@@ -1,35 +1,38 @@
 // @flow
 import 'scss/component/_comment-badge.scss';
 
-import classnames from 'classnames';
 import Icon from 'component/common/icon';
 import React from 'react';
 import Tooltip from 'component/common/tooltip';
-
-const LABEL_TYPES = {
-  ADMIN: 'Admin',
-  MOD: 'Moderator',
-};
 
 type Props = {
   icon: string,
   label: string,
   size?: number,
+  placement?: string,
+  hideTooltip?: boolean,
+  className?: string,
 };
 
 export default function CommentBadge(props: Props) {
-  const { icon, label, size = 20 } = props;
+  const { icon, label, size = 20, placement = 'top', hideTooltip, className } = props;
 
   return (
-    <Tooltip title={label} placement="top">
-      <span
-        className={classnames('comment__badge', {
-          'comment__badge--globalMod': label === LABEL_TYPES.ADMIN,
-          'comment__badge--mod': label === LABEL_TYPES.MOD,
-        })}
-      >
+    <BadgeWrapper title={label} placement={placement} hideTooltip={hideTooltip} className={className}>
+      <span className="comment__badge">
         <Icon icon={icon} size={size} />
       </span>
-    </Tooltip>
+    </BadgeWrapper>
   );
 }
+
+type WrapperProps = {
+  hideTooltip?: boolean,
+  children: any,
+};
+
+const BadgeWrapper = (props: WrapperProps) => {
+  const { hideTooltip, children, ...tooltipProps } = props;
+
+  return !hideTooltip ? <Tooltip {...tooltipProps}>{children}</Tooltip> : children;
+};

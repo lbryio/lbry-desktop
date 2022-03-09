@@ -17,6 +17,7 @@ import Icon from 'component/common/icon';
 import MarkdownPreview from 'component/common/markdown-preview';
 import OptimizedImage from 'component/optimizedImage';
 import React from 'react';
+import PremiumBadge from 'component/common/premium-badge';
 
 type Props = {
   comment: Comment,
@@ -27,8 +28,10 @@ type Props = {
   myChannelIds: ?Array<string>,
   stakedLevel: number,
   isMobile?: boolean,
+  odyseeMembership: string,
   handleDismissPin?: () => void,
   restoreScrollPos?: () => void,
+  claimsByUri: { [string]: any },
 };
 
 export default function LivestreamComment(props: Props) {
@@ -42,6 +45,7 @@ export default function LivestreamComment(props: Props) {
     isMobile,
     handleDismissPin,
     restoreScrollPos,
+    odyseeMembership,
   } = props;
 
   const {
@@ -98,10 +102,6 @@ export default function LivestreamComment(props: Props) {
         {supportAmount > 0 && <ChannelThumbnail uri={authorUri} xsmall />}
 
         <div className="livestreamComment__info">
-          {isGlobalMod && <CommentBadge label={__('Admin')} icon={ICONS.BADGE_MOD} size={16} />}
-          {isModerator && <CommentBadge label={__('Moderator')} icon={ICONS.BADGE_MOD} size={16} />}
-          {isStreamer && <CommentBadge label={__('Streamer')} icon={ICONS.BADGE_STREAMER} size={16} />}
-
           <Button
             className={classnames('button--uri-indicator comment__author', { 'comment__author--creator': isStreamer })}
             target="_blank"
@@ -116,6 +116,11 @@ export default function LivestreamComment(props: Props) {
               {__('Pinned')}
             </span>
           )}
+
+          {isGlobalMod && <CommentBadge label={__('Moderator')} icon={ICONS.BADGE_ADMIN} size={16} />}
+          {isModerator && <CommentBadge label={__('Admin')} icon={ICONS.BADGE_MOD} size={16} />}
+          {isStreamer && <CommentBadge label={__('Streamer')} icon={ICONS.BADGE_STREAMER} size={16} />}
+          <PremiumBadge membership={odyseeMembership} />
 
           {/* Use key to force timestamp update */}
           <DateTime date={timePosted} timeAgo key={forceUpdate} genericSeconds />
@@ -135,6 +140,7 @@ export default function LivestreamComment(props: Props) {
                   stakedLevel={stakedLevel}
                   disableTimestamps
                   setUserMention={setUserMention}
+                  hasMembership={odyseeMembership}
                 />
               )}
             </div>

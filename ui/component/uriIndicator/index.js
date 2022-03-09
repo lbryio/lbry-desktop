@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { normalizeURI } from 'util/lbryURI';
 import { doResolveUri } from 'redux/actions/claims';
-import { selectIsUriResolving, selectClaimForUri } from 'redux/selectors/claims';
+import { selectIsUriResolving, selectClaimForUri, selectOdyseeMembershipForUri } from 'redux/selectors/claims';
 import UriIndicator from './view';
 
 const select = (state, props) => {
@@ -14,6 +14,7 @@ const select = (state, props) => {
     claim: selectClaimForUri(state, props.uri),
     isResolvingUri: selectIsUriResolving(state, props.uri),
     uri,
+    odyseeMembership: selectOdyseeMembershipForUri(state, props.uri),
   };
 };
 

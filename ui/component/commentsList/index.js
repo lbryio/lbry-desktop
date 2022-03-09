@@ -1,5 +1,9 @@
 import { connect } from 'react-redux';
-import { selectClaimForUri, selectClaimIsMine, selectFetchingMyChannels } from 'redux/selectors/claims';
+import { selectClaimForUri,
+  selectClaimIsMine,
+  selectFetchingMyChannels,
+  selectClaimsByUri,
+} from 'redux/selectors/claims';
 import {
   selectTopLevelCommentsForUri,
   makeSelectTopLevelTotalPagesForUri,
@@ -16,6 +20,7 @@ import {
 import { doCommentReset, doCommentList, doCommentById, doCommentReactList } from 'redux/actions/comments';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { getChannelIdFromClaim } from 'util/claim';
+import { doFetchUserMemberships } from 'redux/actions/user';
 import CommentsList from './view';
 
 const select = (state, props) => {
@@ -41,6 +46,7 @@ const select = (state, props) => {
     myReactsByCommentId: selectMyReacts(state),
     othersReactsById: selectOthersReacts(state),
     activeChannelId: activeChannelClaim && activeChannelClaim.claim_id,
+    claimsByUri: selectClaimsByUri(state),
   };
 };
 
@@ -49,6 +55,7 @@ const perform = {
   fetchComment: doCommentById,
   fetchReacts: doCommentReactList,
   resetComments: doCommentReset,
+  doFetchUserMemberships,
 };
 
 export default connect(select, perform)(CommentsList);

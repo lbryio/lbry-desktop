@@ -237,7 +237,14 @@ function ChannelPage(props: Props) {
         {cover && <img className={classnames('channel-cover__custom')} src={PlaceholderTx} />}
         {cover && <OptimizedImage className={classnames('channel-cover__custom')} src={cover} objectFit="cover" />}
         <div className="channel__primary-info">
-          <ChannelThumbnail className="channel__thumbnail--channel-page" uri={uri} allowGifs />
+          <ChannelThumbnail
+            className="channel__thumbnail--channel-page"
+            uri={uri}
+            allowGifs
+            showMemberBadge
+            isChannel
+            hideStakedIndicator
+          />
           <h1 className="channel__title">
             <TruncatedText lines={2} showTooltip>
               {title || (channelName && '@' + channelName)}

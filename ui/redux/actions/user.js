@@ -3,6 +3,7 @@ import { makeSelectClaimForUri } from 'redux/selectors/claims';
 import { doFetchChannelListMine } from 'redux/actions/claims';
 import { isURIValid, normalizeURI } from 'util/lbryURI';
 import { batchActions } from 'util/batch-actions';
+import { getStripeEnvironment } from 'util/stripe';
 
 import * as ACTIONS from 'constants/action_types';
 import { doClaimRewardType, doRewardList } from 'redux/actions/rewards';
@@ -16,6 +17,9 @@ const AUTH_IN_PROGRESS = 'authInProgress';
 export let sessionStorageAvailable = false;
 const CHECK_INTERVAL = 200;
 const AUTH_WAIT_TIMEOUT = 10000;
+const stripeEnvironment = getStripeEnvironment();
+
+const ODYSEE_CHANNEL_ID = '80d2590ad04e36fb1d077a9b9e3a8bba76defdf8';
 
 export function doFetchInviteStatus(shouldCallRewardList = true) {
   return (dispatch) => {
@@ -101,6 +105,59 @@ function checkAuthBusy() {
   });
 }
 
+/***
+ * Given a user, return their highest ranking Odysee membership (Premium or Premium Plus)
+ * @param dispatch
+ * @param user
+ * @returns {Promise<void>}
+ */
+export function doCheckUserOdyseeMemberships(user) {
+  return async (dispatch) => {
+    // get memberships for a given user
+    // TODO: in the future, can we specify this just to @odysee?
+
+    const response = await Lbryio.call(
+      'membership',
+      'mine',
+      {
+        environment: stripeEnvironment,
+      },
+      'post'
+    );
+
+    let savedMemberships = [];
+    let highestMembershipRanking;
+
+    // TODO: this will work for now, but it should be adjusted
+    // TODO: to check if it's active, or if it's cancelled if it's still valid past current date
+    // loop through all memberships and save the @odysee ones
+    // maybe in the future we can only hit @odysee in the API call
+    for (const membership of response) {
+      if (membership.MembershipDetails && membership.MembershipDetails.channel_name === '@odysee') {
+        savedMemberships.push(membership.MembershipDetails.name);
+      }
+    }
+
+    // determine highest ranking membership based on returned data
+    // note: this is from an odd state in the API where a user can be both premium/Premium + at the same time
+    // I expect this can change once upgrade/downgrade is implemented
+    if (savedMemberships.length > 0) {
+      // if premium plus is a membership, return that, otherwise it's only premium
+      const premiumPlusExists = savedMemberships.includes('Premium+');
+      if (premiumPlusExists) {
+        highestMembershipRanking = 'Premium+';
+      } else {
+        highestMembershipRanking = 'Premium';
+      }
+    }
+
+    dispatch({
+      type: ACTIONS.ADD_ODYSEE_MEMBERSHIP_DATA,
+      data: { user, odyseeMembershipName: highestMembershipRanking },
+    });
+  };
+}
+
 // TODO: Call doInstallNew separately so we don't have to pass appVersion and os_system params?
 export function doAuthenticate(
   appVersion,
@@ -123,6 +180,11 @@ export function doAuthenticate(
             type: ACTIONS.AUTHENTICATION_SUCCESS,
             data: { user, accessToken: token },
           });
+
+          // if user is an Odysee member, get the membership details
+          if (user.odysee_member) {
+            dispatch(doCheckUserOdyseeMemberships(user));
+          }
 
           if (shareUsageData) {
             dispatch(doRewardList());
@@ -153,6 +215,11 @@ export function doUserFetch() {
 
       Lbryio.getCurrentUser()
         .then((user) => {
+          // get user membership status
+          if (user.odysee_member) {
+            dispatch(doCheckUserOdyseeMemberships(user));
+          }
+
           dispatch({
             type: ACTIONS.USER_FETCH_SUCCESS,
             data: { user },
@@ -174,6 +241,11 @@ export function doUserCheckEmailVerified() {
   return (dispatch) => {
     Lbryio.getCurrentUser().then((user) => {
       if (user.has_verified_email) {
+        // check premium membership
+        if (user.odysee_member) {
+          dispatch(doCheckUserOdyseeMemberships(user));
+        }
+
         dispatch(doRewardList());
 
         dispatch({
@@ -347,16 +419,19 @@ export function doUserCheckIfEmailExists(email) {
 
     Lbryio.call('user', 'exists', { email }, 'post')
       .catch((error) => {
+        // no email
         if (error.response && error.response.status === 404) {
           dispatch({
             type: ACTIONS.USER_EMAIL_NEW_DOES_NOT_EXIST,
           });
+          // sign in by email
         } else if (error.response && error.response.status === 412) {
           triggerEmailFlow(false);
         }
 
         throw error;
       })
+      // sign the user in
       .then(success, failure);
   };
 }
@@ -782,5 +857,42 @@ export function doCheckYoutubeTransfer() {
           data: String(error),
         });
       });
+  };
+}
+
+/***
+ * Receives a csv of channel claim ids, hits the backend and returns nicely formatted object with relevant info
+ * @param claimIdCsv
+ * @returns {(function(*): Promise<void>)|*}
+ */
+export function doFetchUserMemberships(claimIdCsv) {
+  return async (dispatch) => {
+    // check if users have odysee memberships (premium/premium+)
+    const response = await Lbryio.call('membership', 'check', {
+      channel_id: ODYSEE_CHANNEL_ID,
+      claim_ids: claimIdCsv,
+    });
+
+    let updatedResponse = {};
+
+    // loop through returned users
+    for (const user in response) {
+      // if array was returned for a user (indicating a membership exists), otherwise is null
+      if (response[user] && response[user].length) {
+        // get membership for user
+        // note: a for loop is kind of odd, indicates there may be multiple memberships?
+        // probably not needed depending on what we do with the frontend, should revisit
+        for (const membership of response[user]) {
+          if (membership.channel_name) {
+            updatedResponse[user] = membership.name;
+          }
+        }
+      } else {
+        // note the user has been fetched but is null
+        updatedResponse[user] = null;
+      }
+    }
+
+    dispatch({ type: ACTIONS.ADD_CLAIMIDS_MEMBERSHIP_DATA, data: { response: updatedResponse } });
   };
 }

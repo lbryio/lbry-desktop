@@ -329,9 +329,10 @@
       padding-top: 0;
     }
   }
-  @media (min-width: $breakpoint-small) {
-    // padding: var(--spacing-s);
-    // padding-right: 0px;
+  @media (max-width: $breakpoint-small) {
+    .button--close {
+      top: calc(var(--spacing-m) * -1);
+    }
   }
 }
 

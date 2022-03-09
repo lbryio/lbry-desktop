@@ -9,6 +9,7 @@ import { doClaimSearch } from 'redux/actions/claims';
 import * as SETTINGS from 'constants/settings';
 import { selectFollowedTags } from 'redux/selectors/tags';
 import { selectMutedChannels } from 'redux/selectors/blocked';
+import { doFetchUserMemberships } from 'redux/actions/user';
 import { selectClientSetting, selectShowMatureContent, selectLanguage } from 'redux/selectors/settings';
 import { selectModerationBlockList } from 'redux/selectors/comments';
 import ClaimListDiscover from './view';
@@ -31,6 +32,7 @@ const select = (state, props) => ({
 const perform = {
   doClaimSearch,
   doFetchViewCount,
+  doFetchUserMemberships,
 };
 
 export default connect(select, perform)(ClaimListDiscover);

@@ -35,14 +35,13 @@ export default function HeaderProfileMenuButton(props: HeaderMenuButtonProps) {
         ) : (
           <MenuButton
             aria-label={__('Your account')}
-            title={__('Your account')}
             className={classnames('header__navigationItem', {
               'header__navigationItem--icon': !activeChannelUrl,
               'header__navigationItem--profilePic': activeChannelUrl,
             })}
           >
             {activeChannelUrl ? (
-              <ChannelThumbnail uri={activeChannelUrl} hideTooltip small noLazyLoad />
+              <ChannelThumbnail uri={activeChannelUrl} hideTooltip small noLazyLoad showMemberBadge />
             ) : (
               <Icon size={18} icon={ICONS.ACCOUNT} aria-hidden />
             )}
@@ -57,6 +56,7 @@ export default function HeaderProfileMenuButton(props: HeaderMenuButtonProps) {
               <HeaderMenuLink page={PAGES.CREATOR_DASHBOARD} icon={ICONS.ANALYTICS} name={__('Creator Analytics')} />
               <HeaderMenuLink page={PAGES.REWARDS} icon={ICONS.REWARDS} name={__('Rewards')} />
               <HeaderMenuLink page={PAGES.INVITE} icon={ICONS.INVITE} name={__('Invites')} />
+              <HeaderMenuLink page={PAGES.ODYSEE_MEMBERSHIP} icon={ICONS.UPGRADE} name={__('Odysee Premium')} />
 
               <MenuItem onSelect={signOut}>
                 <div className="menu__link">

@@ -8,16 +8,12 @@
   }
 }
 
-.comment__badge--globalMod {
-  .st0 {
-    // @see: ICONS.BADGE_MOD
-    fill: #fe7500;
-  }
+// fix contrast on hover of channel selector, couldn't come up with a better way
+div[role='menuitem'] .channel__list-item .comment__badge svg {
+  stroke: unset !important;
 }
 
-.comment__badge--mod {
-  .st0 {
-    // @see: ICONS.BADGE_MOD
-    fill: #ff3850;
-  }
+// icon is a bit bright and loud
+.icon--PremiumPlus {
+  filter: brightness(0.92);
 }

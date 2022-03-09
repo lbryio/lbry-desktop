@@ -39,6 +39,7 @@ type Props = {
   doFetchChannelLiveStatus: (string) => void,
   activeLivestreamForChannel: any,
   activeLivestreamInitialized: boolean,
+  userHasPremiumPlus: boolean,
 };
 
 function ChannelContent(props: Props) {
@@ -49,7 +50,6 @@ function ChannelContent(props: Props) {
     channelIsBlocked,
     channelIsBlackListed,
     claim,
-    isAuthenticated,
     defaultPageSize = CS.PAGE_SIZE,
     defaultInfiniteScroll = true,
     showMature,
@@ -61,8 +61,10 @@ function ChannelContent(props: Props) {
     doFetchChannelLiveStatus,
     activeLivestreamForChannel,
     activeLivestreamInitialized,
+    userHasPremiumPlus,
   } = props;
   // const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
+
   const claimsInChannel = 9999;
   const [searchQuery, setSearchQuery] = React.useState('');
   const [isSearching, setIsSearching] = React.useState(false);
@@ -160,7 +162,7 @@ function ChannelContent(props: Props) {
           defaultOrderBy={CS.ORDER_BY_NEW}
           pageSize={defaultPageSize}
           infiniteScroll={defaultInfiniteScroll}
-          injectedItem={SHOW_ADS && !isAuthenticated && { node: <Ads type="video" tileLayout={tileLayout} small /> }}
+          injectedItem={SHOW_ADS && !userHasPremiumPlus && { node: <Ads type="video" tileLayout={tileLayout} small /> }}
           meta={
             showFilters && (
               <Form onSubmit={() => {}} className="wunderbar--inline">

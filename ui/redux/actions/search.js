@@ -13,7 +13,7 @@ import { SEARCH_SERVER_API, SEARCH_SERVER_API_ALT } from 'config';
 import { SEARCH_OPTIONS } from 'constants/search';
 
 type Dispatch = (action: any) => any;
-type GetState = () => { claims: any, search: SearchState };
+type GetState = () => { claims: any, search: SearchState, user: User };
 
 type SearchOptions = {
   size?: number,

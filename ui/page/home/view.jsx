@@ -31,6 +31,7 @@ type Props = {
   doFetchActiveLivestreams: () => void,
   fetchingActiveLivestreams: boolean,
   hideScheduledLivestreams: boolean,
+  userHasPremiumPlus: boolean,
 };
 
 function HomePage(props: Props) {
@@ -44,6 +45,7 @@ function HomePage(props: Props) {
     doFetchActiveLivestreams,
     fetchingActiveLivestreams,
     hideScheduledLivestreams,
+    userHasPremiumPlus,
   } = props;
   const showPersonalizedChannels = (authenticated || !IS_WEB) && subscribedChannels && subscribedChannels.length > 0;
   const showPersonalizedTags = (authenticated || !IS_WEB) && followedTags && followedTags.length > 0;
@@ -100,7 +102,9 @@ function HomePage(props: Props) {
         prefixUris={getLivestreamUris(activeLivestreams, options.channelIds)}
         pinUrls={pinUrls}
         injectedItem={
-          index === 0 && SHOW_ADS && !authenticated && { node: <Ads small type="video" tileLayout />, replace: true }
+          index === 0 &&
+          SHOW_ADS &&
+          !userHasPremiumPlus && { node: <Ads small type="video" tileLayout />, replace: true }
         }
       />
     );

@@ -9,7 +9,7 @@ import { isClaimNsfw, filterClaims, getChannelIdFromClaim, isStreamPlaceholderCl
 import * as CLAIM from 'constants/claim';
 import { INTERNAL_TAGS } from 'constants/tags';
 
-type State = { claims: any };
+type State = { claims: any, user: User };
 
 const selectState = (state: State) => state.claims || {};
 
@@ -791,3 +791,41 @@ export const selectIsMyChannelCountOverLimit = createSelector(
     return false;
   }
 );
+
+/**
+ * Given a uri of a channel, check if there an Odysee membership value
+ * @param state
+ * @param uri
+ * @returns {*}
+ */
+export const selectOdyseeMembershipForUri = function (state: State, uri: string) {
+  const claim = selectClaimForUri(state, uri);
+
+  const uploaderChannelClaimId = getChannelIdFromClaim(claim);
+
+  // looks for the uploader id
+  if (uploaderChannelClaimId) {
+    const matchingMembershipOfUser =
+      state.user &&
+      state.user.odyseeMembershipsPerClaimIds &&
+      state.user.odyseeMembershipsPerClaimIds[uploaderChannelClaimId];
+
+    return matchingMembershipOfUser;
+  }
+
+  return undefined;
+};
+
+/**
+ * Given a uri of a channel, check if there an Odysee membership value
+ * @param state
+ * @param channelId
+ * @returns {*}
+ */
+export const selectOdyseeMembershipForChannelId = function (state: State, channelId: string) {
+  // looks for the uploader id
+  const matchingMembershipOfUser =
+    state.user && state.user.odyseeMembershipsPerClaimIds && state.user.odyseeMembershipsPerClaimIds[channelId];
+
+  return matchingMembershipOfUser;
+};

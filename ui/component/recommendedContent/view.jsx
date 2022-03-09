@@ -23,8 +23,10 @@ type Props = {
   nextRecommendedUri: string,
   isSearching: boolean,
   doFetchRecommendedContent: (string) => void,
-  isAuthenticated: boolean,
   claim: ?StreamClaim,
+  claimId: string,
+  metadata: any,
+  userHasPremiumPlus: boolean,
 };
 
 export default React.memo<Props>(function RecommendedContent(props: Props) {
@@ -34,12 +36,12 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
     recommendedContentUris,
     nextRecommendedUri,
     isSearching,
-    isAuthenticated,
     claim,
+    userHasPremiumPlus,
   } = props;
 
   const claimId: ?string = claim && claim.claim_id;
-  const injectAds = SHOW_ADS && IS_WEB && !isAuthenticated;
+  const injectAds = SHOW_ADS && IS_WEB && !userHasPremiumPlus;
 
   function claimContainsBlockedWords(claim: ?StreamClaim) {
     if (BLOCKED_WORDS) {
@@ -177,7 +179,6 @@ function areEqual(prevProps: Props, nextProps: Props) {
   if (
     a.uri !== b.uri ||
     a.nextRecommendedUri !== b.nextRecommendedUri ||
-    a.isAuthenticated !== b.isAuthenticated ||
     a.isSearching !== b.isSearching ||
     (a.recommendedContentUris && !b.recommendedContentUris) ||
     (!a.recommendedContentUris && b.recommendedContentUris) ||

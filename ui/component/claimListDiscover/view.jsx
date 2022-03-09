@@ -19,6 +19,7 @@ import LangFilterIndicator from 'component/langFilterIndicator';
 import ClaimListHeader from 'component/claimListHeader';
 import useFetchViewCount from 'effects/use-fetch-view-count';
 import { useIsLargeScreen } from 'effects/use-screensize';
+import useGetUserMemberships from 'effects/use-get-user-memberships';
 
 type Props = {
   uris: Array<string>,
@@ -98,6 +99,7 @@ type Props = {
   // --- perform ---
   doClaimSearch: ({}) => void,
   doFetchViewCount: (claimIdCsv: string) => void,
+  doFetchUserMemberships: (claimIdCsv: string) => void,
 
   hideLayoutButton?: boolean,
   loadedCallback?: (number) => void,
@@ -177,6 +179,7 @@ function ClaimListDiscover(props: Props) {
     maxClaimRender,
     useSkeletonScreen = true,
     excludeUris = [],
+    doFetchUserMemberships,
     swipeLayout = false,
   } = props;
   const didNavigateForward = history.action === 'PUSH';
@@ -608,8 +611,13 @@ function ClaimListDiscover(props: Props) {
 
   // **************************************************************************
   // **************************************************************************
-
   useFetchViewCount(fetchViewCount, renderUris, claimsByUri, doFetchViewCount);
+
+  const shouldFetchUserMemberships = true;
+  const arrayOfContentUris = renderUris;
+  const convertClaimUrlsToIds = claimsByUri;
+
+  useGetUserMemberships(shouldFetchUserMemberships, arrayOfContentUris, convertClaimUrlsToIds, doFetchUserMemberships);
 
   React.useEffect(() => {
     if (shouldPerformSearch) {

@@ -2537,21 +2537,58 @@ export const icons = {
       viewBox="0 0 24 24"
       xmlSpace="preserve"
     >
-      <style type="text/css">{'.st0{fill:FF3850}.st1{fill:#181021}.st2{fill:#FFFFFF}'}</style>
+      <style type="text/css">
+        {'.st0--badge-mod{fill:#ff3850}.st1--badge-mod{fill:#181021}.st2--badge-mod{fill:#FFFFFF}'}
+      </style>
       <g>
         <g>
           <path
-            className="st0"
+            className="st0--badge-mod"
             d="M11.69,6.77c4.86,0,7.55,0.9,8.52,1.31c1.29-1.46,3.28-4.14,3.28-6.76c0,0-4.17,4.86-6.92,5.12 c-1.25-0.87-2.77-1.38-4.41-1.38c0,0-3.21-0.06-4.63,1.31C4.81,6.44,0.51,1.32,0.51,1.32c0,2.61,1.97,5.27,3.25,6.74 C4.71,7.59,7.03,6.77,11.69,6.77z M19.87,19.38c0.02-0.13,0.04-0.27,0.04-0.4V12.8c0-1.03-0.21-2.02-0.58-2.92 c-0.83-0.33-3.25-1.11-7.64-1.11c-4.29,0-6.33,0.75-7,1.06c-0.38,0.91-0.6,1.91-0.6,2.97v6.18c0,0.13,0.02,0.26,0.04,0.39 C1.6,19.73,0,22.54,0,22.54L12,24l12-1.46C24,22.54,22.36,19.79,19.87,19.38z"
           />
         </g>
       </g>
       <path
-        className="st1"
+        className="st1--badge-mod"
         d="M13,18.57H11c-2.27,0-4.12-0.82-4.12-2.88v-2.46c0-2.77,2.17-3.94,5.11-3.94s5.11,1.17,5.11,3.94v2.46 C17.11,17.75,15.27,18.57,13,18.57z"
       />
       <path
-        className="st2"
+        className="st2--badge-mod"
+        d="M15.06,15.25c-0.28,0-0.5-0.22-0.5-0.5v-1.42c0-0.32,0-1.31-1.63-1.31c-0.28,0-0.5-0.22-0.5-0.5 s0.22-0.5,0.5-0.5c1.65,0,2.63,0.86,2.63,2.31v1.42C15.56,15.02,15.33,15.25,15.06,15.25z"
+      />
+    </svg>
+  ),
+  [ICONS.BADGE_ADMIN]: (props: IconProps) => (
+    <svg
+      {...props}
+      version="1.1"
+      id="Layer_1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      x="0px"
+      y="0px"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      xmlSpace="preserve"
+    >
+      <style type="text/css">
+        {'.st0--badge-admin{fill:#fe7500}.st1--badge-admin{fill:#181021}.st2--badge-admin{fill:#FFFFFF}'}
+      </style>
+      <g>
+        <g>
+          <path
+            className="st0--badge-admin"
+            d="M11.69,6.77c4.86,0,7.55,0.9,8.52,1.31c1.29-1.46,3.28-4.14,3.28-6.76c0,0-4.17,4.86-6.92,5.12 c-1.25-0.87-2.77-1.38-4.41-1.38c0,0-3.21-0.06-4.63,1.31C4.81,6.44,0.51,1.32,0.51,1.32c0,2.61,1.97,5.27,3.25,6.74 C4.71,7.59,7.03,6.77,11.69,6.77z M19.87,19.38c0.02-0.13,0.04-0.27,0.04-0.4V12.8c0-1.03-0.21-2.02-0.58-2.92 c-0.83-0.33-3.25-1.11-7.64-1.11c-4.29,0-6.33,0.75-7,1.06c-0.38,0.91-0.6,1.91-0.6,2.97v6.18c0,0.13,0.02,0.26,0.04,0.39 C1.6,19.73,0,22.54,0,22.54L12,24l12-1.46C24,22.54,22.36,19.79,19.87,19.38z"
+          />
+        </g>
+      </g>
+      <path
+        className="st1--badge-admin"
+        d="M13,18.57H11c-2.27,0-4.12-0.82-4.12-2.88v-2.46c0-2.77,2.17-3.94,5.11-3.94s5.11,1.17,5.11,3.94v2.46 C17.11,17.75,15.27,18.57,13,18.57z"
+      />
+      <path
+        className="st2--badge-admin"
         d="M15.06,15.25c-0.28,0-0.5-0.22-0.5-0.5v-1.42c0-0.32,0-1.31-1.63-1.31c-0.28,0-0.5-0.22-0.5-0.5 s0.22-0.5,0.5-0.5c1.65,0,2.63,0.86,2.63,2.31v1.42C15.56,15.02,15.33,15.25,15.06,15.25z"
       />
     </svg>
@@ -2570,26 +2607,30 @@ export const icons = {
       viewBox="-1182 401 24 24"
       xmlSpace="preserve"
     >
-      <style type="text/css">{'.st0{fill:#FF5490}.st1{fill:#81BBB9}.st2{fill:#2E2A2F}.st3{fill:#FFFFFF}'}</style>
+      <style type="text/css">
+        {
+          '.st0--badge-streamer{fill:#FF5490}.st1--badge-streamer{fill:#81BBB9}.st2--badge-streamer{fill:#2E2A2F}.st3--badge-streamer{fill:#FFFFFF}'
+        }
+      </style>
       <path
-        className="st0"
+        className="st0--badge-streamer"
         d="M-1169.8,406.4c-4.3,0-7.8,3.5-7.8,7.8c0,0.4,0,0.8,0.1,1.1h1c-0.1-0.4-0.1-0.7-0.1-1.1c0-3.7,3-6.8,6.8-6.8 s6.8,3,6.8,6.8c0,0.4,0,0.8-0.1,1.1h1c0.1-0.4,0.1-0.7,0.1-1.1C-1162.1,409.9-1165.5,406.4-1169.8,406.4z"
       />
       <path
-        className="st0"
+        className="st0--badge-streamer"
         d="M-1180,414.2c0-5.6,4.6-10.2,10.2-10.2c5.6,0,10.2,4.6,10.2,10.2c0,2.2-0.7,4.3-1.9,5.9l0.8,0.6 c1.3-1.8,2.1-4.1,2.1-6.5c0-6.2-5-11.2-11.2-11.2c-6.2,0-11.2,5-11.2,11.2c0,2.1,0.6,4.1,1.6,5.8l1-0.3 C-1179.4,418-1180,416.2-1180,414.2z"
       />
-      <path className="st1" d="M-1163.7,419.4" />
+      <path className="st1--badge-streamer" d="M-1163.7,419.4" />
       <path
-        className="st1"
+        className="st1--badge-streamer"
         d="M-1165.6,418.5c0-0.1,0-3.6,0-3.6c0-1.9-1-4.3-4.4-4.3s-4.4,2.4-4.4,4.3c0,0,0,3.6,0,3.6 c-1.4,0.2-1.8,0.7-1.8,0.7s2.2,2.7,6.2,2.7s6.2-2.7,6.2-2.7S-1164.2,418.7-1165.6,418.5z"
       />
       <path
-        className="st2"
+        className="st2--badge-streamer"
         d="M-1169.2,418.5h-1.5c-1.7,0-3.1-0.6-3.1-2.2v-1.9c0-2.1,1.6-3,3.9-3s3.9,0.9,3.9,3v1.9 C-1166.1,417.8-1167.5,418.5-1169.2,418.5z"
       />
       <path
-        className="st3"
+        className="st3--badge-streamer"
         d="M-1167.8,416.2c-0.2,0-0.4-0.2-0.4-0.4v-1.1c0-0.2,0-1-1.2-1c-0.2,0-0.4-0.2-0.4-0.4s0.2-0.4,0.4-0.4 c1.2,0,2,0.6,2,1.7v1.1C-1167.4,416.1-1167.6,416.2-1167.8,416.2z"
       />
     </svg>
@@ -2715,6 +2756,368 @@ export const icons = {
   [ICONS.POP_CULTURE]: buildIcon(
     <g>
       <path d="M23.5,12.11a7,7,0,0,1-3.27,5.59.26.26,0,0,1-.32,0,.27.27,0,0,1-.05-.31A2.71,2.71,0,0,0,20,17c.65-1.4.5-2.85-.34-3.25s-2,.41-2.67,1.77c.06-.93-.26-1.7-.86-1.88-1.27-.4-1.77,1.24-4.17,5.44-2.44-4.27-2.9-5.84-4.17-5.44-.6.18-.92.95-.86,1.88-.66-1.36-1.84-2.15-2.67-1.77S3.31,15.63,4,17a2.71,2.71,0,0,0,.18.34.27.27,0,0,1,0,.31.26.26,0,0,1-.32,0A7,7,0,0,1,.5,12.11C.5,8.93,3.17,6.18,7,4.9a.25.25,0,0,1,.32.3L7,6.73a3.37,3.37,0,0,0,.78,3,1,1,0,0,0,1.1.28,1,1,0,0,0,.65-.94V5.61a.25.25,0,0,1,.4-.2l1.6,1.2h1l1.6-1.2a.25.25,0,0,1,.4.2V9.05a1,1,0,0,0,.65.94,1,1,0,0,0,1.1-.28,3.35,3.35,0,0,0,.78-3L16.65,5.2A.25.25,0,0,1,17,4.9C20.83,6.18,23.5,8.93,23.5,12.11Z" />
+    </g>
+  ),
+  [ICONS.EARLY_ACCESS]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 35 30"
+      width={'40'}
+      height={'40'}
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <style type="text/css">
+        {
+          '.early-access--st0{fill:none;stroke:#DCBDA2;stroke-width:1.4173;stroke-miterlimit:10;}.early-access--st1{fill:#DCBEA2;}'
+        }
+      </style>
+
+      <circle className="early-access--st0" cx="304.9" cy="346.6" r="13.7" />
+      <g>
+        <ellipse className="early-access--st0" cx="301.2" cy="346.5" rx="3.5" ry="3.8" />
+        <line className="early-access--st0" x1="304.7" y1="346.5" x2="312.5" y2="346.5" />
+        <line className="early-access--st0" x1="310.3" y1="346.6" x2="310.3" y2="349.3" />
+      </g>
+      <circle className="early-access--st0" cx="304.9" cy="390.6" r="13.7" />
+      <path
+        className="early-access--st0"
+        d="M316.2,296.7v6.4c0,0.9-0.5,1.8-1.3,2.3l-9,5.2c-0.8,0.5-1.8,0.5-2.6,0l-9-5.2c-0.8-0.5-1.3-1.3-1.3-2.3v-10.4c0-0.9,0.5-1.8,1.3-2.3l9-5.2c0.8-0.5,1.8-0.5,2.6,0l9,5.2"
+      />
+      <polyline
+        className="early-access--st0"
+        points="318.7,290.8 304.4,306.8 301.3,301.3 295.8,298.2 301.3,295 304.4,289.5 307.5,295 "
+      />
+      <polyline className="early-access--st0" points="299,310.2 299,316.4 304.8,313.1 309.9,316.4 309.9,310.2 " />
+      <line className="early-access--st0" x1="314.7" y1="380.8" x2="295.1" y2="400.5" />
+      <text
+        transform="matrix(1 0 0 1 294.7307 394.0567)"
+        style={{ fill: '#DCBDA2', 'fontFamily': 'Roboto-Bold', 'fontSize': '10.1968px' }}
+      >
+        ADS
+      </text>
+      <g id="XMLID_53_">
+        <g id="XMLID_493_">
+          <path
+            id="XMLID_494_"
+            className="early-access--st1"
+            d="M16,1.6C8,1.6,1.6,8,1.6,16S8,30.4,16,30.4S30.4,24,30.4,16S24,1.6,16,1.6z M16,28.9C8.9,28.9,3.1,23.1,3.1,16S8.9,3.1,16,3.1S28.9,8.9,28.9,16S23.1,28.9,16,28.9z M12.3,11.4c-2.3,0-4.2,2-4.2,4.5s1.9,4.5,4.2,4.5c2.1,0,3.8-1.6,4.1-3.8h4.2v2h1.5v-2h1.4v-1.5h-7.2C16.1,13,14.4,11.4,12.3,11.4z M12.3,18.9c-1.5,0-2.7-1.3-2.7-3s1.2-3,2.7-3c1.5,0,2.7,1.3,2.7,3S13.8,18.9,12.3,18.9z"
+          />
+        </g>
+      </g>
+    </svg>
+  ),
+  [ICONS.MEMBER_BADGE]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 35 30"
+      width={'40'}
+      height={'40'}
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <style type="text/css">
+        {
+          '.member-bage--st0{fill:none;stroke:#DCBDA2;stroke-width:1.4173;stroke-miterlimit:10;}.member-bage--st1{fill:#DCBEA2;}'
+        }
+      </style>
+      <circle className="member-bage--st0" cx="304.9" cy="399.4" r="13.7" />
+      <g>
+        <ellipse className="member-bage--st0" cx="301.2" cy="399.3" rx="3.5" ry="3.8" />
+        <line className="member-bage--st0" x1="304.7" y1="399.3" x2="312.5" y2="399.3" />
+        <line className="member-bage--st0" x1="310.3" y1="399.3" x2="310.3" y2="402" />
+      </g>
+      <circle className="member-bage--st0" cx="304.9" cy="443.4" r="13.7" />
+      <path
+        className="member-bage--st0"
+        d="M316.2,349.5v6.4c0,0.9-0.5,1.8-1.3,2.3l-9,5.2c-0.8,0.5-1.8,0.5-2.6,0l-9-5.2c-0.8-0.5-1.3-1.3-1.3-2.3v-10.4
+      c0-0.9,0.5-1.8,1.3-2.3l9-5.2c0.8-0.5,1.8-0.5,2.6,0l9,5.2"
+      />
+      <polyline
+        className="member-bage--st0"
+        points="318.7,343.5 304.4,359.6 301.3,354 295.8,350.9 301.3,347.8 304.4,342.2 307.5,347.8 "
+      />
+      <polyline className="member-bage--st0" points="299,363 299,369.1 304.8,365.9 309.9,369.1 309.9,363 " />
+      <line className="member-bage--st0" x1="314.7" y1="433.6" x2="295.1" y2="453.2" />
+      <text
+        transform="matrix(1 0 0 1 294.7307 446.8067)"
+        style={{ fill: '#DCBDA2', 'fontFamily': 'Roboto-Bold', 'fontSize': '10.1968px' }}
+      >
+        ADS
+      </text>
+      <g id="XMLID_187_">
+        <g id="XMLID_250_">
+          <path
+            id="XMLID_251_"
+            className="member-bage--st1"
+            d="M26.7,19c0,0.7-0.4,1.3-0.9,1.6l-9,5.2c-0.6,0.3-1.3,0.3-1.9,0l-9-5.2C5.3,20.3,5,19.6,5,19
+          V8.6c0-0.7,0.4-1.3,0.9-1.6l9-5.2c0.6-0.3,1.3-0.3,1.9,0l9,5.2l0.8-1.3l-9-5.2c-1-0.6-2.3-0.6-3.4,0l-9,5.2
+          c-1,0.6-1.7,1.7-1.7,2.9V19c0,1.2,0.6,2.3,1.7,2.9l9,5.2c0.5,0.3,1.1,0.5,1.7,0.5s1.2-0.2,1.7-0.5l9-5.2c1-0.6,1.7-1.7,1.7-2.9
+          v-6.4h-1.5V19z M13.1,16.5L8.5,14l4.6-2.6l2.6-4.6l2.5,4.4l1.3-0.7l-3.8-6.7L12,10.3L5.5,14l6.5,3.7l3.5,6.3l15-16.8l-1.1-1
+          L15.8,21.3L13.1,16.5z M20.4,29.7L16,27.8l-4.7,2v-4.1H9.8v6.3l6.2-2.5l5.9,2.6v-6.3h-1.5V29.7z"
+          />
+        </g>
+      </g>
+    </svg>
+  ),
+  [ICONS.NO_ADS]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 35 30"
+      width={'40'}
+      height={'40'}
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <style type="text/css">
+        {'.st0--no-ads{fill:none;stroke:#DCBDA2;stroke-width:1.4173;stroke-miterlimit:10;}.st1--no-ads{fill:#DCBEA2;}'}
+      </style>
+      <circle className="st0--no-ads" cx="304.9" cy="297.6" r="13.7" />
+      <g>
+        <ellipse className="st0--no-ads" cx="301.2" cy="297.5" rx="3.5" ry="3.8" />
+        <line className="st0--no-ads" x1="304.7" y1="297.5" x2="312.5" y2="297.5" />
+        <line className="st0--no-ads" x1="310.3" y1="297.6" x2="310.3" y2="300.3" />
+      </g>
+      <circle className="st0--no-ads" cx="304.9" cy="341.6" r="13.7" />
+      <path
+        className="st0--no-ads"
+        d="M316.2,247.7v6.4c0,0.9-0.5,1.8-1.3,2.3l-9,5.2c-0.8,0.5-1.8,0.5-2.6,0l-9-5.2c-0.8-0.5-1.3-1.3-1.3-2.3v-10.4
+      c0-0.9,0.5-1.8,1.3-2.3l9-5.2c0.8-0.5,1.8-0.5,2.6,0l9,5.2"
+      />
+      <polyline
+        className="st0--no-ads"
+        points="318.7,241.8 304.4,257.8 301.3,252.3 295.8,249.2 301.3,246 304.4,240.5 307.5,246 "
+      />
+      <polyline className="st0--no-ads" points="299,261.2 299,267.4 304.8,264.1 309.9,267.4 309.9,261.2 " />
+      <line className="st0--no-ads" x1="314.7" y1="331.8" x2="295.1" y2="351.5" />
+      <text
+        transform="matrix(1 0 0 1 294.7307 345.0567)"
+        style={{ fill: '#DCBDA2', 'fontFamily': 'Roboto-Bold', 'fontSize': '10.1968px' }}
+      >
+        ADS
+      </text>
+      <g id="XMLID_109_">
+        <path
+          id="XMLID_190_"
+          className="st1--no-ads"
+          d="M16,1.6C8,1.6,1.6,8,1.6,16S8,30.4,16,30.4S30.4,24,30.4,16S24,1.6,16,1.6z M16,3.1
+        c3.3,0,6.3,1.3,8.6,3.3L18,13c-0.2-0.1-0.3-0.3-0.5-0.4c-0.5-0.3-1.1-0.4-1.7-0.4h-2.2v5.3l-1.2,1.2l-2.4-6.4H8.5l-2.7,7.2h1.6
+        l0.5-1.5h2.6l0.5,1.5h0.5l-5.2,5.2c-2-2.3-3.3-5.3-3.3-8.6C3.1,8.9,8.9,3.1,16,3.1z M17.6,15.6V16c0,0.7-0.2,1.3-0.5,1.6
+        s-0.8,0.6-1.3,0.6H15V18l2.5-2.5C17.6,15.5,17.6,15.6,17.6,15.6z M15,15.9v-2.5h0.7c0.6,0,1,0.2,1.3,0.5L15,15.9z M10.2,16.7H8.3
+        L9.2,14L10.2,16.7z M16,28.9c-3.3,0-6.3-1.3-8.6-3.3l6.2-6.2h2.1c0.6,0,1.2-0.1,1.7-0.4c0.5-0.3,0.9-0.7,1.2-1.2
+        c0.3-0.5,0.4-1.1,0.4-1.8v-0.3c0-0.5-0.1-0.9-0.3-1.4l6.8-6.8c2,2.3,3.3,5.3,3.3,8.6C28.9,23.1,23.1,28.9,16,28.9z"
+        />
+        <path
+          id="XMLID_195_"
+          className="st1--no-ads"
+          d="M23.2,15.1c-0.5-0.1-0.8-0.3-1-0.4c-0.2-0.2-0.4-0.4-0.4-0.6c0-0.3,0.1-0.5,0.3-0.6
+        c0.2-0.2,0.5-0.2,0.9-0.2c0.4,0,0.7,0.1,0.9,0.3c0.2,0.2,0.3,0.4,0.3,0.8h1.5c0-0.4-0.1-0.8-0.3-1.2s-0.5-0.6-0.9-0.8
+        c-0.4-0.2-0.9-0.3-1.4-0.3c-0.5,0-1,0.1-1.4,0.3s-0.7,0.4-1,0.7c-0.2,0.3-0.3,0.7-0.3,1c0,0.8,0.4,1.4,1.2,1.8
+        c0.3,0.2,0.7,0.3,1.2,0.5c0.5,0.2,0.9,0.3,1.1,0.5c0.2,0.2,0.3,0.4,0.3,0.6c0,0.3-0.1,0.5-0.3,0.6c-0.2,0.1-0.5,0.2-0.8,0.2
+        c-1,0-1.4-0.4-1.4-1.2h-1.5c0,0.5,0.1,0.9,0.4,1.2c0.2,0.4,0.6,0.6,1,0.8s1,0.3,1.5,0.3c0.8,0,1.4-0.2,1.9-0.5s0.7-0.8,0.7-1.5
+        c0-0.6-0.2-1-0.6-1.4C24.6,15.7,24,15.4,23.2,15.1z"
+        />
+      </g>
+    </svg>
+  ),
+  [ICONS.PREMIUM]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 35 30"
+      width={props.size || '40'}
+      height={props.size || '40'}
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <style type="text/css">
+        {'.premium--st0{fill:#898DB3;}'}
+        {'.premium--st1{fill:#D8D2E8;}'}
+        {'.premium--st2{fill:#CAC2DF;}'}
+        {'.premium--st3{opacity:0.27;fill:#74749A;}'}
+        {'.premium--st4{fill:none;stroke:#CAC2DF;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;}'}
+        {'.premium--st5{fill:#626092;}.premium--st6{opacity:0.2;fill:#FFFFFF;}'}
+      </style>
+
+      <path
+        id="XMLID_122_"
+        className="premium--st0"
+        d="M0,12.7v0.8c0,2.3,2,4.2,4.4,4.2h23.2c2.4,0,4.4-1.9,4.4-4.2v-0.8H0z"
+      />
+      <path
+        id="XMLID_20_"
+        className="premium--st1"
+        d="M1.8,14.4c0.1,0.3,0.3,0.6,0.5,0.8c0.5,0.6,1.2,0.9,2.1,0.9h23.2c0.8,0,1.6-0.4,2.1-0.9
+      c0.2-0.2,0.4-0.5,0.5-0.8H1.8z"
+      />
+      <path
+        id="XMLID_27_"
+        className="premium--st2"
+        d="M2.3,15.2c0.5,0.6,1.2,0.9,2.1,0.9h23.2c0.8,0,1.6-0.4,2.1-0.9H2.3z"
+      />
+      <rect id="XMLID_28_" x="5.2" y="12.7" className="premium--st3" width="21.7" height="5.1" />
+      <path
+        id="XMLID_125_"
+        className="premium--st0"
+        d="M1.4,16.1v0.8c0,2.3,2,4.2,4.4,4.2h20.4c2.4,0,4.4-1.9,4.4-4.2v-0.8H1.4z"
+      />
+      <path
+        id="XMLID_237_"
+        className="premium--st1"
+        d="M3.2,17.8c0.1,0.3,0.3,0.6,0.5,0.8c0.5,0.6,1.2,0.9,2.1,0.9h20.4c0.8,0,1.6-0.4,2.1-0.9
+      c0.2-0.2,0.4-0.5,0.5-0.8H3.2z"
+      />
+      <path
+        id="XMLID_120_"
+        className="premium--st2"
+        d="M3.7,18.6c0.5,0.6,1.2,0.9,2.1,0.9h20.4c0.8,0,1.6-0.4,2.1-0.9H3.7z"
+      />
+      <rect id="XMLID_29_" x="5.2" y="16.1" className="premium--st3" width="21.7" height="5.1" />
+      <path id="XMLID_75_" className="premium--st4" d="M6.4,14.3" />
+      <path id="XMLID_25_" className="premium--st4" d="M2.7,14.3" />
+      <path
+        id="XMLID_124_"
+        className="premium--st0"
+        d="M25.1,10.4l-7.9-4.6c-0.7-0.4-1.6-0.4-2.3,0l-7.9,4.6c-0.7,0.4-1.2,1.2-1.2,2v9.1
+      c0,0.8,0.4,1.6,1.2,2l7.9,4.6c0.4,0.2,0.8,0.3,1.2,0.3c0.4,0,0.8-0.1,1.2-0.3l7.9-4.6c0.7-0.4,1.2-1.2,1.2-2v-9.1
+      C26.2,11.6,25.8,10.8,25.1,10.4z"
+      />
+      <path
+        id="XMLID_123_"
+        className="premium--st2"
+        d="M16.3,7.3c-0.1-0.1-0.2-0.1-0.3-0.1c-0.1,0-0.2,0-0.3,0.1l-7.9,4.6c-0.2,0.1-0.3,0.3-0.3,0.5
+      v9.1c0,0.2,0.1,0.4,0.3,0.5l7.9,4.6c0.2,0.1,0.4,0.1,0.6,0l7.9-4.6c0.2-0.1,0.3-0.3,0.3-0.5v-9.1c0-0.2-0.1-0.4-0.3-0.5L16.3,7.3z"
+      />
+      <polygon
+        id="XMLID_19_"
+        className="premium--st5"
+        points="20.5,20.1 11.6,20.1 11.2,14.3 14.2,15.8 16,12.4 17.9,15.8 21,14.2 "
+      />
+      <polygon
+        id="XMLID_18_"
+        className="premium--st6"
+        points="16.1,20.8 21.1,20.8 21.7,13.2 18.1,14.9 16.1,11.3 16.1,7.8 23.9,12.3 23.9,21.6 16.1,25.9 "
+      />
+      <polygon id="XMLID_17_" className="premium--st6" points="16.1,13.4 16.1,19.6 20.1,19.6 20.5,15.2 17.8,16.8 " />
+    </svg>
+  ),
+  [ICONS.PREMIUM_PLUS]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 35 30"
+      width={props.size || '40'}
+      height={props.size || '40'}
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <style type="text/css">
+        {'.premium-plus--st0{fill:#C36017;}'}
+        {'.premium-plus--st1{fill:#FAC65D;}'}
+        {'.premium-plus--st2{fill:#F9B915;}'}
+        {'.premium-plus--st3{opacity:0.3;fill:#955000;}'}
+        {'.premium-plus--st4{fill:none;stroke:#CAC2DF;stroke-width:0;stroke-linecap:round;stroke-linejoin:round;}'}
+        {'.premium-plus--st5{fill:#C95B16;}'}
+        {'.premium-plus--st6{opacity:0.2;fill:#FFFFFF;}'}
+      </style>
+
+      <path
+        id="XMLID_141_"
+        className="premium-plus--st0"
+        d="M0,11.7v0.8c0,2.3,2,4.2,4.4,4.2h23.2c2.4,0,4.4-1.9,4.4-4.2v-0.8H0z"
+      />
+      <path
+        id="XMLID_133_"
+        className="premium-plus--st1"
+        d="M1.8,13.4c0.1,0.3,0.3,0.6,0.5,0.8c0.5,0.6,1.2,0.9,2.1,0.9h23.2c0.8,0,1.6-0.4,2.1-0.9c0.2-0.2,0.4-0.5,0.5-0.8H1.8z"
+      />
+      <path
+        id="XMLID_139_"
+        className="premium-plus--st2"
+        d="M2.3,14.2c0.5,0.6,1.2,0.9,2.1,0.9h23.2c0.8,0,1.6-0.4,2.1-0.9H2.3z"
+      />
+      <path
+        id="XMLID_136_"
+        className="premium-plus--st0"
+        d="M1.4,15.1v0.8c0,2.3,2,4.2,4.4,4.2h20.4c2.4,0,4.4-1.9,4.4-4.2v-0.8H1.4z"
+      />
+      <path
+        id="XMLID_131_"
+        className="premium-plus--st1"
+        d="M3.2,16.8c0.1,0.3,0.3,0.6,0.5,0.8c0.5,0.6,1.2,0.9,2.1,0.9h20.4c0.8,0,1.6-0.4,2.1-0.9c0.2-0.2,0.4-0.5,0.5-0.8H3.2z"
+      />
+      <path
+        id="XMLID_134_"
+        className="premium-plus--st2"
+        d="M3.7,17.6c0.5,0.6,1.2,0.9,2.1,0.9h20.4c0.8,0,1.6-0.4,2.1-0.9H3.7z"
+      />
+      <path
+        id="XMLID_260_"
+        className="premium-plus--st0"
+        d="M2.6,18.6v0.8c0,2.3,2,4.2,4.4,4.2h18.2c2.4,0,4.1-1.9,4.1-4.2v-0.8H2.6z"
+      />
+      <path
+        id="XMLID_137_"
+        className="premium-plus--st3"
+        d="M7.4,23.6h17.4c0.7,0,1.9-1.6,1.9-2.3l0.1-9.6H5.3v9.7C5.3,22.1,6.7,23.6,7.4,23.6z"
+      />
+      <path
+        id="XMLID_257_"
+        className="premium-plus--st1"
+        d="M4.5,20.3c0.1,0.3,0.3,0.6,0.5,0.8C5.5,21.6,6.2,22,7,22h18.2c0.8,0,1.2-0.4,1.7-0.9c0.2-0.2,0.4-0.5,0.5-0.8H4.5z"
+      />
+      <path
+        id="XMLID_254_"
+        className="premium-plus--st2"
+        d="M5,21.1C5.5,21.6,6.2,22,7,22h18.2c0.8,0,1.2-0.4,1.7-0.9H5z"
+      />
+      <path id="XMLID_130_" className="premium-plus--st4" d="M6.4,14.3" />
+      <path id="XMLID_129_" className="premium-plus--st4" d="M2.7,14.3" />
+      <path
+        id="XMLID_128_"
+        className="premium-plus--st0"
+        d="M25.1,10.4l-7.9-4.6c-0.7-0.4-1.6-0.4-2.3,0l-7.9,4.6c-0.7,0.4-1.2,1.2-1.2,2v9.1c0,0.8,0.4,1.6,1.2,2l7.9,4.6c0.4,0.2,0.8,0.3,1.2,0.3c0.4,0,0.8-0.1,1.2-0.3l7.9-4.6c0.7-0.4,1.2-1.2,1.2-2v-9.1C26.2,11.6,25.8,10.8,25.1,10.4z"
+      />
+      <path
+        id="XMLID_127_"
+        className="premium-plus--st2"
+        d="M16.3,7.3c-0.1-0.1-0.2-0.1-0.3-0.1c-0.1,0-0.2,0-0.3,0.1l-7.9,4.6c-0.2,0.1-0.3,0.3-0.3,0.5v9.1c0,0.2,0.1,0.4,0.3,0.5l7.9,4.6c0.2,0.1,0.4,0.1,0.6,0l7.9-4.6c0.2-0.1,0.3-0.3,0.3-0.5v-9.1c0-0.2-0.1-0.4-0.3-0.5L16.3,7.3z"
+      />
+      <polygon
+        id="XMLID_126_"
+        className="premium-plus--st5"
+        points="20.5,20.1 11.6,20.1 11.2,14.3 14.2,15.8 16,12.4 17.9,15.8 21,14.2 "
+      />
+      <polygon
+        id="XMLID_24_"
+        className="premium-plus--st6"
+        points="16.1,20.8 21.1,20.8 21.7,13.2 18.1,14.9 16.1,11.3 16.1,7.8 23.9,12.3 23.9,21.616.1,25.9 "
+      />
+      <polygon
+        id="XMLID_23_"
+        className="premium-plus--st6"
+        points="16.1,13.4 16.1,19.6 20.1,19.6 20.5,15.2 17.8,16.8 "
+      />
+    </svg>
+  ),
+  [ICONS.UPGRADE]: buildIcon(
+    <g>
+      <path d="m2 6 10-5 10 5M2 6v12l10 5 10-5V6" />
+      <circle cx={12} cy={10} r={5.25} />
+      <path d="M8.5 14.5 6 17h3l1.5 2.5 1-4h1l1 4L15 17h3l-2-2.5" />
     </g>
   ),
   [ICONS.FEATURED]: (props: IconProps) => {

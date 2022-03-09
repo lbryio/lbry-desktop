@@ -1,16 +1,18 @@
 // @flow
 import ChannelThumbnail from 'component/channelThumbnail';
 import React from 'react';
+import PremiumBadge from 'component/common/premium-badge';
 
 type Props = {
   claimLabel?: string,
   claimTitle?: string,
   emote?: any,
   uri?: string,
+  odyseeMembershipByUri: ?string,
 };
 
 export default function TextareaSuggestionsItem(props: Props) {
-  const { claimLabel, claimTitle, emote, uri, ...autocompleteProps } = props;
+  const { claimLabel, claimTitle, emote, uri, odyseeMembershipByUri, ...autocompleteProps } = props;
 
   if (emote) {
     const { name: value, url, unicode } = emote;
@@ -37,7 +39,10 @@ export default function TextareaSuggestionsItem(props: Props) {
 
         <div className="textarea-suggestion__label">
           <span className="textarea-suggestion__title">{claimTitle || value}</span>
-          <span className="textarea-suggestion__value">{value}</span>
+          <span className="textarea-suggestion__value">
+            {value}
+            <PremiumBadge membership={odyseeMembershipByUri} />
+          </span>
         </div>
       </div>
     );

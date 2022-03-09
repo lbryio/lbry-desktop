@@ -779,6 +779,17 @@ $recent-msg-button__height: 2rem;
     color: var(--color-black);
     opacity: 0.9;
   }
+
+  .channel-name {
+    max-width: unset;
+
+    p {
+      max-width: 5rem;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+  }
 }
 
 .livestreamSuperchat__info--notSticker {

@@ -3,6 +3,7 @@ import type { Node } from 'react';
 import React from 'react';
 import classnames from 'classnames';
 import Button from 'component/button';
+import PremiumBadge from 'component/common/premium-badge';
 import { stripLeadingAtSign } from 'util/string';
 
 type ChannelInfo = { uri: string, name: string, title: string };
@@ -17,10 +18,13 @@ type Props = {
   inline?: boolean,
   showAtSign?: boolean,
   className?: string,
+  showMemberBadge?: boolean,
   children: ?Node, // to allow for other elements to be nested within the UriIndicator (commit: 1e82586f).
   // --- redux ---
   claim: ?Claim,
   isResolvingUri: boolean,
+  odyseeMembership: string,
+  comment?: boolean,
   resolveUri: (string) => void,
 };
 
@@ -90,6 +94,9 @@ class UriIndicator extends React.PureComponent<Props> {
       hideAnonymous = false,
       showAtSign,
       className,
+      odyseeMembership,
+      comment,
+      showMemberBadge = true,
     } = this.props;
 
     if (!channelInfo && !claim) {
@@ -119,7 +126,8 @@ class UriIndicator extends React.PureComponent<Props> {
 
       const inner = (
         <span dir="auto" className={classnames('channel-name', { 'channel-name--inline': inline })}>
-          {showAtSign ? channelName : stripLeadingAtSign(channelTitle)}
+          <p>{showAtSign ? channelName : stripLeadingAtSign(channelTitle)}</p>
+          {!comment && showMemberBadge && <PremiumBadge membership={odyseeMembership} />}
         </span>
       );
 

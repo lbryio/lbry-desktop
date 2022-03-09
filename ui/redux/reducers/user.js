@@ -363,6 +363,28 @@ reducers[ACTIONS.USER_PASSWORD_SET_FAILURE] = (state, action) =>
     passwordSetError: action.data.error,
   });
 
+reducers[ACTIONS.ADD_ODYSEE_MEMBERSHIP_DATA] = (state, action) => {
+  return Object.assign({}, state, {
+    odyseeMembershipName: action.data.odyseeMembershipName,
+  });
+};
+
+reducers[ACTIONS.ADD_CLAIMIDS_MEMBERSHIP_DATA] = (state, action) => {
+  let latestData = {};
+
+  // add additional user membership value
+  if (state.odyseeMembershipsPerClaimIds) {
+    latestData = Object.assign({}, state.odyseeMembershipsPerClaimIds, action.data.response);
+  } else {
+    // otherwise just send the current data because nothing is saved yet
+    latestData = action.data.response;
+  }
+
+  return Object.assign({}, state, {
+    odyseeMembershipsPerClaimIds: latestData,
+  });
+};
+
 export default function userReducer(state = defaultState, action) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);

@@ -86,6 +86,11 @@
 
 .livestreamComment__info {
   overflow: hidden;
+
+  .comment__badge svg {
+    height: 1.4rem;
+    width: 1.4rem;
+  }
 }
 
 .livestream__comment--superchat {

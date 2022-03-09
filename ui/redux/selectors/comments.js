@@ -16,7 +16,7 @@ import { isClaimNsfw, getChannelFromClaim } from 'util/claim';
 import { selectSubscriptionUris } from 'redux/selectors/subscriptions';
 import { getCommentsListTitle } from 'util/comments';
 
-type State = { claims: any, comments: CommentsState };
+type State = { claims: any, comments: CommentsState, user: User };
 
 const selectState = (state) => state.comments || {};
 

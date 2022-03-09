@@ -228,6 +228,11 @@ $thumbnailWidthSmall: 2rem;
       color: rgba(var(--color-secondary-dynamic), 1);
     }
   }
+
+  .comment__badge svg {
+    height: 1.4rem;
+    width: 1.4rem;
+  }
 }
 
 .comment__pin {

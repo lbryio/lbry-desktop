@@ -15,6 +15,7 @@ import Empty from 'component/common/empty';
 import React, { useEffect } from 'react';
 import Spinner from 'component/spinner';
 import usePersistedState from 'effects/use-persisted-state';
+import useGetUserMemberships from 'effects/use-get-user-memberships';
 
 const DEBOUNCE_SCROLL_HANDLER_MS = 200;
 
@@ -50,6 +51,8 @@ type Props = {
   fetchComment: (commentId: string) => void,
   fetchReacts: (commentIds: Array<string>) => Promise<any>,
   resetComments: (claimId: string) => void,
+  claimsByUri: { [string]: any },
+  doFetchUserMemberships: (claimIdCsv: string) => void,
 };
 
 export default function CommentList(props: Props) {
@@ -76,6 +79,8 @@ export default function CommentList(props: Props) {
     fetchComment,
     fetchReacts,
     resetComments,
+    claimsByUri,
+    doFetchUserMemberships,
   } = props;
 
   const isMobile = useIsMobile();
@@ -98,6 +103,22 @@ export default function CommentList(props: Props) {
   // If not, wait to show comments until reactions are fetched
   const [readyToDisplayComments, setReadyToDisplayComments] = React.useState(
     Boolean(othersReactsById) || !ENABLE_COMMENT_REACTIONS
+  );
+
+  // get commenter claim ids for checking premium status
+  const commenterClaimIds = topLevelComments.map(function(comment) {
+    return comment.channel_id;
+  });
+
+  // update premium status
+  const shouldFetchUserMemberships = true;
+  useGetUserMemberships(
+    shouldFetchUserMemberships,
+    commenterClaimIds,
+    claimsByUri,
+    doFetchUserMemberships,
+    [topLevelComments],
+    true,
   );
 
   function changeSort(newSort) {

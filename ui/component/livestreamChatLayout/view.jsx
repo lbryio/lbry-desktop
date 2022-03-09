@@ -18,6 +18,7 @@ import React from 'react';
 import Yrbl from 'component/yrbl';
 import { getTipValues } from 'util/livestream';
 import Slide from '@mui/material/Slide';
+import useGetUserMemberships from 'effects/use-get-user-memberships';
 
 export const VIEW_MODES = {
   CHAT: 'chat',
@@ -49,6 +50,8 @@ type Props = {
   ) => void,
   doResolveUris: (uris: Array<string>, cache: boolean) => void,
   doSuperChatList: (uri: string) => void,
+  claimsByUri: { [string]: any },
+  doFetchUserMemberships: (claimIdCsv: string) => void,
 };
 
 export default function LivestreamChatLayout(props: Props) {
@@ -68,6 +71,8 @@ export default function LivestreamChatLayout(props: Props) {
     doCommentList,
     doResolveUris,
     doSuperChatList,
+    doFetchUserMemberships,
+    claimsByUri,
   } = props;
 
   const isMobile = useIsMobile() && !isPopoutWindow;
@@ -95,6 +100,22 @@ export default function LivestreamChatLayout(props: Props) {
   if (superChatsByChronologicalOrder.length > 0) {
     superChatsByChronologicalOrder.sort((a, b) => b.timestamp - a.timestamp);
   }
+
+  // get commenter claim ids for checking premium status
+  const commenterClaimIds = commentsByChronologicalOrder.map(function(comment) {
+    return comment.channel_id;
+  });
+
+  // update premium status
+  const shouldFetchUserMemberships = true;
+  useGetUserMemberships(
+    shouldFetchUserMemberships,
+    commenterClaimIds,
+    claimsByUri,
+    doFetchUserMemberships,
+    [commentsByChronologicalOrder],
+    true,
+  );
 
   const commentsToDisplay =
     viewMode === VIEW_MODES.CHAT ? commentsByChronologicalOrder : superChatsByChronologicalOrder;

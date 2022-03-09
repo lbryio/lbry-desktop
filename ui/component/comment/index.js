@@ -5,12 +5,12 @@ import {
   selectThumbnailForUri,
   selectHasChannels,
   selectMyClaimIdsRaw,
+  selectOdyseeMembershipForUri,
 } from 'redux/selectors/claims';
 import { doCommentUpdate, doCommentList } from 'redux/actions/comments';
 import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { doToast } from 'redux/actions/notifications';
 import { doClearPlayingUri } from 'redux/actions/content';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import {
   selectLinkedCommentAncestors,
   selectOthersReactsForComment,
@@ -18,6 +18,9 @@ import {
 } from 'redux/selectors/comments';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { selectPlayingUri } from 'redux/selectors/content';
+import {
+  selectUserVerifiedEmail,
+} from 'redux/selectors/user';
 import Comment from './view';
 
 const select = (state, props) => {
@@ -33,7 +36,7 @@ const select = (state, props) => {
     claim: makeSelectClaimForUri(uri)(state),
     thumbnail: channel_url && selectThumbnailForUri(state, channel_url),
     channelIsBlocked: channel_url && makeSelectChannelIsMuted(channel_url)(state),
-    commentingEnabled: IS_WEB ? Boolean(selectUserVerifiedEmail(state)) : true,
+    commentingEnabled: Boolean(selectUserVerifiedEmail(state)),
     othersReacts: selectOthersReactsForComment(state, reactionKey),
     activeChannelClaim,
     hasChannels: selectHasChannels(state),
@@ -41,6 +44,7 @@ const select = (state, props) => {
     stakedLevel: selectStakedLevelForChannelUri(state, channel_url),
     linkedCommentAncestors: selectLinkedCommentAncestors(state),
     totalReplyPages: makeSelectTotalReplyPagesForParentId(comment_id)(state),
+    selectOdyseeMembershipForUri: channel_url && selectOdyseeMembershipForUri(state, channel_url),
   };
 };
 

@@ -40,7 +40,8 @@ type Props = {
   small: boolean,
   claim: Claim,
   isMature: boolean,
-  authenticated: boolean,
+  triggerBlacklist: boolean,
+  userHasPremiumPlus: boolean,
   className?: string,
 };
 
@@ -64,16 +65,9 @@ function clearAdElements() {
 }
 
 function Ads(props: Props) {
-  const {
-    location: { pathname },
-    type = 'video',
-    tileLayout,
-    small,
-    authenticated,
-    className,
-  } = props;
+  const { type = 'video', tileLayout, small, userHasPremiumPlus, className } = props;
 
-  const shouldShowAds = SHOW_ADS && !authenticated;
+  const shouldShowAds = SHOW_ADS && !userHasPremiumPlus;
   const mobileAds = IS_ANDROID || IS_IOS;
 
   // this is populated from app based on location
@@ -106,8 +100,8 @@ function Ads(props: Props) {
         log_in_to_domain: (
           <Button
             button="link"
-            label={__('Log in to %domain%', { domain: DOMAIN })}
-            navigate={`/$/${PAGES.AUTH}?redirect=${pathname}`}
+            label={__('Get Odysee Premium+', { domain: DOMAIN })}
+            navigate={`/$/${PAGES.ODYSEE_MEMBERSHIP}`}
           />
         ),
       }}

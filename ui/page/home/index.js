@@ -3,7 +3,7 @@ import * as SETTINGS from 'constants/settings';
 import { doFetchActiveLivestreams } from 'redux/actions/livestream';
 import { selectActiveLivestreams, selectFetchingActiveLivestreams } from 'redux/selectors/livestream';
 import { selectFollowedTags } from 'redux/selectors/tags';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
+import { selectUserVerifiedEmail, selectOdyseeMembershipIsPremiumPlus } from 'redux/selectors/user';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import { selectShowMatureContent, selectHomepageData, selectClientSetting } from 'redux/selectors/settings';
 
@@ -18,6 +18,7 @@ const select = (state) => ({
   activeLivestreams: selectActiveLivestreams(state),
   fetchingActiveLivestreams: selectFetchingActiveLivestreams(state),
   hideScheduledLivestreams: selectClientSetting(state, SETTINGS.HIDE_SCHEDULED_LIVESTREAMS),
+  userHasPremiumPlus: selectOdyseeMembershipIsPremiumPlus(state),
 });
 
 const perform = (dispatch) => ({

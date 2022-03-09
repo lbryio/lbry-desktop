@@ -1,10 +1,17 @@
 // @flow
 import { useState, useEffect } from 'react';
 
+/**
+ *
+ * @param {boolean} shouldFetch - Whether to get the views, not needed for some pages
+ * @param {array} uris - Array of the LBRY uris of content to fetch views for
+ * @param {object} claimsByUri - Function to get claimIds from claim uris
+ * @param {function} doFetchViewCount - Get views account per a string of comma separated Claim Ids
+ */
 export default function useFetchViewCount(
   shouldFetch: ?boolean,
   uris: Array<string>,
-  claimsByUri: any,
+  claimsByUri: {},
   doFetchViewCount: (string) => void
 ) {
   const [fetchedUris, setFetchedUris] = useState([]);

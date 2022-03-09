@@ -58,6 +58,7 @@ type MarkdownProps = {
   disableTimestamps?: boolean,
   stakedLevel?: number,
   setUserMention?: (boolean) => void,
+  hasMembership?: string,
 };
 
 // ****************************************************************************
@@ -156,6 +157,7 @@ export default React.memo<MarkdownProps>(function MarkdownPreview(props: Markdow
     disableTimestamps,
     stakedLevel,
     setUserMention,
+    hasMembership,
   } = props;
 
   const strippedContent = content
@@ -189,7 +191,7 @@ export default React.memo<MarkdownProps>(function MarkdownPreview(props: Markdow
               parentCommentId={parentCommentId}
               isMarkdownPost={isMarkdownPost}
               simpleLinks={simpleLinks}
-              allowPreview={isStakeEnoughForPreview(stakedLevel)}
+              allowPreview={isStakeEnoughForPreview(stakedLevel) || hasMembership}
               setUserMention={setUserMention}
             />
           ),
@@ -198,7 +200,7 @@ export default React.memo<MarkdownProps>(function MarkdownPreview(props: Markdow
       img: (imgProps) => {
         const imageCdnUrl =
           getThumbnailCdnUrl({ thumbnail: imgProps.src, width: 0, height: 0, quality: 85 }) || MISSING_THUMB_DEFAULT;
-        if (isStakeEnoughForPreview(stakedLevel) && !isEmote(imgProps.title, imgProps.src)) {
+        if ((isStakeEnoughForPreview(stakedLevel) || hasMembership) && !isEmote(imgProps.title, imgProps.src)) {
           return <ZoomableImage {...imgProps} src={imageCdnUrl} />;
         } else {
           return (
@@ -206,7 +208,7 @@ export default React.memo<MarkdownProps>(function MarkdownPreview(props: Markdow
               src={imageCdnUrl}
               alt={imgProps.alt}
               title={imgProps.title}
-              helpText={__("This channel isn't staking enough Credits for inline image previews.")}
+              helpText={__('Odysee Premium required to enable image previews')}
             />
           );
         }

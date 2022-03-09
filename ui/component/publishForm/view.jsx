@@ -97,6 +97,7 @@ type Props = {
   isClaimingInitialRewards: boolean,
   claimInitialRewards: () => void,
   hasClaimedInitialRewards: boolean,
+  odyseeMembership: string,
 };
 
 function PublishForm(props: Props) {
@@ -138,6 +139,7 @@ function PublishForm(props: Props) {
     isClaimingInitialRewards,
     claimInitialRewards,
     hasClaimedInitialRewards,
+    odyseeMembership,
   } = props;
 
   const inEditMode = Boolean(editingURI);
@@ -146,11 +148,15 @@ function PublishForm(props: Props) {
   const TYPE_PARAM = 'type';
   const uploadType = urlParams.get(TYPE_PARAM);
   const _uploadType = uploadType && uploadType.toLowerCase();
+
+  const userHasEnoughLBCForStreaming = activeChannelStakedLevel >= CHANNEL_STAKED_LEVEL_LIVESTREAM;
+
   const enableLivestream =
     ENABLE_NO_SOURCE_CLAIMS &&
     user &&
     !user.odysee_live_disabled &&
-    (activeChannelStakedLevel >= CHANNEL_STAKED_LEVEL_LIVESTREAM || user.odysee_live_enabled);
+    (userHasEnoughLBCForStreaming || user.odysee_live_enabled || odyseeMembership);
+
   // $FlowFixMe
   const AVAILABLE_MODES = Object.values(PUBLISH_MODES).filter((mode) => {
     // $FlowFixMe

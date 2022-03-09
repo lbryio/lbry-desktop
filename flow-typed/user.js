@@ -32,4 +32,5 @@ declare type User = {
   odysee_live_enabled: boolean,
   odysee_live_disabled: boolean,
   global_mod: boolean,
+  odyseeMembershipsPerClaimIds: ?{},
 };

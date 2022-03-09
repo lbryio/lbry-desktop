@@ -15,7 +15,8 @@ import I18nMessage from 'component/i18nMessage';
 import ChannelThumbnail from 'component/channelThumbnail';
 import { useIsMobile, useIsLargeScreen, isTouch } from 'effects/use-screensize';
 import { GetLinksData } from 'util/buildHomepage';
-import { DOMAIN, ENABLE_UI_NOTIFICATIONS, ENABLE_NO_SOURCE_CLAIMS, CHANNEL_STAKED_LEVEL_LIVESTREAM } from 'config';
+import { DOMAIN, ENABLE_UI_NOTIFICATIONS, ENABLE_NO_SOURCE_CLAIMS } from 'config';
+import PremiumBadge from 'component/common/premium-badge';
 
 const touch = isTouch();
 
@@ -70,6 +71,13 @@ const PLAYLISTS = {
   hideForUnauth: true,
 };
 
+const PREMIUM = {
+  title: 'Premium',
+  link: `/$/${PAGES.ODYSEE_MEMBERSHIP}`,
+  icon: ICONS.UPGRADE,
+  hideForUnauth: true,
+};
+
 const UNAUTH_LINKS: Array<SideNavLink> = [
   {
     title: 'Log In',
@@ -118,9 +126,10 @@ type Props = {
   doClearPurchasedUriSuccess: () => void,
   user: ?User,
   homepageData: any,
-  activeChannelStakedLevel: number,
   wildWestDisabled: boolean,
   doClearClaimSearch: () => void,
+  odyseeMembership: string,
+  odyseeMembershipByUri: (uri: string) => string,
   doFetchLastActiveSubs: (force?: boolean, count?: number) => void,
 };
 
@@ -140,9 +149,10 @@ function SideNavigation(props: Props) {
     homepageData,
     user,
     followedTags,
-    activeChannelStakedLevel,
     wildWestDisabled,
     doClearClaimSearch,
+    odyseeMembership,
+    odyseeMembershipByUri,
     doFetchLastActiveSubs,
   } = props;
 
@@ -228,12 +238,7 @@ function SideNavigation(props: Props) {
   const notificationsEnabled = ENABLE_UI_NOTIFICATIONS || (user && user.experimental_ui);
   const isAuthenticated = Boolean(email);
 
-  const livestreamEnabled = Boolean(
-    ENABLE_NO_SOURCE_CLAIMS &&
-      user &&
-      !user.odysee_live_disabled &&
-      (activeChannelStakedLevel >= CHANNEL_STAKED_LEVEL_LIVESTREAM || user.odysee_live_enabled)
-  );
+  const livestreamEnabled = Boolean(ENABLE_NO_SOURCE_CLAIMS && user && !user.odysee_live_disabled);
 
   const [pulseLibrary, setPulseLibrary] = React.useState(false);
   const [expandTags, setExpandTags] = React.useState(false);
@@ -325,7 +330,11 @@ function SideNavigation(props: Props) {
             </li>
           )}
           {displayedSubscriptions.map((subscription) => (
-            <SubscriptionListItem key={subscription.uri} subscription={subscription} />
+            <SubscriptionListItem
+              key={subscription.uri}
+              subscription={subscription}
+              odyseeMembershipByUri={odyseeMembershipByUri}
+            />
           ))}
           {!!subscriptionFilter && !displayedSubscriptions.length && (
             <li>
@@ -494,6 +503,7 @@ function SideNavigation(props: Props) {
               {getLink(getHomeButton(doClearClaimSearch))}
               {getLink(RECENT_FROM_FOLLOWING)}
               {getLink(PLAYLISTS)}
+              {!odyseeMembership && getLink(PREMIUM)}
             </ul>
 
             <ul
@@ -533,8 +543,17 @@ function SideNavigation(props: Props) {
   );
 }
 
-function SubscriptionListItem({ subscription }: { subscription: Subscription }) {
+type SubItemProps = {
+  subscription: Subscription,
+  odyseeMembershipByUri: (uri: string) => string,
+}
+
+function SubscriptionListItem(props: SubItemProps) {
+  const { subscription, odyseeMembershipByUri } = props;
   const { uri, channelName } = subscription;
+
+  const membership = odyseeMembershipByUri(uri);
+
   return (
     <li className="navigation-link__wrapper navigation__subscription">
       <Button
@@ -547,6 +566,7 @@ function SubscriptionListItem({ subscription }: { subscription: Subscription }) 
           <ClaimPreviewTitle uri={uri} />
           <span dir="auto" className="channel-name">
             {channelName}
+            <PremiumBadge membership={membership} />
           </span>
         </div>
       </Button>

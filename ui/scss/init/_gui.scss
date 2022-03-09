@@ -1177,6 +1177,22 @@ img {
   }
 }
 
+.premium-wrapper {
+  .membership_title {
+    .comment__badge {
+      .icon {
+        margin-bottom: -6px;
+      }
+    }
+  }
+  .premium-option {
+    background-color: rgba(var(--color-header-background-base), 0.4);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-m);
+    margin-bottom: var(--spacing-m);
+  }
+}
+
 // Temporary master classes
 .date_time {
   font-size: var(--font-xsmall);

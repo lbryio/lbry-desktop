@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { selectClaimSearchByQuery, selectFetchingClaimSearchByQuery, selectClaimsByUri } from 'redux/selectors/claims';
 import { doClaimSearch } from 'redux/actions/claims';
+import { doFetchUserMemberships } from 'redux/actions/user';
 import * as SETTINGS from 'constants/settings';
 import { MATURE_TAGS } from 'constants/tags';
 import { doFetchViewCount } from 'lbryinc';
@@ -37,6 +38,7 @@ const select = (state, props) => {
 const perform = {
   doClaimSearch,
   doFetchViewCount,
+  doFetchUserMemberships,
 };
 
 export default withRouter(connect(select, perform)(ClaimListDiscover));

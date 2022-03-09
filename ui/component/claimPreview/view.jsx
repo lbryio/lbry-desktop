@@ -90,6 +90,7 @@ type Props = {
   showEdit?: boolean,
   dragHandleProps?: any,
   unavailableUris?: Array<string>,
+  showMemberBadge?: boolean,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -152,6 +153,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     showEdit,
     dragHandleProps,
     unavailableUris,
+    showMemberBadge,
   } = props;
 
   const isMobile = useIsMobile();
@@ -366,7 +368,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
 
           {isChannelUri && claim ? (
             <UriIndicator focusable={false} uri={uri} link>
-              <ChannelThumbnail uri={uri} small={type === 'inline'} />
+              <ChannelThumbnail uri={uri} small={type === 'inline'} showMemberBadge={showMemberBadge} checkMembership={false} />
             </UriIndicator>
           ) : (
             <>
@@ -411,11 +413,16 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                 {!isChannelUri && signingChannel && (
                   <div className="claim-preview__channel-staked">
                     <UriIndicator focusable={false} uri={uri} link hideAnonymous>
-                      <ChannelThumbnail uri={signingChannel.permanent_url} xsmall />
+                      <ChannelThumbnail uri={signingChannel.permanent_url} xsmall showMemberBadge={showMemberBadge} checkMembership={false} />
                     </UriIndicator>
                   </div>
                 )}
-                <ClaimPreviewSubtitle uri={uri} type={type} showAtSign={isChannelUri} />
+                <ClaimPreviewSubtitle
+                  uri={uri}
+                  type={type}
+                  showAtSign={isChannelUri}
+                  showMemberBadge={!showMemberBadge}
+                />
                 {(pending || !!reflectingProgress) && <PublishPending uri={uri} />}
                 {channelSubscribers}
               </div>

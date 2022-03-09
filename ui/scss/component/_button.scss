@@ -285,12 +285,27 @@ a.button--alt {
   max-width: 100%;
   text-align: left;
 
+  .comment__badge {
+    padding-right: 0px;
+
+    svg {
+      height: 1.2rem;
+      width: 1.2rem;
+    }
+  }
+
   .channel-name {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    display: flex;
+    align-items: flex-end;
     font-size: var(--font-xsmall);
     color: rgba(var(--color-text-base), 0.6);
+
+    .icon {
+      margin-left: var(--spacing-xxs);
+    }
   }
 
   .markdown-preview & {

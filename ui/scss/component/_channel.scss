@@ -199,6 +199,37 @@ $actions-z-index: 2;
   width: 5rem;
   background-size: cover;
   margin-right: var(--spacing-m);
+
+  .button {
+    display: flex;
+    position: absolute;
+    text-align: center;
+
+    width: 80%;
+    bottom: -16%;
+    left: unset !important;
+    background-color: unset !important;
+    right: -1rem;
+  }
+
+  .link--small {
+    right: -3rem !important;
+  }
+
+  .comment__badge {
+    position: absolute;
+    text-align: center;
+    width: 80%;
+    left: 22%;
+    bottom: -30%;
+
+    svg {
+      stroke: unset;
+      overflow: visible;
+      width: 100%;
+      height: 100%;
+    }
+  }
 }
 
 .channel-thumbnail--resolving {
@@ -236,6 +267,31 @@ $actions-z-index: 2;
   @media (max-width: $breakpoint-small) {
     top: 0;
     margin-top: var(--spacing-xl);
+  }
+
+  .comment__badge {
+    position: absolute;
+    text-align: center;
+    width: 60%;
+    left: 0;
+
+    svg {
+      stroke: unset;
+      overflow: visible;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.claim-preview .channel-thumbnail .comment__badge {
+  padding: 0px;
+  left: 12%;
+  bottom: -20%;
+
+  svg {
+    width: 3rem;
+    height: 3rem;
   }
 }
 
@@ -331,6 +387,15 @@ $actions-z-index: 2;
 
   @media (max-width: $breakpoint-small) {
     padding-top: var(--spacing-xl);
+  }
+
+  .comment__badge {
+    padding-right: 0px;
+
+    svg {
+      height: 2.5rem;
+      width: 2.5rem;
+    }
   }
 }
 
@@ -501,6 +566,15 @@ $actions-z-index: 2;
   padding: var(--spacing-s);
   overflow: hidden;
 
+  .comment__badge {
+    padding-right: 0px;
+
+    svg {
+      height: 2rem;
+      width: 2rem;
+    }
+  }
+
   .channel-thumbnail {
     height: 2rem;
     width: 2rem;
@@ -632,6 +706,19 @@ $actions-z-index: 2;
   .credit-amount {
     color: var(--color-gray-3);
   }
+}
+
+.icon__wrapper--PremiumPlusBadge {
+  margin-left: 3px;
+  height: 22px !important;
+  width: 22px !important;
+  padding: 0 !important;
+  display: inline-block !important;
+  margin-bottom: -9px !important;
+}
+
+.icon__wrapper--PremiumPlusBadge > svg {
+  margin-top: -2px;
 }
 
 .channelsPage-wrapper {

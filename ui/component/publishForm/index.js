@@ -32,7 +32,7 @@ import {
 } from 'redux/selectors/app';
 import { selectClientSetting } from 'redux/selectors/settings';
 import { makeSelectFileRenderModeForUri } from 'redux/selectors/content';
-import { selectUser } from 'redux/selectors/user';
+import { selectUser, selectOdyseeMembershipName } from 'redux/selectors/user';
 import PublishForm from './view';
 
 const select = (state) => {
@@ -65,6 +65,7 @@ const select = (state) => {
     activeChannelStakedLevel: selectActiveChannelStakedLevel(state),
     isClaimingInitialRewards: selectIsClaimingInitialRewards(state),
     hasClaimedInitialRewards: selectHasClaimedInitialRewards(state),
+    odyseeMembership: selectOdyseeMembershipName(state),
   };
 };
 
