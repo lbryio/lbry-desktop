@@ -1,0 +1,92 @@
+.MuiAutocomplete-inputRoot {
+  padding: 0 !important;
+  font-family: inherit !important;
+  font-weight: inherit !important;
+  font-size: inherit !important;
+  color: var(--color-text) !important;
+
+  .MuiOutlinedInput-notchedOutline {
+    visibility: hidden;
+  }
+
+  .create__comment {
+    @extend textarea;
+
+    min-height: calc(var(--height-input) * 1.5) !important;
+  }
+}
+
+.MuiAutocomplete-paper {
+  @extend .card;
+  background-color: var(--color-card-background);
+  box-shadow: var(--card-box-shadow);
+  color: var(--color-text) !important;
+
+  .textareaSuggestions__group {
+    &:last-child hr {
+      display: none;
+    }
+
+    .textareaSuggestions__label {
+      @extend .wunderbar__label;
+    }
+
+    .Mui-focused {
+      background-color: var(--color-menu-background--active);
+    }
+  }
+
+  > .icon {
+    top: 0;
+    left: var(--spacing-m);
+    height: 100%;
+    z-index: 1;
+    stroke: var(--color-input-placeholder);
+  }
+
+  @media (min-width: $breakpoint-small) {
+    padding: 0;
+  }
+}
+
+.MuiAutocomplete-option {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--spacing-xxs);
+  margin: 0 var(--spacing-xxs);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-radius: var(--border-radius);
+
+  .channel-thumbnail {
+    @include handleChannelGif(2.1rem);
+    margin-right: 0;
+
+    @media (min-width: $breakpoint-small) {
+      @include handleChannelGif(2.1rem);
+    }
+  }
+
+  .textareaSuggestion__label {
+    @extend .wunderbar__suggestion-label;
+    margin-left: var(--spacing-m);
+    display: block;
+    position: relative;
+
+    .textareaSuggestion__title {
+      @extend .wunderbar__suggestion-title;
+    }
+
+    .textareaSuggestion__value {
+      @extend .wunderbar__suggestion-name;
+    }
+  }
+}
+
+.textareaSuggestions__topSeparator {
+  @extend .wunderbar__top-separator;
+}
+
+.MuiAutocomplete-loading {
+  color: var(--color-text) !important;
+}

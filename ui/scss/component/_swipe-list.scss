@@ -1,0 +1,13 @@
+.swipe-list {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+}
+
+.swipe-list__item {
+  width: 80vw;
+  margin-right: var(--spacing-s);
+  flex-shrink: 0;
+  scroll-snap-align: start;
+}
