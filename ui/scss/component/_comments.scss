@@ -6,6 +6,10 @@ $thumbnailWidthSmall: 2rem;
   font-size: var(--font-small);
   margin-top: var(--spacing-l);
 
+  .channel-name {
+    font-size: var(--font-small);
+  }
+
   @media (max-width: $breakpoint-small) {
     margin-top: var(--spacing-s);
 

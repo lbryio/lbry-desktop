@@ -1165,7 +1165,7 @@ img {
 
   .claim-preview__wrapper--channel {
     .claim-preview--channel {
-      a {
+      a.button:not(.tag) {
         .button__content {
           align-items: unset;
         }

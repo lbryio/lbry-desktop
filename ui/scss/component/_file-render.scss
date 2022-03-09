@@ -22,6 +22,32 @@
         }
       }
     }
+    .placeholder.claim-preview__wrapper {
+      background-color: unset;
+      .media__thumb {
+        width: var(--file-list-thumbnail-width);
+      }
+      .placeholder__wrapper {
+        .claim-preview__title {
+          width: 95%;
+        }
+        .claim-preview__title_b {
+          display: block;
+          width: 91%;
+          margin-bottom: unset;
+        }
+        .channel-thumbnail {
+          display: none;
+        }
+        .media__subtitle {
+          width: 94%;
+          margin-top: unset;
+        }
+        .media__subtitle_b {
+          width: 46%;
+        }
+      }
+    }
   }
 
   .file-page__video-container + .card,
