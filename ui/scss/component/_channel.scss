@@ -739,6 +739,9 @@ $actions-z-index: 2;
       .icon {
         margin-bottom: -10%;
         width: 40%;
+        @media (max-width: $breakpoint-small) {
+          margin-bottom: -30%;
+        }
       }
     }
 
