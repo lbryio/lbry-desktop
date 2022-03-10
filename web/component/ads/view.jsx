@@ -53,12 +53,43 @@ function removeIfExists(querySelector) {
 function Ads(props: Props) {
   const { type = 'video', tileLayout, small, userHasPremiumPlus, className } = props;
 
-  const shouldShowAds = SHOW_ADS && !userHasPremiumPlus;
+  const [shouldShowAds, setShouldShowAds] = React.useState(resolveAdVisibility());
   const mobileAds = IS_ANDROID || IS_IOS;
 
   // this is populated from app based on location
   const isInEu = localStorage.getItem('gdprRequired') === 'true';
   const adConfig = isInEu ? AD_CONFIGS.EU : mobileAds ? AD_CONFIGS.MOBILE : AD_CONFIGS.DEFAULT;
+
+  function resolveAdVisibility() {
+    // 'window.odysee_ad_blocker_detected' will be undefined at startup.
+    // We'll wait until we are sure it is not blocked (i.e. === false) before
+    // showing the component.
+    return window.odysee_ad_blocker_detected === false && SHOW_ADS && !userHasPremiumPlus;
+  }
+
+  useEffect(() => {
+    if (window.odysee_ad_blocker_detected === undefined) {
+      let mounted = true;
+      const GOOGLE_AD_URL = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+
+      fetch(GOOGLE_AD_URL)
+        .then(() => {
+          window.odysee_ad_blocker_detected = false;
+        })
+        .catch(() => {
+          window.odysee_ad_blocker_detected = true;
+        })
+        .finally(() => {
+          if (mounted) {
+            setShouldShowAds(resolveAdVisibility());
+          }
+        });
+
+      return () => {
+        mounted = false;
+      };
+    }
+  }, []);
 
   // add script to DOM
   useEffect(() => {
@@ -88,7 +119,7 @@ function Ads(props: Props) {
         };
       } catch (e) {}
     }
-  }, []);
+  }, [shouldShowAds]);
 
   const adsSignInDriver = (
     <I18nMessage
