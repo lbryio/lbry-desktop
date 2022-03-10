@@ -1,5 +1,5 @@
 // @flow
-import { SHOW_ADS, SIMPLE_SITE } from 'config';
+import { SIMPLE_SITE } from 'config';
 import * as CS from 'constants/claim_search';
 import * as ICONS from 'constants/icons';
 import React, { Fragment } from 'react';
@@ -39,7 +39,6 @@ type Props = {
   doFetchChannelLiveStatus: (string) => void,
   activeLivestreamForChannel: any,
   activeLivestreamInitialized: boolean,
-  userHasPremiumPlus: boolean,
 };
 
 function ChannelContent(props: Props) {
@@ -61,7 +60,6 @@ function ChannelContent(props: Props) {
     doFetchChannelLiveStatus,
     activeLivestreamForChannel,
     activeLivestreamInitialized,
-    userHasPremiumPlus,
   } = props;
   // const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
 
@@ -162,7 +160,7 @@ function ChannelContent(props: Props) {
           defaultOrderBy={CS.ORDER_BY_NEW}
           pageSize={defaultPageSize}
           infiniteScroll={defaultInfiniteScroll}
-          injectedItem={SHOW_ADS && !userHasPremiumPlus && { node: <Ads type="video" tileLayout={tileLayout} small /> }}
+          injectedItem={{ node: <Ads type="video" tileLayout={tileLayout} small /> }}
           meta={
             showFilters && (
               <Form onSubmit={() => {}} className="wunderbar--inline">

@@ -1,5 +1,5 @@
 // @flow
-import { SHOW_ADS, DOMAIN, SIMPLE_SITE } from 'config';
+import { DOMAIN, SIMPLE_SITE } from 'config';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import * as CS from 'constants/claim_search';
@@ -31,7 +31,6 @@ type Props = {
   tileLayout: boolean,
   activeLivestreams: ?LivestreamInfo,
   doFetchActiveLivestreams: (orderBy: ?Array<string>, lang: ?Array<string>) => void,
-  userHasPremiumPlus: boolean,
 };
 
 function DiscoverPage(props: Props) {
@@ -48,7 +47,6 @@ function DiscoverPage(props: Props) {
     activeLivestreams,
     doFetchActiveLivestreams,
     dynamicRouteProps,
-    userHasPremiumPlus,
   } = props;
 
   const buttonRef = useRef();
@@ -190,9 +188,7 @@ function DiscoverPage(props: Props) {
         tags={tags}
         hiddenNsfwMessage={<HiddenNsfw type="page" />}
         repostedClaimId={repostedClaim ? repostedClaim.claim_id : null}
-        injectedItem={
-          SHOW_ADS && !userHasPremiumPlus && !isWildWest && { node: <Ads small type="video" tileLayout={tileLayout} /> }
-        }
+        injectedItem={!isWildWest && { node: <Ads small type="video" tileLayout={tileLayout} /> }}
         // Assume wild west page if no dynamicRouteProps
         // Not a very good solution, but just doing it for now
         // until we are sure this page will stay around
