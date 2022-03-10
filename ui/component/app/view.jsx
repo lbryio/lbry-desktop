@@ -1,5 +1,6 @@
 // @flow
 import * as PAGES from 'constants/pages';
+import * as SETTINGS from 'constants/settings';
 import React, { useEffect, useRef, useState, useLayoutEffect } from 'react';
 import { lazyImport } from 'util/lazyImport';
 import { tusUnlockAndNotify, tusHandleTabUpdates } from 'util/tus';
@@ -363,6 +364,17 @@ function App(props: Props) {
       analytics.rewardEligibleEvent();
     }
   }, [previousRewardApproved, isRewardApproved]);
+
+  useEffect(() => {
+    fetchLocaleApi().then((response) => {
+      const locale: LocaleInfo = response?.data;
+      if (locale) {
+        // Put in 'window' for now. Can be moved to localStorage or wherever,
+        // but the key should remain the same so clients are not affected.
+        window[SETTINGS.LOCALE] = locale;
+      }
+    });
+  }, []);
 
   // Load IMA3 SDK for aniview
   // useEffect(() => {

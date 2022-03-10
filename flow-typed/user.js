@@ -34,3 +34,16 @@ declare type User = {
   global_mod: boolean,
   odyseeMembershipsPerClaimIds: ?{},
 };
+
+declare type LocaleInfo = {
+  continent: string,
+  country: string,
+  gdpr_required: boolean,
+  is_eu_member: boolean,
+};
+
+declare type GeoBlock = {
+  types: Array<string>,
+  countries: Array<string>,
+  continents: Array<string>,
+};
