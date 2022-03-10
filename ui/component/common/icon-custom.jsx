@@ -2795,7 +2795,7 @@ export const icons = {
       <line className="early-access--st0" x1="314.7" y1="380.8" x2="295.1" y2="400.5" />
       <text
         transform="matrix(1 0 0 1 294.7307 394.0567)"
-        style={{ fill: '#DCBDA2', 'fontFamily': 'Roboto-Bold', 'fontSize': '10.1968px' }}
+        style={{ fill: '#DCBDA2', fontFamily: 'Roboto-Bold', fontSize: '10.1968px' }}
       >
         ADS
       </text>
@@ -2847,7 +2847,7 @@ export const icons = {
       <line className="member-bage--st0" x1="314.7" y1="433.6" x2="295.1" y2="453.2" />
       <text
         transform="matrix(1 0 0 1 294.7307 446.8067)"
-        style={{ fill: '#DCBDA2', 'fontFamily': 'Roboto-Bold', 'fontSize': '10.1968px' }}
+        style={{ fill: '#DCBDA2', fontFamily: 'Roboto-Bold', fontSize: '10.1968px' }}
       >
         ADS
       </text>
@@ -2901,7 +2901,7 @@ export const icons = {
       <line className="st0--no-ads" x1="314.7" y1="331.8" x2="295.1" y2="351.5" />
       <text
         transform="matrix(1 0 0 1 294.7307 345.0567)"
-        style={{ fill: '#DCBDA2', 'fontFamily': 'Roboto-Bold', 'fontSize': '10.1968px' }}
+        style={{ fill: '#DCBDA2', fontFamily: 'Roboto-Bold', fontSize: '10.1968px' }}
       >
         ADS
       </text>
@@ -3100,11 +3100,6 @@ export const icons = {
         id="XMLID_126_"
         className="premium-plus--st5"
         points="20.5,20.1 11.6,20.1 11.2,14.3 14.2,15.8 16,12.4 17.9,15.8 21,14.2 "
-      />
-      <polygon
-        id="XMLID_24_"
-        className="premium-plus--st6"
-        points="16.1,20.8 21.1,20.8 21.7,13.2 18.1,14.9 16.1,11.3 16.1,7.8 23.9,12.3 23.9,21.616.1,25.9 "
       />
       <polygon
         id="XMLID_23_"
