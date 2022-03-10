@@ -66,6 +66,10 @@
       transition: unset !important;
     }
 
+    #aniBox[style*='height: 1px'] {
+      display: none;
+    }
+
     #aniBox,
     #av-container {
       width: 100% !important;

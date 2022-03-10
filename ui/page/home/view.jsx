@@ -1,7 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
-import { SHOW_ADS, SITE_NAME, SIMPLE_SITE, ENABLE_NO_SOURCE_CLAIMS } from 'config';
+import { SITE_NAME, SIMPLE_SITE, ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import React, { useState } from 'react';
 import Page from 'component/page';
 import Button from 'component/button';
@@ -31,7 +31,6 @@ type Props = {
   doFetchActiveLivestreams: () => void,
   fetchingActiveLivestreams: boolean,
   hideScheduledLivestreams: boolean,
-  userHasPremiumPlus: boolean,
 };
 
 function HomePage(props: Props) {
@@ -45,7 +44,6 @@ function HomePage(props: Props) {
     doFetchActiveLivestreams,
     fetchingActiveLivestreams,
     hideScheduledLivestreams,
-    userHasPremiumPlus,
   } = props;
   const showPersonalizedChannels = (authenticated || !IS_WEB) && subscribedChannels && subscribedChannels.length > 0;
   const showPersonalizedTags = (authenticated || !IS_WEB) && followedTags && followedTags.length > 0;
@@ -101,11 +99,7 @@ function HomePage(props: Props) {
         hasSource
         prefixUris={getLivestreamUris(activeLivestreams, options.channelIds)}
         pinUrls={pinUrls}
-        injectedItem={
-          index === 0 &&
-          SHOW_ADS &&
-          !userHasPremiumPlus && { node: <Ads small type="video" tileLayout />, replace: true }
-        }
+        injectedItem={index === 0 && { node: <Ads small type="video" tileLayout />, replace: true }}
       />
     );
 
