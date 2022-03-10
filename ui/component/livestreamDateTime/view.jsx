@@ -18,7 +18,7 @@ const LivestreamDateTime = (props: Props) => {
     return (
       <span>
         <I18nMessage tokens={{ time_date: <DateTime timeAgo date={activeLivestream.startedStreaming.toDate()} /> }}>
-          {__('Started %time_date%')}
+          Started %time_date%
         </I18nMessage>
       </span>
     );
@@ -32,9 +32,7 @@ const LivestreamDateTime = (props: Props) => {
   }
   return (
     <span>
-      <I18nMessage tokens={{ time_date: <DateTime timeAgo uri={uri} showFutureDate /> }}>
-        {__('Live %time_date%')}
-      </I18nMessage>
+      <I18nMessage tokens={{ time_date: <DateTime timeAgo uri={uri} showFutureDate /> }}>Live %time_date%</I18nMessage>
     </span>
   );
 };

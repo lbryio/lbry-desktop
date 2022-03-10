@@ -13,7 +13,6 @@ import FileRenderDownload from 'component/fileRenderDownload';
 import RecommendedContent from 'component/recommendedContent';
 import CollectionContent from 'component/collectionContentSidebar';
 import Button from 'component/button';
-import I18nMessage from 'component/i18nMessage';
 import Empty from 'component/common/empty';
 import SwipeableDrawer from 'component/swipeableDrawer';
 import { DrawerExpandButton } from 'component/swipeableDrawer/view';
@@ -210,10 +209,9 @@ export default function FilePage(props: Props) {
               {claimIsMine && isLivestream && (
                 <div className="livestream__creator-message">
                   <h4>{__('Only visible to you')}</h4>
-                  <I18nMessage>
-                    People who view this link will be redirected to your livestream. Make sure to use this for sharing
-                    so your title and thumbnail are displayed properly.
-                  </I18nMessage>
+                  {__(
+                    'People who view this link will be redirected to your livestream. Make sure to use this for sharing so your title and thumbnail are displayed properly.'
+                  )}
                   <div className="section__actions">
                     <Button button="primary" navigate={`/$/${PAGES.LIVESTREAM}`} label={__('View livestream')} />
                   </div>

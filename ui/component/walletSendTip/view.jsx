@@ -339,15 +339,12 @@ export default function WalletSendTip(props: Props) {
             // if it's LBC and there is no balance, you can prompt to purchase LBC
             <Card
               title={
-                <I18nMessage tokens={{ lbc: <LbcSymbol size={22} /> }}>
-                  {__('Supporting content requires %lbc%')}
-                </I18nMessage>
+                <I18nMessage tokens={{ lbc: <LbcSymbol size={22} /> }}>Supporting content requires %lbc%</I18nMessage>
               }
               subtitle={
                 <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
-                  {__(
-                    'With %lbc%, you can send tips to your favorite creators, or help boost their content for more people to see.'
-                  )}
+                  With %lbc%, you can send tips to your favorite creators, or help boost their content for more people
+                  to see.
                 </I18nMessage>
               }
               actions={

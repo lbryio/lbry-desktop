@@ -71,12 +71,9 @@ export default function MembershipSplash(props: Props) {
 
       <div className="membership-splash__info-wrapper">
         <div className="membership-splash__info">
-          <I18nMessage>
-            Creating a revolutionary video platform for everyone is something we're proud to be doing, but it isn't
-            something that can happen without support. If you believe in Odysee's mission, please consider becoming a
-            Premium member. As a Premium member, you'll be helping us build the best platform in the universe and we'll
-            give you some cool perks!
-          </I18nMessage>
+          {__(
+            "Creating a revolutionary video platform for everyone is something we're proud to be doing, but it isn't something that can happen without support. If you believe in Odysee's mission, please consider becoming a Premium member. As a Premium member, you'll be helping us build the best platform in the universe and we'll give you some cool perks!"
+          )}
         </div>
 
         <div className="membership-splash__info">
