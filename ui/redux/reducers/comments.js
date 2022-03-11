@@ -89,7 +89,7 @@ export default handleActions(
       newCommentIds.unshift(comment.comment_id);
       byId[claimId] = newCommentIds;
 
-      if (totalCommentsById[claimId]) {
+      if (totalCommentsById.hasOwnProperty(claimId)) {
         totalCommentsById[claimId] += 1;
       }
 
@@ -562,7 +562,7 @@ export default handleActions(
         }
       }
 
-      if (totalCommentsById[claimId]) {
+      if (totalCommentsById.hasOwnProperty(claimId)) {
         totalCommentsById[claimId] = Math.max(0, totalCommentsById[claimId] - 1);
       }
 
