@@ -5,6 +5,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased for Desktop]
 
+### Added
+- Discover page medium duration filter ([#7506](https://github.com/lbryio/lbry-desktop/pull/7506))
+- Keep last used collection for Add To ([#7491](https://github.com/lbryio/lbry-desktop/pull/7491))
+- Disk space functionality on mac / windows ([#7500](https://github.com/lbryio/lbry-desktop/pull/7500))
+
+### Changed
+- Some upgrade modal improvements ([#7488](https://github.com/lbryio/lbry-desktop/pull/7488))
+
+### Fixed
+- Failed comment count increment ([#7510](https://github.com/lbryio/lbry-desktop/pull/7510))
+- App crash playing media on older windows versions by updating electron ([#7509](https://github.com/lbryio/lbry-desktop/pull/7509))
+- Local build failures on mac ([#7497](https://github.com/lbryio/lbry-desktop/pull/7497))
+- Language change now rerenders whole app ([#7504](https://github.com/lbryio/lbry-desktop/pull/7504))
+
 ## [0.52.5] - [2022-02-25]
 
 ### Fixed
