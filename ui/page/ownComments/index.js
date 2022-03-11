@@ -4,7 +4,7 @@ import { selectActiveChannelClaim } from 'redux/selectors/app';
 import {
   selectIsFetchingComments,
   selectCommentsForUri,
-  makeSelectTotalCommentsCountForUri,
+  selectTotalCommentsCountForUri,
   makeSelectTopLevelTotalPagesForUri,
 } from 'redux/selectors/comments';
 import { selectClaimsById } from 'redux/selectors/claims';
@@ -18,7 +18,7 @@ const select = (state) => {
   return {
     activeChannelClaim,
     allComments: selectCommentsForUri(state, uri),
-    totalComments: makeSelectTotalCommentsCountForUri(uri)(state),
+    totalComments: selectTotalCommentsCountForUri(state, uri),
     topLevelTotalPages: makeSelectTopLevelTotalPagesForUri(uri)(state),
     isFetchingComments: selectIsFetchingComments(state),
     claimsById: selectClaimsById(state),

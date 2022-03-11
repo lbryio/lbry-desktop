@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { selectClaimForUri,
+import {
+  selectClaimForUri,
   selectClaimIsMine,
   selectFetchingMyChannels,
   selectClaimsByUri,
@@ -10,7 +11,7 @@ import {
   selectIsFetchingComments,
   selectIsFetchingCommentsById,
   selectIsFetchingReacts,
-  makeSelectTotalCommentsCountForUri,
+  selectTotalCommentsCountForUri,
   selectOthersReacts,
   selectMyReacts,
   selectCommentIdsForUri,
@@ -34,7 +35,7 @@ const select = (state, props) => {
     allCommentIds: selectCommentIdsForUri(state, uri),
     pinnedComments: selectPinnedCommentsForUri(state, uri),
     topLevelTotalPages: makeSelectTopLevelTotalPagesForUri(uri)(state),
-    totalComments: makeSelectTotalCommentsCountForUri(uri)(state),
+    totalComments: selectTotalCommentsCountForUri(state, uri),
     claimId: claim && claim.claim_id,
     channelId: getChannelIdFromClaim(claim),
     claimIsMine: selectClaimIsMine(state, claim),
