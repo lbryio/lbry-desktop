@@ -152,7 +152,11 @@ function ClaimPreviewTile(props: Props) {
 
   if (placeholder || (!claim && isResolvingUri)) {
     return (
-      <li className={classnames('placeholder claim-preview--tile', {})}>
+      <li
+        className={classnames('placeholder claim-preview--tile', {
+          'swipe-list__item claim-preview--horizontal-tile': swipeLayout,
+        })}
+      >
         <div className="media__thumb">
           <img src={PlaceholderTx} alt="Placeholder" />
         </div>

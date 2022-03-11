@@ -25,18 +25,12 @@ type Props = {
   thumbnail?: string,
   title?: string,
   placeholder: boolean,
-  blackListedOutpoints: Array<{
-    txid: string,
-    nout: number,
-  }>,
-  filteredOutpoints: Array<{
-    txid: string,
-    nout: number,
-  }>,
+  swipeLayout?: boolean,
+  blackListedOutpoints: Array<{ txid: string, nout: number }>,
+  filteredOutpoints: Array<{ txid: string, nout: number }>,
   blockedChannelUris: Array<string>,
   isMature?: boolean,
   showMature: boolean,
-  collectionId: string,
   deleteCollection: (string) => void,
   resolveCollectionItems: (any) => void,
   isResolvingCollectionClaims: boolean,
@@ -53,6 +47,7 @@ function CollectionPreviewTile(props: Props) {
     collectionItemUrls,
     claim,
     resolveCollectionItems,
+    swipeLayout = false,
   } = props;
 
   const { push } = useHistory();
@@ -120,7 +115,11 @@ function CollectionPreviewTile(props: Props) {
 
   if (isResolvingUri || isResolvingCollectionClaims) {
     return (
-      <li className={classnames('claim-preview--tile', {})}>
+      <li
+        className={classnames('claim-preview--tile', {
+          'swipe-list__item claim-preview--horizontal-tile': swipeLayout,
+        })}
+      >
         <div className="placeholder media__thumb" />
         <div className="placeholder__wrapper">
           <div className="placeholder claim-tile__title" />
@@ -129,12 +128,19 @@ function CollectionPreviewTile(props: Props) {
       </li>
     );
   }
+
   if (uri) {
-    return <ClaimPreviewTile uri={uri} />;
+    return <ClaimPreviewTile swipeLayout={swipeLayout} uri={uri} />;
   }
 
   return (
-    <li role="link" onClick={handleClick} className={'card claim-preview--tile'}>
+    <li
+      role="link"
+      onClick={handleClick}
+      className={classnames('card claim-preview--tile', {
+        'swipe-list__item claim-preview--horizontal-tile': swipeLayout,
+      })}
+    >
       <NavLink {...navLinkProps}>
         <FileThumbnail uri={collectionItemUrls && collectionItemUrls.length && collectionItemUrls[0]}>
           <React.Fragment>

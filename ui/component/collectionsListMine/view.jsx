@@ -8,10 +8,10 @@ import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import * as KEYCODES from 'constants/keycodes';
-
 import Yrbl from 'component/yrbl';
 import classnames from 'classnames';
 import { FormField, Form } from 'component/common/form';
+import { useIsMobile } from 'effects/use-screensize';
 
 type Props = {
   builtinCollections: CollectionGroup,
@@ -21,10 +21,8 @@ type Props = {
   fetchingCollections: boolean,
 };
 
-const ALL = 'All';
-const PRIVATE = 'Private';
-const PUBLIC = 'Public';
-const COLLECTION_FILTERS = [ALL, PRIVATE, PUBLIC];
+const LIST_TYPE = Object.freeze({ ALL: 'All', PRIVATE: 'Private', PUBLIC: 'Public' });
+const COLLECTION_FILTERS = [LIST_TYPE.ALL, LIST_TYPE.PRIVATE, LIST_TYPE.PUBLIC];
 const COLLECTION_SHOW_COUNT = 12;
 
 export default function CollectionsListMine(props: Props) {
@@ -40,16 +38,17 @@ export default function CollectionsListMine(props: Props) {
   const unpublishedCollectionsList = (Object.keys(unpublishedCollections || {}): any);
   const publishedList = (Object.keys(publishedCollections || {}): any);
   const hasCollections = unpublishedCollectionsList.length || publishedList.length;
-  const [filterType, setFilterType] = React.useState(ALL);
+  const [filterType, setFilterType] = React.useState(LIST_TYPE.ALL);
   const [searchText, setSearchText] = React.useState('');
+  const isMobileScreen = useIsMobile();
 
   const playlistPageUrl = `/$/${PAGES.PLAYLISTS}?type=${filterType}`;
   let collectionsToShow = [];
-  if (filterType === ALL) {
+  if (filterType === LIST_TYPE.ALL) {
     collectionsToShow = unpublishedCollectionsList.concat(publishedList);
-  } else if (filterType === PRIVATE) {
+  } else if (filterType === LIST_TYPE.PRIVATE) {
     collectionsToShow = unpublishedCollectionsList;
-  } else if (filterType === PUBLIC) {
+  } else if (filterType === LIST_TYPE.PUBLIC) {
     collectionsToShow = publishedList;
   }
 
@@ -92,6 +91,7 @@ export default function CollectionsListMine(props: Props) {
   }
   return (
     <>
+      {/* Built-in lists */}
       {builtin.map((list: Collection) => {
         const { items: itemUrls } = list;
         return (
@@ -122,7 +122,13 @@ export default function CollectionsListMine(props: Props) {
                       }
                     />
                   </h1>
-                  <ClaimList tileLayout key={list.name} uris={itemUrls.slice(0, 6)} collectionId={list.id} />
+                  <ClaimList
+                    swipeLayout={isMobileScreen}
+                    tileLayout
+                    key={list.name}
+                    uris={itemUrls.slice(0, 6)}
+                    collectionId={list.id}
+                  />
                 </>
               )}
               {!(itemUrls && itemUrls.length) && (
@@ -135,6 +141,8 @@ export default function CollectionsListMine(props: Props) {
           </div>
         );
       })}
+
+      {/* Playlists: header */}
       <div className="claim-grid__wrapper">
         <div className="claim-grid__header section">
           <h1 className="claim-grid__title">
@@ -159,6 +167,8 @@ export default function CollectionsListMine(props: Props) {
             )}
           </h1>
         </div>
+
+        {/* Playlists: search */}
         <div className="section__header-action-stack">
           <div className="section__header--actions">
             <div className="claim-search__wrapper">
@@ -179,6 +189,7 @@ export default function CollectionsListMine(props: Props) {
             <Form onSubmit={() => {}} className="wunderbar--inline">
               <Icon icon={ICONS.SEARCH} />
               <FormField
+                name="collection_search"
                 onFocus={onTextareaFocus}
                 onBlur={onTextareaBlur}
                 className="wunderbar__input--inline"
@@ -192,10 +203,7 @@ export default function CollectionsListMine(props: Props) {
           <p className="collection-grid__results-summary">
             {isTruncated && (
               <>
-                {__(`Showing %filtered% results of %total%`, {
-                  filtered: filteredLength,
-                  total: totalLength,
-                })}
+                {__('Showing %filtered% results of %total%', { filtered: filteredLength, total: totalLength })}
                 {`${searchText ? ' (' + __('filtered') + ') ' : ' '}`}
               </>
             )}
@@ -206,12 +214,20 @@ export default function CollectionsListMine(props: Props) {
             />
           </p>
         </div>
+
+        {/* Playlists: tiles */}
         {Boolean(hasCollections) && (
           <div>
-            <div className="claim-grid">
+            <div
+              className={classnames('claim-grid', {
+                'swipe-list': isMobileScreen,
+              })}
+            >
               {filteredCollections &&
                 filteredCollections.length > 0 &&
-                filteredCollections.map((key) => <CollectionPreviewTile tileLayout collectionId={key} key={key} />)}
+                filteredCollections.map((key) => (
+                  <CollectionPreviewTile swipeLayout={isMobileScreen} tileLayout collectionId={key} key={key} />
+                ))}
               {!filteredCollections.length && <div className="empty main--empty">{__('No matching playlists')}</div>}
             </div>
           </div>
