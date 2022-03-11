@@ -20,9 +20,6 @@ const ModalBlockChannel = lazyImport(() =>
 const ModalClaimCollectionAdd = lazyImport(() =>
   import('modal/modalClaimCollectionAdd' /* webpackChunkName: "modalClaimCollectionAdd" */)
 );
-const ModalCommentAcknowledgement = lazyImport(() =>
-  import('modal/modalCommentAcknowledgement' /* webpackChunkName: "modalCommentAcknowledgement" */)
-);
 const ModalConfirm = lazyImport(() => import('modal/modalConfirm' /* webpackChunkName: "modalConfirm" */));
 const ModalConfirmAge = lazyImport(() => import('modal/modalConfirmAge' /* webpackChunkName: "modalConfirmAge" */));
 const ModalConfirmThumbnailUpload = lazyImport(() =>
@@ -156,8 +153,6 @@ function getModal(id) {
       return ModalPasswordUnsave;
     case MODALS.REWARD_GENERATED_CODE:
       return ModalRewardCode;
-    case MODALS.COMMENT_ACKNOWEDGEMENT:
-      return ModalCommentAcknowledgement;
     case MODALS.YOUTUBE_WELCOME:
       return ModalYoutubeWelcome;
     case MODALS.SET_REFERRER:
