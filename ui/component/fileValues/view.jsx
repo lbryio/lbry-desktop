@@ -84,7 +84,7 @@ class FileValues extends PureComponent<Props> {
               </div>
             </td>
             <td>
-              <CreditAmount amount={Number(claim.meta.effective_amount)} precision={2} />
+              <CreditAmount amount={Number(claim.meta.effective_amount) || 0} precision={2} />
             </td>
           </tr>
           <tr>
