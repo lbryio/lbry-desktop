@@ -25,20 +25,17 @@ function CollectionPreviewOverlay(props: Props) {
   }, [collectionId, collectionItemUrls, fetchCollectionItems]);
 
   if (collectionItemUrls && collectionItemUrls.length > 0) {
+    const displayed = collectionItemUrls.slice(0, 2);
+
     return (
       <div className="collection-preview__overlay-thumbs">
         <div className="collection-preview__overlay-side" />
         <div className="collection-preview__overlay-grid">
-          {collectionItemUrls &&
-            collectionItemUrls.map((item, index) => {
-              if (index < 2) {
-                return (
-                  <div className="collection-preview__overlay-grid-items" key={item}>
-                    <FileThumbnail uri={item} />
-                  </div>
-                );
-              }
-            })}
+          {displayed.map((uri) => (
+            <div className="collection-preview__overlay-grid-items" key={uri}>
+              <FileThumbnail uri={uri} />
+            </div>
+          ))}
         </div>
       </div>
     );
