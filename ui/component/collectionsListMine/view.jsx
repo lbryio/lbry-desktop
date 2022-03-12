@@ -23,7 +23,7 @@ type Props = {
 
 const LIST_TYPE = Object.freeze({ ALL: 'All', PRIVATE: 'Private', PUBLIC: 'Public' });
 const COLLECTION_FILTERS = [LIST_TYPE.ALL, LIST_TYPE.PRIVATE, LIST_TYPE.PUBLIC];
-const COLLECTION_SHOW_COUNT = 12;
+const PLAYLIST_SHOW_COUNT = Object.freeze({ DEFAULT: 12, MOBILE: 6 });
 
 export default function CollectionsListMine(props: Props) {
   const {
@@ -41,6 +41,7 @@ export default function CollectionsListMine(props: Props) {
   const [filterType, setFilterType] = React.useState(LIST_TYPE.ALL);
   const [searchText, setSearchText] = React.useState('');
   const isMobileScreen = useIsMobile();
+  const playlistShowCount = isMobileScreen ? PLAYLIST_SHOW_COUNT.MOBILE : PLAYLIST_SHOW_COUNT.DEFAULT;
 
   const playlistPageUrl = `/$/${PAGES.PLAYLISTS}?type=${filterType}`;
   let collectionsToShow = [];
@@ -63,9 +64,9 @@ export default function CollectionsListMine(props: Props) {
             publishedCollections[id].name.toLocaleLowerCase().includes(searchText.toLocaleLowerCase()))
         );
       })
-      .slice(0, COLLECTION_SHOW_COUNT);
+      .slice(0, playlistShowCount);
   } else {
-    filteredCollections = collectionsToShow.slice(0, COLLECTION_SHOW_COUNT) || [];
+    filteredCollections = collectionsToShow.slice(0, playlistShowCount) || [];
   }
 
   const totalLength = collectionsToShow ? collectionsToShow.length : 0;
