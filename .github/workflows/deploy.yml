@@ -47,7 +47,7 @@ jobs:
       - name: Build
         run: |
           yarn global add cross-env
-          yarn
+          yarn install --network-timeout 600000
           yarn build
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
