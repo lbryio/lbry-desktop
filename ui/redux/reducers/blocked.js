@@ -4,6 +4,7 @@ import { handleActions } from 'util/redux-utils';
 
 const defaultState: BlocklistState = {
   blockedChannels: [],
+  geoBlockedList: undefined,
 };
 
 export default handleActions(
@@ -20,7 +21,14 @@ export default handleActions(
       }
 
       return {
+        ...state,
         blockedChannels: newBlockedChannels,
+      };
+    },
+    [ACTIONS.FETCH_GBL_DONE]: (state: BlocklistState, action: any): BlocklistState => {
+      return {
+        ...state,
+        geoBlockedList: action.data,
       };
     },
     [ACTIONS.USER_STATE_POPULATE]: (state: BlocklistState, action: { data: { blocked: ?Array<string> } }) => {

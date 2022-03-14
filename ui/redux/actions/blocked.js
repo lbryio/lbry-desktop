@@ -1,4 +1,5 @@
 // @flow
+import { Lbryio } from 'lbryinc';
 import * as ACTIONS from 'constants/action_types';
 import { selectPrefsReady } from 'redux/selectors/sync';
 import { doAlertWaitingForSync } from 'redux/actions/app';
@@ -37,5 +38,24 @@ export function doChannelMute(uri: string, showLink: boolean = true) {
 export function doChannelUnmute(uri: string, showLink: boolean = true) {
   return (dispatch: Dispatch) => {
     return dispatch(doToggleMuteChannel(uri, showLink, true));
+  };
+}
+
+export function doFetchGeoBlockedList() {
+  return (dispatch: Dispatch) => {
+    dispatch({ type: ACTIONS.FETCH_GBL_STARTED });
+
+    const success = (response: GBL) => {
+      dispatch({
+        type: ACTIONS.FETCH_GBL_DONE,
+        data: response,
+      });
+    };
+
+    const failure = (error) => {
+      dispatch({ type: ACTIONS.FETCH_GBL_FAILED, data: error });
+    };
+
+    Lbryio.call('geo', 'blocked_list').then(success, failure);
   };
 }

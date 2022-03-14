@@ -1,12 +1,14 @@
 // @flow
 import { CHANNEL_CREATION_LIMIT } from 'config';
 import { normalizeURI, parseURI, isURIValid } from 'util/lbryURI';
+import { selectGeoBlockLists } from 'redux/selectors/blocked';
 import { selectYoutubeChannels } from 'redux/selectors/user';
 import { selectSupportsByOutpoint } from 'redux/selectors/wallet';
 import { createSelector } from 'reselect';
 import { createCachedSelector } from 're-reselect';
 import { isClaimNsfw, filterClaims, getChannelIdFromClaim, isStreamPlaceholderClaim } from 'util/claim';
 import * as CLAIM from 'constants/claim';
+import * as SETTINGS from 'constants/settings';
 import { INTERNAL_TAGS } from 'constants/tags';
 
 type State = { claims: any, user: User };
@@ -829,3 +831,39 @@ export const selectOdyseeMembershipForChannelId = function (state: State, channe
 
   return matchingMembershipOfUser;
 };
+
+export const selectGeoRestrictionForUri = createCachedSelector(
+  selectClaimForUri,
+  selectGeoBlockLists,
+  (claim, geoBlockLists) => {
+    const locale: LocaleInfo = window[SETTINGS.LOCALE]; // <-- NOTE: not handled by redux updates
+    const channelId: ?string = getChannelIdFromClaim(claim);
+
+    if (locale && geoBlockLists && channelId && claim) {
+      let geoConfig: ?GeoConfig;
+
+      // --- livestreams
+      if (isStreamPlaceholderClaim(claim)) {
+        geoConfig = geoBlockLists.livestreams && geoBlockLists.livestreams[channelId];
+      }
+      // --- videos (a.k.a everything else)
+      else {
+        geoConfig = geoBlockLists.videos && geoBlockLists.videos[channelId];
+      }
+
+      if (geoConfig) {
+        const specials = geoConfig.specials || [];
+        const countries = geoConfig.countries || [];
+        const continents = geoConfig.continents || [];
+
+        return (
+          specials.find((x: GeoRestriction) => x.id === 'EU-ONLY' && locale.is_eu_member) ||
+          countries.find((x: GeoRestriction) => x.id === locale.country) ||
+          continents.find((x: GeoRestriction) => x.id === locale.continent)
+        );
+      }
+    }
+
+    return null;
+  }
+)((state, uri) => String(uri));

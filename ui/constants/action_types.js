@@ -430,6 +430,11 @@ export const COMMENT_SUPER_CHAT_LIST_FAILED = 'COMMENT_SUPER_CHAT_LIST_FAILED';
 // Blocked channels
 export const TOGGLE_BLOCK_CHANNEL = 'TOGGLE_BLOCK_CHANNEL';
 
+// Geo-block
+export const FETCH_GBL_STARTED = 'FETCH_GBL_STARTED';
+export const FETCH_GBL_FAILED = 'FETCH_GBL_FAILED';
+export const FETCH_GBL_DONE = 'FETCH_GBL_DONE';
+
 // Coin swap
 export const ADD_COIN_SWAP = 'ADD_COIN_SWAP';
 export const REMOVE_COIN_SWAP = 'REMOVE_COIN_SWAP';

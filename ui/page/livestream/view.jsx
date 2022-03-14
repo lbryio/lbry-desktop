@@ -6,31 +6,10 @@ import analytics from 'analytics';
 import LivestreamLayout from 'component/livestreamLayout';
 import moment from 'moment';
 import Page from 'component/page';
-import Yrbl from 'component/yrbl';
-import { GEOBLOCKED_CHANNELS } from 'config';
-import * as SETTINGS from 'constants/settings';
 import React from 'react';
 import { useIsMobile } from 'effects/use-screensize';
 
 const LivestreamChatLayout = lazyImport(() => import('component/livestreamChatLayout' /* webpackChunkName: "chat" */));
-
-function isLivestreamGeoAllowed(channelId: ?string, isLive: boolean) {
-  const locale: LocaleInfo = window[SETTINGS.LOCALE];
-  const geoBlock: GeoBlock = GEOBLOCKED_CHANNELS[channelId];
-
-  if (locale && geoBlock) {
-    const typeBlocked = geoBlock.types && geoBlock.types.includes('livestream');
-    const countryBlocked = geoBlock.countries && geoBlock.countries.includes(locale.country);
-    const europeanUnionOnly = geoBlock.continents && geoBlock.continents.includes('EU-UNION') && locale.is_eu_member;
-    const continentBlocked =
-      europeanUnionOnly || (geoBlock.continents && geoBlock.continents.includes(locale.continent));
-
-    return typeBlocked && !countryBlocked && !continentBlocked;
-  }
-
-  // If 'locale/get' fails, we don't know whether to block or not. Flaw?
-  return true;
-}
 
 type Props = {
   activeLivestreamForChannel: any,
@@ -75,7 +54,6 @@ export default function LivestreamPage(props: Props) {
   const claimId = claim && claim.claim_id;
   const isCurrentClaimLive = isChannelBroadcasting && activeLivestreamForChannel.claimId === claimId;
   const livestreamChannelId = channelClaimId || '';
-  const isGeoBlocked = !isLivestreamGeoAllowed(channelClaimId, isCurrentClaimLive);
 
   // $FlowFixMe
   const release = moment.unix(claim.value.release_time);
@@ -182,7 +160,6 @@ export default function LivestreamPage(props: Props) {
       livestream
       chatDisabled={hideComments}
       rightSide={
-        !isGeoBlocked &&
         !hideComments &&
         isInitialized && (
           <React.Suspense fallback={null}>
@@ -191,17 +168,7 @@ export default function LivestreamPage(props: Props) {
         )
       }
     >
-      {isGeoBlocked && (
-        <div className="main--empty">
-          <Yrbl
-            title={__('This creator has requested that their livestream be blocked in your region.')}
-            type="sad"
-            alwaysShow
-          />
-        </div>
-      )}
-
-      {isInitialized && !isGeoBlocked && (
+      {isInitialized && (
         <LivestreamLayout
           uri={uri}
           hideComments={hideComments}

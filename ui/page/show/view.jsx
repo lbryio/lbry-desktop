@@ -36,6 +36,7 @@ type Props = {
   collection: Collection,
   collectionUrls: Array<string>,
   isResolvingCollection: boolean,
+  geoRestriction: ?GeoRestriction,
   doResolveUri: (uri: string, returnCached: boolean, resolveReposts: boolean, options: any) => void,
   doBeginPublish: (name: ?string) => void,
   doFetchItemsInCollection: ({ collectionId: string }) => void,
@@ -57,6 +58,7 @@ export default function ShowPage(props: Props) {
     collection,
     collectionUrls,
     isResolvingCollection,
+    geoRestriction,
     doResolveUri,
     doBeginPublish,
     doFetchItemsInCollection,
@@ -87,7 +89,7 @@ export default function ShowPage(props: Props) {
     );
 
   // changed this from 'isCollection' to resolve strangers' collections.
-  React.useEffect(() => {
+  useEffect(() => {
     if (collectionId && !resolvedCollection) {
       doFetchItemsInCollection({ collectionId });
     }
@@ -226,6 +228,14 @@ export default function ShowPage(props: Props) {
           }
         />
       </Page>
+    );
+  }
+
+  if (geoRestriction) {
+    return (
+      <div className="main--empty">
+        <Yrbl title={__('Content unavailable')} subtitle={__(geoRestriction.message || '')} type="sad" alwaysShow />
+      </div>
     );
   }
 

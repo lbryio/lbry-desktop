@@ -41,9 +41,3 @@ declare type LocaleInfo = {
   gdpr_required: boolean,
   is_eu_member: boolean,
 };
-
-declare type GeoBlock = {
-  types: Array<string>,
-  countries: Array<string>,
-  continents: Array<string>,
-};

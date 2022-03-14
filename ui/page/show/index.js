@@ -10,6 +10,7 @@ import {
   selectClaimIsMine,
   makeSelectClaimIsPending,
   selectIsStreamPlaceholderForUri,
+  selectGeoRestrictionForUri,
 } from 'redux/selectors/claims';
 import {
   makeSelectCollectionForId,
@@ -86,6 +87,7 @@ const select = (state, props) => {
     collectionId,
     collectionUrls: makeSelectUrlsForCollectionId(collectionId)(state),
     isResolvingCollection: makeSelectIsResolvingCollectionForId(collectionId)(state),
+    geoRestriction: selectGeoRestrictionForUri(state, uri),
   };
 };
 

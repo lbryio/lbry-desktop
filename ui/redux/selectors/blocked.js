@@ -7,6 +7,7 @@ type State = { blocked: BlocklistState };
 const selectState = (state: State) => state.blocked || {};
 
 export const selectMutedChannels = (state: State) => selectState(state).blockedChannels;
+export const selectGeoBlockLists = (state: State) => selectState(state).geoBlockedList;
 
 export const makeSelectChannelIsMuted = (uri: string) =>
   createSelector(selectMutedChannels, (state: Array<string>) => {
