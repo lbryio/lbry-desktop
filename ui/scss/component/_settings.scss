@@ -1,0 +1,20 @@
+.setting-item-input {
+  min-height: var(--spacing-l);
+  padding: 0 0 var(--spacing-s) 0;
+  fieldset-section,
+  .fieldset-group,
+  fieldset-group {
+    margin-top: 0;
+    &:not(first-child) {
+      margin-bottom: var(--spacing-m);
+    }
+  }
+  &.checkbox,
+  .checkbox:only-child {
+    height: var(--spacing-l);
+    float: left;
+  }
+  & {
+    margin-left: 2.2rem;
+  }
+}
