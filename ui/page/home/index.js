@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import * as SETTINGS from 'constants/settings';
 import { doFetchActiveLivestreams } from 'redux/actions/livestream';
+import { selectAdBlockerFound } from 'redux/selectors/app';
 import { selectActiveLivestreams, selectFetchingActiveLivestreams } from 'redux/selectors/livestream';
 import { selectFollowedTags } from 'redux/selectors/tags';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
@@ -18,6 +19,7 @@ const select = (state) => ({
   activeLivestreams: selectActiveLivestreams(state),
   fetchingActiveLivestreams: selectFetchingActiveLivestreams(state),
   hideScheduledLivestreams: selectClientSetting(state, SETTINGS.HIDE_SCHEDULED_LIVESTREAMS),
+  adBlockerFound: selectAdBlockerFound(state),
 });
 
 const perform = (dispatch) => ({

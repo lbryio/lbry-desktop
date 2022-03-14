@@ -32,6 +32,7 @@ type Props = {
   doFetchActiveLivestreams: () => void,
   fetchingActiveLivestreams: boolean,
   hideScheduledLivestreams: boolean,
+  adBlockerFound: ?boolean,
 };
 
 function HomePage(props: Props) {
@@ -45,6 +46,7 @@ function HomePage(props: Props) {
     doFetchActiveLivestreams,
     fetchingActiveLivestreams,
     hideScheduledLivestreams,
+    adBlockerFound,
   } = props;
 
   const showPersonalizedChannels = (authenticated || !IS_WEB) && subscribedChannels && subscribedChannels.length > 0;
@@ -104,7 +106,7 @@ function HomePage(props: Props) {
         injectedItem={
           index === 0 && {
             node: <Ads small type="video" tileLayout />,
-            replace: window.odysee_ad_blocker_detected === false,
+            replace: adBlockerFound === false,
           }
         }
       />

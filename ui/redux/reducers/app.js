@@ -47,6 +47,7 @@ export type AppState = {
   activeChannel: ?string,
   incognito: boolean,
   mobilePlayerDimensions?: { height: number, width: number },
+  adBlockerFound: ?boolean, // undefined = unknown; true/false = yes/no;
 };
 
 const defaultState: AppState = {
@@ -87,6 +88,7 @@ const defaultState: AppState = {
   activeChannel: undefined,
   incognito: false,
   mobilePlayerDimensions: undefined,
+  adBlockerFound: undefined,
 };
 
 // @@router comes from react-router
@@ -330,6 +332,13 @@ reducers[ACTIONS.SET_MOBILE_PLAYER_DIMENSIONS] = (state, action) => {
   return {
     ...state,
     mobilePlayerDimensions: action.data.heightWidth,
+  };
+};
+
+reducers[ACTIONS.SET_AD_BLOCKER_FOUND] = (state, action) => {
+  return {
+    ...state,
+    adBlockerFound: action.data,
   };
 };
 

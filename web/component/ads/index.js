@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { doSetAdBlockerFound } from 'redux/actions/app';
 import { selectTheme } from 'redux/selectors/settings';
 import { makeSelectClaimForUri, selectClaimIsNsfwForUri } from 'redux/selectors/claims';
 import { selectOdyseeMembershipIsPremiumPlus } from 'redux/selectors/user';
@@ -11,4 +12,8 @@ const select = (state, props) => ({
   userHasPremiumPlus: selectOdyseeMembershipIsPremiumPlus(state),
 });
 
-export default connect(select)(Ads);
+const perform = {
+  doSetAdBlockerFound,
+};
+
+export default connect(select, perform)(Ads);

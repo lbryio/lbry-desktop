@@ -741,3 +741,10 @@ export const doSetMobilePlayerDimensions = ({ height, width }) => ({
   type: ACTIONS.SET_MOBILE_PLAYER_DIMENSIONS,
   data: { heightWidth: { height, width } },
 });
+
+export function doSetAdBlockerFound(found) {
+  return {
+    type: ACTIONS.SET_AD_BLOCKER_FOUND,
+    data: found,
+  };
+}
