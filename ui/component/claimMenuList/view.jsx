@@ -67,6 +67,9 @@ type Props = {
   resolvedList: boolean,
   fetchCollectionItems: (string) => void,
   doToggleShuffleList: (string) => void,
+  lastUsedCollection: ?Collection,
+  hasClaimInLastUsedCollection: boolean,
+  lastUsedCollectionIsNotBuiltin: boolean,
 };
 
 function ClaimMenuList(props: Props) {
@@ -108,6 +111,9 @@ function ClaimMenuList(props: Props) {
     resolvedList,
     fetchCollectionItems,
     doToggleShuffleList,
+    lastUsedCollection,
+    hasClaimInLastUsedCollection,
+    lastUsedCollectionIsNotBuiltin,
   } = props;
   const [doShuffle, setDoShuffle] = React.useState(false);
   const incognitoClaim = contentChannelUri && !contentChannelUri.includes('@');
@@ -355,6 +361,22 @@ function ClaimMenuList(props: Props) {
                     {__('Add to Lists')}
                   </div>
                 </MenuItem>
+                {lastUsedCollection && lastUsedCollectionIsNotBuiltin && (
+                  <MenuItem
+                    className="comment__menu-option"
+                    onSelect={() =>
+                      handleAdd(hasClaimInLastUsedCollection, lastUsedCollection.name, lastUsedCollection.id)
+                    }
+                  >
+                    <div className="menu__link">
+                      {!hasClaimInLastUsedCollection && <Icon aria-hidden icon={ICONS.ADD} />}
+                      {hasClaimInLastUsedCollection && <Icon aria-hidden icon={ICONS.DELETE} />}
+                      {!hasClaimInLastUsedCollection &&
+                        __('Add to %collection%', { collection: lastUsedCollection.name })}
+                      {hasClaimInLastUsedCollection && __('In %collection%', { collection: lastUsedCollection.name })}
+                    </div>
+                  </MenuItem>
+                )}
                 <hr className="menu__separator" />
               </>
             )
