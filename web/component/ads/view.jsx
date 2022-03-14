@@ -73,8 +73,8 @@ function Ads(props: Props) {
       const GOOGLE_AD_URL = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
 
       fetch(GOOGLE_AD_URL)
-        .then(() => {
-          window.odysee_ad_blocker_detected = false;
+        .then((response) => {
+          window.odysee_ad_blocker_detected = response.redirected === true;
         })
         .catch(() => {
           window.odysee_ad_blocker_detected = true;
