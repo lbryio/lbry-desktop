@@ -837,18 +837,20 @@ export const selectGeoRestrictionForUri = createCachedSelector(
   selectGeoBlockLists,
   (claim, geoBlockLists) => {
     const locale: LocaleInfo = window[SETTINGS.LOCALE]; // <-- NOTE: not handled by redux updates
-    const channelId: ?string = getChannelIdFromClaim(claim);
 
-    if (locale && geoBlockLists && channelId && claim) {
+    if (locale && geoBlockLists && claim) {
+      const claimId: ?string = claim.claim_id;
+      const channelId: ?string = getChannelIdFromClaim(claim);
+
       let geoConfig: ?GeoConfig;
 
       // --- livestreams
-      if (isStreamPlaceholderClaim(claim)) {
-        geoConfig = geoBlockLists.livestreams && geoBlockLists.livestreams[channelId];
+      if (isStreamPlaceholderClaim(claim) && geoBlockLists.livestreams) {
+        geoConfig = geoBlockLists.livestreams[channelId] || geoBlockLists.livestreams[claimId];
       }
       // --- videos (a.k.a everything else)
-      else {
-        geoConfig = geoBlockLists.videos && geoBlockLists.videos[channelId];
+      else if (geoBlockLists.videos) {
+        geoConfig = geoBlockLists.videos[channelId] || geoBlockLists.videos[claimId];
       }
 
       if (geoConfig) {
