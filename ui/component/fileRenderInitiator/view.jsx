@@ -16,7 +16,6 @@ import FileRenderPlaceholder from 'static/img/fileRenderPlaceholder.png';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
 import { LayoutRenderContext } from 'page/livestream/view';
 import { formatLbryUrlForWeb } from 'util/url';
-import { LIVESTREAM_STATUS_CHECK_INTERVAL } from 'constants/livestream';
 import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
 
 type Props = {
@@ -112,11 +111,7 @@ export default function FileRenderInitiator(props: Props) {
     // isCurrentClaimLive = already fetched
     if (!channelClaimId || !isLivestreamClaim || isCurrentClaimLive) return;
 
-    const fetch = () => doFetchChannelLiveStatus(channelClaimId);
-
-    const intervalId = setInterval(fetch, LIVESTREAM_STATUS_CHECK_INTERVAL);
-
-    return () => clearInterval(intervalId);
+    doFetchChannelLiveStatus(channelClaimId);
   }, [channelClaimId, doFetchChannelLiveStatus, isCurrentClaimLive, isLivestreamClaim]);
 
   React.useEffect(() => {
@@ -170,11 +165,11 @@ export default function FileRenderInitiator(props: Props) {
     if (
       (canViewFile || forceAutoplayParam) &&
       ((shouldAutoplay && (!videoOnPage || forceAutoplayParam) && isPlayable) ||
-        RENDER_MODES.AUTO_RENDER_MODES.includes(renderMode))
+        (!embedded && RENDER_MODES.AUTO_RENDER_MODES.includes(renderMode)))
     ) {
       viewFile();
     }
-  }, [canViewFile, forceAutoplayParam, isPlayable, renderMode, shouldAutoplay, viewFile]);
+  }, [canViewFile, embedded, forceAutoplayParam, isPlayable, renderMode, shouldAutoplay, viewFile]);
 
   /*
   once content is playing, let the appropriate <FileRender> take care of it...
