@@ -4,13 +4,13 @@ import * as PAGES from 'constants/pages';
 
 import Icon from 'component/common/icon';
 import Button from 'component/button';
+import I18nMessage from 'component/i18nMessage';
 
 import React from 'react';
 import AstronautAndFriends from './astronaut_n_friends.png';
 import BadgePremium from './badge_premium.png';
 import BadgePremiumPlus from './badge_premium-plus.png';
 import OdyseePremium from './odysee_premium.png';
-import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   pageLocation: string,
@@ -50,6 +50,12 @@ export default function MembershipSplash(props: Props) {
       {__('No ads')}
     </div>
   );
+  // const livestreamInfo = (
+  //   <div className="membership-splash__info-content">
+  //     <Icon icon={ICONS.NO_ADS} />
+  //     {__('Livestreaming')}
+  //   </div>
+  // );
 
   return (
     <div className="membership-splash">
@@ -96,6 +102,8 @@ export default function MembershipSplash(props: Props) {
 
           {badgeInfo}
 
+          {/* {livestreamInfo} */}
+
           {earlyAcessInfo}
 
           <div className="membership-splash__info-button">
@@ -118,6 +126,8 @@ export default function MembershipSplash(props: Props) {
             </div>
           </section>
           {badgeInfo}
+
+          {/* {livestreamInfo} */}
 
           {earlyAcessInfo}
 

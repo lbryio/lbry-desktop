@@ -1,8 +1,7 @@
 // @flow
-import { DOMAIN, SHOW_ADS } from 'config';
+import { SHOW_ADS } from 'config';
 import * as PAGES from 'constants/pages';
 import React, { useEffect } from 'react';
-import { withRouter } from 'react-router';
 import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
 import classnames from 'classnames';
@@ -34,13 +33,11 @@ const IS_ANDROID = /Android/i.test(navigator.userAgent);
 // const isFirefoxAndroid = IS_ANDROID && IS_FIREFOX;
 
 type Props = {
-  location: { pathname: string },
   type: string,
   tileLayout?: boolean,
   small: boolean,
   claim: Claim,
   isMature: boolean,
-  triggerBlacklist: boolean,
   userHasPremiumPlus: boolean,
   className?: string,
 };
@@ -124,16 +121,12 @@ function Ads(props: Props) {
   const adsSignInDriver = (
     <I18nMessage
       tokens={{
-        log_in_to_domain: (
-          <Button
-            button="link"
-            label={__('Get Odysee Premium+', { domain: DOMAIN })}
-            navigate={`/$/${PAGES.ODYSEE_MEMBERSHIP}`}
-          />
+        sign_up_for_premium: (
+          <Button button="link" label={__('Get Odysee Premium+')} navigate={`/$/${PAGES.ODYSEE_MEMBERSHIP}`} />
         ),
       }}
     >
-      Hate these? %log_in_to_domain% for an ad free experience.
+      Hate these? %sign_up_for_premium% for an ad free experience.
     </I18nMessage>
   );
 
@@ -162,4 +155,4 @@ function Ads(props: Props) {
   return null;
 }
 
-export default withRouter(Ads);
+export default Ads;

@@ -14,6 +14,8 @@ import { STRIPE_PUBLIC_KEY } from 'config';
 import { getStripeEnvironment } from 'util/stripe';
 let stripeEnvironment = getStripeEnvironment();
 
+const STRIPE_PLUGIN_SRC = 'https://js.stripe.com/v3/';
+
 const APIS_DOWN_ERROR_RESPONSE = __('There was an error from the server, please try again later');
 const CARD_SETUP_ERROR_RESPONSE = __('There was an error getting your card setup, please try again later');
 
@@ -57,12 +59,17 @@ class SettingsStripeCard extends React.Component<Props, State> {
 
     let doToast = this.props.doToast;
 
-    const script = document.createElement('script');
-    script.src = 'https://js.stripe.com/v3/';
-    script.async = true;
+    // only add script if it doesn't already exist
+    const stripeScriptExists = document.querySelectorAll(`script[src="${STRIPE_PLUGIN_SRC}"]`).length > 0;
 
-    // $FlowFixMe
-    document.body.appendChild(script);
+    if (!stripeScriptExists) {
+      const script = document.createElement('script');
+      script.src = STRIPE_PLUGIN_SRC;
+      script.async = true;
+
+      // $FlowFixMe
+      document.body.appendChild(script);
+    }
 
     // public key of the stripe account
     let publicKey = STRIPE_PUBLIC_KEY;
@@ -426,7 +433,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
                     label={__('View Transactions')}
                     icon={ICONS.SETTINGS}
                     navigate={`/$/${PAGES.WALLET}?fiatType=outgoing&tab=fiat-payment-history&currency=fiat`}
-                    style={{marginLeft: '10px'}}
+                    style={{ marginLeft: '10px' }}
                   />
                 </>
               }
