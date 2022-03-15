@@ -1,33 +1,46 @@
 import { connect } from 'react-redux';
 import EmbedWrapperPage from './view';
-import { makeSelectClaimForUri, selectIsUriResolving } from 'redux/selectors/claims';
+import { selectClaimForUri, selectIsUriResolving } from 'redux/selectors/claims';
 import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
 import { doResolveUri } from 'redux/actions/claims';
 import { buildURI } from 'util/lbryURI';
 import { doPlayUri } from 'redux/actions/content';
 import { selectCostInfoForUri, doFetchCostInfoForUri, selectBlackListedOutpoints } from 'lbryinc';
+import { doCommentSocketConnect, doCommentSocketDisconnect } from 'redux/actions/websocket';
+import { doFetchActiveLivestreams, doFetchChannelLiveStatus } from 'redux/actions/livestream';
+import { selectIsActiveLivestreamForUri, selectActiveLivestreams } from 'redux/selectors/livestream';
+import { isStreamPlaceholderClaim } from 'util/claim';
 
 const select = (state, props) => {
   const { match } = props;
   const { params } = match;
   const { claimName, claimId } = params;
   const uri = claimName ? buildURI({ claimName, claimId }) : '';
+
+  const claim = selectClaimForUri(state, uri);
+  const { canonical_url: canonicalUrl } = claim || {};
+
   return {
     uri,
-    claim: makeSelectClaimForUri(uri)(state),
+    claim,
     costInfo: selectCostInfoForUri(state, uri),
     streamingUrl: makeSelectStreamingUrlForUri(uri)(state),
     isResolvingUri: selectIsUriResolving(state, uri),
     blackListedOutpoints: selectBlackListedOutpoints(state),
+    isCurrentClaimLive: canonicalUrl && selectIsActiveLivestreamForUri(state, canonicalUrl),
+    isLivestreamClaim: isStreamPlaceholderClaim(claim),
+    activeLivestreams: selectActiveLivestreams(state),
   };
 };
 
-const perform = (dispatch) => {
-  return {
-    resolveUri: (uri) => dispatch(doResolveUri(uri)),
-    doPlayUri: (uri) => dispatch(doPlayUri(uri)),
-    doFetchCostInfoForUri: (uri) => dispatch(doFetchCostInfoForUri(uri)),
-  };
+const perform = {
+  doResolveUri,
+  doPlayUri,
+  doFetchCostInfoForUri,
+  doFetchChannelLiveStatus,
+  doCommentSocketConnect,
+  doCommentSocketDisconnect,
+  doFetchActiveLivestreams,
 };
 
 export default connect(select, perform)(EmbedWrapperPage);

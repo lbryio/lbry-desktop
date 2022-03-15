@@ -18,9 +18,7 @@ Lbry.setDaemonConnectionString(PROXY_URL);
 async function getClaim(requestUrl) {
   const uri = requestUrl.replace(`${URL}/`, 'lbry://');
 
-  let claim;
-  let error;
-
+  let claim, error;
   try {
     const response = await Lbry.resolve({ urls: [uri] });
     if (response && response[uri] && !response[uri].error) {
@@ -33,7 +31,7 @@ async function getClaim(requestUrl) {
   } else {
     const { value_type, value } = claim;
 
-    if (value_type !== 'stream' || value.stream_type !== 'video') {
+    if (value_type !== 'stream' || (value.stream_type !== 'video' && value.stream_type !== undefined)) {
       error = 'The URL is not associated with a video claim.';
     }
   }

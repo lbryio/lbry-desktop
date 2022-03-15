@@ -1,51 +1,70 @@
 // @flow
 import { SITE_NAME } from 'config';
-import React, { useEffect } from 'react';
+import React from 'react';
 import classnames from 'classnames';
 import FileRender from 'component/fileRender';
 import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
 import Spinner from 'component/spinner';
 import Button from 'component/button';
 import Card from 'component/common/card';
-import { formatLbryUrlForWeb } from 'util/url';
+import { formatLbryUrlForWeb, formatLbryChannelName } from 'util/url';
 import { useHistory } from 'react-router';
+import useSocketConnect from 'effects/use-socket-connect';
+
+const LIVESTREAM_STATUS_CHECK_INTERVAL = 30000;
 
 type Props = {
   uri: string,
-  resolveUri: (string) => void,
-  claim: Claim,
-  doPlayUri: (string) => void,
+  claim: ?any,
   costInfo: any,
   streamingUrl: string,
-  doFetchCostInfoForUri: (string) => void,
   isResolvingUri: boolean,
-  blackListedOutpoints: Array<{
-    txid: string,
-    nout: number,
-  }>,
+  blackListedOutpoints: Array<{ txid: string, nout: number }>,
+  isCurrentClaimLive: boolean,
+  isLivestreamClaim: boolean,
+  activeLivestreams: ?any,
+  doResolveUri: (uri: string) => void,
+  doPlayUri: (uri: string) => void,
+  doFetchCostInfoForUri: (uri: string) => void,
+  doFetchChannelLiveStatus: (string) => void,
+  doCommentSocketConnect: (string, string, string) => void,
+  doCommentSocketDisconnect: (string, string) => void,
+  doFetchActiveLivestreams: () => void,
 };
 
 export const EmbedContext = React.createContext<any>();
+
 const EmbedWrapperPage = (props: Props) => {
   const {
-    resolveUri,
-    claim,
     uri,
-    doPlayUri,
+    claim,
     costInfo,
     streamingUrl,
-    doFetchCostInfoForUri,
     isResolvingUri,
     blackListedOutpoints,
+    isCurrentClaimLive,
+    isLivestreamClaim: liveClaim,
+    activeLivestreams,
+    doResolveUri,
+    doPlayUri,
+    doFetchCostInfoForUri,
+    doFetchChannelLiveStatus,
+    doCommentSocketConnect,
+    doCommentSocketDisconnect,
+    doFetchActiveLivestreams,
   } = props;
 
   const {
     location: { search },
   } = useHistory();
+
+  const { claim_id: claimId, canonical_url: canonicalUrl, signing_channel: channelClaim } = claim || {};
+
+  const channelUrl = channelClaim && formatLbryChannelName(channelClaim.canonical_url);
   const urlParams = new URLSearchParams(search);
   const embedLightBackground = urlParams.get('embedBackgroundLight');
   const haveClaim = Boolean(claim);
-  const readyToDisplay = claim && streamingUrl;
+  const readyToDisplay = isCurrentClaimLive || (claim && streamingUrl);
   const loading = !claim && isResolvingUri;
   const noContentFound = !claim && !isResolvingUri;
   const isPaidContent = costInfo && costInfo.cost > 0;
@@ -60,20 +79,37 @@ const EmbedWrapperPage = (props: Props) => {
         (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
     );
 
-  useEffect(() => {
-    if (resolveUri && uri && !haveClaim) {
-      resolveUri(uri);
+  React.useEffect(doFetchActiveLivestreams, [doFetchActiveLivestreams]);
+
+  useSocketConnect(liveClaim, claimId, channelUrl, canonicalUrl, doCommentSocketConnect, doCommentSocketDisconnect);
+
+  React.useEffect(() => {
+    if (doResolveUri && uri && !haveClaim) {
+      doResolveUri(uri);
     }
     if (uri && haveClaim && costInfo && costInfo.cost === 0) {
       doPlayUri(uri);
     }
-  }, [resolveUri, uri, doPlayUri, haveClaim, costInfo]);
+  }, [doResolveUri, uri, doPlayUri, haveClaim, costInfo]);
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (haveClaim && uri && doFetchCostInfoForUri) {
       doFetchCostInfoForUri(uri);
     }
   }, [uri, haveClaim, doFetchCostInfoForUri]);
+
+  // Find out current channels status + active live claim every 30 seconds
+  React.useEffect(() => {
+    if (!channelClaim || !activeLivestreams) return;
+
+    const { claim_id: channelClaimId } = channelClaim || {};
+
+    doFetchChannelLiveStatus(channelClaimId);
+
+    const intervalId = setInterval(() => doFetchChannelLiveStatus(channelClaimId), LIVESTREAM_STATUS_CHECK_INTERVAL);
+
+    return () => clearInterval(intervalId);
+  }, [activeLivestreams, channelClaim, doFetchChannelLiveStatus]);
 
   if (isClaimBlackListed) {
     return (
@@ -92,11 +128,7 @@ const EmbedWrapperPage = (props: Props) => {
   }
 
   return (
-    <div
-      className={classnames('embed__wrapper', {
-        'embed__wrapper--light-background': embedLightBackground,
-      })}
-    >
+    <div className={classnames('embed__wrapper', { 'embed__wrapper--light-background': embedLightBackground })}>
       <EmbedContext.Provider value>
         {readyToDisplay ? (
           <FileRender uri={uri} embedded />
