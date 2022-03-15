@@ -4,11 +4,11 @@ import { formatLbryChannelName } from 'util/url';
 
 export default function useSocketConnect(
   isLivestreamClaim: boolean,
-  claimId: boolean,
+  claimId: ?string,
   channelUrl: ?string,
-  canonicalUrl: boolean,
-  doCommentSocketConnect: (string, string, string) => void,
-  doCommentSocketDisconnect: (string, string) => void
+  canonicalUrl: ?string,
+  doCommentSocketConnect: (canonicalUrl: string, channelName: string, claimId: string) => void,
+  doCommentSocketDisconnect: (claimId: string, string) => void
 ) {
   // Establish web socket connection for viewer count.
   React.useEffect(() => {
@@ -18,6 +18,10 @@ export default function useSocketConnect(
 
     doCommentSocketConnect(canonicalUrl, channelName, claimId);
 
-    return () => doCommentSocketDisconnect(claimId, channelName);
+    return () => {
+      if (claimId) {
+        doCommentSocketDisconnect(claimId, channelName);
+      }
+    };
   }, [canonicalUrl, channelUrl, claimId, doCommentSocketConnect, doCommentSocketDisconnect, isLivestreamClaim]);
 }
