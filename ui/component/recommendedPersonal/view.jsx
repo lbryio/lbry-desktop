@@ -96,8 +96,8 @@ export default function RecommendedPersonal(props: Props) {
 
   // Fetch on mount:
   React.useEffect(() => {
-    doFetchPersonalRecommendations();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    hasMembership && doFetchPersonalRecommendations();
+  }, [hasMembership]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if ((!hasMembership && !process.env.ENABLE_WIP_FEATURES) || count < 1) {
     return null;
