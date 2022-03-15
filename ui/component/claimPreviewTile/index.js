@@ -2,7 +2,6 @@ import { connect } from 'react-redux';
 import {
   makeSelectClaimForUri,
   selectIsUriResolving,
-  getThumbnailFromClaim,
   selectTitleForUri,
   selectDateForUri,
 } from 'redux/selectors/claims';
@@ -11,7 +10,7 @@ import { doResolveUri } from 'redux/actions/claims';
 import { selectViewCountForUri, selectBanStateForUri } from 'lbryinc';
 import { selectIsActiveLivestreamForUri } from 'redux/selectors/livestream';
 import { selectShowMatureContent } from 'redux/selectors/settings';
-import { isClaimNsfw, isStreamPlaceholderClaim } from 'util/claim';
+import { isClaimNsfw, isStreamPlaceholderClaim, getThumbnailFromClaim } from 'util/claim';
 import ClaimPreviewTile from './view';
 import formatMediaDuration from 'util/formatMediaDuration';
 

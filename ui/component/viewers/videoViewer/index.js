@@ -39,8 +39,8 @@ const select = (state, props) => {
   const userId = selectUser(state) && selectUser(state).id;
   const internalFeature = selectUser(state) && selectUser(state).internal_feature;
   const playingUri = selectPlayingUri(state);
-  const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID) || (playingUri && playingUri.collectionId);
-  const isMarkdownOrComment = playingUri && (playingUri.source === 'markdown' || playingUri.source === 'comment');
+  const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID) || playingUri.collectionId;
+  const isMarkdownOrComment = playingUri.source === 'markdown' || playingUri.source === 'comment';
 
   let nextRecommendedUri;
   let previousListUri;

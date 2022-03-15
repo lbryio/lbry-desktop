@@ -6,8 +6,12 @@ import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { DISABLE_COMMENTS_TAG } from 'constants/tags';
 import { doCommentSocketConnect, doCommentSocketDisconnect } from 'redux/actions/websocket';
 import { getChannelIdFromClaim } from 'util/claim';
-import { selectActiveLivestreamForChannel, selectActiveLivestreamInitialized } from 'redux/selectors/livestream';
-import { doFetchChannelLiveStatus } from 'redux/actions/livestream';
+import {
+  selectActiveLivestreamForChannel,
+  selectActiveLivestreamInitialized,
+  selectCommentSocketConnected,
+} from 'redux/selectors/livestream';
+import { doFetchChannelLiveStatus, doSetSocketConnected } from 'redux/actions/livestream';
 import LivestreamPage from './view';
 
 const select = (state, props) => {
@@ -20,6 +24,7 @@ const select = (state, props) => {
     chatDisabled: makeSelectTagInClaimOrChannelForUri(uri, DISABLE_COMMENTS_TAG)(state),
     activeLivestreamForChannel: selectActiveLivestreamForChannel(state, channelClaimId),
     activeLivestreamInitialized: selectActiveLivestreamInitialized(state),
+    socketConnected: selectCommentSocketConnected(state),
   };
 };
 
@@ -29,6 +34,7 @@ const perform = {
   doCommentSocketConnect,
   doCommentSocketDisconnect,
   doFetchChannelLiveStatus,
+  doSetSocketConnected,
 };
 
 export default connect(select, perform)(LivestreamPage);

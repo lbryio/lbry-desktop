@@ -11,7 +11,7 @@ import usePersistedState from 'effects/use-persisted-state';
 import { PRIMARY_PLAYER_WRAPPER_CLASS } from 'page/file/view';
 import Draggable from 'react-draggable';
 import { onFullscreenChange } from 'util/full-screen';
-import { generateListSearchUrlParams } from 'util/url';
+import { generateListSearchUrlParams, formatLbryChannelName } from 'util/url';
 import { useIsMobile } from 'effects/use-screensize';
 import debounce from 'util/debounce';
 import { useHistory } from 'react-router';
@@ -35,13 +35,15 @@ export const FLOATING_PLAYER_CLASS = 'content__viewer--floating';
 // ****************************************************************************
 
 type Props = {
+  claimId: ?string,
+  channelClaimUrl: ?string,
   isFloating: boolean,
   uri: string,
   streamingUrl?: string,
   title: ?string,
   floatingPlayerEnabled: boolean,
   renderMode: string,
-  playingUri: ?PlayingUri,
+  playingUri: PlayingUri,
   primaryUri: ?string,
   videoTheaterMode: boolean,
   collectionId: string,
@@ -50,15 +52,21 @@ type Props = {
   nextListUri: string,
   previousListUri: string,
   doFetchRecommendedContent: (uri: string) => void,
-  doUriInitiatePlay: (uri: string, collectionId: ?string, isPlayable: ?boolean, isFloating: ?boolean) => void,
+  doUriInitiatePlay: (playingOptions: PlayingUri, isPlayable: ?boolean, isFloating: ?boolean) => void,
   doSetPlayingUri: ({ uri?: ?string }) => void,
   isCurrentClaimLive?: boolean,
   mobilePlayerDimensions?: any,
+  socketConnected: boolean,
   doSetMobilePlayerDimensions: ({ height?: ?number, width?: ?number }) => void,
+  doCommentSocketConnect: (string, string, string) => void,
+  doCommentSocketDisconnect: (string, string) => void,
+  doSetSocketConnected: (connected: boolean) => void,
 };
 
 export default function FileRenderFloating(props: Props) {
   const {
+    claimId,
+    channelClaimUrl,
     uri,
     streamingUrl,
     title,
@@ -73,12 +81,16 @@ export default function FileRenderFloating(props: Props) {
     claimWasPurchased,
     nextListUri,
     previousListUri,
+    socketConnected,
     doFetchRecommendedContent,
     doUriInitiatePlay,
     doSetPlayingUri,
     isCurrentClaimLive,
     mobilePlayerDimensions,
     doSetMobilePlayerDimensions,
+    doCommentSocketConnect,
+    doCommentSocketDisconnect,
+    doSetSocketConnected,
   } = props;
 
   const isMobile = useIsMobile();
@@ -88,7 +100,7 @@ export default function FileRenderFloating(props: Props) {
   } = useHistory();
   const hideFloatingPlayer = state && state.hideFloatingPlayer;
 
-  const playingUriSource = playingUri && playingUri.source;
+  const { uri: playingUrl, source: playingUriSource, primaryUri: playingPrimaryUri } = playingUri;
   const isComment = playingUriSource === 'comment';
   const mainFilePlaying = (!isFloating || !isMobile) && primaryUri && isURIEqual(uri, primaryUri);
   const noFloatingPlayer = !isFloating || isMobile || !floatingPlayerEnabled || hideFloatingPlayer;
@@ -105,8 +117,7 @@ export default function FileRenderFloating(props: Props) {
   const relativePosRef = React.useRef({ x: 0, y: 0 });
 
   const navigateUrl =
-    playingUri &&
-    (playingUri.primaryUri || playingUri.uri) + (collectionId ? generateListSearchUrlParams(collectionId) : '');
+    (playingPrimaryUri || playingUrl || '') + (collectionId ? generateListSearchUrlParams(collectionId) : '');
 
   const isFree = costInfo && costInfo.cost === 0;
   const canViewFile = isFree || claimWasPurchased;
@@ -184,11 +195,37 @@ export default function FileRenderFloating(props: Props) {
     resetState
   );
 
+  // Establish web socket connection for viewer count.
   React.useEffect(() => {
-    if (playingUri && (playingUri.primaryUri || playingUri.uri)) {
+    if (!claimId || !channelClaimUrl || !isCurrentClaimLive || socketConnected) return;
+
+    const channelName = formatLbryChannelName(channelClaimUrl);
+
+    doCommentSocketConnect(uri, channelName, claimId);
+    doSetSocketConnected(true);
+
+    return () => {
+      doCommentSocketDisconnect(claimId, channelName);
+      doSetSocketConnected(false);
+    };
+
+    // only listen to socketConnected on initial mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    channelClaimUrl,
+    claimId,
+    doCommentSocketConnect,
+    doCommentSocketDisconnect,
+    doSetSocketConnected,
+    isCurrentClaimLive,
+    uri,
+  ]);
+
+  React.useEffect(() => {
+    if (playingPrimaryUri || playingUrl) {
       handleResize();
     }
-  }, [handleResize, playingUri, videoTheaterMode]);
+  }, [handleResize, playingPrimaryUri, videoTheaterMode, playingUrl]);
 
   // Listen to main-window resizing and adjust the floating player position accordingly:
   React.useEffect(() => {
@@ -336,7 +373,7 @@ export default function FileRenderFloating(props: Props) {
               <AutoplayCountdown
                 nextRecommendedUri={nextListUri}
                 doNavigate={() => setDoNavigate(true)}
-                doReplay={() => doUriInitiatePlay(uri, collectionId, false, isFloating)}
+                doReplay={() => doUriInitiatePlay({ uri, collectionId }, false, isFloating)}
                 doPrevious={() => {
                   setPlayNext(false);
                   setDoNavigate(true);

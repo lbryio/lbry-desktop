@@ -197,7 +197,7 @@ const recsys = {
   onPlayerDispose: function (claimId, isEmbedded) {
     if (window && window.store) {
       const state = window.store.getState();
-      const playingUri = selectPlayingUri(state);
+      const { uri: playingUri } = selectPlayingUri(state);
       const primaryUri = selectPrimaryUri(state);
       const onFilePage = playingUri === primaryUri;
       if (!onFilePage || isEmbedded) {
@@ -246,9 +246,8 @@ const recsys = {
   onNavigate: function () {
     if (window && window.store) {
       const state = window.store.getState();
-      const playingUri = selectPlayingUri(state);
-      const actualPlayingUri = playingUri && playingUri.uri;
-      const claim = makeSelectClaimForUri(actualPlayingUri)(state);
+      const { uri: playingUri } = selectPlayingUri(state);
+      const claim = makeSelectClaimForUri(playingUri)(state);
       const playingClaimId = claim ? claim.claim_id : null;
       // const primaryUri = selectPrimaryUri(state);
       const floatingPlayer = selectClientSetting(state, SETTINGS.FLOATING_PLAYER);

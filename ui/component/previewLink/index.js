@@ -2,13 +2,13 @@ import { connect } from 'react-redux';
 import {
   selectClaimIsMine,
   selectTitleForUri,
-  getThumbnailFromClaim,
   selectClaimForUri,
   selectIsUriResolving,
   makeSelectMetadataItemForUri,
 } from 'redux/selectors/claims';
 import { doResolveUri } from 'redux/actions/claims';
 import { selectBlackListedOutpoints } from 'lbryinc';
+import { getThumbnailFromClaim } from 'util/claim';
 import PreviewLink from './view';
 
 const select = (state, props) => {

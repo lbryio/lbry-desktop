@@ -4,7 +4,6 @@ import { withRouter } from 'react-router-dom';
 import CollectionPage from './view';
 import {
   selectTitleForUri,
-  getThumbnailFromClaim,
   selectClaimIsMine,
   makeSelectClaimIsPending,
   makeSelectClaimForClaimId,
@@ -20,6 +19,7 @@ import {
   makeSelectEditedCollectionForId,
 } from 'redux/selectors/collections';
 
+import { getThumbnailFromClaim } from 'util/claim';
 import { doFetchItemsInCollection, doCollectionDelete, doCollectionEdit } from 'redux/actions/collections';
 import { selectUser } from 'redux/selectors/user';
 

@@ -1,10 +1,9 @@
 // @flow
 import { INLINE_PLAYER_WRAPPER_CLASS } from 'component/fileRenderFloating/view';
-import { SIMPLE_SITE } from 'config';
 import * as React from 'react';
 import Button from 'component/button';
 import classnames from 'classnames';
-import EmbedPlayButton from 'component/embedPlayButton';
+import FileRenderInitiator from 'component/fileRenderInitiator';
 import UriIndicator from 'component/uriIndicator';
 
 type Props = {
@@ -15,7 +14,7 @@ type Props = {
   description: ?string,
   isResolvingUri: boolean,
   doResolveUri: (string, boolean) => void,
-  playingUri: ?PlayingUri,
+  playingUri: PlayingUri,
   parentCommentId?: string,
   isMarkdownPost?: boolean,
   allowPreview: boolean,
@@ -61,7 +60,6 @@ class ClaimLink extends React.Component<Props> {
     } = this.props;
     const isUnresolved = (!isResolvingUri && !claim) || !claim;
     const isPlayingInline =
-      playingUri &&
       playingUri.uri === uri &&
       ((playingUri.source === 'comment' && parentCommentId === playingUri.commentId) ||
         playingUri.source === 'markdown');
@@ -73,26 +71,30 @@ class ClaimLink extends React.Component<Props> {
     const { value_type: valueType } = claim;
     const isChannel = valueType === 'channel';
 
-    return isChannel ? (
-      <>
-        <UriIndicator uri={uri} link showAtSign />
-        <span>{fullUri.length > uri.length ? fullUri.substring(uri.length, fullUri.length) : ''}</span>
-      </>
-    ) : allowPreview ? (
-      <div className={classnames('claim-link')}>
-        <div
-          className={classnames({
-            [INLINE_PLAYER_WRAPPER_CLASS]: isPlayingInline,
-          })}
-        >
-          <EmbedPlayButton uri={uri} parentCommentId={parentCommentId} isMarkdownPost={isMarkdownPost} />
+    if (isChannel) {
+      return (
+        <>
+          <UriIndicator uri={uri} link showAtSign />
+          <span>{fullUri.length > uri.length ? fullUri.substring(uri.length, fullUri.length) : ''}</span>
+        </>
+      );
+    }
+
+    if (allowPreview) {
+      return (
+        <div className={classnames('claim-link')}>
+          <div className={isPlayingInline ? INLINE_PLAYER_WRAPPER_CLASS : undefined}>
+            <FileRenderInitiator uri={uri} parentCommentId={parentCommentId} isMarkdownPost={isMarkdownPost} embedded />
+          </div>
+          <Button button="link" className="preview-link__url" label={uri} navigate={uri} />
         </div>
-        <Button button="link" className="preview-link__url" label={uri} navigate={uri} />
-      </div>
-    ) : (
+      );
+    }
+
+    return (
       <Button
         button="link"
-        title={SIMPLE_SITE ? __("This channel isn't staking enough Credits for link previews.") : children}
+        title={__("This channel isn't staking enough Credits for link previews.")}
         label={children}
         className="button--external-link"
         navigate={uri}

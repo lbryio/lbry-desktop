@@ -6,7 +6,13 @@ import { selectYoutubeChannels } from 'redux/selectors/user';
 import { selectSupportsByOutpoint } from 'redux/selectors/wallet';
 import { createSelector } from 'reselect';
 import { createCachedSelector } from 're-reselect';
-import { isClaimNsfw, filterClaims, getChannelIdFromClaim, isStreamPlaceholderClaim } from 'util/claim';
+import {
+  isClaimNsfw,
+  filterClaims,
+  getChannelIdFromClaim,
+  isStreamPlaceholderClaim,
+  getThumbnailFromClaim,
+} from 'util/claim';
 import * as CLAIM from 'constants/claim';
 import * as SETTINGS from 'constants/settings';
 import { INTERNAL_TAGS } from 'constants/tags';
@@ -392,11 +398,6 @@ export const makeSelectContentTypeForUri = (uri: string) =>
     const source = claim && claim.value && claim.value.source;
     return source ? source.media_type : undefined;
   });
-
-export const getThumbnailFromClaim = (claim: Claim) => {
-  const thumbnail = claim && claim.value && claim.value.thumbnail;
-  return thumbnail && thumbnail.url ? thumbnail.url.trim().replace(/^http:\/\//i, 'https://') : undefined;
-};
 
 export const selectThumbnailForUri = createCachedSelector(selectClaimForUri, (claim) => {
   return getThumbnailFromClaim(claim);

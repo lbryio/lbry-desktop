@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectTitleForUri, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
+import { selectClaimForUri, selectTitleForUri, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
 import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
 import {
   makeSelectNextUrlForCollectionAndUrl,
@@ -18,8 +18,10 @@ import { doUriInitiatePlay, doSetPlayingUri } from 'redux/actions/content';
 import { doFetchRecommendedContent } from 'redux/actions/search';
 import { withRouter } from 'react-router';
 import { selectMobilePlayerDimensions } from 'redux/selectors/app';
-import { selectIsActiveLivestreamForUri } from 'redux/selectors/livestream';
+import { selectIsActiveLivestreamForUri, selectCommentSocketConnected } from 'redux/selectors/livestream';
 import { doSetMobilePlayerDimensions } from 'redux/actions/app';
+import { doCommentSocketConnect, doCommentSocketDisconnect } from 'redux/actions/websocket';
+import { doSetSocketConnected } from 'redux/actions/livestream';
 import FileRenderFloating from './view';
 
 const select = (state, props) => {
@@ -28,7 +30,13 @@ const select = (state, props) => {
   const playingUri = selectPlayingUri(state);
   const { uri, collectionId } = playingUri || {};
 
+  const claim = uri && selectClaimForUri(state, uri);
+  const { claim_id: claimId, signing_channel: channelClaim } = claim || {};
+  const { canonical_url: channelClaimUrl } = channelClaim || {};
+
   return {
+    claimId,
+    channelClaimUrl,
     uri,
     playingUri,
     primaryUri: selectPrimaryUri(state),
@@ -45,6 +53,7 @@ const select = (state, props) => {
     collectionId,
     isCurrentClaimLive: selectIsActiveLivestreamForUri(state, uri),
     mobilePlayerDimensions: selectMobilePlayerDimensions(state),
+    socketConnected: selectCommentSocketConnected(state),
   };
 };
 
@@ -53,6 +62,9 @@ const perform = {
   doUriInitiatePlay,
   doSetPlayingUri,
   doSetMobilePlayerDimensions,
+  doCommentSocketConnect,
+  doCommentSocketDisconnect,
+  doSetSocketConnected,
 };
 
 export default withRouter(connect(select, perform)(FileRenderFloating));

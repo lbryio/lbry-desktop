@@ -18,7 +18,7 @@ type Props = {
   cancelPurchase: () => void,
   metadata: StreamMetadata,
   analyticsPurchaseEvent: (GetResponse) => void,
-  playingUri: ?PlayingUri,
+  playingUri: PlayingUri,
   setPlayingUri: (?string) => void,
 };
 
@@ -43,14 +43,14 @@ function ModalAffirmPurchase(props: Props) {
       setSuccess(true);
       analyticsPurchaseEvent(fileInfo);
 
-      if (!playingUri || playingUri.uri !== uri) {
+      if (playingUri.uri !== uri) {
         setPlayingUri(uri);
       }
     });
   }
 
   function cancelPurchase() {
-    if (playingUri && isURIEqual(uri, playingUri.uri)) {
+    if (playingUri.uri && isURIEqual(uri, playingUri.uri)) {
       setPlayingUri(null);
     }
 

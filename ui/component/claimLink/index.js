@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri, selectIsUriResolving } from 'redux/selectors/claims';
+import { selectClaimForUri, selectIsUriResolving } from 'redux/selectors/claims';
 import { doResolveUri } from 'redux/actions/claims';
 import { doSetPlayingUri } from 'redux/actions/content';
 import { punctuationMarks } from 'util/remark-lbry';
@@ -17,7 +17,7 @@ const select = (state, props) => {
   function getValidClaim(testUri) {
     if (testUri.replace('lbry://', '').length <= 1) return;
 
-    claim = makeSelectClaimForUri(testUri)(state);
+    claim = selectClaimForUri(state, testUri);
     if (claim === null && punctuationMarks.includes(testUri.charAt(testUri.length - 1))) {
       getValidClaim(testUri.substring(0, testUri.length - 1));
     } else {

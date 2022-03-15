@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import {
   selectIsUriResolving,
-  getThumbnailFromClaim,
   selectTitleForUri,
   makeSelectChannelForClaimUri,
   selectClaimIsNsfwForUri,
@@ -21,6 +20,7 @@ import { doResolveUri } from 'redux/actions/claims';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
+import { getThumbnailFromClaim } from 'util/claim';
 import CollectionPreviewTile from './view';
 
 const select = (state, props) => {

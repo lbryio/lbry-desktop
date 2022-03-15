@@ -127,3 +127,8 @@ export function getClaimTitle(claim: ?Claim) {
 export const isStreamPlaceholderClaim = (claim: ?StreamClaim) => {
   return claim ? Boolean(claim.value_type === 'stream' && !claim.value.source) : false;
 };
+
+export const getThumbnailFromClaim = (claim: ?Claim) => {
+  const thumbnail = claim && claim.value && claim.value.thumbnail;
+  return thumbnail && thumbnail.url ? thumbnail.url.trim().replace(/^http:\/\//i, 'https://') : undefined;
+};

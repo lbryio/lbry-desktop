@@ -60,7 +60,7 @@ type Props = {
   },
   commentIdentityChannel: any,
   activeChannelClaim: ?ChannelClaim,
-  playingUri: ?PlayingUri,
+  playingUri: PlayingUri,
   stakedLevel: number,
   supportDisabled: boolean,
   setQuickReply: (any) => void,
@@ -186,7 +186,7 @@ function CommentView(props: Props) {
   }
 
   function handleEditComment() {
-    if (playingUri && playingUri.source === 'comment') {
+    if (playingUri.source === 'comment') {
       clearPlayingUri();
     }
     setEditing(true);
@@ -259,7 +259,13 @@ function CommentView(props: Props) {
       >
         <div className="comment__thumbnail-wrapper">
           {authorUri ? (
-            <ChannelThumbnail uri={authorUri} obscure={channelIsBlocked} xsmall className="comment__author-thumbnail" checkMembership={false} />
+            <ChannelThumbnail
+              uri={authorUri}
+              obscure={channelIsBlocked}
+              xsmall
+              className="comment__author-thumbnail"
+              checkMembership={false}
+            />
           ) : (
             <ChannelThumbnail xsmall className="comment__author-thumbnail" checkMembership={false} />
           )}

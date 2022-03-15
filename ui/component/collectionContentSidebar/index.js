@@ -12,10 +12,9 @@ import { doToggleLoopList, doToggleShuffleList } from 'redux/actions/content';
 import { doCollectionEdit } from 'redux/actions/collections';
 
 const select = (state, props) => {
-  const playingUri = selectPlayingUri(state);
-  const playingUrl = playingUri && playingUri.uri;
-  const claim = selectClaimForUri(state, playingUrl);
-  const url = claim && claim.permanent_url;
+  const { uri: playingUri } = selectPlayingUri(state);
+  const { permanent_url: url } = selectClaimForUri(state, playingUri) || {};
+
   const loopList = selectListLoop(state);
   const loop = loopList && loopList.collectionId === props.id && loopList.loop;
   const shuffleList = selectListShuffle(state);

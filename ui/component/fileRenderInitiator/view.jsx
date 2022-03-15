@@ -15,8 +15,12 @@ import Nag from 'component/common/nag';
 import FileRenderPlaceholder from 'static/img/fileRenderPlaceholder.png';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
 import { LayoutRenderContext } from 'page/livestream/view';
+import { formatLbryUrlForWeb } from 'util/url';
+import { LIVESTREAM_STATUS_CHECK_INTERVAL } from 'constants/livestream';
+import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
 
 type Props = {
+  channelClaimId: ?string,
   isPlaying: boolean,
   fileInfo: FileListItem,
   uri: string,
@@ -33,13 +37,18 @@ type Props = {
   authenticated: boolean,
   videoTheaterMode: boolean,
   isCurrentClaimLive?: boolean,
-  doUriInitiatePlay: (uri: string, collectionId: ?string, isPlayable: boolean) => void,
   isLivestreamClaim: boolean,
   customAction?: any,
+  embedded?: boolean,
+  parentCommentId?: string,
+  isMarkdownPost?: boolean,
+  doUriInitiatePlay: (playingOptions: PlayingUri, isPlayable: boolean) => void,
+  doFetchChannelLiveStatus: (string) => void,
 };
 
 export default function FileRenderInitiator(props: Props) {
   const {
+    channelClaimId,
     isPlaying,
     fileInfo,
     uri,
@@ -57,7 +66,11 @@ export default function FileRenderInitiator(props: Props) {
     isCurrentClaimLive,
     isLivestreamClaim,
     customAction,
+    embedded,
+    parentCommentId,
+    isMarkdownPost,
     doUriInitiatePlay,
+    doFetchChannelLiveStatus,
   } = props;
 
   const layountRendered = React.useContext(LayoutRenderContext);
@@ -67,14 +80,15 @@ export default function FileRenderInitiator(props: Props) {
   const containerRef = React.useRef<any>();
   const [thumbnail, setThumbnail] = React.useState(FileRenderPlaceholder);
 
-  const { search, href, state: locationState } = location;
+  const { search, href, state: locationState, pathname } = location;
   const urlParams = search && new URLSearchParams(search);
   const collectionId = urlParams && urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID);
 
   // check if there is a time or autoplay parameter, if so force autoplay
   const urlTimeParam = href && href.indexOf('t=') > -1;
   const forceAutoplayParam = locationState && locationState.forceAutoplay;
-  const shouldAutoplay = forceAutoplayParam || urlTimeParam || autoplay;
+  const shouldAutoplay = !embedded && (forceAutoplayParam || urlTimeParam || autoplay);
+
   const isFree = costInfo && costInfo.cost === 0;
   const canViewFile = isLivestreamClaim
     ? (layountRendered || isMobile) && isCurrentClaimLive
@@ -90,8 +104,19 @@ export default function FileRenderInitiator(props: Props) {
   const shouldRedirect = !authenticated && !isFree;
 
   function doAuthRedirect() {
-    history.push(`/$/${PAGES.AUTH}?redirect=${encodeURIComponent(location.pathname)}`);
+    history.push(`/$/${PAGES.AUTH}?redirect=${encodeURIComponent(pathname)}`);
   }
+
+  // Find out current channels status + active live claim
+  React.useEffect(() => {
+    if (!channelClaimId || !isLivestreamClaim) return;
+
+    const fetch = () => doFetchChannelLiveStatus(channelClaimId);
+
+    const intervalId = setInterval(fetch, LIVESTREAM_STATUS_CHECK_INTERVAL);
+
+    return () => clearInterval(intervalId);
+  }, [channelClaimId, doFetchChannelLiveStatus, isLivestreamClaim]);
 
   React.useEffect(() => {
     if (!claimThumbnail) return;
@@ -114,11 +139,29 @@ export default function FileRenderInitiator(props: Props) {
     }, 200);
   }, [claimThumbnail, thumbnail]);
 
+  function handleClick() {
+    if (embedded && !isPlayable) {
+      const formattedUrl = formatLbryUrlForWeb(uri);
+      history.push(formattedUrl);
+    } else {
+      viewFile();
+    }
+  }
+
   // Wrap this in useCallback because we need to use it to the view effect
   // If we don't a new instance will be created for every render and react will think the dependencies have changed, which will add/remove the listener for every render
   const viewFile = React.useCallback(() => {
-    doUriInitiatePlay(uri, collectionId, isPlayable);
-  }, [collectionId, doUriInitiatePlay, isPlayable, uri]);
+    const playingOptions = { uri, collectionId, pathname, source: undefined, commentId: undefined };
+
+    if (parentCommentId) {
+      playingOptions.source = 'comment';
+      playingOptions.commentId = parentCommentId;
+    } else if (isMarkdownPost) {
+      playingOptions.source = 'markdown';
+    }
+
+    doUriInitiatePlay(playingOptions, isPlayable);
+  }, [collectionId, doUriInitiatePlay, isMarkdownPost, isPlayable, parentCommentId, pathname, uri]);
 
   React.useEffect(() => {
     const videoOnPage = document.querySelector('video');
@@ -143,15 +186,21 @@ export default function FileRenderInitiator(props: Props) {
   return (
     <div
       ref={containerRef}
-      onClick={disabled ? undefined : shouldRedirect ? doAuthRedirect : viewFile}
+      onClick={disabled ? undefined : shouldRedirect ? doAuthRedirect : handleClick}
       style={thumbnail && !obscurePreview ? { backgroundImage: `url("${thumbnail}")` } : {}}
-      className={classnames('content__cover', {
-        'content__cover--disabled': disabled,
-        'content__cover--theater-mode': videoTheaterMode && !isMobile,
-        'content__cover--text': isText,
-        'card__media--nsfw': obscurePreview,
-      })}
+      className={
+        embedded
+          ? 'embed__inline-button'
+          : classnames('content__cover', {
+              'content__cover--disabled': disabled,
+              'content__cover--theater-mode': videoTheaterMode && !isMobile,
+              'content__cover--text': isText,
+              'card__media--nsfw': obscurePreview,
+            })
+      }
     >
+      {embedded && <FileViewerEmbeddedTitle uri={uri} isInApp />}
+
       {renderUnsupported ? (
         <Nag
           type="helpful"
@@ -173,10 +222,10 @@ export default function FileRenderInitiator(props: Props) {
         )
       )}
 
-      {!disabled && (
+      {(!disabled || (embedded && isLivestreamClaim)) && (
         <Button
           requiresAuth={shouldRedirect}
-          onClick={viewFile}
+          onClick={handleClick}
           iconSize={30}
           title={isPlayable ? __('Play') : __('View')}
           className={classnames('button--icon', {

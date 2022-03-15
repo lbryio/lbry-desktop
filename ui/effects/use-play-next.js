@@ -11,7 +11,7 @@ export default function usePlayNext(
   nextListUri: ?string,
   previousListUri: ?string,
   doNavigate: boolean,
-  doUriInitiatePlay: (uri: string, collectionId: ?string, isPlayable: ?boolean, isFloating: ?boolean) => void,
+  doUriInitiatePlay: (playingOptions: PlayingUri, isPlayable: ?boolean, isFloating: ?boolean) => void,
   resetState: () => void
 ) {
   const { push } = useHistory();
@@ -27,7 +27,7 @@ export default function usePlayNext(
           state: { collectionId, forceAutoplay: true, hideFloatingPlayer: true },
         });
       } else {
-        doUriInitiatePlay(playUri, collectionId, true, isFloating);
+        doUriInitiatePlay({ uri: playUri, collectionId }, true, isFloating);
       }
 
       resetState();

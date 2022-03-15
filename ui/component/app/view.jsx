@@ -94,6 +94,8 @@ type Props = {
   fetchModAmIList: () => void,
 };
 
+export const SocketContext = React.createContext<any>();
+
 function App(props: Props) {
   const {
     theme,
@@ -136,6 +138,8 @@ function App(props: Props) {
   const isRewardApproved = user && user.is_reward_approved;
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const previousRewardApproved = usePrevious(isRewardApproved);
+
+  const [socketConnected, setSocketConnection] = React.useState(false);
 
   const [gdprRequired, setGdprRequired] = usePersistedState('gdprRequired');
   const [localeLangs, setLocaleLangs] = React.useState();
@@ -563,10 +567,14 @@ function App(props: Props) {
         />
       ) : (
         <React.Fragment>
-          <Router />
+          <SocketContext.Provider value={socketConnected}>
+            <Router />
+          </SocketContext.Provider>
           <ModalRouter />
           <React.Suspense fallback={null}>{renderFiledrop && <FileDrop />}</React.Suspense>
-          <FileRenderFloating />
+
+          <FileRenderFloating setSocketConnection={setSocketConnection} />
+
           <React.Suspense fallback={null}>
             {isEnhancedLayout && <Yrbl className="yrbl--enhanced" />}
 

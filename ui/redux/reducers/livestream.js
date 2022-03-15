@@ -11,6 +11,7 @@ const defaultState: LivestreamState = {
   activeLivestreamsLastFetchedDate: 0,
   activeLivestreamsLastFetchedOptions: {},
   activeLivestreamInitialized: false,
+  commentSocketConnected: false,
 };
 
 export default handleActions(
@@ -67,6 +68,10 @@ export default handleActions(
       if (activeLivestreams) delete activeLivestreams[action.data.channelId];
       return { ...state, activeLivestreams: Object.assign({}, activeLivestreams), activeLivestreamInitialized: true };
     },
+    [ACTIONS.COMMENT_SOCKET_CONNECTED]: (state: CommentsState, action: any) => ({
+      ...state,
+      commentSocketConnected: action.data.connected,
+    }),
   },
   defaultState
 );

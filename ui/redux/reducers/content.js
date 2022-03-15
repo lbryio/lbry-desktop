@@ -3,7 +3,7 @@ import * as ACTIONS from 'constants/action_types';
 const reducers = {};
 const defaultState = {
   primaryUri: null, // Top level content uri triggered from the file page
-  playingUri: null,
+  playingUri: {},
   channelClaimCounts: {},
   positions: {},
   history: [],

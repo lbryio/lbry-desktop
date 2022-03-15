@@ -5,7 +5,7 @@ import * as ABANDON_STATES from 'constants/abandon_states';
 import { shell } from 'electron';
 // @endif
 import Lbry from 'lbry';
-import { makeSelectClaimForUri } from 'redux/selectors/claims';
+import { selectClaimForUri } from 'redux/selectors/claims';
 import { doAbandonClaim } from 'redux/actions/claims';
 import { batchActions } from 'util/batch-actions';
 
@@ -20,6 +20,7 @@ import {
   selectDownloadingByOutpoint,
   makeSelectStreamingUrlForUri,
 } from 'redux/selectors/file_info';
+import { isStreamPlaceholderClaim } from 'util/claim';
 
 type Dispatch = (action: any) => any;
 type GetState = () => { claims: any, file: FileState, content: any, user: User };
@@ -77,7 +78,7 @@ export function doDeleteFileAndMaybeGoBack(
     const state = getState();
     const playingUri = selectPlayingUri(state);
     const { outpoint } = makeSelectFileInfoForUri(uri)(state) || '';
-    const { nout, txid } = makeSelectClaimForUri(uri)(state);
+    const { nout, txid } = selectClaimForUri(state, uri);
     const claimOutpoint = `${txid}:${nout}`;
     const actions = [];
 
@@ -104,7 +105,7 @@ export function doDeleteFileAndMaybeGoBack(
       )
     );
 
-    if (playingUri && playingUri.uri === uri) {
+    if (playingUri.uri === uri) {
       actions.push(doSetPlayingUri({ uri: null }));
     }
     // it would be nice to stay on the claim if you just want to delete it
@@ -117,7 +118,9 @@ export function doDeleteFileAndMaybeGoBack(
 export function doFileGet(uri: string, saveFile: boolean = true, onSuccess?: (GetResponse) => any) {
   return (dispatch: Dispatch, getState: () => any) => {
     const state = getState();
-    const { nout, txid } = makeSelectClaimForUri(uri)(state);
+    const claim = selectClaimForUri(state, uri);
+    const isLivestreamClaim = isStreamPlaceholderClaim(claim);
+    const { nout, txid } = claim;
     const outpoint = `${txid}:${nout}`;
 
     dispatch({
@@ -168,6 +171,10 @@ export function doFileGet(uri: string, saveFile: boolean = true, onSuccess?: (Ge
           type: ACTIONS.FETCH_FILE_INFO_FAILED,
           data: { outpoint },
         });
+
+        // TODO: probably a better way to address this
+        // supress no source error if it's a livestream
+        if (isLivestreamClaim && error.message === "stream doesn't have source data") return;
 
         dispatch(
           doToast({

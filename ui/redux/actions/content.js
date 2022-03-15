@@ -119,7 +119,7 @@ export function doSetPlayingUri({
   source?: string,
   commentId?: string,
   pathname?: string,
-  collectionId?: string,
+  collectionId?: ?string,
 }) {
   return (dispatch: Dispatch) => {
     dispatch({
@@ -149,16 +149,18 @@ export function doDownloadUri(uri: string) {
   return (dispatch: Dispatch) => dispatch(doPlayUri(uri, false, true, () => dispatch(doAnalyticsView(uri))));
 }
 
-export function doUriInitiatePlay(uri: string, collectionId?: string, isPlayable?: boolean, isFloating?: boolean) {
+export function doUriInitiatePlay(playingOptions: PlayingUri, isPlayable?: boolean, isFloating?: boolean) {
   return (dispatch: Dispatch, getState: () => any) => {
+    const { uri, source } = playingOptions;
+
+    if (!uri) return;
+
     const state = getState();
     const isLive = selectIsActiveLivestreamForUri(state, uri);
 
-    if (!isFloating) dispatch(doSetPrimaryUri(uri));
+    if (!isFloating && !source) dispatch(doSetPrimaryUri(uri));
 
-    if (isPlayable) {
-      dispatch(doSetPlayingUri({ uri, collectionId }));
-    }
+    if (isPlayable) dispatch(doSetPlayingUri(playingOptions));
 
     if (!isLive) dispatch(doPlayUri(uri, false, true, (fileInfo) => dispatch(doAnaltyicsPurchaseEvent(fileInfo))));
   };

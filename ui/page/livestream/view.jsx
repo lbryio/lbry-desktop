@@ -1,7 +1,11 @@
 // @flow
 import { formatLbryChannelName } from 'util/url';
 import { lazyImport } from 'util/lazyImport';
-import { LIVESTREAM_STARTS_SOON_BUFFER, LIVESTREAM_STARTED_RECENTLY_BUFFER } from 'constants/livestream';
+import {
+  LIVESTREAM_STATUS_CHECK_INTERVAL,
+  LIVESTREAM_STARTS_SOON_BUFFER,
+  LIVESTREAM_STARTED_RECENTLY_BUFFER,
+} from 'constants/livestream';
 import analytics from 'analytics';
 import LivestreamLayout from 'component/livestreamLayout';
 import moment from 'moment';
@@ -9,7 +13,6 @@ import Page from 'component/page';
 import React from 'react';
 
 const LivestreamChatLayout = lazyImport(() => import('component/livestreamChatLayout' /* webpackChunkName: "chat" */));
-const LIVESTREAM_STATUS_CHECK_INTERVAL = 30000;
 
 type Props = {
   activeLivestreamForChannel: any,
@@ -19,11 +22,13 @@ type Props = {
   claim: StreamClaim,
   isAuthenticated: boolean,
   uri: string,
+  socketConnected: boolean,
   doSetPrimaryUri: (uri: ?string) => void,
   doCommentSocketConnect: (string, string, string) => void,
   doCommentSocketDisconnect: (string, string) => void,
   doFetchChannelLiveStatus: (string) => void,
   doUserSetReferrer: (string) => void,
+  doSetSocketConnected: (connected: boolean) => void,
 };
 
 export const LayoutRenderContext = React.createContext<any>();
@@ -37,11 +42,13 @@ export default function LivestreamPage(props: Props) {
     claim,
     isAuthenticated,
     uri,
+    socketConnected,
     doSetPrimaryUri,
     doCommentSocketConnect,
     doCommentSocketDisconnect,
     doFetchChannelLiveStatus,
     doUserSetReferrer,
+    doSetSocketConnected,
   } = props;
 
   const [activeStreamUri, setActiveStreamUri] = React.useState(false);
@@ -67,20 +74,25 @@ export default function LivestreamPage(props: Props) {
 
   // Establish web socket connection for viewer count.
   React.useEffect(() => {
-    if (!claim) return;
+    if (!claim || socketConnected) return;
 
     const { claim_id: claimId, signing_channel: channelClaim } = claim;
     const channelName = channelClaim && formatLbryChannelName(channelClaim.canonical_url);
 
     if (claimId && channelName) {
       doCommentSocketConnect(uri, channelName, claimId);
+      doSetSocketConnected(true);
     }
 
     return () => {
       if (claimId && channelName) {
         doCommentSocketDisconnect(claimId, channelName);
+        doSetSocketConnected(false);
       }
     };
+
+    // only listen to socketConnected on initial mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [claim, uri, doCommentSocketConnect, doCommentSocketDisconnect]);
 
   // Find out current channels status + active live claim every 30 seconds
@@ -149,10 +161,12 @@ export default function LivestreamPage(props: Props) {
   }, [uri, stringifiedClaim, isAuthenticated, doUserSetReferrer]);
 
   React.useEffect(() => {
+    if (!layountRendered) return;
+
     doSetPrimaryUri(uri);
 
     return () => doSetPrimaryUri(null);
-  }, [doSetPrimaryUri, uri]);
+  }, [doSetPrimaryUri, layountRendered, uri]);
 
   return (
     <Page

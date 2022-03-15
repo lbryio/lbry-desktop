@@ -26,7 +26,7 @@ type Props = {
   claim: ?Claim,
   claimIsMine: boolean,
   activeChannelClaim: ?ChannelClaim,
-  playingUri: ?PlayingUri,
+  playingUri: PlayingUri,
   moderationDelegatorsById: { [string]: { global: boolean, delegators: { name: string, claimId: string } } },
   // --- perform ---
   doToast: ({ message: string }) => void,
@@ -87,7 +87,7 @@ function CommentMenuList(props: Props) {
     Object.values(activeModeratorInfo.delegators).includes(contentChannelClaim.claim_id);
 
   function handleDeleteComment() {
-    if (playingUri && playingUri.source === 'comment') {
+    if (playingUri.source === 'comment') {
       clearPlayingUri();
     }
 
