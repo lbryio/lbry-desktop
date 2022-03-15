@@ -57,6 +57,7 @@ type Props = {
   isCurrentClaimLive?: boolean,
   mobilePlayerDimensions?: any,
   socketConnected: boolean,
+  isLivestreamClaim: boolean,
   doSetMobilePlayerDimensions: ({ height?: ?number, width?: ?number }) => void,
   doCommentSocketConnect: (string, string, string) => void,
   doCommentSocketDisconnect: (string, string) => void,
@@ -82,6 +83,7 @@ export default function FileRenderFloating(props: Props) {
     nextListUri,
     previousListUri,
     socketConnected,
+    isLivestreamClaim,
     doFetchRecommendedContent,
     doUriInitiatePlay,
     doSetPlayingUri,
@@ -283,7 +285,8 @@ export default function FileRenderFloating(props: Props) {
     !isPlayable ||
     !uri ||
     (isFloating && noFloatingPlayer) ||
-    (collectionId && !isFloating && ((!canViewFile && !nextListUri) || countdownCanceled))
+    (collectionId && !isFloating && ((!canViewFile && !nextListUri) || countdownCanceled)) ||
+    (isLivestreamClaim && !isCurrentClaimLive)
   ) {
     return null;
   }

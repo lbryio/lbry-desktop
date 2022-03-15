@@ -22,6 +22,7 @@ import { selectIsActiveLivestreamForUri, selectCommentSocketConnected } from 're
 import { doSetMobilePlayerDimensions } from 'redux/actions/app';
 import { doCommentSocketConnect, doCommentSocketDisconnect } from 'redux/actions/websocket';
 import { doSetSocketConnected } from 'redux/actions/livestream';
+import { isStreamPlaceholderClaim } from 'util/claim';
 import FileRenderFloating from './view';
 
 const select = (state, props) => {
@@ -54,6 +55,7 @@ const select = (state, props) => {
     isCurrentClaimLive: selectIsActiveLivestreamForUri(state, uri),
     mobilePlayerDimensions: selectMobilePlayerDimensions(state),
     socketConnected: selectCommentSocketConnected(state),
+    isLivestreamClaim: isStreamPlaceholderClaim(claim),
   };
 };
 
