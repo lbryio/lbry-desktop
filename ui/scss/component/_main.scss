@@ -578,8 +578,13 @@ body {
 .main--livestream {
   @extend .main--file-page;
 
+  @media (min-width: 1750px) {
+    padding: 0;
+  }
+
   .card-stack {
     margin-bottom: var(--spacing-m);
+
     @media (min-width: ($breakpoint-large + 300px)) {
       max-width: calc(var(--page-max-width--filepage) / 1.25);
       margin-left: auto;
@@ -608,6 +613,7 @@ body {
 
   @media (max-width: $breakpoint-medium) {
     padding: 0 var(--spacing-s);
+
     .card__main-actions {
       .claim-preview__wrapper {
         a {

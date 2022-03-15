@@ -109,14 +109,15 @@ export default function FileRenderInitiator(props: Props) {
 
   // Find out current channels status + active live claim
   React.useEffect(() => {
-    if (!channelClaimId || !isLivestreamClaim) return;
+    // isCurrentClaimLive = already fetched
+    if (!channelClaimId || !isLivestreamClaim || isCurrentClaimLive) return;
 
     const fetch = () => doFetchChannelLiveStatus(channelClaimId);
 
     const intervalId = setInterval(fetch, LIVESTREAM_STATUS_CHECK_INTERVAL);
 
     return () => clearInterval(intervalId);
-  }, [channelClaimId, doFetchChannelLiveStatus, isLivestreamClaim]);
+  }, [channelClaimId, doFetchChannelLiveStatus, isCurrentClaimLive, isLivestreamClaim]);
 
   React.useEffect(() => {
     if (!claimThumbnail) return;

@@ -420,8 +420,8 @@
 
 .file-viewer__embedded-header {
   position: absolute;
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(5rem, calc(100% - 7rem)) 1fr;
   width: 100%;
   top: 0;
   opacity: 1;
@@ -435,7 +435,7 @@
   border-top-right-radius: var(--border-radius);
 
   .button {
-    padding: var(--spacing-s);
+    padding: var(--spacing-xxs);
     color: var(--color-white);
     z-index: 2;
 
@@ -470,7 +470,6 @@
 }
 
 .file-viewer__embedded-title {
-  max-width: 75%;
   z-index: 2;
   display: flex;
   align-items: center;
@@ -479,13 +478,7 @@
 }
 
 .file-viewer__embedded-info {
-  display: flex;
-  align-items: center;
-  font-size: var(--font-small);
-  margin-left: var(--spacing-m);
-  white-space: nowrap;
-  position: relative;
-  overflow: hidden;
+  justify-self: flex-end;
 
   & > *:not(:last-child) {
     margin-right: var(--spacing-s);

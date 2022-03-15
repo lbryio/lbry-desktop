@@ -111,13 +111,18 @@ const findActiveStreams = async (
 };
 
 export const doFetchChannelLiveStatus = (channelId: string) => async (dispatch: Dispatch) => {
+  const statusForId = `live-status-${channelId}`;
+  // const localStatus = window.localStorage.getItem(statusForId);
+
   try {
     const { channelStatus, channelData } = await fetchLiveChannel(channelId);
 
     if (channelStatus === LiveStatus.NOT_LIVE) {
       dispatch({ type: ACTIONS.REMOVE_CHANNEL_FROM_ACTIVE_LIVESTREAMS, data: { channelId } });
+      window.localStorage.removeItem(statusForId);
       return;
     }
+
     if (channelStatus === LiveStatus.UNKNOWN) {
       return;
     }
@@ -130,8 +135,11 @@ export const doFetchChannelLiveStatus = (channelId: string) => async (dispatch: 
       channelData[channelId].claimUri = liveClaim.stream.canonical_url;
       dispatch({ type: ACTIONS.ADD_CHANNEL_TO_ACTIVE_LIVESTREAMS, data: { ...channelData } });
     }
+
+    window.localStorage.setItem(statusForId, channelStatus);
   } catch (err) {
     dispatch({ type: ACTIONS.REMOVE_CHANNEL_FROM_ACTIVE_LIVESTREAMS, data: { channelId } });
+    window.localStorage.removeItem(statusForId);
   }
 };
 
