@@ -11,6 +11,7 @@ import LivestreamLayout from 'component/livestreamLayout';
 import moment from 'moment';
 import Page from 'component/page';
 import React from 'react';
+import { useIsMobile } from 'effects/use-screensize';
 
 const LivestreamChatLayout = lazyImport(() => import('component/livestreamChatLayout' /* webpackChunkName: "chat" */));
 
@@ -51,11 +52,13 @@ export default function LivestreamPage(props: Props) {
     doSetSocketConnected,
   } = props;
 
+  const isMobile = useIsMobile();
+
   const [activeStreamUri, setActiveStreamUri] = React.useState(false);
   const [showLivestream, setShowLivestream] = React.useState(false);
   const [showScheduledInfo, setShowScheduledInfo] = React.useState(false);
   const [hideComments, setHideComments] = React.useState(false);
-  const [layountRendered, setLayountRendered] = React.useState(chatDisabled);
+  const [layountRendered, setLayountRendered] = React.useState(chatDisabled || isMobile);
 
   const isInitialized = Boolean(activeLivestreamForChannel) || activeLivestreamInitialized;
   const isChannelBroadcasting = Boolean(activeLivestreamForChannel);

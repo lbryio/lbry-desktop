@@ -59,6 +59,119 @@
       z-index: 9999;
     }
   }
+
+  @media (max-width: $breakpoint-small) {
+    height: 50px;
+    width: 80px;
+    top: 3px;
+    left: calc(50% - 40px);
+    transform: unset !important;
+    border: unset;
+
+    .content__wrapper--floating {
+      width: 100%;
+      height: 100%;
+      .content__floating-close {
+        visibility: visible !important;
+        display: inline;
+        position: fixed;
+        top: 12px;
+        left: calc(50% + 80px - 32px);
+        height: 32px;
+        width: 32px;
+        background-color: rgba(var(--color-primary-static), 0.6) !important;
+        border-radius: 50%;
+        .button__content {
+          justify-content: center;
+
+          .icon {
+            flex-shrink: 0;
+            // width:20px;
+          }
+        }
+      }
+      .autoplay-countdown {
+        display: none;
+      }
+    }
+
+    .vjs-control-bar {
+      display: inline-block !important;
+      opacity: 1 !important;
+
+      &::before {
+        background: unset !important;
+      }
+    }
+
+    .vjs-control {
+      display: none;
+    }
+
+    .vjs-play-control {
+      transform: unset !important;
+      display: inline !important;
+      position: fixed !important;
+      top: 12px !important;
+      left: calc(50% - 80px) !important;
+      height: 32px !important;
+      width: 32px !important;
+      background-color: rgba(var(--color-primary-static), 0.6) !important;
+      border-radius: 50% !important;
+      opacity: 1 !important;
+      pointer-events: unset !important;
+      span {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 100;
+        &::before {
+          line-height: 32px !important;
+        }
+      }
+      .vjs-control-text {
+        display: none !important;
+      }
+    }
+
+    .vjs-play-control.vjs-playing {
+      .vjs-icon-placeholder::before {
+        content: '' !important;
+      }
+    }
+
+    .vjs-play-control.vjs-paused {
+      .vjs-icon-placeholder::before {
+        content: '' !important;
+      }
+    }
+
+    .vjs-play-control.vjs-ended {
+      .vjs-icon-placeholder::before {
+        content: '' !important;
+      }
+    }
+
+    .vjs-progress-control {
+      top: 32px;
+      .vjs-slider {
+        margin: 0 !important;
+        div,
+        span {
+          height: 2px !important;
+        }
+      }
+    }
+
+    .content__info {
+      margin-top: -50px;
+      opacity: 0;
+      .button--uri-indicator {
+        display: none;
+      }
+    }
+  }
 }
 
 .content__viewer--theater-mode {
