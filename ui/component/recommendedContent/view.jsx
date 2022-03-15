@@ -1,4 +1,5 @@
 // @flow
+import { v4 as Uuidv4 } from 'uuid';
 import { SHOW_ADS, AD_KEYWORD_BLOCKLIST, AD_KEYWORD_BLOCKLIST_CHECK_DESCRIPTION } from 'config';
 import React from 'react';
 import ClaimList from 'component/claimList';
@@ -8,6 +9,7 @@ import Ads from 'web/component/ads';
 import Card from 'component/common/card';
 import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
 import Button from 'component/button';
+import { FYP_ID } from 'constants/urlParams';
 import classnames from 'classnames';
 import RecSys from 'recsys';
 import { getClaimMetadata } from 'util/claim';
@@ -22,10 +24,11 @@ type Props = {
   recommendedContentUris: Array<string>,
   nextRecommendedUri: string,
   isSearching: boolean,
-  doFetchRecommendedContent: (string) => void,
+  doFetchRecommendedContent: (string, ?FypParam) => void,
   claim: ?StreamClaim,
   claimId: string,
   metadata: any,
+  location: UrlLocation,
   userHasPremiumPlus: boolean,
 };
 
@@ -37,6 +40,7 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
     nextRecommendedUri,
     isSearching,
     claim,
+    location,
     userHasPremiumPlus,
   } = props;
 
@@ -80,9 +84,19 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
         }
       : null;
 
+  // Assume this component always resides in a page where the `uri` matches
+  // e.g. never in a floating popup. With that, we can grab the FYP ID from
+  // the search param directly. Otherwise, the parent component would need to
+  // pass it.
+  const { search } = location;
+  const urlParams = new URLSearchParams(search);
+  const fypId = urlParams.get(FYP_ID);
+  const [uuid] = React.useState(fypId ? Uuidv4() : '');
+
   React.useEffect(() => {
-    doFetchRecommendedContent(uri);
-  }, [uri, doFetchRecommendedContent]);
+    const fypParam = fypId && uuid ? { gid: fypId, uuid } : null;
+    doFetchRecommendedContent(uri, fypParam);
+  }, [uri, doFetchRecommendedContent, fypId, uuid]);
 
   React.useEffect(() => {
     // Right now we only want to record the recs if they actually saw them.
@@ -93,9 +107,9 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
       nextRecommendedUri &&
       viewMode === VIEW_ALL_RELATED
     ) {
-      onRecommendationsLoaded(claimId, recommendedContentUris);
+      onRecommendationsLoaded(claimId, recommendedContentUris, uuid);
     }
-  }, [recommendedContentUris, onRecommendationsLoaded, claimId, nextRecommendedUri, viewMode]);
+  }, [recommendedContentUris, onRecommendationsLoaded, claimId, nextRecommendedUri, viewMode, uuid]);
 
   function handleRecommendationClicked(e, clickedClaim) {
     if (claim) {

@@ -34,6 +34,7 @@ export const selectHasReachedMaxResultsLength: (state: State) => { [boolean]: Ar
   selectState(state).hasReachedMaxResultsLength;
 export const selectMentionSearchResults: (state: State) => Array<string> = (state) => selectState(state).results;
 export const selectMentionQuery: (state: State) => string = (state) => selectState(state).mentionQuery;
+export const selectPersonalRecommendations = (state: State) => selectState(state).personalRecommendations;
 
 export const makeSelectSearchUrisForQuery = (query: string): ((state: State) => Array<string>) =>
   createSelector(selectSearchResultByQuery, (byQuery) => {

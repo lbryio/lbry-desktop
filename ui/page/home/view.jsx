@@ -9,6 +9,7 @@ import ClaimTilesDiscover from 'component/claimTilesDiscover';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import Icon from 'component/common/icon';
 import WaitUntilOnPage from 'component/common/wait-until-on-page';
+import RecommendedPersonal from 'component/recommendedPersonal';
 import { useIsLargeScreen } from 'effects/use-screensize';
 import { GetLinksData } from 'util/buildHomepage';
 import { getLivestreamUris } from 'util/livestream';
@@ -45,11 +46,11 @@ function HomePage(props: Props) {
     fetchingActiveLivestreams,
     hideScheduledLivestreams,
   } = props;
+
   const showPersonalizedChannels = (authenticated || !IS_WEB) && subscribedChannels && subscribedChannels.length > 0;
   const showPersonalizedTags = (authenticated || !IS_WEB) && followedTags && followedTags.length > 0;
   const showIndividualTags = showPersonalizedTags && followedTags.length < 5;
   const isLargeScreen = useIsLargeScreen();
-
   const channelIds = subscribedChannels.map((sub) => splitBySeparator(sub.uri)[1]);
 
   const rowData: Array<RowDataItem> = GetLinksData(
@@ -71,6 +72,7 @@ function HomePage(props: Props) {
     icon?: string,
     help?: string,
   };
+
   const SectionHeader = ({ title, navigate = '/', icon = '', help }: SectionHeaderProps) => {
     return (
       <h1 className="claim-grid__header">
@@ -145,6 +147,7 @@ function HomePage(props: Props) {
     doFetchActiveLivestreams();
   }, []);
 
+  const [hasPersonalRecommendations, setHasPersonalRecommendations] = useState(false);
   const [hasScheduledStreams, setHasScheduledStreams] = useState(false);
   const scheduledStreamsLoaded = (total) => setHasScheduledStreams(total > 0);
 
@@ -169,6 +172,8 @@ function HomePage(props: Props) {
       {SIMPLE_SITE && <Meme />}
       {/* @endif */}
 
+      <RecommendedPersonal onLoad={(displayed) => setHasPersonalRecommendations(displayed)} />
+
       {!fetchingActiveLivestreams && (
         <>
           {authenticated && channelIds.length > 0 && !hideScheduledLivestreams && (
@@ -181,7 +186,7 @@ function HomePage(props: Props) {
             />
           )}
 
-          {authenticated && hasScheduledStreams && !hideScheduledLivestreams && (
+          {authenticated && ((hasScheduledStreams && !hideScheduledLivestreams) || hasPersonalRecommendations) && (
             <SectionHeader title={__('Following')} navigate={`/$/${PAGES.CHANNELS_FOLLOWING}`} icon={ICONS.SUBSCRIBE} />
           )}
         </>

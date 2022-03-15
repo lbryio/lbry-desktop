@@ -22,6 +22,7 @@ const defaultState: SearchState = {
   searching: false,
   results: [],
   mentionQuery: '',
+  personalRecommendations: { gid: '', uris: [] },
 };
 
 export default handleActions(
@@ -74,6 +75,39 @@ export default handleActions(
       results: action.data.uris,
       mentionQuery: action.data.query,
     }),
+
+    [ACTIONS.FYP_FETCH_SUCCESS]: (state: SearchState, action: any): SearchState => {
+      return {
+        ...state,
+        personalRecommendations: {
+          gid: action.data.gid,
+          uris: action.data.uris,
+        },
+      };
+    },
+
+    [ACTIONS.FYP_FETCH_FAILED]: (state: SearchState, action: any): SearchState => ({
+      ...state,
+      personalRecommendations: defaultState.personalRecommendations,
+    }),
+
+    [ACTIONS.FYP_HIDE_URI]: (state: SearchState, action: any): SearchState => {
+      const { uri } = action.data;
+      const uris = state.personalRecommendations.uris.slice();
+      const index = uris.findIndex((x) => x === uri);
+      if (index !== -1) {
+        uris.splice(index, 1);
+        return {
+          ...state,
+          personalRecommendations: {
+            gid: state.personalRecommendations.gid,
+            uris,
+          },
+        };
+      }
+
+      return state;
+    },
   },
   defaultState
 );

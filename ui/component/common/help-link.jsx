@@ -7,21 +7,23 @@ type Props = {
   href?: string,
   navigate?: string,
   icon?: string,
+  iconSize?: number,
   description?: string,
 };
 
 export default function HelpLink(props: Props) {
-  const { href, navigate, icon, description } = props;
+  const { href, navigate, icon, iconSize, description } = props;
   return (
     <Button
-      onClick={e => {
+      onClick={(e) => {
         if (href) {
           e.stopPropagation();
         }
       }}
       className="icon--help"
       icon={icon || ICONS.HELP}
-      iconSize={14}
+      iconSize={iconSize || 14}
+      title={description || __('Help')}
       description={description || __('Help')}
       href={href}
       navigate={navigate}

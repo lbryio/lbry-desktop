@@ -5,20 +5,28 @@ import { URL as SITE_URL, URL_LOCAL, URL_DEV, SIMPLE_SITE } from 'config';
 import { SEARCH_OPTIONS } from 'constants/search';
 
 export function createNormalizedSearchKey(query: string) {
-  const FROM = '&from=';
-
-  // Ignore the "page" (`from`) because we don't care what the last page
-  // searched was, we want everything.
-  let normalizedQuery = query;
-  if (normalizedQuery.includes(FROM)) {
-    const a = normalizedQuery.indexOf(FROM);
-    const b = normalizedQuery.indexOf('&', a + FROM.length);
-    if (b > a) {
-      normalizedQuery = normalizedQuery.substring(0, a) + normalizedQuery.substring(b);
-    } else {
-      normalizedQuery = normalizedQuery.substring(0, a);
+  const removeParam = (query: string, param: string) => {
+    // TODO: find a standard way to do this.
+    if (query.includes(param)) {
+      const a = query.indexOf(param);
+      const b = query.indexOf('&', a + param.length);
+      if (b > a) {
+        query = query.substring(0, a) + query.substring(b);
+      } else {
+        query = query.substring(0, a);
+      }
     }
-  }
+    return query;
+  };
+
+  let normalizedQuery = query;
+
+  // Ignore the "page" (`from`) because we don't care what the last page searched was, we want everything:
+  normalizedQuery = removeParam(normalizedQuery, '&from=');
+  // Remove FYP additional info:
+  normalizedQuery = removeParam(normalizedQuery, '&gid=');
+  normalizedQuery = removeParam(normalizedQuery, '&uuid=');
+
   return normalizedQuery;
 }
 

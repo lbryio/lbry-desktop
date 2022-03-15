@@ -112,6 +112,11 @@ export const selectOdyseeMembershipIsPremiumPlus = (state) => {
   return selectState(state).odyseeMembershipName === 'Premium+';
 };
 
+export const selectHasOdyseeMembership = (state) => {
+  const membershipName = selectOdyseeMembershipName(state);
+  return Boolean(membershipName);
+};
+
 export const selectYouTubeImportVideosComplete = createSelector(selectState, (state) => {
   const total = state.youtubeChannelImportTotal;
   const complete = state.youtubeChannelImportComplete || 0;

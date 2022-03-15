@@ -76,11 +76,11 @@ const recsys = {
    * Page was loaded. Get or Create entry and populate it with default data, plus recommended content, recsysId, etc.
    * Called from recommendedContent component
    */
-  onRecsLoaded: function (claimId, uris) {
+  onRecsLoaded: function (claimId, uris, uuid = '') {
     if (window && window.store) {
       const state = window.store.getState();
       if (!recsys.entries[claimId]) {
-        recsys.createRecsysEntry(claimId);
+        recsys.createRecsysEntry(claimId, null, uuid);
       }
       const claimIds = getClaimIdsFromUris(uris);
       recsys.entries[claimId]['recsysId'] = makeSelectRecommendedRecsysIdForClaimId(claimId)(state) || recsysId;
@@ -94,8 +94,9 @@ const recsys = {
    * Creates an Entry with optional parentUuid
    * @param: claimId: string
    * @param: parentUuid: string (optional)
+   * @param: uuid: string Specific uuid to use.
    */
-  createRecsysEntry: function (claimId, parentUuid) {
+  createRecsysEntry: function (claimId, parentUuid, uuid = '') {
     if (window && window.store && claimId) {
       const state = window.store.getState();
       const user = selectUser(state);
@@ -103,7 +104,7 @@ const recsys = {
       if (parentUuid) {
         // Make a stub entry that will be filled out on page load
         recsys.entries[claimId] = {
-          uuid: Uuidv4(),
+          uuid: uuid || Uuidv4(),
           parentUuid: parentUuid,
           uid: userId || null, // selectUser
           claimId: claimId,
@@ -113,7 +114,7 @@ const recsys = {
         };
       } else {
         recsys.entries[claimId] = {
-          uuid: Uuidv4(),
+          uuid: uuid || Uuidv4(),
           uid: userId, // selectUser
           claimId: claimId,
           pageLoadedAt: Date.now(),

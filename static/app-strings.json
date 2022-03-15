@@ -2168,6 +2168,8 @@
   "Streamer": "Streamer",
   "Pinned": "Pinned",
   "Remove all unavailable claims": "Remove all unavailable claims",
+  "Recommended For You": "Recommended For You",
+  "Recommendation removed. Thanks for the feedback!": "Recommendation removed. Thanks for the feedback!",
   "Hide Chat": "Hide Chat",
   "Popout Chat": "Popout Chat",
   "Chat Hidden": "Chat Hidden",
@@ -2201,5 +2203,6 @@
   "Choose Your Preference": "Choose Your Preference",
   "Recently Active": "Recently Active",
   "All Channels": "All Channels",
+  "# Recommended Videos (Alpha)\n  ## What is this\n\n  LBRY's content catalog is growing fast. Each day, there are more creators using the platform. This is great news! But it also makes finding things you would like to watch harder. Odysee's recommended videos tries to make it easier.\n\n  ## How does it work?\n\n  Based on your video viewing history, Odysee tries to find other channels you might like. Then, we recommend videos from those channels. At least, that's how it works right now. But expect a lot of rapid change.\n\n  ## Does Odysee manipulate the results?\n\n  No. The current algorithm itself has a tendency to favor channels with more viewers. But this is just because we have more evidence for those ones. Otherwise, we aren't making editorial decisions or picking favorites.\n\n  ## My results suck, help?\n\n  The more videos you watch, the better it should be. But this system is brand new and it will take a bit of time to tune it. Please have patience. Or, if you want to complain or suggest something, please email: mailto:hello@odysee.com": "# Recommended Videos (Alpha)\n  ## What is this\n\n  LBRY's content catalog is growing fast. Each day, there are more creators using the platform. This is great news! But it also makes finding things you would like to watch harder. Odysee's recommended videos tries to make it easier.\n\n  ## How does it work?\n\n  Based on your video viewing history, Odysee tries to find other channels you might like. Then, we recommend videos from those channels. At least, that's how it works right now. But expect a lot of rapid change.\n\n  ## Does Odysee manipulate the results?\n\n  No. The current algorithm itself has a tendency to favor channels with more viewers. But this is just because we have more evidence for those ones. Otherwise, we aren't making editorial decisions or picking favorites.\n\n  ## My results suck, help?\n\n  The more videos you watch, the better it should be. But this system is brand new and it will take a bit of time to tune it. Please have patience. Or, if you want to complain or suggest something, please email: mailto:hello@odysee.com",
   "--end--": "--end--"
 }

@@ -49,6 +49,7 @@ type Props = {
   claimSearchByQuery: { [string]: Array<string> },
   claimsByUri: { [string]: any },
   collectionId?: string,
+  fypId?: string,
   showNoSourceClaims?: boolean,
   onClick?: (e: any, claim?: ?Claim, index?: number) => void,
   maxClaimRender?: number,
@@ -88,6 +89,7 @@ export default function ClaimList(props: Props) {
     searchInLanguage,
     hideMenu,
     collectionId,
+    fypId,
     showNoSourceClaims,
     onClick,
     maxClaimRender,
@@ -221,6 +223,7 @@ export default function ClaimList(props: Props) {
                 showHiddenByUser={showHiddenByUser}
                 properties={renderProperties}
                 collectionId={collectionId}
+                fypId={fypId}
                 showNoSourceClaims={showNoSourceClaims}
                 swipeLayout={swipeLayout}
               />

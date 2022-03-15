@@ -426,7 +426,7 @@ const OdyseeMembershipPage = (props: Props) => {
         <ul>
           <li>
             {__(
-              `Early access and exclusive features include: livestreaming and the ability to post odysee hyperlinks and images in comments + blogs. Account is also automatically eligible for Rewards. More to come later.`
+              `Exclusive and early access features include: recommended content on homepage, livestreaming, and the ability to post odysee hyperlinks + images in comments. Account is also automatically eligible for Rewards. More to come later.`
             )}
           </li>
           <li>
