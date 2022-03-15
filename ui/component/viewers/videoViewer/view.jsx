@@ -67,6 +67,8 @@ type Props = {
   isMarkdownOrComment: boolean,
   doAnalyticsView: (string, number) => void,
   claimRewards: () => void,
+  isLivestreamClaim: boolean,
+  activeLivestreamForChannel: any,
 };
 
 /*
@@ -109,7 +111,10 @@ function VideoViewer(props: Props) {
     previousListUri,
     videoTheaterMode,
     isMarkdownOrComment,
+    isLivestreamClaim,
+    activeLivestreamForChannel,
   } = props;
+
   const permanentUrl = claim && claim.permanent_url;
   const adApprovedChannelIds = homepageData ? getAllIds(homepageData) : [];
   const claimId = claim && claim.claim_id;
@@ -149,11 +154,14 @@ function VideoViewer(props: Props) {
     toggleAutoplayNext();
   }, [localAutoplayNext]);
 
-  useInterval(() => {
-    if (playerRef.current && isPlaying) {
-      handlePosition(playerRef.current);
-    }
-  }, PLAY_POSITION_SAVE_INTERVAL_MS);
+  useInterval(
+    () => {
+      if (playerRef.current && isPlaying && !isLivestreamClaim) {
+        handlePosition(playerRef.current);
+      }
+    },
+    !isLivestreamClaim ? PLAY_POSITION_SAVE_INTERVAL_MS : null
+  );
 
   const updateVolumeState = React.useCallback(
     debounce((volume, muted) => {
@@ -181,10 +189,12 @@ function VideoViewer(props: Props) {
 
   // TODO: analytics functionality
   function doTrackingBuffered(e: Event, data: any) {
-    fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
-      data.playerPoweredBy = response.headers.get('x-powered-by');
-      doAnalyticsBuffer(uri, data);
-    });
+    if (!isLivestreamClaim) {
+      fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
+        data.playerPoweredBy = response.headers.get('x-powered-by');
+        doAnalyticsBuffer(uri, data);
+      });
+    }
   }
 
   const doPlay = useCallback(
@@ -294,7 +304,7 @@ function VideoViewer(props: Props) {
   }
 
   function handlePosition(player) {
-    savePosition(uri, player.currentTime());
+    if (!isLivestreamClaim) savePosition(uri, player.currentTime());
   }
 
   function restorePlaybackRate(player) {
@@ -426,7 +436,7 @@ function VideoViewer(props: Props) {
       }
     });
 
-    if (position) {
+    if (position && !isLivestreamClaim) {
       player.currentTime(position);
     }
 
@@ -510,6 +520,9 @@ function VideoViewer(props: Props) {
         uri={uri}
         clearPosition={clearPosition}
         centerPlayButton={centerPlayButton}
+        userClaimId={claim && claim.signing_channel && claim.signing_channel.claim_id}
+        isLivestreamClaim={isLivestreamClaim}
+        activeLivestreamForChannel={activeLivestreamForChannel}
       />
     </div>
   );

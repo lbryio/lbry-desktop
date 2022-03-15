@@ -1,6 +1,10 @@
 import { connect } from 'react-redux';
-import { doUriInitiatePlay, doSetPlayingUri, doSetPrimaryUri } from 'redux/actions/content';
-import { selectThumbnailForUri, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
+import { doUriInitiatePlay } from 'redux/actions/content';
+import {
+  selectThumbnailForUri,
+  makeSelectClaimWasPurchased,
+  selectIsLivestreamClaimForUri,
+} from 'redux/selectors/claims';
 import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import * as SETTINGS from 'constants/settings';
 import { selectCostInfoForUri } from 'lbryinc';
@@ -31,13 +35,12 @@ const select = (state, props) => {
     claimWasPurchased: makeSelectClaimWasPurchased(uri)(state),
     authenticated: selectUserVerifiedEmail(state),
     isCurrentClaimLive: selectIsActiveLivestreamForUri(state, uri),
+    isLivestreamClaim: selectIsLivestreamClaimForUri(state, uri),
   };
 };
 
 const perform = {
   doUriInitiatePlay,
-  doSetPlayingUri,
-  doSetPrimaryUri,
 };
 
 export default withRouter(connect(select, perform)(FileRenderInitiator));

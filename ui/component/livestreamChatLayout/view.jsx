@@ -52,6 +52,7 @@ type Props = {
   doSuperChatList: (uri: string) => void,
   claimsByUri: { [string]: any },
   doFetchUserMemberships: (claimIdCsv: string) => void,
+  setLayountRendered: (boolean) => void,
 };
 
 export default function LivestreamChatLayout(props: Props) {
@@ -73,6 +74,7 @@ export default function LivestreamChatLayout(props: Props) {
     doSuperChatList,
     doFetchUserMemberships,
     claimsByUri,
+    setLayountRendered,
   } = props;
 
   const isMobile = useIsMobile() && !isPopoutWindow;
@@ -102,7 +104,7 @@ export default function LivestreamChatLayout(props: Props) {
   }
 
   // get commenter claim ids for checking premium status
-  const commenterClaimIds = commentsByChronologicalOrder.map(function(comment) {
+  const commenterClaimIds = commentsByChronologicalOrder.map((comment) => {
     return comment.channel_id;
   });
 
@@ -114,7 +116,7 @@ export default function LivestreamChatLayout(props: Props) {
     claimsByUri,
     doFetchUserMemberships,
     [commentsByChronologicalOrder],
-    true,
+    true
   );
 
   const commentsToDisplay =
@@ -166,6 +168,10 @@ export default function LivestreamChatLayout(props: Props) {
     setViewMode(VIEW_MODES.SUPERCHAT);
     if (setCustomViewMode) setCustomViewMode(VIEW_MODES.SUPERCHAT);
   }
+
+  React.useEffect(() => {
+    if (setLayountRendered) setLayountRendered(true);
+  }, [setLayountRendered]);
 
   React.useEffect(() => {
     if (customViewMode && customViewMode !== viewMode) {

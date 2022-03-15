@@ -1,8 +1,17 @@
+export const LIVESTREAM_CDN_DOMAIN = 'cdn.odysee.live';
+export const LIVESTREAM_STREAM_DOMAIN = 'stream.odysee.com';
+export const LIVESTREAM_STREAM_X_PULL = 'bitwaveCDN';
+
 export const LIVESTREAM_EMBED_URL = 'https://player.odysee.live/odysee';
 export const LIVESTREAM_LIVE_API = 'https://api.live.odysee.com/v1/odysee/live';
 export const LIVESTREAM_REPLAY_API = 'https://api.live.odysee.com/v1/replays/odysee';
 export const LIVESTREAM_RTMP_URL = 'rtmp://stream.odysee.com/live';
 export const LIVESTREAM_KILL = 'https://api.stream.odysee.com/stream/kill';
+
+// new livestream endpoints (old can be removed at some future point)
+// export const NEW_LIVESTREAM_RTMP_URL = 'rtmp://publish.odysee.live/live';
+// export const NEW_LIVESTREAM_REPLAY_API = 'https://api.odysee.live/replays/list';
+// export const NEW_LIVESTREAM_LIVE_API = 'https://api.odysee.live/livestream/is_live';
 
 export const MAX_LIVESTREAM_COMMENTS = 50;
 

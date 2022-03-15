@@ -577,28 +577,14 @@ body {
 
 .main--livestream {
   @extend .main--file-page;
-  padding: 0;
-
-  @media (min-width: $breakpoint-small) {
-    > * {
-      width: auto;
-    }
-  }
 
   .card-stack {
     margin-bottom: var(--spacing-m);
-
     @media (min-width: ($breakpoint-large + 300px)) {
       max-width: calc(var(--page-max-width--filepage) / 1.25);
       margin-left: auto;
       margin-right: auto;
       width: calc(100% - var(--livestream-comments-width));
-    }
-
-    @media (min-width: $breakpoint-medium) and (max-width: ($breakpoint-large + 300px)) {
-      max-width: calc(100vw - var(--livestream-comments-width) - var(--spacing-m) * 3);
-      margin-left: var(--spacing-m);
-      margin-right: var(--spacing-m);
     }
 
     @media (max-width: $breakpoint-medium) {
@@ -617,19 +603,6 @@ body {
   .card__body {
     .date_time {
       font-size: var(--font-small);
-    }
-  }
-
-  .main__right-side {
-    position: sticky !important;
-    top: 76px !important;
-
-    width: var(--livestream-comments-width);
-    margin-left: var(--spacing-l);
-
-    @media (max-width: $breakpoint-medium) {
-      width: 100%;
-      margin-bottom: var(--spacing-m);
     }
   }
 

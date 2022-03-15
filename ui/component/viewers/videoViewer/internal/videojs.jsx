@@ -21,6 +21,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import recsys from './plugins/videojs-recsys/plugin';
 // import runAds from './ads';
 import videojs from 'video.js';
+import { LIVESTREAM_STREAM_X_PULL, LIVESTREAM_CDN_DOMAIN, LIVESTREAM_STREAM_DOMAIN } from 'constants/livestream';
+import { useIsMobile } from 'effects/use-screensize';
+
 const canAutoplay = require('./plugins/canAutoplay');
 
 require('@silvermine/videojs-chromecast')(videojs);
@@ -80,6 +83,9 @@ type Props = {
   claimValues: any,
   clearPosition: (string) => void,
   centerPlayButton: () => void,
+  isLivestreamClaim: boolean,
+  userClaimId: ?string,
+  activeLivestreamForChannel: any,
 };
 
 const videoPlaybackRates = [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2];
@@ -143,7 +149,12 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     uri,
     clearPosition,
     centerPlayButton,
+    userClaimId,
+    isLivestreamClaim,
+    activeLivestreamForChannel,
   } = props;
+
+  const isMobile = useIsMobile();
 
   // will later store the videojs player
   const playerRef = useRef();
@@ -154,8 +165,17 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
   const playerServerRef = useRef();
 
+  const { url: livestreamVideoUrl } = activeLivestreamForChannel || {};
+  const showQualitySelector = !isLivestreamClaim || (livestreamVideoUrl && livestreamVideoUrl.includes('/transcode/'));
+
   // initiate keyboard shortcuts
-  const { curried_function } = keyboardShorcuts({ toggleVideoTheaterMode, playNext, playPrevious });
+  const { curried_function } = keyboardShorcuts({
+    isMobile,
+    isLivestreamClaim,
+    toggleVideoTheaterMode,
+    playNext,
+    playPrevious,
+  });
 
   const [reload, setReload] = useState('initial');
 
@@ -178,6 +198,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     uri,
     playerServerRef,
     clearPosition,
+    isLivestreamClaim,
   });
 
   const videoJsOptions = {
@@ -186,23 +207,40 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     responsive: true,
     controls: true,
     html5: {
-      vhs: {
+      hls: {
         overrideNative: !videojs.browser.IS_ANY_SAFARI,
+        allowSeeksWithinUnsafeLiveWindow: true,
+        enableLowInitialPlaylist: false,
+        handlePartialData: true,
+        smoothQualityChange: true,
       },
     },
+    liveTracker: {
+      trackingThreshold: 0,
+      liveTolerance: 10,
+    },
+    inactivityTimeout: 2000,
     autoplay: autoplay,
     muted: startMuted,
     poster: poster, // thumb looks bad in app, and if autoplay, flashing poster is annoying
     plugins: { eventTracking: true, overlay: OVERLAY.OVERLAY_DATA },
     // fixes problem of errant CC button showing up on iOS
     // the true fix here is to fix the m3u8 file, see: https://github.com/lbryio/lbry-desktop/pull/6315
-    controlBar: { subsCapsButton: false },
+    controlBar: {
+      subsCapsButton: false,
+      currentTimeDisplay: !isLivestreamClaim,
+      timeDivider: !isLivestreamClaim,
+      durationDisplay: !isLivestreamClaim,
+      remainingTimeDisplay: !isLivestreamClaim,
+    },
     techOrder: ['chromecast', 'html5'],
     chromecast: {
       requestTitleFn: (src) => title || '',
       requestSubtitleFn: (src) => channelName || '',
     },
     bigPlayButton: embedded, // only show big play button if embedded
+    liveui: true,
+    suppressNotSupportedError: true,
   };
 
   // Initialize video.js
@@ -236,12 +274,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         if (bigPlayButton) bigPlayButton.style.setProperty('display', 'block', 'important');
       }
 
-      Chromecast.initialize(player);
-
       // Add quality selector to player
-      player.hlsQualitySelector({
-        displayCurrentQuality: true,
-      });
+      if (showQualitySelector) player.hlsQualitySelector({ displayCurrentQuality: true });
 
       // Add recsys plugin
       if (shareTelemetry) {
@@ -281,6 +315,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         }
         window.player.userActive(true);
       }
+
+      Chromecast.initialize(player);
     });
 
     // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
@@ -289,6 +325,14 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
     return vjs;
   }
+
+  useEffect(() => {
+    if (showQualitySelector) {
+      // Add quality selector to player
+      const player = playerRef.current;
+      if (player) player.hlsQualitySelector({ displayCurrentQuality: true });
+    }
+  }, [showQualitySelector]);
 
   /** instantiate videoJS and dispose of it when done with code **/
   // This lifecycle hook is only called once (on mount), or when `isAudio` or `source` changes.
@@ -315,26 +359,63 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // $FlowFixMe
       document.querySelector('.vjs-control-bar').style.setProperty('opacity', '1', 'important');
 
-      // change to m3u8 if applicable
-      const response = await fetch(source, { method: 'HEAD', cache: 'no-store' });
+      if (isLivestreamClaim && userClaimId) {
+        // $FlowFixMe
+        vjsPlayer.addClass('livestreamPlayer');
 
-      playerServerRef.current = response.headers.get('x-powered-by');
+        // @if process.env.NODE_ENV!='production'
+        videojs.Vhs.xhr.beforeRequest = (options) => {
+          if (!options.headers) options.headers = {};
+          options.headers['X-Pull'] = LIVESTREAM_STREAM_X_PULL;
+          options.uri = options.uri.replace(LIVESTREAM_CDN_DOMAIN, LIVESTREAM_STREAM_DOMAIN);
+          return options;
+        };
+        // @endif
 
-      if (response && response.redirected && response.url && response.url.endsWith('m3u8')) {
-        // use m3u8 source
+        // const newPoster = livestreamData.ThumbnailURL;
+
+        // pretty sure it's not working
+        // vjsPlayer.poster(newPoster);
+
+        // here specifically because we don't allow rewinds at the moment
+        // $FlowFixMe
+        // vjsPlayer.on('play', function () {
+        //   // $FlowFixMe
+        //   vjsPlayer.liveTracker.seekToLiveEdge();
+        // });
+
         // $FlowFixMe
         vjsPlayer.src({
           type: 'application/x-mpegURL',
-          src: response.url,
+          src: livestreamVideoUrl,
         });
       } else {
-        // use original mp4 source
         // $FlowFixMe
-        vjsPlayer.src({
-          type: sourceType,
-          src: source,
-        });
+        vjsPlayer.removeClass('livestreamPlayer');
+        videojs.Vhs.xhr.beforeRequest = (options) => {};
+
+        // change to m3u8 if applicable
+        const response = await fetch(source, { method: 'HEAD', cache: 'no-store' });
+
+        playerServerRef.current = response.headers.get('x-powered-by');
+
+        if (response && response.redirected && response.url && response.url.endsWith('m3u8')) {
+          // use m3u8 source
+          // $FlowFixMe
+          vjsPlayer.src({
+            type: 'application/x-mpegURL',
+            src: response.url,
+          });
+        } else {
+          // use original mp4 source
+          // $FlowFixMe
+          vjsPlayer.src({
+            type: sourceType,
+            src: source,
+          });
+        }
       }
+
       // load video once source setup
       // $FlowFixMe
       vjsPlayer.load();
@@ -381,7 +462,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         window.player = undefined;
       }
     };
-  }, [isAudio, source, reload]);
+  }, [isAudio, source, reload, userClaimId, isLivestreamClaim]);
 
   return (
     <div className={classnames('video-js-parent', { 'video-js-parent--ios': IS_IOS })} ref={containerRef}>

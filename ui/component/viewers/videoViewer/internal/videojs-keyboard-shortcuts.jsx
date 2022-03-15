@@ -97,10 +97,14 @@ const VideoJsKeyboardShorcuts = ({
   playNext,
   playPrevious,
   toggleVideoTheaterMode,
+  isMobile,
+  isLivestreamClaim,
 }: {
   playNext: any, // function
   playPrevious: any, // function
   toggleVideoTheaterMode: any, // function
+  isMobile: boolean,
+  isLivestreamClaim: boolean,
 }) => {
   function toggleTheaterMode(playerRef) {
     const player = playerRef.current;
@@ -141,7 +145,7 @@ const VideoJsKeyboardShorcuts = ({
     if (e.keyCode === KEYCODES.M) toggleMute(containerRef);
     if (e.keyCode === KEYCODES.UP) volumeUp(e, playerRef);
     if (e.keyCode === KEYCODES.DOWN) volumeDown(e, playerRef);
-    if (e.keyCode === KEYCODES.T) toggleTheaterMode(playerRef);
+    if (e.keyCode === KEYCODES.T && !isMobile && !isLivestreamClaim) toggleTheaterMode(playerRef);
     if (e.keyCode === KEYCODES.L) seekVideo(SEEK_STEP, playerRef, containerRef);
     if (e.keyCode === KEYCODES.J) seekVideo(-SEEK_STEP, playerRef, containerRef);
     if (e.keyCode === KEYCODES.RIGHT) seekVideo(SEEK_STEP_5, playerRef, containerRef);

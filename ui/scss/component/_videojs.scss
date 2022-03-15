@@ -272,33 +272,59 @@ button.vjs-big-play-button {
 .vjs-volume-panel {
   order: 4 !important;
 }
-.vjs-current-time {
+
+.vjs-seek-to-live-control {
   order: 5 !important;
 }
-.vjs-time-divider {
+
+.vjs-live-control {
+  order: 5 !important;
+  margin-left: 8px !important;
+}
+
+.vjs-current-time {
   order: 6 !important;
 }
-.vjs-duration {
+.vjs-time-divider {
   order: 7 !important;
 }
-.vjs-custom-control-spacer {
+.vjs-duration {
   order: 8 !important;
 }
-.vjs-button--autoplay-next {
+.vjs-custom-control-spacer {
   order: 9 !important;
 }
-.vjs-playback-rate {
+.vjs-button--autoplay-next {
   order: 10 !important;
 }
-.vjs-chromecast-button {
+.vjs-playback-rate {
   order: 11 !important;
 }
-.vjs-quality-selector {
+.vjs-chromecast-button {
   order: 12 !important;
 }
-.vjs-button--theater-mode {
+.vjs-quality-selector {
   order: 13 !important;
 }
-.vjs-fullscreen-control {
+.vjs-button--theater-mode {
   order: 14 !important;
+}
+.vjs-fullscreen-control {
+  order: 15 !important;
+}
+
+// livestream player
+.livestreamPlayer {
+  .vjs-current-time,
+  .vjs-duration,
+  .vjs-time-divider,
+  .vjs-button--theater-mode,
+  //.vjs-quality-selector,
+  .vjs-chromecast-button, // hopefully we can use chromecast in the future at some point
+  .vjs-button--autoplay-next
+  //,.vjs-progress-control
+  {
+    // hiding progress control for now
+    display: none !important;
+  }
 }

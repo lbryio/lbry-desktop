@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectTitleForUri, makeSelectClaimWasPurchased, selectClaimForUri } from 'redux/selectors/claims';
+import { selectTitleForUri, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
 import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
 import {
   makeSelectNextUrlForCollectionAndUrl,
@@ -17,7 +17,6 @@ import { selectCostInfoForUri } from 'lbryinc';
 import { doUriInitiatePlay, doSetPlayingUri } from 'redux/actions/content';
 import { doFetchRecommendedContent } from 'redux/actions/search';
 import { withRouter } from 'react-router';
-import { getChannelIdFromClaim } from 'util/claim';
 import { selectMobilePlayerDimensions } from 'redux/selectors/app';
 import { selectIsActiveLivestreamForUri } from 'redux/selectors/livestream';
 import { doSetMobilePlayerDimensions } from 'redux/actions/app';
@@ -28,8 +27,6 @@ const select = (state, props) => {
 
   const playingUri = selectPlayingUri(state);
   const { uri, collectionId } = playingUri || {};
-
-  const claim = selectClaimForUri(state, uri);
 
   return {
     uri,
@@ -47,7 +44,6 @@ const select = (state, props) => {
     previousListUri: collectionId && makeSelectPreviousUrlForCollectionAndUrl(collectionId, uri)(state),
     collectionId,
     isCurrentClaimLive: selectIsActiveLivestreamForUri(state, uri),
-    channelClaimId: claim && getChannelIdFromClaim(claim),
     mobilePlayerDimensions: selectMobilePlayerDimensions(state),
   };
 };

@@ -229,7 +229,7 @@
     "unist-util-visit": "^2.0.3",
     "uuid": "^8.3.2",
     "vast-client": "^3.1.1",
-    "video.js": "^7.13.3",
+    "video.js": "^7.18.1",
     "videojs-contrib-quality-levels": "^2.0.9",
     "videojs-event-tracking": "^1.0.1",
     "villain-react": "^1.0.9",

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { makeSelectTagInClaimOrChannelForUri, selectClaimForUri } from 'redux/selectors/claims';
-import { doSetPlayingUri } from 'redux/actions/content';
+import { doSetPrimaryUri } from 'redux/actions/content';
 import { doUserSetReferrer } from 'redux/actions/user';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { DISABLE_COMMENTS_TAG } from 'constants/tags';
@@ -24,7 +24,7 @@ const select = (state, props) => {
 };
 
 const perform = {
-  doSetPlayingUri,
+  doSetPrimaryUri,
   doUserSetReferrer,
   doCommentSocketConnect,
   doCommentSocketDisconnect,

@@ -1753,7 +1753,7 @@
   "Select advanced mode from the dropdown at the top.": "Select advanced mode from the dropdown at the top.",
   "Ensure the following settings are selected under the streaming tab:": "Ensure the following settings are selected under the streaming tab:",
   "Bitrate: 1000 to 2500 kbps": "Bitrate: 1000 to 2500 kbps",
-  "Keyframes: 1": "Keyframes: 1",
+  "Keyframes: 2": "Keyframes: 2",
   "Profile: High": "Profile: High",
   "Tune: Zerolatency": "Tune: Zerolatency",
   "If using other streaming software, make sure the bitrate is below 4500 kbps or the stream will not work.": "If using other streaming software, make sure the bitrate is below 4500 kbps or the stream will not work.",

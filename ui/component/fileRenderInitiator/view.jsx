@@ -14,6 +14,7 @@ import Nag from 'component/common/nag';
 // $FlowFixMe cannot resolve ...
 import FileRenderPlaceholder from 'static/img/fileRenderPlaceholder.png';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
+import { LayoutRenderContext } from 'page/livestream/view';
 
 type Props = {
   isPlaying: boolean,
@@ -33,8 +34,8 @@ type Props = {
   videoTheaterMode: boolean,
   isCurrentClaimLive?: boolean,
   doUriInitiatePlay: (uri: string, collectionId: ?string, isPlayable: boolean) => void,
-  doSetPlayingUri: ({ uri: ?string }) => void,
-  doSetPrimaryUri: (uri: ?string) => void,
+  isLivestreamClaim: boolean,
+  customAction?: any,
 };
 
 export default function FileRenderInitiator(props: Props) {
@@ -54,15 +55,16 @@ export default function FileRenderInitiator(props: Props) {
     authenticated,
     videoTheaterMode,
     isCurrentClaimLive,
+    isLivestreamClaim,
+    customAction,
     doUriInitiatePlay,
-    doSetPlayingUri,
-    doSetPrimaryUri,
   } = props;
 
-  const containerRef = React.useRef<any>();
+  const layountRendered = React.useContext(LayoutRenderContext);
 
   const isMobile = useIsMobile();
 
+  const containerRef = React.useRef<any>();
   const [thumbnail, setThumbnail] = React.useState(FileRenderPlaceholder);
 
   const { search, href, state: locationState } = location;
@@ -73,26 +75,19 @@ export default function FileRenderInitiator(props: Props) {
   const urlTimeParam = href && href.indexOf('t=') > -1;
   const forceAutoplayParam = locationState && locationState.forceAutoplay;
   const shouldAutoplay = forceAutoplayParam || urlTimeParam || autoplay;
-
   const isFree = costInfo && costInfo.cost === 0;
-  const canViewFile = isFree || claimWasPurchased;
+  const canViewFile = isLivestreamClaim
+    ? (layountRendered || isMobile) && isCurrentClaimLive
+    : isFree || claimWasPurchased;
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode) || isCurrentClaimLive;
   const isText = RENDER_MODES.TEXT_MODES.includes(renderMode);
-  const isMobileClaimLive = isMobile && isCurrentClaimLive;
-  const foundCover = thumbnail !== FileRenderPlaceholder;
 
   const renderUnsupported = RENDER_MODES.UNSUPPORTED_IN_THIS_APP.includes(renderMode);
-  const disabled = renderUnsupported || (!fileInfo && insufficientCredits && !claimWasPurchased);
+  const disabled =
+    (isLivestreamClaim && !isCurrentClaimLive) ||
+    renderUnsupported ||
+    (!fileInfo && insufficientCredits && !claimWasPurchased);
   const shouldRedirect = !authenticated && !isFree;
-
-  React.useEffect(() => {
-    // Set livestream as playing uri so it can be rendered by <FileRenderFloating /> on mobile
-    // instead of showing an empty cover image. Needs cover to fill the space with the player.
-    if (isMobileClaimLive && foundCover) {
-      doSetPlayingUri({ uri });
-      doSetPrimaryUri(uri);
-    }
-  }, [doSetPlayingUri, doSetPrimaryUri, foundCover, isMobileClaimLive, uri]);
 
   function doAuthRedirect() {
     history.push(`/$/${PAGES.AUTH}?redirect=${encodeURIComponent(location.pathname)}`);
@@ -148,11 +143,11 @@ export default function FileRenderInitiator(props: Props) {
   return (
     <div
       ref={containerRef}
-      onClick={disabled || isMobileClaimLive ? undefined : shouldRedirect ? doAuthRedirect : viewFile}
+      onClick={disabled ? undefined : shouldRedirect ? doAuthRedirect : viewFile}
       style={thumbnail && !obscurePreview ? { backgroundImage: `url("${thumbnail}")` } : {}}
       className={classnames('content__cover', {
         'content__cover--disabled': disabled,
-        'content__cover--theater-mode': videoTheaterMode,
+        'content__cover--theater-mode': videoTheaterMode && !isMobile,
         'content__cover--text': isText,
         'card__media--nsfw': obscurePreview,
       })}
@@ -178,7 +173,7 @@ export default function FileRenderInitiator(props: Props) {
         )
       )}
 
-      {!disabled && !isMobileClaimLive && (
+      {!disabled && (
         <Button
           requiresAuth={shouldRedirect}
           onClick={viewFile}
@@ -190,6 +185,8 @@ export default function FileRenderInitiator(props: Props) {
           })}
         />
       )}
+
+      {customAction}
     </div>
   );
 }

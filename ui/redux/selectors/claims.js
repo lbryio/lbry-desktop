@@ -323,6 +323,11 @@ export const makeSelectTotalPagesInChannelSearch = (uri: string) =>
     return byChannel['pageCount'];
   });
 
+export const selectIsLivestreamClaimForUri = (state: State, uri: string) => {
+  const claim = selectClaimForUri(state, uri);
+  return isStreamPlaceholderClaim(claim);
+};
+
 export const selectMetadataForUri = (state: State, uri: string) => {
   const claim = selectClaimForUri(state, uri);
   const metadata = claim && claim.value;
@@ -381,6 +386,9 @@ export const makeSelectEffectiveAmountForUri = (uri: string) =>
 
 export const makeSelectContentTypeForUri = (uri: string) =>
   createSelector(makeSelectClaimForUri(uri), (claim) => {
+    const isLivestreamClaim = isStreamPlaceholderClaim(claim);
+    if (isLivestreamClaim) return 'livestream';
+
     const source = claim && claim.value && claim.value.source;
     return source ? source.media_type : undefined;
   });
