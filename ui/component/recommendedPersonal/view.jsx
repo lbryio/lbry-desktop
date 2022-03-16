@@ -72,7 +72,9 @@ export default function RecommendedPersonal(props: Props) {
 
   React.useEffect(() => {
     // -- Update parent's callback request
-    onLoad(count > 0);
+    if (typeof onLoad === 'function') {
+      onLoad(count > 0);
+    }
   }, [count, onLoad]);
 
   React.useEffect(() => {

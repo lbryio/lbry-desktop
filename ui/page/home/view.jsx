@@ -2,7 +2,7 @@
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import { SITE_NAME, SIMPLE_SITE, ENABLE_NO_SOURCE_CLAIMS } from 'config';
-import React, { useState } from 'react';
+import React from 'react';
 import Page from 'component/page';
 import Button from 'component/button';
 import ClaimTilesDiscover from 'component/claimTilesDiscover';
@@ -21,6 +21,10 @@ import Ads from 'web/component/ads';
 // @if TARGET='web'
 import Meme from 'web/component/meme';
 // @endif
+
+function resolveTitleOverride(title: string) {
+  return title === 'Recent From Following' ? 'Following' : title;
+}
 
 type Props = {
   authenticated: boolean,
@@ -119,19 +123,18 @@ function HomePage(props: Props) {
           'show-ribbon': index === 0,
         })}
       >
-        {/* category header */}
-        {index !== 0 && title && typeof title === 'string' && (
-          <SectionHeader title={__(title)} navigate={route || link} icon={icon} help={help} />
+        {title && typeof title === 'string' && (
+          <SectionHeader title={__(resolveTitleOverride(title))} navigate={route || link} icon={icon} help={help} />
         )}
 
         {index === 0 && <>{claimTiles}</>}
+
         {index !== 0 && (
           <WaitUntilOnPage name={title} placeholder={tilePlaceholder} yOffset={800}>
             {claimTiles}
           </WaitUntilOnPage>
         )}
 
-        {/* view more button */}
         {(route || link) && (
           <Button
             className="claim-grid__title--secondary"
@@ -148,10 +151,6 @@ function HomePage(props: Props) {
   React.useEffect(() => {
     doFetchActiveLivestreams();
   }, []);
-
-  const [hasPersonalRecommendations, setHasPersonalRecommendations] = useState(false);
-  const [hasScheduledStreams, setHasScheduledStreams] = useState(false);
-  const scheduledStreamsLoaded = (total) => setHasScheduledStreams(total > 0);
 
   return (
     <Page className="homePage-wrapper" fullWidthPage>
@@ -174,7 +173,7 @@ function HomePage(props: Props) {
       {SIMPLE_SITE && <Meme />}
       {/* @endif */}
 
-      <RecommendedPersonal onLoad={(displayed) => setHasPersonalRecommendations(displayed)} />
+      <RecommendedPersonal />
 
       {!fetchingActiveLivestreams && (
         <>
@@ -184,12 +183,7 @@ function HomePage(props: Props) {
               tileLayout
               liveUris={getLivestreamUris(activeLivestreams, channelIds)}
               limitClaimsPerChannel={2}
-              onLoad={scheduledStreamsLoaded}
             />
-          )}
-
-          {authenticated && ((hasScheduledStreams && !hideScheduledLivestreams) || hasPersonalRecommendations) && (
-            <SectionHeader title={__('Following')} navigate={`/$/${PAGES.CHANNELS_FOLLOWING}`} icon={ICONS.SUBSCRIBE} />
           )}
         </>
       )}
