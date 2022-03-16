@@ -16,9 +16,13 @@ import LivestreamPage from './view';
 
 const select = (state, props) => {
   const { uri } = props;
-  const channelClaimId = getChannelIdFromClaim(selectClaimForUri(state, uri));
+
+  const claim = selectClaimForUri(state, uri);
+  const { canonical_url } = claim || {};
+  const channelClaimId = getChannelIdFromClaim(claim);
 
   return {
+    uri: canonical_url || '',
     isAuthenticated: selectUserVerifiedEmail(state),
     channelClaimId,
     chatDisabled: makeSelectTagInClaimOrChannelForUri(uri, DISABLE_COMMENTS_TAG)(state),
