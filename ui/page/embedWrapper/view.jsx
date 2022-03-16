@@ -221,15 +221,9 @@ const EmbedWrapperPage = (props: Props) => {
         <>
           <FileViewerEmbeddedTitle uri={uri} />
 
-          <Button
-            onClick={() => {
-              const formattedUrl = formatLbryUrlForWeb(uri);
-              push(formattedUrl);
-            }}
-            iconSize={30}
-            title={__('View')}
-            className="button--icon button--view"
-          />
+          <a target="_blank" rel="noopener noreferrer" href={formatLbryUrlForWeb(uri)}>
+            <Button iconSize={30} title={__('View')} className="button--icon button--view" />
+          </a>
         </>
       )}
     </div>
