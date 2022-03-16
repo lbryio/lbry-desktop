@@ -36,7 +36,7 @@ export const FLOATING_PLAYER_CLASS = 'content__viewer--floating';
 
 type Props = {
   claimId: ?string,
-  channelClaimUrl: ?string,
+  channelUrl: ?string,
   isFloating: boolean,
   uri: string,
   streamingUrl?: string,
@@ -61,13 +61,12 @@ type Props = {
   doSetMobilePlayerDimensions: ({ height?: ?number, width?: ?number }) => void,
   doCommentSocketConnect: (string, string, string) => void,
   doCommentSocketDisconnect: (string, string) => void,
-  doSetSocketConnected: (connected: boolean) => void,
 };
 
 export default function FileRenderFloating(props: Props) {
   const {
     claimId,
-    channelClaimUrl,
+    channelUrl,
     uri,
     streamingUrl,
     title,
@@ -92,7 +91,6 @@ export default function FileRenderFloating(props: Props) {
     doSetMobilePlayerDimensions,
     doCommentSocketConnect,
     doCommentSocketDisconnect,
-    doSetSocketConnected,
   } = props;
 
   const isMobile = useIsMobile();
@@ -199,29 +197,20 @@ export default function FileRenderFloating(props: Props) {
 
   // Establish web socket connection for viewer count.
   React.useEffect(() => {
-    if (!claimId || !channelClaimUrl || !isCurrentClaimLive || socketConnected) return;
+    if (!claimId || !channelUrl || !isCurrentClaimLive) return;
 
-    const channelName = formatLbryChannelName(channelClaimUrl);
+    const channelName = formatLbryChannelName(channelUrl);
 
-    doCommentSocketConnect(uri, channelName, claimId);
-    doSetSocketConnected(true);
+    // Only connect if not yet connected, so for example clicked on an embed instead of accessing
+    // from the Livestream page
+    if (!socketConnected) doCommentSocketConnect(uri, channelName, claimId);
 
-    return () => {
-      doCommentSocketDisconnect(claimId, channelName);
-      doSetSocketConnected(false);
-    };
+    // This will be used to disconnect for every case, since this is the main player component
+    return () => doCommentSocketDisconnect(claimId, channelName);
 
     // only listen to socketConnected on initial mount
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    channelClaimUrl,
-    claimId,
-    doCommentSocketConnect,
-    doCommentSocketDisconnect,
-    doSetSocketConnected,
-    isCurrentClaimLive,
-    uri,
-  ]);
+  }, [channelUrl, claimId, doCommentSocketConnect, doCommentSocketDisconnect, isCurrentClaimLive, uri]);
 
   React.useEffect(() => {
     if (playingPrimaryUri || playingUrl) {

@@ -27,10 +27,8 @@ type Props = {
   socketConnected: boolean,
   doSetPrimaryUri: (uri: ?string) => void,
   doCommentSocketConnect: (string, string, string) => void,
-  doCommentSocketDisconnect: (string, string) => void,
   doFetchChannelLiveStatus: (string) => void,
   doUserSetReferrer: (string) => void,
-  doSetSocketConnected: (connected: boolean) => void,
 };
 
 export const LayoutRenderContext = React.createContext<any>();
@@ -47,10 +45,8 @@ export default function LivestreamPage(props: Props) {
     socketConnected,
     doSetPrimaryUri,
     doCommentSocketConnect,
-    doCommentSocketDisconnect,
     doFetchChannelLiveStatus,
     doUserSetReferrer,
-    doSetSocketConnected,
   } = props;
 
   const isMobile = useIsMobile();
@@ -76,28 +72,24 @@ export default function LivestreamPage(props: Props) {
     analytics.playerLoadedEvent('livestream', false);
   }, []);
 
-  // Establish web socket connection for viewer count.
+  const { signing_channel: channelClaim } = claim || {};
+  const { canonical_url: channelUrl } = channelClaim || {};
+
+  // On livestream page, only connect, fileRenderFloating will handle disconnect.
+  // (either by leaving page with floating player off, or by closing the player)
   React.useEffect(() => {
     if (!claim || socketConnected) return;
 
     const { claim_id: claimId, signing_channel: channelClaim } = claim;
-    const channelName = channelClaim && formatLbryChannelName(channelClaim.canonical_url);
+    const channelName = channelClaim && formatLbryChannelName(channelUrl);
 
     if (claimId && channelName) {
       doCommentSocketConnect(uri, channelName, claimId);
-      doSetSocketConnected(true);
     }
-
-    return () => {
-      if (claimId && channelName) {
-        doCommentSocketDisconnect(claimId, channelName);
-        doSetSocketConnected(false);
-      }
-    };
 
     // only listen to socketConnected on initial mount
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [claim, uri, doCommentSocketConnect, doCommentSocketDisconnect]);
+  }, [channelUrl, claim, doCommentSocketConnect, uri]);
 
   const claimReleaseStartingSoonStatic = () =>
     release.isBetween(moment(), moment().add(LIVESTREAM_STARTS_SOON_BUFFER, 'minutes'));

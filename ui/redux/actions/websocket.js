@@ -148,12 +148,15 @@ export const doCommentSocketConnect = (uri, channelName, claimId, subCategory) =
     },
     'comment'
   );
+
+  dispatch(doSetSocketConnected(true));
 };
 
 export const doCommentSocketDisconnect = (claimId, channelName) => (dispatch) => {
   const url = getCommentSocketUrl(claimId, channelName);
 
   dispatch(doSocketDisconnect(url));
+  dispatch(doSetSocketConnected(false));
 };
 
 export const doCommentSocketConnectAsCommenter = (uri, channelName, claimId) => (dispatch) => {
@@ -165,3 +168,9 @@ export const doCommentSocketDisconnectAsCommenter = (claimId, channelName) => (d
 
   dispatch(doSocketDisconnect(url));
 };
+
+export const doSetSocketConnected = (connected) => (dispatch) =>
+  dispatch({
+    type: ACTIONS.COMMENT_SOCKET_CONNECTED,
+    data: { connected },
+  });

@@ -4,14 +4,14 @@ import { doSetPrimaryUri } from 'redux/actions/content';
 import { doUserSetReferrer } from 'redux/actions/user';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { DISABLE_COMMENTS_TAG } from 'constants/tags';
-import { doCommentSocketConnect, doCommentSocketDisconnect } from 'redux/actions/websocket';
+import { doCommentSocketConnect } from 'redux/actions/websocket';
 import { getChannelIdFromClaim } from 'util/claim';
 import {
   selectActiveLivestreamForChannel,
   selectActiveLivestreamInitialized,
   selectCommentSocketConnected,
 } from 'redux/selectors/livestream';
-import { doFetchChannelLiveStatus, doSetSocketConnected } from 'redux/actions/livestream';
+import { doFetchChannelLiveStatus } from 'redux/actions/livestream';
 import LivestreamPage from './view';
 
 const select = (state, props) => {
@@ -32,9 +32,7 @@ const perform = {
   doSetPrimaryUri,
   doUserSetReferrer,
   doCommentSocketConnect,
-  doCommentSocketDisconnect,
   doFetchChannelLiveStatus,
-  doSetSocketConnected,
 };
 
 export default connect(select, perform)(LivestreamPage);

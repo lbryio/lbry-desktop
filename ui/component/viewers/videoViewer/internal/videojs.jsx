@@ -357,7 +357,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       window.addEventListener('keydown', curried_function(playerRef, containerRef));
 
       // $FlowFixMe
-      document.querySelector('.vjs-control-bar').style.setProperty('opacity', '1', 'important');
+      const controlBar = document.querySelector('.vjs-control-bar');
+      if (controlBar) controlBar.style.setProperty('opacity', '1', 'important');
 
       if (isLivestreamClaim && userClaimId) {
         // $FlowFixMe

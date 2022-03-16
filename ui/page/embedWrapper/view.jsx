@@ -9,7 +9,6 @@ import Button from 'component/button';
 import Card from 'component/common/card';
 import { formatLbryUrlForWeb, formatLbryChannelName } from 'util/url';
 import { useHistory } from 'react-router';
-import useSocketConnect from 'effects/use-socket-connect';
 
 const LIVESTREAM_STATUS_CHECK_INTERVAL = 30000;
 
@@ -81,7 +80,20 @@ const EmbedWrapperPage = (props: Props) => {
 
   React.useEffect(doFetchActiveLivestreams, [doFetchActiveLivestreams]);
 
-  useSocketConnect(liveClaim, claimId, channelUrl, canonicalUrl, doCommentSocketConnect, doCommentSocketDisconnect);
+  // Establish web socket connection for viewer count.
+  React.useEffect(() => {
+    if (!liveClaim || !claimId || !channelUrl || !canonicalUrl) return;
+
+    const channelName = formatLbryChannelName(channelUrl);
+
+    doCommentSocketConnect(canonicalUrl, channelName, claimId);
+
+    return () => {
+      if (claimId) {
+        doCommentSocketDisconnect(claimId, channelName);
+      }
+    };
+  }, [canonicalUrl, channelUrl, claimId, doCommentSocketConnect, doCommentSocketDisconnect, liveClaim]);
 
   React.useEffect(() => {
     if (doResolveUri && uri && !haveClaim) {

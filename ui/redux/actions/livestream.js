@@ -210,9 +210,3 @@ export const doFetchActiveLivestreams = (
     dispatch({ type: ACTIONS.FETCH_ACTIVE_LIVESTREAMS_FAILED });
   }
 };
-
-export const doSetSocketConnected = (connected: boolean) => (dispatch: Dispatch) =>
-  dispatch({
-    type: ACTIONS.COMMENT_SOCKET_CONNECTED,
-    data: { connected },
-  });

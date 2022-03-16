@@ -21,7 +21,6 @@ import { selectMobilePlayerDimensions } from 'redux/selectors/app';
 import { selectIsActiveLivestreamForUri, selectCommentSocketConnected } from 'redux/selectors/livestream';
 import { doSetMobilePlayerDimensions } from 'redux/actions/app';
 import { doCommentSocketConnect, doCommentSocketDisconnect } from 'redux/actions/websocket';
-import { doSetSocketConnected } from 'redux/actions/livestream';
 import { isStreamPlaceholderClaim } from 'util/claim';
 import FileRenderFloating from './view';
 
@@ -33,11 +32,11 @@ const select = (state, props) => {
 
   const claim = uri && selectClaimForUri(state, uri);
   const { claim_id: claimId, signing_channel: channelClaim } = claim || {};
-  const { canonical_url: channelClaimUrl } = channelClaim || {};
+  const { canonical_url: channelUrl } = channelClaim || {};
 
   return {
     claimId,
-    channelClaimUrl,
+    channelUrl,
     uri,
     playingUri,
     primaryUri: selectPrimaryUri(state),
@@ -66,7 +65,6 @@ const perform = {
   doSetMobilePlayerDimensions,
   doCommentSocketConnect,
   doCommentSocketDisconnect,
-  doSetSocketConnected,
 };
 
 export default withRouter(connect(select, perform)(FileRenderFloating));
