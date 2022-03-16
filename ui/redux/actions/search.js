@@ -256,12 +256,11 @@ export const doFetchPersonalRecommendations = () => (dispatch: Dispatch, getStat
     .then((data) => {
       const { gid, recs } = data;
       if (gid && recs) {
+        const uris = processLighthouseResults(recs);
+        dispatch(doResolveUris(uris));
         dispatch({
           type: ACTIONS.FYP_FETCH_SUCCESS,
-          data: {
-            gid,
-            uris: processLighthouseResults(recs),
-          },
+          data: { gid, uris },
         });
       } else {
         dispatch({ type: ACTIONS.FYP_FETCH_FAILED });
