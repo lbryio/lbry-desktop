@@ -66,12 +66,17 @@ export default function RecommendedPersonal(props: Props) {
   const countCollapsed = getSuitablePageSizeForScreen(8, isLargeScreen, isMediumScreen);
   const finalCount = view === VIEW.ALL_VISIBLE ? count : view === VIEW.COLLAPSED ? countCollapsed : count;
 
+  // **************************************************************************
+  // Effects
+  // **************************************************************************
+
   React.useEffect(() => {
+    // -- Update parent's callback request
     onLoad(count > 0);
   }, [count, onLoad]);
 
-  // Resolve the view state:
   React.useEffect(() => {
+    // -- Resolve the view state:
     let newView;
     if (count <= countCollapsed) {
       newView = VIEW.ALL_VISIBLE;
@@ -86,18 +91,23 @@ export default function RecommendedPersonal(props: Props) {
     }
   }, [count, countCollapsed, view, setView]);
 
-  // Mark recommendations when rendered:
   React.useEffect(() => {
+    // -- Mark recommendations when rendered:
     if (userId && markedGid !== personalRecommendations.gid) {
       setMarkedGid(personalRecommendations.gid);
       recsysFyp.markPersonalRecommendations(userId, personalRecommendations.gid);
     }
   }, [userId, markedGid, personalRecommendations.gid]);
 
-  // Fetch on mount:
   React.useEffect(() => {
-    hasMembership && doFetchPersonalRecommendations();
-  }, [hasMembership]); // eslint-disable-line react-hooks/exhaustive-deps
+    // -- Fetch FYP
+    if (hasMembership || process.env.ENABLE_WIP_FEATURES) {
+      doFetchPersonalRecommendations();
+    }
+  }, [hasMembership, doFetchPersonalRecommendations]);
+
+  // **************************************************************************
+  // **************************************************************************
 
   if ((!hasMembership && !process.env.ENABLE_WIP_FEATURES) || count < 1) {
     return null;
