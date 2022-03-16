@@ -207,12 +207,12 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     responsive: true,
     controls: true,
     html5: {
-      hls: {
+      vhs: {
         overrideNative: !videojs.browser.IS_ANY_SAFARI,
         allowSeeksWithinUnsafeLiveWindow: true,
         enableLowInitialPlaylist: false,
         handlePartialData: true,
-        smoothQualityChange: true,
+        fastQualityChange: true,
       },
     },
     liveTracker: {

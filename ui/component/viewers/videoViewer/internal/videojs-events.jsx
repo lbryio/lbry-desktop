@@ -307,7 +307,7 @@ const VideoJsEvents = ({
     });
     // player.on('ended', onEnded);
 
-    if (isLivestreamClaim) {
+    if (isLivestreamClaim && player) {
       player.liveTracker.on('liveedgechange', async () => {
         // Only respond to when we fall behind
         if (player.liveTracker.atLiveEdge()) return;

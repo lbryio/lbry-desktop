@@ -9,6 +9,10 @@ import {
   filterUpcomingLiveStreamClaims,
 } from 'util/livestream';
 import moment from 'moment';
+import { isLocalStorageAvailable } from 'util/storage';
+import { isEmpty } from 'util/object';
+
+const localStorageAvailable = isLocalStorageAvailable();
 
 const FETCH_ACTIVE_LIVESTREAMS_MIN_INTERVAL_MS = 5 * 60 * 1000;
 
@@ -100,26 +104,35 @@ const findActiveStreams = async (
   // Find the first upcoming claim (if one exists) for each channel that's actively broadcasting a stream.
   const upcomingClaims = await dispatch(fetchUpcomingLivestreamClaims(channelIDs, lang));
 
-  // Filter out any of those claims that aren't scheduled to start within the configured "soon" buffer time (ex. next 5 min).
+  // Filter out any of those claims that aren't scheduled to start within the configured "soon" buffer time (ex. next 15 min).
   const startingSoonClaims = filterUpcomingLiveStreamClaims(upcomingClaims);
 
   // Reduce the claim list to one "live" claim per channel, based on how close each claim's
   // release time is to the time the channels stream started.
-  const allClaims = Object.assign({}, mostRecentClaims, startingSoonClaims);
+  const allClaims = Object.assign(
+    {},
+    mostRecentClaims,
+    !isEmpty(startingSoonClaims) ? startingSoonClaims : upcomingClaims
+  );
 
   return determineLiveClaim(allClaims, liveChannels);
 };
 
 export const doFetchChannelLiveStatus = (channelId: string) => async (dispatch: Dispatch) => {
-  const statusForId = `live-status-${channelId}`;
-  // const localStatus = window.localStorage.getItem(statusForId);
+  const statusForId = `channel-live-status`;
+  const localStatus = localStorageAvailable && window.localStorage.getItem(statusForId);
 
   try {
     const { channelStatus, channelData } = await fetchLiveChannel(channelId);
+    // store live state locally, and force 2 non-live statuses before returninig NOT LIVE. This allows for the stream to finish before disposing player.
+    if (localStatus === LiveStatus.LIVE && channelStatus === LiveStatus.NOT_LIVE) {
+      localStorageAvailable && window.localStorage.removeItem(statusForId);
+      return;
+    }
 
-    if (channelStatus === LiveStatus.NOT_LIVE) {
+    if (channelStatus === LiveStatus.NOT_LIVE && !localStatus) {
       dispatch({ type: ACTIONS.REMOVE_CHANNEL_FROM_ACTIVE_LIVESTREAMS, data: { channelId } });
-      window.localStorage.removeItem(statusForId);
+      localStorageAvailable && window.localStorage.removeItem(statusForId);
       return;
     }
 
@@ -136,10 +149,10 @@ export const doFetchChannelLiveStatus = (channelId: string) => async (dispatch: 
       dispatch({ type: ACTIONS.ADD_CHANNEL_TO_ACTIVE_LIVESTREAMS, data: { ...channelData } });
     }
 
-    window.localStorage.setItem(statusForId, channelStatus);
+    localStorageAvailable && window.localStorage.setItem(statusForId, channelStatus);
   } catch (err) {
     dispatch({ type: ACTIONS.REMOVE_CHANNEL_FROM_ACTIVE_LIVESTREAMS, data: { channelId } });
-    window.localStorage.removeItem(statusForId);
+    localStorageAvailable && window.localStorage.removeItem(statusForId);
   }
 };
 

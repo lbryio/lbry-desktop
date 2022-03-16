@@ -3,6 +3,7 @@ import { formatLbryChannelName } from 'util/url';
 import { lazyImport } from 'util/lazyImport';
 import {
   LIVESTREAM_STATUS_CHECK_INTERVAL,
+  LIVESTREAM_STATUS_CHECK_INTERVAL_SOON,
   LIVESTREAM_STARTS_SOON_BUFFER,
   LIVESTREAM_STARTED_RECENTLY_BUFFER,
 } from 'constants/livestream';
@@ -98,16 +99,27 @@ export default function LivestreamPage(props: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [claim, uri, doCommentSocketConnect, doCommentSocketDisconnect]);
 
-  // Find out current channels status + active live claim every 30 seconds
+  const claimReleaseStartingSoonStatic = () =>
+    release.isBetween(moment(), moment().add(LIVESTREAM_STARTS_SOON_BUFFER, 'minutes'));
+
+  const claimReleaseStartedRecentlyStatic = () =>
+    release.isBetween(moment().subtract(LIVESTREAM_STARTED_RECENTLY_BUFFER, 'minutes'), moment());
+
+  // Find out current channels status + active live claim every 30 seconds (or 15 if not live)
+  const fasterPoll = !isCurrentClaimLive && (claimReleaseStartingSoonStatic() || claimReleaseStartedRecentlyStatic());
+
   React.useEffect(() => {
     const fetch = () => doFetchChannelLiveStatus(livestreamChannelId);
 
     fetch();
 
-    const intervalId = setInterval(fetch, LIVESTREAM_STATUS_CHECK_INTERVAL);
+    const intervalId = setInterval(
+      fetch,
+      fasterPoll ? LIVESTREAM_STATUS_CHECK_INTERVAL_SOON : LIVESTREAM_STATUS_CHECK_INTERVAL
+    );
 
     return () => clearInterval(intervalId);
-  }, [livestreamChannelId, doFetchChannelLiveStatus]);
+  }, [livestreamChannelId, doFetchChannelLiveStatus, fasterPoll]);
 
   React.useEffect(() => {
     setActiveStreamUri(!isCurrentClaimLive && isChannelBroadcasting ? activeLivestreamForChannel.claimUri : false);
@@ -117,7 +129,6 @@ export default function LivestreamPage(props: Props) {
     if (!isInitialized) return;
 
     const claimReleaseInFuture = () => release.isAfter();
-
     const claimReleaseInPast = () => release.isBefore();
 
     const claimReleaseStartingSoon = () =>
@@ -127,7 +138,9 @@ export default function LivestreamPage(props: Props) {
       release.isBetween(moment().subtract(LIVESTREAM_STARTED_RECENTLY_BUFFER, 'minutes'), moment());
 
     const checkShowLivestream = () =>
-      isChannelBroadcasting && isCurrentClaimLive && (claimReleaseInPast() || claimReleaseStartingSoon());
+      isChannelBroadcasting &&
+      isCurrentClaimLive &&
+      (claimReleaseInPast() || claimReleaseStartingSoon() || claimReleaseInFuture());
 
     const checkShowScheduledInfo = () =>
       (!isChannelBroadcasting && (claimReleaseInFuture() || claimReleaseStartedRecently())) ||
@@ -144,7 +157,7 @@ export default function LivestreamPage(props: Props) {
     };
 
     calculateStreamReleaseState();
-    const intervalId = setInterval(calculateStreamReleaseState, 1000);
+    const intervalId = setInterval(calculateStreamReleaseState, 5000);
 
     if (isCurrentClaimLive && claimReleaseInPast() && isChannelBroadcasting === true) {
       clearInterval(intervalId);

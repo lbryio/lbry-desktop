@@ -15,7 +15,8 @@ export const LIVESTREAM_KILL = 'https://api.stream.odysee.com/stream/kill';
 
 export const MAX_LIVESTREAM_COMMENTS = 50;
 
-export const LIVESTREAM_STATUS_CHECK_INTERVAL = 30 * 1000;
+export const LIVESTREAM_STATUS_CHECK_INTERVAL = 45 * 1000;
+export const LIVESTREAM_STATUS_CHECK_INTERVAL_SOON = 15 * 1000;
 export const LIVESTREAM_STARTS_SOON_BUFFER = 15;
 export const LIVESTREAM_STARTED_RECENTLY_BUFFER = 15;
 export const LIVESTREAM_UPCOMING_BUFFER = 35;
