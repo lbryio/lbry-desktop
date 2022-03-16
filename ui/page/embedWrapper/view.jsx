@@ -46,7 +46,7 @@ const EmbedWrapperPage = (props: Props) => {
     isResolvingUri,
     blackListedOutpoints,
     isCurrentClaimLive,
-    isLivestreamClaim: liveClaim,
+    isLivestreamClaim,
     claimThumbnail,
     obscurePreview,
     doResolveUri,
@@ -87,7 +87,7 @@ const EmbedWrapperPage = (props: Props) => {
         (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
         (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
     );
-  const isLiveClaimStopped = liveClaim && !readyToDisplay;
+  const isLiveClaimStopped = isLivestreamClaim && !readyToDisplay;
 
   React.useEffect(() => {
     if (!claimThumbnail) return;
@@ -111,15 +111,15 @@ const EmbedWrapperPage = (props: Props) => {
   }, [claimThumbnail, thumbnail]);
 
   React.useEffect(() => {
-    if (doFetchActiveLivestreams) {
+    if (doFetchActiveLivestreams && isLivestreamClaim) {
       doFetchActiveLivestreams();
       setLivestreamsFetched(true);
     }
-  }, [doFetchActiveLivestreams]);
+  }, [doFetchActiveLivestreams, isLivestreamClaim]);
 
   // Establish web socket connection for viewer count.
   React.useEffect(() => {
-    if (!liveClaim || !claimId || !channelUrl || !canonicalUrl) return;
+    if (!isLivestreamClaim || !claimId || !channelUrl || !canonicalUrl) return;
 
     const channelName = formatLbryChannelName(channelUrl);
 
@@ -130,12 +130,13 @@ const EmbedWrapperPage = (props: Props) => {
         doCommentSocketDisconnect(claimId, channelName);
       }
     };
-  }, [canonicalUrl, channelUrl, claimId, doCommentSocketConnect, doCommentSocketDisconnect, liveClaim]);
+  }, [canonicalUrl, channelUrl, claimId, doCommentSocketConnect, doCommentSocketDisconnect, isLivestreamClaim]);
 
   React.useEffect(() => {
     if (doResolveUri && uri && !haveClaim) {
       doResolveUri(uri);
     }
+
     if (uri && haveClaim && costInfo && costInfo.cost === 0) {
       doPlayUri(uri);
     }
@@ -201,7 +202,9 @@ const EmbedWrapperPage = (props: Props) => {
 
               <div className="embed__loading-text">
                 {loading && <Spinner delayed light />}
+
                 {noContentFound && <h1>{__('No content found.')}</h1>}
+
                 {isPaidContent && (
                   <div>
                     <h1>{__('Paid content cannot be embedded.')}</h1>
