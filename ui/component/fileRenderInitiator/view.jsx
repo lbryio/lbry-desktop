@@ -17,6 +17,7 @@ import * as COLLECTIONS_CONSTS from 'constants/collections';
 import { LayoutRenderContext } from 'page/livestream/view';
 import { formatLbryUrlForWeb } from 'util/url';
 import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
+import useFetchLiveStatus from 'effects/use-fetch-live';
 
 type Props = {
   channelClaimId: ?string,
@@ -106,13 +107,7 @@ export default function FileRenderInitiator(props: Props) {
     history.push(`/$/${PAGES.AUTH}?redirect=${encodeURIComponent(pathname)}`);
   }
 
-  // Find out current channels status + active live claim
-  React.useEffect(() => {
-    // isCurrentClaimLive = already fetched
-    if (!channelClaimId || !isLivestreamClaim || isCurrentClaimLive) return;
-
-    doFetchChannelLiveStatus(channelClaimId);
-  }, [channelClaimId, doFetchChannelLiveStatus, isCurrentClaimLive, isLivestreamClaim]);
+  useFetchLiveStatus(channelClaimId, doFetchChannelLiveStatus);
 
   React.useEffect(() => {
     if (!claimThumbnail) return;

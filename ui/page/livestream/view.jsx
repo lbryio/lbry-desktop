@@ -1,18 +1,14 @@
 // @flow
 import { formatLbryChannelName } from 'util/url';
 import { lazyImport } from 'util/lazyImport';
-import {
-  LIVESTREAM_STATUS_CHECK_INTERVAL,
-  LIVESTREAM_STATUS_CHECK_INTERVAL_SOON,
-  LIVESTREAM_STARTS_SOON_BUFFER,
-  LIVESTREAM_STARTED_RECENTLY_BUFFER,
-} from 'constants/livestream';
+import { LIVESTREAM_STARTS_SOON_BUFFER, LIVESTREAM_STARTED_RECENTLY_BUFFER } from 'constants/livestream';
 import analytics from 'analytics';
 import LivestreamLayout from 'component/livestreamLayout';
 import moment from 'moment';
 import Page from 'component/page';
 import React from 'react';
 import { useIsMobile } from 'effects/use-screensize';
+import useFetchLiveStatus from 'effects/use-fetch-live';
 
 const LivestreamChatLayout = lazyImport(() => import('component/livestreamChatLayout' /* webpackChunkName: "chat" */));
 
@@ -100,18 +96,7 @@ export default function LivestreamPage(props: Props) {
   // Find out current channels status + active live claim every 30 seconds (or 15 if not live)
   const fasterPoll = !isCurrentClaimLive && (claimReleaseStartingSoonStatic() || claimReleaseStartedRecentlyStatic());
 
-  React.useEffect(() => {
-    const fetch = () => doFetchChannelLiveStatus(livestreamChannelId);
-
-    fetch();
-
-    const intervalId = setInterval(
-      fetch,
-      fasterPoll ? LIVESTREAM_STATUS_CHECK_INTERVAL_SOON : LIVESTREAM_STATUS_CHECK_INTERVAL
-    );
-
-    return () => clearInterval(intervalId);
-  }, [livestreamChannelId, doFetchChannelLiveStatus, fasterPoll]);
+  useFetchLiveStatus(livestreamChannelId, doFetchChannelLiveStatus, fasterPoll);
 
   React.useEffect(() => {
     setActiveStreamUri(!isCurrentClaimLive && isChannelBroadcasting ? activeLivestreamForChannel.claimUri : false);

@@ -13,6 +13,7 @@ import LivestreamLink from 'component/livestreamLink';
 import { Form, FormField } from 'component/common/form';
 import ScheduledStreams from 'component/scheduledStreams';
 import { SearchResults } from './internal/searchResults';
+import useFetchLiveStatus from 'effects/use-fetch-live';
 
 const TYPES_TO_ALLOW_FILTER = ['stream', 'repost'];
 
@@ -90,12 +91,7 @@ function ChannelContent(props: Props) {
   const isInitialized = Boolean(activeLivestreamForChannel) || activeLivestreamInitialized;
   const isChannelBroadcasting = Boolean(activeLivestreamForChannel);
 
-  // Find out current channels status + active live claim.
-  React.useEffect(() => {
-    doFetchChannelLiveStatus(claimId);
-    const intervalId = setInterval(() => doFetchChannelLiveStatus(claimId), 30000);
-    return () => clearInterval(intervalId);
-  }, [claimId, doFetchChannelLiveStatus]);
+  useFetchLiveStatus(claimId, doFetchChannelLiveStatus);
 
   const showScheduledLiveStreams = claimType !== 'collection'; // ie. not on the playlist page.
 
