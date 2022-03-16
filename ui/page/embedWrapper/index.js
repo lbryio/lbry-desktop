@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import EmbedWrapperPage from './view';
-import { selectClaimForUri, selectIsUriResolving } from 'redux/selectors/claims';
+import { selectClaimForUri, selectIsUriResolving, selectGeoRestrictionForUri } from 'redux/selectors/claims';
 import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
 import { doResolveUri } from 'redux/actions/claims';
 import { buildURI } from 'util/lbryURI';
@@ -9,7 +9,7 @@ import { selectShouldObscurePreviewForUri } from 'redux/selectors/content';
 import { selectCostInfoForUri, doFetchCostInfoForUri, selectBlackListedOutpoints } from 'lbryinc';
 import { doCommentSocketConnect, doCommentSocketDisconnect } from 'redux/actions/websocket';
 import { doFetchActiveLivestreams, doFetchChannelLiveStatus } from 'redux/actions/livestream';
-import { selectIsActiveLivestreamForUri } from 'redux/selectors/livestream';
+import { selectIsActiveLivestreamForUri, selectActiveLivestreamInitialized } from 'redux/selectors/livestream';
 import { getThumbnailFromClaim, isStreamPlaceholderClaim } from 'util/claim';
 
 const select = (state, props) => {
@@ -32,6 +32,8 @@ const select = (state, props) => {
     isLivestreamClaim: isStreamPlaceholderClaim(claim),
     obscurePreview: selectShouldObscurePreviewForUri(state, uri),
     claimThumbnail: getThumbnailFromClaim(claim),
+    activeLivestreamInitialized: selectActiveLivestreamInitialized(state),
+    geoRestriction: selectGeoRestrictionForUri(state, uri),
   };
 };
 

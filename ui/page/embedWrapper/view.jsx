@@ -10,6 +10,7 @@ import Card from 'component/common/card';
 import { formatLbryUrlForWeb, formatLbryChannelName } from 'util/url';
 import { useHistory } from 'react-router';
 import { getThumbnailCdnUrl } from 'util/thumbnail';
+import Yrbl from 'component/yrbl';
 // $FlowFixMe cannot resolve ...
 import FileRenderPlaceholder from 'static/img/fileRenderPlaceholder.png';
 
@@ -26,6 +27,8 @@ type Props = {
   isLivestreamClaim: boolean,
   claimThumbnail?: string,
   obscurePreview: boolean,
+  activeLivestreamInitialized: boolean,
+  geoRestriction: ?GeoRestriction,
   doResolveUri: (uri: string) => void,
   doPlayUri: (uri: string) => void,
   doFetchCostInfoForUri: (uri: string) => void,
@@ -49,6 +52,8 @@ const EmbedWrapperPage = (props: Props) => {
     isLivestreamClaim,
     claimThumbnail,
     obscurePreview,
+    activeLivestreamInitialized,
+    geoRestriction,
     doResolveUri,
     doPlayUri,
     doFetchCostInfoForUri,
@@ -60,7 +65,6 @@ const EmbedWrapperPage = (props: Props) => {
 
   const {
     location: { search },
-    push,
   } = useHistory();
 
   const { claim_id: claimId, canonical_url: canonicalUrl, signing_channel: channelClaim } = claim || {};
@@ -74,8 +78,10 @@ const EmbedWrapperPage = (props: Props) => {
   const embedLightBackground = urlParams.get('embedBackgroundLight');
   const haveClaim = Boolean(claim);
   const readyToDisplay = isCurrentClaimLive || (claim && streamingUrl);
-  const loading = !claim && isResolvingUri;
-  const noContentFound = !claim && !isResolvingUri;
+  const isLiveClaimFetching = isLivestreamClaim && !activeLivestreamInitialized;
+  const isLiveClaimStopped = isLivestreamClaim && !isLiveClaimFetching && !readyToDisplay;
+  const loading = (!claim && isResolvingUri) || isLiveClaimFetching;
+  const noContentFound = claim === null && !isResolvingUri;
   const isPaidContent = costInfo && costInfo.cost > 0;
   const contentLink = formatLbryUrlForWeb(uri);
   const signingChannel = claim && claim.signing_channel;
@@ -87,7 +93,6 @@ const EmbedWrapperPage = (props: Props) => {
         (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
         (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
     );
-  const isLiveClaimStopped = isLivestreamClaim && !readyToDisplay;
 
   React.useEffect(() => {
     if (!claimThumbnail) return;
@@ -177,6 +182,14 @@ const EmbedWrapperPage = (props: Props) => {
     );
   }
 
+  if (geoRestriction) {
+    return (
+      <div className="main--empty">
+        <Yrbl title={__('Content unavailable')} subtitle={__(geoRestriction.message || '')} type="sad" alwaysShow />
+      </div>
+    );
+  }
+
   return (
     <div
       className={
@@ -201,7 +214,7 @@ const EmbedWrapperPage = (props: Props) => {
               <FileViewerEmbeddedTitle uri={uri} />
 
               <div className="embed__loading-text">
-                {loading && <Spinner delayed light />}
+                {(loading || (!claim && !noContentFound)) && <Spinner delayed light />}
 
                 {noContentFound && <h1>{__('No content found.')}</h1>}
 
