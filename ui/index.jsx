@@ -14,7 +14,6 @@ import React, { Fragment, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { doDaemonReady, doAutoUpdate, doOpenModal, doHideModal, doToggle3PAnalytics } from 'redux/actions/app';
-import { doFetchGeoBlockedList } from 'redux/actions/blocked';
 import Lbry, { apiCall } from 'lbry';
 import { isURIValid } from 'util/lbryURI';
 import { setSearchApi } from 'redux/actions/search';
@@ -247,7 +246,6 @@ function AppWrapper() {
         app.store.dispatch(doUpdateIsNightAsync());
         app.store.dispatch(doBlackListedOutpointsSubscribe());
         app.store.dispatch(doFilteredOutpointsSubscribe());
-        app.store.dispatch(doFetchGeoBlockedList());
       }, 25);
 
       analytics.startupEvent(Date.now());

@@ -6,6 +6,7 @@ import { batchActions } from 'util/batch-actions';
 import { getStripeEnvironment } from 'util/stripe';
 
 import * as ACTIONS from 'constants/action_types';
+import { doFetchGeoBlockedList } from 'redux/actions/blocked';
 import { doClaimRewardType, doRewardList } from 'redux/actions/rewards';
 import { selectEmailToVerify, selectPhoneToVerify, selectUserCountryCode, selectUser } from 'redux/selectors/user';
 import { doToast } from 'redux/actions/notifications';
@@ -193,6 +194,8 @@ export function doAuthenticate(
               doInstallNew(appVersion, callbackForUsersWhoAreSharingData, DOMAIN);
             }
           }
+
+          dispatch(doFetchGeoBlockedList());
         });
       })
       .catch((error) => {
