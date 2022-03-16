@@ -28,7 +28,7 @@ export default function PremiumBadge(props: Props) {
       {badgeToShow === 'silver' ? (
         <CommentBadge label={__('Premium')} icon={ICONS.PREMIUM} {...badgeProps} />
       ) : (
-        badgeToShow === 'gold' && <CommentBadge label={__('Premium +')} icon={ICONS.PREMIUM_PLUS} {...badgeProps} />
+        badgeToShow === 'gold' && <CommentBadge label={__('Premium+')} icon={ICONS.PREMIUM_PLUS} {...badgeProps} />
       )}
     </BadgeWrapper>
   );
@@ -42,11 +42,5 @@ type WrapperProps = {
 const BadgeWrapper = (props: WrapperProps) => {
   const { linkPage, children } = props;
 
-  return linkPage ? (
-    <Button navigate="/$/membership">
-      {children}
-    </Button>
-  ) : (
-    children
-  );
+  return linkPage ? <Button navigate="/$/membership">{children}</Button> : children;
 };

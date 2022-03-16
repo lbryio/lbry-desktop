@@ -90,11 +90,11 @@ export default function MembershipSplash(props: Props) {
               <section>
                 <I18nMessage
                   tokens={{
-                    date_range: <div className="membership-splash__info-range">{__('A MONTH')}</div>,
-                    currencyToUseString: premiumDisplayAmounts[currencyToUse],
+                    premium_recurrence: <div className="membership-splash__info-range">{__('A MONTH')}</div>,
+                    premium_price: premiumDisplayAmounts[currencyToUse],
                   }}
                 >
-                  %currencyToUseString% %date_range%
+                  %premium_price% %premium_recurrence% --[context: '99¢ A MONTH']--
                 </I18nMessage>
               </section>
             </div>
@@ -120,8 +120,14 @@ export default function MembershipSplash(props: Props) {
             <div className="membership-splash__info-price">
               <img src={BadgePremiumPlus} />
               <section>
-                {premiumPlusDisplayAmounts[currencyToUse]}
-                <div className="membership-splash__info-range">{__('A MONTH')}</div>
+                <I18nMessage
+                  tokens={{
+                    premium_recurrence: <div className="membership-splash__info-range">{__('A MONTH')}</div>,
+                    premium_price: premiumPlusDisplayAmounts[currencyToUse],
+                  }}
+                >
+                  %premium_price% %premium_recurrence% --[context: '99¢ A MONTH']--
+                </I18nMessage>
               </section>
             </div>
           </section>
