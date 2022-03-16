@@ -24,7 +24,6 @@ type Props = {
   blackListedOutpoints: Array<{ txid: string, nout: number }>,
   isCurrentClaimLive: boolean,
   isLivestreamClaim: boolean,
-  activeLivestreams: ?any,
   claimThumbnail?: string,
   obscurePreview: boolean,
   doResolveUri: (uri: string) => void,
@@ -48,7 +47,6 @@ const EmbedWrapperPage = (props: Props) => {
     blackListedOutpoints,
     isCurrentClaimLive,
     isLivestreamClaim: liveClaim,
-    activeLivestreams,
     claimThumbnail,
     obscurePreview,
     doResolveUri,
@@ -69,6 +67,7 @@ const EmbedWrapperPage = (props: Props) => {
 
   const containerRef = React.useRef<any>();
   const [thumbnail, setThumbnail] = React.useState(FileRenderPlaceholder);
+  const [livestreamsFetched, setLivestreamsFetched] = React.useState(false);
 
   const channelUrl = channelClaim && formatLbryChannelName(channelClaim.canonical_url);
   const urlParams = new URLSearchParams(search);
@@ -112,7 +111,10 @@ const EmbedWrapperPage = (props: Props) => {
   }, [claimThumbnail, thumbnail]);
 
   React.useEffect(() => {
-    if (doFetchActiveLivestreams) doFetchActiveLivestreams();
+    if (doFetchActiveLivestreams) {
+      doFetchActiveLivestreams();
+      setLivestreamsFetched(true);
+    }
   }, [doFetchActiveLivestreams]);
 
   // Establish web socket connection for viewer count.
@@ -147,7 +149,7 @@ const EmbedWrapperPage = (props: Props) => {
 
   // Find out current channels status + active live claim every 30 seconds
   React.useEffect(() => {
-    if (!channelClaim || !activeLivestreams) return;
+    if (!channelClaim || !livestreamsFetched) return;
 
     const { claim_id: channelClaimId } = channelClaim || {};
 
@@ -156,8 +158,7 @@ const EmbedWrapperPage = (props: Props) => {
     const intervalId = setInterval(() => doFetchChannelLiveStatus(channelClaimId), LIVESTREAM_STATUS_CHECK_INTERVAL);
 
     return () => clearInterval(intervalId);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [channelClaim, doFetchChannelLiveStatus]);
+  }, [livestreamsFetched, channelClaim, doFetchChannelLiveStatus]);
 
   if (isClaimBlackListed) {
     return (
