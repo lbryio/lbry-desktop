@@ -10,7 +10,7 @@ import Card from 'component/common/card';
 import { formatLbryUrlForWeb, formatLbryChannelName } from 'util/url';
 import { useHistory } from 'react-router';
 
-const LIVESTREAM_STATUS_CHECK_INTERVAL = 30000;
+const LIVESTREAM_STATUS_CHECK_INTERVAL = 30 * 1000;
 
 type Props = {
   uri: string,
@@ -121,7 +121,8 @@ const EmbedWrapperPage = (props: Props) => {
     const intervalId = setInterval(() => doFetchChannelLiveStatus(channelClaimId), LIVESTREAM_STATUS_CHECK_INTERVAL);
 
     return () => clearInterval(intervalId);
-  }, [activeLivestreams, channelClaim, doFetchChannelLiveStatus]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [channelClaim, doFetchChannelLiveStatus]);
 
   if (isClaimBlackListed) {
     return (
