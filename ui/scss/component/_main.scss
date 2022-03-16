@@ -703,11 +703,11 @@ body {
     border-radius: var(--border-radius);
     border-top: unset;
 
-    .settings__row {
+    .settings-row {
       padding: var(--spacing-s);
       border-bottom: 1px solid var(--color-border);
 
-      .settings__row--value {
+      .settings-row__value {
         .button__content {
           &:hover {
             color: var(--color-secondary);
@@ -723,10 +723,10 @@ body {
         }
       }
     }
-    .settings__row:first-of-type {
+    .settings-row:first-of-type {
       margin-top: var(--spacing-xxxs);
     }
-    .settings__row:last-of-type {
+    .settings-row:last-of-type {
       border-bottom: unset;
     }
 
@@ -798,19 +798,19 @@ body {
     margin-left: auto;
     position: relative;
 
-    .settings__row--value {
+    .settings-row__value {
       align-self: start;
     }
 
-    .settings__row--title {
+    .settings-row__title {
       color: rgba(var(--color-text-base), 0.9);
     }
-    .settings__row--subtitle {
+    .settings-row__subtitle {
       color: rgba(var(--color-text-base), 0.6);
     }
 
     &:hover:not(.opacity-30) {
-      .settings__row--title {
+      .settings-row__title {
         color: rgba(var(--color-text-base), 1);
       }
     }

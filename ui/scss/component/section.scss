@@ -280,14 +280,14 @@
   }
 }
 
-.settings__row {
+.settings-row {
   &:first-child,
   &:only-child {
     border-top: none;
   }
 }
 
-.card__main-actions.settings__row {
+.card__main-actions.settings-row {
   @media (max-width: $breakpoint-small) {
     //padding: var(--spacing-s);
     padding: 0;
@@ -296,7 +296,7 @@
   }
 }
 
-.settings__row--title {
+.settings-row__title {
   min-width: 100%;
   align-self: flex-start;
 
@@ -306,13 +306,13 @@
   }
 }
 
-.settings__row--subtitle {
+.settings-row__subtitle {
   @extend .section__subtitle;
   font-size: var(--font-small);
   margin-top: calc(var(--spacing-xxs) / 2);
 }
 
-.settings__row--value {
+.settings-row__value {
   width: 100%;
 
   fieldset-section.radio {
@@ -353,7 +353,7 @@
   }
 }
 
-.settings__row--value--multirow {
+.settings-row__value--multirow {
   @media (min-width: $breakpoint-medium) {
     width: 80%;
     margin-top: var(--spacing-l);
@@ -367,7 +367,7 @@
   }
 }
 
-.settings__row--value--vertical-separator {
+.settings-row__vertical-separator {
   @media (min-width: $breakpoint-medium) {
     border-left: 1px solid var(--color-border);
   }
