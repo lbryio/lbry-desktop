@@ -215,7 +215,7 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}, referrerQuery) {
     claimPath
   )}&format=xml${referrerQuery ? `&r=${encodeURIComponent(referrerQuery)}` : ''}" title="${title}" />`;
 
-  if (mediaType && (mediaType.startsWith('video/') || mediaType.startsWith('audio/'))) {
+  if ((mediaType && (mediaType.startsWith('video/') || mediaType.startsWith('audio/'))) || !mediaType) {
     const videoUrl = generateEmbedUrl(claim.name, claim.claim_id);
     head += `<meta property="og:video" content="${videoUrl}" />`;
     head += `<meta property="og:video:secure_url" content="${videoUrl}" />`;
