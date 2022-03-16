@@ -28,6 +28,7 @@ const MAP = Object.freeze({
   [MODALS.FILE_SELECTION]: lazyImport(() => import('modal/modalFileSelection' /* webpackChunkName: "modalFileSelection" */)),
   [MODALS.FILE_TIMEOUT]: lazyImport(() => import('modal/modalFileTimeout' /* webpackChunkName: "modalFileTimeout" */)),
   [MODALS.FIRST_REWARD]: lazyImport(() => import('modal/modalFirstReward' /* webpackChunkName: "modalFirstReward" */)),
+  [MODALS.HIDE_RECOMMENDATION]: lazyImport(() => import('modal/modalHideRecommendation' /* webpackChunkName: "modalHideRecommendation" */)),
   [MODALS.IMAGE_UPLOAD]: lazyImport(() => import('modal/modalImageUpload' /* webpackChunkName: "modalImageUpload" */)),
   [MODALS.LIQUIDATE_SUPPORTS]: lazyImport(() => import('modal/modalSupportsLiquidate' /* webpackChunkName: "modalSupportsLiquidate" */)),
   [MODALS.MASS_TIP_UNLOCK]: lazyImport(() => import('modal/modalMassTipUnlock' /* webpackChunkName: "modalMassTipUnlock" */)),

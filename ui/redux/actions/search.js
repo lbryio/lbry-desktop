@@ -1,5 +1,7 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
+import * as MODALS from 'constants/modal_types';
+import { doOpenModal } from 'redux/actions/app';
 import { doToast } from 'redux/actions/notifications';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { selectClaimForUri, selectClaimIdForUri, selectClaimIsNsfwForUri } from 'redux/selectors/claims';
@@ -46,8 +48,13 @@ const recsysFyp = {
     });
   },
 
-  ignoreRecommendation: (userId: string, gid: string, claimId: string) => {
-    return fetch(`${RECSYS_FYP_ENDPOINT}/${userId}/fyp/${gid}/c/${claimId}/ignore`, {
+  ignoreRecommendation: (userId: string, gid: string, claimId: string, ignoreChannel: boolean) => {
+    let endpoint = `${RECSYS_FYP_ENDPOINT}/${userId}/fyp/${gid}/c/${claimId}/ignore`;
+    if (ignoreChannel) {
+      endpoint += '?entire_channel=1';
+    }
+
+    return fetch(endpoint, {
       method: 'POST',
       headers: { [X_LBRY_AUTH_TOKEN]: getAuthToken() },
     })
@@ -281,15 +288,22 @@ export const doRemovePersonalRecommendation = (uri: string) => (dispatch: Dispat
     return;
   }
 
-  recsysFyp
-    .ignoreRecommendation(user.id, personalRecommendations.gid, claimId)
-    .then((res) => {
-      dispatch({ type: ACTIONS.FYP_HIDE_URI, data: { uri } });
-      dispatch(doToast({ message: __('Recommendation removed. Thanks for the feedback!') }));
+  dispatch(
+    doOpenModal(MODALS.HIDE_RECOMMENDATION, {
+      uri,
+      onConfirm: (hideChannel) => {
+        recsysFyp
+          .ignoreRecommendation(user.id, personalRecommendations.gid, claimId, hideChannel)
+          .then((res) => {
+            dispatch({ type: ACTIONS.FYP_HIDE_URI, data: { uri } });
+            dispatch(doToast({ message: __('Recommendation removed. Thanks for the feedback!') }));
+          })
+          .catch((err) => {
+            console.log('doRemovePersonalRecommendation:', err);
+          });
+      },
     })
-    .catch((err) => {
-      console.log('doRemovePersonalRecommendation:', err);
-    });
+  );
 };
 
 export { lighthouse, recsysFyp };
