@@ -20,7 +20,7 @@ export default function FileHideRecommendation(props: Props) {
     e.preventDefault();
   }
 
-  const label = __('I dislike this');
+  const label = __('Not interested');
 
   return (
     <Button

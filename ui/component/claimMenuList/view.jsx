@@ -53,6 +53,7 @@ type Props = {
   claimInCollection: boolean,
   collectionId: string,
   isMyCollection: boolean,
+  fypId?: string,
   doToast: ({ message: string, isError?: boolean }) => void,
   claimIsMine: boolean,
   fileInfo: FileListItem,
@@ -70,6 +71,7 @@ type Props = {
   lastUsedCollection: ?Collection,
   hasClaimInLastUsedCollection: boolean,
   lastUsedCollectionIsNotBuiltin: boolean,
+  doRemovePersonalRecommendation: (uri: string) => void,
 };
 
 function ClaimMenuList(props: Props) {
@@ -97,6 +99,7 @@ function ClaimMenuList(props: Props) {
     hasClaimInFavorites,
     collectionId,
     isMyCollection,
+    fypId,
     doToast,
     claimIsMine,
     fileInfo,
@@ -114,6 +117,7 @@ function ClaimMenuList(props: Props) {
     lastUsedCollection,
     hasClaimInLastUsedCollection,
     lastUsedCollectionIsNotBuiltin,
+    doRemovePersonalRecommendation,
   } = props;
   const [doShuffle, setDoShuffle] = React.useState(false);
   const incognitoClaim = contentChannelUri && !contentChannelUri.includes('@');
@@ -282,6 +286,19 @@ function ClaimMenuList(props: Props) {
         <Icon size={20} icon={ICONS.MORE_VERTICAL} />
       </MenuButton>
       <MenuList className="menu__list">
+        {/* FYP */}
+        {fypId && (
+          <>
+            <MenuItem className="comment__menu-option" onSelect={() => doRemovePersonalRecommendation(uri)}>
+              <div className="menu__link">
+                <Icon aria-hidden icon={ICONS.REMOVE} />
+                {__('Not interested')}
+              </div>
+            </MenuItem>
+            <hr className="menu__separator" />
+          </>
+        )}
+
         <>
           {/* COLLECTION OPERATIONS */}
           {collectionId && isCollectionClaim ? (

@@ -242,7 +242,7 @@ function ClaimPreviewTile(props: Props) {
             )}
           </h2>
         </NavLink>
-        <ClaimMenuList uri={uri} collectionId={listId} channelUri={channelUri} />
+        <ClaimMenuList uri={uri} collectionId={listId} fypId={fypId} channelUri={channelUri} />
       </div>
       <div>
         <div
