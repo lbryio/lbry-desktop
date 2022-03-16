@@ -22,6 +22,9 @@ let stripeEnvironment = getStripeEnvironment();
 
 const isDev = process.env.NODE_ENV !== 'production';
 
+let log = function (input) {};
+if (isDev) log = console.log;
+
 // odysee channel information since the memberships are only for Odysee
 const odyseeChannelId = '80d2590ad04e36fb1d077a9b9e3a8bba76defdf8';
 const odyseeChannelName = '@odysee';
@@ -92,6 +95,9 @@ const OdyseeMembershipPage = (props: Props) => {
         'post'
       );
 
+      log('mine response');
+      log(response);
+
       let activeMemberships = [];
       let canceledMemberships = [];
       let purchasedMemberships = [];
@@ -146,6 +152,9 @@ const OdyseeMembershipPage = (props: Props) => {
           'post'
         );
 
+        log('customer/status response');
+        log(response);
+
         // hardcoded to first card
         const hasAPaymentCard = Boolean(response && response.PaymentMethods && response.PaymentMethods[0]);
 
@@ -172,6 +181,9 @@ const OdyseeMembershipPage = (props: Props) => {
           },
           'post'
         );
+
+        log('membership/list response');
+        log(response);
 
         // hide other options if there's already a membership
         if (activeMemberships && activeMemberships.length > 0) {

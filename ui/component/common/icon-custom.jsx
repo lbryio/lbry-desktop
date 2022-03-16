@@ -2929,6 +2929,99 @@ export const icons = {
       </g>
     </svg>
   ),
+  [ICONS.LIVESTREAM_MEMBERSHIP]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 35 30"
+      width={'40'}
+      height={'40'}
+      fill="none"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <style type="text/css">
+        {
+          '.st0{fill:none;stroke:#DCBDA2;stroke-width:1.4173;stroke-miterlimit:10;}.st1{fill:#DCBEA2;}.st2{fill:#DCBDA2;}'
+        }
+      </style>
+      <circle className="st0" cx="121.8" cy="-11.9" r="13.7" />
+      <g>
+        <ellipse className="st0" cx="118.1" cy="-12" rx="3.5" ry="3.8" />
+        <line className="st0" x1="121.6" y1="-12" x2="129.4" y2="-12" />
+        <line className="st0" x1="127.2" y1="-11.9" x2="127.2" y2="-9.2" />
+      </g>
+      <path
+        className="st0"
+        d="M133.1-61.8v6.4c0,0.9-0.5,1.8-1.3,2.3l-9,5.2c-0.8,0.5-1.8,0.5-2.6,0l-9-5.2c-0.8-0.5-1.3-1.3-1.3-2.3v-10.4
+      c0-0.9,0.5-1.8,1.3-2.3l9-5.2c0.8-0.5,1.8-0.5,2.6,0l9,5.2"
+      />
+      <polyline
+        className="st0"
+        points="135.6,-67.7 121.3,-51.7 118.2,-57.2 112.7,-60.3 118.2,-63.5 121.3,-69 124.4,-63.5 "
+      />
+      <polyline className="st0" points="115.9,-48.3 115.9,-42.1 121.7,-45.4 126.8,-42.1 126.8,-48.3 " />
+      <line className="st0" x1="131.6" y1="22.3" x2="112" y2="42" />
+      <text
+        transform="matrix(1 0 0 1 111.5846 35.5336)"
+        className="st2"
+        style={{ fontFamily: 'Roboto-Bold', fontSize: '10.1968px' }}
+      >
+        ADS
+      </text>
+      <g id="XMLID_434_">
+        <path
+          id="XMLID_435_"
+          className="st1"
+          d="M-52.4,22.5h-12.7c-0.8,0-1.4-0.6-1.4-1.4V8.5c0-7.7,6
+        .3-14.1,14.1-14.1c7.7,0,14.1,6.3,14.1,14.1C-38.4,16.2-44.7,22.5-52.4,22.5z M-64.1,20.2h11.7c6.
+        5,0,11.7-5.2,11.7-11.7C-40.7,2-46-3.2-52.4-3.2c-6.5,0-11.7,5.2-11.7,11.7V20.2z"
+        />
+        <rect id="XMLID_437_" x="-46.9" y="4.4" className="st1" width="2.7" height="3.8" />
+        <rect id="XMLID_436_" x="-53.8" y="4.4" className="st1" width="2.7" height="3.8" />
+        <path
+          id="XMLID_439_"
+          className="st1"
+          d="M-65,16.6c-4.6,0-8.3-3.7-8.3-8.3s3.7-8.3,8.3-8.3s8.3,3.
+        7,8.3,8.3S-60.4,16.6-65,16.6zM-65,2.7c-3.1,0-5.6,2.5-5.6,5.6s2.5,5.6,5.6,5.6c3.1,0,5.6-2.5,5.6-5
+        .6S-61.9,2.7-65,2.7z"
+        />
+      </g>
+      <image
+        style={{
+          overflow: 'visible',
+          width: '172',
+          height: '154',
+          xlinkHref: '#SVGID_00000170984886341847456420000000262070696033326467_',
+          transform: 'matrix(0.2544 0 0 0.2544 10.7103 -58.8974)',
+        }}
+      />
+      <path className="st2" d="M13.9,20.9v-9.7l6.9,4.7L13.9,20.9z M15.1,13.4v5.1l3.7-2.7L15.1,13.4z" />
+      <g>
+        <path
+          className="st2"
+          d="M29,16c0,5.3-3.2,9.8-7.7,11.9l0.3,1.4c5.2-2.2,8.8-7.3,8.8-13.3c0-6-3.
+        7-11.1-8.9-13.3l-0.3,1.4C25.8,6.1,29,10.7,29,16z"
+        />
+        <path
+          className="st2"
+          d="M26,16c0-3.9-2.2-7.2-5.4-8.9l-0.3,1.4c2.6,1.5,4.3,4.3,4.3,7.5c0,3.2-1
+        .7,5.9-4.3,7.4l0.3,1.4C23.8,23.2,26,19.9,26,16z"
+        />
+        <path
+          className="st2"
+          d="M3,16c0-5.3,3.2-9.9,7.8-11.9l-0.3-1.4C5.3,4.9,1.6,10,1.6,16c0,6,3.6,11
+        .1,8.8,13.3l0.3-1.4C6.2,25.8,3,21.3,3,16z"
+        />
+        <path
+          className="st2"
+          d="M6,16c0,3.9,2.2,7.2,5.4,8.9l0.3-1.4c-2.6-1.5-4.3-4.3-4.3-7.4c0-3.2,1.8
+        -6,4.4-7.5l-0.3-1.4C8.2,8.8,6,12.1,6,16z"
+        />
+      </g>
+    </svg>
+  ),
   [ICONS.PREMIUM]: (props: CustomProps) => (
     <svg
       {...props}

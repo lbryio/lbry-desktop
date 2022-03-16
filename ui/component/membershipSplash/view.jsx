@@ -50,12 +50,12 @@ export default function MembershipSplash(props: Props) {
       {__('No ads')}
     </div>
   );
-  // const livestreamInfo = (
-  //   <div className="membership-splash__info-content">
-  //     <Icon icon={ICONS.NO_ADS} />
-  //     {__('Livestreaming')}
-  //   </div>
-  // );
+  const livestreamInfo = (
+    <div className="membership-splash__info-content">
+      <Icon icon={ICONS.LIVESTREAM_MEMBERSHIP} />
+      {__('Livestreaming')}
+    </div>
+  );
 
   return (
     <div className="membership-splash">
@@ -102,7 +102,7 @@ export default function MembershipSplash(props: Props) {
 
           {badgeInfo}
 
-          {/* {livestreamInfo} */}
+          {livestreamInfo}
 
           {earlyAcessInfo}
 
@@ -133,7 +133,7 @@ export default function MembershipSplash(props: Props) {
           </section>
           {badgeInfo}
 
-          {/* {livestreamInfo} */}
+          {livestreamInfo}
 
           {earlyAcessInfo}
 

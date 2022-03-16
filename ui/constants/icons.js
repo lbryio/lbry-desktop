@@ -199,6 +199,7 @@ export const FEATURED = 'Featured';
 export const EARLY_ACCESS = 'EarlyAccess';
 export const MEMBER_BADGE = 'MemberBadge';
 export const NO_ADS = 'NoAds';
+export const LIVESTREAM_MEMBERSHIP = 'LivestreamMembership';
 export const PREMIUM = 'Premium';
 export const PREMIUM_PLUS = 'PremiumPlus';
 export const UPGRADE = 'Upgrade';
