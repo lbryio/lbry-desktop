@@ -22,7 +22,7 @@ let stripeEnvironment = getStripeEnvironment();
 
 const isDev = process.env.NODE_ENV !== 'production';
 
-let log = function (input) {};
+let log = function(input) {};
 if (isDev) log = console.log;
 
 // odysee channel information since the memberships are only for Odysee
@@ -418,7 +418,7 @@ const OdyseeMembershipPage = (props: Props) => {
         <ul>
           <li>
             {__(
-              'Exclusive and early access features include: recommended content on homepage, livestreaming, and the ability to post odysee hyperlinks + images in comments. Account is also automatically eligible for Rewards. More to come later.'
+              'Exclusive and early access features include: recommended content on homepage, livestreaming, and the ability to post Odysee hyperlinks + images in comments. Account is also automatically eligible for Rewards. More to come later.'
             )}
           </li>
           <li>
