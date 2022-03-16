@@ -9,6 +9,9 @@ import Button from 'component/button';
 import Card from 'component/common/card';
 import { formatLbryUrlForWeb, formatLbryChannelName } from 'util/url';
 import { useHistory } from 'react-router';
+import { getThumbnailCdnUrl } from 'util/thumbnail';
+// $FlowFixMe cannot resolve ...
+import FileRenderPlaceholder from 'static/img/fileRenderPlaceholder.png';
 
 const LIVESTREAM_STATUS_CHECK_INTERVAL = 30 * 1000;
 
@@ -22,6 +25,8 @@ type Props = {
   isCurrentClaimLive: boolean,
   isLivestreamClaim: boolean,
   activeLivestreams: ?any,
+  claimThumbnail?: string,
+  obscurePreview: boolean,
   doResolveUri: (uri: string) => void,
   doPlayUri: (uri: string) => void,
   doFetchCostInfoForUri: (uri: string) => void,
@@ -44,6 +49,8 @@ const EmbedWrapperPage = (props: Props) => {
     isCurrentClaimLive,
     isLivestreamClaim: liveClaim,
     activeLivestreams,
+    claimThumbnail,
+    obscurePreview,
     doResolveUri,
     doPlayUri,
     doFetchCostInfoForUri,
@@ -55,9 +62,13 @@ const EmbedWrapperPage = (props: Props) => {
 
   const {
     location: { search },
+    push,
   } = useHistory();
 
   const { claim_id: claimId, canonical_url: canonicalUrl, signing_channel: channelClaim } = claim || {};
+
+  const containerRef = React.useRef<any>();
+  const [thumbnail, setThumbnail] = React.useState(FileRenderPlaceholder);
 
   const channelUrl = channelClaim && formatLbryChannelName(channelClaim.canonical_url);
   const urlParams = new URLSearchParams(search);
@@ -77,8 +88,32 @@ const EmbedWrapperPage = (props: Props) => {
         (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
         (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
     );
+  const isLiveClaimStopped = liveClaim && !readyToDisplay;
 
-  React.useEffect(doFetchActiveLivestreams, [doFetchActiveLivestreams]);
+  React.useEffect(() => {
+    if (!claimThumbnail) return;
+
+    setTimeout(() => {
+      let newThumbnail = claimThumbnail;
+
+      if (
+        containerRef.current &&
+        containerRef.current.parentElement &&
+        containerRef.current.parentElement.offsetWidth
+      ) {
+        const w = containerRef.current.parentElement.offsetWidth;
+        newThumbnail = getThumbnailCdnUrl({ thumbnail: newThumbnail, width: w, height: w });
+      }
+
+      if (newThumbnail !== thumbnail) {
+        setThumbnail(newThumbnail);
+      }
+    }, 200);
+  }, [claimThumbnail, thumbnail]);
+
+  React.useEffect(() => {
+    if (doFetchActiveLivestreams) doFetchActiveLivestreams();
+  }, [doFetchActiveLivestreams]);
 
   // Establish web socket connection for viewer count.
   React.useEffect(() => {
@@ -141,29 +176,58 @@ const EmbedWrapperPage = (props: Props) => {
   }
 
   return (
-    <div className={classnames('embed__wrapper', { 'embed__wrapper--light-background': embedLightBackground })}>
-      <EmbedContext.Provider value>
-        {readyToDisplay ? (
-          <FileRender uri={uri} embedded />
-        ) : (
-          <div className="embed__loading">
-            <FileViewerEmbeddedTitle uri={uri} />
+    <div
+      className={
+        isLiveClaimStopped
+          ? 'embed__inline-button'
+          : classnames('embed__wrapper', { 'embed__wrapper--light-background': embedLightBackground })
+      }
+      style={
+        isLiveClaimStopped
+          ? thumbnail && !obscurePreview
+            ? { backgroundImage: `url("${thumbnail}")`, height: '100%' }
+            : {}
+          : undefined
+      }
+    >
+      {!isLiveClaimStopped ? (
+        <EmbedContext.Provider value>
+          {readyToDisplay ? (
+            <FileRender uri={uri} embedded />
+          ) : (
+            <div className="embed__loading">
+              <FileViewerEmbeddedTitle uri={uri} />
 
-            <div className="embed__loading-text">
-              {loading && <Spinner delayed light />}
-              {noContentFound && <h1>{__('No content found.')}</h1>}
-              {isPaidContent && (
-                <div>
-                  <h1>{__('Paid content cannot be embedded.')}</h1>
-                  <div className="section__actions--centered">
-                    <Button label={__('Watch on %SITE_NAME%', { SITE_NAME })} button="primary" href={contentLink} />
+              <div className="embed__loading-text">
+                {loading && <Spinner delayed light />}
+                {noContentFound && <h1>{__('No content found.')}</h1>}
+                {isPaidContent && (
+                  <div>
+                    <h1>{__('Paid content cannot be embedded.')}</h1>
+                    <div className="section__actions--centered">
+                      <Button label={__('Watch on %SITE_NAME%', { SITE_NAME })} button="primary" href={contentLink} />
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
-          </div>
-        )}
-      </EmbedContext.Provider>
+          )}
+        </EmbedContext.Provider>
+      ) : (
+        <>
+          <FileViewerEmbeddedTitle uri={uri} />
+
+          <Button
+            onClick={() => {
+              const formattedUrl = formatLbryUrlForWeb(uri);
+              push(formattedUrl);
+            }}
+            iconSize={30}
+            title={__('View')}
+            className="button--icon button--view"
+          />
+        </>
+      )}
     </div>
   );
 };

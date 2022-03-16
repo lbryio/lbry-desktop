@@ -5,11 +5,12 @@ import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
 import { doResolveUri } from 'redux/actions/claims';
 import { buildURI } from 'util/lbryURI';
 import { doPlayUri } from 'redux/actions/content';
+import { selectShouldObscurePreviewForUri } from 'redux/selectors/content';
 import { selectCostInfoForUri, doFetchCostInfoForUri, selectBlackListedOutpoints } from 'lbryinc';
 import { doCommentSocketConnect, doCommentSocketDisconnect } from 'redux/actions/websocket';
 import { doFetchActiveLivestreams, doFetchChannelLiveStatus } from 'redux/actions/livestream';
 import { selectIsActiveLivestreamForUri, selectActiveLivestreams } from 'redux/selectors/livestream';
-import { isStreamPlaceholderClaim } from 'util/claim';
+import { getThumbnailFromClaim, isStreamPlaceholderClaim } from 'util/claim';
 
 const select = (state, props) => {
   const { match } = props;
@@ -30,6 +31,8 @@ const select = (state, props) => {
     isCurrentClaimLive: canonicalUrl && selectIsActiveLivestreamForUri(state, canonicalUrl),
     isLivestreamClaim: isStreamPlaceholderClaim(claim),
     activeLivestreams: selectActiveLivestreams(state),
+    obscurePreview: selectShouldObscurePreviewForUri(state, uri),
+    claimThumbnail: getThumbnailFromClaim(claim),
   };
 };
 
