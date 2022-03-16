@@ -14,6 +14,7 @@ import Nag from 'component/common/nag';
 // $FlowFixMe cannot resolve ...
 import FileRenderPlaceholder from 'static/img/fileRenderPlaceholder.png';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
+import { LayoutRenderContext } from 'page/livestream/view';
 import { formatLbryUrlForWeb } from 'util/url';
 import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
 import useFetchLiveStatus from 'effects/use-fetch-live';
@@ -72,6 +73,8 @@ export default function FileRenderInitiator(props: Props) {
     doFetchChannelLiveStatus,
   } = props;
 
+  const layountRendered = React.useContext(LayoutRenderContext);
+
   const isMobile = useIsMobile();
 
   const containerRef = React.useRef<any>();
@@ -87,7 +90,9 @@ export default function FileRenderInitiator(props: Props) {
   const shouldAutoplay = !embedded && (forceAutoplayParam || urlTimeParam || autoplay);
 
   const isFree = costInfo && costInfo.cost === 0;
-  const canViewFile = isLivestreamClaim ? isCurrentClaimLive : isFree || claimWasPurchased;
+  const canViewFile = isLivestreamClaim
+    ? (layountRendered || isMobile) && isCurrentClaimLive
+    : isFree || claimWasPurchased;
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode) || isCurrentClaimLive;
   const isText = RENDER_MODES.TEXT_MODES.includes(renderMode);
 

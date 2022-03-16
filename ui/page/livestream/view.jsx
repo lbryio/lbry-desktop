@@ -7,6 +7,7 @@ import LivestreamLayout from 'component/livestreamLayout';
 import moment from 'moment';
 import Page from 'component/page';
 import React from 'react';
+import { useIsMobile } from 'effects/use-screensize';
 import useFetchLiveStatus from 'effects/use-fetch-live';
 
 const LivestreamChatLayout = lazyImport(() => import('component/livestreamChatLayout' /* webpackChunkName: "chat" */));
@@ -26,6 +27,8 @@ type Props = {
   doUserSetReferrer: (string) => void,
 };
 
+export const LayoutRenderContext = React.createContext<any>();
+
 export default function LivestreamPage(props: Props) {
   const {
     activeLivestreamForChannel,
@@ -42,10 +45,13 @@ export default function LivestreamPage(props: Props) {
     doUserSetReferrer,
   } = props;
 
+  const isMobile = useIsMobile();
+
   const [activeStreamUri, setActiveStreamUri] = React.useState(false);
   const [showLivestream, setShowLivestream] = React.useState(false);
   const [showScheduledInfo, setShowScheduledInfo] = React.useState(false);
   const [hideComments, setHideComments] = React.useState(false);
+  const [layountRendered, setLayountRendered] = React.useState(chatDisabled || isMobile);
 
   const isInitialized = Boolean(activeLivestreamForChannel) || activeLivestreamInitialized;
   const isChannelBroadcasting = Boolean(activeLivestreamForChannel);
@@ -148,10 +154,12 @@ export default function LivestreamPage(props: Props) {
   }, [uri, stringifiedClaim, isAuthenticated, doUserSetReferrer]);
 
   React.useEffect(() => {
+    if (!layountRendered) return;
+
     doSetPrimaryUri(uri);
 
     return () => doSetPrimaryUri(null);
-  }, [doSetPrimaryUri, uri]);
+  }, [doSetPrimaryUri, layountRendered, uri]);
 
   return (
     <Page
@@ -163,21 +171,23 @@ export default function LivestreamPage(props: Props) {
         !hideComments &&
         isInitialized && (
           <React.Suspense fallback={null}>
-            <LivestreamChatLayout uri={uri} />
+            <LivestreamChatLayout uri={uri} setLayountRendered={setLayountRendered} />
           </React.Suspense>
         )
       }
     >
       {isInitialized && (
-        <LivestreamLayout
-          uri={uri}
-          hideComments={hideComments}
-          release={release}
-          isCurrentClaimLive={isCurrentClaimLive}
-          showLivestream={showLivestream}
-          showScheduledInfo={showScheduledInfo}
-          activeStreamUri={activeStreamUri}
-        />
+        <LayoutRenderContext.Provider value={layountRendered}>
+          <LivestreamLayout
+            uri={uri}
+            hideComments={hideComments}
+            release={release}
+            isCurrentClaimLive={isCurrentClaimLive}
+            showLivestream={showLivestream}
+            showScheduledInfo={showScheduledInfo}
+            activeStreamUri={activeStreamUri}
+          />
+        </LayoutRenderContext.Provider>
       )}
     </Page>
   );

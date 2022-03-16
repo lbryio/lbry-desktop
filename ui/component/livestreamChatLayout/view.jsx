@@ -52,6 +52,7 @@ type Props = {
   doSuperChatList: (uri: string) => void,
   claimsByUri: { [string]: any },
   doFetchUserMemberships: (claimIdCsv: string) => void,
+  setLayountRendered: (boolean) => void,
 };
 
 export default function LivestreamChatLayout(props: Props) {
@@ -73,6 +74,7 @@ export default function LivestreamChatLayout(props: Props) {
     doSuperChatList,
     doFetchUserMemberships,
     claimsByUri,
+    setLayountRendered,
   } = props;
 
   const isMobile = useIsMobile() && !isPopoutWindow;
@@ -166,6 +168,10 @@ export default function LivestreamChatLayout(props: Props) {
     setViewMode(VIEW_MODES.SUPERCHAT);
     if (setCustomViewMode) setCustomViewMode(VIEW_MODES.SUPERCHAT);
   }
+
+  React.useEffect(() => {
+    if (setLayountRendered) setLayountRendered(true);
+  }, [setLayountRendered]);
 
   React.useEffect(() => {
     if (customViewMode && customViewMode !== viewMode) {
