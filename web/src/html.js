@@ -231,13 +231,13 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}, referrerQuery) {
       head += `<meta property="og:video:release_date" content="${release}"/>`;
     }
     if (mediaDuration) {
-      head += `<meta property="og:video:duration" content="${mediaDuration}"/>`;
+      head += `<meta property="og:video:duration" content="${mediaDuration || '0'}"/>`;
     }
     if (media && media.width && media.height) {
-      head += `<meta property="og:video:width" content="${media.width}"/>`;
-      head += `<meta property="og:video:height" content="${media.height}"/>`;
-      head += `<meta name="twitter:player:width" content="${media.width}">`;
-      head += `<meta name="twitter:player:height" content="${media.height}">`;
+      head += `<meta property="og:video:width" content="${media.width || '1280'}"/>`;
+      head += `<meta property="og:video:height" content="${media.height || '720'}"/>`;
+      head += `<meta name="twitter:player:width" content="${media.width || '1280'}">`;
+      head += `<meta name="twitter:player:height" content="${media.height || '720'}">`;
     }
   } else {
     head += `<meta name="twitter:card" content="summary_large_image"/>`;
