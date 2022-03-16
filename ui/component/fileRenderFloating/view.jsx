@@ -332,7 +332,7 @@ export default function FileRenderFloating(props: Props) {
           'content__viewer--secondary': isComment,
           'content__viewer--theater-mode': videoTheaterMode && mainFilePlaying && !isCurrentClaimLive && !isMobile,
           'content__viewer--disable-click': wasDragging,
-          'content__viewer--mobile': isMobile,
+          'content__viewer--mobile': isMobile && !playingUriSource,
         })}
         style={
           !isFloating && fileViewerRect
@@ -340,9 +340,12 @@ export default function FileRenderFloating(props: Props) {
                 width: fileViewerRect.width,
                 height: fileViewerRect.height,
                 left: fileViewerRect.x,
-                top: isMobile
-                  ? HEADER_HEIGHT_MOBILE
-                  : fileViewerRect.windowOffset + fileViewerRect.top - HEADER_HEIGHT - (IS_DESKTOP_MAC ? 24 : 0),
+                top:
+                  isMobile && !playingUriSource
+                    ? HEADER_HEIGHT_MOBILE
+                    : fileViewerRect.windowOffset +
+                      fileViewerRect.top -
+                      (!isMobile ? HEADER_HEIGHT - (IS_DESKTOP_MAC ? 24 : 0) : 0),
               }
             : {}
         }

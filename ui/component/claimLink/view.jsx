@@ -2,7 +2,6 @@
 import { INLINE_PLAYER_WRAPPER_CLASS } from 'component/fileRenderFloating/view';
 import * as React from 'react';
 import Button from 'component/button';
-import classnames from 'classnames';
 import FileRenderInitiator from 'component/fileRenderInitiator';
 import UriIndicator from 'component/uriIndicator';
 
@@ -82,8 +81,8 @@ class ClaimLink extends React.Component<Props> {
 
     if (allowPreview) {
       return (
-        <div className={classnames('claim-link')}>
-          <div className={isPlayingInline ? INLINE_PLAYER_WRAPPER_CLASS : undefined}>
+        <div className="claim-link">
+          <div className={isPlayingInline ? INLINE_PLAYER_WRAPPER_CLASS : 'embed__inline-wrapper'}>
             <FileRenderInitiator uri={uri} parentCommentId={parentCommentId} isMarkdownPost={isMarkdownPost} embedded />
           </div>
           <Button button="link" className="preview-link__url" label={uri} navigate={uri} />
