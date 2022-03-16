@@ -64,9 +64,14 @@
     transform: unset !important;
     border: unset;
 
+    .vjs-current-time {
+      display: none !important;
+    }
+
     .content__wrapper--floating {
       width: 100%;
       height: 100%;
+
       .content__floating-close {
         visibility: visible !important;
         display: inline;
@@ -86,6 +91,7 @@
           }
         }
       }
+
       .autoplay-countdown {
         display: none;
       }
@@ -106,7 +112,7 @@
 
     .vjs-play-control {
       transform: unset !important;
-      display: inline !important;
+      display: none !important;
       position: fixed !important;
       top: 12px !important;
       left: calc(50% - 80px) !important;
@@ -116,6 +122,12 @@
       border-radius: 50% !important;
       opacity: 1 !important;
       pointer-events: unset !important;
+      padding: 15px !important;
+
+      .vjs-icon-placeholder {
+        font-size: 1.2rem !important;
+      }
+
       span {
         position: absolute;
         top: 0;
