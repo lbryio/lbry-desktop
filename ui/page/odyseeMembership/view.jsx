@@ -17,7 +17,6 @@ import PremiumBadge from 'component/common/premium-badge';
 import I18nMessage from 'component/i18nMessage';
 import useGetUserMemberships from 'effects/use-get-user-memberships';
 import usePersistedState from 'effects/use-persisted-state';
-import { fetchLocaleApi } from 'locale';
 
 let stripeEnvironment = getStripeEnvironment();
 
@@ -39,6 +38,7 @@ type Props = {
   incognito: boolean,
   updateUserOdyseeMembershipStatus: () => void,
   user: ?User,
+  locale: ?LocaleInfo,
 };
 
 const OdyseeMembershipPage = (props: Props) => {
@@ -51,6 +51,7 @@ const OdyseeMembershipPage = (props: Props) => {
     updateUserOdyseeMembershipStatus,
     incognito,
     user,
+    locale,
   } = props;
 
   const userChannelName = activeChannelClaim ? activeChannelClaim.name : '';
@@ -183,13 +184,8 @@ const OdyseeMembershipPage = (props: Props) => {
         console.log(err);
       }
 
-      try {
-        // use EUR if from European continent
-        const localeResponse = await fetchLocaleApi();
-        const isFromEurope = localeResponse?.data?.continent === 'EU';
-        if (isFromEurope) setCurrencyToUse('eur');
-      } catch (err) {
-        console.log(err);
+      if (locale?.continent === 'EU') {
+        setCurrencyToUse('eur');
       }
 
       populateMembershipData();

@@ -31,6 +31,7 @@ const defaultState: UserState = {
   referrerSetIsPending: false,
   referrerSetError: '',
   odyseeMembershipsPerClaimIds: undefined,
+  locale: undefined,
 };
 
 reducers[ACTIONS.AUTHENTICATION_STARTED] = (state) =>
@@ -363,6 +364,11 @@ reducers[ACTIONS.USER_PASSWORD_SET_FAILURE] = (state, action) =>
   Object.assign({}, state, {
     passwordSetPending: false,
     passwordSetError: action.data.error,
+  });
+
+reducers[ACTIONS.USER_FETCH_LOCALE_DONE] = (state, action) =>
+  Object.assign({}, state, {
+    locale: action.data,
   });
 
 reducers[ACTIONS.ADD_ODYSEE_MEMBERSHIP_DATA] = (state, action) => {

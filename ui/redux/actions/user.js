@@ -12,7 +12,7 @@ import { selectEmailToVerify, selectPhoneToVerify, selectUserCountryCode, select
 import { doToast } from 'redux/actions/notifications';
 import rewards from 'rewards';
 import { Lbryio } from 'lbryinc';
-import { DOMAIN } from 'config';
+import { DOMAIN, LOCALE_API } from 'config';
 import { getDefaultLanguage } from 'util/default-languages';
 const AUTH_IN_PROGRESS = 'authInProgress';
 export let sessionStorageAvailable = false;
@@ -897,5 +897,31 @@ export function doFetchUserMemberships(claimIdCsv) {
     }
 
     dispatch({ type: ACTIONS.ADD_CLAIMIDS_MEMBERSHIP_DATA, data: { response: updatedResponse } });
+  };
+}
+
+export function doFetchUserLocale(isRetry = false) {
+  return (dispatch) => {
+    fetch(LOCALE_API)
+      .then((res) => res.json())
+      .then((json) => {
+        const locale = json.data; // [flow] local: LocaleInfo
+        if (locale) {
+          dispatch({
+            type: ACTIONS.USER_FETCH_LOCALE_DONE,
+            data: locale,
+          });
+        }
+      })
+      .catch(() => {
+        if (!isRetry) {
+          // If failed, retry one more time after N seconds. This removes the
+          // need to fetch at each component level. If it failed twice, probably
+          // don't need to fetch anymore.
+          setTimeout(() => {
+            dispatch(doFetchUserLocale(true));
+          }, 10000);
+        }
+      });
   };
 }

@@ -1,6 +1,5 @@
 // @flow
 import * as PAGES from 'constants/pages';
-import * as SETTINGS from 'constants/settings';
 import React, { useEffect, useRef, useState, useLayoutEffect } from 'react';
 import { lazyImport } from 'util/lazyImport';
 import { tusUnlockAndNotify, tusHandleTabUpdates } from 'util/tus';
@@ -35,7 +34,6 @@ import {
 } from 'web/effects/use-degraded-performance';
 import LANGUAGE_MIGRATIONS from 'constants/language-migrations';
 import { useIsMobile } from 'effects/use-screensize';
-import { fetchLocaleApi } from 'locale';
 import getLanguagesForCountry from 'constants/country_languages';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 
@@ -64,6 +62,7 @@ type Props = {
   languages: Array<string>,
   theme: string,
   user: ?{ id: string, has_verified_email: boolean, is_reward_approved: boolean },
+  locale: ?LocaleInfo,
   location: { pathname: string, hash: string, search: string },
   history: { push: (string) => void },
   fetchChannelListMine: () => void,
@@ -98,6 +97,7 @@ function App(props: Props) {
   const {
     theme,
     user,
+    locale,
     fetchChannelListMine,
     fetchCollectionListMine,
     signIn,
@@ -137,10 +137,7 @@ function App(props: Props) {
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const previousRewardApproved = usePrevious(isRewardApproved);
 
-  const [gdprRequired, setGdprRequired] = usePersistedState('gdprRequired');
   const [localeLangs, setLocaleLangs] = React.useState();
-  const [localeSwitchDismissed] = usePersistedState('locale-switch-dismissed', false);
-
   const [showAnalyticsNag, setShowAnalyticsNag] = usePersistedState('analytics-nag', true);
   const [lbryTvApiStatus, setLbryTvApiStatus] = useState(STATUS_OK);
 
@@ -365,17 +362,6 @@ function App(props: Props) {
     }
   }, [previousRewardApproved, isRewardApproved]);
 
-  useEffect(() => {
-    fetchLocaleApi().then((response) => {
-      const locale: LocaleInfo = response?.data;
-      if (locale) {
-        // Put in 'window' for now. Can be moved to localStorage or wherever,
-        // but the key should remain the same so clients are not affected.
-        window[SETTINGS.LOCALE] = locale;
-      }
-    });
-  }, []);
-
   // Load IMA3 SDK for aniview
   // useEffect(() => {
   //   if (!isAuthenticated && SHOW_ADS) {
@@ -402,7 +388,7 @@ function App(props: Props) {
       }
     }
 
-    if (inIframe()) {
+    if (inIframe() || !locale || !locale.gdpr_required) {
       return;
     }
 
@@ -422,47 +408,10 @@ function App(props: Props) {
     // OneTrust asks to add this
     secondScript.innerHTML = 'function OptanonWrapper() { }';
 
-    // gdpr is known to be required, add script
-    if (gdprRequired) {
-      // $FlowFixMe
-      document.head.appendChild(script);
-      // $FlowFixMe
-      document.head.appendChild(secondScript);
-    }
-
-    const shouldFetchLanguage = !localeLangs && !localeSwitchDismissed;
-    const shouldFetchGdpr = gdprRequired === null || gdprRequired === undefined;
-
-    if (shouldFetchLanguage || shouldFetchGdpr) {
-      fetchLocaleApi().then((response) => {
-        if (shouldFetchLanguage) {
-          const countryCode = response?.data?.country;
-          const langs = getLanguagesForCountry(countryCode);
-
-          const supportedLangs = [];
-          langs.forEach((lang) => lang !== 'en' && SUPPORTED_LANGUAGES[lang] && supportedLangs.push(lang));
-
-          if (supportedLangs.length > 0) setLocaleLangs(supportedLangs);
-        }
-
-        // haven't done a gdpr check, do it now
-        if (shouldFetchGdpr) {
-          const gdprRequiredBasedOnLocation = response?.data?.gdpr_required;
-
-          // note we need gdpr and load script
-          if (gdprRequiredBasedOnLocation) {
-            setGdprRequired(true);
-            // $FlowFixMe
-            document.head.appendChild(script);
-            // $FlowFixMe
-            document.head.appendChild(secondScript);
-            // note we don't need gdpr, save to session
-          } else if (gdprRequiredBasedOnLocation === false) {
-            setGdprRequired(false);
-          }
-        }
-      });
-    }
+    // $FlowFixMe
+    document.head.appendChild(script);
+    // $FlowFixMe
+    document.head.appendChild(secondScript);
 
     return () => {
       try {
@@ -472,11 +421,23 @@ function App(props: Props) {
         document.head.removeChild(secondScript);
       } catch (err) {
         // eslint-disable-next-line no-console
-        console.log(err);
+        // console.log(err); <-- disabling this ... it's clogging up Sentry logs.
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps, (one time after locale is fetched)
+  }, [locale]);
+
+  React.useEffect(() => {
+    if (locale) {
+      const countryCode = locale.country;
+      const langs = getLanguagesForCountry(countryCode) || [];
+      const supportedLangs = langs.filter((lang) => lang !== 'en' && SUPPORTED_LANGUAGES[lang]);
+
+      if (supportedLangs.length > 0) {
+        setLocaleLangs(supportedLangs);
+      }
+    }
+  }, [locale]);
 
   // ready for sync syncs, however after signin when hasVerifiedEmail, that syncs too.
   useEffect(() => {
@@ -563,7 +524,7 @@ function App(props: Props) {
         />
       ) : (
         <React.Fragment>
-            <Router />
+          <Router />
           <ModalRouter />
           <React.Suspense fallback={null}>{renderFiledrop && <FileDrop />}</React.Suspense>
 

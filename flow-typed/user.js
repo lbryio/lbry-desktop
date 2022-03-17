@@ -65,6 +65,7 @@ declare type UserState ={
   referrerSetIsPending: boolean,
   referrerSetError: string,
   odyseeMembershipsPerClaimIds: ?{ [string]: string },
+  locale: ?LocaleInfo,
 };
 
 declare type LocaleInfo = {

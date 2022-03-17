@@ -2,7 +2,7 @@
 import { CHANNEL_CREATION_LIMIT } from 'config';
 import { normalizeURI, parseURI, isURIValid } from 'util/lbryURI';
 import { selectGeoBlockLists } from 'redux/selectors/blocked';
-import { selectYoutubeChannels } from 'redux/selectors/user';
+import { selectUserLocale, selectYoutubeChannels } from 'redux/selectors/user';
 import { selectSupportsByOutpoint } from 'redux/selectors/wallet';
 import { createSelector } from 'reselect';
 import { createCachedSelector } from 're-reselect';
@@ -14,7 +14,6 @@ import {
   getThumbnailFromClaim,
 } from 'util/claim';
 import * as CLAIM from 'constants/claim';
-import * as SETTINGS from 'constants/settings';
 import { INTERNAL_TAGS } from 'constants/tags';
 
 type State = { claims: any, user: UserState };
@@ -844,9 +843,8 @@ export const selectOdyseeMembershipForChannelId = function (state: State, channe
 export const selectGeoRestrictionForUri = createCachedSelector(
   selectClaimForUri,
   selectGeoBlockLists,
-  (claim, geoBlockLists) => {
-    const locale: LocaleInfo = window[SETTINGS.LOCALE]; // <-- NOTE: not handled by redux updates
-
+  selectUserLocale,
+  (claim, geoBlockLists, locale: LocaleInfo) => {
     if (locale && geoBlockLists && claim) {
       const claimId: ?string = claim.claim_id;
       const channelId: ?string = getChannelIdFromClaim(claim);
