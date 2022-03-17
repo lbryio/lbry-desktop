@@ -240,7 +240,7 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}, referrerQuery) {
     head += `<meta property="og:video:width" content="${mediaWidth}"/>`;
     head += `<meta property="og:video:height" content="${mediaHeight}"/>`;
     head += `<meta name="twitter:player:width" content="${mediaWidth}">`;
-    head += `<meta name="twitter:player:height" content="${mediaWidth}">`;
+    head += `<meta name="twitter:player:height" content="${mediaHeight}">`;
   } else {
     head += `<meta name="twitter:card" content="summary_large_image"/>`;
   }
