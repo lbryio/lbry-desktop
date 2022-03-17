@@ -65,15 +65,6 @@ export default function LivestreamSetupPage(props: Props) {
     ENABLE_NO_SOURCE_CLAIMS && user && !liveDisabled && (liveEnabled || odyseeMembership || hasEnoughLBCToStream)
   );
 
-  let reasonAllowedToStream = '';
-  if (odyseeMembership) {
-    reasonAllowedToStream = 'you purchased Odysee Premium';
-  } else if (liveEnabled) {
-    reasonAllowedToStream = 'your livestreaming was turned on manually';
-  } else if (hasEnoughLBCToStream) {
-    reasonAllowedToStream = 'you have enough staked LBC';
-  }
-
   function createStreamKey() {
     if (!channelId || !channelName || !sigData.signature || !sigData.signing_ts) return null;
     return `${channelId}?d=${toHex(channelName)}&s=${sigData.signature}&t=${sigData.signing_ts}`;
@@ -260,9 +251,7 @@ export default function LivestreamSetupPage(props: Props) {
                   />
                 }
                 title={__('Go Live on Odysee')}
-                subtitle={
-                  <>{__(`Congratulations, you have access to livestreaming because ${reasonAllowedToStream}!`)} </>
-                }
+                subtitle={<>{__(`Expand to learn more about setting up a livestream.`)} </>}
                 actions={showHelp && helpText}
               />
               {streamKey && totalLivestreamClaims.length > 0 && (
