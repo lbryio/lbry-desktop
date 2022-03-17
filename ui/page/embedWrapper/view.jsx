@@ -9,11 +9,10 @@ import Button from 'component/button';
 import Card from 'component/common/card';
 import { formatLbryUrlForWeb, formatLbryChannelName } from 'util/url';
 import { useHistory } from 'react-router';
-import { getThumbnailCdnUrl } from 'util/thumbnail';
 import Yrbl from 'component/yrbl';
 // $FlowFixMe cannot resolve ...
-import FileRenderPlaceholder from 'static/img/fileRenderPlaceholder.png';
 import useFetchLiveStatus from 'effects/use-fetch-live';
+import useThumbnail from 'effects/use-thumbnail';
 
 type Props = {
   uri: string,
@@ -85,7 +84,6 @@ export default function EmbedWrapperPage(props: Props) {
   } = useHistory();
 
   const containerRef = React.useRef<any>();
-  const [thumbnail, setThumbnail] = React.useState(FileRenderPlaceholder);
   const [livestreamsFetched, setLivestreamsFetched] = React.useState(false);
 
   const channelUrl = channelUri && formatLbryChannelName(channelUri);
@@ -107,26 +105,7 @@ export default function EmbedWrapperPage(props: Props) {
         (outpoint.txid === txid && outpoint.nout === nout)
     );
 
-  React.useEffect(() => {
-    if (!claimThumbnail) return;
-
-    setTimeout(() => {
-      let newThumbnail = claimThumbnail;
-
-      if (
-        containerRef.current &&
-        containerRef.current.parentElement &&
-        containerRef.current.parentElement.offsetWidth
-      ) {
-        const w = containerRef.current.parentElement.offsetWidth;
-        newThumbnail = getThumbnailCdnUrl({ thumbnail: newThumbnail, width: w, height: w });
-      }
-
-      if (newThumbnail !== thumbnail) {
-        setThumbnail(newThumbnail);
-      }
-    }, 200);
-  }, [claimThumbnail, thumbnail]);
+  const thumbnail = useThumbnail(claimThumbnail, containerRef);
 
   React.useEffect(() => {
     if (doFetchActiveLivestreams && isLivestreamClaim) {
