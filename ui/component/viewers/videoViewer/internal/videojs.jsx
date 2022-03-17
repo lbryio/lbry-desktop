@@ -82,7 +82,6 @@ type Props = {
   uri: string,
   claimValues: any,
   clearPosition: (string) => void,
-  centerPlayButton: () => void,
   isLivestreamClaim: boolean,
   userClaimId: ?string,
   activeLivestreamForChannel: any,
@@ -148,7 +147,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     claimRewards,
     uri,
     clearPosition,
-    centerPlayButton,
     userClaimId,
     isLivestreamClaim,
     activeLivestreamForChannel,
@@ -297,9 +295,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         // $FlowFixMe
         document.querySelector('.vjs-big-play-button').style.setProperty('display', 'block', 'important');
       }
-
-      // center play button
-      centerPlayButton();
 
       // I think this is a callback function
       const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');

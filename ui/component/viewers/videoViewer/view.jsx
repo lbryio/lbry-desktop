@@ -325,23 +325,6 @@ function VideoViewer(props: Props) {
     setEnded(true);
   };
 
-  function centerPlayButton() {
-    // center play button
-    const playBT = document.getElementsByClassName('vjs-big-play-button')[0];
-    const videoDiv = window.player.children_[0].closest('video-js-parent');
-
-    if (!videoDiv) return;
-
-    const controlBar = document.getElementsByClassName('vjs-control-bar')[0];
-    const leftWidth = (videoDiv.offsetWidth - playBT.offsetWidth) / 2 + 'px';
-    const availableHeight = videoDiv.offsetHeight - controlBar.offsetHeight;
-    const topHeight = (availableHeight - playBT.offsetHeight) / 2 + 3 + 'px';
-
-    playBT.style.top = topHeight;
-    playBT.style.left = leftWidth;
-    playBT.style.margin = '0';
-  }
-
   const onPlayerReady = useCallback((player: Player, videoNode: any) => {
     if (!embedded) {
       setVideoNode(videoNode);
@@ -519,7 +502,6 @@ function VideoViewer(props: Props) {
         claimRewards={claimRewards}
         uri={uri}
         clearPosition={clearPosition}
-        centerPlayButton={centerPlayButton}
         userClaimId={claim && claim.signing_channel && claim.signing_channel.claim_id}
         isLivestreamClaim={isLivestreamClaim}
         activeLivestreamForChannel={activeLivestreamForChannel}

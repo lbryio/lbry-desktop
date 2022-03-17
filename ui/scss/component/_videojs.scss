@@ -259,6 +259,13 @@ button.vjs-big-play-button {
   display: none !important;
 }
 
+.vjs-big-play-centered {
+  .vjs-big-play-button {
+    left: calc(50% - 2.5rem) !important;
+    margin-left: unset !important;
+  }
+}
+
 // Rearrange icons
 .vjs-play-control {
   order: 1 !important;
