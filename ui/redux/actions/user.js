@@ -918,7 +918,6 @@ export function doFetchUserMemberships(claimIdCsv) {
     });
 
     let updatedResponse = {};
-    let checkedMemberships = window.checkedMemberships;
 
     // loop through returned users
     for (const user in response) {
@@ -930,17 +929,15 @@ export function doFetchUserMemberships(claimIdCsv) {
         for (const membership of response[user]) {
           if (membership.channel_name) {
             updatedResponse[user] = membership.name;
-            checkedMemberships[user] = membership.name;
+            window.checkedMemberships[user] = membership.name;
           }
         }
       } else {
         // note the user has been fetched but is null
         updatedResponse[user] = null;
-        checkedMemberships[user] = null;
+        window.checkedMemberships[user] = null;
       }
     }
-
-    window.checkedMemberships = Object.assign(window.checkedMemberships, checkedMemberships);
 
     dispatch({ type: ACTIONS.ADD_CLAIMIDS_MEMBERSHIP_DATA, data: { response: updatedResponse } });
   };
