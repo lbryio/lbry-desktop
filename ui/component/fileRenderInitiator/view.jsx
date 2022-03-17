@@ -112,7 +112,7 @@ export default function FileRenderInitiator(props: Props) {
   React.useEffect(() => {
     if (!claimThumbnail) return;
 
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       let newThumbnail = claimThumbnail;
 
       if (
@@ -128,6 +128,8 @@ export default function FileRenderInitiator(props: Props) {
         setThumbnail(newThumbnail);
       }
     }, 200);
+
+    return () => clearTimeout(timer);
   }, [claimThumbnail, thumbnail]);
 
   function handleClick() {
