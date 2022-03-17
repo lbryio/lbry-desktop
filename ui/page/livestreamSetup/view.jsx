@@ -192,6 +192,15 @@ export default function LivestreamSetupPage(props: Props) {
 
   return (
     <Page>
+      {/* channel selector */}
+      {!fetchingChannels && (
+        <>
+          <div className="section__actions--between">
+            <ChannelSelector hideAnon />
+          </div>
+        </>
+      )}
+
       {/* no livestreaming privs because no premium membership */}
       {!livestreamEnabled && !odyseeMembership && (
         <div style={{ marginTop: '11px' }}>
@@ -231,15 +240,6 @@ export default function LivestreamSetupPage(props: Props) {
                 </div>
               }
             />
-          )}
-
-          {/* channel selector */}
-          {!fetchingChannels && (
-            <>
-              <div className="section__actions--between">
-                <ChannelSelector hideAnon />
-              </div>
-            </>
           )}
 
           {/* getting livestreams */}
