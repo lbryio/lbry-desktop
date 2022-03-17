@@ -58,7 +58,6 @@ const recsysFyp = {
       method: 'POST',
       headers: { [X_LBRY_AUTH_TOKEN]: getAuthToken() },
     })
-      .then((response) => response.json())
       .then((result) => result)
       .catch((error) => {
         console.log('FYP: ignore', { error, userId, gid, claimId });
