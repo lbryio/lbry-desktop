@@ -23,7 +23,7 @@ import {
 import { isStreamPlaceholderClaim } from 'util/claim';
 
 type Dispatch = (action: any) => any;
-type GetState = () => { claims: any, file: FileState, content: any, user: User };
+type GetState = () => { claims: any, file: FileState, content: any, user: UserState };
 export function doOpenFileInFolder(path: string) {
   return () => {
     shell.showItemInFolder(path);

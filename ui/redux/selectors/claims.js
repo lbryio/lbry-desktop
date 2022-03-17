@@ -17,7 +17,7 @@ import * as CLAIM from 'constants/claim';
 import * as SETTINGS from 'constants/settings';
 import { INTERNAL_TAGS } from 'constants/tags';
 
-type State = { claims: any, user: User };
+type State = { claims: any, user: UserState };
 
 const selectState = (state: State) => state.claims || {};
 

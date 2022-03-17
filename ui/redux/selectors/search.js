@@ -20,7 +20,7 @@ import { selectHistory } from 'redux/selectors/content';
 import { selectAllCostInfoByUri } from 'lbryinc';
 import { SIMPLE_SITE } from 'config';
 
-type State = { claims: any, search: SearchState, user: User };
+type State = { claims: any, search: SearchState, user: UserState };
 
 export const selectState = (state: State): SearchState => state.search;
 

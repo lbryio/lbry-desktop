@@ -1,8 +1,9 @@
+// @flow
 import * as ACTIONS from 'constants/action_types';
 
 const reducers = {};
 
-const defaultState = {
+const defaultState: UserState = {
   authenticationIsPending: false,
   userIsPending: false,
   emailNewIsPending: false,
@@ -29,6 +30,7 @@ const defaultState = {
   youtubeChannelImportErrorMessage: '',
   referrerSetIsPending: false,
   referrerSetError: '',
+  odyseeMembershipsPerClaimIds: undefined,
 };
 
 reducers[ACTIONS.AUTHENTICATION_STARTED] = (state) =>
@@ -385,7 +387,7 @@ reducers[ACTIONS.ADD_CLAIMIDS_MEMBERSHIP_DATA] = (state, action) => {
   });
 };
 
-export default function userReducer(state = defaultState, action) {
+export default function userReducer(state: UserState = defaultState, action: any) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);
   return state;
