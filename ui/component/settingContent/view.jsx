@@ -27,14 +27,18 @@ type Props = {
   hideReposts: ?boolean,
   showNsfw: boolean,
   hideScheduledLivestreams: boolean,
+  hideFyp: boolean,
   myChannelUrls: ?Array<string>,
   instantPurchaseEnabled: boolean,
   instantPurchaseMax: Price,
   enablePublishPreview: boolean,
+  hasMembership: ?boolean,
+  personalRecommendations: { gid: string, uris: Array<string> },
   // --- perform ---
   setClientSetting: (string, boolean | string | number) => void,
   clearPlayingUri: () => void,
   openModal: (string) => void,
+  doFetchPersonalRecommendations: () => void,
 };
 
 export default function SettingContent(props: Props) {
@@ -46,14 +50,26 @@ export default function SettingContent(props: Props) {
     hideReposts,
     showNsfw,
     hideScheduledLivestreams,
+    hideFyp,
     myChannelUrls,
     instantPurchaseEnabled,
     instantPurchaseMax,
     enablePublishPreview,
+    hasMembership,
+    personalRecommendations,
     setClientSetting,
     clearPlayingUri,
     openModal,
+    doFetchPersonalRecommendations,
   } = props;
+
+  const fypExists = personalRecommendations && personalRecommendations.uris.length > 0;
+
+  React.useEffect(() => {
+    if (hasMembership) {
+      doFetchPersonalRecommendations();
+    }
+  }, []);
 
   return (
     <>
@@ -116,6 +132,20 @@ export default function SettingContent(props: Props) {
                 name="hide_scheduled_livestreams"
                 onChange={() => setClientSetting(SETTINGS.HIDE_SCHEDULED_LIVESTREAMS, !hideScheduledLivestreams)}
                 checked={hideScheduledLivestreams}
+              />
+            </SettingsRow>
+
+            <SettingsRow
+              membersOnly
+              title={__('Hide Personal Recommendations')}
+              subtitle={__(HELP.HIDE_FYP)}
+              disabled={!hasMembership || !fypExists}
+            >
+              <FormField
+                type="checkbox"
+                name="hide_fyp"
+                onChange={() => setClientSetting(SETTINGS.HIDE_FYP, !hideFyp)}
+                checked={hideFyp}
               />
             </SettingsRow>
 
@@ -235,6 +265,7 @@ const HELP = {
   AUTOPLAY_NEXT: 'Autoplay the next related item when a file (video or audio) finishes playing.',
   HIDE_REPOSTS: 'You will not see reposts by people you follow or receive email notifying about them.',
   HIDE_SCHEDULED_LIVESTREAMS: 'You will not see scheduled livestreams by people you follow on the home or following page.',
+  HIDE_FYP: 'You will not see the personal recommendations in the homepage.',
   SHOW_MATURE: 'Mature content may include nudity, intense sexuality, profanity, or other adult content. By displaying mature content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  ',
   MAX_PURCHASE_PRICE: 'This will prevent you from purchasing any content over a certain cost, as a safety measure.',
   ONLY_CONFIRM_OVER_AMOUNT: '', // [feel redundant. Disable for now] "When this option is chosen, LBRY won't ask you to confirm purchases or tips below your chosen amount.",

@@ -7,6 +7,7 @@ import ClaimList from 'component/claimList';
 import { URL, SHARE_DOMAIN_URL } from 'config';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
+import * as SETTINGS from 'constants/settings';
 import { useIsLargeScreen, useIsMediumScreen } from 'effects/use-screensize';
 
 // TODO: recsysFyp will be moved into 'RecSys', so the redux import in a jsx
@@ -22,9 +23,10 @@ type SectionHeaderProps = {
   navigate?: string,
   icon?: string,
   help?: string,
+  onHide?: () => void,
 };
 
-const SectionHeader = ({ title, icon = '', help }: SectionHeaderProps) => {
+const SectionHeader = ({ title, icon = '', help, onHide }: SectionHeaderProps) => {
   const SHARE_DOMAIN = SHARE_DOMAIN_URL || URL;
   return (
     <h1 className="claim-grid__header">
@@ -32,6 +34,7 @@ const SectionHeader = ({ title, icon = '', help }: SectionHeaderProps) => {
       <span className="claim-grid__title">{title}</span>
       {help}
       <HelpLink href={`${SHARE_DOMAIN}/$/${PAGES.FYP}`} iconSize={24} description={__('Learn more')} />
+      <Button button="link" label={__('Hide')} onClick={onHide} className={'ml-m text-s'} />
     </h1>
   );
 };
@@ -52,11 +55,23 @@ type Props = {
   userId: ?string,
   personalRecommendations: { gid: string, uris: Array<string> },
   hasMembership: boolean,
+  hideFyp: boolean,
   doFetchPersonalRecommendations: () => void,
+  doSetClientSetting: (key: string, value: any, pushPreferences: boolean) => void,
+  doToast: ({ isError?: boolean, message: string }) => void,
 };
 
 export default function RecommendedPersonal(props: Props) {
-  const { onLoad, userId, personalRecommendations, hasMembership, doFetchPersonalRecommendations } = props;
+  const {
+    onLoad,
+    userId,
+    personalRecommendations,
+    hasMembership,
+    hideFyp,
+    doFetchPersonalRecommendations,
+    doSetClientSetting,
+    doToast,
+  } = props;
   const [markedGid, setMarkedGid] = React.useState('');
   const [view, setView] = React.useState(VIEW.ALL_VISIBLE);
   const isLargeScreen = useIsLargeScreen();
@@ -65,6 +80,11 @@ export default function RecommendedPersonal(props: Props) {
   const count = personalRecommendations.uris.length;
   const countCollapsed = getSuitablePageSizeForScreen(8, isLargeScreen, isMediumScreen);
   const finalCount = view === VIEW.ALL_VISIBLE ? count : view === VIEW.COLLAPSED ? countCollapsed : count;
+
+  function doHideFyp() {
+    doSetClientSetting(SETTINGS.HIDE_FYP, true, true);
+    doToast({ message: __('Recommendations hidden; you can re-enable them in Settings.') });
+  }
 
   // **************************************************************************
   // Effects
@@ -103,7 +123,7 @@ export default function RecommendedPersonal(props: Props) {
 
   React.useEffect(() => {
     // -- Fetch FYP
-    if (hasMembership || process.env.ENABLE_WIP_FEATURES) {
+    if (hasMembership) {
       doFetchPersonalRecommendations();
     }
   }, [hasMembership, doFetchPersonalRecommendations]);
@@ -111,13 +131,14 @@ export default function RecommendedPersonal(props: Props) {
   // **************************************************************************
   // **************************************************************************
 
-  if ((!hasMembership && !process.env.ENABLE_WIP_FEATURES) || count < 1) {
+  if (hideFyp || !hasMembership || count < 1) {
     return null;
   }
 
   return (
     <>
-      <SectionHeader title={__('Recommended For You')} icon={ICONS.WEB} />
+      <SectionHeader title={__('Recommended For You')} icon={ICONS.WEB} onHide={doHideFyp} />
+
       <ClaimList
         tileLayout
         uris={personalRecommendations.uris.slice(0, finalCount)}
