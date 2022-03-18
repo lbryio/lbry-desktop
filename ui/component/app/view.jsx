@@ -16,6 +16,7 @@ import useKonamiListener from 'util/enhanced-layout';
 import Yrbl from 'component/yrbl';
 import FileRenderFloating from 'component/fileRenderFloating';
 import { withRouter } from 'react-router';
+import useAdOutbrain from 'effects/use-ad-outbrain';
 import usePrevious from 'effects/use-previous';
 import Nag from 'component/common/nag';
 import REWARDS from 'rewards';
@@ -86,6 +87,7 @@ type Props = {
   activeChannelClaim: ?ChannelClaim,
   myChannelClaimIds: ?Array<string>,
   subscriptions: Array<Subscription>,
+  hasPremiumPlus: ?boolean,
   setActiveChannelIfNotSet: () => void,
   setIncognito: (boolean) => void,
   fetchModBlockedList: () => void,
@@ -125,6 +127,7 @@ function App(props: Props) {
     fetchModBlockedList,
     resolveUris,
     subscriptions,
+    hasPremiumPlus,
     fetchModAmIList,
   } = props;
 
@@ -479,6 +482,8 @@ function App(props: Props) {
   }, [sidebarOpen, isPersonalized, resolvedSubscriptions, subscriptions, resolveUris, setResolvedSubscriptions]);
 
   useDegradedPerformance(setLbryTvApiStatus, user);
+
+  useAdOutbrain(Boolean(hasPremiumPlus), isAuthenticated);
 
   useEffect(() => {
     // When language is changed or translations are fetched, we render.

@@ -54,7 +54,7 @@
       width: $width;
     }
 
-    div[style*='transform-origin: left bottom;'] {
+    div[style*='transform-origin: left bottom'] {
       // [Floating ad]
       // Hide for now since can't get it to work in a consistent manner between:
       //   - EU and non-EU version
@@ -186,4 +186,14 @@
 
 .exp-ui__logo {
   display: none;
+}
+
+// ****************************************************************************
+// Outbrain
+// ****************************************************************************
+
+.ob-widget-items-container {
+  padding-left: var(--spacing-xs);
+  padding-right: var(--spacing-xs);
+  border-radius: var(--border-radius);
 }
