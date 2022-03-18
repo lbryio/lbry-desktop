@@ -14,12 +14,14 @@ type Props = {
   doToast: ({}) => void,
 };
 
+let authenticationCompleted = false;
+
 function SignInVerifyPage(props: Props) {
   const {
     history: { push, location },
     doToast,
   } = props;
-  const [isAuthenticationSuccess, setIsAuthenticationSuccess] = useState(false);
+  const [isAuthenticationSuccess, setIsAuthenticationSuccess] = useState(authenticationCompleted);
   const [showCaptchaMessage, setShowCaptchaMessage] = useState(false);
   const [captchaLoaded, setCaptchaLoaded] = useState(false);
   const urlParams = new URLSearchParams(location.search);
@@ -43,10 +45,10 @@ function SignInVerifyPage(props: Props) {
   }, [authToken, userSubmittedEmail, verificationToken, doToast, push]);
 
   React.useEffect(() => {
-    if (!needsRecaptcha) {
+    if (!needsRecaptcha && !isAuthenticationSuccess) {
       verifyUser();
     }
-  }, [needsRecaptcha]);
+  }, []);
 
   React.useEffect(() => {
     let captchaTimeout;
@@ -80,6 +82,7 @@ function SignInVerifyPage(props: Props) {
       ...(captchaValue ? { recaptcha: captchaValue } : {}),
     })
       .then(() => {
+        authenticationCompleted = true;
         setIsAuthenticationSuccess(true);
       })
       .catch(() => {
