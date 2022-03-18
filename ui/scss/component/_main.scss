@@ -105,17 +105,31 @@ body {
 .main--file-page {
   width: 100%;
   max-width: var(--page-max-width--filepage);
-  margin-left: auto;
-  margin-right: auto;
   margin-top: var(--spacing-m);
   padding: 0 var(--spacing-m);
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
   position: relative;
 
-  > :first-child {
-    flex-grow: 2;
+  @media (min-width: $breakpoint-medium) {
+    $recommended-width: calc(var(--recommended-content-width) - var(--spacing-l) * 3 - var(--spacing-m) * 2);
+
+    display: grid;
+    grid-template-columns: 1fr $recommended-width;
+    justify-content: space-between;
+    gap: var(--spacing-l);
+
+    .file-page__recommended {
+      margin: 0 !important;
+      height: 100% !important;
+      width: 100% !important;
+    }
+  }
+
+  @media (max-width: $breakpoint-medium) {
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
   }
 
   .file-page__secondary-content {
