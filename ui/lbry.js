@@ -1,5 +1,4 @@
 // @flow
-import analytics from 'analytics';
 import { NO_AUTH, X_LBRY_AUTH_TOKEN } from 'constants/token';
 
 require('proxy-polyfill');
@@ -247,12 +246,7 @@ export function apiCall(method: string, params: ?{}, resolve: Function, reject: 
       const error = response.error || (response.result && response.result.error);
       return error ? reject(error) : resolve(response.result);
     })
-    .catch((err) => {
-      if (err.message === 'Failed to fetch') {
-        analytics.error(`\`${method}\`: Failed to fetch`);
-      }
-      return reject(err);
-    });
+    .catch(reject);
 }
 
 function daemonCallWithResult(
