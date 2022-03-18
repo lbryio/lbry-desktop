@@ -143,7 +143,8 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}, referrerQuery) {
   const mediaDuration = media && media.duration;
   const claimTitle = escapeHtmlProperty((value && value.title) || claimName);
   const releaseTime = (value && value.release_time) || (meta && meta.creation_timestamp) || 0;
-  const liveStream = !source;
+  const isStream = claim && claim.value_type === 'stream';
+  const liveStream = isStream && !source;
   const mediaHeight = (media && media.height) || '720';
   const mediaWidth = (media && media.width) || '1280';
 
