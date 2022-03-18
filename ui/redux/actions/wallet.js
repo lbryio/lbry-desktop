@@ -388,10 +388,19 @@ export function doSendTip(params, isSupport, successCallback, errorCallback, sho
     };
 
     const error = (err) => {
+      const baseMsg = isSupport ? __('Boost transaction failed.') : __('Tip transaction failed.');
+      const errMsg = typeof err === 'object' ? err.message : err;
+
+      // For now, spew to console for persistence until the Status Log component is ready.
+      // eslint-disable-next-line no-console
+      console.log(`${baseMsg}\n • ${errMsg}`);
+
       dispatch(
         doToast({
-          message: __(`There was an error sending support funds.`),
+          message: baseMsg,
+          subMessage: errMsg,
           isError: true,
+          duration: 'long',
         })
       );
 

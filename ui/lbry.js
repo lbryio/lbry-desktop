@@ -177,19 +177,42 @@ const Lbry = {
     }),
 };
 
-function checkAndParse(response: Response) {
+function checkAndParse(response: Response, method: string) {
+  if (!response.ok) {
+    // prettier-ignore
+    switch (response.status) {
+      case 504: // Gateway timeout
+      case 524: // Cloudflare: a timeout occurred
+        switch (method) {
+          case 'publish':
+            throw Error(__('[Publish]: Your action timed out, but may have been completed. Refresh and check your Uploads or Wallet page to confirm after a few minutes.'));
+          default:
+            throw Error(`${method}: ${response.statusText} (${response.status})`);
+        }
+      default:
+        throw Error(`${method}: ${response.statusText} (${response.status})`);
+    }
+  }
+
   if (response.status >= 200 && response.status < 300) {
     return response.json();
   }
 
-  return response.json().then((json) => {
-    if (json.error) {
-      const errorMessage = typeof json.error === 'object' ? json.error.message : json.error;
-      return Promise.reject(new Error(errorMessage));
-    } else {
-      return Promise.reject(new Error('Protocol error with unknown response signature'));
-    }
-  });
+  return response
+    .json()
+    .then((json) => {
+      if (json.error) {
+        const errorMessage = typeof json.error === 'object' ? json.error.message : json.error;
+        return Promise.reject(new Error(errorMessage));
+      } else {
+        return Promise.reject(new Error('Protocol error with unknown response signature'));
+      }
+    })
+    .catch(() => {
+      // If not parsable, throw the initial response rather than letting
+      // the json failure ("unexpected token at..") pass through.
+      return Promise.reject(new Error(`${method}: ${response.statusText} (${response.status}, JSON)`));
+    });
 }
 
 export function apiCall(method: string, params: ?{}, resolve: Function, reject: Function) {
@@ -218,7 +241,7 @@ export function apiCall(method: string, params: ?{}, resolve: Function, reject: 
     : Lbry.daemonConnectionString;
 
   return fetch(connectionString + '?m=' + method, options)
-    .then(checkAndParse)
+    .then((response) => checkAndParse(response, method))
     .then((response) => {
       const error = response.error || (response.result && response.result.error);
       return error ? reject(error) : resolve(response.result);

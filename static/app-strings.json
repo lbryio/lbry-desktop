@@ -1090,6 +1090,8 @@
   "Channel to show support as": "Channel to show support as",
   "This refundable boost will improve the discoverability of this %claimTypeText% while active. ": "This refundable boost will improve the discoverability of this %claimTypeText% while active. ",
   "Show this channel your appreciation by sending a donation in USD. ": "Show this channel your appreciation by sending a donation in USD. ",
+  "Boost transaction failed.": "Boost transaction failed.",
+  "Tip transaction failed.": "Tip transaction failed.",
   "Add a Card": "Add a Card",
   "To Tip Creators": "To Tip Creators",
   "Show this channel your appreciation by sending a donation of Credits. ": "Show this channel your appreciation by sending a donation of Credits. ",
