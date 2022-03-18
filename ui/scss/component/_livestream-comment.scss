@@ -238,5 +238,11 @@
     .channel-name {
       font-size: var(--font-small);
     }
+
+    .button--link {
+      .icon {
+        flex-shrink: 0;
+      }
+    }
   }
 }
