@@ -1,5 +1,7 @@
 // @flow
 import React from 'react';
+import Button from 'component/button';
+import * as PAGES from 'constants/pages';
 import classnames from 'classnames';
 
 type Props = {
@@ -26,7 +28,11 @@ export default function SettingsRow(props: Props) {
       <div className="settings-row__title">
         <span>
           {title}
-          {membersOnly && <span className="settings-row__members-only">{'PREMIUM'}</span>}
+          {membersOnly && (
+            <Button className="settings-row__members-only" navigate={`/$/${PAGES.ODYSEE_MEMBERSHIP}`}>
+              {'PREMIUM'}
+            </Button>
+          )}
         </span>
         {subtitle && <p className="settings-row__subtitle">{subtitle}</p>}
       </div>

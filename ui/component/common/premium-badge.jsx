@@ -2,6 +2,7 @@
 import 'scss/component/_comment-badge.scss';
 
 import * as ICONS from 'constants/icons';
+import * as PAGES from 'constants/pages';
 import React from 'react';
 import CommentBadge from './comment-badge';
 import Button from 'component/button';
@@ -26,9 +27,9 @@ export default function PremiumBadge(props: Props) {
   return (
     <BadgeWrapper linkPage={linkPage}>
       {badgeToShow === 'silver' ? (
-        <CommentBadge label={'Premium'} icon={ICONS.PREMIUM} {...badgeProps} />
+        <CommentBadge label="Premium" icon={ICONS.PREMIUM} {...badgeProps} />
       ) : (
-        badgeToShow === 'gold' && <CommentBadge label={'Premium+'} icon={ICONS.PREMIUM_PLUS} {...badgeProps} />
+        badgeToShow === 'gold' && <CommentBadge label="Premium+" icon={ICONS.PREMIUM_PLUS} {...badgeProps} />
       )}
     </BadgeWrapper>
   );
@@ -42,5 +43,5 @@ type WrapperProps = {
 const BadgeWrapper = (props: WrapperProps) => {
   const { linkPage, children } = props;
 
-  return linkPage ? <Button navigate="/$/membership">{children}</Button> : children;
+  return linkPage ? <Button navigate={`/$/${PAGES.ODYSEE_MEMBERSHIP}`}>{children}</Button> : children;
 };
