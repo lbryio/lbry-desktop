@@ -339,9 +339,7 @@ body {
 
   .file-page__recommended-collection {
     @extend .file-page__recommended;
-    flex-direction: column;
-    overflow-wrap: break-word;
-    width: 28rem;
+
     @media (max-width: $breakpoint-small) {
       width: unset;
     }
@@ -446,14 +444,11 @@ body {
         }
       }
     }
-
-    .collection-preview__edit-group {
-      //width: 1.5rem;
-    }
   }
 
   .file-page__playlist-collection {
     @extend .file-page__recommended-collection;
+
     .card__first-pane {
       .card__header--between {
         .card__title-section {
@@ -461,6 +456,7 @@ body {
         }
       }
     }
+
     .file-page__playlist-collection__row {
       @extend .file-page__recommended-collection__row;
 
@@ -471,10 +467,6 @@ body {
           }
         }
       }
-    }
-
-    @media (min-width: $breakpoint-small) {
-      width: 32rem;
     }
   }
 
@@ -519,7 +511,8 @@ body {
     justify-content: space-between;
     gap: var(--spacing-l);
 
-    .file-page__recommended {
+    .file-page__recommended,
+    .file-page__playlist-collection {
       margin: 0 !important;
       height: 100% !important;
       width: 100% !important;
