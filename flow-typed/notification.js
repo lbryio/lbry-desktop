@@ -11,10 +11,12 @@ import * as ACTIONS from 'constants/action_types';
 */
 declare type ToastParams = {
   message: string,
-  title?: string,
+  subMessage?: string,
+  // title?: string,
   linkText?: string,
   linkTarget?: string,
   isError?: boolean,
+  duration?: 'default' | 'long',
 };
 
 declare type Toast = {

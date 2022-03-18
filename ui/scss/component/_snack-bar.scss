@@ -5,7 +5,7 @@
   background-color: var(--color-primary);
   color: var(--color-primary-contrast);
   border-radius: var(--border-radius);
-  padding: var(--spacing-s) var(--spacing-l) var(--spacing-s) var(--spacing-m);
+  padding: var(--spacing-s) var(--spacing-m) var(--spacing-s) var(--spacing-m);
   position: fixed;
   transition: all var(--transition-duration) var(--transition-type);
   z-index: 10000; // hack to get it over react modal
@@ -71,8 +71,19 @@
     min-width: 1rem;
   }
 }
+
 .snack-bar__messageText {
   min-width: 0;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.snack-bar__messageText--sub {
+  font-size: var(--font-small);
+  color: var(--color-text-subtitle);
+}
+
+.snack-bar__close {
+  color: var(--color-primary-contrast);
+  margin-left: var(--spacing-m);
 }

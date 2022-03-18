@@ -8,24 +8,16 @@ import LbcMessage from 'component/common/lbc-message';
 
 type Props = {
   removeSnack: (any) => void,
-  snack: ?{
-    linkTarget: ?string,
-    linkText: ?string,
-    message: string,
-    isError: boolean,
-  },
+  snack: ?ToastParams,
 };
 
 class SnackBar extends React.PureComponent<Props> {
   constructor(props: Props) {
     super(props);
-
-    this.displayTime = 5; // in seconds
     this.hideTimeout = null;
   }
 
   hideTimeout: ?TimeoutID;
-  displayTime: number;
 
   render() {
     const { snack, removeSnack } = this.props;
@@ -35,13 +27,16 @@ class SnackBar extends React.PureComponent<Props> {
       return null;
     }
 
-    const { message, linkText, linkTarget, isError } = snack;
+    const { message, subMessage, duration, linkText, linkTarget, isError } = snack;
 
     if (this.hideTimeout === null) {
-      this.hideTimeout = setTimeout(() => {
-        this.hideTimeout = null;
-        removeSnack();
-      }, this.displayTime * 1000);
+      this.hideTimeout = setTimeout(
+        () => {
+          this.hideTimeout = null;
+          removeSnack();
+        },
+        duration === 'long' ? 15000 : 5000
+      );
     }
 
     return (
@@ -52,10 +47,20 @@ class SnackBar extends React.PureComponent<Props> {
       >
         <div className="snack-bar__message">
           <Icon icon={isError ? ICONS.ALERT : ICONS.COMPLETED} size={18} />
-
           <p className="snack-bar__messageText">
             <LbcMessage>{message}</LbcMessage>
+            {subMessage && (
+              <p className="snack-bar__messageText snack-bar__messageText--sub">
+                <LbcMessage>{subMessage}</LbcMessage>
+              </p>
+            )}
           </p>
+          <Button
+            className="snack-bar__close"
+            icon={ICONS.REMOVE}
+            title={__('Dismiss')}
+            onClick={() => removeSnack()}
+          />
         </div>
         {linkText && linkTarget && (
           // This is a little weird because of `linkTarget` code in `lbry-redux`
