@@ -16,8 +16,9 @@ let script;
 
 export default function useAdOutbrain(hasPremiumPlus: boolean, isAuthenticated: boolean) {
   // Only look at authentication for now. Eventually, we'll only use 'hasPremiumPlus'.
-  const isAuthenticatedRef = React.useRef(isAuthenticated);
-  isAuthenticatedRef.current = isAuthenticated;
+  // Authenticated will return undefined if not yet populated, so wait and only show
+  // when returned as false
+  const isNotAuthenticated = isAuthenticated === false;
 
   function loadListener() {
     const container = window[OUTBRAIN_CONTAINER_KEY];
@@ -30,7 +31,7 @@ export default function useAdOutbrain(hasPremiumPlus: boolean, isAuthenticated: 
       // after the stipulated time, well, no soup for you.
       setTimeout(() => {
         const filledAd = document.querySelector('.ob-widget-items-container');
-        if (filledAd && !isAuthenticatedRef.current) {
+        if (filledAd && isNotAuthenticated) {
           container.style.visibility = 'visible';
         }
       }, 5000); // 3s is sufficient for Chrome, but Firefox seems to take ~5s
@@ -38,7 +39,7 @@ export default function useAdOutbrain(hasPremiumPlus: boolean, isAuthenticated: 
   }
 
   React.useEffect(() => {
-    if (!inIFrame() && !isAuthenticated && !script) {
+    if (!inIFrame() && isNotAuthenticated && !script) {
       const loadTimer = setTimeout(() => {
         script = document.createElement('script');
         script.src = 'https://adncdnend.azureedge.net/adtags/odysee.adn.js';
@@ -52,7 +53,7 @@ export default function useAdOutbrain(hasPremiumPlus: boolean, isAuthenticated: 
       return () => clearTimeout(loadTimer);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps, (on mount only)
-  }, []);
+  }, [isNotAuthenticated]);
 
   React.useEffect(() => {
     if (isAuthenticated && window[OUTBRAIN_CONTAINER_KEY]) {
