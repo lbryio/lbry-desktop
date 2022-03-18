@@ -101,9 +101,9 @@ export function makeResumableUploadRequest(
           // $FlowFixMe - flow's constructor for Error is incorrect.
           new Error(customErr || err, {
             cause: {
-              ...(uploader._fingerprint ? { fingerprint: uploader._fingerprint } : {}),
-              ...(uploader._retryAttempt ? { retryAttempt: uploader._retryAttempt } : {}),
-              ...(uploader._offsetBeforeRetry ? { offsetBeforeRetry: uploader._offsetBeforeRetry } : {}),
+              // ...(uploader._fingerprint ? { fingerprint: uploader._fingerprint } : {}),
+              // ...(uploader._retryAttempt ? { retryAttempt: uploader._retryAttempt } : {}),
+              // ...(uploader._offsetBeforeRetry ? { offsetBeforeRetry: uploader._offsetBeforeRetry } : {}),
               ...(customErr ? { original: errMsg } : {}),
             },
           })
