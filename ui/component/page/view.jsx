@@ -133,6 +133,7 @@ function Page(props: Props) {
               'main--full-width hide-ribbon': fullWidthPage,
               'main--auth-page': authPage,
               'main--file-page': filePage,
+              'main--video-page': filePage && !videoTheaterMode && !livestream && !isMarkdown,
               'main--settings-page': settingsPage,
               'main--markdown': isMarkdown,
               'main--theater-mode': isOnFilePage && videoTheaterMode && !livestream && !isMarkdown && !isMobile,

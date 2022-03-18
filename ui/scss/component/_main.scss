@@ -510,6 +510,24 @@ body {
   }
 }
 
+.main--video-page {
+  @media (min-width: $breakpoint-medium) {
+    $recommended-width: calc(var(--recommended-content-width) - var(--spacing-l) * 3 - var(--spacing-m) * 2);
+
+    display: grid;
+    grid-template-columns: 1fr $recommended-width;
+    justify-content: space-between;
+    gap: var(--spacing-l);
+
+    .file-page__recommended {
+      margin: 0 !important;
+      height: 100% !important;
+      width: 100% !important;
+      overflow: hidden;
+    }
+  }
+}
+
 .card__title-section--body-list {
   display: unset !important;
   // width: 100%;
