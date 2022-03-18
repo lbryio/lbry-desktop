@@ -60,10 +60,10 @@ export default function MembershipSplash(props: Props) {
   return (
     <div className="membership-splash">
       <div className="membership-splash__banner">
-        <img src={AstronautAndFriends} />
+        <img width="1000" height="740" src={AstronautAndFriends} />
         <section className="membership-splash__title">
           <section>
-            <img src={OdyseePremium} />
+            <img width="1000" height="174" src={OdyseePremium} />
           </section>
           <section>
             <I18nMessage
@@ -85,7 +85,7 @@ export default function MembershipSplash(props: Props) {
         <div className="membership-splash__info">
           <section className="membership-splash__info-header">
             <div className="membership-splash__info-price">
-              <img src={BadgePremium} />
+              <img width="500" height="500" src={BadgePremium} />
 
               <section>
                 <I18nMessage
@@ -118,7 +118,7 @@ export default function MembershipSplash(props: Props) {
         <div className="membership-splash__info">
           <section className="membership-splash__info-header">
             <div className="membership-splash__info-price">
-              <img src={BadgePremiumPlus} />
+              <img width="500" height="500" src={BadgePremiumPlus} />
               <section>
                 <I18nMessage
                   tokens={{
