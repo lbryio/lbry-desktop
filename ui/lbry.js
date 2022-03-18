@@ -177,19 +177,18 @@ const Lbry = {
     }),
 };
 
-function checkAndParse(response) {
+function checkAndParse(response: Response) {
   if (response.status >= 200 && response.status < 300) {
     return response.json();
   }
+
   return response.json().then((json) => {
-    let error;
     if (json.error) {
       const errorMessage = typeof json.error === 'object' ? json.error.message : json.error;
-      error = new Error(errorMessage);
+      return Promise.reject(new Error(errorMessage));
     } else {
-      error = new Error('Protocol error with unknown response signature');
+      return Promise.reject(new Error('Protocol error with unknown response signature'));
     }
-    return Promise.reject(error);
   });
 }
 
@@ -217,15 +216,12 @@ export function apiCall(method: string, params: ?{}, resolve: Function, reject: 
   const connectionString = Lbry.methodsUsingAlternateConnectionString.includes(method)
     ? Lbry.alternateConnectionString
     : Lbry.daemonConnectionString;
+
   return fetch(connectionString + '?m=' + method, options)
     .then(checkAndParse)
     .then((response) => {
       const error = response.error || (response.result && response.result.error);
-
-      if (error) {
-        return reject(error);
-      }
-      return resolve(response.result);
+      return error ? reject(error) : resolve(response.result);
     })
     .catch(reject);
 }
