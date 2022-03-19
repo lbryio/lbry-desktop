@@ -160,10 +160,10 @@ async function sendAndResetWatchmanData() {
   }
 
   // current position in video in MS
-  const positionInVideo = Math.round(videoPlayer.currentTime()) * 1000;
+  const positionInVideo = videoPlayer && Math.round(videoPlayer.currentTime()) * 1000;
 
   // get the duration marking the time in the video for relative position calculation
-  const totalDurationInSeconds = Math.round(videoPlayer.duration());
+  const totalDurationInSeconds = videoPlayer && Math.round(videoPlayer.duration());
 
   // build object for watchman backend
   const objectToSend = {

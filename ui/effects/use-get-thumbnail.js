@@ -1,12 +1,13 @@
 // @flow
 import React from 'react';
 import { generateStreamUrl } from 'util/web';
+import { MISSING_THUMB_DEFAULT } from 'config';
 
 export default function useGetThumbnail(
   uri: string,
   claim: ?Claim,
   streamingUrl: ?string,
-  getFile: string => void,
+  getFile: (string) => void,
   shouldHide: boolean
 ) {
   let thumbnailToUse;
@@ -24,7 +25,7 @@ export default function useGetThumbnail(
   } else if (claim && isImage && isFree) {
     thumbnailToUse = generateStreamUrl(claim.name, claim.claim_id);
   } else if (isCollection) {
-    thumbnailToUse = 'http://spee.ch/default-thumb-odysee:e.jpg';
+    thumbnailToUse = MISSING_THUMB_DEFAULT;
   }
   // @endif
 

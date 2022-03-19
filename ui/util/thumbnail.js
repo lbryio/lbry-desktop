@@ -15,15 +15,11 @@ export function getThumbnailCdnUrl(props: Props) {
     return thumbnail;
   }
 
-  if (thumbnail && !thumbnail.includes('https://spee.ch')) {
-    return `${THUMBNAIL_CDN_URL}s:${width}:${height}/quality:${quality}/plain/${thumbnail}`;
-  }
-
-  if (thumbnail && thumbnail.includes('https://spee.ch') && !thumbnail.includes('?quality=')) {
-    return `${thumbnail}?quality=${quality}&height=${height}&width=${width}`;
-  }
-
-  if (thumbnail && thumbnail.includes('https://spee.ch')) {
+  if (thumbnail.includes(THUMBNAIL_CDN_URL)) {
     return thumbnail;
+  }
+
+  if (thumbnail) {
+    return `${THUMBNAIL_CDN_URL}s:${width}:${height}/quality:${quality}/plain/${thumbnail}`;
   }
 }
