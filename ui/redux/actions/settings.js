@@ -336,12 +336,8 @@ export function doFetchHomepages() {
 
 export function doSetHomepage(code) {
   return (dispatch, getState) => {
-    let languageCode;
-    if (code === getDefaultLanguage()) {
-      languageCode = null;
-    } else {
-      languageCode = code;
-    }
+    const languageCode = code === getDefaultLanguage() ? null : code;
+
     dispatch(doSetClientSetting(SETTINGS.HOMEPAGE, languageCode));
   };
 }

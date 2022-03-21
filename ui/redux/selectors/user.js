@@ -9,6 +9,8 @@ export const selectEmailAlreadyExists = (state) => selectState(state).emailAlrea
 export const selectEmailDoesNotExist = (state) => selectState(state).emailDoesNotExist;
 export const selectResendingVerificationEmail = (state) => selectState(state).resendingVerificationEmail;
 
+export const selectHomepageFetched = (state) => selectState(state).homepageFetched;
+
 export const selectUserEmail = createSelector(selectUser, (user) =>
   user ? user.primary_email || user.latest_claimed_email : null
 );

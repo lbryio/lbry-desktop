@@ -16,6 +16,7 @@ const LOCALE_OPTIONS = {
 type Props = {
   localeLangs: Array<string>,
   noLanguageSet: boolean,
+  onFrontPage: boolean,
   // redux
   homepageCode: string,
   doSetLanguage: (string) => void,
@@ -24,20 +25,24 @@ type Props = {
 };
 
 export default function NagLocaleSwitch(props: Props) {
-  const { localeLangs, noLanguageSet, homepageCode, doSetLanguage, doSetHomepage, doOpenModal } = props;
+  const { localeLangs, noLanguageSet, onFrontPage, homepageCode, doSetLanguage, doSetHomepage, doOpenModal } = props;
 
   const [localeSwitchDismissed, setLocaleSwitchDismissed] = usePersistedState('locale-switch-dismissed', false);
 
   const hasHomepageForLang = localeLangs.some((lang) => getHomepageLanguage(lang));
   const hasHomepageSet = homepageCode !== 'en';
+  const canSwitchHome = hasHomepageForLang && !hasHomepageSet;
+  const canSwitchLang = noLanguageSet;
+  const showHomeSwitch = canSwitchHome && onFrontPage;
+
   const optionToSwitch =
-    (!hasHomepageForLang || hasHomepageSet) && !noLanguageSet
-      ? undefined
-      : !hasHomepageForLang || hasHomepageSet
-      ? LOCALE_OPTIONS.LANG
-      : !noLanguageSet
+    showHomeSwitch && canSwitchLang
+      ? LOCALE_OPTIONS.BOTH
+      : showHomeSwitch
       ? LOCALE_OPTIONS.HOME
-      : LOCALE_OPTIONS.BOTH;
+      : canSwitchLang
+      ? LOCALE_OPTIONS.LANG
+      : undefined;
 
   const [switchOption, setSwitchOption] = React.useState(optionToSwitch);
 

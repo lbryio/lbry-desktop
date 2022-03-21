@@ -93,6 +93,7 @@ type Props = {
   fetchModBlockedList: () => void,
   resolveUris: (Array<string>) => void,
   fetchModAmIList: () => void,
+  homepageFetched: boolean,
 };
 
 function App(props: Props) {
@@ -129,6 +130,7 @@ function App(props: Props) {
     subscriptions,
     hasPremiumPlus,
     fetchModAmIList,
+    homepageFetched,
   } = props;
 
   const isMobile = useIsMobile();
@@ -141,6 +143,7 @@ function App(props: Props) {
   const previousRewardApproved = usePrevious(isRewardApproved);
 
   const [localeLangs, setLocaleLangs] = React.useState();
+  const [localeSwitchDismissed] = usePersistedState('locale-switch-dismissed', false);
   const [showAnalyticsNag, setShowAnalyticsNag] = usePersistedState('analytics-nag', true);
   const [lbryTvApiStatus, setLbryTvApiStatus] = useState(STATUS_OK);
 
@@ -159,7 +162,8 @@ function App(props: Props) {
   const rawReferrerParam = urlParams.get('r');
   const fromLbrytvParam = urlParams.get('sunset');
   const sanitizedReferrerParam = rawReferrerParam && rawReferrerParam.replace(':', '#');
-  const shouldHideNag = pathname.startsWith(`/$/${PAGES.EMBED}`) || pathname.startsWith(`/$/${PAGES.AUTH_VERIFY}`);
+  const embedPath = pathname.startsWith(`/$/${PAGES.EMBED}`);
+  const shouldHideNag = embedPath || pathname.startsWith(`/$/${PAGES.AUTH_VERIFY}`);
   const userId = user && user.id;
   const hasMyChannels = myChannelClaimIds && myChannelClaimIds.length > 0;
   const hasNoChannels = myChannelClaimIds && myChannelClaimIds.length === 0;
@@ -222,9 +226,9 @@ function App(props: Props) {
       );
     }
 
-    if (localeLangs) {
+    if (localeLangs && !embedPath && !localeSwitchDismissed && homepageFetched) {
       const noLanguageSet = language === 'en' && languages.length === 1;
-      return <NagLocaleSwitch localeLangs={localeLangs} noLanguageSet={noLanguageSet} />;
+      return <NagLocaleSwitch localeLangs={localeLangs} noLanguageSet={noLanguageSet} onFrontPage={pathname === '/'} />;
     }
   }
 
