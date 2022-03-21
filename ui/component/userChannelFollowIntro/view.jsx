@@ -83,7 +83,7 @@ function UserChannelFollowIntro(props: Props) {
                 label={subscribedChannels.length < 1 ? __('Skip') : __('Continue')}
               />
             }
-            defaultOrderBy={SIMPLE_SITE ? CS.ORDER_BY_TOP : CS.ORDER_BY_TRENDING}
+            defaultOrderBy={CS.ORDER_BY_TRENDING}
             defaultFreshness={CS.FRESH_ALL}
             claimType="channel"
             claimIds={(CUSTOM_HOMEPAGE && channelIds) || undefined}

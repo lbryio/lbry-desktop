@@ -126,15 +126,12 @@ function HomePage(props: Props) {
         {title && typeof title === 'string' && (
           <SectionHeader title={__(resolveTitleOverride(title))} navigate={route || link} icon={icon} help={help} />
         )}
-
         {index === 0 && <>{claimTiles}</>}
-
         {index !== 0 && (
           <WaitUntilOnPage name={title} placeholder={tilePlaceholder} yOffset={800}>
             {claimTiles}
           </WaitUntilOnPage>
         )}
-
         {(route || link) && (
           <Button
             className="claim-grid__title--secondary"
@@ -144,6 +141,7 @@ function HomePage(props: Props) {
             label={__('View More')}
           />
         )}
+        {title && (title === 'Recent From Following' || title === 'Following') && <RecommendedPersonal />}
       </div>
     );
   }
@@ -172,8 +170,6 @@ function HomePage(props: Props) {
       {/* @if TARGET='web' */}
       {SIMPLE_SITE && <Meme />}
       {/* @endif */}
-
-      <RecommendedPersonal />
 
       {!fetchingActiveLivestreams && (
         <>
