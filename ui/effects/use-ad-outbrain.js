@@ -26,6 +26,7 @@ export default function useAdOutbrain(hasPremiumPlus: boolean, isAuthenticated: 
       // Hide it immediately while we wait for ads to be filled. This prevents
       // the invisible container from blocking our content.
       container.style.visibility = 'hidden';
+      container.style.zIndex = '800'; // any value below $nag-z-index
 
       // Restore visibility after confirming the ad is filled. If it is filled
       // after the stipulated time, well, no soup for you.
