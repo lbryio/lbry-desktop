@@ -8,7 +8,6 @@ import OptimizedImage from 'component/optimizedImage';
 import { AVATAR_DEFAULT } from 'config';
 import useGetUserMemberships from 'effects/use-get-user-memberships';
 import PremiumBadge from 'component/common/premium-badge';
-import { getThumbnailCdnUrl } from 'util/thumbnail';
 
 type Props = {
   thumbnail: ?string,
@@ -25,7 +24,6 @@ type Props = {
   noLazyLoad?: boolean,
   hideStakedIndicator?: boolean,
   hideTooltip?: boolean,
-  minOptimization?: boolean,
   setThumbUploadError: (boolean) => void,
   ThumbUploadError: boolean,
   claimsByUri: { [string]: any },
@@ -59,21 +57,13 @@ function ChannelThumbnail(props: Props) {
     showMemberBadge,
     isChannel,
     checkMembership = true,
-    minOptimization,
   } = props;
   const [thumbLoadError, setThumbLoadError] = React.useState(ThumbUploadError);
   const shouldResolve = !isResolving && claim === undefined;
   const thumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
   const thumbnailPreview = rawThumbnailPreview && rawThumbnailPreview.trim().replace(/^http:\/\//i, 'https://');
   const defaultAvatar = AVATAR_DEFAULT || Gerbil;
-  const thumb = thumbnailPreview || thumbnail || defaultAvatar;
-  // checking with CDN to see if a max size can be passed, but for now, this is an improvement vs not using the optimizer
-  const channelThumbnail = getThumbnailCdnUrl({
-    thumbnail: thumb,
-    width: minOptimization ? 500 : 50,
-    height: minOptimization ? 500 : 50,
-    quality: minOptimization ? 95 : 85,
-  });
+  const channelThumbnail = thumbnailPreview || thumbnail || defaultAvatar;
   const isGif = channelThumbnail && channelThumbnail.endsWith('gif');
   const showThumb = (!obscure && !!thumbnail) || thumbnailPreview;
 
@@ -125,6 +115,7 @@ function ChannelThumbnail(props: Props) {
         alt={__('Channel profile picture')}
         className={!channelThumbnail ? 'channel-thumbnail__default' : 'channel-thumbnail__custom'}
         src={(!thumbLoadError && channelThumbnail) || defaultAvatar}
+        width={small || xsmall ? 64 : 160}
         loading={noLazyLoad ? undefined : 'lazy'}
         onError={() => {
           if (setThumbUploadError) {

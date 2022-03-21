@@ -28,7 +28,6 @@ import TruncatedText from 'component/common/truncated-text';
 import PlaceholderTx from 'static/img/placeholderTx.gif';
 import Tooltip from 'component/common/tooltip';
 import { toCompactNotation } from 'util/string';
-import { getThumbnailCdnUrl } from 'util/thumbnail';
 
 export const PAGE_VIEW_QUERY = `view`;
 export const DISCUSSION_PAGE = `discussion`;
@@ -236,18 +235,11 @@ function ChannelPage(props: Props) {
           <ClaimMenuList uri={claim.permanent_url} inline isChannelPage />
         </div>
         {cover && <img className={classnames('channel-cover__custom')} src={PlaceholderTx} />}
-        {cover && (
-          <OptimizedImage
-            className={classnames('channel-cover__custom')}
-            src={getThumbnailCdnUrl({ thumbnail: cover, width: 0, height: 0, quality: 85 })}
-            objectFit="cover"
-          />
-        )}
+        {cover && <OptimizedImage className={classnames('channel-cover__custom')} src={cover} objectFit="cover" />}
         <div className="channel__primary-info">
           <ChannelThumbnail
             className="channel__thumbnail--channel-page"
             uri={uri}
-            minOptimization
             allowGifs
             showMemberBadge
             isChannel
