@@ -53,7 +53,6 @@ type Props = {
   showNoSourceClaims?: boolean,
   onClick?: (e: any, claim?: ?Claim, index?: number) => void,
   maxClaimRender?: number,
-  excludeUris?: Array<string>,
   loadedCallback?: (number) => void,
   swipeLayout: boolean,
   showEdit?: boolean,
@@ -93,7 +92,6 @@ export default function ClaimList(props: Props) {
     showNoSourceClaims,
     onClick,
     maxClaimRender,
-    excludeUris = [],
     loadedCallback,
     swipeLayout = false,
     showEdit,
@@ -114,10 +112,6 @@ export default function ClaimList(props: Props) {
   const urisLength = (uris && uris.length) || 0;
 
   let tileUris = (prefixUris || []).concat(uris || []);
-
-  if (excludeUris && excludeUris.length) {
-    tileUris = tileUris.filter((uri) => !excludeUris.includes(uri));
-  }
 
   if (prefixUris && prefixUris.length) tileUris.splice(prefixUris.length * -1, prefixUris.length);
 

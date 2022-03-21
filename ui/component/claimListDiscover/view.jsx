@@ -184,6 +184,7 @@ function ClaimListDiscover(props: Props) {
   } = props;
   const didNavigateForward = history.action === 'PUSH';
   const { search } = location;
+  const prevUris = React.useRef();
   const [page, setPage] = React.useState(1);
   const [forceRefresh, setForceRefresh] = React.useState();
   const isLargeScreen = useIsLargeScreen();
@@ -434,6 +435,7 @@ function ClaimListDiscover(props: Props) {
   const searchKey = createNormalizedClaimSearchKey(options);
   const claimSearchResult = claimSearchByQuery[searchKey];
   const claimSearchResultLastPageReached = claimSearchByQueryLastPageReached[searchKey];
+  const isUnfetchedClaimSearch = claimSearchResult === undefined;
 
   // uncomment to fix an item on a page
   //   const fixUri = 'lbry://@corbettreport#0/lbryodysee#5';
@@ -515,8 +517,27 @@ function ClaimListDiscover(props: Props) {
     </div>
   );
 
-  const renderUris = uris || claimSearchResult;
-  injectPinUrls(renderUris, orderParam, pins);
+  // **************************************************************************
+  // **************************************************************************
+
+  let finalUris;
+
+  if (uris) {
+    // --- direct uris
+    finalUris = uris;
+    injectPinUrls(finalUris, orderParam, pins);
+    filterExcludedUris(finalUris, excludeUris);
+  } else {
+    // --- searched uris
+    if (isUnfetchedClaimSearch && prevUris.current) {
+      finalUris = prevUris.current;
+    } else {
+      finalUris = claimSearchResult;
+      injectPinUrls(finalUris, orderParam, pins);
+      filterExcludedUris(finalUris, excludeUris);
+      prevUris.current = finalUris;
+    }
+  }
 
   // **************************************************************************
   // Helpers
@@ -609,12 +630,19 @@ function ClaimListDiscover(props: Props) {
     }
   }
 
+  function filterExcludedUris(uris, excludeUris) {
+    if (uris && excludeUris && excludeUris.length) {
+      uris = uris.filter((uri) => !excludeUris.includes(uri));
+    }
+  }
+
   // **************************************************************************
   // **************************************************************************
-  useFetchViewCount(fetchViewCount, renderUris, claimsByUri, doFetchViewCount);
+
+  useFetchViewCount(fetchViewCount, finalUris, claimsByUri, doFetchViewCount);
 
   const shouldFetchUserMemberships = true;
-  const arrayOfContentUris = renderUris;
+  const arrayOfContentUris = finalUris;
   const convertClaimUrlsToIds = claimsByUri;
 
   useGetUserMemberships(shouldFetchUserMemberships, arrayOfContentUris, convertClaimUrlsToIds, doFetchUserMemberships);
@@ -668,7 +696,7 @@ function ClaimListDiscover(props: Props) {
           <ClaimList
             tileLayout
             loading={loading}
-            uris={renderUris}
+            uris={finalUris}
             prefixUris={prefixUris}
             onScrollBottom={handleScrollBottom}
             page={page}
@@ -682,7 +710,6 @@ function ClaimListDiscover(props: Props) {
             showNoSourceClaims={showNoSourceClaims}
             empty={empty}
             maxClaimRender={maxClaimRender}
-            excludeUris={excludeUris}
             loadedCallback={loadedCallback}
             swipeLayout={swipeLayout}
           />
@@ -709,7 +736,7 @@ function ClaimListDiscover(props: Props) {
           <ClaimList
             type={type}
             loading={loading}
-            uris={renderUris}
+            uris={finalUris}
             prefixUris={prefixUris}
             onScrollBottom={handleScrollBottom}
             page={page}
@@ -723,7 +750,6 @@ function ClaimListDiscover(props: Props) {
             showNoSourceClaims={hasNoSource || showNoSourceClaims}
             empty={empty}
             maxClaimRender={maxClaimRender}
-            excludeUris={excludeUris}
             loadedCallback={loadedCallback}
             swipeLayout={swipeLayout}
           />
