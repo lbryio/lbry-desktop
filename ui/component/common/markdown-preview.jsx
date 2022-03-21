@@ -198,6 +198,7 @@ export default React.memo<MarkdownProps>(function MarkdownPreview(props: Markdow
       // Workaraund of remarkOptions.Fragment
       div: React.Fragment,
       img: (imgProps) => {
+        // getImageProxyUrl() can also be used if we just want to proxy without compression.
         const imageCdnUrl =
           getThumbnailCdnUrl({ thumbnail: imgProps.src, width: 0, height: 0, quality: 85 }) || MISSING_THUMB_DEFAULT;
         if ((isStakeEnoughForPreview(stakedLevel) || hasMembership) && !isEmote(imgProps.title, imgProps.src)) {

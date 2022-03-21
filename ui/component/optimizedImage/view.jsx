@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { getThumbnailCdnUrl } from 'util/thumbnail';
+import { getImageProxyUrl, getThumbnailCdnUrl } from 'util/thumbnail';
 
 function scaleToDevicePixelRatio(value: number) {
   const devicePixelRatio = window.devicePixelRatio || 1.0;
@@ -12,7 +12,9 @@ function getOptimizedImgUrl(url, width, height, quality) {
   if (url && !url.startsWith('/public/')) {
     optimizedUrl = url.trim().replace(/^http:\/\//i, 'https://');
 
-    if (!optimizedUrl.endsWith('.gif')) {
+    if (optimizedUrl.endsWith('.gif')) {
+      optimizedUrl = getImageProxyUrl(optimizedUrl);
+    } else {
       optimizedUrl = getThumbnailCdnUrl({ thumbnail: optimizedUrl, width, height, quality });
     }
   }

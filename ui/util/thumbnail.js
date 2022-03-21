@@ -1,5 +1,5 @@
 // @flow
-import { THUMBNAIL_CDN_URL, THUMBNAIL_HEIGHT, THUMBNAIL_WIDTH, THUMBNAIL_QUALITY } from 'config';
+import { IMAGE_PROXY_URL, THUMBNAIL_CDN_URL, THUMBNAIL_HEIGHT, THUMBNAIL_WIDTH, THUMBNAIL_QUALITY } from 'config';
 
 type Props = {
   thumbnail: ?string,
@@ -22,4 +22,11 @@ export function getThumbnailCdnUrl(props: Props) {
   if (thumbnail) {
     return `${THUMBNAIL_CDN_URL}s:${width}:${height}/quality:${quality}/plain/${thumbnail}`;
   }
+}
+
+export function getImageProxyUrl(thumbnail: ?string) {
+  if (thumbnail && !thumbnail.startsWith(THUMBNAIL_CDN_URL) && !thumbnail.startsWith(IMAGE_PROXY_URL)) {
+    return `${IMAGE_PROXY_URL}?${thumbnail}`;
+  }
+  return thumbnail;
 }

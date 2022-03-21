@@ -1,6 +1,6 @@
 // @flow
 import type { Node } from 'react';
-import { getThumbnailCdnUrl } from 'util/thumbnail';
+import { getImageProxyUrl, getThumbnailCdnUrl } from 'util/thumbnail';
 import React from 'react';
 import FreezeframeWrapper from './FreezeframeWrapper';
 import Placeholder from './placeholder.png';
@@ -36,8 +36,9 @@ function FileThumbnail(props: Props) {
   }, [hasResolvedClaim, uri, doResolveUri, passedThumbnail]);
 
   if (!allowGifs && isGif) {
+    const url = getImageProxyUrl(thumbnail);
     return (
-      <FreezeframeWrapper src={thumbnail} className={classnames('media__thumb', className)}>
+      <FreezeframeWrapper src={url} className={classnames('media__thumb', className)}>
         {children}
       </FreezeframeWrapper>
     );
@@ -48,8 +49,12 @@ function FileThumbnail(props: Props) {
   let url = thumbnail || (hasResolvedClaim ? Placeholder : '');
   // @if TARGET='web'
   // Pass image urls through a compression proxy
-  if (thumbnail && !(isGif && allowGifs)) {
-    url = getThumbnailCdnUrl({ thumbnail });
+  if (thumbnail) {
+    if (isGif) {
+      url = getImageProxyUrl(thumbnail); // Note: the '!allowGifs' case is handled in Freezeframe above.
+    } else {
+      url = getThumbnailCdnUrl({ thumbnail });
+    }
   }
   // @endif
 

@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { parseURI } from 'util/lbryURI';
+import { getImageProxyUrl } from 'util/thumbnail';
 import classnames from 'classnames';
 import Gerbil from './gerbil.png';
 import FreezeframeWrapper from 'component/fileThumbnail/FreezeframeWrapper';
@@ -95,8 +96,9 @@ function ChannelThumbnail(props: Props) {
   }, [doResolveUri, shouldResolve, uri]);
 
   if (isGif && !allowGifs) {
+    const url = getImageProxyUrl(channelThumbnail);
     return (
-      <FreezeframeWrapper src={channelThumbnail} className={classnames('channel-thumbnail', className)}>
+      <FreezeframeWrapper src={url} className={classnames('channel-thumbnail', className)}>
         {showMemberBadge && <PremiumBadge {...badgeProps} />}
       </FreezeframeWrapper>
     );
