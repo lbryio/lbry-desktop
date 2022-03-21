@@ -118,6 +118,7 @@ function ChannelThumbnail(props: Props) {
         className={!channelThumbnail ? 'channel-thumbnail__default' : 'channel-thumbnail__custom'}
         src={(!thumbLoadError && channelThumbnail) || defaultAvatar}
         width={small || xsmall ? 64 : 160}
+        quality={small || xsmall ? 85 : 95}
         loading={noLazyLoad ? undefined : 'lazy'}
         onError={() => {
           if (setThumbUploadError) {
