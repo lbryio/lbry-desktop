@@ -7,6 +7,7 @@ import * as PAGES from 'constants/pages';
 
 export const PAGE_TITLE = {
   // --- Categories ---
+  [PAGES.ARTISTS]: 'Artists',
   [PAGES.CREATIVE_ARTS]: 'The Arts',
   [PAGES.DISCOVER]: 'Wild West',
   [PAGES.EDUCATION]: 'Education',

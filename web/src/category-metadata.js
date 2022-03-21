@@ -3,6 +3,11 @@ const PAGES = require('../../ui/constants/pages');
 // Uncomment as you add metadata
 
 module.exports.CATEGORY_METADATA = {
+  // [PAGES.ARTISTS]: () => ({
+  //   title: 'Artists',
+  //   description: "",  <------ FILL
+  //   image: '',        <------ FILL
+  // }),
   [PAGES.CREATIVE_ARTS]: () => ({
     title: 'The Arts',
     description: `Odysee's home for art, animation, comedy, and everything inbetween`,

@@ -7,6 +7,7 @@ exports.AUTH_WALLET_PASSWORD = 'walletpassword';
 exports.BACKUP = 'backup';
 exports.CHANNEL = 'channel';
 exports.DISCOVER = 'discover';
+exports.ARTISTS = 'artists';
 exports.BIG_HITS = 'bighits';
 exports.CREATIVE_ARTS = 'arts';
 exports.MOVIES = 'movies';
