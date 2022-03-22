@@ -57,7 +57,7 @@ export default function ChannelsPage(props: Props) {
     <Page className="channelsPage-wrapper">
       {/* TODO: use variabled spacing */}
       <h1 className="section__title" style={{ marginBottom: '15px' }}>
-        Active channel
+        {__('Active channel')}
       </h1>
       <ChannelSelector />
 
