@@ -82,7 +82,7 @@ export default handleActions(
       if (activeChannelClaims && activeChannelClaims.length > 0) {
         const subs = [];
         activeChannelClaims.forEach((claim) => {
-          const index = state.subscriptions.findIndex((sub) => isURIEqual(sub.uri, claim.permanent_url));
+          const index = state.subscriptions.findIndex((sub) => isURIEqual(sub.uri, claim?.permanent_url));
           if (index !== -1) {
             subs.push(state.subscriptions[index]);
           }

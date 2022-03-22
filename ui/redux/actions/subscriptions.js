@@ -1,9 +1,9 @@
 // @flow
-import Lbry from 'lbry';
 import * as ACTIONS from 'constants/action_types';
 import { SIDEBAR_SUBS_DISPLAYED } from 'constants/subscriptions';
 import REWARDS from 'rewards';
 import { Lbryio } from 'lbryinc';
+import { doClaimSearch } from 'redux/actions/claims';
 import { doClaimRewardType } from 'redux/actions/rewards';
 import { getChannelFromClaim } from 'util/claim';
 import { parseURI } from 'util/lbryURI';
@@ -128,11 +128,13 @@ export function doFetchLastActiveSubs(forceFetch: boolean = false, count: number
       order_by: ['release_time'],
     };
 
-    Lbry.claim_search(searchOptions)
-      .then((result) => {
+    dispatch(doClaimSearch(searchOptions))
+      .then((results) => {
+        const values = Object.values(results || {});
         dispatch({
           type: ACTIONS.FETCH_LAST_ACTIVE_SUBS_DONE,
-          data: result.items.map((claim) => getChannelFromClaim(claim)),
+          // $FlowFixMe https://github.com/facebook/flow/issues/2221
+          data: values.map((v) => getChannelFromClaim(v.stream)),
         });
       })
       .catch(() => {
