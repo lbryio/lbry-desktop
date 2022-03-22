@@ -72,6 +72,8 @@ export default function RecommendedPersonal(props: Props) {
     doSetClientSetting,
     doToast,
   } = props;
+
+  const ref = React.useRef();
   const [markedGid, setMarkedGid] = React.useState('');
   const [view, setView] = React.useState(VIEW.ALL_VISIBLE);
   const isLargeScreen = useIsLargeScreen();
@@ -136,7 +138,7 @@ export default function RecommendedPersonal(props: Props) {
   }
 
   return (
-    <>
+    <div ref={ref}>
       <SectionHeader title={__('Recommended For You')} icon={ICONS.WEB} onHide={doHideFyp} />
 
       <ClaimList
@@ -157,12 +159,17 @@ export default function RecommendedPersonal(props: Props) {
                 setView(VIEW.EXPANDED);
               } else {
                 setView(VIEW.COLLAPSED);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
+                if (ref.current) {
+                  ref.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
+                } else {
+                  // Unlikely to happen, but should have a fallback (just go all the way up)
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
               }
             }}
           />
         </div>
       )}
-    </>
+    </div>
   );
 }
