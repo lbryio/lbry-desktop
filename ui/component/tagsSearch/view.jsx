@@ -65,7 +65,7 @@ export default function TagsSearch(props: Props) {
   } = props;
   const [newTag, setNewTag] = useState('');
   const doesTagMatch = (name) => {
-    const nextTag = newTag.substr(newTag.lastIndexOf(',') + 1, newTag.length).trim();
+    const nextTag = newTag.slice(newTag.lastIndexOf(',') + 1, newTag.length).trim();
     return newTag ? name.toLowerCase().includes(nextTag.toLowerCase()) : true;
   };
 

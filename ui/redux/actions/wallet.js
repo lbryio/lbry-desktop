@@ -80,7 +80,7 @@ export function doFetchTransactions(page = 1, pageSize = 999999) {
 
 export function doFetchTxoPage() {
   return (dispatch, getState) => {
-    const fetchId = Math.random().toString(36).substr(2, 9);
+    const fetchId = Math.random().toString(36).slice(2, 11);
 
     dispatch({
       type: ACTIONS.FETCH_TXO_PAGE_STARTED,

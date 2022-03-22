@@ -55,7 +55,7 @@ var Konami = function(callback) {
       konami.input += e ? e.keyCode : event.keyCode;
 
       if (konami.input.length > konami.pattern.length) {
-        konami.input = konami.input.substr(konami.input.length - konami.pattern.length);
+        konami.input = konami.input.slice(konami.input.length - konami.pattern.length);
       }
       if (konami.input === konami.pattern) {
         konami.code(konami._currentLink);
