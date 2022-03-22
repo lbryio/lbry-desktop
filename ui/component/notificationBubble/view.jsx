@@ -2,6 +2,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import { ENABLE_UI_NOTIFICATIONS } from 'config';
+import { buildUnseenCountStr } from 'util/notifications';
 
 type Props = {
   unseenCount: number,
@@ -28,7 +29,7 @@ export default function NotificationHeaderButton(props: Props) {
           'notification__bubble--small': unseenCount > 9,
         })}
       >
-        {unseenCount > 20 ? '20+' : unseenCount}
+        {buildUnseenCountStr(unseenCount)}
       </span>
     </span>
   );

@@ -8,6 +8,7 @@ import { selectTitleForUri } from 'redux/selectors/claims';
 import { doSetHasNavigated } from 'redux/actions/app';
 import { doUserSetReferrer } from 'redux/actions/user';
 import { selectHasUnclaimedRefereeReward } from 'redux/selectors/rewards';
+import { selectUnseenNotificationCount } from 'redux/selectors/notifications';
 
 const select = (state) => {
   const { pathname, hash } = state.router.location;
@@ -36,6 +37,7 @@ const select = (state) => {
     hasUnclaimedRefereeReward: selectHasUnclaimedRefereeReward(state),
     homepageData: selectHomepageData(state),
     wildWestDisabled: selectWildWestDisabled(state),
+    unseenCount: selectUnseenNotificationCount(state),
   };
 };
 

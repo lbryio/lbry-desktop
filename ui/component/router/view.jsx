@@ -12,6 +12,7 @@ import { SITE_TITLE, WELCOME_VERSION } from 'config';
 import LoadingBarOneOff from 'component/loadingBarOneOff';
 import { GetLinksData } from 'util/buildHomepage';
 import * as CS from 'constants/claim_search';
+import { buildUnseenCountStr } from 'util/notifications';
 
 import HomePage from 'page/home';
 
@@ -138,6 +139,7 @@ type Props = {
   hasUnclaimedRefereeReward: boolean,
   homepageData: any,
   wildWestDisabled: boolean,
+  unseenCount: number,
 };
 
 type PrivateRouteProps = Props & {
@@ -178,6 +180,7 @@ function AppRouter(props: Props) {
     setReferrer,
     homepageData,
     wildWestDisabled,
+    unseenCount,
   } = props;
 
   const { entries, listen, action: historyAction } = history;
@@ -246,10 +249,10 @@ function AppRouter(props: Props) {
       document.title = getDefaultTitle(pathname);
     }
 
-    // @if TARGET='app'
-    entries[entryIndex].title = document.title;
-    // @endif
-  }, [pathname, entries, entryIndex, title, uri]);
+    if (unseenCount > 0) {
+      document.title = `(${buildUnseenCountStr(unseenCount)}) ${document.title}`;
+    }
+  }, [pathname, entries, entryIndex, title, uri, unseenCount]);
 
   useEffect(() => {
     if (!hasLinkedCommentInUrl) {
