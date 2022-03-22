@@ -276,7 +276,7 @@ function PublishFile(props: Props) {
       filePath: file.path || file,
     };
     // Strip off extention and replace invalid characters
-    let fileName = name || (file.name && file.name.substr(0, file.name.lastIndexOf('.'))) || '';
+    let fileName = name || (file.name && file.name.substring(0, file.name.lastIndexOf('.'))) || '';
 
     if (!isStillEditing) {
       publishFormParams.name = parseName(fileName);

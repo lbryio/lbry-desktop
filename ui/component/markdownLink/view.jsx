@@ -90,7 +90,7 @@ function MarkdownLink(props: Props) {
         className="button--external-link"
         onClick={() => {
           if (window.player) {
-            window.player.currentTime(parseInt(href.substr(3)));
+            window.player.currentTime(parseInt(href.slice(3)));
             window.scrollTo(0, 0);
           }
         }}

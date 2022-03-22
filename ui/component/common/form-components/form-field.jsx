@@ -157,7 +157,7 @@ export class FormField extends React.PureComponent<Props> {
 
                 delta = instance.getValue().length + delta - textAreaMaxLength;
                 if (delta > 0) {
-                  str = str.substr(0, str.length - delta);
+                  str = str.substring(0, str.length - delta);
                   changes.update(changes.from, changes.to, str.split('\n'));
                 }
               }

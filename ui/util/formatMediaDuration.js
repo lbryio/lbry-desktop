@@ -15,9 +15,9 @@ export default function formatMediaDuration(duration = 0, config) {
   let date = new Date(null);
   date.setSeconds(duration);
 
-  let timeString = date.toISOString().substr(11, 8);
+  let timeString = date.toISOString().slice(11, 19);
   if (timeString.startsWith('00:')) {
-    timeString = timeString.substr(3);
+    timeString = timeString.slice(3);
   }
 
   return timeString;
