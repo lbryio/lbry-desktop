@@ -21,7 +21,7 @@ export default function SettingsRow(props: Props) {
     <div
       className={classnames('card__main-actions settings-row', {
         'section__actions--between': !multirow,
-        'opacity-30': disabled,
+        'opacity-40': disabled,
         'card--highlightedActive': highlighted,
       })}
     >
@@ -40,6 +40,7 @@ export default function SettingsRow(props: Props) {
         className={classnames('settings-row__value', {
           'settings-row__value--multirow': multirow,
           'settings-row__vertical-separator': useVerticalSeparator,
+          'content__non-clickable': disabled,
         })}
       >
         {children && children}
