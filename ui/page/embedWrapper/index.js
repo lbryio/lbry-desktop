@@ -11,6 +11,7 @@ import { doCommentSocketConnect, doCommentSocketDisconnect } from 'redux/actions
 import { doFetchActiveLivestreams, doFetchChannelLiveStatus } from 'redux/actions/livestream';
 import { selectIsActiveLivestreamForUri, selectActiveLivestreamInitialized } from 'redux/selectors/livestream';
 import { getThumbnailFromClaim, isStreamPlaceholderClaim } from 'util/claim';
+import { doUserSetReferrerWithUri } from 'redux/actions/user';
 
 const select = (state, props) => {
   const { match } = props;
@@ -58,6 +59,7 @@ const perform = {
   doCommentSocketConnect,
   doCommentSocketDisconnect,
   doFetchActiveLivestreams,
+  setReferrer: doUserSetReferrerWithUri,
 };
 
 export default connect(select, perform)(EmbedWrapperPage);

@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import REWARDS from 'rewards';
+import { selectUser } from 'redux/selectors/user';
 
 const selectState = (state) => state.rewards || {};
 
@@ -81,3 +82,5 @@ export const selectWeeklyWatchClaimedThisWeek = createSelector(selectUnclaimedRe
   }
   return false;
 });
+
+export const selectIsRewardApproved = createSelector(selectUser, (user) => user && user.is_reward_approved);
