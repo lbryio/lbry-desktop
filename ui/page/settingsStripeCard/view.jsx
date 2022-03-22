@@ -10,6 +10,7 @@ import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
 import * as PAGES from 'constants/pages';
+import { FormField } from 'component/common/form';
 import { STRIPE_PUBLIC_KEY } from 'config';
 import { getStripeEnvironment } from 'util/stripe';
 let stripeEnvironment = getStripeEnvironment();
@@ -51,11 +52,20 @@ class SettingsStripeCard extends React.Component<Props, State> {
       pageTitle: 'Add Card',
       userCardDetails: {},
       paymentMethodId: '',
+      preferredCurrency: 'USD',
     };
   }
 
   componentDidMount() {
     let that = this;
+
+    const { preferredCurrency } = this.props;
+
+    if (preferredCurrency) {
+      that.setState({
+        preferredCurrency: preferredCurrency,
+      });
+    }
 
     let doToast = this.props.doToast;
 
@@ -345,6 +355,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
         };
       }, 0);
     }
+
   }
 
   render() {
@@ -356,9 +367,24 @@ class SettingsStripeCard extends React.Component<Props, State> {
       });
     }
 
+    const { setPreferredCurrency } = this.props;
+
+    // when user changes currency in selector
+    function onCurrencyChange(event: SyntheticInputEvent<*>) {
+      const { value } = event.target;
+
+      // update preferred currency in frontend
+      that.setState({
+        preferredCurrency: value,
+      });
+
+      // update client settings
+      setPreferredCurrency(value);
+    }
+
     const { scriptFailedToLoad, openModal } = this.props;
 
-    const { currentFlowStage, pageTitle, userCardDetails, paymentMethodId } = this.state;
+    const { currentFlowStage, pageTitle, userCardDetails, paymentMethodId, preferredCurrency } = this.state;
 
     return (
       <Page
@@ -439,6 +465,27 @@ class SettingsStripeCard extends React.Component<Props, State> {
               }
             />
             <br />
+
+            <div className="currency-to-use-div">
+              <h1 className="currency-to-use-header">Currency To Use:</h1>
+
+              <fieldset-section>
+                <FormField
+                  className="currency-to-use-selector"
+                  name="currency_selector"
+                  type="select"
+                  onChange={onCurrencyChange}
+                  value={preferredCurrency}
+                  // disabled={automaticDarkModeEnabled}
+                >
+                  {['USD', 'EUR'].map((currency) => (
+                    <option key={currency} value={currency}>
+                      {currency === 'USD' ? __('USD') : __('EUR')}
+                    </option>
+                  ))}
+                </FormField>
+              </fieldset-section>
+            </div>
           </div>
         )}
       </Page>

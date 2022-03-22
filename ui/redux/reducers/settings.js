@@ -8,6 +8,7 @@ import { UNSYNCED_SETTINGS } from 'config';
 
 const { CLIENT_SYNC_KEYS } = SHARED_PREFERENCES;
 const settingsToIgnore = (UNSYNCED_SETTINGS && UNSYNCED_SETTINGS.trim().split(' ')) || [];
+
 const clientSyncKeys = settingsToIgnore.length
   ? CLIENT_SYNC_KEYS.filter((k) => !settingsToIgnore.includes(k))
   : CLIENT_SYNC_KEYS;
@@ -65,6 +66,7 @@ const defaultState = {
       currency: 'LBC',
       amount: 0.1,
     },
+    [SETTINGS.PREFERRED_CURRENCY]: 'USD',
 
     // Content
     [SETTINGS.SHOW_MATURE]: false,

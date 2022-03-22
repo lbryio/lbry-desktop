@@ -12,11 +12,11 @@
   --height-badge: 24px;
 
   // Spacing
-  --spacing-xxxs: calc(2rem / 6);
-  --spacing-xxs: calc(2rem / 5);
-  --spacing-xs: calc(2rem / 4);
-  --spacing-s: calc(2rem / 3);
-  --spacing-m: calc(2rem / 2);
+  --spacing-xxxs: calc(2rem / 6); // 0.33
+  --spacing-xxs: calc(2rem / 5); // 0.4
+  --spacing-xs: calc(2rem / 4); // 0.5
+  --spacing-s: calc(2rem / 3); // 0.66
+  --spacing-m: 1rem;
   --spacing-l: 2rem;
   --spacing-xl: 3rem;
   --spacing-xxl: 4rem;
