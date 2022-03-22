@@ -37,7 +37,11 @@
     }
   ],
   "mac": {
-    "category": "public.app-category.entertainment"
+    "category": "public.app-category.entertainment",
+    "entitlements": "build/entitlements.mac.plist",
+    "entitlementsInherit": "build/entitlements.mac.plist",
+    "hardenedRuntime" : true,
+    "gatekeeperAssess": false
   },
   "dmg": {
     "iconSize": 128,
