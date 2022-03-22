@@ -197,7 +197,9 @@ function AppRouter(props: Props) {
       <Route
         key={dynamicRouteProps.route}
         path={dynamicRouteProps.route}
-        component={(routerProps) => <DiscoverPage {...routerProps} dynamicRouteProps={dynamicRouteProps} />}
+        component={(routerProps) => (
+          <DiscoverPage {...routerProps} dynamicRouteProps={dynamicRouteProps} hideRepostRibbon />
+        )}
       />
     ));
   }, [homepageData, isLargeScreen]);

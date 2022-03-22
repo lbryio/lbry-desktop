@@ -116,11 +116,13 @@ function HomePage(props: Props) {
       />
     );
 
+    const isFollowingSection = link === `/$/${PAGES.CHANNELS_FOLLOWING}`;
+
     return (
       <div
         key={title}
         className={classnames('claim-grid__wrapper', {
-          'show-ribbon': index === 0,
+          'hide-ribbon': !isFollowingSection,
         })}
       >
         {title && typeof title === 'string' && (
@@ -141,7 +143,7 @@ function HomePage(props: Props) {
             label={__('View More')}
           />
         )}
-        {title && (title === 'Recent From Following' || title === 'Following') && <RecommendedPersonal />}
+        {isFollowingSection && <RecommendedPersonal />}
       </div>
     );
   }

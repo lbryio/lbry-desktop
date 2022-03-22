@@ -1,9 +1,10 @@
 // @flow
+import React, { useRef } from 'react';
+import classnames from 'classnames';
 import { DOMAIN, SIMPLE_SITE } from 'config';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import * as CS from 'constants/claim_search';
-import React, { useRef } from 'react';
 import Page from 'component/page';
 import ClaimListDiscover from 'component/claimListDiscover';
 import Button from 'component/button';
@@ -24,6 +25,7 @@ type Props = {
   followedTags: Array<Tag>,
   repostedUri: string,
   repostedClaim: ?GenericClaim,
+  hideRepostRibbon?: boolean,
   languageSetting: string,
   searchInLanguage: boolean,
   doToggleTagFollowDesktop: (string) => void,
@@ -39,6 +41,7 @@ function DiscoverPage(props: Props) {
     followedTags,
     repostedClaim,
     repostedUri,
+    hideRepostRibbon,
     languageSetting,
     searchInLanguage,
     doToggleTagFollowDesktop,
@@ -175,7 +178,11 @@ function DiscoverPage(props: Props) {
   }
 
   return (
-    <Page noFooter fullWidthPage={tileLayout} className="main__discover">
+    <Page
+      noFooter
+      fullWidthPage={tileLayout}
+      className={classnames('main__discover', { 'hide-ribbon': hideRepostRibbon })}
+    >
       <ClaimListDiscover
         pins={getPins(dynamicRouteProps)}
         hideFilters={SIMPLE_SITE ? !(dynamicRouteProps || tags) : undefined}
