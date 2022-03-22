@@ -89,6 +89,10 @@
   ul {
     padding-bottom: var(--spacing-s);
   }
+
+  ul:empty {
+    display: none;
+  }
 }
 
 .navigation-touch {
