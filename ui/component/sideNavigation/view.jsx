@@ -336,6 +336,10 @@ function SideNavigation(props: Props) {
           lastActiveSubs && lastActiveSubs.length > 0 ? lastActiveSubs : subscriptions.slice(0, SIDEBAR_SUBS_DISPLAYED);
       }
 
+      if (lastActiveSubs === undefined) {
+        return null; // Don't show yet, just wait to save some renders
+      }
+
       return (
         <ul className="navigation__secondary navigation-links">
           {subscriptions.length > SIDEBAR_SUBS_DISPLAYED && (

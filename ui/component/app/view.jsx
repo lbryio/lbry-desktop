@@ -1,6 +1,6 @@
 // @flow
 import * as PAGES from 'constants/pages';
-import React, { useEffect, useRef, useState, useLayoutEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { lazyImport } from 'util/lazyImport';
 import { tusUnlockAndNotify, tusHandleTabUpdates } from 'util/tus';
 import classnames from 'classnames';
@@ -24,7 +24,6 @@ import usePersistedState from 'effects/use-persisted-state';
 import useConnectionStatus from 'effects/use-connection-status';
 import Spinner from 'component/spinner';
 import LANGUAGES from 'constants/languages';
-import { SIDEBAR_SUBS_DISPLAYED } from 'constants/subscriptions';
 import YoutubeWelcome from 'web/component/youtubeReferralWelcome';
 import {
   useDegradedPerformance,
@@ -86,12 +85,10 @@ type Props = {
   syncFatalError: boolean,
   activeChannelClaim: ?ChannelClaim,
   myChannelClaimIds: ?Array<string>,
-  subscriptions: Array<Subscription>,
   hasPremiumPlus: ?boolean,
   setActiveChannelIfNotSet: () => void,
   setIncognito: (boolean) => void,
   fetchModBlockedList: () => void,
-  resolveUris: (Array<string>) => void,
   fetchModAmIList: () => void,
   homepageFetched: boolean,
 };
@@ -126,8 +123,6 @@ function App(props: Props) {
     setActiveChannelIfNotSet,
     setIncognito,
     fetchModBlockedList,
-    resolveUris,
-    subscriptions,
     hasPremiumPlus,
     fetchModAmIList,
     homepageFetched,
@@ -149,10 +144,8 @@ function App(props: Props) {
 
   const { pathname, hash, search } = props.location;
   const [upgradeNagClosed, setUpgradeNagClosed] = useState(false);
-  const [resolvedSubscriptions, setResolvedSubscriptions] = useState(false);
   const [retryingSync, setRetryingSync] = useState(false);
   const [langRenderKey, setLangRenderKey] = useState(0);
-  const [sidebarOpen] = usePersistedState('sidebar', true);
   const [seenSunsestMessage, setSeenSunsetMessage] = usePersistedState('lbrytv-sunset', false);
   const showUpgradeButton =
     (autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable)) && !upgradeNagClosed;
@@ -169,7 +162,6 @@ function App(props: Props) {
   const hasNoChannels = myChannelClaimIds && myChannelClaimIds.length === 0;
   const shouldMigrateLanguage = LANGUAGE_MIGRATIONS[language];
   const hasActiveChannelClaim = activeChannelClaim !== undefined;
-  const isPersonalized = !IS_WEB || hasVerifiedEmail;
   const renderFiledrop = !isMobile && isAuthenticated;
   const connectionStatus = useConnectionStatus();
 
@@ -474,16 +466,6 @@ function App(props: Props) {
       setHasSignedIn(true);
     }
   }, [hasVerifiedEmail, signIn, hasSignedIn]);
-
-  // batch resolve subscriptions to be used by the sideNavigation component.
-  // add it here so that it only resolves the first time, despite route changes.
-  // useLayoutEffect because it has to be executed before the sideNavigation component requests them
-  useLayoutEffect(() => {
-    if (sidebarOpen && isPersonalized && subscriptions && !resolvedSubscriptions) {
-      setResolvedSubscriptions(true);
-      resolveUris(subscriptions.slice(0, SIDEBAR_SUBS_DISPLAYED).map((sub) => sub.uri));
-    }
-  }, [sidebarOpen, isPersonalized, resolvedSubscriptions, subscriptions, resolveUris, setResolvedSubscriptions]);
 
   useDegradedPerformance(setLbryTvApiStatus, user);
 

@@ -10,9 +10,8 @@ import {
   selectHomepageFetched,
 } from 'redux/selectors/user';
 import { selectUnclaimedRewards } from 'redux/selectors/rewards';
-import { doFetchChannelListMine, doFetchCollectionListMine, doResolveUris } from 'redux/actions/claims';
+import { doFetchChannelListMine, doFetchCollectionListMine } from 'redux/actions/claims';
 import { selectMyChannelClaimIds } from 'redux/selectors/claims';
-import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import { selectLanguage, selectLoadedLanguages, selectThemePath } from 'redux/selectors/settings';
 import {
   selectIsUpgradeAvailable,
@@ -46,7 +45,6 @@ const select = (state) => ({
   syncFatalError: selectSyncFatalError(state),
   activeChannelClaim: selectActiveChannelClaim(state),
   myChannelClaimIds: selectMyChannelClaimIds(state),
-  subscriptions: selectSubscriptions(state),
   hasPremiumPlus: selectOdyseeMembershipIsPremiumPlus(state),
   homepageFetched: selectHomepageFetched(state),
 });
@@ -62,7 +60,6 @@ const perform = (dispatch) => ({
   setActiveChannelIfNotSet: () => dispatch(doSetActiveChannel()),
   setIncognito: () => dispatch(doSetIncognito()),
   fetchModBlockedList: () => dispatch(doFetchModBlockedList()),
-  resolveUris: (uris) => dispatch(doResolveUris(uris)),
   fetchModAmIList: () => dispatch(doFetchCommentModAmIList()),
 });
 

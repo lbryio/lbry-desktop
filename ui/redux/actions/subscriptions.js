@@ -118,6 +118,14 @@ export function doFetchLastActiveSubs(forceFetch: boolean = false, count: number
     const channelIds = subscriptions.map((sub) => parseIdFromUri(sub.uri));
     activeSubsLastFetchedTime = now;
 
+    if (channelIds.length === 0) {
+      dispatch({
+        type: ACTIONS.FETCH_LAST_ACTIVE_SUBS_DONE,
+        data: [],
+      });
+      return;
+    }
+
     const searchOptions = {
       limit_claims_per_channel: 1,
       channel_ids: channelIds,
