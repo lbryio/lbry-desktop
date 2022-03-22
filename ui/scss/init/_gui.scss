@@ -623,6 +623,11 @@ img {
   }
 }
 
+.homePage-wrapper__section-title {
+  display: flex;
+  justify-content: space-between;
+}
+
 // The following wrapper classes are temporary to fix page specific issues
 .discoverPage-wrapper {
   .claim-preview__wrapper {

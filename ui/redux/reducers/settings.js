@@ -43,6 +43,7 @@ const defaultState = {
     [SETTINGS.THEME]: __('dark'),
     [SETTINGS.THEMES]: [__('dark'), __('light')],
     [SETTINGS.HOMEPAGE]: null,
+    [SETTINGS.HOMEPAGE_ORDER]: { active: null, hidden: null },
     [SETTINGS.HIDE_SPLASH_ANIMATION]: false,
     [SETTINGS.HIDE_BALANCE]: false,
     [SETTINGS.OS_NOTIFICATIONS_ENABLED]: true,

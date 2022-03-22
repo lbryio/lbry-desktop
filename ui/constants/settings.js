@@ -34,6 +34,7 @@ export const TAGS_ACKNOWLEDGED = 'tags_acknowledged';
 export const REWARDS_ACKNOWLEDGED = 'rewards_acknowledged';
 export const SEARCH_IN_LANGUAGE = 'search_in_language';
 export const HOMEPAGE = 'homepage';
+export const HOMEPAGE_ORDER = 'homepage_order';
 export const HIDE_REPOSTS = 'hide_reposts';
 export const HIDE_SCHEDULED_LIVESTREAMS = 'hide_scheduled_livestreams';
 export const HIDE_FYP = 'hide_fyp';

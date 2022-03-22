@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import * as SETTINGS from 'constants/settings';
+import { doOpenModal } from 'redux/actions/app';
 import { doFetchActiveLivestreams } from 'redux/actions/livestream';
 import { selectAdBlockerFound } from 'redux/selectors/app';
 import { selectActiveLivestreams, selectFetchingActiveLivestreams } from 'redux/selectors/livestream';
@@ -20,10 +21,12 @@ const select = (state) => ({
   fetchingActiveLivestreams: selectFetchingActiveLivestreams(state),
   hideScheduledLivestreams: selectClientSetting(state, SETTINGS.HIDE_SCHEDULED_LIVESTREAMS),
   adBlockerFound: selectAdBlockerFound(state),
+  homepageOrder: selectClientSetting(state, SETTINGS.HOMEPAGE_ORDER),
 });
 
 const perform = (dispatch) => ({
   doFetchActiveLivestreams: () => dispatch(doFetchActiveLivestreams()),
+  doOpenModal: (modal, props) => dispatch(doOpenModal(modal, props)),
 });
 
 export default connect(select, perform)(DiscoverPage);

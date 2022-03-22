@@ -1,43 +1,15 @@
 // @flow
 import React from 'react';
 import Button from 'component/button';
-import HelpLink from 'component/common/help-link';
-import Icon from 'component/common/icon';
 import ClaimList from 'component/claimList';
-import { URL, SHARE_DOMAIN_URL } from 'config';
+import I18nMessage from 'component/i18nMessage';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
-import * as SETTINGS from 'constants/settings';
 import { useIsLargeScreen, useIsMediumScreen } from 'effects/use-screensize';
 
 // TODO: recsysFyp will be moved into 'RecSys', so the redux import in a jsx
 // violation is just temporary.
 import { recsysFyp } from 'redux/actions/search';
-
-// ****************************************************************************
-// SectionHeader (TODO: DRY)
-// ****************************************************************************
-
-type SectionHeaderProps = {
-  title: string,
-  navigate?: string,
-  icon?: string,
-  help?: string,
-  onHide?: () => void,
-};
-
-const SectionHeader = ({ title, icon = '', help, onHide }: SectionHeaderProps) => {
-  const SHARE_DOMAIN = SHARE_DOMAIN_URL || URL;
-  return (
-    <h1 className="claim-grid__header">
-      <Icon className="claim-grid__header-icon" sectionIcon icon={icon} size={20} />
-      <span className="claim-grid__title">{title}</span>
-      {help}
-      <HelpLink href={`${SHARE_DOMAIN}/$/${PAGES.FYP}`} iconSize={24} description={__('Learn more')} />
-      <Button button="link" label={__('Hide')} onClick={onHide} className={'ml-m text-s'} />
-    </h1>
-  );
-};
 
 // ****************************************************************************
 // RecommendedPersonal
@@ -50,28 +22,17 @@ function getSuitablePageSizeForScreen(defaultSize, isLargeScreen, isMediumScreen
 }
 
 type Props = {
+  header: React$Node,
   onLoad: (displayed: boolean) => void,
   // --- redux ---
   userId: ?string,
   personalRecommendations: { gid: string, uris: Array<string> },
   hasMembership: boolean,
-  hideFyp: boolean,
   doFetchPersonalRecommendations: () => void,
-  doSetClientSetting: (key: string, value: any, pushPreferences: boolean) => void,
-  doToast: ({ isError?: boolean, message: string }) => void,
 };
 
 export default function RecommendedPersonal(props: Props) {
-  const {
-    onLoad,
-    userId,
-    personalRecommendations,
-    hasMembership,
-    hideFyp,
-    doFetchPersonalRecommendations,
-    doSetClientSetting,
-    doToast,
-  } = props;
+  const { header, onLoad, userId, personalRecommendations, hasMembership, doFetchPersonalRecommendations } = props;
 
   const ref = React.useRef();
   const [markedGid, setMarkedGid] = React.useState('');
@@ -82,11 +43,6 @@ export default function RecommendedPersonal(props: Props) {
   const count = personalRecommendations.uris.length;
   const countCollapsed = getSuitablePageSizeForScreen(8, isLargeScreen, isMediumScreen);
   const finalCount = view === VIEW.ALL_VISIBLE ? count : view === VIEW.COLLAPSED ? countCollapsed : count;
-
-  function doHideFyp() {
-    doSetClientSetting(SETTINGS.HIDE_FYP, true, true);
-    doToast({ message: __('Recommendations hidden; you can re-enable them in Settings.') });
-  }
 
   // **************************************************************************
   // Effects
@@ -133,13 +89,39 @@ export default function RecommendedPersonal(props: Props) {
   // **************************************************************************
   // **************************************************************************
 
-  if (hideFyp || !hasMembership || count < 1) {
-    return null;
+  if (!hasMembership) {
+    return (
+      <div>
+        {header}
+        <div className="empty empty--centered-tight">
+          <I18nMessage
+            tokens={{ learn_more: <Button button="link" navigate={`/$/${PAGES.FYP}`} label={__('learn more')} /> }}
+          >
+            Premium membership required. Become a member, or %learn_more%.
+          </I18nMessage>
+        </div>
+      </div>
+    );
+  }
+
+  if (count < 1) {
+    return (
+      <div>
+        {header}
+        <div className="empty empty--centered-tight">
+          <I18nMessage
+            tokens={{ learn_more: <Button button="link" navigate={`/$/${PAGES.FYP}`} label={__('Learn More')} /> }}
+          >
+            No recommendations available at the moment. %learn_more%
+          </I18nMessage>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div ref={ref}>
-      <SectionHeader title={__('Recommended For You')} icon={ICONS.WEB} onHide={doHideFyp} />
+      {header}
 
       <ClaimList
         tileLayout
@@ -162,8 +144,7 @@ export default function RecommendedPersonal(props: Props) {
                 if (ref.current) {
                   ref.current.scrollIntoView({ block: 'start', behavior: 'smooth' });
                 } else {
-                  // Unlikely to happen, but should have a fallback (just go all the way up)
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  window.scrollTo({ top: 0, behavior: 'smooth' }); // fallback, unlikely.
                 }
               }
             }}

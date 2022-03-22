@@ -23,6 +23,7 @@ const MAP = Object.freeze({
   [MODALS.CONFIRM_REMOVE_COMMENT]: lazyImport(() => import('modal/modalRemoveComment' /* webpackChunkName: "modalRemoveComment" */)),
   [MODALS.CONFIRM_THUMBNAIL_UPLOAD]: lazyImport(() => import('modal/modalConfirmThumbnailUpload' /* webpackChunkName: "modalConfirmThumbnailUpload" */)),
   [MODALS.CONFIRM_TRANSACTION]: lazyImport(() => import('modal/modalConfirmTransaction' /* webpackChunkName: "modalConfirmTransaction" */)),
+  [MODALS.CUSTOMIZE_HOMEPAGE]: lazyImport(() => import('modal/modalCustomizeHomepage' /* webpackChunkName: "modalCustomizeHomepage" */)),
   [MODALS.DOWNLOADING]: lazyImport(() => import('modal/modalDownloading' /* webpackChunkName: "modalDownloading" */)),
   [MODALS.ERROR]: lazyImport(() => import('modal/modalError' /* webpackChunkName: "modalError" */)),
   [MODALS.FILE_SELECTION]: lazyImport(() => import('modal/modalFileSelection' /* webpackChunkName: "modalFileSelection" */)),

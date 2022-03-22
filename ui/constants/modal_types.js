@@ -1,6 +1,7 @@
 export const CONFIRM = 'confirm';
 export const CONFIRM_FILE_REMOVE = 'confirm_file_remove';
 export const CONFIRM_EXTERNAL_RESOURCE = 'confirm_external_resource';
+export const CUSTOMIZE_HOMEPAGE = 'customize_homepage';
 export const INCOMPATIBLE_DAEMON = 'incompatible_daemon';
 export const FILE_TIMEOUT = 'file_timeout';
 export const FILE_SELECTION = 'file_selection';
