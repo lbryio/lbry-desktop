@@ -16,10 +16,19 @@ type Props = {
   collectionId: string,
   playNextUri: string,
   doToggleShuffleList: (string) => void,
+  onRenameList: () => void,
 };
 
 function CollectionMenuList(props: Props) {
-  const { inline = false, collectionId, collectionName, doOpenModal, playNextUri, doToggleShuffleList } = props;
+  const {
+    inline = false,
+    collectionId,
+    collectionName,
+    doOpenModal,
+    playNextUri,
+    doToggleShuffleList,
+    onRenameList,
+  } = props;
   const [doShuffle, setDoShuffle] = React.useState(false);
 
   const { push } = useHistory();
@@ -84,6 +93,12 @@ function CollectionMenuList(props: Props) {
               <div className="menu__link">
                 <Icon aria-hidden icon={ICONS.DELETE} />
                 {__('Delete List')}
+              </div>
+            </MenuItem>
+            <MenuItem onSelect={onRenameList}>
+              <div className="menu__link">
+                <Icon aria-hidden icon={ICONS.EDIT} />
+                {__('Rename List')}
               </div>
             </MenuItem>
           </>

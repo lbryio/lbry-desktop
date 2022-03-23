@@ -1,7 +1,10 @@
 // @flow
 import React from 'react';
 import classnames from 'classnames';
+import * as ICONS from 'constants/icons';
 import { NavLink, useHistory } from 'react-router-dom';
+import { FormField } from 'component/common/form';
+import Button from 'component/button';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import TruncatedText from 'component/common/truncated-text';
 import CollectionCount from './collectionCount';
@@ -40,6 +43,7 @@ type Props = {
   deleteCollection: (string) => void,
   resolveCollectionItems: (any) => void,
   isResolvingCollectionClaims: boolean,
+  renameCollection: (string, string) => void,
 };
 
 function CollectionPreviewTile(props: Props) {
@@ -53,10 +57,15 @@ function CollectionPreviewTile(props: Props) {
     collectionItemUrls,
     claim,
     resolveCollectionItems,
+    renameCollection,
   } = props;
 
   const { push } = useHistory();
   const hasClaim = Boolean(claim);
+
+  const [isRenamingList, setIsRenamingList] = React.useState(false);
+  const [newName, setNewName] = React.useState(collectionName);
+
   React.useEffect(() => {
     if (collectionId && hasClaim && resolveCollectionItems) {
       resolveCollectionItems({ collectionId, page_size: 5 });
@@ -69,9 +78,14 @@ function CollectionPreviewTile(props: Props) {
     formatLbryUrlForWeb(collectionItemUrls[0] || '/') + (collectionId ? generateListSearchUrlParams(collectionId) : '');
 
   function handleClick(e) {
-    if (navigateUrl) {
+    if (navigateUrl && !isRenamingList) {
       push(navigateUrl);
     }
+  }
+
+  function handleRenameCollection() {
+    renameCollection(collectionId, newName);
+    setIsRenamingList(false);
   }
 
   const navLinkProps = {
@@ -144,12 +158,44 @@ function CollectionPreviewTile(props: Props) {
           </React.Fragment>
         </FileThumbnail>
       </NavLink>
-      <NavLink {...navLinkProps}>
-        <h2 className="claim-tile__title">
-          <TruncatedText text={collectionName} lines={1} />
-          <CollectionMenuList collectionId={collectionId} />
-        </h2>
-      </NavLink>
+      {isRenamingList && (
+        <FormField
+          autoFocus
+          type="text"
+          name="rename_collection"
+          value={newName}
+          label={__('New Name')}
+          inputButton={
+            <>
+              <Button
+                button={'alt'}
+                icon={ICONS.COMPLETE}
+                className={'button-toggle'}
+                disabled={collectionName === newName}
+                onClick={handleRenameCollection}
+              />
+              <Button
+                button={'alt'}
+                className={'button-toggle'}
+                icon={ICONS.REMOVE}
+                onClick={() => {
+                  setIsRenamingList(false);
+                  setNewName(collectionName);
+                }}
+              />
+            </>
+          }
+          onChange={(e) => setNewName(e.target.value)}
+        />
+      )}
+      {!isRenamingList && (
+        <NavLink {...navLinkProps}>
+          <h2 className="claim-tile__title">
+            <TruncatedText text={collectionName} lines={1} />
+            <CollectionMenuList collectionId={collectionId} onRenameList={() => setIsRenamingList(true)} />
+          </h2>
+        </NavLink>
+      )}
       <div>
         <div className="claim-tile__info">
           <React.Fragment>
