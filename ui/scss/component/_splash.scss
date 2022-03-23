@@ -317,6 +317,14 @@
 }
 
 .modal {
+  @media (min-width: $breakpoint-xlarge) {
+    .membership-splash {
+      padding-left: 0rem;
+      padding-right: 0rem;
+      margin-left: 0rem;
+      margin-right: 0rem;
+    }
+  }
   @media (min-width: $breakpoint-small) {
     .membership-splash {
       padding-left: unset;
