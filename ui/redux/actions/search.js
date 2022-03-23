@@ -5,7 +5,7 @@ import { doOpenModal } from 'redux/actions/app';
 import { doToast } from 'redux/actions/notifications';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { selectClaimForUri, selectClaimIdForUri, selectClaimIsNsfwForUri } from 'redux/selectors/claims';
-import { doResolveUris } from 'redux/actions/claims';
+import { doClaimSearch, doResolveUris } from 'redux/actions/claims';
 import { buildURI, isURIValid } from 'util/lbryURI';
 import { batchActions } from 'util/batch-actions';
 import { makeSelectSearchUrisForQuery, selectPersonalRecommendations, selectSearchValue } from 'redux/selectors/search';
@@ -263,10 +263,18 @@ export const doFetchPersonalRecommendations = () => (dispatch: Dispatch, getStat
       const { gid, recs } = data;
       if (gid && recs) {
         const uris = processLighthouseResults(recs);
-        dispatch(doResolveUris(uris));
-        dispatch({
-          type: ACTIONS.FYP_FETCH_SUCCESS,
-          data: { gid, uris },
+        dispatch(
+          doClaimSearch({
+            claim_ids: recs.map((r) => r.claimId),
+            page: 1,
+            page_size: 50,
+            no_totals: true,
+          })
+        ).finally(() => {
+          dispatch({
+            type: ACTIONS.FYP_FETCH_SUCCESS,
+            data: { gid, uris },
+          });
         });
       } else {
         dispatch({ type: ACTIONS.FYP_FETCH_FAILED });
