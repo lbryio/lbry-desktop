@@ -19,13 +19,23 @@ type Props = {
   onFrontPage: boolean,
   // redux
   homepageCode: string,
+  userCountry: ?string,
   doSetLanguage: (string) => void,
   doSetHomepage: (string) => void,
   doOpenModal: (string, {}) => void,
 };
 
 export default function NagLocaleSwitch(props: Props) {
-  const { localeLangs, noLanguageSet, onFrontPage, homepageCode, doSetLanguage, doSetHomepage, doOpenModal } = props;
+  const {
+    localeLangs,
+    noLanguageSet,
+    onFrontPage,
+    homepageCode,
+    userCountry,
+    doSetLanguage,
+    doSetHomepage,
+    doOpenModal,
+  } = props;
 
   const [localeSwitchDismissed, setLocaleSwitchDismissed] = usePersistedState('locale-switch-dismissed', false);
 
@@ -48,7 +58,7 @@ export default function NagLocaleSwitch(props: Props) {
 
   if (localeSwitchDismissed || !optionToSwitch) return null;
 
-  const message = __(
+  let message = __(
     // If no homepage, only suggest language switch
     optionToSwitch === LOCALE_OPTIONS.LANG
       ? 'There are language translations available for your location! Do you want to switch from English?'
@@ -56,6 +66,9 @@ export default function NagLocaleSwitch(props: Props) {
       ? 'Homepage and language translations are available for your location! Do you want to switch?'
       : 'A homepage is available for your location! Do you want to switch?'
   );
+  // -- override for specific case due to feedback --
+  if (userCountry === 'CA') message = 'There are translations available in French, do you want to switch from English?';
+  // ------------------------------------------------
 
   function dismissNag() {
     setLocaleSwitchDismissed(true);

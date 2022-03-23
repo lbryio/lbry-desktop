@@ -131,3 +131,5 @@ export const selectYouTubeImportVideosComplete = createSelector(selectState, (st
 export const makeSelectUserPropForProp = (prop) => createSelector(selectUser, (user) => (user ? user[prop] : null));
 
 export const selectUserLocale = (state) => selectState(state).locale;
+
+export const selectUserCountry = createSelector(selectUserLocale, (locale) => locale?.country);
