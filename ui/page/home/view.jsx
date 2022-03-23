@@ -87,7 +87,7 @@ function HomePage(props: Props) {
       } else if (key === 'FYP') {
         sortedRowData.push({
           id: 'FYP',
-          title: 'Recommended For You',
+          title: 'Recommended',
           icon: ICONS.GLOBE,
           link: `/$/${PAGES.FYP}`,
         });
