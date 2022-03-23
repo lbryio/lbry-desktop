@@ -3,7 +3,7 @@ import { CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS, MISSING_THUMB_DEFAULT } from 'conf
 import { formattedEmote, inlineEmote } from 'util/remark-emote';
 import { formattedLinks, inlineLinks } from 'util/remark-lbry';
 import { formattedTimestamp, inlineTimestamp } from 'util/remark-timestamp';
-import { getThumbnailCdnUrl } from 'util/thumbnail';
+import { getThumbnailCdnUrl, getImageProxyUrl } from 'util/thumbnail';
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import Button from 'component/button';
@@ -198,9 +198,13 @@ export default React.memo<MarkdownProps>(function MarkdownPreview(props: Markdow
       // Workaraund of remarkOptions.Fragment
       div: React.Fragment,
       img: (imgProps) => {
-        // getImageProxyUrl() can also be used if we just want to proxy without compression.
+        const isGif = imgProps.src && imgProps.src.endsWith('gif');
+
         const imageCdnUrl =
-          getThumbnailCdnUrl({ thumbnail: imgProps.src, width: 0, height: 0, quality: 85 }) || MISSING_THUMB_DEFAULT;
+          (isGif
+            ? getImageProxyUrl(imgProps.src)
+            : getThumbnailCdnUrl({ thumbnail: imgProps.src, width: 0, height: 0, quality: 85 })) ||
+          MISSING_THUMB_DEFAULT;
         if ((isStakeEnoughForPreview(stakedLevel) || hasMembership) && !isEmote(imgProps.title, imgProps.src)) {
           return <ZoomableImage {...imgProps} src={imageCdnUrl} />;
         } else {
