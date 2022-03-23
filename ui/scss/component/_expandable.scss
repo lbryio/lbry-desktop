@@ -6,7 +6,7 @@ $COLLAPSED_HEIGHT: 120px;
 }
 
 .expandable--closed {
-  max-height: $COLLAPSED_HEIGHT * 3 / 4;
+  max-height: calc(#{$COLLAPSED_HEIGHT} * 3 / 4);
   overflow-y: hidden;
   position: relative;
   -webkit-mask-image: -webkit-gradient(linear, left 30%, left bottom, from(rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0)));
