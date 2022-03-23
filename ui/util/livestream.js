@@ -97,7 +97,7 @@ export const fetchLiveChannels = async (): Promise<LivestreamInfo> => {
  */
 export const fetchLiveChannel = async (channelId: string): Promise<LiveChannelStatus> => {
   const newApiEndpoint = LIVESTREAM_LIVE_API;
-  const newApiResponse = await fetch(`${newApiEndpoint}/${channelId}`);
+  const newApiResponse = await fetch(`${newApiEndpoint}/${channelId}?1`);
   const newApiData = (await newApiResponse.json()).data;
   const isLive = newApiData.live;
 

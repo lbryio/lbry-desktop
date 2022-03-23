@@ -46,7 +46,7 @@ export const killStream = async (channelId: string, channelName: string) => {
 
 export const isLiveStreaming = async (channelId: string): Promise<boolean> => {
   try {
-    const response = await fetch(`${LIVESTREAM_LIVE_API}/${channelId}`);
+    const response = await fetch(`${LIVESTREAM_LIVE_API}/${channelId}?1`);
     const stream = await response.json();
     return stream.data?.live;
   } catch {
