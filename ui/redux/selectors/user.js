@@ -115,6 +115,13 @@ export const selectOdyseeMembershipIsPremiumPlus = (state) => {
 };
 
 export const selectHasOdyseeMembership = (state) => {
+  // @if process.env.NODE_ENV!='production'
+  const override = window.localStorage.getItem('hasMembershipOverride');
+  if (override) {
+    return override === 'true';
+  }
+  // @endif
+
   const membershipName = selectOdyseeMembershipName(state);
   return Boolean(membershipName);
 };
