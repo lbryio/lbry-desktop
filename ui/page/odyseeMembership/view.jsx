@@ -42,6 +42,7 @@ type Props = {
   updateUserOdyseeMembershipStatus: () => void,
   user: ?User,
   locale: ?LocaleInfo,
+  preferredCurrency: ?string,
 };
 
 const OdyseeMembershipPage = (props: Props) => {
@@ -55,6 +56,7 @@ const OdyseeMembershipPage = (props: Props) => {
     incognito,
     user,
     locale,
+    preferredCurrency,
   } = props;
 
   const userChannelName = activeChannelClaim ? activeChannelClaim.name : '';
@@ -196,8 +198,13 @@ const OdyseeMembershipPage = (props: Props) => {
         console.log(err);
       }
 
-      if (locale?.continent === 'EU') {
-        setCurrencyToUse('eur');
+      // use currency if set on client, otherwise use USD by default or EUR if in Europe
+      if (preferredCurrency) {
+        setCurrencyToUse(preferredCurrency.toLowerCase());
+      } else {
+        if (locale?.continent === 'EU') {
+          setCurrencyToUse('eur');
+        }
       }
 
       populateMembershipData();

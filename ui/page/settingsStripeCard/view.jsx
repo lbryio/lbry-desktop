@@ -29,6 +29,7 @@ type Props = {
   doOpenModal: (string, {}) => void,
   openModal: (string, {}) => void,
   setAsConfirmingCard: () => void,
+  locale: ?any,
 };
 
 // type State = {
@@ -59,12 +60,19 @@ class SettingsStripeCard extends React.Component<Props, State> {
   componentDidMount() {
     let that = this;
 
-    const { preferredCurrency } = this.props;
+    const { preferredCurrency, locale } = this.props;
 
+    // use preferredCurrency if it's set on client, otherwise use USD, unless in Europe then use EUR
     if (preferredCurrency) {
       that.setState({
         preferredCurrency: preferredCurrency,
       });
+    } else if (locale) {
+      if (locale.continent === 'EU') {
+        that.setState({
+          preferredCurrency: 'EUR',
+        });
+      }
     }
 
     let doToast = this.props.doToast;
@@ -355,7 +363,6 @@ class SettingsStripeCard extends React.Component<Props, State> {
         };
       }, 0);
     }
-
   }
 
   render() {
@@ -370,7 +377,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
     const { setPreferredCurrency } = this.props;
 
     // when user changes currency in selector
-    function onCurrencyChange(event: SyntheticInputEvent<*>) {
+    function onCurrencyChange(event) {
       const { value } = event.target;
 
       // update preferred currency in frontend
