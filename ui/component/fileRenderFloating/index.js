@@ -1,5 +1,10 @@
 import { connect } from 'react-redux';
-import { selectClaimForUri, selectTitleForUri, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
+import {
+  selectClaimForUri,
+  selectTitleForUri,
+  makeSelectClaimWasPurchased,
+  selectGeoRestrictionForUri,
+} from 'redux/selectors/claims';
 import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
 import {
   makeSelectNextUrlForCollectionAndUrl,
@@ -55,6 +60,7 @@ const select = (state, props) => {
     mobilePlayerDimensions: selectMobilePlayerDimensions(state),
     socketConnected: selectCommentSocketConnected(state),
     isLivestreamClaim: isStreamPlaceholderClaim(claim),
+    geoRestriction: selectGeoRestrictionForUri(state, uri),
   };
 };
 

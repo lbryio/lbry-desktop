@@ -58,6 +58,7 @@ type Props = {
   mobilePlayerDimensions?: any,
   socketConnected: boolean,
   isLivestreamClaim: boolean,
+  geoRestriction: ?GeoRestriction,
   doSetMobilePlayerDimensions: ({ height?: ?number, width?: ?number }) => void,
   doCommentSocketConnect: (string, string, string) => void,
   doCommentSocketDisconnect: (string, string) => void,
@@ -88,6 +89,7 @@ export default function FileRenderFloating(props: Props) {
     doSetPlayingUri,
     isCurrentClaimLive,
     mobilePlayerDimensions,
+    geoRestriction,
     doSetMobilePlayerDimensions,
     doCommentSocketConnect,
     doCommentSocketDisconnect,
@@ -271,6 +273,7 @@ export default function FileRenderFloating(props: Props) {
   }, [doSetMobilePlayerDimensions, doSetPlayingUri, isFloating, isMobile]);
 
   if (
+    geoRestriction ||
     !isPlayable ||
     !uri ||
     (isFloating && noFloatingPlayer) ||
