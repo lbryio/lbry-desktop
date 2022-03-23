@@ -7,21 +7,6 @@ import moment from 'moment';
 import { toCapitalCase } from 'util/string';
 import { CUSTOM_HOMEPAGE } from 'config';
 
-export type RowDataItem = {
-  title: any,
-  link?: string,
-  help?: any,
-  icon?: string,
-  extra?: any,
-  options?: {
-    channelIds?: Array<string>,
-    pageSize?: number,
-    limitClaimsPerChannel?: number,
-  },
-  route?: string,
-  hideForUnauth?: boolean,
-};
-
 export type HomepageCat = {
   name: string,
   icon: string,
@@ -36,12 +21,6 @@ export type HomepageCat = {
   pinnedUrls?: Array<string>,
   mixIn?: Array<string>,
 };
-
-// type HomepageData = {
-//   [string]: {
-//     [string]: HomepageCat,
-//   },
-// };
 
 function getLimitPerChannel(size, isChannel) {
   if (isChannel) {
@@ -62,7 +41,7 @@ export function getAllIds(all: any) {
   return Array.from(idsSet);
 }
 
-export const getHomepageRowForCat = (cat: HomepageCat) => {
+export const getHomepageRowForCat = (key: string, cat: HomepageCat) => {
   let orderValue;
   switch (cat.order) {
     case 'trending':
@@ -104,6 +83,7 @@ export const getHomepageRowForCat = (cat: HomepageCat) => {
   }
 
   return {
+    id: key,
     link: `/$/${PAGES.DISCOVER}?${urlParams.toString()}`,
     route: cat.name ? `/$/${cat.name}` : undefined,
     icon: cat.icon || '', // some default
@@ -147,6 +127,7 @@ export function GetLinksData(
 
   if (isHomepage && showPersonalizedChannels && subscribedChannels) {
     const RECENT_FROM_FOLLOWING = {
+      id: 'FOLLOWING',
       title: __('Recent From Following'),
       link: `/$/${PAGES.CHANNELS_FOLLOWING}`,
       icon: ICONS.SUBSCRIBE,
@@ -318,6 +299,7 @@ export function GetLinksData(
       followedTags.forEach((tag: Tag) => {
         const tagName = `#${toCapitalCase(tag.name)}`;
         individualTagDataItems.push({
+          id: tagName,
           title: __('Trending for %tagName%', { tagName: tagName }),
           link: `/$/${PAGES.DISCOVER}?t=${tag.name}`,
           options: {
@@ -349,8 +331,14 @@ export function GetLinksData(
   // **************************************************************************
 
   // TODO: provide better method for exempting from homepage
-  (Object.values(all): any)
-    .filter((row) => !(isHomepage && row.name === 'news'))
-    .map((row) => rowData.push(getHomepageRowForCat(row)));
+  const entries = Object.entries(all);
+  for (let i = 0; i < entries.length; ++i) {
+    const key = entries[i][0];
+    const val = entries[i][1];
+
+    // $FlowFixMe https://github.com/facebook/flow/issues/2221
+    rowData.push(getHomepageRowForCat(key, val));
+  }
+
   return rowData;
 }

@@ -12,6 +12,7 @@ declare type HomepageData = {
 };
 
 declare type RowDataItem = {
+  id: string,
   title: any,
   link?: string,
   help?: any,
