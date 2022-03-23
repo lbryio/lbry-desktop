@@ -37,7 +37,6 @@ export const HOMEPAGE = 'homepage';
 export const HOMEPAGE_ORDER = 'homepage_order';
 export const HIDE_REPOSTS = 'hide_reposts';
 export const HIDE_SCHEDULED_LIVESTREAMS = 'hide_scheduled_livestreams';
-export const HIDE_FYP = 'hide_fyp';
 export const SUPPORT_OPTION = 'support_option';
 export const TILE_LAYOUT = 'tile_layout';
 export const VIDEO_THEATER_MODE = 'video_theater_mode';
