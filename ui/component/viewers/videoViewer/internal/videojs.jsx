@@ -21,7 +21,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import recsys from './plugins/videojs-recsys/plugin';
 // import runAds from './ads';
 import videojs from 'video.js';
-import { LIVESTREAM_STREAM_X_PULL, LIVESTREAM_CDN_DOMAIN, LIVESTREAM_STREAM_DOMAIN } from 'constants/livestream';
 import { useIsMobile } from 'effects/use-screensize';
 
 const canAutoplay = require('./plugins/canAutoplay');
@@ -237,7 +236,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       requestSubtitleFn: (src) => channelName || '',
     },
     bigPlayButton: embedded, // only show big play button if embedded
-    liveui: true,
+    liveui: isLivestreamClaim,
     suppressNotSupportedError: true,
   };
 
@@ -359,27 +358,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         // $FlowFixMe
         vjsPlayer.addClass('livestreamPlayer');
 
-        // @if process.env.NODE_ENV!='production'
-        videojs.Vhs.xhr.beforeRequest = (options) => {
-          if (!options.headers) options.headers = {};
-          options.headers['X-Pull'] = LIVESTREAM_STREAM_X_PULL;
-          options.uri = options.uri.replace(LIVESTREAM_CDN_DOMAIN, LIVESTREAM_STREAM_DOMAIN);
-          return options;
-        };
-        // @endif
-
-        // const newPoster = livestreamData.ThumbnailURL;
-
-        // pretty sure it's not working
-        // vjsPlayer.poster(newPoster);
-
-        // here specifically because we don't allow rewinds at the moment
-        // $FlowFixMe
-        // vjsPlayer.on('play', function () {
-        //   // $FlowFixMe
-        //   vjsPlayer.liveTracker.seekToLiveEdge();
-        // });
-
         // $FlowFixMe
         vjsPlayer.src({
           type: 'application/x-mpegURL',
@@ -388,7 +366,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       } else {
         // $FlowFixMe
         vjsPlayer.removeClass('livestreamPlayer');
-        videojs.Vhs.xhr.beforeRequest = (options) => {};
 
         // change to m3u8 if applicable
         const response = await fetch(source, { method: 'HEAD', cache: 'no-store' });
