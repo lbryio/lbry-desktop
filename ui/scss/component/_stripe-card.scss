@@ -4,7 +4,7 @@
 }
 
 .jp-card-container {
-  margin: 0 !important;
+  margin: 0 auto !important;
   margin-top: 8px !important;
 }
 
@@ -405,4 +405,19 @@ pre {
 
 .currency-to-use-selector {
   max-width: 113px;
+}
+
+.successCard {
+  text-align: center;
+  margin: 0 auto;
+  display: block;
+}
+
+.card__header--between,
+.card__title-section {
+  display: block;
+}
+
+.currency-to-use-selector {
+  margin: 0 auto;
 }

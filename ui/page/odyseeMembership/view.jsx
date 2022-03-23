@@ -599,20 +599,6 @@ const OdyseeMembershipPage = (props: Props) => {
                               {formatDate(membership.Subscription.current_period_end * 1000)}
                             </h4>
 
-                            {!stillWaitingFromBackend && membership.type === 'yearly' && (
-                              <>
-                                <h4 className="membership_info">
-                                  <b>{__('Membership Period Options')}:</b> {__('Yearly')}
-                                </h4>
-                                {/* TODO: this looks wrong, should support EUR as well */}
-                                <h4 className="membership_info">
-                                  {__('%yearly_cost% USD For A One Year Membership (%monthly_cost% Per Month)', {
-                                    yearly_cost: (membership.cost_usd * 12) / 100,
-                                    monthly_cost: membership.cost_usd / 100,
-                                  })}
-                                </h4>
-                              </>
-                            )}
                             {/* cancel membership button */}
                             <Button
                               button="alt"
@@ -670,13 +656,11 @@ const OdyseeMembershipPage = (props: Props) => {
                   {__('Please save a card as a payment method so you can join Odysee Premium')}
                 </h2>
 
-                <h2 className={'getPaymentCard'}>{__('After the card is added, click Back')}</h2>
-
                 <Button
                   button="primary"
                   label={__('Add a Card')}
                   icon={ICONS.SETTINGS}
-                  navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`}
+                  navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}?returnTo=premium`}
                   className="membership_button"
                   style={{ maxWidth: '151px' }}
                 />

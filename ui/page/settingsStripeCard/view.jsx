@@ -133,7 +133,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
 
               that.setState({
                 currentFlowStage: 'cardConfirmed',
-                pageTitle: 'Tip History',
+                pageTitle: 'Payment Methods',
                 userCardDetails: cardDetails,
                 paymentMethodId: customerStatusResponse.PaymentMethods[0].id,
               });
@@ -352,7 +352,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
 
               that.setState({
                 currentFlowStage: 'cardConfirmed',
-                pageTitle: 'Tip History',
+                pageTitle: 'Payment Methods',
                 userCardDetails: cardDetails,
                 paymentMethodId: customerStatusResponse.PaymentMethods[0].id,
               });
@@ -367,6 +367,9 @@ class SettingsStripeCard extends React.Component<Props, State> {
 
   render() {
     let that = this;
+
+    const returnToValue = new URLSearchParams(this.props.location.search).get('returnTo');
+    let shouldShowBackToMembershipButton = returnToValue === 'premium';
 
     function setAsConfirmingCard() {
       that.setState({
@@ -394,13 +397,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
     const { currentFlowStage, pageTitle, userCardDetails, paymentMethodId, preferredCurrency } = this.state;
 
     return (
-      <Page
-        noFooter
-        noSideNavigation
-        settingsPage
-        className="card-stack"
-        backout={{ title: __(pageTitle), backLabel: __('Back') }}
-      >
+      <Page noFooter noSideNavigation className="card-stack" backout={{ title: __(pageTitle), backLabel: __('Back') }}>
         {/* if Stripe javascript didn't load */}
         <div>
           {scriptFailedToLoad && (
@@ -437,6 +434,16 @@ class SettingsStripeCard extends React.Component<Props, State> {
         {/* if the user has already confirmed their card */}
         {currentFlowStage === 'cardConfirmed' && (
           <div className="successCard">
+            {/* back to membership button */}
+            {shouldShowBackToMembershipButton && (
+              <Button
+                button="primary"
+                label={__('Back To Odysee Premium')}
+                icon={ICONS.UPGRADE}
+                navigate={`/$/${PAGES.ODYSEE_MEMBERSHIP}`}
+                style={{ marginBottom: '20px' }}
+              />
+            )}
             <Card
               title={__('Card Details')}
               body={
