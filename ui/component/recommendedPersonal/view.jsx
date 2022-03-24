@@ -2,6 +2,7 @@
 import React from 'react';
 import Button from 'component/button';
 import ClaimList from 'component/claimList';
+import ClaimPreviewTile from 'component/claimPreviewTile';
 import I18nMessage from 'component/i18nMessage';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
@@ -26,8 +27,8 @@ type Props = {
   onLoad: (displayed: boolean) => void,
   // --- redux ---
   userId: ?string,
-  personalRecommendations: { gid: string, uris: Array<string> },
-  hasMembership: boolean,
+  personalRecommendations: { gid: string, uris: Array<string>, fetched: boolean },
+  hasMembership: ?boolean,
   doFetchPersonalRecommendations: () => void,
 };
 
@@ -88,6 +89,26 @@ export default function RecommendedPersonal(props: Props) {
 
   // **************************************************************************
   // **************************************************************************
+
+  if (hasMembership === undefined || !personalRecommendations.fetched) {
+    return (
+      <>
+        {header}
+        <ul className="claim-grid">
+          {new Array(countCollapsed).fill(1).map((x, i) => (
+            <ClaimPreviewTile key={i} placeholder />
+          ))}
+        </ul>
+        <div className="livestream-list--view-more" style={{ visibility: 'hidden' }}>
+          <Button
+            label='"View More" dummy to reduce layout shift'
+            button="link"
+            className="claim-grid__title--secondary"
+          />
+        </div>
+      </>
+    );
+  }
 
   if (!hasMembership) {
     return (

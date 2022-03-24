@@ -114,6 +114,12 @@ export const selectOdyseeMembershipIsPremiumPlus = (state) => {
   return selectState(state).odyseeMembershipName === 'Premium+';
 };
 
+/**
+ * selectHasOdyseeMembership
+ *
+ * @param state
+ * @returns 'undefined' if not yet fetched; boolean otherwise.
+ */
 export const selectHasOdyseeMembership = (state) => {
   // @if process.env.NODE_ENV!='production'
   const override = window.localStorage.getItem('hasMembershipOverride');
@@ -122,8 +128,8 @@ export const selectHasOdyseeMembership = (state) => {
   }
   // @endif
 
-  const membershipName = selectOdyseeMembershipName(state);
-  return Boolean(membershipName);
+  const membership = selectOdyseeMembershipName(state);
+  return membership === undefined ? membership : Boolean(membership);
 };
 
 export const selectYouTubeImportVideosComplete = createSelector(selectState, (state) => {

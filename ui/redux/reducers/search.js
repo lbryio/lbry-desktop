@@ -22,7 +22,7 @@ const defaultState: SearchState = {
   searching: false,
   results: [],
   mentionQuery: '',
-  personalRecommendations: { gid: '', uris: [] },
+  personalRecommendations: { gid: '', uris: [], fetched: false },
 };
 
 export default handleActions(
@@ -82,13 +82,17 @@ export default handleActions(
         personalRecommendations: {
           gid: action.data.gid,
           uris: action.data.uris,
+          fetched: true,
         },
       };
     },
 
     [ACTIONS.FYP_FETCH_FAILED]: (state: SearchState, action: any): SearchState => ({
       ...state,
-      personalRecommendations: defaultState.personalRecommendations,
+      personalRecommendations: {
+        ...defaultState.personalRecommendations,
+        fetched: true,
+      },
     }),
 
     [ACTIONS.FYP_HIDE_URI]: (state: SearchState, action: any): SearchState => {
@@ -100,6 +104,7 @@ export default handleActions(
         return {
           ...state,
           personalRecommendations: {
+            ...state.personalRecommendations,
             gid: state.personalRecommendations.gid,
             uris,
           },
