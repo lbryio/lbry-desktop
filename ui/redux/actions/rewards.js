@@ -6,6 +6,7 @@ import { selectUnclaimedRewards, selectWeeklyWatchClaimedThisWeek } from 'redux/
 import { selectUserIsRewardApproved } from 'redux/selectors/user';
 import { doFetchInviteStatus } from 'redux/actions/user';
 import rewards from 'rewards';
+import { resolveApiMessage } from 'util/api-message';
 
 export function doRewardList() {
   return (dispatch) => {
@@ -111,7 +112,7 @@ export function doClaimRewardType(rewardType, options = {}) {
       });
 
       if (options.notifyError) {
-        dispatch(doToast({ message: error.message, isError: true }));
+        dispatch(doToast({ message: resolveApiMessage(error.message), isError: true }));
       }
 
       if (options.callback) {

@@ -22,7 +22,7 @@ let stripeEnvironment = getStripeEnvironment();
 
 const isDev = process.env.NODE_ENV !== 'production';
 
-let log = function(input) {};
+let log = (input) => {};
 if (isDev) log = console.log;
 
 // odysee channel information since the memberships are only for Odysee
@@ -667,7 +667,7 @@ const OdyseeMembershipPage = (props: Props) => {
 
                 <Button
                   button="primary"
-                  label={__('Add A Card')}
+                  label={__('Add a Card')}
                   icon={ICONS.SETTINGS}
                   navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`}
                   className="membership_button"

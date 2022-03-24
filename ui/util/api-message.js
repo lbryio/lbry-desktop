@@ -39,6 +39,18 @@ const MESSAGE_MAP: Array<ApiMsgConfig> = Object.freeze([
     originalMsg: 'this creator has set minimum account age requirements that are not currently met',
     replacement: "Your channel does not meet the creator's minimum channel-age limit.",
   },
+  {
+    originalMsg: /^You only watched content (.*) days in the last week and it needs to be at least (.*) to get the reward.$/,
+    replacement: 'You only watched content for %1% days in the last week. It needs to be at least %2% to get the reward.',
+  },
+  // {
+  //   originalMsg: /^Earn a random reward of at least 0.1 LBC for watching cool stuff at least 3 days during the week. You can claim it again in (.*)$/,
+  //   replacement: 'Earn a random reward of at least 0.1 LBC for watching cool stuff at least 3 days during the week. You can claim it again in %1%',
+  // },
+  // {
+  //   originalMsg: /^Earn a random reward of at least 0.1 LBC for watching cool stuff at least 3 days during the week. You last claimed it (.*) ago!$/,
+  //   replacement: 'Earn a random reward of at least 0.1 LBC for watching cool stuff at least 3 days during the week. You last claimed it %1% ago!',
+  // },
 ]);
 
 /**
