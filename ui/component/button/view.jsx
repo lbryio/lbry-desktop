@@ -39,6 +39,7 @@ type Props = {
   dispatch: any,
   'aria-label'?: string,
   user: ?User,
+  meme: ?boolean,
 };
 
 // use forwardRef to allow consumers to pass refs to the button content if they want to
@@ -72,6 +73,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     pathname,
     user,
     authSrc,
+    meme,
     ...otherProps
   } = props;
 
@@ -147,7 +149,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     // TODO: replace the below with an outbound link tracker for matomo
     return (
       <a
-        target="_blank"
+        target={meme ? '' : '_blank'}
         rel="noopener noreferrer"
         href={href || navigate}
         className={combinedClassName}
