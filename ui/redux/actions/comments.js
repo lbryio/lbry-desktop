@@ -4,8 +4,9 @@ import * as REACTION_TYPES from 'constants/reactions';
 import * as PAGES from 'constants/pages';
 import { SORT_BY, BLOCK_LEVEL } from 'constants/comment';
 import Lbry from 'lbry';
+import { resolveApiMessage } from 'util/api-message';
 import { parseURI, buildURI, isURIEqual } from 'util/lbryURI';
-import { devToast, doFailedSignatureToast, resolveCommentronError } from 'util/commentron-error';
+import { devToast, doFailedSignatureToast } from 'util/toast-wrappers';
 import { selectClaimForUri, selectClaimsByUri, selectMyChannelClaims } from 'redux/selectors/claims';
 import { doResolveUris, doClaimSearch } from 'redux/actions/claims';
 import { doToast, doSeeNotifications } from 'redux/actions/notifications';
@@ -558,7 +559,7 @@ export function doCommentCreate(uri: string, livestream: boolean, params: Commen
       })
       .catch((error) => {
         dispatch({ type: ACTIONS.COMMENT_CREATE_FAILED, data: error });
-        dispatch(doToast(resolveCommentronError(error.message)));
+        dispatch(doToast({ message: resolveApiMessage(error.message), isError: true }));
         return Promise.reject(error);
       });
   };
