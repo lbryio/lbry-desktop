@@ -225,7 +225,9 @@ function WalletTipAmountSelector(props: Props) {
 
   if (!claim) return null;
 
-  const getHelpMessage = (helpMessage: any) => <div className="help">{helpMessage}</div>;
+  const getHelpMessage = (helpMessage: any, customClassName) => (
+    <div className={classnames('help', customClassName)}>{helpMessage}</div>
+  );
 
   return (
     <>
@@ -304,16 +306,19 @@ function WalletTipAmountSelector(props: Props) {
 
       {/* lbc tab */}
       {activeTab === TAB_LBC && <WalletSpendableBalanceHelp />}
+
+      {/* help message */}
       {activeTab === TAB_FIAT &&
         (!hasCardSaved
           ? getHelpMessage(
               <>
                 <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" />
                 {' ' + __('To Tip Creators')}
-              </>
+              </>,
+              'add-a-card-help-message'
             )
           : !canReceiveFiatTip
-          ? getHelpMessage(__('Only creators that verify cash accounts can receive tips'))
+          ? getHelpMessage(__('Only creators that have added a bank account can receive tips'))
           : getHelpMessage(__('Send a tip directly from your attached card')))}
     </>
   );

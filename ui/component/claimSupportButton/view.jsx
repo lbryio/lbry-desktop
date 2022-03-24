@@ -22,8 +22,8 @@ export default function ClaimSupportButton(props: Props) {
     <Tooltip title={__('Support this claim')} arrow={false}>
       <Button
         button={!fileAction ? 'alt' : undefined}
-        className={classnames({ 'button--file-action': fileAction })}
-        icon={ICONS.LBC}
+        className={classnames('support-claim-button', { 'button--file-action': fileAction })}
+        icon={ICONS.FINANCE}
         iconSize={fileAction ? 22 : undefined}
         label={isRepost ? __('Support Repost') : __('Support --[button to support a claim]--')}
         requiresAuth
