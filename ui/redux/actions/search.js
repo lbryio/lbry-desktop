@@ -303,7 +303,12 @@ export const doRemovePersonalRecommendation = (uri: string) => (dispatch: Dispat
           .ignoreRecommendation(user.id, personalRecommendations.gid, claimId, hideChannel)
           .then((res) => {
             dispatch({ type: ACTIONS.FYP_HIDE_URI, data: { uri } });
-            dispatch(doToast({ message: __('Recommendation removed. Thanks for the feedback!') }));
+            dispatch(
+              doToast({
+                message: __('Recommendation removed.'),
+                subMessage: __('Thanks for the feedback!'),
+              })
+            );
           })
           .catch((err) => {
             console.log('doRemovePersonalRecommendation:', err);
