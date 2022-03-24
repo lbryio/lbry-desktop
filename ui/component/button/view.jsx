@@ -147,7 +147,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
 
   // check if the link is for odysee.com
   function isAnOdyseeLink(urlString) {
-    return urlString.indexOf('https://odysee.com') !== -1 || urlString.indexOf('http://odysee.com') !== -1;
+    return urlString && (urlString.indexOf('https://odysee.com') !== -1 || urlString.indexOf('http://odysee.com') !== -1);
   }
 
   // if it's an internal link we won't open a new tab
