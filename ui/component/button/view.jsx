@@ -39,7 +39,6 @@ type Props = {
   dispatch: any,
   'aria-label'?: string,
   user: ?User,
-  meme: ?boolean,
 };
 
 // use forwardRef to allow consumers to pass refs to the button content if they want to
@@ -73,7 +72,6 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     pathname,
     user,
     authSrc,
-    meme,
     ...otherProps
   } = props;
 
@@ -147,7 +145,9 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
 
   // check if the link is for odysee.com
   function isAnOdyseeLink(urlString) {
-    return urlString && (urlString.indexOf('https://odysee.com') !== -1 || urlString.indexOf('http://odysee.com') !== -1);
+    return (
+      urlString && (urlString.indexOf('https://odysee.com') !== -1 || urlString.indexOf('http://odysee.com') !== -1)
+    );
   }
 
   // if it's an internal link we won't open a new tab
@@ -157,7 +157,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     // TODO: replace the below with an outbound link tracker for matomo
     return (
       <a
-        target={meme && isAnInternalLink ? '' : '_blank'}
+        target={isAnInternalLink ? '' : '_blank'}
         rel="noopener noreferrer"
         href={href || navigate}
         className={combinedClassName}

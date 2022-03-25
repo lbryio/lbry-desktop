@@ -5,7 +5,7 @@ const memes = require('memes');
 export default function Meme() {
   return (
     <h1 className="home__meme">
-      <Button button="link" navigate={memes.url} meme>
+      <Button button="link" navigate={memes.url}>
         {memes.text}
       </Button>
     </h1>
