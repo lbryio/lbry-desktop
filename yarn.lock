@@ -1919,6 +1919,11 @@
   dependencies:
     "@sentry/cli" "^1.49.0"
 
+"@silvermine/videojs-airplay@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@silvermine/videojs-airplay/-/videojs-airplay-1.1.0.tgz#3f23fe9aaa4af9041f800d88f51b56748e214fdd"
+  integrity sha512-f1N9YA9PJBVNpxv3/bfJZBbS9Qb51XL1+nnWqwOkDS1S6CbjGypan62nY6qU/uqKOHHQ+jXlRgQ5w9Dy3kbDjw==
+
 "@silvermine/videojs-chromecast@^1.3.3":
   version "1.3.3"
   resolved "https://registry.yarnpkg.com/@silvermine/videojs-chromecast/-/videojs-chromecast-1.3.3.tgz#44d81a18f6812aace05c0c37bfd3abc07505d495"
