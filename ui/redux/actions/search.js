@@ -5,7 +5,7 @@ import { doOpenModal } from 'redux/actions/app';
 import { doToast } from 'redux/actions/notifications';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { selectClaimForUri, selectClaimIdForUri, selectClaimIsNsfwForUri } from 'redux/selectors/claims';
-import { doClaimSearch, doResolveUris } from 'redux/actions/claims';
+import { doClaimSearch, doResolveClaimIds, doResolveUris } from 'redux/actions/claims';
 import { buildURI, isURIValid } from 'util/lbryURI';
 import { batchActions } from 'util/batch-actions';
 import { makeSelectSearchUrisForQuery, selectPersonalRecommendations, selectSearchValue } from 'redux/selectors/search';
@@ -167,14 +167,30 @@ export const doSearch = (rawQuery: string, searchOptions: SearchOptions) => (
     type: ACTIONS.SEARCH_START,
   });
 
-  const cmd = searchOptions.hasOwnProperty(SEARCH_OPTIONS.RELATED_TO)
-    ? lighthouse.searchRecommendations
-    : lighthouse.search;
+  const isSearchingRecommendations = searchOptions.hasOwnProperty(SEARCH_OPTIONS.RELATED_TO);
+  const cmd = isSearchingRecommendations ? lighthouse.searchRecommendations : lighthouse.search;
 
   cmd(queryWithOptions)
     .then((data: { body: Array<{ name: string, claimId: string }>, poweredBy: string }) => {
       const { body: result, poweredBy } = data;
       const uris = processLighthouseResults(result);
+
+      if (isSearchingRecommendations) {
+        const claimIds = result.map((x) => x.claimId);
+        dispatch(doResolveClaimIds(claimIds)).finally(() => {
+          dispatch({
+            type: ACTIONS.SEARCH_SUCCESS,
+            data: {
+              query: queryWithOptions,
+              from: from,
+              size: size,
+              uris,
+              recsys: poweredBy,
+            },
+          });
+        });
+        return;
+      }
 
       const actions = [];
       actions.push(doResolveUris(uris));

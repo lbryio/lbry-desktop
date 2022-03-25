@@ -12,6 +12,7 @@ import {
   selectPendingClaimsById,
   selectClaimIsMine,
   selectIsMyChannelCountOverLimit,
+  selectById,
 } from 'redux/selectors/claims';
 
 import { doFetchTxoPage } from 'redux/actions/wallet';
@@ -138,6 +139,40 @@ export function doResolveUris(
 
       return result;
     });
+  };
+}
+
+/**
+ * Temporary alternative to doResolveUris() due to a batching bug with
+ * Lbry.resolve().
+ *
+ * Note that is a simpler version that DOES NOT handle Collections and Reposts.
+ *
+ * @param claimIds
+ */
+export function doResolveClaimIds(claimIds: Array<string>) {
+  return (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const resolvedIds = Object.keys(selectById(state));
+    const idsToResolve = claimIds.filter((x) => !resolvedIds.includes(x));
+
+    if (idsToResolve.length === 0) {
+      return;
+    }
+
+    return dispatch(
+      doClaimSearch(
+        {
+          claim_ids: idsToResolve,
+          page: 1,
+          page_size: Math.min(idsToResolve.length, 50),
+          no_totals: true,
+        },
+        {
+          useAutoPagination: idsToResolve.length > 50,
+        }
+      )
+    );
   };
 }
 
