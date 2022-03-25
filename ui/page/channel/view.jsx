@@ -235,7 +235,7 @@ function ChannelPage(props: Props) {
           <ClaimMenuList uri={claim.permanent_url} inline isChannelPage />
         </div>
         {cover && <img className={classnames('channel-cover__custom')} src={PlaceholderTx} />}
-        {cover && <OptimizedImage className={classnames('channel-cover__custom')} src={cover} objectFit="cover" />}
+        {cover && <OptimizedImage className={classnames('channel-cover__custom')} src={cover} />}
         <div className="channel__primary-info">
           <ChannelThumbnail
             className="channel__thumbnail--channel-page"
