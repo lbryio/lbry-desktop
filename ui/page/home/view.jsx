@@ -79,7 +79,7 @@ function HomePage(props: Props) {
 
   // TODO: probably need memo, or incorporate into GetLinksData.
   let sortedRowData: Array<RowDataItem> = [];
-  if (homepageOrder.active) {
+  if (homepageOrder.active && authenticated) {
     homepageOrder.active.forEach((key) => {
       const item = rowData.find((data) => data.id === key);
       if (item) {
@@ -220,7 +220,7 @@ function HomePage(props: Props) {
         </>
       )}
 
-      {sortedRowData.length === 0 && (
+      {sortedRowData.length === 0 && authenticated && (
         <div className="empty--centered">
           <Yrbl
             alwaysShow
