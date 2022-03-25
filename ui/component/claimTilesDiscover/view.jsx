@@ -4,6 +4,7 @@ import React from 'react';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import useFetchViewCount from 'effects/use-fetch-view-count';
 import useLastVisibleItem from 'effects/use-last-visible-item';
+import useResolvePins from 'effects/use-resolve-pins';
 import useGetUserMemberships from 'effects/use-get-user-memberships';
 
 function urisEqual(prev: ?Array<string>, next: ?Array<string>) {
@@ -25,7 +26,7 @@ function urisEqual(prev: ?Array<string>, next: ?Array<string>) {
 
 type Props = {
   prefixUris?: Array<string>,
-  pinUrls?: Array<string>,
+  pins?: { urls?: Array<string>, claimIds?: Array<string>, onlyPinForOrder?: string },
   uris: Array<string>,
   injectedItem?: { node: Node, index?: number, replace?: boolean },
   showNoSourceClaims?: boolean,
@@ -51,6 +52,7 @@ type Props = {
   location: { search: string },
   claimSearchResults: Array<string>,
   claimsByUri: { [string]: any },
+  claimsById: { [string]: any },
   fetchingClaimSearch: boolean,
   showNsfw: boolean,
   hideReposts: boolean,
@@ -59,6 +61,8 @@ type Props = {
   doClaimSearch: ({}) => void,
   doFetchViewCount: (claimIdCsv: string) => void,
   doFetchUserMemberships: (claimIdCsv: string) => void,
+  doResolveClaimIds: (Array<string>) => Promise<any>,
+  doResolveUris: (Array<string>, boolean) => Promise<any>,
 };
 
 function ClaimTilesDiscover(props: Props) {
@@ -66,12 +70,13 @@ function ClaimTilesDiscover(props: Props) {
     doClaimSearch,
     claimSearchResults,
     claimsByUri,
+    claimsById,
     fetchViewCount,
     fetchingClaimSearch,
     hasNoSource,
     // forceShowReposts = false,
     renderProperties,
-    pinUrls,
+    pins,
     prefixUris,
     injectedItem,
     showNoSourceClaims,
@@ -79,6 +84,8 @@ function ClaimTilesDiscover(props: Props) {
     pageSize = 8,
     optionsStringified,
     doFetchUserMemberships,
+    doResolveClaimIds,
+    doResolveUris,
   } = props;
 
   const listRef = React.useRef();
@@ -87,21 +94,15 @@ function ClaimTilesDiscover(props: Props) {
   const prevUris = React.useRef();
   const claimSearchUris = claimSearchResults || [];
   const isUnfetchedClaimSearch = claimSearchResults === undefined;
+  const resolvedPinUris = useResolvePins({ pins, claimsById, doResolveClaimIds, doResolveUris });
 
   const shouldPerformSearch = !fetchingClaimSearch && claimSearchUris.length === 0;
 
   const uris = (prefixUris || []).concat(claimSearchUris);
   if (prefixUris && prefixUris.length) uris.splice(prefixUris.length * -1, prefixUris.length);
 
-  if (pinUrls && uris && uris.length > 2 && window.location.pathname === '/') {
-    pinUrls.forEach((pin) => {
-      if (uris.indexOf(pin) !== -1) {
-        uris.splice(uris.indexOf(pin), 1);
-      } else {
-        uris.pop();
-      }
-    });
-    uris.splice(2, 0, ...pinUrls);
+  if (window.location.pathname === '/') {
+    injectPinUrls(uris, pins, resolvedPinUris);
   }
 
   if (uris.length > 0 && uris.length < pageSize && shouldPerformSearch) {
@@ -117,17 +118,40 @@ function ClaimTilesDiscover(props: Props) {
   // --------------------------------------------------------------------------
   // --------------------------------------------------------------------------
 
+  function injectPinUrls(uris, pins, resolvedPinUris) {
+    if (!pins || !uris || uris.length <= 2) {
+      return;
+    }
+
+    if (resolvedPinUris) {
+      resolvedPinUris.forEach((pin) => {
+        if (uris.includes(pin)) {
+          uris.splice(uris.indexOf(pin), 1);
+        } else {
+          uris.pop();
+        }
+      });
+
+      uris.splice(2, 0, ...resolvedPinUris);
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  // --------------------------------------------------------------------------
+
   useFetchViewCount(fetchViewCount, uris, claimsByUri, doFetchViewCount);
 
   useGetUserMemberships(true, uris, claimsByUri, doFetchUserMemberships);
 
-  // Run `doClaimSearch`
   React.useEffect(() => {
     if (shouldPerformSearch) {
       const searchOptions = JSON.parse(optionsStringified);
       doClaimSearch(searchOptions);
     }
   }, [doClaimSearch, shouldPerformSearch, optionsStringified]);
+
+  // --------------------------------------------------------------------------
+  // --------------------------------------------------------------------------
 
   return (
     <ul ref={listRef} className="claim-grid">

@@ -128,9 +128,10 @@ function DiscoverPage(props: Props) {
   }
 
   function getPins(routeProps) {
-    if (routeProps && routeProps.pinnedUrls) {
+    if (routeProps && (routeProps.pinnedUrls || routeProps.pinnedClaimIds)) {
       return {
         urls: routeProps.pinnedUrls,
+        claimIds: routeProps.pinnedClaimIds,
         onlyPinForOrder: CS.ORDER_BY_TRENDING,
       };
     }

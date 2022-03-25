@@ -1,11 +1,12 @@
 import { connect } from 'react-redux';
 import {
+  selectById,
   selectClaimsByUri,
   selectClaimSearchByQuery,
   selectClaimSearchByQueryLastPageReached,
   selectFetchingClaimSearch,
 } from 'redux/selectors/claims';
-import { doClaimSearch } from 'redux/actions/claims';
+import { doClaimSearch, doResolveClaimIds, doResolveUris } from 'redux/actions/claims';
 import * as SETTINGS from 'constants/settings';
 import { selectFollowedTags } from 'redux/selectors/tags';
 import { selectMutedChannels } from 'redux/selectors/blocked';
@@ -20,6 +21,7 @@ const select = (state, props) => ({
   claimSearchByQuery: selectClaimSearchByQuery(state),
   claimSearchByQueryLastPageReached: selectClaimSearchByQueryLastPageReached(state),
   claimsByUri: selectClaimsByUri(state),
+  claimsById: selectById(state),
   loading: props.loading !== undefined ? props.loading : selectFetchingClaimSearch(state),
   showNsfw: selectShowMatureContent(state),
   hideReposts: selectClientSetting(state, SETTINGS.HIDE_REPOSTS),
@@ -33,6 +35,8 @@ const perform = {
   doClaimSearch,
   doFetchViewCount,
   doFetchUserMemberships,
+  doResolveClaimIds,
+  doResolveUris,
 };
 
 export default connect(select, perform)(ClaimListDiscover);

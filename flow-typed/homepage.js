@@ -19,6 +19,7 @@ declare type RowDataItem = {
   icon?: string,
   extra?: any,
   pinnedUrls?: Array<string>,
+  pinnedClaimIds?: Array<string>, // pinnedUrls takes precedence
   options?: {
     channelIds?: Array<string>,
     limitClaimsPerChannel?: number,

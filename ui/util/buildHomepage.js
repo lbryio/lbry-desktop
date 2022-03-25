@@ -19,6 +19,7 @@ export type HomepageCat = {
   order?: string,
   tags?: Array<string>,
   pinnedUrls?: Array<string>,
+  pinnedClaimIds?: Array<string>, // pinnedUrls takes precedence
   mixIn?: Array<string>,
 };
 
@@ -89,6 +90,7 @@ export const getHomepageRowForCat = (key: string, cat: HomepageCat) => {
     icon: cat.icon || '', // some default
     title: cat.label,
     pinnedUrls: cat.pinnedUrls,
+    pinnedClaimIds: cat.pinnedClaimIds,
     options: {
       claimType: cat.claimType || ['stream', 'repost'],
       channelIds: cat.channelIds,
