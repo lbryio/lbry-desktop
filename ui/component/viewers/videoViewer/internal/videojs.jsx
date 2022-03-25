@@ -164,8 +164,10 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
   const playerServerRef = useRef();
 
-  const { url: livestreamVideoUrl } = activeLivestreamForChannel || {};
-  const showQualitySelector = !isLivestreamClaim || (livestreamVideoUrl && livestreamVideoUrl.includes('/transcode/'));
+  const livestreamVideoUrl = activeLivestreamForChannel?.url;
+
+  // show quality selector if not a livestream, or a transcoded livestream
+  const showQualitySelector = !isLivestreamClaim || livestreamVideoUrl?.includes('/transcode/');
 
   // initiate keyboard shortcuts
   const { curried_function } = keyboardShorcuts({
@@ -331,6 +333,18 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     }
   }, [showQualitySelector]);
 
+  function hitsTenPercent() {
+    // from 0 - 999
+    const rand = Math.floor(Math.random() * (1000 + 1));
+
+    // 499 is 50% chance of running
+    if (rand < 100) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   /** instantiate videoJS and dispose of it when done with code **/
   // This lifecycle hook is only called once (on mount), or when `isAudio` or `source` changes.
   useEffect(() => {
@@ -357,15 +371,28 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       const controlBar = document.querySelector('.vjs-control-bar');
       if (controlBar) controlBar.style.setProperty('opacity', '1', 'important');
 
+      // if livestream
       if (isLivestreamClaim && userClaimId) {
         // $FlowFixMe
         vjsPlayer.addClass('livestreamPlayer');
 
-        // $FlowFixMe
-        vjsPlayer.src({
-          type: 'application/x-mpegURL',
-          src: livestreamVideoUrl,
-        });
+        const newLivestreamServer = 'https://cdn-backup.odysee.live';
+        const newLivestreamUrl = newLivestreamServer + livestreamVideoUrl.substr(23);
+
+        // run if a 10% chance happens
+        if (hitsTenPercent()) {
+          // $FlowFixMe
+          vjsPlayer.src({
+            type: 'application/x-mpegURL',
+            src: newLivestreamUrl,
+          });
+        } else {
+          // $FlowFixMe
+          vjsPlayer.src({
+            type: 'application/x-mpegURL',
+            src: livestreamVideoUrl,
+          });
+        }
       } else {
         // $FlowFixMe
         vjsPlayer.removeClass('livestreamPlayer');
