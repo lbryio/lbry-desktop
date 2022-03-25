@@ -81,10 +81,8 @@ function ClaimTilesDiscover(props: Props) {
     doFetchUserMemberships,
   } = props;
 
-  // reference to the claim-grid
-  const sectionRef = React.useRef();
-  // determine the index where the ad should be injected
-  const injectedIndex = useLastVisibleItem(injectedItem, sectionRef);
+  const listRef = React.useRef();
+  const injectedIndex = useLastVisibleItem(injectedItem, listRef);
 
   const prevUris = React.useRef();
   const claimSearchUris = claimSearchResults || [];
@@ -119,12 +117,9 @@ function ClaimTilesDiscover(props: Props) {
   // --------------------------------------------------------------------------
   // --------------------------------------------------------------------------
 
-  // populate the view counts for the current claim uris
   useFetchViewCount(fetchViewCount, uris, claimsByUri, doFetchViewCount);
 
-  const shouldFetchUserMemberships = true;
-
-  useGetUserMemberships(shouldFetchUserMemberships, uris, claimsByUri, doFetchUserMemberships);
+  useGetUserMemberships(true, uris, claimsByUri, doFetchUserMemberships);
 
   // Run `doClaimSearch`
   React.useEffect(() => {
@@ -135,11 +130,10 @@ function ClaimTilesDiscover(props: Props) {
   }, [doClaimSearch, shouldPerformSearch, optionsStringified]);
 
   return (
-    <ul ref={sectionRef} className="claim-grid">
+    <ul ref={listRef} className="claim-grid">
       {finalUris && finalUris.length
         ? finalUris.map((uri, i) => {
             if (uri) {
-              // if indexes match, inject ad in place of tile (aka replace it)
               if (injectedIndex === i && injectedItem && injectedItem.replace) {
                 return <React.Fragment key={uri}>{injectedItem.node}</React.Fragment>;
               }
@@ -147,7 +141,6 @@ function ClaimTilesDiscover(props: Props) {
               return (
                 <React.Fragment key={uri}>
                   {injectedIndex === i && injectedItem && injectedItem.node}
-                  {/* inject ad */}
                   <ClaimPreviewTile
                     showNoSourceClaims={hasNoSource || showNoSourceClaims}
                     uri={uri}
