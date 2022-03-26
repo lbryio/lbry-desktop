@@ -48,6 +48,10 @@ function getInitialList(listId, savedOrder, homepageSections) {
   const savedHiddenOrder = savedOrder.hidden || [];
   const sectionKeys = Object.keys(homepageSections);
 
+  if (sectionKeys.includes('NEWS') && !savedHiddenOrder.includes('NEWS') && !savedActiveOrder.includes('NEWS')) {
+    savedHiddenOrder.push('NEWS');
+  }
+
   if (listId === 'ACTIVE') {
     // Start with saved order, excluding obsolete items (i.e. category removed or not available in non-English)
     const finalOrder = savedActiveOrder.filter((x) => sectionKeys.includes(x));
