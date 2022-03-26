@@ -78,21 +78,21 @@ jobs:
           KNOWN_APP_DOMAINS: lbry.tv,lbry.lat,odysee.com
           CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS: 0
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         if: |
           startsWith(runner.os, 'linux')
         with:
           name: Linux
           path: ./dist/electron/*.*
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         if: |
           startsWith(runner.os, 'mac')
         with:
           name: macOS
           path: ./dist/electron/*.*
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         if: |
           startsWith(runner.os, 'windows')
         with:
