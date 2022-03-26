@@ -94,7 +94,20 @@ function HomePage(props: Props) {
       }
     });
   } else {
-    sortedRowData = rowData;
+    rowData.forEach((key) => {
+      // always inject FYP is homepage not customized, hide news.
+      if (key.id === 'FOLLOWING') {
+        sortedRowData.push(key);
+        sortedRowData.push({
+          id: 'FYP',
+          title: 'Recommended',
+          icon: ICONS.GLOBE,
+          link: `/$/${PAGES.FYP}`,
+        });
+      } else if (key.id !== 'NEWS') {
+        sortedRowData.push(key);
+      }
+    });
   }
 
   type SectionHeaderProps = {
