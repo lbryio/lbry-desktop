@@ -58,19 +58,6 @@ const collectionsReducer = handleActions(
       };
     },
 
-    [ACTIONS.COLLECTION_RENAME]: (state, action) => {
-      const { unpublished } = state;
-      const { id, newName } = action.data;
-      const newUnpublished = { ...unpublished };
-      if (newUnpublished[id]) {
-        newUnpublished[id].name = newName;
-      }
-      return {
-        ...state,
-        unpublished: newUnpublished,
-      };
-    },
-
     [ACTIONS.COLLECTION_DELETE]: (state, action) => {
       const { lastUsedCollection } = state;
       const { id, collectionKey } = action.data;

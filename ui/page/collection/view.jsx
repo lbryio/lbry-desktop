@@ -19,6 +19,7 @@ import * as COLLECTIONS_CONSTS from 'constants/collections';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 import Spinner from 'component/spinner';
+import { FormField } from 'component/common/form';
 
 export const PAGE_VIEW_QUERY = 'view';
 export const EDIT_PAGE = 'edit';
@@ -42,6 +43,7 @@ type Props = {
   fetchCollectionItems: (string, () => void) => void,
   resolveUris: (string) => void,
   user: ?User,
+  renameCollection: (string, string) => void,
 };
 
 export default function CollectionPage(props: Props) {
@@ -58,6 +60,7 @@ export default function CollectionPage(props: Props) {
     editCollection,
     fetchCollectionItems,
     deleteCollection,
+    renameCollection,
   } = props;
 
   const {
@@ -69,6 +72,11 @@ export default function CollectionPage(props: Props) {
   const [showInfo, setShowInfo] = React.useState(false);
   const [showEdit, setShowEdit] = React.useState(false);
   const [unavailableUris, setUnavailable] = React.useState([]);
+
+  const collectionName = claim ? claim.value.title || claim.name : collection && collection.name;
+
+  const [isRenamingList, setIsRenamingList] = React.useState(false);
+  const [newName, setNewName] = React.useState(collectionName);
 
   const { name, totalItems } = collection || {};
   const isBuiltin = COLLECTIONS_CONSTS.BUILTIN_LISTS.includes(collectionId);
@@ -82,6 +90,11 @@ export default function CollectionPage(props: Props) {
     const { index: to } = destination;
 
     editCollection(collectionId, { order: { from, to } });
+  }
+
+  function handleRenameCollection() {
+    renameCollection(collectionId, newName);
+    setIsRenamingList(false);
   }
 
   const urlParams = new URLSearchParams(search);
@@ -142,17 +155,48 @@ export default function CollectionPage(props: Props) {
   const info = (
     <Card
       title={
-        <span>
-          <Icon
-            icon={
-              (collectionId === COLLECTIONS_CONSTS.WATCH_LATER_ID && ICONS.TIME) ||
-              (collectionId === COLLECTIONS_CONSTS.FAVORITES_ID && ICONS.STAR) ||
-              ICONS.STACK
+        isRenamingList ? (
+          <FormField
+            autoFocus
+            type="text"
+            name="rename_collection"
+            value={newName}
+            label={__('New Collection Name')}
+            inputButton={
+              <>
+                <Button
+                  button={'alt'}
+                  icon={ICONS.COMPLETE}
+                  className={'button-toggle'}
+                  disabled={!(newName || '').trim() || collectionName === newName}
+                  onClick={handleRenameCollection}
+                />
+                <Button
+                  button={'alt'}
+                  className={'button-toggle'}
+                  icon={ICONS.REMOVE}
+                  onClick={() => {
+                    setIsRenamingList(false);
+                    setNewName(collectionName);
+                  }}
+                />
+              </>
             }
-            className="icon--margin-right"
+            onChange={(e) => setNewName(e.target.value)}
           />
-          {claim ? claim.value.title || claim.name : collection && collection.name}
-        </span>
+        ) : (
+          <span>
+            <Icon
+              icon={
+                (collectionId === COLLECTIONS_CONSTS.WATCH_LATER_ID && ICONS.TIME) ||
+                (collectionId === COLLECTIONS_CONSTS.FAVORITES_ID && ICONS.STAR) ||
+                ICONS.STACK
+              }
+              className="icon--margin-right"
+            />
+            {collectionName}
+          </span>
+        )
       }
       titleActions={unavailableUris.length > 0 ? removeUnavailable : titleActions}
       subtitle={subTitle}
@@ -166,6 +210,7 @@ export default function CollectionPage(props: Props) {
           collectionUrls={collectionUrls}
           setShowEdit={setShowEdit}
           showEdit={showEdit}
+          onRenameCollection={() => setIsRenamingList(true)}
         />
       }
       actions={
