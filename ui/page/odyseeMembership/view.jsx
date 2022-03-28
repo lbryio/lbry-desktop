@@ -283,16 +283,34 @@ const OdyseeMembershipPage = (props: Props) => {
       );
     }
 
-    const priceDisplayString = __(
-      'You are purchasing a %monthly_yearly% %plan% membership that is active immediately and will renew %monthly_yearly% at a price of %price%.',
-      {
-        monthly_yearly: interval === 'month' ? __('monthly') : __('yearly'),
-        price: `${currencyToUse.toUpperCase()} ${currencyToUse === 'usd' ? '$' : '€'}${price / 100}`,
-      }
+    const priceDisplayString = (
+      <I18nMessage
+        tokens={{
+          monthly_yearly_bolded: (
+            <b className="membership-bolded">{interval === 'month' ? __('monthly') : __('yearly')}</b>
+          ),
+          monthly_yearly: interval === 'month' ? __('monthly') : __('yearly'),
+          price: (
+            <b className="membership-bolded">{`${currencyToUse.toUpperCase()} ${currencyToUse === 'usd' ? '$' : '€'}${
+              price / 100
+            }`}</b>
+          ),
+        }}
+      >
+        You are purchasing a %monthly_yearly_bolded% %plan% membership that is active immediately and will renew
+        %monthly_yearly% at a price of %price%.
+      </I18nMessage>
     );
 
-    const noRefund = __(
-      'You can cancel Premium at any time (no refunds) and you can also close this window and choose a different membership option.'
+    const noRefund = (
+      <I18nMessage
+        tokens={{
+          premium_name: <b className="membership-bolded">{`Premium`}</b>,
+        }}
+      >
+        You can cancel %premium_name% at any time (no refunds) and you can also close this window and choose a different
+        membership option.
+      </I18nMessage>
     );
 
     return (

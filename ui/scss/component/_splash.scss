@@ -402,9 +402,15 @@
 }
 
 .stripe__confirm-remove-membership {
+  padding: var(--spacing-m) var(--spacing-l) !important;
+
   .card__subtitle {
     line-height: 39px;
     margin-top: 5px;
     margin-bottom: -1px;
+  }
+
+  .card__main-actions {
+    padding-top: 2px;
   }
 }
