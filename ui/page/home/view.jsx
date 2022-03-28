@@ -40,6 +40,7 @@ type Props = {
   adBlockerFound: ?boolean,
   homepageOrder: HomepageOrder,
   doOpenModal: (id: string, ?{}) => void,
+  hasMembership: boolean,
 };
 
 function HomePage(props: Props) {
@@ -56,6 +57,7 @@ function HomePage(props: Props) {
     adBlockerFound,
     homepageOrder,
     doOpenModal,
+    hasMembership,
   } = props;
 
   const showPersonalizedChannels = (authenticated || !IS_WEB) && subscribedChannels && subscribedChannels.length > 0;
@@ -98,12 +100,13 @@ function HomePage(props: Props) {
       // always inject FYP is homepage not customized, hide news.
       if (key.id === 'FOLLOWING') {
         sortedRowData.push(key);
-        sortedRowData.push({
-          id: 'FYP',
-          title: 'Recommended',
-          icon: ICONS.GLOBE,
-          link: `/$/${PAGES.FYP}`,
-        });
+        hasMembership &&
+          sortedRowData.push({
+            id: 'FYP',
+            title: 'Recommended',
+            icon: ICONS.GLOBE,
+            link: `/$/${PAGES.FYP}`,
+          });
       } else if (key.id !== 'NEWS') {
         sortedRowData.push(key);
       }
