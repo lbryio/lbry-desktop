@@ -34,7 +34,7 @@ function FileViewerEmbeddedEnded(props: Props) {
   const promptKey = promptKeys[Math.floor(Math.random() * promptKeys.length)];
   // $FlowFixMe
   const prompt = prompts[promptKey];
-  const lbrytvLink = `${URL}${formatLbryUrlForWeb(uri)}?src=${promptKey}`;
+  const odyseeLink = `${URL}${formatLbryUrlForWeb(uri)}?src=${promptKey}`;
   const showReplay = Boolean(window.player);
 
   return (
@@ -63,13 +63,13 @@ function FileViewerEmbeddedEnded(props: Props) {
           )}
           {!preferEmbed && (
             <>
-              <Button label={__('Discuss')} iconRight={ICONS.EXTERNAL} button="primary" href={lbrytvLink} />
+              <a target="_blank" rel="noopener noreferrer" href={odyseeLink}>
+                <Button label={__('Discuss')} iconRight={ICONS.EXTERNAL} button="primary" />
+              </a>
               {!isAuthenticated && (
-                <Button
-                  label={__('Join %SITE_NAME%', { SITE_NAME })}
-                  button="secondary"
-                  href={`${URL}/$/signup?src=embed_signup`}
-                />
+                <a target="_blank" rel="noopener noreferrer" href={`${URL}/$/signup?src=embed_signup`}>
+                  <Button label={__('Join %SITE_NAME%', { SITE_NAME })} button="secondary" />
+                </a>
               )}
             </>
           )}
