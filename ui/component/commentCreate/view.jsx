@@ -308,7 +308,7 @@ export function CommentCreate(props: Props) {
       const tipParams: TipParams = { tipAmount: Math.round(tipAmount * 100) / 100, tipChannelName, channelClaimId };
       const userParams: UserParams = { activeChannelName, activeChannelId: activeChannelClaimId };
 
-      doSendCashTip(tipParams, false, userParams, claimId, stripeEnvironment, (customerTipResponse) => {
+      doSendCashTip(tipParams, false, userParams, claimId, stripeEnvironment, preferredCurrency, (customerTipResponse) => {
         const { payment_intent_id } = customerTipResponse;
 
         handleCreateComment(null, payment_intent_id, stripeEnvironment);

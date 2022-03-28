@@ -43,6 +43,7 @@ const select = (state, props) => {
     instantTipMax: selectClientSetting(state, SETTINGS.INSTANT_PURCHASE_MAX),
     isPending: selectIsSendingSupport(state),
     title: selectTitleForUri(state, uri),
+    preferredCurrency: selectClientSetting(state, SETTINGS.PREFERRED_CURRENCY),
   };
 };
 
