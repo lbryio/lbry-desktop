@@ -728,7 +728,7 @@ export const doSendCashTip = (tipParams, anonymous, userParams, claimId, stripeE
       creator_channel_claim_id: tipParams.channelClaimId,
       tipper_channel_name: anonymous ? '' : userParams.activeChannelName,
       tipper_channel_claim_id: anonymous ? '' : userParams.activeChannelId,
-      currency: 'USD',
+      currency: 'EUR',
       anonymous: anonymous,
       source_claim_id: claimId,
       environment: stripeEnvironment,
@@ -738,7 +738,7 @@ export const doSendCashTip = (tipParams, anonymous, userParams, claimId, stripeE
     .then((customerTipResponse) => {
       dispatch(
         doToast({
-          message: __("You sent $%tipAmount% as a tip to %tipChannelName%, I'm sure they appreciate it!", {
+          message: __('You sent $%tipAmount% as a tip to %tipChannelName%, I\'m sure they appreciate it!', {
             tipAmount: tipParams.tipAmount,
             tipChannelName: tipParams.tipChannelName,
           }),

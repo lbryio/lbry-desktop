@@ -206,3 +206,4 @@ export const UPGRADE = 'Upgrade';
 export const DISMISS_ALL = 'DismissAll';
 export const SUBMIT = 'Submit';
 export const FILTERED_BY_LANG = 'FilteredByLang';
+export const EURO = 'Euro';

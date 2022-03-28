@@ -28,13 +28,13 @@ type Props = {
   customTipAmount?: number,
   exchangeRate?: any,
   fiatConversion?: boolean,
-  tipError: boolean,
   tipError: string,
   uri: string,
   onChange: (number) => void,
   setConvertedAmount?: (number) => void,
   setDisableSubmitButton: (boolean) => void,
   setTipError: (any) => void,
+  preferredCurrency?: boolean,
 };
 
 function WalletTipAmountSelector(props: Props) {
@@ -52,6 +52,7 @@ function WalletTipAmountSelector(props: Props) {
     setConvertedAmount,
     setDisableSubmitButton,
     setTipError,
+    preferredCurrency,
   } = props;
 
   const isMobile = useIsMobile();
@@ -229,6 +230,9 @@ function WalletTipAmountSelector(props: Props) {
     <div className={classnames('help', customClassName)}>{helpMessage}</div>
   );
 
+  let fiatIconToUse = ICONS.FINANCE;
+  if (preferredCurrency === 'EUR') fiatIconToUse = ICONS.EURO;
+
   return (
     <>
       <div className="section">
@@ -244,7 +248,7 @@ function WalletTipAmountSelector(props: Props) {
                 'button-toggle--disabled': amount > balance,
               })}
               label={defaultAmount}
-              icon={activeTab === TAB_LBC ? ICONS.LBC : ICONS.FINANCE}
+              icon={activeTab === TAB_LBC ? ICONS.LBC : fiatIconToUse}
               onClick={() => {
                 handleCustomPriceChange(defaultAmount);
                 setUseCustomTip(false);
@@ -258,7 +262,7 @@ function WalletTipAmountSelector(props: Props) {
           className={classnames('button-toggle button-toggle--expandformobile', {
             'button-toggle--active': useCustomTip,
           })}
-          icon={activeTab === TAB_LBC ? ICONS.LBC : ICONS.FINANCE}
+          icon={activeTab === TAB_LBC ? ICONS.LBC : fiatIconToUse}
           label={__('Custom')}
           onClick={() => setUseCustomTip(true)}
         />

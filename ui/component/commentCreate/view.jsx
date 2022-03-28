@@ -66,6 +66,7 @@ type Props = {
   doSendCashTip: (TipParams, anonymous: boolean, UserParams, claimId: string, stripe: ?string, (any) => void) => string,
   doSendTip: (params: {}, isSupport: boolean, successCb: (any) => void, errorCb: (any) => void, boolean) => void,
   doOpenModal: (id: string, any) => void,
+  preferredCurrency?: boolean,
 };
 
 export function CommentCreate(props: Props) {
@@ -101,6 +102,7 @@ export function CommentCreate(props: Props) {
     doSendTip,
     setQuickReply,
     doOpenModal,
+    preferredCurrency,
   } = props;
 
   const isMobile = useIsMobile();
@@ -382,6 +384,9 @@ export function CommentCreate(props: Props) {
     setTipSelector(false);
   }
 
+  let fiatIconToUse = ICONS.FINANCE;
+  if (preferredCurrency === 'EUR') fiatIconToUse = ICONS.EURO;
+
   // **************************************************************************
   // Effects
   // **************************************************************************
@@ -640,7 +645,7 @@ export function CommentCreate(props: Props) {
             <Button
               {...submitButtonProps}
               disabled={disabled || tipSelectorError || !minAmountMet}
-              icon={activeTab === TAB_LBC ? ICONS.LBC : ICONS.FINANCE}
+              icon={activeTab === TAB_LBC ? ICONS.LBC : fiatIconToUse}
               label={__('Review')}
               onClick={() => {
                 setReviewingSupportComment(true);
