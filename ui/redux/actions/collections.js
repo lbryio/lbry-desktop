@@ -40,14 +40,6 @@ export const doLocalCollectionCreate = (
   });
 };
 
-export const doCollectionRename = (id: string, newName: string) => ({
-  type: ACTIONS.COLLECTION_RENAME,
-  data: {
-    id,
-    newName,
-  },
-});
-
 export const doCollectionDelete = (id: string, colKey: ?string = undefined) => (
   dispatch: Dispatch,
   getState: GetState

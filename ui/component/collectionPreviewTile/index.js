@@ -16,7 +16,7 @@ import {
   makeSelectCountForCollectionId,
   makeSelectIsResolvingCollectionForId,
 } from 'redux/selectors/collections';
-import { doFetchItemsInCollection, doCollectionDelete, doCollectionRename } from 'redux/actions/collections';
+import { doFetchItemsInCollection, doCollectionDelete } from 'redux/actions/collections';
 import { doResolveUri } from 'redux/actions/claims';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
@@ -54,7 +54,6 @@ const perform = (dispatch) => ({
   resolveUri: (uri) => dispatch(doResolveUri(uri)),
   resolveCollectionItems: (options) => doFetchItemsInCollection(options),
   deleteCollection: (id) => dispatch(doCollectionDelete(id)),
-  renameCollection: (id, name) => dispatch(doCollectionRename(id, name)),
 });
 
 export default connect(select, perform)(CollectionPreviewTile);

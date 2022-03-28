@@ -29,6 +29,7 @@ type Props = {
   doToggleShuffleList: (string, boolean) => void,
   playNextUri: string,
   firstItem: string,
+  onRenameCollection: () => void,
 };
 
 function CollectionActions(props: Props) {
@@ -48,6 +49,7 @@ function CollectionActions(props: Props) {
     firstItem,
     showEdit,
     setShowEdit,
+    onRenameCollection,
   } = props;
   const [doShuffle, setDoShuffle] = React.useState(false);
   const { push } = useHistory();
@@ -120,6 +122,17 @@ function CollectionActions(props: Props) {
       {!isBuiltin &&
         (isMyCollection ? (
           <>
+            {!uri && (
+              <Button
+                title={__('Rename')}
+                label={__('Rename')}
+                className={classnames('button--file-action')}
+                onClick={onRenameCollection}
+                icon={ICONS.EDIT}
+                iconSize={18}
+                disabled={claimIsPending}
+              />
+            )}
             <Button
               title={uri ? __('Update') : __('Publish')}
               label={uri ? __('Update') : __('Publish')}
