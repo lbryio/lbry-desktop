@@ -46,10 +46,18 @@ type Props = {
   hasSelectedTab?: string,
   customText?: string,
   doHideModal: () => void,
-  doSendCashTip: (TipParams, boolean, UserParams, string, ?string) => string,
+  doSendCashTip: (
+    TipParams,
+    anonymous: boolean,
+    UserParams,
+    claimId: string,
+    stripe: ?string,
+    preferredCurrency: string,
+    ?(any) => void
+  ) => string,
   doSendTip: (SupportParams, boolean) => void, // function that comes from lbry-redux
   setAmount?: (number) => void,
-  preferredCurrency?: boolean,
+  preferredCurrency: string,
 };
 
 export default function WalletSendTip(props: Props) {
@@ -120,8 +128,9 @@ export default function WalletSendTip(props: Props) {
       confirmLabel = __('Boosting');
       break;
     case TAB_FIAT:
-      explainerText = __('Show this channel your appreciation by sending a donation in %currencyToUse%. ',
-        { currencyToUse: preferredCurrency});
+      explainerText = __('Show this channel your appreciation by sending a donation in %currencyToUse%. ', {
+        currencyToUse: preferredCurrency,
+      });
       confirmLabel = __('Tipping %currencyToUse%', { currencyToUse: preferredCurrency });
       break;
     case TAB_LBC:
@@ -195,7 +204,14 @@ export default function WalletSendTip(props: Props) {
         const userParams: UserParams = { activeChannelName, activeChannelId };
 
         // hit backend to send tip
-        doSendCashTip(tipParams, !activeChannelId || incognito, userParams, claimId, stripeEnvironment, preferredCurrency);
+        doSendCashTip(
+          tipParams,
+          !activeChannelId || incognito,
+          userParams,
+          claimId,
+          stripeEnvironment,
+          preferredCurrency
+        );
         doHideModal();
       }
       // if it's a boost (?)

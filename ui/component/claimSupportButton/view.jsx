@@ -13,7 +13,7 @@ type Props = {
   disableSupport: boolean,
   isRepost?: boolean,
   doOpenModal: (id: string, {}) => void,
-  preferredCurrency: ?string,
+  preferredCurrency: string,
 };
 
 export default function ClaimSupportButton(props: Props) {

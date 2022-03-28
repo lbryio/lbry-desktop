@@ -63,10 +63,18 @@ type Props = {
   doFetchCreatorSettings: (channelId: string) => Promise<any>,
   doToast: ({ message: string }) => void,
   doCommentById: (commentId: string, toastIfNotFound: boolean) => Promise<any>,
-  doSendCashTip: (TipParams, anonymous: boolean, UserParams, claimId: string, stripe: ?string, (any) => void) => string,
+  doSendCashTip: (
+    TipParams,
+    anonymous: boolean,
+    UserParams,
+    claimId: string,
+    stripe: ?string,
+    preferredCurrency: string,
+    (any) => void
+  ) => string,
   doSendTip: (params: {}, isSupport: boolean, successCb: (any) => void, errorCb: (any) => void, boolean) => void,
   doOpenModal: (id: string, any) => void,
-  preferredCurrency?: boolean,
+  preferredCurrency: string,
 };
 
 export function CommentCreate(props: Props) {
@@ -308,17 +316,25 @@ export function CommentCreate(props: Props) {
       const tipParams: TipParams = { tipAmount: Math.round(tipAmount * 100) / 100, tipChannelName, channelClaimId };
       const userParams: UserParams = { activeChannelName, activeChannelId: activeChannelClaimId };
 
-      doSendCashTip(tipParams, false, userParams, claimId, stripeEnvironment, preferredCurrency, (customerTipResponse) => {
-        const { payment_intent_id } = customerTipResponse;
+      doSendCashTip(
+        tipParams,
+        false,
+        userParams,
+        claimId,
+        stripeEnvironment,
+        preferredCurrency,
+        (customerTipResponse) => {
+          const { payment_intent_id } = customerTipResponse;
 
-        handleCreateComment(null, payment_intent_id, stripeEnvironment);
+          handleCreateComment(null, payment_intent_id, stripeEnvironment);
 
-        setCommentValue('');
-        setReviewingSupportComment(false);
-        setTipSelector(false);
-        setCommentFailure(false);
-        setSubmitting(false);
-      });
+          setCommentValue('');
+          setReviewingSupportComment(false);
+          setTipSelector(false);
+          setCommentFailure(false);
+          setSubmitting(false);
+        }
+      );
     }
   }
 
@@ -687,7 +703,7 @@ export function CommentCreate(props: Props) {
                   <TipActionButton {...tipButtonProps} name={__('Credits')} icon={ICONS.LBC} tab={TAB_LBC} />
 
                   {stripeEnvironment && (
-                    <TipActionButton {...tipButtonProps} name={__('Cash')} icon={ICONS.FINANCE} tab={TAB_FIAT} />
+                    <TipActionButton {...tipButtonProps} name={__('Cash')} icon={fiatIconToUse} tab={TAB_FIAT} />
                   )}
                 </>
               )}
