@@ -302,15 +302,8 @@ const OdyseeMembershipPage = (props: Props) => {
       </I18nMessage>
     );
 
-    const noRefund = (
-      <I18nMessage
-        tokens={{
-          premium_name: <b className="membership-bolded">{`Premium`}</b>,
-        }}
-      >
-        You can cancel %premium_name% at any time (no refunds) and you can also close this window and choose a different
-        membership option.
-      </I18nMessage>
+    const noRefund = __(
+      'You can cancel Premium at any time (no refunds) and you can also close this window and choose a different membership option.'
     );
 
     return (

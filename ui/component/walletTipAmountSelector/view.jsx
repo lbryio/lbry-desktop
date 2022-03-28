@@ -318,7 +318,7 @@ function WalletTipAmountSelector(props: Props) {
               'add-a-card-help-message'
             )
           : !canReceiveFiatTip
-          ? getHelpMessage(__('Only creators that have added a bank account can receive tips'))
+          ? getHelpMessage(__('Only creators that verify cash accounts can receive tips'))
           : getHelpMessage(__('Send a tip directly from your attached card')))}
     </>
   );
