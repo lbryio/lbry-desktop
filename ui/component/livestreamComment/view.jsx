@@ -120,7 +120,7 @@ export default function LivestreamComment(props: Props) {
           {isGlobalMod && <CommentBadge label={__('Admin')} icon={ICONS.BADGE_ADMIN} size={16} />}
           {isModerator && <CommentBadge label={__('Moderator')} icon={ICONS.BADGE_MOD} size={16} />}
           {isStreamer && <CommentBadge label={__('Streamer')} icon={ICONS.BADGE_STREAMER} size={16} />}
-          <PremiumBadge membership={odyseeMembership} />
+          <PremiumBadge membership={odyseeMembership} linkPage />
 
           {/* Use key to force timestamp update */}
           <DateTime date={timePosted} timeAgo key={forceUpdate} genericSeconds />
