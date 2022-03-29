@@ -747,6 +747,7 @@ fieldset-section {
   border-color: var(--color-text);
   padding-right: var(--spacing-s);
   padding-left: var(--spacing-s);
+  background-color: unset;
 }
 
 .editable-text__input-button {
