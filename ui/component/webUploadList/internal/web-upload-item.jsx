@@ -82,7 +82,7 @@ export default function WebUploadItem(props: Props) {
       if (status) {
         switch (status) {
           case 'retry':
-            return __('Retrying...');
+            return __('Uploading...');
           case 'error':
             return __('Failed.');
           case 'conflict':
