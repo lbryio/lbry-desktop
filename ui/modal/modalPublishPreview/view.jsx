@@ -7,6 +7,7 @@ import { Modal } from 'modal/modal';
 import Card from 'component/common/card';
 import Tag from 'component/tag';
 import MarkdownPreview from 'component/common/markdown-preview';
+import { getLanguageName } from 'constants/languages';
 import { COPYRIGHT, OTHER } from 'constants/licenses';
 import LbcSymbol from 'component/common/lbc-symbol';
 import ChannelThumbnail from 'component/channelThumbnail';
@@ -48,6 +49,7 @@ type Props = {
   publishing: boolean,
   isLivestreamClaim: boolean,
   remoteFile: string,
+  appLanguage: string,
 };
 
 // class ModalPublishPreview extends React.PureComponent<Props> {
@@ -82,6 +84,7 @@ const ModalPublishPreview = (props: Props) => {
     closeModal,
     isLivestreamClaim,
     remoteFile,
+    appLanguage,
   } = props;
 
   const maxCharsBeforeOverflow = 128;
@@ -198,7 +201,7 @@ const ModalPublishPreview = (props: Props) => {
         {licenseUrl}
       </p>
     ) : (
-      <p>{licenseType}</p>
+      <p>{__(licenseType)}</p>
     );
 
   const visibleTags = tags.filter((tag) => !INTERNAL_TAGS.includes(tag.name));
@@ -234,7 +237,15 @@ const ModalPublishPreview = (props: Props) => {
   };
 
   const releaseTimeStr = (time) => {
-    return time ? moment(new Date(time * 1000)).format('MMMM Do, YYYY - h:mm a') : '';
+    if (time) {
+      try {
+        return new Date(time * 1000).toLocaleString(appLanguage);
+      } catch {
+        return moment(new Date(time * 1000)).format('MMMM Do, YYYY - h:mm a');
+      }
+    } else {
+      return '';
+    }
   };
 
   return (
@@ -256,7 +267,7 @@ const ModalPublishPreview = (props: Props) => {
                     {createRow(__('URL'), formattedUri)}
                     {createRow(__('Deposit'), depositValue)}
                     {createRow(__('Price'), priceValue)}
-                    {createRow(__('Language'), language)}
+                    {createRow(__('Language'), language ? getLanguageName(language) : '')}
                     {releaseTimeEdited && createRow(releaseDateText, releaseTimeStr(releaseTimeEdited))}
                     {createRow(__('License'), licenseValue)}
                     {createRow(__('Tags'), tagsValue)}
