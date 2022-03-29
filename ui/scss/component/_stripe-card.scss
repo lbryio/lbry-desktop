@@ -413,9 +413,11 @@ pre {
   display: block;
 }
 
-.card__header--between,
-.card__title-section {
-  display: block;
+.add-payment-card-div {
+  .card__header--between,
+  .card__title-section {
+    display: block;
+  }
 }
 
 .currency-to-use-selector {

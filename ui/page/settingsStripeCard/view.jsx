@@ -446,6 +446,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
             )}
             <Card
               title={__('Card Details')}
+              className="add-payment-card-div"
               body={
                 <>
                   <Plastic
