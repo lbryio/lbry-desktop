@@ -48,7 +48,7 @@ export function doResolveUris(
     });
 
     if (urisToResolve.length === 0) {
-      return;
+      return Promise.resolve();
     }
 
     dispatch({
@@ -157,7 +157,7 @@ export function doResolveClaimIds(claimIds: Array<string>) {
     const idsToResolve = claimIds.filter((x) => !resolvedIds.includes(x));
 
     if (idsToResolve.length === 0) {
-      return;
+      return Promise.resolve();
     }
 
     return dispatch(
