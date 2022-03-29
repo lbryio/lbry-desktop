@@ -195,8 +195,11 @@ export default function CollectionPage(props: Props) {
             {collectionName}
             {!uri && (
               <>
-                {' '}
-                <Button icon={ICONS.EDIT} onClick={() => setIsRenamingList(true)} />
+                <Button
+                  className={'editable-text__input-button'}
+                  icon={ICONS.EDIT}
+                  onClick={() => setIsRenamingList(true)}
+                />
               </>
             )}
           </span>
