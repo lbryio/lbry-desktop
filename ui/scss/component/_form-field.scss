@@ -141,12 +141,12 @@ input-submit {
     border-bottom-right-radius: 0;
     border-right: none;
   }
-
-  & > *:nth-child(2) {
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    border: 1px solid var(--color-input-border);
-  }
+  //
+  //& > *:nth-child(2) {
+  //  border-top-left-radius: 0;
+  //  border-bottom-left-radius: 0;
+  //  border: 1px solid var(--color-input-border);
+  //}
 }
 
 .checkbox,
@@ -736,4 +736,30 @@ fieldset-section {
   margin-bottom: var(--spacing-xs);
   animation: menu-animate-in var(--animation-duration) var(--animation-style);
   box-shadow: 3px 3px rgba(0, 0, 0, 0.1);
+}
+
+.editable-text__field {
+  height: 1.6rem;
+  border-radius: unset;
+  border: unset;
+  border-bottom: 2px solid;
+  color: var(--color-text);
+  border-color: var(--color-text);
+  padding-right: var(--spacing-s);
+  padding-left: var(--spacing-s);
+}
+
+.editable-text__input-button {
+  height: 1.6rem;
+  border-radius: unset;
+  border: unset;
+  color: var(--color-text);
+  border-color: var(--color-text);
+  padding-right: var(--spacing-s);
+  padding-left: var(--spacing-s);
+  input-submit {
+    border-top-left-radius: unset;
+    border-bottom-left-radius: unset;
+    border: unset;
+  }
 }

@@ -159,26 +159,24 @@ export default function CollectionPage(props: Props) {
           <FormField
             autoFocus
             type="text"
+            className={'editable-text__field'}
             name="rename_collection"
             value={newName}
-            label={__('New Collection Name')}
             inputButton={
               <>
                 <Button
-                  button={'alt'}
                   icon={ICONS.COMPLETE}
-                  className={'button-toggle'}
                   disabled={!(newName || '').trim() || collectionName === newName}
                   onClick={handleRenameCollection}
+                  className={'editable-text__input-button'}
                 />
                 <Button
-                  button={'alt'}
-                  className={'button-toggle'}
                   icon={ICONS.REMOVE}
                   onClick={() => {
                     setIsRenamingList(false);
                     setNewName(collectionName);
                   }}
+                  className={'editable-text__input-button'}
                 />
               </>
             }
@@ -195,6 +193,12 @@ export default function CollectionPage(props: Props) {
               className="icon--margin-right"
             />
             {collectionName}
+            {!uri && (
+              <>
+                {' '}
+                <Button icon={ICONS.EDIT} onClick={() => setIsRenamingList(true)} />
+              </>
+            )}
           </span>
         )
       }
@@ -210,7 +214,6 @@ export default function CollectionPage(props: Props) {
           collectionUrls={collectionUrls}
           setShowEdit={setShowEdit}
           showEdit={showEdit}
-          onRenameCollection={() => setIsRenamingList(true)}
         />
       }
       actions={
