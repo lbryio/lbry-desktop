@@ -25,7 +25,12 @@ export function getThumbnailCdnUrl(props: Props) {
 }
 
 export function getImageProxyUrl(thumbnail: ?string) {
-  if (thumbnail && !thumbnail.startsWith(THUMBNAIL_CDN_URL) && !thumbnail.startsWith(IMAGE_PROXY_URL)) {
+  if (
+    IMAGE_PROXY_URL &&
+    thumbnail &&
+    !thumbnail.startsWith(THUMBNAIL_CDN_URL) &&
+    !thumbnail.startsWith(IMAGE_PROXY_URL)
+  ) {
     return `${IMAGE_PROXY_URL}?${thumbnail}`;
   }
   return thumbnail;
