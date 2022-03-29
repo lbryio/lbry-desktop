@@ -342,7 +342,7 @@ function TxoList(props: Props) {
                   className={classnames(`button-toggle`, {
                     'button-toggle--active': currency === 'fiat',
                   })}
-                  label={__('USD --[transactions tab]--')}
+                  label={__('Currency --[transactions tab]--')}
                 />
               </div>
             </fieldset-section>
