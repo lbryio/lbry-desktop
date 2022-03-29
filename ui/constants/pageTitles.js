@@ -66,7 +66,6 @@ export const PAGE_TITLE = {
   [PAGES.UPLOADS]: 'Your uploads',
   [PAGES.UPLOAD]: 'Upload',
   [PAGES.WALLET]: 'Wallet',
-  [PAGES.WELCOME]: 'Welcome',
   [PAGES.YOUTUBE_SYNC]: 'YouTube Sync',
   [PAGES.YOUTUBE_TOS]: 'YouTube Sync Terms of Service',
 };

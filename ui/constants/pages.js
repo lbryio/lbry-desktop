@@ -70,7 +70,6 @@ exports.WALLET = 'wallet';
 exports.CHANNELS = 'channels';
 exports.EMBED = 'embed';
 exports.TOP = 'top';
-exports.WELCOME = 'welcome';
 exports.CREATOR_DASHBOARD = 'dashboard';
 exports.CHECKOUT = 'checkout';
 exports.CODE_2257 = '2257';

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
-import { selectHasNavigated, selectScrollStartingPosition, selectWelcomeVersion } from 'redux/selectors/app';
+import { selectHasNavigated, selectScrollStartingPosition } from 'redux/selectors/app';
 import { selectHomepageData, selectWildWestDisabled } from 'redux/selectors/settings';
 import Router from './view';
 import { normalizeURI } from 'util/lbryURI';
@@ -32,7 +32,6 @@ const select = (state) => {
     title: selectTitleForUri(state, uri),
     currentScroll: selectScrollStartingPosition(state),
     isAuthenticated: selectUserVerifiedEmail(state),
-    welcomeVersion: selectWelcomeVersion(state),
     hasNavigated: selectHasNavigated(state),
     hasUnclaimedRefereeReward: selectHasUnclaimedRefereeReward(state),
     homepageData: selectHomepageData(state),

@@ -8,7 +8,7 @@ import { useIsLargeScreen } from 'effects/use-screensize';
 import { lazyImport } from 'util/lazyImport';
 import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 import { parseURI, isURIValid } from 'util/lbryURI';
-import { SITE_TITLE, WELCOME_VERSION } from 'config';
+import { SITE_TITLE } from 'config';
 import LoadingBarOneOff from 'component/loadingBarOneOff';
 import { GetLinksData } from 'util/buildHomepage';
 import * as CS from 'constants/claim_search';
@@ -105,7 +105,6 @@ const TagsFollowingManagePage = lazyImport(() =>
 const TagsFollowingPage = lazyImport(() => import('page/tagsFollowing' /* webpackChunkName: "tagsFollowing" */));
 const TopPage = lazyImport(() => import('page/top' /* webpackChunkName: "top" */));
 const UpdatePasswordPage = lazyImport(() => import('page/passwordUpdate' /* webpackChunkName: "passwordUpdate" */));
-const Welcome = lazyImport(() => import('page/welcome' /* webpackChunkName: "welcome" */));
 const YoutubeSyncPage = lazyImport(() => import('page/youtubeSync' /* webpackChunkName: "youtubeSync" */));
 
 // Tell the browser we are handling scroll restoration
@@ -173,7 +172,6 @@ function AppRouter(props: Props) {
     history,
     uri,
     title,
-    welcomeVersion,
     hasNavigated,
     setHasNavigated,
     hasUnclaimedRefereeReward,
@@ -279,9 +277,6 @@ function AppRouter(props: Props) {
   return (
     <React.Suspense fallback={<LoadingBarOneOff />}>
       <Switch>
-        {/* @if TARGET='app' */}
-        {welcomeVersion < WELCOME_VERSION && <Route path="/*" component={Welcome} />}
-        {/* @endif */}
         <Redirect
           from={`/$/${PAGES.DEPRECATED__CHANNELS_FOLLOWING_MANAGE}`}
           to={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
@@ -303,7 +298,6 @@ function AppRouter(props: Props) {
         <Route path={`/$/${PAGES.AUTH_PASSWORD_SET}`} exact component={PasswordSetPage} />
         <Route path={`/$/${PAGES.AUTH}`} exact component={SignUpPage} />
         <Route path={`/$/${PAGES.AUTH}/*`} exact component={SignUpPage} />
-        <Route path={`/$/${PAGES.WELCOME}`} exact component={Welcome} />
 
         <Route path={`/$/${PAGES.HELP}`} exact component={HelpPage} />
         {/* @if TARGET='app' */}
