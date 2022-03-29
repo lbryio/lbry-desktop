@@ -34,7 +34,7 @@ type Props = {
   setConvertedAmount?: (number) => void,
   setDisableSubmitButton: (boolean) => void,
   setTipError: (any) => void,
-  preferredCurrency?: boolean,
+  preferredCurrency: string,
 };
 
 function WalletTipAmountSelector(props: Props) {
