@@ -18,6 +18,18 @@ export const RIGHT = 39;
 export const DOWN = 40;
 export const INSERT = 45;
 export const DELETE = 46;
+
+export const ZERO = 48;
+export const ONE = 49;
+export const TWO = 50;
+export const THREE = 51;
+export const FOUR = 52;
+export const FIVE = 53;
+export const SIX = 54;
+export const SEVEN = 55;
+export const EIGHT = 56;
+export const NINE = 57;
+
 export const COMMAND = 91;
 export const COMMAND_LEFT = 91;
 export const COMMAND_RIGHT = 93;

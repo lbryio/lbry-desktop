@@ -37,13 +37,15 @@ function volumeDown(event, playerRef) {
   player.userActive(true);
 }
 
-function seekVideo(stepSize: number, playerRef, containerRef) {
+function seekVideo(stepSize: number, playerRef, containerRef, jumpTo?: boolean) {
   const player = playerRef.current;
   const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
+
   if (!videoNode || !player) return;
+
   const duration = videoNode.duration;
   const currentTime = videoNode.currentTime;
-  const newDuration = currentTime + stepSize;
+  const newDuration = jumpTo ? duration * stepSize : currentTime + stepSize;
   if (newDuration < 0) {
     videoNode.currentTime = 0;
   } else if (newDuration > duration) {
@@ -51,7 +53,7 @@ function seekVideo(stepSize: number, playerRef, containerRef) {
   } else {
     videoNode.currentTime = newDuration;
   }
-  OVERLAY.showSeekedOverlay(player, Math.abs(stepSize), stepSize > 0);
+  OVERLAY.showSeekedOverlay(player, Math.abs(jumpTo ? stepSize * 100 : stepSize), !jumpTo && stepSize > 0, jumpTo);
   player.userActive(true);
 }
 
@@ -150,6 +152,16 @@ const VideoJsKeyboardShorcuts = ({
     if (e.keyCode === KEYCODES.J) seekVideo(-SEEK_STEP, playerRef, containerRef);
     if (e.keyCode === KEYCODES.RIGHT) seekVideo(SEEK_STEP_5, playerRef, containerRef);
     if (e.keyCode === KEYCODES.LEFT) seekVideo(-SEEK_STEP_5, playerRef, containerRef);
+    if (e.keyCode === KEYCODES.ZERO) seekVideo(0, playerRef, containerRef, true);
+    if (e.keyCode === KEYCODES.ONE) seekVideo(10 / 100, playerRef, containerRef, true);
+    if (e.keyCode === KEYCODES.TWO) seekVideo(20 / 100, playerRef, containerRef, true);
+    if (e.keyCode === KEYCODES.THREE) seekVideo(30 / 100, playerRef, containerRef, true);
+    if (e.keyCode === KEYCODES.FOUR) seekVideo(40 / 100, playerRef, containerRef, true);
+    if (e.keyCode === KEYCODES.FIVE) seekVideo(50 / 100, playerRef, containerRef, true);
+    if (e.keyCode === KEYCODES.SIX) seekVideo(60 / 100, playerRef, containerRef, true);
+    if (e.keyCode === KEYCODES.SEVEN) seekVideo(70 / 100, playerRef, containerRef, true);
+    if (e.keyCode === KEYCODES.EIGHT) seekVideo(80 / 100, playerRef, containerRef, true);
+    if (e.keyCode === KEYCODES.NINE) seekVideo(90 / 100, playerRef, containerRef, true);
   }
 
   var curried_function = function (playerRef: any, containerRef: any) {

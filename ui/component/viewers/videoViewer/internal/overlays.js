@@ -85,12 +85,13 @@ export function showPlaybackRateOverlay(player, newRate, isSpeedUp) {
  * @param duration The seek delta duration.
  * @param isForward true if seeking forward, false otherwise.
  */
-export function showSeekedOverlay(player, duration, isForward) {
+export function showSeekedOverlay(player, duration, isForward, isJumpTo) {
   const overlayJsx = (
     <div>
       <p>
-        {isForward ? '+' : '-'}
+        {!isJumpTo && (isForward ? '+' : '-')}
         {duration}
+        {isJumpTo && '%'}
       </p>
     </div>
   );
