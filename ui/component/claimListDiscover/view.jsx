@@ -526,7 +526,7 @@ function ClaimListDiscover(props: Props) {
     // --- direct uris
     finalUris = uris;
     injectPinUrls(finalUris, orderParam, pins);
-    filterExcludedUris(finalUris, excludeUris);
+    finalUris = filterExcludedUris(finalUris, excludeUris);
   } else {
     // --- searched uris
     if (isUnfetchedClaimSearch && prevUris.current) {
@@ -534,7 +534,7 @@ function ClaimListDiscover(props: Props) {
     } else {
       finalUris = claimSearchResult;
       injectPinUrls(finalUris, orderParam, pins);
-      filterExcludedUris(finalUris, excludeUris);
+      finalUris = filterExcludedUris(finalUris, excludeUris);
       prevUris.current = finalUris;
     }
   }
@@ -632,8 +632,9 @@ function ClaimListDiscover(props: Props) {
 
   function filterExcludedUris(uris, excludeUris) {
     if (uris && excludeUris && excludeUris.length) {
-      uris = uris.filter((uri) => !excludeUris.includes(uri));
+      return uris.filter((uri) => !excludeUris.includes(uri));
     }
+    return uris;
   }
 
   // **************************************************************************
