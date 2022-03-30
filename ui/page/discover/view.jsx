@@ -215,6 +215,7 @@ function DiscoverPage(props: Props) {
         }
         meta={getMeta()}
         hasSource
+        forceShowReposts={dynamicRouteProps}
       />
     </Page>
   );

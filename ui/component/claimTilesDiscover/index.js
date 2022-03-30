@@ -18,10 +18,18 @@ import ClaimListDiscover from './view';
 const select = (state, props) => {
   const showNsfw = selectShowMatureContent(state);
   const hideReposts = selectClientSetting(state, SETTINGS.HIDE_REPOSTS);
+  const forceShowReposts = props.forceShowReposts;
   const mutedAndBlockedChannelIds = selectMutedAndBlockedChannelIds(state);
 
   // TODO: memoize these 2 function calls. Lots of params, though; might not be feasible.
-  const options = resolveSearchOptions({ showNsfw, hideReposts, mutedAndBlockedChannelIds, pageSize: 8, ...props });
+  const options = resolveSearchOptions({
+    showNsfw,
+    hideReposts,
+    forceShowReposts,
+    mutedAndBlockedChannelIds,
+    pageSize: 8,
+    ...props,
+  });
   const searchKey = createNormalizedClaimSearchKey(options);
 
   return {
@@ -71,6 +79,7 @@ function resolveSearchOptions(props) {
   const {
     showNsfw,
     hideReposts,
+    forceShowReposts,
     mutedAndBlockedChannelIds,
     location,
     pageSize,
@@ -136,7 +145,7 @@ function resolveSearchOptions(props) {
   }
 
   // https://github.com/lbryio/lbry-desktop/issues/3774
-  if (hideReposts) {
+  if (hideReposts && !forceShowReposts) {
     if (Array.isArray(options.claim_type)) {
       options.claim_type = options.claim_type.filter((claimType) => claimType !== 'repost');
     } else {

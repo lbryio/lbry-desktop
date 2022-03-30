@@ -46,6 +46,7 @@ type Props = {
   limitClaimsPerChannel?: number,
   hasSource?: boolean,
   hasNoSource?: boolean,
+  forceShowReposts?: boolean, // overrides SETTINGS.HIDE_REPOSTS
   // --- select ---
   location: { search: string },
   claimSearchResults: Array<string>,
@@ -68,6 +69,7 @@ function ClaimTilesDiscover(props: Props) {
     fetchViewCount,
     fetchingClaimSearch,
     hasNoSource,
+    // forceShowReposts = false,
     renderProperties,
     pinUrls,
     prefixUris,

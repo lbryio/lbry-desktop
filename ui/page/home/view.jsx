@@ -166,6 +166,7 @@ function HomePage(props: Props) {
             replace: adBlockerFound === false,
           }
         }
+        forceShowReposts={id !== 'FOLLOWING'}
       />
     );
 
