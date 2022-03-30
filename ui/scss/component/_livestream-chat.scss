@@ -290,8 +290,11 @@ $recent-msg-button__height: 2rem;
         text-align: center;
       }
 
-      .button--secondary {
-        background-color: var(--color-header-button) !important;
+      .section__actions {
+        justify-content: center;
+        .button--secondary {
+          background-color: var(--color-header-button) !important;
+        }
       }
     }
   }

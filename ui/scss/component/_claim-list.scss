@@ -1,6 +1,6 @@
 .claim-list {
-  // List view
-  .claim-preview__wrapper:not(.claim-preview__wrapper--channel):not(.claim-preview__wrapper--small) {
+  // List view :not(.claim-preview__wrapper--channel)
+  .claim-preview__wrapper:not(.claim-preview__wrapper--small) {
     padding: var(--spacing-m);
     background-color: rgba(var(--color-header-background-base), 0.6);
 
@@ -1194,6 +1194,7 @@
             text-overflow: ellipsis;
             white-space: nowrap;
             overflow: hidden;
+            display: unset;
 
             &:hover {
               opacity: 0.8;

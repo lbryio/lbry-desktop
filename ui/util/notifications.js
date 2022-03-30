@@ -1,3 +1,3 @@
 // @flow
 
-export const buildUnseenCountStr = (unseenCount: number) => (unseenCount > 20 ? '20+' : `${unseenCount}`);
+export const buildUnseenCountStr = (unseenCount: number) => (unseenCount > 99 ? '99+' : `${unseenCount}`);
