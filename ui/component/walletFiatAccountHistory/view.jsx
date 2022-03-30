@@ -24,6 +24,22 @@ const WalletBalance = (props: Props) => {
   //   accountTransactions.length = 10;
   // }
 
+  function getSymbol(transaction) {
+    if (transaction.currency === 'eur') {
+      return '€';
+    } else {
+      return '$';
+    }
+  }
+
+  function getCurrencyIso(transaction) {
+    if (transaction.currency === 'eur') {
+      return 'EUR';
+    } else {
+      return 'USD';
+    }
+  }
+
   return (
     <div className="table__wrapper">
       <table className="table table--transactions">
@@ -32,7 +48,7 @@ const WalletBalance = (props: Props) => {
             <th className="date-header">{__('Date')}</th>
             <th className="channelName-header">{<>{__('Receiving Channel Name')}</>}</th>
             <th className="location-header">{__('Tip Location')}</th>
-            <th className="amount-header">{__('Amount (USD)')} </th>
+            <th className="amount-header">{__('Amount')} </th>
             <th className="processingFee-header">{__('Processing Fee')}</th>
             <th className="odyseeFee-header">{__('Odysee Fee')}</th>
             <th className="receivedAmount-header">{__('Received Amount')}</th>
@@ -63,10 +79,22 @@ const WalletBalance = (props: Props) => {
                     button="link"
                   />
                 </td>
-                <td>${transaction.tipped_amount / 100}</td>
-                <td>${transaction.transaction_fee / 100}</td>
-                <td>${transaction.application_fee / 100}</td>
-                <td>${transaction.received_amount / 100}</td>
+                <td>
+                  {getSymbol(transaction)}
+                  {transaction.tipped_amount / 100} {getCurrencyIso(transaction)}
+                </td>
+                <td>
+                  {getSymbol(transaction)}
+                  {transaction.transaction_fee / 100}
+                </td>
+                <td>
+                  {getSymbol(transaction)}
+                  {transaction.application_fee / 100}
+                </td>
+                <td>
+                  {getSymbol(transaction)}
+                  {transaction.received_amount / 100}
+                </td>
               </tr>
             ))}
         </tbody>

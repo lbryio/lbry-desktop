@@ -715,9 +715,15 @@ export const doCheckPendingTxs = () => (dispatch, getState) => {
   }, 30000);
 };
 
-export const doSendCashTip = (tipParams, anonymous, userParams, claimId, stripeEnvironment, successCallback) => (
-  dispatch
-) => {
+export const doSendCashTip = (
+  tipParams,
+  anonymous,
+  userParams,
+  claimId,
+  stripeEnvironment,
+  preferredCurrency,
+  successCallback
+) => (dispatch) => {
   Lbryio.call(
     'customer',
     'tip',
@@ -728,7 +734,7 @@ export const doSendCashTip = (tipParams, anonymous, userParams, claimId, stripeE
       creator_channel_claim_id: tipParams.channelClaimId,
       tipper_channel_name: anonymous ? '' : userParams.activeChannelName,
       tipper_channel_claim_id: anonymous ? '' : userParams.activeChannelId,
-      currency: 'USD',
+      currency: preferredCurrency || 'USD',
       anonymous: anonymous,
       source_claim_id: claimId,
       environment: stripeEnvironment,
@@ -736,12 +742,18 @@ export const doSendCashTip = (tipParams, anonymous, userParams, claimId, stripeE
     'post'
   )
     .then((customerTipResponse) => {
+      const fiatIconToUse = preferredCurrency === 'USD' ? '$' : '€';
+
       dispatch(
         doToast({
-          message: __("You sent $%tipAmount% as a tip to %tipChannelName%, I'm sure they appreciate it!", {
-            tipAmount: tipParams.tipAmount,
-            tipChannelName: tipParams.tipChannelName,
-          }),
+          message: __(
+            "You sent %fiatIconToUse%%tipAmount% as a tip to %tipChannelName%, I'm sure they appreciate it!",
+            {
+              tipAmount: tipParams.tipAmount,
+              tipChannelName: tipParams.tipChannelName,
+              fiatIconToUse,
+            }
+          ),
         })
       );
 

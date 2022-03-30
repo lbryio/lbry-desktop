@@ -27,9 +27,12 @@ type Props = {
   email: ?string,
   scriptFailedToLoad: boolean,
   doOpenModal: (string, {}) => void,
+  doToast: ({}) => void,
   openModal: (string, {}) => void,
   setAsConfirmingCard: () => void,
   locale: ?any,
+  preferredCurrency: string,
+  setPreferredCurrency: (string) => void,
 };
 
 // type State = {
@@ -368,7 +371,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
   render() {
     let that = this;
 
-    const returnToValue = new URLSearchParams(this.props.location.search).get('returnTo');
+    const returnToValue = new URLSearchParams(location.search).get('returnTo');
     let shouldShowBackToMembershipButton = returnToValue === 'premium';
 
     function setAsConfirmingCard() {
@@ -482,7 +485,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
             <br />
 
             <div className="currency-to-use-div">
-              <h1 className="currency-to-use-header">Currency To Use:</h1>
+              <h1 className="currency-to-use-header">{__('Currency To Use')}:</h1>
 
               <fieldset-section>
                 <FormField
@@ -491,7 +494,6 @@ class SettingsStripeCard extends React.Component<Props, State> {
                   type="select"
                   onChange={onCurrencyChange}
                   value={preferredCurrency}
-                  // disabled={automaticDarkModeEnabled}
                 >
                   {['USD', 'EUR'].map((currency) => (
                     <option key={currency} value={currency}>

@@ -15,6 +15,8 @@ import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { selectSettingsByChannelId } from 'redux/selectors/comments';
 import { getChannelIdFromClaim } from 'util/claim';
 import { doOpenModal } from 'redux/actions/app';
+import { selectClientSetting } from 'redux/selectors/settings';
+import * as SETTINGS from 'constants/settings';
 
 const select = (state, props) => {
   const { uri } = props;
@@ -42,6 +44,7 @@ const select = (state, props) => {
     isFetchingChannels: selectFetchingMyChannels(state),
     settingsByChannelId: selectSettingsByChannelId(state),
     supportDisabled: makeSelectTagInClaimOrChannelForUri(uri, DISABLE_SUPPORT_TAG)(state),
+    preferredCurrency: selectClientSetting(state, SETTINGS.PREFERRED_CURRENCY),
   };
 };
 

@@ -1194,6 +1194,26 @@ export const icons = {
       <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
     </g>
   ),
+  [ICONS.EURO]: (props: CustomProps) => (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 48 48"
+      width={props.size || '16'}
+      height={props.size || '18'}
+      fill="none"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="1.5"
+      stroke="currentColor"
+    >
+      <g transform="matrix(2,0,0,2,0,0)">
+        <path d="M19.5,23.25a11.25,11.25,0,0,1,0-22.5" />
+        <path d="M4.5 9.75L16.5 9.75" />
+        <path d="M4.5 14.25L13.5 14.25" />
+      </g>
+    </svg>
+  ),
   [ICONS.RABBIT_HOLE]: (props: CustomProps) => (
     <svg
       {...props}

@@ -46,9 +46,18 @@ type Props = {
   hasSelectedTab?: string,
   customText?: string,
   doHideModal: () => void,
-  doSendCashTip: (TipParams, boolean, UserParams, string, ?string) => string,
+  doSendCashTip: (
+    TipParams,
+    anonymous: boolean,
+    UserParams,
+    claimId: string,
+    stripe: ?string,
+    preferredCurrency: string,
+    ?(any) => void
+  ) => string,
   doSendTip: (SupportParams, boolean) => void, // function that comes from lbry-redux
   setAmount?: (number) => void,
+  preferredCurrency: string,
 };
 
 export default function WalletSendTip(props: Props) {
@@ -75,6 +84,7 @@ export default function WalletSendTip(props: Props) {
     doSendCashTip,
     doSendTip,
     setAmount,
+    preferredCurrency,
   } = props;
 
   /** WHAT TAB TO SHOW **/
@@ -118,8 +128,10 @@ export default function WalletSendTip(props: Props) {
       confirmLabel = __('Boosting');
       break;
     case TAB_FIAT:
-      explainerText = __('Show this channel your appreciation by sending a donation in USD. ');
-      confirmLabel = __('Tipping Fiat (USD)');
+      explainerText = __('Show this channel your appreciation by sending a donation in %currencyToUse%. ', {
+        currencyToUse: preferredCurrency,
+      });
+      confirmLabel = __('Tipping %currencyToUse%', { currencyToUse: preferredCurrency });
       break;
     case TAB_LBC:
       explainerText = __('Show this channel your appreciation by sending a donation of Credits. ');
@@ -192,7 +204,14 @@ export default function WalletSendTip(props: Props) {
         const userParams: UserParams = { activeChannelName, activeChannelId };
 
         // hit backend to send tip
-        doSendCashTip(tipParams, !activeChannelId || incognito, userParams, claimId, stripeEnvironment);
+        doSendCashTip(
+          tipParams,
+          !activeChannelId || incognito,
+          userParams,
+          claimId,
+          stripeEnvironment,
+          preferredCurrency
+        );
         doHideModal();
       }
       // if it's a boost (?)
@@ -224,7 +243,7 @@ export default function WalletSendTip(props: Props) {
       case TAB_BOOST:
         return titleText;
       case TAB_FIAT:
-        return __('Send a $%displayAmount% Tip', { displayAmount });
+        return __('Send a %fiatSymbolToUse%%displayAmount% Tip', { displayAmount, fiatSymbolToUse });
       case TAB_LBC:
         return __('Send a %displayAmount% Credit Tip', { displayAmount });
     }
@@ -247,6 +266,13 @@ export default function WalletSendTip(props: Props) {
 
   const tabButtonProps = { isOnConfirmationPage, activeTab, setActiveTab };
 
+  let fiatIconToUse = ICONS.FINANCE;
+  let fiatSymbolToUse = '$';
+  if (preferredCurrency === 'EUR') {
+    fiatIconToUse = ICONS.EURO;
+    fiatSymbolToUse = '€';
+  }
+
   return (
     <Form onSubmit={handleSubmit}>
       {/* if there is no LBC balance, show user frontend to get credits */}
@@ -260,7 +286,7 @@ export default function WalletSendTip(props: Props) {
               <div className="section">
                 {/* tip fiat tab button */}
                 {stripeEnvironment && (
-                  <TabSwitchButton icon={ICONS.FINANCE} label={__('Tip')} name={TAB_FIAT} {...tabButtonProps} />
+                  <TabSwitchButton icon={fiatIconToUse} label={__('Tip')} name={TAB_FIAT} {...tabButtonProps} />
                 )}
 
                 {/* tip LBC tab button */}
@@ -298,7 +324,7 @@ export default function WalletSendTip(props: Props) {
                   <div className="confirm__label">{confirmLabel}</div>
                   <div className="confirm__value">
                     {activeTab === TAB_FIAT ? (
-                      <p>{`$ ${(Math.round(tipAmount * 100) / 100).toFixed(2)}`}</p>
+                      <p>{`${fiatSymbolToUse} ${(Math.round(tipAmount * 100) / 100).toFixed(2)}`}</p>
                     ) : (
                       <LbcSymbol postfix={tipAmount} size={22} />
                     )}
