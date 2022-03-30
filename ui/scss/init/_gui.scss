@@ -1068,6 +1068,10 @@ img {
 }
 
 .publishList-wrapper {
+  .help {
+    color: var(--color-text);
+  }
+
   @media (min-width: $breakpoint-small) {
     .claim-preview--collection-mine {
       height: unset;
@@ -1228,6 +1232,11 @@ img {
 // Remove resize icon in textareas
 ::-webkit-resizer {
   display: none;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:focus {
+  transition: background-color 600000s 0s, color 600000s 0s;
 }
 
 // Remove tap focus on mobile devices

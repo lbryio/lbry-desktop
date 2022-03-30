@@ -390,7 +390,6 @@ export default function WalletSendTip(props: Props) {
                     label={__('Buy/Swap Credits')}
                     navigate={`/$/${PAGES.BUY}`}
                   />
-                  <Button button="link" label={__('Nevermind')} onClick={doHideModal} />
                 </div>
               }
             />
