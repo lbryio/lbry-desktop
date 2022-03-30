@@ -289,7 +289,8 @@ export function doSendDraftTransaction(address, amount) {
         });
         dispatch(
           doToast({
-            message: __('You sent %amount% LBRY Credits', { amount: amount }),
+            message: __("Tip successfully sent. I'm sure they appreciate it!"),
+            subMessage: `${amount} LBC`,
             linkText: __('History'),
             linkTarget: '/wallet',
           })
@@ -366,8 +367,9 @@ export function doSendTip(params, isSupport, successCallback, errorCallback, sho
         dispatch(
           doToast({
             message: shouldSupport
-              ? __('You deposited %amount% LBRY Credits as a support!', { amount: params.amount })
-              : __('You sent %amount% LBRY Credits as a tip, Mahalo!', { amount: params.amount }),
+              ? __('Boost transaction successful.')
+              : __("Tip successfully sent. I'm sure they appreciate it!"),
+            subMessage: `${params.amount} LBC`,
             linkText: __('History'),
             linkTarget: '/wallet',
           })
@@ -742,18 +744,12 @@ export const doSendCashTip = (
     'post'
   )
     .then((customerTipResponse) => {
-      const fiatIconToUse = preferredCurrency === 'USD' ? '$' : '€';
+      const fiatSymbol = preferredCurrency === 'USD' ? '$' : '€';
 
       dispatch(
         doToast({
-          message: __(
-            "You sent %fiatIconToUse%%tipAmount% as a tip to %tipChannelName%, I'm sure they appreciate it!",
-            {
-              tipAmount: tipParams.tipAmount,
-              tipChannelName: tipParams.tipChannelName,
-              fiatIconToUse,
-            }
-          ),
+          message: __("Tip successfully sent. I'm sure they appreciate it!"),
+          subMessage: `${fiatSymbol}${tipParams.tipAmount} ⇒ ${tipParams.tipChannelName}`,
         })
       );
 

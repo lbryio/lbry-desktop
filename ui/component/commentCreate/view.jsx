@@ -298,10 +298,8 @@ export function CommentCreate(props: Props) {
           }, 1500);
 
           doToast({
-            message: __("You sent %tipAmount% Credits as a tip to %tipChannelName%, I'm sure they appreciate it!", {
-              tipAmount: tipAmount, // force show decimal places
-              tipChannelName,
-            }),
+            message: __("Tip successfully sent. I'm sure they appreciate it!"),
+            subMessage: `${tipAmount} LBC ⇒ ${tipChannelName}`, // force show decimal places
           });
 
           setSuccessTip({ txid, tipAmount });

@@ -117,25 +117,17 @@ export default function WalletSendTip(props: Props) {
   } catch (e) {}
 
   // icon to use or explainer text to show per tab
-  let explainerText = '',
-    confirmLabel = '';
+  let explainerText = '';
   switch (activeTab) {
     case TAB_BOOST:
       explainerText = __(
-        'This refundable boost will improve the discoverability of this %claimTypeText% while active. ',
+        'This refundable boost will improve the discoverability of this %claimTypeText% while active.',
         { claimTypeText }
       );
-      confirmLabel = __('Boosting');
       break;
     case TAB_FIAT:
-      explainerText = __('Show this channel your appreciation by sending a donation in %currencyToUse%. ', {
-        currencyToUse: preferredCurrency,
-      });
-      confirmLabel = __('Tipping %currencyToUse%', { currencyToUse: preferredCurrency });
-      break;
     case TAB_LBC:
-      explainerText = __('Show this channel your appreciation by sending a donation of Credits. ');
-      confirmLabel = __('Tipping Credit');
+      explainerText = __('Show this channel your appreciation by sending a donation.');
       break;
   }
 
@@ -301,7 +293,7 @@ export default function WalletSendTip(props: Props) {
 
             {/* short explainer under the button */}
             <div className="section__subtitle">
-              {explainerText}
+              {explainerText}{' '}
               {/* {activeTab === TAB_FIAT && !hasCardSaved && <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add A Card')} button="link" />} */}
               <Button
                 label={__('Learn more')}
@@ -321,7 +313,7 @@ export default function WalletSendTip(props: Props) {
                   <div className="confirm__value">{channelName || title}</div>
                   <div className="confirm__label">{__('From --[the tip sender]--')}</div>
                   <div className="confirm__value">{(!incognito && activeChannelName) || __('Anonymous')}</div>
-                  <div className="confirm__label">{confirmLabel}</div>
+                  <div className="confirm__label">{__('Amount')}</div>
                   <div className="confirm__value">
                     {activeTab === TAB_FIAT ? (
                       <p>{`${fiatSymbolToUse} ${(Math.round(tipAmount * 100) / 100).toFixed(2)}`}</p>
