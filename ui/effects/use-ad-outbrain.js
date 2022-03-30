@@ -10,7 +10,7 @@ function inIFrame() {
 }
 
 const LOAD_AD_DELAY_MS = 3000; // Wait past boot-up and core-vitals period.
-const OUTBRAIN_CONTAINER_KEY = 'outbrainStickyParent';
+const OUTBRAIN_CONTAINER_KEY = 'outbrainSizeDiv';
 
 let script;
 
