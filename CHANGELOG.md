@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Discover page medium duration filter ([#7506](https://github.com/lbryio/lbry-desktop/pull/7506))
 - Keep last used collection for Add To ([#7491](https://github.com/lbryio/lbry-desktop/pull/7491))
 - Disk space functionality on mac / windows ([#7500](https://github.com/lbryio/lbry-desktop/pull/7500))
+- Enable renaming private collections ([#7519](https://github.com/lbryio/lbry-desktop/pull/7519))
 
 ### Changed
 - Some upgrade modal improvements ([#7488](https://github.com/lbryio/lbry-desktop/pull/7488))
