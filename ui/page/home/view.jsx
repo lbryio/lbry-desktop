@@ -33,6 +33,7 @@ type Props = {
   subscribedChannels: Array<Subscription>,
   showNsfw: boolean,
   homepageData: any,
+  homepageFetched: boolean,
   activeLivestreams: any,
   doFetchActiveLivestreams: () => void,
   fetchingActiveLivestreams: boolean,
@@ -50,6 +51,7 @@ function HomePage(props: Props) {
     authenticated,
     showNsfw,
     homepageData,
+    homepageFetched,
     activeLivestreams,
     doFetchActiveLivestreams,
     fetchingActiveLivestreams,
@@ -237,7 +239,7 @@ function HomePage(props: Props) {
         </>
       )}
 
-      {sortedRowData.length === 0 && authenticated && (
+      {sortedRowData.length === 0 && authenticated && homepageFetched && (
         <div className="empty--centered">
           <Yrbl
             alwaysShow

@@ -5,7 +5,7 @@ import { doFetchActiveLivestreams } from 'redux/actions/livestream';
 import { selectAdBlockerFound } from 'redux/selectors/app';
 import { selectActiveLivestreams, selectFetchingActiveLivestreams } from 'redux/selectors/livestream';
 import { selectFollowedTags } from 'redux/selectors/tags';
-import { selectHasOdyseeMembership, selectUserVerifiedEmail } from 'redux/selectors/user';
+import { selectHasOdyseeMembership, selectHomepageFetched, selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import { selectShowMatureContent, selectHomepageData, selectClientSetting } from 'redux/selectors/settings';
 
@@ -17,6 +17,7 @@ const select = (state) => ({
   authenticated: selectUserVerifiedEmail(state),
   showNsfw: selectShowMatureContent(state),
   homepageData: selectHomepageData(state),
+  homepageFetched: selectHomepageFetched(state),
   activeLivestreams: selectActiveLivestreams(state),
   fetchingActiveLivestreams: selectFetchingActiveLivestreams(state),
   hideScheduledLivestreams: selectClientSetting(state, SETTINGS.HIDE_SCHEDULED_LIVESTREAMS),
