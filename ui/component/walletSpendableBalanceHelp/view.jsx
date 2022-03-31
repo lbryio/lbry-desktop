@@ -13,9 +13,9 @@ function WalletSpendableBalanceHelp(props: Props) {
   );
 
   return !balance ? null : inline ? (
-    <span className="help--spendable">{getMessage(__('%balance% available.'))}</span>
+    <span className="help--spendable">{getMessage('%balance% available.')}</span>
   ) : (
-    <div className="help">{getMessage(__('Your immediately spendable balance is %balance%.'))}</div>
+    <div className="help">{getMessage('Your immediately spendable balance is %balance%.')}</div>
   );
 }
 

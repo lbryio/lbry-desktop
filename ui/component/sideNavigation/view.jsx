@@ -22,15 +22,16 @@ const touch = isTouch();
 
 type SideNavLink = {
   title: string,
+  icon: string,
   link?: string,
   route?: string,
   onClick?: () => any,
-  icon: string,
   extra?: Node,
   hideForUnauth?: boolean,
+  noI18n?: boolean,
 };
 
-const GO_LIVE = {
+const GO_LIVE: SideNavLink = {
   title: 'Go Live',
   link: `/$/${PAGES.LIVESTREAM}`,
   icon: ICONS.VIDEO,
@@ -56,7 +57,7 @@ const RECENT_FROM_FOLLOWING = {
   icon: ICONS.SUBSCRIBE,
 };
 
-const NOTIFICATIONS = {
+const NOTIFICATIONS: SideNavLink = {
   title: 'Notifications',
   link: `/$/${PAGES.NOTIFICATIONS}`,
   icon: ICONS.NOTIFICATION,
@@ -64,32 +65,33 @@ const NOTIFICATIONS = {
   hideForUnauth: true,
 };
 
-const WATCH_LATER = {
+const WATCH_LATER: SideNavLink = {
   title: 'Watch Later',
   link: `/$/${PAGES.LIST}/watchlater`,
   icon: ICONS.TIME,
   hideForUnauth: true,
 };
 
-const FAVORITES = {
+const FAVORITES: SideNavLink = {
   title: 'Favorites',
   link: `/$/${PAGES.LIST}/favorites`,
   icon: ICONS.STAR,
   hideForUnauth: true,
 };
 
-const PLAYLISTS = {
+const PLAYLISTS: SideNavLink = {
   title: 'Lists',
   link: `/$/${PAGES.LISTS}`,
   icon: ICONS.STACK,
   hideForUnauth: true,
 };
 
-const PREMIUM = {
+const PREMIUM: SideNavLink = {
   title: 'Premium',
   link: `/$/${PAGES.ODYSEE_MEMBERSHIP}`,
   icon: ICONS.UPGRADE,
   hideForUnauth: true,
+  noI18n: true,
 };
 
 const UNAUTH_LINKS: Array<SideNavLink> = [
@@ -115,7 +117,7 @@ const UNAUTH_LINKS: Array<SideNavLink> = [
   },
 ];
 
-const WILD_WEST = {
+const WILD_WEST: SideNavLink = {
   title: 'Wild West',
   link: `/$/${PAGES.WILD_WEST}`,
   icon: ICONS.WILD_WEST,
@@ -298,7 +300,7 @@ function SideNavigation(props: Props) {
   }
 
   function getLink(props: SideNavLink) {
-    const { hideForUnauth, route, link, ...passedProps } = props;
+    const { hideForUnauth, route, link, noI18n, ...passedProps } = props;
     const { title, icon, extra } = passedProps;
 
     if (hideForUnauth && !email) {
@@ -311,8 +313,8 @@ function SideNavigation(props: Props) {
           {...passedProps}
           icon={icon}
           navigate={route || link}
-          label={__(title)}
-          title={__(title)}
+          label={noI18n ? title : __(title)}
+          title={noI18n ? title : __(title)}
           className={classnames('navigation-link', {
             'navigation-link--pulse': icon === ICONS.LIBRARY && pulseLibrary,
             'navigation-link--highlighted': icon === ICONS.NOTIFICATION && unseenCount > 0,

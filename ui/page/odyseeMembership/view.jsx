@@ -512,7 +512,7 @@ const OdyseeMembershipPage = (props: Props) => {
                             <div className="premium-option">
                               {/* plan title */}
                               <h4 className="membership_title">
-                                {__(membershipOption.Membership.name)}
+                                {membershipOption.Membership.name}
                                 <PremiumBadge membership={membershipOption.Membership.name} />
                               </h4>
 

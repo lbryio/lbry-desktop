@@ -497,7 +497,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
                 >
                   {['USD', 'EUR'].map((currency) => (
                     <option key={currency} value={currency}>
-                      {currency === 'USD' ? __('USD') : __('EUR')}
+                      {currency}
                     </option>
                   ))}
                 </FormField>

@@ -1,5 +1,6 @@
 // @flow
 import { Form } from 'component/common/form';
+import LbcMessage from 'component/common/lbc-message';
 import { Lbryio } from 'lbryinc';
 import { parseURI } from 'util/lbryURI';
 import * as ICONS from 'constants/icons';
@@ -235,9 +236,11 @@ export default function WalletSendTip(props: Props) {
       case TAB_BOOST:
         return titleText;
       case TAB_FIAT:
-        return __('Send a %fiatSymbolToUse%%displayAmount% Tip', { displayAmount, fiatSymbolToUse });
+        return __('Send a %amount% tip', { amount: `${fiatSymbolToUse}${displayAmount}` });
       case TAB_LBC:
-        return __('Send a %displayAmount% Credit Tip', { displayAmount });
+        return __('Send a %amount% tip', { amount: `${displayAmount} LBC` });
+      default:
+        return titleText;
     }
   }
 
@@ -351,7 +354,7 @@ export default function WalletSendTip(props: Props) {
                   button="primary"
                   type="submit"
                   disabled={fetchingChannels || isPending || tipError || !tipAmount || disableSubmitButton}
-                  label={customText || buildButtonText()}
+                  label={<LbcMessage>{customText || buildButtonText()}</LbcMessage>}
                 />
                 {fetchingChannels && <span className="help">{__('Loading your channels...')}</span>}
               </div>
