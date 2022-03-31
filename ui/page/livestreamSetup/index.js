@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import { selectHasChannels, selectFetchingMyChannels } from 'redux/selectors/claims';
 import { doClearPublish } from 'redux/actions/publish';
-import { selectActiveChannelClaim, selectActiveChannelStakedLevel } from 'redux/selectors/app';
+import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { doFetchNoSourceClaims } from 'redux/actions/livestream';
-import { selectUser, selectOdyseeMembershipName } from 'redux/selectors/user';
+import { selectUser } from 'redux/selectors/user';
 import {
   makeSelectPendingLivestreamsForChannelId,
   makeSelectLivestreamsForChannelId,
@@ -25,8 +25,6 @@ const select = (state) => {
     pendingClaims: makeSelectPendingLivestreamsForChannelId(channelId)(state),
     fetchingLivestreams: makeSelectIsFetchingLivestreams(channelId)(state),
     user: selectUser(state),
-    odyseeMembership: selectOdyseeMembershipName(state),
-    activeChannelStakedLevel: selectActiveChannelStakedLevel(state),
   };
 };
 const perform = (dispatch) => ({

@@ -24,15 +24,10 @@ import {
   selectIsClaimingInitialRewards,
   selectHasClaimedInitialRewards,
 } from 'redux/selectors/rewards';
-import {
-  selectModal,
-  selectActiveChannelClaim,
-  selectIncognito,
-  selectActiveChannelStakedLevel,
-} from 'redux/selectors/app';
+import { selectModal, selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
 import { selectClientSetting } from 'redux/selectors/settings';
 import { makeSelectFileRenderModeForUri } from 'redux/selectors/content';
-import { selectUser, selectOdyseeMembershipName } from 'redux/selectors/user';
+import { selectUser } from 'redux/selectors/user';
 import PublishForm from './view';
 
 const select = (state) => {
@@ -62,10 +57,8 @@ const select = (state) => {
     enablePublishPreview: selectClientSetting(state, SETTINGS.ENABLE_PUBLISH_PREVIEW),
     activeChannelClaim: selectActiveChannelClaim(state),
     incognito: selectIncognito(state),
-    activeChannelStakedLevel: selectActiveChannelStakedLevel(state),
     isClaimingInitialRewards: selectIsClaimingInitialRewards(state),
     hasClaimedInitialRewards: selectHasClaimedInitialRewards(state),
-    odyseeMembership: selectOdyseeMembershipName(state),
   };
 };
 

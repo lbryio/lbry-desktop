@@ -394,13 +394,13 @@ const OdyseeMembershipPage = (props: Props) => {
   // description to be shown under plan name
   function getPlanDescription(plan, active?) {
     if (plan === 'Premium') {
-      return 'Badge on profile, livestreaming, automatic rewards confirmation, and early access to new features';
+      return 'Badge on profile, automatic rewards confirmation, and early access to new features';
 
       // if there's more plans added this needs to be expanded
     } else if (active) {
       return 'All Premium features, and no ads';
     } else {
-      return 'Badge on profile, livestreaming, automatic rewards confirmation, early access to new features, and no ads';
+      return 'Badge on profile, automatic rewards confirmation, early access to new features, and no ads';
     }
   }
 
@@ -436,7 +436,7 @@ const OdyseeMembershipPage = (props: Props) => {
         <ul>
           <li>
             {__(
-              'Exclusive and early access features include: recommended content on homepage, livestreaming, and the ability to post Odysee hyperlinks + images in comments. Account is also automatically eligible for Rewards. More to come later.'
+              'Exclusive and early access features include: recommended content, homepage customization, and the ability to post Odysee hyperlinks + images in comments. Account is also automatically eligible for Rewards. More to come later.'
             )}
           </li>
           <li>

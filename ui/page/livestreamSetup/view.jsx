@@ -17,7 +17,7 @@ import Card from 'component/common/card';
 import ClaimList from 'component/claimList';
 import usePersistedState from 'effects/use-persisted-state';
 import { LIVESTREAM_RTMP_URL } from 'constants/livestream';
-import { ENABLE_NO_SOURCE_CLAIMS, CHANNEL_STAKED_LEVEL_LIVESTREAM } from 'config';
+import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 
 type Props = {
   hasChannels: boolean,
@@ -31,8 +31,6 @@ type Props = {
   channelId: ?string,
   channelName: ?string,
   user: ?User,
-  activeChannelStakedLevel: number,
-  odyseeMembership: string,
 };
 
 export default function LivestreamSetupPage(props: Props) {
@@ -49,21 +47,15 @@ export default function LivestreamSetupPage(props: Props) {
     channelId,
     channelName,
     user,
-    odyseeMembership,
-    activeChannelStakedLevel,
   } = props;
 
   const [sigData, setSigData] = React.useState({ signature: undefined, signing_ts: undefined });
   const [showHelp, setShowHelp] = usePersistedState('livestream-help-seen', true);
 
   const hasLivestreamClaims = Boolean(myLivestreamClaims.length || pendingClaims.length);
+  const { odysee_live_disabled: liveDisabled } = user || {};
 
-  const hasEnoughLBCToStream = activeChannelStakedLevel >= CHANNEL_STAKED_LEVEL_LIVESTREAM;
-  const { odysee_live_disabled: liveDisabled, odysee_live_enabled: liveEnabled } = user || {};
-
-  const livestreamEnabled = Boolean(
-    ENABLE_NO_SOURCE_CLAIMS && user && !liveDisabled && (liveEnabled || odyseeMembership || hasEnoughLBCToStream)
-  );
+  const livestreamEnabled = Boolean(ENABLE_NO_SOURCE_CLAIMS && user && !liveDisabled);
 
   function createStreamKey() {
     if (!channelId || !channelName || !sigData.signature || !sigData.signing_ts) return null;
@@ -190,23 +182,6 @@ export default function LivestreamSetupPage(props: Props) {
             <ChannelSelector hideAnon />
           </div>
         </>
-      )}
-
-      {/* no livestreaming privs because no premium membership */}
-      {!livestreamEnabled && !odyseeMembership && (
-        <div style={{ marginTop: '11px' }}>
-          <h2 style={{ marginBottom: '15px' }}>
-            {__('To stream on Odysee, please join Odysee Premium or have 50 Credits as support on your channel')}
-          </h2>
-
-          <Button
-            button="primary"
-            label={__('Join Odysee Premium')}
-            icon={ICONS.FINANCE}
-            navigate={`/$/${PAGES.ODYSEE_MEMBERSHIP}`}
-            className="membership_button"
-          />
-        </div>
       )}
 
       {/* show livestreaming frontend */}
