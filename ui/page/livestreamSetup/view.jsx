@@ -184,6 +184,15 @@ export default function LivestreamSetupPage(props: Props) {
         </>
       )}
 
+      {/* livestreaming disabled */}
+      {!livestreamEnabled && (
+        <div style={{ marginTop: '11px' }}>
+          <h2 style={{ marginBottom: '15px' }}>
+            {__('This account has livestreaming disabled, please reach out to hello@odysee.com for assistance.')}
+          </h2>
+        </div>
+      )}
+
       {/* show livestreaming frontend */}
       {livestreamEnabled && (
         <div className="card-stack">
