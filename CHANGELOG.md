@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Changed
 - Some upgrade modal improvements ([#7488](https://github.com/lbryio/lbry-desktop/pull/7488))
+- Updated lbry-sdk to [0.107.1](https://github.com/lbryio/lbry-sdk/releases/tag/v0.107.1)
 
 ### Fixed
 - Failed comment count increment ([#7510](https://github.com/lbryio/lbry-desktop/pull/7510))
