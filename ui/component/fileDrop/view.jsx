@@ -115,8 +115,12 @@ function FileDrop(props: Props) {
 
   // Handle file drop...
   React.useEffect(() => {
-    if (dropData && !files.length && (!modal || modal.id !== MODALS.FILE_SELECTION)) {
-      getTree(dropData)
+    const DROP_AREA_HEIGHT_PCT = 0.2; // @see: css[.file-drop -> height]
+    const windowHeight = window.innerHeight || document.documentElement?.clientHeight || 768;
+    const dropAreaBottom = windowHeight * DROP_AREA_HEIGHT_PCT;
+
+    if (dropData && dropData.y <= dropAreaBottom && !files.length && (!modal || modal.id !== MODALS.FILE_SELECTION)) {
+      getTree(dropData.dataTransfer)
         .then((entries) => {
           if (entries && entries.length) {
             setFiles(entries);

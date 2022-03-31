@@ -23,7 +23,7 @@ const DRAG_STATE = {
 };
 
 // Returns simple detection for global drag-drop
-export default function useFetched() {
+export default function useDragDrop() {
   const [drag, setDrag] = React.useState(false);
   const [dropData, setDropData] = React.useState(null);
 
@@ -32,7 +32,7 @@ export default function useFetched() {
     let draggingElement = false;
 
     // Handle file drop
-    const handleDropEvent = event => {
+    const handleDropEvent = (event) => {
       // Ignore non file types ( html elements / text )
       if (!draggingElement) {
         event.stopPropagation();
@@ -41,7 +41,7 @@ export default function useFetched() {
         const files = event.dataTransfer.files;
         // Check for files
         if (files.length > 0) {
-          setDropData(event.dataTransfer);
+          setDropData(event);
         }
       }
       // Reset state ( hide drop zone )
@@ -50,12 +50,12 @@ export default function useFetched() {
     };
 
     // Drag event for non files type ( html elements / text )
-    const handleDragElementEvent = event => {
+    const handleDragElementEvent = (event) => {
       draggingElement = DRAG_STATE[event.type];
     };
 
     // Drag events
-    const handleDragEvent = event => {
+    const handleDragEvent = (event) => {
       event.stopPropagation();
       event.preventDefault();
       // Prevent multiple drop areas
@@ -71,7 +71,7 @@ export default function useFetched() {
     };
 
     // Register / Unregister listeners
-    const handleEventListeners = event => {
+    const handleEventListeners = (event) => {
       const action = `${event}EventListener`;
       // Handle drop event
       document[action]('drop', handleDropEvent);
@@ -82,6 +82,7 @@ export default function useFetched() {
       document[action](DRAG_TYPES.END, handleDragElementEvent);
       document[action](DRAG_TYPES.START, handleDragElementEvent);
     };
+
     // On component mounted:
     // Register event listeners
     handleEventListeners(LISTENER.ADD);

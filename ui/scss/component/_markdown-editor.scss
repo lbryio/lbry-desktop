@@ -52,6 +52,14 @@
   }
 }
 
+.editor-statusbar {
+  .editor-statusbar__upload-hint {
+    display: block;
+    float: left;
+    margin-left: 0;
+  }
+}
+
 .form-field--SimpleMDE {
   margin-top: var(--spacing-l);
 

@@ -1,6 +1,9 @@
 // @flow
 import 'easymde/dist/easymde.min.css';
 
+import 'inline-attachment/src/inline-attachment';
+import 'inline-attachment/src/codemirror-4.inline-attachment';
+import { IMG_CDN_PUBLISH_URL, JSON_RESPONSE_KEYS, UPLOAD_CONFIG } from 'constants/cdn_urls';
 import { FF_MAX_CHARS_DEFAULT } from 'constants/form-field';
 import { openEditorMenu, stopContextMenu } from 'util/context-menu';
 import { lazyImport } from 'util/lazyImport';
@@ -179,8 +182,8 @@ export class FormField extends React.PureComponent<Props, State> {
           // SimpleMDE max char check
           editor.codemirror.on('beforeChange', (instance, changes) => {
             if (textAreaMaxLength && changes.update) {
-              var str = changes.text.join('\n');
-              var delta = str.length - (instance.indexFromPos(changes.to) - instance.indexFromPos(changes.from));
+              let str = changes.text.join('\n');
+              let delta = str.length - (instance.indexFromPos(changes.to) - instance.indexFromPos(changes.from));
 
               if (delta <= 0) return;
 
@@ -227,6 +230,16 @@ export class FormField extends React.PureComponent<Props, State> {
               }
             } catch (e) {} // Do nothing (revert to original behavior)
           });
+
+          // Add ability to upload pasted/dragged image (https://github.com/sparksuite/simplemde-markdown-editor/issues/328#issuecomment-227075500)
+          window.inlineAttachment.editors.codemirror4.attach(editor.codemirror, {
+            uploadUrl: IMG_CDN_PUBLISH_URL,
+            uploadFieldName: UPLOAD_CONFIG.BLOB_KEY,
+            extraParams: { [UPLOAD_CONFIG.ACTION_KEY]: UPLOAD_CONFIG.ACTION_VAL },
+            filenameTag: '{filename}',
+            urlText: '![image]({filename})',
+            jsonFieldName: JSON_RESPONSE_KEYS.UPLOADED_URL,
+          });
         };
 
         return (
@@ -250,6 +263,17 @@ export class FormField extends React.PureComponent<Props, State> {
                   options={{
                     spellChecker: true,
                     hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'],
+                    status: [
+                      {
+                        className: 'editor-statusbar__upload-hint',
+                        defaultValue: (el) => {
+                          el.innerHTML = __('Attach images by pasting or drag-and-drop.');
+                        },
+                      },
+                      'lines',
+                      'words',
+                      'cursor',
+                    ],
                     previewRender(plainText) {
                       const preview = <MarkdownPreview content={plainText} noDataStore />;
                       return ReactDOMServer.renderToString(preview);
