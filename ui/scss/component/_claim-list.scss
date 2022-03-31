@@ -885,12 +885,16 @@
 
   .media__thumb {
     overflow: hidden;
-  }
-
-  // Hover Zoom Effect
-  .media__thumb {
     background-size: 100%;
     transition: background-size 0.2s ease-in-out;
+  }
+
+  .channel-name {
+    p {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   .claim-tile__title {

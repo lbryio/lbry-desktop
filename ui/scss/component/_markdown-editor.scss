@@ -2,7 +2,7 @@
   border: 1px solid var(--color-input-border);
   border-bottom-left-radius: var(--border-radius);
   border-bottom-right-radius: var(--border-radius);
-  background: var(--color-input-bg);
+  background: rgba(var(--color-header-background-base), 1);
   color: var(--color-input);
 
   .CodeMirror-placeholder {

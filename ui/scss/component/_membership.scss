@@ -49,6 +49,10 @@
     height: 24px;
     width: 24px;
   }
+  .icon--ChevronUp {
+    margin-top: -2px;
+    margin-bottom: 2px;
+  }
 
   .card__main-actions {
     margin-bottom: 15px;
@@ -56,7 +60,7 @@
 
   .button--close {
     margin-top: 3px;
-    left: 223px;
+    // left: 223px;
     width: 34px;
   }
 

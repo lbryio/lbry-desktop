@@ -205,7 +205,6 @@ export default function LivestreamSetupPage(props: Props) {
             icon={ICONS.FINANCE}
             navigate={`/$/${PAGES.ODYSEE_MEMBERSHIP}`}
             className="membership_button"
-            style={{ maxWidth: '238px' }}
           />
         </div>
       )}

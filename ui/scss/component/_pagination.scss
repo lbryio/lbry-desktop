@@ -42,8 +42,9 @@
   }
 
   > a {
-    display: block;
+    display: inline-block;
     height: 100%;
+    margin-top: 1px;
   }
 
   @media (max-width: $breakpoint-small) {
@@ -68,6 +69,10 @@
   padding-top: var(--spacing-s);
   background-color: var(--color-header-background);
   margin-bottom: 0px !important;
+
+  @media (max-width: $breakpoint-small) {
+    line-height: 0.6;
+  }
 }
 
 .pagination__item--selected {
