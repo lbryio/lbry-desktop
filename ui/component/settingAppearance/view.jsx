@@ -16,12 +16,21 @@ type Props = {
   searchInLanguage: boolean,
   isAuthenticated: boolean,
   hideBalance: boolean,
+  hideTitleNotificationCount: boolean,
   setClientSetting: (string, boolean | string | number) => void,
   setSearchInLanguage: (boolean) => void,
 };
 
 export default function SettingAppearance(props: Props) {
-  const { clock24h, searchInLanguage, isAuthenticated, hideBalance, setClientSetting, setSearchInLanguage } = props;
+  const {
+    clock24h,
+    searchInLanguage,
+    isAuthenticated,
+    hideBalance,
+    hideTitleNotificationCount,
+    setClientSetting,
+    setSearchInLanguage,
+  } = props;
   const {
     location: { hash },
   } = useHistory();
@@ -83,6 +92,15 @@ export default function SettingAppearance(props: Props) {
                 />
               </SettingsRow>
             )}
+
+            <SettingsRow title={__('Hide notification count in title bar')}>
+              <FormField
+                type="checkbox"
+                name="hide_title_notification_count"
+                onChange={() => setClientSetting(SETTINGS.HIDE_TITLE_NOTIFICATION_COUNT, !hideTitleNotificationCount)}
+                checked={hideTitleNotificationCount}
+              />
+            </SettingsRow>
           </>
         }
       />

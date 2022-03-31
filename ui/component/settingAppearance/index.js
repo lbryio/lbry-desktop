@@ -10,6 +10,7 @@ const select = (state) => ({
   searchInLanguage: selectClientSetting(state, SETTINGS.SEARCH_IN_LANGUAGE),
   isAuthenticated: selectUserVerifiedEmail(state),
   hideBalance: selectClientSetting(state, SETTINGS.HIDE_BALANCE),
+  hideTitleNotificationCount: selectClientSetting(state, SETTINGS.HIDE_TITLE_NOTIFICATION_COUNT),
 });
 
 const perform = (dispatch) => ({

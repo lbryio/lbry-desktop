@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
+import * as SETTINGS from 'constants/settings';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectHasNavigated, selectScrollStartingPosition } from 'redux/selectors/app';
-import { selectHomepageData, selectWildWestDisabled } from 'redux/selectors/settings';
+import { selectClientSetting, selectHomepageData, selectWildWestDisabled } from 'redux/selectors/settings';
 import Router from './view';
 import { normalizeURI } from 'util/lbryURI';
 import { selectTitleForUri } from 'redux/selectors/claims';
@@ -37,6 +38,7 @@ const select = (state) => {
     homepageData: selectHomepageData(state),
     wildWestDisabled: selectWildWestDisabled(state),
     unseenCount: selectUnseenNotificationCount(state),
+    hideTitleNotificationCount: selectClientSetting(state, SETTINGS.HIDE_TITLE_NOTIFICATION_COUNT),
   };
 };
 

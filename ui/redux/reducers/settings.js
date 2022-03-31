@@ -47,6 +47,7 @@ const defaultState = {
     [SETTINGS.HOMEPAGE_ORDER]: { active: null, hidden: null },
     [SETTINGS.HIDE_SPLASH_ANIMATION]: false,
     [SETTINGS.HIDE_BALANCE]: false,
+    [SETTINGS.HIDE_TITLE_NOTIFICATION_COUNT]: false,
     [SETTINGS.OS_NOTIFICATIONS_ENABLED]: true,
     [SETTINGS.AUTOMATIC_DARK_MODE_ENABLED]: false,
     [SETTINGS.CLOCK_24H]: false,

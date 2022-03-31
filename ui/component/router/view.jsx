@@ -139,6 +139,7 @@ type Props = {
   homepageData: any,
   wildWestDisabled: boolean,
   unseenCount: number,
+  hideTitleNotificationCount: boolean,
 };
 
 type PrivateRouteProps = Props & {
@@ -179,6 +180,7 @@ function AppRouter(props: Props) {
     homepageData,
     wildWestDisabled,
     unseenCount,
+    hideTitleNotificationCount,
   } = props;
 
   const { entries, listen, action: historyAction } = history;
@@ -247,7 +249,7 @@ function AppRouter(props: Props) {
       document.title = getDefaultTitle(pathname);
     }
 
-    if (unseenCount > 0) {
+    if (unseenCount > 0 && !hideTitleNotificationCount) {
       document.title = `(${buildUnseenCountStr(unseenCount)}) ${document.title}`;
     }
   }, [pathname, entries, entryIndex, title, uri, unseenCount]);
