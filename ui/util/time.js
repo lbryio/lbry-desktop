@@ -36,7 +36,12 @@ export function hmsToSeconds(str: string) {
 
 // Only intended use of future dates is for claims, in case of scheduled
 // publishes or livestreams, used in util/formatAriaLabel
-export function getTimeAgoStr(date: any, showFutureDate?: boolean, genericSecondsString?: boolean) {
+export function getTimeAgoStr(
+  date: any,
+  showFutureDate?: boolean,
+  genericSecondsString?: boolean,
+  zeroDurationStr: string = 'Just now'
+) {
   const suffixList = ['years', 'months', 'days', 'hours', 'minutes', 'seconds'];
   let duration = 0;
   let suffix = '';
@@ -59,7 +64,7 @@ export function getTimeAgoStr(date: any, showFutureDate?: boolean, genericSecond
     str = suffix === 'seconds' ? 'in a few seconds' : 'in %duration% ' + suffix;
     duration = duration * -1;
   } else if (duration <= 0) {
-    str = 'Just now';
+    str = zeroDurationStr;
   } else {
     str = suffix === 'seconds' && genericSecondsString ? 'A few seconds ago' : '%duration% ' + suffix + ' ago';
   }

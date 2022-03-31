@@ -59,12 +59,11 @@ export default function LivestreamPage(props: Props) {
   const isCurrentClaimLive = isChannelBroadcasting && activeLivestreamForChannel.claimId === claimId;
   const livestreamChannelId = channelClaimId || '';
 
-  // $FlowFixMe
-  const release = moment.unix(claim.value.release_time);
+  const releaseTime: moment = moment.unix(claim?.value?.release_time || 0);
   const stringifiedClaim = JSON.stringify(claim);
 
   React.useEffect(() => {
-    // TODO: This should not be needed one we unify the livestream player (?)
+    // TODO: This should not be needed once we unify the livestream player (?)
     analytics.playerLoadedEvent('livestream', false);
   }, []);
 
@@ -88,10 +87,10 @@ export default function LivestreamPage(props: Props) {
   }, [channelUrl, claim, doCommentSocketConnect, uri]);
 
   const claimReleaseStartingSoonStatic = () =>
-    release.isBetween(moment(), moment().add(LIVESTREAM_STARTS_SOON_BUFFER, 'minutes'));
+    releaseTime.isBetween(moment(), moment().add(LIVESTREAM_STARTS_SOON_BUFFER, 'minutes'));
 
   const claimReleaseStartedRecentlyStatic = () =>
-    release.isBetween(moment().subtract(LIVESTREAM_STARTED_RECENTLY_BUFFER, 'minutes'), moment());
+    releaseTime.isBetween(moment().subtract(LIVESTREAM_STARTED_RECENTLY_BUFFER, 'minutes'), moment());
 
   // Find out current channels status + active live claim every 30 seconds (or 15 if not live)
   const fasterPoll = !isCurrentClaimLive && (claimReleaseStartingSoonStatic() || claimReleaseStartedRecentlyStatic());
@@ -105,14 +104,14 @@ export default function LivestreamPage(props: Props) {
   React.useEffect(() => {
     if (!isInitialized) return;
 
-    const claimReleaseInFuture = () => release.isAfter();
-    const claimReleaseInPast = () => release.isBefore();
+    const claimReleaseInFuture = () => releaseTime.isAfter();
+    const claimReleaseInPast = () => releaseTime.isBefore();
 
     const claimReleaseStartingSoon = () =>
-      release.isBetween(moment(), moment().add(LIVESTREAM_STARTS_SOON_BUFFER, 'minutes'));
+      releaseTime.isBetween(moment(), moment().add(LIVESTREAM_STARTS_SOON_BUFFER, 'minutes'));
 
     const claimReleaseStartedRecently = () =>
-      release.isBetween(moment().subtract(LIVESTREAM_STARTED_RECENTLY_BUFFER, 'minutes'), moment());
+      releaseTime.isBetween(moment().subtract(LIVESTREAM_STARTED_RECENTLY_BUFFER, 'minutes'), moment());
 
     const checkShowLivestream = () =>
       isChannelBroadcasting &&
@@ -141,7 +140,7 @@ export default function LivestreamPage(props: Props) {
     }
 
     return () => clearInterval(intervalId);
-  }, [chatDisabled, isChannelBroadcasting, release, isCurrentClaimLive, isInitialized]);
+  }, [chatDisabled, isChannelBroadcasting, releaseTime, isCurrentClaimLive, isInitialized]);
 
   React.useEffect(() => {
     if (uri && stringifiedClaim) {
@@ -181,7 +180,7 @@ export default function LivestreamPage(props: Props) {
           <LivestreamLayout
             uri={uri}
             hideComments={hideComments}
-            release={release}
+            releaseTimeMs={releaseTime.unix() * 1000}
             isCurrentClaimLive={isCurrentClaimLive}
             showLivestream={showLivestream}
             showScheduledInfo={showScheduledInfo}

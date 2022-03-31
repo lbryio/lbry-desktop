@@ -30,7 +30,7 @@ type Props = {
   claim: ?StreamClaim,
   hideComments: boolean,
   isCurrentClaimLive: boolean,
-  release: any,
+  releaseTimeMs: number,
   showLivestream: boolean,
   showScheduledInfo: boolean,
   uri: string,
@@ -44,7 +44,7 @@ export default function LivestreamLayout(props: Props) {
     claim,
     hideComments,
     isCurrentClaimLive,
-    release,
+    releaseTimeMs,
     showLivestream,
     showScheduledInfo,
     uri,
@@ -72,7 +72,7 @@ export default function LivestreamLayout(props: Props) {
         <div className={PRIMARY_PLAYER_WRAPPER_CLASS}>
           <FileRenderInitiator
             uri={claim.canonical_url}
-            customAction={showScheduledInfo && <LivestreamScheduledInfo release={release} />}
+            customAction={showScheduledInfo && <LivestreamScheduledInfo releaseTimeMs={releaseTimeMs} />}
           />
         </div>
 
