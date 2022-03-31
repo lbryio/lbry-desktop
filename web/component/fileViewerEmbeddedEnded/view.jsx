@@ -7,6 +7,13 @@ import { withRouter } from 'react-router';
 import { URL, SITE_NAME } from 'config';
 import Logo from 'component/logo';
 
+const DEFAULT_PROMPTS = {
+  bigtech: 'Together, we can take back control from big tech',
+  discuss: `Continue the discussion on ${SITE_NAME}`,
+  find: `Find more great content on ${SITE_NAME}`,
+  test: "We test a lot of messages here. Wouldn't it be funny if the one telling you that did the best?",
+};
+
 type Props = {
   uri: string,
   isAuthenticated: boolean,
@@ -18,14 +25,11 @@ function FileViewerEmbeddedEnded(props: Props) {
 
   const prompts = isAuthenticated
     ? {
-        discuss_auth: `Continue the discussion on ${SITE_NAME}`,
+        ...DEFAULT_PROMPTS,
         tip_auth: 'Always tip your creators',
       }
     : {
-        bigtech_unauth: 'Together, we can take back control from big tech',
-        discuss_unauth: `Continue the discussion on ${SITE_NAME}`,
-        find_unauth: `Find more great content on ${SITE_NAME}`,
-        a_b_unauth: "We test a lot of messages here. Wouldn't it be funny if the one telling you that did the best?",
+        ...DEFAULT_PROMPTS,
         earn_unauth: `Join ${SITE_NAME} and earn to watch.`,
         blockchain_unauth: "Now if anyone asks, you can say you've used a blockchain.",
       };

@@ -870,8 +870,16 @@ $control-bar-icon-size: 0.8rem;
   }
 }
 
-.file-viewer--ended-embed .vjs-big-play-button {
-  display: none !important; // yes this is dumb, but this was broken and the above CSS was overriding
+.file-viewer--ended-embed {
+  .vjs-big-play-button {
+    display: none !important; // yes this is dumb, but this was broken and the above CSS was overriding
+  }
+
+  .file-viewer__overlay-actions {
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    grid-gap: 1rem;
+  }
 }
 
 .video-thumbnail-generator {
