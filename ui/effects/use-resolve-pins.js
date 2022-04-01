@@ -18,9 +18,7 @@ export default function useResolvePins(props: Props) {
 
   React.useEffect(() => {
     if (resolvedPinUris === undefined && pins && !resolvingPinUris) {
-      if (pins.urls) {
-        doResolveUris(pins.urls, true).finally(() => setResolvedPinUris(pins.urls));
-      } else if (pins.claimIds) {
+      if (pins.claimIds) {
         // setResolvingPinUris is only needed for claim_search.
         // doResolveUris uses selectResolvingUris internally to prevent double call.
         setResolvingPinUris(true);
@@ -31,6 +29,8 @@ export default function useResolvePins(props: Props) {
         // next render cycle (redux would be updated by then). Pretty dumb.
         // $FlowFixMe: already checked for null `pins`, but flow can't see it when there's code above it? Wow.
         doResolveClaimIds(pins.claimIds).finally(() => setResolvingPinUris(false));
+      } else if (pins.urls) {
+        doResolveUris(pins.urls, true).finally(() => setResolvedPinUris(pins.urls));
       } else {
         setResolvedPinUris(null);
       }

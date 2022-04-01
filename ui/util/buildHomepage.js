@@ -19,7 +19,7 @@ export type HomepageCat = {
   order?: string,
   tags?: Array<string>,
   pinnedUrls?: Array<string>,
-  pinnedClaimIds?: Array<string>, // pinnedUrls takes precedence
+  pinnedClaimIds?: Array<string>, // takes precedence over pinnedUrls
   mixIn?: Array<string>,
 };
 
