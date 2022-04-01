@@ -17,7 +17,7 @@ import {
 } from 'redux/actions/app';
 import { selectVolume, selectMute } from 'redux/selectors/app';
 import { savePosition, clearPosition, doPlayUri, doSetPlayingUri } from 'redux/actions/content';
-import { makeSelectContentPositionForUri, makeSelectIsPlayerFloating, selectPlayingUri } from 'redux/selectors/content';
+import { makeSelectIsPlayerFloating, selectContentPositionForUri, selectPlayingUri } from 'redux/selectors/content';
 import { selectRecommendedContentForUri } from 'redux/selectors/search';
 import VideoViewer from './view';
 import { withRouter } from 'react-router';
@@ -35,7 +35,7 @@ const select = (state, props) => {
   const claim = selectClaimForUri(state, uri);
 
   // TODO: eventually this should be received from DB and not local state (https://github.com/lbryio/lbry-desktop/issues/6796)
-  const position = urlParams.get('t') !== null ? urlParams.get('t') : makeSelectContentPositionForUri(uri)(state);
+  const position = urlParams.get('t') !== null ? urlParams.get('t') : selectContentPositionForUri(state, uri);
   const userId = selectUser(state) && selectUser(state).id;
   const internalFeature = selectUser(state) && selectUser(state).internal_feature;
   const playingUri = selectPlayingUri(state);

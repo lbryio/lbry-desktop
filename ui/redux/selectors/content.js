@@ -1,11 +1,11 @@
 // @flow
 import { createSelector } from 'reselect';
 import {
-  makeSelectClaimForUri,
   selectClaimsByUri,
   selectClaimIsNsfwForUri,
   selectClaimIsMineForUri,
   makeSelectContentTypeForUri,
+  selectClaimForUri,
 } from 'redux/selectors/claims';
 import { makeSelectMediaTypeForUri, makeSelectFileNameForUri } from 'redux/selectors/file_info';
 import { selectBalance } from 'redux/selectors/wallet';
@@ -55,15 +55,16 @@ export const makeSelectIsPlayerFloating = (location: UrlLocation) =>
     return true;
   });
 
-export const makeSelectContentPositionForUri = (uri: string) =>
-  createSelector(selectState, makeSelectClaimForUri(uri), (state, claim) => {
-    if (!claim) {
-      return null;
-    }
+export const selectContentPositionForUri = (state: State, uri: string) => {
+  const claim = selectClaimForUri(state, uri);
+  if (claim) {
     const outpoint = `${claim.txid}:${claim.nout}`;
     const id = claim.claim_id;
-    return state.positions[id] ? state.positions[id][outpoint] : null;
-  });
+    const positions = selectState(state).positions;
+    return positions[id] ? positions[id][outpoint] : null;
+  }
+  return null;
+};
 
 export const selectHistory = createSelector(selectState, (state) => state.history || []);
 
