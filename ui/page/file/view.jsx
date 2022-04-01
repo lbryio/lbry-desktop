@@ -40,6 +40,7 @@ type Props = {
   contentCommentsDisabled: boolean,
   isLivestream: boolean,
   position: number,
+  audioVideoDuration: ?number,
   commentsListTitle: string,
   settingsByChannelId: { [channelId: string]: PerChannelSettings },
   isPlaying?: boolean,
@@ -68,6 +69,7 @@ export default function FilePage(props: Props) {
     collectionId,
     isLivestream,
     position,
+    audioVideoDuration,
     commentsListTitle,
     settingsByChannelId,
     doFetchCostInfoForUri,
@@ -87,13 +89,15 @@ export default function FilePage(props: Props) {
   const hasFileInfo = fileInfo !== undefined;
   const isMarkdown = renderMode === RENDER_MODES.MARKDOWN;
   const videoPlayedEnoughToResetPosition = React.useMemo(() => {
+    // I've never seen 'fileInfo' contain metadata lately, but retaining as historical fallback.
     const durationInSecs =
-      fileInfo && fileInfo.metadata && fileInfo.metadata.video ? fileInfo.metadata.video.duration : 0;
+      audioVideoDuration ||
+      (fileInfo && fileInfo.metadata && fileInfo.metadata.video ? fileInfo.metadata.video.duration : 0);
     const isVideoTooShort = durationInSecs <= 45;
     const almostFinishedPlaying = position / durationInSecs >= VIDEO_ALMOST_FINISHED_THRESHOLD;
 
     return durationInSecs ? isVideoTooShort || almostFinishedPlaying : false;
-  }, [fileInfo, position]);
+  }, [audioVideoDuration, fileInfo, position]);
 
   React.useEffect(() => {
     // always refresh file info when entering file page to see if we have the file

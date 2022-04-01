@@ -43,6 +43,7 @@ const select = (state, props) => {
     hasCollectionById: Boolean(makeSelectCollectionForId(collectionId)(state)),
     collectionId,
     position: selectContentPositionForUri(state, uri),
+    audioVideoDuration: claim?.value?.video?.duration || claim?.value?.audio?.duration,
     commentsListTitle: selectCommentsListTitleForUri(state, uri),
   };
 };
