@@ -98,6 +98,10 @@
     margin-left: var(--spacing-s);
   }
 
+  .card__actions--inline:first-child {
+    margin-left: unset;
+  }
+
   @media (max-width: $breakpoint-small) {
     display: none;
   }

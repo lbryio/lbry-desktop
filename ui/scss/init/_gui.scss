@@ -984,7 +984,7 @@ img {
     .card__title-section {
       width: 100%;
       flex-wrap: wrap;
-      div:first-child {
+      div:first-child:not(.channel-thumbnail) {
         width: 100%;
         .card__subtitle {
           background-color: var(--color-header-background);

@@ -33,9 +33,10 @@
   @extend .card;
   background-color: var(--color-modal-background);
   line-height: 1.55;
-  min-width: 500px;
+  min-width: 580px;
   max-width: var(--modal-width);
   overflow: auto;
+  overflow-x: hidden;
   padding: var(--spacing-l);
   word-break: break-word;
   background-color: var(--color-modal-background) !important;
