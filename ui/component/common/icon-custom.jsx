@@ -3286,4 +3286,34 @@ export const icons = {
       </g>
     </svg>
   ),
+  [ICONS.SPORTS]: buildIcon(
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+      <g transform="matrix(2,0,0,2,0,0)">
+        <g>
+          <circle
+            cx="12"
+            cy="12"
+            r="11.5"
+            style={{ fill: 'none', stroke: '#000000', strokeLinecap: 'round', strokeLinejoin: 'round' }}
+          />
+          <path
+            d="M3.59,19.85C5,15.6,9.28,6.37,20.47,4.24"
+            style={{ fill: 'none', stroke: '#000000', strokeLinecap: 'round', strokeLinejoin: 'round' }}
+          />
+          <path
+            d="M3.46,4.29C8,5.94,16.56,10.52,18.37,21.58"
+            style={{ fill: 'none', stroke: '#000000', strokeLinecap: 'round', strokeLinejoin: 'round' }}
+          />
+          <path
+            d="M10.54.59A8.52,8.52,0,0,1,.81,9.42"
+            style={{ fill: 'none', stroke: '#000000', strokeLinecap: 'round', strokeLinejoin: 'round' }}
+          />
+          <path
+            d="M11.79,23.5C7,15.82,15.94,6.89,23.5,11.7"
+            style={{ fill: 'none', stroke: '#000000', strokeLinecap: 'round', strokeLinejoin: 'round' }}
+          />
+        </g>
+      </g>
+    </svg>
+  ),
 };
