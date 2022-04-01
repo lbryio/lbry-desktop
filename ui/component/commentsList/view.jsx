@@ -89,7 +89,7 @@ export default function CommentList(props: Props) {
   const spinnerRef = React.useRef();
   const DEFAULT_SORT = ENABLE_COMMENT_REACTIONS ? SORT_BY.POPULARITY : SORT_BY.NEWEST;
   const [sort, setSort] = usePersistedState('comment-sort-by', DEFAULT_SORT);
-  const [page, setPage] = React.useState(0);
+  const [page, setPage] = React.useState(1);
   const [didInitialPageFetch, setInitialPageFetch] = React.useState(false);
   const hasDefaultExpansion = commentsAreExpanded || !isMediumScreen || isMobile;
   const [expandedComments, setExpandedComments] = React.useState(hasDefaultExpansion);
@@ -106,9 +106,7 @@ export default function CommentList(props: Props) {
   );
 
   // get commenter claim ids for checking premium status
-  const commenterClaimIds = topLevelComments.map(function(comment) {
-    return comment.channel_id;
-  });
+  const commenterClaimIds = topLevelComments.map((comment) => comment.channel_id);
 
   // update premium status
   const shouldFetchUserMemberships = true;
@@ -118,8 +116,13 @@ export default function CommentList(props: Props) {
     claimsByUri,
     doFetchUserMemberships,
     [topLevelComments],
-    true,
+    true
   );
+
+  const handleReset = React.useCallback(() => {
+    if (claimId) resetComments(claimId);
+    setPage(1);
+  }, [claimId, resetComments]);
 
   function changeSort(newSort) {
     if (sort !== newSort) {
@@ -128,15 +131,17 @@ export default function CommentList(props: Props) {
     }
   }
 
-  // Reset comments
+  // Force comments reset
   useEffect(() => {
     if (page === 0) {
-      if (claimId) {
-        resetComments(claimId);
-      }
-      setPage(1);
+      handleReset();
     }
-  }, [page, claimId, resetComments]);
+  }, [handleReset, page]);
+
+  // Reset comments only on claim switch
+  useEffect(() => {
+    return () => handleReset();
+  }, [handleReset]);
 
   // Fetch top-level comments
   useEffect(() => {
@@ -147,7 +152,11 @@ export default function CommentList(props: Props) {
 
       fetchTopLevelComments(uri, undefined, page, COMMENT_PAGE_SIZE_TOP_LEVEL, sort);
     }
-  }, [fetchComment, fetchTopLevelComments, linkedCommentId, page, sort, uri]);
+
+    // no need to listen for uri change, claimId change will trigger page which
+    // will handle this
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fetchComment, fetchTopLevelComments, linkedCommentId, page, sort]);
 
   // Fetch reacts
   useEffect(() => {
@@ -253,7 +262,13 @@ export default function CommentList(props: Props) {
   ]);
 
   const commentProps = { isTopLevel: true, threadDepth: 3, uri, claimIsMine, linkedCommentId };
-  const actionButtonsProps = { totalComments, sort, changeSort, setPage };
+  const actionButtonsProps = {
+    totalComments,
+    sort,
+    changeSort,
+    setPage,
+    handleRefresh: () => setPage(0),
+  };
 
   return (
     <Card
@@ -331,11 +346,11 @@ type ActionButtonsProps = {
   totalComments: number,
   sort: string,
   changeSort: (string) => void,
-  setPage: (number) => void,
+  handleRefresh: () => void,
 };
 
 const CommentActionButtons = (actionButtonsProps: ActionButtonsProps) => {
-  const { totalComments, sort, changeSort, setPage } = actionButtonsProps;
+  const { totalComments, sort, changeSort, handleRefresh } = actionButtonsProps;
 
   const sortButtonProps = { activeSort: sort, changeSort };
 
@@ -354,7 +369,7 @@ const CommentActionButtons = (actionButtonsProps: ActionButtonsProps) => {
         </span>
       )}
 
-      <Button button="alt" icon={ICONS.REFRESH} title={__('Refresh')} onClick={() => setPage(0)} />
+      <Button button="alt" icon={ICONS.REFRESH} title={__('Refresh')} onClick={handleRefresh} />
     </>
   );
 };
