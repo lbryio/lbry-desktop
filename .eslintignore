@@ -2,5 +2,6 @@ node_modules/*
 ./node_modules/**
 **/node_modules/**
 web/dist/**
+**/plugins/inline-attachment/**
 
 ui/component/viewers/videoViewer/internal/plugins/canAutoplay.js

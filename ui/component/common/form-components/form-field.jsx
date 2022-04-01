@@ -1,8 +1,8 @@
 // @flow
 import 'easymde/dist/easymde.min.css';
 
-import 'inline-attachment/src/inline-attachment';
-import 'inline-attachment/src/codemirror-4.inline-attachment';
+import './plugins/inline-attachment/inline-attachment';
+import './plugins/inline-attachment/codemirror-4.inline-attachment';
 import { IMG_CDN_PUBLISH_URL, JSON_RESPONSE_KEYS, UPLOAD_CONFIG } from 'constants/cdn_urls';
 import { FF_MAX_CHARS_DEFAULT } from 'constants/form-field';
 import { openEditorMenu, stopContextMenu } from 'util/context-menu';
@@ -239,6 +239,7 @@ export class FormField extends React.PureComponent<Props, State> {
             filenameTag: '{filename}',
             urlText: '![image]({filename})',
             jsonFieldName: JSON_RESPONSE_KEYS.UPLOADED_URL,
+            errorText: '![image]("failed to upload file")',
           });
         };
 

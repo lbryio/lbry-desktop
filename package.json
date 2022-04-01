@@ -63,7 +63,6 @@
     "express": "^4.17.1",
     "humanize-duration": "^3.27.0",
     "if-env": "^1.0.4",
-    "inline-attachment": "^2.0.3",
     "match-sorter": "^6.3.0",
     "parse-duration": "^1.0.0",
     "player.js": "^0.1.0",
