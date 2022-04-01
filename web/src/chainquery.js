@@ -3,7 +3,7 @@ const mysql = require('mysql');
 const pool = mysql.createPool({
   connectionLimit: 100,
   host: 'chainquery.lbry.com',
-  user: 'lbrytv',
+  user: 'odyseefrontend',
   password: process.env.CHAINQUERY_MYSQL_PASSWORD,
   database: 'chainquery',
 });
