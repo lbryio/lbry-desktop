@@ -1,16 +1,17 @@
+// @flow
 import * as ACTIONS from 'constants/action_types';
 
 const reducers = {};
-const defaultState = {
+const defaultState: ContentState = {
   primaryUri: null, // Top level content uri triggered from the file page
   playingUri: {},
   channelClaimCounts: {},
   positions: {},
   history: [],
-  recommendationId: {}, // { "claimId": "recommendationId" }
-  recommendationParentId: {}, // { "claimId": "referrerId" }
-  recommendationUrls: {}, // { "claimId": [lbryUrls...] }
-  recommendationClicks: {}, // { "claimId": [clicked indices...] }
+  recommendationId: {},
+  recommendationParentId: {},
+  recommendationUrls: {},
+  recommendationClicks: {},
 };
 
 reducers[ACTIONS.SET_PRIMARY_URI] = (state, action) =>
@@ -123,7 +124,7 @@ reducers[ACTIONS.CLEAR_CONTENT_HISTORY_ALL] = (state) => ({ ...state, history: [
 //   };
 // };
 
-export default function reducer(state = defaultState, action) {
+export default function reducer(state: ContentState = defaultState, action: any) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);
   return state;
