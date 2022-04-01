@@ -11,6 +11,7 @@ import { isChannelClaim } from 'util/claim';
 import { formatLbryUrlForWeb } from 'util/url';
 import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
 import { toCompactNotation } from 'util/string';
+import ClaimPreviewProgress from 'component/claimPreviewProgress';
 import Tooltip from 'component/common/tooltip';
 import FileThumbnail from 'component/fileThumbnail';
 import UriIndicator from 'component/uriIndicator';
@@ -368,7 +369,12 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
 
           {isChannelUri && claim ? (
             <UriIndicator focusable={false} uri={uri} link>
-              <ChannelThumbnail uri={uri} small={type === 'inline'} showMemberBadge={showMemberBadge} checkMembership={false} />
+              <ChannelThumbnail
+                uri={uri}
+                small={type === 'inline'}
+                showMemberBadge={showMemberBadge}
+                checkMembership={false}
+              />
             </UriIndicator>
           ) : (
             <>
@@ -390,6 +396,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                         <PreviewOverlayProperties uri={uri} small={type === 'small'} properties={liveProperty} />
                       </div>
                     )}
+                    <ClaimPreviewProgress uri={uri} />
                   </FileThumbnail>
                 </NavLink>
               ) : (
@@ -413,7 +420,12 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                 {!isChannelUri && signingChannel && (
                   <div className="claim-preview__channel-staked">
                     <UriIndicator focusable={false} uri={uri} link hideAnonymous>
-                      <ChannelThumbnail uri={signingChannel.permanent_url} xsmall showMemberBadge={showMemberBadge} checkMembership={false} />
+                      <ChannelThumbnail
+                        uri={signingChannel.permanent_url}
+                        xsmall
+                        showMemberBadge={showMemberBadge}
+                        checkMembership={false}
+                      />
                     </UriIndicator>
                   </div>
                 )}

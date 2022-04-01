@@ -1115,6 +1115,14 @@
   }
 }
 
+.claim-preview__progress {
+  position: absolute;
+  bottom: 0;
+  height: 4px;
+  width: 100%;
+  background-color: var(--color-primary);
+}
+
 .claim-preview__claim-property-overlay {
   position: absolute;
   bottom: var(--spacing-xxs);
