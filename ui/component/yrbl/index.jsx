@@ -2,7 +2,10 @@
 import type { Node } from 'react';
 import * as React from 'react';
 import classnames from 'classnames';
-import { YRBL_HAPPY_IMG_URL, YRBL_SAD_IMG_URL } from 'config';
+// $FlowFixMe cannot resolve ...
+import YrblHappy from 'static/img/yrblhappy.svg';
+// $FlowFixMe cannot resolve ...
+import YrblSad from 'static/img/yrblsad.svg';
 
 type Props = {
   title?: string,
@@ -14,8 +17,8 @@ type Props = {
 };
 
 const yrblTypes = {
-  happy: YRBL_HAPPY_IMG_URL,
-  sad: YRBL_SAD_IMG_URL,
+  happy: YrblHappy,
+  sad: YrblSad,
 };
 
 export default class extends React.PureComponent<Props> {
