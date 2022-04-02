@@ -106,7 +106,7 @@ function CommentsReplies(props: Props) {
           />
         </div>
       )}
-      {(isFetchingByParentId[parentId] || isResolvingReplies || (!fetchedReplies && !canDisplayComments)) && (
+      {(isFetchingByParentId[parentId] || isResolvingReplies || !canDisplayComments) && (
         <div className="comment__replies-container">
           <div className="comment__actions--nested">
             <Spinner type="small" />
