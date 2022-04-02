@@ -38,7 +38,7 @@ function OptimizedImage(props: Props) {
   const {
     src,
     width = 0, // 0 = use intrinsic width
-    quality = 85,
+    quality = 95,
     waitLoad,
     ...imgProps
   } = props;
