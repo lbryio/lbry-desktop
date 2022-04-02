@@ -44,7 +44,7 @@ function CommentsReplies(props: Props) {
   const [commentsToDisplay, setCommentsToDisplay] = React.useState(fetchedReplies);
   const isResolvingReplies = fetchedReplies && resolvedReplies.length !== fetchedReplies.length;
   const alreadyResolved = !isResolvingReplies && resolvedReplies.length !== 0;
-  const canDisplayComments = commentsToDisplay && commentsToDisplay.length === fetchedReplies.length;
+  const canDisplayComments = commentsToDisplay && fetchedReplies && commentsToDisplay.length === fetchedReplies.length;
 
   // Batch resolve comment channel urls
   React.useEffect(() => {
@@ -106,7 +106,7 @@ function CommentsReplies(props: Props) {
           />
         </div>
       )}
-      {(isFetchingByParentId[parentId] || isResolvingReplies || !canDisplayComments) && (
+      {(isFetchingByParentId[parentId] || isResolvingReplies || (!fetchedReplies && !canDisplayComments)) && (
         <div className="comment__replies-container">
           <div className="comment__actions--nested">
             <Spinner type="small" />
