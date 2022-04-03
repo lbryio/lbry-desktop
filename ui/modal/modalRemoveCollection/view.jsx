@@ -31,7 +31,7 @@ function ModalRemoveCollection(props: Props) {
           uri ? (
             <React.Fragment>
               <p>{__('This will permanently delete the list.')}</p>
-              <p>{__('Type "%name%" to confirm.', { name: collectionName })}</p>
+              <p>{__('Type "%list_name%" to confirm.', { list_name: collectionName })}</p>
               <FormField value={confirmName} type={'text'} onChange={(e) => setConfirmName(e.target.value)} />
             </React.Fragment>
           ) : (

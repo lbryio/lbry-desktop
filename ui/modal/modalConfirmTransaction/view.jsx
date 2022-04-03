@@ -51,21 +51,35 @@ class ModalConfirmTransaction extends React.PureComponent<Props> {
                   <div className="confirm__label">{__('Sending')}</div>
                   <div className="confirm__value">{<LbcSymbol postfix={amount} size={22} />}</div>
 
-                  {!isAddress && <div className="confirm__label">{__('From')}</div>}
+                  {!isAddress && <div className="confirm__label">{__('From --[the tip sender]--')}</div>}
                   {!isAddress && (
                     <div className="confirm__value">
                       {incognito ? (
                         'Anonymous'
                       ) : (
-                        <ClaimPreview key={activeChannelUrl} uri={activeChannelUrl} actions={''} type={'small'} hideMenu hideRepostLabel />
+                        <ClaimPreview
+                          key={activeChannelUrl}
+                          uri={activeChannelUrl}
+                          actions={''}
+                          type={'small'}
+                          hideMenu
+                          hideRepostLabel
+                        />
                       )}
                     </div>
                   )}
 
-                  <div className="confirm__label">{__('To')}</div>
+                  <div className="confirm__label">{__('To --[the tip recipient]--')}</div>
                   <div className="confirm__value">
                     {!isAddress ? (
-                      <ClaimPreview key={destination} uri={destination} actions={''} type={'small'} hideMenu hideRepostLabel />
+                      <ClaimPreview
+                        key={destination}
+                        uri={destination}
+                        actions={''}
+                        type={'small'}
+                        hideMenu
+                        hideRepostLabel
+                      />
                     ) : (
                       destination
                     )}
