@@ -9,18 +9,19 @@
   background-color: var(--color-ads-background);
   padding: var(--spacing-s);
   margin-right: var(--spacing-s);
-  border: 1px solid var(--color-border);
   overflow: auto;
   overflow-x: hidden;
+  border-radius: var(--border-radius);
+  outline: 1px solid var(--color-border);
 }
 
 .homepage-sort__bin--dashed {
-  border: dashed var(--color-border);
+  outline: dashed var(--color-border);
 }
 
 .homepage-sort__bin--highlight {
-  border-color: var(--color-primary);
-  border-width: 2px;
+  outline-color: var(--color-primary);
+  outline-width: 2px;
 }
 
 .homepage-sort__bin--no-bg {
@@ -42,6 +43,7 @@
   padding: var(--spacing-xs) var(--spacing-m) var(--spacing-xs) var(--spacing-m);
   align-items: center;
   font-size: var(--font-small);
+  border-radius: var(--border-radius);
 
   svg {
     margin-top: var(--spacing-xxs);

@@ -122,7 +122,8 @@ export default function HomepageSort(props: Props) {
             // $FlowFixMe
             draggableProvided.draggableProps.style.left = draggedItemRef.offsetLeft;
             // $FlowFixMe
-            draggableProvided.draggableProps.style.top = draggedItemRef.offsetTop;
+            // draggableProvided.draggableProps.style.top = draggedItemRef.offsetTop;
+            draggableProvided.draggableProps.style.top = draggableProvided.draggableProps.style.top - 50;
           }
           return (
             <div
