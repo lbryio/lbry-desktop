@@ -12,42 +12,29 @@ const LIMITED = 'limited';
 const NONE = 'none';
 
 type Props = {
-  setWelcomeVersion: (number) => void,
   signOut: () => void,
   setShareDataInternal: (boolean) => void,
-  setShareDataThirdParty: (boolean) => void,
   authenticated: boolean,
   authenticateIfSharingData: () => void,
   handleNextPage: () => void,
 };
 
 function PrivacyAgreement(props: Props) {
-  const {
-    setShareDataInternal,
-    setShareDataThirdParty,
-    authenticated,
-    signOut,
-    authenticateIfSharingData,
-    handleNextPage,
-  } = props;
+  const { setShareDataInternal, authenticated, signOut, authenticateIfSharingData, handleNextPage } = props;
   const [share, setShare] = useState(undefined); // preload
 
   function handleSubmit() {
     if (share === LIMITED) {
       setShareDataInternal(true);
-      setShareDataThirdParty(false);
     } else {
       setShareDataInternal(false);
-      setShareDataThirdParty(false);
     }
 
     if (share === LIMITED) {
       authenticateIfSharingData();
     }
 
-    // setWelcomeVersion(WELCOME_VERSION);
     handleNextPage();
-    // history.replace(`/`);
   }
 
   return (
