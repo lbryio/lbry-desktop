@@ -36,3 +36,10 @@ package-lock.json
 !.env.ody
 .env.desktop
 .env.lbrytv
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
