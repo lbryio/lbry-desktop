@@ -139,11 +139,12 @@
     text-align: center;
     font-size: var(--font-large);
     font-weight: var(--font-weight-base);
-    background-color: var(--color-background);
+    background-color: var(--color-header-background);
     position: absolute;
-    height: var(--spacing-xl);
+    height: var(--spacing-l);
     top: calc(var(--spacing-xl) / 2 + 10px);
-    padding: 0 var(--spacing-l);
+    padding: 0 var(--spacing-s) 0 var(--spacing-s);
+    border-radius: var(--border-radius);
   }
 }
 

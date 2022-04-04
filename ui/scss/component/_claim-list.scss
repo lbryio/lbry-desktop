@@ -214,13 +214,31 @@
   }
 
   .claim-preview {
+    .claim-preview__text {
+      overflow: hidden;
+    }
     .claim-preview-metadata {
-      .media__subtitle {
-        .button {
-          display: inline;
-        }
-        span:not(.channel-name) {
-          font-size: var(--font-xsmall);
+      .claim-tile__info {
+        .media__subtitle {
+          width: calc(100% - 2.1rem);
+          .button {
+            display: inline;
+            .button__content {
+              width: 100%;
+              .channel-name {
+                width: 100%;
+                p {
+                  width: 99%;
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                }
+              }
+            }
+          }
+          span:not(.channel-name) {
+            font-size: var(--font-xsmall);
+          }
         }
       }
     }

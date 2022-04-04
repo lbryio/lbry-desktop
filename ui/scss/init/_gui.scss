@@ -1208,6 +1208,15 @@ img {
 }
 .icon--ExternalLink {
   margin-top: -5px;
+  margin-left: 2px;
+  margin-left: var(--spacing-xxs) !important;
+}
+.markdown-preview {
+  .icon--ExternalLink {
+    flex-shrink: 0;
+    margin-bottom: -1px !important;
+    // margin-left:2px !important;
+  }
 }
 .hide-ribbon {
   .claim-tile__repost-author {

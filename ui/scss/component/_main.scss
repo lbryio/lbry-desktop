@@ -634,7 +634,7 @@ body {
       .claim-preview__wrapper {
         a {
           .button__content {
-            align-items: unset;
+            // align-items: unset;
           }
         }
       }
@@ -954,7 +954,7 @@ body {
 
     > :first-child {
       position: fixed;
-      background-color: var(--color-background);
+      // background-color: var(--color-background);
       width: calc(40% - var(--spacing-l));
       margin-top: var(--spacing-xl);
     }
