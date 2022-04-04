@@ -4,6 +4,7 @@ import * as ICONS from 'constants/icons';
 import React, { useEffect } from 'react';
 import Button from 'component/button';
 import ClaimList from 'component/claimList';
+import ClaimPreview from 'component/claimPreview';
 import Page from 'component/page';
 import Paginate from 'component/common/paginate';
 import { PAGE_PARAM, PAGE_SIZE_PARAM } from 'constants/claim';
@@ -87,7 +88,6 @@ function FileListPublished(props: Props) {
               }
               headerAltControls={
                 <div className="card__actions--inline">
-                  {fetching && <Spinner type="small" />}
                   {!fetching && (
                     <Button
                       button="alt"
@@ -106,8 +106,11 @@ function FileListPublished(props: Props) {
                 </div>
               }
               persistedStorageKey="claim-list-published"
-              uris={urls}
+              uris={fetching ? [] : urls}
+              loading={fetching}
             />
+            {fetching &&
+              new Array(Number(pageSize)).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" />)}
             <Paginate totalPages={urlTotal > 0 ? Math.ceil(urlTotal / Number(pageSize)) : 1} />
           </>
         )}
