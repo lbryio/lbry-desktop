@@ -11,8 +11,8 @@ jobs:
     name: lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: Borales/actions-yarn@v2.3.0
+      - uses: actions/checkout@v3
+      - run: yarn
       - run: yarn lint
 
   build:
@@ -28,8 +28,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     continue-on-error: true
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2-beta
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 
@@ -46,8 +46,8 @@ jobs:
 
       - name: Build
         run: |
-          yarn global add cross-env
-          yarn install --network-timeout 600000
+          yarn dlx cross-env
+          yarn --network-timeout 600000
           yarn build
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN_NEW }}
