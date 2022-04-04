@@ -14,5 +14,9 @@ export default function ClaimPreviewProgress(props: Props) {
     return null;
   }
 
-  return <div className="claim-preview__progress" style={{ width: `${(position / duration) * 100}%` }} />;
+  return (
+    <div className="claim-preview__progress-section">
+      <div className="claim-preview__progress-bar" style={{ width: `${(position / duration) * 100}%` }} />
+    </div>
+  );
 }

@@ -1115,12 +1115,18 @@
   }
 }
 
-.claim-preview__progress {
+$claim-preview-progress-bar-height: 5px;
+
+.claim-preview__progress-section {
   position: absolute;
   bottom: 0;
-  height: 4px;
+  height: $claim-preview-progress-bar-height;
   width: 100%;
-  border-top: 1px solid rgba(0, 0, 0, 0.2);
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.claim-preview__progress-bar {
+  height: $claim-preview-progress-bar-height;
   background-color: var(--color-primary);
 }
 
