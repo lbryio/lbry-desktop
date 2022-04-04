@@ -3,6 +3,7 @@ import * as tus from 'tus-js-client';
 import { v4 as uuid } from 'uuid';
 import { makeUploadRequest } from './publish-v1';
 import { makeResumableUploadRequest } from './publish-v2';
+import { PUBLISH_TIMEOUT_BUT_LIKELY_SUCCESSFUL } from 'constants/errors';
 
 // A modified version of Lbry.apiCall that allows
 // to perform calling methods at arbitrary urls
@@ -54,6 +55,13 @@ export default function apiPublishCallViaWeb(
         if (xhr.status >= 200 && xhr.status < 300 && !xhr.response.error) {
           return resolve(xhr.response.result);
         } else if (xhr.response.error) {
+          if (xhr.responseURL.endsWith('/notify')) {
+            // Temp handling until odysee-api/issues/401 is addressed.
+            const errMsg = xhr.response.error.message;
+            if (errMsg === 'file currently locked' || errMsg.endsWith('no such file or directory')) {
+              return Promise.reject(new Error(PUBLISH_TIMEOUT_BUT_LIKELY_SUCCESSFUL));
+            }
+          }
           error = new Error(xhr.response.error.message);
         } else {
           error = new Error(__('Upload likely timed out. Try a smaller file while we work on this.'));

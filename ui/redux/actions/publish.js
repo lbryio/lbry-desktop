@@ -1,4 +1,5 @@
 // @flow
+import { PUBLISH_TIMEOUT_BUT_LIKELY_SUCCESSFUL } from 'constants/errors';
 import * as MODALS from 'constants/modal_types';
 import * as ACTIONS from 'constants/action_types';
 import * as PAGES from 'constants/pages';
@@ -14,7 +15,7 @@ import {
   selectReflectingById,
 } from 'redux/selectors/claims';
 import { makeSelectPublishFormValue, selectPublishFormValues, selectMyClaimForUri } from 'redux/selectors/publish';
-import { doError } from 'redux/actions/notifications';
+import { doError, doToast } from 'redux/actions/notifications';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';
 import { doOpenModal, doSetIncognito, doSetActiveChannel } from 'redux/actions/app';
@@ -282,7 +283,13 @@ export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispat
     actions.push({
       type: ACTIONS.PUBLISH_FAIL,
     });
-    actions.push(doError({ message: error.message, cause: error.cause }));
+
+    if (error.message === PUBLISH_TIMEOUT_BUT_LIKELY_SUCCESSFUL) {
+      actions.push(doToast({ message: error.message, duration: 'long' }));
+    } else {
+      actions.push(doError({ message: error.message, cause: error.cause }));
+    }
+
     dispatch(batchActions(...actions));
   };
 
