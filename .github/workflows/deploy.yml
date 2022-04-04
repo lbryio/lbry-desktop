@@ -2,7 +2,7 @@ name: Node.js CI
 
 on:
   push:
-    branches: [master]
+    branches: [master,test-107]
   pull_request:
     branches: [master]
 
