@@ -1,11 +1,16 @@
 import { connect } from 'react-redux';
 import SwipeableDrawer from './view';
 import { selectTheme } from 'redux/selectors/settings';
-import { selectMobilePlayerDimensions } from 'redux/selectors/app';
+import { selectAppDrawerOpen } from 'redux/selectors/app';
+import { doToggleAppDrawer } from 'redux/actions/app';
 
 const select = (state) => ({
+  open: selectAppDrawerOpen(state),
   theme: selectTheme(state),
-  mobilePlayerDimensions: selectMobilePlayerDimensions(state),
 });
 
-export default connect(select)(SwipeableDrawer);
+const perform = {
+  toggleDrawer: doToggleAppDrawer,
+};
+
+export default connect(select, perform)(SwipeableDrawer);

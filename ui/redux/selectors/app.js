@@ -107,5 +107,5 @@ export const selectActiveChannelStakedLevel = (state) => {
 
 export const selectIncognito = (state) => selectState(state).incognito;
 
-export const selectMobilePlayerDimensions = (state) => selectState(state).mobilePlayerDimensions;
 export const selectAdBlockerFound = (state) => selectState(state).adBlockerFound;
+export const selectAppDrawerOpen = (state) => selectState(state).appDrawerOpen;

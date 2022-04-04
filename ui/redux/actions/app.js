@@ -38,6 +38,7 @@ import {
   selectUpgradeTimer,
   selectModal,
   selectAllowAnalytics,
+  selectAppDrawerOpen,
 } from 'redux/selectors/app';
 import { selectDaemonSettings, selectClientSetting } from 'redux/selectors/settings';
 import { selectUser, selectUserVerifiedEmail } from 'redux/selectors/user';
@@ -669,6 +670,7 @@ export function doHandleSyncComplete(error, hasNewData, syncId) {
         dispatch(doGetAndPopulatePreferences(syncId));
       }
     } else {
+      // eslint-disable-next-line no-console
       console.error('Error in doHandleSyncComplete', error);
     }
   };
@@ -737,14 +739,21 @@ export function doSetIncognito(incognitoEnabled) {
   };
 }
 
-export const doSetMobilePlayerDimensions = ({ height, width }) => ({
-  type: ACTIONS.SET_MOBILE_PLAYER_DIMENSIONS,
-  data: { heightWidth: { height, width } },
-});
-
 export function doSetAdBlockerFound(found) {
   return {
     type: ACTIONS.SET_AD_BLOCKER_FOUND,
     data: found,
+  };
+}
+
+export function doToggleAppDrawer(open) {
+  return (dispatch, getState) => {
+    const state = getState();
+    const isOpen = selectAppDrawerOpen(state);
+
+    dispatch({
+      type: ACTIONS.DRAWER_OPENED,
+      data: !isOpen,
+    });
   };
 }

@@ -133,7 +133,8 @@ export default function FileRenderInitiator(props: Props) {
   }, [collectionId, doUriInitiatePlay, isMarkdownPost, isPlayable, parentCommentId, pathname, uri]);
 
   React.useEffect(() => {
-    const videoOnPage = document.querySelector('video');
+    // avoid selecting 'video' anymore -> can cause conflicts with Ad popup videos
+    const videoOnPage = document.querySelector('.vjs-tech');
 
     if (
       (canViewFile || forceAutoplayParam) &&

@@ -1,18 +1,18 @@
 // @flow
 import { FLOATING_PLAYER_CLASS } from './view';
 
-function getRootEl() {
+export function getRootEl() {
   return document && document.documentElement;
 }
 
 export function getScreenWidth() {
-  const mainEl = getRootEl();
-  return mainEl ? mainEl.clientWidth : window.innerWidth;
+  const rootEl = getRootEl();
+  return rootEl ? rootEl.clientWidth : window.innerWidth;
 }
 
 export function getScreenHeight() {
-  const mainEl = getRootEl();
-  return mainEl ? mainEl.clientHeight : window.innerHeight;
+  const rootEl = getRootEl();
+  return rootEl ? rootEl.clientHeight : window.innerHeight;
 }
 
 export function getFloatingPlayerRect() {
@@ -51,4 +51,37 @@ export function calculateRelativePos(x: number, y: number) {
     x: x / getScreenWidth(),
     y: y / getScreenHeight(),
   };
+}
+
+// Max landscape height = calculates the maximum size the player would be at
+// if it was at landscape aspect ratio
+export function getMaxLandscapeHeight(width?: number) {
+  const windowWidth = width || getScreenWidth();
+  const maxLandscapeHeight = (windowWidth * 9) / 16;
+
+  return maxLandscapeHeight;
+}
+
+// If a video is higher than landscape, this calculates how much is needed in order
+// for the video to be centered in a container at the landscape height
+export function getAmountNeededToCenterVideo(height: number, fromValue: number) {
+  const minVideoHeight = getMaxLandscapeHeight();
+  const timesHigherThanLandscape = height / minVideoHeight;
+  const amountNeededToCenter = (height - fromValue) / timesHigherThanLandscape;
+
+  return amountNeededToCenter * -1;
+}
+
+export function getPossiblePlayerHeight(height: number, isMobile: boolean) {
+  // min player height = landscape size based on screen width (only for mobile, since
+  // comment expansion will default to landscape view height)
+  const minHeight = getMaxLandscapeHeight();
+  const maxPercentOfScreen = isMobile ? 70 : 80;
+  // max player height
+  const maxHeight = (getScreenHeight() * maxPercentOfScreen) / 100;
+
+  const forceMaxHeight = height < maxHeight ? height : maxHeight;
+  const forceMinHeight = isMobile && height < minHeight ? minHeight : forceMaxHeight;
+
+  return forceMinHeight;
 }

@@ -46,8 +46,8 @@ export type AppState = {
   interestedInYoutubeSync: boolean,
   activeChannel: ?string,
   incognito: boolean,
-  mobilePlayerDimensions?: { height: number, width: number },
   adBlockerFound: ?boolean, // undefined = unknown; true/false = yes/no;
+  appDrawerOpen: boolean,
 };
 
 const defaultState: AppState = {
@@ -87,8 +87,8 @@ const defaultState: AppState = {
   interestedInYoutubeSync: false,
   activeChannel: undefined,
   incognito: false,
-  mobilePlayerDimensions: undefined,
   adBlockerFound: undefined,
+  appDrawerOpen: false,
 };
 
 // @@router comes from react-router
@@ -328,17 +328,17 @@ reducers[ACTIONS.SET_INCOGNITO] = (state, action) => {
   };
 };
 
-reducers[ACTIONS.SET_MOBILE_PLAYER_DIMENSIONS] = (state, action) => {
-  return {
-    ...state,
-    mobilePlayerDimensions: action.data.heightWidth,
-  };
-};
-
 reducers[ACTIONS.SET_AD_BLOCKER_FOUND] = (state, action) => {
   return {
     ...state,
     adBlockerFound: action.data,
+  };
+};
+
+reducers[ACTIONS.DRAWER_OPENED] = (state, action) => {
+  return {
+    ...state,
+    appDrawerOpen: action.data,
   };
 };
 

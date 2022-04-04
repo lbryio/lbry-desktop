@@ -15,7 +15,7 @@ import CollectionContent from 'component/collectionContentSidebar';
 import Button from 'component/button';
 import Empty from 'component/common/empty';
 import SwipeableDrawer from 'component/swipeableDrawer';
-import { DrawerExpandButton } from 'component/swipeableDrawer/view';
+import DrawerExpandButton from 'component/swipeableDrawerExpand';
 import { useIsMobile } from 'effects/use-screensize';
 
 const CommentsList = lazyImport(() => import('component/commentsList' /* webpackChunkName: "comments" */));
@@ -49,6 +49,7 @@ type Props = {
   doSetPrimaryUri: (uri: ?string) => void,
   clearPosition: (uri: string) => void,
   doClearPlayingUri: () => void,
+  doToggleAppDrawer: () => void,
 };
 
 export default function FilePage(props: Props) {
@@ -76,12 +77,12 @@ export default function FilePage(props: Props) {
     doSetContentHistoryItem,
     doSetPrimaryUri,
     clearPosition,
+    doToggleAppDrawer,
   } = props;
 
   const isMobile = useIsMobile();
 
   // Auto-open the drawer on Mobile view if there is a linked comment
-  const [showComments, setShowComments] = React.useState(linkedCommentId);
 
   const channelSettings = channelId ? settingsByChannelId[channelId] : undefined;
   const commentSettingDisabled = channelSettings && !channelSettings.comments_enabled;
@@ -98,6 +99,15 @@ export default function FilePage(props: Props) {
 
     return durationInSecs ? isVideoTooShort || almostFinishedPlaying : false;
   }, [audioVideoDuration, fileInfo, position]);
+
+  React.useEffect(() => {
+    if (linkedCommentId && isMobile) {
+      doToggleAppDrawer();
+    }
+    // only on mount, otherwise clicking on a comments timestamp and linking it
+    // would trigger the drawer
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   React.useEffect(() => {
     // always refresh file info when entering file page to see if we have the file
@@ -231,15 +241,11 @@ export default function FilePage(props: Props) {
                   <Empty {...emptyMsgProps} text={__('This channel has disabled comments on their page.')} />
                 ) : isMobile ? (
                   <>
-                    <SwipeableDrawer
-                      open={Boolean(showComments)}
-                      toggleDrawer={() => setShowComments(!showComments)}
-                      title={commentsListTitle}
-                    >
+                    <SwipeableDrawer title={commentsListTitle}>
                       <CommentsList {...commentsListProps} />
                     </SwipeableDrawer>
 
-                    <DrawerExpandButton label={commentsListTitle} toggleDrawer={() => setShowComments(!showComments)} />
+                    <DrawerExpandButton label={commentsListTitle} />
                   </>
                 ) : (
                   <CommentsList {...commentsListProps} />
