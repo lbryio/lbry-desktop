@@ -112,7 +112,7 @@
 
     .vjs-play-control {
       transform: unset !important;
-      display: none !important;
+      display: inline-block !important;
       position: fixed !important;
       top: 12px !important;
       left: calc(50% - 80px) !important;
@@ -125,7 +125,11 @@
       padding: 15px !important;
 
       .vjs-icon-placeholder {
-        font-size: 1.2rem !important;
+        &::before {
+          font-size: 1.8em !important;
+          line-height: 32px !important;
+          background-size: 60%;
+        }
       }
 
       span {

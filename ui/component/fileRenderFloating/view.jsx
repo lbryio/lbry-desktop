@@ -318,14 +318,14 @@ export default function FileRenderFloating(props: Props) {
 
   return (
     <Draggable
-      onDrag={handleDragMove}
-      onStart={handleDragStart}
-      onStop={handleDragStop}
+      onDrag={!isMobile ? handleDragMove : null}
+      onStart={!isMobile ? handleDragStart : null}
+      onStop={!isMobile ? handleDragStop : null}
       defaultPosition={position}
       position={isFloating ? position : { x: 0, y: 0 }}
       bounds="parent"
       disabled={noFloatingPlayer}
-      handle=".draggable"
+      handle={!isMobile ? '.draggable' : ''}
       cancel=".button"
     >
       <div
@@ -365,7 +365,7 @@ export default function FileRenderFloating(props: Props) {
           )}
 
           {isReadyToPlay ? (
-            <FileRender className="draggable" uri={uri} />
+            <FileRender className={classnames({ draggable: !isMobile })} uri={uri} />
           ) : collectionId && !canViewFile ? (
             <div className="content__loading">
               <AutoplayCountdown
@@ -385,7 +385,7 @@ export default function FileRenderFloating(props: Props) {
           )}
 
           {isFloating && (
-            <div className="draggable content__info">
+            <div className={classnames('content__info', { draggable: !isMobile })}>
               <div className="claim-preview__title" title={title || uri}>
                 <Button label={title || uri} navigate={navigateUrl} button="link" className="content__floating-link" />
               </div>
