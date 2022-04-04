@@ -1,0 +1,277 @@
+.table {
+  width: 100%;
+  position: relative;
+
+  th,
+  td {
+    overflow: hidden;
+
+    &:first-of-type {
+      padding-left: var(--spacing-m);
+    }
+
+    &:last-of-type {
+      padding-right: var(--spacing-m);
+    }
+  }
+
+  thead {
+    cursor: default;
+    position: relative;
+
+    th {
+      border-bottom: 1px solid var(--color-border);
+    }
+  }
+
+  tr {
+    &:not(:last-of-type) {
+      td {
+        border-bottom: 1px solid var(--color-border);
+      }
+    }
+  }
+
+  th,
+  td {
+    padding: 0.5rem 1rem;
+  }
+
+  th {
+    font-size: var(--font-xsmall);
+    color: var(--color-text-help);
+    padding-bottom: var(--spacing-xxxs);
+    @media (max-width: $breakpoint-small) {
+      padding-left: var(--spacing-xs) !important;
+      padding-right: var(--spacing-xs) !important;
+    }
+  }
+}
+
+th {
+  text-align: left;
+}
+
+td {
+  @media (max-width: $breakpoint-small) {
+    font-size: var(--font-small);
+  }
+}
+
+.table--fixed {
+  table-layout: fixed;
+}
+
+.table--condensed {
+  td,
+  th {
+    padding: 0.5rem;
+
+    &:first-of-type {
+      padding-left: 0;
+    }
+
+    &:last-of-type {
+      padding-right: 0;
+    }
+  }
+
+  tr {
+    &:nth-child(2n) {
+      background-color: transparent;
+    }
+  }
+}
+
+.table__item-label {
+  font-size: var(--font-multiplier-small);
+  font-weight: 300;
+  color: var(--color-text-subtitle);
+}
+
+.table__item--align-right {
+  text-align: right;
+
+  * {
+    text-align: right;
+    justify-content: flex-end;
+  }
+}
+
+.table__wrapper {
+  overflow-x: auto;
+}
+
+.table__header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--color-border);
+
+  .section__subtitle {
+    margin-bottom: 0;
+  }
+}
+
+.table__header-text {
+  width: 100%;
+  margin-right: var(--spacing-s);
+}
+
+.table__header-text--between {
+  @extend .table__header-text;
+  display: flex;
+  justify-content: space-between;
+
+  @media (max-width: $breakpoint-small) {
+    flex-wrap: wrap;
+  }
+}
+
+.table__date {
+  font-size: var(--font-small);
+}
+
+.table--help {
+  td:nth-of-type(1) {
+    min-width: 130px;
+  }
+
+  td:nth-of-type(2) {
+    @include constrict(20vw);
+  }
+}
+
+.table--transactions {
+  td:nth-of-type(1) {
+    width: 20%;
+  }
+  td:nth-of-type(2) {
+    width: 15%;
+  }
+  td:nth-of-type(3) {
+    // Only add ellipsis to the links in the table
+    // We still want to show the entire message if a TX includes one
+    a,
+    button {
+      @include constrict(22rem);
+      vertical-align: bottom;
+      display: inline-block;
+    }
+  }
+  td:nth-of-type(4) {
+    width: 15%;
+  }
+  td:nth-of-type(5) {
+    width: 15%;
+  }
+}
+
+.table--btc-swap {
+  width: 100%;
+
+  td:nth-of-type(1) {
+    width: 1%;
+  }
+
+  td:nth-of-type(2) {
+    font-size: var(--font-small);
+    width: 98%;
+  }
+
+  td:nth-of-type(3) {
+    width: 1%;
+  }
+}
+
+.table--rewards {
+  td:nth-of-type(1) {
+    width: 40%;
+  }
+
+  td:nth-of-type(2) {
+    width: 17.5%;
+  }
+
+  td:nth-of-type(3) {
+    width: 17.5%;
+  }
+
+  td:nth-of-type(4) {
+    width: 25%;
+  }
+}
+
+.table--invites {
+  svg {
+    margin-bottom: -2px;
+    margin-left: var(--spacing-s);
+  }
+}
+
+.table--details {
+  font-size: var(--font-small);
+}
+
+.table--lbc-details {
+  @extend .table--details;
+
+  td:nth-of-type(2) {
+    text-align: right;
+  }
+}
+
+.table__item--actionable {
+  vertical-align: middle;
+  white-space: nowrap;
+
+  .button {
+    height: 1.5rem;
+    padding: var(--spacing-s);
+    margin-left: var(--spacing-m);
+  }
+}
+
+.table--publish-preview {
+  line-height: 1.1;
+  table-layout: fixed;
+
+  th,
+  td {
+    padding: 0.4rem 1rem;
+  }
+
+  // Column-1: "Label"
+  td:nth-of-type(1) {
+    font-weight: bold;
+    // The "value" is more important on smaller screens, so we truncate the "label".
+    width: 30%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // Column-2: "Value"
+  td:nth-of-type(2) {
+    white-space: normal;
+    max-width: 70%;
+  }
+
+  .channel-value {
+    display: flex;
+    align-items: center;
+
+    .channel-thumbnail {
+      height: 1.3rem;
+      width: 1.3rem;
+      margin-right: var(--spacing-s);
+    }
+
+    .icon__wrapper {
+      padding: 0;
+      height: 1.3rem;
+      width: 1.3rem;
+      margin-right: var(--spacing-s);
+      border-radius: var(--border-radius);
+    }
+  }
+}
