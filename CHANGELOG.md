@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased for Desktop]
 
+## [0.52.6] - [2022-04-04]
+
 ### Added
 - Discover page medium duration filter ([#7506](https://github.com/lbryio/lbry-desktop/pull/7506))
 - Keep last used collection for Add To ([#7491](https://github.com/lbryio/lbry-desktop/pull/7491))
@@ -22,6 +24,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Local build failures on mac ([#7497](https://github.com/lbryio/lbry-desktop/pull/7497))
 - Language change now rerenders whole app ([#7504](https://github.com/lbryio/lbry-desktop/pull/7504))
 - Mac notarization ([#7518](https://github.com/lbryio/lbry-desktop/pull/7518))
+- Prevent crash when deleting last comment reply ([#7526](https://github.com/lbryio/lbry-desktop/pull/7526))
 
 ## [0.52.5] - [2022-02-25]
 
