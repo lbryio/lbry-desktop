@@ -36,7 +36,7 @@ function FileWatchLaterLink(props: Props) {
   const title = hasClaimInWatchLater ? __('Remove from Watch Later') : __('Add to Watch Later');
 
   // label that is shown after hover
-  const label = !hasClaimInWatchLater ? __('Watch later') : __('Remove');
+  const label = !hasClaimInWatchLater ? __('Watch Later') : __('Remove');
 
   return (
     <Button
