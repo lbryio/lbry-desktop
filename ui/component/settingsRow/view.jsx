@@ -40,7 +40,7 @@ export default function SettingsRow(props: Props) {
         className={classnames('settings-row__value', {
           'settings-row__value--multirow': multirow,
           'settings-row__vertical-separator': useVerticalSeparator,
-          'content__non-clickable': disabled,
+          'non-clickable': disabled,
         })}
       >
         {children && children}

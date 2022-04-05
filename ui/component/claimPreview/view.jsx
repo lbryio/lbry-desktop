@@ -57,6 +57,7 @@ type Props = {
   nsfw: boolean,
   placeholder: string,
   type: string,
+  nonClickable?: boolean,
   banState: { blacklisted?: boolean, filtered?: boolean, muted?: boolean, blocked?: boolean },
   hasVisitedUri: boolean,
   blockedUris: Array<string>,
@@ -81,7 +82,7 @@ type Props = {
   isLivestreamActive: boolean,
   collectionId?: string,
   isCollectionMine: boolean,
-  disableNavigation?: boolean,
+  disableNavigation?: boolean, // DEPRECATED - use 'nonClickable'. Remove this when channel-finder is consolidated (#810)
   mediaDuration?: string,
   date?: any,
   indexInContainer?: number, // The index order of this component within 'containerId'.
@@ -117,6 +118,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     history,
     wrapperElement,
     type,
+    nonClickable,
     placeholder,
     // pending
     reflectingProgress,
@@ -345,6 +347,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
         'claim-preview__wrapper--small': type === 'small',
         'claim-preview__live': isLivestreamActive,
         'claim-preview__active': active,
+        'non-clickable': nonClickable,
       })}
     >
       <>

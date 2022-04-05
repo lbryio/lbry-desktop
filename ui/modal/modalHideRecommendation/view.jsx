@@ -27,11 +27,7 @@ export default function ModalHideRecommendation(props: Props) {
     <Modal isOpen type="card" onAborted={doHideModal}>
       <Card
         title={__('Not interested')}
-        body={
-          <div className="content__non-clickable">
-            <ClaimPreview uri={uri} hideMenu hideActions type="inline" properties={false} />
-          </div>
-        }
+        body={<ClaimPreview uri={uri} hideMenu hideActions nonClickable type="inline" properties={false} />}
         actions={
           <>
             <div className="section__checkbox">

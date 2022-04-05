@@ -156,11 +156,7 @@ export default function ModalBlockChannel(props: Props) {
   }
 
   function getCommenterPreview(uri) {
-    return (
-      <div className="content__non-clickable">
-        <ClaimPreview uri={uri} hideMenu hideActions type="small" />
-      </div>
-    );
+    return <ClaimPreview uri={uri} hideMenu hideActions nonClickable type="small" />;
   }
 
   function getActiveChannelElem() {

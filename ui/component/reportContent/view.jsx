@@ -712,8 +712,8 @@ export default function ReportContent(props: Props) {
 
   function getClaimPreview(claim: StreamClaim) {
     return (
-      <div className="section content__non-clickable">
-        <ClaimPreview uri={claim.permanent_url} hideMenu hideActions type="small" />
+      <div className="section">
+        <ClaimPreview uri={claim.permanent_url} hideMenu hideActions nonClickable type="small" />
       </div>
     );
   }
