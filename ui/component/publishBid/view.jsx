@@ -1,5 +1,5 @@
 // @flow
-import { MINIMUM_PUBLISH_BID } from 'constants/claim';
+import { MINIMUM_PUBLISH_BID, ESTIMATED_FEE } from 'constants/claim';
 import React, { useState, useEffect } from 'react';
 import { FormField } from 'component/common/form';
 import BidHelpText from './bid-help-text';
@@ -34,7 +34,7 @@ function PublishName(props: Props) {
       bidError = __('Deposit cannot be higher than your available balance: %balance%', {
         balance: totalAvailableBidAmount,
       });
-    } else if (totalAvailableBidAmount <= bid + 0.05) {
+    } else if (totalAvailableBidAmount - bid < ESTIMATED_FEE) {
       bidError = __('Please decrease your deposit to account for transaction fees or acquire more LBRY Credits.');
     }
 
@@ -56,8 +56,8 @@ function PublishName(props: Props) {
           value={bid}
           error={bidError}
           disabled={!name}
-          onChange={event => updatePublishForm({ bid: parseFloat(event.target.value) })}
-          onWheel={e => e.stopPropagation()}
+          onChange={(event) => updatePublishForm({ bid: parseFloat(event.target.value) })}
+          onWheel={(e) => e.stopPropagation()}
           helper={
             <>
               <BidHelpText

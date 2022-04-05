@@ -1,6 +1,6 @@
 // @flow
 export const MINIMUM_PUBLISH_BID = 0.0001;
-export const ESTIMATED_FEE = 0.048; // .001 + .001 | .048 + .048 = .1
+export const ESTIMATED_FEE = 0.0015;
 
 export const MY_CLAIMS_PAGE_SIZE = 10;
 export const PAGE_PARAM = 'page';
