@@ -112,6 +112,7 @@ export default function FileRenderFloating(props: Props) {
 
   const isMobile = useIsMobile();
 
+  const initialMobileState = React.useRef(isMobile);
   const initialPlayerHeight = React.useRef();
   const resizedBetweenFloating = React.useRef();
 
@@ -170,7 +171,11 @@ export default function FileRenderFloating(props: Props) {
       x: rect.x,
     };
 
-    if (videoAspectRatio && !initialPlayerHeight.current) {
+    // replace the initial value every time the window is resized if isMobile is true,
+    // since it could be a portrait -> landscape rotation switch, or if it was a mobile - desktop
+    // switch, so use the ref to compare the initial state
+    const resizedEnoughForMobileSwitch = isMobile !== initialMobileState.current;
+    if (videoAspectRatio && (!initialPlayerHeight.current || isMobile || resizedEnoughForMobileSwitch)) {
       const heightForRect = getPossiblePlayerHeight(videoAspectRatio * rect.width, isMobile);
       initialPlayerHeight.current = heightForRect;
     }
@@ -526,7 +531,9 @@ const PlayerGlobalStyles = (props: GlobalStylesProps) => {
   const transparentBackground = {
     background: videoGreaterThanLandscape && mainFilePlaying && !forceDefaults ? 'transparent !important' : undefined,
   };
-  const maxHeight = { maxHeight: !videoTheaterMode ? 'var(--desktop-portrait-player-max-height)' : undefined };
+  const maxHeight = {
+    maxHeight: !videoTheaterMode && !isMobile ? 'var(--desktop-portrait-player-max-height)' : undefined,
+  };
 
   return (
     <Global
