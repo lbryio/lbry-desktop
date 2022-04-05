@@ -14,14 +14,16 @@ type Props = {
   doToast: ({}) => void,
 };
 
-let authenticationCompleted = false;
+// Guard against parents remounting. We don't want to send multi api calls.
+let verificationApiHistory = { called: false, successful: false };
 
 function SignInVerifyPage(props: Props) {
   const {
     history: { push, location },
     doToast,
   } = props;
-  const [isAuthenticationSuccess, setIsAuthenticationSuccess] = useState(authenticationCompleted);
+
+  const [isAuthenticationSuccess, setIsAuthenticationSuccess] = useState(verificationApiHistory.successful);
   const [showCaptchaMessage, setShowCaptchaMessage] = useState(false);
   const [captchaLoaded, setCaptchaLoaded] = useState(false);
   const urlParams = new URLSearchParams(location.search);
@@ -29,6 +31,8 @@ function SignInVerifyPage(props: Props) {
   const userSubmittedEmail = urlParams.get('email');
   const verificationToken = urlParams.get('verification_token');
   const needsRecaptcha = urlParams.get('needs_recaptcha') === 'true';
+
+  const successful = isAuthenticationSuccess || verificationApiHistory.successful;
 
   function onAuthError(message) {
     doToast({
@@ -45,9 +49,10 @@ function SignInVerifyPage(props: Props) {
   }, [authToken, userSubmittedEmail, verificationToken, doToast, push]);
 
   React.useEffect(() => {
-    if (!needsRecaptcha && !isAuthenticationSuccess) {
+    if (!needsRecaptcha && !isAuthenticationSuccess && !verificationApiHistory.called) {
       verifyUser();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps, (on mount only)
   }, []);
 
   React.useEffect(() => {
@@ -75,6 +80,7 @@ function SignInVerifyPage(props: Props) {
   }
 
   function verifyUser(captchaValue) {
+    verificationApiHistory.called = true;
     Lbryio.call('user_email', 'confirm', {
       auth_token: authToken,
       email: userSubmittedEmail,
@@ -82,10 +88,11 @@ function SignInVerifyPage(props: Props) {
       ...(captchaValue ? { recaptcha: captchaValue } : {}),
     })
       .then(() => {
-        authenticationCompleted = true;
+        verificationApiHistory.successful = true;
         setIsAuthenticationSuccess(true);
       })
       .catch(() => {
+        verificationApiHistory.successful = false;
         onAuthError(__('Invalid captcha response or other authentication error.'));
       });
   }
@@ -94,17 +101,17 @@ function SignInVerifyPage(props: Props) {
     <Page authPage noFooter>
       <div className="main__sign-up">
         <Card
-          title={isAuthenticationSuccess ? __('Log in success!') : __('Log in')}
+          title={successful ? __('Log in success!') : __('Log in')}
           subtitle={
             <React.Fragment>
               <p>
-                {isAuthenticationSuccess
+                {successful
                   ? __('You can now close this tab.')
                   : needsRecaptcha
                   ? null
                   : __('Welcome back! You are automatically being signed in.')}
               </p>
-              {showCaptchaMessage && !isAuthenticationSuccess && (
+              {showCaptchaMessage && !successful && (
                 <p>
                   <I18nMessage
                     tokens={{
@@ -120,7 +127,7 @@ function SignInVerifyPage(props: Props) {
             </React.Fragment>
           }
           actions={
-            !isAuthenticationSuccess &&
+            !successful &&
             needsRecaptcha && (
               <div className="section__actions">
                 <ReCAPTCHA
