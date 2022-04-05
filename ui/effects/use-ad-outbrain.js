@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import * as PAGES from 'constants/pages';
 
 function inIFrame() {
   try {
@@ -9,12 +10,21 @@ function inIFrame() {
   }
 }
 
+const EXCLUDED_PATHS = Object.freeze([`/$/${PAGES.AUTH}`, `/$/${PAGES.AUTH_SIGNIN}`, `/$/${PAGES.AUTH_VERIFY}`]);
+
 const LOAD_AD_DELAY_MS = 3000; // Wait past boot-up and core-vitals period.
 const OUTBRAIN_CONTAINER_KEY = 'outbrainSizeDiv';
-
 let script;
 
-export default function useAdOutbrain(hasPremiumPlus: boolean, isAuthenticated: boolean) {
+/**
+ * @param hasPremiumPlus
+ * @param isAuthenticated
+ * @param pathname Reminder: the component using this effect must be listening
+ *                 to path changes (e.g. useHistory, etc.). This value must not
+ *                 come from window.location.pathname, which doesn't spark an
+ *                 update.
+ */
+export default function useAdOutbrain(hasPremiumPlus: boolean, isAuthenticated: boolean, pathname: string) {
   // Only look at authentication for now. Eventually, we'll only use 'hasPremiumPlus'.
   // Authenticated will return undefined if not yet populated, so wait and only show
   // when returned as false
@@ -37,8 +47,12 @@ export default function useAdOutbrain(hasPremiumPlus: boolean, isAuthenticated: 
   }, [isNotAuthenticated]);
 
   React.useEffect(() => {
-    if (isAuthenticated && window[OUTBRAIN_CONTAINER_KEY]) {
-      window[OUTBRAIN_CONTAINER_KEY].style.display = 'none';
+    if (window[OUTBRAIN_CONTAINER_KEY]) {
+      if (isAuthenticated) {
+        window[OUTBRAIN_CONTAINER_KEY].style.display = 'none';
+      } else {
+        window[OUTBRAIN_CONTAINER_KEY].style.display = EXCLUDED_PATHS.includes(pathname) ? 'none' : '';
+      }
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, pathname]);
 }
