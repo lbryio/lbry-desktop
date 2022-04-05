@@ -1217,9 +1217,13 @@ img {
     margin-bottom: -1px !important;
     // margin-left:2px !important;
   }
-  .claim-link {
-    width: 40%;
-    margin-top: var(--spacing-xs);
+}
+.comments {
+  .markdown-preview {
+    .claim-link {
+      width: 40%;
+      margin-top: var(--spacing-xs);
+    }
   }
 }
 .hide-ribbon {
