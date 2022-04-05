@@ -66,8 +66,16 @@
   }
 
   .claim-preview__wrapper {
+    padding-top: 0;
+
+    .claim-preview-info {
+      padding-top: var(--spacing-s);
+    }
+    .claim__menu-button {
+      right: var(--spacing-xxs) !important;
+    }
     &:hover {
-      background-color: unset;
+      // background-color: unset;
     }
   }
 

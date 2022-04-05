@@ -83,6 +83,7 @@
 .filePrice__key {
   @extend .filePrice;
   color: var(--color-gray-5);
+  top: 0;
 
   .icon {
     fill: white;

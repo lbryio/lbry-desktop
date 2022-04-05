@@ -764,7 +764,7 @@
 
 .claim-upload__progress--inner-text {
   position: absolute;
-  color: var(--color-primary-contrast);
+  color: var(--color-text);
   width: 80%;
   white-space: nowrap;
   overflow: hidden;
@@ -1286,6 +1286,25 @@ $claim-preview-progress-bar-height: 5px;
       }
     }
   }
+
+  .button--file-action {
+    width: auto;
+    max-width: 25.59px;
+    transition: max-width 0.1s;
+    padding: 0.3rem !important;
+    .button__label {
+      margin-top: 0;
+      padding-top: 0px;
+      margin-bottom: -4px;
+      margin-left: var(--spacing-xxs);
+      text-overflow: hidden;
+    }
+
+    &:hover {
+      width: auto;
+      max-width: 60px;
+    }
+  }
 }
 
 .claim-preview__active {
@@ -1299,8 +1318,8 @@ $claim-preview-progress-bar-height: 5px;
 
   .claim-preview:not(.claim-preview--collection-mine):before {
     position: absolute;
-    top: -5px;
-    left: 78px;
+    top: 0px;
+    left: 68px;
     content: '▸';
     z-index: 1;
     font-size: 4.6rem;
