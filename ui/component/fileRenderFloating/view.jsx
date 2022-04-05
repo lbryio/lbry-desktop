@@ -470,8 +470,12 @@ const PlayerGlobalStyles = (props: GlobalStylesProps) => {
   const widthForViewer = heightForViewer / videoAspectRatio;
   const maxLandscapeHeight = getMaxLandscapeHeight(isMobile ? undefined : widthForViewer);
   const heightResult = appDrawerOpen ? `${maxLandscapeHeight}px` : `${heightForViewer}px`;
+  const amountNeededToCenter = getAmountNeededToCenterVideo(heightForViewer, maxLandscapeHeight);
 
+  // forceDefaults = no styles should be applied to any of these conditions
+  // !mainFilePlaying = embeds on markdown (comments or posts)
   const forceDefaults = !mainFilePlaying || videoTheaterMode || isFloating || isMobile;
+
   const videoGreaterThanLandscape = heightForViewer > maxLandscapeHeight;
 
   // Handles video shrink + center on mobile view
@@ -524,6 +528,22 @@ const PlayerGlobalStyles = (props: GlobalStylesProps) => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [appDrawerOpen, heightForViewer, isMobilePlayer, mainFilePlaying, maxLandscapeHeight, initialPlayerHeight]);
+
+  React.useEffect(() => {
+    if (appDrawerOpen && videoGreaterThanLandscape && isMobilePlayer) {
+      const videoNode = document.querySelector('.vjs-tech');
+      if (videoNode) videoNode.style.top = `${amountNeededToCenter}px`;
+    }
+
+    if (isMobile && isFloating) {
+      const viewer = document.querySelector(`.${CONTENT_VIEWER_CLASS}`);
+      if (viewer) viewer.removeAttribute('style');
+      const touchOverlay = document.querySelector('.vjs-touch-overlay');
+      if (touchOverlay) touchOverlay.removeAttribute('style');
+      const videoNode = document.querySelector('.vjs-tech');
+      if (videoNode) videoNode.removeAttribute('style');
+    }
+  }, [amountNeededToCenter, appDrawerOpen, isFloating, isMobile, isMobilePlayer, videoGreaterThanLandscape]);
 
   // -- render styles --
 
