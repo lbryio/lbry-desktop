@@ -73,9 +73,10 @@ function FileListPublished(props: Props) {
     <Page>
       <div className="card-stack">
         <WebUploadList />
-        {!!(urls && urls.length) && (
+        {!!urls && (
           <>
             <ClaimList
+              noEmpty
               header={
                 <span>
                   <Button
@@ -139,17 +140,23 @@ function FileListPublished(props: Props) {
           {!fetching ? (
             <section className="main--empty">
               <Yrbl
-                title={__('No uploads')}
-                subtitle={__("You haven't uploaded anything yet. This is where you can find them when you do!")}
+                title={filterBy === FILTER_REPOSTS ? __('No Reposts') : __('No uploads')}
+                subtitle={
+                  filterBy === FILTER_REPOSTS
+                    ? __("You haven't reposted anything yet.")
+                    : __("You haven't uploaded anything yet. This is where you can find them when you do!")
+                }
                 actions={
-                  <div className="section__actions">
-                    <Button
-                      button="primary"
-                      navigate={`/$/${PAGES.UPLOAD}`}
-                      label={__('Upload Something New')}
-                      onClick={() => clearPublish()}
-                    />
-                  </div>
+                  filterBy !== FILTER_REPOSTS && (
+                    <div className="section__actions">
+                      <Button
+                        button="primary"
+                        navigate={`/$/${PAGES.UPLOAD}`}
+                        label={__('Upload Something New')}
+                        onClick={() => clearPublish()}
+                      />
+                    </div>
+                  )
                 }
               />
             </section>

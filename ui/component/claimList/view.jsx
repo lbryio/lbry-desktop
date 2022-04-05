@@ -52,6 +52,7 @@ type Props = {
   fypId?: string,
   showNoSourceClaims?: boolean,
   onClick?: (e: any, claim?: ?Claim, index?: number) => void,
+  noEmpty?: boolean,
   maxClaimRender?: number,
   loadedCallback?: (number) => void,
   swipeLayout: boolean,
@@ -91,6 +92,7 @@ export default function ClaimList(props: Props) {
     fypId,
     showNoSourceClaims,
     onClick,
+    noEmpty,
     maxClaimRender,
     loadedCallback,
     swipeLayout = false,
@@ -227,7 +229,9 @@ export default function ClaimList(props: Props) {
               />
             </React.Fragment>
           ))}
-        {!timedOut && urisLength === 0 && !loading && <div className="empty main--empty">{empty || noResultMsg}</div>}
+        {!timedOut && urisLength === 0 && !loading && !noEmpty && (
+          <div className="empty main--empty">{empty || noResultMsg}</div>
+        )}
         {timedOut && timedOutMessage && <div className="empty main--empty">{timedOutMessage}</div>}
       </section>
       {loading && useLoadingSpinner && (
@@ -322,7 +326,9 @@ export default function ClaimList(props: Props) {
         </ul>
       )}
 
-      {!timedOut && urisLength === 0 && !loading && <div className="empty empty--centered">{empty || noResultMsg}</div>}
+      {!timedOut && urisLength === 0 && !loading && !noEmpty && (
+        <div className="empty empty--centered">{empty || noResultMsg}</div>
+      )}
       {!loading && timedOut && timedOutMessage && <div className="empty empty--centered">{timedOutMessage}</div>}
       {loading && useLoadingSpinner && (
         <div className="spinnerArea--centered">
