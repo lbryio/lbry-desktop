@@ -378,7 +378,7 @@
 
     flex-shrink: 0;
     margin-right: var(--spacing-s);
-    box-shadow: 0px 0px 0px 1px rgba(var(--color-primary-dynamic), 0.3) inset;
+    box-shadow: 0px 0px 0px 1px rgba(var(--color-primary-dynamic), 0.2) inset;
   }
 
   .media__thumb-placeholder-text {
@@ -1290,19 +1290,25 @@ $claim-preview-progress-bar-height: 5px;
   .button--file-action {
     width: auto;
     max-width: 25.59px;
-    transition: max-width 0.1s;
+    transition: max-width 0.2s;
     padding: 0.3rem !important;
+
+    .button__content {
+      flex-direction: row-reverse;
+    }
     .button__label {
-      margin-top: 0;
+      margin-top: -1px;
       padding-top: 0px;
       margin-bottom: -4px;
-      margin-left: var(--spacing-xxs);
+      margin-left: 4px;
+      margin-right: var(--spacing-xxs);
       text-overflow: hidden;
     }
 
     &:hover {
       width: auto;
-      max-width: 60px;
+      min-width: 25.59px;
+      max-width: 140px;
     }
   }
 }
