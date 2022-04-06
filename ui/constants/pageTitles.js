@@ -16,6 +16,7 @@ export const PAGE_TITLE = {
   [PAGES.FINANCE]: 'Finance 2.0',
   [PAGES.GAMING]: 'Gaming',
   [PAGES.GENERAL]: 'Cheese',
+  [PAGES.SPORTS]: 'Sports',
   [PAGES.LAB]: 'Lab',
   [PAGES.MOVIES]: 'Movies',
   [PAGES.MUSIC]: 'Music',

@@ -8,6 +8,7 @@ exports.BACKUP = 'backup';
 exports.CHANNEL = 'channel';
 exports.DISCOVER = 'discover';
 exports.ARTISTS = 'artists';
+exports.SPORTS = 'sports';
 exports.BIG_HITS = 'bighits';
 exports.CREATIVE_ARTS = 'arts';
 exports.MOVIES = 'movies';
