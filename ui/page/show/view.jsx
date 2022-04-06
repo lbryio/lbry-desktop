@@ -28,7 +28,6 @@ type Props = {
   claim: StreamClaim,
   location: UrlLocation,
   blackListedOutpointMap: { [string]: number },
-  title: string,
   claimIsMine: boolean,
   claimIsPending: boolean,
   isLivestream: boolean,
