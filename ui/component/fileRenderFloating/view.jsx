@@ -17,7 +17,7 @@ import { PRIMARY_PLAYER_WRAPPER_CLASS } from 'page/file/view';
 import Draggable from 'react-draggable';
 import { onFullscreenChange } from 'util/full-screen';
 import { generateListSearchUrlParams, formatLbryChannelName } from 'util/url';
-import { useIsMobile, useIsMobileLandscape } from 'effects/use-screensize';
+import { useIsMobile, useIsMobileLandscape, useIsLandscapeScreen } from 'effects/use-screensize';
 import debounce from 'util/debounce';
 import { useHistory } from 'react-router';
 import { isURIEqual } from 'util/lbryURI';
@@ -111,6 +111,7 @@ export default function FileRenderFloating(props: Props) {
   } = props;
 
   const isMobile = useIsMobile();
+  const isTabletLandscape = useIsLandscapeScreen() && !isMobile;
   const isLandscapeRotated = useIsMobileLandscape();
 
   const initialMobileState = React.useRef(isMobile);
@@ -389,12 +390,13 @@ export default function FileRenderFloating(props: Props) {
           <PlayerGlobalStyles
             videoAspectRatio={videoAspectRatio}
             videoTheaterMode={videoTheaterMode}
-            appDrawerOpen={appDrawerOpen && !isLandscapeRotated}
+            appDrawerOpen={appDrawerOpen && !isLandscapeRotated && !isTabletLandscape}
             initialPlayerHeight={initialPlayerHeight}
             isFloating={isFloating}
             fileViewerRect={fileViewerRect}
             mainFilePlaying={mainFilePlaying}
             isLandscapeRotated={isLandscapeRotated}
+            isTabletLandscape={isTabletLandscape}
           />
         ) : null}
 
@@ -453,6 +455,7 @@ type GlobalStylesProps = {
   fileViewerRect: any,
   mainFilePlaying: boolean,
   isLandscapeRotated: boolean,
+  isTabletLandscape: boolean,
 };
 
 const PlayerGlobalStyles = (props: GlobalStylesProps) => {
@@ -465,6 +468,7 @@ const PlayerGlobalStyles = (props: GlobalStylesProps) => {
     fileViewerRect,
     mainFilePlaying,
     isLandscapeRotated,
+    isTabletLandscape,
   } = props;
 
   const isMobile = useIsMobile();
@@ -485,7 +489,7 @@ const PlayerGlobalStyles = (props: GlobalStylesProps) => {
   // Handles video shrink + center on mobile view
   // direct DOM manipulation due to performance for every scroll
   React.useEffect(() => {
-    if (!isMobilePlayer || !mainFilePlaying || appDrawerOpen || isLandscapeRotated) return;
+    if (!isMobilePlayer || !mainFilePlaying || appDrawerOpen || isLandscapeRotated || isTabletLandscape) return;
 
     const viewer = document.querySelector(`.${CONTENT_VIEWER_CLASS}`);
     if (viewer) viewer.style.height = `${heightForViewer}px`;
@@ -539,6 +543,7 @@ const PlayerGlobalStyles = (props: GlobalStylesProps) => {
     maxLandscapeHeight,
     initialPlayerHeight,
     isLandscapeRotated,
+    isTabletLandscape,
   ]);
 
   React.useEffect(() => {
@@ -556,6 +561,15 @@ const PlayerGlobalStyles = (props: GlobalStylesProps) => {
       if (videoNode) videoNode.removeAttribute('style');
     }
   }, [amountNeededToCenter, appDrawerOpen, isFloating, isMobile, isMobilePlayer, videoGreaterThanLandscape]);
+
+  React.useEffect(() => {
+    if (isTabletLandscape) {
+      const videoNode = document.querySelector('.vjs-tech');
+      if (videoNode) videoNode.removeAttribute('style');
+      const touchOverlay = document.querySelector('.vjs-touch-overlay');
+      if (touchOverlay) touchOverlay.removeAttribute('style');
+    }
+  }, [isTabletLandscape]);
 
   // -- render styles --
 
@@ -582,7 +596,13 @@ const PlayerGlobalStyles = (props: GlobalStylesProps) => {
           video: maxHeight,
         },
         '.content__wrapper': transparentBackground,
-        '.video-js': transparentBackground,
+        '.video-js': {
+          ...transparentBackground,
+
+          '.vjs-touch-overlay': {
+            maxHeight: isTabletLandscape ? 'var(--desktop-portrait-player-max-height) !important' : undefined,
+          },
+        },
 
         '.vjs-fullscreen': {
           video: {

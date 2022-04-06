@@ -53,17 +53,22 @@ export function useIsMobile() {
 }
 
 export function useIsMobileLandscape() {
-  const isWindowClient = typeof window === 'object';
   const isMobile = useIsMobile();
+  const isLandscapeScreen = useIsLandscapeScreen();
+  return isMobile && isLandscapeScreen;
+}
+
+export function useIsLandscapeScreen() {
+  const isWindowClient = typeof window === 'object';
 
   const windowAngle = getWindowAngle();
-  const isLandscape = isMobile && isWindowLandscapeForAngle(windowAngle);
+  const isLandscape = isWindowLandscapeForAngle(windowAngle);
   const [landscape, setLandscape] = React.useState<boolean>(isLandscape);
 
   React.useEffect(() => {
     function handleResize() {
       const currAngle = getWindowAngle();
-      const isCurrLandscape = isMobile && isWindowLandscapeForAngle(currAngle);
+      const isCurrLandscape = isWindowLandscapeForAngle(currAngle);
       if (landscape !== isCurrLandscape) {
         setLandscape(isCurrLandscape);
       }
