@@ -1,7 +1,7 @@
 // @flow
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import Button from 'component/button';
 import ClaimList from 'component/claimList';
 import Page from 'component/page';
@@ -9,6 +9,8 @@ import Paginate from 'component/common/paginate';
 import { PAGE_PARAM, PAGE_SIZE_PARAM } from 'constants/claim';
 import Spinner from 'component/spinner';
 import Yrbl from 'component/yrbl';
+import { FormField, Form } from 'component/common/form';
+import Icon from 'component/common/icon';
 import classnames from 'classnames';
 
 const FILTER_ALL = 'stream,repost';
@@ -18,19 +20,19 @@ const FILTER_REPOSTS = 'repost';
 type Props = {
   checkPendingPublishes: () => void,
   clearPublish: () => void,
-  fetchClaimListMine: (number, number, boolean, Array<string>) => void,
   fetching: boolean,
-  urls: Array<string>,
-  urlTotal: number,
   history: { replace: (string) => void, push: (string) => void },
   page: number,
   pageSize: number,
+  myClaims: any,
+  fetchAllMyClaims: () => void,
 };
 
 function FileListPublished(props: Props) {
-  const { checkPendingPublishes, clearPublish, fetchClaimListMine, fetching, urls, urlTotal, page, pageSize } = props;
+  const { checkPendingPublishes, clearPublish, fetching, page, pageSize, myClaims, fetchAllMyClaims } = props;
 
   const [filterBy, setFilterBy] = React.useState(FILTER_ALL);
+  const [searchText, setSearchText] = React.useState('');
   const params = {};
 
   params[PAGE_PARAM] = Number(page);
@@ -42,12 +44,44 @@ function FileListPublished(props: Props) {
     checkPendingPublishes();
   }, [checkPendingPublishes]);
 
-  useEffect(() => {
-    if (paramsString && fetchClaimListMine) {
-      const params = JSON.parse(paramsString);
-      fetchClaimListMine(params.page, params.page_size, true, filterBy.split(','));
+  const filteredClaims = useMemo(() => {
+    if (fetching) {
+      return [];
     }
-  }, [paramsString, filterBy, fetchClaimListMine]);
+
+    return myClaims.filter((claim) => {
+      const value = claim.value || {};
+      const src = value.source || {};
+      const title = (value.title || '').toLowerCase();
+      const description = (value.description || '').toLowerCase();
+      const tags = (value.tags || []).join('').toLowerCase();
+      const srcName = (src.name || '').toLowerCase();
+      const lowerCaseSearchText = searchText.toLowerCase();
+      const textMatches =
+        !searchText ||
+        title.indexOf(lowerCaseSearchText) !== -1 ||
+        description.indexOf(lowerCaseSearchText) !== -1 ||
+        tags.indexOf(lowerCaseSearchText) !== -1 ||
+        srcName.indexOf(lowerCaseSearchText) !== -1;
+      return textMatches && filterBy.includes(claim.value_type);
+    });
+  }, [fetching, myClaims, filterBy, searchText]);
+
+  const urlTotal = filteredClaims.length;
+
+  const urls = useMemo(() => {
+    const params = JSON.parse(paramsString);
+    const zeroIndexPage = Math.max(0, params.page - 1);
+    const paginated = filteredClaims.slice(
+      zeroIndexPage * params.page_size,
+      zeroIndexPage * params.page_size + params.page_size
+    );
+    return paginated.map((claim) => claim.permanent_url);
+  }, [filteredClaims, paramsString]);
+
+  useEffect(() => {
+    fetchAllMyClaims();
+  }, [fetchAllMyClaims]);
 
   return (
     <Page>
@@ -89,20 +123,18 @@ function FileListPublished(props: Props) {
                 <div className="card__actions--inline">
                   {fetching && <Spinner type="small" />}
                   {!fetching && (
-                    <Button
-                      button="alt"
-                      label={__('Refresh')}
-                      icon={ICONS.REFRESH}
-                      onClick={() => fetchClaimListMine(params.page, params.page_size, true, filterBy.split(','))}
-                    />
+                    <Button button="alt" label={__('Refresh')} icon={ICONS.REFRESH} onClick={fetchAllMyClaims} />
                   )}
-                  <Button
-                    icon={ICONS.PUBLISH}
-                    button="secondary"
-                    label={__('Upload')}
-                    navigate={`/$/${PAGES.UPLOAD}`}
-                    onClick={() => clearPublish()}
-                  />
+                  <Form onSubmit={() => {}} className="wunderbar--inline">
+                    <Icon icon={ICONS.SEARCH} />
+                    <FormField
+                      className="wunderbar__input--inline"
+                      value={searchText}
+                      onChange={(e) => setSearchText(e.target.value)}
+                      type="text"
+                      placeholder={__('Search')}
+                    />
+                  </Form>
                 </div>
               }
               persistedStorageKey="claim-list-published"
@@ -112,7 +144,7 @@ function FileListPublished(props: Props) {
           </>
         )}
       </div>
-      {!(urls && urls.length) && (
+      {!fetching && myClaims.length === 0 && (
         <React.Fragment>
           {!fetching ? (
             <section className="main--empty">

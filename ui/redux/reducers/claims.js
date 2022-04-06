@@ -61,6 +61,8 @@ type State = {
   isCheckingNameForPublish: boolean,
   checkingPending: boolean,
   checkingReflecting: boolean,
+  isFetchingAllClaimListMine: boolean,
+  allClaimListMine: ?ClaimListResponse,
 };
 
 const reducers = {};
@@ -109,6 +111,8 @@ const defaultState = {
   isCheckingNameForPublish: false,
   checkingPending: false,
   checkingReflecting: false,
+  isFetchingAllClaimListMine: false,
+  allClaimListMine: undefined,
 };
 
 function handleClaimAction(state: State, action: any): State {
@@ -272,6 +276,17 @@ reducers[ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED] = (state: State, action: any):
     myClaimsPageTotalResults: totalItems,
   });
 };
+
+reducers[ACTIONS.FETCH_ALL_CLAIM_LIST_MINE_STARTED] = (state: State): State =>
+  Object.assign({}, state, {
+    isFetchingAllClaimListMine: true,
+  });
+
+reducers[ACTIONS.FETCH_ALL_CLAIM_LIST_MINE_COMPLETED] = (state: State, action: any): State =>
+  Object.assign({}, state, {
+    isFetchingAllClaimListMine: false,
+    allClaimListMine: action.data.result.items,
+  });
 
 reducers[ACTIONS.FETCH_CHANNEL_LIST_STARTED] = (state: State): State =>
   Object.assign({}, state, { fetchingMyChannels: true });

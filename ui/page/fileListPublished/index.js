@@ -1,11 +1,10 @@
 import { connect } from 'react-redux';
 import {
-  selectIsFetchingClaimListMine,
-  selectMyClaimsPage,
-  selectMyClaimsPageItemCount,
+  selectIsFetchingAllMyClaims,
   selectFetchingMyClaimsPageError,
+  selectAllMyClaims,
 } from 'redux/selectors/claims';
-import { doFetchClaimListMine, doCheckPendingClaims } from 'redux/actions/claims';
+import { doCheckPendingClaims, doFetchAllClaimListMine } from 'redux/actions/claims';
 import { doClearPublish } from 'redux/actions/publish';
 import FileListPublished from './view';
 import { withRouter } from 'react-router';
@@ -20,18 +19,16 @@ const select = (state, props) => {
   return {
     page,
     pageSize,
-    fetching: selectIsFetchingClaimListMine(state),
-    urls: selectMyClaimsPage(state),
-    urlTotal: selectMyClaimsPageItemCount(state),
+    fetching: selectIsFetchingAllMyClaims(state),
     error: selectFetchingMyClaimsPageError(state),
+    myClaims: selectAllMyClaims(state),
   };
 };
 
 const perform = (dispatch) => ({
   checkPendingPublishes: () => dispatch(doCheckPendingClaims()),
-  fetchClaimListMine: (page, pageSize, resolve, filterBy) =>
-    dispatch(doFetchClaimListMine(page, pageSize, resolve, filterBy)),
   clearPublish: () => dispatch(doClearPublish()),
+  fetchAllMyClaims: () => dispatch(doFetchAllClaimListMine()),
 });
 
 export default withRouter(connect(select, perform)(FileListPublished));
