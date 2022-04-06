@@ -16,6 +16,7 @@ import classnames from 'classnames';
 const FILTER_ALL = 'stream,repost';
 const FILTER_UPLOADS = 'stream';
 const FILTER_REPOSTS = 'repost';
+const PAGINATE_PARAM = 'page';
 
 type Props = {
   checkPendingPublishes: () => void,
@@ -26,10 +27,23 @@ type Props = {
   pageSize: number,
   myClaims: any,
   fetchAllMyClaims: () => void,
+  location: { search: string },
+  disableHistory?: boolean, // Disables the use of '&page=' param and history stack.
 };
 
 function FileListPublished(props: Props) {
-  const { checkPendingPublishes, clearPublish, fetching, page, pageSize, myClaims, fetchAllMyClaims } = props;
+  const {
+    checkPendingPublishes,
+    clearPublish,
+    fetching,
+    page,
+    pageSize,
+    myClaims,
+    fetchAllMyClaims,
+    location,
+    disableHistory,
+    history,
+  } = props;
 
   const [filterBy, setFilterBy] = React.useState(FILTER_ALL);
   const [searchText, setSearchText] = React.useState('');
@@ -78,6 +92,20 @@ function FileListPublished(props: Props) {
     );
     return paginated.map((claim) => claim.permanent_url);
   }, [filteredClaims, paramsString]);
+
+  const { search } = location;
+
+  // Go back to the first page when the filtered claims change.
+  // This way, we avoid hiding results just because the
+  // user may be on a different page (page that was calculated
+  // using a different state, ie, different filtered claims)
+  useEffect(() => {
+    if (!disableHistory) {
+      const params = new URLSearchParams(search);
+      params.set(PAGINATE_PARAM, '1');
+      history.push('?' + params.toString());
+    }
+  }, [filteredClaims]);
 
   useEffect(() => {
     fetchAllMyClaims();
