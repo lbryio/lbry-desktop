@@ -30,12 +30,26 @@ export default function useAdOutbrain(hasPremiumPlus: boolean, isAuthenticated: 
   // when returned as false
   const isNotAuthenticated = isAuthenticated === false;
 
+  const propRef = React.useRef({ isAuthenticated, pathname });
+  propRef.current = { isAuthenticated, pathname };
+
+  function resolveVisibility() {
+    if (window[OUTBRAIN_CONTAINER_KEY]) {
+      if (propRef.current.isAuthenticated) {
+        window[OUTBRAIN_CONTAINER_KEY].style.display = 'none';
+      } else {
+        window[OUTBRAIN_CONTAINER_KEY].style.display = EXCLUDED_PATHS.includes(propRef.current.pathname) ? 'none' : '';
+      }
+    }
+  }
+
   React.useEffect(() => {
     if (!inIFrame() && isNotAuthenticated && !script) {
       const loadTimer = setTimeout(() => {
         script = document.createElement('script');
         script.src = 'https://adncdnend.azureedge.net/adtags/odysee.adn.js';
         script.async = true;
+        script.addEventListener('load', resolveVisibility);
 
         // $FlowFixMe
         document.body.appendChild(script);
@@ -43,16 +57,10 @@ export default function useAdOutbrain(hasPremiumPlus: boolean, isAuthenticated: 
 
       return () => clearTimeout(loadTimer);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps, (on mount only)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isNotAuthenticated]);
 
   React.useEffect(() => {
-    if (window[OUTBRAIN_CONTAINER_KEY]) {
-      if (isAuthenticated) {
-        window[OUTBRAIN_CONTAINER_KEY].style.display = 'none';
-      } else {
-        window[OUTBRAIN_CONTAINER_KEY].style.display = EXCLUDED_PATHS.includes(pathname) ? 'none' : '';
-      }
-    }
+    resolveVisibility();
   }, [isAuthenticated, pathname]);
 }
