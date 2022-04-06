@@ -62,7 +62,7 @@ type State = {
   checkingPending: boolean,
   checkingReflecting: boolean,
   isFetchingAllClaimListMine: boolean,
-  allClaimListMine: ?ClaimListResponse,
+  allClaimListMine: Array<ChannelClaim | Claim>,
 };
 
 const reducers = {};
@@ -112,7 +112,7 @@ const defaultState = {
   checkingPending: false,
   checkingReflecting: false,
   isFetchingAllClaimListMine: false,
-  allClaimListMine: undefined,
+  allClaimListMine: [],
 };
 
 function handleClaimAction(state: State, action: any): State {
