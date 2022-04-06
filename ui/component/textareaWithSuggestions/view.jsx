@@ -58,6 +58,7 @@ type Props = {
   value: any,
   autoFocus?: boolean,
   submitButtonRef?: any,
+  spellCheck?: boolean,
   claimIsMine?: boolean,
   slimInput?: boolean,
   doResolveUris: (uris: Array<string>, cache: boolean) => void,
@@ -92,6 +93,7 @@ export default function TextareaWithSuggestions(props: Props) {
     value: messageValue,
     autoFocus,
     submitButtonRef,
+    spellCheck,
     claimIsMine,
     slimInput,
     doResolveUris,
@@ -105,7 +107,7 @@ export default function TextareaWithSuggestions(props: Props) {
     handlePreventClick,
   } = props;
 
-  const inputDefaultProps = { className, placeholder, maxLength, type, disabled };
+  const inputDefaultProps = { className, placeholder, maxLength, spellCheck, type, disabled };
 
   const [suggestionValue, setSuggestionValue] = React.useState(undefined);
   const [highlightedSuggestion, setHighlightedSuggestion] = React.useState('');

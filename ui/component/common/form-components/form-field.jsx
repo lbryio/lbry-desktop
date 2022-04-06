@@ -330,6 +330,7 @@ export class FormField extends React.PureComponent<Props, State> {
                 ) : (
                   <React.Suspense fallback={null}>
                     <TextareaWithSuggestions
+                      spellCheck
                       uri={uri}
                       type={type}
                       id={name}
