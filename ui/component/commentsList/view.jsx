@@ -302,7 +302,7 @@ export default function CommentList(props: Props) {
 
           {!hasDefaultExpansion && (
             <div className="card__bottom-actions--comments">
-              {(!expandedComments || moreBelow) && (
+              {(!expandedComments || moreBelow) && totalComments > 0 && (
                 <Button
                   button="link"
                   title={!expandedComments ? __('Expand') : __('More')}
@@ -310,7 +310,7 @@ export default function CommentList(props: Props) {
                   onClick={() => (!expandedComments ? setExpandedComments(true) : setPage(page + 1))}
                 />
               )}
-              {expandedComments && (
+              {expandedComments && totalComments > 0 && (
                 <Button
                   button="link"
                   title={__('Collapse')}
