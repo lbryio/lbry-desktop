@@ -1,10 +1,18 @@
 // @flow
 import type { Node } from 'react';
+import {
+  THUMBNAIL_WIDTH,
+  THUMBNAIL_WIDTH_MOBILE,
+  THUMBNAIL_HEIGHT,
+  THUMBNAIL_HEIGHT_MOBILE,
+  THUMBNAIL_QUALITY,
+  MISSING_THUMB_DEFAULT,
+} from 'config';
+import { useIsMobile } from 'effects/use-screensize';
 import { getImageProxyUrl, getThumbnailCdnUrl } from 'util/thumbnail';
 import React from 'react';
 import FreezeframeWrapper from './FreezeframeWrapper';
 import Placeholder from './placeholder.png';
-import { MISSING_THUMB_DEFAULT } from 'config';
 import classnames from 'classnames';
 import Thumb from './thumb';
 
@@ -28,6 +36,7 @@ function FileThumbnail(props: Props) {
 
   const hasResolvedClaim = claim !== undefined;
   const isGif = thumbnail && thumbnail.endsWith('gif');
+  const isMobile = useIsMobile();
 
   React.useEffect(() => {
     if (!hasResolvedClaim && uri && !passedThumbnail) {
@@ -53,7 +62,12 @@ function FileThumbnail(props: Props) {
     if (isGif) {
       url = getImageProxyUrl(thumbnail); // Note: the '!allowGifs' case is handled in Freezeframe above.
     } else {
-      url = getThumbnailCdnUrl({ thumbnail });
+      url = getThumbnailCdnUrl({
+        thumbnail,
+        width: isMobile ? THUMBNAIL_WIDTH_MOBILE : THUMBNAIL_WIDTH,
+        height: isMobile ? THUMBNAIL_HEIGHT_MOBILE : THUMBNAIL_HEIGHT,
+        quality: THUMBNAIL_QUALITY,
+      });
     }
   }
   // @endif
