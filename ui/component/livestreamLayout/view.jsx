@@ -2,7 +2,7 @@
 import 'scss/component/_swipeable-drawer.scss';
 
 import { lazyImport } from 'util/lazyImport';
-import { useIsMobile } from 'effects/use-screensize';
+import { useIsMobile, useIsMobileLandscape } from 'effects/use-screensize';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import FileTitleSection from 'component/fileTitleSection';
 import LivestreamLink from 'component/livestreamLink';
@@ -53,6 +53,7 @@ export default function LivestreamLayout(props: Props) {
   } = props;
 
   const isMobile = useIsMobile();
+  const isLandscapeRotated = useIsMobileLandscape();
 
   const [superchatsHidden, setSuperchatsHidden] = React.useState(false);
   const [chatViewMode, setChatViewMode] = React.useState(VIEW_MODES.CHAT);
@@ -100,7 +101,7 @@ export default function LivestreamLayout(props: Props) {
           />
         )}
 
-        {isMobile && !hideComments && (
+        {isMobile && !isLandscapeRotated && !hideComments && (
           <React.Suspense fallback={null}>
             <SwipeableDrawer
               title={

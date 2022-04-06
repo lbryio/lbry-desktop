@@ -1,6 +1,7 @@
 // @flow
 // Widths are taken from "ui/scss/init/vars.scss"
 import React, { useRef } from 'react';
+import { getWindowAngle, isWindowLandscapeForAngle } from 'component/fileRenderFloating/helper-functions';
 const DEFAULT_SCREEN_SIZE = 1080;
 
 export function useWindowSize() {
@@ -49,6 +50,33 @@ function useHasWindowWidthChangedEnough(comparisonFn: (windowSize: number) => bo
 
 export function useIsMobile() {
   return useHasWindowWidthChangedEnough((windowSize) => windowSize < 901);
+}
+
+export function useIsMobileLandscape() {
+  const isWindowClient = typeof window === 'object';
+  const isMobile = useIsMobile();
+
+  const windowAngle = getWindowAngle();
+  const isLandscape = isMobile && isWindowLandscapeForAngle(windowAngle);
+  const [landscape, setLandscape] = React.useState<boolean>(isLandscape);
+
+  React.useEffect(() => {
+    function handleResize() {
+      const currAngle = getWindowAngle();
+      const isCurrLandscape = isMobile && isWindowLandscapeForAngle(currAngle);
+      if (landscape !== isCurrLandscape) {
+        setLandscape(isCurrLandscape);
+      }
+    }
+
+    if (isWindowClient) {
+      window.addEventListener('resize', handleResize);
+
+      return () => window.removeEventListener('resize', handleResize);
+    }
+  }, [isWindowClient, landscape]);
+
+  return landscape;
 }
 
 export function useIsMediumScreen() {

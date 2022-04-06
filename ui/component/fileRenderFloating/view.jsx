@@ -17,7 +17,7 @@ import { PRIMARY_PLAYER_WRAPPER_CLASS } from 'page/file/view';
 import Draggable from 'react-draggable';
 import { onFullscreenChange } from 'util/full-screen';
 import { generateListSearchUrlParams, formatLbryChannelName } from 'util/url';
-import { useIsMobile } from 'effects/use-screensize';
+import { useIsMobile, useIsMobileLandscape } from 'effects/use-screensize';
 import debounce from 'util/debounce';
 import { useHistory } from 'react-router';
 import { isURIEqual } from 'util/lbryURI';
@@ -111,6 +111,7 @@ export default function FileRenderFloating(props: Props) {
   } = props;
 
   const isMobile = useIsMobile();
+  const isLandscapeRotated = useIsMobileLandscape();
 
   const initialMobileState = React.useRef(isMobile);
   const initialPlayerHeight = React.useRef();
@@ -368,7 +369,7 @@ export default function FileRenderFloating(props: Props) {
           'content__viewer--secondary': isComment,
           'content__viewer--theater-mode': videoTheaterMode && mainFilePlaying && !isCurrentClaimLive && !isMobile,
           'content__viewer--disable-click': wasDragging,
-          'content__viewer--mobile': isMobile && !playingUriSource,
+          'content__viewer--mobile': isMobile && !isLandscapeRotated && !playingUriSource,
         })}
         style={
           !isFloating && fileViewerRect
@@ -388,11 +389,12 @@ export default function FileRenderFloating(props: Props) {
           <PlayerGlobalStyles
             videoAspectRatio={videoAspectRatio}
             videoTheaterMode={videoTheaterMode}
-            appDrawerOpen={appDrawerOpen}
+            appDrawerOpen={appDrawerOpen && !isLandscapeRotated}
             initialPlayerHeight={initialPlayerHeight}
             isFloating={isFloating}
             fileViewerRect={fileViewerRect}
             mainFilePlaying={mainFilePlaying}
+            isLandscapeRotated={isLandscapeRotated}
           />
         ) : null}
 
@@ -450,6 +452,7 @@ type GlobalStylesProps = {
   isFloating: boolean,
   fileViewerRect: any,
   mainFilePlaying: boolean,
+  isLandscapeRotated: boolean,
 };
 
 const PlayerGlobalStyles = (props: GlobalStylesProps) => {
@@ -461,6 +464,7 @@ const PlayerGlobalStyles = (props: GlobalStylesProps) => {
     isFloating,
     fileViewerRect,
     mainFilePlaying,
+    isLandscapeRotated,
   } = props;
 
   const isMobile = useIsMobile();
@@ -481,7 +485,7 @@ const PlayerGlobalStyles = (props: GlobalStylesProps) => {
   // Handles video shrink + center on mobile view
   // direct DOM manipulation due to performance for every scroll
   React.useEffect(() => {
-    if (!isMobilePlayer || !mainFilePlaying || appDrawerOpen) return;
+    if (!isMobilePlayer || !mainFilePlaying || appDrawerOpen || isLandscapeRotated) return;
 
     const viewer = document.querySelector(`.${CONTENT_VIEWER_CLASS}`);
     if (viewer) viewer.style.height = `${heightForViewer}px`;
@@ -527,7 +531,15 @@ const PlayerGlobalStyles = (props: GlobalStylesProps) => {
 
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [appDrawerOpen, heightForViewer, isMobilePlayer, mainFilePlaying, maxLandscapeHeight, initialPlayerHeight]);
+  }, [
+    appDrawerOpen,
+    heightForViewer,
+    isMobilePlayer,
+    mainFilePlaying,
+    maxLandscapeHeight,
+    initialPlayerHeight,
+    isLandscapeRotated,
+  ]);
 
   React.useEffect(() => {
     if (appDrawerOpen && videoGreaterThanLandscape && isMobilePlayer) {
@@ -594,7 +606,10 @@ const PlayerGlobalStyles = (props: GlobalStylesProps) => {
         },
 
         [`.${CONTENT_VIEWER_CLASS}`]: {
-          height: !forceDefaults && (!isMobile || isMobilePlayer) ? `${heightResult} !important` : undefined,
+          height:
+            (!forceDefaults || isLandscapeRotated) && (!isMobile || isMobilePlayer)
+              ? `${heightResult} !important`
+              : undefined,
           ...maxHeight,
         },
       }}

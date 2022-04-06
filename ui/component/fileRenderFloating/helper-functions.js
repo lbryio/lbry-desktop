@@ -85,3 +85,20 @@ export function getPossiblePlayerHeight(height: number, isMobile: boolean) {
 
   return forceMinHeight;
 }
+
+export function getWindowAngle(cb?: () => void) {
+  // iOS
+  if (typeof window.orientation === 'number') {
+    return window.orientation;
+  }
+  // Android
+  if (screen && screen.orientation && screen.orientation.angle) {
+    return window.orientation;
+  }
+  if (cb) cb();
+  return 0;
+}
+
+export function isWindowLandscapeForAngle(angle: number) {
+  return angle === 90 || angle === 270 || angle === -90;
+}

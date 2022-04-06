@@ -16,7 +16,7 @@ import Button from 'component/button';
 import Empty from 'component/common/empty';
 import SwipeableDrawer from 'component/swipeableDrawer';
 import DrawerExpandButton from 'component/swipeableDrawerExpand';
-import { useIsMobile } from 'effects/use-screensize';
+import { useIsMobile, useIsMobileLandscape } from 'effects/use-screensize';
 
 const CommentsList = lazyImport(() => import('component/commentsList' /* webpackChunkName: "comments" */));
 const PostViewer = lazyImport(() => import('component/postViewer' /* webpackChunkName: "postViewer" */));
@@ -81,8 +81,7 @@ export default function FilePage(props: Props) {
   } = props;
 
   const isMobile = useIsMobile();
-
-  // Auto-open the drawer on Mobile view if there is a linked comment
+  const isLandscapeRotated = useIsMobileLandscape();
 
   const channelSettings = channelId ? settingsByChannelId[channelId] : undefined;
   const commentSettingDisabled = channelSettings && !channelSettings.comments_enabled;
@@ -239,7 +238,7 @@ export default function FilePage(props: Props) {
                   <Empty {...emptyMsgProps} text={__('The creator of this content has disabled comments.')} />
                 ) : commentSettingDisabled ? (
                   <Empty {...emptyMsgProps} text={__('This channel has disabled comments on their page.')} />
-                ) : isMobile ? (
+                ) : isMobile && !isLandscapeRotated ? (
                   <>
                     <SwipeableDrawer title={commentsListTitle}>
                       <CommentsList {...commentsListProps} />
