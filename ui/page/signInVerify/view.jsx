@@ -1,5 +1,4 @@
 // @flow
-import * as PAGES from 'constants/pages';
 import React, { useState } from 'react';
 import { withRouter } from 'react-router';
 import Page from 'component/page';
@@ -39,7 +38,6 @@ function SignInVerifyPage(props: Props) {
       message: message || __('Authentication failure.'),
       isError: true,
     });
-    push(`/$/${PAGES.AUTH}`);
   }
 
   React.useEffect(() => {
