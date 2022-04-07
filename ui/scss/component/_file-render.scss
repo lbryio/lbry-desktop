@@ -124,10 +124,6 @@
   }
 
   @media (max-width: $breakpoint-small) {
-    .card__main-actions {
-      // padding: var(--spacing-s) var(--spacing-xxs) !important;
-    }
-
     .claim-preview--inline {
       align-items: flex-start;
       line-height: 1.3;
@@ -203,12 +199,19 @@
   }
 }
 
+.file-page__video-container {
+  max-height: var(--desktop-portrait-player-max-height);
+}
+
 .file-render {
   width: 100%;
   height: 100%;
   z-index: 1;
   overflow: hidden;
-  max-height: var(--inline-player-max-height);
+
+  @media (max-width: $breakpoint-small) {
+    max-height: var(--mobile-player-max-height);
+  }
 }
 
 .file-render--video {
@@ -724,6 +727,8 @@ $control-bar-icon-size: 0.8rem;
     &.skip {
       background-color: rgba(0, 0, 0, 0.5);
     }
+
+    max-height: var(--mobile-player-max-height);
   }
 }
 
@@ -761,6 +766,10 @@ $control-bar-icon-size: 0.8rem;
 }
 
 .video-js.vjs-fullscreen {
+  video {
+    max-height: none !important;
+  }
+
   .vjs-button--theater-mode {
     display: none;
   }
@@ -804,12 +813,6 @@ $control-bar-icon-size: 0.8rem;
 }
 
 .file-render {
-  .video-js {
-    /*display: flex;*/
-    /*align-items: center;*/
-    /*justify-content: center;*/
-  }
-
   .vjs-big-play-button {
     @extend .button--icon;
     @extend .button--play;

@@ -22,11 +22,10 @@ import { selectCostInfoForUri } from 'lbryinc';
 import { doUriInitiatePlay, doSetPlayingUri } from 'redux/actions/content';
 import { doFetchRecommendedContent } from 'redux/actions/search';
 import { withRouter } from 'react-router';
-import { selectMobilePlayerDimensions } from 'redux/selectors/app';
+import { selectAppDrawerOpen } from 'redux/selectors/app';
 import { selectIsActiveLivestreamForUri, selectCommentSocketConnected } from 'redux/selectors/livestream';
-import { doSetMobilePlayerDimensions } from 'redux/actions/app';
 import { doCommentSocketConnect, doCommentSocketDisconnect } from 'redux/actions/websocket';
-import { isStreamPlaceholderClaim } from 'util/claim';
+import { isStreamPlaceholderClaim, getVideoClaimAspectRatio } from 'util/claim';
 import FileRenderFloating from './view';
 
 const select = (state, props) => {
@@ -57,10 +56,11 @@ const select = (state, props) => {
     previousListUri: collectionId && makeSelectPreviousUrlForCollectionAndUrl(collectionId, uri)(state),
     collectionId,
     isCurrentClaimLive: selectIsActiveLivestreamForUri(state, uri),
-    mobilePlayerDimensions: selectMobilePlayerDimensions(state),
+    videoAspectRatio: getVideoClaimAspectRatio(claim),
     socketConnected: selectCommentSocketConnected(state),
     isLivestreamClaim: isStreamPlaceholderClaim(claim),
     geoRestriction: selectGeoRestrictionForUri(state, uri),
+    appDrawerOpen: selectAppDrawerOpen(state),
   };
 };
 
@@ -68,7 +68,6 @@ const perform = {
   doFetchRecommendedContent,
   doUriInitiatePlay,
   doSetPlayingUri,
-  doSetMobilePlayerDimensions,
   doCommentSocketConnect,
   doCommentSocketDisconnect,
 };

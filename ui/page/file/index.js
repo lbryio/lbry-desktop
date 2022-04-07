@@ -16,6 +16,7 @@ import { selectShowMatureContent, selectClientSetting } from 'redux/selectors/se
 import { makeSelectFileRenderModeForUri, selectContentPositionForUri } from 'redux/selectors/content';
 import { selectCommentsListTitleForUri, selectSettingsByChannelId } from 'redux/selectors/comments';
 import { DISABLE_COMMENTS_TAG } from 'constants/tags';
+import { doToggleAppDrawer } from 'redux/actions/app';
 import { getChannelIdFromClaim } from 'util/claim';
 
 import FilePage from './view';
@@ -53,6 +54,7 @@ const perform = {
   doSetContentHistoryItem,
   doSetPrimaryUri,
   clearPosition,
+  doToggleAppDrawer,
 };
 
 export default withRouter(connect(select, perform)(FilePage));

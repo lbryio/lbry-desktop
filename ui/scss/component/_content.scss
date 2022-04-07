@@ -22,6 +22,12 @@
   @media (max-width: $breakpoint-small) {
     max-height: var(--mobile-player-max-height);
   }
+
+  video {
+    @media (max-width: $breakpoint-small) {
+      max-height: var(--mobile-player-max-height);
+    }
+  }
 }
 
 .content__viewer--secondary {
@@ -330,7 +336,6 @@
     border-radius: 0;
     border: none;
     margin: 0;
-    max-height: var(--mobile-player-max-height);
   }
 }
 

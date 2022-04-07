@@ -3,7 +3,7 @@ import { lazyImport } from 'util/lazyImport';
 import { MAIN_CLASS } from 'constants/classnames';
 import { parseURI } from 'util/lbryURI';
 import { useHistory } from 'react-router';
-import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
+import { useIsMobile, useIsMediumScreen, useIsMobileLandscape } from 'effects/use-screensize';
 import classnames from 'classnames';
 import Header from 'component/header';
 import React from 'react';
@@ -65,6 +65,7 @@ function Page(props: Props) {
 
   const isMediumScreen = useIsMediumScreen();
   const isMobile = useIsMobile();
+  const isLandscapeRotated = useIsMobileLandscape();
   const [sidebarOpen, setSidebarOpen] = usePersistedState('sidebar', false);
 
   const url = pathname.slice(1).replace(/:/g, '#');
@@ -143,7 +144,7 @@ function Page(props: Props) {
           >
             {children}
 
-            {!isMobile && (!livestream || !chatDisabled) && rightSide}
+            {(!isMobile || isLandscapeRotated) && (!livestream || !chatDisabled) && rightSide}
           </main>
 
           {!noFooter && (

@@ -2,7 +2,7 @@
 import 'scss/component/_swipeable-drawer.scss';
 
 import { lazyImport } from 'util/lazyImport';
-import { useIsMobile } from 'effects/use-screensize';
+import { useIsMobile, useIsMobileLandscape } from 'effects/use-screensize';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import FileTitleSection from 'component/fileTitleSection';
 import LivestreamLink from 'component/livestreamLink';
@@ -12,7 +12,7 @@ import FileRenderInitiator from 'component/fileRenderInitiator';
 import LivestreamScheduledInfo from 'component/livestreamScheduledInfo';
 import * as ICONS from 'constants/icons';
 import SwipeableDrawer from 'component/swipeableDrawer';
-import { DrawerExpandButton } from 'component/swipeableDrawer/view';
+import DrawerExpandButton from 'component/swipeableDrawerExpand';
 import LivestreamMenu from 'component/livestreamChatLayout/livestream-menu';
 import Icon from 'component/common/icon';
 import CreditAmount from 'component/common/credit-amount';
@@ -53,8 +53,8 @@ export default function LivestreamLayout(props: Props) {
   } = props;
 
   const isMobile = useIsMobile();
+  const isLandscapeRotated = useIsMobileLandscape();
 
-  const [showChat, setShowChat] = React.useState(undefined);
   const [superchatsHidden, setSuperchatsHidden] = React.useState(false);
   const [chatViewMode, setChatViewMode] = React.useState(VIEW_MODES.CHAT);
 
@@ -101,11 +101,9 @@ export default function LivestreamLayout(props: Props) {
           />
         )}
 
-        {isMobile && !hideComments && (
+        {isMobile && !isLandscapeRotated && !hideComments && (
           <React.Suspense fallback={null}>
             <SwipeableDrawer
-              open={Boolean(showChat)}
-              toggleDrawer={() => setShowChat(!showChat)}
               title={
                 <ChatModeSelector
                   superChats={superChats}
@@ -133,7 +131,7 @@ export default function LivestreamLayout(props: Props) {
               />
             </SwipeableDrawer>
 
-            <DrawerExpandButton label={__('Open Live Chat')} toggleDrawer={() => setShowChat(!showChat)} />
+            <DrawerExpandButton label={__('Open Live Chat')} />
           </React.Suspense>
         )}
 
