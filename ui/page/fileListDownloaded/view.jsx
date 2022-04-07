@@ -31,6 +31,8 @@ type Props = {
 const VIEW_DOWNLOADS = 'view_download';
 const VIEW_PURCHASES = 'view_purchases';
 
+const ENABLE_DOWNLOADS_TAB = false;
+
 function FileListDownloaded(props: Props) {
   const {
     history,
@@ -57,39 +59,29 @@ function FileListDownloaded(props: Props) {
   return (
     <>
       <div className="section__header--actions">
-        <div className="section__actions--inline">
-          <Button
-            icon={ICONS.LIBRARY}
-            button="alt"
-            label={__('Downloads')}
-            className={classnames(`button-toggle`, {
-              'button-toggle--active': viewMode === VIEW_DOWNLOADS,
-            })}
-            onClick={() => setViewMode(VIEW_DOWNLOADS)}
-          />
-          <Button
-            icon={ICONS.PURCHASED}
-            button="alt"
-            label={__('Purchases')}
-            className={classnames(`button-toggle`, {
-              'button-toggle--active': viewMode === VIEW_PURCHASES,
-            })}
-            onClick={() => setViewMode(VIEW_PURCHASES)}
-          />
-          {loading && <Spinner type="small" />}
-        </div>
-
-        <Form onSubmit={() => {}} className="wunderbar--inline">
-          <Icon icon={ICONS.SEARCH} />
-          <FormField
-            className="wunderbar__input--inline"
-            onChange={handleInputChange}
-            value={query}
-            type="text"
-            name="query"
-            placeholder={__('Search')}
-          />
-        </Form>
+        {ENABLE_DOWNLOADS_TAB && (
+          <div className="section__actions--inline">
+            <Button
+              icon={ICONS.LIBRARY}
+              button="alt"
+              label={__('Downloads')}
+              className={classnames(`button-toggle`, {
+                'button-toggle--active': viewMode === VIEW_DOWNLOADS,
+              })}
+              onClick={() => setViewMode(VIEW_DOWNLOADS)}
+            />
+            <Button
+              icon={ICONS.PURCHASED}
+              button="alt"
+              label={__('Purchases')}
+              className={classnames(`button-toggle`, {
+                'button-toggle--active': viewMode === VIEW_PURCHASES,
+              })}
+              onClick={() => setViewMode(VIEW_PURCHASES)}
+            />
+            {loading && <Spinner type="small" />}
+          </div>
+        )}
       </div>
       {IS_WEB && viewMode === VIEW_DOWNLOADS ? (
         <div className="main--empty">
@@ -108,6 +100,20 @@ function FileListDownloaded(props: Props) {
       ) : (
         <div>
           <ClaimList
+            header={<h1 className="section__title">{__('Purchases')}</h1>}
+            headerAltControls={
+              <Form onSubmit={() => {}} className="wunderbar--inline">
+                <Icon icon={ICONS.SEARCH} />
+                <FormField
+                  className="wunderbar__input--inline"
+                  onChange={handleInputChange}
+                  value={query}
+                  type="text"
+                  name="query"
+                  placeholder={__('Search')}
+                />
+              </Form>
+            }
             renderProperties={() => null}
             empty={
               viewMode === VIEW_PURCHASES && !query ? (

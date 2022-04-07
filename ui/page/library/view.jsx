@@ -31,7 +31,7 @@ function LibraryPage(props: Props) {
   }, [doPurchaseList, page]);
 
   return (
-    <Page>
+    <Page noFooter noSideNavigation settingsPage backout={{ title: __('Purchases'), backLabel: __('Back') }}>
       {loading && !hasDownloads && (
         <div className="main--empty">
           <Spinner delayed />

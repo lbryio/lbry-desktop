@@ -103,6 +103,10 @@ export default function SettingAccount(props: Props) {
                 />
               </SettingsRow>
             )}
+
+            <SettingsRow title={__('Purchases')} subtitle={__('View your purchased content.')}>
+              <Button button="inverse" label={__('Manage')} icon={ICONS.ARROW_RIGHT} navigate={`/$/${PAGES.LIBRARY}`} />
+            </SettingsRow>
           </>
         }
       />
