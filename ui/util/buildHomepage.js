@@ -139,7 +139,7 @@ export function GetLinksData(
           subscribedChannels.length > 20
             ? `>${Math.floor(moment().subtract(9, 'months').startOf('week').unix())}`
             : `>${Math.floor(moment().subtract(1, 'year').startOf('week').unix())}`,
-        pageSize: getPageSize(subscribedChannels.length > 3 ? (subscribedChannels.length > 6 ? 16 : 8) : 4),
+        pageSize: getPageSize(subscribedChannels.length > 3 ? (subscribedChannels.length > 6 ? 12 : 8) : 4),
         streamTypes: null,
         channelIds: subscribedChannels.map((subscription: Subscription) => {
           const { channelClaimId } = parseURI(subscription.uri);
