@@ -142,7 +142,7 @@ function ClaimListDiscover(props: Props) {
     header,
     name,
     claimType,
-    pageSize,
+    // pageSize,
     defaultClaimType,
     streamType,
     defaultStreamType = SIMPLE_SITE ? [CS.FILE_VIDEO, CS.FILE_AUDIO] : undefined, // add param for DEFAULT_STREAM_TYPE
@@ -258,7 +258,8 @@ function ClaimListDiscover(props: Props) {
   const channelIdsInUrl = urlParams.get(CS.CHANNEL_IDS_KEY);
   const channelIdsParam = channelIdsInUrl ? channelIdsInUrl.split(',') : channelIds;
   const feeAmountParam = urlParams.get('fee_amount') || feeAmount;
-  const originalPageSize = pageSize || CS.PAGE_SIZE;
+  // const originalPageSize = pageSize || CS.PAGE_SIZE;
+  const originalPageSize = 12;
   const dynamicPageSize = isLargeScreen ? Math.ceil(originalPageSize * (3 / 2)) : originalPageSize;
   const historyAction = history.action;
 
