@@ -262,7 +262,7 @@ export class FormField extends React.PureComponent<Props, State> {
                   events={handleEvents}
                   getMdeInstance={getInstance}
                   options={{
-                    spellChecker: true,
+                    spellChecker: false,
                     hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'],
                     status: [
                       {
