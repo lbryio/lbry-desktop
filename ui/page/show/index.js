@@ -13,6 +13,7 @@ import {
   makeSelectUrlsForCollectionId,
   makeSelectIsResolvingCollectionForId,
 } from 'redux/selectors/collections';
+import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { doResolveUri } from 'redux/actions/claims';
 import { doBeginPublish } from 'redux/actions/publish';
 import { doFetchItemsInCollection } from 'redux/actions/collections';
@@ -81,6 +82,7 @@ const select = (state, props) => {
     collectionId,
     collectionUrls: makeSelectUrlsForCollectionId(collectionId)(state),
     isResolvingCollection: makeSelectIsResolvingCollectionForId(collectionId)(state),
+    isAuthenticated: selectUserVerifiedEmail(state),
     geoRestriction: selectGeoRestrictionForUri(state, uri),
   };
 };
