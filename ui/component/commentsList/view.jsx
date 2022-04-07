@@ -87,6 +87,7 @@ export default function CommentList(props: Props) {
   const isMediumScreen = useIsMediumScreen();
 
   const spinnerRef = React.useRef();
+  const commentListRef = React.useRef();
   const DEFAULT_SORT = ENABLE_COMMENT_REACTIONS ? SORT_BY.POPULARITY : SORT_BY.NEWEST;
   const [sort, setSort] = usePersistedState('comment-sort-by', DEFAULT_SORT);
   const [page, setPage] = React.useState(1);
@@ -286,23 +287,22 @@ export default function CommentList(props: Props) {
           )}
 
           <ul
-            className={classnames({
-              comments: !isMediumScreen || expandedComments,
-              'comments--contracted': isMediumScreen && !expandedComments,
+            ref={commentListRef}
+            className={classnames('comments', {
+              'comments--contracted': isMediumScreen && !expandedComments && totalComments > 1,
             })}
           >
             {readyToDisplayComments && (
               <>
                 {pinnedComments && <CommentElements comments={pinnedComments} {...commentProps} />}
-
                 <CommentElements comments={topLevelComments} {...commentProps} />
               </>
             )}
           </ul>
 
           {!hasDefaultExpansion && (
-            <div className="card__bottom-actions--comments">
-              {(!expandedComments || moreBelow) && totalComments > 0 && (
+            <div className="card__bottom-actions card__bottom-actions--comments">
+              {(!expandedComments || moreBelow) && totalComments > 1 && (
                 <Button
                   button="link"
                   title={!expandedComments ? __('Expand') : __('More')}
@@ -310,12 +310,22 @@ export default function CommentList(props: Props) {
                   onClick={() => (!expandedComments ? setExpandedComments(true) : setPage(page + 1))}
                 />
               )}
-              {expandedComments && totalComments > 0 && (
+              {expandedComments && totalComments > 1 && (
                 <Button
                   button="link"
                   title={__('Collapse')}
                   label={__('Collapse')}
-                  onClick={() => setExpandedComments(false)}
+                  onClick={() => {
+                    setExpandedComments(false);
+                    if (commentListRef.current) {
+                      const ADDITIONAL_OFFSET = 200;
+                      const refTop = commentListRef.current.getBoundingClientRect().top;
+                      window.scrollTo({
+                        top: refTop + window.pageYOffset - ADDITIONAL_OFFSET,
+                        behavior: 'smooth',
+                      });
+                    }
+                  }}
                 />
               )}
             </div>

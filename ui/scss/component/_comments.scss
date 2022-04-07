@@ -28,7 +28,6 @@ $thumbnailWidthSmall: 2rem;
 }
 
 .comments--contracted {
-  @extend .comments;
   max-height: 5rem;
   overflow: hidden;
   -webkit-mask-image: -webkit-gradient(linear, left 30%, left bottom, from(rgba(0, 0, 0, 1)), to(rgba(0, 0, 0, 0)));
