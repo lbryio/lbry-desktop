@@ -8,7 +8,7 @@ import { selectActiveLivestreams } from 'redux/selectors/livestream';
 import { selectFollowedTags } from 'redux/selectors/tags';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import { selectClientSetting, selectLanguage } from 'redux/selectors/settings';
-import Tags from './view';
+import DiscoverPage from './view';
 
 const select = (state, props) => {
   const urlParams = new URLSearchParams(props.location.search);
@@ -30,4 +30,4 @@ export default connect(select, {
   doToggleTagFollowDesktop,
   doResolveUri,
   doFetchActiveLivestreams,
-})(Tags);
+})(DiscoverPage);

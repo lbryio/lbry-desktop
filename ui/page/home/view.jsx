@@ -21,9 +21,12 @@ import classnames from 'classnames';
 import Ads from 'web/component/ads';
 import Meme from 'web/component/meme';
 
-function resolveTitleOverride(title: string) {
-  return title === 'Recent From Following' ? 'Following' : title;
-}
+const FYP_SECTION: RowDataItem = {
+  id: 'FYP',
+  title: 'Recommended',
+  icon: ICONS.GLOBE,
+  link: `/$/${PAGES.FYP}`,
+};
 
 type HomepageOrder = { active: ?Array<string>, hidden: ?Array<string> };
 
@@ -89,12 +92,7 @@ function HomePage(props: Props) {
       if (item) {
         sortedRowData.push(item);
       } else if (key === 'FYP') {
-        sortedRowData.push({
-          id: 'FYP',
-          title: 'Recommended',
-          icon: ICONS.GLOBE,
-          link: `/$/${PAGES.FYP}`,
-        });
+        sortedRowData.push(FYP_SECTION);
       }
     });
   } else {
@@ -102,13 +100,9 @@ function HomePage(props: Props) {
       // always inject FYP is homepage not customized, hide news.
       if (key.id === 'FOLLOWING') {
         sortedRowData.push(key);
-        hasMembership &&
-          sortedRowData.push({
-            id: 'FYP',
-            title: 'Recommended',
-            icon: ICONS.GLOBE,
-            link: `/$/${PAGES.FYP}`,
-          });
+        if (hasMembership) {
+          sortedRowData.push(FYP_SECTION);
+        }
       } else if (key.id !== 'NEWS') {
         sortedRowData.push(key);
       }
@@ -173,6 +167,10 @@ function HomePage(props: Props) {
     );
 
     const HeaderArea = () => {
+      function resolveTitleOverride(title: string) {
+        return title === 'Recent From Following' ? 'Following' : title;
+      }
+
       return (
         <>
           {title && typeof title === 'string' && (

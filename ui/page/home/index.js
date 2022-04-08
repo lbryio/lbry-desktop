@@ -9,7 +9,7 @@ import { selectHasOdyseeMembership, selectHomepageFetched, selectUserVerifiedEma
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import { selectShowMatureContent, selectHomepageData, selectClientSetting } from 'redux/selectors/settings';
 
-import DiscoverPage from './view';
+import HomePage from './view';
 
 const select = (state) => ({
   followedTags: selectFollowedTags(state),
@@ -31,4 +31,4 @@ const perform = (dispatch) => ({
   doOpenModal: (modal, props) => dispatch(doOpenModal(modal, props)),
 });
 
-export default connect(select, perform)(DiscoverPage);
+export default connect(select, perform)(HomePage);
