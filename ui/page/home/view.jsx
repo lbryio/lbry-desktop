@@ -88,16 +88,26 @@ function HomePage(props: Props) {
   let sortedRowData: Array<RowDataItem> = [];
   if (homepageOrder.active && authenticated) {
     homepageOrder.active.forEach((key) => {
-      const item = rowData.find((data) => data.id === key);
-      if (item) {
-        sortedRowData.push(item);
+      const dataIndex = rowData.findIndex((data) => data.id === key);
+      if (dataIndex !== -1) {
+        sortedRowData.push(rowData[dataIndex]);
+        rowData.splice(dataIndex, 1);
       } else if (key === 'FYP') {
         sortedRowData.push(FYP_SECTION);
       }
     });
+
+    if (homepageOrder.hidden) {
+      rowData.forEach((data: RowDataItem) => {
+        // $FlowIssue: null 'hidden' already avoided, but flow can't see beyond this anonymous function?
+        if (!homepageOrder.hidden.includes(data.id)) {
+          sortedRowData.push(data);
+        }
+      });
+    }
   } else {
     rowData.forEach((key) => {
-      // always inject FYP is homepage not customized, hide news.
+      // always inject FYP if homepage not customized, hide news.
       if (key.id === 'FOLLOWING') {
         sortedRowData.push(key);
         if (hasMembership) {
