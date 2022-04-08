@@ -575,12 +575,15 @@ export default handleActions(
 
       // to remove the comment and its references
       const claimId = comment.claim_id;
-      for (let i = 0; i < byId[claimId].length; i++) {
-        if (byId[claimId][i] === comment_id) {
-          // immutable update
-          byId[claimId] = Array.from(byId[claimId]);
-          byId[claimId].splice(i, 1);
-          break;
+
+      if (byId[claimId]) {
+        for (let i = 0; i < byId[claimId].length; i++) {
+          if (byId[claimId][i] === comment_id) {
+            // immutable update
+            byId[claimId] = Array.from(byId[claimId]);
+            byId[claimId].splice(i, 1);
+            break;
+          }
         }
       }
 
