@@ -111,7 +111,7 @@ export function doCommentList(
 export function doCommentListOwn(
   channelId: string,
   page: number = 1,
-  pageSize: number = 99999,
+  pageSize: number = 10,
   sortBy: number = SORT_BY.NEWEST_NO_PINS
 ) {
   return async (dispatch: Dispatch, getState: GetState) => {
@@ -133,6 +133,10 @@ export function doCommentListOwn(
       console.error('Failed to sign channel name.'); // eslint-disable-line
       return;
     }
+
+    // @if process.env.NODE_ENV!='production'
+    console.assert(pageSize <= 50, `claim_search can't resolve > 50 (pageSize=${pageSize})`);
+    // @endif
 
     dispatch({
       type: ACTIONS.COMMENT_LIST_STARTED,
@@ -160,7 +164,7 @@ export function doCommentListOwn(
         dispatch(
           doClaimSearch({
             page: 1,
-            page_size: 20,
+            page_size: pageSize,
             no_totals: true,
             claim_ids: comments.map((c) => c.claim_id),
           })
@@ -173,9 +177,15 @@ export function doCommentListOwn(
                 totalItems: total_items,
                 totalFilteredItems: total_filtered_items,
                 totalPages: total_pages,
-                uri: channelClaim.canonical_url, // hijack "Discussion Page"
-                claimId: channelClaim.claim_id, // hijack "Discussion Page"
+                uri: channelClaim.canonical_url, // hijack Discussion Page ¹
+                claimId: channelClaim.claim_id, // hijack Discussion Page ¹
               },
+              // ¹ Comments are currently stored in an object with the key being
+              // the content claim_id; so as a quick solution, we are using the
+              // channel's claim_id to store Own Comments, which is the same way
+              // as Discussion Page. This idea works based on the assumption
+              // that both Own Comments and Discussion will never appear
+              // simultaneously.
             });
           })
           .catch((err) => {
