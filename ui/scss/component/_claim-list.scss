@@ -5,7 +5,8 @@
     background-color: rgba(var(--color-header-background-base), 0.6);
 
     .claim__menu-button {
-      margin-right: var(--spacing-m);
+      // margin-right: var(--spacing-m);
+      right: 9px;
     }
 
     .media__thumb {
@@ -24,13 +25,23 @@
   }
 }
 
+.claim__menu-button {
+  .icon {
+    transition: transform 0.2s;
+  }
+}
+
 [aria-expanded='true'].claim__menu-button {
   opacity: 1;
-  background-color: var(--color-header-background);
-  border-radius: var(--border-radius);
+  // background-color: var(--color-header-background);
+  background-color: rgba(var(--color-header-button-base), 0.9);
+  //border-radius: var(--border-radius);
+  border-radius: 50%;
+  outline: 2px solid var(--color-header-background);
 
   .icon {
-    stroke: var(--color-primary);
+    stroke: var(--color-primary) !important;
+    transform: rotate(90deg);
   }
 }
 
@@ -308,7 +319,7 @@
   }
 
   .claim__menu-button {
-    right: -8px !important;
+    // right: -8px !important;
     margin-top: 6px;
 
     &:hover {
@@ -618,6 +629,13 @@
 .claim-preview--channel {
   .claim-preview__actions {
     margin-top: 0px;
+  }
+  @media (max-width: $breakpoint-small) {
+    a.button--no-style:first-of-type {
+      .button__content {
+        align-items: unset;
+      }
+    }
   }
 }
 

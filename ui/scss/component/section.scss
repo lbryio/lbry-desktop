@@ -197,15 +197,12 @@
     }
 
     button {
-      height: 2rem;
+      // height: 2rem;
+      height: var(--height-button);
       padding: 0px var(--spacing-s);
 
       .button__content {
-        height: unset;
-
-        span {
-          font-size: var(--font-xxsmall);
-        }
+        // height: unset;
       }
     }
 

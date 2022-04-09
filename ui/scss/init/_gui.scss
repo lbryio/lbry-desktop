@@ -116,7 +116,8 @@ ol {
     padding-bottom: var(--spacing-m);
 
     .claim__menu-button {
-      right: -8px;
+      // right: -8px;
+      right: 2px;
     }
   }
 }
@@ -1136,16 +1137,6 @@ img {
   @media (max-width: $breakpoint-small) {
     padding: var(--spacing-s);
     padding-top: 0;
-
-    .card__main-actions {
-      .claim-preview__wrapper {
-        a {
-          .button__content {
-            align-items: unset;
-          }
-        }
-      }
-    }
   }
 }
 
@@ -1223,6 +1214,9 @@ img {
     .claim-link {
       width: 40%;
       margin-top: var(--spacing-xs);
+      @media (max-width: $breakpoint-small) {
+        width: 100%;
+      }
     }
   }
 }

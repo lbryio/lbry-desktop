@@ -127,6 +127,16 @@ $actions-z-index: 2;
   .media__info-text:first-of-type {
     opacity: 1;
   }
+
+  .MuiAutocomplete-root {
+  }
+  .MuiOutlinedInput-root {
+    background-color: var(--color-input-bg);
+
+    .MuiOutlinedInput-notchedOutline {
+      border: unset !important;
+    }
+  }
 }
 .channel-cover {
   position: relative;
@@ -749,7 +759,6 @@ $actions-z-index: 2;
     }
 
     .claim__menu-button {
-      right: calc(var(--spacing-m) - 8px) !important;
       margin-top: var(--spacing-xxs);
 
       .icon {
@@ -757,6 +766,9 @@ $actions-z-index: 2;
       }
 
       &:hover {
+        background-color: rgba(var(--color-header-button-base), 0.9);
+        border-radius: 50%;
+        outline: 2px solid var(--color-header-background);
         .icon {
           stroke: var(--color-primary);
         }
@@ -780,11 +792,6 @@ $actions-z-index: 2;
 
     @media (max-width: $breakpoint-small) {
       .claim-preview--channel {
-        a:first-of-type {
-          .button__content {
-            align-items: unset;
-          }
-        }
         .claim-preview__actions {
           flex-flow: row;
           .section__actions {

@@ -158,8 +158,9 @@ reach-portal {
 .menu__link {
   display: flex;
   align-items: center;
-  padding: var(--spacing-s);
-  padding-right: var(--spacing-l);
+  // padding: var(--spacing-s);
+  // padding-right: var(--spacing-l);
+  padding: var(--spacing-xs) var(--spacing-s) var(--spacing-xs) var(--spacing-s);
   height: var(--button-height);
 
   .icon {

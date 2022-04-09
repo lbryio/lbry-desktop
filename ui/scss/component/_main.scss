@@ -189,11 +189,6 @@ body {
       margin-top: var(--spacing-xs) !important;
       .claim-preview__wrapper {
         padding: 0 !important;
-        a {
-          .button__content {
-            align-items: unset;
-          }
-        }
         .claim-preview-info {
           margin-top: 2px;
           margin-bottom: -2px;

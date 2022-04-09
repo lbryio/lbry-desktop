@@ -193,6 +193,12 @@
         top: calc(var(--spacing-m) * -1) !important;
         left: calc(var(--spacing-m) * -1) !important;
       }
+      .claim__menu-button {
+        right: calc(var(--spacing-m) - 8px) !important;
+      }
+      &:hover {
+        background-color: rgba(var(--color-header-background-base), 0.9);
+      }
     }
     .claim-preview__wrapper {
       .claim-preview__repost-author {
@@ -240,7 +246,7 @@
     padding: var(--spacing-m) !important;
 
     .claim__menu-button {
-      right: calc(var(--spacing-m) - 8px) !important;
+      // right: calc(var(--spacing-m) - 8px) !important;
       margin-top: var(--spacing-xxs);
 
       .icon {
