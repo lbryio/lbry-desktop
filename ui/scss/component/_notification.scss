@@ -22,12 +22,20 @@ $contentMaxWidth: 60rem;
         stroke: var(--color-text);
       }
 
+      .menu__button {
+        .icon {
+          transition: transform 0.2s;
+        }
+      }
+
       [aria-expanded='true'].menu__button {
         opacity: 1;
-        background-color: var(--color-header-background);
-        border-radius: var(--border-radius);
+        background-color: rgba(var(--color-header-button-base), 0.9);
+        border-radius: 50%;
+        outline: 2px solid var(--color-header-background);
         .icon {
           stroke: var(--color-primary);
+          transform: rotate(-90deg);
         }
       }
     }

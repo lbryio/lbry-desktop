@@ -204,7 +204,7 @@ $thumbnailWidthSmall: 2rem;
     outline: 2px solid var(--color-header-background);
     .icon {
       stroke: var(--color-primary);
-      transform: rotate(90deg);
+      transform: rotate(-90deg);
     }
   }
 }
