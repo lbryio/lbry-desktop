@@ -20,7 +20,7 @@ const VIEW = { ALL_VISIBLE: 0, COLLAPSED: 1, EXPANDED: 2 };
 
 function getSuitablePageSizeForScreen(defaultSize, isLargeScreen, isMediumScreen) {
   // return isMediumScreen ? 6 : isLargeScreen ? Math.ceil(defaultSize * (3 / 2)) : defaultSize;
-  return isMediumScreen ? 6 : isLargeScreen ? Math.ceil(defaultSize * 2) : defaultSize;
+  return isMediumScreen ? 12 : isLargeScreen ? Math.ceil(24) : 12;
 }
 
 type Props = {
@@ -43,8 +43,8 @@ export default function RecommendedPersonal(props: Props) {
   const isMediumScreen = useIsMediumScreen();
 
   const count = personalRecommendations.uris.length;
-  const countCollapsed = getSuitablePageSizeForScreen(8, isLargeScreen, isMediumScreen);
-  const finalCount = view === VIEW.ALL_VISIBLE ? count : view === VIEW.COLLAPSED ? countCollapsed : count;
+  const countCollapsed = getSuitablePageSizeForScreen(12, isLargeScreen, isMediumScreen);
+  const finalCount = view === VIEW.ALL_VISIBLE ? count : view === VIEW.COLLAPSED ? countCollapsed : 37;
 
   // **************************************************************************
   // Effects
