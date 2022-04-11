@@ -871,6 +871,7 @@
   "Hide reposts": "Hide reposts",
   "You will not see reposts by people you follow or receive email notifying about them.": "You will not see reposts by people you follow or receive email notifying about them.",
   "Sorry, your request timed out. Modify your options or %again%": "Sorry, your request timed out. Modify your options or %again%",
+  "Sorry, your request timed out. Try refreshing in a bit.": "Sorry, your request timed out. Try refreshing in a bit.",
   "Pause at any time to select a thumbnail from your video": "Pause at any time to select a thumbnail from your video",
   "For video content, use MP4s in H264/AAC format and a friendly bitrate (under 5 Mbps) and resolution (720p) for more reliable streaming. %SITE_NAME% uploads are restricted to %limit% GB.": "For video content, use MP4s in H264/AAC format and a friendly bitrate (under 5 Mbps) and resolution (720p) for more reliable streaming. %SITE_NAME% uploads are restricted to %limit% GB.",
   "Share this channel": "Share this channel",

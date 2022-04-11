@@ -1,11 +1,15 @@
 // @flow
 import type { Node } from 'react';
 import React from 'react';
+import Button from 'component/button';
 import ClaimPreviewTile from 'component/claimPreviewTile';
+import I18nMessage from 'component/i18nMessage';
 import useFetchViewCount from 'effects/use-fetch-view-count';
 import useLastVisibleItem from 'effects/use-last-visible-item';
 import useResolvePins from 'effects/use-resolve-pins';
 import useGetUserMemberships from 'effects/use-get-user-memberships';
+
+const SHOW_TIMEOUT_MSG = false;
 
 function urisEqual(prev: ?Array<string>, next: ?Array<string>) {
   if (!prev || !next) {
@@ -96,7 +100,8 @@ function ClaimTilesDiscover(props: Props) {
   const isUnfetchedClaimSearch = claimSearchResults === undefined;
   const resolvedPinUris = useResolvePins({ pins, claimsById, doResolveClaimIds, doResolveUris });
 
-  const shouldPerformSearch = !fetchingClaimSearch && claimSearchUris.length === 0;
+  const timedOut = claimSearchResults === null;
+  const shouldPerformSearch = !fetchingClaimSearch && !timedOut && claimSearchUris.length === 0;
 
   const uris = (prefixUris || []).concat(claimSearchUris);
   if (prefixUris && prefixUris.length) uris.splice(prefixUris.length * -1, prefixUris.length);
@@ -152,6 +157,29 @@ function ClaimTilesDiscover(props: Props) {
 
   // --------------------------------------------------------------------------
   // --------------------------------------------------------------------------
+
+  if (timedOut && SHOW_TIMEOUT_MSG) {
+    return (
+      <div className="empty empty--centered">
+        <p>{__('Sorry, your request timed out. Try refreshing in a bit.')}</p>
+        <p>
+          <I18nMessage
+            tokens={{
+              contact_support: (
+                <Button
+                  button="link"
+                  label={__('contact support')}
+                  href="https://odysee.com/@OdyseeHelp:b?view=about"
+                />
+              ),
+            }}
+          >
+            If you continue to have issues, please %contact_support%.
+          </I18nMessage>
+        </p>
+      </div>
+    );
+  }
 
   return (
     <ul ref={listRef} className="claim-grid">
