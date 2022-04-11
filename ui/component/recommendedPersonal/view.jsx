@@ -19,7 +19,8 @@ import { recsysFyp } from 'redux/actions/search';
 const VIEW = { ALL_VISIBLE: 0, COLLAPSED: 1, EXPANDED: 2 };
 
 function getSuitablePageSizeForScreen(defaultSize, isLargeScreen, isMediumScreen) {
-  return isMediumScreen ? 6 : isLargeScreen ? Math.ceil(defaultSize * (3 / 2)) : defaultSize;
+  // return isMediumScreen ? 6 : isLargeScreen ? Math.ceil(defaultSize * (3 / 2)) : defaultSize;
+  return isMediumScreen ? 6 : isLargeScreen ? Math.ceil(defaultSize * 2) : defaultSize;
 }
 
 type Props = {

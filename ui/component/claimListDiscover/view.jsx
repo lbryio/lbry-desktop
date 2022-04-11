@@ -260,7 +260,8 @@ function ClaimListDiscover(props: Props) {
   const feeAmountParam = urlParams.get('fee_amount') || feeAmount;
   // const originalPageSize = pageSize || CS.PAGE_SIZE;
   const originalPageSize = 12;
-  const dynamicPageSize = isLargeScreen ? Math.ceil(originalPageSize * (3 / 2)) : originalPageSize;
+  // const dynamicPageSize = isLargeScreen ? Math.ceil(originalPageSize * (3 / 2)) : originalPageSize;
+  const dynamicPageSize = isLargeScreen ? Math.ceil((originalPageSize / 2) * 6) : originalPageSize;
   const historyAction = history.action;
 
   let orderParam = orderBy || urlParams.get(CS.ORDER_BY_KEY) || defaultOrderBy || orderParamEntry;

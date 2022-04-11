@@ -14,6 +14,7 @@ import { Form, FormField } from 'component/common/form';
 import ScheduledStreams from 'component/scheduledStreams';
 import { SearchResults } from './internal/searchResults';
 import useFetchLiveStatus from 'effects/use-fetch-live';
+import { useIsLargeScreen } from 'effects/use-screensize';
 
 const TYPES_TO_ALLOW_FILTER = ['stream', 'repost'];
 
@@ -78,6 +79,8 @@ function ChannelContent(props: Props) {
     (Array.isArray(claimType)
       ? claimType.every((ct) => TYPES_TO_ALLOW_FILTER.includes(ct))
       : TYPES_TO_ALLOW_FILTER.includes(claimType));
+  const isLargeScreen = useIsLargeScreen();
+  const dynamicPageSize = isLargeScreen ? Math.ceil(defaultPageSize * 3) : defaultPageSize;
 
   function handleInputChange(e) {
     const { value } = e.target;
@@ -154,7 +157,7 @@ function ChannelContent(props: Props) {
           claimType={claimType}
           feeAmount={CS.FEE_AMOUNT_ANY}
           defaultOrderBy={CS.ORDER_BY_NEW}
-          pageSize={defaultPageSize}
+          pageSize={dynamicPageSize}
           infiniteScroll={defaultInfiniteScroll}
           injectedItem={{ node: <Ads type="video" tileLayout={tileLayout} small /> }}
           meta={
