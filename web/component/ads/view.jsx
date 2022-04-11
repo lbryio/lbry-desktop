@@ -11,6 +11,8 @@ import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 import { LocalStorage, LS } from 'util/storage';
 
+const USE_ADNIMATION = true;
+
 // prettier-ignore
 const AD_CONFIGS = Object.freeze({
   DEFAULT: {
@@ -25,9 +27,31 @@ const AD_CONFIGS = Object.freeze({
     url: 'https://tg1.vidcrunch.com/api/adserver/spt?AV_TAGID=61dff05c599f1e20b01085d4&AV_PUBLISHERID=6182c8993c8ae776bd5635e9',
     tag: 'AV61dff05c599f1e20b01085d4',
   },
+  ADNIMATION: {
+    url: 'https://tg1.aniview.com/api/adserver/spt?AV_TAGID=6252bb6f28951333ec10a7a6&AV_PUBLISHERID=601d9a7f2e688a79e17c1265',
+    tag: 'AV6252bb6f28951333ec10a7a6',
+  },
 });
 
-// Internal use only. One-time update flag.
+// ****************************************************************************
+// Helpers
+// ****************************************************************************
+
+function removeIfExists(querySelector) {
+  const element = document.querySelector(querySelector);
+  if (element) element.remove();
+}
+
+function resolveVidcrunchConfig() {
+  const mobileAds = platform.isAndroid() || platform.isIOS();
+  const isInEu = LocalStorage.getItem(LS.GDPR_REQUIRED) === 'true';
+  return isInEu ? AD_CONFIGS.EU : mobileAds ? AD_CONFIGS.MOBILE : AD_CONFIGS.DEFAULT;
+}
+
+// ****************************************************************************
+// Ads
+// ****************************************************************************
+
 let ad_blocker_detected;
 
 type Props = {
@@ -44,11 +68,6 @@ type Props = {
   doSetAdBlockerFound: (boolean) => void,
 };
 
-function removeIfExists(querySelector) {
-  const element = document.querySelector(querySelector);
-  if (element) element.remove();
-}
-
 function Ads(props: Props) {
   const {
     type = 'video',
@@ -62,11 +81,7 @@ function Ads(props: Props) {
   } = props;
 
   const [shouldShowAds, setShouldShowAds] = React.useState(resolveAdVisibility());
-  const mobileAds = platform.isAndroid() || platform.isIOS();
-
-  // this is populated from app based on location
-  const isInEu = LocalStorage.getItem(LS.GDPR_REQUIRED) === 'true';
-  const adConfig = isInEu ? AD_CONFIGS.EU : mobileAds ? AD_CONFIGS.MOBILE : AD_CONFIGS.DEFAULT;
+  const adConfig = USE_ADNIMATION ? AD_CONFIGS.ADNIMATION : resolveVidcrunchConfig();
 
   function resolveAdVisibility() {
     // 'ad_blocker_detected' will be undefined at startup. Wait until we are
@@ -123,10 +138,9 @@ function Ads(props: Props) {
           delete window.__player_618bb4d28aac298191eec411__;
 
           // clean DOM elements from ad related elements
-          removeIfExists('[src^="https://cdn.vidcrunch.com/618bb4d28aac298191eec411.js"]');
-          removeIfExists('[src^="https://player.aniview.com/script/6.1/aniview.js"]');
-          removeIfExists('[id^="AVLoaderaniplayer_vidcrunch"]');
-          removeIfExists('#av_css_id');
+          removeIfExists('[src^="https://player.avplayer.com"]');
+          removeIfExists('[src^="https://gum.criteo.com"]');
+          removeIfExists('[id^="AVLoaderaniview_slot"]');
         };
       } catch (e) {}
     }
