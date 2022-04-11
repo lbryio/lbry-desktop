@@ -276,7 +276,12 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       }
 
       // Add quality selector to player
-      if (showQualitySelector) player.hlsQualitySelector({ displayCurrentQuality: true });
+      if (showQualitySelector) {
+        player.hlsQualitySelector({
+          displayCurrentQuality: true,
+          originalHeight: claimValues?.video?.height,
+        });
+      }
 
       // Add recsys plugin
       if (shareTelemetry) {

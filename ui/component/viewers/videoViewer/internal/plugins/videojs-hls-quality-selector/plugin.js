@@ -66,7 +66,7 @@ class HlsQualitySelectorPlugin {
    * @return {*} - videojs-http-streaming plugin.
    */
   getHls() {
-    console.warn('hls-quality-selector: WARN: Using getHls options is deprecated. Use getVhs instead.')
+    console.warn('hls-quality-selector: WARN: Using getHls options is deprecated. Use getVhs instead.');
     return this.getVhs();
   }
 
@@ -112,13 +112,43 @@ class HlsQualitySelectorPlugin {
     concreteButtonInstance.removeClass('vjs-hidden');
   }
 
+  resolveOriginalQualityLabel(abbreviatedForm, includeResolution) {
+    if (includeResolution && this.config.originalHeight) {
+      return abbreviatedForm
+        ? __('Orig (%quality%) --[Video quality popup. Short form.]--', { quality: this.config.originalHeight + 'p' })
+        : __('Original (%quality%) --[Video quality popup. Long form.]--', {
+            quality: this.config.originalHeight + 'p',
+          });
+    } else {
+      // The allocated space for the button is fixed and happened to fit
+      // "Original", so we don't abbreviate for English. But it will most likely
+      // not fit for other languages, hence the 2 strings.
+      return abbreviatedForm
+        ? __('Original --[Video quality button. Abbreviate to fit space.]--')
+        : __('Original --[Video quality button. Long form.]--');
+    }
+  }
+
   /**
    *Set inner button text.
    *
    * @param {string} text - the text to display in the button.
    */
   setButtonInnerText(text) {
-    this._qualityButton.menuButton_.$('.vjs-icon-placeholder').innerHTML = text;
+    let str;
+    switch (text) {
+      case 'auto':
+        str = __('Auto --[Video quality. Short form]--');
+        break;
+      case 'original':
+        str = this.resolveOriginalQualityLabel(true, false);
+        break;
+      default:
+        str = text;
+        break;
+    }
+
+    this._qualityButton.menuButton_.$('.vjs-icon-placeholder').innerHTML = str;
   }
 
   /**
@@ -172,7 +202,15 @@ class HlsQualitySelectorPlugin {
 
     levelItems.push(
       this.getQualityMenuItem.call(this, {
-        label: player.localize('Auto'),
+        label: this.resolveOriginalQualityLabel(false, true),
+        value: 'original',
+        selected: false,
+      })
+    );
+
+    levelItems.push(
+      this.getQualityMenuItem.call(this, {
+        label: __('Auto --[Video quality. Short form]--'),
         value: 'auto',
         selected: true,
       })
@@ -198,14 +236,14 @@ class HlsQualitySelectorPlugin {
     this._currentQuality = height;
 
     if (this.config.displayCurrentQuality) {
-      this.setButtonInnerText(height === 'auto' ? height : `${height}p`);
+      this.setButtonInnerText(height === 'auto' ? 'auto' : height === 'original' ? 'original' : `${height}p`);
     }
 
     for (let i = 0; i < qualityList.length; ++i) {
       const quality = qualityList[i];
-
-      quality.enabled = quality.height === height || height === 'auto';
+      quality.enabled = quality.height === height || height === 'auto' || height === 'original';
     }
+
     this._qualityButton.unpressButton();
   }
 
