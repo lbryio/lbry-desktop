@@ -550,15 +550,13 @@ export function doSignOut() {
         .then(doSignOutCleanup)
         .then(() => {
           // @if TARGET='web'
-          window.persistor.purge();
+          return window.persistor.purge();
           // @endif
         })
-        .then(() => {
-          setTimeout(() => {
-            location.reload();
-          });
+        .catch((err) => {
+          analytics.error(`\`doSignOut\`: ${err.message || err}`);
         })
-        .catch(() => location.reload());
+        .finally(() => location.reload());
     }
   };
 }
