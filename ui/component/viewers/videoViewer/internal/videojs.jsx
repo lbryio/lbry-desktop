@@ -333,19 +333,17 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   //   }
   // }, [showQualitySelector]);
 
-  /** instantiate videoJS and dispose of it when done with code **/
   // This lifecycle hook is only called once (on mount), or when `isAudio` or `source` changes.
   useEffect(() => {
     (async function () {
-      // test if perms to play video are available
       let canAutoplayVideo = await canAutoplay.video({ timeout: 2000, inline: true });
-
       canAutoplayVideo = canAutoplayVideo.result === true;
 
       const vjsElement = createVideoPlayerDOM(containerRef.current);
-
-      // Initialize Video.js
       const vjsPlayer = initializeVideoPlayer(vjsElement, canAutoplayVideo);
+      if (!vjsPlayer) {
+        return;
+      }
 
       // Add reference to player to global scope
       window.player = vjsPlayer;
@@ -355,38 +353,31 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       window.addEventListener('keydown', curried_function(playerRef, containerRef));
 
-      // $FlowFixMe
       const controlBar = document.querySelector('.vjs-control-bar');
-      if (controlBar) controlBar.style.setProperty('opacity', '1', 'important');
+      if (controlBar) {
+        controlBar.style.setProperty('opacity', '1', 'important');
+      }
 
       if (isLivestreamClaim && userClaimId) {
-        // $FlowFixMe
         vjsPlayer.addClass('livestreamPlayer');
 
-        // $FlowFixMe
         vjsPlayer.src({
           type: 'application/x-mpegURL',
           src: livestreamVideoUrl,
         });
       } else {
-        // $FlowFixMe
         vjsPlayer.removeClass('livestreamPlayer');
 
         // change to m3u8 if applicable
         const response = await fetch(source, { method: 'HEAD', cache: 'no-store' });
-
         playerServerRef.current = response.headers.get('x-powered-by');
 
         if (response && response.redirected && response.url && response.url.endsWith('m3u8')) {
-          // use m3u8 source
-          // $FlowFixMe
           vjsPlayer.src({
             type: 'application/x-mpegURL',
             src: response.url,
           });
         } else {
-          // use original mp4 source
-          // $FlowFixMe
           vjsPlayer.src({
             type: sourceType,
             src: source,
@@ -394,11 +385,9 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         }
       }
 
-      // load video once source setup
-      // $FlowFixMe
       vjsPlayer.load();
 
-      // fix invisible vidcrunch overlay on IOS
+      // fix invisible vidcrunch overlay on IOS  << TODO: does not belong here. Move to ads.jsx (#739)
       if (IS_IOS) {
         // ads video player
         const adsClaimDiv = document.querySelector('.ads__claim-item');
