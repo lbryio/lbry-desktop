@@ -30,10 +30,17 @@ require('@silvermine/videojs-chromecast')(videojs);
 require('@silvermine/videojs-airplay')(videojs);
 
 export type Player = {
+  // -- custom --
+  claimSrcOriginal: ?{ src: string, type: string },
+  claimSrcVhs: ?{ src: string, type: string },
+  isLivestream?: boolean,
+  // -- original --
   controlBar: { addChild: (string, any) => void },
   loadingSpinner: any,
   autoplay: (any) => boolean,
   chromecast: (any) => void,
+  hlsQualitySelector: ?any,
+  tech: (?boolean) => { vhs: ?any },
   currentTime: (?number) => number,
   dispose: () => void,
   duration: () => number,
@@ -51,6 +58,8 @@ export type Player = {
   playbackRate: (?number) => number,
   readyState: () => number,
   requestFullscreen: () => boolean,
+  src: ({ src: string, type: string }) => ?string,
+  currentSrc: () => string,
   userActive: (?boolean) => boolean,
   volume: (?number) => number,
 };
@@ -364,29 +373,23 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       }
 
       if (isLivestreamClaim && userClaimId) {
+        vjsPlayer.isLivestream = true;
         vjsPlayer.addClass('livestreamPlayer');
-
-        vjsPlayer.src({
-          type: 'application/x-mpegURL',
-          src: livestreamVideoUrl,
-        });
+        vjsPlayer.src({ type: 'application/x-mpegURL', src: livestreamVideoUrl });
       } else {
+        vjsPlayer.isLivestream = false;
         vjsPlayer.removeClass('livestreamPlayer');
 
         // change to m3u8 if applicable
         const response = await fetch(source, { method: 'HEAD', cache: 'no-store' });
         playerServerRef.current = response.headers.get('x-powered-by');
+        vjsPlayer.claimSrcOriginal = { type: sourceType, src: source };
 
         if (response && response.redirected && response.url && response.url.endsWith('m3u8')) {
-          vjsPlayer.src({
-            type: 'application/x-mpegURL',
-            src: response.url,
-          });
+          vjsPlayer.claimSrcVhs = { type: 'application/x-mpegURL', src: response.url };
+          vjsPlayer.src(vjsPlayer.claimSrcVhs);
         } else {
-          vjsPlayer.src({
-            type: sourceType,
-            src: source,
-          });
+          vjsPlayer.src(vjsPlayer.claimSrcOriginal);
         }
       }
 

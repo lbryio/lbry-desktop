@@ -50,12 +50,9 @@ class HlsQualitySelectorPlugin {
   }
 
   updatePlugin() {
-    // If there is the VHS tech
-    if (this.getVhs()) {
-      // Show quality selector
+    if (this.player.claimSrcVhs || this.player.isLivestream) {
       this._qualityButton.show();
     } else {
-      // Hide quality selector
       this._qualityButton.hide();
     }
   }
@@ -200,13 +197,15 @@ class HlsQualitySelectorPlugin {
       return 0;
     });
 
-    levelItems.push(
-      this.getQualityMenuItem.call(this, {
-        label: this.resolveOriginalQualityLabel(false, true),
-        value: 'original',
-        selected: false,
-      })
-    );
+    if (!player.isLivestream) {
+      levelItems.push(
+        this.getQualityMenuItem.call(this, {
+          label: this.resolveOriginalQualityLabel(false, true),
+          value: 'original',
+          selected: false,
+        })
+      );
+    }
 
     levelItems.push(
       this.getQualityMenuItem.call(this, {
@@ -222,6 +221,15 @@ class HlsQualitySelectorPlugin {
       };
       this._qualityButton.update();
     }
+  }
+
+  swapSrcTo(mode = 'original') {
+    const currentTime = this.player.currentTime();
+    this.player.src(mode === 'vhs' ? this.player.claimSrcVhs : this.player.claimSrcOriginal);
+    this.player.load();
+    this.player.currentTime(currentTime);
+
+    console.assert(mode === 'vhs' || mode === 'original', 'Unexpected input');
   }
 
   /**
@@ -242,6 +250,24 @@ class HlsQualitySelectorPlugin {
     for (let i = 0; i < qualityList.length; ++i) {
       const quality = qualityList[i];
       quality.enabled = quality.height === height || height === 'auto' || height === 'original';
+    }
+
+    if (height === 'original') {
+      if (this.player.currentSrc() !== this.player.claimSrcOriginal.src) {
+        setTimeout(() => this.swapSrcTo('original'));
+      }
+    } else {
+      if (!this.player.isLivestream && this.player.currentSrc() !== this.player.claimSrcVhs.src) {
+        setTimeout(() => this.swapSrcTo('vhs'));
+
+        if (height !== 'auto') {
+          // -- Re-select quality --
+          // Until we have "persistent quality" implemented, we need to do this
+          // because the VHS internals default to "auto" when initialized,
+          // causing a GUI mismatch.
+          setTimeout(() => this.setQuality(height), 1000);
+        }
+      }
     }
 
     this._qualityButton.unpressButton();
