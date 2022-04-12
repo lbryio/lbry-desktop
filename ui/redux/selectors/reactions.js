@@ -20,7 +20,7 @@ export const makeSelectMyReactionForUri = (uri) =>
     }
     const claimId = claim.claim_id;
 
-    const myReactions = reactions.my_reactions[claimId];
+    const myReactions = reactions.my_reactions ? reactions.my_reactions[claimId] : {};
     if (myReactions[REACTION_TYPES.LIKE]) {
       return REACTION_TYPES.LIKE;
     } else if (myReactions[REACTION_TYPES.DISLIKE]) {
