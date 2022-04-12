@@ -44,7 +44,7 @@ export default function RecommendedPersonal(props: Props) {
 
   const count = personalRecommendations.uris.length;
   const countCollapsed = getSuitablePageSizeForScreen(12, isLargeScreen, isMediumScreen);
-  const finalCount = view === VIEW.ALL_VISIBLE ? count : view === VIEW.COLLAPSED ? countCollapsed : 37;
+  const finalCount = view === VIEW.ALL_VISIBLE ? count : view === VIEW.COLLAPSED ? countCollapsed : 36;
 
   // **************************************************************************
   // Effects
