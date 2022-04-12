@@ -8,7 +8,7 @@ import {
 import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
 import { doEditForChannel } from 'redux/actions/publish';
 import { selectCostInfoForUri } from 'lbryinc';
-import { doClearPlayingUri, doDownloadUri } from 'redux/actions/content';
+import { doDownloadUri } from 'redux/actions/content';
 import { doToast } from 'redux/actions/notifications';
 import { doOpenModal } from 'redux/actions/app';
 import FileActions from './view';
@@ -36,7 +36,6 @@ const select = (state, props) => {
 const perform = {
   doOpenModal,
   doEditForChannel,
-  doClearPlayingUri,
   doToast,
   doDownloadUri,
 };

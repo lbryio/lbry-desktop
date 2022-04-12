@@ -1,9 +1,7 @@
 // @flow
-
 import * as ICONS from 'constants/icons';
 import { MINIMUM_PUBLISH_BID, INVALID_NAME_ERROR } from 'constants/claim';
 import React from 'react';
-import { useHistory } from 'react-router';
 import Card from 'component/common/card';
 import Button from 'component/button';
 import ChannelSelector from 'component/channelSelector';
@@ -23,6 +21,7 @@ type Props = {
   doToast: ({ message: string }) => void,
   doClearRepostError: () => void,
   doRepost: (StreamRepostOptions) => Promise<*>,
+  doHideModal: () => void,
   title: string,
   claim?: StreamClaim,
   enteredContentClaim?: StreamClaim,
@@ -36,7 +35,6 @@ type Props = {
   setRepostUri: (string) => void,
   setContentUri: (string) => void,
   doCheckPendingClaims: () => void,
-  redirectUri?: string,
   passedRepostAmount: number,
   enteredRepostAmount: number,
   isResolvingPassedRepost: boolean,
@@ -48,10 +46,10 @@ type Props = {
 
 function RepostCreate(props: Props) {
   const {
-    redirectUri,
     doToast,
     doClearRepostError,
     doRepost,
+    doHideModal,
     claim,
     enteredContentClaim,
     balance,
@@ -83,7 +81,6 @@ function RepostCreate(props: Props) {
   const [enteredContent, setEnteredContentUri] = React.useState(undefined);
   const [contentError, setContentError] = React.useState('');
 
-  const { replace, goBack } = useHistory();
   const resolvingRepost = isResolvingEnteredRepost || isResolvingPassedRepost;
   const repostUrlName = `lbry://${incognito || !activeChannelClaim ? '' : `${activeChannelClaim.name}/`}`;
 
@@ -255,28 +252,6 @@ function RepostCreate(props: Props) {
 
   const repostClaimId = contentClaimId || enteredClaimId;
 
-  const getRedirect = (entered, passed, redirect) => {
-    if (redirect) {
-      return redirect;
-    } else if (entered) {
-      try {
-        const { claimName } = parseURI(entered);
-        return claimName ? `/${claimName}` : '/';
-      } catch (e) {
-        return '/';
-      }
-    } else if (passed) {
-      try {
-        const { claimName } = parseURI(passed);
-        return claimName ? `/${claimName}` : '/';
-      } catch (e) {
-        return '/';
-      }
-    } else {
-      return '/';
-    }
-  };
-
   function handleSubmit() {
     if (enteredRepostName && repostBid && repostClaimId) {
       doRepost({
@@ -292,14 +267,14 @@ function RepostCreate(props: Props) {
           linkText: __('Uploads'),
           linkTarget: '/uploads',
         });
-        replace(getRedirect(contentUri, uri, redirectUri));
+        doHideModal();
       });
     }
   }
 
   function cancelIt() {
     doClearRepostError();
-    goBack();
+    doHideModal();
   }
 
   if (fetchingMyChannels) {
@@ -312,12 +287,12 @@ function RepostCreate(props: Props) {
 
   return (
     <>
-      <ChannelSelector />
-
       <Card
+        title={__('Repost')}
         className="repost-wrapper"
         actions={
           <div>
+            <ChannelSelector />
             {uri && (
               <fieldset-section>
                 <ClaimPreview key={uri} uri={uri} actions={''} showNullPlaceholder />

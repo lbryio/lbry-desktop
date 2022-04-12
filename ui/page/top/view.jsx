@@ -7,16 +7,17 @@ import ClaimEffectiveAmount from 'component/claimEffectiveAmount';
 import SearchTopClaim from 'component/searchTopClaim';
 import * as CS from 'constants/claim_search';
 import Button from 'component/button';
-import * as PAGES from 'constants/pages';
+import * as MODALS from 'constants/modal_types';
 import { SIMPLE_SITE } from 'config';
 
 type Props = {
   name: string,
   beginPublish: (string) => void,
+  doOpenModal: (string, {}) => void,
 };
 
 function TopPage(props: Props) {
-  const { name, beginPublish } = props;
+  const { name, beginPublish, doOpenModal } = props;
   const [channelActive, setChannelActive] = React.useState(false);
   // if the query was actually '@name', still offer repost for 'name'
   const queryName = name[0] === '@' ? name.slice(1) : name;
@@ -30,7 +31,7 @@ function TopPage(props: Props) {
         streamType={SIMPLE_SITE ? CS.CONTENT_ALL : undefined}
         meta={
           <div className="search__top-links">
-            <Button button="secondary" navigate={`/$/${PAGES.REPOST_NEW}?to=${queryName}`} label={__('Repost Here')} />
+            <Button button="secondary" onClick={() => doOpenModal(MODALS.REPOST, {})} label={__('Repost Here')} />
             <Button button="secondary" onClick={() => beginPublish(queryName)} label={__('Publish Here')} />
           </div>
         }

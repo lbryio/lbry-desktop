@@ -1,9 +1,8 @@
 // @flow
 import { DOMAIN, ENABLE_NO_SOURCE_CLAIMS } from 'config';
-import * as PAGES from 'constants/pages';
 import React, { useEffect } from 'react';
 import { lazyImport } from 'util/lazyImport';
-import { Redirect, useHistory } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import Spinner from 'component/spinner';
 import ChannelPage from 'page/channel';
 import Page from 'component/page';
@@ -13,6 +12,7 @@ import Yrbl from 'component/yrbl';
 import { formatLbryUrlForWeb } from 'util/url';
 import { parseURI } from 'util/lbryURI';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
+import * as MODALS from 'constants/modal_types';
 
 const AbandonedChannelPreview = lazyImport(() =>
   import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */)
@@ -40,6 +40,7 @@ type Props = {
   doResolveUri: (uri: string, returnCached: boolean, resolveReposts: boolean, options: any) => void,
   doBeginPublish: (name: ?string) => void,
   doFetchItemsInCollection: ({ collectionId: string }) => void,
+  doOpenModal: (string, {}) => void,
 };
 
 export default function ShowPage(props: Props) {
@@ -62,9 +63,9 @@ export default function ShowPage(props: Props) {
     doResolveUri,
     doBeginPublish,
     doFetchItemsInCollection,
+    doOpenModal,
   } = props;
 
-  const { push } = useHistory();
   const { search, pathname, hash } = location;
   const urlParams = new URLSearchParams(search);
   const linkedCommentId = urlParams.get('lc');
@@ -190,8 +191,8 @@ export default function ShowPage(props: Props) {
                     />
                     <Button
                       button="secondary"
-                      onClick={() => push(`/$/${PAGES.REPOST_NEW}${contentName ? `?to=${contentName}` : ''}`)}
                       label={__('Repost Something')}
+                      onClick={() => doOpenModal(MODALS.REPOST, { contentName })}
                     />
                   </div>
                 )

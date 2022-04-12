@@ -1117,6 +1117,13 @@ img {
 }
 
 .repost-wrapper {
+  // Repost now uses a modal. Lock the width because the bid message
+  // keeps changing as you type the desired name.
+  min-width: var(--modal-width);
+  @media (max-width: $breakpoint-small) {
+    min-width: 100%;
+  }
+
   .claim-preview__wrapper {
     background-color: rgba(var(--color-header-background-base), 0.6);
     &:hover {

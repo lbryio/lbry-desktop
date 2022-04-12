@@ -32,7 +32,6 @@ type Props = {
   disableDownloadButton: boolean,
   doOpenModal: (id: string, { uri: string, claimIsMine?: boolean, isSupport?: boolean }) => void,
   doEditForChannel: (claim: Claim, uri: string) => void,
-  doClearPlayingUri: () => void,
   doToast: (data: { message: string }) => void,
   doDownloadUri: (uri: string) => void,
 };
@@ -51,14 +50,13 @@ export default function FileActions(props: Props) {
     disableDownloadButton,
     doOpenModal,
     doEditForChannel,
-    doClearPlayingUri,
     doToast,
     doDownloadUri,
   } = props;
 
   const {
     push,
-    location: { pathname, search },
+    location: { search },
   } = useHistory();
 
   const isMobile = useIsMobile();
@@ -104,13 +102,13 @@ export default function FileActions(props: Props) {
 
   function handleRepostClick() {
     if (!hasChannels) {
-      doClearPlayingUri();
-      push(`/$/${PAGES.CHANNEL_NEW}?redirect=${pathname}`);
       doToast({ message: __('A channel is required to repost on %SITE_NAME%', { SITE_NAME }) });
-    } else {
-      push(`/$/${PAGES.REPOST_NEW}?from=${encodeURIComponent(uri)}&redirect=${encodeURIComponent(pathname)}`);
+      return;
     }
+
+    doOpenModal(MODALS.REPOST, { uri });
   }
+
   return (
     <div className="media__actions">
       {ENABLE_FILE_REACTIONS && <FileReactions uri={uri} />}

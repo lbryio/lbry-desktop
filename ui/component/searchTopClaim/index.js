@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { doClearPublish, doPrepareEdit } from 'redux/actions/publish';
 import { doResolveUris } from 'redux/actions/claims';
+import { doOpenModal } from 'redux/actions/app';
 import { selectPendingIds, makeSelectClaimForUri } from 'redux/selectors/claims';
 import { makeSelectWinningUriForQuery, selectIsResolvingWinningUri } from 'redux/selectors/search';
 import SearchTopClaim from './view';
@@ -25,6 +26,7 @@ const perform = (dispatch) => ({
     dispatch(push(`/$/${PAGES.UPLOAD}`));
   },
   doResolveUris: (uris) => dispatch(doResolveUris(uris)),
+  doOpenModal: (id, props) => dispatch(doOpenModal(id, props)),
 });
 
 export default connect(select, perform)(SearchTopClaim);

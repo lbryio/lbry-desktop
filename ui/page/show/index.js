@@ -16,6 +16,7 @@ import {
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { doResolveUri } from 'redux/actions/claims';
 import { doBeginPublish } from 'redux/actions/publish';
+import { doOpenModal } from 'redux/actions/app';
 import { doFetchItemsInCollection } from 'redux/actions/collections';
 import { isStreamPlaceholderClaim } from 'util/claim';
 import { normalizeURI } from 'util/lbryURI';
@@ -91,6 +92,7 @@ const perform = {
   doResolveUri,
   doBeginPublish,
   doFetchItemsInCollection,
+  doOpenModal,
 };
 
 export default withRouter(connect(select, perform)(ShowPage));

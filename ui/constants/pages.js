@@ -45,7 +45,6 @@ exports.REPORT = 'report';
 exports.REPORT_CONTENT = 'report_content';
 exports.REWARDS = 'rewards';
 exports.REWARDS_VERIFY = 'rewards/verify';
-exports.REPOST_NEW = 'repost';
 exports.SEND = 'send';
 exports.SETTINGS = 'settings';
 exports.SETTINGS_STRIPE_CARD = 'settings/card';
