@@ -1,3 +1,4 @@
+/* eslint-disable */
 import window from 'global/window';
 import Config from './config';
 import Playlist from './playlist';
@@ -192,11 +193,31 @@ export const simpleSelector = function(
 export const lastBandwidthSelector = function() {
   const pixelRatio = this.useDevicePixelRatio ? window.devicePixelRatio || 1 : 1;
 
-  return simpleSelector(
+  const selectedBandwidth = simpleSelector(
     this.playlists.master,
     this.systemBandwidth,
     parseInt(safeGetComputedStyle(this.tech_.el(), 'width'), 10) * pixelRatio,
     parseInt(safeGetComputedStyle(this.tech_.el(), 'height'), 10) * pixelRatio,
     this.limitRenditionByPlayerDimensions
   );
+
+  const player = this.player_;
+  const hlsQualitySelector = player.hlsQualitySelector;
+  const originalHeight = hlsQualitySelector.config.originalHeight;
+
+  if (originalHeight && hlsQualitySelector) {
+    if (hlsQualitySelector.getCurrentQuality() === 'auto') {
+      if (selectedBandwidth.attributes.RESOLUTION.height === originalHeight) {
+        if (player.claimSrcOriginal && player.currentSrc() !== player.claimSrcOriginal?.src) {
+          setTimeout(() => {
+            const currentTime = player.currentTime();
+            player.src(player.claimSrcOriginal);
+            player.currentTime(currentTime);
+          });
+        }
+      }
+    }
+  }
+
+  return selectedBandwidth;
 };

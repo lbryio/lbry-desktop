@@ -27,6 +27,7 @@ import type { HomepageCat } from 'util/buildHomepage';
 import debounce from 'util/debounce';
 import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
 import useInterval from 'effects/use-interval';
+import { lastBandwidthSelector } from './internal/plugins/videojs-http-streaming--override/playlist-selectors';
 
 // const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
 // const PLAY_TIMEOUT_LIMIT = 2000;
@@ -381,6 +382,15 @@ function VideoViewer(props: Props) {
     // delay from the header-fetch. This is a temp change until the next
     // re-factoring.
     player.on('loadedmetadata', () => restorePlaybackRate(player));
+
+    // Override "auto" to use non-vhs url when the quality matches.
+    player.on('loadedmetadata', () => {
+      const vhs = player.tech(true).vhs;
+      if (vhs) {
+        // https://github.com/videojs/http-streaming/issues/749#issuecomment-606972884
+        vhs.selectPlaylist = lastBandwidthSelector;
+      }
+    });
 
     // used for tracking buffering for watchman
     player.on('tracking:buffered', doTrackingBuffered);
