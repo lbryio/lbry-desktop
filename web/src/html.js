@@ -36,6 +36,10 @@ Lbry.setDaemonConnectionString(PROXY_URL);
 const BEGIN_STR = '<!-- VARIABLE_HEAD_BEGIN -->';
 const FINAL_STR = '<!-- VARIABLE_HEAD_END -->';
 
+// ****************************************************************************
+// Helpers
+// ****************************************************************************
+
 function insertToHead(fullHtml, htmlToInsert) {
   const beginIndex = fullHtml.indexOf(BEGIN_STR);
   const finalIndex = fullHtml.indexOf(FINAL_STR);
@@ -56,7 +60,7 @@ function truncateDescription(description, maxChars = 200) {
   return chars.length > maxChars ? truncated + '...' : truncated;
 }
 
-function getCategoryMetaRenderFn(path) {
+function getCategoryMeta(path) {
   const page = Object.keys(CATEGORY_METADATA).find((x) => path === `/$/${x}` || path === `/$/${x}/`);
   return CATEGORY_METADATA[page];
 }
@@ -299,6 +303,21 @@ function buildGoogleVideoMetadata(uri, claim) {
   );
 }
 
+function buildSearchPageHead(html, requestPath, queryStr) {
+  const searchPageMetadata = buildOgMetadata({
+    ...(queryStr
+      ? {
+          title: `"${queryStr}" Search Results`,
+          description: `Find the best "${queryStr}" content on Odysee`,
+          image: '', // TODO: get Search Page image
+          urlQueryString: `q=${queryStr}`,
+        }
+      : {}),
+    path: requestPath,
+  });
+  return insertToHead(html, searchPageMetadata);
+}
+
 async function resolveClaimOrRedirect(ctx, url, ignoreRedirect = false) {
   let claim;
   try {
@@ -314,6 +333,10 @@ async function resolveClaimOrRedirect(ctx, url, ignoreRedirect = false) {
   } catch {}
   return claim;
 }
+
+// ****************************************************************************
+// getHtml
+// ****************************************************************************
 
 let html;
 async function getHtml(ctx) {
@@ -371,14 +394,19 @@ async function getHtml(ctx) {
     return insertToHead(html);
   }
 
-  const categoryMetaFn = getCategoryMetaRenderFn(requestPath);
-  if (categoryMetaFn) {
-    const categoryMeta = categoryMetaFn(query);
+  const categoryMeta = getCategoryMeta(requestPath);
+  if (categoryMeta) {
     const categoryPageMetadata = buildOgMetadata({
-      ...categoryMeta,
+      title: categoryMeta.title,
+      description: categoryMeta.description,
+      image: categoryMeta.image,
       path: requestPath,
     });
     return insertToHead(html, categoryPageMetadata);
+  }
+
+  if (requestPath === `/$/${PAGES.SEARCH}` || requestPath === `/$/${PAGES.SEARCH}/`) {
+    return buildSearchPageHead(html, requestPath, query.q);
   }
 
   if (!requestPath.includes('$')) {
