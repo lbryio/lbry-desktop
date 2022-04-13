@@ -321,7 +321,9 @@ async function getHtml(ctx) {
     html = fs.readFileSync(path.join(__dirname, '/../dist/index.html'), 'utf8');
   }
 
+  const query = ctx.query;
   const requestPath = unscapeHtmlProperty(decodeURIComponent(ctx.path));
+
   if (requestPath.length === 0) {
     const ogMetadata = buildBasicOgMetadata();
     return insertToHead(html, ogMetadata);
@@ -371,7 +373,7 @@ async function getHtml(ctx) {
 
   const categoryMetaFn = getCategoryMetaRenderFn(requestPath);
   if (categoryMetaFn) {
-    const categoryMeta = categoryMetaFn(ctx.request.query);
+    const categoryMeta = categoryMetaFn(query);
     const categoryPageMetadata = buildOgMetadata({
       ...categoryMeta,
       path: requestPath,
