@@ -11,7 +11,6 @@ const {
   URL,
 } = require('../../config.js');
 
-const { CATEGORY_METADATA } = require('./category-metadata');
 const {
   generateDirectUrl,
   generateEmbedUrl,
@@ -23,6 +22,7 @@ const {
 } = require('../../ui/util/web');
 const { getJsBundleId } = require('../bundle-id.js');
 const { lbryProxy: Lbry } = require('../lbry');
+const { getHomepageJSON } = require('./getHomepageJSON');
 const { buildURI, parseURI, normalizeClaimUrl } = require('./lbryURI');
 const fs = require('fs');
 const moment = require('moment');
@@ -61,8 +61,26 @@ function truncateDescription(description, maxChars = 200) {
 }
 
 function getCategoryMeta(path) {
-  const page = Object.keys(CATEGORY_METADATA).find((x) => path === `/$/${x}` || path === `/$/${x}/`);
-  return CATEGORY_METADATA[page];
+  const homepage = getHomepageJSON();
+
+  if (path === `/$/${PAGES.WILD_WEST}` || path === `/$/${PAGES.WILD_WEST}/`) {
+    return {
+      title: 'Wild West',
+      description: 'Boosted by user credits, this is what the community promotes on Odysee',
+      image: 'https://player.odycdn.com/speech/category-wildwest:1.jpg',
+    };
+  } else if (homepage && homepage.en) {
+    const data = Object.values(homepage.en).find((x) => path === `/$/${x.name}` || path === `/$/${x.name}/`);
+    if (data) {
+      return {
+        title: data.label,
+        description: data.description,
+        image: data.image,
+      };
+    }
+  }
+
+  return null;
 }
 
 //
@@ -318,6 +336,16 @@ function buildSearchPageHead(html, requestPath, queryStr) {
   return insertToHead(html, searchPageMetadata);
 }
 
+function buildCategoryPageHead(html, requestPath, categoryMeta) {
+  const categoryPageMetadata = buildOgMetadata({
+    title: categoryMeta.title,
+    description: categoryMeta.description,
+    image: categoryMeta.image,
+    path: requestPath,
+  });
+  return insertToHead(html, categoryPageMetadata);
+}
+
 async function resolveClaimOrRedirect(ctx, url, ignoreRedirect = false) {
   let claim;
   try {
@@ -396,13 +424,7 @@ async function getHtml(ctx) {
 
   const categoryMeta = getCategoryMeta(requestPath);
   if (categoryMeta) {
-    const categoryPageMetadata = buildOgMetadata({
-      title: categoryMeta.title,
-      description: categoryMeta.description,
-      image: categoryMeta.image,
-      path: requestPath,
-    });
-    return insertToHead(html, categoryPageMetadata);
+    return buildCategoryPageHead(html, requestPath, categoryMeta);
   }
 
   if (requestPath === `/$/${PAGES.SEARCH}` || requestPath === `/$/${PAGES.SEARCH}/`) {
