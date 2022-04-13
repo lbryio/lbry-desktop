@@ -11,7 +11,6 @@ const {
   URL,
 } = require('../../config.js');
 
-const { CATEGORY_METADATA } = require('./category-metadata');
 const {
   generateDirectUrl,
   generateEmbedUrl,
@@ -23,6 +22,7 @@ const {
 } = require('../../ui/util/web');
 const { getJsBundleId } = require('../bundle-id.js');
 const { lbryProxy: Lbry } = require('../lbry');
+const { getHomepageJSON } = require('./getHomepageJSON');
 const { buildURI, parseURI, normalizeClaimUrl } = require('./lbryURI');
 const fs = require('fs');
 const moment = require('moment');
@@ -35,6 +35,10 @@ Lbry.setDaemonConnectionString(PROXY_URL);
 
 const BEGIN_STR = '<!-- VARIABLE_HEAD_BEGIN -->';
 const FINAL_STR = '<!-- VARIABLE_HEAD_END -->';
+
+// ****************************************************************************
+// Helpers
+// ****************************************************************************
 
 function insertToHead(fullHtml, htmlToInsert) {
   const beginIndex = fullHtml.indexOf(BEGIN_STR);
@@ -56,9 +60,27 @@ function truncateDescription(description, maxChars = 200) {
   return chars.length > maxChars ? truncated + '...' : truncated;
 }
 
-function getCategoryMetaRenderFn(path) {
-  const page = Object.keys(CATEGORY_METADATA).find((x) => path === `/$/${x}` || path === `/$/${x}/`);
-  return CATEGORY_METADATA[page];
+function getCategoryMeta(path) {
+  const homepage = getHomepageJSON();
+
+  if (path === `/$/${PAGES.WILD_WEST}` || path === `/$/${PAGES.WILD_WEST}/`) {
+    return {
+      title: 'Wild West',
+      description: 'Boosted by user credits, this is what the community promotes on Odysee',
+      image: 'https://player.odycdn.com/speech/category-wildwest:1.jpg',
+    };
+  } else if (homepage && homepage.en) {
+    const data = Object.values(homepage.en).find((x) => path === `/$/${x.name}` || path === `/$/${x.name}/`);
+    if (data) {
+      return {
+        title: data.label,
+        description: data.description,
+        image: data.image,
+      };
+    }
+  }
+
+  return null;
 }
 
 //
@@ -299,6 +321,31 @@ function buildGoogleVideoMetadata(uri, claim) {
   );
 }
 
+function buildSearchPageHead(html, requestPath, queryStr) {
+  const searchPageMetadata = buildOgMetadata({
+    ...(queryStr
+      ? {
+          title: `"${queryStr}" Search Results`,
+          description: `Find the best "${queryStr}" content on Odysee`,
+          image: '', // TODO: get Search Page image
+          urlQueryString: `q=${queryStr}`,
+        }
+      : {}),
+    path: requestPath,
+  });
+  return insertToHead(html, searchPageMetadata);
+}
+
+function buildCategoryPageHead(html, requestPath, categoryMeta) {
+  const categoryPageMetadata = buildOgMetadata({
+    title: categoryMeta.title,
+    description: categoryMeta.description,
+    image: categoryMeta.image,
+    path: requestPath,
+  });
+  return insertToHead(html, categoryPageMetadata);
+}
+
 async function resolveClaimOrRedirect(ctx, url, ignoreRedirect = false) {
   let claim;
   try {
@@ -314,6 +361,10 @@ async function resolveClaimOrRedirect(ctx, url, ignoreRedirect = false) {
   } catch {}
   return claim;
 }
+
+// ****************************************************************************
+// getHtml
+// ****************************************************************************
 
 let html;
 async function getHtml(ctx) {
@@ -371,14 +422,13 @@ async function getHtml(ctx) {
     return insertToHead(html);
   }
 
-  const categoryMetaFn = getCategoryMetaRenderFn(requestPath);
-  if (categoryMetaFn) {
-    const categoryMeta = categoryMetaFn(query);
-    const categoryPageMetadata = buildOgMetadata({
-      ...categoryMeta,
-      path: requestPath,
-    });
-    return insertToHead(html, categoryPageMetadata);
+  const categoryMeta = getCategoryMeta(requestPath);
+  if (categoryMeta) {
+    return buildCategoryPageHead(html, requestPath, categoryMeta);
+  }
+
+  if (requestPath === `/$/${PAGES.SEARCH}` || requestPath === `/$/${PAGES.SEARCH}/`) {
+    return buildSearchPageHead(html, requestPath, query.q);
   }
 
   if (!requestPath.includes('$')) {
