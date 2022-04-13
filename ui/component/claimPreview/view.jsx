@@ -347,7 +347,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
             <>
               {!pending ? (
                 <NavLink aria-hidden tabIndex={-1} {...navLinkProps}>
-                  <FileThumbnail thumbnail={thumbnailUrl}>
+                  <FileThumbnail uri={uri} thumbnail={thumbnailUrl}>
                     <div className="claim-preview__hover-actions">
                       {isPlayable && <FileWatchLaterLink focusable={false} uri={repostedContentUri} />}
                     </div>
@@ -364,7 +364,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                   </FileThumbnail>
                 </NavLink>
               ) : (
-                <FileThumbnail thumbnail={thumbnailUrl} />
+                <FileThumbnail uri={uri} thumbnail={thumbnailUrl} />
               )}
             </>
           )}
