@@ -310,11 +310,12 @@ export function doFetchLanguage(language) {
 
 export function doFetchHomepages() {
   return (dispatch) => {
-    // -- Use this env flag to use local homepage data. Otherwise, it will grab from odysee.com.
+    // -- Use this env flag to use local homepage data. Otherwise, it will grab from `/$/api/content/v1/get`.
     // @if USE_LOCAL_HOMEPAGE_DATA='true'
     const homepages = require('homepages');
     if (homepages) {
       window.homepages = homepages;
+      dispatch({ type: ACTIONS.FETCH_HOMEPAGES_DONE });
       return;
     }
     // @endif
