@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Changed
 
 ### Fixed
+- Fix post-editor preview mode _community pr!_ ([#7532](https://github.com/lbryio/lbry-desktop/pull/7532))
 
 ## [0.52.6] - [2022-04-04]
 

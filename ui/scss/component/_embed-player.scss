@@ -38,8 +38,7 @@
   }
 }
 
-.embed__inline-button-preview {
-  @extend .embed__inline-button;
+.embed__inline-button--preview {
   background-color: var(--color-editor-inline-code-bg);
   width: 50%;
 }
