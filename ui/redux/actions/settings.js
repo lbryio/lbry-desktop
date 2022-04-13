@@ -301,7 +301,8 @@ export function doFetchLanguage(language) {
         .then((r) => r.json())
         .then((j) => {
           window.app_strings = j;
-        });
+        })
+        .catch(() => {});
     }
     // @endif
   };
