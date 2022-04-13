@@ -165,7 +165,9 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   const playerServerRef = useRef();
 
   const { url: livestreamVideoUrl } = activeLivestreamForChannel || {};
-  const showQualitySelector = !isLivestreamClaim || (livestreamVideoUrl && livestreamVideoUrl.includes('/transcode/'));
+  const showQualitySelector =
+    !isLivestreamClaim ||
+    (livestreamVideoUrl && (livestreamVideoUrl.includes('/transcode/') || livestreamVideoUrl.includes('cloud.odysee')));
 
   // initiate keyboard shortcuts
   const { curried_function } = keyboardShorcuts({
@@ -323,13 +325,13 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     return vjs;
   }
 
-  useEffect(() => {
-    if (showQualitySelector) {
-      // Add quality selector to player
-      const player = playerRef.current;
-      if (player) player.hlsQualitySelector({ displayCurrentQuality: true });
-    }
-  }, [showQualitySelector]);
+  // useEffect(() => {
+  //   if (showQualitySelector) {
+  //     // Add quality selector to player
+  //     const player = playerRef.current;
+  //     if (player) player.hlsQualitySelector({ displayCurrentQuality: true });
+  //   }
+  // }, [showQualitySelector]);
 
   /** instantiate videoJS and dispose of it when done with code **/
   // This lifecycle hook is only called once (on mount), or when `isAudio` or `source` changes.

@@ -1,5 +1,10 @@
 // @flow
-import { LIVESTREAM_LIVE_API, LIVESTREAM_KILL, LIVESTREAM_STARTS_SOON_BUFFER } from 'constants/livestream';
+import {
+  LIVESTREAM_LIVE_API,
+  NEW_LIVESTREAM_LIVE_API,
+  LIVESTREAM_KILL,
+  LIVESTREAM_STARTS_SOON_BUFFER,
+} from 'constants/livestream';
 import { toHex } from 'util/hex';
 import Lbry from 'lbry';
 import moment from 'moment';
@@ -96,19 +101,34 @@ export const fetchLiveChannels = async (): Promise<LivestreamInfo> => {
  * @returns {Promise<{channelStatus: string}|{channelData: LivestreamInfo, channelStatus: string}>}
  */
 export const fetchLiveChannel = async (channelId: string): Promise<LiveChannelStatus> => {
-  const newApiEndpoint = LIVESTREAM_LIVE_API;
-  const newApiResponse = await fetch(`${newApiEndpoint}/${channelId}?1`);
+  const newApiEndpoint = NEW_LIVESTREAM_LIVE_API;
+  const oldApiEndpoint = LIVESTREAM_LIVE_API;
+  const newApiResponse = await fetch(`${newApiEndpoint}/is_live?channel_claim_id=${channelId}`);
   const newApiData = (await newApiResponse.json()).data;
-  const isLive = newApiData.live;
-
+  let isLive = newApiData.Live;
+  let translatedData = [];
   // transform data to old API standard
-  const translatedData = {
-    url: newApiData.url,
-    type: 'application/x-mpegurl',
-    viewCount: newApiData.viewCount,
-    claimId: newApiData.claimId,
-    timestamp: newApiData.timestamp,
-  };
+  if (isLive) {
+    translatedData = {
+      url: newApiData.VideoURL,
+      type: 'application/x-mpegurl',
+      viewCount: newApiData.ViewerCount,
+      claimId: newApiData.ChannelClaimID,
+      timestamp: newApiData.Start,
+    };
+  } else {
+    const oldApiResponse = await fetch(`${oldApiEndpoint}/${channelId}`);
+    const oldApiData = (await oldApiResponse.json()).data;
+
+    isLive = oldApiData.live;
+    translatedData = {
+      url: oldApiData.url,
+      type: 'application/x-mpegurl',
+      viewCount: oldApiData.viewCount,
+      claimId: oldApiData.claimId,
+      timestamp: oldApiData.timestamp,
+    };
+  }
 
   try {
     if (isLive === false) {

@@ -9,9 +9,9 @@ export const LIVESTREAM_RTMP_URL = 'rtmp://stream.odysee.com/live';
 export const LIVESTREAM_KILL = 'https://api.stream.odysee.com/stream/kill';
 
 // new livestream endpoints (old can be removed at some future point)
-// export const NEW_LIVESTREAM_RTMP_URL = 'rtmp://publish.odysee.live/live';
-// export const NEW_LIVESTREAM_REPLAY_API = 'https://api.odysee.live/replays/list';
-// export const NEW_LIVESTREAM_LIVE_API = 'https://api.odysee.live/livestream/is_live';
+export const NEW_LIVESTREAM_RTMP_URL = 'rtmp://publish.odysee.live/live';
+export const NEW_LIVESTREAM_REPLAY_API = 'https://api.odysee.live/replays/list';
+export const NEW_LIVESTREAM_LIVE_API = 'https://api.odysee.live/livestream';
 
 export const MAX_LIVESTREAM_COMMENTS = 50;
 
