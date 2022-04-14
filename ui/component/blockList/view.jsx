@@ -118,7 +118,7 @@ export default function BlockList(props: Props) {
   return (
     <>
       <div className="help--notice">{help}</div>
-      <div className="section">
+      <div className="section" style={{ zIndex: '4' }}>
         <SearchList
           list={localList}
           placeholder={__('e.g. odysee')}

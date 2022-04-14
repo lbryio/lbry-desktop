@@ -30,6 +30,7 @@ $nag-error-z-index: 999;
   top: 0;
   bottom: auto;
   z-index: 1 !important; /* booooooo */
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
 .nag--relative {
@@ -40,12 +41,17 @@ $nag-error-z-index: 999;
   background-color: var(--color-primary);
   color: var(--color-white);
   z-index: $nag-helpful-z-index;
+  border-radius: var(--border-radius);
+  margin-top: var(--spacing-s);
 }
 
 .nag--error {
-  background-color: var(--color-error);
+  background-color: #000;
   color: var(--color-text-error);
   z-index: $nag-error-z-index;
+  border-radius: var(--border-radius);
+  margin-top: var(--spacing-s);
+  margin-bottom: var(--spacing-s);
 }
 
 .nag__message {

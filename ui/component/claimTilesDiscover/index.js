@@ -9,6 +9,7 @@ import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import { makeSelectClientSetting, selectShowMatureContent } from 'redux/selectors/settings';
 import { selectMutedAndBlockedChannelIds } from 'redux/selectors/blocked';
 import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
+import { createNormalizedClaimSearchKey } from 'util/claim';
 
 import ClaimListDiscover from './view';
 
@@ -17,13 +18,22 @@ const select = (state, props) => {
   const hideReposts = makeSelectClientSetting(SETTINGS.HIDE_REPOSTS)(state);
   const mutedAndBlockedChannelIds = selectMutedAndBlockedChannelIds(state);
 
-  return {
-    claimSearchByQuery: selectClaimSearchByQuery(state),
-    claimsByUri: selectClaimsByUri(state),
-    fetchingClaimSearchByQuery: selectFetchingClaimSearchByQuery(state),
+  const options = resolveSearchOptions({
     showNsfw,
     hideReposts,
-    options: resolveSearchOptions({ showNsfw, hideReposts, mutedAndBlockedChannelIds, pageSize: 8, ...props }),
+    mutedAndBlockedChannelIds,
+    pageSize: 8,
+    ...props,
+  });
+  const searchKey = createNormalizedClaimSearchKey(options);
+
+  return {
+    claimSearchResults: selectClaimSearchByQuery(state)[searchKey],
+    claimsByUri: selectClaimsByUri(state),
+    fetchingClaimSearch: selectFetchingClaimSearchByQuery(state)[searchKey],
+    showNsfw,
+    hideReposts,
+    optionsStringified: JSON.stringify(options),
   };
 };
 

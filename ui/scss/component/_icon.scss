@@ -1,5 +1,5 @@
 .icon__wrapper {
-  background-color: var(--color-primary-alt);
+  background-color: var(--color-header-background);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -13,7 +13,7 @@
 
   .icon {
     position: absolute;
-    stroke: var(--color-primary);
+    stroke: var(--color-text);
   }
 }
 
@@ -22,6 +22,7 @@
 
   .icon {
     stroke: var(--color-follow-icon);
+    fill: var(--color-follow-icon);
   }
 }
 

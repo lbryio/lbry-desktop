@@ -29,6 +29,13 @@
       margin-top: calc(var(--spacing-xl) * 2);
     }
   }
+
+  .filePrice {
+    .credit-amount {
+      color: #000;
+      margin-right: var(--spacing-l);
+    }
+  }
 }
 
 .purchase-stuff__text--purchased {

@@ -25,6 +25,14 @@ const VideoJsEvents = ({
   playerRef,
   autoplaySetting,
   replay,
+  claimId,
+  userId,
+  claimValues,
+  embedded,
+  uri,
+  doAnalyticsView,
+  claimRewards,
+  playerServerRef,
 }: {
   tapToUnmuteRef: any, // DOM element
   tapToRetryRef: any, // DOM element
@@ -33,6 +41,15 @@ const VideoJsEvents = ({
   playerRef: any, // DOM element
   autoplaySetting: boolean,
   replay: boolean,
+  claimId?: ?string,
+  userId?: ?number,
+  claimValues?: any,
+  embedded?: boolean,
+  clearPosition?: (string) => void,
+  uri?: string,
+  doAnalyticsView?: (string, number) => any,
+  claimRewards?: () => void,
+  playerServerRef?: any,
 }) => {
   // Override the player's control text. We override to:
   // 1. Add keyboard shortcut to the tool-tip.
@@ -93,6 +110,10 @@ const VideoJsEvents = ({
 
   function onInitialPlay() {
     const player = playerRef.current;
+
+    const bigPlayButton = document.querySelector('.vjs-big-play-button');
+    if (bigPlayButton) bigPlayButton.style.setProperty('display', 'none');
+
     if (player && (player.muted() || player.volume() === 0)) {
       // The css starts as "hidden". We make it visible here without
       // re-rendering the whole thing.
@@ -223,6 +244,19 @@ const VideoJsEvents = ({
     player.on('volumechange', resolveCtrlText);
     player.on('volumechange', onVolumeChange);
     player.on('error', onError);
+    // custom tracking plugin, event used for watchman data, and marking view/getting rewards
+    // hide forcing control bar show
+    player.on('canplaythrough', function () {
+      setTimeout(function () {
+        // $FlowFixMe
+        const vjsControlBar = document.querySelector('.vjs-control-bar');
+        if (vjsControlBar) vjsControlBar.style.removeProperty('opacity');
+      }, 1000 * 3); // wait 3 seconds to hit control bar
+    });
+    player.on('playing', function () {
+      // $FlowFixMe
+      document.querySelector('.vjs-big-play-button').style.setProperty('display', 'none', 'important');
+    });
     // player.on('ended', onEnded);
   }
 

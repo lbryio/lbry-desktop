@@ -12,6 +12,7 @@ import { PRIMARY_PLAYER_WRAPPER_CLASS } from 'page/file/view';
 import Draggable from 'react-draggable';
 import { onFullscreenChange } from 'util/full-screen';
 import { generateListSearchUrlParams, formatLbryUrlForWeb } from 'util/url';
+import { useIsMobile } from 'effects/use-screensize';
 import debounce from 'util/debounce';
 import { useHistory } from 'react-router';
 import { isURIEqual } from 'util/lbryURI';
@@ -19,7 +20,8 @@ import AutoplayCountdown from 'component/autoplayCountdown';
 
 // scss/init/vars.scss
 // --header-height
-const HEADER_HEIGHT = 64;
+const HEADER_HEIGHT = 60;
+const HEADER_HEIGHT_MOBILE = 60;
 
 const IS_DESKTOP_MAC = typeof process === 'object' ? process.platform === 'darwin' : false;
 const DEBOUNCE_WINDOW_RESIZE_HANDLER_MS = 100;
@@ -130,6 +132,7 @@ export default function FileRenderFloating(props: Props) {
   const hideFloatingPlayer = location.state && location.state.hideFloatingPlayer;
   const playingUriSource = playingUri && playingUri.source;
   const isComment = playingUriSource === 'comment';
+  const isMobile = useIsMobile();
   const mainFilePlaying = !isFloating && primaryUri && isURIEqual(uri, primaryUri);
 
   const [fileViewerRect, setFileViewerRect] = useState();
@@ -245,14 +248,10 @@ export default function FileRenderFloating(props: Props) {
   }, [handleResize]);
 
   useEffect(() => {
-    // @if TARGET='app'
     setDesktopPlayStartTime(Date.now());
-    // @endif
 
     return () => {
-      // @if TARGET='app'
       setDesktopPlayStartTime(undefined);
-      // @endif
     };
   }, [uri]);
 
@@ -293,7 +292,7 @@ export default function FileRenderFloating(props: Props) {
   if (
     !isPlayable ||
     !uri ||
-    (isFloating && (!floatingPlayerEnabled || hideFloatingPlayer)) ||
+    (isFloating && (isMobile || !floatingPlayerEnabled || hideFloatingPlayer)) ||
     (collectionId && !isFloating && ((!canViewFile && !nextListUri) || countdownCanceled))
   ) {
     return null;
@@ -317,7 +316,6 @@ export default function FileRenderFloating(props: Props) {
 
   function handleDragStop(e, ui) {
     if (wasDragging) {
-      // e.stopPropagation();
       setWasDragging(false);
     }
 
@@ -346,7 +344,7 @@ export default function FileRenderFloating(props: Props) {
           'content__viewer--floating': isFloating,
           'content__viewer--inline': !isFloating,
           'content__viewer--secondary': isComment,
-          'content__viewer--theater-mode': !isFloating && videoTheaterMode,
+          'content__viewer--theater-mode': !isFloating && videoTheaterMode && playingUri?.uri === primaryUri,
           'content__viewer--disable-click': wasDragging,
         })}
         style={
@@ -355,7 +353,11 @@ export default function FileRenderFloating(props: Props) {
                 width: fileViewerRect.width,
                 height: fileViewerRect.height,
                 left: fileViewerRect.x,
-                top: fileViewerRect.windowOffset + fileViewerRect.top - HEADER_HEIGHT - (IS_DESKTOP_MAC ? 24 : 0),
+                top:
+                  fileViewerRect.windowOffset +
+                  fileViewerRect.top -
+                  (isMobile ? HEADER_HEIGHT_MOBILE : HEADER_HEIGHT) -
+                  (IS_DESKTOP_MAC ? 24 : 0),
               }
             : {}
         }

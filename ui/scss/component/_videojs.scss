@@ -1,3 +1,8 @@
+$control-bar-height: 2.5rem;
+$control-bar-font-size: 0.8rem;
+$control-bar-popup-font-size: 0.8rem;
+$control-bar-icon-size: 0.8rem;
+
 .video-js {
   font-size: 12px;
   overflow: hidden;
@@ -5,6 +10,8 @@
   // Control Bar (container)
   .vjs-control-bar {
     background: none;
+    color: #dbd8d8;
+    height: $control-bar-height;
 
     &::before {
       position: absolute;
@@ -29,7 +36,7 @@
     // Circle play head
     .vjs-play-progress::before {
       transform: scale(0);
-      transition: transform 0.3s;
+      transition: transform 0.1s;
     }
 
     &:hover {
@@ -47,7 +54,7 @@
   // Load progress color
   .vjs-load-progress,
   .vjs-load-progress div {
-    background-color: rgba(160, 160, 160, 0.5);
+    background-color: rgba(var(--color-secondary), 0.5);
   }
 
   // Progress Bar Background
@@ -78,20 +85,13 @@
     position: absolute !important;
   }*/
 
-  // Menu size
-  .vjs-playback-rate .vjs-menu .vjs-menu-content {
-    width: 125%;
-    font-size: 10px;
-  }
-
   // Volume slider
   .vjs-volume-panel {
-    &.vjs-control {
-      transition: 0.2s;
-    }
+    margin-right: calc(var(--spacing-xxs) * -1);
 
     .vjs-volume-control.vjs-volume-horizontal {
-      transition: 0.2s;
+      transition: 0.1s;
+      margin-top: 2px;
     }
   }
 }
@@ -122,7 +122,7 @@
   &.vjs-user-inactive.vjs-playing {
     .vjs-control-bar {
       opacity: 0;
-      transition: 0.3s;
+      transition: 0.1s;
     }
   }
 
@@ -149,4 +149,137 @@
 
 .bottom-gradient {
   background-image: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 72px);
+}
+
+.vjs-hover {
+  opacity: 1;
+}
+
+[dir] .vjs-menu-button-popup .vjs-menu .vjs-menu-content {
+  background-color: rgba(43, 51, 63);
+  max-height: 20em;
+  margin-bottom: calc(var(--spacing-xxs) * -1); // Prevents accidental dismissal when the gap is hovered.
+
+  li {
+    font-size: $control-bar-popup-font-size;
+  }
+}
+
+.vjs-slider-horizontal {
+  background-color: #474747 !important;
+}
+
+.vjs-mouse-display {
+  color: white !important;
+  background-color: lightgrey !important;
+  width: 8px !important;
+  margin-left: -5px !important;
+}
+
+.vjs_video_3_ima-ad-container {
+  display: none;
+}
+
+.ima-ad-container {
+  display: none;
+}
+
+.vjs-chromecast-button {
+  .vjs-icon-placeholder {
+    width: 19px;
+    height: 19px;
+  }
+}
+
+.video-js-parent .vjs-tech-chromecast {
+  .vjs-tech-chromecast-poster {
+    &::after {
+      $chromecast-poster-width: 50px;
+      width: $chromecast-poster-width;
+      left: calc(50% - #{$chromecast-poster-width * 0.5});
+    }
+  }
+
+  .vjs-tech-chromecast-poster-img {
+    $chromecast-poster-max-height: 50px;
+    max-height: $chromecast-poster-max-height;
+    &.vjs-tech-chromecast-poster-img-empty {
+      width: 80px;
+      height: 90px;
+    }
+  }
+
+  .vjs-tech-chromecast-title-container {
+    margin-bottom: var(--spacing-main-padding);
+  }
+
+  .vjs-tech-chromecast-title {
+    font-size: var(--font-title);
+    @media (max-width: $breakpoint-small) {
+      font-size: var(--font-small);
+    }
+  }
+
+  .vjs-tech-chromecast-subtitle {
+    color: var(--color-text-subtitle);
+    font-size: var(--font-body);
+    @media (max-width: $breakpoint-small) {
+      font-size: var(--font-xsmall);
+    }
+  }
+}
+
+// larger than default spinner for all but smallest devices
+@media (min-width: 680px) {
+  .vjs-loading-spinner {
+    border-radius: 100px;
+    height: 75px;
+    width: 75px;
+    margin: -49px 0 0 -37px;
+  }
+}
+
+// TODO: make sure there's no bad side effects of this
+button.vjs-big-play-button {
+  display: none !important;
+}
+
+// Rearrange icons
+.vjs-play-control {
+  order: 1 !important;
+}
+.vjs-volume-panel {
+  order: 2 !important;
+}
+.vjs-current-time {
+  order: 3 !important;
+}
+.vjs-time-divider {
+  order: 4 !important;
+}
+.vjs-duration {
+  order: 5 !important;
+}
+
+.vjs-custom-control-spacer {
+  order: 6 !important;
+}
+
+.vjs-button--autoplay-next {
+  order: 7 !important;
+}
+.vjs-playback-rate {
+  order: 8 !important;
+}
+.vjs-chromecast-button {
+  order: 9 !important;
+}
+.vjs-quality-selector {
+  order: 10 !important;
+}
+.vjs-button--theater-mode {
+  order: 11 !important;
+}
+.vjs-fullscreen-control {
+  order: 12 !important;
 }

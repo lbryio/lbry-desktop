@@ -258,9 +258,9 @@ export function normalizeURI(URL: string) {
   });
 }
 
-export function isURIValid(URL: string): boolean {
+export function isURIValid(URL: string, normalize: boolean = true): boolean {
   try {
-    parseURI(normalizeURI(URL));
+    parseURI(normalize ? normalizeURI(URL) : URL);
   } catch (error) {
     return false;
   }

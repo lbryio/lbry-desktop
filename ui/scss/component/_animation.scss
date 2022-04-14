@@ -70,11 +70,11 @@
 
 @keyframes menu-animate-in {
   0% {
-    transform: scaleY(0);
-    opacity: 0;
+    transform: scale(1, 0);
+    opacity: 1;
   }
   100% {
-    transform: scaleY(1);
+    transform: scaleZ(1);
     opacity: 1;
   }
 }
