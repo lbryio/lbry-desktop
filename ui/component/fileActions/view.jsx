@@ -118,7 +118,7 @@ function FileActions(props: Props) {
       {!claimIsMine && (
         <Menu>
           <MenuButton
-            className="button--file-action"
+            className="button--file-action--menu"
             onClick={(e) => {
               e.stopPropagation();
               e.preventDefault();

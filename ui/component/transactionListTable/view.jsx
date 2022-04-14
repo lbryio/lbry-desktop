@@ -33,10 +33,10 @@ function TransactionListTable(props: Props) {
           <table className="table table--transactions">
             <thead>
               <tr>
-                <th>{__('Date')}</th>
-                <th>{<>{__('Type')}</>}</th>
+                <th className="table-column-lbc-date">{__('Date')}</th>
+                <th className="table-column-lbc-type">{<>{__('Type')}</>}</th>
                 <th>{__('Details')} </th>
-                <th>{__('Transaction')}</th>
+                <th className="table-column-lbc-transaction">{__('Transaction')}</th>
                 <th className="table__item--align-right">
                   <LbcSymbol size={18} />
                 </th>

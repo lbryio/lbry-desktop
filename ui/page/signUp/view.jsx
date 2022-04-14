@@ -5,7 +5,7 @@ import Page from 'component/page';
 
 export default function SignUpPage() {
   return (
-    <Page authPage>
+    <Page authPage noFooter>
       <UserSignUp />
     </Page>
   );

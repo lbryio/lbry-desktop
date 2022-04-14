@@ -8,17 +8,95 @@ import Button from 'component/button';
 import classnames from 'classnames';
 import Icon from 'component/common/icon';
 import NotificationBubble from 'component/notificationBubble';
+import DebouncedInput from 'component/common/debounced-input';
 import I18nMessage from 'component/i18nMessage';
 import ChannelThumbnail from 'component/channelThumbnail';
-import { DOMAIN, ENABLE_UI_NOTIFICATIONS } from 'config';
+import { useIsMobile, isTouch } from 'effects/use-screensize';
 import { IS_MAC } from 'component/app/view';
 import { useHistory } from 'react-router';
+import { DOMAIN, ENABLE_UI_NOTIFICATIONS } from 'config';
+
+const FOLLOWED_ITEM_INITIAL_LIMIT = 10;
+const touch = isTouch();
+const {
+  location: { pathname },
+} = useHistory();
+
+type SideNavLink = {
+  title: string,
+  link?: string,
+  route?: string,
+  onClick?: () => any,
+  icon: string,
+  extra?: Node,
+  hideForUnauth?: boolean,
+};
+
+const HOME = {
+  title: 'Home',
+  link: `/`,
+  icon: ICONS.HOME,
+  onClick: () => {
+    if (pathname === '/') window.location.reload();
+  },
+};
 
 const RECENT_FROM_FOLLOWING = {
   title: 'Following --[sidebar button]--',
   link: `/$/${PAGES.CHANNELS_FOLLOWING}`,
   icon: ICONS.SUBSCRIBE,
 };
+
+const DISCOVER = {
+  title: 'Discover',
+  link: `/$/${PAGES.DISCOVER}`,
+  icon: ICONS.DISCOVER,
+};
+
+const LIBRARY = {
+  title: 'Library',
+  link: `/$/${PAGES.LIBRARY}`,
+  icon: ICONS.PURCHASED,
+};
+
+const NOTIFICATIONS = {
+  title: 'Notifications',
+  link: `/$/${PAGES.NOTIFICATIONS}`,
+  icon: ICONS.NOTIFICATION,
+  extra: <NotificationBubble inline />,
+};
+
+const PLAYLISTS = {
+  title: 'Lists',
+  link: `/$/${PAGES.LISTS}`,
+  icon: ICONS.STACK,
+};
+
+const UNAUTH_LINKS: Array<SideNavLink> = [
+  {
+    title: 'Log In',
+    link: `/$/${PAGES.AUTH_SIGNIN}`,
+    icon: ICONS.SIGN_IN,
+  },
+  {
+    title: 'Sign Up',
+    link: `/$/${PAGES.AUTH}`,
+    icon: ICONS.SIGN_UP,
+  },
+  {
+    title: 'Settings',
+    link: `/$/${PAGES.SETTINGS}`,
+    icon: ICONS.SETTINGS,
+  },
+  {
+    title: 'Help',
+    link: `/$/${PAGES.HELP}`,
+    icon: ICONS.HELP,
+  },
+];
+
+// ****************************************************************************
+// ****************************************************************************
 
 type Props = {
   subscriptions: Array<Subscription>,
@@ -35,16 +113,7 @@ type Props = {
   doClearPurchasedUriSuccess: () => void,
   user: ?User,
   homepageData: any,
-};
-
-type SideNavLink = {
-  title: string,
-  link?: string,
-  route?: string,
-  onClick?: () => any,
-  icon: string,
-  extra?: Node,
-  hideForUnauth?: boolean,
+  activeChannelStakedLevel: number,
 };
 
 function SideNavigation(props: Props) {
@@ -63,46 +132,7 @@ function SideNavigation(props: Props) {
     followedTags,
   } = props;
 
-  const {
-    location: { pathname },
-  } = useHistory();
-
-  const HOME = {
-    title: 'Home',
-    link: `/`,
-    icon: ICONS.HOME,
-    onClick: () => {
-      if (pathname === '/') window.location.reload();
-    },
-  };
-  const FULL_LINKS: Array<SideNavLink> = [
-    {
-      title: 'Your Tags',
-      link: `/$/${PAGES.TAGS_FOLLOWING}`,
-      icon: ICONS.TAG,
-      hideForUnauth: true,
-    },
-    {
-      title: 'Discover',
-      link: `/$/${PAGES.DISCOVER}`,
-      icon: ICONS.DISCOVER,
-    },
-    {
-      title: 'Library',
-      link: `/$/${PAGES.LIBRARY}`,
-      icon: ICONS.PURCHASED,
-      hideForUnauth: true,
-    },
-  ];
-
   const MOBILE_LINKS: Array<SideNavLink> = [
-    {
-      title: 'Notifications',
-      link: `/$/${PAGES.NOTIFICATIONS}`,
-      icon: ICONS.NOTIFICATION,
-      extra: <NotificationBubble inline />,
-      hideForUnauth: true,
-    },
     {
       title: 'Upload',
       link: `/$/${PAGES.UPLOAD}`,
@@ -171,56 +201,149 @@ function SideNavigation(props: Props) {
     },
   ];
 
-  const UNAUTH_LINKS: Array<SideNavLink> = [
-    {
-      title: 'Log In',
-      link: `/$/${PAGES.AUTH_SIGNIN}`,
-      icon: ICONS.SIGN_IN,
-    },
-    {
-      title: 'Sign Up',
-      link: `/$/${PAGES.AUTH}`,
-      icon: ICONS.SIGN_UP,
-    },
-    {
-      title: 'Settings',
-      link: `/$/${PAGES.SETTINGS}`,
-      icon: ICONS.SETTINGS,
-    },
-    {
-      title: 'Help',
-      link: `/$/${PAGES.HELP}`,
-      icon: ICONS.HELP,
-    },
-  ];
-
   const notificationsEnabled = ENABLE_UI_NOTIFICATIONS || (user && user.experimental_ui);
   const isAuthenticated = Boolean(email);
-  // SIDE LINKS: FOLLOWING, HOME, [FULL,] [EXTRA]
-  let SIDE_LINKS: Array<SideNavLink> = [];
-
-  SIDE_LINKS.push(HOME);
-  SIDE_LINKS.push(RECENT_FROM_FOLLOWING);
-  FULL_LINKS.push({
-    title: 'Lists',
-    link: `/$/${PAGES.LISTS}`,
-    icon: ICONS.STACK,
-    hideForUnauth: true,
-  });
-  SIDE_LINKS.push(...FULL_LINKS);
 
   const [pulseLibrary, setPulseLibrary] = React.useState(false);
-  const isAbsolute = isOnFilePage || isMediumScreen;
-  const microNavigation = !sidebarOpen || isMediumScreen;
-  const subLinks = email
-    ? MOBILE_LINKS.filter((link) => {
-        if (!notificationsEnabled && link.icon === ICONS.NOTIFICATION) {
-          return false;
-        }
+  const [expandSubscriptions, setExpandSubscriptions] = React.useState(false);
+  const [expandTags, setExpandTags] = React.useState(false);
 
-        return true;
-      })
-    : UNAUTH_LINKS;
+  const isAbsolute = isOnFilePage || isMediumScreen;
+  const isMobile = useIsMobile();
+  const [menuInitialized, setMenuInitialized] = React.useState(false);
+  const menuCanCloseCompletely = (isOnFilePage && !isMobile) || (isMobile && menuInitialized);
+  const hideMenuFromView = menuCanCloseCompletely && !sidebarOpen;
+  const [canDisposeMenu, setCanDisposeMenu] = React.useState(false);
+
+  React.useEffect(() => {
+    if (hideMenuFromView || !menuInitialized) {
+      const handler = setTimeout(() => {
+        setMenuInitialized(true);
+        setCanDisposeMenu(true);
+      }, 250);
+      return () => {
+        clearTimeout(handler);
+      };
+    } else {
+      setCanDisposeMenu(false);
+    }
+  }, [hideMenuFromView, menuInitialized]);
+
+  const shouldRenderLargeMenu = menuCanCloseCompletely || sidebarOpen;
+
+  const showMicroMenu = !sidebarOpen && !menuCanCloseCompletely;
+  const showPushMenu = sidebarOpen && !menuCanCloseCompletely;
+
+  const showSubscriptionSection = shouldRenderLargeMenu && subscriptions && subscriptions.length > 0;
+  const showTagSection = sidebarOpen && followedTags && followedTags.length;
+
+  const [subscriptionFilter, setSubscriptionFilter] = React.useState('');
+
+  const filteredSubscriptions = subscriptions.filter(
+    (sub) => !subscriptionFilter || sub.channelName.toLowerCase().includes(subscriptionFilter.toLowerCase())
+  );
+
+  let displayedSubscriptions = filteredSubscriptions;
+  if (
+    showSubscriptionSection &&
+    !subscriptionFilter &&
+    subscriptions.length > FOLLOWED_ITEM_INITIAL_LIMIT &&
+    !expandSubscriptions
+  ) {
+    displayedSubscriptions = subscriptions.slice(0, FOLLOWED_ITEM_INITIAL_LIMIT);
+  }
+
+  let displayedFollowedTags = followedTags;
+  if (showTagSection && followedTags.length > FOLLOWED_ITEM_INITIAL_LIMIT && !expandTags) {
+    displayedFollowedTags = followedTags.slice(0, FOLLOWED_ITEM_INITIAL_LIMIT);
+  }
+
+  function getLink(props: SideNavLink) {
+    const { hideForUnauth, route, link, ...passedProps } = props;
+    const { title, icon, extra } = passedProps;
+
+    if (hideForUnauth && !email) {
+      return null;
+    }
+
+    return (
+      <li key={route || link || title}>
+        <Button
+          {...passedProps}
+          icon={icon}
+          navigate={route || link}
+          label={__(title)}
+          title={__(title)}
+          className={classnames('navigation-link', {
+            'navigation-link--pulse': icon === ICONS.LIBRARY && pulseLibrary,
+            'navigation-link--highlighted': icon === ICONS.NOTIFICATION && unseenCount > 0,
+          })}
+          activeClass="navigation-link--active"
+        />
+        {extra && extra}
+      </li>
+    );
+  }
+
+  function getSubscriptionSection() {
+    if (showSubscriptionSection) {
+      return (
+        <>
+          <ul className="navigation__secondary navigation-links">
+            {subscriptions.length > FOLLOWED_ITEM_INITIAL_LIMIT && (
+              <li className="navigation-item">
+                <DebouncedInput icon={ICONS.SEARCH} placeholder={__('Filter')} onChange={setSubscriptionFilter} />
+              </li>
+            )}
+            {displayedSubscriptions.map((subscription) => (
+              <SubscriptionListItem key={subscription.uri} subscription={subscription} />
+            ))}
+            {!!subscriptionFilter && !displayedSubscriptions.length && (
+              <li>
+                <div className="navigation-item">
+                  <div className="empty empty--centered">{__('No results')}</div>
+                </div>
+              </li>
+            )}
+            {!subscriptionFilter && subscriptions.length > FOLLOWED_ITEM_INITIAL_LIMIT && (
+              <Button
+                key="showMore"
+                label={expandSubscriptions ? __('Show less') : __('Show more')}
+                className="navigation-link"
+                onClick={() => setExpandSubscriptions(!expandSubscriptions)}
+              />
+            )}
+          </ul>
+        </>
+      );
+    }
+    return null;
+  }
+
+  function getFollowedTagsSection() {
+    if (showTagSection) {
+      return (
+        <>
+          <ul className="navigation__secondary navigation-links">
+            {displayedFollowedTags.map(({ name }, key) => (
+              <li key={name} className="navigation-link__wrapper">
+                <Button navigate={`/$/discover?t=${name}`} label={`#${name}`} className="navigation-link" />
+              </li>
+            ))}
+            {followedTags.length > FOLLOWED_ITEM_INITIAL_LIMIT && (
+              <Button
+                key="showMore"
+                label={expandTags ? __('Show less') : __('Show more')}
+                className="navigation-link"
+                onClick={() => setExpandTags(!expandTags)}
+              />
+            )}
+          </ul>
+        </>
+      );
+    }
+    return null;
+  }
 
   React.useEffect(() => {
     if (purchaseSuccess) {
@@ -292,151 +415,57 @@ function SideNavigation(props: Props) {
   return (
     <div
       className={classnames('navigation__wrapper', {
-        'navigation__wrapper--micro': microNavigation && !isOnFilePage,
+        'navigation__wrapper--micro': showMicroMenu,
         'navigation__wrapper--absolute': isAbsolute,
       })}
     >
-      {!isOnFilePage && (
-        <nav
-          aria-label={'Sidebar'}
-          className={classnames('navigation', {
-            'navigation--micro': microNavigation,
-            // @if TARGET='app'
-            'navigation--mac': IS_MAC,
-            // @endif
-          })}
-        >
-          <div>
-            <ul className={classnames('navigation-links', { 'navigation-links--micro': !sidebarOpen })}>
-              {SIDE_LINKS.map((linkProps) => {
-                //   $FlowFixMe
-                const { hideForUnauth, ...passedProps } = linkProps;
-                return (
-                  <li key={linkProps.route || linkProps.link}>
-                    <Button
-                      {...passedProps}
-                      label={__(linkProps.title)}
-                      title={__(linkProps.title)}
-                      //   $FlowFixMe
-                      navigate={linkProps.route || linkProps.link}
-                      icon={pulseLibrary && linkProps.icon === ICONS.LIBRARY ? ICONS.PURCHASED : linkProps.icon}
-                      className={classnames('navigation-link', {
-                        'navigation-link--pulse': linkProps.icon === ICONS.LIBRARY && pulseLibrary,
-                        'navigation-link--highlighted': linkProps.icon === ICONS.NOTIFICATION && unseenCount > 0,
-                      })}
-                      activeClass="navigation-link--active"
-                    />
-                    {linkProps.extra && linkProps.extra}
-                  </li>
-                );
+      <nav
+        aria-label={'Sidebar'}
+        className={classnames('navigation', {
+          'navigation--micro': showMicroMenu,
+          'navigation--push': showPushMenu,
+          'navigation-file-page-and-mobile': hideMenuFromView,
+          'navigation-touch': touch,
+          // @if TARGET='app'
+          'navigation--mac': IS_MAC,
+          // @endif
+        })}
+      >
+        {(!canDisposeMenu || sidebarOpen) && (
+          <div className="navigation-inner-container">
+            <ul className="navigation-links--absolute mobile-only">{notificationsEnabled && getLink(NOTIFICATIONS)}</ul>
+
+            <ul
+              className={classnames('navigation-links', {
+                'navigation-links--micro': showMicroMenu,
+                'navigation-links--absolute': shouldRenderLargeMenu,
+                'navigation--mac': IS_MAC,
               })}
+            >
+              {getLink(HOME)}
+              {getLink(RECENT_FROM_FOLLOWING)}
+              {getLink(DISCOVER)}
+              {getLink(LIBRARY)}
+              {getLink(PLAYLISTS)}
+            </ul>
+            <ul className="navigation-links--absolute mobile-only">
+              {email && MOBILE_LINKS.map((linkProps) => getLink(linkProps))}
+              {!email && UNAUTH_LINKS.map((linkProps) => getLink(linkProps))}
             </ul>
 
-            {sidebarOpen && subscriptions && subscriptions.length > 0 && (
-              <ul className="navigation__secondary navigation-links">
-                {subscriptions.map((subscription) => (
-                  <SubscriptionListItem key={subscription.uri} subscription={subscription} />
-                ))}
-              </ul>
-            )}
-            {sidebarOpen && followedTags && followedTags.length > 0 && (
-              <ul className="navigation__secondary navigation-links navigation-links--small">
-                {followedTags.map(({ name }, key) => (
-                  <li key={name} className="navigation-link__wrapper">
-                    <Button navigate={`/$/discover?t=${name}`} label={`#${name}`} className="navigation-link" />
-                  </li>
-                ))}
-              </ul>
-            )}
-
+            {getSubscriptionSection()}
+            {getFollowedTagsSection()}
             {!isAuthenticated && sidebarOpen && unAuthNudge}
           </div>
-
-          {sidebarOpen && helpLinks}
-        </nav>
-      )}
-
-      {(isOnFilePage || isMediumScreen) && sidebarOpen && (
-        <>
-          <nav
-            className={classnames('navigation--absolute', {
-              // @if TARGET='app'
-              'navigation--mac': IS_MAC,
-              // @endif
-            })}
-          >
-            <div>
-              <ul className="navigation-links--absolute">
-                {SIDE_LINKS.map((linkProps) => {
-                  //   $FlowFixMe
-                  const { hideForUnauth, link, route, ...passedProps } = linkProps;
-                  return (
-                    <li key={route || link}>
-                      <Button
-                        {...passedProps}
-                        navigate={route || link}
-                        label={__(linkProps.title)}
-                        title={__(linkProps.title)}
-                        icon={pulseLibrary && linkProps.icon === ICONS.LIBRARY ? ICONS.PURCHASED : linkProps.icon}
-                        className={classnames('navigation-link', {
-                          'navigation-link--pulse': linkProps.icon === ICONS.LIBRARY && pulseLibrary,
-                          'navigation-link--highlighted': linkProps.icon === ICONS.NOTIFICATION && unseenCount > 0,
-                        })}
-                        activeClass="navigation-link--active"
-                      />
-                      {linkProps.extra && linkProps.extra}
-                    </li>
-                  );
-                })}
-              </ul>
-              <ul className="navigation-links--absolute mobile-only">
-                {subLinks.map((linkProps) => {
-                  const { hideForUnauth, ...passedProps } = linkProps;
-
-                  return (
-                    <li key={linkProps.title} className="mobile-only">
-                      <Button
-                        {...passedProps}
-                        navigate={linkProps.link}
-                        label={__(linkProps.title)}
-                        title={__(linkProps.title)}
-                        className="navigation-link"
-                        activeClass="navigation-link--active"
-                      />
-                      {linkProps.extra}
-                    </li>
-                  );
-                })}
-              </ul>
-              {sidebarOpen && subscriptions && subscriptions.length > 0 && (
-                <ul className="navigation__secondary navigation-links">
-                  {subscriptions.map((subscription) => (
-                    <SubscriptionListItem key={subscription.uri} subscription={subscription} />
-                  ))}
-                </ul>
-              )}
-              {sidebarOpen && followedTags && followedTags.length > 0 && (
-                <ul className="navigation__secondary navigation-links navigation-links--small">
-                  {followedTags.map(({ name }, key) => (
-                    <li key={name} className="navigation-link__wrapper">
-                      <Button navigate={`/$/discover?t=${name}`} label={`#${name}`} className="navigation-link" />
-                    </li>
-                  ))}
-                </ul>
-              )}
-              {!isAuthenticated && unAuthNudge}
-            </div>
-          </nav>
-          <div
-            className={classnames('navigation__overlay', {
-              // @if TARGET='app'
-              'navigation__overlay--mac': IS_MAC,
-              // @endif
-            })}
-            onClick={() => setSidebarOpen(false)}
-          />
-        </>
-      )}
+        )}
+        {(!canDisposeMenu || sidebarOpen) && shouldRenderLargeMenu && helpLinks}
+      </nav>
+      <div
+        className={classnames('navigation__overlay', {
+          'navigation__overlay--active': isAbsolute && sidebarOpen,
+        })}
+        onClick={() => setSidebarOpen(false)}
+      />
     </div>
   );
 }

@@ -8,12 +8,20 @@
   border-radius: var(--border-radius);
   box-shadow: var(--card-box-shadow);
   background-color: var(--color-secondary);
-  color: var(--color-white);
+  color: var(--color-secondary-contrast);
   font-weight: bold;
 
   .button--close {
     .icon {
-      stroke: var(--color-white);
+      stroke: var(--color-secondary-contrast);
+    }
+
+    &:hover {
+      background-color: var(--color-primary);
+
+      .icon {
+        stroke: var(--color-primary-contrast);
+      }
     }
   }
 

@@ -5,14 +5,6 @@
   th,
   td {
     overflow: hidden;
-
-    &:first-of-type {
-      padding-left: var(--spacing-m);
-    }
-
-    &:last-of-type {
-      padding-right: var(--spacing-m);
-    }
   }
 
   thead {
@@ -21,6 +13,8 @@
 
     th {
       border-bottom: 1px solid var(--color-border);
+      color: var(--color-text);
+      font-size: var(--font-medium);
     }
   }
 
@@ -34,17 +28,13 @@
 
   th,
   td {
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 0;
   }
 
   th {
     font-size: var(--font-xsmall);
     color: var(--color-text-help);
     padding-bottom: var(--spacing-xxxs);
-    @media (max-width: $breakpoint-small) {
-      padding-left: var(--spacing-xs) !important;
-      padding-right: var(--spacing-xs) !important;
-    }
   }
 }
 
@@ -56,10 +46,6 @@ td {
   @media (max-width: $breakpoint-small) {
     font-size: var(--font-small);
   }
-}
-
-.table--fixed {
-  table-layout: fixed;
 }
 
 .table--condensed {
@@ -142,11 +128,14 @@ td {
 }
 
 .table--transactions {
-  td:nth-of-type(1) {
-    width: 20%;
+  .table-column-lbc-date {
+    min-width: 140px;
   }
-  td:nth-of-type(2) {
-    width: 15%;
+  .table-column-lbc-type {
+    min-width: 80px;
+  }
+  .table-column-lbc-transaction {
+    min-width: 100px;
   }
   td:nth-of-type(3) {
     // Only add ellipsis to the links in the table
@@ -272,6 +261,15 @@ td {
       width: 1.3rem;
       margin-right: var(--spacing-s);
       border-radius: var(--border-radius);
+    }
+  }
+
+  .tag {
+    background-color: var(--color-primary);
+    color: var(--color-primary-contrast);
+    &:hover {
+      background-color: var(--color-secondary);
+      color: var(--color-secondary-contrast);
     }
   }
 }

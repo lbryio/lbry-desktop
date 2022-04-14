@@ -130,20 +130,28 @@ const Header = (props: Props) => {
         }
       >
         <div>
-          <Button
-            // title={
-            //   balance > 0
-            //     ? __('Immediately spendable: %spendable_balance%', { spendable_balance: roundedSpendableBalance })
-            //     : __('Your Wallet')
-            // }
-            navigate={`/$/${PAGES.WALLET}`}
-            className="button--file-action header__navigationItem--balance"
-            label={hideBalance || Number(roundedBalance) === 0 ? __('Your Wallet') : roundedBalance}
-            icon={ICONS.LBC}
-            onDoubleClick={(e) => {
-              e.stopPropagation();
-            }}
-          />
+          {hideBalance ? (
+            <Button
+              navigate={`/$/${PAGES.WALLET}`}
+              className="header__navigationItem--icon header__navigationItem--balance"
+              label={!(hideBalance || Number(roundedBalance) === 0) && roundedBalance}
+              icon={ICONS.WALLET2}
+              iconSize={18}
+              onDoubleClick={(e) => {
+                e.stopPropagation();
+              }}
+            />
+          ) : (
+            <Button
+              navigate={`/$/${PAGES.WALLET}`}
+              className="button--file-action header__navigationItem--balance"
+              label={hideBalance || Number(roundedBalance) === 0 ? __('Your Wallet') : roundedBalance}
+              icon={ICONS.LBC}
+              onDoubleClick={(e) => {
+                e.stopPropagation();
+              }}
+            />
+          )}
         </div>
       </Tooltip>
 
@@ -181,7 +189,7 @@ const Header = (props: Props) => {
                   <span style={{ position: 'relative' }}>
                     <Button
                       aria-label={sidebarLabel}
-                      className="header__navigationItem--icon"
+                      className="header__navigationItem--icon button-rotate"
                       icon={ICONS.MENU}
                       aria-expanded={sidebarOpen}
                       onClick={() => setSidebarOpen(!sidebarOpen)}

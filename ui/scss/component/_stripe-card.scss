@@ -9,11 +9,43 @@
 }
 
 .stripe__card-link-text {
-  color: rgb(253, 253, 253)
+  color: rgb(253, 253, 253);
 }
 
 .date-header {
-  width: 30%;
+  min-width: 190px;
+}
+
+.channelName-header {
+  min-width: 210px;
+}
+
+.location-header {
+  min-width: 120px;
+}
+
+.amount-header {
+  min-width: 135px;
+}
+
+.card-header {
+  min-width: 115px;
+}
+
+.anonymous-header {
+  min-width: 115px;
+}
+
+.processingFee-header {
+  min-width: 135px;
+}
+
+.odyseeFee-header {
+  min-width: 115px;
+}
+
+.receivedAmount-header {
+  min-width: 155px;
 }
 
 .grey-text {
@@ -87,6 +119,7 @@
   -webkit-appearance: none;
   appearance: none;
   width: 284px;
+  border-radius: var(--border-radius);
 }
 .sr-input:focus {
   box-shadow: 0 0 0 1px rgba(50, 151, 211, 0.3), 0 1px 1px 0 rgba(0, 0, 0, 0.07), 0 0 0 4px rgba(50, 151, 211, 0.3);
@@ -320,6 +353,22 @@ pre {
   100% {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+.sr-main {
+  @media (max-width: $breakpoint-small) {
+    padding: 0 !important;
+
+    .sr-payment-form {
+      padding: 0;
+      .sr-input {
+        width: 100%;
+      }
+      .linkButton {
+        max-width: unset;
+      }
+    }
   }
 }
 

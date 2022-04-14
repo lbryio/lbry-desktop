@@ -6,7 +6,6 @@ import classnames from 'classnames';
 import Button from 'component/button';
 import { formatNumberWithCommas } from 'util/number';
 import NudgeFloating from 'component/nudgeFloating';
-
 type Props = {
   claim: StreamClaim,
   doFetchReactions: (string) => void,
@@ -57,26 +56,10 @@ function FileReactions(props: Props) {
       <Button
         title={__('I like this')}
         authSrc="filereaction_like"
-        className={classnames('button--file-action', {
+        className={classnames('button--file-action button-like', {
           'button--file-action-active': myReaction === REACTION_TYPES.LIKE,
         })}
-        label={
-          <>
-            {/* Be nice to have animated Likes */}
-            {/* {myReaction === REACTION_TYPES.LIKE && SIMPLE_SITE && ( */}
-            {/*  <> */}
-            {/*    <div className="button__fire-glow" /> */}
-            {/*    <div className="button__fire-particle1" /> */}
-            {/*    <div className="button__fire-particle2" /> */}
-            {/*    <div className="button__fire-particle3" /> */}
-            {/*    <div className="button__fire-particle4" /> */}
-            {/*    <div className="button__fire-particle5" /> */}
-            {/*    <div className="button__fire-particle6" /> */}
-            {/*  </> */}
-            {/* )} */}
-            {formatNumberWithCommas(likeCount, 0)}
-          </>
-        }
+        label={<>{formatNumberWithCommas(likeCount, 0)}</>}
         iconSize={18}
         icon={likeIcon}
         onClick={() => doReactionLike(uri)}
@@ -84,7 +67,7 @@ function FileReactions(props: Props) {
       <Button
         authSrc={'filereaction_dislike'}
         title={__('I dislike this')}
-        className={classnames('button--file-action', {
+        className={classnames('button--file-action button-dislike', {
           'button--file-action-active': myReaction === REACTION_TYPES.DISLIKE,
         })}
         label={<>{formatNumberWithCommas(dislikeCount, 0)}</>}

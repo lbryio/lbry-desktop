@@ -69,7 +69,7 @@ export default function SubscribeButton(props: Props) {
 
   if (isSubscribed && !permanentUrl && rawChannelName) {
     return (
-      <div className="button-group">
+      <div className="button-group button-group-subscribed">
         <Button
           ref={buttonRef}
           iconColor="red"
@@ -100,6 +100,7 @@ export default function SubscribeButton(props: Props) {
       <Button
         ref={buttonRef}
         iconColor="red"
+        className={isSubscribed ? 'button-following' : ''}
         largestLabel={isMobile && shrinkOnMobile ? '' : subscriptionLabel}
         icon={unfollowOverride ? ICONS.UNSUBSCRIBE : isSubscribed ? ICONS.SUBSCRIBED : ICONS.SUBSCRIBE}
         button={'alt'}
@@ -119,32 +120,35 @@ export default function SubscribeButton(props: Props) {
         }}
       />
       {isSubscribed && uiNotificationsEnabled && (
-        <Button
-          button="alt"
-          icon={notificationsDisabled ? ICONS.BELL : ICONS.BELL_ON}
-          aria-label={notificationsDisabled ? __('Turn on notifications') : __('Turn off notifications')}
-          onClick={() => {
-            const newNotificationsDisabled = !notificationsDisabled;
+        <>
+          <Button
+            button="alt"
+            icon={notificationsDisabled ? ICONS.BELL : ICONS.BELL_ON}
+            className={isSubscribed ? 'button-following' : ''}
+            aria-label={notificationsDisabled ? __('Turn on notifications') : __('Turn off notifications')}
+            onClick={() => {
+              const newNotificationsDisabled = !notificationsDisabled;
 
-            doChannelSubscribe(
-              {
-                channelName: claimName,
-                uri: permanentUrl,
-                notificationsDisabled: newNotificationsDisabled,
-              },
-              false
-            );
+              doChannelSubscribe(
+                {
+                  channelName: claimName,
+                  uri: permanentUrl,
+                  notificationsDisabled: newNotificationsDisabled,
+                },
+                false
+              );
 
-            doToast({
-              message: __(
-                newNotificationsDisabled
-                  ? 'Notifications turned off for %channel%'
-                  : 'Notifications turned on for %channel%!',
-                { channel: claimName }
-              ),
-            });
-          }}
-        />
+              doToast({
+                message: __(
+                  newNotificationsDisabled
+                    ? 'Notifications turned off for %channel%'
+                    : 'Notifications turned on for %channel%!',
+                  { channel: claimName }
+                ),
+              });
+            }}
+          />
+        </>
       )}
     </div>
   ) : null;

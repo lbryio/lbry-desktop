@@ -8,7 +8,6 @@ import classnames from 'classnames';
 import Icon from 'component/common/icon';
 import { isURIValid, normalizeURI, parseURI } from 'util/lbryURI';
 import { Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption } from '@reach/combobox';
-// import '@reach/combobox/styles.css'; --> 'scss/third-party.scss'
 import useLighthouse from 'effects/use-lighthouse';
 import { Form } from 'component/common/form';
 import Button from 'component/button';
@@ -279,11 +278,9 @@ export default function WunderBarSuggestions(props: Props) {
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
-      // @if TARGET='app'
       if (inputRef.current) {
         inputRef.current.removeEventListener('dblclick', handleDoubleClick);
       }
-      // @endif
     };
   }, [inputRef]);
 
@@ -309,7 +306,7 @@ export default function WunderBarSuggestions(props: Props) {
         className={classnames('wunderbar__wrapper', { 'wunderbar__wrapper--mobile': isMobile })}
         onSubmit={() => handleSelect(term)}
       >
-        <Combobox className="wunderbar" onSelect={handleSelect}>
+        <Combobox className="wunderbar" onSelect={handleSelect} openOnFocus>
           <Icon icon={ICONS.SEARCH} />
           <ComboboxInput
             ref={inputRef}

@@ -34,3 +34,7 @@ export function useIsLargeScreen() {
   const windowSize = useWindowSize();
   return windowSize > 1600;
 }
+
+export function isTouch() {
+  return 'ontouchstart' in window || 'onmsgesturechange' in window;
+}

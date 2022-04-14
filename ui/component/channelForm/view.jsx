@@ -212,6 +212,7 @@ function ChannelForm(props: Props) {
 
   function handleSubmit() {
     if (uri) {
+      console.log('Params A: ', params);
       updateChannel(params).then((success) => {
         if (success) {
           onDone();
@@ -269,9 +270,10 @@ function ChannelForm(props: Props) {
   }
 
   // TODO clear and bail after submit
+  // <div className={classnames('main--contained', { 'card--disabled': disabled })}></div>
   return (
     <>
-      <div className={classnames('main--contained', { 'card--disabled': disabled })}>
+      <div className={classnames({ 'card--disabled': disabled })}>
         <header className="channel-cover">
           <div className="channel__quick-actions">
             <Button
@@ -332,7 +334,7 @@ function ChannelForm(props: Props) {
           <div className="channel-cover__gradient" />
         </header>
 
-        <Tabs>
+        <Tabs className="channelPage-wrapper">
           <TabList className="tabs__list--channel-page">
             <Tab>{__('General')}</Tab>
             <Tab>{__('Credit Details')}</Tab>

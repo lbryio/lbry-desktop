@@ -1,0 +1,28 @@
+.schedule-counter {
+  position: absolute;
+  top: 19px;
+  left: 15px;
+  width: 10px;
+  height: 10px;
+  color: var(--color-text);
+  z-index: 99999;
+  font-size: 7px;
+}
+
+.test {
+  svg {
+    stroke: var(--color-text);
+    fill: var(--color-text);
+  }
+
+  &:hover {
+    svg {
+      stroke: var(--color-primary-contrast);
+      fill: var(--color-primary-contrast);
+    }
+
+    .schedule-counter {
+      color: var(--color-primary-contrast);
+    }
+  }
+}

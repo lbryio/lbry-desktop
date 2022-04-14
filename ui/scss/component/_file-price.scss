@@ -11,7 +11,7 @@
     position: relative;
     margin-left: var(--spacing-m);
     white-space: nowrap;
-    color: var(--color-purchased-text);
+    color: var(--color-primary-contrast);
   }
 
   &::before {
@@ -21,9 +21,7 @@
     width: 250%;
     height: 160%;
     transform: skew(15deg);
-    border-radius: var(--border-radius);
-    background-color: var(--color-purchased-alt);
-    border: 2px solid var(--color-purchased);
+    background-color: rgba(var(--color-primary-dynamic), 1);
   }
 }
 
@@ -31,10 +29,12 @@
   font-size: var(--font-body);
   top: calc(var(--spacing-xxs) * -1);
   margin-left: var(--spacing-m);
+  margin-right: var(--spacing-m);
+  height: 2.4rem;
 
   .credit-amount {
     margin: 0 var(--spacing-m);
-    margin-bottom: -0.5rem;
+    margin-bottom: -0.9rem;
   }
 
   &::before {

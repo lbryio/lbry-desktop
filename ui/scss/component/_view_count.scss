@@ -6,7 +6,7 @@
     padding: var(--spacing-s) 4px;
 
     .date_time {
-      font-size: 11px;
+      font-size: var(--font-xsmall);
     }
   }
 
@@ -29,6 +29,6 @@
       margin: 0 2.5px;
     }
 
-    font-size: 11px;
+    font-size: var(--font-xsmall);
   }
 }

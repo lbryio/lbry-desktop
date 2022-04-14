@@ -20,11 +20,11 @@
   text-align: center;
 
   &:not(.pagination__item--selected):hover {
-    background-color: var(--color-button-secondary-bg);
+    background-color: var(--color-button-secondary);
   }
 
   &:not(.pagination__item--selected):not(.pagination__item--break):not(.disabled):hover {
-    color: var(--color-button-secondary-text);
+    color: var(--color-primary);
 
     &:hover {
       background-color: var(--color-button-secondary-bg-hover);
@@ -38,6 +38,7 @@
   }
 
   &:not(.pagination__item--break):not(.disabled) {
+    background-color: var(--color-header-background);
     cursor: pointer;
   }
 
@@ -66,6 +67,8 @@
   line-height: 1.5;
   position: relative;
   padding-top: var(--spacing-s);
+  background-color: var(--color-header-background);
+  margin-bottom: 0px !important;
 }
 
 .pagination__item--selected {

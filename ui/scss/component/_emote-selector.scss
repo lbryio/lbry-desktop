@@ -1,4 +1,4 @@
-@import '../init/vars';
+@import '../init/breakpoints';
 
 .emoteSelector {
   animation: menu-animate-in var(--animation-duration) var(--animation-style);
@@ -14,6 +14,8 @@
   overflow-x: hidden;
   max-height: 25vh;
   padding: var(--spacing-s);
+  background-color: rgba(var(--color-primary-dynamic), 0.01);
+  border-radius: var(--border-radius);
 
   .emoteSelector__listRowItems {
     display: flex;
@@ -30,10 +32,17 @@
         width: 1.5rem;
         height: 1.5rem;
 
+        .button__label {
+          line-height: normal;
+        }
+
         span {
           margin: auto;
           font-size: var(--font-large);
         }
+      }
+      &:hover {
+        background-color: rgba(var(--color-primary-dynamic), 0.2) !important;
       }
     }
   }

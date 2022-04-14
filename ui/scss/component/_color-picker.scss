@@ -1,0 +1,70 @@
+.color-picker {
+  position: relative;
+  height: var(--height-input);
+  //background-color:#ff0000;
+  border-radius: var(--border-radius);
+  max-width: 220px;
+  margin-top: var(--spacing-s);
+
+  .swatch {
+    position: absolute;
+    left: 0;
+    margin: 5px;
+    background: var(--color-header-background);
+    border-radius: var(--border-radius);
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    cursor: pointer;
+    width: calc(var(--height-input) - (2 * 5px));
+    height: calc(var(--height-input) - (2 * 5px));
+    box-sizing: border-box;
+  }
+
+  .color {
+    width: 100%;
+    height: 100%;
+    border-radius: calc(var(--border-radius) - 2px);
+  }
+
+  .popover {
+    position: absolute;
+    z-index: 2;
+  }
+
+  .cover {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+  }
+
+  .sketch-picker {
+    background-color: var(--color-header-background) !important;
+    margin-bottom: var(--spacing-l);
+
+    .flexbox-fix {
+      input {
+        box-shadow: unset !important;
+        background-color: var(--color-header-button) !important;
+        text-align: center;
+      }
+      label {
+        color: var(--color-text) !important;
+      }
+    }
+
+    .flexbox-fix:nth-child(3) {
+      display: none !important;
+    }
+    .flexbox-fix:last-of-type {
+      display: none !important;
+    }
+  }
+
+  input {
+    width: 220px;
+    display: inline-block;
+    padding-left: calc(var(--height-input) + var(--spacing-xxs));
+  }
+}

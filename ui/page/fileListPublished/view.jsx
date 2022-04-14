@@ -90,7 +90,7 @@ function FileListPublished(props: Props) {
                   {fetching && <Spinner type="small" />}
                   {!fetching && (
                     <Button
-                      button="alt"
+                      button="secondary"
                       label={__('Refresh')}
                       icon={ICONS.REFRESH}
                       onClick={() => fetchClaimListMine(params.page, params.page_size, true, filterBy.split(','))}
@@ -98,7 +98,7 @@ function FileListPublished(props: Props) {
                   )}
                   <Button
                     icon={ICONS.PUBLISH}
-                    button="secondary"
+                    button="primary"
                     label={__('Upload')}
                     navigate={`/$/${PAGES.UPLOAD}`}
                     onClick={() => clearPublish()}
