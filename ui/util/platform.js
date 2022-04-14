@@ -167,7 +167,12 @@ export const platform = {
   // **************************************************************************
 
   isIOS: function () {
-    return this.userAgent().match(/iPhone|iPad|iPod/i) != null;
+    return (
+      (/iPad|iPhone|iPod/.test(navigator.platform) ||
+        // for iOS 13+ , platform is MacIntel, so use this to test
+        (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
+      !window.MSStream
+    );
   },
 
   isAndroid: function () {

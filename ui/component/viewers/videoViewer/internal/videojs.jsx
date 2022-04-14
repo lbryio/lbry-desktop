@@ -23,6 +23,7 @@ import recsys from './plugins/videojs-recsys/plugin';
 // import runAds from './ads';
 import videojs from 'video.js';
 import { useIsMobile } from 'effects/use-screensize';
+import { platform } from 'util/platform';
 
 const canAutoplay = require('./plugins/canAutoplay');
 
@@ -98,12 +99,7 @@ type Props = {
 };
 
 const videoPlaybackRates = [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2];
-
-const IS_IOS =
-  (/iPad|iPhone|iPod/.test(navigator.platform) ||
-    // for iOS 13+ , platform is MacIntel, so use this to test
-    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
-  !window.MSStream;
+const IS_IOS = platform.isIOS();
 
 if (!Object.keys(videojs.getPlugins()).includes('eventTracking')) {
   videojs.registerPlugin('eventTracking', eventTracking);

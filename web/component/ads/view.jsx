@@ -5,6 +5,7 @@ import React, { useEffect } from 'react';
 import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
 import classnames from 'classnames';
+import { platform } from 'util/platform';
 
 // prettier-ignore
 const AD_CONFIGS = Object.freeze({
@@ -21,16 +22,6 @@ const AD_CONFIGS = Object.freeze({
     tag: 'AV61dff05c599f1e20b01085d4',
   },
 });
-
-const IS_IOS =
-  (/iPad|iPhone|iPod/.test(navigator.platform) ||
-    // for iOS 13+ , platform is MacIntel, so use this to test
-    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
-  !window.MSStream;
-const IS_ANDROID = /Android/i.test(navigator.userAgent);
-// const IS_FIREFOX = /Firefox/i.test(navigator.userAgent);
-
-// const isFirefoxAndroid = IS_ANDROID && IS_FIREFOX;
 
 // Internal use only. One-time update flag.
 let ad_blocker_detected;
@@ -55,7 +46,7 @@ function Ads(props: Props) {
   const { type = 'video', tileLayout, small, userHasPremiumPlus, className, doSetAdBlockerFound } = props;
 
   const [shouldShowAds, setShouldShowAds] = React.useState(resolveAdVisibility());
-  const mobileAds = IS_ANDROID || IS_IOS;
+  const mobileAds = platform.isAndroid() || platform.isIOS();
 
   // this is populated from app based on location
   const isInEu = localStorage.getItem('gdprRequired') === 'true';
