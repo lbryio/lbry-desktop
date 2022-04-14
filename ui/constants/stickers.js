@@ -13,32 +13,21 @@ const FAIL_BORDER = 'FAIL/PNG/fail_with_border.png';
 const HYPE_BORDER = 'HYPE/PNG/hype_with_border.png';
 const PANTS_1_WITH_FRAME = 'PANTS/PNG/PANTS_1_with_frame.png';
 const PISS = 'PISS/PNG/piss_with_frame.png';
-const PREGNANT_MAN_ASIA_WHITE_BORDER = 'pregnant%20man/png/Pregnant%20man_white%20border_asia.png';
-const PREGNANT_MAN_BLACK_HAIR_WHITE_BORDER = 'pregnant%20man/png/Pregnant%20man_white%20border_black%20hair.png';
-const PREGNANT_MAN_BLACK_SKIN_WHITE_BORDER = 'pregnant%20man/png/Pregnant%20man_white%20border_black%20skin.png';
 const PREGNANT_MAN_BLONDE_WHITE_BORDER = 'pregnant%20man/png/Pregnant%20man_white%20border_blondie.png';
-const PREGNANT_MAN_RED_HAIR_WHITE_BORDER =
-  'pregnant%20man/png/Pregnant%20man_white%20border_red%20hair%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20.png';
-const PREGNANT_WOMAN_BLACK_HAIR_GREEN_SHIRT_WHITE_BORDER =
-  'pregnant%20woman/png/Pregnant%20woman_white_border_black%20hair%20green%20shirt.png';
-const PREGNANT_WOMAN_BLACK_HAIR_WHITE_BORDER = 'pregnant%20woman/png/Pregnant%20woman_white_border_black%20hair.png';
-const PREGNANT_WOMAN_BLACK_SKIN_WHITE_BORDER = 'pregnant%20woman/png/Pregnant%20woman_white_border_black%20woman.png';
-const PREGNANT_WOMAN_BLONDE_WHITE_BORDER = 'pregnant%20woman/png/Pregnant%20woman_white_border_blondie.png';
 const PREGNANT_WOMAN_BROWN_HAIR_WHITE_BORDER = 'pregnant%20woman/png/Pregnant%20woman_white_border_brown%20hair.png';
-const PREGNANT_WOMAN_RED_HAIR_WHITE_BORDER =
-  'pregnant%20woman/png/Pregnant%20woman_white_border_red%20hair%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20%20.png';
 const ROCKET_SPACEMAN_WITH_BORDER = 'ROCKET%20SPACEMAN/PNG/rocket-spaceman_with-border.png';
 const SALTY = 'SALTY/PNG/salty.png';
 const SICK_2_WITH_BORDER = 'SICK/PNG/sick2_with_border.png';
 const SICK_1_WITH_BORDERDARK_WITH_FRAME = 'SICK/PNG/with%20borderdark%20with%20frame.png';
 const SLIME_WITH_FRAME = 'SLIME/PNG/slime_with_frame.png';
+const FIRE_WITH_FRAME = 'MISC/PNG/fire.png';
 const SPHAGETTI_BATH_WITH_FRAME = 'SPHAGETTI%20BATH/PNG/sphagetti%20bath_with_frame.png';
 const THUG_LIFE_WITH_BORDER = 'THUG%20LIFE/PNG/thug_life_with_border_clean.png';
 const WHUUT_WITH_FRAME = 'WHUUT/PNG/whuut_with-frame.png';
 const EGIRL = 'EGIRL/PNG/e-girl.png';
 const BULL_RIDE = 'BULL/PNG/bull-ride.png';
 const TRAP = 'TRAP/PNG/trap.png';
-const XMAS = 'SEASONAL/PNG/xmas.png';
+// const XMAS = 'SEASONAL/PNG/xmas.png';
 const ELIMINATED = 'ELIMINATED/PNG/eliminated.png';
 const TRASH = 'TRASH/PNG/trash.png';
 const BAN = 'BAN/PNG/ban.png';
@@ -79,7 +68,9 @@ export const FREE_GLOBAL_STICKERS = [
   buildSticker('FAIL', FAIL_BORDER),
   buildSticker('HYPE', HYPE_BORDER),
   buildSticker('PANTS_1', PANTS_1_WITH_FRAME),
-  buildSticker('XMAS', XMAS),
+  // buildSticker('XMAS', XMAS),
+  buildSticker('FIRE', FIRE_WITH_FRAME),
+  buildSticker('SLIME', SLIME_WITH_FRAME),
   buildSticker('PISS', PISS),
   buildSticker('BULL_RIDE', BULL_RIDE),
   buildSticker('ELIMINATED', ELIMINATED),
@@ -97,22 +88,12 @@ export const FREE_GLOBAL_STICKERS = [
   buildSticker('BILL_COSBY', BILL_COSBY),
   buildSticker('CHE_GUEVARA', CHE_GUEVARA),
   buildSticker('CHRIS_CHAN', CHRIS_CHAN),
-  buildSticker('PREGNANT_MAN_ASIA', PREGNANT_MAN_ASIA_WHITE_BORDER),
-  buildSticker('PREGNANT_MAN_BLACK_HAIR', PREGNANT_MAN_BLACK_HAIR_WHITE_BORDER),
-  buildSticker('PREGNANT_MAN_BLACK_SKIN', PREGNANT_MAN_BLACK_SKIN_WHITE_BORDER),
   buildSticker('PREGNANT_MAN_BLONDE', PREGNANT_MAN_BLONDE_WHITE_BORDER),
-  buildSticker('PREGNANT_MAN_RED_HAIR', PREGNANT_MAN_RED_HAIR_WHITE_BORDER),
-  buildSticker('PREGNANT_WOMAN_BLACK_HAIR_GREEN_SHIRT', PREGNANT_WOMAN_BLACK_HAIR_GREEN_SHIRT_WHITE_BORDER),
-  buildSticker('PREGNANT_WOMAN_BLACK_HAIR', PREGNANT_WOMAN_BLACK_HAIR_WHITE_BORDER),
-  buildSticker('PREGNANT_WOMAN_BLACK_SKIN', PREGNANT_WOMAN_BLACK_SKIN_WHITE_BORDER),
-  buildSticker('PREGNANT_WOMAN_BLONDE', PREGNANT_WOMAN_BLONDE_WHITE_BORDER),
   buildSticker('PREGNANT_WOMAN_BROWN_HAIR', PREGNANT_WOMAN_BROWN_HAIR_WHITE_BORDER),
-  buildSticker('PREGNANT_WOMAN_RED_HAIR', PREGNANT_WOMAN_RED_HAIR_WHITE_BORDER),
   buildSticker('ROCKET_SPACEMAN', ROCKET_SPACEMAN_WITH_BORDER),
   buildSticker('SALTY', SALTY),
   buildSticker('SICK_FLAME', SICK_2_WITH_BORDER),
   buildSticker('SICK_SKULL', SICK_1_WITH_BORDERDARK_WITH_FRAME),
-  buildSticker('SLIME', SLIME_WITH_FRAME),
   buildSticker('SPHAGETTI_BATH', SPHAGETTI_BATH_WITH_FRAME),
   buildSticker('THUG_LIFE', THUG_LIFE_WITH_BORDER),
   buildSticker('TRAP', TRAP),
