@@ -1,11 +1,11 @@
 // @flow
-import { SHOW_ADS } from 'config';
 import * as PAGES from 'constants/pages';
 import React, { useEffect } from 'react';
 import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
 import PremiumPlusTile from 'component/premiumPlusTile';
 import classnames from 'classnames';
+import useShouldShowAds from 'effects/use-should-show-ads';
 import { platform } from 'util/platform';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
@@ -52,8 +52,6 @@ function resolveVidcrunchConfig() {
 // Ads
 // ****************************************************************************
 
-let ad_blocker_detected;
-
 type Props = {
   type: string,
   tileLayout?: boolean,
@@ -61,8 +59,6 @@ type Props = {
   className?: string,
   noFallback?: boolean,
   // --- redux ---
-  claim: Claim,
-  isMature: boolean,
   userHasPremiumPlus: boolean,
   userCountry: string,
   doSetAdBlockerFound: (boolean) => void,
@@ -80,42 +76,8 @@ function Ads(props: Props) {
     doSetAdBlockerFound,
   } = props;
 
-  const [shouldShowAds, setShouldShowAds] = React.useState(resolveAdVisibility());
+  const shouldShowAds = useShouldShowAds(userHasPremiumPlus, userCountry, doSetAdBlockerFound);
   const adConfig = USE_ADNIMATION ? AD_CONFIGS.ADNIMATION : resolveVidcrunchConfig();
-
-  function resolveAdVisibility() {
-    // 'ad_blocker_detected' will be undefined at startup. Wait until we are
-    // sure it is not blocked (i.e. === false) before showing the component.
-    return ad_blocker_detected === false && SHOW_ADS && !userHasPremiumPlus && userCountry === 'US';
-  }
-
-  useEffect(() => {
-    if (ad_blocker_detected === undefined) {
-      let mounted = true;
-      const GOOGLE_AD_URL = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
-
-      fetch(GOOGLE_AD_URL)
-        .then((response) => {
-          const detected = response.redirected === true;
-          window.odysee_ad_blocker_detected = detected;
-          ad_blocker_detected = detected;
-          doSetAdBlockerFound(detected);
-        })
-        .catch(() => {
-          ad_blocker_detected = true;
-          doSetAdBlockerFound(true);
-        })
-        .finally(() => {
-          if (mounted) {
-            setShouldShowAds(resolveAdVisibility());
-          }
-        });
-
-      return () => {
-        mounted = false;
-      };
-    }
-  }, []);
 
   // add script to DOM
   useEffect(() => {
