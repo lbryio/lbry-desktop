@@ -366,3 +366,82 @@
 #av-container #av-inner #gui #timeline #timeline-progress {
   background: var(--color-primary) !important;
 }
+
+// ****************************************************************************
+// Banner
+// ****************************************************************************
+
+$BANNER_BORDER: 1px;
+
+.banner-ad {
+  margin-top: var(--spacing-l);
+  background-color: var(--color-ads-background);
+  border: $BANNER_BORDER solid var(--color-border);
+  border-radius: var(--border-radius);
+}
+
+.banner-ad__container {
+  padding: var(--spacing-xxs) var(--spacing-m);
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-xxs) var(--spacing-xxs);
+  }
+
+  @media (min-width: $breakpoint-small) {
+    margin: auto;
+    width: 100%;
+    max-width: 386px;
+  }
+}
+
+.banner-ad__driver {
+  display: none; // "= flex" when ads are fetched ('ob_holder' exists)
+  flex-direction: row;
+  align-items: center;
+
+  border-left: $BANNER_BORDER solid var(--color-border);
+  border-top: $BANNER_BORDER solid var(--color-border);
+  border-radius: var(--border-radius) 0 var(--border-radius) 0;
+  max-width: 95%;
+  float: right;
+
+  font-size: var(--font-xsmall);
+  @media (max-width: $breakpoint-small) {
+    font-size: var(--font-xxsmall);
+  }
+
+  > * {
+    padding: 0 var(--spacing-xxxs);
+  }
+}
+
+#ob_holder ~ .banner-ad__driver,
+.banner-ad__container[data-ob-mark='true'] ~ .banner-ad__driver {
+  display: flex;
+}
+
+.banner-ad__driver-label {
+  color: var(--color-text-subtitle);
+}
+
+.banner-ad__driver-value {
+  color: var(--color-text-subtitle);
+  border-left: $BANNER_BORDER solid var(--color-border);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  @supports (-webkit-line-clamp: 3) {
+    white-space: initial;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    line-height: 1.2;
+    padding: calc(var(--spacing-xxxs) / 2) var(--spacing-xxxs);
+  }
+}
