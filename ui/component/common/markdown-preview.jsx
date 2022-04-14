@@ -33,6 +33,7 @@ type SimpleTextProps = {
 type SimpleLinkProps = {
   href?: string,
   title?: string,
+  embed?: boolean,
   children?: React.Node,
 };
 
@@ -66,7 +67,7 @@ const SimpleText = (props: SimpleTextProps) => {
 // ****************************************************************************
 
 const SimpleLink = (props: SimpleLinkProps) => {
-  const { title, children, href } = props;
+  const { title, children, href, embed } = props;
 
   if (!href) {
     return children || null;
@@ -82,13 +83,13 @@ const SimpleLink = (props: SimpleLinkProps) => {
 
   const [uri, search] = href.split('?');
   const urlParams = new URLSearchParams(search);
-  const embed = urlParams.get('embed');
+  const embedParam = urlParams.get('embed');
 
-  if (embed) {
+  if (embed || embedParam) {
     // Decode this since users might just copy it from the url bar
     const decodedUri = decodeURI(uri);
     return (
-      <div className="embed__inline-button-preview">
+      <div className="embed__inline-button embed__inline-button--preview">
         <pre>{decodedUri}</pre>
       </div>
     );
@@ -195,7 +196,11 @@ export default React.memo<MarkdownProps>(function MarkdownPreview(props: Markdow
       // Workaraund of remarkOptions.Fragment
       div: React.Fragment,
       img: (imgProps) =>
-        isStakeEnoughForPreview(stakedLevel) && !isEmote(imgProps.title, imgProps.src) ? (
+        noDataStore ? (
+          <div className="file-viewer file-viewer--document">
+            <img {...imgProps} />
+          </div>
+        ) : isStakeEnoughForPreview(stakedLevel) && !isEmote(imgProps.title, imgProps.src) ? (
           <ZoomableImage {...imgProps} />
         ) : (
           <SimpleImageLink src={imgProps.src} alt={imgProps.alt} title={imgProps.title} />
