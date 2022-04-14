@@ -309,14 +309,11 @@
 
 .wunderbar__tag-search {
   .tag {
-    //display: flex;
-    //align-items: center;
     height: 1.2rem;
     margin-left: var(--spacing-xxs);
     color: var(--color-odysee-contrast);
     background-color: var(--color-odysee);
 
-    //padding-right:60px;
     padding-top: 1px;
 
     overflow: hidden;
@@ -353,6 +350,24 @@
 
   [data-reach-combobox-option]:last-of-type {
     margin-bottom: 0px;
+  }
+
+  @media (min-width: $breakpoint-small) and (max-width: $breakpoint-medium) {
+    // background-color:#ff0000;
+    flex-direction: column;
+    padding-left: var(--spacing-xxs);
+    padding-right: var(--spacing-xxs);
+    .wunderbar__more-results {
+      width: 100% !important;
+      .button {
+        width: 100% !important;
+      }
+    }
+    .wunderbar__tag-search {
+      .tag {
+        max-width: 100%;
+      }
+    }
   }
 }
 

@@ -125,6 +125,10 @@
   margin-bottom: 0;
   margin-top: var(--spacing-xs);
 
+  .button:not(:last-child) {
+    margin-right: var(--spacing-s);
+  }
+
   @media (min-width: $breakpoint-small) {
     margin-top: 0;
   }
