@@ -30,10 +30,17 @@ require('@silvermine/videojs-chromecast')(videojs);
 require('@silvermine/videojs-airplay')(videojs);
 
 export type Player = {
+  // -- custom --
+  claimSrcOriginal: ?{ src: string, type: string },
+  claimSrcVhs: ?{ src: string, type: string },
+  isLivestream?: boolean,
+  // -- original --
   controlBar: { addChild: (string, any) => void },
   loadingSpinner: any,
   autoplay: (any) => boolean,
   chromecast: (any) => void,
+  hlsQualitySelector: ?any,
+  tech: (?boolean) => { vhs: ?any },
   currentTime: (?number) => number,
   dispose: () => void,
   duration: () => number,
@@ -51,6 +58,8 @@ export type Player = {
   playbackRate: (?number) => number,
   readyState: () => number,
   requestFullscreen: () => boolean,
+  src: ({ src: string, type: string }) => ?string,
+  currentSrc: () => string,
   userActive: (?boolean) => boolean,
   volume: (?number) => number,
 };
@@ -276,7 +285,12 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       }
 
       // Add quality selector to player
-      if (showQualitySelector) player.hlsQualitySelector({ displayCurrentQuality: true });
+      if (showQualitySelector) {
+        player.hlsQualitySelector({
+          displayCurrentQuality: true,
+          originalHeight: claimValues?.video?.height,
+        });
+      }
 
       // Add recsys plugin
       if (shareTelemetry) {
@@ -333,19 +347,17 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   //   }
   // }, [showQualitySelector]);
 
-  /** instantiate videoJS and dispose of it when done with code **/
   // This lifecycle hook is only called once (on mount), or when `isAudio` or `source` changes.
   useEffect(() => {
     (async function () {
-      // test if perms to play video are available
       let canAutoplayVideo = await canAutoplay.video({ timeout: 2000, inline: true });
-
       canAutoplayVideo = canAutoplayVideo.result === true;
 
       const vjsElement = createVideoPlayerDOM(containerRef.current);
-
-      // Initialize Video.js
       const vjsPlayer = initializeVideoPlayer(vjsElement, canAutoplayVideo);
+      if (!vjsPlayer) {
+        return;
+      }
 
       // Add reference to player to global scope
       window.player = vjsPlayer;
@@ -355,50 +367,35 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       window.addEventListener('keydown', curried_function(playerRef, containerRef));
 
-      // $FlowFixMe
       const controlBar = document.querySelector('.vjs-control-bar');
-      if (controlBar) controlBar.style.setProperty('opacity', '1', 'important');
+      if (controlBar) {
+        controlBar.style.setProperty('opacity', '1', 'important');
+      }
 
       if (isLivestreamClaim && userClaimId) {
-        // $FlowFixMe
+        vjsPlayer.isLivestream = true;
         vjsPlayer.addClass('livestreamPlayer');
-
-        // $FlowFixMe
-        vjsPlayer.src({
-          type: 'application/x-mpegURL',
-          src: livestreamVideoUrl,
-        });
+        vjsPlayer.src({ type: 'application/x-mpegURL', src: livestreamVideoUrl });
       } else {
-        // $FlowFixMe
+        vjsPlayer.isLivestream = false;
         vjsPlayer.removeClass('livestreamPlayer');
 
         // change to m3u8 if applicable
         const response = await fetch(source, { method: 'HEAD', cache: 'no-store' });
-
         playerServerRef.current = response.headers.get('x-powered-by');
+        vjsPlayer.claimSrcOriginal = { type: sourceType, src: source };
 
         if (response && response.redirected && response.url && response.url.endsWith('m3u8')) {
-          // use m3u8 source
-          // $FlowFixMe
-          vjsPlayer.src({
-            type: 'application/x-mpegURL',
-            src: response.url,
-          });
+          vjsPlayer.claimSrcVhs = { type: 'application/x-mpegURL', src: response.url };
+          vjsPlayer.src(vjsPlayer.claimSrcVhs);
         } else {
-          // use original mp4 source
-          // $FlowFixMe
-          vjsPlayer.src({
-            type: sourceType,
-            src: source,
-          });
+          vjsPlayer.src(vjsPlayer.claimSrcOriginal);
         }
       }
 
-      // load video once source setup
-      // $FlowFixMe
       vjsPlayer.load();
 
-      // fix invisible vidcrunch overlay on IOS
+      // fix invisible vidcrunch overlay on IOS  << TODO: does not belong here. Move to ads.jsx (#739)
       if (IS_IOS) {
         // ads video player
         const adsClaimDiv = document.querySelector('.ads__claim-item');
