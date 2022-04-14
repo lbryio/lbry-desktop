@@ -8,7 +8,7 @@ declare type HomepageObject = {
 
 declare type HomepageData = {
   [string]: HomepageObject,
-  default: any => any,
+  default: (any) => any,
 };
 
 declare type RowDataItem = {
@@ -24,6 +24,7 @@ declare type RowDataItem = {
     channelIds?: Array<string>,
     limitClaimsPerChannel?: number,
     pageSize?: number,
+    releaseTime?: string,
   },
   route?: string,
   hideForUnauth?: boolean,

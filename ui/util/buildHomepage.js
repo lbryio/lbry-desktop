@@ -100,7 +100,7 @@ export const getHomepageRowForCat = (key: string, cat: HomepageCat) => {
       releaseTime: `>${Math.floor(
         moment()
           .subtract(cat.daysOfContent || 30, 'days')
-          .startOf('week')
+          .startOf('hour')
           .unix()
       )}`,
     },

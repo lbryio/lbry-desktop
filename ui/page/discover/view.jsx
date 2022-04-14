@@ -177,6 +177,10 @@ function DiscoverPage(props: Props) {
       </span>
     );
   }
+  let releaseTime =
+    dynamicRouteProps && dynamicRouteProps.options && dynamicRouteProps.options.releaseTime
+      ? dynamicRouteProps.options.releaseTime
+      : !dynamicRouteProps && !tags && `>${Math.floor(moment().subtract(0, 'hour').startOf('week').unix())}`;
 
   return (
     <Page
@@ -202,11 +206,7 @@ function DiscoverPage(props: Props) {
         // until we are sure this page will stay around
         // TODO: find a better way to determine discover / wild west vs other modes release times
         // for now including && !tags so that
-        releaseTime={
-          SIMPLE_SITE
-            ? !dynamicRouteProps && !tags && `>${Math.floor(moment().subtract(1, 'day').startOf('week').unix())}`
-            : undefined
-        }
+        releaseTime={releaseTime || undefined}
         feeAmount={SIMPLE_SITE ? !dynamicRouteProps && CS.FEE_AMOUNT_ANY : undefined}
         channelIds={channelIds}
         limitClaimsPerChannel={
