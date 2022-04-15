@@ -86,7 +86,7 @@ You can run the web version (lbry.tv), the electron app, or both at the same tim
 1. Clone (or [fork](https://help.github.com/articles/fork-a-repo/)) this repository: `git clone https://github.com/lbryio/lbry-desktop`
 2. Change directory into the cloned repository: `cd lbry-desktop`
 3. If corepack is not enabled, run `sudo corepack enable` (the sudo is necessary for system-wide installation, if you use container, nvm etc... you might not be forced to use it)
-3. Install the dependencies: `yarn`
+4. Install the dependencies: `yarn`
 
 #### Run the electron app
 
