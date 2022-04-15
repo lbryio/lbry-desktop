@@ -86,7 +86,8 @@
   top: 0;
 
   .icon {
-    fill: white;
+    stroke: black;
+    stroke-width: 2;
   }
 
   &::before {

@@ -76,6 +76,10 @@
 
 .tag--mature {
   @extend .badge--tag-mature;
+  background-color: #2a0000 !important;
+  &:hover {
+    background-color: #ff0000 !important;
+  }
 }
 
 .tag--flow {

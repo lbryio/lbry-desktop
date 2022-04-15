@@ -14,7 +14,15 @@ const select = (state, props) => {
   const claim = selectClaimForUri(state, uri);
   const { claim_id: claimId, signing_channel, value_type } = claim || {};
 
-  const channelName = signing_channel && signing_channel.name;
+  let channelTitle = null;
+  if (signing_channel) {
+    const { value, name } = signing_channel;
+    if (value && value.title) {
+      channelTitle = value.title;
+    } else {
+      channelTitle = name;
+    }
+  }
   const isCollection = value_type && value_type === 'collection'; // hack because nudge gets cut off by card on cols.
 
   return {
@@ -23,7 +31,7 @@ const select = (state, props) => {
     dislikeCount: makeSelectDislikeCountForUri(uri)(state),
     isLivestreamClaim: selectIsStreamPlaceholderForUri(state, uri),
     claimId,
-    channelName,
+    channelTitle,
     isCollection,
   };
 };

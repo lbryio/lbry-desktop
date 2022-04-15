@@ -15,7 +15,7 @@ type Props = {
   uri: string,
   // redux
   claimId?: string,
-  channelName?: string,
+  channelTitle?: string,
   isCollection?: boolean,
   likeCount: number,
   dislikeCount: number,
@@ -30,7 +30,7 @@ export default function FileReactions(props: Props) {
   const {
     uri,
     claimId,
-    channelName,
+    channelTitle,
     isCollection,
     myReaction,
     likeCount,
@@ -97,10 +97,10 @@ export default function FileReactions(props: Props) {
 
   return (
     <>
-      {channelName && !isCollection && (
+      {channelTitle && !isCollection && (
         <NudgeFloating
           name="nudge:support-acknowledge"
-          text={__('Let %channel% know you enjoyed this!', { channel: channelName })}
+          text={__('Let %channel% know you enjoyed this!', { channel: channelTitle })}
         />
       )}
 
