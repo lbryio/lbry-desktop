@@ -11,6 +11,7 @@ import Spinner from 'component/spinner';
 import Yrbl from 'component/yrbl';
 import { FormField, Form } from 'component/common/form';
 import Icon from 'component/common/icon';
+import debounce from 'util/debounce';
 import classnames from 'classnames';
 
 const FILTER_ALL = 'stream,repost';
@@ -28,7 +29,7 @@ type Props = {
   myClaims: any,
   fetchAllMyClaims: () => void,
   location: { search: string },
-  disableHistory?: boolean, // Disables the use of '&page=' param and history stack.
+  initialSearchTerm: string,
 };
 
 function FileListPublished(props: Props) {
@@ -41,12 +42,14 @@ function FileListPublished(props: Props) {
     myClaims,
     fetchAllMyClaims,
     location,
-    disableHistory,
     history,
+    initialSearchTerm,
   } = props;
 
   const [filterBy, setFilterBy] = React.useState(FILTER_ALL);
-  const [searchText, setSearchText] = React.useState('');
+  const [searchText, setSearchText] = React.useState(initialSearchTerm);
+  const [filteredClaims, setFilteredClaims] = React.useState([]);
+  const { search } = location;
   const params = {};
 
   params[PAGE_PARAM] = Number(page);
@@ -54,16 +57,11 @@ function FileListPublished(props: Props) {
 
   const paramsString = JSON.stringify(params);
 
-  useEffect(() => {
-    checkPendingPublishes();
-  }, [checkPendingPublishes]);
-
-  const filteredClaims = useMemo(() => {
+  const doFilterClaims = () => {
     if (fetching) {
-      return [];
+      return;
     }
-
-    return myClaims.filter((claim) => {
+    const filtered = myClaims.filter((claim) => {
       const value = claim.value || {};
       const src = value.source || {};
       const title = (value.title || '').toLowerCase();
@@ -79,7 +77,25 @@ function FileListPublished(props: Props) {
         srcName.indexOf(lowerCaseSearchText) !== -1;
       return textMatches && filterBy.includes(claim.value_type);
     });
-  }, [fetching, myClaims, filterBy, searchText]);
+    setFilteredClaims(filtered);
+  };
+
+  const debounceFilter = debounce(doFilterClaims, 200);
+
+  useEffect(() => {
+    checkPendingPublishes();
+  }, [checkPendingPublishes]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(search);
+    params.set('searchText', searchText);
+    history.replace('?' + params.toString());
+    debounceFilter();
+  }, [myClaims, searchText]);
+
+  useEffect(() => {
+    doFilterClaims();
+  }, [myClaims, filterBy]);
 
   const urlTotal = filteredClaims.length;
 
@@ -93,18 +109,14 @@ function FileListPublished(props: Props) {
     return paginated.map((claim) => claim.permanent_url);
   }, [filteredClaims, paramsString]);
 
-  const { search } = location;
-
   // Go back to the first page when the filtered claims change.
   // This way, we avoid hiding results just because the
   // user may be on a different page (page that was calculated
   // using a different state, ie, different filtered claims)
   useEffect(() => {
-    if (!disableHistory) {
-      const params = new URLSearchParams(search);
-      params.set(PAGINATE_PARAM, '1');
-      history.push('?' + params.toString());
-    }
+    const params = new URLSearchParams(search);
+    params.set(PAGINATE_PARAM, '1');
+    history.replace('?' + params.toString());
   }, [filteredClaims]);
 
   useEffect(() => {
@@ -114,7 +126,7 @@ function FileListPublished(props: Props) {
   return (
     <Page>
       <div className="card-stack">
-        {!!urls && (
+        {!fetching && myClaims.length > 0 && (
           <>
             <ClaimList
               noEmpty
@@ -140,7 +152,10 @@ function FileListPublished(props: Props) {
                   <Button
                     button="alt"
                     label={__('Reposts')}
-                    onClick={() => setFilterBy(FILTER_REPOSTS)}
+                    onClick={() => {
+                      setFilterBy(FILTER_REPOSTS);
+                      setSearchText('');
+                    }}
                     className={classnames(`button-toggle`, {
                       'button-toggle--active': filterBy === FILTER_REPOSTS,
                     })}
@@ -161,6 +176,7 @@ function FileListPublished(props: Props) {
                       onChange={(e) => setSearchText(e.target.value)}
                       type="text"
                       placeholder={__('Search')}
+                      disabled={filterBy === FILTER_REPOSTS}
                     />
                   </Form>
                 </div>

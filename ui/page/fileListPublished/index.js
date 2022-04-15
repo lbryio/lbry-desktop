@@ -15,6 +15,7 @@ const select = (state, props) => {
   const urlParams = new URLSearchParams(search);
   const page = Number(urlParams.get(PAGE_PARAM)) || '1';
   const pageSize = urlParams.get(PAGE_SIZE_PARAM) || String(MY_CLAIMS_PAGE_SIZE);
+  const initialSearchTerm = urlParams.get('searchText') || '';
 
   return {
     page,
@@ -22,6 +23,7 @@ const select = (state, props) => {
     fetching: selectIsFetchingAllMyClaims(state),
     error: selectFetchingMyClaimsPageError(state),
     myClaims: selectAllMyClaims(state),
+    initialSearchTerm,
   };
 };
 
