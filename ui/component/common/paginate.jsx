@@ -81,8 +81,9 @@ function Paginate(props: Props) {
           <FormField
             value={textValue}
             onChange={(e) => setTextValue(e.target.value)}
-            className="paginate-channel"
-            label={__('Go to page:')}
+            className="paginate-goto"
+            aria-label={__('Go to page:')}
+            placeholder={__('Go to')}
             type="text"
             name="paginate-file"
           />

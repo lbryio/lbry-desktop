@@ -358,16 +358,13 @@ fieldset-group {
       }
 
       &:nth-of-type(2) {
-        &:not(input.paginate-channel) {
-          // yuck
-          input,
-          select {
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-          }
-          label {
-            margin-left: var(--spacing-s);
-          }
+        input,
+        select {
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+        }
+        label {
+          margin-left: var(--spacing-s);
         }
       }
     }
@@ -375,13 +372,14 @@ fieldset-group {
     &.fieldgroup--paginate {
       padding-bottom: var(--spacing-l);
       margin-top: var(--spacing-l);
-      align-items: flex-end;
+      align-items: center;
       justify-content: center;
 
       fieldset-section {
         input {
-          margin-bottom: 5px !important;
           margin-left: var(--spacing-s);
+          border-radius: calc(var(--height-button) / 2);
+          height: var(--height-button);
         }
       }
     }
