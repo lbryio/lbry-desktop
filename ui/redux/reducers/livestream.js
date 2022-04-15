@@ -14,6 +14,22 @@ const defaultState: LivestreamState = {
   commentSocketConnected: false,
 };
 
+function updateViewersById(activeLivestreams, originalState) {
+  if (activeLivestreams) {
+    const viewersById = Object.assign({}, originalState);
+    Object.values(activeLivestreams).forEach((data) => {
+      // $FlowFixMe: mixed
+      if (data.claimId && data.viewCount) {
+        // $FlowFixMe: mixed
+        viewersById[data.claimId] = data.viewCount;
+      }
+    });
+    return viewersById;
+  }
+
+  return originalState;
+}
+
 export default handleActions(
   {
     [ACTIONS.FETCH_NO_SOURCE_CLAIMS_STARTED]: (state: LivestreamState, action: any): LivestreamState => {
@@ -57,11 +73,17 @@ export default handleActions(
         activeLivestreams,
         activeLivestreamsLastFetchedDate,
         activeLivestreamsLastFetchedOptions,
+        viewersById: updateViewersById(activeLivestreams, state.viewersById),
       };
     },
     [ACTIONS.ADD_CHANNEL_TO_ACTIVE_LIVESTREAMS]: (state: LivestreamState, action: any) => {
       const activeLivestreams = Object.assign({}, state.activeLivestreams || {}, action.data);
-      return { ...state, activeLivestreams, activeLivestreamInitialized: true };
+      return {
+        ...state,
+        activeLivestreams,
+        activeLivestreamInitialized: true,
+        viewersById: updateViewersById(activeLivestreams, state.viewersById),
+      };
     },
     [ACTIONS.REMOVE_CHANNEL_FROM_ACTIVE_LIVESTREAMS]: (state: LivestreamState, action: any) => {
       const activeLivestreams = state.activeLivestreams;
