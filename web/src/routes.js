@@ -1,6 +1,4 @@
-const { CUSTOM_HOMEPAGE } = require('../../config.js');
 const { generateStreamUrl } = require('../../ui/util/web');
-const { getHomepageJSON } = require('./getHomepageJSON');
 const { getHtml } = require('./html');
 const { getOEmbed } = require('./oEmbed');
 const { getRss } = require('./rss');
@@ -8,6 +6,7 @@ const { getTempFile } = require('./tempfile');
 
 const fetch = require('node-fetch');
 const Router = require('@koa/router');
+const { getHomepage } = require('./homepageApi');
 
 // So any code from 'lbry-redux'/'lbryinc' that uses `fetch` can be run on the server
 global.fetch = fetch;
@@ -39,30 +38,9 @@ const tempfileMiddleware = async (ctx) => {
   ctx.body = temp;
 };
 
-router.get(`/$/api/content/v1/get`, async (ctx) => {
-  if (!CUSTOM_HOMEPAGE) {
-    ctx.status = 404;
-    ctx.body = {
-      message: 'Not Found',
-    };
-  } else {
-    let content;
-    try {
-      content = getHomepageJSON();
-      ctx.set('Content-Type', 'application/json');
-      ctx.set('Access-Control-Allow-Origin', '*');
-      ctx.body = {
-        status: 'success',
-        data: content,
-      };
-    } catch (err) {
-      ctx.status = err.statusCode || err.status || 500;
-      ctx.body = {
-        message: err.message,
-      };
-    }
-  }
-});
+router.get(`/$/api/content/v1/get`, async (ctx) => getHomepage(ctx, 1));
+
+router.get(`/$/api/content/v2/get`, async (ctx) => getHomepage(ctx, 2));
 
 router.get(`/$/download/:claimName/:claimId`, async (ctx) => {
   const streamUrl = getStreamUrl(ctx);

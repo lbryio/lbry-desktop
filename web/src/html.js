@@ -22,7 +22,7 @@ const {
 } = require('../../ui/util/web');
 const { getJsBundleId } = require('../bundle-id.js');
 const { lbryProxy: Lbry } = require('../lbry');
-const { getHomepageJSON } = require('./getHomepageJSON');
+const { getHomepageJsonV1 } = require('./getHomepageJSON');
 const { buildURI, parseURI, normalizeClaimUrl } = require('./lbryURI');
 const fs = require('fs');
 const moment = require('moment');
@@ -61,7 +61,7 @@ function truncateDescription(description, maxChars = 200) {
 }
 
 function getCategoryMeta(path) {
-  const homepage = getHomepageJSON();
+  const homepage = getHomepageJsonV1();
 
   if (path === `/$/${PAGES.WILD_WEST}` || path === `/$/${PAGES.WILD_WEST}/`) {
     return {
