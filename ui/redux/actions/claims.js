@@ -184,6 +184,29 @@ export function doFetchClaimListMine(
   };
 }
 
+export function doFetchAllClaimListMine() {
+  return (dispatch: Dispatch) => {
+    dispatch({
+      type: ACTIONS.FETCH_ALL_CLAIM_LIST_MINE_STARTED,
+    });
+
+    // $FlowFixMe
+    Lbry.claim_list({
+      page: 1,
+      page_size: 99999,
+      claim_type: ['stream', 'repost'],
+      resolve: true,
+    }).then((result: StreamListResponse) => {
+      dispatch({
+        type: ACTIONS.FETCH_ALL_CLAIM_LIST_MINE_COMPLETED,
+        data: {
+          result,
+        },
+      });
+    });
+  };
+}
+
 export function doAbandonTxo(txo: Txo, cb: (string) => void) {
   return (dispatch: Dispatch) => {
     if (cb) cb(ABANDON_STATES.PENDING);

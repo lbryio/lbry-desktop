@@ -410,6 +410,10 @@ export const selectIsFetchingClaimListMine = (state: State) => selectState(state
 
 export const selectMyClaimsPage = createSelector(selectState, (state) => state.myClaimsPageResults || []);
 
+export const selectAllMyClaims = createSelector(selectState, (state) => state.allClaimListMine || []);
+
+export const selectIsFetchingAllMyClaims = createSelector(selectState, (state) => state.isFetchingAllClaimListMine);
+
 export const selectMyClaimsPageNumber = createSelector(
   selectState,
   (state) => (state.claimListMinePage && state.claimListMinePage.items) || [],
