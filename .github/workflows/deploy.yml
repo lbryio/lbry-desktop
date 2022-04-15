@@ -2,9 +2,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [master,odystyles]
+    branches: [master]
   pull_request:
-    branches: [master,odystyles]
+    branches: [master]
 
 jobs:
   lint:
