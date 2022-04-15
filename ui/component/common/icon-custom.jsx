@@ -285,12 +285,6 @@ export const icons = {
       <line x1="1" y1="10" x2="23" y2="10" />
     </g>
   ),
-  [ICONS.WALLET2]: buildIcon(
-    <g>
-      <path d="M1 4c0 1 1 2 2 2h17M1 4c0-1 1-2 2-2h15c1 0 2 1 2 2v2M1 4v16c0 1 1 2 2 2h18c1 0 2-1 2-2V8c0-1-1-2-2-2h-1" />
-      <path d="m14 11 2 2v2l-4 4-4-4v-2l4-4 2 2Zm0 0-3 3M9 16l3-3" />
-    </g>
-  ),
   [ICONS.COIN_SWAP]: buildIcon(
     <g>
       <path d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />

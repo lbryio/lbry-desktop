@@ -135,7 +135,7 @@ const Header = (props: Props) => {
               navigate={`/$/${PAGES.WALLET}`}
               className="header__navigationItem--icon header__navigationItem--balance"
               label={!(hideBalance || Number(roundedBalance) === 0) && roundedBalance}
-              icon={ICONS.WALLET2}
+              icon={ICONS.LBC}
               iconSize={18}
               onDoubleClick={(e) => {
                 e.stopPropagation();

@@ -186,4 +186,3 @@ export const MYSTERIES = 'Mysteries';
 export const TECHNOLOGY = 'Technology';
 export const EMOJI = 'Emoji';
 export const STICKER = 'Sticker';
-export const WALLET2 = 'Wallet2';
