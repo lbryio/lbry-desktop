@@ -80,10 +80,12 @@ You can run the web version (lbry.tv), the electron app, or both at the same tim
 
 - [Git](https://git-scm.com/downloads)
 - [Node.js](https://nodejs.org/en/download/) (v14 required)
+- [Corepack](https://nodejs.org/dist/latest-v17.x/docs/api/corepack.html) `npm i -g corepack` (Included in nodejs 14 LTS, 16 LTS and 17)
 - [Yarn](https://yarnpkg.com/en/docs/install)
 
 1. Clone (or [fork](https://help.github.com/articles/fork-a-repo/)) this repository: `git clone https://github.com/lbryio/lbry-desktop`
 2. Change directory into the cloned repository: `cd lbry-desktop`
+3. If corepack is not enabled, run `sudo corepack enable` (the sudo is necessary for system-wide installation, if you use container, nvm etc... you might not be forced to use it)
 3. Install the dependencies: `yarn`
 
 #### Run the electron app
