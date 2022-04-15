@@ -62,7 +62,7 @@ function WalletSendTip(props: Props) {
   const [tipAmount, setTipAmount] = usePersistedState('comment-support:customTip', 1.0);
   const [isOnConfirmationPage, setConfirmationPage] = React.useState(false);
   const [tipError, setTipError] = React.useState();
-  const [activeTab, setActiveTab] = usePersistedState(TAB_BOOST);
+  const [activeTab, setActiveTab] = usePersistedState('comment-tip:tab', TAB_BOOST);
   const [disableSubmitButton, setDisableSubmitButton] = React.useState();
 
   /** CONSTS **/

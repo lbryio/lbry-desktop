@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased for Desktop]
 
+### Added
+- Uploads: show placeholder when loading page _community pr!_ ([#7531](https://github.com/lbryio/lbry-desktop/pull/7531))
+
+### Changed
+
+### Fixed
+- Fix post-editor preview mode _community pr!_ ([#7532](https://github.com/lbryio/lbry-desktop/pull/7532))
+
 ## [0.52.6] - [2022-04-04]
 
 ### Added
@@ -54,7 +62,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Reenabled generating thumbs from video ([#7384](https://github.com/lbryio/lbry-desktop/pull/7409))
 - Brought in playlist drag and drop playlist reordering _odysee team!_ ([#7442](https://github.com/lbryio/lbry-desktop/pull/7442))
 - Added duration overlays to ClaimPreview component ([#7420](https://github.com/lbryio/lbry-desktop/pull/7420))
-- Some Horizontal Scroll groundwork from _odysee team!_ 
+- Some Horizontal Scroll groundwork from _odysee team!_
 - Comment Emotes and Stickers and Mentions refactors from _odysee team!_ ([#7435](https://github.com/lbryio/lbry-desktop/pull/7435))
 - Seek forward and back from _odysee team!_ () ([#7460](https://github.com/lbryio/lbry-desktop/pull/7460))
 
