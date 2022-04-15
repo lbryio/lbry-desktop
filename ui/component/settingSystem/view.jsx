@@ -400,7 +400,7 @@ export default function SettingSystem(props: Props) {
               subtitle={__('This might fix issues that you are having. Your wallet will not be affected.')}
             >
               <Button
-                button="secondary"
+                button="primary"
                 icon={ALERT}
                 label={clearingCache ? __('Clearing') : __('Clear Cache')}
                 onClick={() => {

@@ -98,11 +98,11 @@
   --color-input-color: #111111;
   --color-input-label: var(--color-gray-5);
   --color-input-placeholder: #212529;
-  --color-input-bg: var(--color-gray-1);
+  --color-input-bg: var(--color-white);
   --color-input-border: var(--color-border);
   --color-input-border-active: var(--color-secondary);
   --color-input-toggle: var(--color-secondary);
-  --color-input-toggle-bg: var(--color-gray-1);
+  --color-input-toggle-bg: var(--color-input-bg);
   --color-input-toggle-bg-hover: var(--color-secondary-alt);
   --color-input-prefix-bg: var(--color-gray-2);
   --color-input-prefix-border: var(--color-gray-5);

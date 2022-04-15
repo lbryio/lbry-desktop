@@ -183,7 +183,7 @@
 
 .card__actions--between {
   @include between;
-  align-items: center;
+  align-items: end;
   width: 100%;
 }
 
