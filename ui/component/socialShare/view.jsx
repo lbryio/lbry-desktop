@@ -100,7 +100,7 @@ function SocialShare(props: Props) {
   let tweetIntentParams = {
     url: shareUrl,
     text: title || claim.name,
-    hashtags: 'LBRY',
+    hashtags: 'Odysee',
   };
 
   if (TWITTER_ACCOUNT) {
@@ -231,7 +231,6 @@ function SocialShare(props: Props) {
       )}
       {showClaimLinks && (
         <div className="section">
-          <CopyableText label={__('LBRY URL')} copyable={`lbry://${lbryUrl}`} />
           {Boolean(isStream) && <CopyableText label={__('Download Link')} copyable={downloadUrl} />}
         </div>
       )}

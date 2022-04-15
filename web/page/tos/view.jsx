@@ -346,8 +346,8 @@ const TOSPage = () => {
             </p>
 
             <p>
-              Designated Agent: Odysee INC Address: 99 Hanover St, Manchester, NH 03101 Telephone Number: 907-318-5956
-              Fax Number: 801-327-6808
+              Designated Agent: Odysee, Inc 2540 S Maryland Pkwy Unit #5021 Las Vegas, NV 89109 Telephone Number:
+              907-318-5956 Fax Number: 801-327-6808
             </p>
 
             <p>E-Mail Address: hello@odysee.com</p>

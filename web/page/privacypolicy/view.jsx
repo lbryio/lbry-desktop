@@ -381,7 +381,7 @@ const PrivacyPolicyPage = () => {
             </p>
 
             <blockquote>
-              <p>Odysee Inc. 99 Hanover St Manchester, New Hampshire 03101 United States hello@odysee.com</p>
+              <p>Odysee, Inc 2540 S Maryland Pkwy Unit #5021 Las Vegas, NV 89109 hello@odysee.com</p>
             </blockquote>
 
             <small>Last edited on 2021-10-08</small>
