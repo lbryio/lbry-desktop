@@ -4,6 +4,7 @@ import * as ICONS from 'constants/icons';
 import React, { useEffect, useMemo } from 'react';
 import Button from 'component/button';
 import ClaimList from 'component/claimList';
+import ClaimPreview from 'component/claimPreview';
 import Page from 'component/page';
 import Paginate from 'component/common/paginate';
 import { PAGE_PARAM, PAGE_SIZE_PARAM } from 'constants/claim';
@@ -126,67 +127,73 @@ function FileListPublished(props: Props) {
   return (
     <Page>
       <div className="card-stack">
-        <ClaimList
-          noEmpty
-          header={
-            <span>
-              <Button
-                button="alt"
-                label={__('All')}
-                aria-label={__('All uploads')}
-                onClick={() => setFilterBy(FILTER_ALL)}
-                className={classnames(`button-toggle`, {
-                  'button-toggle--active': filterBy === FILTER_ALL,
-                })}
-              />
-              <Button
-                button="alt"
-                label={__('Uploads')}
-                onClick={() => setFilterBy(FILTER_UPLOADS)}
-                className={classnames(`button-toggle`, {
-                  'button-toggle--active': filterBy === FILTER_UPLOADS,
-                })}
-              />
-              <Button
-                button="alt"
-                label={__('Reposts')}
-                onClick={() => {
-                  setFilterBy(FILTER_REPOSTS);
-                  setSearchText('');
-                }}
-                className={classnames(`button-toggle`, {
-                  'button-toggle--active': filterBy === FILTER_REPOSTS,
-                })}
-              />
-            </span>
-          }
-          headerAltControls={
-            <div className="card__actions--inline">
-              <Button
-                button="alt"
-                label={__('Refresh')}
-                icon={ICONS.REFRESH}
-                disabled={fetching}
-                onClick={fetchAllMyClaims}
-              />
-              <Form onSubmit={() => {}} className="wunderbar--inline">
-                <Icon icon={ICONS.SEARCH} />
-                <FormField
-                  className="wunderbar__input--inline"
-                  value={searchText}
-                  onChange={(e) => setSearchText(e.target.value)}
-                  type="text"
-                  placeholder={__('Search Uploads')}
-                  disabled={filterBy === FILTER_REPOSTS}
-                />
-              </Form>
-            </div>
-          }
-          persistedStorageKey="claim-list-published"
-          uris={urls}
-          loading={fetching}
-        />
-        <Paginate totalPages={urlTotal > 0 ? Math.ceil(urlTotal / Number(pageSize)) : 1} />
+        {!!urls && (
+          <>
+            <ClaimList
+              noEmpty
+              header={
+                <span>
+                  <Button
+                    button="alt"
+                    label={__('All')}
+                    aria-label={__('All uploads')}
+                    onClick={() => setFilterBy(FILTER_ALL)}
+                    className={classnames(`button-toggle`, {
+                      'button-toggle--active': filterBy === FILTER_ALL,
+                    })}
+                  />
+                  <Button
+                    button="alt"
+                    label={__('Uploads')}
+                    onClick={() => setFilterBy(FILTER_UPLOADS)}
+                    className={classnames(`button-toggle`, {
+                      'button-toggle--active': filterBy === FILTER_UPLOADS,
+                    })}
+                  />
+                  <Button
+                    button="alt"
+                    label={__('Reposts')}
+                    onClick={() => {
+                      setFilterBy(FILTER_REPOSTS);
+                      setSearchText('');
+                    }}
+                    className={classnames(`button-toggle`, {
+                      'button-toggle--active': filterBy === FILTER_REPOSTS,
+                    })}
+                  />
+                </span>
+              }
+              headerAltControls={
+                <div className="card__actions--inline">
+                  <Button
+                    button="alt"
+                    label={__('Refresh')}
+                    icon={ICONS.REFRESH}
+                    disabled={fetching}
+                    onClick={fetchAllMyClaims}
+                  />
+                  <Form onSubmit={() => {}} className="wunderbar--inline">
+                    <Icon icon={ICONS.SEARCH} />
+                    <FormField
+                      className="wunderbar__input--inline"
+                      value={searchText}
+                      onChange={(e) => setSearchText(e.target.value)}
+                      type="text"
+                      placeholder={__('Search Uploads')}
+                      disabled={filterBy === FILTER_REPOSTS}
+                    />
+                  </Form>
+                </div>
+              }
+              persistedStorageKey="claim-list-published"
+              uris={fetching ? [] : urls}
+              loading={fetching}
+            />
+            {fetching &&
+              new Array(Number(pageSize)).fill(1).map((x, i) => <ClaimPreview key={i} placeholder="loading" />)}
+            <Paginate totalPages={urlTotal > 0 ? Math.ceil(urlTotal / Number(pageSize)) : 1} />
+          </>
+        )}
       </div>
       {!fetching && myClaims.length === 0 && (
         <React.Fragment>
