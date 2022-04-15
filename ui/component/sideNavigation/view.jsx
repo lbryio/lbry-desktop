@@ -18,10 +18,6 @@ import { DOMAIN, ENABLE_UI_NOTIFICATIONS } from 'config';
 
 const FOLLOWED_ITEM_INITIAL_LIMIT = 10;
 const touch = isTouch();
-const {
-  location: { pathname },
-} = useHistory();
-
 type SideNavLink = {
   title: string,
   link?: string,
@@ -31,69 +27,6 @@ type SideNavLink = {
   extra?: Node,
   hideForUnauth?: boolean,
 };
-
-const HOME = {
-  title: 'Home',
-  link: `/`,
-  icon: ICONS.HOME,
-  onClick: () => {
-    if (pathname === '/') window.location.reload();
-  },
-};
-
-const RECENT_FROM_FOLLOWING = {
-  title: 'Following --[sidebar button]--',
-  link: `/$/${PAGES.CHANNELS_FOLLOWING}`,
-  icon: ICONS.SUBSCRIBE,
-};
-
-const DISCOVER = {
-  title: 'Discover',
-  link: `/$/${PAGES.DISCOVER}`,
-  icon: ICONS.DISCOVER,
-};
-
-const LIBRARY = {
-  title: 'Library',
-  link: `/$/${PAGES.LIBRARY}`,
-  icon: ICONS.PURCHASED,
-};
-
-const NOTIFICATIONS = {
-  title: 'Notifications',
-  link: `/$/${PAGES.NOTIFICATIONS}`,
-  icon: ICONS.NOTIFICATION,
-  extra: <NotificationBubble inline />,
-};
-
-const PLAYLISTS = {
-  title: 'Lists',
-  link: `/$/${PAGES.LISTS}`,
-  icon: ICONS.STACK,
-};
-
-const UNAUTH_LINKS: Array<SideNavLink> = [
-  {
-    title: 'Log In',
-    link: `/$/${PAGES.AUTH_SIGNIN}`,
-    icon: ICONS.SIGN_IN,
-  },
-  {
-    title: 'Sign Up',
-    link: `/$/${PAGES.AUTH}`,
-    icon: ICONS.SIGN_UP,
-  },
-  {
-    title: 'Settings',
-    link: `/$/${PAGES.SETTINGS}`,
-    icon: ICONS.SETTINGS,
-  },
-  {
-    title: 'Help',
-    link: `/$/${PAGES.HELP}`,
-    icon: ICONS.HELP,
-  },
-];
 
 // ****************************************************************************
 // ****************************************************************************
@@ -131,6 +64,73 @@ function SideNavigation(props: Props) {
     user,
     followedTags,
   } = props;
+
+  const {
+    location: { pathname },
+  } = useHistory();
+
+  const HOME = {
+    title: 'Home',
+    link: `/`,
+    icon: ICONS.HOME,
+    onClick: () => {
+      if (pathname === '/') window.location.reload();
+    },
+  };
+
+  const RECENT_FROM_FOLLOWING = {
+    title: 'Following --[sidebar button]--',
+    link: `/$/${PAGES.CHANNELS_FOLLOWING}`,
+    icon: ICONS.SUBSCRIBE,
+  };
+
+  const DISCOVER = {
+    title: 'Discover',
+    link: `/$/${PAGES.DISCOVER}`,
+    icon: ICONS.DISCOVER,
+  };
+
+  const LIBRARY = {
+    title: 'Library',
+    link: `/$/${PAGES.LIBRARY}`,
+    icon: ICONS.PURCHASED,
+  };
+
+  const NOTIFICATIONS = {
+    title: 'Notifications',
+    link: `/$/${PAGES.NOTIFICATIONS}`,
+    icon: ICONS.NOTIFICATION,
+    extra: <NotificationBubble inline />,
+  };
+
+  const PLAYLISTS = {
+    title: 'Lists',
+    link: `/$/${PAGES.LISTS}`,
+    icon: ICONS.STACK,
+  };
+
+  const UNAUTH_LINKS: Array<SideNavLink> = [
+    {
+      title: 'Log In',
+      link: `/$/${PAGES.AUTH_SIGNIN}`,
+      icon: ICONS.SIGN_IN,
+    },
+    {
+      title: 'Sign Up',
+      link: `/$/${PAGES.AUTH}`,
+      icon: ICONS.SIGN_UP,
+    },
+    {
+      title: 'Settings',
+      link: `/$/${PAGES.SETTINGS}`,
+      icon: ICONS.SETTINGS,
+    },
+    {
+      title: 'Help',
+      link: `/$/${PAGES.HELP}`,
+      icon: ICONS.HELP,
+    },
+  ];
 
   const MOBILE_LINKS: Array<SideNavLink> = [
     {
