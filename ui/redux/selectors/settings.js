@@ -66,7 +66,7 @@ export const selectLanguage = (state) => {
 export const selectHomepageData = (state) => {
   const homepageCode = selectHomepageCode(state);
   const homepages = window.homepages;
-  return homepages ? homepages[homepageCode] || homepages['en'] || {} : {};
+  return homepages ? homepages[homepageCode].categories || homepages['en'].categories || {} : {};
 };
 
 export const selectInRegionByCode = (state, code) => {

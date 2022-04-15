@@ -310,17 +310,31 @@ export function doFetchLanguage(language) {
 
 export function doFetchHomepages() {
   return (dispatch) => {
-    // -- Use this env flag to use local homepage data. Otherwise, it will grab from `/$/api/content/v1/get`.
+    // -- Use this env flag to use local homepage data. Otherwise, it will grab from `/$/api/content/v*/get`.
     // @if USE_LOCAL_HOMEPAGE_DATA='true'
     const homepages = require('homepages');
     if (homepages) {
-      window.homepages = homepages;
+      const v2 = {};
+      const homepageKeys = Object.keys(homepages);
+
+      homepageKeys.forEach((hp) => {
+        v2[hp] = {
+          categories: homepages[hp],
+        };
+      });
+
+      const meme = require('memes');
+      if (meme && v2['en']) {
+        v2['en'].meme = meme;
+      }
+
+      window.homepages = v2;
       dispatch({ type: ACTIONS.FETCH_HOMEPAGES_DONE });
       return;
     }
     // @endif
 
-    fetch('https://odysee.com/$/api/content/v1/get')
+    fetch('https://odysee.com/$/api/content/v2/get')
       .then((response) => response.json())
       .then((json) => {
         if (json?.status === 'success' && json?.data) {

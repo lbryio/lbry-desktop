@@ -1,12 +1,16 @@
 import React from 'react';
 import Button from 'component/button';
-const memes = require('memes');
 
 export default function Meme() {
+  const meme = window?.homepages?.en?.meme;
+  if (!meme) {
+    return null;
+  }
+
   return (
     <h1 className="home__meme">
-      <Button button="link" navigate={memes.url}>
-        {memes.text}
+      <Button button="link" navigate={meme.url}>
+        {meme.text}
       </Button>
     </h1>
   );
