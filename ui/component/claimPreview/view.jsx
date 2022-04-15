@@ -12,6 +12,7 @@ import { formatLbryUrlForWeb } from 'util/url';
 import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
 import { toCompactNotation } from 'util/string';
 import ClaimPreviewProgress from 'component/claimPreviewProgress';
+import Icon from 'component/common/icon';
 import Tooltip from 'component/common/tooltip';
 import FileThumbnail from 'component/fileThumbnail';
 import UriIndicator from 'component/uriIndicator';
@@ -34,6 +35,7 @@ import ClaimPreviewHidden from './claim-preview-no-mature';
 import ClaimPreviewNoContent from './claim-preview-no-content';
 import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import CollectionEditButtons from 'component/collectionEditButtons';
+import * as ICONS from 'constants/icons';
 import { useIsMobile } from 'effects/use-screensize';
 
 const AbandonedChannelPreview = lazyImport(() =>
@@ -80,6 +82,7 @@ type Props = {
   hideMenu?: boolean,
   isLivestream?: boolean,
   isLivestreamActive: boolean,
+  livestreamViewerCount: ?number,
   collectionId?: string,
   isCollectionMine: boolean,
   disableNavigation?: boolean, // DEPRECATED - use 'nonClickable'. Remove this when channel-finder is consolidated (#810)
@@ -146,6 +149,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     // repostUrl,
     isLivestream,
     isLivestreamActive,
+    livestreamViewerCount,
     collectionId,
     isCollectionMine,
     disableNavigation,
@@ -333,7 +337,15 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
 
   let liveProperty = null;
   if (isLivestreamActive === true) {
-    liveProperty = (claim) => <>LIVE</>;
+    if (livestreamViewerCount) {
+      liveProperty = (claim) => (
+        <span className="livestream__viewer-count">
+          {livestreamViewerCount} <Icon icon={ICONS.EYE} />
+        </span>
+      );
+    } else {
+      liveProperty = (claim) => <>LIVE</>;
+    }
   }
 
   return (

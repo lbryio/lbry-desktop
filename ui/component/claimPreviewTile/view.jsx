@@ -5,6 +5,7 @@ import { NavLink, withRouter } from 'react-router-dom';
 import ClaimPreviewProgress from 'component/claimPreviewProgress';
 import FileThumbnail from 'component/fileThumbnail';
 import UriIndicator from 'component/uriIndicator';
+import Icon from 'component/common/icon';
 import TruncatedText from 'component/common/truncated-text';
 import DateTime from 'component/dateTime';
 import LivestreamDateTime from 'component/livestreamDateTime';
@@ -22,6 +23,7 @@ import FileWatchLaterLink from 'component/fileWatchLaterLink';
 import ClaimRepostAuthor from 'component/claimRepostAuthor';
 import ClaimMenuList from 'component/claimMenuList';
 import CollectionPreviewOverlay from 'component/collectionPreviewOverlay';
+import * as ICONS from 'constants/icons';
 import { FYP_ID } from 'constants/urlParams';
 // $FlowFixMe cannot resolve ...
 import PlaceholderTx from 'static/img/placeholderTx.gif';
@@ -50,6 +52,7 @@ type Props = {
   isLivestream: boolean,
   viewCount: string,
   isLivestreamActive: boolean,
+  livestreamViewerCount: ?number,
   swipeLayout: boolean,
 };
 
@@ -75,6 +78,7 @@ function ClaimPreviewTile(props: Props) {
     showNoSourceClaims,
     isLivestream,
     isLivestreamActive,
+    livestreamViewerCount,
     collectionId,
     fypId,
     mediaDuration,
@@ -187,8 +191,16 @@ function ClaimPreviewTile(props: Props) {
   }
 
   let liveProperty = null;
-  if (isLivestream === true) {
-    liveProperty = (claim) => <>LIVE</>;
+  if (isLivestream) {
+    if (isLivestreamActive === true && livestreamViewerCount) {
+      liveProperty = (claim) => (
+        <span className="livestream__viewer-count">
+          {livestreamViewerCount} <Icon icon={ICONS.EYE} />
+        </span>
+      );
+    } else {
+      liveProperty = (claim) => <>LIVE</>;
+    }
   }
 
   return (

@@ -15,7 +15,7 @@ import { makeSelectCollectionIsMine } from 'redux/selectors/collections';
 import { doResolveUri } from 'redux/actions/claims';
 import { doFileGet } from 'redux/actions/file';
 import { selectBanStateForUri } from 'lbryinc';
-import { selectIsActiveLivestreamForUri } from 'redux/selectors/livestream';
+import { selectIsActiveLivestreamForUri, selectViewersForId } from 'redux/selectors/livestream';
 import { selectLanguage, selectShowMatureContent } from 'redux/selectors/settings';
 import { makeSelectHasVisitedUri } from 'redux/selectors/content';
 import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
@@ -48,6 +48,7 @@ const select = (state, props) => {
     wasPurchased: props.uri && makeSelectClaimWasPurchased(props.uri)(state),
     isLivestream,
     isLivestreamActive: isLivestream && selectIsActiveLivestreamForUri(state, props.uri),
+    livestreamViewerCount: isLivestream && claim ? selectViewersForId(state, claim.claim_id) : undefined,
     isCollectionMine: makeSelectCollectionIsMine(props.collectionId)(state),
     lang: selectLanguage(state),
   };
