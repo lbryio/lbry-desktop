@@ -372,7 +372,7 @@ export default function FileRenderFloating(props: Props) {
               title={__('Close')}
               onClick={closeFloatingPlayer}
               icon={ICONS.REMOVE}
-              button="primary"
+              button="alt"
               className="content__floating-close"
             />
           )}
