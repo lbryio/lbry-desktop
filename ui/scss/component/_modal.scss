@@ -50,7 +50,6 @@
     }
 
     input {
-      background: var(--color-header-button) !important;
       &:focus {
         border: 1px solid var(--color-primary);
         box-shadow: unset;
@@ -101,10 +100,6 @@
     border: 2px solid black;
     border-radius: var(--border-radius);
 
-    .form-field--copyable {
-      background: rgba(var(--color-primary-dynamic), 0.1);
-    }
-
     .button-toggle {
       background-color: rgba(var(--color-header-button-base), 0.4) !important;
       &:hover {
@@ -116,7 +111,6 @@
     .channel__list-item,
     .button--secondary,
     input {
-      background-color: rgba(var(--color-header-button-base), 0.9) !important;
     }
     .channel__list-item {
       &:hover {
