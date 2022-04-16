@@ -109,29 +109,6 @@ function SideNavigation(props: Props) {
     icon: ICONS.STACK,
   };
 
-  const UNAUTH_LINKS: Array<SideNavLink> = [
-    {
-      title: 'Log In',
-      link: `/$/${PAGES.AUTH_SIGNIN}`,
-      icon: ICONS.SIGN_IN,
-    },
-    {
-      title: 'Sign Up',
-      link: `/$/${PAGES.AUTH}`,
-      icon: ICONS.SIGN_UP,
-    },
-    {
-      title: 'Settings',
-      link: `/$/${PAGES.SETTINGS}`,
-      icon: ICONS.SETTINGS,
-    },
-    {
-      title: 'Help',
-      link: `/$/${PAGES.HELP}`,
-      icon: ICONS.HELP,
-    },
-  ];
-
   const MOBILE_LINKS: Array<SideNavLink> = [
     {
       title: 'Upload',
@@ -450,7 +427,6 @@ function SideNavigation(props: Props) {
             </ul>
             <ul className="navigation-links--absolute mobile-only">
               {email && MOBILE_LINKS.map((linkProps) => getLink(linkProps))}
-              {!email && UNAUTH_LINKS.map((linkProps) => getLink(linkProps))}
             </ul>
 
             {getSubscriptionSection()}

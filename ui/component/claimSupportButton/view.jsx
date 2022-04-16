@@ -23,7 +23,7 @@ export default function ClaimSupportButton(props: Props) {
 
   return (
     <Button
-      button={fileAction ? undefined : 'alt'}
+      button={fileAction ? undefined : 'secondary'}
       className={classnames({ 'button--file-action': fileAction })}
       icon={ICONS.LBC}
       iconSize={fileAction ? 22 : undefined}

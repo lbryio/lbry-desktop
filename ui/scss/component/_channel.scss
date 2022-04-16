@@ -580,7 +580,6 @@ $actions-z-index: 2;
 }
 
 .channel-staked__wrapper {
-  z-index: 5;
   z-index: 10;
   display: flex;
   position: absolute;
@@ -595,9 +594,7 @@ $actions-z-index: 2;
   //  height: 100%;
   //}
   padding: 0.2rem;
-  bottom: -0.75rem;
   bottom: -0.5rem;
-  right: -0.8rem;
   right: -0.5rem;
   //background-color: white;
   background-color: var(--color-card-background);

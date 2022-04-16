@@ -36,11 +36,11 @@
   .header__menu--right {
     .header__navigationItem--balance {
       .button__label {
-        margin-left: var(--spacing-xxs) !important;
+        margin-left: var(--spacing-xxs);
       }
       &:hover {
         .button__label {
-          color: var(--color-primary) !important;
+          color: var(--color-primary);
         }
         .icon {
           stroke: var(--color-primary);
@@ -165,7 +165,6 @@
     color: var(--color-text);
 
     &:hover {
-      background-color: var(--color-brand);
       color: var(--color-brand-contrast);
     }
   }

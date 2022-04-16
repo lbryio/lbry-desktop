@@ -1,8 +1,5 @@
 .status-bar {
-  background-color: #505050;
-  border: solid 1px #707070;
-  border-bottom-color: #505050;
-  border-left-color: #505050;
+  background-color: var(--color-card-background);
   color: #e0e0e0;
   position: fixed;
   left: 0;
@@ -15,6 +12,7 @@
   opacity: 0;
   transition: opacity 0.3s ease;
   transition-delay: 400ms;
+  z-index: 10;
 
   &.visible {
     opacity: 1;
