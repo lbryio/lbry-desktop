@@ -224,7 +224,7 @@ $thumbnailWidthSmall: 1rem;
     color: var(--color-link);
 
     &:hover {
-      color: rgba(var(--color-secondary-dynamic), 1);
+      color: var(--color-secondary);
     }
   }
 }

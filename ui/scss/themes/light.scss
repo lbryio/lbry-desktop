@@ -2,29 +2,21 @@
   // Color overrides
   --color-primary: rgb(43, 187, 144);
   --color-primary-dynamic: rgb(43, 187, 144);
-  --color-primary-alt: rgb(228, 244, 239); //6
-  --color-primary-alt-2: rgb(6, 95, 70); // color brand  dark
-  --color-primary-alt-3: rgb(16, 185, 129); // color-brand
-  --color-primary-static: rgb(4, 120, 87); //4, 120,87
-  --color-primary-contrast-static: #ffffff;
+  --color-primary-alt: rgb(228, 244, 239);
+  --color-primary-alt-2: rgb(6, 95, 70);
+  --color-primary-alt-3: rgb(16, 185, 129);
+  --color-primary-static: rgb(4, 120, 87);
   --color-primary-contrast: #ffffff;
   --color-primary-text-hover: #ffffff;
-  --color-primary-bg: var(--color-primary);
-  --color-primary-text: var(--color-gray-9);
   --color-brand-blue: rgb(49, 135, 148);
-  --color-brand-contrast: var(--color-primary-contrast-static);
+  --color-brand-contrast: white;
   --color-brand: var(--color-primary-static);
   --color-brand-bright: rgb(56, 217, 169);
-  --color-brand-dark: var(--color-primary-alt);
   --color-accent: var(--color-brand-blue);
-  --color-accent-alt: rgb(219, 234, 254);
-  --color-accent-alt-2: rgb(191, 219, 254);
-  --color-accent-alt-3: rgb(30, 64, 175);
   --color-secondary: rgb(219, 234, 254);
   --color-secondary-alt: rgb(191, 219, 254);
   --color-secondary-alt-2: rgb(30, 64, 175);
   --color-secondary-static: var(--color-secondary);
-  --color-secondary-dynamic: var(--color-secondary);
   --color-secondary-contrast-static: #ffffff;
   --color-secondary-contrast: #ffffff;
 
