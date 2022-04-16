@@ -1,6 +1,5 @@
 // @flow
 import { Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption } from '@reach/combobox';
-// import '@reach/combobox/styles.css'; --> 'scss/third-party.scss'
 import { matchSorter } from 'match-sorter';
 import React from 'react';
 import classnames from 'classnames';

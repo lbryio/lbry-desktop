@@ -4,27 +4,6 @@ import React from 'react';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import useFetchViewCount from 'effects/use-fetch-view-count';
 
-// type SearchOptions = {
-//   page_size: number,
-//   page: number,
-//   no_totals: boolean,
-//   any_tags: Array<string>,
-//   channel_ids: Array<string>,
-//   claim_ids?: Array<string>,
-//   not_channel_ids: Array<string>,
-//   not_tags: Array<string>,
-//   order_by: Array<string>,
-//   languages?: Array<string>,
-//   release_time?: string,
-//   claim_type?: string | Array<string>,
-//   timestamp?: string,
-//   fee_amount?: string,
-//   limit_claims_per_channel?: number,
-//   stream_types?: Array<string>,
-//   has_source?: boolean,
-//   has_no_source?: boolean,
-// };
-
 function urisEqual(prev: ?Array<string>, next: ?Array<string>) {
   if (!prev || !next) {
     // ClaimList: "null" and "undefined" have special meaning,

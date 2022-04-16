@@ -28,20 +28,8 @@ function getChannelIcon(level: number): string {
   return icons[level] || ICONS.CHANNEL_LEVEL_1;
 }
 
-// function getChannelIconB(level: number): string {
-//   const icons = {
-//     '1': ICONS.CHANNEL_LEVEL_1_B,
-//     '2': ICONS.CHANNEL_LEVEL_2_B,
-//     '3': ICONS.CHANNEL_LEVEL_3_B,
-//     '4': ICONS.CHANNEL_LEVEL_4_B,
-//     '5': ICONS.CHANNEL_LEVEL_5_B,
-//   };
-//
-//   return icons[level] || ICONS.CHANNEL_LEVEL_1_B;
-// }
-
 function ChannelStakedIndicator(props: Props) {
-  const { channelClaim, amount, level, large = false, inline = false, hideTooltip = false } = props;
+  const { channelClaim, amount, level, large = false, inline = false, hideTooltip } = props;
 
   if (!channelClaim || !channelClaim.meta) {
     return null;
@@ -49,7 +37,6 @@ function ChannelStakedIndicator(props: Props) {
 
   const isControlling = channelClaim && channelClaim.meta.is_controlling;
   const icon = getChannelIcon(level);
-  // const icon_b = getChannelIconB(level);
 
   if (!hideTooltip) {
     return (

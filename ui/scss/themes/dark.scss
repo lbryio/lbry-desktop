@@ -51,7 +51,7 @@
   --color-tag-words-hover: var(--color-white);
   --color-tag-words-bg-hover: var(--color-gray-4);
 
-  // Buttons ================
+  // Buttons
   // pri
   --color-button-primary-text-hover: white;
   --color-button-primary-background: var(--color-background);
@@ -116,12 +116,6 @@
   --color-navigation-hover-text: var(--color-primary);
 
   // Tags
-  //--color-tag: var(--color-primary-alt-3);
-  //--color-tag-bg: var(--color-gray-7);
-  //--color-tag-hover: var(--color-white);
-  //--color-tag-bg-hover: var(--color-primary-alt);
-  // ->
-  // Tags
   --color-tag: var(--color-secondary-contrast);
   --color-tag-bg: var(--color-secondary);
   --color-tag-hover: var(--color-primary-contrast);
@@ -176,7 +170,6 @@
   --color-placeholder-background: var(--color-header-background);
   --color-spinner-light: white;
   --color-spinner-dark: #212529;
-  --color-login-graphic-background: var(--color-background);
 
   // Editor
   --color-editor-cursor: var(--color-text);

@@ -212,7 +212,6 @@ function ChannelForm(props: Props) {
 
   function handleSubmit() {
     if (uri) {
-      console.log('Params A: ', params);
       updateChannel(params).then((success) => {
         if (success) {
           onDone();
@@ -270,7 +269,6 @@ function ChannelForm(props: Props) {
   }
 
   // TODO clear and bail after submit
-  // <div className={classnames('main--contained', { 'card--disabled': disabled })}></div>
   return (
     <>
       <div className={classnames({ 'card--disabled': disabled })}>

@@ -9,10 +9,8 @@
   --color-primary-contrast-static: #ffffff;
   --color-primary-contrast: #ffffff;
   --color-primary-text-hover: #ffffff;
-
   --color-primary-bg: var(--color-primary);
   --color-primary-text: var(--color-gray-9);
-
   --color-brand-blue: rgb(49, 135, 148);
   --color-brand-contrast: var(--color-primary-contrast-static);
   --color-brand: var(--color-primary-static);
@@ -29,10 +27,6 @@
   --color-secondary-dynamic: var(--color-secondary);
   --color-secondary-contrast-static: #ffffff;
   --color-secondary-contrast: #ffffff;
-  //--color-fire: #d62912;
-  --color-fire: #c91800;
-  --color-fire-outside: #ff9b20;
-  --color-slime: #7bc45e;
 
   //Structure
   --color-border: #ededed;
@@ -72,7 +66,6 @@
   // sec
   --color-button-secondary-bg: var(--color-gray-1);
   --color-button-secondary-border: var(--color-secondary-alt-3);
-  //--color-button-secondary-text: var(--color-secondary-alt-2);
   --color-button-secondary-text: var(--color-gray-6);
   --color-button-secondary-bg-hover: var(--color-card-background);
   --color-button-secondary-text-hover: var(--color-primary);
@@ -91,7 +84,6 @@
   --color-link: var(--color-primary-alt-2);
   --color-button-alt-text-hover: var(--color-text);
   --color-link-hover: var(--color-primary);
-  // nav
 
   // Input
   --color-input-bg-selected: var(--color-primary-alt);
@@ -192,8 +184,6 @@
   // Scrollbar
   --color-scrollbar-thumb-bg: rgba(0, 0, 0, 0.2);
   --color-scrollbar-track-bg: transparent;
-
-  /////
 
   // Structure
   --color-border: rgba(0, 0, 0, 0.2);
