@@ -165,11 +165,9 @@ const Header = (props: Props) => {
         'header--minimal': authHeader,
         'header--mac': IS_MAC,
       })}
-      // @if TARGET='app'
       onDoubleClick={(e) => {
         remote.getCurrentWindow().maximize();
       }}
-      // @endif
     >
       <div className="card__actions--between header__contents">
         {!authHeader && canBackout ? (

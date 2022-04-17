@@ -8,7 +8,6 @@ import classnames from 'classnames';
 import HeaderMenuLink from 'component/common/header-menu-link';
 import Icon from 'component/common/icon';
 import React from 'react';
-import Skeleton from '@mui/material/Skeleton';
 
 type HeaderMenuButtonProps = {
   activeChannelClaim: ?ChannelClaim,
@@ -25,24 +24,20 @@ export default function HeaderProfileMenuButton(props: HeaderMenuButtonProps) {
   return (
     <div className="header__buttons">
       <Menu>
-        {activeChannelUrl === undefined ? (
-          <Skeleton variant="circular" animation="wave" className="header__navigationItem--iconSkeleton" />
-        ) : (
-          <MenuButton
-            aria-label={__('Your account')}
-            title={__('Your account')}
-            className={classnames('header__navigationItem', {
-              'header__navigationItem--icon': !activeChannelUrl,
-              'header__navigationItem--profilePic': activeChannelUrl,
-            })}
-          >
-            {activeChannelUrl ? (
-              <ChannelThumbnail uri={activeChannelUrl} small noLazyLoad />
-            ) : (
-              <Icon size={18} icon={ICONS.ACCOUNT} aria-hidden />
-            )}
-          </MenuButton>
-        )}
+        <MenuButton
+          aria-label={__('Your account')}
+          title={__('Your account')}
+          className={classnames('header__navigationItem', {
+            'header__navigationItem--icon': !activeChannelUrl,
+            'header__navigationItem--profilePic': activeChannelUrl,
+          })}
+        >
+          {activeChannelUrl ? (
+            <ChannelThumbnail uri={activeChannelUrl} small noLazyLoad />
+          ) : (
+            <Icon size={18} icon={ICONS.ACCOUNT} aria-hidden />
+          )}
+        </MenuButton>
 
         <MenuList className="menu__list--header">
           <HeaderMenuLink page={PAGES.UPLOADS} icon={ICONS.PUBLISH} name={__('Uploads')} />
