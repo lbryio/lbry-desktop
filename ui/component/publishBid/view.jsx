@@ -35,7 +35,7 @@ function PublishName(props: Props) {
         balance: totalAvailableBidAmount,
       });
     } else if (totalAvailableBidAmount - bid < ESTIMATED_FEE) {
-      bidError = __('Please decrease your deposit to account for transaction fees or acquire more LBRY Credits.');
+      bidError = __('Please decrease your deposit to account for transaction fees');
     }
 
     setBidError(bidError);
