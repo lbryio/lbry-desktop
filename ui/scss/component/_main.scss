@@ -417,9 +417,7 @@ body {
   }
 
   @media (max-width: $breakpoint-small) {
-    padding: var(--spacing-xs);
     flex-direction: column;
-    padding-top: 0;
     margin: 0;
     padding: 0;
 

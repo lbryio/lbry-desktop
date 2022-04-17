@@ -752,7 +752,7 @@ img {
 .playlistPage-wrapper {
   .button--file-action {
     &:hover {
-      background-color: unset;
+      background-color: var(--color-gray-9);
     }
   }
 
