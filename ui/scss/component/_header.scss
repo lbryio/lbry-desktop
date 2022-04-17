@@ -281,10 +281,6 @@
   position: relative;
   font-weight: var(--font-weight-bold);
 
-  svg {
-    stroke: var(--color-text);
-  }
-
   &[aria-expanded='true']:not(.header__navigationItem--profilePic) {
     transform: rotate(0deg);
     &:not(.button-rotate) {
@@ -318,7 +314,7 @@
   background-color: var(--color-header-button);
   border-radius: 1.5rem;
   margin-right: var(--spacing-s);
-
+  color: var(--color-brand-contrast);
   &:hover {
     .icon {
       stroke: var(--color-primary);
