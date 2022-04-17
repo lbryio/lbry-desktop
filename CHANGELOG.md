@@ -7,11 +7,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
 - Uploads: show placeholder when loading page _community pr!_ ([#7531](https://github.com/lbryio/lbry-desktop/pull/7531))
+- Sidebar channel search _styles pr_ ([#7542](https://github.com/lbryio/lbry-desktop/pull/7542))
+- View position indicator on thumbnail ([#7541](https://github.com/lbryio/lbry-desktop/pull/7541))
+- Ability to search through publishes ([#7535](https://github.com/lbryio/lbry-desktop/pull/7535))
 
 ### Changed
+- Large styles revamp following odysee _styles pr_ ([#7542](https://github.com/lbryio/lbry-desktop/pull/7542))
 
 ### Fixed
+- Fix bad rerender on homepage _styles pr_ ([#7542](https://github.com/lbryio/lbry-desktop/pull/7542))
 - Fix post-editor preview mode _community pr!_ ([#7532](https://github.com/lbryio/lbry-desktop/pull/7532))
+- Fix send-tip default tab ([#7533](https://github.com/lbryio/lbry-desktop/pull/7533))
 
 ## [0.52.6] - [2022-04-04]
 
