@@ -166,11 +166,18 @@ function FileListPublished(props: Props) {
               headerAltControls={
                 <div className="card__actions--inline">
                   <Button
-                    button="alt"
+                    button="secondary"
                     label={__('Refresh')}
                     icon={ICONS.REFRESH}
                     disabled={fetching}
                     onClick={fetchAllMyClaims}
+                  />
+                  <Button
+                    icon={ICONS.PUBLISH}
+                    button="primary"
+                    label={__('Upload')}
+                    navigate={`/$/${PAGES.UPLOAD}`}
+                    onClick={() => clearPublish()}
                   />
                   <Form onSubmit={() => {}} className="wunderbar--inline">
                     <Icon icon={ICONS.SEARCH} />

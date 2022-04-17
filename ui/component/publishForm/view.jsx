@@ -129,6 +129,7 @@ function PublishForm(props: Props) {
     hasClaimedInitialRewards,
   } = props;
 
+  const inEditMode = Boolean(editingURI);
   const { replace, location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
   const TYPE_PARAM = 'type';
@@ -137,7 +138,7 @@ function PublishForm(props: Props) {
   // $FlowFixMe
   const AVAILABLE_MODES = Object.values(PUBLISH_MODES).filter((mode) => {
     // $FlowFixMe
-    if (editingURI) {
+    if (inEditMode) {
       if (isPostClaim) {
         return mode === PUBLISH_MODES.POST;
       } else {
@@ -248,7 +249,7 @@ function PublishForm(props: Props) {
       submitLabel = __('Uploading...');
     }
   } else if (previewing) {
-    submitLabel = __('Preparing...');
+    submitLabel = <Spinner type="small" />;
   } else {
     if (isStillEditing) {
       submitLabel = __('Save');
@@ -498,6 +499,7 @@ function PublishForm(props: Props) {
         <div className={classnames({ 'card--disabled': formDisabled })}>
           {mode !== PUBLISH_MODES.POST && <PublishDescription disabled={formDisabled} />}
           <Card actions={<SelectThumbnail />} />
+          <label>{__('Tags')}</label>
           <TagsSelect
             suggestMature
             disableAutoFocus

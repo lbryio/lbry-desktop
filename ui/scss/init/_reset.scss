@@ -1,3 +1,5 @@
+@import './breakpoints';
+
 html {
   box-sizing: border-box;
   text-rendering: optimizeLegibility;
@@ -158,13 +160,17 @@ select {
 
 textarea {
   width: 100%;
-  min-height: var(--spacing-xxl);
   padding: var(--spacing-s);
-  // border-color should be added in apps for blur/focus
-  border: 1px solid;
-
   &:not([disabled]) {
     resize: vertical;
+  }
+}
+
+@media (min-width: $breakpoint-small) {
+  textarea {
+    width: 100%;
+    min-height: var(--spacing-xxl);
+    padding: var(--spacing-s);
   }
 }
 

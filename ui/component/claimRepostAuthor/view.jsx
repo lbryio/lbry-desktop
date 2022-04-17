@@ -19,8 +19,11 @@ function ClaimRepostAuthor(props: Props) {
   if (short && repostUrl) {
     return (
       <span className="claim-preview__repost-author">
-        <Icon icon={ICONS.REPOST} size={12} />
-        <span>{repostUrl}</span>
+        <div className="claim-preview__repost-ribbon">
+          <Icon icon={ICONS.REPOST} size={12} />
+          <br />
+          <span>{repostUrl}</span>
+        </div>
       </span>
     );
   }
@@ -47,10 +50,13 @@ function ClaimRepostAuthor(props: Props) {
 
   return (
     <div className="claim-preview__repost-author">
-      <Icon icon={ICONS.REPOST} size={10} className="claim-preview__repost-icon" />
-      <I18nMessage tokens={{ repost_channel_link: <UriIndicator link uri={repostChannelUrl} /> }}>
-        %repost_channel_link% reposted
-      </I18nMessage>
+      <div className="claim-preview__repost-ribbon">
+        <Icon icon={ICONS.REPOST} size={10} className="claim-preview__repost-icon" />
+        <br />
+        <I18nMessage tokens={{ repost_channel_link: <UriIndicator link uri={repostChannelUrl} /> }}>
+          %repost_channel_link%
+        </I18nMessage>
+      </div>
     </div>
   );
 }

@@ -20,6 +20,10 @@
   opacity: 0.4;
 }
 
+.opacity-30 {
+  opacity: 0.3;
+}
+
 .h-12 {
   height: 3rem;
 }
@@ -34,6 +38,10 @@
 
 .mt-m {
   margin-top: var(--spacing-m);
+}
+
+.mb-s {
+  margin-bottom: var(--spacing-s);
 }
 
 .mb-m {

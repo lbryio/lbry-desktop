@@ -13,6 +13,7 @@ type Props = {
   level: number,
   large?: boolean,
   inline?: boolean,
+  hideTooltip?: Boolean,
 };
 
 function getChannelIcon(level: number): string {
@@ -28,7 +29,7 @@ function getChannelIcon(level: number): string {
 }
 
 function ChannelStakedIndicator(props: Props) {
-  const { channelClaim, amount, level, large = false, inline = false } = props;
+  const { channelClaim, amount, level, large = false, inline = false, hideTooltip } = props;
 
   if (!channelClaim || !channelClaim.meta) {
     return null;
@@ -37,23 +38,36 @@ function ChannelStakedIndicator(props: Props) {
   const isControlling = channelClaim && channelClaim.meta.is_controlling;
   const icon = getChannelIcon(level);
 
-  return (
-    <Tooltip
-      title={
-        <div className="channel-staked__tooltip">
-          <div className="channel-staked__tooltip-icons">
-            <LevelIcon icon={icon} isControlling={isControlling} size={isControlling ? 14 : 10} />
-          </div>
+  if (!hideTooltip) {
+    return (
+      <Tooltip
+        title={
+          <div className="channel-staked__tooltip">
+            <div className="channel-staked__tooltip-icons">
+              <LevelIcon icon={icon} isControlling={isControlling} size={isControlling ? 14 : 10} />
+            </div>
 
-          <div className="channel-staked__tooltip-text">
-            <span>{__('Level %current_level%', { current_level: level })}</span>
-            <div className="channel-staked__amount">
-              <LbcSymbol postfix={<CreditAmount amount={amount} showLBC={false} />} size={14} />
+            <div className="channel-staked__tooltip-text">
+              <span>{__('Level %current_level%', { current_level: level })}</span>
+              <div className="channel-staked__amount">
+                <LbcSymbol postfix={<CreditAmount amount={amount} showLBC={false} />} size={14} />
+              </div>
             </div>
           </div>
+        }
+      >
+        <div
+          className={classnames('channel-staked__wrapper', {
+            'channel-staked__wrapper--large': large,
+            'channel-staked__wrapper--inline': inline,
+          })}
+        >
+          <LevelIcon icon={icon} large={large} isControlling={isControlling} />
         </div>
-      }
-    >
+      </Tooltip>
+    );
+  } else {
+    return (
       <div
         className={classnames('channel-staked__wrapper', {
           'channel-staked__wrapper--large': large,
@@ -62,8 +76,8 @@ function ChannelStakedIndicator(props: Props) {
       >
         <LevelIcon icon={icon} large={large} isControlling={isControlling} />
       </div>
-    </Tooltip>
-  );
+    );
+  }
 }
 
 type LevelIconProps = {

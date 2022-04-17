@@ -14,7 +14,7 @@ export default function ShareButton(props: Props) {
 
   return (
     <Button
-      button="alt"
+      button="secondary"
       icon={ICONS.SHARE}
       label={__('Share')}
       title={__('Share this channel')}

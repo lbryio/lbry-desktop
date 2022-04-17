@@ -45,7 +45,7 @@ export default function ChannelsPage(props: Props) {
   }, [setRewardData]);
 
   return (
-    <Page>
+    <Page className="channelsPage-wrapper">
       <div className="card-stack">
         {hasYoutubeChannels && <YoutubeTransferStatus hideChannelLink />}
 

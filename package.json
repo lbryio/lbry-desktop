@@ -1,6 +1,6 @@
 {
   "name": "lbry",
-  "version": "0.52.6",
+  "version": "0.52.6-alpha.teststyles.3",
   "description": "A browser for the LBRY network, a digital marketplace controlled by its users.",
   "keywords": [
     "lbry"
@@ -63,6 +63,7 @@
     "proxy-polyfill": "0.1.6",
     "re-reselect": "^4.0.0",
     "react-beautiful-dnd": "^13.1.0",
+    "react-color": "^2.19.3",
     "react-datetime-picker": "^3.4.3",
     "remove-markdown": "^0.3.0",
     "rss": "^1.2.2",
@@ -89,7 +90,7 @@
     "@meetfranz/electron-cookies": "^3.0.2",
     "@reach/auto-id": "^0.13.0",
     "@reach/combobox": "^0.12.1",
-    "@reach/menu-button": "0.7.4",
+    "@reach/menu-button": "0.8.6",
     "@reach/rect": "^0.16.0",
     "@reach/tabs": "^0.1.5",
     "@reach/tooltip": "^0.12.1",

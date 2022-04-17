@@ -71,7 +71,7 @@ class FileSelector extends React.PureComponent<Props> {
         <FormField
           label={label}
           webkitdirectory="true"
-          className="form-field--copyable"
+          className="form-field--with-button"
           error={error}
           disabled={disabled}
           type="text"
@@ -80,7 +80,7 @@ class FileSelector extends React.PureComponent<Props> {
           inputButton={
             <Button
               autoFocus={autoFocus}
-              button="secondary"
+              button="primary"
               disabled={disabled}
               onClick={type === 'openDirectory' ? this.handleDirectoryInputSelection : this.fileInputButton}
               label={__('Browse')}

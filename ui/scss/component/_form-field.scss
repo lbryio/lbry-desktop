@@ -1,21 +1,15 @@
 @import '../init/mixins';
 
 input,
-textarea,
 select,
 .date-picker-input {
   height: var(--height-input);
   border-radius: var(--border-radius);
-  border: 1px solid;
   color: var(--color-input);
   border-color: var(--color-input-border);
   background-color: var(--color-input-bg);
   padding-right: var(--spacing-s);
   padding-left: var(--spacing-s);
-
-  &:focus {
-    @include focus;
-  }
 
   &::placeholder {
     color: var(--color-input-placeholder);
@@ -31,9 +25,37 @@ select,
   }
 
   &[type='range'] {
-    height: auto;
     height: 0.5rem;
     background-color: var(--color-secondary);
+  }
+}
+
+@media (min-width: $breakpoint-small) {
+  textarea {
+    height: var(--height-input);
+    border-radius: var(--border-radius);
+    color: var(--color-input);
+    background-color: var(--color-input-bg);
+    padding-right: var(--spacing-s);
+    padding-left: var(--spacing-s);
+
+    &::placeholder {
+      color: var(--color-input-placeholder);
+      opacity: 0.4;
+    }
+
+    &:disabled {
+      opacity: 0.4;
+
+      & + label {
+        opacity: 0.4;
+      }
+    }
+
+    &[type='range'] {
+      height: 0.5rem;
+      background-color: var(--color-secondary);
+    }
   }
 }
 
@@ -95,6 +117,20 @@ form,
   }
 }
 
+fieldset-section {
+  background-color: unset; // imp
+  select:focus-visible {
+    background-color: var(--color-header-background); // ip
+  }
+
+  select {
+    background-color: var(--color-header-background);
+  }
+
+  option {
+    background-color: var(--color-header-background);
+  }
+}
 fieldset-section,
 .checkbox,
 .radio {
@@ -141,7 +177,7 @@ input-submit {
     border-bottom-right-radius: 0;
     border-right: none;
   }
-  //
+  // FIX THIS e.g. copyable text vs editable text
   //& > *:nth-child(2) {
   //  border-top-left-radius: 0;
   //  border-bottom-left-radius: 0;
@@ -174,7 +210,7 @@ input-submit {
     display: inline-block;
     margin: 0;
     font-size: var(--font-base);
-    padding-left: calc(var(--height-checkbox) + var(--spacing-s));
+    padding-left: calc(var(--height-checkbox) + 10px);
     min-height: var(--height-checkbox);
 
     &::before {
@@ -205,11 +241,6 @@ input-submit {
   input[type='radio']:checked + label::after {
     content: '';
   }
-
-  input[type='checkbox']:focus + label::before,
-  input[type='radio']:focus + label::before {
-    @include focus;
-  }
 }
 
 .checkbox {
@@ -217,7 +248,6 @@ input-submit {
   label::before {
     height: var(--height-checkbox);
     width: var(--height-checkbox);
-    border: 1px solid var(--color-input-border);
     border-radius: var(--border-radius);
     left: 0px;
     top: -1px;
@@ -229,8 +259,8 @@ input-submit {
     width: 12px;
     border-left: 2px solid;
     border-bottom: 2px solid;
-    border-color: var(--color-input-toggle);
-    border-left-color: var(--color-input-toggle);
+    border-color: var(--color-primary);
+    border-left-color: var(--color-primary);
     transform: rotate(-45deg);
     left: 6px;
     top: 6px;
@@ -308,9 +338,7 @@ input[type='number'] {
 
 fieldset-group {
   + fieldset-group {
-    &:not(.fieldset-group--row) {
-      margin-top: var(--spacing-s);
-    }
+    margin-top: var(--spacing-s);
   }
 
   &.fieldset-group--smushed {
@@ -330,16 +358,13 @@ fieldset-group {
       }
 
       &:nth-of-type(2) {
-        &:not(input.paginate-channel) {
-          // yuck
-          input,
-          select {
-            border-top-left-radius: 0;
-            border-bottom-left-radius: 0;
-          }
-          label {
-            margin-left: var(--spacing-s);
-          }
+        input,
+        select {
+          border-top-left-radius: 0;
+          border-bottom-left-radius: 0;
+        }
+        label {
+          margin-left: var(--spacing-s);
         }
       }
     }
@@ -347,17 +372,22 @@ fieldset-group {
     &.fieldgroup--paginate {
       padding-bottom: var(--spacing-l);
       margin-top: var(--spacing-l);
-      align-items: flex-end;
+      align-items: center;
       justify-content: center;
+
+      fieldset-section {
+        input {
+          margin-left: var(--spacing-s);
+          border-radius: calc(var(--height-button) / 2);
+          height: var(--height-button);
+        }
+      }
     }
 
     &.fieldgroup--paginate-top {
       padding-bottom: var(--spacing-m);
       align-items: flex-end;
       justify-content: center;
-    }
-
-    &:not(.fieldset-group--row) {
     }
   }
 
@@ -387,7 +417,6 @@ fieldset-group {
         overflow: hidden;
         padding: 0.5rem;
         height: var(--height-input);
-        border: 1px solid;
         border-top-left-radius: var(--border-radius);
         border-bottom-left-radius: var(--border-radius);
         border-color: var(--color-input-border);
@@ -418,11 +447,28 @@ fieldset-group {
   }
 }
 
+.form-field--with-button {
+  padding: 0.2rem 0.75rem;
+  text-overflow: ellipsis;
+  user-select: text;
+  cursor: default;
+}
+
+.form-field--with-button ~ button {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
+}
+
 .form-field--copyable {
   padding: 0.2rem 0.75rem;
   text-overflow: ellipsis;
   user-select: text;
   cursor: default;
+}
+
+.form-field--copyable ~ button {
+  border-bottom-left-radius: 0;
+  border-top-left-radius: 0;
 }
 
 .form-field--short {
@@ -450,6 +496,7 @@ fieldset-group {
 
 .form-field__help {
   @extend .help;
+  color: var(--color-text);
 }
 
 .form-field__help + .checkbox,
@@ -465,19 +512,33 @@ fieldset-group {
   @media (min-width: $breakpoint-small) {
     column-count: 2;
   }
+
+  @media (max-width: $breakpoint-small) {
+    span {
+      font-size: var(--font-xxsmall);
+    }
+  }
 }
 
 .form-field__quick-action {
   font-size: var(--font-xsmall);
 }
 
+.form-field__hint {
+  font-size: var(--font-xsmall);
+  color: var(--color-input-label);
+}
+
 .form-field__textarea-info {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
   justify-content: space-between;
   margin-top: var(--spacing-xxs);
   margin-bottom: var(--spacing-s);
+  text-align: right;
+
+  span {
+    display: inline-block;
+    padding-right: 0px;
+  }
 }
 
 fieldset-section {
@@ -495,12 +556,24 @@ fieldset-section {
 
     @media (min-width: $breakpoint-small) {
       max-width: none;
+
+      select {
+        max-height: 1.5rem !important;
+        padding: 0 var(--spacing-xs);
+        padding-right: var(--spacing-l);
+      }
     }
 
     select {
-      max-height: 1.5rem !important;
+      max-height: var(--height-input-slim) !important;
       padding: 0 var(--spacing-xs);
       padding-right: var(--spacing-l);
+    }
+
+    @media (max-width: $breakpoint-small) {
+      select {
+        max-height: 1.25rem !important;
+      }
     }
   }
 
@@ -526,6 +599,7 @@ fieldset-section {
 
 .form-field-date-picker {
   margin-bottom: var(--spacing-l);
+  font-size: var(--font-base);
 
   label {
     display: block;
@@ -596,6 +670,10 @@ fieldset-section {
 
   .react-calendar button:enabled:hover {
     cursor: pointer;
+  }
+
+  .react-calendar button:disabled {
+    background-color: rgba(var(--color-header-background-base), 1);
   }
 
   .react-calendar__navigation {
@@ -675,6 +753,10 @@ fieldset-section {
   .react-calendar__tile:enabled:hover,
   .react-calendar__tile:enabled:focus {
     background: var(--color-button-alt-bg-hover);
+  }
+
+  .react-calendar__tile:disabled {
+    background-color: rgba(var(--color-primary-dynamic), 0.4);
   }
 
   .react-calendar__tile--now {

@@ -1,5 +1,4 @@
 // @flow
-// import 'scss/component/_header.scss'; // REMOVE!
 
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import * as ICONS from 'constants/icons';

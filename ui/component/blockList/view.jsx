@@ -1,6 +1,5 @@
 // @flow
 import { Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption } from '@reach/combobox';
-// import '@reach/combobox/styles.css'; --> 'scss/third-party.scss'
 import { matchSorter } from 'match-sorter';
 import React from 'react';
 import classnames from 'classnames';
@@ -118,7 +117,7 @@ export default function BlockList(props: Props) {
   return (
     <>
       <div className="help--notice">{help}</div>
-      <div className="section">
+      <div className="section" style={{ zIndex: '4' }}>
         <SearchList
           list={localList}
           placeholder={__('e.g. odysee')}

@@ -5,15 +5,15 @@
 //
 :root {
   // Generic colors
-  --color-primary: #047857;
-  --color-primary-alt: #e4f4ef;
-  --color-primary-alt-2: #065f46;
-  --color-primary-alt-3: #10b981;
-  --color-secondary: #1e3a8a;
-  --color-secondary-alt: #dbeafe;
-  --color-secondary-alt-2: #bfdbfe;
-  --color-secondary-alt-3: #1e40af;
-  --color-tertiary: #5b21b6;
+  --color-primary: rgb(4, 120, 87);
+  --color-primary-alt: rgb(228, 244, 239);
+  --color-primary-alt-2: rgb(6, 95, 70);
+  --color-primary-alt-3: rgb(16, 185, 129);
+  --color-secondary: rgb(30, 58, 138);
+  --color-secondary-alt: rgb(219, 234, 254);
+  --color-secondary-alt-2: rgb(191, 219, 254);
+  --color-secondary-alt-3: rgb(30, 64, 175);
+  --color-tertiary: rgb(91, 33, 182);
   --color-tertiary-alt: #f5f3ff;
   --color-danger: #991b1b;
   --color-danger-alt: #fecaca;
@@ -33,6 +33,9 @@
   --color-gray-10: #18181b;
   --color-amber: #f26522;
   --color-orange: #fb923c;
+  --color-fire: #ff653e;
+  --color-slime: rgb(166, 255, 0);
+  --color-transparent: rgba(0, 0, 0, 0);
 
   // Structure
   --color-text: var(--color-black);
@@ -51,9 +54,6 @@
   --color-text-help: #999999;
   --color-text-subtitle: #767676;
   --color-text-warning: #212529;
-  --color-help-warning-bg: #fef3c7;
-  --color-help-warning-text: #555555;
-  --color-text-warning--background: var(--lbry-yellow-1);
   --color-blockquote: var(--color-gray-3);
   --color-text-error: var(--color-danger);
   --color-error: var(--color-danger-alt);
@@ -80,6 +80,7 @@
   --color-button-alt-bg-hover: var(--color-gray-2);
   --color-button-toggle-text: var(--color-primary);
   --color-button-toggle-bg: var(--color-primary-alt);
+  --color-button-toggle-bg-active: var(--color-navigation-link);
   --color-button-border: var(--color-gray-3);
   --color-link: var(--color-primary);
   --color-link-hover: var(--color-black);
@@ -89,9 +90,8 @@
   --color-input-color: var(--color-black);
   --color-input-label: var(--color-gray-5);
   --color-input-placeholder: var(--color-gray-8);
-  //--color-input-bg: var(--color-gray-1);
-  --color-input-bg: var(--color-white);
-  --color-input-border: var(--color-gray-3);
+  --color-input-bg: var(--color-gray-1);
+  --color-input-border: var(--color-border);
   --color-input-border-active: var(--color-secondary);
   --color-input-toggle: var(--color-secondary);
   --color-input-toggle-bg: var(--color-gray-1);
@@ -116,31 +116,33 @@
   --color-tag-bg-hover: var(--color-button-primary-bg);
 
   // Tags (words)
-  --color-tag-words: var(--color-gray-5);
-  --color-tag-words-bg: var(--color-button-alt-bg);
-  --color-tag-words-hover: var(--color-button-alt-text);
-  --color-tag-words-bg-hover: var(--color-button-alt-bg-hover);
+  --color-tag-words: var(--color-primary);
+  --color-tag-words-bg: var(--color-secondary);
+  --color-tag-words-hover: var(--color-primary);
+  --color-tag-words-bg-hover: var(--color-primary-alt-3);
 
   // Menu
   --color-menu-background: var(--color-header-background);
   --color-menu-background--active: var(--color-card-background-highlighted);
   --color-menu-icon: var(--color-navigation-link);
-  --color-menu-icon-active: var(--color-gray-6);
+  --color-menu-icon-active: var(--color-navigation-link);
 
   // Comments
+  --color-comment-menu: var(--color-gray-3);
+  --color-comment-menu-hovering: var(--color-gray-6);
   --color-comment-highlighted: #fff2d9;
   --color-comment-threadline: var(--color-gray-1);
   --color-comment-threadline-hover: var(--color-gray-4);
 
   // Icons
-  --color-follow-bg: #ffd4da;
+  --color-follow-bg: var(--color-header-background);
   --color-follow-icon: #e2495e;
-  --color-view-bg: var(--color-secondary-alt);
-  --color-view-icon: var(--color-secondary);
+  --color-view-bg: var(--color-header-background);
+  --color-view-icon: #0f9f11;
 
   // Snack
   --color-snack-bg: var(--color-primary);
-  --color-snack: var(--color-white);
+  --color-snack: var(--color-primary-contrast);
   --color-snack-bg-error: var(--color-danger);
   --color-snack-upgrade: var(--color-tertiary);
 
@@ -187,7 +189,7 @@
   --color-tabs-background: var(--color-card-background);
   --color-tab-divider: var(--color-primary);
   --color-modal-background: var(--color-card-background);
-  --color-login-graphic-background: var(--color-primary-alt);
+  --color-login-graphic-background: var(--color-secondary);
 
   // Ads
   --color-ads-background: #fae5ff;

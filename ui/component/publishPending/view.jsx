@@ -27,9 +27,9 @@ const PublishPending = (props: Props) => {
     return <span>{__('Uploading (%progress%%) ', { progress: progress })}</span>;
   } else {
     return (
-      <span>
+      <div className="confirming-change">
         {__('Confirming...')} <Spinner type="small" />
-      </span>
+      </div>
     );
   }
 };

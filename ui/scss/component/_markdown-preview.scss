@@ -47,6 +47,9 @@
   }
 
   &.markdown-preview--description {
+    padding-top: var(--spacing-s);
+    margin-bottom: var(--spacing-l);
+
     h1 {
       font-size: 1.2em;
     }
@@ -64,6 +67,29 @@
     }
     h6 {
       font-size: 0.7em;
+    }
+
+    @media (max-width: $breakpoint-small) {
+      margin-bottom: 0;
+      font-size: var(--font-xsmall);
+      word-wrap: break-word;
+      overflow: hidden;
+
+      a {
+        .button__content {
+          display: block;
+        }
+
+        span {
+          font-size: var(--font-xsmall);
+          font-weight: var(--font-weight-bold);
+        }
+
+        svg {
+          margin-left: var(--spacing-xxs);
+          bottom: 2;
+        }
+      }
     }
   }
 
@@ -182,10 +208,24 @@
     text-align: left;
   }
 
+  .file-viewer__embedded-header {
+    .file-viewer__embedded-title {
+      width: calc(100% - 120px);
+      .button__label {
+        display: inline-block;
+        width: 100%;
+      }
+    }
+    .file-viewer__overlay-logo {
+      padding-left: 0;
+    }
+  }
+
   .preview-link__url {
     font-size: var(--font-xxsmall);
     margin-top: 0;
     padding-left: var(--spacing-xs);
+    padding-right: var(--spacing-xs);
     background-color: black;
     color: var(--color-gray-2);
     width: 100%;
@@ -198,7 +238,9 @@
     line-height: 2rem;
 
     .button__label {
+      display: inline-block;
       white-space: nowrap;
+      width: 100%;
     }
 
     &:hover {
@@ -221,7 +263,7 @@
     padding: 0;
     margin: 0;
     padding-right: var(--spacing-s);
-    background-color: var(--color-primary-alt);
+    background-color: var(--color-secondary);
     display: block;
     align-items: center;
     word-break: break-all;
