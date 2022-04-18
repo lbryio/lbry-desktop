@@ -1024,10 +1024,12 @@ export function doCheckPublishNameAvailability(name: string) {
           useAutoPagination: true,
         }
       )
-    ).then(() => {
+    ).then((result) => {
       dispatch({
         type: ACTIONS.CHECK_PUBLISH_NAME_COMPLETED,
       });
+
+      return Object.keys(result).length === 0;
     });
   };
 }
