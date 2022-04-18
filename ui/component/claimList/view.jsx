@@ -41,7 +41,7 @@ type Props = {
   renderActions?: (Claim) => ?Node,
   renderProperties?: (Claim) => ?Node,
   includeSupportAction?: boolean,
-  injectedItem?: { node: Node, index?: number, replace?: boolean },
+  injectedItem?: ListInjectedItem,
   timedOutMessage?: Node,
   tileLayout?: boolean,
   searchInLanguage: boolean,
@@ -206,9 +206,18 @@ export default function ClaimList(props: Props) {
   );
 
   const getInjectedItem = (index) => {
-    if (injectedItem && injectedItem.node && lastVisibleIndex === index) {
-      return injectedItem.node;
+    if (injectedItem && injectedItem.node) {
+      if (typeof injectedItem.node === 'function') {
+        return injectedItem.node(index, lastVisibleIndex, pageSize);
+      } else {
+        if (injectedItem.index === undefined || injectedItem.index === null) {
+          return index === lastVisibleIndex ? injectedItem.node : null;
+        } else {
+          return index === injectedItem.index ? injectedItem.node : null;
+        }
+      }
     }
+
     return null;
   };
 

@@ -32,7 +32,7 @@ type Props = {
   prefixUris?: Array<string>,
   pins?: { urls?: Array<string>, claimIds?: Array<string>, onlyPinForOrder?: string },
   uris: Array<string>,
-  injectedItem?: { node: Node, index?: number, replace?: boolean },
+  injectedItem?: ListInjectedItem,
   showNoSourceClaims?: boolean,
   renderProperties?: (Claim) => ?Node,
   fetchViewCount?: boolean,
@@ -142,6 +142,22 @@ function ClaimTilesDiscover(props: Props) {
     }
   }
 
+  const getInjectedItem = (index) => {
+    if (injectedItem && injectedItem.node) {
+      if (typeof injectedItem.node === 'function') {
+        return injectedItem.node(index, lastVisibleIndex, pageSize);
+      } else {
+        if (injectedItem.index === undefined || injectedItem.index === null) {
+          return index === lastVisibleIndex ? injectedItem.node : null;
+        } else {
+          return index === injectedItem.index ? injectedItem.node : null;
+        }
+      }
+    }
+
+    return null;
+  };
+
   // --------------------------------------------------------------------------
   // --------------------------------------------------------------------------
 
@@ -187,18 +203,17 @@ function ClaimTilesDiscover(props: Props) {
       {finalUris && finalUris.length
         ? finalUris.map((uri, i) => {
             if (uri) {
-              if (lastVisibleIndex === i && injectedItem && injectedItem.replace) {
-                return <React.Fragment key={uri}>{injectedItem.node}</React.Fragment>;
-              }
-
+              const inj = getInjectedItem(i);
               return (
                 <React.Fragment key={uri}>
-                  {lastVisibleIndex === i && injectedItem && injectedItem.node}
-                  <ClaimPreviewTile
-                    showNoSourceClaims={hasNoSource || showNoSourceClaims}
-                    uri={uri}
-                    properties={renderProperties}
-                  />
+                  {inj && inj}
+                  {(!inj || !injectedItem || !injectedItem.replace) && (
+                    <ClaimPreviewTile
+                      showNoSourceClaims={hasNoSource || showNoSourceClaims}
+                      uri={uri}
+                      properties={renderProperties}
+                    />
+                  )}
                 </React.Fragment>
               );
             } else {
