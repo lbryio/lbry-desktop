@@ -13,6 +13,7 @@ import {
   selectClaimIsMine,
   selectIsMyChannelCountOverLimit,
   selectById,
+  selectMyChannelClaimIds,
 } from 'redux/selectors/claims';
 
 import { doFetchTxoPage } from 'redux/actions/wallet';
@@ -1001,25 +1002,32 @@ export function doCollectionPublishUpdate(
 }
 
 export function doCheckPublishNameAvailability(name: string) {
-  return (dispatch: Dispatch) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     dispatch({
       type: ACTIONS.CHECK_PUBLISH_NAME_STARTED,
     });
 
-    return Lbry.claim_list({ name: name }).then((result) => {
+    const state = getState();
+    const myChannelClaimIds = selectMyChannelClaimIds(state);
+
+    return dispatch(
+      doClaimSearch(
+        {
+          name,
+          channel_ids: myChannelClaimIds,
+          page: 1,
+          page_size: 50,
+          no_totals: true,
+          include_is_my_output: true,
+        },
+        {
+          useAutoPagination: true,
+        }
+      )
+    ).then(() => {
       dispatch({
         type: ACTIONS.CHECK_PUBLISH_NAME_COMPLETED,
       });
-      if (result.items.length) {
-        dispatch({
-          type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
-          data: {
-            result,
-            resolve: false,
-          },
-        });
-      }
-      return !(result && result.items && result.items.length);
     });
   };
 }

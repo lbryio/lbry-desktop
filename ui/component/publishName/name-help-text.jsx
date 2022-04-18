@@ -13,13 +13,14 @@ function isUriPendingUpload(uri: ?string, currentUploadNames: Array<string>) {
 type Props = {
   uri: ?string,
   myClaimForUri: ?StreamClaim,
+  myClaimForUriCaseInsensitive: ?StreamClaim,
   currentUploads: { [key: string]: FileUploadItem },
   isStillEditing: boolean,
   onEditMyClaim: (any, string) => void,
 };
 
 function NameHelpText(props: Props) {
-  const { uri, myClaimForUri, currentUploads, onEditMyClaim, isStillEditing } = props;
+  const { uri, myClaimForUri, myClaimForUriCaseInsensitive, currentUploads, onEditMyClaim, isStillEditing } = props;
 
   const currentUploadNames: Array<string> = React.useMemo(() => {
     // $FlowFixMe - unable to resolve mixed
@@ -67,6 +68,8 @@ function NameHelpText(props: Props) {
         />
       </React.Fragment>
     );
+  } else if (uri && myClaimForUriCaseInsensitive) {
+    nameHelpText = <div className="error__text">{__('You already have an upload with that name.')}</div>;
   }
 
   return (

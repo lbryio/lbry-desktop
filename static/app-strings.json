@@ -1056,6 +1056,7 @@
   "Edit existing claim instead": "Edit existing claim instead",
   "You already have a claim at %existing_uri%. Publishing will update (overwrite) your existing claim.": "You already have a claim at %existing_uri%. Publishing will update (overwrite) your existing claim.",
   "You already have a pending upload at %existing_uri%.": "You already have a pending upload at %existing_uri%.",
+  "You already have an upload with that name.": "You already have an upload with that name.",
   "Save": "Save",
   "Saved": "Saved",
   "Saving...": "Saving...",

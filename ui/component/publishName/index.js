@@ -16,6 +16,7 @@ const select = (state) => ({
   uri: makeSelectPublishFormValue('uri')(state),
   isStillEditing: selectIsStillEditing(state),
   myClaimForUri: selectMyClaimForUri(state),
+  myClaimForUriCaseInsensitive: selectMyClaimForUri(state, false),
   currentUploads: selectCurrentUploads(state),
   activeChannelClaim: selectActiveChannelClaim(state),
   incognito: selectIncognito(state),

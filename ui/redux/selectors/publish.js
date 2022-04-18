@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { createCachedSelector } from 're-reselect';
 import { parseURI, buildURI } from 'util/lbryURI';
 import {
   selectClaimsById,
@@ -51,26 +52,39 @@ export const selectPublishFormValues = createSelector(
 
 export const makeSelectPublishFormValue = (item) => createSelector(selectState, (state) => state[item]);
 
-export const selectMyClaimForUri = createSelector(
+export const selectMyClaimForUri = createCachedSelector(
   selectPublishFormValues,
   selectIsStillEditing,
   selectClaimsById,
   selectMyClaimsWithoutChannels,
-  ({ editingURI, uri }, isStillEditing, claimsById, myClaims) => {
-    const { channelName: contentName, streamName: claimName } = parseURI(uri);
+  (state, caseSensitive) => caseSensitive,
+  ({ editingURI, uri }, isStillEditing, claimsById, myClaims, caseSensitive = true) => {
+    let { channelName: contentName, streamName: claimName } = parseURI(uri);
     const { streamClaimId: editClaimId } = parseURI(editingURI);
 
     // If isStillEditing
     // They clicked "edit" from the file page
     // They haven't changed the channel/name after clicking edit
     // Get the claim so they can edit without re-uploading a new file
-    return isStillEditing
-      ? claimsById[editClaimId]
-      : myClaims.find((claim) =>
+    if (isStillEditing) {
+      return claimsById[editClaimId];
+    } else {
+      if (caseSensitive) {
+        return myClaims.find((claim) =>
           !contentName ? claim.name === claimName : claim.name === contentName || claim.name === claimName
         );
+      } else {
+        contentName = contentName ? contentName.toLowerCase() : contentName;
+        claimName = claimName ? claimName.toLowerCase() : claimName;
+
+        return myClaims.find((claim) => {
+          const n = claim && claim.name ? claim.name.toLowerCase() : null;
+          return !contentName ? n === claimName : n === contentName || n === claimName;
+        });
+      }
+    }
   }
-);
+)((state, caseSensitive = true) => `selectMyClaimForUri-${caseSensitive ? '1' : '0'}`);
 
 export const selectIsResolvingPublishUris = createSelector(
   selectState,

@@ -11,6 +11,7 @@ type Props = {
   uri: string,
   isStillEditing: boolean,
   myClaimForUri: ?StreamClaim,
+  myClaimForUriCaseInsensitive: ?StreamClaim,
   amountNeededForTakeover: number,
   prepareEdit: ({}, string) => void,
   updatePublishForm: ({}) => void,
@@ -25,6 +26,7 @@ function PublishName(props: Props) {
     uri,
     isStillEditing,
     myClaimForUri,
+    myClaimForUriCaseInsensitive,
     prepareEdit,
     updatePublishForm,
     activeChannelClaim,
@@ -86,6 +88,7 @@ function PublishName(props: Props) {
           uri={uri}
           isStillEditing={isStillEditing}
           myClaimForUri={myClaimForUri}
+          myClaimForUriCaseInsensitive={myClaimForUriCaseInsensitive}
           currentUploads={currentUploads}
           onEditMyClaim={editExistingClaim}
         />
