@@ -142,10 +142,10 @@ export default function EmbedWrapperPage(props: Props) {
       doResolveUri(uri);
     }
 
-    if (uri && haveClaim && !hasCost) {
+    if (uri && haveClaim && costInfo && costInfo.cost === 0) {
       doPlayUri(uri);
     }
-  }, [doPlayUri, doResolveUri, hasCost, haveClaim, uri]);
+  }, [doPlayUri, doResolveUri, haveClaim, costInfo, uri]);
 
   React.useEffect(() => {
     if (haveClaim && uri && doFetchCostInfoForUri) {
