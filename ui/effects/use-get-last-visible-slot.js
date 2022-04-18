@@ -10,7 +10,7 @@ type InjectedItem = { node: Node, index?: number, replace?: boolean };
  * @param listRef - A reference to the claim-grid
  * @returns {number}
  */
-export default function useLastVisibleItem(injectedItem: ?InjectedItem, listRef: any) {
+export default function useGetLastVisibleSlot(injectedItem: ?InjectedItem, listRef: any) {
   const [injectedIndex, setInjectedIndex] = React.useState(injectedItem?.index);
 
   React.useEffect(() => {

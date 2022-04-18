@@ -5,7 +5,7 @@ import Button from 'component/button';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import I18nMessage from 'component/i18nMessage';
 import useFetchViewCount from 'effects/use-fetch-view-count';
-import useLastVisibleItem from 'effects/use-last-visible-item';
+import useGetLastVisibleSlot from 'effects/use-get-last-visible-slot';
 import useResolvePins from 'effects/use-resolve-pins';
 import useGetUserMemberships from 'effects/use-get-user-memberships';
 
@@ -93,7 +93,7 @@ function ClaimTilesDiscover(props: Props) {
   } = props;
 
   const listRef = React.useRef();
-  const injectedIndex = useLastVisibleItem(injectedItem, listRef);
+  const injectedIndex = useGetLastVisibleSlot(injectedItem, listRef);
 
   const prevUris = React.useRef();
   const claimSearchUris = claimSearchResults || [];

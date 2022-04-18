@@ -7,7 +7,7 @@ import ClaimPreview from 'component/claimPreview';
 import Spinner from 'component/spinner';
 import { FormField } from 'component/common/form';
 import usePersistedState from 'effects/use-persisted-state';
-import useLastVisibleItem from 'effects/use-last-visible-item';
+import useGetLastVisibleSlot from 'effects/use-get-last-visible-slot';
 import debounce from 'util/debounce';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 
@@ -106,7 +106,7 @@ export default function ClaimList(props: Props) {
 
   // Resolve the index for injectedItem, if provided; else injectedIndex will be 'undefined'.
   const listRef = React.useRef();
-  const injectedIndex = useLastVisibleItem(injectedItem, listRef);
+  const injectedIndex = useGetLastVisibleSlot(injectedItem, listRef);
 
   // Exclude prefix uris in these results variables. We don't want to show
   // anything if the search failed or timed out.
