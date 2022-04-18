@@ -7,7 +7,7 @@ import ClaimPreview from 'component/claimPreview';
 import Spinner from 'component/spinner';
 import { FormField } from 'component/common/form';
 import usePersistedState from 'effects/use-persisted-state';
-import useLastVisibleItem from 'effects/use-last-visible-item';
+import useGetLastVisibleSlot from 'effects/use-get-last-visible-slot';
 import debounce from 'util/debounce';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 
@@ -41,7 +41,7 @@ type Props = {
   renderActions?: (Claim) => ?Node,
   renderProperties?: (Claim) => ?Node,
   includeSupportAction?: boolean,
-  injectedItem?: { node: Node, index?: number, replace?: boolean },
+  injectedItem?: ListInjectedItem,
   timedOutMessage?: Node,
   tileLayout?: boolean,
   searchInLanguage: boolean,
@@ -106,7 +106,8 @@ export default function ClaimList(props: Props) {
 
   // Resolve the index for injectedItem, if provided; else injectedIndex will be 'undefined'.
   const listRef = React.useRef();
-  const injectedIndex = useLastVisibleItem(injectedItem, listRef);
+  const findLastVisibleSlot = injectedItem && injectedItem.node && injectedItem.index === undefined;
+  const lastVisibleIndex = useGetLastVisibleSlot(listRef, !findLastVisibleSlot);
 
   // Exclude prefix uris in these results variables. We don't want to show
   // anything if the search failed or timed out.
@@ -205,9 +206,18 @@ export default function ClaimList(props: Props) {
   );
 
   const getInjectedItem = (index) => {
-    if (injectedItem && injectedItem.node && injectedIndex === index) {
-      return injectedItem.node;
+    if (injectedItem && injectedItem.node) {
+      if (typeof injectedItem.node === 'function') {
+        return injectedItem.node(index, lastVisibleIndex, pageSize);
+      } else {
+        if (injectedItem.index === undefined || injectedItem.index === null) {
+          return index === lastVisibleIndex ? injectedItem.node : null;
+        } else {
+          return index === injectedItem.index ? injectedItem.node : null;
+        }
+      }
     }
+
     return null;
   };
 
