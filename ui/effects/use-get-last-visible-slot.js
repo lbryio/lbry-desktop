@@ -1,34 +1,24 @@
 // @flow
 import React from 'react';
-import type { Node } from 'react';
-
-type InjectedItem = { node: Node, index?: number, replace?: boolean };
 
 /**
- * Returns the index indicating where in the claim-grid to inject the ad element
- * @param injectedItem
- * @param listRef - A reference to the claim-grid
- * @returns {number}
+ * Returns the last visible slot in a list.
+ *
+ * @param listRef A reference to the list.
+ * @param skipEval Skip the evaluation/effect. Useful if the client knows the effect is not needed in certain scenarios.
+ * @param checkDelayMs Delay before running the effect. Useful if the list is known to not be populated until later.
+ * @returns {number | undefined} Zero-indexed number representing the last visible slot.
  */
-export default function useGetLastVisibleSlot(injectedItem: ?InjectedItem, listRef: any) {
-  const [injectedIndex, setInjectedIndex] = React.useState(injectedItem?.index);
+export default function useGetLastVisibleSlot(listRef: any, skipEval: boolean, checkDelayMs: number = 1500) {
+  const [lastVisibleIndex, setLastVisibleIndex] = React.useState(undefined);
 
   React.useEffect(() => {
-    // Move to default injection index (last visible item)
-    if (injectedItem && injectedItem.index === undefined) {
-      // AD_INJECTION_DELAY_MS = average total-blocking-time incurred for
-      // loading ads. Delay to let higher priority tasks run first. Ideally,
-      // should use 'requestIdleCallback/requestAnimationFrame'.
-      const AD_INJECTION_DELAY_MS = 1500;
-
+    if (!skipEval) {
       const timer = setTimeout(() => {
         if (listRef.current) {
           const screenBottom = window.innerHeight;
-
-          // claim preview tiles
           const items = listRef.current.children;
 
-          // algo to return index of item, where ad will be injected before it
           if (items.length) {
             let i = 2; // Start from 2, so that the min possible is index-1
             for (; i < items.length; ++i) {
@@ -38,18 +28,18 @@ export default function useGetLastVisibleSlot(injectedItem: ?InjectedItem, listR
               }
             }
 
-            setInjectedIndex(i - 1);
+            setLastVisibleIndex(i - 1);
             return;
           }
         }
 
         // Fallback to index-1 (2nd item) for failures. No retries.
-        setInjectedIndex(1);
-      }, AD_INJECTION_DELAY_MS);
+        setLastVisibleIndex(1);
+      }, checkDelayMs);
 
       return () => clearTimeout(timer);
     }
   }, []);
 
-  return injectedIndex;
+  return lastVisibleIndex;
 }

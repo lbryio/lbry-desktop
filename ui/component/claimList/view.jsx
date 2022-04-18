@@ -106,7 +106,8 @@ export default function ClaimList(props: Props) {
 
   // Resolve the index for injectedItem, if provided; else injectedIndex will be 'undefined'.
   const listRef = React.useRef();
-  const injectedIndex = useGetLastVisibleSlot(injectedItem, listRef);
+  const findLastVisibleSlot = injectedItem && injectedItem.node && injectedItem.index === undefined;
+  const lastVisibleIndex = useGetLastVisibleSlot(listRef, !findLastVisibleSlot);
 
   // Exclude prefix uris in these results variables. We don't want to show
   // anything if the search failed or timed out.
@@ -205,7 +206,7 @@ export default function ClaimList(props: Props) {
   );
 
   const getInjectedItem = (index) => {
-    if (injectedItem && injectedItem.node && injectedIndex === index) {
+    if (injectedItem && injectedItem.node && lastVisibleIndex === index) {
       return injectedItem.node;
     }
     return null;

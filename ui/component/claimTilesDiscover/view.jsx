@@ -93,7 +93,8 @@ function ClaimTilesDiscover(props: Props) {
   } = props;
 
   const listRef = React.useRef();
-  const injectedIndex = useGetLastVisibleSlot(injectedItem, listRef);
+  const findLastVisibleSlot = injectedItem && injectedItem.node && injectedItem.index === undefined;
+  const lastVisibleIndex = useGetLastVisibleSlot(listRef, !findLastVisibleSlot);
 
   const prevUris = React.useRef();
   const claimSearchUris = claimSearchResults || [];
@@ -186,13 +187,13 @@ function ClaimTilesDiscover(props: Props) {
       {finalUris && finalUris.length
         ? finalUris.map((uri, i) => {
             if (uri) {
-              if (injectedIndex === i && injectedItem && injectedItem.replace) {
+              if (lastVisibleIndex === i && injectedItem && injectedItem.replace) {
                 return <React.Fragment key={uri}>{injectedItem.node}</React.Fragment>;
               }
 
               return (
                 <React.Fragment key={uri}>
-                  {injectedIndex === i && injectedItem && injectedItem.node}
+                  {lastVisibleIndex === i && injectedItem && injectedItem.node}
                   <ClaimPreviewTile
                     showNoSourceClaims={hasNoSource || showNoSourceClaims}
                     uri={uri}
