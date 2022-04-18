@@ -69,7 +69,7 @@ function NameHelpText(props: Props) {
       </React.Fragment>
     );
   } else if (uri && myClaimForUriCaseInsensitive) {
-    nameHelpText = <div className="error__text">{__('You already have an upload with that name.')}</div>;
+    nameHelpText = <div className="error__text">{__('You already have a claim with this name.')}</div>;
   }
 
   return (
