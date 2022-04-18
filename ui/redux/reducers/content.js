@@ -55,6 +55,7 @@ reducers[ACTIONS.SET_CONTENT_POSITION] = (state, action) => {
       [claimId]: {
         ...state.positions[claimId],
         [outpoint]: position,
+        [`${outpoint}:persisted`]: position,
       },
     },
   };

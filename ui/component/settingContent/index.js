@@ -14,6 +14,7 @@ const select = (state) => ({
   autoplayMedia: makeSelectClientSetting(SETTINGS.AUTOPLAY_MEDIA)(state),
   autoplayNext: makeSelectClientSetting(SETTINGS.AUTOPLAY_NEXT)(state),
   hideReposts: makeSelectClientSetting(SETTINGS.HIDE_REPOSTS)(state),
+  persistWatchTime: makeSelectClientSetting(SETTINGS.PERSIST_WATCH_TIME)(state),
   showNsfw: selectShowMatureContent(state),
   myChannelUrls: selectMyChannelUrls(state),
   instantPurchaseEnabled: makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED)(state),
