@@ -84,7 +84,6 @@ function HomePage(props: Props) {
     showNsfw
   );
 
-  // TODO: probably need memo, or incorporate into GetLinksData.
   let sortedRowData: Array<RowDataItem> = [];
   if (homepageOrder.active && authenticated) {
     homepageOrder.active.forEach((key) => {
@@ -99,7 +98,7 @@ function HomePage(props: Props) {
 
     if (homepageOrder.hidden) {
       rowData.forEach((data: RowDataItem) => {
-        // $FlowIssue: null 'hidden' already avoided, but flow can't see beyond this anonymous function?
+        // $FlowIssue: null 'hidden' already avoided outside anonymous function.
         if (!homepageOrder.hidden.includes(data.id)) {
           sortedRowData.push(data);
         }
@@ -107,14 +106,9 @@ function HomePage(props: Props) {
     }
   } else {
     rowData.forEach((key) => {
-      // always inject FYP if homepage not customized, hide news.
-      if (key.id === 'FOLLOWING') {
-        sortedRowData.push(key);
-        if (hasMembership) {
-          sortedRowData.push(FYP_SECTION);
-        }
-      } else if (key.id !== 'NEWS') {
-        sortedRowData.push(key);
+      sortedRowData.push(key);
+      if (key.id === 'FOLLOWING' && hasMembership) {
+        sortedRowData.push(FYP_SECTION);
       }
     });
   }
