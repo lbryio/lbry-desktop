@@ -169,7 +169,7 @@ function HomePage(props: Props) {
         injectedItem={
           index === 0 && {
             node: <Ads small type="video" tileLayout />,
-            replace: adBlockerFound === false,
+            replace: adBlockerFound === false && isLargeScreen,
           }
         }
         forceShowReposts={id !== 'FOLLOWING'}
