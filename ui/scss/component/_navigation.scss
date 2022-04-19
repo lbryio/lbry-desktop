@@ -235,6 +235,10 @@
         margin-left: 0;
       }
     }
+
+    .comment__badge {
+      margin-left: var(--spacing-xxs);
+    }
   }
 
   &:hover:not(.navigation-link--active) {

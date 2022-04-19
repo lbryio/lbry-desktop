@@ -23,7 +23,8 @@
   fieldset-section.radio,
   div.checkbox,
   div.section {
-    margin-top: var(--spacing-s);
+    margin-top: var(--spacing-m);
+    margin-bottom: var(--spacing-s);
   }
 
   .channel__selector {

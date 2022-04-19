@@ -1021,6 +1021,38 @@ body {
       padding-right: 0;
     }
   }
+
+  @media (max-width: $breakpoint-small) {
+    .card__main-actions {
+      margin-top: var(--spacing-s);
+    }
+    .section__actions {
+      margin-top: var(--spacing-m);
+    }
+    .MuiAutocomplete-root {
+      background-color: var(--color-input-bg);
+      border-radius: var(--border-radius);
+      .MuiOutlinedInput-input {
+        font-size: var(--font-body);
+        padding-left: var(--spacing-s);
+        padding-right: var(--spacing-s);
+        height: 22px !important;
+        &::placeholder {
+          color: #ffffff !important;
+          font-size: var(--font-body);
+        }
+        &:focus-visible {
+          box-shadow: unset;
+        }
+      }
+      .Mui-focused {
+        outline: 2px solid var(--color-primary);
+      }
+      .MuiOutlinedInput-notchedOutline {
+        border: none;
+      }
+    }
+  }
 }
 
 .main--empty {

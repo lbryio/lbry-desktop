@@ -86,6 +86,11 @@ $contentMaxWidth: 60rem;
           opacity: 1;
         }
       }
+
+      .MuiAutocomplete-root {
+        background-color: var(--color-background);
+        border-radius: var(--border-radius);
+      }
     }
   }
 

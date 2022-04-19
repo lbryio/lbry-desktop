@@ -76,9 +76,11 @@
 
 .tag--mature {
   @extend .badge--tag-mature;
-  background-color: #2a0000 !important;
+  background-color: #710000 !important;
+  color: #ffffff !important;
   &:hover {
-    background-color: #ff0000 !important;
+    background-color: #b00000 !important;
+    color: #ffffff !important;
   }
 }
 
