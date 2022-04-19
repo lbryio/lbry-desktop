@@ -21,6 +21,7 @@ export type HomepageCat = {
   tags?: Array<string>,
   pinnedUrls?: Array<string>,
   pinnedClaimIds?: Array<string>, // takes precedence over pinnedUrls
+  searchLanguages?: Array<string>,
   mixIn?: Array<string>,
 };
 
@@ -98,6 +99,7 @@ export const getHomepageRowForCat = (key: string, cat: HomepageCat) => {
       orderBy: orderValue,
       pageSize: cat.pageSize || undefined,
       limitClaimsPerChannel: limitClaims,
+      searchLanguages: cat.searchLanguages,
       releaseTime: `>${Math.floor(
         moment()
           .subtract(cat.daysOfContent || 30, 'days')

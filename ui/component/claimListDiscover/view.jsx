@@ -44,6 +44,7 @@ type Props = {
   showHiddenByUser?: boolean,
   showNoSourceClaims?: boolean,
   tileLayout: boolean,
+  searchLanguages?: Array<string>,
   ignoreSearchInLanguage?: boolean,
 
   orderBy?: Array<string>, // Trending, New, Top
@@ -165,6 +166,7 @@ function ClaimListDiscover(props: Props) {
     maxPages,
     forceShowReposts = false,
     languageSetting,
+    searchLanguages,
     searchInLanguage,
     ignoreSearchInLanguage,
     limitClaimsPerChannel,
@@ -211,9 +213,14 @@ function ClaimListDiscover(props: Props) {
     new Set(mutedUris.concat(blockedUris).map((uri) => splitBySeparator(uri)[1]))
   );
 
+  // Precedence:
+  // - searchLanguages (per instance attribute)
+  // - urlParams
+  // - languageSetting (redux setting)
+  const language = searchLanguages ? searchLanguages.join(',') : languageSetting;
   const langParam = urlParams.get(CS.LANGUAGE_KEY) || null;
-  const searchInSelectedLangOnly = searchInLanguage && !ignoreSearchInLanguage;
-  const languageParams = resolveLangForClaimSearch(languageSetting, searchInSelectedLangOnly, langParam);
+  const searchInSelectedLangOnly = Boolean(searchLanguages) || (searchInLanguage && !ignoreSearchInLanguage);
+  const languageParams = resolveLangForClaimSearch(language, searchInSelectedLangOnly, langParam);
 
   let claimTypeParam = claimType || defaultClaimType || null;
   let streamTypeParam = streamType || defaultStreamType || null;

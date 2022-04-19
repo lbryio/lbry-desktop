@@ -25,6 +25,7 @@ declare type RowDataItem = {
     limitClaimsPerChannel?: number,
     pageSize?: number,
     releaseTime?: string,
+    searchLanguages?: Array<string>,
   },
   route?: string,
   hideForUnauth?: boolean,

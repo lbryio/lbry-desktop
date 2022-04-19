@@ -115,6 +115,7 @@ function DiscoverPage(props: Props) {
           channelIds={channelIds}
           activeLivestreams={activeLivestreams}
           doFetchActiveLivestreams={doFetchActiveLivestreams}
+          searchLanguages={dynamicRouteProps?.options?.searchLanguages}
           languageSetting={languageSetting}
           searchInLanguage={searchInLanguage}
           langParam={langParam}
@@ -214,6 +215,7 @@ function DiscoverPage(props: Props) {
         meta={getMeta()}
         hasSource
         forceShowReposts={dynamicRouteProps}
+        searchLanguages={dynamicRouteProps?.options?.searchLanguages}
       />
     </Page>
   );
