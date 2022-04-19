@@ -4,6 +4,7 @@ import { version as VERSION } from './package.json';
 import ConcreteButton from './ConcreteButton';
 import ConcreteMenuItem from './ConcreteMenuItem';
 import * as QUALITY_OPTIONS from 'constants/video';
+import { safeGetComputedStyle, simpleSelector } from '../videojs-http-streaming--override/playlist-selectors';
 
 // Default options for the plugin.
 const defaults = {};
@@ -110,6 +111,29 @@ class HlsQualitySelectorPlugin {
     concreteButtonInstance.removeClass('vjs-hidden');
   }
 
+  resolveAutoQualityLabel(includeResolution) {
+    const player = this.player;
+    const vhs = player.tech(true).vhs;
+
+    if (includeResolution && vhs) {
+      const pixelRatio = this.useDevicePixelRatio ? window.devicePixelRatio || 1 : 1;
+
+      const selectedBandwidth = simpleSelector(
+        vhs.playlists.master,
+        vhs.systemBandwidth,
+        parseInt(safeGetComputedStyle(vhs.tech_.el_, 'width'), 10) * pixelRatio,
+        parseInt(safeGetComputedStyle(vhs.tech_.el_, 'height'), 10) * pixelRatio,
+        vhs.limitRenditionByPlayerDimensions
+      );
+
+      const quality = selectedBandwidth.attributes.RESOLUTION.height;
+
+      return __('Auto (%quality%) --[Video quality popup. Long form.]--', { quality: quality + 'p' });
+    } else {
+      return __('Auto --[Video quality. Short form]--');
+    }
+  }
+
   resolveOriginalQualityLabel(abbreviatedForm, includeResolution) {
     if (includeResolution && this.config.originalHeight) {
       return abbreviatedForm
@@ -136,7 +160,7 @@ class HlsQualitySelectorPlugin {
     let str;
     switch (text) {
       case QUALITY_OPTIONS.AUTO:
-        str = __('Auto --[Video quality. Short form]--');
+        str = this.resolveAutoQualityLabel(true);
         break;
       case QUALITY_OPTIONS.ORIGINAL:
         str = this.resolveOriginalQualityLabel(true, false);
@@ -230,15 +254,15 @@ class HlsQualitySelectorPlugin {
 
     levelItems.push(
       this.getQualityMenuItem.call(this, {
-        label: __('Auto --[Video quality. Short form]--'),
+        label: this.resolveAutoQualityLabel(true),
         value: QUALITY_OPTIONS.AUTO,
         selected: !defaultQuality ? true : defaultQuality === QUALITY_OPTIONS.AUTO,
       })
     );
 
-    if (nextLowestQualityItemObj || defaultQuality) {
-      this.setButtonInnerText(nextLowestQualityItemObj ? nextLowestQualityItemObj.label : defaultQuality);
-    }
+    this.setButtonInnerText(
+      nextLowestQualityItemObj ? nextLowestQualityItemObj.label : defaultQuality || QUALITY_OPTIONS.AUTO
+    );
 
     if (this._qualityButton) {
       this._qualityButton.createItems = function () {

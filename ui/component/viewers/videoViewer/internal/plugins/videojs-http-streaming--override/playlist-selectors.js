@@ -15,7 +15,7 @@ import Playlist from './playlist';
  * @param {HTMLElement} el the htmlelement to work on
  * @param {string} the proprety to get the style for
  */
-const safeGetComputedStyle = function(el, property) {
+export const safeGetComputedStyle = function(el, property) {
   if (!el) {
     return '';
   }
