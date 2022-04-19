@@ -190,9 +190,9 @@ function AppRouter(props: Props) {
   const tagParams = urlParams.get(CS.TAGS_KEY);
   const isLargeScreen = useIsLargeScreen();
 
-  const homeCategoryPages = React.useMemo(() => {
+  const categoryPages = React.useMemo(() => {
     const dynamicRoutes = GetLinksData(homepageData, isLargeScreen).filter(
-      (potentialRoute: any) => potentialRoute && potentialRoute.route
+      (x: any) => x && x.route && (x.id !== 'WILD_WEST' || !wildWestDisabled)
     );
 
     return dynamicRoutes.map((dynamicRouteProps: RowDataItem) => (
@@ -204,7 +204,7 @@ function AppRouter(props: Props) {
         )}
       />
     ));
-  }, [homepageData, isLargeScreen]);
+  }, [homepageData, isLargeScreen, wildWestDisabled]);
 
   // For people arriving at settings page from deeplinks, know whether they can "go back"
   useEffect(() => {
@@ -291,8 +291,7 @@ function AppRouter(props: Props) {
         <Route path={`/`} exact component={HomePage} />
 
         {(!wildWestDisabled || tagParams) && <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />}
-        {!wildWestDisabled && <Route path={`/$/${PAGES.WILD_WEST}`} exact component={DiscoverPage} />}
-        {homeCategoryPages}
+        {categoryPages}
 
         <Route path={`/$/${PAGES.AUTH_SIGNIN}`} exact component={SignInPage} />
         <Route path={`/$/${PAGES.AUTH_PASSWORD_RESET}`} exact component={PasswordResetPage} />
