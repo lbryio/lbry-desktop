@@ -45,7 +45,7 @@ type Props = {
   showNoSourceClaims?: boolean,
   tileLayout: boolean,
   searchLanguages?: Array<string>,
-  ignoreSearchInLanguage?: boolean,
+  ignoreSearchInLanguage?: boolean, // Negate the redux setting where it doesn't make sense.
 
   orderBy?: Array<string>, // Trending, New, Top
   defaultOrderBy?: string,
@@ -219,8 +219,9 @@ function ClaimListDiscover(props: Props) {
   // - languageSetting (redux setting)
   const language = searchLanguages ? searchLanguages.join(',') : languageSetting;
   const langParam = urlParams.get(CS.LANGUAGE_KEY) || null;
-  const searchInSelectedLangOnly = Boolean(searchLanguages) || (searchInLanguage && !ignoreSearchInLanguage);
-  const languageParams = resolveLangForClaimSearch(language, searchInSelectedLangOnly, langParam);
+  const forcedSearchInLanguage = Boolean(searchLanguages);
+  const userSearchInLanguage = searchInLanguage && !ignoreSearchInLanguage;
+  const languageParams = resolveLangForClaimSearch(language, forcedSearchInLanguage || userSearchInLanguage, langParam);
 
   let claimTypeParam = claimType || defaultClaimType || null;
   let streamTypeParam = streamType || defaultStreamType || null;
@@ -701,7 +702,7 @@ function ClaimListDiscover(props: Props) {
             <div className="section__header--actions">
               <div className="section__actions">
                 {headerToUse}
-                {searchInSelectedLangOnly && <LangFilterIndicator />}
+                {userSearchInLanguage && <LangFilterIndicator />}
               </div>
               {meta && <div className="section__actions--no-margin">{meta}</div>}
             </div>
@@ -741,7 +742,7 @@ function ClaimListDiscover(props: Props) {
             <div className="section__header--actions">
               <div className="section__actions">
                 {headerToUse}
-                {searchInSelectedLangOnly && <LangFilterIndicator />}
+                {userSearchInLanguage && <LangFilterIndicator />}
               </div>
               {meta && <div className="section__actions--no-margin">{meta}</div>}
             </div>
