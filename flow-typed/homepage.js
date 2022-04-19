@@ -22,6 +22,7 @@ declare type RowDataItem = {
   pinnedClaimIds?: Array<string>, // takes precedence over pinnedUrls
   options?: {
     channelIds?: Array<string>,
+    excludedChannelIds?: Array<string>,
     limitClaimsPerChannel?: number,
     pageSize?: number,
     releaseTime?: string,

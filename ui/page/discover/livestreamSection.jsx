@@ -23,6 +23,7 @@ function getTileLimit(isLargeScreen, originalSize) {
 type Props = {
   tileLayout: boolean,
   channelIds?: Array<string>,
+  excludedChannelIds?: Array<string>,
   activeLivestreams: ?LivestreamInfo,
   doFetchActiveLivestreams: (orderBy: ?Array<string>, lang: ?Array<string>) => void,
   searchLanguages?: Array<string>,
@@ -35,6 +36,7 @@ export default function LivestreamSection(props: Props) {
   const {
     tileLayout,
     channelIds,
+    excludedChannelIds,
     activeLivestreams,
     doFetchActiveLivestreams,
     searchLanguages,
@@ -51,7 +53,7 @@ export default function LivestreamSection(props: Props) {
 
   const initialLiveTileLimit = getTileLimit(isLargeScreen, DEFAULT_LIVESTREAM_TILE_LIMIT);
   const [liveSection, setLiveSection] = React.useState(liveSectionStore || SECTION.COLLAPSED);
-  const livestreamUris = getLivestreamUris(activeLivestreams, channelIds);
+  const livestreamUris = getLivestreamUris(activeLivestreams, channelIds, excludedChannelIds);
   const liveTilesOverLimit = livestreamUris && livestreamUris.length > initialLiveTileLimit;
 
   function collapseSection() {

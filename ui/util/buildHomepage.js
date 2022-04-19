@@ -21,6 +21,7 @@ export type HomepageCat = {
   tags?: Array<string>,
   pinnedUrls?: Array<string>,
   pinnedClaimIds?: Array<string>, // takes precedence over pinnedUrls
+  excludedChannelIds?: Array<string>,
   searchLanguages?: Array<string>,
   mixIn?: Array<string>,
 };
@@ -96,6 +97,7 @@ export const getHomepageRowForCat = (key: string, cat: HomepageCat) => {
     options: {
       claimType: cat.claimType || ['stream', 'repost'],
       channelIds: cat.channelIds,
+      excludedChannelIds: cat.excludedChannelIds,
       orderBy: orderValue,
       pageSize: cat.pageSize || undefined,
       limitClaimsPerChannel: limitClaims,

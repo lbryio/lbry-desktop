@@ -66,8 +66,8 @@ function DiscoverPage(props: Props) {
   // Eventually allow more than one tag on this page
   // Restricting to one to make follow/unfollow simpler
   const tag = (tags && tags[0]) || null;
-  const channelIds =
-    (dynamicRouteProps && dynamicRouteProps.options && dynamicRouteProps.options.channelIds) || undefined;
+  const channelIds = dynamicRouteProps?.options?.channelIds || undefined;
+  const excludedChannelIds = dynamicRouteProps?.options?.excludedChannelIds || undefined;
 
   const isFollowing = followedTags.map(({ name }) => name).includes(tag);
   let label = isFollowing ? __('Following --[button label indicating a channel has been followed]--') : __('Follow');
@@ -113,6 +113,7 @@ function DiscoverPage(props: Props) {
         <LivestreamSection
           tileLayout={repostedUri ? false : tileLayout}
           channelIds={channelIds}
+          excludedChannelIds={excludedChannelIds}
           activeLivestreams={activeLivestreams}
           doFetchActiveLivestreams={doFetchActiveLivestreams}
           searchLanguages={dynamicRouteProps?.options?.searchLanguages}
@@ -207,6 +208,7 @@ function DiscoverPage(props: Props) {
         releaseTime={releaseTime || undefined}
         feeAmount={isWildWest || tags ? CS.FEE_AMOUNT_ANY : undefined}
         channelIds={channelIds}
+        excludedChannelIds={excludedChannelIds}
         limitClaimsPerChannel={
           SIMPLE_SITE
             ? (dynamicRouteProps && dynamicRouteProps.options && dynamicRouteProps.options.limitClaimsPerChannel) || 3

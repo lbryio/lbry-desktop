@@ -71,6 +71,7 @@ type Props = {
   limitClaimsPerChannel?: number,
 
   channelIds?: Array<string>,
+  excludedChannelIds?: Array<string>,
   claimIds?: Array<string>,
   subscribedChannels: Array<Subscription>,
 
@@ -128,6 +129,7 @@ function ClaimListDiscover(props: Props) {
     meta,
     subSection,
     channelIds,
+    excludedChannelIds,
     showNsfw,
     hideReposts,
     fetchViewCount,
@@ -265,6 +267,7 @@ function ClaimListDiscover(props: Props) {
   const durationParam = urlParams.get(CS.DURATION_KEY) || null;
   const channelIdsInUrl = urlParams.get(CS.CHANNEL_IDS_KEY);
   const channelIdsParam = channelIdsInUrl ? channelIdsInUrl.split(',') : channelIds;
+  const excludedIdsParam = excludedChannelIds;
   const feeAmountParam = urlParams.get('fee_amount') || feeAmount;
   // const originalPageSize = pageSize || CS.PAGE_SIZE;
   const originalPageSize = 12;
@@ -352,6 +355,10 @@ function ClaimListDiscover(props: Props) {
 
   if (channelIdsParam) {
     options.channel_ids = channelIdsParam;
+  }
+
+  if (excludedIdsParam) {
+    options.not_channel_ids = (options.not_channel_ids || []).concat(excludedIdsParam);
   }
 
   if (tagsParam) {
