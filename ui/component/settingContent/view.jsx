@@ -12,6 +12,7 @@ import Card from 'component/common/card';
 import { FormField, FormFieldPrice } from 'component/common/form';
 import MaxPurchasePrice from 'component/maxPurchasePrice';
 import SettingsRow from 'component/settingsRow';
+import SettingDefaultQuality from 'component/settingDefaultQuality';
 
 type Price = {
   currency: string,
@@ -117,6 +118,10 @@ export default function SettingContent(props: Props) {
                 onChange={() => setClientSetting(SETTINGS.HIDE_SCHEDULED_LIVESTREAMS, !hideScheduledLivestreams)}
                 checked={hideScheduledLivestreams}
               />
+            </SettingsRow>
+
+            <SettingsRow title={__('Default Video Quality')} subtitle={__(HELP.DEFAULT_VIDEO_QUALITY)}>
+              <SettingDefaultQuality />
             </SettingsRow>
 
             {!SIMPLE_SITE && (
@@ -240,4 +245,5 @@ const HELP = {
   MAX_PURCHASE_PRICE: 'This will prevent you from purchasing any content over a certain cost, as a safety measure.',
   ONLY_CONFIRM_OVER_AMOUNT: '', // [feel redundant. Disable for now] "When this option is chosen, LBRY won't ask you to confirm purchases or tips below your chosen amount.",
   PUBLISH_PREVIEW: 'Show preview and confirmation dialog before publishing content.',
+  DEFAULT_VIDEO_QUALITY: 'Set a default quality for video playback. If the default choice is not available, the next lowest will be used when playback starts.',
 };

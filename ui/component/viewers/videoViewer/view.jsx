@@ -71,6 +71,8 @@ type Props = {
   claimRewards: () => void,
   isLivestreamClaim: boolean,
   activeLivestreamForChannel: any,
+  defaultQuality: ?string,
+  doSetDefaultVideoQuality: (value: ?string) => void,
 };
 
 /*
@@ -115,6 +117,8 @@ function VideoViewer(props: Props) {
     isMarkdownOrComment,
     isLivestreamClaim,
     activeLivestreamForChannel,
+    defaultQuality,
+    doSetDefaultVideoQuality,
   } = props;
 
   const permanentUrl = claim && claim.permanent_url;
@@ -512,6 +516,8 @@ function VideoViewer(props: Props) {
         userClaimId={claim && claim.signing_channel && claim.signing_channel.claim_id}
         isLivestreamClaim={isLivestreamClaim}
         activeLivestreamForChannel={activeLivestreamForChannel}
+        defaultQuality={defaultQuality}
+        doSetDefaultVideoQuality={doSetDefaultVideoQuality}
       />
     </div>
   );

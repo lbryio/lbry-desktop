@@ -493,3 +493,6 @@ export function toggleAutoplayNext() {
     );
   };
 }
+
+export const doSetDefaultVideoQuality = (value) => (dispatch) =>
+  dispatch(doSetClientSetting(SETTINGS.DEFAULT_VIDEO_QUALITY, value, true));

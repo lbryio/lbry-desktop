@@ -3,6 +3,7 @@ import videojs from 'video.js';
 import { version as VERSION } from './package.json';
 import ConcreteButton from './ConcreteButton';
 import ConcreteMenuItem from './ConcreteMenuItem';
+import * as QUALITY_OPTIONS from 'constants/video';
 
 // Default options for the plugin.
 const defaults = {};
@@ -104,7 +105,7 @@ class HlsQualitySelectorPlugin {
 
       concreteButtonInstance.menuButton_.$('.vjs-icon-placeholder').className += icon;
     } else {
-      this.setButtonInnerText('auto');
+      this.setButtonInnerText(QUALITY_OPTIONS.AUTO);
     }
     concreteButtonInstance.removeClass('vjs-hidden');
   }
@@ -134,10 +135,10 @@ class HlsQualitySelectorPlugin {
   setButtonInnerText(text) {
     let str;
     switch (text) {
-      case 'auto':
+      case QUALITY_OPTIONS.AUTO:
         str = __('Auto --[Video quality. Short form]--');
         break;
-      case 'original':
+      case QUALITY_OPTIONS.ORIGINAL:
         str = this.resolveOriginalQualityLabel(true, false);
         break;
       default:
@@ -165,23 +166,43 @@ class HlsQualitySelectorPlugin {
    */
   onAddQualityLevel() {
     const player = this.player;
+    const { defaultQuality } = this.config;
     const qualityList = player.qualityLevels();
     const levels = qualityList.levels_ || [];
-    const levelItems = [];
+
+    let levelItems = [];
+    let nextLowestQualityItem;
+    let nextLowestQualityItemObj;
 
     for (let i = 0; i < levels.length; ++i) {
-      if (
-        !levelItems.filter((_existingItem) => {
-          return _existingItem.item && _existingItem.item.value === levels[i].height;
-        }).length
-      ) {
+      const currentHeight = levels[i].height;
+
+      if (!levelItems.filter((_existingItem) => _existingItem.item?.value === currentHeight).length) {
+        const heightStr = currentHeight + 'p';
+
         const levelItem = this.getQualityMenuItem.call(this, {
-          label: levels[i].height + 'p',
-          value: levels[i].height,
+          label: heightStr,
+          value: currentHeight,
+          selected: defaultQuality ? currentHeight === defaultQuality : undefined,
         });
+
+        if (defaultQuality && !nextLowestQualityItem && currentHeight <= defaultQuality) {
+          nextLowestQualityItem = levelItem;
+          nextLowestQualityItemObj = {
+            label: heightStr,
+            value: currentHeight,
+            selected: true,
+          };
+        }
 
         levelItems.push(levelItem);
       }
+    }
+
+    if (nextLowestQualityItem) {
+      levelItems = levelItems.map((item) =>
+        item === nextLowestQualityItem ? this.getQualityMenuItem.call(this, nextLowestQualityItemObj) : item
+      );
     }
 
     levelItems.sort((current, next) => {
@@ -201,8 +222,8 @@ class HlsQualitySelectorPlugin {
       levelItems.push(
         this.getQualityMenuItem.call(this, {
           label: this.resolveOriginalQualityLabel(false, true),
-          value: 'original',
-          selected: false,
+          value: QUALITY_OPTIONS.ORIGINAL,
+          selected: defaultQuality ? defaultQuality === QUALITY_OPTIONS.ORIGINAL : false,
         })
       );
     }
@@ -210,10 +231,14 @@ class HlsQualitySelectorPlugin {
     levelItems.push(
       this.getQualityMenuItem.call(this, {
         label: __('Auto --[Video quality. Short form]--'),
-        value: 'auto',
-        selected: true,
+        value: QUALITY_OPTIONS.AUTO,
+        selected: !defaultQuality ? true : defaultQuality === QUALITY_OPTIONS.AUTO,
       })
     );
+
+    if (nextLowestQualityItemObj || defaultQuality) {
+      this.setButtonInnerText(nextLowestQualityItemObj ? nextLowestQualityItemObj.label : defaultQuality);
+    }
 
     if (this._qualityButton) {
       this._qualityButton.createItems = function () {
@@ -223,13 +248,13 @@ class HlsQualitySelectorPlugin {
     }
   }
 
-  swapSrcTo(mode = 'original') {
+  swapSrcTo(mode = QUALITY_OPTIONS.ORIGINAL) {
     const currentTime = this.player.currentTime();
     this.player.src(mode === 'vhs' ? this.player.claimSrcVhs : this.player.claimSrcOriginal);
     this.player.load();
     this.player.currentTime(currentTime);
 
-    console.assert(mode === 'vhs' || mode === 'original', 'Unexpected input');
+    console.assert(mode === 'vhs' || mode === QUALITY_OPTIONS.ORIGINAL, 'Unexpected input');
   }
 
   /**
@@ -238,35 +263,36 @@ class HlsQualitySelectorPlugin {
    * @param {number} height - A number representing HLS playlist.
    */
   setQuality(height) {
+    const { doSetDefaultVideoQuality } = this.config;
     const qualityList = this.player.qualityLevels();
 
     // Set quality on plugin
     this._currentQuality = height;
+    doSetDefaultVideoQuality(height);
 
     if (this.config.displayCurrentQuality) {
-      this.setButtonInnerText(height === 'auto' ? 'auto' : height === 'original' ? 'original' : `${height}p`);
+      this.setButtonInnerText(
+        height === QUALITY_OPTIONS.AUTO
+          ? QUALITY_OPTIONS.AUTO
+          : height === QUALITY_OPTIONS.ORIGINAL
+          ? QUALITY_OPTIONS.ORIGINAL
+          : `${height}p`
+      );
     }
 
     for (let i = 0; i < qualityList.length; ++i) {
       const quality = qualityList[i];
-      quality.enabled = quality.height === height || height === 'auto' || height === 'original';
+      quality.enabled =
+        quality.height === height || height === QUALITY_OPTIONS.AUTO || height === QUALITY_OPTIONS.ORIGINAL;
     }
 
-    if (height === 'original') {
+    if (height === QUALITY_OPTIONS.ORIGINAL) {
       if (this.player.currentSrc() !== this.player.claimSrcOriginal.src) {
-        setTimeout(() => this.swapSrcTo('original'));
+        setTimeout(() => this.swapSrcTo(QUALITY_OPTIONS.ORIGINAL));
       }
     } else {
       if (!this.player.isLivestream && this.player.currentSrc() !== this.player.claimSrcVhs.src) {
         setTimeout(() => this.swapSrcTo('vhs'));
-
-        if (height !== 'auto') {
-          // -- Re-select quality --
-          // Until we have "persistent quality" implemented, we need to do this
-          // because the VHS internals default to "auto" when initialized,
-          // causing a GUI mismatch.
-          setTimeout(() => this.setQuality(height), 1000);
-        }
       }
     }
 
@@ -279,7 +305,7 @@ class HlsQualitySelectorPlugin {
    * @return {string} the currently set quality
    */
   getCurrentQuality() {
-    return this._currentQuality || 'auto';
+    return this._currentQuality || QUALITY_OPTIONS.AUTO;
   }
 }
 

@@ -84,6 +84,8 @@ type Props = {
   startMuted: boolean,
   userId: ?number,
   videoTheaterMode: boolean,
+  defaultQuality: ?string,
+  doSetDefaultVideoQuality: (value: ?string) => void,
   onPlayerReady: (Player, any) => void,
   playNext: () => void,
   playPrevious: () => void,
@@ -144,6 +146,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     startMuted,
     userId,
     videoTheaterMode,
+    defaultQuality,
+    doSetDefaultVideoQuality,
     onPlayerReady,
     playNext,
     playPrevious,
@@ -281,6 +285,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         player.hlsQualitySelector({
           displayCurrentQuality: true,
           originalHeight: claimValues?.video?.height,
+          defaultQuality,
+          doSetDefaultVideoQuality,
         });
       }
 
