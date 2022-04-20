@@ -58,7 +58,6 @@ function TopPage(props: Props) {
           <div className="claim-search__menu-group">
             <Button
               label={queryName}
-              button="alt"
               onClick={() => setChannelActive(false)}
               className={classnames('button-toggle', {
                 'button-toggle--active': !channelActive,
@@ -66,7 +65,6 @@ function TopPage(props: Props) {
             />
             <Button
               label={`@${queryName}`}
-              button="alt"
               onClick={() => setChannelActive(true)}
               className={classnames('button-toggle', {
                 'button-toggle--active': channelActive,

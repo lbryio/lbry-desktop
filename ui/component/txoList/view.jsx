@@ -254,7 +254,6 @@ function TxoList(props: Props) {
                       <div className={'txo__radios'}>
                         {/* active transactions button */}
                         <Button
-                          button="alt"
                           onClick={(e) => handleChange({ changedParameterKey: TXO.ACTIVE, value: 'active' })}
                           className={classnames(`button-toggle`, {
                             'button-toggle--active': active === TXO.ACTIVE,
@@ -263,7 +262,6 @@ function TxoList(props: Props) {
                         />
                         {/* historical transactions button */}
                         <Button
-                          button="alt"
                           onClick={(e) => handleChange({ changedParameterKey: TXO.ACTIVE, value: 'spent' })}
                           className={classnames(`button-toggle`, {
                             'button-toggle--active': active === 'spent',
@@ -272,7 +270,6 @@ function TxoList(props: Props) {
                         />
                         {/* all transactions button */}
                         <Button
-                          button="alt"
                           onClick={(e) => handleChange({ changedParameterKey: TXO.ACTIVE, value: 'all' })}
                           className={classnames(`button-toggle`, {
                             'button-toggle--active': active === 'all',

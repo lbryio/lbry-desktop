@@ -22,7 +22,7 @@
 
 .badge--tag-mature {
   @extend .badge;
-  background-color: var(--color-tertiary-alt);
+  background-color: var(--color-tertiary) !important;
   color: var(--color-tertiary);
 }
 

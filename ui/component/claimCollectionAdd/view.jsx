@@ -115,19 +115,13 @@ const ClaimCollectionAdd = (props: Props) => {
                 inputButton={
                   <>
                     <Button
-                      button={'alt'}
                       icon={ICONS.ADD}
                       className={'button-toggle'}
                       disabled={!newCollectionName.length}
                       onClick={() => handleAddCollection()}
                       ref={buttonref}
                     />
-                    <Button
-                      button={'alt'}
-                      className={'button-toggle'}
-                      icon={ICONS.REMOVE}
-                      onClick={() => handleClearNew()}
-                    />
+                    <Button className={'button-toggle'} icon={ICONS.REMOVE} onClick={() => handleClearNew()} />
                   </>
                 }
                 onChange={handleNameInput}

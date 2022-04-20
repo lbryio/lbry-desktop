@@ -119,18 +119,6 @@
     margin-top: var(--spacing-xxs);
   }
 
-  .claim__tags {
-    .tag {
-      color: var(--color-text);
-      background-color: var(--color-header-button);
-
-      &:hover {
-        background-color: var(--color-primary);
-        color: var(--color-primary-contrast);
-      }
-    }
-  }
-
   .claim-preview__repost-author {
     width: 120px;
     height: 120px;
@@ -567,7 +555,7 @@
     width: auto;
 
     .button--alt {
-      color: var(--color-primary-contrast);
+      color: var(--color-text);
 
       .icon {
         stroke: var(--color-primary-contrast);

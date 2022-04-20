@@ -72,13 +72,6 @@ $thumbnailWidthSmall: 1rem;
     @media (min-width: $breakpoint-small) {
       @include handleChannelGif($thumbnailWidth);
     }
-
-    .channel-staked__wrapper {
-      padding: 0;
-      bottom: -1rem;
-      padding: -1rem;
-      margin-left: 0;
-    }
     .channel-staked__indicator {
       @media (max-width: $breakpoint-small) {
         margin-left: 0.1rem;
@@ -222,10 +215,6 @@ $thumbnailWidthSmall: 1rem;
 
   .channel-name {
     color: var(--color-link);
-
-    &:hover {
-      color: var(--color-secondary);
-    }
   }
 }
 

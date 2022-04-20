@@ -85,10 +85,10 @@
   &:hover {
     background-color: var(--color-button-secondary-bg-hover) !important;
     .button__label {
-      color: var(--color-button-secondary-text-hover) !important;
+      color: var(--color-button-secondary-text-hover);
     }
     .icon {
-      stroke: var(--color-button-secondary-text-hover) !important;
+      stroke: var(--color-button-secondary-text-hover);
     }
   }
 
@@ -107,8 +107,8 @@
 }
 
 .button--alt {
-  background-color: var(--color-button-alt-bg);
-  color: var(--color-button-alt-text);
+  background-color: var(--color-feature-background);
+  color: var(--color-text);
   &:hover {
     background-color: var(--color-button-alt-bg-hover);
     color: var(--color-button-alt-text-hover);
@@ -468,14 +468,15 @@ svg + .button__label {
 }
 
 .button-toggle {
+  @extend .button--alt;
   padding: 0 var(--spacing-m);
   height: var(--height-button);
   font-size: var(--font-base);
   border-left-width: 0;
   border-radius: 0;
   margin: 0;
-  color: var(--color-button-toggle-text) !important;
-  background-color: var(--color-button-toggle-bg) !important;
+  color: var(--color-button-toggle-text);
+  background-color: var(--color-button-toggle-bg);
 
   -webkit-user-select: none;
   user-select: none;
@@ -488,6 +489,10 @@ svg + .button__label {
     .icon {
       stroke: var(--color-button-toggle-text-hover) !important;
     }
+  }
+
+  .button-toggle--active {
+    background-color: var(--color-button-toggle-bg-active);
   }
 
   @media (max-width: $breakpoint-small) {
@@ -524,7 +529,7 @@ svg + .button__label {
   // color: var(--color-button-toggle-text) !important;
   //box-shadow: 0px 0px 0px 1px var(--color-primary) inset;
   color: var(--color-button-toggle-text-active) !important;
-  background-color: var(--color-button-toggle-bg-active) !important;
+  background-color: var(--color-button-toggle-bg-active);
 
   .icon {
     opacity: 1;

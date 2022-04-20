@@ -206,7 +206,6 @@ function ListBlocked(props: Props) {
     return (
       <Button
         icon={icon}
-        button="alt"
         label={__(label)}
         className={classnames(`button-toggle`, {
           'button-toggle--active': viewMode === view,
@@ -221,7 +220,6 @@ function ListBlocked(props: Props) {
       myChannelClaimIds && (
         <Button
           icon={ICONS.REFRESH}
-          button="alt"
           label={__('Refresh')}
           onClick={() => {
             fetchModBlockedList();

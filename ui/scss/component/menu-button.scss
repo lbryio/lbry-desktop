@@ -8,18 +8,15 @@ reach-portal {
   [data-reach-menu] {
     [data-reach-menu-items] {
       &:focus-visible {
-        //background-color: var(--color-header-background);
         background-color: var(--color-header-background);
       }
 
       [data-reach-menu-item][data-selected] {
         .menu__link {
-          //color: var(--color-primary-contrast);
-          color: var(--color-alt-contrast);
+          color: var(--color-primary-contrast);
         }
         .icon {
-          //stroke: var(--color-primary-contrast);
-          stroke: var(--color-alt-contrast);
+          stroke: var(--color-primary-contrast);
         }
       }
     }
@@ -72,7 +69,6 @@ reach-portal {
 
 [data-reach-menu-item][data-selected] {
   background-color: var(--color-menu-background--active);
-  color: var(--color-primary-contrast) !important;
   box-shadow: none;
 
   .icon {
@@ -125,25 +121,15 @@ reach-portal {
   @extend .menu__list;
 
   [data-reach-menu-item][data-selected] {
-    .menu__link {
-      color: var(--color-brand-contrast) !important;
-    }
-    .icon {
-      stroke: var(--color-primary-contrast);
-    }
-  }
-
-  [data-reach-menu-item][data-selected] {
-    color: var(--color-brand-contrast) !important;
-    background-color: var(--color-brand) !important;
+    background-color: var(--color-menu-background--active);
     box-shadow: none;
 
     .icon {
-      stroke: var(--color-brand-contrast) !important;
+      stroke: var(--color-brand-contrast);
     }
 
     .comment__menu-help {
-      color: var(--color-brand-contrast) !important;
+      color: var(--color-brand-contrast);
     }
   }
 

@@ -41,6 +41,12 @@
     }
   }
 
+  button.active {
+    &.preview {
+      color: var(--color-brand-blue);
+    }
+  }
+
   button {
     color: var(--color-header-link);
     border-color: transparent;
@@ -107,7 +113,6 @@
     button:not(.button) {
       padding-right: 0;
       padding-left: 0;
-      background-color: transparent !important;
       border: transparent;
 
       &:hover {

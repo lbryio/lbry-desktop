@@ -207,7 +207,7 @@
       height: calc(var(--header-height-mobile) - var(--spacing-m));
       background-color: rgba(var(--color-primary-static), 0.6);
       .icon {
-        stroke: var(--color-brand-contrast);
+        stroke: var(--color-text);
       }
     }
 
@@ -285,10 +285,6 @@
     transform: rotate(0deg);
     &:not(.button-rotate) {
       background-color: var(--color-header-button-hover);
-
-      .icon {
-        stroke: var(--color-brand-contrast);
-      }
     }
   }
 

@@ -59,7 +59,6 @@ function FileListDownloaded(props: Props) {
         <div className="section__actions--inline">
           <Button
             icon={ICONS.LIBRARY}
-            button="alt"
             label={__('Downloads')}
             className={classnames(`button-toggle`, {
               'button-toggle--active': viewMode === VIEW_DOWNLOADS,
@@ -68,7 +67,6 @@ function FileListDownloaded(props: Props) {
           />
           <Button
             icon={ICONS.PURCHASED}
-            button="alt"
             label={__('Purchases')}
             className={classnames(`button-toggle`, {
               'button-toggle--active': viewMode === VIEW_PURCHASES,

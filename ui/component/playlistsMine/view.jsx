@@ -125,7 +125,6 @@ export default function PlaylistsMine(props: Props) {
                 <Button
                   label={__(value)}
                   key={value}
-                  button="alt"
                   onClick={() => handleFilterType(value)}
                   className={classnames('button-toggle', {
                     'button-toggle--active': filterType === value,

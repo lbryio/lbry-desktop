@@ -3,26 +3,27 @@ $metadata-z-index: 1;
 $actions-z-index: 2;
 
 .channelPage-wrapper {
-  .button-group {
-    .button__content {
-      .icon {
-        stroke: var(--color-text);
+  .channel__quick-actions {
+    .button-group {
+      .button__content {
+        .icon {
+          stroke: var(--color-text);
+        }
       }
-    }
-    .button-following {
-      color: var(--color-text) !important;
-      background-color: var(--color-button-alt-bg) !important;
-      .icon {
-        stroke: var(--color-text) !important;
+      .button-following {
+        &.button--alt {
+          color: var(--color-text);
+          background-color: var(--color-button-alt-bg);
+          .icon {
+            stroke: var(--color-text);
+          }
+          &:hover {
+            color: var(--color-primary);
+          }
+        }
       }
-      &:hover {
-        color: var(--color-primary) !important;
-      }
-    }
-    .button-following:last-of-type {
-      margin-left: 2px;
-      &:hover {
-        color: var(--color-text) !important;
+      .button-following:last-of-type {
+        margin-left: 2px;
       }
     }
   }
@@ -407,12 +408,13 @@ $actions-z-index: 2;
 
   .button,
   .menu__button {
+    background-color: var(--color-header-background);
     &:hover {
-      color: var(--color-link);
+      //color: var(--color-link);
       background-color: rgba(var(--color-header-background-base), 0.95);
 
       .icon {
-        stroke: var(--color-link);
+        //stroke: var(--color-link);
       }
     }
   }
@@ -456,16 +458,6 @@ $actions-z-index: 2;
 
   [role='menuitem'] {
     margin: 0;
-
-    &[data-selected] {
-      // background: transparent;
-      .channel__list-item,
-      .channel-staked__wrapper {
-        .claim-preview__title {
-          color: var(--color-primary-contrast);
-        }
-      }
-    }
 
     &:last-child {
       .channel__list-item {
@@ -529,14 +521,6 @@ $actions-z-index: 2;
       border-radius: 50%;
     }
   }
-
-  &:hover {
-    background-color: var(--color-primary);
-
-    .channel__list-text {
-      color: var(--color-menu-icon-active);
-    }
-  }
 }
 
 .channel__list-item--selected {
@@ -544,12 +528,6 @@ $actions-z-index: 2;
 
   .icon--ChevronDown {
     margin-left: var(--spacing-l);
-  }
-
-  &:hover {
-    .claim-preview__title {
-      color: white;
-    }
   }
 }
 
