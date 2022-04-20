@@ -263,6 +263,8 @@
 .file-render__img-container {
   width: 100%;
   // aspect-ratio: 16 / 9;
+  background-color: #000000;
+  border-radius: var(--border-radius);
 }
 
 .file-render--post-container {
