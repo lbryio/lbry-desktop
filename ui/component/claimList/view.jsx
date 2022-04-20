@@ -231,6 +231,7 @@ export default function ClaimList(props: Props) {
               <ClaimPreviewTile
                 uri={uri}
                 showHiddenByUser={showHiddenByUser}
+                showUnresolvedClaims={showUnresolvedClaims}
                 properties={renderProperties}
                 collectionId={collectionId}
                 fypId={fypId}

@@ -129,6 +129,7 @@ export default function CollectionsListMine(props: Props) {
                     key={list.name}
                     uris={itemUrls.slice(0, 6)}
                     collectionId={list.id}
+                    showUnresolvedClaims
                   />
                 </>
               )}

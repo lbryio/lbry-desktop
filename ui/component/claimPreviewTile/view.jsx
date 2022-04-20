@@ -45,10 +45,11 @@ type Props = {
   isMature: boolean,
   showMature: boolean,
   showHiddenByUser?: boolean,
+  showNoSourceClaims?: boolean,
+  showUnresolvedClaims?: boolean,
   properties?: (Claim) => void,
   collectionId?: string,
   fypId?: string,
-  showNoSourceClaims?: boolean,
   isLivestream: boolean,
   viewCount: string,
   isLivestreamActive: boolean,
@@ -76,6 +77,7 @@ function ClaimPreviewTile(props: Props) {
     showHiddenByUser,
     properties,
     showNoSourceClaims,
+    showUnresolvedClaims,
     isLivestream,
     isLivestreamActive,
     livestreamViewerCount,
@@ -88,6 +90,7 @@ function ClaimPreviewTile(props: Props) {
   const isRepost = claim && claim.repost_channel_url;
   const isCollection = claim && claim.value_type === 'collection';
   const isStream = claim && claim.value_type === 'stream';
+  const isAbandoned = !isResolvingUri && !claim;
   // $FlowFixMe
   const isPlayable =
     claim &&
@@ -150,7 +153,10 @@ function ClaimPreviewTile(props: Props) {
     shouldHide = true;
   } else {
     shouldHide =
-      banState.blacklisted || banState.filtered || (!showHiddenByUser && (banState.muted || banState.blocked));
+      banState.blacklisted ||
+      banState.filtered ||
+      (!showHiddenByUser && (banState.muted || banState.blocked)) ||
+      (isAbandoned && !showUnresolvedClaims);
   }
 
   if (shouldHide || (isLivestream && !showNoSourceClaims)) {
