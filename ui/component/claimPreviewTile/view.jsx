@@ -153,10 +153,11 @@ function ClaimPreviewTile(props: Props) {
     shouldHide = true;
   } else {
     shouldHide =
-      banState.blacklisted ||
-      banState.filtered ||
-      (!showHiddenByUser && (banState.muted || banState.blocked)) ||
-      (isAbandoned && !showUnresolvedClaims);
+      !placeholder &&
+      (banState.blacklisted ||
+        banState.filtered ||
+        (!showHiddenByUser && (banState.muted || banState.blocked)) ||
+        (isAbandoned && !showUnresolvedClaims));
   }
 
   if (shouldHide || (isLivestream && !showNoSourceClaims)) {
