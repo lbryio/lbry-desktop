@@ -3,7 +3,7 @@ import videojs from 'video.js';
 import { version as VERSION } from './package.json';
 import ConcreteButton from './ConcreteButton';
 import ConcreteMenuItem from './ConcreteMenuItem';
-import * as QUALITY_OPTIONS from 'constants/video';
+import * as QUALITY_OPTIONS from 'constants/player';
 import { safeGetComputedStyle, simpleSelector } from '../videojs-http-streaming--override/playlist-selectors';
 
 // Default options for the plugin.
@@ -287,14 +287,13 @@ class HlsQualitySelectorPlugin {
    * @param {number} height - A number representing HLS playlist.
    */
   setQuality(height) {
-    const { doSetDefaultVideoQuality } = this.config;
     const qualityList = this.player.qualityLevels();
 
     // Set quality on plugin
     this._currentQuality = height;
-    doSetDefaultVideoQuality(height);
 
     if (this.config.displayCurrentQuality) {
+      console.log(height);
       this.setButtonInnerText(
         height === QUALITY_OPTIONS.AUTO
           ? QUALITY_OPTIONS.AUTO

@@ -72,7 +72,6 @@ type Props = {
   isLivestreamClaim: boolean,
   activeLivestreamForChannel: any,
   defaultQuality: ?string,
-  doSetDefaultVideoQuality: (value: ?string) => void,
 };
 
 /*
@@ -118,7 +117,6 @@ function VideoViewer(props: Props) {
     isLivestreamClaim,
     activeLivestreamForChannel,
     defaultQuality,
-    doSetDefaultVideoQuality,
   } = props;
 
   const permanentUrl = claim && claim.permanent_url;
@@ -517,7 +515,6 @@ function VideoViewer(props: Props) {
         isLivestreamClaim={isLivestreamClaim}
         activeLivestreamForChannel={activeLivestreamForChannel}
         defaultQuality={defaultQuality}
-        doSetDefaultVideoQuality={doSetDefaultVideoQuality}
       />
     </div>
   );

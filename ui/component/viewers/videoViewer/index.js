@@ -23,12 +23,7 @@ import VideoViewer from './view';
 import { withRouter } from 'react-router';
 import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { selectDaemonSettings, selectClientSetting, selectHomepageData } from 'redux/selectors/settings';
-import {
-  toggleVideoTheaterMode,
-  toggleAutoplayNext,
-  doSetClientSetting,
-  doSetDefaultVideoQuality,
-} from 'redux/actions/settings';
+import { toggleVideoTheaterMode, toggleAutoplayNext, doSetClientSetting } from 'redux/actions/settings';
 import { selectUserVerifiedEmail, selectUser } from 'redux/selectors/user';
 
 const select = (state, props) => {
@@ -107,7 +102,6 @@ const perform = (dispatch) => ({
     ),
   doAnalyticsView: (uri, timeToStart) => dispatch(doAnalyticsView(uri, timeToStart)),
   claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
-  doSetDefaultVideoQuality: (value) => dispatch(doSetDefaultVideoQuality(value)),
 });
 
 export default withRouter(connect(select, perform)(VideoViewer));

@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { FormField } from 'component/common/form';
-import { VIDEO_QUALITY_OPTIONS } from 'constants/video';
+import { VIDEO_QUALITY_OPTIONS } from 'constants/player';
 import { toCapitalCase } from 'util/string';
 
 type Props = {
