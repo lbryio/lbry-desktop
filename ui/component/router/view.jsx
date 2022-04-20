@@ -70,6 +70,7 @@ const LibraryPage = lazyImport(() => import('page/library' /* webpackChunkName: 
 const ListBlockedPage = lazyImport(() => import('page/listBlocked' /* webpackChunkName: "listBlocked" */));
 const ListsPage = lazyImport(() => import('page/lists' /* webpackChunkName: "lists" */));
 const PlaylistsPage = lazyImport(() => import('page/playlists' /* webpackChunkName: "lists" */));
+const HistoryPage = lazyImport(() => import('page/history' /* webpackChunkName: "history" */));
 const LiveStreamSetupPage = lazyImport(() => import('page/livestreamSetup' /* webpackChunkName: "livestreamSetup" */));
 const LivestreamCurrentPage = lazyImport(() =>
   import('page/livestreamCurrent' /* webpackChunkName: "livestreamCurrent" */)
@@ -362,6 +363,7 @@ function AppRouter(props: Props) {
         <PrivateRoute {...props} path={`/$/${PAGES.LIBRARY}`} component={LibraryPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.LISTS}`} component={ListsPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.PLAYLISTS}`} component={PlaylistsPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.HISTORY}`} component={HistoryPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`} component={TagsFollowingManagePage} />
         <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_BLOCKED_MUTED}`} component={ListBlockedPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_CREATOR}`} component={SettingsCreatorPage} />
