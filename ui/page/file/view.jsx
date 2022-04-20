@@ -44,12 +44,14 @@ type Props = {
   commentsListTitle: string,
   settingsByChannelId: { [channelId: string]: PerChannelSettings },
   isPlaying?: boolean,
+  claimWasPurchased: boolean,
   doFetchCostInfoForUri: (uri: string) => void,
   doSetContentHistoryItem: (uri: string) => void,
   doSetPrimaryUri: (uri: ?string) => void,
   clearPosition: (uri: string) => void,
   doClearPlayingUri: () => void,
   doToggleAppDrawer: () => void,
+  doFileGet: (uri: string) => void,
 };
 
 export default function FilePage(props: Props) {
@@ -73,11 +75,13 @@ export default function FilePage(props: Props) {
     audioVideoDuration,
     commentsListTitle,
     settingsByChannelId,
+    claimWasPurchased,
     doFetchCostInfoForUri,
     doSetContentHistoryItem,
     doSetPrimaryUri,
     clearPosition,
     doToggleAppDrawer,
+    doFileGet,
   } = props;
 
   const isMobile = useIsMobile();
@@ -123,6 +127,7 @@ export default function FilePage(props: Props) {
     doFetchCostInfoForUri(uri);
     doSetContentHistoryItem(uri);
     doSetPrimaryUri(uri);
+    if (claimWasPurchased && !hasFileInfo) doFileGet(uri);
 
     return () => doSetPrimaryUri(null);
   }, [
@@ -135,6 +140,8 @@ export default function FilePage(props: Props) {
     doFetchCostInfoForUri,
     doSetContentHistoryItem,
     doSetPrimaryUri,
+    doFileGet,
+    claimWasPurchased,
   ]);
 
   function renderFilePageLayout() {

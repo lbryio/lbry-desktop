@@ -6,6 +6,7 @@ import {
   makeSelectTagInClaimOrChannelForUri,
   selectIsStreamPlaceholderForUri,
   selectClaimForUri,
+  selectClaimWasPurchasedForUri,
 } from 'redux/selectors/claims';
 import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import { makeSelectCollectionForId } from 'redux/selectors/collections';
@@ -18,6 +19,7 @@ import { selectCommentsListTitleForUri, selectSettingsByChannelId } from 'redux/
 import { DISABLE_COMMENTS_TAG } from 'constants/tags';
 import { doToggleAppDrawer } from 'redux/actions/app';
 import { getChannelIdFromClaim } from 'util/claim';
+import { doFileGet } from 'redux/actions/file';
 
 import FilePage from './view';
 
@@ -46,6 +48,7 @@ const select = (state, props) => {
     position: selectContentPositionForUri(state, uri),
     audioVideoDuration: claim?.value?.video?.duration || claim?.value?.audio?.duration,
     commentsListTitle: selectCommentsListTitleForUri(state, uri),
+    claimWasPurchased: selectClaimWasPurchasedForUri(state, uri),
   };
 };
 
@@ -55,6 +58,7 @@ const perform = {
   doSetPrimaryUri,
   clearPosition,
   doToggleAppDrawer,
+  doFileGet,
 };
 
 export default withRouter(connect(select, perform)(FilePage));
