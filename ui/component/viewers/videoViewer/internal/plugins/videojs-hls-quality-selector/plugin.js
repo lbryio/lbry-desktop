@@ -188,9 +188,9 @@ class HlsQualitySelectorPlugin {
   /**
    * Executed when a quality level is added from HLS playlist.
    */
-  onAddQualityLevel() {
+  onAddQualityLevel(e, qualityOption) {
     const player = this.player;
-    const { defaultQuality } = this.config;
+    const defaultQuality = qualityOption || this.config.defaultQuality;
     const qualityList = player.qualityLevels();
     const levels = qualityList.levels_ || [];
 
@@ -317,6 +317,17 @@ class HlsQualitySelectorPlugin {
     } else {
       if (!this.player.isLivestream && this.player.currentSrc() !== this.player.claimSrcVhs.src) {
         setTimeout(() => this.swapSrcTo('vhs'));
+
+        if (height !== 'auto') {
+          // -- Re-select quality --
+          // Until we have "persistent quality" implemented, we need to do this
+          // because the VHS internals default to "auto" when initialized,
+          // causing a GUI mismatch.
+          setTimeout(() => {
+            this.setQuality(height);
+            this.onAddQualityLevel(undefined, height);
+          }, 1000);
+        }
       }
     }
 
