@@ -47,9 +47,9 @@ type Props = {
   header: Node,
   livestreamData: LivestreamReplayData,
   isLivestreamClaim: boolean,
-  checkLivestreams: (string, ?string, ?string) => void,
+  checkLivestreams: (string, string) => void,
+  channelName: string,
   channelId: string,
-  channelSignature: { signature?: string, signing_ts?: string },
   isCheckingLivestreams: boolean,
   setWaitForFile: (boolean) => void,
   setOverMaxBitrate: (boolean) => void,
@@ -86,7 +86,7 @@ function PublishFile(props: Props) {
     subtitle,
     checkLivestreams,
     channelId,
-    channelSignature,
+    channelName,
     isCheckingLivestreams,
     setWaitForFile,
     setOverMaxBitrate,
@@ -175,9 +175,9 @@ function PublishFile(props: Props) {
     } else {
       if (url.startsWith('http://')) {
         return url;
-      } else {
+      } else if (url) {
         return `https://${url}`;
-      }
+      } else return __('Click Check for Replays to update...');
     }
   };
   // update remoteUrl when replay selected
@@ -550,9 +550,7 @@ function PublishFile(props: Props) {
                       label={__('Check for Replays')}
                       disabled={isCheckingLivestreams}
                       icon={ICONS.REFRESH}
-                      onClick={() =>
-                        checkLivestreams(channelId, channelSignature.signature, channelSignature.signing_ts)
-                      }
+                      onClick={() => checkLivestreams(channelId, channelName)}
                     />
                   )}
                 </div>
@@ -605,9 +603,11 @@ function PublishFile(props: Props) {
                               </div>
                             </td>
                             <td>
-                              {`${Math.floor(item.data.fileDuration / 60)} ${
-                                Math.floor(item.data.fileDuration / 60) > 1 ? __('minutes') : __('minute')
-                              }`}
+                              {item.data.fileDuration && isNaN(item.data.fileDuration)
+                                ? item.data.fileDuration
+                                : `${Math.floor(item.data.fileDuration / 60)} ${
+                                    Math.floor(item.data.fileDuration / 60) > 1 ? __('minutes') : __('minute')
+                                  }`}
                               <div className="table__item-label">
                                 {`${moment(item.data.uploadedAt).from(moment())}`}
                               </div>

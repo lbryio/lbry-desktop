@@ -85,7 +85,7 @@ export default function LivestreamLayout(props: Props) {
         )}
 
         {!activeStreamUri && !showScheduledInfo && !isCurrentClaimLive && (
-          <div className="help--notice">
+          <div className="help--notice" style={{ marginTop: '20px' }}>
             {channelName
               ? __("%channelName% isn't live right now, but the chat is! Check back later to watch the stream.", {
                   channelName,

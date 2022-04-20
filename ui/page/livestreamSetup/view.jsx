@@ -84,7 +84,7 @@ export default function LivestreamSetupPage(props: Props) {
       <p>{__(`Ensure the following settings are selected under the streaming tab:`)}</p>
       <ul>
         <li>{__(`Bitrate: 1000 to 2500 kbps`)}</li>
-        <li>{__(`Keyframes: 1`)}</li>
+        <li>{__(`Keyframes: 2`)}</li>
         <li>{__(`Profile: High`)}</li>
         <li>{__(`Tune: Zerolatency`)}</li>
       </ul>

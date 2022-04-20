@@ -3,8 +3,7 @@
 import React from 'react';
 import { SITE_HELP_EMAIL } from 'config';
 import Button from 'component/button';
-import { killStream } from '$web/src/livestreaming';
-import watchLivestreamStatus from '$web/src/livestreaming/long-polling';
+import { killStream } from 'util/livestream';
 import 'scss/component/claim-preview-reset.scss';
 
 type Props = {
@@ -12,19 +11,12 @@ type Props = {
   channelName: string,
   claimIsMine: boolean,
   doToast: ({ message: string, isError?: boolean }) => void,
+  activeLivestreamForChannel: any,
 };
 
 const ClaimPreviewReset = (props: Props) => {
-  const { channelId, channelName, claimIsMine, doToast } = props;
-
-  const [isLivestreaming, setIsLivestreaming] = React.useState(false);
-
-  React.useEffect(() => {
-    if (!claimIsMine) return;
-    return watchLivestreamStatus(channelId, (state) => setIsLivestreaming(state));
-  }, [channelId, setIsLivestreaming, claimIsMine]);
-
-  if (!claimIsMine || !isLivestreaming) return null;
+  const { channelId, channelName, claimIsMine, doToast, activeLivestreamForChannel } = props;
+  if (!claimIsMine || !activeLivestreamForChannel) return null;
 
   const handleClick = async () => {
     try {
