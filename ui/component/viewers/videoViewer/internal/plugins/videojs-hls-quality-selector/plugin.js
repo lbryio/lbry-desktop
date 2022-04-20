@@ -293,7 +293,6 @@ class HlsQualitySelectorPlugin {
     this._currentQuality = height;
 
     if (this.config.displayCurrentQuality) {
-      console.log(height);
       this.setButtonInnerText(
         height === QUALITY_OPTIONS.AUTO
           ? QUALITY_OPTIONS.AUTO
