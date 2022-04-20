@@ -20,6 +20,7 @@ export default function SettingDefaultQuality(props: Props) {
     if (enabled) {
       setEnabled(false);
       // From enabled to disabled -> clear the setting
+      valueRef.current = defaultQuality;
       doSetDefaultVideoQuality(null);
     } else {
       setEnabled(true);
@@ -42,7 +43,7 @@ export default function SettingDefaultQuality(props: Props) {
           type="select"
           onChange={handleSetQuality}
           disabled={!enabled}
-          value={defaultQuality}
+          value={defaultQuality || valueRef.current}
         >
           {VIDEO_QUALITY_OPTIONS.map((quality) => {
             const qualityStr = typeof quality === 'number' ? quality + 'p' : toCapitalCase(quality);
