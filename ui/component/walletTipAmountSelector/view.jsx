@@ -231,7 +231,6 @@ function WalletTipAmountSelector(props: Props) {
             <Button
               key={defaultAmount}
               disabled={shouldDisableAmountSelector(defaultAmount)}
-              button="alt"
               className={classnames('button-toggle button-toggle--expandformobile', {
                 'button-toggle--active':
                   convertToTwoDecimalsOrMore(defaultAmount) === convertToTwoDecimalsOrMore(amount) && !useCustomTip,
@@ -247,7 +246,6 @@ function WalletTipAmountSelector(props: Props) {
           ))}
 
         <Button
-          button="alt"
           disabled={shouldDisableFiatSelectors}
           className={classnames('button-toggle button-toggle--expandformobile', {
             'button-toggle--active': useCustomTip,

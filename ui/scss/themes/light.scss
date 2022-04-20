@@ -13,7 +13,7 @@
   --color-brand: var(--color-primary-static);
   --color-brand-bright: rgb(56, 217, 169);
   --color-accent: var(--color-brand-blue);
-  --color-secondary: rgb(219, 234, 254);
+  --color-secondary: var(--color-brand-blue);
   --color-secondary-alt: rgb(191, 219, 254);
   --color-secondary-alt-2: rgb(30, 64, 175);
   --color-secondary-static: var(--color-secondary);
@@ -24,7 +24,7 @@
   --color-border: #ededed;
   --color-background: #fafafa;
   --color-background-overlay: #21252980;
-  --color-card-background: #ffffff;
+  --color-card-background: var(--color-gray-1);
   --color-card-background-highlighted: #fff5f5;
 
   //Text
@@ -43,14 +43,16 @@
   --color-tooltip-text: #fafafa;
 
   // Header
-  --color-header-button: var(--color-button-alt-bg);
+  --color-header-button: var(--color-white); //var(--color-button-alt-bg);
   --color-header-button-text: var(--color-black);
   --color-header-background: #ffffff;
+  --color-feature-background: #ffffff;
 
   // Button
-  --color-button-alt-bg: var(--color-gray-1);
-  --color-button-alt-bg-hover: var(--color-gray-2);
-  --color-button-alt-text: black;
+  --color-button-alt-bg: var(--color-feature-background);
+  --color-button-alt-bg-hover: var(--color-gray-1);
+  --color-button-alt-text: var(--color-text);
+  --color-button-alt-text-hover: var(--color-text);
   // pri
   --color-button-primary-bg: var(--color-primary);
   --color-button-primary-bg-hover: var(--color-accent);
@@ -60,22 +62,22 @@
   --color-button-secondary-bg: var(--color-gray-1);
   --color-button-secondary-border: var(--color-secondary-alt-3);
   --color-button-secondary-text: var(--color-gray-6);
-  --color-button-secondary-bg-hover: var(--color-card-background);
+  --color-button-secondary-bg-hover: var(--color-feature-background);
   --color-button-secondary-text-hover: var(--color-primary);
   // toggle
   --color-button-toggle-text: var(--color-gray-6);
   --color-button-toggle-bg: var(--color-gray-1);
-  --color-button-toggle-bg-hover: var(--color-card-background);
+  --color-button-toggle-bg-hover: var(--color-feature-background);
   --color-button-border: var(--color-gray-3);
-  --color-button-toggle-text-hover: var(--color-primary);
-  --color-button-toggle-bg-active: var(--color-card-background);
-  --color-button-toggle-text-active: var(--color-gray-6);
-  --color-toggle-custom: var(--color-secondary);
+  --color-button-toggle-text-hover: var(--color-text);
+  --color-button-toggle-bg-active: var(--color-header-background);
+  --color-button-toggle-text-active: var(--color-text);
+  --color-toggle-custom: var(--color-brand-blue);
   // link / util
   --color-link-active: var(--color-primary);
   --color-link-focus-bg: #f1f1f1;
   --color-link: var(--color-primary-alt-2);
-  --color-button-alt-text-hover: var(--color-text);
+
   --color-link-hover: var(--color-primary);
 
   // Input
@@ -143,10 +145,10 @@
   --color-spinner-light: #ffffff;
   --color-spinner-dark: #212529;
   --color-placeholder-background: #f0f0f0;
-  --color-file-viewer-background: var(--color-card-background);
-  --color-tabs-background: var(--color-card-background);
+  --color-file-viewer-background: var(--color-feature-background);
+  --color-tabs-background: var(--color-feature-background);
   --color-tab-divider: var(--color-primary);
-  --color-modal-background: var(--color-card-background);
+  --color-modal-background: var(--color-gray-1);
 
   // Icons
   --color-follow-bg: #ffd4da;

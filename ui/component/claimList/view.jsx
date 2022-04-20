@@ -144,7 +144,7 @@ export default function ClaimList(props: Props) {
         const mainEl = document.querySelector(`.${MAIN_CLASS}`);
 
         if (mainEl && !loading && urisLength >= pageSize) {
-          const contentWrapperAtBottomOfPage = mainEl.getBoundingClientRect().bottom - 0.5 <= window.innerHeight;
+          const contentWrapperAtBottomOfPage = mainEl.getBoundingClientRect().bottom - 1.5 <= window.innerHeight;
 
           if (contentWrapperAtBottomOfPage) {
             onScrollBottom();

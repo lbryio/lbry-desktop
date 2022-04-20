@@ -230,7 +230,6 @@ function ClaimListHeader(props: Props) {
               {CS.ORDER_BY_TYPES.map((type) => (
                 <Button
                   key={type}
-                  button="alt"
                   onClick={(e) =>
                     handleChange({
                       key: CS.ORDER_BY_KEY,
@@ -251,7 +250,6 @@ function ClaimListHeader(props: Props) {
           <div className="claim-search__menu-group">
             {!hideAdvancedFilter && (
               <Button
-                button="alt"
                 aria-label={__('More')}
                 className={classnames(`button-toggle button-toggle--top button-toggle--more`, {
                   'button-toggle--custom': isFiltered(),

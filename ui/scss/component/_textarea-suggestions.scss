@@ -133,6 +133,10 @@
   box-shadow: var(--card-box-shadow);
   color: var(--color-text) !important;
 
+  .textareaSuggestions__topSeparator {
+    margin-top: var(--spacing-m);
+    margin-bottom: var(--spacing-m);
+  }
   .textarea-suggestions__group {
     &:last-child hr {
       display: none;
@@ -273,13 +277,6 @@
       margin: 2px 0 1px 0;
       height: 1.4rem;
       background-color: var(--color-header-button);
-    }
-  }
-
-  .button-toggle {
-    background-color: rgba(var(--color-header-button-base), 0.4) !important;
-    &:hover {
-      background-color: rgba(var(--color-header-button-base), 0.9) !important;
     }
   }
   .button-toggle--active {

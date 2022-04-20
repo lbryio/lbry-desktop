@@ -152,10 +152,6 @@ body {
       .date_time {
         font-size: var(--font-xsmall) !important;
         color: rgba(var(--color-text-base), 0.6);
-
-        &:hover {
-          color: var(--color-text);
-        }
       }
     }
 

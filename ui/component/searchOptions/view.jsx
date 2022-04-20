@@ -109,7 +109,6 @@ const SearchOptions = (props: Props) => {
             return (
               <Button
                 key={option}
-                button="alt"
                 label={t[1]}
                 className={classnames(`button-toggle`, {
                   'button-toggle--active': options[SEARCH_OPTIONS.CLAIM_TYPE] === option,

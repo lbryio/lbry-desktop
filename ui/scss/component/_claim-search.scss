@@ -29,13 +29,15 @@
 
 .claim-search__dropdown {
   font-size: var(--font-body);
-  background-color: var(--color-card-background);
+  background-color: var(--color-input-bg);
   background-position: right var(--spacing-m) center;
 }
 
 .claim-search__dropdown--selected {
-  color: var(--color-primary-contrast);
-  background-color: var(--color-brand-blue);
+  color: var(--color-brand-blue);
+  option {
+    color: var(--color-text);
+  }
 }
 
 .claim-search__input-container {

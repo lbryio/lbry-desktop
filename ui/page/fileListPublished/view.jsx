@@ -134,7 +134,6 @@ function FileListPublished(props: Props) {
               header={
                 <span>
                   <Button
-                    button="alt"
                     label={__('All')}
                     aria-label={__('All uploads')}
                     onClick={() => setFilterBy(FILTER_ALL)}
@@ -143,7 +142,6 @@ function FileListPublished(props: Props) {
                     })}
                   />
                   <Button
-                    button="alt"
                     label={__('Uploads')}
                     onClick={() => setFilterBy(FILTER_UPLOADS)}
                     className={classnames(`button-toggle`, {
@@ -151,7 +149,6 @@ function FileListPublished(props: Props) {
                     })}
                   />
                   <Button
-                    button="alt"
                     label={__('Reposts')}
                     onClick={() => {
                       setFilterBy(FILTER_REPOSTS);
