@@ -50,7 +50,7 @@ export default function SettingDefaultQuality(props: Props) {
 
             return (
               <option key={'quality' + qualityStr} value={quality}>
-                {qualityStr}
+                {__(qualityStr)}
               </option>
             );
           })}
