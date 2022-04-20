@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import classnames from 'classnames';
 import Icon from 'component/common/icon';
+import { HOMEPAGE_EXCLUDED_CATEGORIES } from 'constants/homepage_languages';
 import * as ICONS from 'constants/icons';
 import 'scss/component/homepage-sort.scss';
 
@@ -48,26 +49,26 @@ function getInitialList(listId, savedOrder, homepageSections) {
   const savedHiddenOrder = savedOrder.hidden || [];
   const sectionKeys = Object.keys(homepageSections);
 
-  if (sectionKeys.includes('NEWS') && !savedHiddenOrder.includes('NEWS') && !savedActiveOrder.includes('NEWS')) {
-    savedHiddenOrder.push('NEWS');
-  }
-
   if (listId === 'ACTIVE') {
     // Start with saved order, excluding obsolete items (i.e. category removed or not available in non-English)
     const finalOrder = savedActiveOrder.filter((x) => sectionKeys.includes(x));
 
-    // Add new items (e.g. new categories)
+    // Add new categories not seen previously.
     sectionKeys.forEach((x) => {
       if (!finalOrder.includes(x)) {
         finalOrder.push(x);
       }
     });
 
-    // Exclude items that were moved to Hidden
-    return finalOrder.filter((x) => !savedHiddenOrder.includes(x));
+    // Exclude items that were moved to Hidden, or intentionally excluded from Homepage.
+    return finalOrder
+      .filter((x) => !savedHiddenOrder.includes(x))
+      .filter((x) => !HOMEPAGE_EXCLUDED_CATEGORIES.includes(x));
   } else {
     console.assert(listId === 'HIDDEN', `Unhandled listId: ${listId}`);
-    return savedHiddenOrder.filter((x) => sectionKeys.includes(x));
+    return savedHiddenOrder
+      .filter((x) => sectionKeys.includes(x))
+      .filter((x) => !HOMEPAGE_EXCLUDED_CATEGORIES.includes(x));
   }
 }
 

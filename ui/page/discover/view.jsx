@@ -25,7 +25,6 @@ type Props = {
   followedTags: Array<Tag>,
   repostedUri: string,
   repostedClaim: ?GenericClaim,
-  hideRepostRibbon?: boolean,
   languageSetting: string,
   searchInLanguage: boolean,
   doToggleTagFollowDesktop: (string) => void,
@@ -41,7 +40,6 @@ function DiscoverPage(props: Props) {
     followedTags,
     repostedClaim,
     repostedUri,
-    hideRepostRibbon,
     languageSetting,
     searchInLanguage,
     doToggleTagFollowDesktop,
@@ -55,7 +53,7 @@ function DiscoverPage(props: Props) {
   const buttonRef = useRef();
   const isHovering = useHover(buttonRef);
   const isMobile = useIsMobile();
-  const isWildWest = window.location.pathname === `/$/${PAGES.WILD_WEST}`;
+  const isWildWest = dynamicRouteProps && dynamicRouteProps.id === 'WILD_WEST';
 
   const urlParams = new URLSearchParams(search);
   const langParam = urlParams.get(CS.LANGUAGE_KEY) || null;
@@ -63,14 +61,13 @@ function DiscoverPage(props: Props) {
   const tagsQuery = urlParams.get('t') || null;
   const tags = tagsQuery ? tagsQuery.split(',') : null;
   const repostedClaimIsResolved = repostedUri && repostedClaim;
+  const hideRepostRibbon = !isWildWest;
 
-  const discoverIcon = SIMPLE_SITE ? ICONS.WILD_WEST : ICONS.DISCOVER;
-  const discoverLabel = SIMPLE_SITE ? __('Wild West') : __('All Content');
   // Eventually allow more than one tag on this page
   // Restricting to one to make follow/unfollow simpler
   const tag = (tags && tags[0]) || null;
-  const channelIds =
-    (dynamicRouteProps && dynamicRouteProps.options && dynamicRouteProps.options.channelIds) || undefined;
+  const channelIds = dynamicRouteProps?.options?.channelIds || undefined;
+  const excludedChannelIds = dynamicRouteProps?.options?.excludedChannelIds || undefined;
 
   const isFollowing = followedTags.map(({ name }) => name).includes(tag);
   let label = isFollowing ? __('Following --[button label indicating a channel has been followed]--') : __('Follow');
@@ -116,8 +113,10 @@ function DiscoverPage(props: Props) {
         <LivestreamSection
           tileLayout={repostedUri ? false : tileLayout}
           channelIds={channelIds}
+          excludedChannelIds={excludedChannelIds}
           activeLivestreams={activeLivestreams}
           doFetchActiveLivestreams={doFetchActiveLivestreams}
+          searchLanguages={dynamicRouteProps?.options?.searchLanguages}
           languageSetting={languageSetting}
           searchInLanguage={searchInLanguage}
           langParam={langParam}
@@ -172,15 +171,15 @@ function DiscoverPage(props: Props) {
   } else {
     headerLabel = (
       <span>
-        <Icon icon={(dynamicRouteProps && dynamicRouteProps.icon) || discoverIcon} size={10} />
-        {(dynamicRouteProps && __(`${dynamicRouteProps.title}`)) || discoverLabel}
+        <Icon icon={(dynamicRouteProps && dynamicRouteProps.icon) || ICONS.DISCOVER} size={10} />
+        {(dynamicRouteProps && __(`${dynamicRouteProps.title}`)) || __('All Content')}
       </span>
     );
   }
   let releaseTime =
     dynamicRouteProps && dynamicRouteProps.options && dynamicRouteProps.options.releaseTime
       ? dynamicRouteProps.options.releaseTime
-      : !dynamicRouteProps && !tags && `>${Math.floor(moment().subtract(0, 'hour').startOf('week').unix())}`;
+      : !isWildWest && `>${Math.floor(moment().subtract(0, 'hour').startOf('week').unix())}`;
 
   return (
     <Page
@@ -190,11 +189,11 @@ function DiscoverPage(props: Props) {
     >
       <ClaimListDiscover
         pins={getPins(dynamicRouteProps)}
-        hideFilters={SIMPLE_SITE ? !(dynamicRouteProps || tags) : undefined}
+        hideFilters={isWildWest ? true : undefined}
         header={repostedUri ? <span /> : undefined}
         subSection={getSubSection()}
         tileLayout={repostedUri ? false : tileLayout}
-        defaultOrderBy={SIMPLE_SITE ? (dynamicRouteProps ? undefined : CS.ORDER_BY_TRENDING) : undefined}
+        defaultOrderBy={isWildWest || tags ? CS.ORDER_BY_TRENDING : undefined}
         claimType={claimType ? [claimType] : undefined}
         headerLabel={headerLabel}
         tags={tags}
@@ -207,8 +206,9 @@ function DiscoverPage(props: Props) {
         // TODO: find a better way to determine discover / wild west vs other modes release times
         // for now including && !tags so that
         releaseTime={releaseTime || undefined}
-        feeAmount={SIMPLE_SITE ? !dynamicRouteProps && CS.FEE_AMOUNT_ANY : undefined}
+        feeAmount={isWildWest || tags ? CS.FEE_AMOUNT_ANY : undefined}
         channelIds={channelIds}
+        excludedChannelIds={excludedChannelIds}
         limitClaimsPerChannel={
           SIMPLE_SITE
             ? (dynamicRouteProps && dynamicRouteProps.options && dynamicRouteProps.options.limitClaimsPerChannel) || 3
@@ -217,6 +217,7 @@ function DiscoverPage(props: Props) {
         meta={getMeta()}
         hasSource
         forceShowReposts={dynamicRouteProps}
+        searchLanguages={dynamicRouteProps?.options?.searchLanguages}
       />
     </Page>
   );

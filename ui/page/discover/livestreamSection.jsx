@@ -8,7 +8,7 @@ import ClaimListDiscover from 'component/claimListDiscover';
 import { useIsMobile, useIsLargeScreen } from 'effects/use-screensize';
 import usePersistedState from 'effects/use-persisted-state';
 import { getLivestreamUris } from 'util/livestream';
-import { resolveLangForClaimSearch } from '../../util/default-languages';
+import { resolveLangForClaimSearch } from 'util/default-languages';
 
 const DEFAULT_LIVESTREAM_TILE_LIMIT = 8;
 const SECTION = Object.freeze({ COLLAPSED: 1, EXPANDED: 2 });
@@ -23,8 +23,10 @@ function getTileLimit(isLargeScreen, originalSize) {
 type Props = {
   tileLayout: boolean,
   channelIds?: Array<string>,
+  excludedChannelIds?: Array<string>,
   activeLivestreams: ?LivestreamInfo,
   doFetchActiveLivestreams: (orderBy: ?Array<string>, lang: ?Array<string>) => void,
+  searchLanguages?: Array<string>,
   languageSetting?: string,
   searchInLanguage?: boolean,
   langParam?: string | null,
@@ -34,8 +36,10 @@ export default function LivestreamSection(props: Props) {
   const {
     tileLayout,
     channelIds,
+    excludedChannelIds,
     activeLivestreams,
     doFetchActiveLivestreams,
+    searchLanguages,
     languageSetting,
     searchInLanguage,
     langParam,
@@ -49,7 +53,7 @@ export default function LivestreamSection(props: Props) {
 
   const initialLiveTileLimit = getTileLimit(isLargeScreen, DEFAULT_LIVESTREAM_TILE_LIMIT);
   const [liveSection, setLiveSection] = React.useState(liveSectionStore || SECTION.COLLAPSED);
-  const livestreamUris = getLivestreamUris(activeLivestreams, channelIds);
+  const livestreamUris = getLivestreamUris(activeLivestreams, channelIds, excludedChannelIds);
   const liveTilesOverLimit = livestreamUris && livestreamUris.length > initialLiveTileLimit;
 
   function collapseSection() {
@@ -66,7 +70,9 @@ export default function LivestreamSection(props: Props) {
 
   React.useEffect(() => {
     // Fetch active livestreams on mount
-    const langCsv = resolveLangForClaimSearch(languageSetting, searchInLanguage, langParam);
+    const language = searchLanguages ? searchLanguages.join(',') : languageSetting;
+    const searchInSelectedLangOnly = Boolean(searchLanguages) || searchInLanguage;
+    const langCsv = resolveLangForClaimSearch(language, searchInSelectedLangOnly, langParam);
     const lang = langCsv ? langCsv.split(',') : null;
     doFetchActiveLivestreams(CS.ORDER_BY_NEW_VALUE, lang);
     // eslint-disable-next-line react-hooks/exhaustive-deps, (on mount only)

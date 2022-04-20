@@ -118,12 +118,6 @@ const UNAUTH_LINKS: Array<SideNavLink> = [
   },
 ];
 
-const WILD_WEST: SideNavLink = {
-  title: 'Wild West',
-  link: `/$/${PAGES.WILD_WEST}`,
-  icon: ICONS.WILD_WEST,
-};
-
 // ****************************************************************************
 // ****************************************************************************
 
@@ -143,7 +137,6 @@ type Props = {
   doClearPurchasedUriSuccess: () => void,
   user: ?User,
   homepageData: any,
-  wildWestDisabled: boolean,
   doClearClaimSearch: () => void,
   odyseeMembership: string,
   odyseeMembershipByUri: (uri: string) => string,
@@ -166,7 +159,6 @@ function SideNavigation(props: Props) {
     homepageData,
     user,
     followedTags,
-    wildWestDisabled,
     doClearClaimSearch,
     odyseeMembership,
     odyseeMembershipByUri,
@@ -549,7 +541,6 @@ function SideNavigation(props: Props) {
                 <>
                   {/* $FlowFixMe: GetLinksData type needs an update */}
                   {EXTRA_SIDEBAR_LINKS.map((linkProps) => getLink(linkProps))}
-                  {!wildWestDisabled && getLink(WILD_WEST)}
                 </>
               )}
             </ul>
