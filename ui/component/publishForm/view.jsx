@@ -288,10 +288,11 @@ function PublishForm(props: Props) {
       throw e;
     }
     if (signedMessage) {
+      const encodedChannelName = encodeURIComponent(channelName || '');
       const newEndpointUrl =
         `${NEW_LIVESTREAM_REPLAY_API}?channel_claim_id=${channelId}` +
         `&signature=${signedMessage.signature}&signature_ts=${signedMessage.signing_ts}&channel_name=${
-          channelName || ''
+          encodedChannelName || ''
         }`;
 
       const responseFromNewApi = await fetch(newEndpointUrl);

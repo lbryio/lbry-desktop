@@ -183,8 +183,10 @@ export const killStream = async (channelId: string, channelName: string) => {
   try {
     const streamData = await getStreamData(channelId, channelName);
 
+    const encodedChannelName = encodeURIComponent(channelName);
+
     const apiData = await fetch(
-      `${LIVESTREAM_KILL}channel_claim_id=${channelId}&channel_name=${channelName}&signature_ts=${streamData.t}&signature=${streamData.s}`
+      `${LIVESTREAM_KILL}channel_claim_id=${channelId}&channel_name=${encodedChannelName}&signature_ts=${streamData.t}&signature=${streamData.s}`
     );
 
     const data = (await apiData.json()).data;
