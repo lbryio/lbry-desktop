@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { doUriInitiatePlay } from 'redux/actions/content';
-import { makeSelectClaimWasPurchased, selectClaimForUri } from 'redux/selectors/claims';
+import { selectClaimWasPurchasedForUri, selectClaimForUri } from 'redux/selectors/claims';
 import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import * as SETTINGS from 'constants/settings';
 import { selectCostInfoForUri } from 'lbryinc';
@@ -36,7 +36,7 @@ const select = (state, props) => {
     autoplay: selectClientSetting(state, SETTINGS.AUTOPLAY_MEDIA),
     costInfo: selectCostInfoForUri(state, uri),
     renderMode: makeSelectFileRenderModeForUri(uri)(state),
-    claimWasPurchased: makeSelectClaimWasPurchased(uri)(state),
+    claimWasPurchased: selectClaimWasPurchasedForUri(state, uri),
     authenticated: selectUserVerifiedEmail(state),
     isCurrentClaimLive: selectIsActiveLivestreamForUri(state, uri),
     isLivestreamClaim: isStreamPlaceholderClaim(claim),

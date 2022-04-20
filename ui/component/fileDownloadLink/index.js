@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectClaimIsMine, selectClaimForUri, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
+import { selectClaimIsMine, selectClaimForUri } from 'redux/selectors/claims';
 import {
   makeSelectFileInfoForUri,
   makeSelectDownloadingForUri,
@@ -21,7 +21,6 @@ const select = (state, props) => {
     claimIsMine: selectClaimIsMine(state, claim),
     claim,
     costInfo: selectCostInfoForUri(state, props.uri),
-    claimWasPurchased: makeSelectClaimWasPurchased(props.uri)(state),
     streamingUrl: makeSelectStreamingUrlForUri(props.uri)(state),
   };
 };

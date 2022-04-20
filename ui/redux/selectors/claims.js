@@ -294,10 +294,9 @@ export const makeSelectMyPurchasesForPage = (query: ?string, page: number = 1) =
     }
   );
 
-export const makeSelectClaimWasPurchased = (uri: string) =>
-  createSelector(makeSelectClaimForUri(uri), (claim) => {
-    return claim && claim.purchase_receipt !== undefined;
-  });
+export const selectClaimWasPurchasedForUri = createSelector(selectClaimForUri, (claim) =>
+  Boolean(claim?.purchase_receipt !== undefined)
+);
 
 export const selectAllFetchingChannelClaims = createSelector(selectState, (state) => state.fetchingChannelClaims || {});
 

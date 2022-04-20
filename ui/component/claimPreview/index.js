@@ -5,7 +5,6 @@ import {
   selectClaimIsMine,
   makeSelectClaimIsPending,
   makeSelectReflectingClaimForUri,
-  makeSelectClaimWasPurchased,
   selectTitleForUri,
   selectDateForUri,
 } from 'redux/selectors/claims';
@@ -45,7 +44,6 @@ const select = (state, props) => {
     hasVisitedUri: props.uri && makeSelectHasVisitedUri(props.uri)(state),
     isSubscribed: props.uri && selectIsSubscribedForUri(state, props.uri),
     streamingUrl: props.uri && makeSelectStreamingUrlForUri(props.uri)(state),
-    wasPurchased: props.uri && makeSelectClaimWasPurchased(props.uri)(state),
     isLivestream,
     isLivestreamActive: isLivestream && selectIsActiveLivestreamForUri(state, props.uri),
     livestreamViewerCount: isLivestream && claim ? selectViewersForId(state, claim.claim_id) : undefined,

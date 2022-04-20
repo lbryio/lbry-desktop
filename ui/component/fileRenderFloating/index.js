@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import {
   selectClaimForUri,
   selectTitleForUri,
-  makeSelectClaimWasPurchased,
+  selectClaimWasPurchasedForUri,
   selectGeoRestrictionForUri,
 } from 'redux/selectors/claims';
 import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
@@ -51,7 +51,7 @@ const select = (state, props) => {
     renderMode: makeSelectFileRenderModeForUri(uri)(state),
     videoTheaterMode: selectClientSetting(state, SETTINGS.VIDEO_THEATER_MODE),
     costInfo: selectCostInfoForUri(state, uri),
-    claimWasPurchased: makeSelectClaimWasPurchased(uri)(state),
+    claimWasPurchased: selectClaimWasPurchasedForUri(state, uri),
     nextListUri: collectionId && makeSelectNextUrlForCollectionAndUrl(collectionId, uri)(state),
     previousListUri: collectionId && makeSelectPreviousUrlForCollectionAndUrl(collectionId, uri)(state),
     collectionId,

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { makeSelectFileInfoForUri, makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
-import { makeSelectClaimWasPurchased } from 'redux/selectors/claims';
+import { selectClaimWasPurchasedForUri } from 'redux/selectors/claims';
 import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { makeSelectFileRenderModeForUri, selectPrimaryUri } from 'redux/selectors/content';
 import { withRouter } from 'react-router';
@@ -14,7 +14,7 @@ const select = (state, props) => ({
   streamingUrl: makeSelectStreamingUrlForUri(props.uri)(state),
   renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
   costInfo: selectCostInfoForUri(state, props.uri),
-  claimWasPurchased: makeSelectClaimWasPurchased(props.uri)(state),
+  claimWasPurchased: selectClaimWasPurchasedForUri(state, props.uri),
 });
 
 const perform = (dispatch) => ({
