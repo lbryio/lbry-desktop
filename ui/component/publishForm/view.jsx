@@ -214,9 +214,7 @@ function PublishForm(props: Props) {
   const emptyPostError = mode === PUBLISH_MODES.POST && (!fileText || fileText.trim() === '');
   const formDisabled = (fileFormDisabled && !editingURI) || emptyPostError || publishing;
   const isInProgress = filePath || editingURI || name || title;
-  const activeChannelName =
-    (myClaimForUri && myClaimForUri.signing_channel && myClaimForUri.signing_channel.name) ||
-    (activeChannelClaim && activeChannelClaim.name);
+  const activeChannelName = activeChannelClaim && activeChannelClaim.name;
   // Editing content info
   const fileMimeType =
     myClaimForUri && myClaimForUri.value && myClaimForUri.value.source
