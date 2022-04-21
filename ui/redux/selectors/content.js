@@ -63,16 +63,6 @@ export const makeSelectContentPositionForUri = (uri: string) =>
     return state.positions[id] ? state.positions[id][outpoint] : null;
   });
 
-export const makeSelectContentPositionPersistedForUri = (uri: string) =>
-  createSelector(selectState, makeSelectClaimForUri(uri), (state, claim) => {
-    if (!claim) {
-      return null;
-    }
-    const outpoint = `${claim.txid}:${claim.nout}:persisted`;
-    const id = claim.claim_id;
-    return state.positions[id] ? state.positions[id][outpoint] : null;
-  });
-
 export const selectHistory = createSelector(selectState, (state) => state.history || []);
 
 export const selectHistoryPageCount = createSelector(selectHistory, (history) =>

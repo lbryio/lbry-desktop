@@ -55,7 +55,6 @@ reducers[ACTIONS.SET_CONTENT_POSITION] = (state, action) => {
       [claimId]: {
         ...state.positions[claimId],
         [outpoint]: position,
-        [`${outpoint}:persisted`]: position,
       },
     },
   };
@@ -89,6 +88,13 @@ reducers[ACTIONS.CLEAR_CONTENT_POSITION] = (state, action) => {
   } else {
     return state;
   }
+};
+
+reducers[ACTIONS.CLEAR_CONTENT_CACHE] = (state, action) => {
+  return {
+    ...state,
+    positions: {},
+  };
 };
 
 reducers[ACTIONS.SET_CONTENT_LAST_VIEWED] = (state, action) => {

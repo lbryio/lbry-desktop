@@ -18,3 +18,13 @@
     margin-left: 2.2rem;
   }
 }
+
+.settings {
+  &__persistWatchTimeCheckbox {
+    display: flex;
+    justify-content: end;
+  }
+  &__persistWatchTimeClearCache {
+    text-align: right;
+  }
+}

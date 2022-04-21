@@ -16,7 +16,7 @@ type Props = {
   claim: ?StreamClaim,
   doResolveUri: (string) => void,
   className?: string,
-  position?: number,
+  position: number | null,
 };
 
 function FileThumbnail(props: Props) {
@@ -32,9 +32,12 @@ function FileThumbnail(props: Props) {
 
   const media = claim && claim.value && (claim.value.video || claim.value.audio);
   const duration = media && media.duration;
-  const viewedBar = position && duration && (
+  // When the position is -1, it means the user has watched the entire
+  // video and he/she is using the persist watch setting.
+  const watchedPercentage = position === -1 ? 100 : ((position || 0) / (duration || 1)) * 100 || 0;
+  const viewedBar = position && (
     <div className="file-thumbnail__viewed-bar">
-      <div className="file-thumbnail__viewed-bar-progress" style={{ width: (position / duration) * 100 + '%' }} />
+      <div className="file-thumbnail__viewed-bar-progress" style={{ width: `${watchedPercentage}%` }} />
     </div>
   );
 

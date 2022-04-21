@@ -32,6 +32,7 @@ type Props = {
   // --- perform ---
   setClientSetting: (string, boolean | string | number) => void,
   clearPlayingUri: () => void,
+  clearContentCache: () => void,
 };
 
 export default function SettingContent(props: Props) {
@@ -49,6 +50,7 @@ export default function SettingContent(props: Props) {
     enablePublishPreview,
     setClientSetting,
     clearPlayingUri,
+    clearContentCache,
   } = props;
 
   return (
@@ -105,12 +107,23 @@ export default function SettingContent(props: Props) {
               />
             </SettingsRow>
             <SettingsRow title={__('Persist watch time')} subtitle={__(HELP.PERSIST_WATCH_TIME)}>
-              <FormField
-                type="checkbox"
-                name="persist_watch_time"
-                onChange={() => setClientSetting(SETTINGS.PERSIST_WATCH_TIME, !persistWatchTime)}
-                checked={persistWatchTime}
-              />
+              <div className="settings__persistWatchTimeCheckbox">
+                <FormField
+                  type="checkbox"
+                  name="persist_watch_time"
+                  onChange={() => setClientSetting(SETTINGS.PERSIST_WATCH_TIME, !persistWatchTime)}
+                  checked={persistWatchTime}
+                />
+              </div>
+              <div className="settings__persistWatchTimeClearCache">
+                <Button
+                  button="primary"
+                  icon={ICONS.ALERT}
+                  label="Clear Cache"
+                  onClick={clearContentCache}
+                  disabled={false}
+                />
+              </div>
             </SettingsRow>
             <SettingsRow title={__('Show mature content')} subtitle={__(HELP.SHOW_MATURE)}>
               <FormField

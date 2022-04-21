@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { selectMyChannelUrls } from 'redux/selectors/claims';
 import * as SETTINGS from 'constants/settings';
-import { doSetPlayingUri } from 'redux/actions/content';
+import { doSetPlayingUri, clearContentCache } from 'redux/actions/content';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { selectShowMatureContent, makeSelectClientSetting } from 'redux/selectors/settings';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
@@ -25,6 +25,7 @@ const select = (state) => ({
 const perform = (dispatch) => ({
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
   clearPlayingUri: () => dispatch(doSetPlayingUri({ uri: null })),
+  clearContentCache: () => dispatch(clearContentCache()),
 });
 
 export default connect(select, perform)(SettingContent);
