@@ -151,7 +151,7 @@ export function CommentCreate(props: Props) {
   const minSuper = (channelSettings && channelSettings.min_tip_amount_super_chat) || 0;
   const minTip = (channelSettings && channelSettings.min_tip_amount_comment) || 0;
   const minAmount = minTip || minSuper || 0;
-  const minAmountMet = minAmount === 0 || tipAmount >= minAmount;
+  const minAmountMet = activeTab !== TAB_LBC || minAmount === 0 || tipAmount >= minAmount;
   const stickerPrice = selectedSticker && selectedSticker.price;
   const tipSelectorError = tipError || disableReviewButton;
 
