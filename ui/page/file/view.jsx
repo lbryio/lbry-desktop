@@ -86,7 +86,7 @@ export default function FilePage(props: Props) {
 
   const isMobile = useIsMobile();
   const isLandscapeRotated = useIsMobileLandscape();
-  const theaterMode = renderMode === 'video' ? videoTheaterMode : false;
+  const theaterMode = renderMode === 'video' || renderMode === 'audio' ? videoTheaterMode : false;
   const channelSettings = channelId ? settingsByChannelId[channelId] : undefined;
   const commentSettingDisabled = channelSettings && !channelSettings.comments_enabled;
   const cost = costInfo ? costInfo.cost : null;

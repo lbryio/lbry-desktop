@@ -148,7 +148,7 @@ export default function FileRenderFloating(props: Props) {
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode) || isCurrentClaimLive;
   const isReadyToPlay = isCurrentClaimLive || (isPlayable && streamingUrl);
 
-  const theaterMode = renderMode === 'video' ? videoTheaterMode : false;
+  const theaterMode = renderMode === 'video' || renderMode === 'audio' ? videoTheaterMode : false;
 
   // ****************************************************************************
   // FUNCTIONS

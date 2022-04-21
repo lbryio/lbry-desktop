@@ -65,7 +65,7 @@ function Page(props: Props) {
     location: { pathname },
   } = useHistory();
 
-  const theaterMode = renderMode === 'video' ? videoTheaterMode : false;
+  const theaterMode = renderMode === 'video' || renderMode === 'audio' ? videoTheaterMode : false;
   const isMediumScreen = useIsMediumScreen();
   const isMobile = useIsMobile();
   const isLandscapeRotated = useIsMobileLandscape();

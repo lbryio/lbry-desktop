@@ -262,8 +262,9 @@
 
 .file-render__img-container {
   width: 100%;
-  // aspect-ratio: 16 / 9;
-  background-color: #000000;
+  aspect-ratio: 16 / 9;
+  background-color: var(--color-placeholder-background);
+  // background-color: rgba(25,25,25,0.4);
   border-radius: var(--border-radius);
 }
 

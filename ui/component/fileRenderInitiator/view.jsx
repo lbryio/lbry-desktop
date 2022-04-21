@@ -71,6 +71,7 @@ export default function FileRenderInitiator(props: Props) {
     doFetchChannelLiveStatus,
   } = props;
 
+  const theaterMode = renderMode === 'video' || renderMode === 'audio' ? videoTheaterMode : false;
   const { livestreamPage, layountRendered } = React.useContext(LivestreamContext) || {};
 
   const isMobile = useIsMobile();
@@ -163,7 +164,7 @@ export default function FileRenderInitiator(props: Props) {
           ? 'embed__inline-button'
           : classnames('content__cover', {
               'content__cover--disabled': disabled,
-              'content__cover--theater-mode': videoTheaterMode && !isMobile,
+              'content__cover--theater-mode': theaterMode && !isMobile,
               'content__cover--text': isText,
               'card__media--nsfw': obscurePreview,
             })
