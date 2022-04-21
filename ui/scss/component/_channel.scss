@@ -10,18 +10,19 @@ $actions-z-index: 2;
           stroke: var(--color-text);
         }
       }
-      .button-following {
-        &.button--alt {
-          color: var(--color-text);
-          background-color: var(--color-button-alt-bg);
-          .icon {
-            stroke: var(--color-text);
-          }
-          &:hover {
-            color: var(--color-primary);
-          }
-        }
-      }
+      // bring back later
+      //.button-following {
+      //  &.button--alt {
+      //    color: var(--color-text);
+      //    background-color: var(--color-button-alt-bg);
+      //    .icon {
+      //      stroke: var(--color-text);
+      //    }
+      //    &:hover {
+      //      color: var(--color-primary);
+      //    }
+      //  }
+      //}
       .button-following:last-of-type {
         margin-left: 2px;
       }
