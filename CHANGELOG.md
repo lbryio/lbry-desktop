@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 - Uploads: show placeholder when loading page _community pr!_ ([#7531](https://github.com/lbryio/lbry-desktop/pull/7531))
 - Sidebar channel search _styles pr_ ([#7542](https://github.com/lbryio/lbry-desktop/pull/7542))
-- View position indicator on thumbnail ([#7541](https://github.com/lbryio/lbry-desktop/pull/7541))
+- View position indicator on thumbnail (partials only) ([#7541](https://github.com/lbryio/lbry-desktop/pull/7541))
 - Ability to search through publishes ([#7535](https://github.com/lbryio/lbry-desktop/pull/7535))
 
 ### Changed
