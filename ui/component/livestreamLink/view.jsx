@@ -15,7 +15,11 @@ export default function LivestreamLink(props: Props) {
   const { claimUri, title = null } = props;
   const { push } = useHistory();
 
-  const element = (props: { children: any }) => (
+  if (!claimUri) {
+    return null;
+  }
+
+  return (
     <Card
       className="livestream__channel-link claim-preview__live"
       title={title || __('Live stream in progress')}
@@ -23,9 +27,7 @@ export default function LivestreamLink(props: Props) {
         push(formatLbryUrlForWeb(claimUri));
       }}
     >
-      {props.children}
+      <ClaimPreview uri={claimUri} type="inline" hideMenu />
     </Card>
   );
-
-  return claimUri ? <ClaimPreview uri={claimUri} wrapperElement={element} type="inline" /> : null;
 }
