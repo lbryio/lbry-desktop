@@ -2327,5 +2327,7 @@
   "* Note that as\n                peer-to-peer software, your IP address and potentially other system information can be sent to other\n                users, though this information is not stored permanently.": "* Note that as\n                peer-to-peer software, your IP address and potentially other system information can be sent to other\n                users, though this information is not stored permanently.",
   "Persist watch time": "Persist watch time",
   "Persist the watch time of the videos you have watched.": "Persist the watch time of the videos you have watched.",
+  "Clearing...": "Clearing...",
+  "Cache cleared": "Cache cleared",
   "--end--": "--end--"
 }

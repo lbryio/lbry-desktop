@@ -246,7 +246,7 @@ export function clearPosition(uri: string) {
     if (persistWatchTime) {
       dispatch({
         type: ACTIONS.SET_CONTENT_POSITION,
-        data: { claimId, outpoint, position: -1 },
+        data: { claimId, outpoint, position: null },
       });
       return;
     }

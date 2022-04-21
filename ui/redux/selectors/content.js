@@ -63,6 +63,31 @@ export const makeSelectContentPositionForUri = (uri: string) =>
     return state.positions[id] ? state.positions[id][outpoint] : null;
   });
 
+export const makeSelectContentWatchedPercentageForUri = (uri: string) =>
+  createSelector(selectState, makeSelectClaimForUri(uri), (state, claim) => {
+    if (!claim) {
+      return 0;
+    }
+    const media = claim.value && (claim.value.video || claim.value.audio);
+    if (!media) {
+      return 0;
+    }
+    const id = claim.claim_id;
+    if (!state.positions[id]) {
+      return 0;
+    }
+    const outpoint = `${claim.txid}:${claim.nout}`;
+    const watched = state.positions[id][outpoint];
+    // If the user turns on the persist watch setting,
+    // clearing the position will set it to null,
+    // which means the entire video has been watched.
+    if (watched === null) {
+      return 100;
+    }
+    const duration = media.duration;
+    return (watched / duration) * 100;
+  });
+
 export const selectHistory = createSelector(selectState, (state) => state.history || []);
 
 export const selectHistoryPageCount = createSelector(selectHistory, (history) =>

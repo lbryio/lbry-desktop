@@ -52,6 +52,18 @@ export default function SettingContent(props: Props) {
     clearPlayingUri,
     clearContentCache,
   } = props;
+  const [contentCacheCleared, setContentCacheCleared] = React.useState(false);
+  const [clearingContentCache, setClearingContentCache] = React.useState(false);
+  const onClearContentCache = React.useCallback(() => {
+    setClearingContentCache(true);
+    clearContentCache();
+    // Just a small timer to give the user a visual effect
+    // that the content is being cleared.
+    setTimeout(() => {
+      setClearingContentCache(false);
+      setContentCacheCleared(true);
+    }, 2000);
+  }, [setClearingContentCache, clearContentCache, setContentCacheCleared]);
 
   return (
     <>
@@ -119,9 +131,15 @@ export default function SettingContent(props: Props) {
                 <Button
                   button="primary"
                   icon={ICONS.ALERT}
-                  label="Clear Cache"
-                  onClick={clearContentCache}
-                  disabled={false}
+                  label={
+                    contentCacheCleared
+                      ? __('Cache cleared')
+                      : clearingContentCache
+                      ? __('Clearing...')
+                      : __('Clear Cache')
+                  }
+                  onClick={onClearContentCache}
+                  disabled={clearingContentCache || contentCacheCleared}
                 />
               </div>
             </SettingsRow>
