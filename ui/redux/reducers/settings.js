@@ -67,7 +67,7 @@ const defaultState = {
     [SETTINGS.FLOATING_PLAYER]: true,
     [SETTINGS.AUTO_DOWNLOAD]: true,
     [SETTINGS.HIDE_REPOSTS]: false,
-    [SETTINGS.PERSIST_WATCH_TIME]: false,
+    [SETTINGS.PERSIST_WATCH_TIME]: true,
 
     // OS
     [SETTINGS.AUTO_LAUNCH]: true,

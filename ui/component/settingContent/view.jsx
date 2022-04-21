@@ -133,10 +133,10 @@ export default function SettingContent(props: Props) {
                   icon={ICONS.ALERT}
                   label={
                     contentCacheCleared
-                      ? __('Cache cleared')
+                      ? __('Views cleared')
                       : clearingContentCache
                       ? __('Clearing...')
-                      : __('Clear Cache')
+                      : __('Clear Views')
                   }
                   onClick={onClearContentCache}
                   disabled={clearingContentCache || contentCacheCleared}
@@ -229,7 +229,7 @@ const HELP = {
   AUTOPLAY_MEDIA: 'Autoplay video and audio files when navigating to a file.',
   AUTOPLAY_NEXT: 'Autoplay the next related item when a file (video or audio) finishes playing.',
   HIDE_REPOSTS: 'You will not see reposts by people you follow or receive email notifying about them.',
-  PERSIST_WATCH_TIME: 'Persist the watch time of the videos you have watched.',
+  PERSIST_WATCH_TIME: 'Persist the watch time of the videos you have fully. This will not erase or hide any blockchain activity or downloads.',
   SHOW_MATURE: 'Mature content may include nudity, intense sexuality, profanity, or other adult content. By displaying mature content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  ',
   MAX_PURCHASE_PRICE: 'This will prevent you from purchasing any content over a certain cost, as a safety measure.',
   ONLY_CONFIRM_OVER_AMOUNT: '', // [feel redundant. Disable for now] "When this option is chosen, LBRY won't ask you to confirm purchases or tips below your chosen amount.",
