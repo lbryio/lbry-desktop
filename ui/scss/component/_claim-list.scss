@@ -130,9 +130,9 @@
       position: absolute;
       display: block;
       width: 225px;
-      padding-top: 4px;
+      padding-top: 2px;
       padding-right: 8px;
-      background-color: var(--color-brand-blue);
+      background-color: var(--color-gray-7);
       color: var(--color-primary-contrast);
       text-align: center;
       z-index: 1;
@@ -141,6 +141,14 @@
       left: -80px;
       top: 10px;
       transform: rotate(-45deg);
+
+      &.claim-preview__repost-ribbon--anon {
+        left: -85px;
+        top: 12px;
+        .icon {
+          margin-right: var(--spacing-xxs);
+        }
+      }
 
       .button--uri-indicator {
         top: -3px;
@@ -160,7 +168,7 @@
             overflow: hidden;
 
             &:hover {
-              color: var(--color-secondary);
+              color: var(--color-primary);
             }
           }
         }
