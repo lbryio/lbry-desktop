@@ -41,7 +41,7 @@ function FileThumbnail(props: Props) {
   const hasResolvedClaim = claim !== undefined;
   const isGif = thumbnail && thumbnail.endsWith('gif');
 
-  const viewedBar = showPercentage && watchedPercentage && (
+  const viewedBar = Boolean(showPercentage && watchedPercentage) && (
     <div className="file-thumbnail__viewed-bar">
       <div className="file-thumbnail__viewed-bar-progress" style={{ width: `${watchedPercentage}%` }} />
     </div>
