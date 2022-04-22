@@ -2,19 +2,16 @@
 import React from 'react';
 import ClaimList from 'component/claimList';
 import Page from 'component/page';
-import * as PAGES from 'constants/pages';
 import { useHistory } from 'react-router-dom';
-import CollectionEdit from 'component/collectionEdit';
 import Card from 'component/common/card';
 import Button from 'component/button';
-import CollectionActions from 'component/collectionActions';
 import classnames from 'classnames';
-import ClaimAuthor from 'component/claimAuthor';
-import FileDescription from 'component/fileDescription';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 import Spinner from 'component/spinner';
+
+import usePersistedState from 'effects/use-persisted-state';
 
 // prettier-ignore
 const Lazy = {
@@ -29,13 +26,10 @@ export const EDIT_PAGE = 'edit';
 
 type Props = {
   collectionId: string,
-  uri: string,
   claim: Claim,
   title: string,
   thumbnail: string,
-  collection: Collection,
   collectionUrls: Array<string>,
-  collectionCount: number,
   isResolvingCollection: boolean,
   isMyClaim: boolean,
   isMyCollection: boolean,
@@ -51,11 +45,7 @@ type Props = {
 export default function HistoryPage(props: Props) {
   const {
     collectionId,
-    uri,
     claim,
-    collection,
-    collectionUrls,
-    collectionCount,
     collectionHasEdits,
     claimIsPending,
     isResolvingCollection,
@@ -64,17 +54,21 @@ export default function HistoryPage(props: Props) {
     deleteCollection,
   } = props;
 
+  const collection = {
+    id: 'watchhistory',
+    name: __('Watch History'),
+    type: 'playlist',
+  };
+  const collectionUrls = [];
+
+  const [history] = usePersistedState('watch-history', []);
+
   const {
-    replace,
     location: { search },
   } = useHistory();
 
   const [didTryResolve, setDidTryResolve] = React.useState(false);
-  const [showInfo, setShowInfo] = React.useState(false);
-  const [showEdit, setShowEdit] = React.useState(false);
   const [unavailableUris, setUnavailable] = React.useState([]);
-
-  const { name, totalItems } = collection || {};
   const isBuiltin = COLLECTIONS_CONSTS.BUILTIN_LISTS.includes(collectionId);
 
   function handleOnDragEnd(result) {
@@ -91,8 +85,7 @@ export default function HistoryPage(props: Props) {
   const urlParams = new URLSearchParams(search);
   const editing = urlParams.get(PAGE_VIEW_QUERY) === EDIT_PAGE;
 
-  const urlsReady =
-    collectionUrls && (totalItems === undefined || (totalItems && totalItems === collectionUrls.length));
+  const urlsReady = collectionUrls && history.length;
 
   React.useEffect(() => {
     if (collectionId && !urlsReady && !didTryResolve && !collection) {
@@ -135,15 +128,6 @@ export default function HistoryPage(props: Props) {
     titleActions = pending;
   }
 
-  const subTitle = (
-    <div>
-      <span className="collection__subtitle">
-        {collectionCount === 1 ? __('1 item') : __('%collectionCount% items', { collectionCount })}
-      </span>
-      {uri && <ClaimAuthor uri={uri} />}
-    </div>
-  );
-
   const listName = claim ? claim.value.title || claim.name : collection && collection.name;
 
   const info = (
@@ -154,7 +138,7 @@ export default function HistoryPage(props: Props) {
             icon={
               (collectionId === COLLECTIONS_CONSTS.WATCH_LATER_ID && ICONS.TIME) ||
               (collectionId === COLLECTIONS_CONSTS.FAVORITES_ID && ICONS.STAR) ||
-              ICONS.STACK
+              ICONS.TIME
             }
             className="icon--margin-right"
           />
@@ -162,27 +146,6 @@ export default function HistoryPage(props: Props) {
         </span>
       }
       titleActions={unavailableUris.length > 0 ? removeUnavailable : titleActions}
-      subtitle={subTitle}
-      body={
-        <CollectionActions
-          uri={uri}
-          collectionId={collectionId}
-          setShowInfo={setShowInfo}
-          showInfo={showInfo}
-          isBuiltin={isBuiltin}
-          collectionUrls={collectionUrls}
-          setShowEdit={setShowEdit}
-          showEdit={showEdit}
-        />
-      }
-      actions={
-        showInfo &&
-        uri && (
-          <div className="section">
-            <FileDescription uri={uri} expandOverride />
-          </div>
-        )
-      }
     />
   );
 
@@ -202,27 +165,6 @@ export default function HistoryPage(props: Props) {
     );
   }
 
-  if (editing) {
-    return (
-      <Page
-        noFooter
-        noSideNavigation={editing}
-        backout={{
-          title: __('%action% %collection%', { collection: name, action: uri ? __('Editing') : __('Publishing') }),
-          simpleTitle: uri ? __('Editing') : __('Publishing'),
-        }}
-      >
-        <CollectionEdit
-          uri={uri}
-          collectionId={collectionId}
-          onDone={(id) => {
-            replace(`/$/${PAGES.LIST}/${id}`);
-          }}
-        />
-      </Page>
-    );
-  }
-
   if (urlsReady) {
     return (
       <Page className="playlistPage-wrapper">
@@ -234,9 +176,9 @@ export default function HistoryPage(props: Props) {
               <Lazy.Droppable droppableId="list__ordering">
                 {(DroppableProvided) => (
                   <ClaimList
-                    uris={collectionUrls}
+                    uris={history}
                     collectionId={collectionId}
-                    showEdit={showEdit}
+                    // showEdit={showEdit}
                     droppableProvided={DroppableProvided}
                     unavailableUris={unavailableUris}
                   />

@@ -29,6 +29,7 @@ import debounce from 'util/debounce';
 import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
 import useInterval from 'effects/use-interval';
 import { lastBandwidthSelector } from './internal/plugins/videojs-http-streaming--override/playlist-selectors';
+import usePersistedState from 'effects/use-persisted-state';
 
 // const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
 // const PLAY_TIMEOUT_LIMIT = 2000;
@@ -150,6 +151,23 @@ function VideoViewer(props: Props) {
   const [localAutoplayNext, setLocalAutoplayNext] = useState(autoplayNext);
   const isFirstRender = React.useRef(true);
   const playerRef = React.useRef(null);
+
+  const [history, setHistory] = usePersistedState('watch-history', []);
+  React.useEffect(() => {
+    if (!history[0].indexOf(claim.permanent_url) !== -1) {
+      if (!history || !history.length) {
+        setHistory([claim.permanent_url]);
+      } else {
+        if (history.find((entry) => entry === claim.permanent_url)) {
+          history.splice(history.indexOf(claim.permanent_url), 1);
+          history.unshift(claim.permanent_url);
+        } else {
+          history.unshift(claim.permanent_url);
+        }
+        setHistory(history);
+      }
+    }
+  }, [isPlaying]);
 
   useEffect(() => {
     if (isFirstRender.current) {
@@ -288,6 +306,7 @@ function VideoViewer(props: Props) {
     setIsEndedEmbed(false);
     setReplay(false);
     setDoNavigate(false);
+    // setWatchHistory()
     analytics.videoIsPlaying(true, player);
   }
 

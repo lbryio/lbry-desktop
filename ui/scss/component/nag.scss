@@ -41,7 +41,7 @@ $nag-error-z-index: 999;
   background-color: var(--color-primary);
   color: var(--color-white);
   z-index: $nag-helpful-z-index;
-  border-radius: var(--border-radius);
+  // border-radius: var(--border-radius);
   margin-top: var(--spacing-s);
 }
 
@@ -88,7 +88,7 @@ $nag-error-z-index: 999;
 
 .nag__button--helpful {
   &:hover {
-    color: var(--color-secondary);
+    color: var(--color-primary);
   }
 }
 
