@@ -3,12 +3,13 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.53.0] - [2022-04-21]
+## [0.53.0] - [2022-04-22]
 
 ### Added
 - Uploads: show placeholder when loading page _community pr!_ ([#7531](https://github.com/lbryio/lbry-desktop/pull/7531))
 - Sidebar channel search _styles pr_ ([#7542](https://github.com/lbryio/lbry-desktop/pull/7542))
-- View position indicator on thumbnail (partials only) ([#7541](https://github.com/lbryio/lbry-desktop/pull/7541))
+- Viewed content progress indicator on thumbnail part 1 ([#7541](https://github.com/lbryio/lbry-desktop/pull/7541))
+- Viewed content progress indicator on thumbnail part 2 ([#7547](https://github.com/lbryio/lbry-desktop/pull/7547))
 - Ability to search through publishes ([#7535](https://github.com/lbryio/lbry-desktop/pull/7535))
 
 ### Changed
