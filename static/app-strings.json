@@ -2315,5 +2315,7 @@
   "Clear Views": "Clear Views",
   "Show Video View Progress": "Show Video View Progress",
   "Display view progress on thumbnail. This setting will not hide any blockchain activity or downloads.": "Display view progress on thumbnail. This setting will not hide any blockchain activity or downloads.",
+  "%anonymous%": "%anonymous%",
+  "Anon --[used in <%anonymous% Reposted>]--": "Anon",
   "--end--": "--end--"
 }

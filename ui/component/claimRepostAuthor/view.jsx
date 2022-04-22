@@ -31,16 +31,18 @@ function ClaimRepostAuthor(props: Props) {
   if (repostUrl && !repostChannelUrl) {
     return (
       <div className="claim-preview__repost-author">
-        <Icon icon={ICONS.REPOST} size={10} />
-        <span>
-          <I18nMessage
-            tokens={{
-              anonymous: <strong>{__('Anonymous --[used in <%anonymous% Reposted>]--')}</strong>,
-            }}
-          >
-            %anonymous% Reposted
-          </I18nMessage>
-        </span>
+        <div className="claim-preview__repost-ribbon claim-preview__repost-ribbon--anon">
+          <Icon icon={ICONS.REPOST} size={10} />
+          <span>
+            <I18nMessage
+              tokens={{
+                anonymous: <strong>{__('Anon --[used in <%anonymous% Reposted>]--')}</strong>,
+              }}
+            >
+              %anonymous%
+            </I18nMessage>
+          </span>
+        </div>
       </div>
     );
   }
