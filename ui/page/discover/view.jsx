@@ -176,10 +176,13 @@ function DiscoverPage(props: Props) {
       </span>
     );
   }
-  let releaseTime =
-    dynamicRouteProps && dynamicRouteProps.options && dynamicRouteProps.options.releaseTime
-      ? dynamicRouteProps.options.releaseTime
-      : !isWildWest && `>${Math.floor(moment().subtract(0, 'hour').startOf('week').unix())}`;
+
+  let releaseTime = dynamicRouteProps?.options?.releaseTime;
+  if (isWildWest) {
+    // The homepage definition currently does not support 'start-of-week', so
+    // continue to hardcode here for now.
+    releaseTime = `>${Math.floor(moment().subtract(0, 'hour').startOf('week').unix())}`;
+  }
 
   return (
     <Page
