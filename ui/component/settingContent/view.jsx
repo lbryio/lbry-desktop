@@ -127,23 +127,23 @@ export default function SettingContent(props: Props) {
                 onChange={() => setClientSetting(SETTINGS.PERSIST_WATCH_TIME, !persistWatchTime)}
                 checked={persistWatchTime}
               />
-              {/* </div> */}
-              {/* Disabled until styling is better */}
-              {/* <div className="settings__persistWatchTimeClearCache"> */}
-              {/*  <Button */}
-              {/*    button="primary" */}
-              {/*    icon={ICONS.ALERT} */}
-              {/*    label={ */}
-              {/*      contentCacheCleared */}
-              {/*        ? __('Views cleared') */}
-              {/*        : clearingContentCache */}
-              {/*        ? __('Clearing...') */}
-              {/*        : __('Clear Views') */}
-              {/*    } */}
-              {/*    onClick={onClearContentCache} */}
-              {/*    disabled={clearingContentCache || contentCacheCleared} */}
-              {/*  /> */}
-              {/* </div> */}
+              {/* </div>
+              Disabled until styling is better
+              <div className="settings__persistWatchTimeClearCache">
+               <Button
+                 button="primary"
+                 icon={ICONS.ALERT}
+                 label={
+                   contentCacheCleared
+                     ? __('Views cleared')
+                     : clearingContentCache
+                     ? __('Clearing...')
+                     : __('Clear Views')
+                 }
+                 onClick={onClearContentCache}
+                 disabled={clearingContentCache || contentCacheCleared}
+               />
+              </div> */}
             </SettingsRow>
             <SettingsRow title={__('Show mature content')} subtitle={__(HELP.SHOW_MATURE)}>
               <FormField
