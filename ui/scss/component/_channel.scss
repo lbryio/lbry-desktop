@@ -28,6 +28,12 @@ $actions-z-index: 2;
       }
     }
   }
+  // hack. we should make all these buttons the same class.
+  .button--secondary {
+    .button__label {
+      color: var(--color-text) !important;
+    }
+  }
 
   .claim-preview__live {
     margin-bottom: 0;
