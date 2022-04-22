@@ -35,6 +35,7 @@ export const REWARDS_ACKNOWLEDGED = 'rewards_acknowledged';
 export const SEARCH_IN_LANGUAGE = 'search_in_language';
 export const HOMEPAGE = 'homepage';
 export const HIDE_REPOSTS = 'hide_reposts';
+export const PERSIST_WATCH_TIME = 'persist_watch_time';
 export const SUPPORT_OPTION = 'support_option';
 export const TILE_LAYOUT = 'tile_layout';
 export const VIDEO_THEATER_MODE = 'video_theater_mode';

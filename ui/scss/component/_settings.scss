@@ -18,3 +18,14 @@
     margin-left: 2.2rem;
   }
 }
+
+.settings__persistWatchTimeCheckbox {
+  display: flex;
+  justify-content: end;
+  padding-bottom: var(--spacing-m);
+}
+
+.settings__persistWatchTimeCheckbox {
+  text-align: right;
+  padding-top: var(--spacing-m);
+}

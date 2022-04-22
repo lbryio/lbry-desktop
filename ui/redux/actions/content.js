@@ -239,13 +239,28 @@ export function clearPosition(uri: string) {
   return (dispatch: Dispatch, getState: () => any) => {
     const state = getState();
     const claim = makeSelectClaimForUri(uri)(state);
+    const persistWatchTime = makeSelectClientSetting(SETTINGS.PERSIST_WATCH_TIME)(state);
     const { claim_id: claimId, txid, nout } = claim;
     const outpoint = `${txid}:${nout}`;
+
+    if (persistWatchTime) {
+      dispatch({
+        type: ACTIONS.SET_CONTENT_POSITION,
+        data: { claimId, outpoint, position: null },
+      });
+      return;
+    }
 
     dispatch({
       type: ACTIONS.CLEAR_CONTENT_POSITION,
       data: { claimId, outpoint },
     });
+  };
+}
+
+export function clearContentCache() {
+  return {
+    type: ACTIONS.CLEAR_CONTENT_CACHE,
   };
 }
 

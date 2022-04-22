@@ -90,6 +90,13 @@ reducers[ACTIONS.CLEAR_CONTENT_POSITION] = (state, action) => {
   }
 };
 
+reducers[ACTIONS.CLEAR_CONTENT_CACHE] = (state, action) => {
+  return {
+    ...state,
+    positions: {},
+  };
+};
+
 reducers[ACTIONS.SET_CONTENT_LAST_VIEWED] = (state, action) => {
   const { uri, lastViewed } = action.data;
   const { history } = state;

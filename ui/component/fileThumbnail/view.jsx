@@ -16,11 +16,22 @@ type Props = {
   claim: ?StreamClaim,
   doResolveUri: (string) => void,
   className?: string,
-  position?: number,
+  watchedPercentage: number,
+  showPercentage: boolean,
 };
 
 function FileThumbnail(props: Props) {
-  const { claim, uri, doResolveUri, thumbnail: rawThumbnail, children, allowGifs = false, className, position } = props;
+  const {
+    claim,
+    uri,
+    doResolveUri,
+    thumbnail: rawThumbnail,
+    children,
+    allowGifs = false,
+    className,
+    watchedPercentage,
+    showPercentage,
+  } = props;
 
   const passedThumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
   const thumbnailFromClaim =
@@ -30,11 +41,9 @@ function FileThumbnail(props: Props) {
   const hasResolvedClaim = claim !== undefined;
   const isGif = thumbnail && thumbnail.endsWith('gif');
 
-  const media = claim && claim.value && (claim.value.video || claim.value.audio);
-  const duration = media && media.duration;
-  const viewedBar = position && duration && (
+  const viewedBar = showPercentage && watchedPercentage && (
     <div className="file-thumbnail__viewed-bar">
-      <div className="file-thumbnail__viewed-bar-progress" style={{ width: (position / duration) * 100 + '%' }} />
+      <div className="file-thumbnail__viewed-bar-progress" style={{ width: `${watchedPercentage}%` }} />
     </div>
   );
 

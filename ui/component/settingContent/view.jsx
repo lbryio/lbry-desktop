@@ -24,6 +24,7 @@ type Props = {
   autoplayNext: boolean,
   hideReposts: ?boolean,
   showNsfw: boolean,
+  persistWatchTime: boolean,
   myChannelUrls: ?Array<string>,
   instantPurchaseEnabled: boolean,
   instantPurchaseMax: Price,
@@ -31,6 +32,7 @@ type Props = {
   // --- perform ---
   setClientSetting: (string, boolean | string | number) => void,
   clearPlayingUri: () => void,
+  // clearContentCache: () => void,
 };
 
 export default function SettingContent(props: Props) {
@@ -40,6 +42,7 @@ export default function SettingContent(props: Props) {
     autoplayMedia,
     autoplayNext,
     hideReposts,
+    persistWatchTime,
     showNsfw,
     myChannelUrls,
     instantPurchaseEnabled,
@@ -47,7 +50,21 @@ export default function SettingContent(props: Props) {
     enablePublishPreview,
     setClientSetting,
     clearPlayingUri,
+    // clearContentCache,
   } = props;
+  // feature disabled until styling is ironed out
+  // const [contentCacheCleared, setContentCacheCleared] = React.useState(false);
+  // const [clearingContentCache, setClearingContentCache] = React.useState(false);
+  // const onClearContentCache = React.useCallback(() => {
+  //   setClearingContentCache(true);
+  //   clearContentCache();
+  //   // Just a small timer to give the user a visual effect
+  //   // that the content is being cleared.
+  //   setTimeout(() => {
+  //     setClearingContentCache(false);
+  //     setContentCacheCleared(true);
+  //   }, 2000);
+  // }, [setClearingContentCache, clearContentCache, setContentCacheCleared]);
 
   return (
     <>
@@ -101,6 +118,32 @@ export default function SettingContent(props: Props) {
                 }}
                 checked={hideReposts}
               />
+            </SettingsRow>
+            <SettingsRow title={__('Show Video View Progress')} subtitle={__(HELP.PERSIST_WATCH_TIME)}>
+              {/* <div className="settings__persistWatchTimeCheckbox"> */}
+              <FormField
+                type="checkbox"
+                name="persist_watch_time"
+                onChange={() => setClientSetting(SETTINGS.PERSIST_WATCH_TIME, !persistWatchTime)}
+                checked={persistWatchTime}
+              />
+              {/* </div>
+              Disabled until styling is better
+              <div className="settings__persistWatchTimeClearCache">
+               <Button
+                 button="primary"
+                 icon={ICONS.ALERT}
+                 label={
+                   contentCacheCleared
+                     ? __('Views cleared')
+                     : clearingContentCache
+                     ? __('Clearing...')
+                     : __('Clear Views')
+                 }
+                 onClick={onClearContentCache}
+                 disabled={clearingContentCache || contentCacheCleared}
+               />
+              </div> */}
             </SettingsRow>
             <SettingsRow title={__('Show mature content')} subtitle={__(HELP.SHOW_MATURE)}>
               <FormField
@@ -188,6 +231,7 @@ const HELP = {
   AUTOPLAY_MEDIA: 'Autoplay video and audio files when navigating to a file.',
   AUTOPLAY_NEXT: 'Autoplay the next related item when a file (video or audio) finishes playing.',
   HIDE_REPOSTS: 'You will not see reposts by people you follow or receive email notifying about them.',
+  PERSIST_WATCH_TIME: 'Display view progress on thumbnail. This setting will not hide any blockchain activity or downloads.',
   SHOW_MATURE: 'Mature content may include nudity, intense sexuality, profanity, or other adult content. By displaying mature content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  ',
   MAX_PURCHASE_PRICE: 'This will prevent you from purchasing any content over a certain cost, as a safety measure.',
   ONLY_CONFIRM_OVER_AMOUNT: '', // [feel redundant. Disable for now] "When this option is chosen, LBRY won't ask you to confirm purchases or tips below your chosen amount.",
