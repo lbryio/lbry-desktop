@@ -70,9 +70,7 @@ export default function LivestreamSection(props: Props) {
 
   React.useEffect(() => {
     // Fetch active livestreams on mount
-    const language = searchLanguages ? searchLanguages.join(',') : languageSetting;
-    const searchInSelectedLangOnly = Boolean(searchLanguages) || searchInLanguage;
-    const langCsv = resolveLangForClaimSearch(language, searchInSelectedLangOnly, langParam);
+    const langCsv = resolveLangForClaimSearch(languageSetting, searchInLanguage, searchLanguages, langParam);
     const lang = langCsv ? langCsv.split(',') : null;
     doFetchActiveLivestreams(CS.ORDER_BY_NEW_VALUE, lang);
     // eslint-disable-next-line react-hooks/exhaustive-deps, (on mount only)

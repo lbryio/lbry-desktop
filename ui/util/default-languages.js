@@ -44,24 +44,42 @@ export function sortLanguageMap(languages) {
 }
 
 /**
- * Resolves the language parameter for a claim_search based on various settings.
+ * Resolves the claim_search 'any_language' parameter based on various language settings.
  *
- * @param langSetting The user's language setting.
- * @param searchInSelectedLangOnly Return results in the given language only.
- * @param langParam Language override for specific use-cases, typically from urlParam.
+ * @param languageSetting The user (redux) language setting.
+ * @param searchInLanguageSetting By default, the user (redux) setting, but some components may override to false (e.g. 'ignoreSearchInLanguage' prop).
+ * @param searchLanguages Per-instance default language list (e.g. different Categories having different filters).
+ * @param languageUrlParams Language override via URLSearchParams.
  * @returns {string|null} Comma-separated string of language codes, or null.
  */
-export function resolveLangForClaimSearch(langSetting, searchInSelectedLangOnly, langParam = null) {
-  // TODO: expand ternary for easier maintenance.
-  return searchInSelectedLangOnly
-    ? langParam === null
-      ? langSetting.concat(langSetting === 'en' ? ',none' : '')
-      : langParam === 'any'
-      ? null
-      : langParam.concat(langParam === 'en' ? ',none' : '')
-    : langParam === null
-    ? null
-    : langParam === 'any'
-    ? null
-    : langParam.concat(langParam === 'en' ? ',none' : '');
+export function resolveLangForClaimSearch(
+  languageSetting, // : string,
+  searchInLanguageSetting, // : boolean,
+  searchLanguages, // : ?Array<string>,
+  languageUrlParams = null // : ?string
+) {
+  const langParam = languageUrlParams;
+
+  let lang;
+  if (searchInLanguageSetting) {
+    lang = languageSetting;
+  } else if (searchLanguages) {
+    lang = searchLanguages.join(',');
+  }
+
+  if (lang) {
+    if (langParam === null) {
+      return lang === 'en' ? 'en,none' : lang;
+    } else if (langParam === 'any') {
+      return null;
+    } else {
+      return langParam === 'en' ? 'en,none' : langParam;
+    }
+  } else if (langParam === null) {
+    return null;
+  } else if (langParam === 'any') {
+    return null;
+  } else {
+    return langParam === 'en' ? 'en,none' : langParam;
+  }
 }

@@ -215,15 +215,9 @@ function ClaimListDiscover(props: Props) {
     new Set(mutedUris.concat(blockedUris).map((uri) => splitBySeparator(uri)[1]))
   );
 
-  // Precedence:
-  // - searchLanguages (per instance attribute)
-  // - urlParams
-  // - languageSetting (redux setting)
-  const language = searchLanguages ? searchLanguages.join(',') : languageSetting;
   const langParam = urlParams.get(CS.LANGUAGE_KEY) || null;
-  const forcedSearchInLanguage = Boolean(searchLanguages);
-  const userSearchInLanguage = searchInLanguage && !ignoreSearchInLanguage;
-  const languageParams = resolveLangForClaimSearch(language, forcedSearchInLanguage || userSearchInLanguage, langParam);
+  const searchInSelectedLang = searchInLanguage && !ignoreSearchInLanguage;
+  const languageParams = resolveLangForClaimSearch(languageSetting, searchInSelectedLang, searchLanguages, langParam);
 
   let claimTypeParam = claimType || defaultClaimType || null;
   let streamTypeParam = streamType || defaultStreamType || null;
@@ -709,7 +703,7 @@ function ClaimListDiscover(props: Props) {
             <div className="section__header--actions">
               <div className="section__actions">
                 {headerToUse}
-                {userSearchInLanguage && <LangFilterIndicator />}
+                {searchInSelectedLang && <LangFilterIndicator />}
               </div>
               {meta && <div className="section__actions--no-margin">{meta}</div>}
             </div>
@@ -749,7 +743,7 @@ function ClaimListDiscover(props: Props) {
             <div className="section__header--actions">
               <div className="section__actions">
                 {headerToUse}
-                {userSearchInLanguage && <LangFilterIndicator />}
+                {searchInSelectedLang && <LangFilterIndicator />}
               </div>
               {meta && <div className="section__actions--no-margin">{meta}</div>}
             </div>
