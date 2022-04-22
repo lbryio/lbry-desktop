@@ -1,10 +1,5 @@
 // @flow
-import {
-  LIVESTREAM_LIVE_API,
-  NEW_LIVESTREAM_LIVE_API,
-  LIVESTREAM_KILL,
-  LIVESTREAM_STARTS_SOON_BUFFER,
-} from 'constants/livestream';
+import { NEW_LIVESTREAM_LIVE_API, LIVESTREAM_KILL, LIVESTREAM_STARTS_SOON_BUFFER } from 'constants/livestream';
 import { toHex } from 'util/hex';
 import Lbry from 'lbry';
 import moment from 'moment';
@@ -82,20 +77,6 @@ export function getTipValues(superChatsByAmount: Array<Comment>) {
   return { superChatsChannelUrls, superChatsFiatAmount, superChatsLBCAmount };
 }
 
-const transformLivestreamData = (data: Array<any>): LivestreamInfo => {
-  return data.reduce((acc, curr) => {
-    acc[curr.claimId] = {
-      url: curr.url,
-      type: curr.type,
-      live: curr.live,
-      viewCount: curr.viewCount,
-      creatorId: curr.claimId,
-      startedStreaming: moment(curr.timestamp),
-    };
-    return acc;
-  }, {});
-};
-
 const transformNewLivestreamData = (data: Array<any>): LivestreamInfo => {
   return data.reduce((acc, curr) => {
     acc[curr.ChannelClaimID] = {
@@ -114,15 +95,8 @@ export const fetchLiveChannels = async (): Promise<LivestreamInfo> => {
   const newApiResponse = await fetch(`${NEW_LIVESTREAM_LIVE_API}/all`);
   const newApiData = (await newApiResponse.json()).data;
   if (!newApiData) throw new Error();
-  const newTranslatedData = transformNewLivestreamData(newApiData);
 
-  const oldApiResponse = await fetch(`${LIVESTREAM_LIVE_API}`);
-  const oldApiData = (await oldApiResponse.json()).data;
-  if (!oldApiData) throw new Error();
-  const oldTranslatedData = transformLivestreamData(oldApiData);
-  const mergedData = { ...oldTranslatedData, ...newTranslatedData };
-
-  return mergedData;
+  return transformNewLivestreamData(newApiData);
 };
 
 /**
@@ -132,21 +106,10 @@ export const fetchLiveChannels = async (): Promise<LivestreamInfo> => {
  */
 export const fetchLiveChannel = async (channelId: string): Promise<LiveChannelStatus> => {
   const newApiEndpoint = NEW_LIVESTREAM_LIVE_API;
-  const oldApiEndpoint = LIVESTREAM_LIVE_API;
   const newApiResponse = await fetch(`${newApiEndpoint}/is_live?channel_claim_id=${channelId}`);
   const newApiData = (await newApiResponse.json()).data;
-  let isLive = newApiData.Live;
-  let translatedData;
-  // transform data to old API standard
-  if (isLive) {
-    translatedData = transformNewLivestreamData([newApiData]);
-  } else {
-    const oldApiResponse = await fetch(`${oldApiEndpoint}/${channelId}`);
-    const oldApiData = (await oldApiResponse.json()).data;
-
-    isLive = oldApiData.live;
-    translatedData = transformLivestreamData([oldApiData]);
-  }
+  const isLive = newApiData.Live;
+  const translatedData = transformNewLivestreamData([newApiData]);
 
   try {
     if (isLive === false) {

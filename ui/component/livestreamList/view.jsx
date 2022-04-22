@@ -1,6 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import { LIVESTREAM_LIVE_API } from 'constants/livestream';
+import { NEW_LIVESTREAM_LIVE_API } from 'constants/livestream';
 import React from 'react';
 import Icon from 'component/common/icon';
 import Spinner from 'component/spinner';
@@ -14,7 +14,7 @@ export default function LivestreamList() {
 
   React.useEffect(() => {
     function checkCurrentLivestreams() {
-      fetch(LIVESTREAM_LIVE_API)
+      fetch(`${NEW_LIVESTREAM_LIVE_API}/all`)
         .then((res) => res.json())
         .then((res) => {
           setLoading(false);
@@ -26,7 +26,7 @@ export default function LivestreamList() {
           const livestreamMap = res.data.reduce((acc, curr) => {
             return {
               ...acc,
-              [curr.claimId]: curr,
+              [curr.ChannelClaimID]: curr,
             };
           }, {});
 
@@ -53,7 +53,6 @@ export default function LivestreamList() {
           <Spinner delayed />
         </div>
       )}
-
       {livestreamMap && Object.keys(livestreamMap).length > 0 && (
         <ClaimTilesDiscover
           showNoSourceClaims
@@ -67,7 +66,7 @@ export default function LivestreamList() {
 
             return (
               <span className="livestream__viewer-count">
-                {livestream.viewCount} <Icon icon={ICONS.EYE} />
+                {livestream.ViewerCount} <Icon icon={ICONS.EYE} />
               </span>
             );
           }}
