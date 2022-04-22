@@ -4,7 +4,6 @@ import { version as VERSION } from './package.json';
 import ConcreteButton from './ConcreteButton';
 import ConcreteMenuItem from './ConcreteMenuItem';
 import * as QUALITY_OPTIONS from 'constants/player';
-import { safeGetComputedStyle, simpleSelector } from '../videojs-http-streaming--override/playlist-selectors';
 
 // Default options for the plugin.
 const defaults = {};

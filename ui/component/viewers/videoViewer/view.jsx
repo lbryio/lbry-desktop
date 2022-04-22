@@ -385,7 +385,7 @@ function VideoViewer(props: Props) {
     // re-factoring.
     player.on('loadedmetadata', () => restorePlaybackRate(player));
 
-    // Override "auto" to use non-vhs url when the quality matches.
+    // Override the "auto" algorithm to post-process the result
     player.on('loadedmetadata', () => {
       const vhs = player.tech(true).vhs;
       if (vhs) {
