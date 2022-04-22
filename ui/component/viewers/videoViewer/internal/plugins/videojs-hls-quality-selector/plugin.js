@@ -111,29 +111,6 @@ class HlsQualitySelectorPlugin {
     concreteButtonInstance.removeClass('vjs-hidden');
   }
 
-  resolveAutoQualityLabel(includeResolution) {
-    const player = this.player;
-    const vhs = player.tech(true).vhs;
-
-    if (includeResolution && vhs) {
-      const pixelRatio = this.useDevicePixelRatio ? window.devicePixelRatio || 1 : 1;
-
-      const selectedBandwidth = simpleSelector(
-        vhs.playlists.master,
-        vhs.systemBandwidth,
-        parseInt(safeGetComputedStyle(vhs.tech_.el_, 'width'), 10) * pixelRatio,
-        parseInt(safeGetComputedStyle(vhs.tech_.el_, 'height'), 10) * pixelRatio,
-        vhs.limitRenditionByPlayerDimensions
-      );
-
-      const quality = selectedBandwidth.attributes.RESOLUTION.height;
-
-      return __('Auto (%quality%) --[Video quality popup. Long form.]--', { quality: quality + 'p' });
-    } else {
-      return __('Auto --[Video quality. Short form]--');
-    }
-  }
-
   resolveOriginalQualityLabel(abbreviatedForm, includeResolution) {
     if (includeResolution && this.config.originalHeight) {
       return abbreviatedForm
@@ -160,7 +137,7 @@ class HlsQualitySelectorPlugin {
     let str;
     switch (text) {
       case QUALITY_OPTIONS.AUTO:
-        str = this.resolveAutoQualityLabel(true);
+        str = QUALITY_OPTIONS.AUTO;
         break;
       case QUALITY_OPTIONS.ORIGINAL:
         str = this.resolveOriginalQualityLabel(true, false);
@@ -227,6 +204,7 @@ class HlsQualitySelectorPlugin {
       levelItems = levelItems.map((item) =>
         item === nextLowestQualityItem ? this.getQualityMenuItem.call(this, nextLowestQualityItemObj) : item
       );
+      this._currentQuality = nextLowestQualityItemObj.value;
     }
 
     levelItems.sort((current, next) => {
@@ -254,7 +232,7 @@ class HlsQualitySelectorPlugin {
 
     levelItems.push(
       this.getQualityMenuItem.call(this, {
-        label: this.resolveAutoQualityLabel(true),
+        label: QUALITY_OPTIONS.AUTO,
         value: QUALITY_OPTIONS.AUTO,
         selected: !defaultQuality ? true : defaultQuality === QUALITY_OPTIONS.AUTO,
       })

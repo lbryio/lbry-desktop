@@ -205,19 +205,10 @@ export const lastBandwidthSelector = function() {
   const hlsQualitySelector = player.hlsQualitySelector;
   const originalHeight = hlsQualitySelector.config.originalHeight;
 
-  if (originalHeight && hlsQualitySelector) {
-    if (hlsQualitySelector.getCurrentQuality() === 'auto') {
-      if (selectedBandwidth.attributes.RESOLUTION.height === originalHeight) {
-        if (player.claimSrcOriginal && player.currentSrc() !== player.claimSrcOriginal?.src) {
-          setTimeout(() => {
-            const currentTime = player.currentTime();
-            player.src(player.claimSrcOriginal);
-            player.currentTime(currentTime);
-          });
-        }
-      }
-    }
+  if (hlsQualitySelector?.getCurrentQuality() === 'auto') {
+    hlsQualitySelector._qualityButton.menuButton_.$('.vjs-icon-placeholder').innerHTML = __('Auto(%quality%) --[Video quality popup. Long form.]--', { quality: selectedBandwidth.attributes.RESOLUTION.height + 'p' });
   }
+  
 
   return selectedBandwidth;
 };
