@@ -4,6 +4,8 @@ import { FormField } from 'component/common/form';
 import { VIDEO_QUALITY_OPTIONS } from 'constants/player';
 import { toCapitalCase } from 'util/string';
 
+const OPTION_DISABLED = 'Disabled';
+
 type Props = {
   defaultQuality: ?string,
   doSetDefaultVideoQuality: (value: ?string) => void,
@@ -12,60 +14,32 @@ type Props = {
 export default function SettingDefaultQuality(props: Props) {
   const { defaultQuality, doSetDefaultVideoQuality } = props;
 
-  const [enabled, setEnabled] = React.useState<boolean>(Boolean(defaultQuality));
-
-  const valueRef = React.useRef(VIDEO_QUALITY_OPTIONS[0]);
-
-  function handleEnable() {
-    if (enabled) {
-      setEnabled(false);
-      // From enabled to disabled -> clear the setting
-      valueRef.current = defaultQuality;
-      doSetDefaultVideoQuality(null);
-    } else {
-      setEnabled(true);
-      // From to disabled to enabled -> set the current shown value
-      doSetDefaultVideoQuality(valueRef.current);
-    }
-  }
+  const valueRef = React.useRef();
+  const dropdownOptions = [OPTION_DISABLED, ...VIDEO_QUALITY_OPTIONS];
 
   function handleSetQuality(e) {
     const { value } = e.target;
-    doSetDefaultVideoQuality(value);
+
+    doSetDefaultVideoQuality(value === OPTION_DISABLED ? null : value);
     valueRef.current = value;
   }
 
   return (
-    <>
-      <fieldset-section>
-        <FormField
-          name="default_video_quality"
-          type="select"
-          onChange={handleSetQuality}
-          disabled={!enabled}
-          value={defaultQuality || valueRef.current}
-        >
-          {VIDEO_QUALITY_OPTIONS.map((quality) => {
-            const qualityStr = typeof quality === 'number' ? quality + 'p' : toCapitalCase(quality);
+    <FormField
+      name="default_video_quality"
+      type="select"
+      onChange={handleSetQuality}
+      value={defaultQuality || valueRef.current}
+    >
+      {dropdownOptions.map((option) => {
+        const qualityStr = typeof option === 'number' ? option + 'p' : toCapitalCase(option);
 
-            return (
-              <option key={'quality' + qualityStr} value={quality}>
-                {__(qualityStr)}
-              </option>
-            );
-          })}
-        </FormField>
-      </fieldset-section>
-
-      <fieldset-section>
-        <FormField
-          type="checkbox"
-          name="enable_default_quality"
-          onChange={handleEnable}
-          checked={enabled}
-          label={__('Enable default quality setting')}
-        />
-      </fieldset-section>
-    </>
+        return (
+          <option key={'quality' + qualityStr} value={option}>
+            {__(qualityStr)}
+          </option>
+        );
+      })}
+    </FormField>
   );
 }
