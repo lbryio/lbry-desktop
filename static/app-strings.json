@@ -2311,9 +2311,9 @@
   "Elements": "Elements",
   "Icons": "Icons",
   "Go to": "Go to",
-  "Persist watch time": "Persist watch time",
   "Clearing...": "Clearing...",
   "Clear Views": "Clear Views",
-  "Persist the watch time of the videos you have watched. This will not erase or hide any blockchain activity or downloads.": "Persist the watch time of the videos you have watched. This will not erase or hide any blockchain activity or downloads.",
+  "Show Video View Progress": "Show Video View Progress",
+  "Display view progress on thumbnail. This setting will not hide any blockchain activity or downloads.": "Display view progress on thumbnail. This setting will not hide any blockchain activity or downloads.",
   "--end--": "--end--"
 }

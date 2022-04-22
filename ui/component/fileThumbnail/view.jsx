@@ -17,6 +17,7 @@ type Props = {
   doResolveUri: (string) => void,
   className?: string,
   watchedPercentage: number,
+  showPercentage: boolean,
 };
 
 function FileThumbnail(props: Props) {
@@ -29,6 +30,7 @@ function FileThumbnail(props: Props) {
     allowGifs = false,
     className,
     watchedPercentage,
+    showPercentage,
   } = props;
 
   const passedThumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
@@ -39,7 +41,7 @@ function FileThumbnail(props: Props) {
   const hasResolvedClaim = claim !== undefined;
   const isGif = thumbnail && thumbnail.endsWith('gif');
 
-  const viewedBar = watchedPercentage && (
+  const viewedBar = showPercentage && watchedPercentage && (
     <div className="file-thumbnail__viewed-bar">
       <div className="file-thumbnail__viewed-bar-progress" style={{ width: `${watchedPercentage}%` }} />
     </div>
