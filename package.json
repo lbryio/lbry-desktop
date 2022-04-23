@@ -156,7 +156,6 @@
     "husky": "^3.1.0",
     "imagesloaded": "^4.1.4",
     "json-loader": "^0.5.4",
-    "lbry-format": "https://github.com/lbryio/lbry-format.git",
     "lint-staged": "^7.0.2",
     "localforage": "^1.7.1",
     "lodash-es": "^4.17.21",

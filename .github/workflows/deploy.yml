@@ -13,6 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - run: corepack enable
+      - run: yarn set version berry
       - run: yarn
       - run: yarn lint
 
@@ -21,7 +22,7 @@ jobs:
     name: 'build'
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [16.x]
         os:
           - ubuntu-latest
           - macos-latest
@@ -48,6 +49,7 @@ jobs:
 
       - name: Build
         run: |
+          yarn set version berry
           yarn dlx cross-env
           yarn --network-timeout 600000
           yarn build
