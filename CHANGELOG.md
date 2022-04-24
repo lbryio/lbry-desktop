@@ -2,6 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+## [Unreleased]
+
+### Changed
+- Upgraded Yarn to Berry branch ([#7530](https://github.com/lbryio/lbry-desktop/pull/7530))
 
 ## [0.53.1] - [2022-04-22]
 
@@ -32,7 +36,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Some upgrade modal improvements ([#7488](https://github.com/lbryio/lbry-desktop/pull/7488))
 - Updated lbry-sdk to [0.107.1](https://github.com/lbryio/lbry-sdk/releases/tag/v0.107.1)
 - New YRBL!; facelift for first run ([#7527](https://github.com/lbryio/lbry-desktop/pull/7527))
-- Upgraded Yarn to Berry branch ([#7530](https://github.com/lbryio/lbry-desktop/pull/7530))
 
 ### Fixed
 - Failed comment count increment ([#7510](https://github.com/lbryio/lbry-desktop/pull/7510))
