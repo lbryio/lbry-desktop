@@ -83,6 +83,11 @@ function SideNavigation(props: Props) {
     link: `/$/${PAGES.CHANNELS_FOLLOWING}`,
     icon: ICONS.SUBSCRIBE,
   };
+  const TAGS_FROM_FOLLOWING = {
+    title: 'Your Tags',
+    link: `/$/${PAGES.TAGS_FOLLOWING}`,
+    icon: ICONS.TAG,
+  };
 
   const DISCOVER = {
     title: 'Discover',
@@ -421,6 +426,7 @@ function SideNavigation(props: Props) {
             >
               {getLink(HOME)}
               {getLink(RECENT_FROM_FOLLOWING)}
+              {getLink(TAGS_FROM_FOLLOWING)}
               {getLink(DISCOVER)}
               {getLink(LIBRARY)}
               {getLink(PLAYLISTS)}
