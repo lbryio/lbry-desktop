@@ -332,7 +332,7 @@ body {
 
       &:nth-child(2) {
         display: flex;
-        margin-top: calc(var(--spacing-m) * -1 - 10px);
+        //margin-top: calc(var(--spacing-m) * -1 - 10px);
         .button {
           flex: auto;
           .button__content {
