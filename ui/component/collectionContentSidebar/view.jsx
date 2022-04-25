@@ -10,7 +10,6 @@ import Card from 'component/common/card';
 import Button from 'component/button';
 import * as PAGES from 'constants/pages';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
-import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 
 type Props = {
@@ -61,19 +60,17 @@ export default function CollectionContent(props: Props) {
       className="file-page__playlist-collection"
       title={
         <>
-          <a href={`/$/${PAGES.LIST}/${id}`}>
-            <span className="file-page__playlist-collection__row">
-              <Icon
-                icon={
-                  (id === COLLECTIONS_CONSTS.WATCH_LATER_ID && ICONS.TIME) ||
-                  (id === COLLECTIONS_CONSTS.FAVORITES_ID && ICONS.STAR) ||
-                  ICONS.STACK
-                }
-                className="icon--margin-right"
-              />
-              {collectionName}
-            </span>
-          </a>
+          <Button
+            button="link"
+            className="file-page__playlist-collection__row"
+            navigate={`/$/${PAGES.LIST}/${id}`}
+            icon={
+              (id === COLLECTIONS_CONSTS.WATCH_LATER_ID && ICONS.TIME) ||
+              (id === COLLECTIONS_CONSTS.FAVORITES_ID && ICONS.STAR) ||
+              ICONS.STACK
+            }
+            label={collectionName}
+          />
           <span className="file-page__playlist-collection__row">
             <Button
               button="alt"
