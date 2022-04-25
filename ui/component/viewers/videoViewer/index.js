@@ -25,6 +25,7 @@ import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { selectDaemonSettings, selectClientSetting, selectHomepageData } from 'redux/selectors/settings';
 import { toggleVideoTheaterMode, toggleAutoplayNext, doSetClientSetting } from 'redux/actions/settings';
 import { selectUserVerifiedEmail, selectUser } from 'redux/selectors/user';
+import { doToast } from 'redux/actions/notifications';
 
 const select = (state, props) => {
   const { search } = props.location;
@@ -102,6 +103,7 @@ const perform = (dispatch) => ({
     ),
   doAnalyticsView: (uri, timeToStart) => dispatch(doAnalyticsView(uri, timeToStart)),
   claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
+  doToast: (props) => dispatch(doToast(props)),
 });
 
 export default withRouter(connect(select, perform)(VideoViewer));

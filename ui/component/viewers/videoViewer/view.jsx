@@ -70,6 +70,7 @@ type Props = {
   isLivestreamClaim: boolean,
   activeLivestreamForChannel: any,
   defaultQuality: ?string,
+  doToast: ({ message: string, linkText: string, linkTarget: string }) => void,
 };
 
 /*
@@ -115,6 +116,7 @@ function VideoViewer(props: Props) {
     isLivestreamClaim,
     activeLivestreamForChannel,
     defaultQuality,
+    doToast,
   } = props;
 
   const permanentUrl = claim && claim.permanent_url;
@@ -511,6 +513,7 @@ function VideoViewer(props: Props) {
         isLivestreamClaim={isLivestreamClaim}
         activeLivestreamForChannel={activeLivestreamForChannel}
         defaultQuality={defaultQuality}
+        doToast={doToast}
       />
     </div>
   );
