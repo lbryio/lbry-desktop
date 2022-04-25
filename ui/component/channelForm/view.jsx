@@ -6,7 +6,6 @@ import classnames from 'classnames';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import TagsSearch from 'component/tagsSearch';
-import { FF_MAX_CHARS_IN_DESCRIPTION } from 'constants/form-field';
 import ErrorText from 'component/common/error-text';
 import ChannelThumbnail from 'component/channelThumbnail';
 import { isNameValid, parseURI } from 'util/lbryURI';
@@ -27,6 +26,9 @@ import Gerbil from 'component/channelThumbnail/gerbil.png';
 const LANG_NONE = 'none';
 
 const MAX_TAG_SELECT = 5;
+const MAX_NAME_LEN = 128;
+const MAX_TITLE_LEN = 255;
+const MAX_DESCRIPTION_LEN = 2056;
 
 type Props = {
   claim: ChannelClaim,
@@ -359,6 +361,7 @@ function ChannelForm(props: Props) {
                         error={nameError}
                         disabled={!isNewChannel}
                         onChange={(e) => setParams({ ...params, name: e.target.value })}
+                        maxLength={MAX_NAME_LEN}
                       />
                     </fieldset-group>
                     {!isNewChannel && <span className="form-field__help">{__('This field cannot be changed.')}</span>}
@@ -370,6 +373,7 @@ function ChannelForm(props: Props) {
                       placeholder={__('My Awesome Channel')}
                       value={params.title}
                       onChange={(e) => setParams({ ...params, title: e.target.value })}
+                      maxLength={MAX_TITLE_LEN}
                     />
                     <FormField
                       type="markdown"
@@ -378,7 +382,7 @@ function ChannelForm(props: Props) {
                       placeholder={__('Description of your content')}
                       value={params.description}
                       onChange={(text) => setParams({ ...params, description: text })}
-                      textAreaMaxLength={FF_MAX_CHARS_IN_DESCRIPTION}
+                      textAreaMaxLength={MAX_DESCRIPTION_LEN}
                     />
                   </>
                 }
