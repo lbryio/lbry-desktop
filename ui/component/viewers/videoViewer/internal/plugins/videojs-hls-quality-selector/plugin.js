@@ -186,7 +186,11 @@ class HlsQualitySelectorPlugin {
           selected: defaultQuality ? currentHeight === defaultQuality : undefined,
         });
 
-        if (defaultQuality && !nextLowestQualityItem && currentHeight <= defaultQuality) {
+        const isLiveOriginal = defaultQuality && defaultQuality === QUALITY_OPTIONS.ORIGINAL && player.isLivestream;
+        const shouldCheckHeight =
+          defaultQuality && !nextLowestQualityItem && (currentHeight <= defaultQuality || isLiveOriginal);
+
+        if (shouldCheckHeight) {
           nextLowestQualityItem = levelItem;
           nextLowestQualityItemObj = {
             label: heightStr,
