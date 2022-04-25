@@ -160,18 +160,16 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
   const isMobile = useIsMobile();
 
-  // will later store the videojs player
   const playerRef = useRef();
   const containerRef = useRef();
-
   const tapToUnmuteRef = useRef();
   const tapToRetryRef = useRef();
-
   const playerServerRef = useRef();
 
   const { url: livestreamVideoUrl } = activeLivestreamForChannel || {};
+  const overrideNativeVhs = !platform.isIPhone();
   const showQualitySelector =
-    !isLivestreamClaim ||
+    (!isLivestreamClaim && overrideNativeVhs) ||
     (livestreamVideoUrl && (livestreamVideoUrl.includes('/transcode/') || livestreamVideoUrl.includes('cloud.odysee')));
 
   // initiate keyboard shortcuts
@@ -214,7 +212,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     controls: true,
     html5: {
       vhs: {
-        overrideNative: !videojs.browser.IS_ANY_SAFARI,
+        overrideNative: overrideNativeVhs, // !videojs.browser.IS_ANY_SAFARI,
         enableLowInitialPlaylist: false,
         fastQualityChange: true,
         useDtsForTimestampOffset: true,

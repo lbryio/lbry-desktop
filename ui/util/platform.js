@@ -203,9 +203,9 @@ export const platform = {
   //   return (/ipad/gi).test(navigator.platform);
   // },
 
-  // isIPhone: function() { << untested
-  //   return (/iphone/gi).test(navigator.platform);
-  // },
+  isIPhone: function () {
+    return /iphone/gi.test(navigator.platform);
+  },
 
   // isLandscape: function() {  << I think window.orientation makes more sense
   //   return window.innerHeight < window.innerWidth;
