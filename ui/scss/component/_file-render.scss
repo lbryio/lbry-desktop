@@ -634,7 +634,8 @@ $control-bar-icon-size: 0.8rem;
       }
     }
 
-    .vjs-chromecast-button {
+    .vjs-chromecast-button,
+    .vjs-airplay-button {
       .vjs-icon-placeholder {
         $chromecast-icon-size: 21px;
         width: $chromecast-icon-size;

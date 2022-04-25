@@ -305,7 +305,8 @@ button.vjs-big-play-button {
 .vjs-playback-rate {
   order: 11 !important;
 }
-.vjs-chromecast-button {
+.vjs-chromecast-button,
+.vjs-airplay-button {
   order: 12 !important;
 }
 .vjs-quality-selector {
