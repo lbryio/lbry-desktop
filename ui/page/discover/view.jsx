@@ -8,6 +8,7 @@ import * as CS from 'constants/claim_search';
 import Page from 'component/page';
 import ClaimListDiscover from 'component/claimListDiscover';
 import Button from 'component/button';
+import { ClaimSearchFilterContext } from 'contexts/claimSearchFilterContext';
 import useHover from 'effects/use-hover';
 import { useIsMobile } from 'effects/use-screensize';
 import analytics from 'analytics';
@@ -18,6 +19,8 @@ import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
 import moment from 'moment';
 import LivestreamSection from './livestreamSection';
+
+const CATEGORY_CONTENT_TYPES_FILTER = CS.CONTENT_TYPES.filter((x) => x !== CS.CLAIM_REPOST);
 
 type Props = {
   dynamicRouteProps: RowDataItem,
@@ -77,6 +80,10 @@ function DiscoverPage(props: Props) {
   }
 
   const includeLivestreams = !tagsQuery;
+  const filters = { contentTypes: isCategory && !isWildWest ? CATEGORY_CONTENT_TYPES_FILTER : CS.CONTENT_TYPES };
+
+  // **************************************************************************
+  // **************************************************************************
 
   function getMeta() {
     if (!dynamicRouteProps) {
@@ -191,38 +198,40 @@ function DiscoverPage(props: Props) {
       fullWidthPage={tileLayout}
       className={classnames('main__discover', { 'hide-ribbon': hideRepostRibbon })}
     >
-      <ClaimListDiscover
-        pins={getPins(dynamicRouteProps)}
-        hideFilters={isWildWest ? true : undefined}
-        header={repostedUri ? <span /> : undefined}
-        subSection={getSubSection()}
-        tileLayout={repostedUri ? false : tileLayout}
-        defaultOrderBy={isWildWest || tags ? CS.ORDER_BY_TRENDING : undefined}
-        claimType={claimType ? [claimType] : undefined}
-        headerLabel={headerLabel}
-        tags={tags}
-        hiddenNsfwMessage={<HiddenNsfw type="page" />}
-        repostedClaimId={repostedClaim ? repostedClaim.claim_id : null}
-        injectedItem={!isWildWest && { node: <Ads small type="video" tileLayout={tileLayout} /> }}
-        // Assume wild west page if no dynamicRouteProps
-        // Not a very good solution, but just doing it for now
-        // until we are sure this page will stay around
-        // TODO: find a better way to determine discover / wild west vs other modes release times
-        // for now including && !tags so that
-        releaseTime={releaseTime || undefined}
-        feeAmount={isWildWest || tags ? CS.FEE_AMOUNT_ANY : undefined}
-        channelIds={channelIds}
-        excludedChannelIds={excludedChannelIds}
-        limitClaimsPerChannel={
-          SIMPLE_SITE
-            ? (dynamicRouteProps && dynamicRouteProps.options && dynamicRouteProps.options.limitClaimsPerChannel) || 3
-            : 3
-        }
-        meta={getMeta()}
-        hasSource
-        forceShowReposts={dynamicRouteProps}
-        searchLanguages={dynamicRouteProps?.options?.searchLanguages}
-      />
+      <ClaimSearchFilterContext.Provider value={filters}>
+        <ClaimListDiscover
+          pins={getPins(dynamicRouteProps)}
+          hideFilters={isWildWest ? true : undefined}
+          header={repostedUri ? <span /> : undefined}
+          subSection={getSubSection()}
+          tileLayout={repostedUri ? false : tileLayout}
+          defaultOrderBy={isWildWest || tags ? CS.ORDER_BY_TRENDING : undefined}
+          claimType={claimType ? [claimType] : undefined}
+          headerLabel={headerLabel}
+          tags={tags}
+          hiddenNsfwMessage={<HiddenNsfw type="page" />}
+          repostedClaimId={repostedClaim ? repostedClaim.claim_id : null}
+          injectedItem={!isWildWest && { node: <Ads small type="video" tileLayout={tileLayout} /> }}
+          // Assume wild west page if no dynamicRouteProps
+          // Not a very good solution, but just doing it for now
+          // until we are sure this page will stay around
+          // TODO: find a better way to determine discover / wild west vs other modes release times
+          // for now including && !tags so that
+          releaseTime={releaseTime || undefined}
+          feeAmount={isWildWest || tags ? CS.FEE_AMOUNT_ANY : undefined}
+          channelIds={channelIds}
+          excludedChannelIds={excludedChannelIds}
+          limitClaimsPerChannel={
+            SIMPLE_SITE
+              ? (dynamicRouteProps && dynamicRouteProps.options && dynamicRouteProps.options.limitClaimsPerChannel) || 3
+              : 3
+          }
+          meta={getMeta()}
+          hasSource
+          forceShowReposts={dynamicRouteProps}
+          searchLanguages={dynamicRouteProps?.options?.searchLanguages}
+        />
+      </ClaimSearchFilterContext.Provider>
     </Page>
   );
 }

@@ -11,6 +11,7 @@ import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import { toCapitalCase } from 'util/string';
 import SEARCHABLE_LANGUAGES from 'constants/searchable_languages';
+import { ClaimSearchFilterContext } from 'contexts/claimSearchFilterContext';
 
 type Props = {
   defaultTags: string,
@@ -62,6 +63,7 @@ function ClaimListHeader(props: Props) {
     languageSetting,
     scrollAnchor,
   } = props;
+  const filterCtx = React.useContext(ClaimSearchFilterContext);
   const { action, push, location } = useHistory();
   const { search } = location;
   const [expanded, setExpanded] = usePersistedState(`expanded-${location.pathname}`, false);
@@ -345,7 +347,7 @@ function ClaimListHeader(props: Props) {
                       })
                     }
                   >
-                    {CS.CONTENT_TYPES.map((type) => {
+                    {filterCtx.contentTypes.map((type) => {
                       if (type !== CS.CLAIM_CHANNEL || (type === CS.CLAIM_CHANNEL && !channelIdsParam)) {
                         return (
                           <option key={type} value={type}>

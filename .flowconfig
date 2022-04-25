@@ -16,6 +16,7 @@
 suppress_comment=\\(.\\|\n\\)*\\$FlowFixMe
 suppress_comment=\\(.\\|\n\\)*\\$FlowIssue
 module.name_mapper='^constants\(.*\)$' -> '<PROJECT_ROOT>/ui/constants\1'
+module.name_mapper='^contexts\(.*\)$' -> '<PROJECT_ROOT>/ui/contexts\1'
 module.name_mapper='^util\(.*\)$' -> '<PROJECT_ROOT>/ui/util\1'
 module.name_mapper='^redux\(.*\)$' -> '<PROJECT_ROOT>/ui/redux\1'
 module.name_mapper='^types\(.*\)$' -> '<PROJECT_ROOT>/ui/types\1'
