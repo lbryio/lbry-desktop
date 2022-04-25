@@ -698,6 +698,10 @@ body {
   margin-top: var(--spacing-m);
   padding: 0 var(--spacing-m);
 
+  .section__actions {
+    margin-left: var(--spacing-s);
+  }
+
   @media (max-width: $breakpoint-small) {
     .section__header--actions {
       .section__actions--inline:last-of-type {

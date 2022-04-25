@@ -424,6 +424,27 @@ $thumbnailWidthSmall: 2rem;
   .button__label {
     margin-left: var(--spacing-xs);
   }
+
+  .comment__action:not(.comment__action--active):not(.comment__action--creator-like) {
+    color: rgba(var(--color-text-base), 0.7);
+    &:hover {
+      color: rgba(var(--color-text-base), 1);
+    }
+  }
+  .comment__action--creator-like {
+    span {
+      .icon {
+        stroke: rgba(var(--color-text-base), 0.7);
+      }
+    }
+    &:hover {
+      span {
+        .icon {
+          stroke: rgba(var(--color-text-base), 1);
+        }
+      }
+    }
+  }
 }
 
 .comment__actions--nested {

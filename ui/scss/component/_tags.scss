@@ -8,8 +8,6 @@
     margin-left: 0;
     margin-bottom: var(--spacing-s);
     margin-right: var(--spacing-s);
-    //color:var(--color-primary-contrast);
-    //background-color:var(--color-primary);
     color: var(--color-text);
     background-color: var(--color-header-background);
 
@@ -49,7 +47,7 @@
   // Nested style needed for more specificity
   .tag__input {
     @extend .tag--remove;
-    height: var(--tag-height);
+    height: var(--input-height);
     padding: calc(var(--spacing-xxs) + 1px) var(--spacing-s);
     background-color: var(--color-input-bg);
     margin-bottom: var(--spacing-m);
@@ -59,6 +57,7 @@
 .tag {
   @extend .badge;
   @extend .badge--tag;
+  font-size: var(--font-xsmall);
 }
 
 .tag--remove {

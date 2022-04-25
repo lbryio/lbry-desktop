@@ -1482,13 +1482,8 @@ $claim-preview-progress-bar-height: 5px;
   position: relative;
 
   .tag {
-    background-color: var(--color-primary);
-    color: var(--color-primary-contrast);
-    /*
-    @media (max-width: $breakpoint-xsmall) {
-      display: none;
-    }
-    */
+    background-color: var(--color-header-background);
+    color: var(--color-text);
     font-size: var(--font-xsmall);
 
     @media (max-width: $breakpoint-small) {
@@ -1503,8 +1498,8 @@ $claim-preview-progress-bar-height: 5px;
     }
 
     &:hover {
-      background-color: var(--color-secondary);
-      color: var(--color-secondary-contrast);
+      background-color: var(--color-primary);
+      color: var(--color-primary-contrast);
     }
   }
 

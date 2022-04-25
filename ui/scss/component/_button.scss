@@ -699,10 +699,6 @@ svg + .button__label {
   -ms-user-select: none;
   user-select: none;
 
-  .icon {
-    // margin-bottom:-4px;
-  }
-
   &:hover:not(.button-toggle--active) {
     background-color: var(--color-button-toggle-bg-hover) !important;
     .button__label {

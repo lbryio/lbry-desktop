@@ -225,7 +225,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
                     </div>
                     <div className="section__actions">
                       <a href={stripeConnectionUrl}>
-                        <Button button="secondary" label={__('Connect your bank account')} icon={ICONS.FINANCE} />
+                        <Button button="primary" label={__('Connect your bank account')} icon={ICONS.FINANCE} />
                       </a>
                     </div>
                   </div>
@@ -272,7 +272,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
                       </div>
                       <div className="section__actions">
                         <a href={stripeConnectionUrl}>
-                          <Button button="secondary" label={__('Connect your bank account')} icon={ICONS.FINANCE} />
+                          <Button button="primary" label={__('Connect your bank account')} icon={ICONS.FINANCE} />
                         </a>
                       </div>
                     </div>
@@ -282,26 +282,28 @@ class StripeAccountConnection extends React.Component<Props, State> {
             </div>
           }
           // only show additional buttons if its for additional verification or to show transaction page
-          actions={(stillRequiringVerification || accountConfirmed) &&
-            <>
-              {stillRequiringVerification && (
-                <Button
-                  button="primary"
-                  label={__('Complete Verification')}
-                  icon={ICONS.SETTINGS}
-                  navigate={stripeConnectionUrl}
-                  className="stripe__complete-verification-button"
-                />
-              )}
-              {accountConfirmed && (
-                <Button
-                  button="secondary"
-                  label={__('View Transactions')}
-                  icon={ICONS.SETTINGS}
-                  navigate={`/$/${PAGES.WALLET}?fiatType=incoming&tab=fiat-payment-history&currency=fiat`}
-                />
-              )}
-            </>
+          actions={
+            (stillRequiringVerification || accountConfirmed) && (
+              <>
+                {stillRequiringVerification && (
+                  <Button
+                    button="primary"
+                    label={__('Complete Verification')}
+                    icon={ICONS.SETTINGS}
+                    navigate={stripeConnectionUrl}
+                    className="stripe__complete-verification-button"
+                  />
+                )}
+                {accountConfirmed && (
+                  <Button
+                    button="secondary"
+                    label={__('View Transactions')}
+                    icon={ICONS.SETTINGS}
+                    navigate={`/$/${PAGES.WALLET}?fiatType=incoming&tab=fiat-payment-history&currency=fiat`}
+                  />
+                )}
+              </>
+            )
           }
         />
         <br />
