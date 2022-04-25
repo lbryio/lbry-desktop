@@ -54,6 +54,7 @@ function DiscoverPage(props: Props) {
   const isHovering = useHover(buttonRef);
   const isMobile = useIsMobile();
   const isWildWest = dynamicRouteProps && dynamicRouteProps.id === 'WILD_WEST';
+  const isCategory = Boolean(dynamicRouteProps);
 
   const urlParams = new URLSearchParams(search);
   const langParam = urlParams.get(CS.LANGUAGE_KEY) || null;
@@ -61,7 +62,7 @@ function DiscoverPage(props: Props) {
   const tagsQuery = urlParams.get('t') || null;
   const tags = tagsQuery ? tagsQuery.split(',') : null;
   const repostedClaimIsResolved = repostedUri && repostedClaim;
-  const hideRepostRibbon = !isWildWest;
+  const hideRepostRibbon = isCategory && !isWildWest;
 
   // Eventually allow more than one tag on this page
   // Restricting to one to make follow/unfollow simpler
