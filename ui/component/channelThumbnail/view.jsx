@@ -109,6 +109,13 @@ function ChannelThumbnail(props: Props) {
               setThumbLoadError(true);
             }
           }}
+          onLoad={() => {
+            if (setThumbUploadError) {
+              setThumbUploadError(false);
+            } else {
+              setThumbLoadError(false);
+            }
+          }}
         />
       )}
       {!hideStakedIndicator && <ChannelStakedIndicator uri={uri} claim={claim} />}
