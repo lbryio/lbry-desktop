@@ -11,6 +11,7 @@ type Props = {
   src: string,
   objectFit?: string,
   waitLoad?: boolean,
+  onLoad?: () => void,
 };
 
 function OptimizedImage(props: Props) {
@@ -107,6 +108,7 @@ function OptimizedImage(props: Props) {
       onLoad={() => {
         if (waitLoad) ref.current.style.visibility = 'visible';
         adjustOptimizationIfNeeded(ref.current, objectFit, src);
+        if (imgProps.onLoad) imgProps.onLoad();
       }}
     />
   );
