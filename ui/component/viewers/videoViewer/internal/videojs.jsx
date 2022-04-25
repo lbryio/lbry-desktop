@@ -164,7 +164,11 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   } = props;
 
   // used to notify about default quality setting
-  const [initialQualityChange, setInitialQualityChange] = usePersistedState('initial-quality-change', false);
+  // if already has a quality set, no need to notify
+  const [initialQualityChange, setInitialQualityChange] = usePersistedState(
+    'initial-quality-change',
+    Boolean(defaultQuality)
+  );
 
   const isMobile = useIsMobile();
 
