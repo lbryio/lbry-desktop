@@ -207,6 +207,7 @@ function DiscoverPage(props: Props) {
           tileLayout={repostedUri ? false : tileLayout}
           defaultOrderBy={isWildWest || tags ? CS.ORDER_BY_TRENDING : undefined}
           claimType={claimType ? [claimType] : undefined}
+          defaultStreamType={isCategory ? [CS.FILE_VIDEO, CS.FILE_AUDIO] : undefined}
           headerLabel={headerLabel}
           tags={tags}
           hiddenNsfwMessage={<HiddenNsfw type="page" />}

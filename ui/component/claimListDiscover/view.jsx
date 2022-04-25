@@ -1,5 +1,5 @@
 // @flow
-import { ENABLE_NO_SOURCE_CLAIMS, SIMPLE_SITE } from 'config';
+import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import type { Node } from 'react';
 import * as CS from 'constants/claim_search';
 import React from 'react';
@@ -148,7 +148,7 @@ function ClaimListDiscover(props: Props) {
     // pageSize,
     defaultClaimType,
     streamType,
-    defaultStreamType = SIMPLE_SITE ? [CS.FILE_VIDEO, CS.FILE_AUDIO] : undefined, // add param for DEFAULT_STREAM_TYPE
+    defaultStreamType,
     freshness,
     defaultFreshness = CS.FRESH_WEEK,
     renderProperties,
