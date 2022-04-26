@@ -37,6 +37,7 @@ const defaultState = {
     [SETTINGS.TAGS_ACKNOWLEDGED]: false,
     [SETTINGS.ENABLE_SYNC]: IS_WEB,
     [SETTINGS.ENABLE_PUBLISH_PREVIEW]: true,
+    [SETTINGS.ACTIVE_CHANNEL_CLAIM]: undefined,
 
     // UI
     [SETTINGS.LANGUAGE]: null,

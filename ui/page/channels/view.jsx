@@ -56,7 +56,8 @@ export default function ChannelsPage(props: Props) {
   return (
     <Page className="channelsPage-wrapper">
       <h1 className="section__title section__title--margin-bottom">{__('Active channel')}</h1>
-      <ChannelSelector />
+      <span className="section__subtitle ">{__('You can select a new active channel by default')}</span>
+      <ChannelSelector storeSelection />
 
       <div className="card-stack">
         {hasYoutubeChannels && <YoutubeTransferStatus hideChannelLink />}

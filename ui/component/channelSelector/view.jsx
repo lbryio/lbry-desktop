@@ -1,6 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
+import * as SETTINGS from 'constants/settings';
 import classnames from 'classnames';
 import React from 'react';
 import ChannelThumbnail from 'component/channelThumbnail';
@@ -23,6 +24,8 @@ type Props = {
   claimsByUri: { [string]: any },
   doFetchUserMemberships: (claimIdCsv: string) => void,
   odyseeMembershipByUri: (uri: string) => string,
+  storeSelection?: boolean,
+  doSetClientSetting: (key: string, value: string, pushPrefs: boolean) => void,
 };
 
 type ListItemProps = {
@@ -76,6 +79,8 @@ function ChannelSelector(props: Props) {
     odyseeMembershipByUri,
     claimsByUri,
     doFetchUserMemberships,
+    storeSelection,
+    doSetClientSetting,
   } = props;
 
   const {
@@ -88,6 +93,10 @@ function ChannelSelector(props: Props) {
   function handleChannelSelect(channelClaim) {
     doSetIncognito(false);
     doSetActiveChannel(channelClaim.claim_id);
+
+    if (storeSelection) {
+      doSetClientSetting(SETTINGS.ACTIVE_CHANNEL_CLAIM, channelClaim.claim_id, true);
+    }
   }
 
   return (
