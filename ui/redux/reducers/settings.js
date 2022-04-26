@@ -76,6 +76,7 @@ const defaultState = {
     [SETTINGS.AUTO_DOWNLOAD]: true,
     [SETTINGS.HIDE_REPOSTS]: false,
     [SETTINGS.HIDE_SCHEDULED_LIVESTREAMS]: false,
+    [SETTINGS.DEFAULT_VIDEO_QUALITY]: null,
 
     // OS
     [SETTINGS.AUTO_LAUNCH]: true,

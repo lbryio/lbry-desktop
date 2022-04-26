@@ -1671,7 +1671,9 @@
   "Theater Mode (t)": "Theater Mode (t)",
   "Default Mode (t)": "Default Mode (t)",
   "Quality": "Quality",
+  "Auto": "Auto",
   "Auto --[Video quality. Short form]--": "Auto",
+  "Auto %quality% --[Video quality popup. Long form.]--": "Auto %quality%",
   "Orig (%quality%) --[Video quality popup. Short form.]--": "Orig (%quality%)",
   "Original (%quality%) --[Video quality popup. Long form.]--": "Original (%quality%)",
   "Original --[Video quality button. Abbreviate to fit space.]--": "Original",
@@ -2246,5 +2248,9 @@
   "Attach images by pasting or drag-and-drop.": "Attach images by pasting or drag-and-drop.",
   "There was a network error, but the publish may have been completed. Wait a few minutes, then check your Uploads or Wallet page to confirm.": "There was a network error, but the publish may have been completed. Wait a few minutes, then check your Uploads or Wallet page to confirm.",
   "Sports": "Sports",
+  "Default Video Quality": "Default Video Quality",
+  "Set a default quality for video playback. If the default choice is not available, the next lowest will be used when playback starts.": "Set a default quality for video playback. If the default choice is not available, the next lowest will be used when playback starts.",
+  "Original": "Original",
+  "Enable default quality setting": "Enable default quality setting",
   "--end--": "--end--"
 }

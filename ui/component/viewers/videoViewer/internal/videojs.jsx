@@ -24,6 +24,7 @@ import recsys from './plugins/videojs-recsys/plugin';
 import videojs from 'video.js';
 import { useIsMobile } from 'effects/use-screensize';
 import { platform } from 'util/platform';
+import usePersistedState from 'effects/use-persisted-state';
 
 const canAutoplay = require('./plugins/canAutoplay');
 
@@ -84,6 +85,7 @@ type Props = {
   startMuted: boolean,
   userId: ?number,
   videoTheaterMode: boolean,
+  defaultQuality: ?string,
   onPlayerReady: (Player, any) => void,
   playNext: () => void,
   playPrevious: () => void,
@@ -96,6 +98,7 @@ type Props = {
   isLivestreamClaim: boolean,
   userClaimId: ?string,
   activeLivestreamForChannel: any,
+  doToast: ({ message: string, linkText: string, linkTarget: string }) => void,
 };
 
 const videoPlaybackRates = [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2];
@@ -144,6 +147,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     startMuted,
     userId,
     videoTheaterMode,
+    defaultQuality,
     onPlayerReady,
     playNext,
     playPrevious,
@@ -156,7 +160,15 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     userClaimId,
     isLivestreamClaim,
     activeLivestreamForChannel,
+    doToast,
   } = props;
+
+  // used to notify about default quality setting
+  // if already has a quality set, no need to notify
+  const [initialQualityChange, setInitialQualityChange] = usePersistedState(
+    'initial-quality-change',
+    Boolean(defaultQuality)
+  );
 
   const isMobile = useIsMobile();
 
@@ -281,6 +293,10 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         player.hlsQualitySelector({
           displayCurrentQuality: true,
           originalHeight: claimValues?.video?.height,
+          defaultQuality,
+          initialQualityChange,
+          setInitialQualityChange,
+          doToast,
         });
       }
 

@@ -311,6 +311,12 @@ button.vjs-big-play-button {
 }
 .vjs-quality-selector {
   order: 13 !important;
+  display: flex;
+
+  .vjs-icon-placeholder {
+    word-break: break-word;
+    line-height: 1rem !important;
+  }
 }
 .vjs-button--theater-mode {
   order: 14 !important;
