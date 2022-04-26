@@ -259,7 +259,8 @@ function ClaimListHeader(props: Props) {
                 onClick={() => setExpanded(!expanded)}
               />
             )}
-
+          </div>
+          <div className="claim-search__menu-group">
             {tileLayout !== undefined && (
               <Button
                 onClick={() => {
