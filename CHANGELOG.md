@@ -2,10 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
-## [Unreleased]
+
+## [0.53.2] - [2022-04-26]
 
 ### Changed
 - Upgraded Yarn to Berry branch ([#7530](https://github.com/lbryio/lbry-desktop/pull/7530))
+- Removed some lbrytv references ([#7560](https://github.com/lbryio/lbry-desktop/pull/7560))
+- Removed some lbrytv player references ([#7552](https://github.com/lbryio/lbry-desktop/pull/7552))
+
+## Fixed
+- Repost style issues ([#7559](https://github.com/lbryio/lbry-desktop/pull/7559))
+- Disappearing sidebar thumbs ([#7556](https://github.com/lbryio/lbry-desktop/pull/7556))
+- Restore tags sidebar link ([#7555](https://github.com/lbryio/lbry-desktop/pull/7555))
+- Playlist view link no longer crashes ([#7552](https://github.com/lbryio/lbry-desktop/pull/7552))
 
 ## [0.53.1] - [2022-04-22]
 
