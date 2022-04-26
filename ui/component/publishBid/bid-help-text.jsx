@@ -1,4 +1,6 @@
 // @flow
+import { formatCredits } from 'util/format-credits';
+
 type Props = {
   uri: ?string,
   isResolvingUri: boolean,
@@ -23,7 +25,7 @@ function BidHelpText(props: Props) {
       bidHelpText = __(
         'If you bid more than %amount% LBRY Credits, when someone navigates to %uri%, it will load your published content. However, you can get a longer version of this URL for any bid.',
         {
-          amount: amountNeededForTakeover,
+          amount: formatCredits(amountNeededForTakeover, 2, true),
           uri: uri,
         }
       );

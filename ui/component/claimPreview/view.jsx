@@ -9,7 +9,7 @@ import * as COLLECTIONS_CONSTS from 'constants/collections';
 import { isChannelClaim } from 'util/claim';
 import { formatLbryUrlForWeb } from 'util/url';
 import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
-import { toCompactNotation } from 'util/string';
+import { formatNumber } from 'util/number';
 import Tooltip from 'component/common/tooltip';
 import FileThumbnail from 'component/fileThumbnail';
 import UriIndicator from 'component/uriIndicator';
@@ -138,7 +138,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     indexInContainer,
     channelSubCount,
     swipeLayout = false,
-    lang,
     showEdit,
     dragHandleProps,
     unavailableUris,
@@ -162,8 +161,8 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     if (channelSubCount === undefined) {
       return <span />;
     }
-    const formattedSubCount = toCompactNotation(channelSubCount, lang, 10000);
-    const formattedSubCountLocale = Number(channelSubCount).toLocaleString();
+    const formattedSubCount = formatNumber(channelSubCount, 2, true);
+    const formattedSubCountLocale = formatNumber(channelSubCount, 2, false);
     return (
       <div className="media__subtitle">
         <Tooltip title={formattedSubCountLocale} followCursor placement="top">

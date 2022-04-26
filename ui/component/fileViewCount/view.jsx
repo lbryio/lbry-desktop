@@ -2,7 +2,7 @@
 import React from 'react';
 import HelpLink from 'component/common/help-link';
 import Tooltip from 'component/common/tooltip';
-import { toCompactNotation } from 'util/string';
+import { formatNumber } from 'util/number';
 
 type Props = {
   claimId: ?string, // this
@@ -14,8 +14,8 @@ type Props = {
 
 function FileViewCount(props: Props) {
   const { claimId, uri, fetchViewCount, viewCount } = props; // claimId
-  const countCompact = toCompactNotation(viewCount);
-  const countFullResolution = Number(viewCount).toLocaleString();
+  const countCompact = formatNumber(Number(viewCount), 2, true);
+  const countFullResolution = formatNumber(Number(viewCount), 2, false);
 
   React.useEffect(() => {
     if (claimId) {
@@ -24,7 +24,7 @@ function FileViewCount(props: Props) {
   }, [fetchViewCount, uri, claimId]);
 
   return (
-    <Tooltip label={countFullResolution}>
+    <Tooltip title={`${countFullResolution}`}>
       <span className="media__subtitle--centered">
         {viewCount !== 1 ? __('%view_count% views', { view_count: countCompact }) : __('1 view')}
         {<HelpLink href="https://lbry.com/faq/views" />}

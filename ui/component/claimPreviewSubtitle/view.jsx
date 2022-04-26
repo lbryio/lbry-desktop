@@ -5,6 +5,7 @@ import DateTime from 'component/dateTime';
 import Button from 'component/button';
 import FileViewCountInline from 'component/fileViewCountInline';
 import { parseURI } from 'util/lbryURI';
+import { formatNumber } from 'util/number';
 
 type Props = {
   uri: string,
@@ -34,7 +35,7 @@ function ClaimPreviewSubtitle(props: Props) {
             <>
               {isChannel &&
                 type !== 'inline' &&
-                `${claimsInChannel} ${claimsInChannel === 1 ? __('upload') : __('uploads')}`}
+                `${formatNumber(claimsInChannel, 2, true)} ${claimsInChannel === 1 ? __('upload') : __('uploads')}`}
 
               {!isChannel && (
                 <>

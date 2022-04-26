@@ -4,7 +4,7 @@ import * as ICONS from 'constants/icons';
 import React from 'react';
 import classnames from 'classnames';
 import Button from 'component/button';
-import { formatNumberWithCommas } from 'util/number';
+import { formatNumber } from 'util/number';
 import NudgeFloating from 'component/nudgeFloating';
 type Props = {
   claim: StreamClaim,
@@ -18,16 +18,8 @@ type Props = {
 };
 
 function FileReactions(props: Props) {
-  const {
-    claim,
-    uri,
-    doFetchReactions,
-    doReactionLike,
-    doReactionDislike,
-    myReaction,
-    likeCount,
-    dislikeCount,
-  } = props;
+  const { claim, uri, doFetchReactions, doReactionLike, doReactionDislike, myReaction, likeCount, dislikeCount } =
+    props;
 
   const claimId = claim && claim.claim_id;
   const channel = claim && claim.signing_channel && claim.signing_channel.name;
@@ -59,7 +51,7 @@ function FileReactions(props: Props) {
         className={classnames('button--file-action button-like', {
           'button--file-action-active': myReaction === REACTION_TYPES.LIKE,
         })}
-        label={<>{formatNumberWithCommas(likeCount, 0)}</>}
+        label={<>{formatNumber(likeCount, 2, true)}</>}
         iconSize={18}
         icon={likeIcon}
         onClick={() => doReactionLike(uri)}
@@ -70,7 +62,7 @@ function FileReactions(props: Props) {
         className={classnames('button--file-action button-dislike', {
           'button--file-action-active': myReaction === REACTION_TYPES.DISLIKE,
         })}
-        label={<>{formatNumberWithCommas(dislikeCount, 0)}</>}
+        label={<>{formatNumber(dislikeCount, 2, true)}</>}
         iconSize={18}
         icon={dislikeIcon}
         onClick={() => doReactionDislike(uri)}

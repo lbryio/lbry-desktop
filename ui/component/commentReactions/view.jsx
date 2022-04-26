@@ -9,6 +9,7 @@ import Button from 'component/button';
 import ChannelThumbnail from 'component/channelThumbnail';
 import { useHistory } from 'react-router';
 import { useIsMobile } from 'effects/use-screensize';
+import { formatNumber } from 'util/number';
 
 type Props = {
   myReacts: Array<string>,
@@ -109,7 +110,11 @@ export default function CommentReactions(props: Props) {
           'comment__action--active': myReacts && myReacts.includes(REACTION_TYPES.LIKE),
         })}
         onClick={handleCommentLike}
-        label={<span className="comment__reaction-count">{getCountForReact(REACTION_TYPES.LIKE)}</span>}
+        label={
+          <span className="comment__reaction-count">
+            {formatNumber(getCountForReact(REACTION_TYPES.LIKE), 2, true)}
+          </span>
+        }
       />
       <Button
         title={__('Downvote')}
@@ -119,7 +124,11 @@ export default function CommentReactions(props: Props) {
           'comment__action--active': myReacts && myReacts.includes(REACTION_TYPES.DISLIKE),
         })}
         onClick={handleCommentDislike}
-        label={<span className="comment__reaction-count">{getCountForReact(REACTION_TYPES.DISLIKE)}</span>}
+        label={
+          <span className="comment__reaction-count">
+            {formatNumber(getCountForReact(REACTION_TYPES.DISLIKE), 2, true)}
+          </span>
+        }
       />
 
       {!shouldHide && ENABLE_CREATOR_REACTIONS && (canCreatorReact || creatorLiked) && (

@@ -2,6 +2,7 @@
 import { SORT_COMMENTS_NEW, SORT_COMMENTS_BEST, SORT_COMMENTS_CONTROVERSIAL } from 'constants/comment';
 import { FREE_GLOBAL_STICKERS, PAID_GLOBAL_STICKERS } from 'constants/stickers';
 import * as REACTION_TYPES from 'constants/reactions';
+import { formatNumber } from 'util/number';
 
 const ALL_VALID_STICKERS = [...FREE_GLOBAL_STICKERS, ...PAID_GLOBAL_STICKERS];
 const stickerRegex = /(<stkr>:[A-Z0-9_]+:<stkr>)/;
@@ -118,7 +119,7 @@ export function getCommentsListTitle(totalComments: number) {
   const title =
     (totalComments === 0 && __('Leave a comment')) ||
     (totalComments === 1 && __('1 comment')) ||
-    __('%total_comments% comments', { total_comments: totalComments });
+    __('%total_comments% comments', { total_comments: formatNumber(totalComments, 2, true) });
 
   return title;
 }
