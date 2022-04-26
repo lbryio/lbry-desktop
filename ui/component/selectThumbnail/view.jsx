@@ -26,6 +26,7 @@ type Props = {
   updatePublishForm: ({}) => void,
   updateThumbnailParams: ({}) => void,
   resetThumbnailStatus: () => void,
+  usePublishFormMode: boolean,
 };
 
 function SelectThumbnail(props: Props) {
@@ -42,9 +43,10 @@ function SelectThumbnail(props: Props) {
     updateThumbnailParams,
     thumbnailPath,
     resetThumbnailStatus,
+    usePublishFormMode,
   } = props;
 
-  const publishForm = !updateThumbnailParams;
+  const publishForm = usePublishFormMode || !updateThumbnailParams;
   const thumbnail = publishForm ? props.thumbnail : thumbnailParam;
   const thumbnailError = publishForm ? props.thumbnailError : props.thumbnailParamError;
 

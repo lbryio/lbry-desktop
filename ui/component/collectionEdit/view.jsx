@@ -362,6 +362,7 @@ function CollectionForm(props: Props) {
                           thumbnailParamError={thumbError}
                           thumbnailParamStatus={thumbStatus}
                           updateThumbnailParams={handleUpdateThumbnail}
+                          usePublishFormMode
                         />
                       </fieldset-section>
                       <FormField
