@@ -139,6 +139,7 @@ export default function FileRenderFloating(props: Props) {
     y: window.innerHeight - 400,
   });
   const relativePosRef = React.useRef({ x: 0, y: 0 });
+  const noPlayerHeight = fileViewerRect?.height === 0;
 
   const navigateUrl =
     (playingPrimaryUri || playingUrl || '') + (collectionId ? generateListSearchUrlParams(collectionId) : '');
@@ -244,10 +245,10 @@ export default function FileRenderFloating(props: Props) {
   }, [channelUrl, claimId, doCommentSocketConnect, doCommentSocketDisconnect, isCurrentClaimLive, uri]);
 
   React.useEffect(() => {
-    if (playingPrimaryUri || playingUrl) {
+    if (playingPrimaryUri || playingUrl || noPlayerHeight) {
       handleResize();
     }
-  }, [handleResize, playingPrimaryUri, theaterMode, playingUrl]);
+  }, [handleResize, playingPrimaryUri, theaterMode, playingUrl, noPlayerHeight]);
 
   // Listen to main-window resizing and adjust the floating player position accordingly:
   React.useEffect(() => {
@@ -587,7 +588,8 @@ const PlayerGlobalStyles = (props: GlobalStylesProps) => {
     <Global
       styles={{
         [`.${PRIMARY_PLAYER_WRAPPER_CLASS}`]: {
-          height: !theaterMode && mainFilePlaying ? `${heightResult} !important` : undefined,
+          height:
+            !theaterMode && mainFilePlaying && fileViewerRect?.height > 0 ? `${heightResult} !important` : undefined,
           opacity: !theaterMode && mainFilePlaying ? '0 !important' : undefined,
         },
 
