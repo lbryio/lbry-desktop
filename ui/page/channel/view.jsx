@@ -3,6 +3,7 @@ import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import React from 'react';
 import { parseURI } from 'util/lbryURI';
+import { formatNumber } from 'util/number';
 import { YOUTUBE_STATUSES } from 'lbryinc';
 import Page from 'component/page';
 import SubscribeButton from 'component/subscribeButton';
@@ -93,7 +94,7 @@ function ChannelPage(props: Props) {
   const { channelName } = parseURI(uri);
   const { permanent_url: permanentUrl } = claim;
   const claimId = claim.claim_id;
-  const formattedSubCount = Number(subCount).toLocaleString();
+  const formattedSubCount = formatNumber(subCount, 2, true);
   const isBlocked = claim && blockedChannels.includes(claim.permanent_url);
   const isMuted = claim && mutedChannels.includes(claim.permanent_url);
   const isMyYouTubeChannel =

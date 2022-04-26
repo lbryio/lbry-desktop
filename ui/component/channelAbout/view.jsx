@@ -6,6 +6,7 @@ import CreditAmount from 'component/common/credit-amount';
 import DateTime from 'component/dateTime';
 import YoutubeBadge from 'component/youtubeBadge';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
+import { formatNumber } from 'util/number';
 
 type Props = {
   claim: ChannelClaim,
@@ -74,7 +75,7 @@ function ChannelAbout(props: Props) {
           </div>
 
           <label>{__('Total Uploads')}</label>
-          <div className="media__info-text">{claim.meta.claims_in_channel}</div>
+          <div className="media__info-text">{formatNumber(claim.meta.claims_in_channel || 0, 2, true)}</div>
 
           <label>{__('Last Updated')}</label>
           <div className="media__info-text">

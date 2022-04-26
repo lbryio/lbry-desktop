@@ -8,6 +8,7 @@ import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
 import { SITE_NAME, ENABLE_COMMENT_REACTIONS } from 'config';
 import React, { useEffect, useState } from 'react';
 import { parseURI } from 'util/lbryURI';
+import { formatNumber } from 'util/number';
 import DateTime from 'component/dateTime';
 import Button from 'component/button';
 import Expandable from 'component/expandable';
@@ -384,7 +385,7 @@ function CommentView(props: Props) {
                       label={
                         numDirectReplies < 2
                           ? __('Show reply')
-                          : __('Show %count% replies', { count: numDirectReplies })
+                          : __('Show %count% replies', { count: formatNumber(numDirectReplies, 2, true) })
                       }
                       button="link"
                       onClick={() => {
