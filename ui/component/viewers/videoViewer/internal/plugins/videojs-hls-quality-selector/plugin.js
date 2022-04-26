@@ -186,7 +186,8 @@ class HlsQualitySelectorPlugin {
           selected: defaultQuality ? currentHeight === defaultQuality : undefined,
         });
 
-        const isLiveOriginal = defaultQuality && defaultQuality === QUALITY_OPTIONS.ORIGINAL && player.isLivestream;
+        // Stop at index 0 since the list starts from max quality
+        const isLiveOriginal = defaultQuality === QUALITY_OPTIONS.ORIGINAL && player.isLivestream && i === 0;
         const shouldCheckHeight =
           defaultQuality && !nextLowestQualityItem && (currentHeight <= defaultQuality || isLiveOriginal);
 
@@ -197,6 +198,7 @@ class HlsQualitySelectorPlugin {
             value: currentHeight,
             selected: true,
           };
+          this.setQuality(currentHeight);
         }
 
         levelItems.push(levelItem);
@@ -207,7 +209,6 @@ class HlsQualitySelectorPlugin {
       levelItems = levelItems.map((item) =>
         item === nextLowestQualityItem ? this.getQualityMenuItem.call(this, nextLowestQualityItemObj) : item
       );
-      this._currentQuality = nextLowestQualityItemObj.value;
     }
 
     levelItems.sort((current, next) => {
@@ -224,6 +225,9 @@ class HlsQualitySelectorPlugin {
     });
 
     if (!player.isLivestream) {
+      const videoEl = document.querySelector('.vjs-tech');
+      const didSwitch = videoEl.getAttribute('switched-from-default');
+
       levelItems.push(
         this.getQualityMenuItem.call(this, {
           label: this.resolveOriginalQualityLabel(false, true),
@@ -231,6 +235,12 @@ class HlsQualitySelectorPlugin {
           selected: defaultQuality ? defaultQuality === QUALITY_OPTIONS.ORIGINAL : false,
         })
       );
+      if (defaultQuality === QUALITY_OPTIONS.ORIGINAL && !didSwitch) {
+        this.swapSrcTo(QUALITY_OPTIONS.ORIGINAL);
+        // Add this attribute to the video player so later it can be checked and avoid switching again
+        // Since this is only for initial load, based on the default quality setting
+        videoEl.setAttribute('switched-from-default', true);
+      }
     }
 
     levelItems.push(
