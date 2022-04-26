@@ -9,41 +9,10 @@ import { doClaimRewardType, doRewardList } from 'redux/actions/rewards';
 import { selectEmailToVerify, selectPhoneToVerify, selectUserCountryCode, selectUser } from 'redux/selectors/user';
 import rewards from 'rewards';
 import { Lbryio } from 'lbryinc';
-import { DOMAIN } from 'config';
+import { CLOUD_DOMAIN } from 'config';
 import { getDefaultLanguage } from 'util/default-languages';
 const AUTH_IN_PROGRESS = 'authInProgress';
 export let sessionStorageAvailable = false;
-
-export function doFetchInviteStatus(shouldCallRewardList = true) {
-  return (dispatch) => {
-    dispatch({
-      type: ACTIONS.USER_INVITE_STATUS_FETCH_STARTED,
-    });
-
-    Promise.all([Lbryio.call('user', 'invite_status'), Lbryio.call('user_referral_code', 'list')])
-      .then(([status, code]) => {
-        if (shouldCallRewardList) {
-          dispatch(doRewardList());
-        }
-
-        dispatch({
-          type: ACTIONS.USER_INVITE_STATUS_FETCH_SUCCESS,
-          data: {
-            invitesRemaining: status.invites_remaining ? status.invites_remaining : 0,
-            invitees: status.invitees,
-            referralLink: `${Lbryio.CONNECTION_STRING}user/refer?r=${code}`,
-            referralCode: code,
-          },
-        });
-      })
-      .catch((error) => {
-        dispatch({
-          type: ACTIONS.USER_INVITE_STATUS_FETCH_FAILURE,
-          data: { error },
-        });
-      });
-  };
-}
 
 export function doInstallNew(appVersion, os = null, firebaseToken = null, callbackForUsersWhoAreSharingData, domain) {
   const payload = { app_version: appVersion, domain };
@@ -70,30 +39,6 @@ export function doInstallNew(appVersion, os = null, firebaseToken = null, callba
   });
 }
 
-export function doInstallNewWithParams(
-  appVersion,
-  installationId,
-  nodeId,
-  lbrynetVersion,
-  os,
-  platform,
-  firebaseToken = null
-) {
-  return () => {
-    const payload = { app_version: appVersion };
-    if (firebaseToken) {
-      payload.firebase_token = firebaseToken;
-    }
-
-    payload.app_id = installationId;
-    payload.node_id = nodeId;
-    payload.daemon_version = lbrynetVersion;
-    payload.operating_system = os;
-    payload.platform = platform;
-    Lbryio.call('install', 'new', payload);
-  };
-}
-
 // TODO: Call doInstallNew separately so we don't have to pass appVersion and os_system params?
 export function doAuthenticate(
   appVersion,
@@ -108,7 +53,7 @@ export function doAuthenticate(
     dispatch({
       type: ACTIONS.AUTHENTICATION_STARTED,
     });
-    return Lbryio.authenticate(DOMAIN, getDefaultLanguage())
+    return Lbryio.authenticate(CLOUD_DOMAIN, getDefaultLanguage()) // lbry.tv
       .then((user) => {
         if (sessionStorageAvailable) window.sessionStorage.removeItem(AUTH_IN_PROGRESS);
         Lbryio.getAuthToken().then((token) => {
