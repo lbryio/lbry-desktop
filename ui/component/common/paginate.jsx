@@ -46,6 +46,7 @@ function Paginate(props: Props) {
     if (newPage && newPage > 0 && newPage <= totalPages) {
       handleChangePage(newPage);
     }
+    setTextValue('');
   }
 
   React.useEffect(() => {
