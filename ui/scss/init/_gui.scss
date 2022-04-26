@@ -1205,6 +1205,38 @@ img {
   }
 }
 
+.historyPage-wrapper {
+  .claim-preview__wrapper {
+    .claim-preview__history-remove {
+      position: absolute;
+      top: var(--spacing-s);
+      right: var(--spacing-xs);
+      opacity: 0;
+
+      .icon {
+        width: 22px;
+        height: 22px;
+      }
+
+      &:hover {
+        .icon {
+          stroke: var(--color-primary);
+          cursor: pointer;
+        }
+      }
+    }
+    .menu__button.claim__menu-button {
+      top: 2.2rem;
+    }
+
+    &:hover {
+      .claim-preview__history-remove {
+        opacity: 1;
+      }
+    }
+  }
+}
+
 .premium-wrapper {
   .membership_title {
     .comment__badge {

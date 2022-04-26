@@ -154,7 +154,7 @@ function VideoViewer(props: Props) {
 
   const [history, setHistory] = usePersistedState('watch-history', []);
   React.useEffect(() => {
-    if (!history[0].indexOf(claim.permanent_url) !== -1) {
+    if (!history[0] || !history[0].indexOf(claim.permanent_url) !== -1) {
       if (!history || !history.length) {
         setHistory([claim.permanent_url]);
       } else {
@@ -306,7 +306,6 @@ function VideoViewer(props: Props) {
     setIsEndedEmbed(false);
     setReplay(false);
     setDoNavigate(false);
-    // setWatchHistory()
     analytics.videoIsPlaying(true, player);
   }
 

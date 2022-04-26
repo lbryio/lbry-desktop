@@ -37,6 +37,7 @@ import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import CollectionEditButtons from 'component/collectionEditButtons';
 import * as ICONS from 'constants/icons';
 import { useIsMobile } from 'effects/use-screensize';
+import usePersistedState from 'effects/use-persisted-state';
 
 const AbandonedChannelPreview = lazyImport(() =>
   import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */)
@@ -96,6 +97,7 @@ type Props = {
   dragHandleProps?: any,
   unavailableUris?: Array<string>,
   showMemberBadge?: boolean,
+  inHistory?: boolean,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -161,6 +163,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     dragHandleProps,
     unavailableUris,
     showMemberBadge,
+    inHistory,
   } = props;
 
   const isMobile = useIsMobile();
@@ -211,6 +214,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       ? claim.permanent_url || claim.canonical_url
       : undefined;
   const repostedContentUri = claim && (claim.reposted_claim ? claim.reposted_claim.permanent_url : claim.permanent_url);
+  const [watchHistory, setHistory] = usePersistedState('watch-history', []);
 
   // Get channel title ( use name as fallback )
   let channelTitle = null;
@@ -281,6 +285,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
 
   function handleOnClick(e) {
     if (onClick) {
+      console.log('click: ', e);
       onClick(e, claim, indexInContainer);
     }
 
@@ -289,6 +294,14 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
         pathname: navigateUrl,
         search: navigateSearch.toString() ? '?' + navigateSearch.toString() : '',
       });
+    }
+  }
+
+  function removeFromHistory(e, uri) {
+    e.stopPropagation();
+    if (watchHistory.find((entry) => entry === uri)) {
+      watchHistory.splice(watchHistory.indexOf(uri), 1);
+      setHistory(watchHistory);
     }
   }
 
@@ -364,7 +377,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     >
       <>
         {!hideRepostLabel && <ClaimRepostAuthor uri={uri} />}
-
         <div
           className={classnames('claim-preview', {
             'claim-preview--small': type === 'small' || type === 'tooltip',
@@ -487,7 +499,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
             )}
           </div>
         </div>
-
+        {inHistory && (
+          <div onClick={(e) => removeFromHistory(e, uri)} className="claim-preview__history-remove">
+            <Icon icon={ICONS.REMOVE} />
+          </div>
+        )}
         {/* Todo: check isLivestreamActive once we have that data consistently everywhere. */}
         {claim && isLivestream && <ClaimPreviewReset uri={uri} />}
 
