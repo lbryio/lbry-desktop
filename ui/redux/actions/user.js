@@ -53,7 +53,7 @@ export function doInstallNew(appVersion, os = null, firebaseToken = null, callba
 
   Lbry.status().then((status) => {
     payload.app_id =
-      domain && domain !== 'lbry.com'
+      domain && domain !== 'lbry.tv'
         ? (domain.replace(/[.]/gi, '') + status.installation_id).slice(0, 66)
         : status.installation_id;
     payload.node_id = status.lbry_id;

@@ -19,7 +19,7 @@ const WATCHMAN_BACKEND_ENDPOINT = 'https://watchman.na-backend.odysee.com/report
 
 if (isProduction) {
   ElectronCookies.enable({
-    origin: 'https://lbry.com',
+    origin: 'https://lbry.tv',
   });
 }
 
