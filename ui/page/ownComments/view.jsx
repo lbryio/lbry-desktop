@@ -81,6 +81,7 @@ export default function OwnComments(props: Props) {
             </div>
             <React.Suspense fallback={null}>
               <Comment
+                uri={contentClaim?.canonical_url}
                 isTopLevel
                 hideActions
                 comment={comment}
