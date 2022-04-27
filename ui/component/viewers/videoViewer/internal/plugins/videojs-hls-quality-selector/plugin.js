@@ -46,6 +46,15 @@ class HlsQualitySelectorPlugin {
 
     // Listen for source changes
     this.player.on('loadedmetadata', (e) => {
+      // if there was a quality option selected to default to, set it using the setQuality function
+      // as if it was being clicked on, on loadedmetadata
+      if (this.player.qualityToSet && !this.player.switchedFromDefaultQuality) {
+        this.setQuality(this.player.qualityToSet);
+
+        // Add this attribute to the video player so later it can be checked and avoid switching again
+        // Since this is only for initial load, based on the default quality setting
+        this.player.switchedFromDefaultQuality = true;
+      }
       this.updatePlugin();
     });
   }
@@ -198,7 +207,6 @@ class HlsQualitySelectorPlugin {
             value: currentHeight,
             selected: true,
           };
-          this.setQuality(currentHeight);
         }
 
         levelItems.push(levelItem);
@@ -225,9 +233,6 @@ class HlsQualitySelectorPlugin {
     });
 
     if (!player.isLivestream) {
-      const videoEl = document.querySelector('.vjs-tech');
-      const didSwitch = videoEl.getAttribute('switched-from-default');
-
       levelItems.push(
         this.getQualityMenuItem.call(this, {
           label: this.resolveOriginalQualityLabel(false, true),
@@ -235,11 +240,8 @@ class HlsQualitySelectorPlugin {
           selected: defaultQuality ? defaultQuality === QUALITY_OPTIONS.ORIGINAL : false,
         })
       );
-      if (defaultQuality === QUALITY_OPTIONS.ORIGINAL && !didSwitch) {
+      if (defaultQuality === QUALITY_OPTIONS.ORIGINAL && !player.switchedFromDefaultQuality) {
         this.swapSrcTo(QUALITY_OPTIONS.ORIGINAL);
-        // Add this attribute to the video player so later it can be checked and avoid switching again
-        // Since this is only for initial load, based on the default quality setting
-        videoEl.setAttribute('switched-from-default', true);
       }
     }
 
@@ -251,15 +253,25 @@ class HlsQualitySelectorPlugin {
       })
     );
 
-    this.setButtonInnerText(
-      nextLowestQualityItemObj ? nextLowestQualityItemObj.label : defaultQuality || QUALITY_OPTIONS.AUTO
-    );
+    // initial button inner text based on default quality setting, or next lowest
+    if (!this.player.switchedFromDefaultQuality) {
+      this.setButtonInnerText(
+        nextLowestQualityItemObj ? nextLowestQualityItemObj.label : defaultQuality || QUALITY_OPTIONS.AUTO
+      );
+    }
 
     if (this._qualityButton) {
       this._qualityButton.createItems = function () {
         return levelItems;
       };
       this._qualityButton.update();
+    }
+
+    if (defaultQuality) {
+      this.player.qualityToSet =
+        nextLowestQualityItemObj?.value ||
+        (defaultQuality === QUALITY_OPTIONS.ORIGINAL && QUALITY_OPTIONS.ORIGINAL) ||
+        QUALITY_OPTIONS.AUTO;
     }
   }
 
