@@ -21,7 +21,6 @@ const config = {
   WELCOME_VERSION: process.env.WELCOME_VERSION,
   DOMAIN: process.env.DOMAIN,
   SHARE_DOMAIN_URL: process.env.SHARE_DOMAIN_URL,
-  CLOUD_DOMAIN: process.env.CLOUD_DOMAIN,
   URL: process.env.URL,
   THUMBNAIL_CDN_URL: process.env.THUMBNAIL_CDN_URL,
   SITE_TITLE: process.env.SITE_TITLE,
