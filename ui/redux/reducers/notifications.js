@@ -35,13 +35,13 @@ export default handleActions(
     },
 
     // Notifications
-    [ACTIONS.NOTIFICATION_LIST_STARTED]: (state, action) => {
+    [ACTIONS.LBRYIO_NOTIFICATION_LIST_STARTED]: (state, action) => {
       return {
         ...state,
         fetchingNotifications: true,
       };
     },
-    [ACTIONS.NOTIFICATION_LIST_COMPLETED]: (state, action) => {
+    [ACTIONS.LBRYIO_NOTIFICATION_LIST_COMPLETED]: (state, action) => {
       const { filterRule, newNotifications } = action.data;
       if (filterRule) {
         return {
@@ -57,7 +57,7 @@ export default handleActions(
         };
       }
     },
-    [ACTIONS.NOTIFICATION_LIST_FAILED]: (state, action) => {
+    [ACTIONS.LBRYIO_NOTIFICATION_LIST_FAILED]: (state, action) => {
       return {
         ...state,
         fetchingNotifications: false,

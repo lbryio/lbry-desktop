@@ -1,6 +1,6 @@
 import * as ACTIONS from 'constants/action_types';
 import { getAuthToken } from 'util/saved-passwords';
-import { doNotificationList } from 'redux/actions/notifications';
+import { doLbryioNotificationList } from 'redux/actions/notifications';
 import { SOCKETY_SERVER_API } from 'config';
 
 const NOTIFICATION_WS_URL = `${SOCKETY_SERVER_API}/internal?id=`;
@@ -79,7 +79,7 @@ export const doNotificationSocketConnect = (enableNotifications) => (dispatch) =
     switch (data.type) {
       case 'pending_notification':
         if (enableNotifications) {
-          dispatch(doNotificationList());
+          dispatch(doLbryioNotificationList());
         }
         break;
       case 'swap-status':

@@ -16,7 +16,7 @@ import { doClearSupport, doBalanceSubscribe } from 'redux/actions/wallet';
 import { doClearPublish } from 'redux/actions/publish';
 import { Lbryio } from 'lbryinc';
 import { selectFollowedTagsList } from 'redux/selectors/tags';
-import { doToast, doError, doNotificationList } from 'redux/actions/notifications';
+import { doToast, doError, doLbryioNotificationList } from 'redux/actions/notifications';
 
 import {
   doFetchDaemonSettings,
@@ -509,7 +509,7 @@ export function doSignIn() {
     dispatch(doNotificationSocketConnect(notificationsEnabled));
 
     if (notificationsEnabled) {
-      dispatch(doNotificationList());
+      dispatch(doLbryioNotificationList());
     }
     dispatch(doCheckPendingClaims());
 

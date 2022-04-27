@@ -45,12 +45,12 @@ export function doDismissError() {
   };
 }
 
-export function doNotificationList(types?: Array<string>) {
+export function doLbryioNotificationList(types?: Array<string>) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const notificationTypes = selectNotificationCategories(state);
 
-    dispatch({ type: ACTIONS.NOTIFICATION_LIST_STARTED });
+    dispatch({ type: ACTIONS.LBRYIO_NOTIFICATION_LIST_STARTED });
 
     let params: any = { is_app_readable: true };
     if (types) {
@@ -94,7 +94,7 @@ export function doNotificationList(types?: Array<string>) {
 
         dispatch(doResolveUris(channelsToResolve));
         dispatch({
-          type: ACTIONS.NOTIFICATION_LIST_COMPLETED,
+          type: ACTIONS.LBRYIO_NOTIFICATION_LIST_COMPLETED,
           data: {
             newNotifications: notifications,
             filterRule: Boolean(types),
@@ -102,7 +102,7 @@ export function doNotificationList(types?: Array<string>) {
         });
       });
     } catch (error) {
-      dispatch({ type: ACTIONS.NOTIFICATION_LIST_FAILED, data: { error } });
+      dispatch({ type: ACTIONS.LBRYIO_NOTIFICATION_LIST_FAILED, data: { error } });
     }
   };
 }
