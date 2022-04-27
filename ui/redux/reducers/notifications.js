@@ -35,7 +35,7 @@ export default handleActions(
     },
 
     // Notifications
-    [ACTIONS.LBRYIO_NOTIFICATION_LIST_STARTED]: (state, action) => {
+    [ACTIONS.LBRYIO_NOTIFICATION_LIST_STARTED]: (state) => {
       return {
         ...state,
         fetchingNotifications: true,
@@ -57,13 +57,13 @@ export default handleActions(
         };
       }
     },
-    [ACTIONS.LBRYIO_NOTIFICATION_LIST_FAILED]: (state, action) => {
+    [ACTIONS.LBRYIO_NOTIFICATION_LIST_FAILED]: (state) => {
       return {
         ...state,
         fetchingNotifications: false,
       };
     },
-    [ACTIONS.NOTIFICATION_CATEGORIES_COMPLETED]: (state, action) => {
+    [ACTIONS.LBRYIO_NOTIFICATION_CATEGORIES_COMPLETED]: (state, action) => {
       const { notificationCategories } = action.data;
 
       return {
@@ -71,7 +71,7 @@ export default handleActions(
         notificationCategories,
       };
     },
-    [ACTIONS.NOTIFICATION_READ_COMPLETED]: (state, action) => {
+    [ACTIONS.LBRYIO_NOTIFICATION_READ_COMPLETED]: (state, action) => {
       const { notifications, notificationsFiltered } = state;
       const { notificationIds } = action.data;
 
@@ -94,12 +94,12 @@ export default handleActions(
         notificationsFiltered: markIdsAsRead(notificationsFiltered, notificationIds),
       };
     },
-    [ACTIONS.NOTIFICATION_READ_FAILED]: (state, action) => {
+    [ACTIONS.LBRYIO_NOTIFICATION_READ_FAILED]: (state, action) => {
       return {
         ...state,
       };
     },
-    [ACTIONS.NOTIFICATION_SEEN_COMPLETED]: (state, action) => {
+    [ACTIONS.LBRYIO_NOTIFICATION_SEEN_COMPLETED]: (state, action) => {
       const { notifications, notificationsFiltered } = state;
       const { notificationIds } = action.data;
 
@@ -118,7 +118,7 @@ export default handleActions(
         notificationsFiltered: markIdsAsSeen(notificationsFiltered, notificationIds),
       };
     },
-    [ACTIONS.NOTIFICATION_DELETE_COMPLETED]: (state, action) => {
+    [ACTIONS.LBRYIO_NOTIFICATION_DELETE_COMPLETED]: (state, action) => {
       const { notifications, notificationsFiltered } = state;
       const { notificationId } = action.data;
 

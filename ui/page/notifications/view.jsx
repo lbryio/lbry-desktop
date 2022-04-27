@@ -19,8 +19,8 @@ type Props = {
   fetching: boolean,
   unreadCount: number,
   unseenCount: number,
-  doSeeAllNotifications: () => void,
-  doReadNotifications: () => void,
+  doLbryioSeeAllNotifications: () => void,
+  doLbryioNotificationsMarkRead: () => void,
   doLbryioNotificationList: (?Array<string>) => void,
   activeChannel: ?ChannelClaim,
   doCommentReactList: (Array<string>) => Promise<any>,
@@ -33,8 +33,8 @@ export default function NotificationsPage(props: Props) {
     fetching,
     unreadCount,
     unseenCount,
-    doSeeAllNotifications,
-    doReadNotifications,
+    doLbryioSeeAllNotifications,
+    doLbryioNotificationsMarkRead,
     doLbryioNotificationList,
     notificationCategories,
     activeChannel,
@@ -81,9 +81,9 @@ export default function NotificationsPage(props: Props) {
 
   React.useEffect(() => {
     if (unseenCount > 0) {
-      doSeeAllNotifications();
+      doLbryioSeeAllNotifications();
     }
-  }, [unseenCount, doSeeAllNotifications]);
+  }, [unseenCount, doLbryioSeeAllNotifications]);
 
   const stringifiedNotificationCategories = JSON.stringify(notificationCategories);
   React.useEffect(() => {
@@ -114,7 +114,12 @@ export default function NotificationsPage(props: Props) {
           {fetching && <Spinner type="small" />}
 
           {unreadCount > 0 && (
-            <Button icon={ICONS.EYE} onClick={doReadNotifications} button="secondary" label={__('Mark all as read')} />
+            <Button
+              icon={ICONS.EYE}
+              onClick={doLbryioNotificationsMarkRead}
+              button="secondary"
+              label={__('Mark all as read')}
+            />
           )}
           {notificationCategories && (
             <FormField

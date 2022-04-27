@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { selectUnseenNotificationCount } from 'redux/selectors/notifications';
-import { doSeeAllNotifications } from 'redux/actions/notifications';
+import { doLbryioSeeAllNotifications } from 'redux/actions/notifications';
 import { selectUser } from 'redux/selectors/user';
 import NotificationHeaderButton from './view';
 
@@ -10,5 +10,5 @@ const select = (state) => ({
 });
 
 export default connect(select, {
-  doSeeAllNotifications,
+  doLbryioSeeAllNotifications,
 })(NotificationHeaderButton);

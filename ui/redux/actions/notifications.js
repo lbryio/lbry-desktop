@@ -62,7 +62,7 @@ export function doLbryioNotificationList(types?: Array<string>) {
         const notificationCategories = await Lbryio.call('notification', 'categories');
         if (notificationCategories) {
           dispatch({
-            type: ACTIONS.NOTIFICATION_CATEGORIES_COMPLETED,
+            type: ACTIONS.LBRYIO_NOTIFICATION_CATEGORIES_COMPLETED,
             data: {
               notificationCategories: notificationCategories.reverse(),
             },
@@ -107,7 +107,7 @@ export function doLbryioNotificationList(types?: Array<string>) {
   };
 }
 
-export function doReadNotifications(notificationsIds: Array<number>) {
+export function doLbryioNotificationsMarkRead(notificationsIds: Array<number>) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const notifications = selectNotifications(state);
@@ -127,36 +127,36 @@ export function doReadNotifications(notificationsIds: Array<number>) {
       ids = Array.from(new Set([...getUnreadIds(notifications), ...getUnreadIds(notificationsFiltered)]));
     }
 
-    dispatch({ type: ACTIONS.NOTIFICATION_READ_STARTED });
+    dispatch({ type: ACTIONS.LBRYIO_NOTIFICATION_READ_STARTED });
     return Lbryio.call('notification', 'edit', { notification_ids: ids.join(','), is_read: true })
       .then(() => {
-        dispatch({ type: ACTIONS.NOTIFICATION_READ_COMPLETED, data: { notificationIds: ids } });
+        dispatch({ type: ACTIONS.LBRYIO_NOTIFICATION_READ_COMPLETED, data: { notificationIds: ids } });
       })
       .catch((error) => {
-        dispatch({ type: ACTIONS.NOTIFICATION_READ_FAILED, data: { error } });
+        dispatch({ type: ACTIONS.LBRYIO_NOTIFICATION_READ_FAILED, data: { error } });
       });
   };
 }
 
-export function doSeeNotifications(notificationIds: Array<string>) {
+export function doLbryioNotificationsMarkSeen(notificationIds: Array<string>) {
   return (dispatch: Dispatch) => {
-    dispatch({ type: ACTIONS.NOTIFICATION_SEEN_STARTED });
+    dispatch({ type: ACTIONS.LBRYIO_NOTIFICATION_SEEN_STARTED });
     return Lbryio.call('notification', 'edit', { notification_ids: notificationIds.join(','), is_seen: true })
       .then(() => {
         dispatch({
-          type: ACTIONS.NOTIFICATION_SEEN_COMPLETED,
+          type: ACTIONS.LBRYIO_NOTIFICATION_SEEN_COMPLETED,
           data: {
             notificationIds,
           },
         });
       })
       .catch((error) => {
-        dispatch({ type: ACTIONS.NOTIFICATION_SEEN_FAILED, data: { error } });
+        dispatch({ type: ACTIONS.LBRYIO_NOTIFICATION_SEEN_FAILED, data: { error } });
       });
   };
 }
 
-export function doSeeAllNotifications() {
+export function doLbryioSeeAllNotifications() {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const notifications = selectNotifications(state);
@@ -169,15 +169,15 @@ export function doSeeAllNotifications() {
     const getUnseenIds = (list) => list.filter((n) => !n.is_seen).map((n) => n.id);
     const unseenIds = Array.from(new Set([...getUnseenIds(notifications), ...getUnseenIds(notificationsFiltered)]));
 
-    dispatch(doSeeNotifications(unseenIds));
+    dispatch(doLbryioNotificationsMarkSeen(unseenIds));
   };
 }
 
-export function doDeleteNotification(notificationId: number) {
+export function doLbryioDeleteNotification(notificationId: number) {
   return (dispatch: Dispatch) => {
     Lbryio.call('notification', 'delete', { notification_ids: notificationId })
       .then(() => {
-        dispatch({ type: ACTIONS.NOTIFICATION_DELETE_COMPLETED, data: { notificationId } });
+        dispatch({ type: ACTIONS.LBRYIO_NOTIFICATION_DELETE_COMPLETED, data: { notificationId } });
       })
       .catch(() => {
         dispatch(doToast({ isError: true, message: __('Unable to delete this right now. Please try again later.') }));

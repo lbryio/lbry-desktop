@@ -9,7 +9,11 @@ import {
 } from 'redux/selectors/notifications';
 import { doCommentReactList } from 'redux/actions/comments';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
-import { doReadNotifications, doLbryioNotificationList, doSeeAllNotifications } from 'redux/actions/notifications';
+import {
+  doLbryioNotificationsMarkRead,
+  doLbryioNotificationList,
+  doLbryioSeeAllNotifications,
+} from 'redux/actions/notifications';
 import NotificationsPage from './view';
 
 const select = (state) => ({
@@ -23,8 +27,8 @@ const select = (state) => ({
 });
 
 export default connect(select, {
-  doReadNotifications,
+  doLbryioNotificationsMarkRead,
   doLbryioNotificationList,
-  doSeeAllNotifications,
+  doLbryioSeeAllNotifications,
   doCommentReactList,
 })(NotificationsPage);

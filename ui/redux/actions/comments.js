@@ -7,7 +7,7 @@ import Lbry from 'lbry';
 import { parseURI, buildURI, isURIEqual } from 'util/lbryURI';
 import { selectClaimsByUri, selectMyChannelClaims } from 'redux/selectors/claims';
 import { doClaimSearch } from 'redux/actions/claims';
-import { doToast, doSeeNotifications } from 'redux/actions/notifications';
+import { doToast, doLbryioNotificationsMarkSeen } from 'redux/actions/notifications';
 import {
   selectMyReactsForComment,
   selectOthersReactsForComment,
@@ -452,7 +452,7 @@ export function doCommentReact(commentId: string, type: string) {
     }
 
     if (notification && !notification.is_seen) {
-      dispatch(doSeeNotifications([notification.id]));
+      dispatch(doLbryioNotificationsMarkSeen([notification.id]));
     }
 
     const exclusiveTypes = {
@@ -593,7 +593,7 @@ export function doCommentCreate(
 
     // send a notification
     const notification = parent_id && makeSelectNotificationForCommentId(parent_id)(state);
-    if (notification && !notification.is_seen) dispatch(doSeeNotifications([notification.id]));
+    if (notification && !notification.is_seen) dispatch(doLbryioNotificationsMarkSeen([notification.id]));
 
     if (!signatureData) {
       return dispatch(doToast({ isError: true, message: __('Unable to verify your channel. Please try again.') }));
