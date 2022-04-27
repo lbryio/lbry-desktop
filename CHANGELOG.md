@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.53.3] - [2022-04-27]
+
+## Fixed
+ - Reverted lbry.tv changes that broke production login ([#7569](https://github.com/lbryio/lbry-desktop/pull/7569))
+ - Reverted lbry.tv changes that broke login ([#7570](https://github.com/lbryio/lbry-desktop/pull/7570))
+
 ## [0.53.2] - [2022-04-26]
 
 ### Changed
