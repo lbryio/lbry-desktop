@@ -57,6 +57,9 @@ function CollectionActions(props: Props) {
 
   const doPlay = React.useCallback(
     (playUri) => {
+      if (!playUri) {
+        return;
+      }
       const navigateUrl = formatLbryUrlForWeb(playUri);
       push({
         pathname: navigateUrl,
