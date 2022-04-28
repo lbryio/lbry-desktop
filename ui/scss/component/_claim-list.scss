@@ -134,6 +134,10 @@
   list-style: none;
   position: relative;
 
+  .claim-tile__info {
+    padding-bottom: unset;
+  }
+
   .claim__menu-button {
     right: calc(var(--spacing-m) - 8px);
     margin-top: var(--spacing-xxs);
