@@ -4,17 +4,20 @@ import { FormField } from 'component/common/form';
 
 type Props = {
   tiny?: boolean,
-  label: string,
+  label?: string,
+  injected?: ?Array<string>,
+  channelIds?: Array<string>, // Specific channel IDs to show. Must be a subset of own channels.
+  // --- Redux ---
   myChannelClaims: ?Array<ChannelClaim>,
-  injected: ?Array<string>,
+  fetchingChannels: boolean,
   activeChannelId: ?string,
   setActiveChannel: (string) => void,
-  fetchingChannels: boolean,
 };
 
 function SelectChannel(props: Props) {
   const {
     fetchingChannels,
+    channelIds,
     myChannelClaims = [],
     label,
     injected = [],
@@ -26,6 +29,11 @@ function SelectChannel(props: Props) {
   function handleChannelChange(event: SyntheticInputEvent<*>) {
     const channelClaimId = event.target.value;
     setActiveChannel(channelClaimId);
+  }
+
+  let mine = myChannelClaims;
+  if (myChannelClaims && channelIds) {
+    mine = myChannelClaims.filter((x) => channelIds.includes(x.claim_id));
   }
 
   return (
@@ -43,8 +51,8 @@ function SelectChannel(props: Props) {
           <option>{__('Loading your channels...')}</option>
         ) : (
           <>
-            {myChannelClaims &&
-              myChannelClaims.map(({ name, claim_id: claimId }) => (
+            {mine &&
+              mine.map(({ name, claim_id: claimId }) => (
                 <option key={claimId} value={claimId}>
                   {name}
                 </option>
