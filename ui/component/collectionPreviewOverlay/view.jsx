@@ -33,7 +33,7 @@ function CollectionPreviewOverlay(props: Props) {
             collectionItemUrls.map((item, index) => {
               if (index < 2) {
                 return (
-                  <div className="collection-preview__overlay-grid-items">
+                  <div key={item} className="collection-preview__overlay-grid-items">
                     <FileThumbnail uri={item} key={item} />
                   </div>
                 );

@@ -95,7 +95,7 @@ export default function CollectionsListMine(props: Props) {
       {builtin.map((list: Collection) => {
         const { items: itemUrls } = list;
         return (
-          <>
+          <React.Fragment key={list.name}>
             {Boolean(itemUrls && itemUrls.length) && (
               <div className="claim-grid__wrapper" key={list.name}>
                 <h1 className="claim-grid__header">
@@ -124,7 +124,7 @@ export default function CollectionsListMine(props: Props) {
                 <ClaimList tileLayout key={list.name} uris={itemUrls.slice(0, 6)} collectionId={list.id} />
               </div>
             )}
-          </>
+          </React.Fragment>
         );
       })}
       <div className="claim-grid__wrapper">
