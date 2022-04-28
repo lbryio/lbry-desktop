@@ -1224,7 +1224,12 @@ img {
           cursor: pointer;
         }
       }
+
+      @media (max-width: $breakpoint-small) {
+        opacity: 1;
+      }
     }
+
     .menu__button.claim__menu-button {
       top: 2.2rem;
     }
