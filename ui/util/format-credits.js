@@ -1,11 +1,12 @@
 export function formatCredits(amount, precision, shortFormat = false) {
+  const language = localStorage.getItem('language') || undefined;
   const actualAmount = Number(amount);
-  const safePrecision = Math.min(20, Math.max(1, precision));
+  const safePrecision = Math.min(20, Math.max(1, precision || 0));
 
   if (Number.isNaN(actualAmount) || actualAmount === 0) return '0';
 
   if (shortFormat) {
-    const formatter = new Intl.NumberFormat(undefined, {
+    const formatter = new Intl.NumberFormat(language, {
       minimumFractionDigits: safePrecision,
       maximumFractionDigits: safePrecision,
       roundingIncrement: 5,
@@ -16,7 +17,7 @@ export function formatCredits(amount, precision, shortFormat = false) {
     return formatter.format(actualAmount);
   }
 
-  const formatter = new Intl.NumberFormat(undefined, {
+  const formatter = new Intl.NumberFormat(language, {
     minimumFractionDigits: safePrecision,
     maximumFractionDigits: safePrecision,
     roundingIncrement: 5,
