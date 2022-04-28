@@ -563,14 +563,6 @@ export function doCommentReact(commentId: string, type: string) {
   };
 }
 
-/**
- *
- * @param uri
- * @param livestream
- * @param params the CommentSubmitParams needed for CommentCreateParams (not the same as they are dealt differently,
- * like mentionedChannels which is selected after submission)
- * @returns {(function(Dispatch, GetState): Promise<undefined|void|*>)|*}
- */
 export function doCommentCreate(uri: string, livestream: boolean, params: CommentSubmitParams) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const { comment, claim_id, parent_id, txid, payment_intent_id, environment, sticker } = params;
@@ -623,19 +615,12 @@ export function doCommentCreate(uri: string, livestream: boolean, params: Commen
 
     dispatch({ type: ACTIONS.COMMENT_CREATE_STARTED });
 
-    let signatureData;
-    if (activeChannelClaim) {
-      try {
-        signatureData = await Lbry.channel_sign({
-          channel_id: activeChannelClaim.claim_id,
-          hexdata: toHex(comment),
-        });
-      } catch (e) {}
+    const notification = parent_id && makeSelectNotificationForCommentId(parent_id)(state);
+    if (notification && !notification.is_seen) {
+      dispatch(doSeeNotifications([notification.id]));
     }
 
-    const notification = parent_id && makeSelectNotificationForCommentId(parent_id)(state);
-    if (notification && !notification.is_seen) dispatch(doSeeNotifications([notification.id]));
-
+    const signatureData = await channelSignData(activeChannelClaim.claim_id, comment);
     if (!signatureData) {
       return dispatch(doToast({ isError: true, message: __('Unable to verify your channel. Please try again.') }));
     }
@@ -732,9 +717,12 @@ export function doCommentPin(commentId: string, claimId: string, remove: boolean
  * Deletes a comment in Commentron.
  *
  * @param commentId The comment ID to delete.
- * @param deleterClaim The channel-claim of the person doing the deletion. Defaults to the active channel if not provided.
+ * @param deleterClaim The channel-claim of the person doing the deletion.
+ *   Defaults to the active channel if not provided.
  * @param deleterIsModOrAdmin Is the deleter a mod or admin for the content?
- * @param creatorClaim The channel-claim for the content where the comment resides. Not required if the deleter owns the comment (i.e. deleting own comment).
+ * @param creatorClaim The channel-claim for the content where the comment
+ *   resides. Not required if the deleter owns the comment (i.e. deleting own
+ *   comment).
  * @returns {function(Dispatch): *}
  */
 export function doCommentAbandon(
@@ -1119,7 +1107,8 @@ export function doCommentModBlock(
  *
  * @param commenterUri
  * @param offendingCommentId
- * @param blockerId Your specific channel ID to block with, or pass 'undefined' to block it for all of your channels.
+ * @param blockerId Your specific channel ID to block with, or pass 'undefined'
+ *   to block it for all of your channels.
  * @param timeoutSec
  * @returns {function(Dispatch): *}
  */
@@ -1152,7 +1141,8 @@ export function doCommentModBlockAsAdmin(
  * @param commenterUri
  * @param offendingCommentId
  * @param creatorUri
- * @param blockerId Your specific channel ID to block with, or pass 'undefined' to block it for all of your channels.
+ * @param blockerId Your specific channel ID to block with, or pass 'undefined'
+ *   to block it for all of your channels.
  * @param timeoutSec
  * @returns {function(Dispatch): *}
  */
