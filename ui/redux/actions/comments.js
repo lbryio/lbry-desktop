@@ -251,6 +251,56 @@ export function doCommentById(commentId: string, toastIfNotFound: boolean = true
   };
 }
 
+export function doFetchMyCommentedChannels(claimId: ?string) {
+  return (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const myChannelClaims = selectMyChannelClaims(state);
+    const contentClaimId = claimId;
+
+    if (!contentClaimId || !myChannelClaims) {
+      return;
+    }
+
+    return Promise.all(myChannelClaims.map((x) => channelSignName(x.claim_id, x.name))).then((signatures) => {
+      const params = [];
+      const commentedChannelIds = [];
+
+      signatures.forEach((signature, i) => {
+        if (signature !== undefined && signature !== null) {
+          params.push({
+            page: 1,
+            page_size: 1,
+            claim_id: contentClaimId,
+            author_claim_id: myChannelClaims[i].claim_id,
+            requestor_channel_name: myChannelClaims[i].name,
+            requestor_channel_id: myChannelClaims[i].claim_id,
+            signature: signature.signature,
+            signing_ts: signature.signing_ts,
+          });
+        }
+      });
+
+      // $FlowFixMe
+      return Promise.allSettled(params.map((p) => Comments.comment_list(p)))
+        .then((response) => {
+          response.forEach((res, i) => {
+            if (res.status === 'fulfilled' && res.value.total_items > 0) {
+              commentedChannelIds.push(params[i].author_claim_id);
+            }
+          });
+
+          dispatch({
+            type: ACTIONS.COMMENT_FETCH_MY_COMMENTED_CHANNELS_COMPLETE,
+            data: { contentClaimId, commentedChannelIds },
+          });
+        })
+        .catch((err) => {
+          console.log({ err });
+        });
+    });
+  };
+}
+
 export function doCommentReset(claimId: string) {
   return (dispatch: Dispatch) => {
     if (!claimId) {

@@ -52,7 +52,10 @@ type Props = {
   fetchReacts: (commentIds: Array<string>) => Promise<any>,
   resetComments: (claimId: string) => void,
   claimsByUri: { [string]: any },
+  myChannelClaimIds: ?Array<string>,
+  myCommentedChannelIds: ?Array<string>,
   doFetchUserMemberships: (claimIdCsv: string) => void,
+  doFetchMyCommentedChannels: (claimId: ?string) => void,
 };
 
 export default function CommentList(props: Props) {
@@ -80,7 +83,10 @@ export default function CommentList(props: Props) {
     fetchReacts,
     resetComments,
     claimsByUri,
+    myChannelClaimIds,
+    myCommentedChannelIds,
     doFetchUserMemberships,
+    doFetchMyCommentedChannels,
   } = props;
 
   const isMobile = useIsMobile();
@@ -261,6 +267,13 @@ export default function CommentList(props: Props) {
     readyToDisplayComments,
     topLevelTotalPages,
   ]);
+
+  // Determine my channels that have commented
+  useEffect(() => {
+    if (myCommentedChannelIds === undefined && claimId && myChannelClaimIds) {
+      doFetchMyCommentedChannels(claimId);
+    }
+  }, [claimId, myCommentedChannelIds, myChannelClaimIds]);
 
   const commentProps = { isTopLevel: true, threadDepth: 3, uri, claimIsMine, linkedCommentId };
   const actionButtonsProps = {

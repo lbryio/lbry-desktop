@@ -472,3 +472,14 @@ export const selectChannelMentionData = createCachedSelector(
     };
   }
 )((state, uri, maxCount) => `${String(uri)}:${maxCount}`);
+
+/**
+ * Returns the list of your channel IDs that have commented on the given claim.
+ *
+ * @param state
+ * @param claimId
+ * @returns {null | undefined | Array<string>} 'undefined' = "not fetched"; 'null' = "no claim";
+ */
+export const selectMyCommentedChannelIdsForId = (state: State, claimId: string) => {
+  return claimId ? selectState(state).myCommentedChannelIdsById[claimId] : null;
+};

@@ -49,6 +49,7 @@ const defaultState: CommentsState = {
   settingsByChannelId: {},
   fetchingSettings: false,
   fetchingBlockedWords: false,
+  myCommentedChannelIdsById: {},
 };
 
 // ****************************************************************************
@@ -146,6 +147,16 @@ export default handleActions(
         }
       }
 
+      let myCommentedChannelIdsById;
+      const commentedChannelIds = (state.myCommentedChannelIdsById[claimId] || []).slice();
+      if (!commentedChannelIds.includes(comment.channel_id)) {
+        commentedChannelIds.push(comment.channel_id);
+        myCommentedChannelIdsById = {
+          ...state.myCommentedChannelIdsById,
+          [claimId]: commentedChannelIds,
+        };
+      }
+
       return {
         ...state,
         topLevelCommentsById,
@@ -156,6 +167,7 @@ export default handleActions(
         commentsByUri,
         isLoading: false,
         isCommenting: false,
+        myCommentedChannelIdsById: myCommentedChannelIdsById || state.myCommentedChannelIdsById,
       };
     },
 
@@ -412,6 +424,18 @@ export default handleActions(
         byId,
         commentById,
         linkedCommentAncestors,
+      };
+    },
+
+    [ACTIONS.COMMENT_FETCH_MY_COMMENTED_CHANNELS_COMPLETE]: (state: CommentsState, action: any) => {
+      const { contentClaimId, commentedChannelIds } = action.data;
+
+      return {
+        ...state,
+        myCommentedChannelIdsById: {
+          ...state.myCommentedChannelIdsById,
+          [contentClaimId]: commentedChannelIds,
+        },
       };
     },
 

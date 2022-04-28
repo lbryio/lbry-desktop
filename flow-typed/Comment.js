@@ -81,6 +81,7 @@ declare type CommentsState = {
   settingsByChannelId: { [string]: PerChannelSettings }, // ChannelID -> settings
   fetchingSettings: boolean,
   fetchingBlockedWords: boolean,
+  myCommentedChannelIdsById: { [string]: Array<string> }, // [content-claim-id] -> array of own channels IDs that have commented before.
 };
 
 // Authorization parameters for calls requiring user authentication
