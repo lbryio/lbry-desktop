@@ -1355,7 +1355,7 @@
   "Unable to edit this comment, please try again later.": "Unable to edit this comment, please try again later.",
   "No active channel selected.": "No active channel selected.",
   "Unable to verify your channel. Please try again.": "Unable to verify your channel. Please try again.",
-  "Unable to verify signature for %channel%.": "Unable to verify signature for %channel%.",
+  "Unable to verify signature.": "Unable to verify signature.",
   "Channel cannot be anonymous, please select a channel and try again.": "Channel cannot be anonymous, please select a channel and try again.",
   "Change to list layout": "Change to list layout",
   "Change to tile layout": "Change to tile layout",
@@ -2254,5 +2254,7 @@
   "This account has livestreaming disabled, please reach out to hello@odysee.com for assistance.": "This account has livestreaming disabled, please reach out to hello@odysee.com for assistance.",
   "Attach images by pasting or drag-and-drop.": "Attach images by pasting or drag-and-drop.",
   "There was a network error, but the publish may have been completed. Wait a few minutes, then check your Uploads or Wallet page to confirm.": "There was a network error, but the publish may have been completed. Wait a few minutes, then check your Uploads or Wallet page to confirm.",
+  "Already reacted to this comment from another channel.": "Already reacted to this comment from another channel.",
+  "Unable to react. Please try again later.": "Unable to react. Please try again later.",
   "--end--": "--end--"
 }

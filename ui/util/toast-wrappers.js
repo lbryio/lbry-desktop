@@ -4,7 +4,8 @@ import { doToast } from 'redux/actions/notifications';
 export function doFailedSignatureToast(dispatch: Dispatch, channelName: string) {
   dispatch(
     doToast({
-      message: __('Unable to verify signature for %channel%.', { channel: channelName }),
+      message: __('Unable to verify signature.'),
+      subMessage: channelName,
       isError: true,
     })
   );

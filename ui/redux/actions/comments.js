@@ -352,6 +352,77 @@ export function doCommentReactList(commentIds: Array<string>) {
   };
 }
 
+function doFetchAllReactionsForId(commentIds: Array<string>, channelClaims: ?Array<Claim>) {
+  const commentIdsCsv = commentIds.join(',');
+
+  if (!channelClaims || channelClaims.length === 0) {
+    return Promise.reject(null);
+  }
+
+  return Promise.all(channelClaims.map((x) => channelSignName(x.claim_id, x.name)))
+    .then((channelSignatures) => {
+      const params = [];
+      channelSignatures.forEach((sigData, i) => {
+        if (sigData !== undefined && sigData !== null) {
+          params.push({
+            comment_ids: commentIdsCsv,
+            // $FlowFixMe: null 'channelClaims' already handled at the top
+            channel_name: channelClaims[i].name,
+            // $FlowFixMe: null 'channelClaims' already handled at the top
+            channel_id: channelClaims[i].claim_id,
+            signature: sigData.signature,
+            signing_ts: sigData.signing_ts,
+          });
+        }
+      });
+
+      // $FlowFixMe
+      return Promise.allSettled(params.map((p) => Comments.reaction_list(p))).then((response) => {
+        const results = [];
+
+        response.forEach((res, i) => {
+          if (res.status === 'fulfilled') {
+            results.push({
+              myReactions: res.value.my_reactions,
+              // othersReactions: res.value.others_reactions,
+              // commentIds,
+              channelId: params[i].channel_id,
+              channelName: params[i].channel_name,
+            });
+          }
+        });
+
+        return results;
+      });
+    })
+    .catch((error) => {
+      return null;
+    });
+}
+
+async function getReactedChannelNames(commentId: string, myChannelClaims: ?Array<Claim>) {
+  // 1. Fetch reactions for all channels:
+  const reactions = await doFetchAllReactionsForId([commentId], myChannelClaims);
+  if (reactions) {
+    const reactedChannelNames = [];
+
+    // 2. Collect all the channel names that have reacted
+    for (let i = 0; i < reactions.length; ++i) {
+      const r = reactions[i];
+      const myReactions = r.myReactions[commentId];
+      const myReactionValues = Object.values(myReactions);
+
+      if (myReactionValues.includes(1)) {
+        reactedChannelNames.push(r.channelName);
+      }
+    }
+
+    return reactedChannelNames;
+  } else {
+    return null;
+  }
+}
+
 export function doCommentReact(commentId: string, type: string) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
@@ -379,8 +450,10 @@ export function doCommentReact(commentId: string, type: string) {
     }
 
     const reactKey = `${commentId}:${activeChannelClaim.claim_id}`;
-    const myReacts = selectMyReactsForComment(state, reactKey) || [];
+    const myReacts = (selectMyReactsForComment(state, reactKey) || []).slice();
     const othersReacts = selectOthersReactsForComment(state, reactKey) || {};
+    let checkIfAlreadyReacted = false;
+    let rejectReaction = false;
 
     const signatureData = await channelSignName(activeChannelClaim.claim_id, activeChannelClaim.name);
     if (!signatureData) {
@@ -404,11 +477,18 @@ export function doCommentReact(commentId: string, type: string) {
       if (Object.keys(exclusiveTypes).includes(type)) {
         params['clear_types'] = exclusiveTypes[type];
         if (myReacts.indexOf(exclusiveTypes[type]) !== -1) {
+          // Mutually-exclusive toggle:
           myReacts.splice(myReacts.indexOf(exclusiveTypes[type]), 1);
+        } else {
+          // It's not a mutually-exclusive toggle, so check if we've already
+          // reacted from another channel. But the verification could take some
+          // time if we have lots of channels, so update the GUI first.
+          checkIfAlreadyReacted = true;
         }
       }
     }
 
+    // --- Update the GUI for immediate feedback ---
     dispatch({
       type: ACTIONS.COMMENT_REACT_STARTED,
       data: commentId + type,
@@ -428,7 +508,31 @@ export function doCommentReact(commentId: string, type: string) {
       },
     });
 
-    Comments.reaction_react(params)
+    // --- Check if already commented from another channel ---
+    if (checkIfAlreadyReacted) {
+      const reactedChannelNames = await getReactedChannelNames(commentId, selectMyChannelClaims(state));
+
+      if (!reactedChannelNames) {
+        // Couldn't determine. Probably best to just stop the operation.
+        dispatch(doToast({ message: __('Unable to react. Please try again later.'), isError: true }));
+        rejectReaction = true;
+      } else if (reactedChannelNames.length) {
+        dispatch(
+          doToast({
+            message: __('Already reacted to this comment from another channel.'),
+            subMessage: reactedChannelNames.join(' • '),
+            duration: 'long',
+            isError: true,
+          })
+        );
+        rejectReaction = true;
+      }
+    }
+
+    new Promise((res, rej) => (rejectReaction ? rej('') : res(true)))
+      .then(() => {
+        return Comments.reaction_react(params);
+      })
       .then((result: ReactionReactResponse) => {
         dispatch({
           type: ACTIONS.COMMENT_REACT_COMPLETED,
@@ -451,8 +555,8 @@ export function doCommentReact(commentId: string, type: string) {
         dispatch({
           type: ACTIONS.COMMENT_REACTION_LIST_COMPLETED,
           data: {
-            myReactions: { [commentId]: myRevertedReactsObj },
-            othersReactions: { [commentId]: othersReacts },
+            myReactions: { [reactKey]: myRevertedReactsObj },
+            othersReactions: { [reactKey]: othersReacts },
           },
         });
       });
