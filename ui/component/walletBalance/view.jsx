@@ -9,7 +9,7 @@ import HelpLink from 'component/common/help-link';
 import Card from 'component/common/card';
 import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
-import { formatNumberWithCommas } from 'util/number';
+import { formatCredits } from 'util/format-credits';
 
 type Props = {
   balance: number,
@@ -64,7 +64,7 @@ const WalletBalance = (props: Props) => {
 
   return (
     <Card
-      title={<LbcSymbol postfix={formatNumberWithCommas(totalBalance)} isTitle />}
+      title={<LbcSymbol postfix={formatCredits(totalBalance, 8)} isTitle />}
       subtitle={
         totalLocked > 0 ? (
           <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
