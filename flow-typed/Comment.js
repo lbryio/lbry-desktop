@@ -42,7 +42,7 @@ declare type PerChannelSettings = {
 
 // todo: relate individual comments to their commentId
 declare type CommentsState = {
-  commentsByUri: { [string]: string },
+  commentsByUri: { [string]: string }, // URI -> claimId (TODO: remove)
   superChatsByUri: { [string]: { totalAmount: number, comments: Array<Comment> } },
   byId: { [string]: Array<string> }, // ClaimID -> list of fetched comment IDs.
   totalCommentsById: {}, // ClaimId -> ultimate total (including replies) in commentron.
@@ -51,7 +51,7 @@ declare type CommentsState = {
   topLevelCommentsById: { [string]: Array<string> }, // ClaimID -> list of fetched top level comments.
   topLevelTotalPagesById: { [string]: number }, // ClaimID -> total number of top-level pages in commentron. Based on COMMENT_PAGE_SIZE_TOP_LEVEL.
   topLevelTotalCommentsById: { [string]: number }, // ClaimID -> total top level comments in commentron.
-  commentById: { [string]: Comment },
+  commentById: { [string]: Comment }, // commentId -> Comment
   linkedCommentAncestors: { [string]: Array<string> }, // {"linkedCommentId": ["parentId", "grandParentId", ...]}
   pinnedCommentsById: {}, // ClaimId -> array of pinned comment IDs
   isLoading: boolean,

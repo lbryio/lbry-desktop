@@ -4,22 +4,23 @@ import { handleActions } from 'util/redux-utils';
 import { BLOCK_LEVEL } from 'constants/comment';
 import { isURIEqual } from 'util/lbryURI';
 
+// See 'CommentsState' for documentation.
 const defaultState: CommentsState = {
-  commentById: {}, // commentId -> Comment
-  byId: {}, // ClaimID -> list of fetched comment IDs.
-  totalCommentsById: {}, // ClaimId -> ultimate total (including replies) in commentron.
-  repliesByParentId: {}, // ParentCommentID -> list of fetched replies.
-  repliesTotalPagesByParentId: {}, // ParentCommentID -> total number of reply pages for a parentId in commentron.
-  topLevelCommentsById: {}, // ClaimID -> list of fetched top level comments.
-  topLevelTotalPagesById: {}, // ClaimID -> total number of top-level pages in commentron. Based on COMMENT_PAGE_SIZE_TOP_LEVEL.
-  topLevelTotalCommentsById: {}, // ClaimID -> total top level comments in commentron.
+  commentById: {},
+  byId: {},
+  totalCommentsById: {},
+  repliesByParentId: {},
+  repliesTotalPagesByParentId: {},
+  topLevelCommentsById: {},
+  topLevelTotalPagesById: {},
+  topLevelTotalCommentsById: {},
   // TODO:
   // Remove commentsByUri
   // It is not needed and doesn't provide anything but confusion
   commentsByUri: {}, // URI -> claimId
-  linkedCommentAncestors: {}, // {"linkedCommentId": ["parentId", "grandParentId", ...]}
+  linkedCommentAncestors: {},
   superChatsByUri: {},
-  pinnedCommentsById: {}, // ClaimId -> array of pinned comment IDs
+  pinnedCommentsById: {},
   isLoading: false,
   isLoadingById: false,
   isLoadingByParentId: {},
@@ -45,7 +46,7 @@ const defaultState: CommentsState = {
   adminTimeoutMap: {},
   moderatorTimeoutMap: {},
   togglingForDelegatorMap: {},
-  settingsByChannelId: {}, // ChannelId -> PerChannelSettings
+  settingsByChannelId: {},
   fetchingSettings: false,
   fetchingBlockedWords: false,
 };
