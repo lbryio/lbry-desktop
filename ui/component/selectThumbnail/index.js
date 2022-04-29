@@ -5,11 +5,15 @@ import { doUpdatePublishForm, doResetThumbnailStatus } from 'redux/actions/publi
 import { doOpenModal } from 'redux/actions/app';
 import PublishPage from './view';
 
-const select = (state) => ({
-  ...selectPublishFormValues(state),
-  fileInfos: selectFileInfosByOutpoint(state),
-  myClaimForUri: selectMyClaimForUri(state),
-});
+const select = (state, props) => {
+  const publishFormFields = selectPublishFormValues(state);
+  return {
+    ...publishFormFields,
+    thumbnail: props.thumbnail || publishFormFields.thumbnail,
+    fileInfos: selectFileInfosByOutpoint(state),
+    myClaimForUri: selectMyClaimForUri(state),
+  };
+};
 
 const perform = (dispatch) => ({
   updatePublishForm: (value) => dispatch(doUpdatePublishForm(value)),

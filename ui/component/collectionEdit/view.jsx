@@ -58,6 +58,7 @@ type Props = {
   setActiveChannel: (string) => void,
   setIncognito: (boolean) => void,
   doCollectionEdit: (CollectionEditParams) => void,
+  resetThumbnailStatus: () => void,
 };
 
 function CollectionForm(props: Props) {
@@ -92,6 +93,7 @@ function CollectionForm(props: Props) {
     setIncognito,
     onDone,
     doCollectionEdit,
+    resetThumbnailStatus,
   } = props;
   const activeChannelName = activeChannelClaim && activeChannelClaim.name;
   let prefix = 'lbry://';
@@ -158,7 +160,7 @@ function CollectionForm(props: Props) {
   }
 
   function handleUpdateThumbnail(update: { [string]: string }) {
-    if (update.thumbnail_url) {
+    if (update.thumbnail_url !== undefined) {
       setParam(update);
     } else if (update.thumbnail_status) {
       setThumbStatus(update.thumbnail_status);
@@ -309,6 +311,10 @@ function CollectionForm(props: Props) {
     }
   }, [uri, hasClaim]);
 
+  React.useEffect(() => {
+    resetThumbnailStatus();
+  }, [resetThumbnailStatus]);
+
   return (
     <>
       <div className={classnames('main--contained', { 'card--disabled': disabled })}>
@@ -358,8 +364,8 @@ function CollectionForm(props: Props) {
                       />
                       <fieldset-section>
                         <SelectThumbnail
-                          thumbnailParam={params.thumbnail_url}
-                          thumbnailParamError={thumbError}
+                          thumbnail={params.thumbnail_url}
+                          thumbnailError={thumbError}
                           thumbnailParamStatus={thumbStatus}
                           updateThumbnailParams={handleUpdateThumbnail}
                           usePublishFormMode
