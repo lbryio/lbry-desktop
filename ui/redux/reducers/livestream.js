@@ -11,7 +11,7 @@ const defaultState: LivestreamState = {
   activeLivestreamsLastFetchedDate: 0,
   activeLivestreamsLastFetchedOptions: {},
   activeLivestreamInitialized: false,
-  commentSocketConnected: false,
+  socketConnectionById: {},
 };
 
 function updateViewersById(activeLivestreams, originalState) {
@@ -90,10 +90,14 @@ export default handleActions(
       if (activeLivestreams) delete activeLivestreams[action.data.channelId];
       return { ...state, activeLivestreams: Object.assign({}, activeLivestreams), activeLivestreamInitialized: true };
     },
-    [ACTIONS.COMMENT_SOCKET_CONNECTED]: (state: CommentsState, action: any) => ({
-      ...state,
-      commentSocketConnected: action.data.connected,
-    }),
+    [ACTIONS.SOCKET_CONNECTED_BY_ID]: (state: LivestreamState, action: any) => {
+      const { connected, sub_category, id: claimId } = action.data;
+
+      const socketConnectionById = Object.assign({}, state.socketConnectionById);
+      socketConnectionById[claimId] = { connected, sub_category };
+
+      return { ...state, socketConnectionById };
+    },
   },
   defaultState
 );

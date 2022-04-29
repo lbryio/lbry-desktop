@@ -20,9 +20,11 @@ type Props = {
   claim: StreamClaim,
   isAuthenticated: boolean,
   uri: string,
-  socketConnected: boolean,
+  socketConnection: { connected: ?boolean },
+  isStreamPlaying: boolean,
   doSetPrimaryUri: (uri: ?string) => void,
-  doCommentSocketConnect: (string, string, string) => void,
+  doCommentSocketConnect: (uri: string, channelName: string, claimId: string) => void,
+  doCommentSocketDisconnect: (claimId: string, channelName: string) => void,
   doFetchChannelLiveStatus: (string) => void,
   doUserSetReferrer: (string) => void,
 };
@@ -38,14 +40,18 @@ export default function LivestreamPage(props: Props) {
     claim,
     isAuthenticated,
     uri,
-    socketConnected,
+    socketConnection,
+    isStreamPlaying,
     doSetPrimaryUri,
     doCommentSocketConnect,
+    doCommentSocketDisconnect,
     doFetchChannelLiveStatus,
     doUserSetReferrer,
   } = props;
 
   const isMobile = useIsMobile();
+
+  const streamPlayingRef = React.useRef();
 
   const [activeStreamUri, setActiveStreamUri] = React.useState(false);
   const [showLivestream, setShowLivestream] = React.useState(false);
@@ -73,18 +79,33 @@ export default function LivestreamPage(props: Props) {
   // On livestream page, only connect, fileRenderFloating will handle disconnect.
   // (either by leaving page with floating player off, or by closing the player)
   React.useEffect(() => {
-    if (!claim || socketConnected) return;
-
     const { claim_id: claimId, signing_channel: channelClaim } = claim;
     const channelName = channelClaim && formatLbryChannelName(channelUrl);
 
-    if (claimId && channelName) {
+    if (claimId && channelName && !socketConnection?.connected) {
       doCommentSocketConnect(uri, channelName, claimId);
     }
-
-    // only listen to socketConnected on initial mount
+    // willAutoplay mount only
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [channelUrl, claim, doCommentSocketConnect, uri]);
+  }, [channelUrl, claim, doCommentSocketConnect, doCommentSocketDisconnect, socketConnection, uri]);
+
+  React.useEffect(() => {
+    // use for unmount case without triggering render
+    streamPlayingRef.current = isStreamPlaying;
+  }, [isStreamPlaying]);
+
+  React.useEffect(() => {
+    return () => {
+      if (!streamPlayingRef.current) {
+        const { claim_id: claimId, signing_channel: channelClaim } = claim;
+        const channelName = channelClaim && formatLbryChannelName(channelUrl);
+
+        if (claimId && channelName) doCommentSocketDisconnect(claimId, channelName);
+      }
+    };
+    // only on unmount -> leave page
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const claimReleaseStartingSoonStatic = () =>
     releaseTime.isBetween(moment(), moment().add(LIVESTREAM_STARTS_SOON_BUFFER, 'minutes'));

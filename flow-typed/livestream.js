@@ -18,7 +18,7 @@ declare type LivestreamReplayItem = {
     uploadedAt: string, // Date?
   },
   id: string,
-}
+};
 declare type LivestreamReplayData = Array<LivestreamReplayItem>;
 
 declare type LivestreamState = {
@@ -29,7 +29,8 @@ declare type LivestreamState = {
   activeLivestreamsLastFetchedDate: number,
   activeLivestreamsLastFetchedOptions: {},
   activeLivestreamInitialized: boolean,
-}
+  socketConnectionById: { [id: string]: { connected: ?boolean, sub_category: ?string } },
+};
 
 declare type LivestreamInfo = {
   [/* creatorId */ string]: {
@@ -38,5 +39,5 @@ declare type LivestreamInfo = {
     creatorId: string,
     claimId: string,
     claimUri: string,
-  }
-}
+  },
+};

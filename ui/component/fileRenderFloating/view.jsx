@@ -71,12 +71,13 @@ type Props = {
   doSetPlayingUri: ({ uri?: ?string }) => void,
   isCurrentClaimLive?: boolean,
   videoAspectRatio: number,
-  socketConnected: boolean,
+  socketConnection: { connected: ?boolean },
   isLivestreamClaim: boolean,
   geoRestriction: ?GeoRestriction,
   appDrawerOpen: boolean,
   doCommentSocketConnect: (string, string, string) => void,
   doCommentSocketDisconnect: (string, string) => void,
+  doClearPlayingUri: () => void,
 };
 
 export default function FileRenderFloating(props: Props) {
@@ -97,7 +98,7 @@ export default function FileRenderFloating(props: Props) {
     claimWasPurchased,
     nextListUri,
     previousListUri,
-    socketConnected,
+    socketConnection,
     isLivestreamClaim,
     doFetchRecommendedContent,
     doUriInitiatePlay,
@@ -108,6 +109,7 @@ export default function FileRenderFloating(props: Props) {
     appDrawerOpen,
     doCommentSocketConnect,
     doCommentSocketDisconnect,
+    doClearPlayingUri,
   } = props;
 
   const isMobile = useIsMobile();
@@ -235,14 +237,25 @@ export default function FileRenderFloating(props: Props) {
 
     // Only connect if not yet connected, so for example clicked on an embed instead of accessing
     // from the Livestream page
-    if (!socketConnected) doCommentSocketConnect(uri, channelName, claimId);
+    if (!socketConnection?.connected) {
+      doCommentSocketConnect(uri, channelName, claimId);
+    }
 
     // This will be used to disconnect for every case, since this is the main player component
-    return () => doCommentSocketDisconnect(claimId, channelName);
-
-    // only listen to socketConnected on initial mount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [channelUrl, claimId, doCommentSocketConnect, doCommentSocketDisconnect, isCurrentClaimLive, uri]);
+    return () => {
+      if (socketConnection?.connected) {
+        doCommentSocketDisconnect(claimId, channelName);
+      }
+    };
+  }, [
+    channelUrl,
+    claimId,
+    doCommentSocketConnect,
+    doCommentSocketDisconnect,
+    isCurrentClaimLive,
+    socketConnection,
+    uri,
+  ]);
 
   React.useEffect(() => {
     if (playingPrimaryUri || playingUrl || noPlayerHeight) {
@@ -309,6 +322,12 @@ export default function FileRenderFloating(props: Props) {
       }
     };
   }, [playingUrl]);
+
+  React.useEffect(() => {
+    if (!primaryUri && !floatingPlayerEnabled && playingUrl && !playingUriSource) {
+      doClearPlayingUri();
+    }
+  }, [doClearPlayingUri, floatingPlayerEnabled, playingUriSource, playingUrl, primaryUri]);
 
   if (
     geoRestriction ||

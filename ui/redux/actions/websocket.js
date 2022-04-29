@@ -154,31 +154,30 @@ export const doCommentSocketConnect = (uri, channelName, claimId, subCategory) =
         dispatch(doFetchChannelLiveStatus(channel_id));
       }
     },
-    'comment'
+    `${subCategory || COMMENT_WS_SUBCATEGORIES.VIEWER} comment`
   );
 
-  dispatch(doSetSocketConnected(true));
+  dispatch(doSetSocketConnection(true, claimId, subCategory || COMMENT_WS_SUBCATEGORIES.VIEWER));
 };
 
-export const doCommentSocketDisconnect = (claimId, channelName) => (dispatch) => {
-  const url = getCommentSocketUrl(claimId, channelName);
+export const doCommentSocketDisconnect = (claimId, channelName, subCategory) => (dispatch) => {
+  const url =
+    subCategory === COMMENT_WS_SUBCATEGORIES.COMMENTER
+      ? getCommentSocketUrlForCommenter(claimId, channelName)
+      : getCommentSocketUrl(claimId, channelName);
 
   dispatch(doSocketDisconnect(url));
-  dispatch(doSetSocketConnected(false));
+  dispatch(doSetSocketConnection(false, claimId, subCategory));
 };
 
-export const doCommentSocketConnectAsCommenter = (uri, channelName, claimId) => (dispatch) => {
+export const doCommentSocketConnectAsCommenter = (uri, channelName, claimId) => (dispatch) =>
   dispatch(doCommentSocketConnect(uri, channelName, claimId, COMMENT_WS_SUBCATEGORIES.COMMENTER));
-};
 
-export const doCommentSocketDisconnectAsCommenter = (claimId, channelName) => (dispatch) => {
-  const url = getCommentSocketUrlForCommenter(claimId, channelName);
+export const doCommentSocketDisconnectAsCommenter = (claimId, channelName) => (dispatch) =>
+  dispatch(doCommentSocketDisconnect(claimId, channelName, COMMENT_WS_SUBCATEGORIES.COMMENTER));
 
-  dispatch(doSocketDisconnect(url));
-};
-
-export const doSetSocketConnected = (connected) => (dispatch) =>
+export const doSetSocketConnection = (connected, id, subCategory) => (dispatch) =>
   dispatch({
-    type: ACTIONS.COMMENT_SOCKET_CONNECTED,
-    data: { connected },
+    type: ACTIONS.SOCKET_CONNECTED_BY_ID,
+    data: { connected, sub_category: subCategory, id },
   });

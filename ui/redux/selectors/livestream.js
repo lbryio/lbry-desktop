@@ -12,7 +12,13 @@ export const selectViewersById = (state: State) => selectState(state).viewersByI
 export const selectActiveLivestreams = (state: State) => selectState(state).activeLivestreams;
 export const selectFetchingActiveLivestreams = (state: State) => selectState(state).fetchingActiveLivestreams;
 export const selectActiveLivestreamInitialized = (state: State) => selectState(state).activeLivestreamInitialized;
-export const selectCommentSocketConnected = (state: State) => selectState(state).commentSocketConnected;
+export const selectSocketConnectionById = (state: State) => selectState(state).socketConnectionById;
+
+export const selectSocketConnectionForId = createSelector(
+  (state, claimId) => claimId,
+  selectSocketConnectionById,
+  (claimId, byId) => claimId && byId[claimId]
+);
 
 // select non-pending claims without sources for given channel
 export const makeSelectLivestreamsForChannelId = (channelId: string) =>
