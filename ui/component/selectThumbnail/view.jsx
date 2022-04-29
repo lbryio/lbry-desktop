@@ -69,10 +69,10 @@ function SelectThumbnail(props: Props) {
 
   function handleThumbnailChange(e: SyntheticInputEvent<*>) {
     const newThumbnail = e.target.value.replace(' ', '');
-
     if (updateThumbnailParams) {
       updateThumbnailParams({ thumbnail_url: newThumbnail });
-    } else {
+    }
+    if (updatePublishForm) {
       updatePublishForm({ thumbnail: newThumbnail });
     }
   }
@@ -108,16 +108,22 @@ function SelectThumbnail(props: Props) {
         style={{ display: 'none' }}
         src={thumbnail}
         alt={__('Thumbnail Preview')}
-        onError={() =>
-          publishForm
-            ? updatePublishForm({ thumbnailError: true })
-            : updateThumbnailParams({ thumbnail_error: Boolean(thumbnail) })
-        }
-        onLoad={() =>
-          publishForm
-            ? updatePublishForm({ thumbnailError: !isUrlInput })
-            : updateThumbnailParams({ thumbnail_error: !isUrlInput })
-        }
+        onError={() => {
+          if (updateThumbnailParams) {
+            updateThumbnailParams({ thumbnail_error: Boolean(thumbnail) });
+          }
+          if (publishForm) {
+            updatePublishForm({ thumbnailError: true });
+          }
+        }}
+        onLoad={() => {
+          if (updateThumbnailParams) {
+            updateThumbnailParams({ thumbnail_error: !isUrlInput });
+          }
+          if (publishForm) {
+            updatePublishForm({ thumbnailError: !isUrlInput });
+          }
+        }}
       />
     </div>
   );
@@ -157,7 +163,7 @@ function SelectThumbnail(props: Props) {
                     onFileChosen={(file) =>
                       openModal(MODALS.CONFIRM_THUMBNAIL_UPLOAD, {
                         file,
-                        cb: (url) => !publishForm && updateThumbnailParams({ thumbnail_url: url }),
+                        cb: (url) => updateThumbnailParams && updateThumbnailParams({ thumbnail_url: url }),
                       })
                     }
                   />

@@ -23,6 +23,7 @@ import CollectionForm from './view';
 import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
 import { doSetActiveChannel, doSetIncognito } from 'redux/actions/app';
 import { doCollectionEdit } from 'redux/actions/collections';
+import { doResetThumbnailStatus } from 'redux/actions/publish';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
@@ -52,6 +53,7 @@ const perform = (dispatch, ownProps) => ({
   setActiveChannel: (claimId) => dispatch(doSetActiveChannel(claimId)),
   setIncognito: (incognito) => dispatch(doSetIncognito(incognito)),
   doCollectionEdit: (params) => dispatch(doCollectionEdit(ownProps.collectionId, params)),
+  resetThumbnailStatus: () => dispatch(doResetThumbnailStatus()),
 });
 
 export default connect(select, perform)(CollectionForm);
