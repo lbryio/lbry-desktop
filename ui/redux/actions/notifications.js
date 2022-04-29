@@ -5,6 +5,7 @@ import { Lbryio } from 'lbryinc';
 import { v4 as uuid } from 'uuid';
 import {
   selectNotifications,
+  selectNotificationsLocal,
   selectNotificationsFiltered,
   selectNotificationCategories,
 } from 'redux/selectors/notifications';
@@ -182,5 +183,38 @@ export function doLbryioDeleteNotification(notificationId: number) {
       .catch(() => {
         dispatch(doToast({ isError: true, message: __('Unable to delete this right now. Please try again later.') }));
       });
+  };
+}
+
+export function doLocalDeleteNotification(notificationId: number) {
+  return (dispatch: Dispatch) => {
+    dispatch({ type: ACTIONS.LOCAL_NOTIFICATION_DELETE_COMPLETED, data: { notificationId } });
+  };
+}
+
+export function doLocalSeeNotification(notificationIds: Array<string>) {
+  return (dispatch: Dispatch) => {
+    dispatch({
+      type: ACTIONS.LOCAL_NOTIFICATION_SEEN_COMPLETED,
+      data: {
+        notificationIds,
+      },
+    });
+  };
+}
+
+export function doLocalSeeAllNotifications() {
+  return (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const notifications = selectNotificationsLocal(state);
+
+    if (!notifications) {
+      return;
+    }
+
+    const getUnseenIds = (list) => list.filter((n) => !n.is_seen).map((n) => n.id);
+    const unseenIds = Array.from(new Set([...getUnseenIds(notifications)]));
+
+    dispatch(doLbryioNotificationsMarkSeen(unseenIds));
   };
 }

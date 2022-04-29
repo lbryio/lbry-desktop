@@ -1,7 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { parseURI } from 'util/lbryURI';
 import { YOUTUBE_STATUSES } from 'lbryinc';
 import Page from 'component/page';
@@ -26,6 +26,7 @@ import I18nMessage from 'component/i18nMessage';
 import TruncatedText from 'component/common/truncated-text';
 // $FlowFixMe cannot resolve ...
 import PlaceholderTx from 'static/img/placeholderTx.gif';
+import { FormField } from 'component/common/form-components/form-field';
 
 export const PAGE_VIEW_QUERY = `view`;
 export const DISCUSSION_PAGE = `discussion`;
@@ -36,6 +37,7 @@ const PAGE = {
   ABOUT: 'about',
   DISCUSSION: DISCUSSION_PAGE,
   EDIT: 'edit',
+  SUBSCRIPTION: 'subscription',
 };
 
 type Props = {
@@ -159,6 +161,9 @@ function ChannelPage(props: Props) {
     case PAGE.DISCUSSION:
       tabIndex = 3;
       break;
+    case PAGE.SUBSCRIPTION:
+      tabIndex = 4;
+      break;
     default:
       tabIndex = 0;
       break;
@@ -174,8 +179,10 @@ function ChannelPage(props: Props) {
       search += `${PAGE_VIEW_QUERY}=${PAGE.LISTS}`;
     } else if (newTabIndex === 2) {
       search += `${PAGE_VIEW_QUERY}=${PAGE.ABOUT}`;
-    } else {
+    } else if (newTabIndex === 3) {
       search += `${PAGE_VIEW_QUERY}=${PAGE.DISCUSSION}`;
+    } else {
+      search += `${PAGE_VIEW_QUERY}=${PAGE.SUBSCRIPTION}`;
     }
 
     push(`${url}${search}`);
@@ -286,6 +293,7 @@ function ChannelPage(props: Props) {
             <Tab disabled={editing}>{__('Playlists')}</Tab>
             <Tab>{editing ? __('Editing Your Channel') : __('About --[tab title in Channel Page]--')}</Tab>
             <Tab disabled={editing}>{__('Community')}</Tab>
+            <Tab disabled={editing}>{__('Subscription')}</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -315,6 +323,27 @@ function ChannelPage(props: Props) {
             </TabPanel>
             <TabPanel>
               {(discussionWasMounted || currentView === PAGE.DISCUSSION) && <ChannelDiscussion uri={uri} />}
+            </TabPanel>
+            <TabPanel>
+              <div className="card">
+                <section className="section card--section">
+                  <Fragment>
+                    <div className="media__info-text">
+                      <label>{__('New Content Notifications')}</label>
+                      <FormField name={'notify'} type={'checkbox'} checked />
+                    </div>
+
+                    <div className="media__info-text">
+                      <label>{__('Download and Host new content')}</label>
+                      <FormField name={'host'} type={'checkbox'} checked />
+                    </div>
+                    <div className="media__info-text">
+                      <label>{__('Items to Host')}</label>
+                      <FormField name={'host_count'} type={'number'} value={3} />
+                    </div>
+                  </Fragment>
+                </section>
+              </div>
             </TabPanel>
           </TabPanels>
         </Tabs>

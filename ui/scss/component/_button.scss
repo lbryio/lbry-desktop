@@ -710,14 +710,11 @@ svg + .button__label {
   }
 }
 // bring back special button-following style later
-//.button-following {
-//  color: var(--color-primary-contrast) !important;
-//  //background-color: rgba(var(--color-primary-dynamic),0.5) !important;
-//  background-color: rgba(125, 125, 125, 0.5) !important;
-//  .icon {
-//    stroke: var(--color-primary-contrast) !important;
-//  }
-//}
+.button-following {
+  .icon {
+    stroke: var(--color-text) !important;
+  }
+}
 
 .recommended-content__bubble {
   // margin-top: var(--spacing-xs);

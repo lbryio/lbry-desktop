@@ -1,7 +1,4 @@
 // @flow
-// import 'scss/component/_header.scss'; // ody codesplits this; no.
-
-import { ENABLE_UI_NOTIFICATIONS } from 'config';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
@@ -15,14 +12,11 @@ type HeaderMenuButtonProps = {
   authenticated: boolean,
   automaticDarkModeEnabled: boolean,
   currentTheme: string,
-  user: ?User,
   handleThemeToggle: (boolean, string) => void,
 };
 
 export default function HeaderMenuButtons(props: HeaderMenuButtonProps) {
-  const { automaticDarkModeEnabled, currentTheme, user, handleThemeToggle } = props;
-
-  const notificationsEnabled = ENABLE_UI_NOTIFICATIONS || (user && user.experimental_ui);
+  const { automaticDarkModeEnabled, currentTheme, handleThemeToggle } = props;
 
   return (
     <div className="header__buttons">
@@ -39,7 +33,7 @@ export default function HeaderMenuButtons(props: HeaderMenuButtonProps) {
         </MenuList>
       </Menu>
 
-      {notificationsEnabled && <NotificationHeaderButton />}
+      <NotificationHeaderButton />
 
       <Menu>
         <Tooltip title={__('Settings')}>

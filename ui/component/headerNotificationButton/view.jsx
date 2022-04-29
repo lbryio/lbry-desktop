@@ -1,7 +1,4 @@
 // @flow
-// import 'scss/component/_header.scss'; // ody codesplits this; no. REMOVE THESE
-
-import { ENABLE_UI_NOTIFICATIONS } from 'config';
 import { useHistory } from 'react-router';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
@@ -13,22 +10,21 @@ import Tooltip from 'component/common/tooltip';
 
 type Props = {
   unseenCount: number,
-  user: ?User,
+  unseenLocalCount: number,
   doLbryioSeeAllNotifications: () => void,
+  doLocalSeeAllNotifications: () => void,
 };
 
 export default function NotificationHeaderButton(props: Props) {
-  const { unseenCount, user, doLbryioSeeAllNotifications } = props;
+  const { unseenCount, unseenLocalCount, doLbryioSeeAllNotifications, doLocalSeeAllNotifications } = props;
 
   const { push } = useHistory();
-  const notificationsEnabled = ENABLE_UI_NOTIFICATIONS || (user && user.experimental_ui);
 
   function handleMenuClick() {
     if (unseenCount > 0) doLbryioSeeAllNotifications();
+    if (unseenLocalCount > 0) doLocalSeeAllNotifications();
     push(`/$/${PAGES.NOTIFICATIONS}`);
   }
-
-  if (!notificationsEnabled) return null;
 
   return (
     <Tooltip title={__('Notifications')}>

@@ -4,6 +4,7 @@ import { handleActions } from 'util/redux-utils';
 
 const defaultState: NotificationState = {
   notifications: [],
+  localNotifications: [],
   notificationsFiltered: [],
   notificationCategories: undefined,
   fetchingNotifications: false,
@@ -130,6 +131,39 @@ export default handleActions(
         ...state,
         notifications: deleteId(notifications, notificationId),
         notificationsFiltered: deleteId(notificationsFiltered, notificationId),
+      };
+    },
+
+    [ACTIONS.LOCAL_NOTIFICATION_DELETE_COMPLETED]: (state, action) => {
+      const { localNotifications } = state;
+      const { notificationId } = action.data;
+
+      const deleteId = (list, id) => {
+        return localNotifications.filter((n) => n.id !== id);
+      };
+
+      return {
+        ...state,
+        localNotifications: deleteId(localNotifications, notificationId),
+      };
+    },
+
+    [ACTIONS.LOCAL_NOTIFICATION_SEEN_COMPLETED]: (state, action) => {
+      const { localNotifications } = state;
+      const { notificationIds } = action.data;
+
+      const markIdsAsSeen = (list, ids) => {
+        return list.map((n) => {
+          if (ids.includes(n.id)) {
+            return { ...n, is_seen: true };
+          }
+          return n;
+        });
+      };
+
+      return {
+        ...state,
+        localNotifications: markIdsAsSeen(localNotifications, notificationIds),
       };
     },
 

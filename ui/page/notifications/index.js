@@ -15,6 +15,7 @@ import {
   doLbryioSeeAllNotifications,
 } from 'redux/actions/notifications';
 import NotificationsPage from './view';
+import { selectUser } from 'redux/selectors/user';
 
 const select = (state) => ({
   notifications: selectNotifications(state),
@@ -24,6 +25,7 @@ const select = (state) => ({
   unreadCount: selectUnreadNotificationCount(state),
   unseenCount: selectUnseenNotificationCount(state),
   activeChannel: selectActiveChannelClaim(state),
+  user: selectUser(state),
 });
 
 export default connect(select, {

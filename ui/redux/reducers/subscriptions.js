@@ -6,9 +6,16 @@ import { handleActions } from 'util/redux-utils';
 const defaultState: SubscriptionState = {
   subscriptions: [], // Deprecated
   following: [],
+  autoDownloads: {},
   loading: false,
   firstRunCompleted: false,
 };
+
+/*
+For each channel, track number to keep downloaded (number), downloads (Array<{id, releaseTime}>)
+  AutoDownloadById
+  { channel_id: { count: n, downloads: [ { claimId: xyz, releaseTime: 123 ], ... } }
+ */
 
 export default handleActions(
   {
@@ -61,19 +68,6 @@ export default handleActions(
         following: newFollowing,
       };
     },
-    [ACTIONS.FETCH_SUBSCRIPTIONS_START]: (state: SubscriptionState): SubscriptionState => ({
-      ...state,
-      loading: true,
-    }),
-    [ACTIONS.FETCH_SUBSCRIPTIONS_FAIL]: (state: SubscriptionState): SubscriptionState => ({
-      ...state,
-      loading: false,
-    }),
-    [ACTIONS.FETCH_SUBSCRIPTIONS_SUCCESS]: (state: SubscriptionState, action): SubscriptionState => ({
-      ...state,
-      loading: false,
-      subscriptions: action.data,
-    }),
     [ACTIONS.SET_VIEW_MODE]: (state: SubscriptionState, action): SubscriptionState => ({
       ...state,
       viewMode: action.data,

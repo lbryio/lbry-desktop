@@ -14,6 +14,7 @@ import { RULE } from 'constants/notifications';
 
 type Props = {
   notifications: Array<Notification>,
+  localNotifications: Array<Notification>,
   notificationsFiltered: Array<Notification>,
   notificationCategories: Array<NotificationCategory>,
   fetching: boolean,
@@ -24,12 +25,14 @@ type Props = {
   doLbryioNotificationList: (?Array<string>) => void,
   activeChannel: ?ChannelClaim,
   doCommentReactList: (Array<string>) => Promise<any>,
+  user: User,
 };
 
 export default function NotificationsPage(props: Props) {
   const {
     notifications,
     notificationsFiltered,
+    localNotifications,
     fetching,
     unreadCount,
     unseenCount,
@@ -39,7 +42,10 @@ export default function NotificationsPage(props: Props) {
     notificationCategories,
     activeChannel,
     doCommentReactList,
+    user,
   } = props;
+  // const localCategories = [{ name: 'New Content', types: ['new_content'] }];
+  const legacyNotificationsEnabled = user && user.experimental_ui;
   const initialFetchDone = useFetched(fetching);
   const [name, setName] = usePersistedState('notifications--rule', NOTIFICATIONS.NOTIFICATION_NAME_ALL);
   const isFiltered = name !== NOTIFICATIONS.NOTIFICATION_NAME_ALL;
@@ -113,7 +119,7 @@ export default function NotificationsPage(props: Props) {
         <div className="claim-list__alt-controls--wrap">
           {fetching && <Spinner type="small" />}
 
-          {unreadCount > 0 && (
+          {legacyNotificationsEnabled && unreadCount > 0 && (
             <Button
               icon={ICONS.EYE}
               onClick={doLbryioNotificationsMarkRead}
@@ -121,7 +127,10 @@ export default function NotificationsPage(props: Props) {
               label={__('Mark all as read')}
             />
           )}
-          {notificationCategories && (
+          {!legacyNotificationsEnabled && unreadCount > 0 && (
+            <Button icon={ICONS.EYE} onClick={() => alert('clear')} button="secondary" label={__('Mark all as read')} />
+          )}
+          {legacyNotificationsEnabled && notificationCategories && (
             <FormField
               className="notification__filter"
               type="select"
@@ -140,7 +149,7 @@ export default function NotificationsPage(props: Props) {
           )}
         </div>
       </div>
-      {list && list.length > 0 && !(isFiltered && fetching) ? (
+      {legacyNotificationsEnabled && list && list.length > 0 && !(isFiltered && fetching) && (
         <div className="card">
           <div className="notification_list">
             {list.map((notification) => {
@@ -148,7 +157,17 @@ export default function NotificationsPage(props: Props) {
             })}
           </div>
         </div>
-      ) : (
+      )}
+      {!legacyNotificationsEnabled && localNotifications && localNotifications.length > 0 && (
+        <div className="card">
+          <div className="notification_list">
+            {localNotifications.map((notification) => {
+              return <Notification key={notification.id} notification={notification} local />;
+            })}
+          </div>
+        </div>
+      )}
+      {!(legacyNotificationsEnabled && list && list.length > 0 && !(isFiltered && fetching)) && (
         <div className="main--empty">
           {!fetching && (
             <Yrbl
