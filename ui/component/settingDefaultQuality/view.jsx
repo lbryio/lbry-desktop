@@ -32,11 +32,9 @@ export default function SettingDefaultQuality(props: Props) {
       value={defaultQuality || valueRef.current}
     >
       {dropdownOptions.map((option) => {
-        const qualityStr = typeof option === 'number' ? option + 'p' : toCapitalCase(option);
-
         return (
-          <option key={'quality' + qualityStr} value={option}>
-            {__(qualityStr)}
+          <option key={String(option)} value={option}>
+            {typeof option === 'number' ? `${option}p` : __(toCapitalCase(option))}
           </option>
         );
       })}
