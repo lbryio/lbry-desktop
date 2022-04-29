@@ -308,6 +308,15 @@ export function doFetchLanguage(language) {
   };
 }
 
+function populateCategoryTitles(categories) {
+  if (categories) {
+    window.CATEGORY_PAGE_TITLE = {};
+    Object.values(categories).forEach((x) => {
+      window.CATEGORY_PAGE_TITLE[x.name] = x.label;
+    });
+  }
+}
+
 export function doFetchHomepages() {
   return (dispatch) => {
     // -- Use this env flag to use local homepage data. Otherwise, it will grab from `/$/api/content/v*/get`.
@@ -329,6 +338,7 @@ export function doFetchHomepages() {
       }
 
       window.homepages = v2;
+      populateCategoryTitles(window.homepages?.en?.categories);
       dispatch({ type: ACTIONS.FETCH_HOMEPAGES_DONE });
       return;
     }
@@ -339,6 +349,7 @@ export function doFetchHomepages() {
       .then((json) => {
         if (json?.status === 'success' && json?.data) {
           window.homepages = json.data;
+          populateCategoryTitles(window.homepages?.en?.categories);
           dispatch({ type: ACTIONS.FETCH_HOMEPAGES_DONE });
         } else {
           dispatch({ type: ACTIONS.FETCH_HOMEPAGES_FAILED });

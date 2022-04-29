@@ -226,8 +226,16 @@ function AppRouter(props: Props) {
 
   useEffect(() => {
     const getDefaultTitle = (pathname: string) => {
-      const title = pathname.startsWith('/$/') ? PAGE_TITLE[pathname.substring(3)] : '';
-      return __(title) || (IS_WEB ? SITE_TITLE : 'Odysee');
+      let title = '';
+      if (pathname.startsWith('/$/')) {
+        const name = pathname.substring(3);
+        if (window.CATEGORY_PAGE_TITLE && window.CATEGORY_PAGE_TITLE[name]) {
+          title = window.CATEGORY_PAGE_TITLE[name];
+        } else {
+          title = PAGE_TITLE[name];
+        }
+      }
+      return __(title) || SITE_TITLE || 'Odysee';
     };
 
     if (uri) {
