@@ -62,12 +62,14 @@ const SMALL_TIP = 'TIPS/png/with%20bordersmall$_tip.png';
 const TIP_HAND_FLIP = 'TIPS/png/tip_hand_flip_$%20_with_border.png';
 const TIP_HAND_FLIP_COIN = 'TIPS/png/tip_hand_flip_coin_with_border.png';
 const TIP_HAND_FLIP_LBC = 'TIPS/png/tip_hand_flip_lbc_with_border.png';
+const DOGE = 'MISC/PNG/doge.png';
 
 export const FREE_GLOBAL_STICKERS = [
   buildSticker('CAT', CAT_BORDER),
   buildSticker('FAIL', FAIL_BORDER),
   buildSticker('HYPE', HYPE_BORDER),
   buildSticker('PANTS_1', PANTS_1_WITH_FRAME),
+  buildSticker('DOGE', DOGE),
   // buildSticker('XMAS', XMAS),
   buildSticker('FIRE', FIRE_WITH_FRAME),
   buildSticker('SLIME', SLIME_WITH_FRAME),
