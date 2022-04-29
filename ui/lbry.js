@@ -4,11 +4,9 @@ import { NO_AUTH, X_LBRY_AUTH_TOKEN } from 'constants/token';
 require('proxy-polyfill');
 
 const CHECK_DAEMON_STARTED_TRY_NUMBER = 200;
-//
+
 // Basic LBRY sdk connection config
 // Offers a proxy to call LBRY sdk methods
-
-//
 const Lbry = {
   isConnected: false,
   connectPromise: null,
@@ -177,6 +175,53 @@ const Lbry = {
     }),
 };
 
+const ApiFailureMgr = {
+  MAX_FAILED_ATTEMPTS: 5,
+  MAX_FAILED_GAP_MS: 500,
+  BLOCKED_DURATION_MS: 60000,
+  METHODS_TO_LOG: ['claim_search'], // Can check all, but narrow do claim_search only for now.
+
+  failureTimestamps: {}, // { [key: string]: Array<timestamps: number> }
+
+  logFailure: function (method: string, params: ?{}, timestamp: number) {
+    if (this.isListedMethod(method)) {
+      const key = this.getKey(method, params);
+      const ts = this.failureTimestamps[key] || [];
+      ts.push(timestamp);
+      this.failureTimestamps[key] = ts;
+    }
+  },
+
+  logSuccess: function (method: string, params: ?{}) {
+    if (this.isListedMethod(method)) {
+      const key = this.getKey(method, params);
+      delete this.failureTimestamps[key];
+    }
+  },
+
+  isFailingAndShouldDrop: function (method: string, params: ?{}) {
+    if (this.isListedMethod(method)) {
+      const key = this.getKey(method, params);
+      const fts = this.failureTimestamps[key];
+      if (fts && fts.length > this.MAX_FAILED_ATTEMPTS) {
+        const ts2 = fts[fts.length - 1];
+        const ts1 = fts[fts.length - this.MAX_FAILED_ATTEMPTS];
+        const successivelyFailed = ts2 - ts1 < this.MAX_FAILED_GAP_MS;
+        return successivelyFailed && Date.now() - ts2 < this.BLOCKED_DURATION_MS;
+      }
+    }
+    return false;
+  },
+
+  getKey: function (method: string, params: ?{}) {
+    return method + '/' + JSON.stringify(params || {});
+  },
+
+  isListedMethod: function (method: string) {
+    return this.METHODS_TO_LOG.includes(method);
+  },
+};
+
 function checkAndParse(response: Response, method: string) {
   if (!response.ok) {
     // prettier-ignore
@@ -236,6 +281,10 @@ export function apiCall(method: string, params: ?{}, resolve: Function, reject: 
     }),
   };
 
+  if (ApiFailureMgr.isFailingAndShouldDrop(method, params)) {
+    return Promise.reject('Dropped due to successive failures.');
+  }
+
   const connectionString = Lbry.methodsUsingAlternateConnectionString.includes(method)
     ? Lbry.alternateConnectionString
     : Lbry.daemonConnectionString;
@@ -244,9 +293,18 @@ export function apiCall(method: string, params: ?{}, resolve: Function, reject: 
     .then((response) => checkAndParse(response, method))
     .then((response) => {
       const error = response.error || (response.result && response.result.error);
-      return error ? reject(error) : resolve(response.result);
+      if (error) {
+        ApiFailureMgr.logFailure(method, params, counter);
+        return reject(error);
+      } else {
+        ApiFailureMgr.logSuccess(method);
+        return resolve(response.result);
+      }
     })
-    .catch(reject);
+    .catch((err) => {
+      ApiFailureMgr.logFailure(method, params, counter);
+      return reject(err);
+    });
 }
 
 function daemonCallWithResult(
