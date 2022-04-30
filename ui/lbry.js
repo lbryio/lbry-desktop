@@ -1,5 +1,7 @@
 // @flow
+import { FETCH_TIMEOUT } from 'constants/errors';
 import { NO_AUTH, X_LBRY_AUTH_TOKEN } from 'constants/token';
+import fetchWithTimeout from 'util/fetch';
 
 require('proxy-polyfill');
 
@@ -222,21 +224,35 @@ const ApiFailureMgr = {
   },
 };
 
-function checkAndParse(response: Response, method: string) {
-  if (!response.ok) {
+/**
+ * Returns a customized error message for known scenarios.
+ */
+function resolveFetchErrorMsg(method: string, response: Response | string) {
+  if (typeof response === 'object') {
     // prettier-ignore
     switch (response.status) {
       case 504: // Gateway timeout
       case 524: // Cloudflare: a timeout occurred
         switch (method) {
           case 'publish':
-            throw Error(__('[Publish]: Your action timed out, but may have been completed. Refresh and check your Uploads or Wallet page to confirm after a few minutes.'));
+            return __('[Publish]: Your action timed out, but may have been completed. Refresh and check your Uploads or Wallet page to confirm after a few minutes.');
           default:
-            throw Error(`${method}: ${response.statusText} (${response.status})`);
+            return `${method}: ${response.statusText} (${response.status})`;
         }
       default:
-        throw Error(`${method}: ${response.statusText} (${response.status})`);
+        return `${method}: ${response.statusText} (${response.status})`;
     }
+  } else if (response === FETCH_TIMEOUT) {
+    return `${method}: Your action timed out, but may have been completed.`;
+  } else {
+    return `${method}: fetch failed.`;
+  }
+}
+
+function checkAndParse(response: Response, method: string) {
+  if (!response.ok) {
+    const errMsg = resolveFetchErrorMsg(method, response);
+    throw Error(errMsg);
   }
 
   if (response.status >= 200 && response.status < 300) {
@@ -289,7 +305,8 @@ export function apiCall(method: string, params: ?{}, resolve: Function, reject: 
     ? Lbry.alternateConnectionString
     : Lbry.daemonConnectionString;
 
-  return fetch(connectionString + '?m=' + method, options)
+  const SDK_FETCH_TIMEOUT_MS = 60000;
+  return fetchWithTimeout(SDK_FETCH_TIMEOUT_MS, fetch(connectionString + '?m=' + method, options))
     .then((response) => checkAndParse(response, method))
     .then((response) => {
       const error = response.error || (response.result && response.result.error);
@@ -303,7 +320,11 @@ export function apiCall(method: string, params: ?{}, resolve: Function, reject: 
     })
     .catch((err) => {
       ApiFailureMgr.logFailure(method, params, counter);
-      return reject(err);
+       if (err?.message === FETCH_TIMEOUT) {
+        reject(resolveFetchErrorMsg(method, FETCH_TIMEOUT));
+      } else {
+        reject(err);
+      }
     });
 }
 

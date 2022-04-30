@@ -5,12 +5,15 @@
 //   - 'file' binary
 //   - 'json_payload' publish params to be passed to the server's sdk.
 
+import { PUBLISH_TIMEOUT_BUT_LIKELY_SUCCESSFUL } from '../../ui/constants/errors';
 import { X_LBRY_AUTH_TOKEN } from '../../ui/constants/token';
 import { doUpdateUploadAdd, doUpdateUploadProgress, doUpdateUploadRemove } from '../../ui/redux/actions/publish';
 import { LBRY_WEB_PUBLISH_API } from 'config';
 
 const ENDPOINT = LBRY_WEB_PUBLISH_API;
 const ENDPOINT_METHOD = 'publish';
+
+const PUBLISH_FETCH_TIMEOUT_MS = 60000;
 
 export function makeUploadRequest(
   token: string,
@@ -46,6 +49,7 @@ export function makeUploadRequest(
     let xhr = new XMLHttpRequest();
     xhr.open('POST', ENDPOINT);
     xhr.setRequestHeader(X_LBRY_AUTH_TOKEN, token);
+    xhr.timeout = PUBLISH_FETCH_TIMEOUT_MS;
     xhr.responseType = 'json';
     xhr.upload.onprogress = (e) => {
       const percentage = ((e.loaded / e.total) * 100).toFixed(2);
@@ -58,6 +62,10 @@ export function makeUploadRequest(
     xhr.onerror = () => {
       window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
       reject(new Error(__('There was a problem with your upload. Please try again.')));
+    };
+    xhr.ontimeout = () => {
+      window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
+      reject(new Error(PUBLISH_TIMEOUT_BUT_LIKELY_SUCCESSFUL));
     };
     xhr.onabort = () => {
       window.store.dispatch(doUpdateUploadRemove(guid));
