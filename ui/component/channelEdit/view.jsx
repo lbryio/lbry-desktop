@@ -356,6 +356,15 @@ function ChannelForm(props: Props) {
               <Card
                 body={
                   <>
+                    {isNewChannel && (
+                      <Button
+                        button="primary"
+                        label={__('Sync YouTube Channel')}
+                        icon={ICONS.YOUTUBE}
+                        navigate={`/$/${PAGES.YOUTUBE_SYNC}`}
+                      />
+                    )}
+
                     <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">
                       <fieldset-section>
                         <label htmlFor="channel_name">{__('Name')}</label>
