@@ -90,7 +90,7 @@ const PLAYLISTS: SideNavLink = {
 const HISTORY: SideNavLink = {
   title: 'History',
   link: `/$/${PAGES.HISTORY}`,
-  icon: ICONS.EYE,
+  icon: ICONS.WATCHHISTORY,
   hideForUnauth: true,
 };
 

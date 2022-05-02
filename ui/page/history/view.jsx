@@ -44,7 +44,7 @@ export default function HistoryPage(props: Props) {
       <div className={classnames('section card-stack')}>
         <div className="claim-list__header">
           <h1 className="card__title">
-            <Icon icon={ICONS.EYE} style={{ marginRight: 'var(--spacing-s)' }} />
+            <Icon icon={ICONS.WATCHHISTORY} style={{ marginRight: 'var(--spacing-s)' }} />
             {__('Watch History')}
           </h1>
 
