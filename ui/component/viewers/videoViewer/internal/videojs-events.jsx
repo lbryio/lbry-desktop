@@ -17,7 +17,6 @@ const setLabel = (controlBar, childName, label) => {
   }
 };
 
-// $FlowFixMe
 const VideoJsEvents = ({
   tapToUnmuteRef,
   tapToRetryRef,

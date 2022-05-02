@@ -239,8 +239,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     muted: startMuted,
     poster: poster, // thumb looks bad in app, and if autoplay, flashing poster is annoying
     plugins: { eventTracking: true, overlay: OVERLAY.OVERLAY_DATA },
-    // fixes problem of errant CC button showing up on iOS
-    // the true fix here is to fix the m3u8 file, see: https://github.com/lbryio/lbry-desktop/pull/6315
     controlBar: {
       currentTimeDisplay: !isLivestreamClaim,
       timeDivider: !isLivestreamClaim,
