@@ -4,6 +4,7 @@ import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import React, { useEffect, useState, useContext, useCallback } from 'react';
 import { stopContextMenu } from 'util/context-menu';
+import * as Chapters from './internal/chapters';
 import type { Player } from './internal/videojs';
 import VideoJs from './internal/videojs';
 import analytics from 'analytics';
@@ -429,6 +430,8 @@ function VideoViewer(props: Props) {
     if (position && !isLivestreamClaim) {
       player.currentTime(position);
     }
+
+    Chapters.parseAndLoad(player, claim);
 
     playerRef.current = player;
   }, playerReadyDependencyList); // eslint-disable-line

@@ -113,6 +113,7 @@ $control-bar-icon-size: 0.8rem;
 // Tooltip
 .vjs-mouse-display .vjs-time-tooltip {
   color: white;
+  white-space: nowrap;
 }
 
 // Tooltip
@@ -338,4 +339,11 @@ button.vjs-big-play-button {
     // hiding progress control for now
     display: none !important;
   }
+}
+
+.vjs-chapter-marker {
+  position: absolute;
+  height: 100%;
+  background-color: var(--color-error);
+  width: 2px;
 }
