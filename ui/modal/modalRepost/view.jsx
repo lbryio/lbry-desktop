@@ -22,7 +22,7 @@ function ModalRepost(props: Props) {
 
   const urlParams = new URLSearchParams(search);
   const param = urlParams.get('name') || urlParams.get('q') || contentName;
-  const repostTo = param && param[0] === '@' ? param.slice(1) : param;
+  const repostTo = param && (param[0] === '@' ? param.slice(1) : param.replace(/\s/g, '')); // remove spaces
 
   const [contentUri, setContentUri] = React.useState('');
   const [repostUri, setRepostUri] = React.useState('');
