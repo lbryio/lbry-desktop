@@ -33,6 +33,19 @@
   border-top-right-radius: var(--border-radius);
   background-color: var(--color-black);
 
+  .nag--helpful {
+    border-radius: 0px !important;
+    bottom: 0;
+
+    .button {
+      display: inline-block !important;
+    }
+  }
+
+  .nag--inline {
+    top: unset;
+  }
+
   @media (max-width: $breakpoint-small) {
     height: 200px;
   }
