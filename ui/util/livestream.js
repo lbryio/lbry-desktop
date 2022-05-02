@@ -52,6 +52,14 @@ export function getLivestreamUris(
     values = values.filter((v) => !excludedChannelIds.includes(v.creatorId));
   }
 
+  values = values.sort((a, b) => {
+    // $FlowFixMe
+    if (a.viewCount < b.viewCount) return 1;
+    // $FlowFixMe
+    else if (a.viewCount > b.viewCount) return -1;
+    else return 0;
+  });
+
   // $FlowFixMe
   return values.map((v) => v.claimUri);
 }
