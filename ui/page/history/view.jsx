@@ -48,7 +48,7 @@ export default function HistoryPage(props: Props) {
           <h1 className="card__title">
             <Icon icon={ICONS.WATCHHISTORY} style={{ marginRight: 'var(--spacing-s)' }} />
             {__('Watch History')}
-            <Tooltip title={__('Currently, history is only saved in your local browser session')}>
+            <Tooltip title={__('Currently, your watch history is only saved locally.')}>
               <Button className="icon--help" icon={ICONS.HELP} iconSize={14} />
             </Tooltip>
           </h1>
