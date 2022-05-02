@@ -457,6 +457,15 @@ fieldset-group {
   }
 }
 
+.form-field__avatar {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 50%;
+  background-color: var(--color-header-background);
+  padding: var(--spacing-xxs);
+  float: left;
+}
+
 .form-field--price-amount {
   max-width: 6em;
 }
