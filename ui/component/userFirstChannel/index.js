@@ -15,7 +15,7 @@ const select = (state) => ({
 
 const perform = (dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
-  createChannel: (name, amount) => dispatch(doCreateChannel(name, amount)),
+  createChannel: (name, amount, optionalParams) => dispatch(doCreateChannel(name, amount, optionalParams)),
 });
 
 export default connect(select, perform)(UserFirstChannel);

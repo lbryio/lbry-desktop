@@ -11,14 +11,15 @@ import I18nMessage from 'component/i18nMessage';
 import analytics from 'analytics';
 import { sortLanguageMap } from 'util/default-languages';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
-import Gerbil from 'component/channelThumbnail/gerbil.png';
+import Spaceman from 'component/channelThumbnail/spaceman.png';
+import ThumbnailBrokenImage from 'component/selectThumbnail/thumbnail-broken.png';
 import { THUMBNAIL_CDN_SIZE_LIMIT_BYTES } from 'config';
 import * as ICONS from 'constants/icons';
 
 export const DEFAULT_BID_FOR_FIRST_CHANNEL = 0.01;
 
 type Props = {
-  createChannel: (string, number) => Promise<ChannelClaim>,
+  createChannel: (string, number, any) => Promise<ChannelClaim>,
   creatingChannel: boolean,
   createChannelError: string,
   claimingReward: boolean,
@@ -55,6 +56,12 @@ function UserFirstChannel(props: Props) {
   const primaryLanguage = Array.isArray(languageParam) && languageParam.length && languageParam[0];
   const [nameError, setNameError] = useState(undefined);
 
+  var optionalParams = {
+    title: title,
+    thumbnailUrl: params.thumbnailUrl,
+    languages: primaryLanguage,
+  };
+
   function getChannelParams() {
     // fill this in with sdk data
     const channelParams: {
@@ -69,7 +76,7 @@ function UserFirstChannel(props: Props) {
 
   let thumbnailPreview;
   if (!params.thumbnailUrl) {
-    thumbnailPreview = Gerbil;
+    thumbnailPreview = Spaceman;
   } else if (thumbError) {
     thumbnailPreview = ThumbnailBrokenImage;
   } else {
@@ -82,8 +89,27 @@ function UserFirstChannel(props: Props) {
     setThumbError(false);
   }
 
+  function handleLanguageChange(index, code) {
+    let langs = [...languageParam];
+    if (index === 0) {
+      if (code === LANG_NONE) {
+        // clear all
+        langs = [];
+      } else {
+        langs[0] = code;
+      }
+    } else {
+      if (code === LANG_NONE || code === langs[0]) {
+        langs.splice(1, 1);
+      } else {
+        langs[index] = code;
+      }
+    }
+    setParams({ ...params, languages: langs });
+  }
+
   function handleCreateChannel() {
-    createChannel(`@${channel}`, DEFAULT_BID_FOR_FIRST_CHANNEL).then((channelClaim) => {
+    createChannel(`@${channel}`, DEFAULT_BID_FOR_FIRST_CHANNEL, optionalParams).then((channelClaim) => {
       if (channelClaim) {
         analytics.apiLogPublish(channelClaim);
       }
@@ -100,6 +126,11 @@ function UserFirstChannel(props: Props) {
     }
   }
 
+  function handleTitleChange(e) {
+    const { value } = e.target;
+    setTitle(value);
+  }
+
   return (
     <div className="main__channel-creation">
       <Card
@@ -112,6 +143,40 @@ function UserFirstChannel(props: Props) {
         }
         actions={
           <Form onSubmit={handleCreateChannel}>
+            <fieldset-section>
+              <label>Avatar</label>
+              <div className="form-field__avatar_upload">
+                <img className="form-field__avatar" src={thumbnailPreview} />
+                <Button
+                  button="alt"
+                  title={__('Edit')}
+                  onClick={() =>
+                    openModal(MODALS.IMAGE_UPLOAD, {
+                      onUpdate: (thumbnailUrl, isUpload) => handleThumbnailChange(thumbnailUrl, isUpload),
+                      title: __('Edit Thumbnail Image'),
+                      helpText: __('(1:1 ratio, %max_size%MB max)', {
+                        max_size: THUMBNAIL_CDN_SIZE_LIMIT_BYTES / (1024 * 1024),
+                      }),
+                      assetName: __('Thumbnail'),
+                      currentValue: params.thumbnailUrl,
+                    })
+                  }
+                  icon={ICONS.CAMERA}
+                  iconSize={18}
+                />
+              </div>
+            </fieldset-section>
+            <fieldset-section>
+              <FormField
+                autoFocus
+                type="text"
+                name="channel_title2"
+                label={__('Title')}
+                placeholder={__('My Awesome Channel')}
+                value={title}
+                onChange={handleTitleChange}
+              />
+            </fieldset-section>
             <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">
               <fieldset-section>
                 <label htmlFor="auth_first_channel">
@@ -125,7 +190,6 @@ function UserFirstChannel(props: Props) {
               </fieldset-section>
 
               <FormField
-                autoFocus
                 placeholder={__('channel')}
                 type="text"
                 name="auth_first_channel"
@@ -134,37 +198,6 @@ function UserFirstChannel(props: Props) {
                 onChange={handleChannelChange}
               />
             </fieldset-group>
-            <fieldset-section>
-              <FormField
-                type="text"
-                name="channel_title2"
-                label={__('Title')}
-                placeholder={__('My Awesome Channel')}
-                value={title}
-                onChange={handleChannelChange}
-              />
-            </fieldset-section>
-            <fieldset-section>
-              <label>Avatar</label>
-              <img className="form-field__avatar" src={Gerbil} />
-              <Button
-                button="alt"
-                title={__('Edit')}
-                onClick={() =>
-                  openModal(MODALS.IMAGE_UPLOAD, {
-                    onUpdate: (thumbnailUrl, isUpload) => handleThumbnailChange(thumbnailUrl, isUpload),
-                    title: __('Edit Thumbnail Image'),
-                    helpText: __('(1:1 ratio, %max_size%MB max)', {
-                      max_size: THUMBNAIL_CDN_SIZE_LIMIT_BYTES / (1024 * 1024),
-                    }),
-                    assetName: __('Thumbnail'),
-                    currentValue: params.thumbnailUrl,
-                  })
-                }
-                icon={ICONS.CAMERA}
-                iconSize={18}
-              />
-            </fieldset-section>
             <fieldset-section>
               <FormField
                 name="language_select"

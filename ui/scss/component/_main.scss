@@ -1162,6 +1162,17 @@ body {
   margin-left: auto;
   margin-right: auto;
   max-width: 32rem;
+
+  fieldset-section {
+    .form-field__avatar_upload {
+      display: flex;
+      flex-flow: row;
+      align-items: center;
+      .button--alt {
+        margin-left: var(--spacing-s);
+      }
+    }
+  }
 }
 
 // Temp hacks until 'section__actions--no-margin' is generic again.

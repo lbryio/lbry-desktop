@@ -431,6 +431,8 @@ export function doCreateChannel(name: string, amount: number, optionalParams: an
     const state = getState();
     const channelCountOverLimit = selectIsMyChannelCountOverLimit(state);
 
+    console.log('optionalParams: ', optionalParams);
+
     dispatch({
       type: ACTIONS.CREATE_CHANNEL_STARTED,
     });
