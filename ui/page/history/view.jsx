@@ -6,6 +6,7 @@ import Button from 'component/button';
 import classnames from 'classnames';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
+import { YRBL_SAD_IMG_URL } from 'config';
 
 import usePersistedState from 'effects/use-persisted-state';
 
@@ -62,7 +63,14 @@ export default function HistoryPage(props: Props) {
         {history.length > 0 && (
           <ClaimList uris={history} collectionId={collectionId} unavailableUris={unavailableUris} inHistory />
         )}
-        {history.length === 0 && <h2 className="main--empty empty">{__('Nothing here')}</h2>}
+        {history.length === 0 && (
+          <div style={{ textAlign: 'center' }}>
+            <img src={YRBL_SAD_IMG_URL} />
+            <h2 className="main--empty empty" style={{ marginTop: '0' }}>
+              {__('Nothing here')}
+            </h2>
+          </div>
+        )}
       </div>
     </Page>
   );
