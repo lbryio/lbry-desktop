@@ -2317,5 +2317,6 @@
   "Display view progress on thumbnail. This setting will not hide any blockchain activity or downloads.": "Display view progress on thumbnail. This setting will not hide any blockchain activity or downloads.",
   "%anonymous%": "%anonymous%",
   "Anon --[used in <%anonymous% Reposted>]--": "Anon",
+  "This will be visible in a few minutes after you submit this form.": "This will be visible in a few minutes after you submit this form.",
   "--end--": "--end--"
 }

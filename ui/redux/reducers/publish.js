@@ -93,7 +93,7 @@ export const publishReducer = handleActions(
       ...defaultState,
       uri: undefined,
       channel: state.channel,
-      bid: state.bid,
+      bid: state.bid || 0.01,
       optimize: state.optimize,
       language: state.language,
     }),
