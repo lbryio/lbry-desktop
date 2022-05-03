@@ -742,6 +742,14 @@ $actions-z-index: 2;
 }
 
 .channelsPage-wrapper {
+  .section__title {
+    margin-top: var(--spacing-m);
+  }
+  .section__title--margin-bottom {
+    margin-top: 0px;
+    margin-bottom: var(--spacing-m);
+  }
+
   .claim-preview__wrapper--channel {
     position: relative;
     border-radius: var(--border-radius);

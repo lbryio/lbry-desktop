@@ -55,14 +55,18 @@ export default function ChannelsPage(props: Props) {
 
   return (
     <Page className="channelsPage-wrapper">
-      {/* TODO: use variabled spacing */}
-      <h1 className="section__title" style={{ marginBottom: '15px' }}>
-        {__('Active channel')}
-      </h1>
+      <h1 className="section__title section__title--margin-bottom">{__('Active channel')}</h1>
       <ChannelSelector />
 
       <div className="card-stack">
         {hasYoutubeChannels && <YoutubeTransferStatus hideChannelLink />}
+
+        <Button
+          button="primary"
+          label={__('Sync YouTube Channel')}
+          icon={ICONS.YOUTUBE}
+          navigate={`/$/${PAGES.YOUTUBE_SYNC}`}
+        />
 
         {channelUrls && Boolean(channelUrls.length) && (
           <ClaimList
