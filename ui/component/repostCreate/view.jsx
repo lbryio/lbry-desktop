@@ -1,5 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
+import * as PAGES from 'constants/pages';
 import { MINIMUM_PUBLISH_BID, INVALID_NAME_ERROR } from 'constants/claim';
 import React from 'react';
 import Card from 'component/common/card';
@@ -16,6 +17,7 @@ import HelpLink from 'component/common/help-link';
 import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
 import BidHelpText from 'component/publishBid/bid-help-text';
 import Spinner from 'component/spinner';
+import { REPOST_PARAMS } from 'page/repost/view';
 
 type Props = {
   doToast: ({ message: string }) => void,
@@ -42,6 +44,7 @@ type Props = {
   activeChannelClaim: ?ChannelClaim,
   fetchingMyChannels: boolean,
   incognito: boolean,
+  isRepostPage?: boolean,
 };
 
 function RepostCreate(props: Props) {
@@ -68,6 +71,7 @@ function RepostCreate(props: Props) {
     activeChannelClaim,
     fetchingMyChannels,
     incognito,
+    isRepostPage,
   } = props;
 
   const defaultName = name || (claim && claim.name) || '';
@@ -290,6 +294,19 @@ function RepostCreate(props: Props) {
       <Card
         title={__('Repost')}
         className="repost-wrapper"
+        subtitle={
+          isRepostPage ? undefined : (
+            <Button
+              button="link"
+              label={__('Open Repost in new tab')}
+              iconRight={ICONS.EXTERNAL}
+              href={`/$/${PAGES.REPOST_NEW}?${REPOST_PARAMS.FROM}=${encodeURIComponent(uri)}&to=${encodeURIComponent(
+                enteredRepostName
+              )}`}
+              navigateTarget="_blank"
+            />
+          )
+        }
         actions={
           <div>
             <ChannelSelector />

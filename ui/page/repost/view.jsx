@@ -6,7 +6,7 @@ import RepostCreate from 'component/repostCreate';
 import YrblWalletEmpty from 'component/yrblWalletEmpty';
 import useThrottle from 'effects/use-throttle';
 
-const REPOST_PARAMS = {
+export const REPOST_PARAMS = {
   FROM: 'from',
   TO: 'to',
   REDIRECT: 'redirect',
@@ -67,6 +67,7 @@ function RepostPage(props: Props) {
           contentUri={contentUri}
           setContentUri={setContentUri}
           setRepostUri={setRepostUri}
+          isRepostPage
         />
       </div>
     </Page>
