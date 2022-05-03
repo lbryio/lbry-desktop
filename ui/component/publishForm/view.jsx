@@ -30,7 +30,7 @@ import * as PUBLISH_MODES from 'constants/publish_types';
 import { useHistory } from 'react-router';
 import Spinner from 'component/spinner';
 import { toHex } from 'util/hex';
-import { LIVESTREAM_REPLAY_API, NEW_LIVESTREAM_REPLAY_API } from 'constants/livestream';
+import { NEW_LIVESTREAM_REPLAY_API } from 'constants/livestream';
 import PublishStreamReleaseDate from 'component/publishStreamReleaseDate';
 import { SOURCE_NONE } from 'constants/publish_sources';
 
@@ -317,28 +317,7 @@ function PublishForm(props: Props) {
         }
       }
 
-      const responseFromOldApi = await fetch(
-        `${LIVESTREAM_REPLAY_API}/${channelId}?signature=${signedMessage.signature || ''}&signing_ts=${
-          signedMessage.signing_ts || ''
-        }`
-      );
-      const oldData = (await responseFromOldApi.json()).data;
-
-      // TODO: this code could still use some attention, it just chops off oldapi replays, and keeps new ones
-      const amountOfUploadsToRemove = newData.length;
-      let dataToSend = [];
-      if (amountOfUploadsToRemove > 0) {
-        // TODO: use a pure functional method instead
-        oldData.splice(0, amountOfUploadsToRemove);
-
-        dataToSend = newData.concat(oldData);
-      } else if (oldData) {
-        dataToSend = oldData;
-      } else {
-        dataToSend = newData;
-      }
-
-      setLivestreamData(dataToSend);
+      setLivestreamData(newData);
       setCheckingLivestreams(false);
     }
   }
