@@ -83,6 +83,7 @@ const PasswordSetPage = lazyImport(() => import('page/passwordSet' /* webpackChu
 const PublishPage = lazyImport(() => import('page/publish' /* webpackChunkName: "publish" */));
 const ReportContentPage = lazyImport(() => import('page/reportContent' /* webpackChunkName: "reportContent" */));
 const ReportPage = lazyImport(() => import('page/report' /* webpackChunkName: "report" */));
+const RepostNew = lazyImport(() => import('page/repost' /* webpackChunkName: "repost" */));
 const RewardsPage = lazyImport(() => import('page/rewards' /* webpackChunkName: "rewards" */));
 const RewardsVerifyPage = lazyImport(() => import('page/rewardsVerify' /* webpackChunkName: "rewardsVerify" */));
 const SearchPage = lazyImport(() => import('page/search' /* webpackChunkName: "search" */));
@@ -351,6 +352,7 @@ function AppRouter(props: Props) {
         />
         <PrivateRoute {...props} path={`/$/${PAGES.INVITE}`} component={InvitePage} />
         <PrivateRoute {...props} path={`/$/${PAGES.CHANNEL_NEW}`} component={ChannelNew} />
+        <PrivateRoute {...props} path={`/$/${PAGES.REPOST_NEW}`} component={RepostNew} />
         <PrivateRoute {...props} path={`/$/${PAGES.UPLOADS}`} component={FileListPublished} />
         <PrivateRoute {...props} path={`/$/${PAGES.CREATOR_DASHBOARD}`} component={CreatorDashboard} />
         <PrivateRoute {...props} path={`/$/${PAGES.UPLOAD}`} component={PublishPage} />
