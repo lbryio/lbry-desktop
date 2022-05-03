@@ -63,8 +63,7 @@ $control-bar-icon-size: 0.8rem;
   // Load progress color
   .vjs-load-progress,
   .vjs-load-progress div {
-    //background-color: rgba(160, 160, 160, 0.5);
-    background-color: rgba(var(--color-secondary), 0.5);
+    background-color: rgba(255, 255, 255, 0.5);
   }
 
   // Progress Bar Background
