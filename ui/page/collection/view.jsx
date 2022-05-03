@@ -64,9 +64,6 @@ export default function CollectionPage(props: Props) {
     deleteCollection,
   } = props;
 
-  console.log('collection: ', props.collection);
-  console.log('collectionUrls: ', props.collectionUrls);
-
   const {
     replace,
     location: { search },

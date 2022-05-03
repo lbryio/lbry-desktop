@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import { withRouter } from 'react-router-dom';
-import HistoryPage from './view';
+import WatchHistoryPage from './view';
 import {
   selectTitleForUri,
   selectClaimIsMine,
@@ -56,4 +56,4 @@ const perform = (dispatch) => ({
   editCollection: (id, params) => dispatch(doCollectionEdit(id, params)),
 });
 
-export default withRouter(connect(select, perform)(HistoryPage));
+export default withRouter(connect(select, perform)(WatchHistoryPage));

@@ -97,7 +97,7 @@ type Props = {
   dragHandleProps?: any,
   unavailableUris?: Array<string>,
   showMemberBadge?: boolean,
-  inHistory?: boolean,
+  inWatchHistory?: boolean,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -163,7 +163,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     dragHandleProps,
     unavailableUris,
     showMemberBadge,
-    inHistory,
+    inWatchHistory,
   } = props;
 
   const isMobile = useIsMobile();
@@ -214,7 +214,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       ? claim.permanent_url || claim.canonical_url
       : undefined;
   const repostedContentUri = claim && (claim.reposted_claim ? claim.reposted_claim.permanent_url : claim.permanent_url);
-  const [watchHistory, setHistory] = usePersistedState('watch-history', []);
+  const [watchHistory, setWatchHistory] = usePersistedState('watch-history', []);
 
   // Get channel title ( use name as fallback )
   let channelTitle = null;
@@ -285,7 +285,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
 
   function handleOnClick(e) {
     if (onClick) {
-      console.log('click: ', e);
       onClick(e, claim, indexInContainer);
     }
 
@@ -301,7 +300,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     e.stopPropagation();
     if (watchHistory.find((entry) => entry === uri)) {
       watchHistory.splice(watchHistory.indexOf(uri), 1);
-      setHistory(watchHistory);
+      setWatchHistory(watchHistory);
     }
   }
 
@@ -499,7 +498,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
             )}
           </div>
         </div>
-        {inHistory && (
+        {inWatchHistory && (
           <div onClick={(e) => removeFromHistory(e, uri)} className="claim-preview__history-remove">
             <Icon icon={ICONS.REMOVE} />
           </div>

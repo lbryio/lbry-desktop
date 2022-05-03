@@ -3297,7 +3297,7 @@ export const icons = {
       </g>
     </svg>
   ),
-  [ICONS.WATCHHISTORY]: buildIcon(
+  [ICONS.WATCH_HISTORY]: buildIcon(
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
       <path d="M0.6,11.8c0-6,5-11,11-11 M9.6,7.2v9.5l6.9-4.7L9.6,7.2z M-2.1,9.5l2.9,2.9l3.2-2.7 M11.4,23.2 v-0.9 M5.6,21.5L6,20.6 M2.1,16.4l-0.8,0.4 M17,20.8l0.5,0.8 M20.9,16.7l0.8,0.5 M23.1,11l-0.9,0.1 M21,5.2l-0.7,0.5 M16.2,1.2 L15.8,2" />
     </svg>

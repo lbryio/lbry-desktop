@@ -8,11 +8,9 @@ import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 import { YRBL_SAD_IMG_URL } from 'config';
 import Tooltip from 'component/common/tooltip';
-
 import usePersistedState from 'effects/use-persisted-state';
 
 export const PAGE_VIEW_QUERY = 'view';
-// export const EDIT_PAGE = 'edit';
 
 type Props = {
   collectionId: string,
@@ -21,24 +19,18 @@ type Props = {
   thumbnail: string,
   collectionUrls: Array<string>,
   isResolvingCollection: boolean,
-  // isMyClaim: boolean,
-  // isMyCollection: boolean,
-  // claimIsPending: boolean,
-  // collectionHasEdits: boolean,
-  // deleteCollection: (string, string) => void,
-  // editCollection: (string, CollectionEditParams) => void,
   fetchCollectionItems: (string, () => void) => void,
   resolveUris: (string) => void,
   user: ?User,
 };
 
-export default function HistoryPage(props: Props) {
+export default function WatchHistoryPage(props: Props) {
   const { collectionId } = props;
-  const [history, setHistory] = usePersistedState('watch-history', []);
+  const [watchHistory, setWatchHistory] = usePersistedState('watch-history', []);
   const [unavailableUris] = React.useState([]);
 
   function clearHistory() {
-    setHistory([]);
+    setWatchHistory([]);
   }
 
   return (
@@ -46,7 +38,7 @@ export default function HistoryPage(props: Props) {
       <div className={classnames('section card-stack')}>
         <div className="claim-list__header">
           <h1 className="card__title">
-            <Icon icon={ICONS.WATCHHISTORY} style={{ marginRight: 'var(--spacing-s)' }} />
+            <Icon icon={ICONS.WATCH_HISTORY} style={{ marginRight: 'var(--spacing-s)' }} />
             {__('Watch History')}
             <Tooltip title={__('Currently, your watch history is only saved locally.')}>
               <Button className="icon--help" icon={ICONS.HELP} iconSize={14} />
@@ -54,7 +46,7 @@ export default function HistoryPage(props: Props) {
           </h1>
 
           <div className="claim-list__alt-controls--wrap">
-            {history.length > 0 && (
+            {watchHistory.length > 0 && (
               <Button
                 title={__('Clear History')}
                 button="primary"
@@ -64,10 +56,10 @@ export default function HistoryPage(props: Props) {
             )}
           </div>
         </div>
-        {history.length > 0 && (
-          <ClaimList uris={history} collectionId={collectionId} unavailableUris={unavailableUris} inHistory />
+        {watchHistory.length > 0 && (
+          <ClaimList uris={watchHistory} collectionId={collectionId} unavailableUris={unavailableUris} inWatchHistory />
         )}
-        {history.length === 0 && (
+        {watchHistory.length === 0 && (
           <div style={{ textAlign: 'center' }}>
             <img src={YRBL_SAD_IMG_URL} />
             <h2 className="main--empty empty" style={{ marginTop: '0' }}>

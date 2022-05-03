@@ -87,10 +87,10 @@ const PLAYLISTS: SideNavLink = {
   hideForUnauth: true,
 };
 
-const HISTORY: SideNavLink = {
-  title: 'History',
-  link: `/$/${PAGES.HISTORY}`,
-  icon: ICONS.WATCHHISTORY,
+const WATCH_HISTORY: SideNavLink = {
+  title: 'Watch History',
+  link: `/$/${PAGES.WATCH_HISTORY}`,
+  icon: ICONS.WATCH_HISTORY,
   hideForUnauth: true,
 };
 
@@ -536,7 +536,7 @@ function SideNavigation(props: Props) {
               {!showMicroMenu && getLink(WATCH_LATER)}
               {!showMicroMenu && getLink(FAVORITES)}
               {getLink(PLAYLISTS)}
-              {getLink(HISTORY)}
+              {!showMicroMenu && getLink(WATCH_HISTORY)}
             </ul>
 
             <ul

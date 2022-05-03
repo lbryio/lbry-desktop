@@ -152,19 +152,20 @@ function VideoViewer(props: Props) {
   const isFirstRender = React.useRef(true);
   const playerRef = React.useRef(null);
 
-  const [history, setHistory] = usePersistedState('watch-history', []);
+  const [watchHistory, setWatchHistory] = usePersistedState('watch-history', []);
   React.useEffect(() => {
-    if (!history[0] || !history[0].indexOf(claim.permanent_url) !== -1) {
-      if (!history || !history.length) {
-        setHistory([claim.permanent_url]);
+    if (!watchHistory[0] || !watchHistory[0].indexOf(claim.permanent_url) !== -1) {
+      if (!watchHistory || !watchHistory.length) {
+        setWatchHistory([claim.permanent_url]);
       } else {
-        if (history.find((entry) => entry === claim.permanent_url)) {
-          history.splice(history.indexOf(claim.permanent_url), 1);
-          history.unshift(claim.permanent_url);
+        let newWatchHistory = watchHistory;
+        if (newWatchHistory.find((entry) => entry === claim.permanent_url)) {
+          newWatchHistory.splice(newWatchHistory.indexOf(claim.permanent_url), 1);
+          newWatchHistory.unshift(claim.permanent_url);
         } else {
-          history.unshift(claim.permanent_url);
+          newWatchHistory.unshift(claim.permanent_url);
         }
-        setHistory(history);
+        setWatchHistory(newWatchHistory);
       }
     }
   }, [isPlaying]);
