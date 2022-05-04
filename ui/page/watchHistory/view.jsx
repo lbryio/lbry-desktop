@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { useState } from 'react';
 import ClaimList from 'component/claimList';
 import Page from 'component/page';
 import Button from 'component/button';
@@ -8,7 +8,6 @@ import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 import { YRBL_SAD_IMG_URL } from 'config';
 import Tooltip from 'component/common/tooltip';
-import usePersistedState from 'effects/use-persisted-state';
 
 export const PAGE_VIEW_QUERY = 'view';
 
@@ -19,19 +18,31 @@ type Props = {
   thumbnail: string,
   collectionUrls: Array<string>,
   isResolvingCollection: boolean,
+  selectHistory: Array<any>,
+  doClearContentHistoryAll: () => void,
   fetchCollectionItems: (string, () => void) => void,
   resolveUris: (string) => void,
   user: ?User,
 };
 
 export default function WatchHistoryPage(props: Props) {
-  const { collectionId } = props;
-  const [watchHistory, setWatchHistory] = usePersistedState('watch-history', []);
+  const { collectionId, selectHistory, doClearContentHistoryAll } = props;
+  const [watchHistory, setWatchHistory] = useState([]);
   const [unavailableUris] = React.useState([]);
 
   function clearHistory() {
-    setWatchHistory([]);
+    doClearContentHistoryAll();
   }
+
+  React.useEffect(() => {
+    let newWatchHistory = [];
+    for (let entry of selectHistory) {
+      if (entry.uri.indexOf('@') !== -1) {
+        newWatchHistory.push(entry.uri);
+      }
+    }
+    setWatchHistory(newWatchHistory);
+  }, [selectHistory]);
 
   return (
     <Page className="historyPage-wrapper">

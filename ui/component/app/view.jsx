@@ -141,7 +141,6 @@ function App(props: Props) {
   const [localeSwitchDismissed] = usePersistedState('locale-switch-dismissed', false);
   const [showAnalyticsNag, setShowAnalyticsNag] = usePersistedState('analytics-nag', true);
   const [lbryTvApiStatus, setLbryTvApiStatus] = useState(STATUS_OK);
-  usePersistedState('watch-history', []);
 
   const { pathname, hash, search } = props.location;
   const [upgradeNagClosed, setUpgradeNagClosed] = useState(false);

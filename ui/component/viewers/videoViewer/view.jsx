@@ -29,7 +29,6 @@ import debounce from 'util/debounce';
 import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
 import useInterval from 'effects/use-interval';
 import { lastBandwidthSelector } from './internal/plugins/videojs-http-streaming--override/playlist-selectors';
-import usePersistedState from 'effects/use-persisted-state';
 
 // const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
 // const PLAY_TIMEOUT_LIMIT = 2000;
@@ -73,6 +72,9 @@ type Props = {
   activeLivestreamForChannel: any,
   defaultQuality: ?string,
   doToast: ({ message: string, linkText: string, linkTarget: string }) => void,
+  selectHistory: Array<string>,
+  doSetContentHistoryItem: (uri: string) => void,
+  doClearContentHistoryUri: (uri: string) => void,
 };
 
 /*
@@ -119,6 +121,7 @@ function VideoViewer(props: Props) {
     activeLivestreamForChannel,
     defaultQuality,
     doToast,
+    doSetContentHistoryItem,
   } = props;
 
   const permanentUrl = claim && claim.permanent_url;
@@ -152,21 +155,9 @@ function VideoViewer(props: Props) {
   const isFirstRender = React.useRef(true);
   const playerRef = React.useRef(null);
 
-  const [watchHistory, setWatchHistory] = usePersistedState('watch-history', []);
   React.useEffect(() => {
-    if (!watchHistory[0] || !watchHistory[0].indexOf(claim.permanent_url) !== -1) {
-      if (!watchHistory || !watchHistory.length) {
-        setWatchHistory([claim.permanent_url]);
-      } else {
-        let newWatchHistory = watchHistory;
-        if (newWatchHistory.find((entry) => entry === claim.permanent_url)) {
-          newWatchHistory.splice(newWatchHistory.indexOf(claim.permanent_url), 1);
-          newWatchHistory.unshift(claim.permanent_url);
-        } else {
-          newWatchHistory.unshift(claim.permanent_url);
-        }
-        setWatchHistory(newWatchHistory);
-      }
+    if (isPlaying) {
+      doSetContentHistoryItem(claim.permanent_url);
     }
   }, [isPlaying]);
 

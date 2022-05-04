@@ -10,6 +10,10 @@ import {
   makeSelectChannelForClaimUri,
 } from 'redux/selectors/claims';
 
+import { selectHistory } from 'redux/selectors/content';
+
+import { doClearContentHistoryAll } from 'redux/actions/content';
+
 import {
   makeSelectCollectionForId,
   makeSelectUrlsForCollectionId,
@@ -38,6 +42,7 @@ const select = (state, props) => {
     collectionUrls: makeSelectUrlsForCollectionId(collectionId)(state),
     collectionCount: makeSelectCountForCollectionId(collectionId)(state),
     isResolvingCollection: makeSelectIsResolvingCollectionForId(collectionId)(state),
+    selectHistory: selectHistory(state, uri),
     title: selectTitleForUri(state, uri),
     thumbnail: getThumbnailFromClaim(claim),
     isMyClaim: selectClaimIsMine(state, claim), // or collection is mine?
@@ -51,6 +56,7 @@ const select = (state, props) => {
 };
 
 const perform = (dispatch) => ({
+  doClearContentHistoryAll: () => dispatch(doClearContentHistoryAll()),
   fetchCollectionItems: (claimId, cb) => dispatch(doFetchItemsInCollection({ collectionId: claimId }, cb)), // if this collection is not resolved, resolve it
   deleteCollection: (id, colKey) => dispatch(doCollectionDelete(id, colKey)),
   editCollection: (id, params) => dispatch(doCollectionEdit(id, params)),

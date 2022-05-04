@@ -16,7 +16,13 @@ import {
   doAnalyticsView,
 } from 'redux/actions/app';
 import { selectVolume, selectMute } from 'redux/selectors/app';
-import { savePosition, clearPosition, doPlayUri, doSetPlayingUri } from 'redux/actions/content';
+import {
+  savePosition,
+  clearPosition,
+  doPlayUri,
+  doSetPlayingUri,
+  doSetContentHistoryItem,
+} from 'redux/actions/content';
 import { makeSelectIsPlayerFloating, selectContentPositionForUri, selectPlayingUri } from 'redux/selectors/content';
 import { selectRecommendedContentForUri } from 'redux/selectors/search';
 import VideoViewer from './view';
@@ -104,6 +110,7 @@ const perform = (dispatch) => ({
   doAnalyticsView: (uri, timeToStart) => dispatch(doAnalyticsView(uri, timeToStart)),
   claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
   doToast: (props) => dispatch(doToast(props)),
+  doSetContentHistoryItem: (uri) => dispatch(doSetContentHistoryItem(uri)),
 });
 
 export default withRouter(connect(select, perform)(VideoViewer));

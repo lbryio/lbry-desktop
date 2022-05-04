@@ -37,7 +37,6 @@ import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import CollectionEditButtons from 'component/collectionEditButtons';
 import * as ICONS from 'constants/icons';
 import { useIsMobile } from 'effects/use-screensize';
-import usePersistedState from 'effects/use-persisted-state';
 
 const AbandonedChannelPreview = lazyImport(() =>
   import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */)
@@ -98,6 +97,7 @@ type Props = {
   unavailableUris?: Array<string>,
   showMemberBadge?: boolean,
   inWatchHistory?: boolean,
+  doClearContentHistoryUri: (uri: string) => void,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -164,6 +164,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     unavailableUris,
     showMemberBadge,
     inWatchHistory,
+    doClearContentHistoryUri,
   } = props;
 
   const isMobile = useIsMobile();
@@ -214,7 +215,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       ? claim.permanent_url || claim.canonical_url
       : undefined;
   const repostedContentUri = claim && (claim.reposted_claim ? claim.reposted_claim.permanent_url : claim.permanent_url);
-  const [watchHistory, setWatchHistory] = usePersistedState('watch-history', []);
 
   // Get channel title ( use name as fallback )
   let channelTitle = null;
@@ -298,10 +298,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
 
   function removeFromHistory(e, uri) {
     e.stopPropagation();
-    if (watchHistory.find((entry) => entry === uri)) {
-      watchHistory.splice(watchHistory.indexOf(uri), 1);
-      setWatchHistory(watchHistory);
-    }
+    doClearContentHistoryUri(uri);
   }
 
   useEffect(() => {
