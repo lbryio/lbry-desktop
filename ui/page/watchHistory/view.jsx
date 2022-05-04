@@ -12,21 +12,12 @@ import Tooltip from 'component/common/tooltip';
 export const PAGE_VIEW_QUERY = 'view';
 
 type Props = {
-  collectionId: string,
-  claim: Claim,
-  title: string,
-  thumbnail: string,
-  collectionUrls: Array<string>,
-  isResolvingCollection: boolean,
   selectHistory: Array<any>,
   doClearContentHistoryAll: () => void,
-  fetchCollectionItems: (string, () => void) => void,
-  resolveUris: (string) => void,
-  user: ?User,
 };
 
 export default function WatchHistoryPage(props: Props) {
-  const { collectionId, selectHistory, doClearContentHistoryAll } = props;
+  const { selectHistory, doClearContentHistoryAll } = props;
   const [watchHistory, setWatchHistory] = useState([]);
   const [unavailableUris] = React.useState([]);
 
@@ -67,9 +58,7 @@ export default function WatchHistoryPage(props: Props) {
             )}
           </div>
         </div>
-        {watchHistory.length > 0 && (
-          <ClaimList uris={watchHistory} collectionId={collectionId} unavailableUris={unavailableUris} inWatchHistory />
-        )}
+        {watchHistory.length > 0 && <ClaimList uris={watchHistory} unavailableUris={unavailableUris} inWatchHistory />}
         {watchHistory.length === 0 && (
           <div style={{ textAlign: 'center' }}>
             <img src={YRBL_SAD_IMG_URL} />

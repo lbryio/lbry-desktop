@@ -1,30 +1,9 @@
 import { connect } from 'react-redux';
-
 import { withRouter } from 'react-router-dom';
 import WatchHistoryPage from './view';
-import {
-  selectTitleForUri,
-  selectClaimIsMine,
-  makeSelectClaimIsPending,
-  makeSelectClaimForClaimId,
-  makeSelectChannelForClaimUri,
-} from 'redux/selectors/claims';
-
+import { makeSelectClaimForClaimId, makeSelectChannelForClaimUri } from 'redux/selectors/claims';
 import { selectHistory } from 'redux/selectors/content';
-
 import { doClearContentHistoryAll } from 'redux/actions/content';
-
-import {
-  makeSelectCollectionForId,
-  makeSelectUrlsForCollectionId,
-  makeSelectIsResolvingCollectionForId,
-  makeSelectCollectionIsMine,
-  makeSelectCountForCollectionId,
-  makeSelectEditedCollectionForId,
-} from 'redux/selectors/collections';
-
-import { getThumbnailFromClaim } from 'util/claim';
-import { doFetchItemsInCollection, doCollectionDelete, doCollectionEdit } from 'redux/actions/collections';
 import { selectUser } from 'redux/selectors/user';
 
 const select = (state, props) => {
@@ -36,19 +15,7 @@ const select = (state, props) => {
   const uri = (claim && (claim.canonical_url || claim.permanent_url)) || null;
 
   return {
-    collectionId,
-    claim,
-    collection: makeSelectCollectionForId(collectionId)(state),
-    collectionUrls: makeSelectUrlsForCollectionId(collectionId)(state),
-    collectionCount: makeSelectCountForCollectionId(collectionId)(state),
-    isResolvingCollection: makeSelectIsResolvingCollectionForId(collectionId)(state),
     selectHistory: selectHistory(state, uri),
-    title: selectTitleForUri(state, uri),
-    thumbnail: getThumbnailFromClaim(claim),
-    isMyClaim: selectClaimIsMine(state, claim), // or collection is mine?
-    isMyCollection: makeSelectCollectionIsMine(collectionId)(state),
-    claimIsPending: makeSelectClaimIsPending(uri)(state),
-    collectionHasEdits: Boolean(makeSelectEditedCollectionForId(collectionId)(state)),
     uri,
     user: selectUser(state),
     channel: uri && makeSelectChannelForClaimUri(uri)(state),
@@ -57,9 +24,6 @@ const select = (state, props) => {
 
 const perform = (dispatch) => ({
   doClearContentHistoryAll: () => dispatch(doClearContentHistoryAll()),
-  fetchCollectionItems: (claimId, cb) => dispatch(doFetchItemsInCollection({ collectionId: claimId }, cb)), // if this collection is not resolved, resolve it
-  deleteCollection: (id, colKey) => dispatch(doCollectionDelete(id, colKey)),
-  editCollection: (id, params) => dispatch(doCollectionEdit(id, params)),
 });
 
 export default withRouter(connect(select, perform)(WatchHistoryPage));
