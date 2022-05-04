@@ -54,6 +54,7 @@ function CollectionActions(props: Props) {
   const isMobile = useIsMobile();
   const claimId = claim && claim.claim_id;
   const webShareable = true; // collections have cost?
+  const isEmptyCollection = !firstItem;
 
   const doPlay = React.useCallback(
     (playUri) => {
@@ -84,6 +85,7 @@ function CollectionActions(props: Props) {
         icon={ICONS.PLAY}
         label={__('Play')}
         title={__('Play')}
+        disabled={isEmptyCollection}
         onClick={() => {
           doToggleShuffleList(collectionId, false);
           doPlay(firstItem);
@@ -94,6 +96,7 @@ function CollectionActions(props: Props) {
         icon={ICONS.SHUFFLE}
         label={__('Shuffle Play')}
         title={__('Shuffle Play')}
+        disabled={isEmptyCollection}
         onClick={() => {
           doToggleShuffleList(collectionId, true);
           setDoShuffle(true);
