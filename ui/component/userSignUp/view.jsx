@@ -172,11 +172,6 @@ function UserSignUp(props: Props) {
         }}
       />
     ),
-    /*
-    showChannelDetailsUpdate && (
-      <UserFirstChannelDetails />
-    ),
-    */
     showChannelCreation &&
       (interestedInYoutubeSync ? (
         <YoutubeSync inSignUpFlow doToggleInterestedInYoutubeSync={doToggleInterestedInYoutubeSync} />

@@ -11,9 +11,8 @@ import I18nMessage from 'component/i18nMessage';
 import analytics from 'analytics';
 import { sortLanguageMap } from 'util/default-languages';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
-import Spaceman from 'component/channelThumbnail/spaceman.png';
 import ThumbnailBrokenImage from 'component/selectThumbnail/thumbnail-broken.png';
-import { THUMBNAIL_CDN_SIZE_LIMIT_BYTES } from 'config';
+import { AVATAR_DEFAULT, THUMBNAIL_CDN_SIZE_LIMIT_BYTES } from 'config';
 import * as ICONS from 'constants/icons';
 
 export const DEFAULT_BID_FOR_FIRST_CHANNEL = 0.01;
@@ -24,7 +23,6 @@ type Props = {
   createChannelError: string,
   claimingReward: boolean,
   user: User,
-  languages: Array<string>,
   doToggleInterestedInYoutubeSync: () => void,
   openModal: (
     id: string,
@@ -38,7 +36,6 @@ function UserFirstChannel(props: Props) {
     creatingChannel,
     claimingReward,
     user,
-    languages = [],
     createChannelError,
     doToggleInterestedInYoutubeSync,
     openModal,
@@ -52,15 +49,9 @@ function UserFirstChannel(props: Props) {
   const [params, setParams]: [any, (any) => void] = React.useState(getChannelParams());
 
   const LANG_NONE = 'none';
-  const languageParam = params.languages;
+  const [languageParam, setLanguageParam] = useState([]);
   const primaryLanguage = Array.isArray(languageParam) && languageParam.length && languageParam[0];
   const [nameError, setNameError] = useState(undefined);
-
-  var optionalParams = {
-    title: title,
-    thumbnailUrl: params.thumbnailUrl,
-    languages: primaryLanguage,
-  };
 
   function getChannelParams() {
     // fill this in with sdk data
@@ -69,14 +60,14 @@ function UserFirstChannel(props: Props) {
       languages: ?Array<string>,
     } = {
       title,
-      languages: languages || [],
+      languages: languageParam || [],
     };
     return channelParams;
   }
 
   let thumbnailPreview;
   if (!params.thumbnailUrl) {
-    thumbnailPreview = Spaceman;
+    thumbnailPreview = AVATAR_DEFAULT;
   } else if (thumbError) {
     thumbnailPreview = ThumbnailBrokenImage;
   } else {
@@ -105,11 +96,16 @@ function UserFirstChannel(props: Props) {
         langs[index] = code;
       }
     }
-    setParams({ ...params, languages: langs });
+    setLanguageParam(langs);
+    // setParams({ ...params, languages: langs });
   }
 
   function handleCreateChannel() {
-    createChannel(`@${channel}`, DEFAULT_BID_FOR_FIRST_CHANNEL, optionalParams).then((channelClaim) => {
+    createChannel(`@${channel}`, DEFAULT_BID_FOR_FIRST_CHANNEL, {
+      title: title,
+      thumbnailUrl: params.thumbnailUrl,
+      languages: primaryLanguage,
+    }).then((channelClaim) => {
       if (channelClaim) {
         analytics.apiLogPublish(channelClaim);
       }
@@ -144,7 +140,7 @@ function UserFirstChannel(props: Props) {
         actions={
           <Form onSubmit={handleCreateChannel}>
             <fieldset-section>
-              <label>Avatar</label>
+              <label>{__('Avatar')}</label>
               <div className="form-field__avatar_upload">
                 <img className="form-field__avatar" src={thumbnailPreview} />
                 <Button
@@ -171,7 +167,7 @@ function UserFirstChannel(props: Props) {
                 autoFocus
                 type="text"
                 name="channel_title2"
-                label={__('Title')}
+                label={__('Display Name')}
                 placeholder={__('My Awesome Channel')}
                 value={title}
                 onChange={handleTitleChange}
@@ -183,7 +179,7 @@ function UserFirstChannel(props: Props) {
                   {createChannelError || nameError ? (
                     <span className="error__text">{createChannelError || nameError}</span>
                   ) : (
-                    __('Your Channel')
+                    __('Username')
                   )}
                 </label>
                 <div className="form-field__prefix">@</div>
