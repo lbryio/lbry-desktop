@@ -10,8 +10,9 @@ type Props = {
   // --- Redux ---
   myChannelClaims: ?Array<ChannelClaim>,
   fetchingChannels: boolean,
-  activeChannelId: ?string,
-  setActiveChannel: (string) => void,
+  activeChannelClaimId: ?string,
+  hasDefaultChannel: boolean,
+  setActiveChannel: (claimId: ?string, override?: boolean) => void,
 };
 
 function SelectChannel(props: Props) {
@@ -22,9 +23,12 @@ function SelectChannel(props: Props) {
     label,
     injected = [],
     tiny,
-    activeChannelId,
+    activeChannelClaimId,
+    hasDefaultChannel,
     setActiveChannel,
   } = props;
+
+  const defaultChannelRef = React.useRef(hasDefaultChannel);
 
   function handleChannelChange(event: SyntheticInputEvent<*>) {
     const channelClaimId = event.target.value;
@@ -36,6 +40,20 @@ function SelectChannel(props: Props) {
     mine = myChannelClaims.filter((x) => channelIds.includes(x.claim_id));
   }
 
+  React.useEffect(() => {
+    defaultChannelRef.current = hasDefaultChannel;
+  }, [hasDefaultChannel]);
+
+  React.useEffect(() => {
+    return () => {
+      // has a default channel selected, clear the current active channel
+      if (defaultChannelRef.current) {
+        setActiveChannel(null, true);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       <FormField
@@ -44,7 +62,7 @@ function SelectChannel(props: Props) {
         labelOnLeft={tiny}
         type={tiny ? 'select-tiny' : 'select'}
         onChange={handleChannelChange}
-        value={activeChannelId}
+        value={activeChannelClaimId}
         disabled={fetchingChannels}
       >
         {fetchingChannels ? (
