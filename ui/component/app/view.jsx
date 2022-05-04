@@ -509,7 +509,7 @@ function App(props: Props) {
 
   useDegradedPerformance(setLbryTvApiStatus, user);
 
-  useAdOutbrain(Boolean(hasPremiumPlus), isAuthenticated, history?.location?.pathname);
+  useAdOutbrain(hasPremiumPlus, isAuthenticated, history?.location?.pathname);
 
   useEffect(() => {
     // When language is changed or translations are fetched, we render.
