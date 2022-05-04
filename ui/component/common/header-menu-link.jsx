@@ -22,7 +22,15 @@ export default function HeaderMenuLink(props: Props) {
 
   if (useMui) {
     return (
-      <MuiMenuItem className="menu__link" component={MuiLink} href={`/$/${page}`}>
+      <MuiMenuItem
+        className="menu__link"
+        component={MuiLink}
+        href={`/$/${page}`}
+        onClick={(e) => {
+          e.preventDefault();
+          push(`/$/${page}`);
+        }}
+      >
         <Icon aria-hidden icon={icon} />
         {name}
       </MuiMenuItem>
