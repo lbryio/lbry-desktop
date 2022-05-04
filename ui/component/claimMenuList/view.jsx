@@ -110,6 +110,11 @@ function ClaimMenuList(props: Props) {
   const [doShuffle, setDoShuffle] = React.useState(false);
   const incognitoClaim = contentChannelUri && !contentChannelUri.includes('@');
   const isChannel = !incognitoClaim && !contentSigningChannel;
+  // $FlowFixMe
+  const claimLength = claim && claim.value && claim.value.claims && claim.value.claims.length;
+  // $FlowFixMe
+  const claimCount = editedCollection ? editedCollection.items.length : claimLength;
+  const isEmptyCollection = (Number(claimCount) || 0) <= 0;
   const { channelName } = parseURI(contentChannelUri);
   const showDelete = claimIsMine || (fileInfo && (fileInfo.written_bytes > 0 || fileInfo.blobs_completed > 0));
   const subscriptionLabel = repostedClaim
@@ -297,18 +302,20 @@ function ClaimMenuList(props: Props) {
                   {__('View List')}
                 </a>
               </MenuItem>
-              <MenuItem
-                className="comment__menu-option"
-                onSelect={() => {
-                  if (!resolvedList) fetchItems();
-                  setDoShuffle(true);
-                }}
-              >
-                <div className="menu__link">
-                  <Icon aria-hidden icon={ICONS.SHUFFLE} />
-                  {__('Shuffle Play')}
-                </div>
-              </MenuItem>
+              {!isEmptyCollection && (
+                <MenuItem
+                  className="comment__menu-option"
+                  onSelect={() => {
+                    if (!resolvedList) fetchItems();
+                    setDoShuffle(true);
+                  }}
+                >
+                  <div className="menu__link">
+                    <Icon aria-hidden icon={ICONS.SHUFFLE} />
+                    {__('Shuffle Play')}
+                  </div>
+                </MenuItem>
+              )}
               {isMyCollection && (
                 <>
                   <MenuItem
