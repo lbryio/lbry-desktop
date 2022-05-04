@@ -1,5 +1,5 @@
 // @flow
-import React, { useState } from 'react';
+import React from 'react';
 import ClaimList from 'component/claimList';
 import Page from 'component/page';
 import Button from 'component/button';
@@ -12,28 +12,23 @@ import Tooltip from 'component/common/tooltip';
 export const PAGE_VIEW_QUERY = 'view';
 
 type Props = {
-  selectHistory: Array<any>,
+  history: Array<any>,
   doClearContentHistoryAll: () => void,
 };
 
 export default function WatchHistoryPage(props: Props) {
-  const { selectHistory, doClearContentHistoryAll } = props;
-  const [watchHistory, setWatchHistory] = useState([]);
+  const { history, doClearContentHistoryAll } = props;
   const [unavailableUris] = React.useState([]);
+  const watchHistory = [];
+  for (let entry of history) {
+    if (entry.uri.indexOf('@') !== -1) {
+      watchHistory.push(entry.uri);
+    }
+  }
 
   function clearHistory() {
     doClearContentHistoryAll();
   }
-
-  React.useEffect(() => {
-    let newWatchHistory = [];
-    for (let entry of selectHistory) {
-      if (entry.uri.indexOf('@') !== -1) {
-        newWatchHistory.push(entry.uri);
-      }
-    }
-    setWatchHistory(newWatchHistory);
-  }, [selectHistory]);
 
   return (
     <Page className="historyPage-wrapper">

@@ -72,7 +72,6 @@ type Props = {
   activeLivestreamForChannel: any,
   defaultQuality: ?string,
   doToast: ({ message: string, linkText: string, linkTarget: string }) => void,
-  selectHistory: Array<string>,
   doSetContentHistoryItem: (uri: string) => void,
   doClearContentHistoryUri: (uri: string) => void,
 };
