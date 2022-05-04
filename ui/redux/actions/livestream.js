@@ -168,10 +168,13 @@ export const doFetchActiveLivestreams = (
   const nextOptions = { order_by: orderBy, ...(lang ? { any_languages: lang } : {}) };
   const sameOptions = JSON.stringify(prevOptions) === JSON.stringify(nextOptions);
 
-  // already fetched livestreams within the interval, skip for now
   if (sameOptions && timeDelta < FETCH_ACTIVE_LIVESTREAMS_MIN_INTERVAL_MS) {
-    dispatch({ type: ACTIONS.FETCH_ACTIVE_LIVESTREAMS_SKIPPED });
-    return;
+    const failCount = state.livestream.activeLivestreamsLastFetchedFailCount;
+    if (failCount === 0 || failCount > 3) {
+      // Just fetched successfully, or failed 3 times. Skip for FETCH_ACTIVE_LIVESTREAMS_MIN_INTERVAL_MS.
+      dispatch({ type: ACTIONS.FETCH_ACTIVE_LIVESTREAMS_SKIPPED });
+      return;
+    }
   }
 
   // start fetching livestreams
@@ -207,6 +210,12 @@ export const doFetchActiveLivestreams = (
       },
     });
   } catch (err) {
-    dispatch({ type: ACTIONS.FETCH_ACTIVE_LIVESTREAMS_FAILED });
+    dispatch({
+      type: ACTIONS.FETCH_ACTIVE_LIVESTREAMS_FAILED,
+      data: {
+        activeLivestreamsLastFetchedDate: now,
+        activeLivestreamsLastFetchedOptions: nextOptions,
+      },
+    });
   }
 };

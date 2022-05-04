@@ -10,6 +10,7 @@ const defaultState: LivestreamState = {
   activeLivestreams: null,
   activeLivestreamsLastFetchedDate: 0,
   activeLivestreamsLastFetchedOptions: {},
+  activeLivestreamsLastFetchedFailCount: 0,
   activeLivestreamInitialized: false,
   socketConnectionById: {},
 };
@@ -62,8 +63,15 @@ export default handleActions(
     [ACTIONS.FETCH_ACTIVE_LIVESTREAMS_STARTED]: (state: LivestreamState) => {
       return { ...state, fetchingActiveLivestreams: true };
     },
-    [ACTIONS.FETCH_ACTIVE_LIVESTREAMS_FAILED]: (state: LivestreamState) => {
-      return { ...state, fetchingActiveLivestreams: false };
+    [ACTIONS.FETCH_ACTIVE_LIVESTREAMS_FAILED]: (state: LivestreamState, action: any) => {
+      const { activeLivestreamsLastFetchedDate, activeLivestreamsLastFetchedOptions } = action.data;
+      return {
+        ...state,
+        fetchingActiveLivestreams: false,
+        activeLivestreamsLastFetchedDate,
+        activeLivestreamsLastFetchedOptions,
+        activeLivestreamsLastFetchedFailCount: state.activeLivestreamsLastFetchedFailCount + 1,
+      };
     },
     [ACTIONS.FETCH_ACTIVE_LIVESTREAMS_COMPLETED]: (state: LivestreamState, action: any) => {
       const { activeLivestreams, activeLivestreamsLastFetchedDate, activeLivestreamsLastFetchedOptions } = action.data;
@@ -73,6 +81,7 @@ export default handleActions(
         activeLivestreams,
         activeLivestreamsLastFetchedDate,
         activeLivestreamsLastFetchedOptions,
+        activeLivestreamsLastFetchedFailCount: 0,
         viewersById: updateViewersById(activeLivestreams, state.viewersById),
       };
     },
