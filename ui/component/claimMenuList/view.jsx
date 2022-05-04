@@ -340,9 +340,9 @@ function ClaimMenuList(props: Props) {
               )}
             </>
           ) : (
-            isPlayable && (
-              <>
-                {/* WATCH LATER */}
+            <>
+              {/* WATCH LATER */}
+              {isPlayable && (
                 <MenuItem
                   className="comment__menu-option"
                   onSelect={() => handleAdd(hasClaimInWatchLater, __('Watch Later'), COLLECTIONS_CONSTS.WATCH_LATER_ID)}
@@ -352,45 +352,45 @@ function ClaimMenuList(props: Props) {
                     {hasClaimInWatchLater ? __('In Watch Later') : __('Watch Later')}
                   </div>
                 </MenuItem>
-                {/* FAVORITES LIST */}
+              )}
+              {/* FAVORITES LIST */}
+              <MenuItem
+                className="comment__menu-option"
+                onSelect={() => handleAdd(hasClaimInFavorites, __('Favorites'), COLLECTIONS_CONSTS.FAVORITES_ID)}
+              >
+                <div className="menu__link">
+                  <Icon aria-hidden icon={hasClaimInFavorites ? ICONS.DELETE : ICONS.STAR} />
+                  {hasClaimInFavorites ? __('In Favorites') : __('Favorites')}
+                </div>
+              </MenuItem>
+              {/* CURRENTLY ONLY SUPPORT PLAYLISTS FOR PLAYABLE; LATER DIFFERENT TYPES */}
+              <MenuItem
+                className="comment__menu-option"
+                onSelect={() => openModal(MODALS.COLLECTION_ADD, { uri, type: 'playlist' })}
+              >
+                <div className="menu__link">
+                  <Icon aria-hidden icon={ICONS.STACK} />
+                  {__('Add to Lists')}
+                </div>
+              </MenuItem>
+              {lastUsedCollection && lastUsedCollectionIsNotBuiltin && (
                 <MenuItem
                   className="comment__menu-option"
-                  onSelect={() => handleAdd(hasClaimInFavorites, __('Favorites'), COLLECTIONS_CONSTS.FAVORITES_ID)}
+                  onSelect={() =>
+                    handleAdd(hasClaimInLastUsedCollection, lastUsedCollection.name, lastUsedCollection.id)
+                  }
                 >
                   <div className="menu__link">
-                    <Icon aria-hidden icon={hasClaimInFavorites ? ICONS.DELETE : ICONS.STAR} />
-                    {hasClaimInFavorites ? __('In Favorites') : __('Favorites')}
+                    {!hasClaimInLastUsedCollection && <Icon aria-hidden icon={ICONS.ADD} />}
+                    {hasClaimInLastUsedCollection && <Icon aria-hidden icon={ICONS.DELETE} />}
+                    {!hasClaimInLastUsedCollection &&
+                      __('Add to %collection%', { collection: lastUsedCollection.name })}
+                    {hasClaimInLastUsedCollection && __('In %collection%', { collection: lastUsedCollection.name })}
                   </div>
                 </MenuItem>
-                {/* CURRENTLY ONLY SUPPORT PLAYLISTS FOR PLAYABLE; LATER DIFFERENT TYPES */}
-                <MenuItem
-                  className="comment__menu-option"
-                  onSelect={() => openModal(MODALS.COLLECTION_ADD, { uri, type: 'playlist' })}
-                >
-                  <div className="menu__link">
-                    <Icon aria-hidden icon={ICONS.STACK} />
-                    {__('Add to Lists')}
-                  </div>
-                </MenuItem>
-                {lastUsedCollection && lastUsedCollectionIsNotBuiltin && (
-                  <MenuItem
-                    className="comment__menu-option"
-                    onSelect={() =>
-                      handleAdd(hasClaimInLastUsedCollection, lastUsedCollection.name, lastUsedCollection.id)
-                    }
-                  >
-                    <div className="menu__link">
-                      {!hasClaimInLastUsedCollection && <Icon aria-hidden icon={ICONS.ADD} />}
-                      {hasClaimInLastUsedCollection && <Icon aria-hidden icon={ICONS.DELETE} />}
-                      {!hasClaimInLastUsedCollection &&
-                        __('Add to %collection%', { collection: lastUsedCollection.name })}
-                      {hasClaimInLastUsedCollection && __('In %collection%', { collection: lastUsedCollection.name })}
-                    </div>
-                  </MenuItem>
-                )}
-                <hr className="menu__separator" />
-              </>
-            )
+              )}
+              <hr className="menu__separator" />
+            </>
           )}
         </>
         {!isChannelPage && (
