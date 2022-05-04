@@ -64,7 +64,7 @@ function parse(claim: StreamClaim) {
       const splitIndex = line.indexOf(' ');
       if (splitIndex >= 0 && splitIndex < line.length - 2) {
         const ts = line.substring(0, splitIndex);
-        const label = line.substring(splitIndex) + 1;
+        const label = line.substring(splitIndex + 1);
 
         if (ts && label && isValidTimestamp(ts)) {
           const seconds = timestampStrToSeconds(ts);
