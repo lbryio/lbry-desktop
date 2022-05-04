@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import { selectHasChannels, selectFetchingMyChannels } from 'redux/selectors/claims';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
-import { doSetActiveChannel } from 'redux/actions/app';
 import CreatorDashboardPage from './view';
 
 const select = (state) => ({
@@ -10,4 +9,4 @@ const select = (state) => ({
   activeChannelClaim: selectActiveChannelClaim(state),
 });
 
-export default connect(select, { doSetActiveChannel })(CreatorDashboardPage);
+export default connect(select)(CreatorDashboardPage);

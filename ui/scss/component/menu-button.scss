@@ -31,16 +31,17 @@ reach-portal {
   max-width: calc(100% - var(--height-button) - var(--spacing-xs));
 }
 
-[data-reach-menu-list] {
+[data-reach-menu-list],
+.MuiMenu-list--paper {
   display: block;
   white-space: nowrap;
   outline: none;
   // background-color: var(--color-header-background) !important;
-  background-color: rgba(var(--color-header-button-base), 0.9) !important;
+  background-color: rgba(var(--color-header-button-base), 0.5) !important;
   border: 2px solid var(--color-header-background) !important;
   border-top: none;
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px) !important;
+  backdrop-filter: blur(4px) !important;
 
   &:focus-visible {
     background-color: var(--color-header-background) !important;
@@ -85,6 +86,13 @@ reach-portal {
   }
 }
 
+.menu__link:hover {
+  color: var(--color-odysee-contrast) !important;
+  background-color: var(--color-odysee) !important;
+  border-radius: var(--border-radius);
+  box-shadow: none;
+}
+
 .menu__button {
   display: flex;
   justify-content: center;
@@ -125,6 +133,22 @@ reach-portal {
 .menu__list--header {
   @extend .menu__list;
 
+  .channel__selector {
+    margin: 0px !important;
+    display: flex;
+
+    .menu__link {
+      margin: 0px !important;
+      padding: var(--spacing-xs) var(--spacing-s) !important;
+      width: 100%;
+      color: inherit;
+    }
+
+    .icon--ChevronDown {
+      margin-left: var(--spacing-s);
+    }
+  }
+
   [data-reach-menu-item][data-selected] {
     .menu__link {
       color: var(--color-odysee-contrast) !important;
@@ -155,6 +179,12 @@ reach-portal {
   @extend .menu__list;
 }
 
+.MuiMenuItem-root {
+  margin-left: 0px !important;
+  font-size: var(--font-small) !important;
+  display: block !important;
+}
+
 .menu__link {
   display: flex;
   align-items: center;
@@ -162,6 +192,7 @@ reach-portal {
   // padding-right: var(--spacing-l);
   padding: var(--spacing-xs) var(--spacing-s) var(--spacing-xs) var(--spacing-s);
   height: var(--button-height);
+  color: var(--color-primary-contrast) !important;
 
   .icon {
     stroke: var(--color-menu-icon);
@@ -186,7 +217,7 @@ reach-portal {
   display: block;
   color: var(--color-text);
   font-size: var(--font-small);
-  padding-top: 0;
+  padding: 0px;
   white-space: normal;
   text-overflow: ellipsis;
   overflow-x: hidden;

@@ -26,49 +26,10 @@ type Props = {
   odyseeMembershipByUri: (uri: string) => string,
   storeSelection?: boolean,
   doSetClientSetting: (key: string, value: string, pushPrefs: boolean) => void,
+  isHeaderMenu: boolean,
 };
 
-type ListItemProps = {
-  uri: string,
-  isSelected?: boolean,
-  claimsByUri: { [string]: any },
-  doFetchUserMemberships: (claimIdCsv: string) => void,
-  odyseeMembershipByUri: (uri: string) => string,
-};
-
-function ChannelListItem(props: ListItemProps) {
-  const { uri, isSelected = false, claimsByUri, doFetchUserMemberships, odyseeMembershipByUri } = props;
-
-  const membership = odyseeMembershipByUri(uri);
-
-  const shouldFetchUserMemberships = true;
-  useGetUserMemberships(shouldFetchUserMemberships, [uri], claimsByUri, doFetchUserMemberships, [uri]);
-
-  return (
-    <div className={classnames('channel__list-item', { 'channel__list-item--selected': isSelected })}>
-      <ChannelThumbnail uri={uri} hideStakedIndicator xsmall noLazyLoad />
-      <ChannelTitle uri={uri} />
-      <PremiumBadge membership={membership} />
-      {isSelected && <Icon icon={ICONS.DOWN} />}
-    </div>
-  );
-}
-
-type IncognitoSelectorProps = {
-  isSelected?: boolean,
-};
-
-function IncognitoSelector(props: IncognitoSelectorProps) {
-  return (
-    <div className={classnames('channel__list-item', { 'channel__list-item--selected': props.isSelected })}>
-      <Icon sectionIcon icon={ICONS.ANONYMOUS} />
-      <h2 className="channel__list-text">{__('Anonymous')}</h2>
-      {props.isSelected && <Icon icon={ICONS.DOWN} />}
-    </div>
-  );
-}
-
-function ChannelSelector(props: Props) {
+export default function ChannelSelector(props: Props) {
   const {
     channels,
     activeChannelClaim,
@@ -81,6 +42,7 @@ function ChannelSelector(props: Props) {
     doFetchUserMemberships,
     storeSelection,
     doSetClientSetting,
+    isHeaderMenu,
   } = props;
 
   const {
@@ -102,8 +64,14 @@ function ChannelSelector(props: Props) {
   return (
     <div className="channel__selector">
       <Menu>
-        <MenuButton>
-          {(incognito && !hideAnon) || !activeChannelUrl ? (
+        <MenuButton className={isHeaderMenu ? 'menu__link' : undefined}>
+          {isHeaderMenu ? (
+            <>
+              <ChannelThumbnail uri={activeChannelUrl} hideStakedIndicator xxsmall noLazyLoad />
+              {__('Change Default Channel')}
+              <Icon icon={ICONS.DOWN} />
+            </>
+          ) : (incognito && !hideAnon) || !activeChannelUrl ? (
             <IncognitoSelector isSelected />
           ) : (
             <ChannelListItem
@@ -145,4 +113,42 @@ function ChannelSelector(props: Props) {
   );
 }
 
-export default ChannelSelector;
+type ListItemProps = {
+  uri: string,
+  isSelected?: boolean,
+  claimsByUri: { [string]: any },
+  doFetchUserMemberships: (claimIdCsv: string) => void,
+  odyseeMembershipByUri: (uri: string) => string,
+};
+
+function ChannelListItem(props: ListItemProps) {
+  const { uri, isSelected = false, claimsByUri, doFetchUserMemberships, odyseeMembershipByUri } = props;
+
+  const membership = odyseeMembershipByUri(uri);
+
+  const shouldFetchUserMemberships = true;
+  useGetUserMemberships(shouldFetchUserMemberships, [uri], claimsByUri, doFetchUserMemberships, [uri]);
+
+  return (
+    <div className={classnames('channel__list-item', { 'channel__list-item--selected': isSelected })}>
+      <ChannelThumbnail uri={uri} hideStakedIndicator xsmall noLazyLoad />
+      <ChannelTitle uri={uri} />
+      <PremiumBadge membership={membership} />
+      {isSelected && <Icon icon={ICONS.DOWN} />}
+    </div>
+  );
+}
+
+type IncognitoSelectorProps = {
+  isSelected?: boolean,
+};
+
+function IncognitoSelector(props: IncognitoSelectorProps) {
+  return (
+    <div className={classnames('channel__list-item', { 'channel__list-item--selected': props.isSelected })}>
+      <Icon sectionIcon icon={ICONS.ANONYMOUS} />
+      <h2 className="channel__list-text">{__('Anonymous')}</h2>
+      {props.isSelected && <Icon icon={ICONS.DOWN} />}
+    </div>
+  );
+}

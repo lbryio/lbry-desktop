@@ -3,6 +3,8 @@ import * as PAGES from 'constants/pages';
 import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { MenuLink, MenuItem } from '@reach/menu-button';
+import MuiMenuItem from '@mui/material/MenuItem';
+import MuiLink from '@mui/material/Link';
 import Icon from 'component/common/icon';
 
 type Props = {
@@ -10,12 +12,22 @@ type Props = {
   name: string,
   page: string,
   requiresAuth?: boolean,
+  useMui?: boolean,
 };
 
 export default function HeaderMenuLink(props: Props) {
-  const { icon, name, page, requiresAuth } = props;
+  const { icon, name, page, requiresAuth, useMui } = props;
 
   const { push } = useHistory();
+
+  if (useMui) {
+    return (
+      <MuiMenuItem className="menu__link" component={MuiLink} href={`/$/${page}`}>
+        <Icon aria-hidden icon={icon} />
+        {name}
+      </MuiMenuItem>
+    );
+  }
 
   if (requiresAuth) {
     return (

@@ -18,6 +18,7 @@ type Props = {
   obscure?: boolean,
   small?: boolean,
   xsmall?: boolean,
+  xxsmall?: boolean,
   allowGifs?: boolean,
   claim: ?ChannelClaim,
   doResolveUri: (string) => void,
@@ -44,6 +45,7 @@ function ChannelThumbnail(props: Props) {
     obscure,
     small = false,
     xsmall = false,
+    xxsmall,
     allowGifs = false,
     claim,
     doResolveUri,
@@ -110,6 +112,7 @@ function ChannelThumbnail(props: Props) {
         [colorClassName]: !showThumb,
         'channel-thumbnail--small': small,
         'channel-thumbnail--xsmall': xsmall,
+        'channel-thumbnail--xxsmall': xxsmall,
         'channel-thumbnail--resolving': isResolving,
       })}
     >
@@ -117,8 +120,8 @@ function ChannelThumbnail(props: Props) {
         alt={__('Channel profile picture')}
         className={!channelThumbnail ? 'channel-thumbnail__default' : 'channel-thumbnail__custom'}
         src={(!thumbLoadError && channelThumbnail) || defaultAvatar}
-        width={small || xsmall ? 64 : 160}
-        quality={small || xsmall ? 85 : 95}
+        width={xxsmall ? 16 : small || xsmall ? 64 : 160}
+        quality={xxsmall ? 16 : small || xsmall ? 85 : 95}
         loading={noLazyLoad ? undefined : 'lazy'}
         onError={() => {
           if (setThumbUploadError) {

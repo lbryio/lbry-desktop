@@ -76,7 +76,7 @@ export const selectActiveChannelClaim = createSelector(
     // Null: has none. Undefined: not resolved, default state, could have or not
     if (!userEmail || myChannelClaims === null) {
       return null;
-    } else if (!activeChannelClaim || !myChannelClaims || !myChannelClaims.length) {
+    } else if (!myChannelClaims || !myChannelClaims.length) {
       return undefined;
     }
 

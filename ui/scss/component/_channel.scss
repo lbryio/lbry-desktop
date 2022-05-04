@@ -267,6 +267,12 @@ $actions-z-index: 2;
   margin-right: var(--spacing-xs);
 }
 
+.channel-thumbnail--xxsmall {
+  height: 16px;
+  width: 16px;
+  margin-right: var(--spacing-s) !important;
+}
+
 .channel-thumbnail--waiting {
   background-color: var(--color-gray-5);
   border-radius: var(--border-radius);

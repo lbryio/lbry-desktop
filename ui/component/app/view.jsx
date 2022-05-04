@@ -86,7 +86,6 @@ type Props = {
   activeChannelClaim: ?ChannelClaim,
   myChannelClaimIds: ?Array<string>,
   hasPremiumPlus: ?boolean,
-  setActiveChannelIfNotSet: () => void,
   setIncognito: (boolean) => void,
   fetchModBlockedList: () => void,
   fetchModAmIList: () => void,
@@ -120,7 +119,6 @@ function App(props: Props) {
     syncFatalError,
     myChannelClaimIds,
     activeChannelClaim,
-    setActiveChannelIfNotSet,
     setIncognito,
     fetchModBlockedList,
     hasPremiumPlus,
@@ -312,9 +310,7 @@ function App(props: Props) {
   }, [currentModal]);
 
   useEffect(() => {
-    if (hasMyChannels && !hasActiveChannelClaim) {
-      setActiveChannelIfNotSet();
-    } else if (hasNoChannels) {
+    if (hasNoChannels) {
       setIncognito(true);
     }
 
@@ -323,7 +319,7 @@ function App(props: Props) {
       fetchModAmIList();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasMyChannels, hasNoChannels, hasActiveChannelClaim, setActiveChannelIfNotSet, setIncognito]);
+  }, [hasMyChannels, hasNoChannels, hasActiveChannelClaim, setIncognito]);
 
   useEffect(() => {
     // $FlowFixMe

@@ -23,7 +23,7 @@ import {
 import { selectUploadCount } from 'redux/selectors/publish';
 import { doSetLanguage } from 'redux/actions/settings';
 import { doSyncLoop } from 'redux/actions/sync';
-import { doDownloadUpgradeRequested, doSignIn, doSetActiveChannel, doSetIncognito } from 'redux/actions/app';
+import { doDownloadUpgradeRequested, doSignIn, doSetIncognito } from 'redux/actions/app';
 import { doFetchModBlockedList, doFetchCommentModAmIList } from 'redux/actions/comments';
 import App from './view';
 
@@ -57,7 +57,6 @@ const perform = (dispatch) => ({
   requestDownloadUpgrade: () => dispatch(doDownloadUpgradeRequested()),
   syncLoop: (noInterval) => dispatch(doSyncLoop(noInterval)),
   setReferrer: (referrer, doClaim) => dispatch(doUserSetReferrer(referrer, doClaim)),
-  setActiveChannelIfNotSet: () => dispatch(doSetActiveChannel()),
   setIncognito: () => dispatch(doSetIncognito()),
   fetchModBlockedList: () => dispatch(doFetchModBlockedList()),
   fetchModAmIList: () => dispatch(doFetchCommentModAmIList()),
