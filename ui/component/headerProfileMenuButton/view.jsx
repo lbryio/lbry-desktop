@@ -61,53 +61,58 @@ export default function HeaderProfileMenuButton(props: HeaderMenuButtonProps) {
           )}
         </Button>
       )}
-      <MuiMenu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'basic-button',
-          sx: { padding: 'var(--spacing-xs)' },
-        }}
-        className="menu__list--header"
-        sx={{ 'z-index': 2 }}
-        PaperProps={{ className: 'MuiMenu-list--paper' }}
-      >
-        {authenticated ? (
-          <>
-            <HeaderMenuLink useMui page={PAGES.UPLOADS} icon={ICONS.PUBLISH} name={__('Uploads')} />
-            <HeaderMenuLink useMui page={PAGES.CHANNELS} icon={ICONS.CHANNEL} name={__('Channels')} />
-            <HeaderMenuLink
-              useMui
-              page={PAGES.CREATOR_DASHBOARD}
-              icon={ICONS.ANALYTICS}
-              name={__('Creator Analytics')}
-            />
-            <HeaderMenuLink useMui page={PAGES.REWARDS} icon={ICONS.REWARDS} name={__('Rewards')} />
-            <HeaderMenuLink useMui page={PAGES.INVITE} icon={ICONS.INVITE} name={__('Invites')} />
-            <HeaderMenuLink useMui page={PAGES.ODYSEE_MEMBERSHIP} icon={ICONS.UPGRADE} name={__('Odysee Premium')} />
-            <ChannelSelector storeSelection isHeaderMenu />
+      {authenticated ? (
+        <MuiMenu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+            sx: { padding: 'var(--spacing-xs)' },
+          }}
+          className="menu__list--header"
+          sx={{ 'z-index': 2 }}
+          PaperProps={{ className: 'MuiMenu-list--paper' }}
+        >
+          <HeaderMenuLink useMui page={PAGES.UPLOADS} icon={ICONS.PUBLISH} name={__('Uploads')} />
+          <HeaderMenuLink useMui page={PAGES.CHANNELS} icon={ICONS.CHANNEL} name={__('Channels')} />
+          <HeaderMenuLink useMui page={PAGES.CREATOR_DASHBOARD} icon={ICONS.ANALYTICS} name={__('Creator Analytics')} />
+          <HeaderMenuLink useMui page={PAGES.REWARDS} icon={ICONS.REWARDS} name={__('Rewards')} />
+          <HeaderMenuLink useMui page={PAGES.INVITE} icon={ICONS.INVITE} name={__('Invites')} />
+          <HeaderMenuLink useMui page={PAGES.ODYSEE_MEMBERSHIP} icon={ICONS.UPGRADE} name={__('Odysee Premium')} />
+          <ChannelSelector storeSelection isHeaderMenu />
 
-            <MuiMenuItem onClick={signOut} sx={{ padding: '0px' }}>
-              <div className="menu__link" style={{ 'flex-direction': 'column', 'align-items': 'flex-start' }}>
-                <div>
-                  <Icon aria-hidden icon={ICONS.SIGN_OUT} />
-                  {__('Sign Out')}
-                </div>
-                <span className="menu__link-help">{email}</span>
+          <MuiMenuItem onClick={signOut} sx={{ padding: '0px' }}>
+            <div className="menu__link" style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+              <div>
+                <Icon aria-hidden icon={ICONS.SIGN_OUT} />
+                {__('Sign Out')}
               </div>
-            </MuiMenuItem>
-          </>
-        ) : (
-          <>
-            <HeaderMenuLink useMui page={PAGES.AUTH_SIGNIN} icon={ICONS.SIGN_IN} name={__('Log In')} />
-            <HeaderMenuLink useMui page={PAGES.AUTH} icon={ICONS.SIGN_UP} name={__('Sign Up')} />
-            <HeaderMenuLink useMui page={PAGES.SETTINGS} icon={ICONS.SETTINGS} name={__('Settings')} />
-            <HeaderMenuLink useMui page={PAGES.HELP} icon={ICONS.HELP} name={__('Help')} />
-          </>
-        )}
-      </MuiMenu>
+              <span className="menu__link-help">{email}</span>
+            </div>
+          </MuiMenuItem>
+        </MuiMenu>
+      ) : (
+        <MuiMenu
+          id="basic-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            'aria-labelledby': 'basic-button',
+            sx: { padding: 'var(--spacing-xs)' },
+          }}
+          className="menu__list--header"
+          sx={{ 'z-index': 2 }}
+          PaperProps={{ className: 'MuiMenu-list--paper' }}
+        >
+          <HeaderMenuLink useMui page={PAGES.AUTH_SIGNIN} icon={ICONS.SIGN_IN} name={__('Log In')} />
+          <HeaderMenuLink useMui page={PAGES.AUTH} icon={ICONS.SIGN_UP} name={__('Sign Up')} />
+          <HeaderMenuLink useMui page={PAGES.SETTINGS} icon={ICONS.SETTINGS} name={__('Settings')} />
+          <HeaderMenuLink useMui page={PAGES.HELP} icon={ICONS.HELP} name={__('Help')} />
+        </MuiMenu>
+      )}
     </div>
   );
 }
