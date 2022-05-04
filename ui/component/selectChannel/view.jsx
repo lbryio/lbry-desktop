@@ -11,7 +11,6 @@ type Props = {
   myChannelClaims: ?Array<ChannelClaim>,
   fetchingChannels: boolean,
   activeChannelClaimId: ?string,
-  hasDefaultChannel: boolean,
   setActiveChannel: (claimId: ?string, override?: boolean) => void,
 };
 
@@ -24,11 +23,8 @@ function SelectChannel(props: Props) {
     injected = [],
     tiny,
     activeChannelClaimId,
-    hasDefaultChannel,
     setActiveChannel,
   } = props;
-
-  const defaultChannelRef = React.useRef(hasDefaultChannel);
 
   function handleChannelChange(event: SyntheticInputEvent<*>) {
     const channelClaimId = event.target.value;
@@ -39,20 +35,6 @@ function SelectChannel(props: Props) {
   if (myChannelClaims && channelIds) {
     mine = myChannelClaims.filter((x) => channelIds.includes(x.claim_id));
   }
-
-  React.useEffect(() => {
-    defaultChannelRef.current = hasDefaultChannel;
-  }, [hasDefaultChannel]);
-
-  React.useEffect(() => {
-    return () => {
-      // has a default channel selected, clear the current active channel
-      if (defaultChannelRef.current) {
-        setActiveChannel(null, true);
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <>

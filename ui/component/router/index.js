@@ -6,7 +6,7 @@ import { selectClientSetting, selectHomepageData, selectWildWestDisabled } from 
 import Router from './view';
 import { normalizeURI } from 'util/lbryURI';
 import { selectTitleForUri } from 'redux/selectors/claims';
-import { doSetHasNavigated } from 'redux/actions/app';
+import { doSetHasNavigated, doSetActiveChannel } from 'redux/actions/app';
 import { doUserSetReferrer } from 'redux/actions/user';
 import { selectHasUnclaimedRefereeReward } from 'redux/selectors/rewards';
 import { selectUnseenNotificationCount } from 'redux/selectors/notifications';
@@ -39,12 +39,14 @@ const select = (state) => {
     wildWestDisabled: selectWildWestDisabled(state),
     unseenCount: selectUnseenNotificationCount(state),
     hideTitleNotificationCount: selectClientSetting(state, SETTINGS.HIDE_TITLE_NOTIFICATION_COUNT),
+    hasDefaultChannel: Boolean(selectClientSetting(state, SETTINGS.ACTIVE_CHANNEL_CLAIM)),
   };
 };
 
-const perform = (dispatch) => ({
-  setHasNavigated: () => dispatch(doSetHasNavigated()),
-  setReferrer: (referrer) => dispatch(doUserSetReferrer(referrer)),
-});
+const perform = {
+  setHasNavigated: doSetHasNavigated,
+  setReferrer: doUserSetReferrer,
+  doSetActiveChannel,
+};
 
 export default connect(select, perform)(Router);

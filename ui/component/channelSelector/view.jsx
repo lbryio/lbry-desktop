@@ -27,7 +27,6 @@ type Props = {
   storeSelection?: boolean,
   doSetClientSetting: (key: string, value: string, pushPrefs: boolean) => void,
   isHeaderMenu: boolean,
-  hasDefaultChannel: boolean,
 };
 
 export default function ChannelSelector(props: Props) {
@@ -43,12 +42,9 @@ export default function ChannelSelector(props: Props) {
     storeSelection,
     doSetClientSetting,
     isHeaderMenu,
-    hasDefaultChannel,
   } = props;
 
   const hideAnon = Boolean(props.hideAnon || storeSelection);
-
-  const defaultChannelRef = React.useRef(hasDefaultChannel);
 
   const {
     push,
@@ -65,20 +61,6 @@ export default function ChannelSelector(props: Props) {
       doSetClientSetting(SETTINGS.ACTIVE_CHANNEL_CLAIM, channelClaim.claim_id, true);
     }
   }
-
-  React.useEffect(() => {
-    defaultChannelRef.current = hasDefaultChannel;
-  }, [hasDefaultChannel]);
-
-  React.useEffect(() => {
-    return () => {
-      // has a default channel selected, clear the current active channel
-      if (defaultChannelRef.current) {
-        doSetActiveChannel(null, true);
-      }
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <div className="channel__selector">

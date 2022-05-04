@@ -141,6 +141,8 @@ type Props = {
   wildWestDisabled: boolean,
   unseenCount: number,
   hideTitleNotificationCount: boolean,
+  hasDefaultChannel: boolean,
+  doSetActiveChannel: (claimId: ?string, override?: boolean) => void,
 };
 
 type PrivateRouteProps = Props & {
@@ -182,7 +184,11 @@ function AppRouter(props: Props) {
     wildWestDisabled,
     unseenCount,
     hideTitleNotificationCount,
+    hasDefaultChannel,
+    doSetActiveChannel,
   } = props;
+
+  const defaultChannelRef = React.useRef(hasDefaultChannel);
 
   const { entries, listen, action: historyAction } = history;
   const entryIndex = history.index;
@@ -274,6 +280,20 @@ function AppRouter(props: Props) {
       }
     }
   }, [currentScroll, pathname, search, hash, resetScroll, hasLinkedCommentInUrl, historyAction]);
+
+  React.useEffect(() => {
+    defaultChannelRef.current = hasDefaultChannel;
+  }, [hasDefaultChannel]);
+
+  React.useEffect(() => {
+    return () => {
+      // has a default channel selected, clear the current active channel
+      if (defaultChannelRef.current) {
+        doSetActiveChannel(null, true);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pathname]);
 
   // react-router doesn't decode pathanmes before doing the route matching check
   // We have to redirect here because if we redirect on the server, it might get encoded again
