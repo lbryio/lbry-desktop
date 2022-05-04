@@ -1,4 +1,6 @@
 // @flow
+import { platform } from 'util/platform';
+
 const REQUIRED_DELAY_FOR_IOS_MS = 10;
 const MIN_SECONDS_BETWEEN_CHAPTERS = 10;
 const MIN_CHAPTERS = 3;
@@ -148,6 +150,11 @@ function load(player: any, timestampData: TimestampData, duration: number) {
 
 export function parseAndLoad(player: any, claim: StreamClaim) {
   console.assert(claim, 'null claim');
+
+  if (platform.isMobile()) {
+    return;
+  }
+
   const tsData = parse(claim);
   const duration = claim?.value?.video?.duration || claim?.value?.audio?.duration;
 
