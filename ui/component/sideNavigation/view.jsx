@@ -138,7 +138,7 @@ type Props = {
   user: ?User,
   homepageData: any,
   doClearClaimSearch: () => void,
-  odyseeMembership: string,
+  odyseeMembership: ?string,
   odyseeMembershipByUri: (uri: string) => string,
   doFetchLastActiveSubs: (force?: boolean, count?: number) => void,
 };

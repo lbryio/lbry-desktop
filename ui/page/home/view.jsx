@@ -44,7 +44,7 @@ type Props = {
   adBlockerFound: ?boolean,
   homepageOrder: HomepageOrder,
   doOpenModal: (id: string, ?{}) => void,
-  hasMembership: boolean,
+  hasMembership: ?boolean,
 };
 
 function HomePage(props: Props) {

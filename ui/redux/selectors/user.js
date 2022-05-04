@@ -106,30 +106,32 @@ export const selectYouTubeImportError = (state) => selectState(state).youtubeCha
 export const selectSetReferrerPending = (state) => selectState(state).referrerSetIsPending;
 export const selectSetReferrerError = (state) => selectState(state).referrerSetError;
 
+// undefined = not fetched
+// '' = no membership
+// '<name>' = membership name
 export const selectOdyseeMembershipName = (state) => selectState(state).odyseeMembershipName;
 
+/**
+ * @param state
+ * @returns {undefined|boolean} 'undefined' if not yet fetched; boolean otherwise.
+ */
 export const selectOdyseeMembershipIsPremiumPlus = (state) => {
-  const odyseeMembershipName = selectState(state).odyseeMembershipName;
-  if (!odyseeMembershipName) return undefined;
-  return selectState(state).odyseeMembershipName === 'Premium+';
+  const name = selectOdyseeMembershipName(state);
+  return name === undefined ? undefined : name === 'Premium+';
 };
 
 /**
- * selectHasOdyseeMembership
- *
  * @param state
- * @returns 'undefined' if not yet fetched; boolean otherwise.
+ * @returns {undefined|boolean} 'undefined' if not yet fetched; boolean otherwise.
  */
 export const selectHasOdyseeMembership = (state) => {
   // @if process.env.NODE_ENV!='production'
   const override = window.localStorage.getItem('hasMembershipOverride');
-  if (override) {
-    return override === 'true';
-  }
+  if (override) return override === 'true';
   // @endif
 
-  const membership = selectOdyseeMembershipName(state);
-  return membership === undefined ? membership : Boolean(membership);
+  const name = selectOdyseeMembershipName(state);
+  return name === undefined ? undefined : Boolean(name);
 };
 
 export const selectYouTubeImportVideosComplete = createSelector(selectState, (state) => {

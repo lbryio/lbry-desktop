@@ -64,6 +64,7 @@ declare type UserState ={
   youtubeChannelImportErrorMessage: string,
   referrerSetIsPending: boolean,
   referrerSetError: string,
+  odyseeMembershipName: ?string, // undefined: not fetched, '': no membership
   odyseeMembershipsPerClaimIds: ?{ [string]: string },
   locale: ?LocaleInfo,
 };

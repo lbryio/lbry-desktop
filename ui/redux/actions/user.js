@@ -155,7 +155,7 @@ export function doCheckUserOdyseeMemberships(user) {
 
     dispatch({
       type: ACTIONS.ADD_ODYSEE_MEMBERSHIP_DATA,
-      data: { user, odyseeMembershipName: highestMembershipRanking },
+      data: { user, odyseeMembershipName: highestMembershipRanking || '' }, // '' = none; `undefined` = not fetched
     });
   };
 }
