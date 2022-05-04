@@ -34,12 +34,38 @@ const select = (state, props) => {
   const playingUri = selectPlayingUri(state);
   const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID) || (playingUri && playingUri.collectionId);
   const isMarkdownOrComment = playingUri && (playingUri.source === 'markdown' || playingUri.source === 'comment');
+  const isClaimPlayable = (uri) => {
+    const claim = makeSelectClaimForUri(uri)(state);
+    // $FlowFixMe
+    return (
+      claim &&
+      // $FlowFixMe
+      claim.value &&
+      // $FlowFixMe
+      claim.value.stream_type &&
+      // $FlowFixMe
+      (claim.value.stream_type === 'audio' || claim.value.stream_type === 'video')
+    );
+  };
+  const nextUriInCollection = (fromUri) => {
+    return makeSelectNextUrlForCollectionAndUrl(collectionId, fromUri)(state);
+  };
+  const prevUriInCollection = (fromUri) => {
+    return makeSelectPreviousUrlForCollectionAndUrl(collectionId, fromUri)(state);
+  };
 
   let nextRecommendedUri;
   let previousListUri;
   if (collectionId) {
-    nextRecommendedUri = makeSelectNextUrlForCollectionAndUrl(collectionId, uri)(state);
-    previousListUri = makeSelectPreviousUrlForCollectionAndUrl(collectionId, uri)(state);
+    nextRecommendedUri = uri;
+    previousListUri = uri;
+    // Find previous and next playable item in the collection.
+    do {
+      nextRecommendedUri = nextUriInCollection(nextRecommendedUri);
+    } while (nextRecommendedUri && !isClaimPlayable(nextRecommendedUri));
+    do {
+      previousListUri = prevUriInCollection(previousListUri);
+    } while (previousListUri && !isClaimPlayable(previousListUri));
   } else {
     const recommendedContent = selectRecommendedContentForUri(state, uri);
     nextRecommendedUri = recommendedContent && recommendedContent[0];
