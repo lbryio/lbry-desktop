@@ -31,6 +31,10 @@ reach-portal {
   max-width: calc(100% - var(--height-button) - var(--spacing-xs));
 }
 
+.MuiMenu-list--paper {
+  display: flex;
+}
+
 [data-reach-menu-list],
 .MuiMenu-list--paper {
   display: block;
