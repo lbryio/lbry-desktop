@@ -50,7 +50,9 @@ export function makeUploadRequest(
     let xhr = new XMLHttpRequest();
     xhr.open('POST', ENDPOINT);
     xhr.setRequestHeader(X_LBRY_AUTH_TOKEN, token);
-    xhr.timeout = PUBLISH_FETCH_TIMEOUT_MS;
+    if (!remoteUrl) {
+      xhr.timeout = PUBLISH_FETCH_TIMEOUT_MS;
+    }
     xhr.responseType = 'json';
     xhr.upload.onprogress = (e) => {
       const percentage = ((e.loaded / e.total) * 100).toFixed(2);
