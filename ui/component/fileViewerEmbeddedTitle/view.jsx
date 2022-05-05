@@ -4,7 +4,6 @@ import Button from 'component/button';
 import FilePrice from 'component/filePrice';
 import { formatLbryUrlForWeb } from 'util/url';
 import { withRouter } from 'react-router';
-import { URL } from 'config';
 import Logo from 'component/logo';
 
 type Props = {
@@ -24,7 +23,7 @@ function FileViewerEmbeddedTitle(props: Props) {
   }
 
   const contentLinkProps = isInApp ? { navigate: contentLink } : { href: contentLink };
-  const lbryLinkProps = isInApp ? { navigate: '/' } : { href: URL };
+  const odyseeLinkProps = isInApp ? { navigate: '/' } : { href: '/' };
 
   return (
     <div className="file-viewer__embedded-header">
@@ -44,7 +43,12 @@ function FileViewerEmbeddedTitle(props: Props) {
       )}
 
       <div className="file-viewer__embedded-info">
-        <Button className="file-viewer__overlay-logo" disabled={preferEmbed} aria-label={__('Home')} {...lbryLinkProps}>
+        <Button
+          className="file-viewer__overlay-logo"
+          disabled={preferEmbed}
+          aria-label={__('Home')}
+          {...odyseeLinkProps}
+        >
           <Logo type={'embed'} />
         </Button>
         {isInApp && <FilePrice uri={uri} />}

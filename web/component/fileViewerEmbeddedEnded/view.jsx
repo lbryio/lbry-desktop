@@ -44,7 +44,7 @@ function FileViewerEmbeddedEnded(props: Props) {
   return (
     <div className="file-viewer__overlay">
       <div className="file-viewer__overlay-secondary">
-        <Button className="file-viewer__overlay-logo" href={URL} disabled={preferEmbed}>
+        <Button className="file-viewer__overlay-logo" href="/" disabled={preferEmbed}>
           <Logo type={'embed'} />
         </Button>
       </div>
