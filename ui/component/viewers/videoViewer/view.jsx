@@ -72,6 +72,8 @@ type Props = {
   activeLivestreamForChannel: any,
   defaultQuality: ?string,
   doToast: ({ message: string, linkText: string, linkTarget: string }) => void,
+  doSetContentHistoryItem: (uri: string) => void,
+  doClearContentHistoryUri: (uri: string) => void,
 };
 
 /*
@@ -118,6 +120,7 @@ function VideoViewer(props: Props) {
     activeLivestreamForChannel,
     defaultQuality,
     doToast,
+    doSetContentHistoryItem,
   } = props;
 
   const permanentUrl = claim && claim.permanent_url;
@@ -150,6 +153,12 @@ function VideoViewer(props: Props) {
   const [localAutoplayNext, setLocalAutoplayNext] = useState(autoplayNext);
   const isFirstRender = React.useRef(true);
   const playerRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (isPlaying) {
+      doSetContentHistoryItem(claim.permanent_url);
+    }
+  }, [isPlaying]);
 
   useEffect(() => {
     if (isFirstRender.current) {

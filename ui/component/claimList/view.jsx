@@ -60,6 +60,7 @@ type Props = {
   droppableProvided?: any,
   unavailableUris?: Array<string>,
   showMemberBadge?: boolean,
+  inWatchHistory?: boolean,
 };
 
 export default function ClaimList(props: Props) {
@@ -100,6 +101,7 @@ export default function ClaimList(props: Props) {
     droppableProvided,
     unavailableUris,
     showMemberBadge,
+    inWatchHistory,
   } = props;
 
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
@@ -202,6 +204,7 @@ export default function ClaimList(props: Props) {
       dragHandleProps={draggableProvided && draggableProvided.dragHandleProps}
       unavailableUris={unavailableUris}
       showMemberBadge={showMemberBadge}
+      inWatchHistory={inWatchHistory}
     />
   );
 

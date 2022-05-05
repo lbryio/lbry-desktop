@@ -87,6 +87,13 @@ const PLAYLISTS: SideNavLink = {
   hideForUnauth: true,
 };
 
+const WATCH_HISTORY: SideNavLink = {
+  title: 'Watch History',
+  link: `/$/${PAGES.WATCH_HISTORY}`,
+  icon: ICONS.WATCH_HISTORY,
+  hideForUnauth: true,
+};
+
 const PREMIUM: SideNavLink = {
   title: 'Premium',
   link: `/$/${PAGES.ODYSEE_MEMBERSHIP}`,
@@ -529,6 +536,7 @@ function SideNavigation(props: Props) {
               {!showMicroMenu && getLink(WATCH_LATER)}
               {!showMicroMenu && getLink(FAVORITES)}
               {getLink(PLAYLISTS)}
+              {!showMicroMenu && getLink(WATCH_HISTORY)}
             </ul>
 
             <ul

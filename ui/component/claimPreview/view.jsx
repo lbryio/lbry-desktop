@@ -96,6 +96,8 @@ type Props = {
   dragHandleProps?: any,
   unavailableUris?: Array<string>,
   showMemberBadge?: boolean,
+  inWatchHistory?: boolean,
+  doClearContentHistoryUri: (uri: string) => void,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -161,6 +163,8 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     dragHandleProps,
     unavailableUris,
     showMemberBadge,
+    inWatchHistory,
+    doClearContentHistoryUri,
   } = props;
 
   const isMobile = useIsMobile();
@@ -292,6 +296,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     }
   }
 
+  function removeFromHistory(e, uri) {
+    e.stopPropagation();
+    doClearContentHistoryUri(uri);
+  }
+
   useEffect(() => {
     if (isValid && !isResolvingUri && shouldFetch && uri) {
       resolveUri(uri);
@@ -364,7 +373,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     >
       <>
         {!hideRepostLabel && <ClaimRepostAuthor uri={uri} />}
-
         <div
           className={classnames('claim-preview', {
             'claim-preview--small': type === 'small' || type === 'tooltip',
@@ -487,7 +495,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
             )}
           </div>
         </div>
-
+        {inWatchHistory && (
+          <div onClick={(e) => removeFromHistory(e, uri)} className="claim-preview__history-remove">
+            <Icon icon={ICONS.REMOVE} />
+          </div>
+        )}
         {/* Todo: check isLivestreamActive once we have that data consistently everywhere. */}
         {claim && isLivestream && <ClaimPreviewReset uri={uri} />}
 
