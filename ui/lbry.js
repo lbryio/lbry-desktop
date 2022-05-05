@@ -1,5 +1,5 @@
 // @flow
-import analytics from 'analytics';
+// import analytics from 'analytics';
 import { FETCH_TIMEOUT } from 'constants/errors';
 import { NO_AUTH, X_LBRY_AUTH_TOKEN } from 'constants/token';
 import fetchWithTimeout from 'util/fetch';
@@ -306,7 +306,7 @@ export function apiCall(method: string, params: ?{}, resolve: Function, reject: 
     ? Lbry.alternateConnectionString
     : Lbry.daemonConnectionString;
 
-  const SDK_FETCH_TIMEOUT_MS = 60000;
+  const SDK_FETCH_TIMEOUT_MS = 1800000;
   return fetchWithTimeout(SDK_FETCH_TIMEOUT_MS, fetch(connectionString + '?m=' + method, options))
     .then((response) => checkAndParse(response, method))
     .then((response) => {
@@ -322,7 +322,7 @@ export function apiCall(method: string, params: ?{}, resolve: Function, reject: 
     .catch((err) => {
       ApiFailureMgr.logFailure(method, params, counter);
       if (err?.message === FETCH_TIMEOUT) {
-        analytics.error(`${method}: timed out after ${SDK_FETCH_TIMEOUT_MS / 1000}s`);
+        // analytics.error(`${method}: timed out after ${SDK_FETCH_TIMEOUT_MS / 1000}s`);
         reject(resolveFetchErrorMsg(method, FETCH_TIMEOUT));
       } else {
         reject(err);
