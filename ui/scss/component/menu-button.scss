@@ -31,8 +31,17 @@ reach-portal {
   max-width: calc(100% - var(--height-button) - var(--spacing-xs));
 }
 
+.MuiMenuItem-root {
+  padding: 0px;
+  margin: 0px !important;
+}
+
 .MuiMenu-list--paper {
   display: flex;
+
+  .menu__link {
+    display: flex !important;
+  }
 }
 
 [data-reach-menu-list],
@@ -262,6 +271,11 @@ reach-portal {
   margin-right: auto;
   font-weight: var(--font-weight-bold);
   margin-top: var(--spacing-m);
+}
+
+.menu__link-label {
+  display: flex;
+  align-items: center;
 }
 
 .menu__separator {

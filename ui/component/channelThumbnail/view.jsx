@@ -100,7 +100,10 @@ function ChannelThumbnail(props: Props) {
   if (isGif && !allowGifs) {
     const url = getImageProxyUrl(channelThumbnail);
     return (
-      <FreezeframeWrapper src={url} className={classnames('channel-thumbnail', className)}>
+      <FreezeframeWrapper
+        src={url}
+        className={classnames('channel-thumbnail', className, { 'channel-thumbnail--xxsmall': xxsmall })}
+      >
         {showMemberBadge && <PremiumBadge {...badgeProps} />}
       </FreezeframeWrapper>
     );

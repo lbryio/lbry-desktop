@@ -26,7 +26,7 @@ type Props = {
   odyseeMembershipByUri: (uri: string) => string,
   storeSelection?: boolean,
   doSetClientSetting: (key: string, value: string, pushPrefs: boolean) => void,
-  isHeaderMenu: boolean,
+  isHeaderMenu?: boolean,
 };
 
 export default function ChannelSelector(props: Props) {
@@ -65,25 +65,27 @@ export default function ChannelSelector(props: Props) {
   return (
     <div className="channel__selector">
       <Menu>
-        <MenuButton className={isHeaderMenu ? 'menu__link' : undefined}>
-          {isHeaderMenu ? (
-            <>
-              <ChannelThumbnail uri={activeChannelUrl} hideStakedIndicator xxsmall noLazyLoad />
-              {__('Change Default Channel')}
-              <Icon icon={ICONS.DOWN} />
-            </>
-          ) : (incognito && !hideAnon) || !activeChannelUrl ? (
-            <IncognitoSelector isSelected />
-          ) : (
-            <ChannelListItem
-              odyseeMembershipByUri={odyseeMembershipByUri}
-              uri={activeChannelUrl}
-              isSelected
-              claimsByUri={claimsByUri}
-              doFetchUserMemberships={doFetchUserMemberships}
-            />
-          )}
-        </MenuButton>
+        {isHeaderMenu ? (
+          <MenuButton className="menu__link">
+            <ChannelThumbnail uri={activeChannelUrl} hideStakedIndicator xxsmall noLazyLoad />
+            {__('Change Default Channel')}
+            <Icon icon={ICONS.DOWN} />
+          </MenuButton>
+        ) : (
+          <MenuButton>
+            {(incognito && !hideAnon) || !activeChannelUrl ? (
+              <IncognitoSelector isSelected />
+            ) : (
+              <ChannelListItem
+                odyseeMembershipByUri={odyseeMembershipByUri}
+                uri={activeChannelUrl}
+                isSelected
+                claimsByUri={claimsByUri}
+                doFetchUserMemberships={doFetchUserMemberships}
+              />
+            )}
+          </MenuButton>
+        )}
 
         <MenuList className="menu__list channel__list">
           {channels &&

@@ -101,9 +101,9 @@ export default function HeaderProfileMenuButton(props: HeaderMenuButtonProps) {
             <HeaderMenuLink useMui page={PAGES.ODYSEE_MEMBERSHIP} icon={ICONS.UPGRADE} name={__('Odysee Premium')} />
             <ChannelSelector storeSelection isHeaderMenu />
 
-            <MuiMenuItem onClick={signOut} sx={{ padding: '0px' }}>
+            <MuiMenuItem onClick={signOut}>
               <div className="menu__link" style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
-                <div>
+                <div className="menu__link-label">
                   <Icon aria-hidden icon={ICONS.SIGN_OUT} />
                   {__('Sign Out')}
                 </div>
