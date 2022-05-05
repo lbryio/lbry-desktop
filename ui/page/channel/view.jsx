@@ -26,7 +26,6 @@ import I18nMessage from 'component/i18nMessage';
 import TruncatedText from 'component/common/truncated-text';
 // $FlowFixMe cannot resolve ...
 import PlaceholderTx from 'static/img/placeholderTx.gif';
-import { FormField } from 'component/common/form-components/form-field';
 
 export const PAGE_VIEW_QUERY = `view`;
 export const DISCUSSION_PAGE = `discussion`;
@@ -293,7 +292,6 @@ function ChannelPage(props: Props) {
             <Tab disabled={editing}>{__('Playlists')}</Tab>
             <Tab>{editing ? __('Editing Your Channel') : __('About --[tab title in Channel Page]--')}</Tab>
             <Tab disabled={editing}>{__('Community')}</Tab>
-            <Tab disabled={editing}>{__('Subscription')}</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -323,27 +321,6 @@ function ChannelPage(props: Props) {
             </TabPanel>
             <TabPanel>
               {(discussionWasMounted || currentView === PAGE.DISCUSSION) && <ChannelDiscussion uri={uri} />}
-            </TabPanel>
-            <TabPanel>
-              <div className="card">
-                <section className="section card--section">
-                  <Fragment>
-                    <div className="media__info-text">
-                      <label>{__('New Content Notifications')}</label>
-                      <FormField name={'notify'} type={'checkbox'} checked />
-                    </div>
-
-                    <div className="media__info-text">
-                      <label>{__('Download and Host new content')}</label>
-                      <FormField name={'host'} type={'checkbox'} checked />
-                    </div>
-                    <div className="media__info-text">
-                      <label>{__('Items to Host')}</label>
-                      <FormField name={'host_count'} type={'number'} value={3} />
-                    </div>
-                  </Fragment>
-                </section>
-              </div>
             </TabPanel>
           </TabPanels>
         </Tabs>

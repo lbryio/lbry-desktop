@@ -16,4 +16,7 @@ declare type SubscriptionState = {
   following: Array<Following>,
   loading: boolean,
   firstRunCompleted: boolean,
+  downloadEnabledByUrl: any,
+  downloadQueue: Array<string>,
+  lastReleaseBySubUrl: any,
 };

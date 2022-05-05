@@ -6,9 +6,11 @@ import { handleActions } from 'util/redux-utils';
 const defaultState: SubscriptionState = {
   subscriptions: [], // Deprecated
   following: [],
-  autoDownloads: {},
   loading: false,
   firstRunCompleted: false,
+  downloadEnabledByUrl: {},
+  downloadQueue: [],
+  lastReleaseBySubUrl: {},
 };
 
 /*
@@ -72,6 +74,41 @@ export default handleActions(
       ...state,
       viewMode: action.data,
     }),
+    [ACTIONS.SUBSCRIPTION_DOWNLOAD_ADD]: (state: SubscriptionState, action): SubscriptionState => {
+      const { downloadQueue } = state;
+      const uri = action.data;
+      const newDownloadQueue = downloadQueue.concat(uri);
+      return {
+        ...state,
+        downloadUrisQueued: newDownloadQueue,
+      };
+    },
+    [ACTIONS.SUBSCRIPTION_DOWNLOAD_REMOVE]: (state: SubscriptionState, action): SubscriptionState => {
+      const { downloadQueue } = state;
+      const uri = action.data;
+      const newDownloadQueue = downloadQueue.filter((f) => f !== uri);
+      return {
+        ...state,
+        downloadUrisQueued: newDownloadQueue,
+      };
+    },
+    [ACTIONS.SUBSCRIPTION_RELEASE_UPDATE]: (state: SubscriptionState, action): SubscriptionState => {
+      const { lastReleaseBySubUrl } = state;
+      const { uri, timestamp } = action.data;
+
+      lastReleaseBySubUrl[uri] = timestamp;
+      return {
+        ...state,
+        lastReleaseBySubUrl,
+      };
+    },
+    [ACTIONS.SUBSCRIPTION_DOWNLOAD_TOGGLE]: (state: SubscriptionState, action): SubscriptionState => {
+      const { downloadEnabledByUrl } = state;
+      const { uri, enable } = action.data;
+
+      downloadEnabledByUrl[uri] = enable;
+      return Object.assign({}, state, { downloadEnabledByUrl });
+    },
     [ACTIONS.SYNC_STATE_POPULATE]: (
       state: SubscriptionState,
       action: { data: { subscriptions: ?Array<string>, following: ?Array<Subscription> } }

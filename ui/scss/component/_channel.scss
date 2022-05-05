@@ -19,7 +19,7 @@ $actions-z-index: 2;
           }
         }
       }
-      .button-following:last-of-type {
+      .button-following:not(first-of-type) {
         margin-left: 2px;
       }
     }

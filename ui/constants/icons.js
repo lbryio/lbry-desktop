@@ -186,3 +186,5 @@ export const MYSTERIES = 'Mysteries';
 export const TECHNOLOGY = 'Technology';
 export const EMOJI = 'Emoji';
 export const STICKER = 'Sticker';
+export const HOST = 'Host';
+export const NO_HOST = 'NoHost';

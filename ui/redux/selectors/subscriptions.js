@@ -30,6 +30,8 @@ export const selectFollowing = createSelector(selectState, (state) => state.foll
 // Fetching list of users subscriptions
 export const selectIsFetchingSubscriptions = createSelector(selectState, (state) => state.loading);
 
+export const selectDownloadEnabledByUrl = createSelector(selectState, (state) => state.downloadEnabledByUrl);
+
 // The current view mode on the subscriptions page
 export const selectViewMode = createSelector(selectState, (state) => state.viewMode);
 
@@ -154,3 +156,8 @@ export const makeSelectNotificationsDisabled = (uri) =>
       return true;
     }
   );
+
+export const makeSelectDownloadEnabled = (uri) =>
+  createSelector(selectDownloadEnabledByUrl, (downloadEnabledByUrl) => {
+    return downloadEnabledByUrl[uri] || false;
+  });
