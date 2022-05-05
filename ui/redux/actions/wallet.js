@@ -10,6 +10,7 @@ import {
   selectPendingConsolidateTxid,
   selectPendingMassClaimTxid,
 } from 'redux/selectors/wallet';
+import { resolveApiMessage } from 'util/api-message';
 import { creditsToString } from 'util/format-credits';
 import { selectMyClaimsRaw, selectClaimsById } from 'redux/selectors/claims';
 import { doFetchChannelListMine, doFetchClaimListMine, doClaimSearch } from 'redux/actions/claims';
@@ -317,6 +318,7 @@ export function doSendDraftTransaction(address, amount) {
       dispatch(
         doToast({
           message: __('Transaction failed'),
+          subMessage: resolveApiMessage(error?.message),
           isError: true,
         })
       );

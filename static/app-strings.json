@@ -860,6 +860,7 @@
   "Successfully abandoned your support.": "Successfully abandoned your support.",
   "Transaction failed": "Transaction failed",
   "Insufficient credits": "Insufficient credits",
+  "Insufficient credits to account for transaction fees.": "Insufficient credits to account for transaction fees.",
   "Error abandoning your claim/support": "Error abandoning your claim/support",
   "Error unlocking your tip": "Error unlocking your tip",
   "No stats found": "No stats found",

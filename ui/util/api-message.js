@@ -43,6 +43,10 @@ const MESSAGE_MAP: Array<ApiMsgConfig> = Object.freeze([
     originalMsg: /^You only watched content (.*) days in the last week and it needs to be at least (.*) to get the reward.$/,
     replacement: 'You only watched content for %1% days in the last week. It needs to be at least %2% to get the reward.',
   },
+  {
+    originalMsg: 'Not enough funds to cover this transaction.',
+    replacement: 'Insufficient credits to account for transaction fees.',
+  },
   // {
   //   originalMsg: /^Earn a random reward of at least 0.1 LBC for watching cool stuff at least 3 days during the week. You can claim it again in (.*)$/,
   //   replacement: 'Earn a random reward of at least 0.1 LBC for watching cool stuff at least 3 days during the week. You can claim it again in %1%',
@@ -62,7 +66,7 @@ const MESSAGE_MAP: Array<ApiMsgConfig> = Object.freeze([
  * @param message
  * @returns {string}
  */
-export function resolveApiMessage(message: string) {
+export function resolveApiMessage(message: string = '') {
   for (let n = 0; n < MESSAGE_MAP.length; ++n) {
     const config: ApiMsgConfig = MESSAGE_MAP[n];
 
