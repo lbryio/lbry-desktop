@@ -13,7 +13,7 @@ type Props = {
   type?: string,
   actions?: Node,
 };
-export default function YrblHelp(props: Props) {
+export default function YrblWalletEmpty(props: Props) {
   const { includeWalletLink = false, type = 'sad' } = props;
 
   return (

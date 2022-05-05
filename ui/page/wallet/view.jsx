@@ -64,7 +64,6 @@ const WalletPage = (props: Props) => {
     }
     push(url);
   }
-
   // @endif
 
   const { totalBalance } = props;
@@ -89,22 +88,17 @@ const WalletPage = (props: Props) => {
             <TabPanel>
               <div className="section card-stack">
                 <div className="lbc-transactions">
-                  {/* if the transactions are loading */}
                   {loading && (
                     <div className="main--empty">
                       <Spinner delayed />
                     </div>
                   )}
-                  {/* when the transactions are finished loading */}
                   {!loading && (
                     <>
-                      {showIntro ? (
-                        <YrblWalletEmpty includeWalletLink />
-                      ) : (
-                        <div className="card-stack">
-                          <TxoList search={search} />
-                        </div>
-                      )}
+                      {showIntro && <YrblWalletEmpty includeWalletLink />}
+                      <div className="card-stack">
+                        <TxoList search={search} />
+                      </div>
                     </>
                   )}
                 </div>
