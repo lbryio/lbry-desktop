@@ -460,7 +460,8 @@ async function getReactedChannelNames(commentId: string, myChannelClaims: ?Array
     for (let i = 0; i < reactions.length; ++i) {
       const r = reactions[i];
       const myReactions = r.myReactions[commentId];
-      const myReactionValues = Object.values(myReactions);
+      const { creator_like, creators_like, ...basicReactions } = myReactions;
+      const myReactionValues = Object.values(basicReactions);
 
       if (myReactionValues.includes(1)) {
         reactedChannelNames.push(r.channelName);
