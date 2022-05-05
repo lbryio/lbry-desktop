@@ -56,7 +56,7 @@ export default function ChannelsPage(props: Props) {
   return (
     <Page className="channelsPage-wrapper">
       <h1 className="section__title section__title--margin-bottom">{__('Active channel')}</h1>
-      <span className="section__subtitle ">{__('You can select a new active channel by default')}</span>
+      <span className="section__subtitle ">{__('Select your default active channel')}</span>
       <ChannelSelector storeSelection />
 
       <div className="card-stack">
