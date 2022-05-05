@@ -140,7 +140,7 @@ function UserFirstChannel(props: Props) {
         actions={
           <Form onSubmit={handleCreateChannel}>
             <fieldset-section>
-              <label>{__('Avatar')}</label>
+              <label>{__('Channel profile picture')}</label>
               <div className="form-field__avatar_upload">
                 <img className="form-field__avatar" src={thumbnailPreview} />
                 <Button
@@ -179,7 +179,7 @@ function UserFirstChannel(props: Props) {
                   {createChannelError || nameError ? (
                     <span className="error__text">{createChannelError || nameError}</span>
                   ) : (
-                    __('Username')
+                    __('Username (cannot be changed)')
                   )}
                 </label>
                 <div className="form-field__prefix">@</div>

@@ -2258,5 +2258,7 @@
   "There was a network error, but the publish may have been completed. Wait a few minutes, then check your Uploads or Wallet page to confirm.": "There was a network error, but the publish may have been completed. Wait a few minutes, then check your Uploads or Wallet page to confirm.",
   "Already reacted to this comment from another channel.": "Already reacted to this comment from another channel.",
   "Unable to react. Please try again later.": "Unable to react. Please try again later.",
+  "Username (cannot be changed)": "Username (cannot be changed)",
+  "Display Name": "Display Name",
   "--end--": "--end--"
 }
