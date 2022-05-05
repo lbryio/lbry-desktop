@@ -126,7 +126,7 @@ function overrideHoverTooltip(player: any, tsData: TimestampData, duration: numb
 
 function load(player: any, timestampData: TimestampData, duration: number) {
   player.one('loadedmetadata', () => {
-    const textTrack = player.addTextTrack('chapters', 'label', 'en');
+    const textTrack = player.addTextTrack('chapters', __('Chapters'), 'en');
 
     setTimeout(() => {
       const values = Object.values(timestampData);
@@ -144,6 +144,11 @@ function load(player: any, timestampData: TimestampData, duration: number) {
         values.map((v) => v.seconds),
         duration
       );
+
+      const chaptersButton = player?.controlBar?.chaptersButton;
+      if (chaptersButton) {
+        chaptersButton.update();
+      }
     }, REQUIRED_DELAY_FOR_IOS_MS);
   });
 }

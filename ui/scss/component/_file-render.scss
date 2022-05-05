@@ -634,6 +634,18 @@ $control-bar-icon-size: 0.8rem;
       }
     }
 
+    .vjs-chapters-button {
+      .vjs-menu {
+        width: 20em;
+        left: -3em;
+      }
+
+      li {
+        text-align: left;
+        padding: var(--spacing-xxxs) var(--spacing-s);
+      }
+    }
+
     .vjs-chromecast-button,
     .vjs-airplay-button {
       .vjs-icon-placeholder {
