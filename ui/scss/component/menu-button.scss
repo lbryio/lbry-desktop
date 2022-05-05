@@ -34,6 +34,11 @@ reach-portal {
 .MuiMenuItem-root {
   padding: 0px;
   margin: 0px !important;
+  color: var(--color-text) !important;
+
+  &:hover {
+    color: var(--color-primary-contrast) !important;
+  }
 }
 
 .MuiMenu-list--paper {
@@ -99,13 +104,6 @@ reach-portal {
   }
 }
 
-.menu__link:hover {
-  color: var(--color-odysee-contrast) !important;
-  background-color: var(--color-odysee) !important;
-  border-radius: var(--border-radius);
-  box-shadow: none;
-}
-
 .menu__button {
   display: flex;
   justify-content: center;
@@ -147,15 +145,8 @@ reach-portal {
   @extend .menu__list;
 
   .channel__selector {
-    margin: 0px !important;
+    margin: 0px;
     display: flex;
-
-    .menu__link {
-      margin: 0px !important;
-      padding: var(--spacing-xs) var(--spacing-s) !important;
-      width: 100%;
-      color: inherit;
-    }
 
     .icon--ChevronDown {
       margin-left: var(--spacing-s);
@@ -205,7 +196,7 @@ reach-portal {
   // padding-right: var(--spacing-l);
   padding: var(--spacing-xs) var(--spacing-s) var(--spacing-xs) var(--spacing-s);
   height: var(--button-height);
-  color: var(--color-primary-contrast) !important;
+  color: var(--color-text);
 
   .icon {
     stroke: var(--color-menu-icon);
@@ -218,6 +209,10 @@ reach-portal {
 
   &:hover {
     color: var(--color-primary-contrast);
+    background-color: var(--color-odysee);
+    border-radius: var(--border-radius);
+    box-shadow: none;
+
     .icon {
       stroke: var(--color-primary-contrast);
       margin-right: var(--spacing-s);
