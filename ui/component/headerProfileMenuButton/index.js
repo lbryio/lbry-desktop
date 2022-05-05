@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
 import { doSignOut } from 'redux/actions/app';
-import { selectActiveChannelClaim } from 'redux/selectors/app';
+import { selectDefaultChannelClaim } from 'redux/selectors/settings';
 import { selectMyChannelClaimIds } from 'redux/selectors/claims';
 import { selectUserEmail, selectUserVerifiedEmail } from 'redux/selectors/user';
 import HeaderProfileMenuButton from './view';
 
 const select = (state) => ({
   myChannelClaimIds: selectMyChannelClaimIds(state),
-  activeChannelClaim: selectActiveChannelClaim(state),
+  defaultChannelClaim: selectDefaultChannelClaim(state),
   authenticated: selectUserVerifiedEmail(state),
   email: selectUserEmail(state),
 });

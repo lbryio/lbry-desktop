@@ -5,6 +5,7 @@ import SUPPORTED_BROWSER_LANGUAGES from 'constants/supported_browser_languages';
 import { createSelector } from 'reselect';
 import { ENABLE_MATURE } from 'config';
 import { getDefaultHomepageKey, getDefaultLanguage } from 'util/default-languages';
+import { selectClaimWithId } from 'redux/selectors/claims';
 
 const selectState = (state) => state.settings || {};
 
@@ -81,3 +82,8 @@ export const selectWildWestDisabled = (state) => {
 };
 
 export const selectosNotificationsEnabled = (state) => selectClientSetting(state, SETTINGS.OS_NOTIFICATIONS_ENABLED);
+
+export const selectDefaultChannelClaim = createSelector(
+  (state) => selectClaimWithId(state, selectClientSetting(state, SETTINGS.ACTIVE_CHANNEL_CLAIM)),
+  (defaultChannelClaim) => defaultChannelClaim
+);
