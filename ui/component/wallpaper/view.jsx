@@ -223,7 +223,7 @@ const Wallpaper = (props: Props) => {
         className={'background-image'}
         style={{
           backgroundImage:
-            'url("https://thumbnails.odysee.com/optimize/plain/https://player.odycdn.com/speech/2e9a7dc6c99f0fb9.jpg")',
+            'url("https://thumbnails.odycdn.com/optimize/plain/https://player.odycdn.com/speech/2e9a7dc6c99f0fb9.jpg")',
         }}
       />
       <div className={'theme'} />
