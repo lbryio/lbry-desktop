@@ -478,7 +478,7 @@ export const selectChannelMentionData = createCachedSelector(
  *
  * @param state
  * @param claimId
- * @returns {null | undefined | Array<string>} 'undefined' = "not fetched"; 'null' = "no claim";
+ * @returns {null | undefined | Array<string>} 'undefined' = "not fetched for this ID"; 'null' = "no claim";
  */
 export const selectMyCommentedChannelIdsForId = (state: State, claimId: string) => {
   return claimId ? selectState(state).myCommentedChannelIdsById[claimId] : null;

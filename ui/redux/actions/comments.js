@@ -16,6 +16,7 @@ import {
   selectPendingCommentReacts,
   selectModerationBlockList,
   selectModerationDelegatorsById,
+  selectMyCommentedChannelIdsForId,
 } from 'redux/selectors/comments';
 import { makeSelectNotificationForCommentId } from 'redux/selectors/notifications';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
@@ -620,11 +621,29 @@ export function doCommentCreate(uri: string, livestream: boolean, params: Commen
 
     const state = getState();
     const activeChannelClaim = selectActiveChannelClaim(state);
+    const myCommentedChannelIds = selectMyCommentedChannelIdsForId(state, claim_id);
     const mentionedChannels: Array<MentionedChannel> = [];
 
     if (!activeChannelClaim) {
       console.error('Unable to create comment. No activeChannel is set.'); // eslint-disable-line
       return;
+    }
+
+    if (myCommentedChannelIds === undefined) {
+      dispatchToast(
+        dispatch,
+        __('Failed to perform action.'),
+        __('Please wait a while before re-submitting, or try refreshing the page.'),
+        'long'
+      );
+      return;
+    }
+
+    if (myCommentedChannelIds && myCommentedChannelIds.length) {
+      if (!myCommentedChannelIds.includes(activeChannelClaim.claim_id)) {
+        dispatchToast(dispatch, __('Commenting from multiple channels is not allowed.'));
+        return;
+      }
     }
 
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/matchAll
