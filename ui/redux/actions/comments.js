@@ -284,11 +284,16 @@ export function doFetchMyCommentedChannels(claimId: ?string) {
       // $FlowFixMe
       return Promise.allSettled(params.map((p) => Comments.comment_list(p)))
         .then((response) => {
-          response.forEach((res, i) => {
-            if (res.status === 'fulfilled' && res.value.total_items > 0) {
+          for (let i = 0; i < response.length; ++i) {
+            if (response[i].status !== 'fulfilled') {
+              // Meaningless if it couldn't confirm history for all own channels.
+              return;
+            }
+
+            if (response[i].value.total_items > 0) {
               commentedChannelIds.push(params[i].author_claim_id);
             }
-          });
+          }
 
           dispatch({
             type: ACTIONS.COMMENT_FETCH_MY_COMMENTED_CHANNELS_COMPLETE,
