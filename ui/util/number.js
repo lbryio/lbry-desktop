@@ -1,9 +1,10 @@
 // @flow
+import { getFormatter } from './intlNumberFormat';
 
 export function formatNumber(num: number, numberOfDigits?: number, short: boolean = false): string {
   const language = localStorage.getItem('language') || undefined;
   const safePrecision = Math.min(20, numberOfDigits || 0);
-  const formatter = new Intl.NumberFormat(language, {
+  const formatter = getFormatter(language, {
     maximumFractionDigits: safePrecision,
     notation: short ? 'compact' : 'standard',
     compactDisplay: 'short',
