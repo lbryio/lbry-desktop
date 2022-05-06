@@ -6,7 +6,7 @@ import { SORT_BY, BLOCK_LEVEL } from 'constants/comment';
 import Lbry from 'lbry';
 import { resolveApiMessage } from 'util/api-message';
 import { parseURI, buildURI, isURIEqual } from 'util/lbryURI';
-import { devToast, doFailedSignatureToast } from 'util/toast-wrappers';
+import { devToast, dispatchToast, doFailedSignatureToast } from 'util/toast-wrappers';
 import { selectClaimForUri, selectClaimsByUri, selectMyChannelClaims } from 'redux/selectors/claims';
 import { doResolveUris, doClaimSearch, doResolveClaimIds } from 'redux/actions/claims';
 import { doToast, doSeeNotifications } from 'redux/actions/notifications';
@@ -704,7 +704,7 @@ export function doCommentCreate(uri: string, livestream: boolean, params: Commen
       })
       .catch((error) => {
         dispatch({ type: ACTIONS.COMMENT_CREATE_FAILED, data: error });
-        dispatch(doToast({ message: resolveApiMessage(error.message), isError: true }));
+        dispatchToast(dispatch, resolveApiMessage(error.message));
         return Promise.reject(error);
       });
   };
@@ -754,12 +754,7 @@ export function doCommentPin(commentId: string, claimId: string, remove: boolean
           type: ACTIONS.COMMENT_PIN_FAILED,
           data: error,
         });
-        dispatch(
-          doToast({
-            message: 'Unable to pin this comment, please try again later.',
-            isError: true,
-          })
-        );
+        dispatchToast(dispatch, __('Unable to pin this comment, please try again later.'));
       });
   };
 }
