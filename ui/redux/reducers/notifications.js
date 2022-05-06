@@ -26,7 +26,7 @@ export default handleActions(
     },
     [ACTIONS.DISMISS_TOAST]: (state: NotificationState) => {
       const newToasts: Array<Toast> = state.toasts.slice();
-      newToasts.shift();
+      newToasts.pop();
 
       return {
         ...state,

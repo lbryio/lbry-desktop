@@ -31,7 +31,7 @@ export const selectUnseenNotificationCount = createSelector(selectNotifications,
 
 export const selectToast = createSelector(selectState, (state) => {
   if (state.toasts.length) {
-    const { id, params } = state.toasts[0];
+    const { id, params } = state.toasts[state.toasts.length - 1];
     return {
       id,
       ...params,
