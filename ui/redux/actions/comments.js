@@ -831,6 +831,9 @@ export function doCommentAbandon(
               comment_id: commentId,
             },
           });
+
+          // Update the commented-channels list.
+          dispatch(doFetchMyCommentedChannels(result.claim_id));
         } else {
           dispatch({
             type: ACTIONS.COMMENT_ABANDON_FAILED,

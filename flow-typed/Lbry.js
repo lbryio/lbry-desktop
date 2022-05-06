@@ -155,6 +155,7 @@ declare type CommentPinResponse = {
 declare type CommentAbandonResponse = {
   // keyed by the CommentId given
   abandoned: boolean,
+  claim_id: string,
 };
 
 declare type ChannelListResponse = {
