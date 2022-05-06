@@ -11,11 +11,10 @@ import SelectChannel from 'component/selectChannel';
 type SelectorProps = {
   isReply: boolean,
   isLivestream: boolean,
-  channelIds?: Array<string>, // Specific channel IDs to show. Must be a subset of own channels.
 };
 
 export const FormChannelSelector = (selectorProps: SelectorProps) => {
-  const { isReply, isLivestream, channelIds } = selectorProps;
+  const { isReply, isLivestream } = selectorProps;
 
   return (
     <div className="comment-create__label-wrapper">
@@ -23,7 +22,7 @@ export const FormChannelSelector = (selectorProps: SelectorProps) => {
         {(isReply ? __('Replying as') : isLivestream ? __('Chat as') : __('Comment as')) + ' '}
       </span>
 
-      <SelectChannel tiny channelIds={channelIds} />
+      <SelectChannel tiny />
     </div>
   );
 };

@@ -7,7 +7,7 @@ import Lbry from 'lbry';
 import { resolveApiMessage } from 'util/api-message';
 import { parseURI, buildURI, isURIEqual } from 'util/lbryURI';
 import { devToast, dispatchToast, doFailedSignatureToast } from 'util/toast-wrappers';
-import { selectClaimForUri, selectClaimsByUri, selectMyChannelClaims } from 'redux/selectors/claims';
+import { selectClaimForUri, selectClaimsById, selectClaimsByUri, selectMyChannelClaims } from 'redux/selectors/claims';
 import { doResolveUris, doClaimSearch, doResolveClaimIds } from 'redux/actions/claims';
 import { doToast, doSeeNotifications } from 'redux/actions/notifications';
 import {
@@ -646,7 +646,15 @@ export function doCommentCreate(uri: string, livestream: boolean, params: Commen
 
     if (myCommentedChannelIds && myCommentedChannelIds.length) {
       if (!myCommentedChannelIds.includes(activeChannelClaim.claim_id)) {
-        dispatchToast(dispatch, __('Commenting from multiple channels is not allowed.'));
+        const claimById = selectClaimsById(state);
+        const commentedChannelNames = myCommentedChannelIds.map((id) => claimById[id]?.name);
+
+        dispatchToast(
+          dispatch,
+          __('Commenting from multiple channels is not allowed.'),
+          commentedChannelNames.join(' • '),
+          'long'
+        );
         return;
       }
     }
