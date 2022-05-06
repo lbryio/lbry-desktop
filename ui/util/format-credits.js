@@ -1,3 +1,5 @@
+import { getFormatter } from './intlNumberFormat';
+
 export function formatCredits(amount, precision, shortFormat = false) {
   const language = localStorage.getItem('language') || undefined;
   const actualAmount = Number(amount);
@@ -6,7 +8,7 @@ export function formatCredits(amount, precision, shortFormat = false) {
   if (Number.isNaN(actualAmount) || actualAmount === 0) return '0';
 
   if (shortFormat) {
-    const formatter = new Intl.NumberFormat(language, {
+    const formatter = getFormatter(language, {
       minimumFractionDigits: safePrecision,
       maximumFractionDigits: safePrecision,
       roundingIncrement: 5,
@@ -17,7 +19,7 @@ export function formatCredits(amount, precision, shortFormat = false) {
     return formatter.format(actualAmount);
   }
 
-  const formatter = new Intl.NumberFormat(language, {
+  const formatter = getFormatter(language, {
     minimumFractionDigits: safePrecision,
     maximumFractionDigits: safePrecision,
     roundingIncrement: 5,
