@@ -37,6 +37,32 @@
   background-color: var(--color-snack-bg-error);
 }
 
+.snack-bar--stacked-non-error {
+  box-shadow: // The top layer shadow
+    0 1px 1px var(--color-border),
+    // The second layer
+    0 10px 0 -5px var(--color-primary),
+    // The second layer shadow
+    0 10px 1px -4px var(--color-border);
+  //// The third layer
+  //0 20px 0 -10px var(--color-primary),
+  //// The third layer shadow
+  //0 20px 1px -9px var(--color-border);
+}
+
+.snack-bar--stacked-error {
+  box-shadow: // The top layer shadow
+    0 1px 1px var(--color-border),
+    // The second layer
+    0 10px 0 -5px var(--color-snack-bg-error),
+    // The second layer shadow
+    0 10px 1px -4px var(--color-border);
+  //// The third layer
+  //0 20px 0 -10px var(--color-snack-bg-error),
+  //// The third layer shadow
+  //0 20px 1px -9px var(--color-border);
+}
+
 .snack-bar--notification {
   @extend .card;
   background-color: var(--color-card-background);

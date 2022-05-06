@@ -41,6 +41,8 @@ export const selectToast = createSelector(selectState, (state) => {
   return null;
 });
 
+export const selectToastCount = (state) => selectState(state).toasts.length;
+
 export const selectError = createSelector(selectState, (state) => {
   if (state.errors.length) {
     const { error } = state.errors[0];

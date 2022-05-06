@@ -9,40 +9,46 @@ import LbcMessage from 'component/common/lbc-message';
 type Props = {
   removeSnack: (any) => void,
   snack: ?ToastParams,
+  snackCount: number,
 };
 
 class SnackBar extends React.PureComponent<Props> {
   constructor(props: Props) {
     super(props);
-    this.hideTimeout = null;
+    this.intervalId = null;
   }
 
-  hideTimeout: ?TimeoutID;
+  intervalId: ?IntervalID;
 
   render() {
-    const { snack, removeSnack } = this.props;
+    const { snack, snackCount, removeSnack } = this.props;
 
     if (!snack) {
-      this.hideTimeout = null; // should be unmounting anyway, but be safe?
+      clearInterval(this.intervalId);
+      this.intervalId = null; // should be unmounting anyway, but be safe?
       return null;
     }
 
     const { message, subMessage, duration, linkText, linkTarget, isError } = snack;
 
-    if (this.hideTimeout === null) {
-      this.hideTimeout = setTimeout(
-        () => {
-          this.hideTimeout = null;
-          removeSnack();
-        },
-        duration === 'long' ? 15000 : 5000
-      );
+    if (this.intervalId) {
+      // TODO: render should be pure
+      clearInterval(this.intervalId);
     }
+
+    this.intervalId = setInterval(
+      () => {
+        removeSnack();
+      },
+      duration === 'long' ? 10000 : 5000
+    );
 
     return (
       <div
         className={classnames('snack-bar', {
           'snack-bar--error': isError,
+          'snack-bar--stacked-error': snackCount > 1 && isError,
+          'snack-bar--stacked-non-error': snackCount > 1 && !isError,
         })}
       >
         <div className="snack-bar__message">
