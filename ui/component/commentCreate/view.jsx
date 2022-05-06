@@ -75,6 +75,9 @@ type Props = {
   doSendTip: (params: {}, isSupport: boolean, successCb: (any) => void, errorCb: (any) => void, boolean) => void,
   doOpenModal: (id: string, any) => void,
   preferredCurrency: string,
+  myChannelClaimIds: ?Array<string>,
+  myCommentedChannelIds: ?Array<string>,
+  doFetchMyCommentedChannels: (claimId: ?string) => void,
 };
 
 export function CommentCreate(props: Props) {
@@ -111,6 +114,9 @@ export function CommentCreate(props: Props) {
     setQuickReply,
     doOpenModal,
     preferredCurrency,
+    myChannelClaimIds,
+    myCommentedChannelIds,
+    doFetchMyCommentedChannels,
   } = props;
 
   const isMobile = useIsMobile();
@@ -485,6 +491,13 @@ export function CommentCreate(props: Props) {
       window.removeEventListener('keydown', altEnterListener);
     };
   }, [isLivestream]);
+
+  // Determine my channels that have commented
+  React.useEffect(() => {
+    if (myCommentedChannelIds === undefined && claimId && myChannelClaimIds) {
+      doFetchMyCommentedChannels(claimId);
+    }
+  }, [claimId, myCommentedChannelIds, myChannelClaimIds]);
 
   // **************************************************************************
   // Render

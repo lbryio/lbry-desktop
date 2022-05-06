@@ -5,14 +5,20 @@ import {
   selectHasChannels,
   selectFetchingMyChannels,
   makeSelectTagInClaimOrChannelForUri,
+  selectMyChannelClaimIds,
 } from 'redux/selectors/claims';
 import { CommentCreate } from './view';
 import { DISABLE_SUPPORT_TAG } from 'constants/tags';
-import { doCommentCreate, doFetchCreatorSettings, doCommentById } from 'redux/actions/comments';
+import {
+  doCommentCreate,
+  doFetchCreatorSettings,
+  doCommentById,
+  doFetchMyCommentedChannels,
+} from 'redux/actions/comments';
 import { doSendTip, doSendCashTip } from 'redux/actions/wallet';
 import { doToast } from 'redux/actions/notifications';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
-import { selectSettingsByChannelId } from 'redux/selectors/comments';
+import { selectMyCommentedChannelIdsForId, selectSettingsByChannelId } from 'redux/selectors/comments';
 import { getChannelIdFromClaim } from 'util/claim';
 import { doOpenModal } from 'redux/actions/app';
 import { selectClientSetting } from 'redux/selectors/settings';
@@ -45,12 +51,15 @@ const select = (state, props) => {
     settingsByChannelId: selectSettingsByChannelId(state),
     supportDisabled: makeSelectTagInClaimOrChannelForUri(uri, DISABLE_SUPPORT_TAG)(state),
     preferredCurrency: selectClientSetting(state, SETTINGS.PREFERRED_CURRENCY),
+    myChannelClaimIds: selectMyChannelClaimIds(state),
+    myCommentedChannelIds: selectMyCommentedChannelIdsForId(state, claim?.claim_id),
   };
 };
 
 const perform = {
   doCommentCreate,
   doFetchCreatorSettings,
+  doFetchMyCommentedChannels,
   doToast,
   doCommentById,
   doSendCashTip,
