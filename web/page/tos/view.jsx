@@ -187,38 +187,7 @@ const TOSPage = () => {
               commercial use or remixing.
             </p>
 
-            <h3 id="toc_4">5. Hosting Content</h3>
-
-            <p>
-              This section applies to you if you host any Content via Odysee using the Services. The Services allow
-              Hosts to make available storage space (<strong>“Space"</strong>) on the Host’s device for the storage of
-              Content published through Odysee By making available Space on your device, you authorize any user of our
-              Services to: (i) store Content published through Odysee onto your device; and (ii) access such Content
-              from your device at any time.{' '}
-            </p>
-
-            <p>
-              a) You represent and warrant that (i) you own or control your device, and have the right to provide the
-              Space on your device pursuant to these Terms; and (ii) you will not breach any agreement to which you are
-              a party in connection with your performance under these Terms, including any agreement you have with a
-              third-party Internet service provider.{' '}
-            </p>
-
-            <p>
-              b) By allowing Space to be utilized to store Content distributed through Odysee, you understand that your
-              device may be impacted due to the additional constraints being placed on it by the processing of Content.
-              In particular, your device may not operate as quickly as it would without making Space available for
-              others to utilize.{' '}
-            </p>
-
-            <p>
-              c) You will not: (i) reverse engineer any aspect of the Content stored on your device or do anything that
-              might discover the contents or origin of the Content; (ii) attempt to bypass or circumvent measures
-              employed to prevent or limit access to the Content, including attempting to defeat any encryption; or
-              (iii) attempt to interfere with the storage or transmission of Content.
-            </p>
-
-            <h3 id="toc_5">6. General Conduct Restrictions</h3>
+            <h3 id="toc_4">5. General Conduct Restrictions</h3>
 
             <p>
               You are solely responsible for your conduct while using the Services. You will comply with all applicable
@@ -276,7 +245,7 @@ const TOSPage = () => {
               prohibited by such rules.{' '}
             </p>
 
-            <h3 id="toc_6">7. Limited License; Copyright and Trademark</h3>
+            <h3 id="toc_5">6. Limited License; Copyright and Trademark</h3>
 
             <p>
               Our Services and the text, graphics, images, photographs, illustrations, trademarks, trade names, service
@@ -289,7 +258,7 @@ const TOSPage = () => {
               any page or form contained on a page, on the Services without the Company’s express written consent.
             </p>
 
-            <h3 id="toc_7">8. Open Source Software</h3>
+            <h3 id="toc_6">7. Open Source Software</h3>
 
             <p>
               a) We may, from time to time, release the source code for certain of the software that supports our
@@ -305,7 +274,7 @@ const TOSPage = () => {
               through our Services, then these Terms will apply to such access and use.{' '}
             </p>
 
-            <h3 id="toc_8">9. YouTube Sync Program Terms</h3>
+            <h3 id="toc_7">8. YouTube Sync Program Terms</h3>
 
             <p>
               a) If you participate in the YouTube Sync Program, you also agree to{' '}
@@ -326,7 +295,7 @@ const TOSPage = () => {
               </a>
             </p>
 
-            <h3 id="toc_9">10. Feedback</h3>
+            <h3 id="toc_8">9. Feedback</h3>
 
             <p>
               Any questions, comments, suggestions, ideas, original or creative materials or other information you
@@ -337,7 +306,7 @@ const TOSPage = () => {
               acknowledgment or compensation to you.
             </p>
 
-            <h3 id="toc_10">11. Copyright Complaints</h3>
+            <h3 id="toc_9">10. Copyright Complaints</h3>
 
             <p>
               We have a policy of limiting access to our Services and terminating the accounts of users who infringe the
@@ -358,7 +327,7 @@ const TOSPage = () => {
               to the Company for certain costs and damages.
             </p>
 
-            <h3 id="toc_11">12. Indemnification</h3>
+            <h3 id="toc_10">11. Indemnification</h3>
 
             <p>
               To the fullest extent permitted by applicable law, you will indemnify, defend, and hold harmless the
@@ -375,7 +344,7 @@ const TOSPage = () => {
               agreement between you and the Company or the other Company Parties.
             </p>
 
-            <h3 id="toc_12">13. Disclaimers</h3>
+            <h3 id="toc_11">12. Disclaimers</h3>
 
             <p>
               <strong>
@@ -389,7 +358,7 @@ const TOSPage = () => {
               </strong>
             </p>
 
-            <h3 id="toc_13">14. Limitation of Liability</h3>
+            <h3 id="toc_12">13. Limitation of Liability</h3>
 
             <p>
               <strong>
@@ -418,7 +387,7 @@ const TOSPage = () => {
               </strong>
             </p>
 
-            <h3 id="toc_14">15. Release</h3>
+            <h3 id="toc_13">14. Release</h3>
 
             <p>
               To the fullest extent permitted by applicable law, you release the Company and the other Company Parties
@@ -433,7 +402,7 @@ const TOSPage = () => {
               </strong>
             </p>
 
-            <h3 id="toc_15">16. Dispute Resolution; Arbitration</h3>
+            <h3 id="toc_14">15. Dispute Resolution; Arbitration</h3>
 
             <p>
               <strong>
@@ -442,7 +411,7 @@ const TOSPage = () => {
               </strong>
             </p>
 
-            <h3 id="toc_16">16.1. Binding Arbitration</h3>
+            <h3 id="toc_15">15.1. Binding Arbitration</h3>
 
             <p>
               Except for any disputes, claims, suits, actions, causes of action, demands or proceedings (collectively,{' '}
@@ -457,7 +426,7 @@ const TOSPage = () => {
               judge or jury in court).
             </p>
 
-            <h3 id="toc_17">16.2. No Class Arbitrations, Class Actions or Representative Actions</h3>
+            <h3 id="toc_16">15.2. No Class Arbitrations, Class Actions or Representative Actions</h3>
 
             <p>
               Any Dispute arising out of or related to these Terms or the Services is personal to you and the Company
@@ -469,7 +438,7 @@ const TOSPage = () => {
               individuals.
             </p>
 
-            <h3 id="toc_18">16.3. Federal Arbitration Act</h3>
+            <h3 id="toc_17">15.3. Federal Arbitration Act</h3>
 
             <p>
               These Terms affect interstate commerce and the enforceability of this Section 16 will be both
@@ -478,7 +447,7 @@ const TOSPage = () => {
               applicable law.
             </p>
 
-            <h3 id="toc_19">16.4. Notice; Informal Dispute Resolution</h3>
+            <h3 id="toc_18">15.4. Notice; Informal Dispute Resolution</h3>
 
             <p>
               Each party will notify the other party in writing of any arbitrable or small claims Dispute within thirty
@@ -493,7 +462,7 @@ const TOSPage = () => {
               claim in court.{' '}
             </p>
 
-            <h3 id="toc_20">16.5. Process</h3>
+            <h3 id="toc_19">15.5. Process</h3>
 
             <p>
               Any arbitration will occur in New Castle County, Delaware. Arbitration will be conducted confidentially by
@@ -504,7 +473,7 @@ const TOSPage = () => {
               you reside if the Dispute meets the requirements to be heard in small claims court.{' '}
             </p>
 
-            <h3 id="toc_21">16.6. Authority of Arbitrator</h3>
+            <h3 id="toc_20">15.6. Authority of Arbitrator</h3>
 
             <p>
               As limited by the FAA, these Terms and the applicable JAMS rules, the arbitrator will have (a) the
@@ -517,7 +486,7 @@ const TOSPage = () => {
               proceeding involving more than one individual.
             </p>
 
-            <h3 id="toc_22">16.7. Rules of JAMS</h3>
+            <h3 id="toc_21">15.7. Rules of JAMS</h3>
 
             <p>
               The rules of JAMS and additional information about JAMS are available on the{' '}
@@ -529,7 +498,7 @@ const TOSPage = () => {
               the rules of JAMS are unfair or should not apply for any reason.
             </p>
 
-            <h3 id="toc_23">17. Governing Law and Venue</h3>
+            <h3 id="toc_22">16. Governing Law and Venue</h3>
 
             <p>
               These Terms and your access to and use of the Services will be governed by and construed and enforced in
@@ -541,7 +510,7 @@ const TOSPage = () => {
               Delaware.{' '}
             </p>
 
-            <h3 id="toc_24">18. Severability</h3>
+            <h3 id="toc_23">17. Severability</h3>
 
             <p>
               If any term, clause or provision of these Terms is held invalid or unenforceable, then that term, clause
@@ -549,7 +518,7 @@ const TOSPage = () => {
               remaining part of that term, clause or provision, or any other term, clause or provision of these Terms.
             </p>
 
-            <h3 id="toc_25">19. Termination or Suspension</h3>
+            <h3 id="toc_24">18. Termination or Suspension</h3>
 
             <p>
               Notwithstanding anything contained in these Terms, we reserve the right, without notice and in our sole
@@ -560,7 +529,7 @@ const TOSPage = () => {
               will prevent the spread or distribution of published Content through Odysee.
             </p>
 
-            <h3 id="toc_26">20. Amendment</h3>
+            <h3 id="toc_25">19. Amendment</h3>
 
             <p>
               We reserve the right to change these Terms from time to time upon notice to you. If we make changes to
@@ -571,14 +540,14 @@ const TOSPage = () => {
               the revised Terms. If you do not agree to the modified Terms, you must stop using the Services.{' '}
             </p>
 
-            <h3 id="toc_27">21. Survival</h3>
+            <h3 id="toc_26">20. Survival</h3>
 
             <p>
               The following sections will survive the expiration or termination of these Terms: all defined terms and
               Sections 12 - 18, 21 and 22.
             </p>
 
-            <h3 id="toc_28">22. Miscellaneous</h3>
+            <h3 id="toc_27">21. Miscellaneous</h3>
 
             <p>
               These Terms constitutes the entire agreement between you and the Company relating to your access to and
@@ -592,7 +561,7 @@ const TOSPage = () => {
               beneficiary rights upon any other person or entity.
             </p>
 
-            <h3 id="toc_28">23. Export Control and Prohibited Use</h3>
+            <h3 id="toc_28">22. Export Control and Prohibited Use</h3>
 
             <p>
               Use of the Service and Software, including transferring, posting, or uploading data, software or other
