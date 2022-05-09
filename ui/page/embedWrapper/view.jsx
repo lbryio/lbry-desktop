@@ -1,5 +1,6 @@
 // @flow
 import { SITE_NAME } from 'config';
+import * as PAGES from 'constants/pages';
 import React from 'react';
 import classnames from 'classnames';
 import FileRender from 'component/fileRender';
@@ -36,6 +37,9 @@ type Props = {
   obscurePreview: boolean,
   activeLivestreamInitialized: boolean,
   geoRestriction: ?GeoRestriction,
+  latestClaimUrl: ?string,
+  isNewestPath: ?boolean,
+  fetchLatestClaimForChannel: (uri: string, isEmbed: boolean) => void,
   doResolveUri: (uri: string) => void,
   doPlayUri: (uri: string) => void,
   doFetchCostInfoForUri: (uri: string) => void,
@@ -71,6 +75,9 @@ export default function EmbedWrapperPage(props: Props) {
     obscurePreview,
     activeLivestreamInitialized,
     geoRestriction,
+    latestClaimUrl,
+    isNewestPath,
+    fetchLatestClaimForChannel,
     doResolveUri,
     doPlayUri,
     doFetchCostInfoForUri,
@@ -90,6 +97,9 @@ export default function EmbedWrapperPage(props: Props) {
 
   const channelUrl = channelUri && formatLbryChannelName(channelUri);
   const urlParams = new URLSearchParams(search);
+  const featureParam = urlParams.get('feature');
+  const latestContentPath = featureParam === PAGES.LATEST;
+  const liveContentPath = featureParam === PAGES.LIVE_NOW;
   const rawReferrerParam = urlParams.get('r');
   const sanitizedReferrerParam = rawReferrerParam && rawReferrerParam.replace(':', '#');
   const embedLightBackground = urlParams.get('embedBackgroundLight');
@@ -110,6 +120,18 @@ export default function EmbedWrapperPage(props: Props) {
     );
 
   const thumbnail = useThumbnail(claimThumbnail, containerRef);
+
+  React.useEffect(() => {
+    if (!latestClaimUrl && liveContentPath && claimId) {
+      doFetchChannelLiveStatus(claimId);
+    }
+  }, [claimId, doFetchChannelLiveStatus, latestClaimUrl, liveContentPath]);
+
+  React.useEffect(() => {
+    if (!latestClaimUrl && latestContentPath && canonicalUrl) {
+      fetchLatestClaimForChannel(canonicalUrl, true);
+    }
+  }, [canonicalUrl, fetchLatestClaimForChannel, latestClaimUrl, latestContentPath]);
 
   React.useEffect(() => {
     if (!sanitizedReferrerParam) setReferrer(uri);
@@ -142,10 +164,10 @@ export default function EmbedWrapperPage(props: Props) {
       doResolveUri(uri);
     }
 
-    if (uri && haveClaim && costInfo && costInfo.cost === 0) {
+    if (uri && (isNewestPath ? latestClaimUrl : haveClaim) && costInfo && costInfo.cost === 0) {
       doPlayUri(uri);
     }
-  }, [doPlayUri, doResolveUri, haveClaim, costInfo, uri]);
+  }, [doPlayUri, doResolveUri, haveClaim, costInfo, uri, isNewestPath, latestClaimUrl]);
 
   React.useEffect(() => {
     if (haveClaim && uri && doFetchCostInfoForUri) {
@@ -154,6 +176,15 @@ export default function EmbedWrapperPage(props: Props) {
   }, [uri, haveClaim, doFetchCostInfoForUri]);
 
   useFetchLiveStatus(livestreamsFetched ? channelClaimId : undefined, doFetchChannelLiveStatus);
+
+  // Wait for latest claim fetch
+  if (isNewestPath && latestClaimUrl === undefined) {
+    return (
+      <div className="main--empty">
+        <Spinner delayed />
+      </div>
+    );
+  }
 
   if (isClaimBlackListed) {
     return (

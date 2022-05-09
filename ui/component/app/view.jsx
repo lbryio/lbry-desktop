@@ -55,6 +55,7 @@ const oneTrustScriptSrc = 'https://cdn.cookielaw.org/scripttemplates/otSDKStub.j
 
 const LATEST_PATH = `/$/${PAGES.LATEST}/`;
 const LIVE_PATH = `/$/${PAGES.LIVE_NOW}/`;
+const EMBED_PATH = `/$/${PAGES.EMBED}/`;
 
 type Props = {
   language: string,
@@ -143,7 +144,7 @@ function App(props: Props) {
   const rawReferrerParam = urlParams.get('r');
   const fromLbrytvParam = urlParams.get('sunset');
   const sanitizedReferrerParam = rawReferrerParam && rawReferrerParam.replace(':', '#');
-  const embedPath = pathname.startsWith(`/$/${PAGES.EMBED}`);
+  const embedPath = pathname.startsWith(EMBED_PATH);
   const shouldHideNag = embedPath || pathname.startsWith(`/$/${PAGES.AUTH_VERIFY}`);
   const userId = user && user.id;
   const hasMyChannels = myChannelClaimIds && myChannelClaimIds.length > 0;
@@ -156,11 +157,13 @@ function App(props: Props) {
   const urlPath = pathname + hash;
   const latestContentPath = urlPath.startsWith(LATEST_PATH);
   const liveContentPath = urlPath.startsWith(LIVE_PATH);
-  const isNewestPath = latestContentPath || liveContentPath;
+  const featureParam = urlParams.get('feature');
+  const embedLatestPath = embedPath && (featureParam === PAGES.LATEST || featureParam === PAGES.LIVE_NOW);
+  const isNewestPath = latestContentPath || liveContentPath || embedLatestPath;
 
   let path;
   if (isNewestPath) {
-    path = urlPath.replace(latestContentPath ? LATEST_PATH : LIVE_PATH, '');
+    path = urlPath.replace(embedLatestPath ? EMBED_PATH : latestContentPath ? LATEST_PATH : LIVE_PATH, '');
   } else {
     // Remove the leading "/" added by the browser
     path = urlPath.slice(1);
@@ -515,7 +518,7 @@ function App(props: Props) {
         />
       ) : (
         <React.Fragment>
-          <Router uri={uri} />
+          <Router uri={uri} embedLatestPath={embedLatestPath} />
           <ModalRouter />
 
           <React.Suspense fallback={null}>{renderFiledrop && <FileDrop />}</React.Suspense>

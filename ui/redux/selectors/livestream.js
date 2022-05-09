@@ -66,7 +66,7 @@ export const selectIsActiveLivestreamForUri = createCachedSelector(
 
     const activeLivestreamValues = Object.values(activeLivestreams);
     // $FlowFixMe - unable to resolve claimUri
-    return activeLivestreamValues.some((v) => v.claimUri === uri);
+    return activeLivestreamValues.some((v) => v?.claimUri === uri);
   }
 )((state, uri) => String(uri));
 

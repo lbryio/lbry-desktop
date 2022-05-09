@@ -1135,7 +1135,10 @@ export const doCheckPendingClaims = (onChannelConfirmed: Function) => (dispatch:
   }, 30000);
 };
 
-export const doFetchLatestClaimForChannel = (uri: string) => (dispatch: Dispatch, getState: GetState) => {
+export const doFetchLatestClaimForChannel = (uri: string, isEmbed?: boolean) => (
+  dispatch: Dispatch,
+  getState: GetState
+) => {
   const searchOptions = {
     limit_claims_per_channel: 1,
     channel: uri,
@@ -1143,6 +1146,7 @@ export const doFetchLatestClaimForChannel = (uri: string) => (dispatch: Dispatch
     order_by: ['release_time'],
     page: 1,
     has_source: true,
+    stream_types: isEmbed ? ['audio', 'video'] : undefined,
   };
 
   return dispatch(doClaimSearch(searchOptions))
