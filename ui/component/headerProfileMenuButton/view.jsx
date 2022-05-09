@@ -18,21 +18,21 @@ import Button from 'component/button';
 
 type HeaderMenuButtonProps = {
   myChannelClaimIds: ?Array<string>,
-  defaultChannelClaim: ?ChannelClaim,
+  activeChannelClaim: ?ChannelClaim,
   authenticated: boolean,
   email: ?string,
   signOut: () => void,
 };
 
 export default function HeaderProfileMenuButton(props: HeaderMenuButtonProps) {
-  const { myChannelClaimIds, defaultChannelClaim, authenticated, email, signOut } = props;
+  const { myChannelClaimIds, activeChannelClaim, authenticated, email, signOut } = props;
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => setAnchorEl(!anchorEl ? event.currentTarget : null);
   const handleClose = () => setAnchorEl(null);
 
-  const activeChannelUrl = defaultChannelClaim && defaultChannelClaim.permanent_url;
+  const activeChannelUrl = activeChannelClaim && activeChannelClaim.permanent_url;
   // activeChannel will be: undefined = fetching, null = nothing, or { channel claim }
   const noActiveChannel = activeChannelUrl === null;
   const pendingChannelFetch = !noActiveChannel && myChannelClaimIds === undefined;
