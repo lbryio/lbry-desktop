@@ -1,8 +1,13 @@
+// @flow
 import React from 'react';
 import Button from 'component/button';
 
-export default function Meme() {
-  const meme = window?.homepages?.en?.meme;
+type Props = {
+  meme: ?{ text: string, url: string },
+};
+
+export default function Meme(props: Props) {
+  const { meme } = props;
   if (!meme) {
     return null;
   }

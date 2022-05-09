@@ -7,7 +7,12 @@ import { selectActiveLivestreams, selectFetchingActiveLivestreams } from 'redux/
 import { selectFollowedTags } from 'redux/selectors/tags';
 import { selectHasOdyseeMembership, selectHomepageFetched, selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
-import { selectShowMatureContent, selectHomepageData, selectClientSetting } from 'redux/selectors/settings';
+import {
+  selectShowMatureContent,
+  selectHomepageData,
+  selectClientSetting,
+  selectHomepageMeme,
+} from 'redux/selectors/settings';
 
 import HomePage from './view';
 
@@ -17,6 +22,7 @@ const select = (state) => ({
   authenticated: selectUserVerifiedEmail(state),
   showNsfw: selectShowMatureContent(state),
   homepageData: selectHomepageData(state),
+  homepageMeme: selectHomepageMeme(state),
   homepageFetched: selectHomepageFetched(state),
   activeLivestreams: selectActiveLivestreams(state),
   fetchingActiveLivestreams: selectFetchingActiveLivestreams(state),

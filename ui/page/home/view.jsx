@@ -36,6 +36,7 @@ type Props = {
   subscribedChannels: Array<Subscription>,
   showNsfw: boolean,
   homepageData: any,
+  homepageMeme: ?{ text: string, url: string },
   homepageFetched: boolean,
   activeLivestreams: any,
   doFetchActiveLivestreams: () => void,
@@ -54,6 +55,7 @@ function HomePage(props: Props) {
     authenticated,
     showNsfw,
     homepageData,
+    homepageMeme,
     homepageFetched,
     activeLivestreams,
     doFetchActiveLivestreams,
@@ -226,7 +228,7 @@ function HomePage(props: Props) {
 
   return (
     <Page className="homePage-wrapper" fullWidthPage>
-      <Meme />
+      <Meme meme={homepageMeme} />
 
       {!fetchingActiveLivestreams && (
         <>

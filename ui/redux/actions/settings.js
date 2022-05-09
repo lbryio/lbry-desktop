@@ -325,17 +325,9 @@ export function doFetchHomepages() {
     if (homepages) {
       const v2 = {};
       const homepageKeys = Object.keys(homepages);
-
       homepageKeys.forEach((hp) => {
-        v2[hp] = {
-          categories: homepages[hp],
-        };
+        v2[hp] = homepages[hp];
       });
-
-      const meme = require('memes');
-      if (meme && v2['en']) {
-        v2['en'].meme = meme;
-      }
 
       window.homepages = v2;
       populateCategoryTitles(window.homepages?.en?.categories);

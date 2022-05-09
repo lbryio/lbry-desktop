@@ -70,6 +70,18 @@ export const selectHomepageData = (state) => {
   return homepages ? homepages[homepageCode].categories || homepages['en'].categories || {} : {};
 };
 
+export const selectHomepageMeme = (state) => {
+  const homepageCode = selectHomepageCode(state);
+  const homepages = window.homepages;
+  if (homepages) {
+    const meme = homepages[homepageCode].meme;
+    if (meme && meme.text && meme.url) {
+      return meme;
+    }
+  }
+  return homepages['en'].meme || {};
+};
+
 export const selectInRegionByCode = (state, code) => {
   const hp = selectClientSetting(state, SETTINGS.HOMEPAGE);
   const lang = selectLanguage(state);
