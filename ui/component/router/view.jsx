@@ -401,6 +401,8 @@ function AppRouter(props: Props) {
         <Route path={`/$/${PAGES.EMBED}/:claimName/:claimId`} exact component={EmbedWrapperPage} />
 
         {/* Below need to go at the end to make sure we don't match any of our pages first */}
+        <Route path={`/$/${PAGES.LATEST}/:channelName`} exact render={() => <ShowPage uri={uri} latestContentPath />} />
+        <Route path={`/$/${PAGES.LIVE_NOW}/:channelName`} exact render={() => <ShowPage uri={uri} liveContentPath />} />
         <Route path="/:claimName" exact render={() => <ShowPage uri={uri} />} />
         <Route path="/:claimName/:streamName" exact render={() => <ShowPage uri={uri} />} />
         <Route path="/*" component={FourOhFourPage} />

@@ -6,6 +6,7 @@ import {
   selectClaimIsMine,
   makeSelectClaimIsPending,
   selectGeoRestrictionForUri,
+  selectLatestClaimByUri,
 } from 'redux/selectors/claims';
 import {
   makeSelectCollectionForId,
@@ -13,7 +14,7 @@ import {
   makeSelectIsResolvingCollectionForId,
 } from 'redux/selectors/collections';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
-import { doResolveUri } from 'redux/actions/claims';
+import { doResolveUri, doFetchLatestClaimForChannel } from 'redux/actions/claims';
 import { doBeginPublish } from 'redux/actions/publish';
 import { doOpenModal } from 'redux/actions/app';
 import { doFetchItemsInCollection } from 'redux/actions/collections';
@@ -21,10 +22,12 @@ import { isStreamPlaceholderClaim } from 'util/claim';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
 import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
 import { selectBlacklistedOutpointMap } from 'lbryinc';
+import { selectActiveLiveClaimForChannel } from 'redux/selectors/livestream';
+import { doFetchChannelLiveStatus } from 'redux/actions/livestream';
 import ShowPage from './view';
 
 const select = (state, props) => {
-  const { uri, location } = props;
+  const { uri, location, liveContentPath } = props;
   const { search } = location;
 
   const urlParams = new URLSearchParams(search);
@@ -35,9 +38,16 @@ const select = (state, props) => {
     (claim && claim.value_type === 'collection' && claim.claim_id) ||
     null;
 
+  const { canonical_url: canonicalUrl, claim_id: claimId } = claim || {};
+  const latestContentClaim = liveContentPath
+    ? selectActiveLiveClaimForChannel(state, claimId)
+    : selectLatestClaimByUri(state, canonicalUrl);
+  const latestClaimUrl = latestContentClaim && latestContentClaim.canonical_url;
+
   return {
     uri,
     claim,
+    latestClaimUrl,
     isResolvingUri: selectIsUriResolving(state, uri),
     blackListedOutpointMap: selectBlacklistedOutpointMap(state),
     isSubscribed: selectIsSubscribedForUri(state, uri),
@@ -58,6 +68,8 @@ const perform = {
   doBeginPublish,
   doFetchItemsInCollection,
   doOpenModal,
+  fetchLatestClaimForChannel: doFetchLatestClaimForChannel,
+  fetchChannelLiveStatus: doFetchChannelLiveStatus,
 };
 
 export default withRouter(connect(select, perform)(ShowPage));

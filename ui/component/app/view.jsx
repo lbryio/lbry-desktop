@@ -53,6 +53,9 @@ export const IS_MAC = navigator.userAgent.indexOf('Mac OS X') !== -1;
 // const imaLibraryPath = 'https://imasdk.googleapis.com/js/sdkloader/ima3.js';
 const oneTrustScriptSrc = 'https://cdn.cookielaw.org/scripttemplates/otSDKStub.js';
 
+const LATEST_PATH = `/$/${PAGES.LATEST}/`;
+const LIVE_PATH = `/$/${PAGES.LIVE_NOW}/`;
+
 type Props = {
   language: string,
   languages: Array<string>,
@@ -151,8 +154,22 @@ function App(props: Props) {
   const connectionStatus = useConnectionStatus();
 
   const urlPath = pathname + hash;
+  const latestContentPath = urlPath.startsWith(LATEST_PATH);
+  const liveContentPath = urlPath.startsWith(LIVE_PATH);
+  const isNewestPath = latestContentPath || liveContentPath;
 
-  let path = urlPath.slice(1).replace(/:/g, '#');
+  let path;
+  if (isNewestPath) {
+    path = urlPath.replace(latestContentPath ? LATEST_PATH : LIVE_PATH, '');
+  } else {
+    // Remove the leading "/" added by the browser
+    path = urlPath.slice(1);
+  }
+  path = path.replace(/:/g, '#');
+
+  if (isNewestPath && !path.startsWith('@')) {
+    path = `@${path}`;
+  }
 
   if (search && search.startsWith('?q=cache:')) {
     generateGoogleCacheUrl(search, path);

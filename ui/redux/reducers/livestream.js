@@ -7,7 +7,7 @@ const defaultState: LivestreamState = {
   fetchingById: {},
   viewersById: {},
   fetchingActiveLivestreams: 'pending',
-  activeLivestreams: null,
+  activeLivestreams: {},
   activeLivestreamsLastFetchedDate: 0,
   activeLivestreamsLastFetchedOptions: {},
   activeLivestreamsLastFetchedFailCount: 0,
@@ -95,9 +95,9 @@ export default handleActions(
       };
     },
     [ACTIONS.REMOVE_CHANNEL_FROM_ACTIVE_LIVESTREAMS]: (state: LivestreamState, action: any) => {
-      const activeLivestreams = state.activeLivestreams;
-      if (activeLivestreams) delete activeLivestreams[action.data.channelId];
-      return { ...state, activeLivestreams: Object.assign({}, activeLivestreams), activeLivestreamInitialized: true };
+      const activeLivestreams = Object.assign({}, state.activeLivestreams);
+      activeLivestreams[action.data.channelId] = null;
+      return { ...state, activeLivestreams, activeLivestreamInitialized: true };
     },
     [ACTIONS.SOCKET_CONNECTED_BY_ID]: (state: LivestreamState, action: any) => {
       const { connected, sub_category, id: claimId } = action.data;

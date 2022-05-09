@@ -38,7 +38,12 @@ type Props = {
   isResolvingCollection: boolean,
   isAuthenticated: boolean,
   geoRestriction: ?GeoRestriction,
-  doResolveUri: (uri: string, returnCached: boolean, resolveReposts: boolean, options: any) => void,
+  latestContentPath?: boolean,
+  liveContentPath?: boolean,
+  latestClaimUrl: ?string,
+  fetchLatestClaimForChannel: (uri: string) => void,
+  fetchChannelLiveStatus: (channelId: string) => void,
+  doResolveUri: (uri: string, returnCached?: boolean, resolveReposts?: boolean, options?: any) => void,
   doBeginPublish: (name: ?string) => void,
   doFetchItemsInCollection: ({ collectionId: string }) => void,
   doOpenModal: (string, {}) => void,
@@ -61,6 +66,11 @@ export default function ShowPage(props: Props) {
     isResolvingCollection,
     isAuthenticated,
     geoRestriction,
+    latestContentPath,
+    liveContentPath,
+    latestClaimUrl,
+    fetchLatestClaimForChannel,
+    fetchChannelLiveStatus,
     doResolveUri,
     doBeginPublish,
     doFetchItemsInCollection,
@@ -77,6 +87,8 @@ export default function ShowPage(props: Props) {
   const claimExists = claim !== null && claim !== undefined;
   const haventFetchedYet = claim === undefined;
   const isMine = claim && claim.is_my_output;
+  const claimId = claim && claim.claim_id;
+  const isNewestPath = latestContentPath || liveContentPath;
 
   const { contentName, isChannel } = parseURI(uri); // deprecated contentName - use streamName and channelName
   const isCollection = claim && claim.value_type === 'collection';
@@ -89,6 +101,26 @@ export default function ShowPage(props: Props) {
       (signingChannel && blackListedOutpointMap[`${signingChannel.txid}:${signingChannel.nout}`]) ||
         blackListedOutpointMap[`${claim.txid}:${claim.nout}`]
     );
+
+  useEffect(() => {
+    if (!canonicalUrl && isNewestPath) {
+      doResolveUri(uri);
+    }
+    // only for mount on a latest content page
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (!latestClaimUrl && liveContentPath && claimId) {
+      fetchChannelLiveStatus(claimId);
+    }
+  }, [claimId, fetchChannelLiveStatus, latestClaimUrl, liveContentPath]);
+
+  useEffect(() => {
+    if (!latestClaimUrl && latestContentPath && canonicalUrl) {
+      fetchLatestClaimForChannel(canonicalUrl);
+    }
+  }, [canonicalUrl, fetchLatestClaimForChannel, latestClaimUrl, latestContentPath]);
 
   // changed this from 'isCollection' to resolve strangers' collections.
   useEffect(() => {
@@ -150,9 +182,24 @@ export default function ShowPage(props: Props) {
     isAuthenticated,
   ]);
 
+  // Wait for latest claim fetch
+  if (isNewestPath && latestClaimUrl === undefined) {
+    return (
+      <div className="main--empty">
+        <Spinner delayed />
+      </div>
+    );
+  }
+
+  if (isNewestPath && latestClaimUrl) {
+    const params = urlParams.toString() !== '' ? `?${urlParams.toString()}` : '';
+    return <Redirect to={`${formatLbryUrlForWeb(latestClaimUrl)}${params}`} />;
+  }
+
   // Don't navigate directly to repost urls
   // Always redirect to the actual content
-  if (claim && claim.repost_url === uri) {
+  // Also redirect to channel page (uri) when on a non-existing latest path (live or content)
+  if (claim && (claim.repost_url === uri || (isNewestPath && latestClaimUrl === null))) {
     const newUrl = formatLbryUrlForWeb(canonicalUrl);
     return <Redirect to={newUrl} />;
   }

@@ -61,6 +61,7 @@ type State = {
   isCheckingNameForPublish: boolean,
   checkingPending: boolean,
   checkingReflecting: boolean,
+  latestByUri: { [string]: any },
 };
 
 const reducers = {};
@@ -109,6 +110,7 @@ const defaultState = {
   isCheckingNameForPublish: false,
   checkingPending: false,
   checkingReflecting: false,
+  latestByUri: {},
 };
 
 // ****************************************************************************
@@ -927,6 +929,17 @@ reducers[ACTIONS.PURCHASE_LIST_STARTED] = (state: State): State => {
     fetchingMyPurchases: true,
     fetchingMyPurchasesError: null,
   };
+};
+
+reducers[ACTIONS.FETCH_LATEST_FOR_CHANNEL_DONE] = (state: State, action: any): State => {
+  const { uri, results } = action.data;
+  const latestByUri = Object.assign({}, state.latestByUri);
+  latestByUri[uri] = results;
+
+  return Object.assign({}, state, {
+    ...state,
+    latestByUri,
+  });
 };
 
 reducers[ACTIONS.PURCHASE_LIST_COMPLETED] = (state: State, action: any): State => {

@@ -33,6 +33,17 @@ export const selectCreatingChannel = (state: State) => selectState(state).creati
 export const selectCreateChannelError = (state: State) => selectState(state).createChannelError;
 export const selectRepostLoading = (state: State) => selectState(state).repostLoading;
 export const selectRepostError = (state: State) => selectState(state).repostError;
+export const selectLatestByUri = (state: State) => selectState(state).latestByUri;
+
+export const selectLatestClaimByUri = createSelector(
+  (state, uri) => uri,
+  selectLatestByUri,
+  (uri, latestByUri) => {
+    const latestClaim = latestByUri[uri];
+    // $FlowFixMe
+    return latestClaim && Object.values(latestClaim)[0].stream;
+  }
+);
 
 export const selectClaimsByUri = createSelector(selectClaimIdsByUri, selectClaimsById, (byUri, byId) => {
   const claims = {};
@@ -810,7 +821,7 @@ export const selectIsMyChannelCountOverLimit = createSelector(
  * @param uri
  * @returns {*}
  */
-export const selectOdyseeMembershipForUri = function (state: State, uri: string) {
+export const selectOdyseeMembershipForUri = (state: State, uri: string) => {
   const claim = selectClaimForUri(state, uri);
 
   const uploaderChannelClaimId = getChannelIdFromClaim(claim);
@@ -834,7 +845,7 @@ export const selectOdyseeMembershipForUri = function (state: State, uri: string)
  * @param channelId
  * @returns {*}
  */
-export const selectOdyseeMembershipForChannelId = function (state: State, channelId: string) {
+export const selectOdyseeMembershipForChannelId = (state: State, channelId: string) => {
   // looks for the uploader id
   const matchingMembershipOfUser =
     state.user && state.user.odyseeMembershipsPerClaimIds && state.user.odyseeMembershipsPerClaimIds[channelId];

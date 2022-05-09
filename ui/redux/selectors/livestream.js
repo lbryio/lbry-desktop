@@ -1,7 +1,7 @@
 // @flow
 import { createSelector } from 'reselect';
 import { createCachedSelector } from 're-reselect';
-import { selectMyClaims, selectPendingClaims } from 'redux/selectors/claims';
+import { selectMyClaims, selectPendingClaims, selectClaimForUri } from 'redux/selectors/claims';
 
 type State = { livestream: any };
 
@@ -91,6 +91,12 @@ export const selectActiveLivestreamForChannel = createCachedSelector(
     if (!channelId || !activeLivestreams) {
       return null;
     }
-    return activeLivestreams[channelId] || null;
+    return activeLivestreams[channelId];
   }
+)((state, channelId) => String(channelId));
+
+export const selectActiveLiveClaimForChannel = createCachedSelector(
+  (state) => state,
+  selectActiveLivestreamForChannel,
+  (state, activeLivestream) => activeLivestream && selectClaimForUri(state, activeLivestream.claimUri)
 )((state, channelId) => String(channelId));
