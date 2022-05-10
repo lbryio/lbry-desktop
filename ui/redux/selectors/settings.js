@@ -79,7 +79,7 @@ export const selectHomepageMeme = (state) => {
       return meme;
     }
   }
-  return homepages['en'].meme || {};
+  return homepages ? homepages['en'].meme || {} : {};
 };
 
 export const selectInRegionByCode = (state, code) => {
