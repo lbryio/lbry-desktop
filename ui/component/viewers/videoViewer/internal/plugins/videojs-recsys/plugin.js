@@ -44,7 +44,6 @@ class RecsysPlugin extends Component {
   constructor(player, options) {
     super(player, options);
 
-    // Plugin started
     if (options.debug) {
       this.log(`Created recsys plugin for: videoId:${options.videoId}`);
     }
@@ -56,6 +55,7 @@ class RecsysPlugin extends Component {
     this.lastTimeUpdate = null;
     this.currentTimeUpdate = null;
     this.inPause = false;
+    this.watchedDuration = { total: 0, lastTimestamp: -1 };
 
     // Plugin event listeners
     player.on('playing', (event) => this.onPlay(event));
@@ -115,6 +115,21 @@ class RecsysPlugin extends Component {
     }
 
     this.currentTimeUpdate = nextCurrentTime;
+
+    // --- Log watch duration (PR 1317) ---
+    // - Total playing time includes scrubbed durations, i.e. can technically be
+    //   greater than length of the video if scrubbed back to re-watch parts.
+    // - Factors out playback speed, i.e. if the user watches two minutes of
+    //   video at 2x, it's recorded as two minutes, not the browsers clock time
+    //   of one minute.
+    // - Excludes jumping frames, e.g. jumping incrementally from start to end
+    //   while paused will not contribute to the total despite user having
+    //   "watched" the static frames.
+    const curTimeSec = nextCurrentTime.toFixed(0);
+    if (this.watchedDuration.lastTimestamp !== curTimeSec && !this.inPause) {
+      this.watchedDuration.total += 1;
+      this.watchedDuration.lastTimestamp = curTimeSec;
+    }
   }
 
   onSeeked(event) {
@@ -147,7 +162,7 @@ class RecsysPlugin extends Component {
     // Some browsers don't send onEnded event when closing player/browser, force it here
     const recsysEvent = newRecsysPlayerEvent(PlayerEvent.event.stop, this.player.currentTime());
     RecSys.onRecsysPlayerEvent(this.options_.videoId, recsysEvent);
-    RecSys.onPlayerDispose(this.options_.videoId, this.options_.embedded);
+    RecSys.onPlayerDispose(this.options_.videoId, this.options_.embedded, this.watchedDuration.total);
   }
 
   log(...args) {

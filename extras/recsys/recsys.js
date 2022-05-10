@@ -194,7 +194,7 @@ const recsys = {
    * Player closed. Check to see if primaryUri = playingUri
    * if so, send the Entry.
    */
-  onPlayerDispose: function (claimId, isEmbedded) {
+  onPlayerDispose: function (claimId, isEmbedded, totalPlayingTime) {
     if (window && window.store) {
       const state = window.store.getState();
       const playingUri = selectPlayingUri(state);
@@ -204,6 +204,7 @@ const recsys = {
         if (isEmbedded) {
           recsys.entries[claimId]['isEmbed'] = true;
         }
+        recsys.entries[claimId]['totalPlayingTime'] = totalPlayingTime;
         recsys.sendRecsysEntry(claimId);
       }
     }
