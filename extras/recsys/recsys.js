@@ -136,7 +136,8 @@ const recsys = {
       IS_WEB || (window && window.store && selectDaemonSettings(window.store.getState()).share_usage_data);
 
     if (recsys.entries[claimId] && shareTelemetry) {
-      const data = JSON.stringify(recsys.entries[claimId]);
+      const { events, ...entryData } = recsys.entries[claimId];
+      const data = JSON.stringify(entryData);
 
       if (!isTentative) {
         delete recsys.entries[claimId];
