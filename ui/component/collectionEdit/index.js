@@ -21,7 +21,6 @@ import * as ACTIONS from 'constants/action_types';
 
 import CollectionForm from './view';
 import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
-import { doSetActiveChannel, doSetIncognito } from 'redux/actions/app';
 import { doCollectionEdit } from 'redux/actions/collections';
 
 const select = (state, props) => ({
@@ -49,8 +48,6 @@ const perform = (dispatch, ownProps) => ({
   publishCollectionUpdate: (params) => dispatch(doCollectionPublishUpdate(params)),
   publishCollection: (params, collectionId) => dispatch(doCollectionPublish(params, collectionId)),
   clearCollectionErrors: () => dispatch({ type: ACTIONS.CLEAR_COLLECTION_ERRORS }),
-  setActiveChannel: (claimId) => dispatch(doSetActiveChannel(claimId)),
-  setIncognito: (incognito) => dispatch(doSetIncognito(incognito)),
   doCollectionEdit: (params) => dispatch(doCollectionEdit(ownProps.collectionId, params)),
 });
 

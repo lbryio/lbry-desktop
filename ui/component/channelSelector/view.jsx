@@ -27,6 +27,8 @@ type Props = {
   storeSelection?: boolean,
   doSetClientSetting: (key: string, value: string, pushPrefs: boolean) => void,
   isHeaderMenu?: boolean,
+  autoSet?: boolean,
+  channelToSet?: string,
 };
 
 export default function ChannelSelector(props: Props) {
@@ -42,6 +44,8 @@ export default function ChannelSelector(props: Props) {
     storeSelection,
     doSetClientSetting,
     isHeaderMenu,
+    autoSet,
+    channelToSet,
   } = props;
 
   const hideAnon = Boolean(props.hideAnon || storeSelection);
@@ -61,6 +65,20 @@ export default function ChannelSelector(props: Props) {
       doSetClientSetting(SETTINGS.ACTIVE_CHANNEL_CLAIM, channelClaim.claim_id, true);
     }
   }
+
+  React.useEffect(() => {
+    if (!autoSet) return;
+
+    if (channelToSet) {
+      doSetActiveChannel(channelToSet);
+      doSetIncognito(false);
+    } else if (!channelToSet) {
+      doSetIncognito(true);
+    }
+
+    // on mount, if we get to autoSet a channel, set it.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="channel__selector">

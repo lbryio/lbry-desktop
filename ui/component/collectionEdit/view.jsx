@@ -61,8 +61,6 @@ type Props = {
   publishCollection: (CollectionPublishParams, string) => Promise<any>,
   clearCollectionErrors: () => void,
   onDone: (string) => void,
-  setActiveChannel: (string) => void,
-  setIncognito: (boolean) => void,
   doCollectionEdit: (CollectionEditParams) => void,
 };
 
@@ -94,8 +92,6 @@ function CollectionForm(props: Props) {
     publishCollectionUpdate,
     publishCollection,
     clearCollectionErrors,
-    setActiveChannel,
-    setIncognito,
     onDone,
     doCollectionEdit,
   } = props;
@@ -108,7 +104,6 @@ function CollectionForm(props: Props) {
   const collectionName = (claim && claim.name) || (collection && collection.name);
   const collectionChannel = claim && claim.signing_channel ? claim.signing_channel.claim_id : undefined;
   const hasClaim = !!claim;
-  const [initialized, setInitialized] = React.useState(false);
   const [nameError, setNameError] = React.useState(undefined);
   const [bidError, setBidError] = React.useState('');
   const [thumbStatus, setThumbStatus] = React.useState('');
@@ -264,6 +259,7 @@ function CollectionForm(props: Props) {
     const collectionClaimIds = JSON.parse(collectionClaimIdsString);
     setParams({ ...params, claims: collectionClaimIds });
     clearCollectionErrors();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [collectionClaimIdsString, setParams]);
 
   React.useEffect(() => {
@@ -277,35 +273,22 @@ function CollectionForm(props: Props) {
     setNameError(nameError);
   }, [name]);
 
-  // on mount, if we get a collectionChannel, set it.
-  React.useEffect(() => {
-    if (hasClaim && !initialized) {
-      if (collectionChannel) {
-        setActiveChannel(collectionChannel);
-        setIncognito(false);
-      } else if (!collectionChannel && hasClaim) {
-        setIncognito(true);
-      }
-      setInitialized(true);
-    }
-  }, [setInitialized, setActiveChannel, collectionChannel, setIncognito, hasClaim, incognito, initialized]);
-
   // every time activechannel or incognito changes, set it.
   React.useEffect(() => {
-    if (initialized) {
-      if (activeChannelId) {
-        setParam({ channel_id: activeChannelId });
-      } else if (incognito) {
-        setParam({ channel_id: undefined });
-      }
+    if (activeChannelId) {
+      setParam({ channel_id: activeChannelId });
+    } else if (incognito) {
+      setParam({ channel_id: undefined });
     }
-  }, [activeChannelId, incognito, initialized]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeChannelId, incognito]);
 
   // setup initial params after we're sure if it's published or not
   React.useEffect(() => {
     if (!uri || (uri && hasClaim)) {
       updateParams(getCollectionParams());
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uri, hasClaim]);
 
   return (
@@ -322,7 +305,7 @@ function CollectionForm(props: Props) {
           <TabPanels>
             <TabPanel>
               <div className={'card-stack'}>
-                <ChannelSelector disabled={disabled} />
+                <ChannelSelector disabled={disabled} autoSet channelToSet={collectionChannel} />
                 <Card
                   body={
                     <>

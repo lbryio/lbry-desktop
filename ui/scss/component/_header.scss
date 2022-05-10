@@ -131,6 +131,8 @@
   flex: 1;
   height: var(--header-height);
   padding: var(--spacing-s) var(--spacing-m);
+  margin-right: var(--body-scrollbar-width);
+  width: unset;
 
   @media (max-width: $breakpoint-small) {
     padding: var(--spacing-xs);

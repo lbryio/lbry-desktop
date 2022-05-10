@@ -6,7 +6,7 @@ import {
   makeSelectTagInClaimOrChannelForUri,
 } from 'redux/selectors/claims';
 import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
-import { doEditForChannel } from 'redux/actions/publish';
+import { doPrepareEdit } from 'redux/actions/publish';
 import { selectCostInfoForUri } from 'lbryinc';
 import { doDownloadUri } from 'redux/actions/content';
 import { doToast } from 'redux/actions/notifications';
@@ -35,7 +35,7 @@ const select = (state, props) => {
 
 const perform = {
   doOpenModal,
-  doEditForChannel,
+  doPrepareEdit,
   doToast,
   doDownloadUri,
 };

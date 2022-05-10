@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { selectClaimForUri, selectClaimIsMine } from 'redux/selectors/claims';
 import { doCollectionEdit, doFetchItemsInCollection } from 'redux/actions/collections';
-import { doEditForChannel } from 'redux/actions/publish';
+import { doPrepareEdit } from 'redux/actions/publish';
 import { doRemovePersonalRecommendation } from 'redux/actions/search';
 import {
   makeSelectCollectionForId,
@@ -89,7 +89,7 @@ const select = (state, props) => {
 };
 
 const perform = (dispatch) => ({
-  prepareEdit: (publishData, uri, fileInfo) => dispatch(doEditForChannel(publishData, uri, fileInfo, fs)),
+  prepareEdit: (publishData, uri, fileInfo) => dispatch(doPrepareEdit(publishData, uri, fileInfo, fs)),
   doToast: (props) => dispatch(doToast(props)),
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   doChannelMute: (channelUri) => dispatch(doChannelMute(channelUri)),
