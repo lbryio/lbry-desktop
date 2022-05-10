@@ -17,6 +17,7 @@ type Props = {
   email: ?string,
   website: ?string,
   languages: Array<string>,
+  user: ?User,
 };
 
 const formatEmail = (email: string) => {
@@ -29,8 +30,9 @@ const formatEmail = (email: string) => {
 };
 
 function ChannelAbout(props: Props) {
-  const { claim, uri, description, email, website, languages } = props;
+  const { claim, uri, description, email, website, languages, user } = props;
   const claimId = claim && claim.claim_id;
+  const canView = user && user.global_mod;
 
   return (
     <div className="card">
@@ -111,8 +113,7 @@ function ChannelAbout(props: Props) {
               />
             )}
           </div>
-
-          <YoutubeBadge channelClaimId={claimId} />
+          {canView && <YoutubeBadge channelClaimId={claimId} />}
         </Fragment>
       </section>
     </div>
