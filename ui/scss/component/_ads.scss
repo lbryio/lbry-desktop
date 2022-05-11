@@ -81,6 +81,14 @@
     .avp-p-wrapper > div {
       border-radius: var(--border-radius) !important; // Needed for EU only
     }
+
+    #av-container #av-inner #gui #close-btn {
+      // The current version started displaying the close button on video ads.
+      // It closes the video but leaves the container behind. Since there will
+      // be changes in the near future which the end result won't have this
+      // issue, just hide it for now.
+      display: none !important;
+    }
   }
 }
 
