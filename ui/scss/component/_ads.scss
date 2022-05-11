@@ -381,6 +381,8 @@ $BANNER_BORDER: 1px;
 }
 
 .banner-ad__container {
+  min-height: 250px;
+
   padding: var(--spacing-xxs) var(--spacing-m);
   @media (max-width: $breakpoint-small) {
     padding: var(--spacing-xxs) var(--spacing-xxs);
@@ -389,19 +391,21 @@ $BANNER_BORDER: 1px;
   @media (min-width: $breakpoint-small) {
     margin: auto;
     width: 100%;
-    max-width: 386px;
+  }
+
+  @media (min-width: $breakpoint-xlarge) {
+    max-width: calc(#{$breakpoint-xlarge} * 3 / 4);
   }
 }
 
 .banner-ad__driver {
-  display: none; // "= flex" when ads are fetched ('ob_holder' exists)
+  display: flex;
   flex-direction: row;
-  align-items: center;
+  max-width: 50%;
 
   border-left: $BANNER_BORDER solid var(--color-border);
-  border-top: $BANNER_BORDER solid var(--color-border);
-  border-radius: var(--border-radius) 0 var(--border-radius) 0;
-  max-width: 95%;
+  border-bottom: $BANNER_BORDER solid var(--color-border);
+  border-radius: 0 var(--border-radius) 0 var(--border-radius);
   float: right;
 
   font-size: var(--font-xsmall);
@@ -412,11 +416,6 @@ $BANNER_BORDER: 1px;
   > * {
     padding: 0 var(--spacing-xxxs);
   }
-}
-
-#ob_holder ~ .banner-ad__driver,
-.banner-ad__container[data-ob-mark='true'] ~ .banner-ad__driver {
-  display: flex;
 }
 
 .banner-ad__driver-label {

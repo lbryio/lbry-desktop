@@ -70,17 +70,17 @@ export default function AdsBanner(props: Props) {
 
   return (
     <div className="banner-ad">
-      <div
-        className="banner-ad__container OUTBRAIN"
-        data-ob-contenturl="DROP_PERMALINK_HERE"
-        data-widget-id="AR_6"
-        data-ob-installation-key="ADNIMKAJDGAG4GAO6AGG6H5KP"
-        data-dark-mode={currentTheme === 'dark' ? 'true' : 'false'}
-      />
       <div className="banner-ad__driver">
         <div className="banner-ad__driver-label">Ad</div>
         <div className="banner-ad__driver-value">{adsSignInDriver}</div>
       </div>
+      <div
+        className="banner-ad__container OUTBRAIN"
+        data-ob-contenturl="DROP_PERMALINK_HERE"
+        data-widget-id="AR_18"
+        data-ob-installation-key="ADNIMKAJDGAG4GAO6AGG6H5KP"
+        data-dark-mode={currentTheme === 'dark' ? 'true' : 'false'}
+      />
     </div>
   );
 }
