@@ -101,28 +101,23 @@ const recsys = {
       const state = window.store.getState();
       const user = selectUser(state);
       const userId = user ? user.id : null;
+
+      // Make a stub entry that will be filled out on page load
+      recsys.entries[claimId] = {
+        uuid: uuid || Uuidv4(),
+        claimId: claimId,
+        recClickedVideoIdx: [],
+        pageLoadedAt: Date.now(),
+        events: [],
+      };
+
       if (parentUuid) {
-        // Make a stub entry that will be filled out on page load
-        recsys.entries[claimId] = {
-          uuid: uuid || Uuidv4(),
-          parentUuid: parentUuid,
-          uid: userId || null, // selectUser
-          claimId: claimId,
-          recClickedVideoIdx: [],
-          pageLoadedAt: Date.now(),
-          events: [],
-        };
+        recsys.entries[claimId].uid = userId || null;
+        recsys.entries[claimId].parentUuid = parentUuid;
       } else {
-        recsys.entries[claimId] = {
-          uuid: uuid || Uuidv4(),
-          uid: userId, // selectUser
-          claimId: claimId,
-          pageLoadedAt: Date.now(),
-          recsysId: null,
-          recClaimIds: [],
-          recClickedVideoIdx: [],
-          events: [],
-        };
+        recsys.entries[claimId].uid = userId;
+        recsys.entries[claimId].recsysId = null;
+        recsys.entries[claimId].recClaimIds = [];
       }
     }
     recsys.log('createRecsysEntry', claimId);
@@ -184,6 +179,7 @@ const recsys = {
     recsys.entries[claimId].events.push(event);
     recsys.log('onRecsysPlayerEvent', claimId);
   },
+
   log: function (callName, claimId) {
     if (recsys.debug) {
       console.log(`Call: ***${callName}***, ClaimId: ${claimId}, Recsys Entries`, Object.assign({}, recsys.entries));
