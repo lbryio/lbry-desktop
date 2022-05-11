@@ -1,5 +1,6 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
+import { FETCH_ACTIVE_LIVESTREAMS_MIN_INTERVAL_MS } from 'constants/livestream';
 import { doClaimSearch } from 'redux/actions/claims';
 import {
   LiveStatus,
@@ -13,8 +14,6 @@ import { isLocalStorageAvailable } from 'util/storage';
 import { isEmpty } from 'util/object';
 
 const localStorageAvailable = isLocalStorageAvailable();
-
-const FETCH_ACTIVE_LIVESTREAMS_MIN_INTERVAL_MS = 5 * 60 * 1000;
 
 export const doFetchNoSourceClaims = (channelId: string) => async (dispatch: Dispatch, getState: GetState) => {
   dispatch({

@@ -1,77 +1,41 @@
 // @flow
-import * as ICONS from 'constants/icons';
-import { NEW_LIVESTREAM_LIVE_API } from 'constants/livestream';
 import React from 'react';
-import Icon from 'component/common/icon';
+import ClaimList from 'component/claimList';
 import Spinner from 'component/spinner';
-import ClaimTilesDiscover from 'component/claimTilesDiscover';
+import { FETCH_ACTIVE_LIVESTREAMS_MIN_INTERVAL_MS } from 'constants/livestream';
+import { getLivestreamUris } from 'util/livestream';
 
-const LIVESTREAM_POLL_IN_MS = 10 * 1000;
+type Props = {
+  activeLivestreams: ?LivestreamInfo,
+  fetchingActiveLivestreams: boolean,
+  doFetchActiveLivestreams: () => void,
+};
 
-export default function LivestreamList() {
-  const [loading, setLoading] = React.useState(true);
-  const [livestreamMap, setLivestreamMap] = React.useState();
+export default function LivestreamList(props: Props) {
+  const { activeLivestreams, fetchingActiveLivestreams, doFetchActiveLivestreams } = props;
+  const livestreamUris = getLivestreamUris(activeLivestreams, null);
 
   React.useEffect(() => {
-    function checkCurrentLivestreams() {
-      fetch(`${NEW_LIVESTREAM_LIVE_API}/all`)
-        .then((res) => res.json())
-        .then((res) => {
-          setLoading(false);
-          if (!res.data) {
-            setLivestreamMap({});
-            return;
-          }
+    doFetchActiveLivestreams();
 
-          const livestreamMap = res.data.reduce((acc, curr) => {
-            return {
-              ...acc,
-              [curr.ChannelClaimID]: curr,
-            };
-          }, {});
-
-          setLivestreamMap(livestreamMap);
-        })
-        .catch((err) => {
-          setLoading(false);
-        });
-    }
-
-    checkCurrentLivestreams();
-    let fetchInterval = setInterval(checkCurrentLivestreams, LIVESTREAM_POLL_IN_MS);
+    // doFetchActiveLivestreams is currently limited to 5 minutes per fetch as
+    // a global default. If we want more frequent updates (say, to update the
+    // view count), we can either change that limit, or add a 'force' parameter
+    // to doFetchActiveLivestreams to override selectively.
+    const fetchInterval = setInterval(doFetchActiveLivestreams, FETCH_ACTIVE_LIVESTREAMS_MIN_INTERVAL_MS + 50);
     return () => {
-      if (fetchInterval) {
-        clearInterval(fetchInterval);
-      }
+      clearInterval(fetchInterval);
     };
   }, []);
 
   return (
     <>
-      {loading && (
+      {fetchingActiveLivestreams && (
         <div className="main--empty">
           <Spinner delayed />
         </div>
       )}
-      {livestreamMap && Object.keys(livestreamMap).length > 0 && (
-        <ClaimTilesDiscover
-          showNoSourceClaims
-          hasNoSource
-          streamTypes={null}
-          channelIds={Object.keys(livestreamMap)}
-          limitClaimsPerChannel={1}
-          pageSize={50}
-          renderProperties={(claim) => {
-            const livestream = livestreamMap[claim.signing_channel.claim_id];
-
-            return (
-              <span className="livestream__viewer-count">
-                {livestream.ViewerCount} <Icon icon={ICONS.EYE} />
-              </span>
-            );
-          }}
-        />
-      )}
+      {!fetchingActiveLivestreams && <ClaimList uris={livestreamUris} showNoSourceClaims tileLayout />}
     </>
   );
 }
