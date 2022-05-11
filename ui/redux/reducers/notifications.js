@@ -134,7 +134,7 @@ export default handleActions(
       };
     },
 
-    [ACTIONS.LOCAL_NOTIFICATION_DELETE_COMPLETED]: (state, action) => {
+    [ACTIONS.LOCAL_NOTIFICATION_DELETE]: (state, action) => {
       const { localNotifications } = state;
       const { notificationId } = action.data;
 
@@ -147,8 +147,12 @@ export default handleActions(
         localNotifications: deleteId(localNotifications, notificationId),
       };
     },
-
-    [ACTIONS.LOCAL_NOTIFICATION_SEEN_COMPLETED]: (state, action) => {
+    [ACTIONS.LOCAL_NOTIFICATION_ADD]: (state, action) => {
+      const { localNotifications } = state;
+      const { notifications } = action.data;
+      return localNotifications.concat(notifications);
+    },
+    [ACTIONS.LOCAL_NOTIFICATION_SEEN]: (state, action) => {
       const { localNotifications } = state;
       const { notificationIds } = action.data;
 

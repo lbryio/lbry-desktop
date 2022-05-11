@@ -94,9 +94,11 @@ export default handleActions(
     },
     [ACTIONS.SUBSCRIPTION_RELEASE_UPDATE]: (state: SubscriptionState, action): SubscriptionState => {
       const { lastReleaseBySubUrl } = state;
-      const { uri, timestamp } = action.data;
+      const entries = action.data;
 
-      lastReleaseBySubUrl[uri] = timestamp;
+      Object.entries(entries).forEach(([uri, timestamp]) => {
+        lastReleaseBySubUrl[uri] = timestamp;
+      });
       return {
         ...state,
         lastReleaseBySubUrl,

@@ -67,6 +67,7 @@ declare type GenericMetadata = {
   languages?: Array<string>,
   tags?: Array<string>,
   locations?: Array<Location>,
+  release_time?: number, // this shouldn't be here, but... fixme?
 };
 
 declare type ChannelMetadata = GenericMetadata & {

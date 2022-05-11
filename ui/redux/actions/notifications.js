@@ -186,16 +186,22 @@ export function doLbryioDeleteNotification(notificationId: number) {
   };
 }
 
+export function doLocalAddNotification(notifications: Array<any>) {
+  return (dispatch: Dispatch) => {
+    dispatch({ type: ACTIONS.LOCAL_NOTIFICATION_ADD, data: { notifications } });
+  };
+}
+
 export function doLocalDeleteNotification(notificationId: number) {
   return (dispatch: Dispatch) => {
-    dispatch({ type: ACTIONS.LOCAL_NOTIFICATION_DELETE_COMPLETED, data: { notificationId } });
+    dispatch({ type: ACTIONS.LOCAL_NOTIFICATION_DELETE, data: { notificationId } });
   };
 }
 
 export function doLocalSeeNotification(notificationIds: Array<string>) {
   return (dispatch: Dispatch) => {
     dispatch({
-      type: ACTIONS.LOCAL_NOTIFICATION_SEEN_COMPLETED,
+      type: ACTIONS.LOCAL_NOTIFICATION_SEEN,
       data: {
         notificationIds,
       },

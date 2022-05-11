@@ -31,6 +31,10 @@ export const selectFollowing = createSelector(selectState, (state) => state.foll
 export const selectIsFetchingSubscriptions = createSelector(selectState, (state) => state.loading);
 
 export const selectDownloadEnabledByUrl = createSelector(selectState, (state) => state.downloadEnabledByUrl);
+export const selectLastReleasesByUrl = createSelector(selectState, (state) => state.lastReleaseBySubUrl);
+export const selectDownloadEnabledUrls = createSelector(selectDownloadEnabledByUrl, (enabledByUrl) =>
+  Object.keys(enabledByUrl)
+);
 
 // The current view mode on the subscriptions page
 export const selectViewMode = createSelector(selectState, (state) => state.viewMode);
@@ -149,7 +153,6 @@ export const makeSelectNotificationsDisabled = (uri) =>
         const disabled = following.some((sub) => {
           return sub.uri === uri && sub.notificationsDisabled === true;
         });
-
         return disabled;
       }
 
@@ -160,4 +163,9 @@ export const makeSelectNotificationsDisabled = (uri) =>
 export const makeSelectDownloadEnabled = (uri) =>
   createSelector(selectDownloadEnabledByUrl, (downloadEnabledByUrl) => {
     return downloadEnabledByUrl[uri] || false;
+  });
+
+export const makeSelectLastReleaseForUri = (uri) =>
+  createSelector(selectLastReleasesByUrl, (last) => {
+    return last[uri] || Math.floor(Date.now() / 1000) - 604800; // fall back to a week ago
   });
