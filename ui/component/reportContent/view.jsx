@@ -469,7 +469,7 @@ export default function ReportContent(props: Props) {
                 {includeTimestamp(claim) && (
                   <div className="section">
                     <FormField
-                      type="time"
+                      type="text"
                       name="timestamp"
                       label={__('Timestamp')}
                       placeholder={'00:23:59'}
