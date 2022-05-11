@@ -93,7 +93,10 @@ export const selectClaimIdForUri = (state: State, uri: string) => selectClaimIds
 
 export const selectReflectingById = (state: State) => selectState(state).reflectingById;
 
+// OBSOLETE: use selectClaimForClaimId instead
 export const makeSelectClaimForClaimId = (claimId: string) => createSelector(selectClaimsById, (byId) => byId[claimId]);
+
+export const selectClaimForClaimId = (state: State, claimId: string) => selectClaimsById(state)[claimId];
 
 export const selectClaimForUri = createCachedSelector(
   selectClaimIdsByUri,

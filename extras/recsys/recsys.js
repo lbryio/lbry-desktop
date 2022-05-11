@@ -9,6 +9,7 @@ import { X_LBRY_AUTH_TOKEN } from 'constants/token';
 import { makeSelectClaimForUri } from 'redux/selectors/claims';
 import { selectPlayingUri, selectPrimaryUri } from 'redux/selectors/content';
 import { selectClientSetting, selectDaemonSettings } from 'redux/selectors/settings';
+import { selectIsSubscribedForClaimId } from 'redux/selectors/subscriptions';
 import { history } from 'ui/store';
 
 const recsysEndpoint = RECSYS_ENDPOINT;
@@ -109,6 +110,8 @@ const recsys = {
         recClickedVideoIdx: [],
         pageLoadedAt: Date.now(),
         events: [],
+        incognito: !(user && user.has_verified_email),
+        isFollowing: selectIsSubscribedForClaimId(state, claimId),
       };
 
       if (parentUuid) {

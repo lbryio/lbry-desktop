@@ -7,6 +7,7 @@ import {
   makeSelectChannelForClaimUri,
   makeSelectClaimForUri,
   selectClaimForUri,
+  selectClaimForClaimId,
 } from 'redux/selectors/claims';
 import { swapKeyAndValue } from 'util/swap-json';
 import { getChannelFromClaim, isChannelClaim } from 'util/claim';
@@ -134,6 +135,23 @@ export const selectIsSubscribedForUri = createCachedSelector(
     return false;
   }
 )((state, uri) => String(uri));
+
+/**
+ * Unlike its 'selectIsSubscribedForUri' counterpart, this does not try to use
+ * parseURI as a fallback (since it only has claimId and not the uri).
+ */
+export const selectIsSubscribedForClaimId = createCachedSelector(
+  selectClaimForClaimId, // (state, claimId)
+  selectSubscriptions, // (state)
+  (claim, subscriptions) => {
+    const channelClaim = getChannelFromClaim(claim);
+    if (channelClaim) {
+      const permanentUrl = channelClaim.permanent_url;
+      return subscriptions.some((sub) => isURIEqual(sub.uri, permanentUrl));
+    }
+    return false;
+  }
+)((state, claimId) => String(claimId));
 
 export const makeSelectNotificationsDisabled = (uri) =>
   createSelector(
