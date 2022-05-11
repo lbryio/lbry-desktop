@@ -1,0 +1,57 @@
+// @flow
+import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
+import * as ICONS from 'constants/icons';
+import * as PAGES from 'constants/pages';
+import HeaderMenuLink from 'component/common/header-menu-link';
+import Icon from 'component/common/icon';
+import NotificationHeaderButton from 'component/headerNotificationButton';
+import React from 'react';
+import Tooltip from 'component/common/tooltip';
+
+type HeaderMenuButtonProps = {
+  authenticated: boolean,
+  automaticDarkModeEnabled: boolean,
+  currentTheme: string,
+  handleThemeToggle: (boolean, string) => void,
+};
+
+export default function HeaderMenuButtons(props: HeaderMenuButtonProps) {
+  const { automaticDarkModeEnabled, currentTheme, handleThemeToggle } = props;
+
+  return (
+    <div className="header__buttons">
+      <Menu>
+        <Tooltip title={__('Publish a file, or create a channel')}>
+          <MenuButton className="header__navigationItem--icon">
+            <Icon size={18} icon={ICONS.PUBLISH} aria-hidden />
+          </MenuButton>
+        </Tooltip>
+
+        <MenuList className="menu__list--header">
+          <HeaderMenuLink page={PAGES.UPLOAD} icon={ICONS.PUBLISH} name={__('Upload')} />
+          <HeaderMenuLink page={PAGES.CHANNEL_NEW} icon={ICONS.CHANNEL} name={__('New Channel')} />
+        </MenuList>
+      </Menu>
+
+      <NotificationHeaderButton />
+
+      <Menu>
+        <Tooltip title={__('Settings')}>
+          <MenuButton className="header__navigationItem--icon">
+            <Icon size={18} icon={ICONS.SETTINGS} aria-hidden />
+          </MenuButton>
+        </Tooltip>
+
+        <MenuList className="menu__list--header">
+          <HeaderMenuLink page={PAGES.SETTINGS} icon={ICONS.SETTINGS} name={__('Settings')} />
+          <HeaderMenuLink page={PAGES.HELP} icon={ICONS.HELP} name={__('Help')} />
+
+          <MenuItem className="menu__link" onSelect={() => handleThemeToggle(automaticDarkModeEnabled, currentTheme)}>
+            <Icon icon={currentTheme === 'light' ? ICONS.DARK : ICONS.LIGHT} />
+            {currentTheme === 'light' ? __('Dark') : __('Light')}
+          </MenuItem>
+        </MenuList>
+      </Menu>
+    </div>
+  );
+}
