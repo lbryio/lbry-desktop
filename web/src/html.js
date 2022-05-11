@@ -217,7 +217,7 @@ function buildClaimOgMetadata(uri, claim, overrideOptions = {}, referrerQuery) {
   head += `<meta name="description" content="${cleanDescription}"/>`;
 
   if (tags && tags.length > 0) {
-    head += `<meta name="keywords" content="${tags.toString()}"/>`;
+    head += `<meta name="keywords" content="${escapeHtmlProperty(tags.toString())}"/>`;
   }
 
   head += `<meta name="twitter:image" content="${claimThumbnail}"/>`;
