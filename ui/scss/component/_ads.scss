@@ -54,11 +54,14 @@
       width: $width;
     }
 
-    div[style*='transform-origin: left bottom'] {
+    div[style*='transform-origin: left bottom'],
+    div[style*='transform-origin: right bottom'] {
       // [Floating ad]
       // Hide for now since can't get it to work in a consistent manner between:
       //   - EU and non-EU version
       //   - issues in Firefox
+      //   - floater not taking browser zoom levels into account (close button off screen).
+      //   - many more...
       display: none !important;
     }
 
