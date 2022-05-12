@@ -213,9 +213,6 @@ function DiscoverPage(props: Props) {
           hiddenNsfwMessage={<HiddenNsfw type="page" />}
           repostedClaimId={repostedClaim ? repostedClaim.claim_id : null}
           injectedItem={!isWildWest && { node: <Ads small type="video" tileLayout={tileLayout} /> }}
-          // Assume wild west page if no dynamicRouteProps
-          // Not a very good solution, but just doing it for now
-          // until we are sure this page will stay around
           // TODO: find a better way to determine discover / wild west vs other modes release times
           // for now including && !tags so that
           releaseTime={releaseTime || undefined}
