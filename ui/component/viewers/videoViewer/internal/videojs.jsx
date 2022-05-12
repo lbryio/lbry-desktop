@@ -180,9 +180,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
   const { url: livestreamVideoUrl } = activeLivestreamForChannel || {};
   const overrideNativeVhs = !platform.isIPhone();
-  const showQualitySelector =
-    (!isLivestreamClaim && overrideNativeVhs) ||
-    (livestreamVideoUrl && (livestreamVideoUrl.includes('/transcode/') || livestreamVideoUrl.includes('cloud.odysee')));
+  const showQualitySelector = (!isLivestreamClaim && overrideNativeVhs) || livestreamVideoUrl;
 
   // initiate keyboard shortcuts
   const { curried_function } = keyboardShorcuts({
