@@ -469,11 +469,11 @@ export default function ReportContent(props: Props) {
                 {includeTimestamp(claim) && (
                   <div className="section">
                     <FormField
-                      type="tel"
+                      type="text"
                       name="timestamp"
                       label={__('Timestamp')}
                       placeholder={'00:23:59'}
-                      pattern="[0-9]{3}"
+                      pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}"
                       value={input.timestamp}
                       maxlength={8}
                       onChange={(e) => {
