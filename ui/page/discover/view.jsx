@@ -63,6 +63,8 @@ function DiscoverPage(props: Props) {
   const langParam = urlParams.get(CS.LANGUAGE_KEY) || null;
   const claimType = urlParams.get('claim_type');
   const tagsQuery = urlParams.get('t') || null;
+  const freshnessParam = urlParams.get(CS.FRESH_KEY);
+  const orderParam = urlParams.get(CS.ORDER_BY_KEY);
   const tags = tagsQuery ? tagsQuery.split(',') : null;
   const repostedClaimIsResolved = repostedUri && repostedClaim;
   const hideRepostRibbon = isCategory && !isWildWest;
@@ -185,11 +187,18 @@ function DiscoverPage(props: Props) {
     );
   }
 
-  let releaseTime = dynamicRouteProps?.options?.releaseTime;
+  const categoryReleaseTime = dynamicRouteProps?.options?.releaseTime;
+  let releaseTime;
+
   if (isWildWest) {
     // The homepage definition currently does not support 'start-of-week', so
     // continue to hardcode here for now.
     releaseTime = `>${Math.floor(moment().subtract(0, 'hour').startOf('week').unix())}`;
+  } else if (categoryReleaseTime) {
+    const hasFreshnessOverride = orderParam === CS.ORDER_BY_TOP && freshnessParam !== null;
+    if (!hasFreshnessOverride) {
+      releaseTime = categoryReleaseTime;
+    }
   }
 
   return (
