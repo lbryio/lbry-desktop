@@ -57,8 +57,8 @@ export default function HeaderProfileMenuButton(props: HeaderMenuButtonProps) {
         <Global
           styles={{
             body: {
-              'overflow-y': 'scroll !important',
-              'padding-right': '0px !important',
+              overflowY: 'scroll !important',
+              paddingRight: '0px !important',
             },
           }}
         />
