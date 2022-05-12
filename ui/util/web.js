@@ -1,12 +1,12 @@
-const { URL, LBRY_WEB_STREAMING_API, THUMBNAIL_CARDS_CDN_URL } = require('../../config');
+const { URL, THUMBNAIL_CARDS_CDN_URL } = require('../../config');
+const { buildURI } = require('../../web/src/lbryURI');
+const { lbryProxy: Lbry } = require('../../web/lbry');
 
 const CONTINENT_COOKIE = 'continent';
 
 function generateStreamUrl(claimName, claimId) {
-  return `${LBRY_WEB_STREAMING_API}/content/claims/${encodeURIComponent(claimName)
-    .replace(/'/g, '%27')
-    .replace(/\(/g, '%28')
-    .replace(/\)/g, '%29')}/${claimId}/${encodeURIComponent(claimName)}`;
+  const uri = buildURI({ claimName, claimId });
+  return Lbry.get({ uri }).then(({ streaming_url }) => streaming_url);
 }
 
 function generateEmbedUrl(claimName, claimId, startTime, referralLink) {
