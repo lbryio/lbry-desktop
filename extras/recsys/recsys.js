@@ -204,7 +204,7 @@ const recsys = {
         if (isEmbedded) {
           recsys.entries[claimId]['isEmbed'] = true;
         }
-        recsys.entries[claimId]['totalPlayingTime'] = totalPlayingTime;
+        recsys.entries[claimId]['totalPlayTime'] = totalPlayingTime;
         recsys.sendRecsysEntry(claimId);
       }
     }
