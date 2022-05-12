@@ -10,6 +10,7 @@ const config = {
   LBRY_WEB_PUBLISH_API: process.env.LBRY_WEB_PUBLISH_API,
   LBRY_WEB_PUBLISH_API_V2: process.env.LBRY_WEB_PUBLISH_API_V2,
   LBRY_API_URL: process.env.LBRY_API_URL, // api.odysee.com',
+  LBRY_WEB_STREAMING_API: process.env.LBRY_WEB_STREAMING_API, // player.odycdn.com
   LBRY_WEB_BUFFER_API: process.env.LBRY_WEB_BUFFER_API,
   SEARCH_SERVER_API: process.env.SEARCH_SERVER_API,
   SEARCH_SERVER_API_ALT: process.env.SEARCH_SERVER_API_ALT,
