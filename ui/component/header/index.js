@@ -3,7 +3,7 @@ import { doClearEmailEntry, doClearPasswordEntry } from 'redux/actions/user';
 import { doSignOut, doOpenModal } from 'redux/actions/app';
 import { doClearClaimSearch } from 'redux/actions/claims';
 import { selectClientSetting } from 'redux/selectors/settings';
-import { selectGetSyncErrorMessage } from 'redux/selectors/sync';
+import { selectGetSyncErrorMessage, selectPrefsReady } from 'redux/selectors/sync';
 import { selectHasNavigated } from 'redux/selectors/app';
 import { selectTotalBalance, selectBalance } from 'redux/selectors/wallet';
 import { selectUserVerifiedEmail, selectEmailToVerify, selectUser } from 'redux/selectors/user';
@@ -20,6 +20,7 @@ const select = (state) => ({
   totalBalance: selectTotalBalance(state),
   syncError: selectGetSyncErrorMessage(state),
   user: selectUser(state),
+  prefsReady: selectPrefsReady(state),
 });
 
 const perform = (dispatch) => ({

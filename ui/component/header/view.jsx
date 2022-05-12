@@ -43,6 +43,7 @@ type Props = {
   syncError: ?string,
   totalBalance?: number,
   user: ?User,
+  prefsReady: boolean,
   doClearClaimSearch: () => void,
   clearEmailEntry: () => void,
   clearPasswordEntry: () => void,
@@ -66,6 +67,7 @@ const Header = (props: Props) => {
     syncError,
     totalBalance,
     user,
+    prefsReady,
     doClearClaimSearch,
     clearEmailEntry,
     clearPasswordEntry,
@@ -152,10 +154,8 @@ const Header = (props: Props) => {
                     navigate={`/$/${PAGES.WALLET}`}
                     className="button--file-action header__navigationItem--balance"
                     label={
-                      hideBalance || Number(roundedTotalBalance) === 0
-                        ? isMobile
-                          ? __('Wallet')
-                          : __('Your Wallet')
+                      hideBalance || Number(roundedTotalBalance) === 0 || !prefsReady
+                        ? __(isMobile ? 'Wallet' : 'Your Wallet')
                         : roundedTotalBalance
                     }
                     icon={ICONS.LBC}
