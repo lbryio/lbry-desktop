@@ -1,5 +1,5 @@
 // @flow
-// import analytics from 'analytics';
+import analytics from 'analytics';
 import { FETCH_TIMEOUT } from 'constants/errors';
 import { NO_AUTH, X_LBRY_AUTH_TOKEN } from 'constants/token';
 import fetchWithTimeout from 'util/fetch';
@@ -7,6 +7,7 @@ import fetchWithTimeout from 'util/fetch';
 require('proxy-polyfill');
 
 const CHECK_DAEMON_STARTED_TRY_NUMBER = 200;
+const ERR_LOG_METHOD_WHITELIST = ['support_create'];
 
 // Basic LBRY sdk connection config
 // Offers a proxy to call LBRY sdk methods
@@ -306,7 +307,7 @@ export function apiCall(method: string, params: ?{}, resolve: Function, reject: 
     ? Lbry.alternateConnectionString
     : Lbry.daemonConnectionString;
 
-  const SDK_FETCH_TIMEOUT_MS = 1800000;
+  const SDK_FETCH_TIMEOUT_MS = 60000;
   return fetchWithTimeout(SDK_FETCH_TIMEOUT_MS, fetch(connectionString + '?m=' + method, options))
     .then((response) => checkAndParse(response, method))
     .then((response) => {
@@ -322,7 +323,9 @@ export function apiCall(method: string, params: ?{}, resolve: Function, reject: 
     .catch((err) => {
       ApiFailureMgr.logFailure(method, params, counter);
       if (err?.message === FETCH_TIMEOUT) {
-        // analytics.error(`${method}: timed out after ${SDK_FETCH_TIMEOUT_MS / 1000}s`);
+        if (ERR_LOG_METHOD_WHITELIST.includes(method)) {
+          analytics.error(`${method}: timed out after ${SDK_FETCH_TIMEOUT_MS / 1000}s`);
+        }
         reject(resolveFetchErrorMsg(method, FETCH_TIMEOUT));
       } else {
         reject(err);
