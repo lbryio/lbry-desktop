@@ -2,7 +2,7 @@ const { URL, THUMBNAIL_CARDS_CDN_URL } = require('../../config');
 
 const CONTINENT_COOKIE = 'continent';
 
-function generateEmbedUrl(claimName, claimId, startTime, referralLink) {
+function generateEmbedUrl(claimName, claimId, startTime, referralLink, newestType) {
   let urlParams = new URLSearchParams();
 
   if (startTime) {
@@ -15,7 +15,12 @@ function generateEmbedUrl(claimName, claimId, startTime, referralLink) {
 
   const encodedUriName = encodeURIComponent(claimName).replace(/'/g, '%27').replace(/\(/g, '%28').replace(/\)/g, '%29');
 
-  const embedUrl = `${URL}/$/embed/${escapeHtmlProperty(encodedUriName)}/${escapeHtmlProperty(claimId)}`;
+  let embedUrl;
+  if (newestType) {
+    embedUrl = `${URL}/$/embed/${escapeHtmlProperty(encodedUriName)}?feature=${newestType}`;
+  } else {
+    embedUrl = `${URL}/$/embed/${escapeHtmlProperty(encodedUriName)}/${escapeHtmlProperty(claimId)}`;
+  }
   const embedUrlParams = urlParams.toString() ? `?${urlParams.toString()}` : '';
 
   return `${embedUrl}${embedUrlParams}`;
@@ -39,6 +44,10 @@ function generateDownloadUrl(claimName, claimId) {
 
 function generateDirectUrl(claimName, claimId) {
   return `${URL}/$/stream/${claimName}/${claimId}`;
+}
+
+function generateNewestUrl(channelName, newestType) {
+  return `${URL}/$/${newestType}/${channelName}`;
 }
 
 function getThumbnailCdnUrl(url) {
@@ -95,4 +104,5 @@ module.exports = {
   getThumbnailCdnUrl,
   escapeHtmlProperty,
   unscapeHtmlProperty,
+  generateNewestUrl,
 };

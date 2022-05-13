@@ -1,11 +1,12 @@
 // @flow
 import * as ICONS from 'constants/icons';
+import * as PAGES from 'constants/pages';
 import React from 'react';
 import Button from 'component/button';
 import CopyableText from 'component/copyableText';
 import EmbedTextArea from 'component/embedTextArea';
 import Spinner from 'component/spinner';
-import { generateDownloadUrl } from 'util/web';
+import { generateDownloadUrl, generateNewestUrl } from 'util/web';
 import { useIsMobile } from 'effects/use-screensize';
 import { FormField } from 'component/common/form';
 import { hmsToSeconds, secondsToHms } from 'util/time';
@@ -28,6 +29,7 @@ type Props = {
   user: any,
   position: number,
   collectionId?: number,
+  hasActiveLivestream: boolean,
   doFetchInviteStatus: (boolean) => void,
 };
 
@@ -41,6 +43,7 @@ function SocialShare(props: Props) {
     webShareable,
     position,
     collectionId,
+    hasActiveLivestream,
     doFetchInviteStatus,
   } = props;
   const [showEmbed, setShowEmbed] = React.useState(false);
@@ -191,7 +194,7 @@ function SocialShare(props: Props) {
           title={__('Share on Facebook')}
           href={`https://facebook.com/sharer/sharer.php?u=${encodedLbryURL}`}
         />
-        {webShareable && !isCollection && !isChannel && (
+        {webShareable && !isCollection && (
           <Button
             className="share"
             iconSize={24}
@@ -220,18 +223,32 @@ function SocialShare(props: Props) {
           <Button icon={ICONS.SHARE} button="primary" label={__('Share via...')} onClick={handleWebShareClick} />
         </div>
       )}
-      {showEmbed && (
-        <EmbedTextArea
-          label={__('Embedded')}
-          claim={claim}
-          includeStartTime={includeStartTime}
-          startTime={startTimeSeconds}
-          referralCode={referralCode}
-        />
-      )}
+      {showEmbed &&
+        (!isChannel ? (
+          <EmbedTextArea
+            label={__('Embedded')}
+            claim={claim}
+            includeStartTime={includeStartTime}
+            startTime={startTimeSeconds}
+            referralCode={referralCode}
+          />
+        ) : (
+          <>
+            <EmbedTextArea label={__('Embedded Latest Video Content')} claim={claim} newestType={PAGES.LATEST} />
+            {hasActiveLivestream && (
+              <EmbedTextArea label={__('Embedded Current Livestream')} claim={claim} newestType={PAGES.LIVE_NOW} />
+            )}
+          </>
+        ))}
       {showClaimLinks && (
         <div className="section">
           {Boolean(isStream) && <CopyableText label={__('Download Link')} copyable={downloadUrl} />}
+          {Boolean(isChannel) && (
+            <CopyableText label={__('Latest Content Link')} copyable={generateNewestUrl(name, PAGES.LATEST)} />
+          )}
+          {Boolean(isChannel) && hasActiveLivestream && (
+            <CopyableText label={__('Current Livestream Link')} copyable={generateNewestUrl(name, PAGES.LIVE_NOW)} />
+          )}
         </div>
       )}
     </React.Fragment>
