@@ -19,7 +19,6 @@ export default function useGetThumbnail(
   const isCollection = claim && claim.value_type === 'collection';
   const thumbnailInClaim = claim && claim.value && claim.value.thumbnail && claim.value.thumbnail.url;
 
-  // @if TARGET='web'
   if (thumbnailInClaim) {
     thumbnailToUse = thumbnailInClaim;
   } else if (claim && isImage && isFree) {
@@ -27,24 +26,6 @@ export default function useGetThumbnail(
   } else if (isCollection) {
     thumbnailToUse = MISSING_THUMB_DEFAULT;
   }
-  // @endif
-
-  // @if TARGET='app'
-  thumbnailToUse = thumbnailInClaim;
-
-  //
-  // Temporarily disabled until we can call get with "save_blobs: off"
-  //
-  // React.useEffect(() => {
-  //   if (hasClaim && isImage && isFree) {
-  //     if (streamingUrl) {
-  //       setThumbnail(streamingUrl);
-  //     } else if (!shouldHide) {
-  //       getFile(uri);
-  //     }
-  //   }
-  // }, [hasClaim, isFree, isImage, streamingUrl, uri, shouldHide]);
-  // @endif
 
   const [thumbnail, setThumbnail] = React.useState(thumbnailToUse);
   React.useEffect(() => {
