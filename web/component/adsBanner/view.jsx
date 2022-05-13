@@ -56,6 +56,8 @@ export default function AdsBanner(props: Props) {
           document.body.removeChild(script);
 
           if (--gReferenceCounter <= 0) {
+            // Note: This method has the bad requirement of the parent having to
+            // mount and dismount all banners in the same cycle.
             delete window.OBR;
             // TODO: clear styles after the team adds an ID or class for us to query.
           }
