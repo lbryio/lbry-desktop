@@ -1,5 +1,6 @@
 // Can't use aliases here because we're doing exports/require
 
+import { DOMAIN } from 'config';
 const PAGES = require('../constants/pages');
 const { parseURI, buildURI } = require('../util/lbryURI');
 const COLLECTIONS_CONSTS = require('../constants/collections');
@@ -165,3 +166,19 @@ export const generateListSearchUrlParams = (collectionId) => {
   urlParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
   return `?` + urlParams.toString();
 };
+
+// Google cache url
+// ex: webcache.googleusercontent.com/search?q=cache:MLwN3a8fCbYJ:https://lbry.tv/%40Bombards_Body_Language:f+&cd=12&hl=en&ct=clnk&gl=us
+// Extract the lbry url and use that instead
+// Without this it will try to render lbry://search
+export function generateGoogleCacheUrl(search, path) {
+  const googleCacheRegex = new RegExp(`(https://${DOMAIN}/)([^+]*)`);
+  const [x, y, googleCachedUrl] = search.match(googleCacheRegex); // eslint-disable-line
+
+  if (googleCachedUrl) {
+    const actualUrl = decodeURIComponent(googleCachedUrl);
+    if (actualUrl) {
+      path = actualUrl.replace(/:/g, '#');
+    }
+  }
+}

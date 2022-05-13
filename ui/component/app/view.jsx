@@ -3,15 +3,13 @@ import * as PAGES from 'constants/pages';
 import React, { useEffect, useRef, useState } from 'react';
 import { lazyImport } from 'util/lazyImport';
 import { tusUnlockAndNotify, tusHandleTabUpdates } from 'util/tus';
-import classnames from 'classnames';
 import analytics from 'analytics';
 import { setSearchUserId } from 'redux/actions/search';
-import { buildURI, parseURI } from 'util/lbryURI';
-import { SIMPLE_SITE } from 'config';
+import { normalizeURI } from 'util/lbryURI';
+import { generateGoogleCacheUrl } from 'util/url';
 import Router from 'component/router/index';
 import ModalRouter from 'modal/modalRouter';
 import ReactModal from 'react-modal';
-import { openContextMenu } from 'util/context-menu';
 import useKonamiListener from 'util/enhanced-layout';
 import Yrbl from 'component/yrbl';
 import FileRenderFloating from 'component/fileRenderFloating';
@@ -40,8 +38,6 @@ import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 const FileDrop = lazyImport(() => import('component/fileDrop' /* webpackChunkName: "fileDrop" */));
 const NagContinueFirstRun = lazyImport(() => import('component/nagContinueFirstRun' /* webpackChunkName: "nagCFR" */));
 const NagLocaleSwitch = lazyImport(() => import('component/nagLocaleSwitch' /* webpackChunkName: "nagLocaleSwitch" */));
-const OpenInAppLink = lazyImport(() => import('web/component/openInAppLink' /* webpackChunkName: "openInAppLink" */));
-const NagDataCollection = lazyImport(() => import('web/component/nag-data-collection' /* webpackChunkName: "nagDC" */));
 const NagDegradedPerformance = lazyImport(() =>
   import('web/component/nag-degraded-performance' /* webpackChunkName: "NagDegradedPerformance" */)
 );
@@ -63,16 +59,13 @@ type Props = {
   theme: string,
   user: ?{ id: string, has_verified_email: boolean, is_reward_approved: boolean },
   locale: ?LocaleInfo,
-  location: { pathname: string, hash: string, search: string },
-  history: { push: (string) => void, location: { pathname: string } },
+  location: { pathname: string, hash: string, search: string, hostname: string, reload: () => void },
+  history: { push: (string) => void, location: { pathname: string }, replace: (string) => void },
   fetchChannelListMine: () => void,
   fetchCollectionListMine: () => void,
   signIn: () => void,
-  requestDownloadUpgrade: () => void,
   setLanguage: (string) => void,
-  isUpgradeAvailable: boolean,
   isReloadRequired: boolean,
-  autoUpdateDownloaded: boolean,
   uploadCount: number,
   balance: ?number,
   syncIsLocked: boolean,
@@ -97,13 +90,11 @@ function App(props: Props) {
     theme,
     user,
     locale,
+    location,
     fetchChannelListMine,
     fetchCollectionListMine,
     signIn,
-    autoUpdateDownloaded,
-    isUpgradeAvailable,
     isReloadRequired,
-    requestDownloadUpgrade,
     uploadCount,
     history,
     syncError,
@@ -137,16 +128,12 @@ function App(props: Props) {
 
   const [localeLangs, setLocaleLangs] = React.useState();
   const [localeSwitchDismissed] = usePersistedState('locale-switch-dismissed', false);
-  const [showAnalyticsNag, setShowAnalyticsNag] = usePersistedState('analytics-nag', true);
   const [lbryTvApiStatus, setLbryTvApiStatus] = useState(STATUS_OK);
 
-  const { pathname, hash, search } = props.location;
-  const [upgradeNagClosed, setUpgradeNagClosed] = useState(false);
+  const { pathname, hash, search, hostname } = location;
   const [retryingSync, setRetryingSync] = useState(false);
   const [langRenderKey, setLangRenderKey] = useState(0);
   const [seenSunsestMessage, setSeenSunsetMessage] = usePersistedState('lbrytv-sunset', false);
-  const showUpgradeButton =
-    (autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable)) && !upgradeNagClosed;
   // referral claiming
   const referredRewardAvailable = rewards && rewards.some((reward) => reward.reward_type === REWARDS.TYPE_REFEREE);
   const urlParams = new URLSearchParams(search);
@@ -163,14 +150,23 @@ function App(props: Props) {
   const renderFiledrop = !isMobile && isAuthenticated;
   const connectionStatus = useConnectionStatus();
 
+  const urlPath = pathname + hash;
+
+  let path = urlPath.slice(1).replace(/:/g, '#');
+
+  if (search && search.startsWith('?q=cache:')) {
+    generateGoogleCacheUrl(search, path);
+  }
+
   let uri;
   try {
-    const newpath = buildURI(parseURI(pathname.slice(1).replace(/:/g, '#')));
-    uri = newpath + hash;
-  } catch (e) {}
+    uri = normalizeURI(path);
+  } catch (e) {
+    const match = path.match(/[#/:]/);
 
-  function handleAnalyticsDismiss() {
-    setShowAnalyticsNag(false);
+    if (!path.startsWith('$/') && match && match.index) {
+      uri = `lbry://${path.slice(0, match.index)}`;
+    }
   }
 
   function getStatusNag() {
@@ -388,7 +384,7 @@ function App(props: Props) {
     }
 
     // $FlowFixMe
-    const useProductionOneTrust = process.env.NODE_ENV === 'production' && location.hostname === 'odysee.com';
+    const useProductionOneTrust = process.env.NODE_ENV === 'production' && hostname === 'odysee.com';
 
     const script = document.createElement('script');
     script.src = oneTrustScriptSrc;
@@ -493,17 +489,8 @@ function App(props: Props) {
   }
 
   return (
-    <div
-      className={classnames(MAIN_WRAPPER_CLASS, {
-        // @if TARGET='app'
-        [`${MAIN_WRAPPER_CLASS}--mac`]: IS_MAC,
-        // @endif
-      })}
-      ref={appRef}
-      key={langRenderKey}
-      onContextMenu={IS_WEB ? undefined : (e) => openContextMenu(e)}
-    >
-      {IS_WEB && lbryTvApiStatus === STATUS_DOWN ? (
+    <div className={MAIN_WRAPPER_CLASS} ref={appRef} key={langRenderKey}>
+      {lbryTvApiStatus === STATUS_DOWN ? (
         <Yrbl
           className="main--empty"
           title={__('odysee.com is currently down')}
@@ -511,8 +498,9 @@ function App(props: Props) {
         />
       ) : (
         <React.Fragment>
-          <Router />
+          <Router uri={uri} />
           <ModalRouter />
+
           <React.Suspense fallback={null}>{renderFiledrop && <FileDrop />}</React.Suspense>
 
           <FileRenderFloating />
@@ -520,25 +508,10 @@ function App(props: Props) {
           <React.Suspense fallback={null}>
             {isEnhancedLayout && <Yrbl className="yrbl--enhanced" />}
 
-            {/* @if TARGET='app' */}
-            {showUpgradeButton && (
-              <Nag
-                message={__('An upgrade is available.')}
-                actionText={__('Install Now')}
-                onClick={requestDownloadUpgrade}
-                onClose={() => setUpgradeNagClosed(true)}
-              />
-            )}
-            {/* @endif */}
-
             <YoutubeWelcome />
-            {!SIMPLE_SITE && !shouldHideNag && <OpenInAppLink uri={uri} />}
             {!shouldHideNag && <NagContinueFirstRun />}
             {fromLbrytvParam && !seenSunsestMessage && !shouldHideNag && (
               <NagSunset email={hasVerifiedEmail} onClose={() => setSeenSunsetMessage(true)} />
-            )}
-            {!SIMPLE_SITE && lbryTvApiStatus === STATUS_OK && showAnalyticsNag && !shouldHideNag && (
-              <NagDataCollection onClose={handleAnalyticsDismiss} />
             )}
             {getStatusNag()}
           </React.Suspense>
