@@ -10,7 +10,16 @@ if (!memo.homepageData) {
 }
 
 const getHomepageJsonV1 = () => {
-  return memo.homepageData || {};
+  if (!memo.homepageData) {
+    return {};
+  }
+
+  const v1 = {};
+  const homepageKeys = Object.keys(memo.homepageData);
+  homepageKeys.forEach((hp) => {
+    v1[hp] = memo.homepageData[hp].categories;
+  });
+  return v1;
 };
 
 const getHomepageJsonV2 = () => {
