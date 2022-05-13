@@ -1,4 +1,4 @@
-const { generateStreamUrl } = require('../../ui/util/web');
+const { fetchStreamUrl } = require('./fetchStreamUrl');
 const { getHtml } = require('./html');
 const { getOEmbed } = require('./oEmbed');
 const { getRss } = require('./rss');
@@ -13,11 +13,9 @@ global.fetch = fetch;
 
 const router = new Router();
 
-function getStreamUrl(ctx) {
+async function getStreamUrl(ctx) {
   const { claimName, claimId } = ctx.params;
-
-  const streamUrl = generateStreamUrl(claimName, claimId);
-  return streamUrl;
+  return await fetchStreamUrl(claimName, claimId);
 }
 
 const rssMiddleware = async (ctx) => {
@@ -43,7 +41,7 @@ router.get(`/$/api/content/v1/get`, async (ctx) => getHomepage(ctx, 1));
 router.get(`/$/api/content/v2/get`, async (ctx) => getHomepage(ctx, 2));
 
 router.get(`/$/download/:claimName/:claimId`, async (ctx) => {
-  const streamUrl = getStreamUrl(ctx);
+  const streamUrl = await getStreamUrl(ctx);
   const downloadUrl = `${streamUrl}?download=1`;
   ctx.redirect(downloadUrl);
 });

@@ -1,13 +1,6 @@
-const { URL, LBRY_WEB_STREAMING_API, THUMBNAIL_CARDS_CDN_URL } = require('../../config');
+const { URL, THUMBNAIL_CARDS_CDN_URL } = require('../../config');
 
 const CONTINENT_COOKIE = 'continent';
-
-function generateStreamUrl(claimName, claimId) {
-  return `${LBRY_WEB_STREAMING_API}/content/claims/${encodeURIComponent(claimName)
-    .replace(/'/g, '%27')
-    .replace(/\(/g, '%28')
-    .replace(/\)/g, '%29')}/${claimId}/${encodeURIComponent(claimName)}`;
-}
 
 function generateEmbedUrl(claimName, claimId, startTime, referralLink) {
   let urlParams = new URLSearchParams();
@@ -98,7 +91,6 @@ module.exports = {
   generateEmbedIframeData,
   generateEmbedUrl,
   generateEmbedUrlEncoded,
-  generateStreamUrl,
   getParameterByName,
   getThumbnailCdnUrl,
   escapeHtmlProperty,

@@ -1,4 +1,4 @@
-const { generateStreamUrl } = require('../../ui/util/web');
+const { fetchStreamUrl } = require('./fetchStreamUrl');
 const { lbryProxy: Lbry } = require('../lbry');
 const { URL, SITE_NAME, PROXY_URL } = require('../../config.js');
 const Mime = require('mime-types');
@@ -62,7 +62,7 @@ function encodeWithSpecialCharEncode(string) {
   return encodeURIComponent(string).replace(/'/g, '%27').replace(/\(/g, '%28').replace(/\)/g, '%29');
 }
 
-const generateEnclosureForClaimContent = (claim) => {
+async function generateEnclosureForClaimContent(claim) {
   const value = claim.value;
   if (!value || !value.stream_type) {
     return undefined;
@@ -72,27 +72,27 @@ const generateEnclosureForClaimContent = (claim) => {
   switch (value.stream_type) {
     case 'video':
       return {
-        url: generateStreamUrl(claim.name, claim.claim_id) + (fileExt || '.mp4'),
+        url: (await fetchStreamUrl(claim.name, claim.claim_id)) + (fileExt || '.mp4'),
         type: (value.source && value.source.media_type) || 'video/mp4',
         size: (value.source && value.source.size) || 0, // Per spec, 0 is a valid fallback.
       };
 
     case 'audio':
       return {
-        url: generateStreamUrl(claim.name, claim.claim_id) + ((fileExt === '.mpga' ? '.mp3' : fileExt) || '.mp3'),
+        url: (await fetchStreamUrl(claim.name, claim.claim_id)) + ((fileExt === '.mpga' ? '.mp3' : fileExt) || '.mp3'),
         type: (value.source && value.source.media_type) || 'audio/mpeg',
         size: (value.source && value.source.size) || 0, // Per spec, 0 is a valid fallback.
       };
     case 'image':
       return {
-        url: generateStreamUrl(claim.name, claim.claim_id) + (fileExt || '.jpeg'),
+        url: (await fetchStreamUrl(claim.name, claim.claim_id)) + (fileExt || '.jpeg'),
         type: (value.source && value.source.media_type) || 'image/jpeg',
         size: (value.source && value.source.size) || 0, // Per spec, 0 is a valid fallback.
       };
     case 'document':
     case 'software':
       return {
-        url: generateStreamUrl(claim.name, claim.claim_id),
+        url: await fetchStreamUrl(claim.name, claim.claim_id),
         type: (value.source && value.source.media_type) || undefined,
         size: (value.source && value.source.size) || 0, // Per spec, 0 is a valid fallback.
       };
@@ -100,7 +100,7 @@ const generateEnclosureForClaimContent = (claim) => {
     default:
       return undefined;
   }
-};
+}
 
 const getLanguageValue = (claim) => {
   const {
@@ -215,7 +215,7 @@ const getFormattedDescription = (claim) => replaceLineFeeds(claim.value.descript
 // Generate
 // ****************************************************************************
 
-function generateFeed(feedLink, channelClaim, claimsInChannel) {
+async function generateFeed(feedLink, channelClaim, claimsInChannel) {
   // --- Channel ---
   let channelTitle = (channelClaim.value && channelClaim.value.title) || channelClaim.name;
   let channelURL = URL + '/' + channelClaim.canonical_url.replace('lbry://', '').replace(/#/g, ':');
@@ -245,7 +245,8 @@ function generateFeed(feedLink, channelClaim, claimsInChannel) {
   });
 
   // --- Content ---
-  claimsInChannel.forEach((c) => {
+  for (let i = 0; i < claimsInChannel.length; ++i) {
+    const c = claimsInChannel[i];
     const title = (c.value && c.value.title) || c.name;
     const thumbnailUrl = (c.value && c.value.thumbnail && c.value.thumbnail.url) || '';
     const thumbnailHtml = thumbnailUrl
@@ -264,7 +265,7 @@ function generateFeed(feedLink, channelClaim, claimsInChannel) {
       guid: undefined, // defaults to 'url'
       author: undefined, // defaults feed author property
       date: new Date(date),
-      enclosure: generateEnclosureForClaimContent(c),
+      enclosure: await generateEnclosureForClaimContent(c),
       custom_elements: [
         { 'itunes:title': title },
         { 'itunes:author': channelTitle },
@@ -273,7 +274,7 @@ function generateFeed(feedLink, channelClaim, claimsInChannel) {
         generateItunesExplicitElement(c),
       ],
     });
-  });
+  }
 
   return feed;
 }
@@ -289,7 +290,7 @@ async function getRss(ctx) {
   }
 
   const latestClaimsInChannel = await getClaimsFromChannel(channelClaim.claim_id, NUM_ENTRIES);
-  const feed = generateFeed(`${URL}${ctx.request.url}`, channelClaim, latestClaimsInChannel);
+  const feed = await generateFeed(`${URL}${ctx.request.url}`, channelClaim, latestClaimsInChannel);
   return feed.xml();
 }
 
