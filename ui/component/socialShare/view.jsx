@@ -29,7 +29,6 @@ type Props = {
   user: any,
   position: number,
   collectionId?: number,
-  hasActiveLivestream: boolean,
   doFetchInviteStatus: (boolean) => void,
 };
 
@@ -43,7 +42,6 @@ function SocialShare(props: Props) {
     webShareable,
     position,
     collectionId,
-    hasActiveLivestream,
     doFetchInviteStatus,
   } = props;
   const [showEmbed, setShowEmbed] = React.useState(false);
@@ -235,19 +233,17 @@ function SocialShare(props: Props) {
         ) : (
           <>
             <EmbedTextArea label={__('Embedded Latest Video Content')} claim={claim} newestType={PAGES.LATEST} />
-            {hasActiveLivestream && (
-              <EmbedTextArea label={__('Embedded Current Livestream')} claim={claim} newestType={PAGES.LIVE_NOW} />
-            )}
+            <EmbedTextArea label={__('Embedded Current Livestream')} claim={claim} newestType={PAGES.LIVE_NOW} />
           </>
         ))}
       {showClaimLinks && (
         <div className="section">
           {Boolean(isStream) && <CopyableText label={__('Download Link')} copyable={downloadUrl} />}
           {Boolean(isChannel) && (
-            <CopyableText label={__('Latest Content Link')} copyable={generateNewestUrl(name, PAGES.LATEST)} />
-          )}
-          {Boolean(isChannel) && hasActiveLivestream && (
-            <CopyableText label={__('Current Livestream Link')} copyable={generateNewestUrl(name, PAGES.LIVE_NOW)} />
+            <>
+              <CopyableText label={__('Latest Content Link')} copyable={generateNewestUrl(name, PAGES.LATEST)} />
+              <CopyableText label={__('Current Livestream Link')} copyable={generateNewestUrl(name, PAGES.LIVE_NOW)} />
+            </>
           )}
         </div>
       )}

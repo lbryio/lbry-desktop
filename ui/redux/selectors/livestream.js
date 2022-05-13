@@ -80,7 +80,7 @@ export const selectActiveLivestreamForClaimId = createCachedSelector(
 
     const activeLivestreamValues = Object.values(activeLivestreams);
     // $FlowFixMe - https://github.com/facebook/flow/issues/2221
-    return activeLivestreamValues.find((v) => v.claimId === claimId) || null;
+    return activeLivestreamValues.find((v) => v?.claimId === claimId) || null;
   }
 )((state, claimId) => String(claimId));
 
