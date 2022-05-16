@@ -1,17 +1,17 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import WatchHistoryPage from './view';
-import { selectHistory } from 'redux/selectors/content';
+import { selectWatchHistoryUris } from 'redux/selectors/content';
 import { doClearContentHistoryAll } from 'redux/actions/content';
+import { doResolveUris } from 'redux/actions/claims';
 
-const select = (state) => {
-  return {
-    history: selectHistory(state),
-  };
-};
-
-const perform = (dispatch) => ({
-  doClearContentHistoryAll: () => dispatch(doClearContentHistoryAll()),
+const select = (state) => ({
+  historyUris: selectWatchHistoryUris(state),
 });
+
+const perform = {
+  doClearContentHistoryAll,
+  doResolveUris,
+};
 
 export default withRouter(connect(select, perform)(WatchHistoryPage));

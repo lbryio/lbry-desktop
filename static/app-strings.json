@@ -2263,5 +2263,8 @@
   "Unable to react. Please try again later.": "Unable to react. Please try again later.",
   "Username (cannot be changed)": "Username (cannot be changed)",
   "Display Name": "Display Name",
+  "Watch History": "Watch History",
+  "Currently, your watch history is only saved locally.": "Currently, your watch history is only saved locally.",
+  "Clear History": "Clear History",
   "--end--": "--end--"
 }

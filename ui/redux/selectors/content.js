@@ -69,7 +69,7 @@ export const selectContentPositionForUri = (state: State, uri: string) => {
   return null;
 };
 
-export const selectHistory = createSelector(selectState, (state) => state.history || []);
+export const selectHistory = (state: State) => selectState(state).history || [];
 
 export const selectHistoryPageCount = createSelector(selectHistory, (history) =>
   Math.ceil(history.length / HISTORY_ITEMS_PER_PAGE)
@@ -90,6 +90,16 @@ export const makeSelectHasVisitedUri = (uri: string) =>
 
 export const selectRecentHistory = createSelector(selectHistory, (history) => {
   return history.slice(0, RECENT_HISTORY_AMOUNT);
+});
+
+export const selectWatchHistoryUris = createSelector(selectHistory, (history) => {
+  const uris = [];
+  for (let entry of history) {
+    if (entry.uri.indexOf('@') !== -1) {
+      uris.push(entry.uri);
+    }
+  }
+  return uris;
 });
 
 export const selectShouldObscurePreviewForUri = (state: State, uri: string) => {

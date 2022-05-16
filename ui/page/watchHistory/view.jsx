@@ -8,23 +8,24 @@ import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 import { YRBL_SAD_IMG_URL } from 'config';
 import Tooltip from 'component/common/tooltip';
+import useClaimListInfiniteScroll from 'effects/use-claimList-infinite-scroll';
 
-export const PAGE_VIEW_QUERY = 'view';
+export const PAGE_SIZE = 30;
 
 type Props = {
-  history: Array<any>,
+  historyUris: Array<string>,
   doClearContentHistoryAll: () => void,
+  doResolveUris: (uris: Array<string>, returnCachedClaims: boolean, resolveReposts: boolean) => void,
 };
 
 export default function WatchHistoryPage(props: Props) {
-  const { history, doClearContentHistoryAll } = props;
-  const [unavailableUris] = React.useState([]);
-  const watchHistory = [];
-  for (let entry of history) {
-    if (entry.uri.indexOf('@') !== -1) {
-      watchHistory.push(entry.uri);
-    }
-  }
+  const { historyUris, doClearContentHistoryAll, doResolveUris } = props;
+  const { uris, page, isLoadingPage, bumpPage } = useClaimListInfiniteScroll(
+    historyUris,
+    doResolveUris,
+    PAGE_SIZE,
+    true
+  );
 
   function clearHistory() {
     doClearContentHistoryAll();
@@ -43,7 +44,7 @@ export default function WatchHistoryPage(props: Props) {
           </h1>
 
           <div className="claim-list__alt-controls--wrap">
-            {watchHistory.length > 0 && (
+            {uris.length > 0 && (
               <Button
                 title={__('Clear History')}
                 button="primary"
@@ -53,8 +54,18 @@ export default function WatchHistoryPage(props: Props) {
             )}
           </div>
         </div>
-        {watchHistory.length > 0 && <ClaimList uris={watchHistory} unavailableUris={unavailableUris} inWatchHistory />}
-        {watchHistory.length === 0 && (
+        {uris.length > 0 && (
+          <ClaimList
+            uris={uris.slice(0, (page + 1) * PAGE_SIZE)}
+            onScrollBottom={bumpPage}
+            page={page + 1}
+            pageSize={PAGE_SIZE}
+            loading={isLoadingPage}
+            useLoadingSpinner
+            inWatchHistory
+          />
+        )}
+        {uris.length === 0 && (
           <div style={{ textAlign: 'center' }}>
             <img src={YRBL_SAD_IMG_URL} />
             <h2 className="main--empty empty" style={{ marginTop: '0' }}>
