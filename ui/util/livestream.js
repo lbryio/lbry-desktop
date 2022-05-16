@@ -41,10 +41,10 @@ export function getLivestreamUris(
 
   if (channelIds && channelIds.length > 0) {
     // $FlowFixMe
-    values = values.filter((v) => channelIds.includes(v.creatorId) && Boolean(v.claimUri));
+    values = values.filter((v) => channelIds.includes(v?.creatorId) && Boolean(v?.claimUri));
   } else {
     // $FlowFixMe
-    values = values.filter((v) => Boolean(v.claimUri));
+    values = values.filter((v) => Boolean(v?.claimUri));
   }
 
   if (excludedChannelIds) {
