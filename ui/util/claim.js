@@ -108,3 +108,12 @@ export function getChannelFromClaim(claim: ?Claim) {
     ? claim.signing_channel
     : null;
 }
+
+export function isClaimPlayable(claim: ?Claim) {
+  // $FlowFixMe
+  if (!claim || !claim.value || !claim.value.stream_type) {
+    return false;
+  }
+  // $FlowFixMe
+  return ['audio', 'video'].includes(claim.value.stream_type);
+}
