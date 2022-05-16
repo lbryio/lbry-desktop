@@ -18,7 +18,7 @@ const defaultState: CommentsState = {
   // Remove commentsByUri
   // It is not needed and doesn't provide anything but confusion
   commentsByUri: {}, // URI -> claimId
-  linkedCommentAncestors: {},
+  fetchedCommentAncestors: {},
   superChatsByUri: {},
   pinnedCommentsById: {},
   isLoading: false,
@@ -386,7 +386,7 @@ export default handleActions(
       const topLevelTotalPagesById = Object.assign({}, state.topLevelTotalPagesById);
       const pinnedCommentsById = Object.assign({}, state.pinnedCommentsById);
       const repliesByParentId = Object.assign({}, state.repliesByParentId);
-      const linkedCommentAncestors = Object.assign({}, state.linkedCommentAncestors);
+      const fetchedCommentAncestors = Object.assign({}, state.fetchedCommentAncestors);
 
       const updateStore = (comment, commentById, byId, repliesByParentId, topLevelCommentsById) => {
         commentById[comment.comment_id] = comment;
@@ -409,7 +409,7 @@ export default handleActions(
       if (ancestors) {
         ancestors.forEach((ancestor) => {
           updateStore(ancestor, commentById, byId, repliesByParentId, topLevelCommentsById);
-          immPushToArrayInObject(linkedCommentAncestors, comment.comment_id, ancestor.comment_id);
+          immPushToArrayInObject(fetchedCommentAncestors, comment.comment_id, ancestor.comment_id);
         });
       }
 
@@ -423,7 +423,7 @@ export default handleActions(
         repliesByParentId,
         byId,
         commentById,
-        linkedCommentAncestors,
+        fetchedCommentAncestors,
       };
     },
 

@@ -162,8 +162,11 @@ export const selectTopLevelCommentsByClaimId = createSelector(
   }
 );
 
-export const makeSelectCommentForCommentId = (commentId: string) =>
-  createSelector(selectCommentsById, (comments) => comments[commentId]);
+export const selectCommentForCommentId = createSelector(
+  (state, commentId) => commentId,
+  selectCommentsById,
+  (commentId, comments) => comments[commentId]
+);
 
 export const selectRepliesByParentId = createSelector(selectState, selectCommentsById, (state, byId) => {
   const byParentId = state.repliesByParentId || {};
@@ -182,7 +185,13 @@ export const selectRepliesByParentId = createSelector(selectState, selectComment
   return comments;
 });
 
-export const selectLinkedCommentAncestors = (state: State) => selectState(state).linkedCommentAncestors;
+export const selectFetchedCommentAncestors = (state: State) => selectState(state).fetchedCommentAncestors;
+
+export const selectCommentAncestorsForId = createSelector(
+  (state, commentId) => commentId,
+  selectFetchedCommentAncestors,
+  (commentId, fetchedAncestors) => fetchedAncestors && fetchedAncestors[commentId]
+);
 
 export const selectCommentIdsForUri = (state: State, uri: string) => {
   const claimId = selectClaimIdForUri(state, uri);

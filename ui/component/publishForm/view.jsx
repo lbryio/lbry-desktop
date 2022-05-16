@@ -266,9 +266,11 @@ function PublishForm(props: Props) {
 
   useEffect(() => {
     if (!modal) {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         setPreviewing(false);
       }, 250);
+
+      return () => clearTimeout(timer);
     }
   }, [modal]);
 

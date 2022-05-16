@@ -1,5 +1,6 @@
 // @flow
 import { getChannelFromClaim } from 'util/claim';
+import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 import { MenuList, MenuItem } from '@reach/menu-button';
 import { parseURI } from 'util/lbryURI';
 import { URL } from 'config';
@@ -163,8 +164,8 @@ function CommentMenuList(props: Props) {
 
   function handleCopyCommentLink() {
     const urlParams = new URLSearchParams(search);
-    urlParams.delete('lc');
-    urlParams.append('lc', commentId);
+    urlParams.delete(LINKED_COMMENT_QUERY_PARAM);
+    urlParams.append(LINKED_COMMENT_QUERY_PARAM, commentId);
     navigator.clipboard
       .writeText(`${URL}${pathname}?${urlParams.toString()}`)
       .then(() => doToast({ message: __('Link copied.') }));

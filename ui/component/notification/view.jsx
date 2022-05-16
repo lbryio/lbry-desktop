@@ -20,6 +20,7 @@ import React from 'react';
 import UriIndicator from 'component/uriIndicator';
 import { generateNotificationTitle } from './helpers/title';
 import { generateNotificationText } from './helpers/text';
+import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 
 const CommentCreate = lazyImport(() => import('component/commentCreate' /* webpackChunkName: "comments" */));
 const CommentReactions = lazyImport(() => import('component/commentReactions' /* webpackChunkName: "comments" */));
@@ -93,7 +94,7 @@ export default function Notification(props: Props) {
   let notificationLink = formatLbryUrlForWeb(notificationTarget);
   let urlParams = new URLSearchParams();
   if (isCommentNotification && notification_parameters.dynamic.hash) {
-    urlParams.append('lc', notification_parameters.dynamic.hash);
+    urlParams.append(LINKED_COMMENT_QUERY_PARAM, notification_parameters.dynamic.hash);
   }
 
   let channelName;

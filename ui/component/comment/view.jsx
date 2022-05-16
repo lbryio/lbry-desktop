@@ -3,7 +3,12 @@ import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import * as KEYCODES from 'constants/keycodes';
 import { COMMENT_HIGHLIGHTED } from 'constants/classnames';
-import { SORT_BY, COMMENT_PAGE_SIZE_REPLIES } from 'constants/comment';
+import {
+  SORT_BY,
+  COMMENT_PAGE_SIZE_REPLIES,
+  LINKED_COMMENT_QUERY_PARAM,
+  THREAD_COMMENT_QUERY_PARAM,
+} from 'constants/comment';
 import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
 import { SITE_NAME, SIMPLE_SITE, ENABLE_COMMENT_REACTIONS } from 'config';
 import React, { useEffect, useState } from 'react';
@@ -31,6 +36,7 @@ import { getChannelFromClaim } from 'util/claim';
 import { parseSticker } from 'util/comments';
 import { useIsMobile } from 'effects/use-screensize';
 import PremiumBadge from 'component/common/premium-badge';
+import Spinner from 'component/spinner';
 
 const AUTO_EXPAND_ALL_REPLIES = false;
 
@@ -47,12 +53,12 @@ type Props = {
   totalReplyPages: number,
   commentModBlock: (string) => void,
   linkedCommentId?: string,
+  threadCommentId?: string,
   linkedCommentAncestors: { [string]: Array<string> },
   hasChannels: boolean,
   commentingEnabled: boolean,
   doToast: ({ message: string }) => void,
   isTopLevel?: boolean,
-  threadDepth: number,
   hideActions?: boolean,
   othersReacts: ?{
     like: number,
@@ -66,6 +72,10 @@ type Props = {
   setQuickReply: (any) => void,
   quickReply: any,
   selectOdyseeMembershipForUri: string,
+  fetchedReplies: Array<Comment>,
+  repliesFetching: boolean,
+  threadLevel?: number,
+  threadDepthLevel?: number,
 };
 
 const LENGTH_TO_COLLAPSE = 300;
@@ -82,12 +92,12 @@ function CommentView(props: Props) {
     fetchReplies,
     totalReplyPages,
     linkedCommentId,
+    threadCommentId,
     linkedCommentAncestors,
     commentingEnabled,
     hasChannels,
     doToast,
     isTopLevel,
-    threadDepth,
     hideActions,
     othersReacts,
     playingUri,
@@ -96,6 +106,10 @@ function CommentView(props: Props) {
     setQuickReply,
     quickReply,
     selectOdyseeMembershipForUri,
+    fetchedReplies,
+    repliesFetching,
+    threadLevel = 0,
+    threadDepthLevel = 0,
   } = props;
 
   const {
@@ -117,6 +131,11 @@ function CommentView(props: Props) {
   const commentIsMine = channelId && myChannelIds && myChannelIds.includes(channelId);
 
   const isMobile = useIsMobile();
+  const ROUGH_HEADER_HEIGHT = isMobile ? 56 : 60; // @see: --header-height
+
+  const lastThreadLevel = threadDepthLevel - 1;
+  // Mobile: 0, 1, 2 -> new thread....., so each 3 comments
+  const openNewThread = threadLevel > 0 && threadLevel % lastThreadLevel === 0;
 
   const {
     push,
@@ -124,12 +143,14 @@ function CommentView(props: Props) {
     location: { pathname, search },
   } = useHistory();
 
+  const urlParams = new URLSearchParams(search);
   const isLinkedComment = linkedCommentId && linkedCommentId === commentId;
+  const isThreadComment = threadCommentId && threadCommentId === commentId;
   const isInLinkedCommentChain =
     linkedCommentId &&
     linkedCommentAncestors[linkedCommentId] &&
     linkedCommentAncestors[linkedCommentId].includes(commentId);
-  const showRepliesOnMount = isInLinkedCommentChain || AUTO_EXPAND_ALL_REPLIES;
+  const showRepliesOnMount = isThreadComment || isInLinkedCommentChain || AUTO_EXPAND_ALL_REPLIES;
 
   const [isReplying, setReplying] = React.useState(false);
   const [isEditing, setEditing] = useState(false);
@@ -146,6 +167,7 @@ function CommentView(props: Props) {
   const contentChannelClaim = getChannelFromClaim(claim);
   const commentByOwnerOfContent = contentChannelClaim && contentChannelClaim.permanent_url === authorUri;
   const stickerFromMessage = parseSticker(message);
+  const isExpandable = editedMessage.length >= LENGTH_TO_COLLAPSE;
 
   let channelOwnerOfContent;
   try {
@@ -208,37 +230,36 @@ function CommentView(props: Props) {
   }
 
   function handleTimeClick() {
-    const urlParams = new URLSearchParams(search);
-    urlParams.delete('lc');
-    urlParams.append('lc', commentId);
+    urlParams.set(LINKED_COMMENT_QUERY_PARAM, commentId);
     replace(`${pathname}?${urlParams.toString()}`);
+  }
+
+  function handleOpenNewThread() {
+    urlParams.set(LINKED_COMMENT_QUERY_PARAM, commentId);
+    urlParams.set(THREAD_COMMENT_QUERY_PARAM, commentId);
+    push({ pathname, search: urlParams.toString() });
   }
 
   const linkedCommentRef = React.useCallback(
     (node) => {
       if (node !== null && window.pendingLinkedCommentScroll) {
-        const ROUGH_HEADER_HEIGHT = 125; // @see: --header-height
         delete window.pendingLinkedCommentScroll;
 
         const mobileChatElem = document.querySelector('.MuiPaper-root .card--enable-overflow');
-        const drawerElem = document.querySelector('.MuiDrawer-root');
         const elem = (isMobile && mobileChatElem) || window;
 
         if (elem) {
           // $FlowFixMe
           elem.scrollTo({
-            top:
-              node.getBoundingClientRect().top +
-              // $FlowFixMe
-              (mobileChatElem && drawerElem ? drawerElem.getBoundingClientRect().top * -1 : elem.scrollY) -
-              ROUGH_HEADER_HEIGHT,
+            // $FlowFixMe
+            top: node.getBoundingClientRect().top + (mobileChatElem ? 0 : elem.scrollY) - ROUGH_HEADER_HEIGHT,
             left: 0,
             behavior: 'smooth',
           });
         }
       }
     },
-    [isMobile]
+    [ROUGH_HEADER_HEIGHT, isMobile]
   );
 
   return (
@@ -250,28 +271,31 @@ function CommentView(props: Props) {
       })}
       id={commentId}
     >
-      <div
-        ref={isLinkedComment ? linkedCommentRef : undefined}
-        className={classnames('comment__content', {
-          [COMMENT_HIGHLIGHTED]: isLinkedComment,
-          'comment--slimed': slimedToDeath && !displayDeadComment,
-        })}
-      >
-        <div className="comment__thumbnail-wrapper">
-          {authorUri ? (
-            <ChannelThumbnail
-              uri={authorUri}
-              obscure={channelIsBlocked}
-              xsmall
-              className="comment__author-thumbnail"
-              checkMembership={false}
-            />
-          ) : (
-            <ChannelThumbnail xsmall className="comment__author-thumbnail" checkMembership={false} />
-          )}
-        </div>
+      <div className="comment__thumbnail-wrapper">
+        {authorUri ? (
+          <ChannelThumbnail
+            uri={authorUri}
+            obscure={channelIsBlocked}
+            xsmall
+            className="comment__author-thumbnail"
+            checkMembership={false}
+          />
+        ) : (
+          <ChannelThumbnail xsmall className="comment__author-thumbnail" checkMembership={false} />
+        )}
 
-        <div className="comment__body-container">
+        {numDirectReplies > 0 && showReplies && (
+          <Button className="comment__threadline" aria-label="Hide Replies" onClick={() => setShowReplies(false)} />
+        )}
+      </div>
+
+      <div className="comment__content" ref={isLinkedComment || isThreadComment ? linkedCommentRef : undefined}>
+        <div
+          className={classnames('comment__body-container', {
+            [COMMENT_HIGHLIGHTED]: isLinkedComment || (isThreadComment && !linkedCommentId),
+            'comment--slimed': slimedToDeath && !displayDeadComment,
+          })}
+        >
           <div className="comment__meta">
             <div className="comment__meta-information">
               {!author ? (
@@ -361,8 +385,8 @@ function CommentView(props: Props) {
                     <div className="sticker__comment">
                       <OptimizedImage src={stickerFromMessage.url} waitLoad loading="lazy" />
                     </div>
-                  ) : editedMessage.length >= LENGTH_TO_COLLAPSE ? (
-                    <Expandable>
+                  ) : isExpandable ? (
+                    <Expandable beginCollapsed>
                       <MarkdownPreview
                         content={message}
                         promptLinks
@@ -384,49 +408,60 @@ function CommentView(props: Props) {
 
                 {!hideActions && (
                   <div className="comment__actions">
-                    {threadDepth !== 0 && (
-                      <Button
-                        requiresAuth={IS_WEB}
-                        label={commentingEnabled ? __('Reply') : __('Log in to reply')}
-                        className="comment__action"
-                        onClick={handleCommentReply}
-                        icon={ICONS.REPLY}
-                        iconSize={isMobile && 12}
-                      />
-                    )}
+                    <Button
+                      requiresAuth={IS_WEB}
+                      label={commentingEnabled ? __('Reply') : __('Log in to reply')}
+                      className="comment__action"
+                      onClick={handleCommentReply}
+                      icon={ICONS.REPLY}
+                      iconSize={isMobile && 12}
+                    />
                     {ENABLE_COMMENT_REACTIONS && <CommentReactions uri={uri} commentId={commentId} />}
                   </div>
                 )}
 
-                {numDirectReplies > 0 && !showReplies && (
-                  <div className="comment__actions">
-                    <Button
-                      label={
-                        numDirectReplies < 2
-                          ? __('Show reply')
-                          : __('Show %count% replies', { count: numDirectReplies })
-                      }
-                      button="link"
-                      onClick={() => {
-                        setShowReplies(true);
-                        if (page === 0) {
-                          setPage(1);
-                        }
-                      }}
-                      icon={ICONS.DOWN}
-                    />
-                  </div>
-                )}
-
-                {numDirectReplies > 0 && showReplies && (
-                  <div className="comment__actions">
-                    <Button
-                      label={__('Hide replies')}
-                      button="link"
-                      onClick={() => setShowReplies(false)}
-                      icon={ICONS.UP}
-                    />
-                  </div>
+                {repliesFetching && (!fetchedReplies || fetchedReplies.length === 0) ? (
+                  <span className="comment__actions comment__replies-loading">
+                    <Spinner text={numDirectReplies > 1 ? __('Loading Replies') : __('Loading Reply')} type="small" />
+                  </span>
+                ) : (
+                  numDirectReplies > 0 && (
+                    <div className="comment__actions">
+                      {!showReplies ? (
+                        openNewThread ? (
+                          <Button
+                            label={__('Continue Thread')}
+                            button="link"
+                            onClick={handleOpenNewThread}
+                            iconRight={ICONS.ARROW_RIGHT}
+                          />
+                        ) : (
+                          <Button
+                            label={
+                              numDirectReplies < 2
+                                ? __('Show reply')
+                                : __('Show %count% replies', { count: numDirectReplies })
+                            }
+                            button="link"
+                            onClick={() => {
+                              setShowReplies(true);
+                              if (page === 0) {
+                                setPage(1);
+                              }
+                            }}
+                            iconRight={ICONS.DOWN}
+                          />
+                        )
+                      ) : (
+                        <Button
+                          label={__('Hide replies')}
+                          button="link"
+                          onClick={() => setShowReplies(false)}
+                          iconRight={ICONS.UP}
+                        />
+                      )}
+                    </div>
+                  )
                 )}
 
                 {isReplying && (
@@ -435,7 +470,11 @@ function CommentView(props: Props) {
                     uri={uri}
                     parentId={commentId}
                     onDoneReplying={() => {
-                      setShowReplies(true);
+                      if (openNewThread) {
+                        handleOpenNewThread();
+                      } else {
+                        setShowReplies(true);
+                      }
                       setReplying(false);
                     }}
                     onCancelReplying={() => {
@@ -448,19 +487,21 @@ function CommentView(props: Props) {
             )}
           </div>
         </div>
-      </div>
 
-      {showReplies && (
-        <CommentsReplies
-          threadDepth={threadDepth - 1}
-          uri={uri}
-          parentId={commentId}
-          linkedCommentId={linkedCommentId}
-          numDirectReplies={numDirectReplies}
-          onShowMore={() => setPage(page + 1)}
-          hasMore={page < totalReplyPages}
-        />
-      )}
+        {showReplies && (
+          <CommentsReplies
+            threadLevel={threadLevel}
+            uri={uri}
+            parentId={commentId}
+            linkedCommentId={linkedCommentId}
+            threadCommentId={threadCommentId}
+            numDirectReplies={numDirectReplies}
+            onShowMore={() => setPage(page + 1)}
+            hasMore={page < totalReplyPages}
+            threadDepthLevel={threadDepthLevel}
+          />
+        )}
+      </div>
     </li>
   );
 }

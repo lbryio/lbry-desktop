@@ -239,7 +239,7 @@ function AppWrapper() {
     if (readyToLaunch && persistDone) {
       app.store.dispatch(doDaemonReady());
 
-      setTimeout(() => {
+      const timer = setTimeout(() => {
         if (DEFAULT_LANGUAGE) {
           app.store.dispatch(doFetchLanguage(DEFAULT_LANGUAGE));
         }
@@ -251,6 +251,8 @@ function AppWrapper() {
       }, 25);
 
       analytics.startupEvent(Date.now());
+
+      return () => clearTimeout(timer);
     }
   }, [readyToLaunch, persistDone]);
 

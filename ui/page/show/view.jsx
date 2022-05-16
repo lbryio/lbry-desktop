@@ -1,5 +1,6 @@
 // @flow
 import { DOMAIN, ENABLE_NO_SOURCE_CLAIMS } from 'config';
+import { LINKED_COMMENT_QUERY_PARAM, THREAD_COMMENT_QUERY_PARAM } from 'constants/comment';
 import React, { useEffect } from 'react';
 import { lazyImport } from 'util/lazyImport';
 import { Redirect } from 'react-router-dom';
@@ -68,7 +69,8 @@ export default function ShowPage(props: Props) {
 
   const { search, pathname, hash } = location;
   const urlParams = new URLSearchParams(search);
-  const linkedCommentId = urlParams.get('lc');
+  const linkedCommentId = urlParams.get(LINKED_COMMENT_QUERY_PARAM);
+  const threadCommentId = urlParams.get(THREAD_COMMENT_QUERY_PARAM);
 
   const signingChannel = claim && claim.signing_channel;
   const canonicalUrl = claim && claim.canonical_url;
@@ -134,6 +136,7 @@ export default function ShowPage(props: Props) {
         isMine === undefined && isAuthenticated ? { include_is_my_output: true, include_purchase_receipt: true } : {}
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     doResolveUri,
     isResolvingUri,
@@ -250,7 +253,12 @@ export default function ShowPage(props: Props) {
 
   return (
     <React.Suspense fallback={null}>
-      <FilePage uri={uri} collectionId={collectionId} linkedCommentId={linkedCommentId} />
+      <FilePage
+        uri={uri}
+        collectionId={collectionId}
+        linkedCommentId={linkedCommentId}
+        threadCommentId={threadCommentId}
+      />
     </React.Suspense>
   );
 }

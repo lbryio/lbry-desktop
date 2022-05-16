@@ -1,4 +1,5 @@
 export const LINKED_COMMENT_QUERY_PARAM = 'lc';
+export const THREAD_COMMENT_QUERY_PARAM = 'tc';
 
 export const SORT_COMMENTS_NEW = 'new';
 export const SORT_COMMENTS_BEST = 'best';

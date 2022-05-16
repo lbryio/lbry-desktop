@@ -8,12 +8,14 @@ const COLLAPSED_HEIGHT = 120;
 
 type Props = {
   children: React$Node | Array<React$Node>,
+  beginCollapsed?: boolean,
 };
 
 export default function Expandable(props: Props) {
+  const { children, beginCollapsed } = props;
+
   const [expanded, setExpanded] = useState(false);
   const [rect, setRect] = useState();
-  const { children } = props;
   const ref = useRef();
 
   // Update the rect initially & when the window size changes.
@@ -40,7 +42,7 @@ export default function Expandable(props: Props) {
 
   return (
     <div ref={ref}>
-      {rect && rect.height > COLLAPSED_HEIGHT ? (
+      {(rect && rect.height > COLLAPSED_HEIGHT) || beginCollapsed ? (
         <div ref={ref}>
           <div
             className={classnames({

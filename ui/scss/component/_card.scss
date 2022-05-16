@@ -19,29 +19,29 @@
     .card__main-actions {
       margin-top: 0px !important;
 
-      .comment__sort {
-        margin: 0px !important;
-        display: inline;
-
-        button {
-          padding: var(--spacing-xxs);
-
-          span {
-            font-size: var(--font-xxsmall);
-          }
-        }
-      }
-
-      > .button--alt {
-        padding: var(--spacing-xxs) var(--spacing-s);
-      }
-
       .comment__sort + button {
         margin: 0px var(--spacing-xxs);
       }
 
       .button + .commentCreate {
         margin-top: var(--spacing-xxs);
+      }
+    }
+
+    .comment__sort {
+      margin: 0px !important;
+      display: inline;
+
+      + .button--alt {
+        padding: var(--spacing-xxs) var(--spacing-s);
+      }
+
+      button {
+        padding: var(--spacing-xxs);
+
+        span {
+          font-size: var(--font-xxsmall);
+        }
       }
     }
   }
@@ -279,17 +279,20 @@
 }
 
 .card--enable-overflow {
-  .card__header--between {
-    @media (max-width: $breakpoint-small) {
+  @media (max-width: $breakpoint-small) {
+    .card__header--between {
       margin-bottom: 0;
+
       .card__title-section {
-        width: 60%;
+        margin: var(--spacing-s) 0px;
+
+        h2 {
+          font-size: var(--font-body);
+        }
       }
     }
-  }
 
-  .card__title-actions-container {
-    @media (max-width: $breakpoint-small) {
+    .card__title-actions-container {
       flex-grow: 1;
       min-height: 47px;
 

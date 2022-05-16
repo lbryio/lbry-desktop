@@ -53,11 +53,13 @@ export default function WaitUntilOnPage(props: Props) {
 
   // Handles "element is already in viewport when mounted".
   React.useEffect(() => {
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       if (!shouldRender && shouldElementRender(ref)) {
         setShouldRender(true);
       }
     }, 500);
+
+    return () => clearTimeout(timer);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Handles "element scrolled into viewport".

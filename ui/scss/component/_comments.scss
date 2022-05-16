@@ -34,10 +34,9 @@ $thumbnailWidthSmall: 2rem;
   overflow-wrap: anywhere;
 }
 
-.comments--replies {
-  list-style-type: none;
-  margin-left: var(--spacing-s);
-  flex: 1;
+.comment__list .card__first-pane > .button {
+  margin-left: 3px;
+  height: calc(var(--height-button) - 3px);
 }
 
 .comment__sort {
@@ -56,7 +55,7 @@ $thumbnailWidthSmall: 2rem;
 .comment {
   width: 100%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   font-size: var(--font-small);
   margin: 0;
   position: relative;
@@ -88,13 +87,17 @@ $thumbnailWidthSmall: 2rem;
 }
 
 .comment__thumbnail-wrapper {
-  flex: 0;
-  // margin-top: var(--spacing-xxs);
+  display: grid;
+  justify-items: stretch;
+  grid-template-rows: auto 1fr;
+  grid-gap: 1rem;
 }
 
 .comment__content {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
 
   &:hover {
     .ff-canvas {
@@ -113,16 +116,46 @@ $thumbnailWidthSmall: 2rem;
 }
 
 .comment__replies {
-  display: flex;
   margin-top: var(--spacing-m);
-  margin-left: #{$thumbnailWidthSmall};
-
-  @media (min-width: $breakpoint-small) {
-    margin-left: calc(#{$thumbnailWidth} + var(--spacing-m));
-  }
+  list-style-type: none;
+  margin-left: var(--spacing-s);
+  flex: 1;
 
   @media (max-width: $breakpoint-small) {
     margin-top: var(--spacing-s);
+  }
+}
+
+.comment__replies-loading {
+  color: var(--color-link);
+  align-items: center;
+  margin-left: var(--spacing-xs);
+
+  .spinner {
+    margin: 0px;
+
+    .rect {
+      background-color: var(--color-link) !important;
+    }
+  }
+}
+
+.comment__replies-loading--more {
+  align-items: flex-start;
+  transform: translate(var(--spacing-xs));
+
+  .spinner {
+    margin: 0px;
+  }
+}
+
+.comment__thread-links {
+  font-size: var(--font-xsmall);
+  flex-direction: column;
+  margin-bottom: var(--spacing-m);
+
+  .button {
+    padding: var(--spacing-xxs) 0px;
   }
 }
 
@@ -151,18 +184,19 @@ $thumbnailWidthSmall: 2rem;
 .comment__threadline {
   @extend .button--alt;
   height: auto;
-  align-self: stretch;
-  padding: 1px;
-  border-radius: 3px;
-  background-color: var(--color-comment-threadline);
+  border-left: 1px solid var(--color-comment-threadline);
+  background-color: transparent !important;
+  border-radius: 0px;
+  left: 50%;
 
   &:hover {
-    background-color: var(--color-comment-threadline-hover);
-    border-color: var(--color-comment-threadline-hover);
-  }
+    border-left: 4px solid var(--color-comment-threadline);
+    background-color: transparent !important;
+    padding-right: calc(var(--spacing-m) - 3px);
 
-  @media (min-width: $breakpoint-small) {
-    padding: 2px;
+    @media (max-width: $breakpoint-small) {
+      left: calc(50% - 3px);
+    }
   }
 }
 

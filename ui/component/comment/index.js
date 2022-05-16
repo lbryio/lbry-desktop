@@ -12,15 +12,15 @@ import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { doToast } from 'redux/actions/notifications';
 import { doClearPlayingUri } from 'redux/actions/content';
 import {
-  selectLinkedCommentAncestors,
+  selectFetchedCommentAncestors,
   selectOthersReactsForComment,
   makeSelectTotalReplyPagesForParentId,
+  selectIsFetchingCommentsForParentId,
+  selectRepliesForParentId,
 } from 'redux/selectors/comments';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { selectPlayingUri } from 'redux/selectors/content';
-import {
-  selectUserVerifiedEmail,
-} from 'redux/selectors/user';
+import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import Comment from './view';
 
 const select = (state, props) => {
@@ -42,9 +42,11 @@ const select = (state, props) => {
     hasChannels: selectHasChannels(state),
     playingUri: selectPlayingUri(state),
     stakedLevel: selectStakedLevelForChannelUri(state, channel_url),
-    linkedCommentAncestors: selectLinkedCommentAncestors(state),
+    linkedCommentAncestors: selectFetchedCommentAncestors(state),
     totalReplyPages: makeSelectTotalReplyPagesForParentId(comment_id)(state),
     selectOdyseeMembershipForUri: channel_url && selectOdyseeMembershipForUri(state, channel_url),
+    repliesFetching: selectIsFetchingCommentsForParentId(state, comment_id),
+    fetchedReplies: selectRepliesForParentId(state, comment_id),
   };
 };
 

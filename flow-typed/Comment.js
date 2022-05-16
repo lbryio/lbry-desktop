@@ -52,7 +52,7 @@ declare type CommentsState = {
   topLevelTotalPagesById: { [string]: number }, // ClaimID -> total number of top-level pages in commentron. Based on COMMENT_PAGE_SIZE_TOP_LEVEL.
   topLevelTotalCommentsById: { [string]: number }, // ClaimID -> total top level comments in commentron.
   commentById: { [string]: Comment }, // commentId -> Comment
-  linkedCommentAncestors: { [string]: Array<string> }, // {"linkedCommentId": ["parentId", "grandParentId", ...]}
+  fetchedCommentAncestors: { [string]: Array<string> }, // {"fetchedCommentId": ["parentId", "grandParentId", ...]}
   pinnedCommentsById: {}, // ClaimId -> array of pinned comment IDs
   isLoading: boolean,
   isLoadingById: boolean,

@@ -58,7 +58,9 @@ function UserChannelFollowIntro(props: Props) {
           if (claimName) channelSubscribe(claimName, channelUri);
         });
       };
-      setTimeout(delayedChannelSubscribe, 1000);
+      const timer = setTimeout(delayedChannelSubscribe, 1000);
+
+      return () => clearTimeout(timer);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [prefsReady]);
