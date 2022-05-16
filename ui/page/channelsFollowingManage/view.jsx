@@ -10,6 +10,7 @@ import Page from 'component/page';
 import Spinner from 'component/spinner';
 import * as ICONS from 'constants/icons';
 import { SIDEBAR_SUBS_DISPLAYED } from 'constants/subscriptions';
+import useClaimListInfiniteScroll from 'effects/use-claimList-infinite-scroll';
 
 function getFilteredUris(uris, filterQuery) {
   if (filterQuery) {
@@ -34,44 +35,19 @@ type Props = {
 
 export default function ChannelsFollowingManage(props: Props) {
   const { subscribedChannelUris, lastActiveSubs, doResolveUris, doFetchLastActiveSubs } = props;
-
-  // The locked-on-mount full set of subscribed uris.
-  const [uris, setUris] = React.useState([]);
+  const { uris, page, isLoadingPage, bumpPage } = useClaimListInfiniteScroll(
+    subscribedChannelUris,
+    doResolveUris,
+    FOLLOW_PAGE_SIZE
+  );
 
   // Filtered query and their uris.
   const [filterQuery, setFilterQuery] = React.useState('');
   const [filteredUris, setFilteredUris] = React.useState(null);
 
-  // Infinite-scroll handling. 'page' is 0-indexed.
-  const [page, setPage] = React.useState(-1);
-  const lastPage = Math.max(0, Math.ceil(uris.length / FOLLOW_PAGE_SIZE) - 1);
-  const [loadingPage, setLoadingPage] = React.useState(false);
-
   async function resolveUris(uris) {
     return doResolveUris(uris, true, false);
   }
-
-  async function resolveNextPage(uris, currPage, pageSize = FOLLOW_PAGE_SIZE) {
-    const nextPage = currPage + 1;
-    const nextUriBatch = uris.slice(nextPage * pageSize, (nextPage + 1) * pageSize);
-    return resolveUris(nextUriBatch);
-  }
-
-  function bumpPage() {
-    if (page < lastPage) {
-      setLoadingPage(true);
-      resolveNextPage(uris, page).finally(() => {
-        setLoadingPage(false);
-        setPage(page + 1);
-      });
-    }
-  }
-
-  React.useEffect(() => {
-    setUris(subscribedChannelUris);
-    resolveNextPage(subscribedChannelUris, -1).finally(() => setPage(0));
-    // eslint-disable-next-line react-hooks/exhaustive-deps, (lock list on mount so it doesn't shift when unfollow)
-  }, []);
 
   React.useEffect(() => {
     const filteredUris = getFilteredUris(uris, filterQuery);
@@ -144,7 +120,7 @@ export default function ChannelsFollowingManage(props: Props) {
                 onScrollBottom={bumpPage}
                 page={page + 1}
                 pageSize={FOLLOW_PAGE_SIZE}
-                loading={loadingPage}
+                loading={isLoadingPage}
                 useLoadingSpinner
               />
             </>
