@@ -63,7 +63,7 @@ type Analytics = {
   tagFollowEvent: (string, boolean, ?string) => void,
   playerLoadedEvent: (string, ?boolean) => void,
   playerVideoStartedEvent: (?boolean) => void,
-  videoStartEvent: (?string, number, string, ?number, string, any, ?number) => void,
+  videoStartEvent: (?string, number, string, ?number, string, any, ?number, boolean) => void,
   videoIsPlaying: (boolean, any) => void,
   videoBufferEvent: (
     StreamClaim,
@@ -75,6 +75,7 @@ type Analytics = {
       userId: string,
       playerPoweredBy: string,
       readyState: number,
+      isLivestream: boolean,
     }
   ) => Promise<any>,
   adsFetchedEvent: () => void,
@@ -133,7 +134,7 @@ function getDeviceType() {
 // variables initialized for watchman
 let amountOfBufferEvents = 0;
 let amountOfBufferTimeInMS = 0;
-let videoType, userId, claimUrl, playerPoweredBy, videoPlayer, bitrateAsBitsPerSecond;
+let videoType, userId, claimUrl, playerPoweredBy, videoPlayer, bitrateAsBitsPerSecond, isLivestream;
 let lastSentTime;
 
 // calculate data for backend, send them, and reset buffer data for next interval
@@ -150,20 +151,27 @@ async function sendAndResetWatchmanData() {
   lastSentTime = new Date();
 
   let protocol;
-  if (videoType === 'application/x-mpegURL') {
+  if (videoType === 'application/x-mpegURL' && !isLivestream) {
     protocol = 'hls';
     // get bandwidth if it exists from the texttrack (so it's accurate if user changes quality)
     // $FlowFixMe
-    bitrateAsBitsPerSecond = videoPlayer.textTracks?.().tracks_[0]?.activeCues[0]?.value?.bandwidth;
+    bitrateAsBitsPerSecond = videoPlayer.tech(true).vhs?.playlists?.media?.().attributes?.BANDWIDTH;
+  } else if (isLivestream) {
+    protocol = 'lvs';
+    // $FlowFixMe
+    bitrateAsBitsPerSecond = videoPlayer.tech(true).vhs?.playlists?.media?.().attributes?.BANDWIDTH;
   } else {
     protocol = 'stb';
   }
 
   // current position in video in MS
-  const positionInVideo = videoPlayer && Math.round(videoPlayer.currentTime()) * 1000;
+  const positionInVideo = isLivestream ? 0 : videoPlayer && Math.round(videoPlayer.currentTime()) * 1000;
 
   // get the duration marking the time in the video for relative position calculation
-  const totalDurationInSeconds = videoPlayer && Math.round(videoPlayer.duration());
+  const totalDurationInSeconds = isLivestream ? 0 : videoPlayer && Math.round(videoPlayer.duration());
+
+  // temp: if buffering over the interval, the duration doesn't reset since we don't get an event
+  if (amountOfBufferTimeInMS > timeSinceLastIntervalSend) amountOfBufferTimeInMS = timeSinceLastIntervalSend;
 
   // build object for watchman backend
   const objectToSend = {
@@ -175,8 +183,8 @@ async function sendAndResetWatchmanData() {
     protocol,
     player: playerPoweredBy,
     user_id: userId.toString(),
-    position: Math.round(positionInVideo),
-    rel_position: Math.round((positionInVideo / (totalDurationInSeconds * 1000)) * 100),
+    position: isLivestream ? 0 : Math.round(positionInVideo),
+    rel_position: isLivestream ? 0 : Math.round((positionInVideo / (totalDurationInSeconds * 1000)) * 100),
     bitrate: bitrateAsBitsPerSecond,
     bandwidth: undefined,
     // ...(userDownloadBandwidthInBitsPerSecond && {bandwidth: userDownloadBandwidthInBitsPerSecond}), // add bandwidth if populated
@@ -267,16 +275,26 @@ const analytics: Analytics = {
       startWatchmanIntervalIfNotRunning();
     }
   },
-  videoStartEvent: (claimId, timeToStartVideo, poweredBy, passedUserId, canonicalUrl, passedPlayer, videoBitrate) => {
+  videoStartEvent: (
+    claimId,
+    timeToStartVideo,
+    poweredBy,
+    passedUserId,
+    canonicalUrl,
+    passedPlayer,
+    videoBitrate,
+    isLivestreamClaim
+  ) => {
     // populate values for watchman when video starts
     userId = passedUserId;
     claimUrl = canonicalUrl;
     playerPoweredBy = poweredBy;
+    isLivestream = isLivestreamClaim;
 
     videoType = passedPlayer.currentSource().type;
     videoPlayer = passedPlayer;
     bitrateAsBitsPerSecond = videoBitrate;
-    sendPromMetric('time_to_start', timeToStartVideo);
+    !isLivestreamClaim && sendPromMetric('time_to_start', timeToStartVideo, playerPoweredBy);
   },
   error: (message) => {
     return new Promise((resolve) => {
@@ -469,10 +487,10 @@ function sendGaEvent(event: string, params?: { [string]: string | number }) {
   }
 }
 
-function sendPromMetric(name: string, value?: number) {
+function sendPromMetric(name: string, value?: number, player: string) {
   if (IS_WEB) {
     let url = new URL(SDK_API_PATH + '/metric/ui');
-    const params = { name: name, value: value ? value.toString() : '' };
+    const params = { name: name, value: value ? value.toString() : '', player: player };
     url.search = new URLSearchParams(params).toString();
     return fetch(url, { method: 'post' }).catch(function (error) {});
   }

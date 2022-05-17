@@ -22,6 +22,7 @@ const VideoJsEvents = ({
   embedded,
   uri,
   doAnalyticsView,
+  doAnalyticsBuffer,
   claimRewards,
   playerServerRef,
   isLivestreamClaim,
@@ -38,16 +39,28 @@ const VideoJsEvents = ({
   clearPosition: (string) => void,
   uri: string,
   doAnalyticsView: (string, number) => any,
+  doAnalyticsBuffer: (string, any) => void,
   claimRewards: () => void,
   playerServerRef: any,
   isLivestreamClaim: boolean,
 }) => {
+  function doTrackingBuffered(e: Event, data: any) {
+    const playerPoweredBy = isLivestreamClaim ? 'lvs' : playerServerRef.current;
+
+    data.playPoweredBy = playerPoweredBy;
+    data.isLivestream = isLivestreamClaim;
+    // $FlowFixMe
+    data.bitrateAsBitsPerSecond = this.tech(true).vhs?.playlists?.media?.().attributes?.BANDWIDTH;
+    doAnalyticsBuffer(uri, data);
+  }
   /**
    * Analytics functionality that is run on first video start
    * @param e - event from videojs (from the plugin?)
    * @param data - only has secondsToLoad property
    */
   function doTrackingFirstPlay(e: Event, data: any) {
+    const playerPoweredBy = isLivestreamClaim ? 'lvs' : playerServerRef.current;
+
     // how long until the video starts
     let timeToStartVideo = data.secondsToLoad;
 
@@ -63,10 +76,6 @@ const VideoJsEvents = ({
         bitrateAsBitsPerSecond = Math.round(contentInBits / durationInSeconds);
       }
 
-      // figure out what server the video is served from and then run start analytic event
-      // server string such as 'eu-p6'
-      const playerPoweredBy = playerServerRef.current;
-
       // populates data for watchman, sends prom and matomo event
       analytics.videoStartEvent(
         claimId,
@@ -75,7 +84,21 @@ const VideoJsEvents = ({
         userId,
         uri,
         this, // pass the player
-        bitrateAsBitsPerSecond
+        bitrateAsBitsPerSecond,
+        isLivestreamClaim
+      );
+    } else {
+      // populates data for watchman, sends prom and matomo event
+      analytics.videoStartEvent(
+        claimId,
+        0,
+        playerPoweredBy,
+        userId,
+        uri,
+        this, // pass the player
+        // $FlowFixMe
+        this.tech(true).vhs?.playlists?.media?.().attributes?.BANDWIDTH,
+        isLivestreamClaim
       );
     }
 
@@ -191,6 +214,9 @@ const VideoJsEvents = ({
     player.on('error', onError);
     // custom tracking plugin, event used for watchman data, and marking view/getting rewards
     player.on('tracking:firstplay', doTrackingFirstPlay);
+    // used for tracking buffering for watchman
+    player.on('tracking:buffered', doTrackingBuffered);
+
     // hide forcing control bar show
     player.on('canplaythrough', function () {
       setTimeout(function () {

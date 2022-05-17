@@ -204,16 +204,6 @@ function VideoViewer(props: Props) {
     };
   }, [embedded, videoPlaybackRate]);
 
-  // TODO: analytics functionality
-  function doTrackingBuffered(e: Event, data: any) {
-    if (!isLivestreamClaim) {
-      fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
-        data.playerPoweredBy = response.headers.get('x-powered-by');
-        doAnalyticsBuffer(uri, data);
-      });
-    }
-  }
-
   const doPlay = useCallback(
     (playUri) => {
       setDoNavigate(false);
@@ -409,9 +399,6 @@ function VideoViewer(props: Props) {
       }
     });
 
-    // used for tracking buffering for watchman
-    player.on('tracking:buffered', doTrackingBuffered);
-
     player.on('ended', () => setEnded(true));
     player.on('play', onPlay);
     player.on('pause', (event) => onPause(event, player));
@@ -519,6 +506,7 @@ function VideoViewer(props: Props) {
         embedded={embedded}
         claimValues={claim.value}
         doAnalyticsView={doAnalyticsView}
+        doAnalyticsBuffer={doAnalyticsBuffer}
         claimRewards={claimRewards}
         uri={uri}
         clearPosition={clearPosition}

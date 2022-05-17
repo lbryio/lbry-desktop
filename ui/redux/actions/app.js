@@ -480,22 +480,24 @@ export function doAnalyticsView(uri, timeToStart) {
 
 export function doAnalyticsBuffer(uri, bufferData) {
   return (dispatch, getState) => {
+    const isLivestream = bufferData.isLivestream;
     const state = getState();
     const claim = selectClaimForUri(state, uri);
     const user = selectUser(state);
     const {
       value: { video, audio, source },
     } = claim;
-    const timeAtBuffer = parseInt(bufferData.currentTime * 1000);
+    const timeAtBuffer = isLivestream ? 0 : parseInt(bufferData.currentTime * 1000);
     const bufferDuration = parseInt(bufferData.secondsToLoad * 1000);
-    const fileDurationInSeconds = (video && video.duration) || (audio && audio.duration);
-    const fileSize = source.size; // size in bytes
-    const fileSizeInBits = fileSize * 8;
-    const bitRate = parseInt(fileSizeInBits / fileDurationInSeconds);
+    const fileDurationInSeconds = isLivestream ? 0 : (video && video.duration) || (audio && audio.duration);
+    const fileSize = isLivestream ? 0 : source.size; // size in bytes
+    const fileSizeInBits = isLivestream ? '0' : fileSize * 8;
+    const bitRate = isLivestream ? bufferData.bitrateAsBitsPerSecond : parseInt(fileSizeInBits / fileDurationInSeconds);
     const userId = user && user.id.toString();
     // if there's a logged in user, send buffer event data to watchman
     if (userId) {
       analytics.videoBufferEvent(claim, {
+        isLivestream,
         timeAtBuffer,
         bufferDuration,
         bitRate,
