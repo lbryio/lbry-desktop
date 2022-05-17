@@ -15,8 +15,8 @@ import AutoplayCountdown from 'component/autoplayCountdown';
 import usePrevious from 'effects/use-previous';
 import FileViewerEmbeddedEnded from 'web/component/fileViewerEmbeddedEnded';
 import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
-import { addTheaterModeButton } from './internal/theater-mode';
-import { addAutoplayNextButton } from './internal/autoplay-next';
+import useAutoplayNext from './internal/effects/use-autoplay-next';
+import useTheaterMode from './internal/effects/use-theater-mode';
 import { addPlayNextButton } from './internal/play-next';
 import { addPlayPreviousButton } from './internal/play-previous';
 import { useGetAds } from 'effects/use-get-ads';
@@ -153,6 +153,9 @@ function VideoViewer(props: Props) {
   const [localAutoplayNext, setLocalAutoplayNext] = useState(autoplayNext);
   const isFirstRender = React.useRef(true);
   const playerRef = React.useRef(null);
+
+  const addAutoplayNextButton = useAutoplayNext(playerRef, autoplayNext);
+  const addTheaterModeButton = useTheaterMode(playerRef, videoTheaterMode);
 
   React.useEffect(() => {
     if (isPlaying) {
@@ -503,7 +506,6 @@ function VideoViewer(props: Props) {
         startMuted={autoplayIfEmbedded}
         toggleVideoTheaterMode={toggleVideoTheaterMode}
         autoplay={!embedded || autoplayIfEmbedded}
-        autoplaySetting={localAutoplayNext}
         claimId={claimId}
         title={claim && ((claim.value && claim.value.title) || claim.name)}
         channelName={channelName}
@@ -512,7 +514,6 @@ function VideoViewer(props: Props) {
         internalFeatureEnabled={internalFeature}
         shareTelemetry={shareTelemetry}
         replay={replay}
-        videoTheaterMode={videoTheaterMode}
         playNext={doPlayNext}
         playPrevious={doPlayPrevious}
         embedded={embedded}

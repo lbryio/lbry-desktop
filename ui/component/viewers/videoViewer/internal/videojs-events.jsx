@@ -10,20 +10,11 @@ const TAP = {
   RETRY: 'RETRY',
 };
 
-const setLabel = (controlBar, childName, label) => {
-  const c = controlBar.getChild(childName);
-  if (c) {
-    c.controlText(label);
-  }
-};
-
 const VideoJsEvents = ({
   tapToUnmuteRef,
   tapToRetryRef,
   setReload,
-  videoTheaterMode,
   playerRef,
-  autoplaySetting,
   replay,
   claimId,
   userId,
@@ -38,9 +29,7 @@ const VideoJsEvents = ({
   tapToUnmuteRef: any, // DOM element
   tapToRetryRef: any, // DOM element
   setReload: any, // react hook
-  videoTheaterMode: any, // dispatch function
   playerRef: any, // DOM element
-  autoplaySetting: boolean,
   replay: boolean,
   claimId: ?string,
   userId: ?number,
@@ -96,63 +85,6 @@ const VideoJsEvents = ({
     });
   }
 
-  // Override the player's control text. We override to:
-  // 1. Add keyboard shortcut to the tool-tip.
-  // 2. Override videojs' i18n and use our own (don't want to have 2 systems).
-  //
-  // Notes:
-  // - For dynamic controls (e.g. play/pause), those unfortunately need to be
-  // updated again at their event-listener level (that's just the way videojs
-  // updates the text), hence the need to listen to 'play', 'pause' and 'volumechange'
-  // on top of just 'loadstart'.
-  // - videojs changes the MuteToggle text at 'loadstart', so this was chosen
-  // as the listener to update static texts.
-
-  function resolveCtrlText(e) {
-    const player = playerRef.current;
-    if (player) {
-      const ctrlBar = player.getChild('controlBar');
-      switch (e.type) {
-        case 'play':
-          setLabel(ctrlBar, 'PlayToggle', __('Pause (space)'));
-          break;
-        case 'pause':
-          setLabel(ctrlBar, 'PlayToggle', __('Play (space)'));
-          break;
-        case 'volumechange':
-          ctrlBar
-            .getChild('VolumePanel')
-            .getChild('MuteToggle')
-            .controlText(player.muted() || player.volume() === 0 ? __('Unmute (m)') : __('Mute (m)'));
-          break;
-        case 'fullscreenchange':
-          setLabel(
-            ctrlBar,
-            'FullscreenToggle',
-            player.isFullscreen() ? __('Exit Fullscreen (f)') : __('Fullscreen (f)')
-          );
-          break;
-        case 'loadstart':
-          // --- Do everything ---
-          setLabel(ctrlBar, 'PlaybackRateMenuButton', __('Playback Rate (<, >)'));
-          setLabel(ctrlBar, 'QualityButton', __('Quality'));
-          setLabel(ctrlBar, 'PlayNextButton', __('Play Next (SHIFT+N)'));
-          setLabel(ctrlBar, 'PlayPreviousButton', __('Play Previous (SHIFT+P)'));
-          setLabel(ctrlBar, 'TheaterModeButton', videoTheaterMode ? __('Default Mode (t)') : __('Theater Mode (t)'));
-          setLabel(ctrlBar, 'AutoplayNextButton', autoplaySetting ? __('Autoplay Next On') : __('Autoplay Next Off'));
-
-          resolveCtrlText({ type: 'play' });
-          resolveCtrlText({ type: 'pause' });
-          resolveCtrlText({ type: 'volumechange' });
-          resolveCtrlText({ type: 'fullscreenchange' });
-          break;
-        default:
-          if (isDev) throw Error('Unexpected: ' + e.type);
-          break;
-      }
-    }
-  }
-
   function onInitialPlay() {
     const player = playerRef.current;
 
@@ -193,17 +125,6 @@ const VideoJsEvents = ({
   //     showTapButton(TAP.NONE);
   //   }
   // }, [adUrl]);
-
-  useEffect(() => {
-    const player = playerRef.current;
-    if (player) {
-      const controlBar = player.getChild('controlBar');
-      const theaterButton = controlBar.getChild('TheaterModeButton');
-      if (theaterButton) {
-        theaterButton.controlText(videoTheaterMode ? __('Default Mode (t)') : __('Theater Mode (t)'));
-      }
-    }
-  }, [videoTheaterMode]);
 
   // when user clicks 'Unmute' button, turn audio on and hide unmute button
   function unmuteAndHideHint() {
@@ -257,23 +178,6 @@ const VideoJsEvents = ({
 
   useEffect(() => {
     const player = playerRef.current;
-    if (player) {
-      const touchOverlay = player.getChild('TouchOverlay');
-      const controlBar = player.getChild('controlBar') || touchOverlay.getChild('controlBar');
-      const autoplayButton = controlBar.getChild('AutoplayNextButton');
-
-      if (autoplayButton) {
-        const title = autoplaySetting ? __('Autoplay Next On') : __('Autoplay Next Off');
-
-        autoplayButton.controlText(title);
-        autoplayButton.setAttribute('aria-label', title);
-        autoplayButton.setAttribute('aria-checked', autoplaySetting);
-      }
-    }
-  }, [autoplaySetting]);
-
-  useEffect(() => {
-    const player = playerRef.current;
     if (replay && player) {
       player.play();
     }
@@ -281,13 +185,8 @@ const VideoJsEvents = ({
 
   function initializeEvents() {
     const player = playerRef.current;
-    // Add various event listeners to player
+
     player.one('play', onInitialPlay);
-    player.on('play', resolveCtrlText);
-    player.on('pause', resolveCtrlText);
-    player.on('loadstart', resolveCtrlText);
-    player.on('fullscreenchange', resolveCtrlText);
-    player.on('volumechange', resolveCtrlText);
     player.on('volumechange', onVolumeChange);
     player.on('error', onError);
     // custom tracking plugin, event used for watchman data, and marking view/getting rewards
@@ -316,7 +215,6 @@ const VideoJsEvents = ({
         setTimeout(() => {
           // Do not jump ahead if user has paused the player
           if (player.paused()) return;
-
           player.liveTracker.seekToLiveEdge();
         }, 5 * 1000);
       });

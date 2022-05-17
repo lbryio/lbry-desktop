@@ -20,6 +20,7 @@ import Chromecast from './chromecast';
 import playerjs from 'player.js';
 import qualityLevels from 'videojs-contrib-quality-levels';
 import React, { useEffect, useRef, useState } from 'react';
+import i18n from './plugins/videojs-i18n/plugin';
 import recsys from './plugins/videojs-recsys/plugin';
 // import runAds from './ads';
 import videojs from 'video.js';
@@ -37,12 +38,16 @@ export type Player = {
   claimSrcOriginal: ?{ src: string, type: string },
   claimSrcVhs: ?{ src: string, type: string },
   isLivestream?: boolean,
-  // -- original --
+  // -- plugins ---
+  mobileUi: (any) => void,
+  chromecast: (any) => void,
+  overlay: (any) => void,
+  hlsQualitySelector: ?any,
+  i18n: (any) => void,
+  // -- base videojs --
   controlBar: { addChild: (string, any) => void },
   loadingSpinner: any,
   autoplay: (any) => boolean,
-  chromecast: (any) => void,
-  hlsQualitySelector: ?any,
   tech: (?boolean) => { vhs: ?any },
   currentTime: (?number) => number,
   dispose: () => void,
@@ -52,11 +57,9 @@ export type Player = {
   exitFullscreen: () => boolean,
   getChild: (string) => any,
   isFullscreen: () => boolean,
-  mobileUi: (any) => void,
   muted: (?boolean) => boolean,
   on: (string, (any) => void) => void,
   one: (string, (any) => void) => void,
-  overlay: (any) => void,
   play: () => Promise<any>,
   playbackRate: (?number) => number,
   readyState: () => number,
@@ -71,7 +74,6 @@ type Props = {
   adUrl: ?string,
   allowPreRoll: ?boolean,
   autoplay: boolean,
-  autoplaySetting: boolean,
   claimId: ?string,
   title: ?string,
   channelName: ?string,
@@ -85,7 +87,6 @@ type Props = {
   sourceType: string,
   startMuted: boolean,
   userId: ?number,
-  videoTheaterMode: boolean,
   defaultQuality: ?string,
   onPlayerReady: (Player, any) => void,
   playNext: () => void,
@@ -104,21 +105,19 @@ type Props = {
 
 const IS_IOS = platform.isIOS();
 
-if (!Object.keys(videojs.getPlugins()).includes('eventTracking')) {
-  videojs.registerPlugin('eventTracking', eventTracking);
-}
+const PLUGIN_MAP = {
+  eventTracking: eventTracking,
+  hlsQualitySelector: hlsQualitySelector,
+  qualityLevels: qualityLevels,
+  recsys: recsys,
+  i18n: i18n,
+};
 
-if (!Object.keys(videojs.getPlugins()).includes('hlsQualitySelector')) {
-  videojs.registerPlugin('hlsQualitySelector', hlsQualitySelector);
-}
-
-if (!Object.keys(videojs.getPlugins()).includes('qualityLevels')) {
-  videojs.registerPlugin('qualityLevels', qualityLevels);
-}
-
-if (!Object.keys(videojs.getPlugins()).includes('recsys')) {
-  videojs.registerPlugin('recsys', recsys);
-}
+Object.entries(PLUGIN_MAP).forEach(([pluginName, plugin]) => {
+  if (!Object.keys(videojs.getPlugins()).includes(pluginName)) {
+    videojs.registerPlugin(pluginName, plugin);
+  }
+});
 
 // ****************************************************************************
 // VideoJs
@@ -132,7 +131,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     // adUrl, // TODO: this ad functionality isn't used, can be pulled out
     // allowPreRoll,
     autoplay,
-    autoplaySetting,
     claimId,
     title,
     channelName,
@@ -146,7 +144,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     sourceType,
     startMuted,
     userId,
-    videoTheaterMode,
     defaultQuality,
     onPlayerReady,
     playNext,
@@ -199,9 +196,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     tapToUnmuteRef,
     tapToRetryRef,
     setReload,
-    videoTheaterMode,
     playerRef,
-    autoplaySetting,
     replay,
     claimValues,
     userId,
@@ -276,6 +271,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       // Initialize mobile UI.
       player.mobileUi();
+
+      player.i18n();
 
       if (!embedded) {
         window.player.bigPlayButton && window.player.bigPlayButton.hide();
