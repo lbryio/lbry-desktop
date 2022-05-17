@@ -24,15 +24,19 @@ import type { Player } from '../../videojs';
 const VERSION = '1.0.0';
 const defaultOptions = {};
 
+function logError(msg) {
+  // @if process.env.LOG_VIDEOJS_I18N='true'
+  console.error(msg);
+  // @endif
+}
+
 function setLabel(controlBar, childName, label) {
   try {
     controlBar.getChild(childName).controlText(label);
   } catch (e) {
     // We want to be notified, at least on dev, over any structural changes,
     // so don't check for null children and let the error surface.
-    // @if process.env.NODE_ENV!='production'
-    console.error(e);
-    // @endif
+    logError(childName + ': ' + e);
   }
 }
 
@@ -43,38 +47,54 @@ function resolveCtrlText(e, player) {
       case 'play':
         setLabel(ctrlBar, 'PlayToggle', __('Pause (space)'));
         break;
+
       case 'pause':
         setLabel(ctrlBar, 'PlayToggle', __('Play (space)'));
         break;
+
       case 'volumechange':
-        ctrlBar
-          .getChild('VolumePanel')
-          .getChild('MuteToggle')
-          .controlText(player.muted() || player.volume() === 0 ? __('Unmute (m)') : __('Mute (m)'));
+        try {
+          ctrlBar
+            .getChild('VolumePanel')
+            .getChild('MuteToggle')
+            .controlText(player.muted() || player.volume() === 0 ? __('Unmute (m)') : __('Mute (m)'));
+        } catch (e) {
+          logError('MuteToggle: ' + e);
+        }
         break;
+
       case 'fullscreenchange':
         setLabel(ctrlBar, 'FullscreenToggle', player.isFullscreen() ? __('Exit Fullscreen (f)') : __('Fullscreen (f)'));
         break;
+
       case 'loadstart':
         // --- Do everything ---
         setLabel(ctrlBar, 'PlaybackRateMenuButton', __('Playback Rate (<, >)'));
         setLabel(ctrlBar, 'QualityButton', __('Quality'));
         setLabel(ctrlBar, 'PlayNextButton', __('Play Next (SHIFT+N)'));
         setLabel(ctrlBar, 'PlayPreviousButton', __('Play Previous (SHIFT+P)'));
-        ctrlBar
-          .getChild('VolumePanel')
-          .getChild('MuteToggle')
-          .controlText(player.muted() || player.volume() === 0 ? __('Unmute (m)') : __('Mute (m)'));
+        setLabel(ctrlBar, 'ChaptersButton', __('Chapters'));
+        setLabel(ctrlBar, 'ChromecastButton', __('Open Chromecast menu'));
+        setLabel(ctrlBar, 'FullscreenToggle', player.isFullscreen() ? __('Exit Fullscreen (f)') : __('Fullscreen (f)'));
+
+        try {
+          ctrlBar
+            .getChild('VolumePanel')
+            .getChild('MuteToggle')
+            .controlText(player.muted() || player.volume() === 0 ? __('Unmute (m)') : __('Mute (m)'));
+        } catch (e) {
+          logError('MuteToggle: ' + e);
+        }
 
         resolveCtrlText({ type: 'play' });
         resolveCtrlText({ type: 'pause' });
         resolveCtrlText({ type: 'volumechange' });
         resolveCtrlText({ type: 'fullscreenchange' });
         break;
+
       default:
-        // @if process.env.NODE_ENV!='production'
-        throw Error('Unexpected: ' + e.type);
-      // @endif
+        logError('Unexpected: ' + e.type);
+        break;
     }
   }
 }
