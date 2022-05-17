@@ -11,6 +11,9 @@
  * For the case of 'MuteToggle', videojs changes the text at 'loadstart', so
  * this event was chosen as the "lowest common denominator" to update the other
  * static-text components.
+ *
+ * --- Notes ---
+ * (1) 'AutoplayNextButton' handles i18n (among other things) on its own.
  */
 
 // @flow
@@ -58,7 +61,6 @@ function resolveCtrlText(e, player) {
         setLabel(ctrlBar, 'PlayNextButton', __('Play Next (SHIFT+N)'));
         setLabel(ctrlBar, 'PlayPreviousButton', __('Play Previous (SHIFT+P)'));
         setLabel(ctrlBar, 'TheaterModeButton', __('Toggle Theater Mode (t)'));
-        setLabel(ctrlBar, 'AutoplayNextButton', __('Toggle Autoplay Next'));
         ctrlBar
           .getChild('VolumePanel')
           .getChild('MuteToggle')

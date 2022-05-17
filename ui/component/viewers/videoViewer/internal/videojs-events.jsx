@@ -16,7 +16,6 @@ const VideoJsEvents = ({
   setReload,
   videoTheaterMode,
   playerRef,
-  autoplaySetting,
   replay,
   claimId,
   userId,
@@ -33,7 +32,6 @@ const VideoJsEvents = ({
   setReload: any, // react hook
   videoTheaterMode: any, // dispatch function
   playerRef: any, // DOM element
-  autoplaySetting: boolean,
   replay: boolean,
   claimId: ?string,
   userId: ?number,
@@ -190,23 +188,6 @@ const VideoJsEvents = ({
         break;
     }
   }
-
-  useEffect(() => {
-    const player = playerRef.current;
-    if (player) {
-      const touchOverlay = player.getChild('TouchOverlay');
-      const controlBar = player.getChild('controlBar') || touchOverlay.getChild('controlBar');
-      const autoplayButton = controlBar.getChild('AutoplayNextButton');
-
-      if (autoplayButton) {
-        const title = autoplaySetting ? __('Autoplay Next On') : __('Autoplay Next Off');
-
-        autoplayButton.controlText(title);
-        autoplayButton.setAttribute('aria-label', title);
-        autoplayButton.setAttribute('aria-checked', autoplaySetting);
-      }
-    }
-  }, [autoplaySetting]);
 
   useEffect(() => {
     const player = playerRef.current;

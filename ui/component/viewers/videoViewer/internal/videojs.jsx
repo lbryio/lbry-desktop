@@ -74,7 +74,6 @@ type Props = {
   adUrl: ?string,
   allowPreRoll: ?boolean,
   autoplay: boolean,
-  autoplaySetting: boolean,
   claimId: ?string,
   title: ?string,
   channelName: ?string,
@@ -133,7 +132,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     // adUrl, // TODO: this ad functionality isn't used, can be pulled out
     // allowPreRoll,
     autoplay,
-    autoplaySetting,
     claimId,
     title,
     channelName,
@@ -202,7 +200,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     setReload,
     videoTheaterMode,
     playerRef,
-    autoplaySetting,
     replay,
     claimValues,
     userId,
