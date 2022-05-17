@@ -14,7 +14,6 @@ const VideoJsEvents = ({
   tapToUnmuteRef,
   tapToRetryRef,
   setReload,
-  videoTheaterMode,
   playerRef,
   replay,
   claimId,
@@ -30,7 +29,6 @@ const VideoJsEvents = ({
   tapToUnmuteRef: any, // DOM element
   tapToRetryRef: any, // DOM element
   setReload: any, // react hook
-  videoTheaterMode: any, // dispatch function
   playerRef: any, // DOM element
   replay: boolean,
   claimId: ?string,
@@ -127,17 +125,6 @@ const VideoJsEvents = ({
   //     showTapButton(TAP.NONE);
   //   }
   // }, [adUrl]);
-
-  useEffect(() => {
-    const player = playerRef.current;
-    if (player) {
-      const controlBar = player.getChild('controlBar');
-      const theaterButton = controlBar.getChild('TheaterModeButton');
-      if (theaterButton) {
-        theaterButton.controlText(videoTheaterMode ? __('Default Mode (t)') : __('Theater Mode (t)'));
-      }
-    }
-  }, [videoTheaterMode]);
 
   // when user clicks 'Unmute' button, turn audio on and hide unmute button
   function unmuteAndHideHint() {

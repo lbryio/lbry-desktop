@@ -13,7 +13,8 @@
  * static-text components.
  *
  * --- Notes ---
- * (1) 'AutoplayNextButton' handles i18n (among other things) on its own.
+ * (1) 'AutoplayNextButton' and 'TheaterModeButton' handles i18n (among other
+ * things) on its own.
  */
 
 // @flow
@@ -60,7 +61,6 @@ function resolveCtrlText(e, player) {
         setLabel(ctrlBar, 'QualityButton', __('Quality'));
         setLabel(ctrlBar, 'PlayNextButton', __('Play Next (SHIFT+N)'));
         setLabel(ctrlBar, 'PlayPreviousButton', __('Play Previous (SHIFT+P)'));
-        setLabel(ctrlBar, 'TheaterModeButton', __('Toggle Theater Mode (t)'));
         ctrlBar
           .getChild('VolumePanel')
           .getChild('MuteToggle')
