@@ -12,6 +12,7 @@ const defaultState: ContentState = {
   recommendationParentId: {},
   recommendationUrls: {},
   recommendationClicks: {},
+  loopList: undefined,
 };
 
 reducers[ACTIONS.SET_PRIMARY_URI] = (state, action) =>
