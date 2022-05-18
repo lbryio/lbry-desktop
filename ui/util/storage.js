@@ -23,3 +23,15 @@ export function getLocalStorageSummary() {
     return 'inaccessible';
   }
 }
+
+const localStorageAvailable = isLocalStorageAvailable();
+
+export function getLocalStorageItem(key) {
+  return localStorageAvailable ? window.localStorage.getItem(key) : undefined;
+}
+
+export function setLocalStorageItem(key, value) {
+  if (localStorageAvailable) {
+    window.localStorage.setItem(key, value);
+  }
+}
