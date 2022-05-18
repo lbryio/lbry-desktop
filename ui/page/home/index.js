@@ -5,7 +5,12 @@ import { doFetchActiveLivestreams } from 'redux/actions/livestream';
 import { selectAdBlockerFound } from 'redux/selectors/app';
 import { selectActiveLivestreams, selectFetchingActiveLivestreams } from 'redux/selectors/livestream';
 import { selectFollowedTags } from 'redux/selectors/tags';
-import { selectHasOdyseeMembership, selectHomepageFetched, selectUserVerifiedEmail } from 'redux/selectors/user';
+import {
+  selectOdyseeMembershipIsPremiumPlus,
+  selectHasOdyseeMembership,
+  selectHomepageFetched,
+  selectUserVerifiedEmail,
+} from 'redux/selectors/user';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import {
   selectShowMatureContent,
@@ -30,6 +35,7 @@ const select = (state) => ({
   adBlockerFound: selectAdBlockerFound(state),
   homepageOrder: selectClientSetting(state, SETTINGS.HOMEPAGE_ORDER),
   hasMembership: selectHasOdyseeMembership(state),
+  hasPremiumPlus: selectOdyseeMembershipIsPremiumPlus(state),
 });
 
 const perform = (dispatch) => ({

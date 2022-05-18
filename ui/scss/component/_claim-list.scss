@@ -397,7 +397,7 @@
 
     flex-shrink: 0;
     margin-right: var(--spacing-s);
-    box-shadow: 0px 0px 0px 1px rgba(var(--color-primary-dynamic), 0.1) inset;
+    box-shadow: 0 0 0 1px rgba(var(--color-primary-dynamic), 0.1) inset;
   }
 
   .media__thumb-placeholder-text {
@@ -413,7 +413,7 @@
   // show watch later button and duration divs when hovered
   &:hover {
     .media__thumb {
-      box-shadow: 0px 0px 0px 1px rgba(var(--color-primary-dynamic), 1) inset;
+      box-shadow: 0 0 0 1px rgba(var(--color-primary-dynamic), 1) inset;
     }
     .claim-preview__title {
       color: var(--color-link);
@@ -443,6 +443,29 @@
 
     .channel-thumbnail {
       @include handleChannelGif(4rem);
+    }
+  }
+}
+
+.claim-preview--premium-plus {
+  .media__thumb {
+    background-color: #283263;
+    background-image: url('https://odysee.com/public/img/astronaut_n_friends.png');
+    background-size: 100%;
+  }
+
+  .icon {
+    color: var(--color-text);
+    width: 2.1rem;
+    height: 2.1rem;
+    float: left;
+    margin-right: var(--spacing-s);
+  }
+
+  .channel-name {
+    font-weight: var(--font-weight-bold);
+    &:hover {
+      color: var(--color-text);
     }
   }
 }
@@ -938,11 +961,20 @@
     }
   }
 
+  .comment__badge {
+    display: inherit;
+
+    .icon {
+      margin-bottom: -1px;
+      padding-bottom: 4px;
+    }
+  }
+
   &:hover {
     cursor: pointer;
 
     .media__thumb {
-      box-shadow: 0px 0px 0px 1px rgba(var(--color-primary-dynamic), 1) inset;
+      box-shadow: 0 0 0 1px rgba(var(--color-primary-dynamic), 1) inset;
       background-size: 108%;
     }
 
@@ -965,7 +997,7 @@
         color: var(--color-primary);
       }
       .media__thumb {
-        box-shadow: 0px 0px 0px 1px rgba(var(--color-primary-dynamic), 1) inset;
+        box-shadow: 0 0 0 1px rgba(var(--color-primary-dynamic), 1) inset;
       }
     }
   }
@@ -1332,7 +1364,7 @@ $claim-preview-progress-bar-height: 5px;
       margin-bottom: -4px;
       margin-left: 4px;
       margin-right: var(--spacing-xxs);
-      text-overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     &:hover {
@@ -1349,7 +1381,7 @@ $claim-preview-progress-bar-height: 5px;
   }
 
   .media__thumb {
-    box-shadow: 0px 0px 0px 1px rgba(var(--color-primary-dynamic), 1) inset;
+    box-shadow: 0 0 0 1px rgba(var(--color-primary-dynamic), 1) inset;
   }
 
   .claim-preview:not(.claim-preview--collection-mine):before {
@@ -1371,14 +1403,13 @@ $claim-preview-progress-bar-height: 5px;
 }
 
 .claim-preview__live {
+  // margin-bottom: 0 !important;
   .claim-preview__file-property-overlay {
-    opacity: 1; // The original 0.7 is not visible over bright thumbnails
+    opacity: 0.9; // The original 0.7 is not visible over bright thumbnails
     color: var(--color-white-alt);
     background-color: var(--color-live);
     .claim-preview__overlay-properties {
-      margin-bottom: -2px;
       color: white;
-      font-weight: var(--font-weight-bold);
     }
   }
 

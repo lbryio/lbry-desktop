@@ -27,7 +27,7 @@ export default function CollectionAddButton(props: Props) {
         button={!fileAction ? 'alt' : undefined}
         className={classnames({ 'button--file-action': fileAction })}
         icon={fileAction ? (!isSaved ? ICONS.ADD : ICONS.STACK) : ICONS.LIBRARY}
-        iconSize={fileAction ? 22 : undefined}
+        iconSize={fileAction ? 16 : undefined}
         label={uri ? (!isSaved ? __('Save') : __('Saved')) : __('New List')}
         requiresAuth
         onClick={(e) => {

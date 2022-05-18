@@ -15,6 +15,7 @@ import ScheduledStreams from 'component/scheduledStreams';
 import { SearchResults } from './internal/searchResults';
 import useFetchLiveStatus from 'effects/use-fetch-live';
 import { useIsLargeScreen } from 'effects/use-screensize';
+import PremiumPlusTile from 'component/premiumPlusTile';
 
 const TYPES_TO_ALLOW_FILTER = ['stream', 'repost'];
 
@@ -41,6 +42,8 @@ type Props = {
   doFetchChannelLiveStatus: (string) => void,
   activeLivestreamForChannel: any,
   activeLivestreamInitialized: boolean,
+  adBlockerFound: ?boolean,
+  hasPremiumPlus: ?boolean,
 };
 
 function ChannelContent(props: Props) {
@@ -62,6 +65,8 @@ function ChannelContent(props: Props) {
     doFetchChannelLiveStatus,
     activeLivestreamForChannel,
     activeLivestreamInitialized,
+    adBlockerFound,
+    hasPremiumPlus,
   } = props;
   // const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
 
@@ -159,7 +164,15 @@ function ChannelContent(props: Props) {
           defaultOrderBy={CS.ORDER_BY_NEW}
           pageSize={dynamicPageSize}
           infiniteScroll={defaultInfiniteScroll}
-          injectedItem={{ node: <Ads type="video" tileLayout={tileLayout} small /> }}
+          injectedItem={
+            !hasPremiumPlus && {
+              node: adBlockerFound ? (
+                <PremiumPlusTile tileLayout={tileLayout} />
+              ) : (
+                <Ads small type="video" tileLayout />
+              ),
+            }
+          }
           meta={
             showFilters && (
               <Form onSubmit={() => {}} className="wunderbar--inline">

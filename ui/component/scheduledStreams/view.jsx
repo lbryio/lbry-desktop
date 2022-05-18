@@ -23,6 +23,7 @@ type Props = {
   doShowSnackBar: (string) => void,
 };
 
+/* NEKO MARK */
 const ScheduledStreams = (props: Props) => {
   const {
     channelIds,
@@ -34,6 +35,7 @@ const ScheduledStreams = (props: Props) => {
     onLoad,
     showHideSetting = true,
   } = props;
+
   const isMobileScreen = useIsMobile();
   const isLargeScreen = useIsLargeScreen();
 

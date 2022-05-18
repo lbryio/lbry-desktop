@@ -732,7 +732,7 @@ function ClaimListDiscover(props: Props) {
           {loading && useSkeletonScreen && (
             <div className="claim-grid">
               {new Array(dynamicPageSize).fill(1).map((x, i) => (
-                <ClaimPreviewTile key={i} placeholder="loading" />
+                <ClaimPreviewTile key={i} placeholder="loading" pulse />
               ))}
             </div>
           )}

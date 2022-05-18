@@ -1,7 +1,7 @@
 // @flow
 import { MAIN_CLASS } from 'constants/classnames';
 import type { Node } from 'react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import classnames from 'classnames';
 import ClaimPreview from 'component/claimPreview';
 import Spinner from 'component/spinner';
@@ -61,6 +61,7 @@ type Props = {
   unavailableUris?: Array<string>,
   showMemberBadge?: boolean,
   inWatchHistory?: boolean,
+  onHidden: string,
 };
 
 export default function ClaimList(props: Props) {
@@ -102,9 +103,11 @@ export default function ClaimList(props: Props) {
     unavailableUris,
     showMemberBadge,
     inWatchHistory,
+    onHidden,
   } = props;
 
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
+  const [uriBuffer, setUriBuffer] = useState([]);
 
   // Resolve the index for injectedItem, if provided; else injectedIndex will be 'undefined'.
   const listRef = React.useRef();
@@ -154,12 +157,6 @@ export default function ClaimList(props: Props) {
     return claim.name.length === 24 && !claim.name.includes(' ') && claim.value.author === 'Spee.ch';
   }, []);
 
-  // @if process.env.NODE_ENV!='production'
-  if (injectedItem && injectedItem.replace) {
-    throw new Error('claimList: "injectedItem.replace" is not implemented yet');
-  }
-  // @endif
-
   useEffect(() => {
     const handleScroll = debounce((e) => {
       if (page && pageSize && onScrollBottom) {
@@ -208,6 +205,19 @@ export default function ClaimList(props: Props) {
     />
   );
 
+  React.useEffect(() => {
+    tileUris.forEach((uri, index) => {
+      if (uri) {
+        const inj = getInjectedItem(index);
+        if (inj) {
+          if (uriBuffer.indexOf(index) === -1) {
+            setUriBuffer([index]);
+          }
+        }
+      }
+    });
+  }, [tileUris, injectedItem, lastVisibleIndex, pageSize]);
+
   const getInjectedItem = (index) => {
     if (injectedItem && injectedItem.node) {
       if (typeof injectedItem.node === 'function') {
@@ -228,21 +238,30 @@ export default function ClaimList(props: Props) {
     <>
       <section ref={listRef} className={classnames('claim-grid', { 'swipe-list': swipeLayout })}>
         {urisLength > 0 &&
-          tileUris.map((uri, index) => (
-            <React.Fragment key={uri}>
-              {getInjectedItem(index)}
-              <ClaimPreviewTile
-                uri={uri}
-                showHiddenByUser={showHiddenByUser}
-                showUnresolvedClaims={showUnresolvedClaims}
-                properties={renderProperties}
-                collectionId={collectionId}
-                fypId={fypId}
-                showNoSourceClaims={showNoSourceClaims}
-                swipeLayout={swipeLayout}
-              />
-            </React.Fragment>
-          ))}
+          tileUris.map((uri, index) => {
+            if (uri) {
+              const inj = getInjectedItem(index);
+              return (
+                <React.Fragment key={uri}>
+                  {inj && inj}
+                  {(index < tileUris.length - uriBuffer.length ||
+                    (pageSize && index < pageSize - uriBuffer.length)) && (
+                    <ClaimPreviewTile
+                      uri={uri}
+                      showHiddenByUser={showHiddenByUser}
+                      showUnresolvedClaims={showUnresolvedClaims}
+                      properties={renderProperties}
+                      collectionId={collectionId}
+                      fypId={fypId}
+                      showNoSourceClaims={showNoSourceClaims}
+                      swipeLayout={swipeLayout}
+                      onHidden={onHidden}
+                    />
+                  )}
+                </React.Fragment>
+              );
+            }
+          })}
         {!timedOut && urisLength === 0 && !loading && !noEmpty && (
           <div className="empty main--empty">{empty || noResultMsg}</div>
         )}

@@ -55,6 +55,8 @@ type Props = {
   isLivestreamActive: boolean,
   livestreamViewerCount: ?number,
   swipeLayout: boolean,
+  onHidden?: (string) => void,
+  pulse?: boolean,
 };
 
 // preview image cards used in related video functionality, channel overview page and homepage
@@ -86,6 +88,8 @@ function ClaimPreviewTile(props: Props) {
     mediaDuration,
     viewCount,
     swipeLayout = false,
+    onHidden,
+    pulse,
   } = props;
   const isRepost = claim && claim.repost_channel_url;
   const isCollection = claim && claim.value_type === 'collection';
@@ -158,6 +162,7 @@ function ClaimPreviewTile(props: Props) {
         banState.filtered ||
         (!showHiddenByUser && (banState.muted || banState.blocked)) ||
         (isAbandoned && !showUnresolvedClaims));
+    if (onHidden && shouldHide) onHidden(props.uri);
   }
 
   if (shouldHide || (isLivestream && !showNoSourceClaims)) {
@@ -173,6 +178,7 @@ function ClaimPreviewTile(props: Props) {
       <li
         className={classnames('placeholder claim-preview--tile', {
           'swipe-list__item claim-preview--horizontal-tile': swipeLayout,
+          pulse: pulse,
         })}
       >
         <div className="media__thumb">

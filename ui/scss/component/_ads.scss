@@ -33,10 +33,17 @@
     aspect-ratio: 16 / 9;
     $minWidth: calc(var(--file-list-thumbnail-width) * 0.8);
     min-width: $minWidth;
+    background-color: #283263;
+    background-image: url('https://odysee.com/public/img/astronaut_n_friends.png');
+    background-size: 100%;
+    border-radius: var(--border-radius);
+    box-shadow: 0 0 0 1px rgba(var(--color-primary-dynamic), 0.1) inset;
 
     video {
       width: 100% !important;
       height: 100% !important;
+      border-radius: var(--border-radius) !important;
+      border: 1px solid rgba(var(--color-primary-dynamic), 0.1);
     }
 
     @media (max-width: $breakpoint-small) {
@@ -93,6 +100,33 @@
       display: none !important;
     }
   }
+
+  &:hover {
+    .ad__container {
+      box-shadow: 0 0 0 1px rgba(var(--color-primary-dynamic), 1) inset;
+    }
+    video {
+      border: 1px solid rgba(var(--color-primary-dynamic), 1);
+    }
+  }
+}
+
+.claim-list {
+  .ads__claim-item--tile {
+    background-color: var(--color-ads-background);
+    margin-left: unset;
+    margin-bottom: var(--spacing-xxs);
+    width: 100%;
+    padding: var(--spacing-m);
+    flex: 1;
+    flex-direction: row;
+
+    .ad__container {
+      width: calc(var(--file-list-thumbnail-width) * 1.2);
+      // margin-left: var(--spacing-s);
+      margin-right: var(--spacing-s);
+    }
+  }
 }
 
 .ads__claim-item--tile {
@@ -105,10 +139,30 @@
   border-bottom: unset;
 
   .ads__claim-text {
-    margin: var(--spacing-s) 0 0 0;
+    margin: var(--spacing-xs) 0 0 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    .ads__title {
+      color: var(--color-text);
+    }
+
+    .ads__subtitle {
+      margin-top: var(--spacing-s);
+      color: rgba(var(--color-text-base), 0.6);
+      font-weight: var(--font-weight-bold);
+      line-height: 1rem;
+      font-size: var(--font-xsmall);
+
+      .icon {
+        color: var(--color-text);
+        width: 2.1rem;
+        height: 2.1rem;
+        float: left;
+        margin-right: var(--spacing-s);
+      }
+    }
   }
 
   .ad__container {
@@ -118,10 +172,52 @@
   .ads__claim-text {
     max-width: 100%;
   }
+
+  #close-btn {
+    left: unset !important;
+    right: 0 !important;
+    border: none !important;
+    border-radius: 0 var(--border-radius) 0 var(--border-radius) !important;
+    background-color: var(--color-primary) !important;
+  }
+
+  .visible {
+    display: none !important;
+    position: absolute !important;
+    top: 0px !important;
+    z-index: 99 !important;
+    width: 3rem !important;
+    height: 3rem !important;
+    background-color: var(--color-primary) !important;
+    border-radius: 0 var(--border-radius) 0 var(--border-radius) !important;
+    background-size: 60% !important;
+  }
 }
 
 .ads__claim-item--recommended {
-  padding: var(--spacing-s);
+  // padding: var(--spacing-s);
+  padding: 0;
+  margin-top: var(--spacing-m);
+  border-radius: var(--border-radius);
+  border-bottom: unset;
+
+  .ad__container {
+    // width:100%;
+    width: var(--file-list-thumbnail-width);
+  }
+
+  .ads__claim-text {
+    margin: 0;
+    padding-left: var(--spacing-s);
+
+    .ads__title {
+      color: white;
+    }
+  }
+
+  .icon {
+    display: none;
+  }
 
   @media (min-width: $breakpoint-medium) {
     margin-bottom: 0;
@@ -203,8 +299,66 @@
 // Outbrain
 // ****************************************************************************
 
+.OUTBRAIN {
+  border-radius: var(--border-radius) 0 0 0 !important;
+  height: unset !important;
+
+  .ob-widget .ob-unit.ob-rec-text {
+    font-size: 12px !important;
+  }
+}
+
+.closeButton {
+  background-color: var(--color-primary) !important;
+  color: var(--color-primary-contrast) !important;
+  border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
+  top: -27px !important;
+  width: 2rem !important;
+  padding-top: 3px;
+  // padding-bottom:4px !important;
+  height: 27px !important;
+}
+
+.ob-widget-footer {
+  position: absolute !important;
+  right: 32px;
+  top: -27px;
+
+  background: black;
+  border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
+  padding-left: 4px;
+  padding-right: 6px;
+  padding-top: 3px;
+  padding-bottom: 0px;
+
+  .ob_what_resp {
+    padding: unset !important;
+  }
+}
+
 .ob-widget-items-container {
   padding-left: var(--spacing-xs);
   padding-right: var(--spacing-xs);
-  border-radius: var(--border-radius);
+  border-radius: var(--border-radius) 0 0 0;
+}
+
+// ****************************************************************************
+// Neko Patch
+// ****************************************************************************
+
+.ad__container {
+  div {
+    max-width: unset !important;
+  }
+}
+
+#av-container #av-inner #gui::before {
+  background: unset !important;
+  #timeline #timeline-progress {
+    background: var(--color-primary) !important;
+  }
+}
+
+#av-container #av-inner #gui #timeline #timeline-progress {
+  background: var(--color-primary) !important;
 }
