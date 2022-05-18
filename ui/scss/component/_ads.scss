@@ -334,6 +334,10 @@
   .ob_what_resp {
     padding: unset !important;
   }
+
+  @media (max-width: $breakpoint-small) {
+    display: none !important;
+  }
 }
 
 .ob-widget-items-container {
