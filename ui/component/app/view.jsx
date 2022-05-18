@@ -89,6 +89,7 @@ type Props = {
   fetchModAmIList: () => void,
   homepageFetched: boolean,
   doOpenAnnouncements: () => void,
+  doSetLastViewedAnnouncement: (hash: string) => void,
 };
 
 function App(props: Props) {
@@ -123,6 +124,7 @@ function App(props: Props) {
     fetchModAmIList,
     homepageFetched,
     doOpenAnnouncements,
+    doSetLastViewedAnnouncement,
   } = props;
 
   const isMobile = useIsMobile();
@@ -480,6 +482,13 @@ function App(props: Props) {
       doOpenAnnouncements();
     }
   }, [prefsReady]);
+
+  useEffect(() => {
+    window.clearLastViewedAnnouncement = () => {
+      console.log('Clearing history. Please wait ...');
+      doSetLastViewedAnnouncement('');
+    };
+  }, []);
 
   // Keep this at the end to ensure initial setup effects are run first
   useEffect(() => {

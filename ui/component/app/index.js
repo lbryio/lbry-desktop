@@ -7,6 +7,7 @@ import {
   selectSyncIsLocked,
 } from 'redux/selectors/sync';
 import { doUserSetReferrer } from 'redux/actions/user';
+import { doSetLastViewedAnnouncement } from 'redux/actions/content';
 import {
   selectOdyseeMembershipIsPremiumPlus,
   selectUser,
@@ -58,6 +59,7 @@ const perform = {
   fetchModBlockedList: doFetchModBlockedList,
   fetchModAmIList: doFetchCommentModAmIList,
   doOpenAnnouncements,
+  doSetLastViewedAnnouncement,
 };
 
 export default hot(connect(select, perform)(App));
