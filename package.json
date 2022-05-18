@@ -81,7 +81,8 @@
     "videojs-contrib-ads": "^6.9.0",
     "videojs-ima": "^1.11.0",
     "videojs-ima-player": "^0.5.6",
-    "videojs-logo": "^2.1.4"
+    "videojs-logo": "^2.1.4",
+    "videojs-vtt-thumbnails": "https://github.com/OdyseeTeam/videojs-vtt-thumbnails"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",

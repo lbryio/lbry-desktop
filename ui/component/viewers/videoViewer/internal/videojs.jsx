@@ -1,6 +1,7 @@
 // @flow
 import 'videojs-contrib-ads'; // must be loaded in this order
 import 'videojs-ima'; // loads directly after contrib-ads
+import 'videojs-vtt-thumbnails';
 import 'video.js/dist/alt/video-js-cdn.min.css';
 import './plugins/videojs-mobile-ui/plugin';
 import '@silvermine/videojs-chromecast/dist/silvermine-videojs-chromecast.css';
@@ -392,6 +393,14 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         if (response && response.redirected && response.url && response.url.endsWith('m3u8')) {
           vjsPlayer.claimSrcVhs = { type: 'application/x-mpegURL', src: response.url };
           vjsPlayer.src(vjsPlayer.claimSrcVhs);
+
+          const trimmedPath = response.url.substring(0, response.url.lastIndexOf('/'));
+          const thumbnailPath = trimmedPath + '/stream_sprite.vtt';
+
+          vjsPlayer.vttThumbnails({
+            src: thumbnailPath,
+            showTimestamp: true,
+          });
         } else {
           vjsPlayer.src(vjsPlayer.claimSrcOriginal);
         }
