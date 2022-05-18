@@ -592,7 +592,10 @@ body {
     max-width: var(--page-max-width--filepage);
     position: relative;
     display: grid;
-    grid-template-columns: 1fr minmax(0, var(--livestream-comments-width));
+
+    $file-min-width: calc(var(--page-max-width--filepage) - var(--livestream-comments-width));
+    grid-template-columns: minmax($file-min-width, 0) 1fr;
+
     justify-content: space-between;
     justify-items: end;
     gap: var(--spacing-m);

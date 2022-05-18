@@ -375,9 +375,9 @@ export default function FileRenderFloating(props: Props) {
 
   return (
     <Draggable
-      onDrag={!isMobile ? handleDragMove : null}
-      onStart={!isMobile ? handleDragStart : null}
-      onStop={!isMobile ? handleDragStop : null}
+      onDrag={!isMobile ? handleDragMove : undefined}
+      onStart={!isMobile ? handleDragStart : undefined}
+      onStop={!isMobile ? handleDragStop : undefined}
       defaultPosition={position}
       position={isFloating ? position : { x: 0, y: 0 }}
       bounds="parent"

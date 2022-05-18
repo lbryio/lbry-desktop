@@ -28,6 +28,9 @@ $recent-msg-button__height: 2rem;
   @media (min-width: $breakpoint-small) {
     top: calc(var(--header-height) + var(--spacing-m)) !important;
     position: sticky;
+    resize: horizontal;
+    overflow: hidden;
+    max-width: 30vw;
   }
 
   @media (min-width: $breakpoint-medium) {
@@ -154,6 +157,8 @@ $recent-msg-button__height: 2rem;
   height: 100vh !important;
   top: 0 !important;
   overflow: hidden;
+  resize: none;
+  max-width: unset;
 
   .livestreamComments__wrapper {
     height: 95vh !important;
@@ -488,7 +493,6 @@ $recent-msg-button__height: 2rem;
 
   @media (min-width: $breakpoint-small) {
     padding: var(--spacing-xs);
-    width: var(--livestream-comments-width);
   }
 }
 
@@ -578,7 +582,6 @@ $recent-msg-button__height: 2rem;
 
   @media (min-width: $breakpoint-small) {
     padding: var(--spacing-xs);
-    width: var(--livestream-comments-width);
   }
 }
 
