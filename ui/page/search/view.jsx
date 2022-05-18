@@ -20,10 +20,11 @@ type Props = {
   uris: Array<string>,
   isAuthenticated: boolean,
   hasReachedMaxResultsLength: boolean,
+  hasPremiumPlus: boolean,
 };
 
 export default function SearchPage(props: Props) {
-  const { urlQuery, searchOptions, search, uris, isSearching, hasReachedMaxResultsLength } = props;
+  const { urlQuery, searchOptions, search, uris, isSearching, hasReachedMaxResultsLength, hasPremiumPlus } = props;
   const { push } = useHistory();
   const [from, setFrom] = React.useState(0);
 
@@ -103,7 +104,7 @@ export default function SearchPage(props: Props) {
                   onSearchOptionsChanged={resetPage}
                 />
               }
-              injectedItem={{ node: <Ads small type="video" />, index: 3 }}
+              injectedItem={!hasPremiumPlus && { node: <Ads small type="video" />, index: 3 }}
             />
 
             <div className="main--empty help">{__('These search results are provided by Odysee.')}</div>

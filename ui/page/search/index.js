@@ -9,11 +9,13 @@ import {
 } from 'redux/selectors/search';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { getSearchQueryString } from 'util/query-params';
+import { selectOdyseeMembershipIsPremiumPlus } from 'redux/selectors/user';
 import SearchPage from './view';
 
 const select = (state, props) => {
   const showMature = selectShowMatureContent(state);
   const urlParams = new URLSearchParams(props.location.search);
+  const hasPremiumPlus = selectOdyseeMembershipIsPremiumPlus(state);
 
   let urlQuery = urlParams.get('q') || null;
   if (urlQuery) {
@@ -36,6 +38,7 @@ const select = (state, props) => {
     isSearching: selectIsSearching(state),
     uris: uris,
     hasReachedMaxResultsLength: hasReachedMaxResultsLength,
+    hasPremiumPlus: hasPremiumPlus,
   };
 };
 

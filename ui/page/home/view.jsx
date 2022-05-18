@@ -45,6 +45,7 @@ type Props = {
   homepageOrder: HomepageOrder,
   doOpenModal: (id: string, ?{}) => void,
   hasMembership: ?boolean,
+  hasPremiumPlus: boolean,
 };
 
 function HomePage(props: Props) {
@@ -63,6 +64,7 @@ function HomePage(props: Props) {
     homepageOrder,
     doOpenModal,
     hasMembership,
+    hasPremiumPlus,
   } = props;
 
   const showPersonalizedChannels = (authenticated || !IS_WEB) && subscribedChannels && subscribedChannels.length > 0;
@@ -160,7 +162,7 @@ function HomePage(props: Props) {
         hasSource
         prefixUris={getLivestreamUris(activeLivestreams, options.channelIds)}
         pins={{ urls: pinUrls, claimIds: pinnedClaimIds }}
-        injectedItem={index === 0 && { node: <Ads small type="video" tileLayout /> }}
+        injectedItem={index === 0 && !hasPremiumPlus && { node: <Ads small type="video" tileLayout /> }}
         forceShowReposts={id !== 'FOLLOWING'}
         loading={id === 'FOLLOWING' ? fetchingActiveLivestreams : false}
       />

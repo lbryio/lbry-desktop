@@ -29,7 +29,7 @@ type Props = {
   claimId: string,
   metadata: any,
   location: UrlLocation,
-  userHasPremiumPlus: boolean,
+  hasPremiumPlus: boolean,
 };
 
 export default React.memo<Props>(function RecommendedContent(props: Props) {
@@ -41,11 +41,11 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
     isSearching,
     claim,
     location,
-    userHasPremiumPlus,
+    hasPremiumPlus,
   } = props;
 
   const claimId: ?string = claim && claim.claim_id;
-  const injectAds = SHOW_ADS && IS_WEB && !userHasPremiumPlus;
+  const injectAds = SHOW_ADS && IS_WEB && !hasPremiumPlus;
 
   function claimContainsBlockedWords(claim: ?StreamClaim) {
     if (BLOCKED_WORDS) {
@@ -77,7 +77,7 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
   const { onRecsLoaded: onRecommendationsLoaded, onClickedRecommended: onRecommendationClicked } = RecSys;
 
   const InjectedAd =
-    injectAds && !blacklistTriggered
+    injectAds && !blacklistTriggered && !hasPremiumPlus
       ? {
           node: <Ads small type="video" className="ads__claim-item--recommended" noFallback />,
           index: isMobile ? 0 : 3,

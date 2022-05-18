@@ -41,6 +41,7 @@ type Props = {
   doFetchChannelLiveStatus: (string) => void,
   activeLivestreamForChannel: any,
   activeLivestreamInitialized: boolean,
+  hasPremiumPlus: boolean,
 };
 
 function ChannelContent(props: Props) {
@@ -62,6 +63,7 @@ function ChannelContent(props: Props) {
     doFetchChannelLiveStatus,
     activeLivestreamForChannel,
     activeLivestreamInitialized,
+    hasPremiumPlus,
   } = props;
   // const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
 
@@ -159,7 +161,11 @@ function ChannelContent(props: Props) {
           defaultOrderBy={CS.ORDER_BY_NEW}
           pageSize={dynamicPageSize}
           infiniteScroll={defaultInfiniteScroll}
-          injectedItem={{ node: <Ads small type="video" tileLayout /> }}
+          injectedItem={
+            !hasPremiumPlus && {
+              node: <Ads small type="video" tileLayout />,
+            }
+          }
           meta={
             showFilters && (
               <Form onSubmit={() => {}} className="wunderbar--inline">

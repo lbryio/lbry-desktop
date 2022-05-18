@@ -4,7 +4,12 @@ import { doOpenModal } from 'redux/actions/app';
 import { doFetchActiveLivestreams } from 'redux/actions/livestream';
 import { selectActiveLivestreams, selectFetchingActiveLivestreams } from 'redux/selectors/livestream';
 import { selectFollowedTags } from 'redux/selectors/tags';
-import { selectHasOdyseeMembership, selectHomepageFetched, selectUserVerifiedEmail } from 'redux/selectors/user';
+import {
+  selectOdyseeMembershipIsPremiumPlus,
+  selectHasOdyseeMembership,
+  selectHomepageFetched,
+  selectUserVerifiedEmail,
+} from 'redux/selectors/user';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import {
   selectShowMatureContent,
@@ -28,6 +33,7 @@ const select = (state) => ({
   hideScheduledLivestreams: selectClientSetting(state, SETTINGS.HIDE_SCHEDULED_LIVESTREAMS),
   homepageOrder: selectClientSetting(state, SETTINGS.HOMEPAGE_ORDER),
   hasMembership: selectHasOdyseeMembership(state),
+  hasPremiumPlus: selectOdyseeMembershipIsPremiumPlus(state),
 });
 
 const perform = (dispatch) => ({

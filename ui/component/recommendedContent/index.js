@@ -15,7 +15,7 @@ const select = (state, props) => {
     recommendedContentUris,
     nextRecommendedUri,
     isSearching: selectIsSearching(state),
-    userHasPremiumPlus: selectOdyseeMembershipIsPremiumPlus(state),
+    hasPremiumPlus: selectOdyseeMembershipIsPremiumPlus(state),
   };
 };
 

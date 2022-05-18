@@ -35,6 +35,7 @@ type Props = {
   tileLayout: boolean,
   activeLivestreams: ?LivestreamInfo,
   doFetchActiveLivestreams: (orderBy: ?Array<string>, lang: ?Array<string>) => void,
+  hasPremiumPlus: boolean,
 };
 
 function DiscoverPage(props: Props) {
@@ -51,6 +52,7 @@ function DiscoverPage(props: Props) {
     activeLivestreams,
     doFetchActiveLivestreams,
     dynamicRouteProps,
+    hasPremiumPlus,
   } = props;
 
   const buttonRef = useRef();
@@ -221,7 +223,7 @@ function DiscoverPage(props: Props) {
           tags={tags}
           hiddenNsfwMessage={<HiddenNsfw type="page" />}
           repostedClaimId={repostedClaim ? repostedClaim.claim_id : null}
-          injectedItem={!isWildWest && { node: <Ads small type="video" tileLayout /> }}
+          injectedItem={!isWildWest && !hasPremiumPlus && { node: <Ads small type="video" tileLayout /> }}
           // TODO: find a better way to determine discover / wild west vs other modes release times
           // for now including && !tags so that
           releaseTime={releaseTime || undefined}
