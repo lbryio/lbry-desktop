@@ -45,7 +45,7 @@ function enableBatching(reducer) {
   };
 }
 
-const contentFilter = createFilter('content', ['positions', 'history']);
+const contentFilter = createFilter('content', ['positions', 'history', 'lastViewedAnnouncement']);
 const fileInfoFilter = createFilter('fileInfo', [
   'fileListPublishedSort',
   'fileListDownloadedSort',
@@ -141,6 +141,7 @@ const triggerSharedStateActions = [
   ACTIONS.COLLECTION_DELETE,
   ACTIONS.COLLECTION_NEW,
   ACTIONS.COLLECTION_PENDING,
+  ACTIONS.SET_LAST_VIEWED_ANNOUNCEMENT,
   // MAYBE COLLECTOIN SAVE
   // ACTIONS.SET_WELCOME_VERSION,
   // ACTIONS.SET_ALLOW_ANALYTICS,
@@ -183,6 +184,7 @@ const sharedStateFilters = {
   editedCollections: { source: 'collections', property: 'edited' },
   // savedCollections: { source: 'collections', property: 'saved' },
   unpublishedCollections: { source: 'collections', property: 'unpublished' },
+  lastViewedAnnouncement: { source: 'content', property: 'lastViewedAnnouncement' },
 };
 
 const sharedStateCb = ({ dispatch, getState, syncId }) => {
