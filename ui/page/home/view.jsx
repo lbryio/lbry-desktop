@@ -20,7 +20,6 @@ import { splitBySeparator } from 'util/lbryURI';
 import classnames from 'classnames';
 import Ads from 'web/component/ads';
 import Meme from 'web/component/meme';
-import PremiumPlusTile from 'component/premiumPlusTile';
 
 const FYP_SECTION: RowDataItem = {
   id: 'FYP',
@@ -43,12 +42,9 @@ type Props = {
   doFetchActiveLivestreams: () => void,
   fetchingActiveLivestreams: boolean,
   hideScheduledLivestreams: boolean,
-  adBlockerFound: ?boolean,
   homepageOrder: HomepageOrder,
   doOpenModal: (id: string, ?{}) => void,
   hasMembership: ?boolean,
-  hasPremiumPlus: ?boolean,
-  userCountry: string,
 };
 
 function HomePage(props: Props) {
@@ -64,12 +60,9 @@ function HomePage(props: Props) {
     doFetchActiveLivestreams,
     fetchingActiveLivestreams,
     hideScheduledLivestreams,
-    adBlockerFound,
     homepageOrder,
     doOpenModal,
     hasMembership,
-    hasPremiumPlus,
-    userCountry,
   } = props;
 
   const showPersonalizedChannels = (authenticated || !IS_WEB) && subscribedChannels && subscribedChannels.length > 0;
@@ -77,7 +70,6 @@ function HomePage(props: Props) {
   const showIndividualTags = showPersonalizedTags && followedTags.length < 5;
   const isLargeScreen = useIsLargeScreen();
   const channelIds = subscribedChannels.map((sub) => splitBySeparator(sub.uri)[1]);
-  const userIsInUS = userCountry === 'US';
 
   const rowData: Array<RowDataItem> = GetLinksData(
     homepageData,
@@ -168,16 +160,9 @@ function HomePage(props: Props) {
         hasSource
         prefixUris={getLivestreamUris(activeLivestreams, options.channelIds)}
         pins={{ urls: pinUrls, claimIds: pinnedClaimIds }}
-        injectedItem={
-          index === 0 &&
-          !hasPremiumPlus && {
-            node:
-              adBlockerFound || !userIsInUS ? <PremiumPlusTile tileLayout /> : <Ads small type="video" tileLayout />,
-          }
-        }
+        injectedItem={index === 0 && { node: <Ads small type="video" tileLayout /> }}
         forceShowReposts={id !== 'FOLLOWING'}
         loading={id === 'FOLLOWING' ? fetchingActiveLivestreams : false}
-        adBlockerFound={adBlockerFound}
       />
     );
 

@@ -19,7 +19,6 @@ import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
 import moment from 'moment';
 import LivestreamSection from './livestreamSection';
-import PremiumPlusTile from 'component/premiumPlusTile';
 
 const CATEGORY_CONTENT_TYPES_FILTER = CS.CONTENT_TYPES.filter((x) => x !== CS.CLAIM_REPOST);
 
@@ -36,9 +35,6 @@ type Props = {
   tileLayout: boolean,
   activeLivestreams: ?LivestreamInfo,
   doFetchActiveLivestreams: (orderBy: ?Array<string>, lang: ?Array<string>) => void,
-  adBlockerFound: ?boolean,
-  hasPremiumPlus: ?boolean,
-  userCountry: string,
 };
 
 function DiscoverPage(props: Props) {
@@ -55,9 +51,6 @@ function DiscoverPage(props: Props) {
     activeLivestreams,
     doFetchActiveLivestreams,
     dynamicRouteProps,
-    adBlockerFound,
-    hasPremiumPlus,
-    userCountry,
   } = props;
 
   const buttonRef = useRef();
@@ -65,7 +58,6 @@ function DiscoverPage(props: Props) {
   const isMobile = useIsMobile();
   const isWildWest = dynamicRouteProps && dynamicRouteProps.id === 'WILD_WEST';
   const isCategory = Boolean(dynamicRouteProps);
-  const userIsInUS = userCountry === 'US';
 
   const urlParams = new URLSearchParams(search);
   const langParam = urlParams.get(CS.LANGUAGE_KEY) || null;
@@ -229,17 +221,7 @@ function DiscoverPage(props: Props) {
           tags={tags}
           hiddenNsfwMessage={<HiddenNsfw type="page" />}
           repostedClaimId={repostedClaim ? repostedClaim.claim_id : null}
-          injectedItem={
-            !isWildWest &&
-            !hasPremiumPlus && {
-              node:
-                adBlockerFound || !userIsInUS ? (
-                  <PremiumPlusTile tileLayout={tileLayout} />
-                ) : (
-                  <Ads small type="video" tileLayout />
-                ),
-            }
-          }
+          injectedItem={!isWildWest && { node: <Ads small type="video" tileLayout /> }}
           // TODO: find a better way to determine discover / wild west vs other modes release times
           // for now including && !tags so that
           releaseTime={releaseTime || undefined}
