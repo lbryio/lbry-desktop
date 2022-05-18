@@ -106,6 +106,7 @@ type Props = {
 };
 
 const IS_IOS = platform.isIOS();
+const IS_MOBILE = platform.isMobile();
 
 const PLUGIN_MAP = {
   eventTracking: eventTracking,
@@ -397,10 +398,13 @@ export default React.memo<Props>(function VideoJs(props: Props) {
           const trimmedPath = response.url.substring(0, response.url.lastIndexOf('/'));
           const thumbnailPath = trimmedPath + '/stream_sprite.vtt';
 
-          vjsPlayer.vttThumbnails({
-            src: thumbnailPath,
-            showTimestamp: true,
-          });
+          // disable thumbnails on mobile for now
+          if (!IS_MOBILE) {
+            vjsPlayer.vttThumbnails({
+              src: thumbnailPath,
+              showTimestamp: true,
+            });
+          }
         } else {
           vjsPlayer.src(vjsPlayer.claimSrcOriginal);
         }
