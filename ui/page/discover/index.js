@@ -9,7 +9,7 @@ import { selectFollowedTags } from 'redux/selectors/tags';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import { selectClientSetting, selectLanguage } from 'redux/selectors/settings';
 import { selectAdBlockerFound } from 'redux/selectors/app';
-import { selectOdyseeMembershipIsPremiumPlus } from 'redux/selectors/user';
+import { selectOdyseeMembershipIsPremiumPlus, selectUserCountry } from 'redux/selectors/user';
 import DiscoverPage from './view';
 
 const select = (state, props) => {
@@ -27,6 +27,7 @@ const select = (state, props) => {
     searchInLanguage: selectClientSetting(state, SETTINGS.SEARCH_IN_LANGUAGE),
     adBlockerFound: selectAdBlockerFound(state),
     hasPremiumPlus: selectOdyseeMembershipIsPremiumPlus(state),
+    userCountry: selectUserCountry(state),
   };
 };
 

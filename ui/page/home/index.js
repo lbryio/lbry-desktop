@@ -10,6 +10,7 @@ import {
   selectHasOdyseeMembership,
   selectHomepageFetched,
   selectUserVerifiedEmail,
+  selectUserCountry,
 } from 'redux/selectors/user';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import {
@@ -36,6 +37,7 @@ const select = (state) => ({
   homepageOrder: selectClientSetting(state, SETTINGS.HOMEPAGE_ORDER),
   hasMembership: selectHasOdyseeMembership(state),
   hasPremiumPlus: selectOdyseeMembershipIsPremiumPlus(state),
+  userCountry: selectUserCountry(state),
 });
 
 const perform = (dispatch) => ({

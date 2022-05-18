@@ -38,6 +38,7 @@ type Props = {
   doFetchActiveLivestreams: (orderBy: ?Array<string>, lang: ?Array<string>) => void,
   adBlockerFound: ?boolean,
   hasPremiumPlus: ?boolean,
+  userCountry: string,
 };
 
 function DiscoverPage(props: Props) {
@@ -56,6 +57,7 @@ function DiscoverPage(props: Props) {
     dynamicRouteProps,
     adBlockerFound,
     hasPremiumPlus,
+    userCountry,
   } = props;
 
   const buttonRef = useRef();
@@ -63,6 +65,7 @@ function DiscoverPage(props: Props) {
   const isMobile = useIsMobile();
   const isWildWest = dynamicRouteProps && dynamicRouteProps.id === 'WILD_WEST';
   const isCategory = Boolean(dynamicRouteProps);
+  const userIsInUS = userCountry === 'US';
 
   const urlParams = new URLSearchParams(search);
   const langParam = urlParams.get(CS.LANGUAGE_KEY) || null;
@@ -229,11 +232,12 @@ function DiscoverPage(props: Props) {
           injectedItem={
             !isWildWest &&
             !hasPremiumPlus && {
-              node: adBlockerFound ? (
-                <PremiumPlusTile tileLayout={tileLayout} />
-              ) : (
-                <Ads small type="video" tileLayout />
-              ),
+              node:
+                adBlockerFound || !userIsInUS ? (
+                  <PremiumPlusTile tileLayout={tileLayout} />
+                ) : (
+                  <Ads small type="video" tileLayout />
+                ),
             }
           }
           // TODO: find a better way to determine discover / wild west vs other modes release times

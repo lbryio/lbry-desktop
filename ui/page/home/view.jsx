@@ -48,6 +48,7 @@ type Props = {
   doOpenModal: (id: string, ?{}) => void,
   hasMembership: ?boolean,
   hasPremiumPlus: ?boolean,
+  userCountry: string,
 };
 
 function HomePage(props: Props) {
@@ -68,6 +69,7 @@ function HomePage(props: Props) {
     doOpenModal,
     hasMembership,
     hasPremiumPlus,
+    userCountry,
   } = props;
 
   const showPersonalizedChannels = (authenticated || !IS_WEB) && subscribedChannels && subscribedChannels.length > 0;
@@ -75,6 +77,7 @@ function HomePage(props: Props) {
   const showIndividualTags = showPersonalizedTags && followedTags.length < 5;
   const isLargeScreen = useIsLargeScreen();
   const channelIds = subscribedChannels.map((sub) => splitBySeparator(sub.uri)[1]);
+  const userIsInUS = userCountry === 'US';
 
   const rowData: Array<RowDataItem> = GetLinksData(
     homepageData,
@@ -168,7 +171,8 @@ function HomePage(props: Props) {
         injectedItem={
           index === 0 &&
           !hasPremiumPlus && {
-            node: adBlockerFound ? <PremiumPlusTile tileLayout /> : <Ads small type="video" tileLayout />,
+            node:
+              adBlockerFound || !userIsInUS ? <PremiumPlusTile tileLayout /> : <Ads small type="video" tileLayout />,
           }
         }
         forceShowReposts={id !== 'FOLLOWING'}
