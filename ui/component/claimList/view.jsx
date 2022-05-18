@@ -119,13 +119,15 @@ export default function ClaimList(props: Props) {
   const timedOut = uris === null;
   const urisLength = (uris && uris.length) || 0;
 
-  let tileUris = (prefixUris || []).concat(uris || []);
-
-  if (prefixUris && prefixUris.length) tileUris.splice(prefixUris.length * -1, prefixUris.length);
+  const tileUris = React.useMemo(() => {
+    const x = (prefixUris || []).concat(uris || []);
+    if (prefixUris && prefixUris.length) {
+      x.splice(prefixUris.length * -1, prefixUris.length);
+    }
+    return maxClaimRender ? x.slice(0, maxClaimRender) : x;
+  }, [prefixUris, uris, maxClaimRender]);
 
   const totalLength = tileUris.length;
-
-  if (maxClaimRender) tileUris = tileUris.slice(0, maxClaimRender);
 
   const sortedUris = (urisLength > 0 && (currentSort === SORT_NEW ? tileUris : tileUris.slice().reverse())) || [];
 
