@@ -47,7 +47,7 @@ router.get(`/$/download/:claimName/:claimId`, async (ctx) => {
 });
 
 router.get(`/$/stream/:claimName/:claimId`, async (ctx) => {
-  const streamUrl = getStreamUrl(ctx);
+  const streamUrl = await getStreamUrl(ctx);
   ctx.redirect(streamUrl);
 });
 
