@@ -82,6 +82,18 @@ export const selectHomepageMeme = (state) => {
   return homepages ? homepages['en'].meme || {} : {};
 };
 
+export const selectHomepageAnnouncement = (state) => {
+  const homepageCode = selectHomepageCode(state);
+  const homepages = window.homepages;
+  if (homepages) {
+    const news = homepages[homepageCode].announcement;
+    if (news) {
+      return news;
+    }
+  }
+  return homepages ? homepages['en'].announcement || '' : '';
+};
+
 export const selectInRegionByCode = (state, code) => {
   const hp = selectClientSetting(state, SETTINGS.HOMEPAGE);
   const lang = selectLanguage(state);
