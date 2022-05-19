@@ -30,12 +30,12 @@ type Props = {
   fileMimeType: ?string,
   isStillEditing: boolean,
   balance: number,
-  updatePublishForm: ({}) => void,
+  doUpdatePublishForm: ({}) => void,
   disabled: boolean,
   publishing: boolean,
-  showToast: (string) => void,
+  doToast: ({ message: string, isError?: boolean }) => void,
   inProgress: boolean,
-  clearPublish: () => void,
+  doClearPublish: () => void,
   ffmpegStatus: any,
   optimize: boolean,
   size: number,
@@ -68,11 +68,12 @@ function PublishFile(props: Props) {
     filePath,
     fileMimeType,
     isStillEditing,
-    updatePublishForm,
+    doUpdatePublishForm: updatePublishForm,
+    doToast,
     disabled,
     publishing,
     inProgress,
-    clearPublish,
+    doClearPublish,
     optimize,
     ffmpegStatus = {},
     size,
@@ -116,6 +117,9 @@ function PublishFile(props: Props) {
     SITE_NAME,
     limit: TV_PUBLISH_SIZE_LIMIT_GB_STR,
   });
+
+  const bitRate = getBitrate(size, duration);
+  const bitRateIsOverMax = bitRate > MAX_BITRATE;
 
   const fileSelectorModes = [
     { label: __('Upload'), actionName: SOURCE_UPLOAD, icon: ICONS.PUBLISH },
@@ -202,7 +206,7 @@ function PublishFile(props: Props) {
         handleFileChange(filePath);
       }
     }
-  }, [filePath, currentFile, handleFileChange, updateFileInfo]);
+  }, [filePath, currentFile, doToast, updatePublishForm]);
 
   useEffect(() => {
     const isOptimizeAvail = currentFile && currentFile !== '' && isVid && ffmpegAvail;
@@ -211,6 +215,10 @@ function PublishFile(props: Props) {
     setOptimizeAvail(isOptimizeAvail);
     updatePublishForm({ optimize: finalOptimizeState });
   }, [currentFile, filePath, isVid, ffmpegAvail, userOptimize, updatePublishForm]);
+
+  useEffect(() => {
+    setOverMaxBitrate(bitRateIsOverMax);
+  }, [bitRateIsOverMax]);
 
   function updateFileInfo(duration, size, isvid) {
     updatePublishForm({ fileDur: duration, fileSize: size, fileVid: isvid });
@@ -264,18 +272,11 @@ function PublishFile(props: Props) {
       );
     }
     // @endif
-    let bitRate = getBitrate(size, duration);
-    let overMaxBitrate = bitRate > MAX_BITRATE;
-    if (overMaxBitrate) {
-      setOverMaxBitrate(true);
-    } else {
-      setOverMaxBitrate(false);
-    }
 
     if (isVid && duration && bitRate > RECOMMENDED_BITRATE) {
       return (
         <p className="help--warning">
-          {overMaxBitrate
+          {bitRateIsOverMax
             ? __(
                 'Your video has a bitrate over ~12 Mbps and cannot be processed at this time. We suggest transcoding to provide viewers the best experience.'
               )
@@ -392,7 +393,6 @@ function PublishFile(props: Props) {
   }
 
   function handleFileChange(file: WebFile, clearName = true) {
-    const { showToast } = props;
     window.URL = window.URL || window.webkitURL;
     setOversized(false);
     setOverMaxBitrate(false);
@@ -459,7 +459,7 @@ function PublishFile(props: Props) {
     // we only need to enforce file sizes on 'web'
     if (file.size && Number(file.size) > TV_PUBLISH_SIZE_LIMIT_BYTES) {
       setOversized(true);
-      showToast(__(UPLOAD_SIZE_MESSAGE));
+      doToast({ message: __(UPLOAD_SIZE_MESSAGE), isError: true });
       updatePublishForm({ filePath: '' });
       return;
     }
@@ -498,7 +498,7 @@ function PublishFile(props: Props) {
                 button="close"
                 label={__('New --[clears Publish Form]--')}
                 icon={ICONS.REFRESH}
-                onClick={clearPublish}
+                onClick={doClearPublish}
               />
             </div>
           )}

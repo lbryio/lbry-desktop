@@ -23,10 +23,10 @@ const select = (state, props) => ({
   isLivestreamClaim: selectIsStreamPlaceholderForUri(state, props.uri),
 });
 
-const perform = (dispatch) => ({
-  clearPublish: () => dispatch(doClearPublish()),
-  updatePublishForm: (value) => dispatch(doUpdatePublishForm(value)),
-  showToast: (message) => dispatch(doToast({ message, isError: true })),
-});
+const perform = {
+  doClearPublish,
+  doUpdatePublishForm,
+  doToast,
+};
 
 export default connect(select, perform)(PublishPage);
