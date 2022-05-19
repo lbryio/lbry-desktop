@@ -6,7 +6,7 @@ import {
   selectClaimIsMine,
   makeSelectClaimIsPending,
   selectGeoRestrictionForUri,
-  selectLatestClaimByUri,
+  selectLatestClaimForUri,
 } from 'redux/selectors/claims';
 import {
   makeSelectCollectionForId,
@@ -41,7 +41,7 @@ const select = (state, props) => {
   const { canonical_url: canonicalUrl, claim_id: claimId } = claim || {};
   const latestContentClaim = liveContentPath
     ? selectActiveLiveClaimForChannel(state, claimId)
-    : selectLatestClaimByUri(state, canonicalUrl);
+    : selectLatestClaimForUri(state, canonicalUrl);
   const latestClaimUrl = latestContentClaim && latestContentClaim.canonical_url;
 
   return {

@@ -5,7 +5,7 @@ import {
   selectClaimForUri,
   selectIsUriResolving,
   selectGeoRestrictionForUri,
-  selectLatestClaimByUri,
+  selectLatestClaimForUri,
 } from 'redux/selectors/claims';
 import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
 import { doResolveUri, doFetchLatestClaimForChannel } from 'redux/actions/claims';
@@ -51,7 +51,7 @@ const select = (state, props) => {
   const latestContentClaim =
     featureParam === PAGES.LIVE_NOW
       ? selectActiveLiveClaimForChannel(state, claimId)
-      : selectLatestClaimByUri(state, canonicalUrl);
+      : selectLatestClaimForUri(state, canonicalUrl);
   const latestClaimUrl = latestContentClaim && latestContentClaim.canonical_url;
   if (latestClaimUrl) uri = latestClaimUrl;
 

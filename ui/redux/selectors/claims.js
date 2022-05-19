@@ -35,7 +35,7 @@ export const selectRepostLoading = (state: State) => selectState(state).repostLo
 export const selectRepostError = (state: State) => selectState(state).repostError;
 export const selectLatestByUri = (state: State) => selectState(state).latestByUri;
 
-export const selectLatestClaimByUri = createSelector(
+export const selectLatestClaimForUri = createSelector(
   (state, uri) => uri,
   selectLatestByUri,
   (uri, latestByUri) => {
