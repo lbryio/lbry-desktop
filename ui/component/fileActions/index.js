@@ -4,6 +4,7 @@ import {
   selectClaimForUri,
   selectHasChannels,
   makeSelectTagInClaimOrChannelForUri,
+  selectClaimIsNsfwForUri,
 } from 'redux/selectors/claims';
 import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
 import { doPrepareEdit } from 'redux/actions/publish';
@@ -29,7 +30,8 @@ const select = (state, props) => {
     hasChannels: selectHasChannels(state),
     isLivestreamClaim: isStreamPlaceholderClaim(claim),
     streamingUrl: makeSelectStreamingUrlForUri(uri)(state),
-    disableDownloadButton: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_DOWNLOAD_BUTTON_TAG)(state),
+    disableDownloadButton: makeSelectTagInClaimOrChannelForUri(uri, DISABLE_DOWNLOAD_BUTTON_TAG)(state),
+    isMature: selectClaimIsNsfwForUri(state, uri),
   };
 };
 

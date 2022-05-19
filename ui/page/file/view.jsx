@@ -156,7 +156,7 @@ export default function FilePage(props: Props) {
       );
     }
 
-    if (RENDER_MODES.UNRENDERABLE_MODES.includes(renderMode)) {
+    if (RENDER_MODES.UNRENDERABLE_MODES.includes(renderMode) && !isMature) {
       return (
         <>
           <FileTitleSection uri={uri} />

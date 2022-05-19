@@ -36,6 +36,8 @@ type Props = {
   position: number,
   collectionId?: number,
   doFetchInviteStatus: (boolean) => void,
+  disableDownloadButton: boolean,
+  isMature: boolean,
 };
 
 function SocialShare(props: Props) {
@@ -49,6 +51,8 @@ function SocialShare(props: Props) {
     position,
     collectionId,
     doFetchInviteStatus,
+    disableDownloadButton,
+    isMature,
   } = props;
   const [showEmbed, setShowEmbed] = React.useState(false);
   const [includeCollectionId, setIncludeCollectionId] = React.useState(Boolean(collectionId)); // unless it *is* a collection?
@@ -245,7 +249,9 @@ function SocialShare(props: Props) {
         ))}
       {showClaimLinks && (
         <div className="section">
-          {Boolean(isStream) && <CopyableText label={__('Download Link')} copyable={downloadUrl} />}
+          {Boolean(isStream) && !disableDownloadButton && !isMature && (
+            <CopyableText label={__('Download Link')} copyable={downloadUrl} />
+          )}
           {Boolean(rssUrl) && <CopyableText label={__('RSS Url')} copyable={rssUrl} />}
           {Boolean(isChannel) && (
             <>

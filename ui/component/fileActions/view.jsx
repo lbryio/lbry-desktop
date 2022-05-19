@@ -34,6 +34,7 @@ type Props = {
   doPrepareEdit: (claim: Claim, uri: string) => void,
   doToast: (data: { message: string }) => void,
   doDownloadUri: (uri: string) => void,
+  isMature: boolean,
 };
 
 export default function FileActions(props: Props) {
@@ -52,6 +53,7 @@ export default function FileActions(props: Props) {
     doPrepareEdit,
     doToast,
     doDownloadUri,
+    isMature,
   } = props;
 
   const {
@@ -221,7 +223,7 @@ export default function FileActions(props: Props) {
               </>
             )}
 
-            {!isLivestreamClaim && !disableDownloadButton && (
+            {!isLivestreamClaim && !disableDownloadButton && !isMature && (
               <MenuItem className="comment__menu-option" onSelect={handleWebDownload}>
                 <div className="menu__link">
                   <Icon aria-hidden icon={ICONS.DOWNLOAD} />
