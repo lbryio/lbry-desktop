@@ -70,7 +70,7 @@ function Ads(props: Props) {
   function resolveAdVisibility() {
     // 'ad_blocker_detected' will be undefined at startup. Wait until we are
     // sure it is not blocked (i.e. === false) before showing the component.
-    return ad_blocker_detected === false && SHOW_ADS && !userHasPremiumPlus && userCountry !== 'US';
+    return ad_blocker_detected === false && SHOW_ADS && !userHasPremiumPlus && userCountry === 'US';
   }
 
   useEffect(() => {
