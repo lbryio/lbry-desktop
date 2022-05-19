@@ -76,15 +76,7 @@ const Lbry = {
 
   // Claim fetching and manipulation
   resolve: (params) => daemonCallWithResult('resolve', params),
-  // get: (params) => daemonCallWithResult('get', params),
-  get: (params) => {
-    // $FlowFixMe
-    const uri = params?.uri;
-    if (uri && uri.endsWith('[object Promise]')) {
-      return Promise.reject(new Error(`get: Invalid url (${uri})`));
-    }
-    return daemonCallWithResult('get', params);
-  },
+  get: (params) => daemonCallWithResult('get', params),
   claim_search: (params) => daemonCallWithResult('claim_search', params),
   claim_list: (params) => daemonCallWithResult('claim_list', params),
   channel_create: (params) => daemonCallWithResult('channel_create', params),
