@@ -20,7 +20,8 @@ export default function apiPublishCallViaWeb(
   const isMarkdown = filePath && typeof filePath === 'object' && filePath.type === 'text/markdown';
 
   if (!filePath && !remoteUrl) {
-    return apiCall(method, params, resolve, reject);
+    const { claim_id: claimId, ...otherParams } = params;
+    return apiCall(method, otherParams, resolve, reject);
   }
 
   let fileField = filePath;

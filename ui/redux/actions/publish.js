@@ -97,8 +97,10 @@ function resolvePublishPayload(publishData, myClaimForUri, myChannels, preview) 
   const channelId = namedChannelClaim ? namedChannelClaim.claim_id : '';
 
   const nowTimeStamp = Number(Math.round(Date.now() / 1000));
+  const { claim_id: claimId } = myClaimForUri || {};
 
   const publishPayload: {
+    claim_id?: string,
     name: ?string,
     bid: string,
     description?: string,
@@ -130,6 +132,10 @@ function resolvePublishPayload(publishData, myClaimForUri, myChannels, preview) 
     blocking: true,
     preview: false,
   };
+
+  if (claimId) {
+    publishPayload.claim_id = claimId;
+  }
 
   // Temporary solution to keep the same publish flow with the new tags api
   // Eventually we will allow users to enter their own tags on publish

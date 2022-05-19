@@ -57,6 +57,7 @@ declare type TusUploader = any;
 
 declare type FileUploadSdkParams = {
   file_path: string | File,
+  claim_id: ?string,
   name: ?string,
   preview?: boolean,
   remote_url?: string,
