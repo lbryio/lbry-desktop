@@ -109,14 +109,16 @@ export default function CommentList(props: Props) {
   const isMobile = useIsMobile();
   const isMediumScreen = useIsMediumScreen();
 
+  const currentFetchedPage = Math.ceil(topLevelComments.length / COMMENT_PAGE_SIZE_TOP_LEVEL);
   const spinnerRef = React.useRef();
   const commentListRef = React.useRef();
   const DEFAULT_SORT = ENABLE_COMMENT_REACTIONS ? SORT_BY.POPULARITY : SORT_BY.NEWEST;
   const [sort, setSort] = usePersistedState('comment-sort-by', DEFAULT_SORT);
-  const [page, setPage] = React.useState(1);
+  const [page, setPage] = React.useState(currentFetchedPage > 0 ? currentFetchedPage : 1);
   const [didInitialPageFetch, setInitialPageFetch] = React.useState(false);
   const hasDefaultExpansion = commentsAreExpanded || !isMediumScreen || isMobile;
   const [expandedComments, setExpandedComments] = React.useState(hasDefaultExpansion);
+  const [debouncedUri, setDebouncedUri] = React.useState();
 
   const totalFetchedComments = allCommentIds ? allCommentIds.length : 0;
   const channelSettings = channelId ? settingsByChannelId[channelId] : undefined;
@@ -189,6 +191,14 @@ export default function CommentList(props: Props) {
     }
   }, [linkedCommentAncestors, linkedCommentId, pathname, push, search, threadCommentId, threadDepthLevel]);
 
+  // set new page on scroll debounce and avoid setting the page after navigated uris
+  useEffect(() => {
+    if (debouncedUri && debouncedUri === uri) {
+      setPage(page + 1);
+      setDebouncedUri(undefined);
+    }
+  }, [debouncedUri, page, uri]);
+
   // Force comments reset
   useEffect(() => {
     if (page === 0) {
@@ -196,14 +206,28 @@ export default function CommentList(props: Props) {
     }
   }, [handleReset, page]);
 
-  // Reset comments only on claim switch
+  // Set page back to 1 on every claim switch
   useEffect(() => {
-    return () => handleReset();
-  }, [handleReset]);
+    return () => setPage(1);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [uri]);
+
+  // When navigating to a new claim, the page will be 1 due to the above
+  // and if there was already fetched top level comments, the fetched page will be higher
+  // so set the current page as the fetched page to start fetching new pages from there
+  useEffect(() => {
+    if (page < currentFetchedPage) setPage(currentFetchedPage > 0 ? currentFetchedPage : 1);
+  }, [currentFetchedPage, page, uri]);
 
   // Fetch top-level comments
   useEffect(() => {
-    if (page !== 0) {
+    const isInitialFetch = currentFetchedPage === 0;
+    const isNewPage = page !== 1 && page !== currentFetchedPage;
+    // only one or the other should be true, if both are true it means
+    // it will fetch the wrong page initially. needs Number so it's 0 or 1
+    const hasRightFetchPage = Number(isInitialFetch) ^ Number(isNewPage);
+
+    if (page !== 0 && hasRightFetchPage) {
       if (page === 1) {
         if (threadCommentId) {
           fetchComment(threadCommentId);
@@ -215,11 +239,7 @@ export default function CommentList(props: Props) {
 
       fetchTopLevelComments(uri, undefined, page, COMMENT_PAGE_SIZE_TOP_LEVEL, sort);
     }
-
-    // no need to listen for uri change, claimId change will trigger page which
-    // will handle this
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [fetchComment, fetchTopLevelComments, linkedCommentId, page, sort, threadCommentId]);
+  }, [currentFetchedPage, fetchComment, fetchTopLevelComments, linkedCommentId, page, sort, threadCommentId, uri]);
 
   React.useEffect(() => {
     if (threadCommentId) {
@@ -298,7 +318,7 @@ export default function CommentList(props: Props) {
 
     const handleCommentScroll = debounce(() => {
       if (shouldFetchNextPage(page, topLevelTotalPages)) {
-        setPage(page + 1);
+        setDebouncedUri(uri);
         setInitialPageFetch(true);
       }
     }, DEBOUNCE_SCROLL_HANDLER_MS);
@@ -328,6 +348,7 @@ export default function CommentList(props: Props) {
     page,
     readyToDisplayComments,
     topLevelTotalPages,
+    uri,
   ]);
 
   const commentProps = {
@@ -342,7 +363,6 @@ export default function CommentList(props: Props) {
     totalComments,
     sort,
     changeSort,
-    setPage,
     handleRefresh: refreshComments,
   };
 
