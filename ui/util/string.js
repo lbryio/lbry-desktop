@@ -26,3 +26,7 @@ export function toCompactNotation(number: string | number, lang: ?string, minThr
 export function stripLeadingAtSign(str: ?string) {
   return str && str.charAt(0) === '@' ? str.slice(1) : str;
 }
+
+export function getSimpleStrHash(s: string) {
+  return String(s.split('').reduce((a, b) => ((a << 5) - a + b.charCodeAt(0)) | 0, 0));
+}

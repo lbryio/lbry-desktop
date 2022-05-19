@@ -303,6 +303,29 @@
   }
 }
 
+// TODO: Move .announcement to `modalAnnouncements/style.scss` when structure is ready.
+.announcement {
+  @media (min-width: $breakpoint-small) {
+    max-height: 90vh;
+  }
+}
+
+.markdown-preview--announcement {
+  @media (min-width: $breakpoint-small) {
+    max-height: 80vh;
+  }
+
+  overflow: hidden;
+  overflow-y: auto;
+
+  img {
+    max-width: 40%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 .editor-preview {
   background-color: rgba(var(--color-header-background-base), 1);
 }

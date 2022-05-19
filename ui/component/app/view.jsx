@@ -74,6 +74,7 @@ type Props = {
   balance: ?number,
   syncIsLocked: boolean,
   syncError: ?string,
+  prefsReady: boolean,
   rewards: Array<Reward>,
   setReferrer: (string, boolean) => void,
   isAuthenticated: boolean,
@@ -87,6 +88,8 @@ type Props = {
   fetchModBlockedList: () => void,
   fetchModAmIList: () => void,
   homepageFetched: boolean,
+  doOpenAnnouncements: () => void,
+  doSetLastViewedAnnouncement: (hash: string) => void,
 };
 
 function App(props: Props) {
@@ -103,6 +106,7 @@ function App(props: Props) {
     history,
     syncError,
     syncIsLocked,
+    prefsReady,
     language,
     languages,
     setLanguage,
@@ -119,6 +123,8 @@ function App(props: Props) {
     hasPremiumPlus,
     fetchModAmIList,
     homepageFetched,
+    doOpenAnnouncements,
+    doSetLastViewedAnnouncement,
   } = props;
 
   const isMobile = useIsMobile();
@@ -438,7 +444,7 @@ function App(props: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps, (one time after locale is fetched)
   }, [locale]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (locale) {
       const countryCode = locale.country;
       const langs = getLanguagesForCountry(countryCode) || [];
@@ -470,6 +476,19 @@ function App(props: Props) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [syncError, pathname, isAuthenticated]);
+
+  useEffect(() => {
+    if (prefsReady) {
+      doOpenAnnouncements();
+    }
+  }, [prefsReady]);
+
+  useEffect(() => {
+    window.clearLastViewedAnnouncement = () => {
+      console.log('Clearing history. Please wait ...');
+      doSetLastViewedAnnouncement('');
+    };
+  }, []);
 
   // Keep this at the end to ensure initial setup effects are run first
   useEffect(() => {

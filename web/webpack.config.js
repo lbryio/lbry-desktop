@@ -68,6 +68,10 @@ const copyWebpackCommands = [
     from: `${WEB_STATIC_ROOT}/pwa/`,
     to: `${DIST_ROOT}/public/pwa/`,
   },
+  {
+    from: `${STATIC_ROOT}/../custom/homepages/v2/announcement`,
+    to: `${DIST_ROOT}/announcement`,
+  },
 ];
 
 const CUSTOM_OG_PATH = `${CUSTOM_ROOT}/v2-og.png`;

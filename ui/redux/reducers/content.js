@@ -13,6 +13,7 @@ const defaultState: ContentState = {
   recommendationUrls: {},
   recommendationClicks: {},
   loopList: undefined,
+  lastViewedAnnouncement: '',
 };
 
 reducers[ACTIONS.SET_PRIMARY_URI] = (state, action) =>
@@ -118,12 +119,19 @@ reducers[ACTIONS.CLEAR_CONTENT_HISTORY_URI] = (state, action) => {
 
 reducers[ACTIONS.CLEAR_CONTENT_HISTORY_ALL] = (state) => ({ ...state, history: [] });
 
+reducers[ACTIONS.SET_LAST_VIEWED_ANNOUNCEMENT] = (state, action) => ({ ...state, lastViewedAnnouncement: action.data });
+
 // reducers[LBRY_REDUX_ACTIONS.PURCHASE_URI_FAILED] = (state, action) => {
 //   return {
 //     ...state,
 //     playingUri: null,
 //   };
 // };
+
+reducers[ACTIONS.USER_STATE_POPULATE] = (state, action) => {
+  const { lastViewedAnnouncement } = action.data;
+  return { ...state, lastViewedAnnouncement };
+};
 
 export default function reducer(state: ContentState = defaultState, action: any) {
   const handler = reducers[action.type];

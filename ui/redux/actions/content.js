@@ -374,3 +374,12 @@ export function doToggleShuffleList(currentUri: string, collectionId: string, sh
     }
   };
 }
+
+export function doSetLastViewedAnnouncement(hash: string) {
+  return (dispatch: Dispatch) => {
+    dispatch({
+      type: ACTIONS.SET_LAST_VIEWED_ANNOUNCEMENT,
+      data: hash,
+    });
+  };
+}
