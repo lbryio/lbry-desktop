@@ -72,7 +72,7 @@ async function generateEnclosureForClaimContent(claim) {
   switch (value.stream_type) {
     case 'video':
       return {
-        url: (await fetchStreamUrl(claim.name, claim.claim_id)) + (fileExt || '.mp4'),
+        url: (await fetchStreamUrl(claim.name, claim.claim_id).replace('/v4/', '/v3/')) + (fileExt || '.mp4'), // v3 = mp4 always, v4 may redirect to m3u8
         type: (value.source && value.source.media_type) || 'video/mp4',
         size: (value.source && value.source.size) || 0, // Per spec, 0 is a valid fallback.
       };
