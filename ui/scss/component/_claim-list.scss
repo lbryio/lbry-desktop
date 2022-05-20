@@ -970,24 +970,26 @@
     }
   }
 
-  &:hover {
-    cursor: pointer;
+  @media (hover) {
+    &:hover {
+      cursor: pointer;
 
-    .media__thumb {
-      box-shadow: 0 0 0 1px rgba(var(--color-primary-dynamic), 1) inset;
-      background-size: 108%;
-    }
+      .media__thumb {
+        box-shadow: 0 0 0 1px rgba(var(--color-primary-dynamic), 1) inset;
+        background-size: 108%;
+      }
 
-    .claim-tile__title {
-      color: var(--color-link);
-    }
+      .claim-tile__title {
+        color: var(--color-link);
+      }
 
-    .claim__menu-button {
-      opacity: 1;
-    }
-    .collection-preview__overlay-thumbs {
-      opacity: 1;
-      transition: 0.3s;
+      .claim__menu-button {
+        opacity: 1;
+      }
+      .collection-preview__overlay-thumbs {
+        opacity: 1;
+        transition: 0.3s;
+      }
     }
   }
 
