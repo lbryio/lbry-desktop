@@ -12,6 +12,12 @@
   }
 }
 
+iframe {
+  .vjs-touch-overlay {
+    max-height: 100% !important;
+  }
+}
+
 .video-js {
   // This class is added to the video.js element by the plugin by default.
   &.vjs-has-started .vjs-touch-overlay {
