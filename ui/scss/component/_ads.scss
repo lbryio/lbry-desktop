@@ -34,7 +34,7 @@
     $minWidth: calc(var(--file-list-thumbnail-width) * 0.8);
     min-width: $minWidth;
     background-color: #283263;
-    background-image: url('https://odysee.com/public/img/astronaut_n_friends.png');
+    background-image: url('../../ui/component/membershipSplash/astronaut_n_friends.png'); // TODO fix relative path for all url('')
     background-size: 100%;
     border-radius: var(--border-radius);
     box-shadow: 0 0 0 1px rgba(var(--color-primary-dynamic), 0.1) inset;
