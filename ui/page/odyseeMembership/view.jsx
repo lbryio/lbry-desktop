@@ -18,16 +18,18 @@ import I18nMessage from 'component/i18nMessage';
 import useGetUserMemberships from 'effects/use-get-user-memberships';
 import usePersistedState from 'effects/use-persisted-state';
 
-let stripeEnvironment = getStripeEnvironment();
-
+const stripeEnvironment = getStripeEnvironment();
 const isDev = process.env.NODE_ENV !== 'production';
-
-let log = (input) => {};
-if (isDev) log = console.log;
 
 // odysee channel information since the memberships are only for Odysee
 const odyseeChannelId = '80d2590ad04e36fb1d077a9b9e3a8bba76defdf8';
 const odyseeChannelName = '@odysee';
+
+function log(...args) {
+  // @if process.env.LOG_MEMBERSHIP='true'
+  console.log(args);
+  // @endif
+}
 
 type Props = {
   history: { action: string, push: (string) => void, replace: (string) => void },
