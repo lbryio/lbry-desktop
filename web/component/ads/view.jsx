@@ -99,6 +99,16 @@ function Ads(props: Props) {
           delete window.__VIDCRUNCH_CONFIG_618bb4d28aac298191eec411__;
           delete window.__player_618bb4d28aac298191eec411__;
 
+          const styles = document.querySelectorAll('body > style');
+          styles.forEach((s) => {
+            // We are asking Adnimation to supply us with a specific ID or
+            // pattern so that our query wouldn't break when they change their
+            // script. For now, this is the "best effort".
+            if (s.innerText && s.innerText.startsWith('#outbrain')) {
+              s.remove();
+            }
+          });
+
           // clean DOM elements from ad related elements
           removeIfExists('[src^="https://player.avplayer.com"]');
           removeIfExists('[src^="https://gum.criteo.com"]');
