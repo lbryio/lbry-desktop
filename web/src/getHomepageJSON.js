@@ -19,6 +19,10 @@ const loadAnnouncements = (homepageKeys) => {
 
 // this didn't seem to help.
 if (!memo.homepageData) {
+  if (process.env.CUSTOM_HOMEPAGE !== 'true') {
+    return;
+  }
+
   try {
     memo.homepageData = require('../../custom/homepages/v2');
     memo.announcements = loadAnnouncements(Object.keys(memo.homepageData));
