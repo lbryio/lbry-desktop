@@ -109,20 +109,12 @@ export default function LivestreamSection(props: Props) {
 
   return (
     <div className="livestream-list">
-      {liveTilesOverLimit && liveSection === SECTION.EXPANDED && (
-        <div className="livestream-list--view-more">
-          <Button
-            label={__('Show fewer livestreams')}
-            button="link"
-            iconRight={ICONS.UP}
-            className="claim-grid__title--secondary"
-            onClick={collapseSection}
-          />
-        </div>
-      )}
-
       <ClaimListDiscover
-        uris={liveSection === SECTION.COLLAPSED ? livestreamUris.slice(0, initialLiveTileLimit) : livestreamUris}
+        uris={
+          liveSection === SECTION.COLLAPSED
+            ? livestreamUris.slice(0, initialLiveTileLimit)
+            : livestreamUris.slice(0, initialLiveTileLimit * 2)
+        }
         tileLayout={tileLayout}
         showHeader={false}
         hideFilters

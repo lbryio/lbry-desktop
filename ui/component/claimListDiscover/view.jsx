@@ -145,7 +145,6 @@ function ClaimListDiscover(props: Props) {
     header,
     name,
     claimType,
-    // pageSize,
     defaultClaimType,
     streamType,
     defaultStreamType,
@@ -214,6 +213,7 @@ function ClaimListDiscover(props: Props) {
   const mutedAndBlockedChannelIds = Array.from(
     new Set(mutedUris.concat(blockedUris).map((uri) => splitBySeparator(uri)[1]))
   );
+  const [hiddenBuffer, setHiddenBuffer] = React.useState([]);
 
   const langParam = urlParams.get(CS.LANGUAGE_KEY) || null;
   const searchInSelectedLang = searchInLanguage && !ignoreSearchInLanguage;
@@ -263,10 +263,8 @@ function ClaimListDiscover(props: Props) {
   const channelIdsParam = channelIdsInUrl ? channelIdsInUrl.split(',') : channelIds;
   const excludedIdsParam = excludedChannelIds;
   const feeAmountParam = urlParams.get('fee_amount') || feeAmount;
-  // const originalPageSize = pageSize || CS.PAGE_SIZE;
   const originalPageSize = 12;
-  // const dynamicPageSize = isLargeScreen ? Math.ceil(originalPageSize * (3 / 2)) : originalPageSize;
-  const dynamicPageSize = isLargeScreen ? Math.ceil((originalPageSize / 2) * 6) : originalPageSize;
+  const dynamicPageSize = isLargeScreen ? Math.ceil((originalPageSize / 2) * 6) : Math.ceil((originalPageSize / 2) * 4);
   const historyAction = history.action;
 
   let orderParam = orderBy || urlParams.get(CS.ORDER_BY_KEY) || defaultOrderBy || orderParamEntry;
@@ -656,6 +654,14 @@ function ClaimListDiscover(props: Props) {
     return uris;
   }
 
+  function onHidden(uri) {
+    if (hiddenBuffer.indexOf(uri) === -1) {
+      let newBuffer = hiddenBuffer;
+      newBuffer.push(uri);
+      setHiddenBuffer(newBuffer);
+    }
+  }
+
   // **************************************************************************
   // **************************************************************************
 
@@ -728,6 +734,7 @@ function ClaimListDiscover(props: Props) {
             maxClaimRender={maxClaimRender}
             loadedCallback={loadedCallback}
             swipeLayout={swipeLayout}
+            onHidden={onHidden}
           />
           {loading && useSkeletonScreen && (
             <div className="claim-grid">
@@ -768,6 +775,7 @@ function ClaimListDiscover(props: Props) {
             maxClaimRender={maxClaimRender}
             loadedCallback={loadedCallback}
             swipeLayout={swipeLayout}
+            onHidden={onHidden}
           />
           {loading &&
             useSkeletonScreen &&

@@ -61,7 +61,7 @@ type Props = {
   unavailableUris?: Array<string>,
   showMemberBadge?: boolean,
   inWatchHistory?: boolean,
-  onHidden: string,
+  onHidden: (string) => void,
 };
 
 export default function ClaimList(props: Props) {
