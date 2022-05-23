@@ -22,6 +22,7 @@ declare type RowDataItem = {
     channelIds?: Array<string>,
     limitClaimsPerChannel?: number,
     pageSize?: number,
+    languages?: Array<string>,
   },
   route?: string,
   hideForUnauth?: boolean,

@@ -2,6 +2,7 @@
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import * as CS from 'constants/claim_search';
+import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import { parseURI } from 'util/lbryURI';
 import moment from 'moment';
 import { toCapitalCase } from 'util/string';
@@ -17,6 +18,7 @@ export type RowDataItem = {
     channelIds?: Array<string>,
     pageSize?: number,
     limitClaimsPerChannel?: number,
+    languages?: Array<string>,
   },
   route?: string,
   hideForUnauth?: boolean,
@@ -279,6 +281,21 @@ export function GetLinksData(
     },
   };
 
+  const language = localStorage.getItem('language') || 'en';
+  const languageName = SUPPORTED_LANGUAGES[language];
+  const LANGUAGE_CATEGORY = {
+    title: __('Top content in %language%', { language: languageName }),
+    link: `/$/${PAGES.DISCOVER}?${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_DAY}&${CS.LANGUAGE_KEY}=${language}`,
+    options: {
+      languages: [language],
+      pageSize: getPageSize(showPersonalizedChannels || showPersonalizedTags ? 4 : 8),
+      orderBy: CS.ORDER_BY_TOP_VALUE,
+      claimType: ['stream'],
+      limitClaimsPerChannel: 2,
+      releaseTime: `>${Math.floor(moment().subtract(1, 'day').startOf('day').unix())}`,
+    },
+  };
+
   const TOP_CHANNELS = {
     title: __('Top Channels On LBRY'),
     link: `/$/${PAGES.DISCOVER}?claim_type=channel&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_ALL}`,
@@ -338,6 +355,9 @@ export function GetLinksData(
       rowData.push(YOUTUBE_CREATOR_ROW);
     }
     rowData.push(TOP_CONTENT_TODAY);
+    if (language !== 'en') {
+      rowData.push(LANGUAGE_CATEGORY);
+    }
     rowData.push(LATEST_FROM_LBRY);
     if (!showPersonalizedChannels) rowData.push(TOP_CHANNELS);
   }
