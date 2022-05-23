@@ -21,3 +21,11 @@ export const COMMUNITY_CHANNELS = Object.freeze({
   es: ES_CHANNELS,
   de: DE_CHANNELS,
 });
+
+// ****************************************************************************
+// ****************************************************************************
+
+export const ODYSEE_CHANNEL = Object.freeze({
+  ID: '80d2590ad04e36fb1d077a9b9e3a8bba76defdf8',
+  NAME: '@odysee',
+});

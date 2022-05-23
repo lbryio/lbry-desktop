@@ -4,7 +4,7 @@ import { doFetchChannelListMine } from 'redux/actions/claims';
 import { isURIValid, normalizeURI } from 'util/lbryURI';
 import { batchActions } from 'util/batch-actions';
 import { getStripeEnvironment } from 'util/stripe';
-
+import { ODYSEE_CHANNEL } from 'constants/channels';
 import * as ACTIONS from 'constants/action_types';
 import { doFetchGeoBlockedList } from 'redux/actions/blocked';
 import { doClaimRewardType, doRewardList } from 'redux/actions/rewards';
@@ -15,13 +15,12 @@ import rewards from 'rewards';
 import { Lbryio } from 'lbryinc';
 import { DOMAIN, LOCALE_API } from 'config';
 import { getDefaultLanguage } from 'util/default-languages';
+
 const AUTH_IN_PROGRESS = 'authInProgress';
 export let sessionStorageAvailable = false;
 const CHECK_INTERVAL = 200;
 const AUTH_WAIT_TIMEOUT = 10000;
 const stripeEnvironment = getStripeEnvironment();
-
-const ODYSEE_CHANNEL_ID = '80d2590ad04e36fb1d077a9b9e3a8bba76defdf8';
 
 export function doFetchInviteStatus(shouldCallRewardList = true) {
   return (dispatch) => {
@@ -912,7 +911,7 @@ export function doFetchUserMemberships(claimIdCsv) {
 
     // check if users have odysee memberships (premium/premium+)
     const response = await Lbryio.call('membership', 'check', {
-      channel_id: ODYSEE_CHANNEL_ID,
+      channel_id: ODYSEE_CHANNEL.ID,
       claim_ids: claimIdCsv,
       environment: stripeEnvironment,
     });
