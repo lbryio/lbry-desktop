@@ -1,3 +1,14 @@
+/**
+ * Comment component.
+ *
+ * Notes:
+ * - Filtration is not done at this component level. Comments are filtered
+ *   in the selector through `filterComments()`. This saves the need to handle
+ *   it from the render loop, but also means we cannot render it differently
+ *   (e.g. displaying as "Comment has been blocked") since the component doesn't
+ *   see it.
+ */
+
 // @flow
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
@@ -46,7 +57,6 @@ type Props = {
   clearPlayingUri: () => void,
   uri: string,
   claim: StreamClaim,
-  channelIsBlocked: boolean, // if the channel is blacklisted in the app
   claimIsMine: boolean, // if you control the claim which this comment was posted on
   updateComment: (string, string) => void,
   fetchReplies: (string, string, number, number, number) => void,
@@ -87,7 +97,6 @@ function CommentView(props: Props) {
     clearPlayingUri,
     claim,
     uri,
-    channelIsBlocked,
     updateComment,
     fetchReplies,
     totalReplyPages,
@@ -273,13 +282,7 @@ function CommentView(props: Props) {
     >
       <div className="comment__thumbnail-wrapper">
         {authorUri ? (
-          <ChannelThumbnail
-            uri={authorUri}
-            obscure={channelIsBlocked}
-            xsmall
-            className="comment__author-thumbnail"
-            checkMembership={false}
-          />
+          <ChannelThumbnail uri={authorUri} xsmall className="comment__author-thumbnail" checkMembership={false} />
         ) : (
           <ChannelThumbnail xsmall className="comment__author-thumbnail" checkMembership={false} />
         )}
