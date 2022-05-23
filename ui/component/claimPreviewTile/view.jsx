@@ -134,20 +134,10 @@ function ClaimPreviewTile(props: Props) {
   const channelUri = !isChannel ? signingChannel && signingChannel.permanent_url : claim && claim.permanent_url;
   const channelTitle = signingChannel && ((signingChannel.value && signingChannel.value.title) || signingChannel.name);
 
-  // Aria-label value for claim preview
-  let ariaLabelData = isChannel ? title : formatClaimPreviewTitle(title, channelTitle, date, mediaDuration);
+  const isChannelPage = window.location.pathname.startsWith('/@');
+  const shouldShowViewCount = !(!viewCount || (claim && claim.repost_url) || isLivestream || !isChannelPage);
 
-  function handleClick(e) {
-    if (navigateUrl) {
-      history.push(navigateUrl);
-    }
-  }
-
-  React.useEffect(() => {
-    if (isValid && !isResolvingUri && shouldFetch && uri) {
-      resolveUri(uri);
-    }
-  }, [isValid, isResolvingUri, uri, resolveUri, shouldFetch]);
+  const ariaLabelData = isChannel ? title : formatClaimPreviewTitle(title, channelTitle, date, mediaDuration);
 
   let shouldHide = false;
 
@@ -165,13 +155,30 @@ function ClaimPreviewTile(props: Props) {
     if (onHidden && shouldHide) onHidden(props.uri);
   }
 
+  // **************************************************************************
+  // **************************************************************************
+
+  function handleClick(e) {
+    if (navigateUrl) {
+      history.push(navigateUrl);
+    }
+  }
+
+  // **************************************************************************
+  // **************************************************************************
+
+  React.useEffect(() => {
+    if (isValid && !isResolvingUri && shouldFetch && uri) {
+      resolveUri(uri);
+    }
+  }, [isValid, isResolvingUri, uri, resolveUri, shouldFetch]);
+
+  // **************************************************************************
+  // **************************************************************************
+
   if (shouldHide || (isLivestream && !showNoSourceClaims)) {
     return null;
   }
-
-  const isChannelPage = window.location.pathname.startsWith('/@');
-
-  const shouldShowViewCount = !(!viewCount || (claim && claim.repost_url) || isLivestream || !isChannelPage);
 
   if (placeholder || (!claim && isResolvingUri)) {
     return (
