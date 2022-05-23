@@ -197,7 +197,9 @@ export default function CommentList(props: Props) {
       setPage(page + 1);
       setDebouncedUri(undefined);
     }
-  }, [debouncedUri, page, uri]);
+    // only for comparing uri with debounced uri
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedUri, uri]);
 
   // Force comments reset
   useEffect(() => {
@@ -217,7 +219,9 @@ export default function CommentList(props: Props) {
   // so set the current page as the fetched page to start fetching new pages from there
   useEffect(() => {
     if (page < currentFetchedPage) setPage(currentFetchedPage > 0 ? currentFetchedPage : 1);
-  }, [currentFetchedPage, page, uri]);
+    // only on uri change
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [uri]);
 
   // Fetch top-level comments
   useEffect(() => {
