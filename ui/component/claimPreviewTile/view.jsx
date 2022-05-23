@@ -145,14 +145,18 @@ function ClaimPreviewTile(props: Props) {
     // Unfortunately needed until this is resolved
     // https://github.com/lbryio/lbry-sdk/issues/2785
     shouldHide = true;
-  } else {
+  }
+
+  if (!shouldHide && !placeholder) {
     shouldHide =
-      !placeholder &&
-      (banState.blacklisted ||
-        banState.filtered ||
-        (!showHiddenByUser && (banState.muted || banState.blocked)) ||
-        (isAbandoned && !showUnresolvedClaims));
-    if (onHidden && shouldHide) onHidden(props.uri);
+      banState.blacklisted ||
+      banState.filtered ||
+      (!showHiddenByUser && (banState.muted || banState.blocked)) ||
+      (isAbandoned && !showUnresolvedClaims);
+  }
+
+  if (!shouldHide) {
+    shouldHide = isLivestream && !showNoSourceClaims;
   }
 
   // **************************************************************************
@@ -173,10 +177,16 @@ function ClaimPreviewTile(props: Props) {
     }
   }, [isValid, isResolvingUri, uri, resolveUri, shouldFetch]);
 
+  React.useEffect(() => {
+    if (onHidden && shouldHide) {
+      onHidden(props.uri);
+    }
+  }, [shouldHide, onHidden, props.uri]);
+
   // **************************************************************************
   // **************************************************************************
 
-  if (shouldHide || (isLivestream && !showNoSourceClaims)) {
+  if (shouldHide) {
     return null;
   }
 
