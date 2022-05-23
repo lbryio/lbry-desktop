@@ -112,7 +112,7 @@ export default function LivestreamSection(props: Props) {
       {liveTilesOverLimit && liveSection === SECTION.EXPANDED && (
         <div className="livestream-list--view-more">
           <Button
-            label={__('Show less livestreams')}
+            label={__('Show fewer livestreams')}
             button="link"
             iconRight={ICONS.UP}
             className="claim-grid__title--secondary"
@@ -150,7 +150,7 @@ export default function LivestreamSection(props: Props) {
       {liveTilesOverLimit && liveSection === SECTION.EXPANDED && (
         <div className="livestream-list--view-more">
           <Button
-            label={__('Show less livestreams')}
+            label={__('Show fewer livestreams')}
             button="link"
             iconRight={ICONS.UP}
             className="claim-grid__title--secondary"
