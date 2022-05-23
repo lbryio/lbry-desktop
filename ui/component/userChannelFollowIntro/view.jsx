@@ -2,7 +2,7 @@
 import { CUSTOM_HOMEPAGE, SIMPLE_SITE, SITE_NAME } from 'config';
 import { parseURI } from 'util/lbryURI';
 import * as CS from 'constants/claim_search';
-import COMMUNITY_CHANNELS from 'constants/community_channels';
+import { COMMUNITY_CHANNELS } from 'constants/channels';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import ClaimListDiscover from 'component/claimListDiscover';

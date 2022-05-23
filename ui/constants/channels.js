@@ -15,11 +15,9 @@ const DE_CHANNELS =
   ' ' +
   'lbry://@OdyseeHilfe#14dd52c6105698159df73eb1fac89da477f895ea';
 
-const COMMUNITY_CHANNELS = {
+export const COMMUNITY_CHANNELS = Object.freeze({
   en: AUTO_FOLLOW_CHANNELS,
   'pt-BR': PT_BR_CHANNELS,
   es: ES_CHANNELS,
   de: DE_CHANNELS,
-};
-
-export default COMMUNITY_CHANNELS;
+});
