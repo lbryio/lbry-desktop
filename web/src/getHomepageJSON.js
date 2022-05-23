@@ -7,7 +7,10 @@ const loadAnnouncements = (homepageKeys) => {
 
   homepageKeys.forEach((key) => {
     const file = path.join(__dirname, `../dist/announcement/${key.toLowerCase()}.md`);
-    const announcement = fs.readFileSync(file, 'utf8');
+    let announcement;
+    try {
+      announcement = fs.readFileSync(file, 'utf8');
+    } catch {}
     announcements[key] = announcement ? announcement.trim() : '';
   });
 
