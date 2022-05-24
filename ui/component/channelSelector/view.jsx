@@ -1,7 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
-import * as SETTINGS from 'constants/settings';
 import classnames from 'classnames';
 import React from 'react';
 import ChannelThumbnail from 'component/channelThumbnail';
@@ -25,7 +24,7 @@ type Props = {
   doFetchUserMemberships: (claimIdCsv: string) => void,
   odyseeMembershipByUri: (uri: string) => string,
   storeSelection?: boolean,
-  doSetClientSetting: (key: string, value: string, pushPrefs: boolean) => void,
+  doSetDefaultChannel: (claimId: string) => void,
   isHeaderMenu?: boolean,
   autoSet?: boolean,
   channelToSet?: string,
@@ -42,7 +41,7 @@ export default function ChannelSelector(props: Props) {
     claimsByUri,
     doFetchUserMemberships,
     storeSelection,
-    doSetClientSetting,
+    doSetDefaultChannel,
     isHeaderMenu,
     autoSet,
     channelToSet,
@@ -62,7 +61,7 @@ export default function ChannelSelector(props: Props) {
     doSetActiveChannel(channelClaim.claim_id);
 
     if (storeSelection) {
-      doSetClientSetting(SETTINGS.ACTIVE_CHANNEL_CLAIM, channelClaim.claim_id, true);
+      doSetDefaultChannel(channelClaim.claim_id);
     }
   }
 

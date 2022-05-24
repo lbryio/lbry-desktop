@@ -88,8 +88,10 @@ type Props = {
   fetchModBlockedList: () => void,
   fetchModAmIList: () => void,
   homepageFetched: boolean,
+  defaultChannelClaim: ?any,
   doOpenAnnouncements: () => void,
   doSetLastViewedAnnouncement: (hash: string) => void,
+  doSetDefaultChannel: (claimId: string) => void,
 };
 
 function App(props: Props) {
@@ -123,8 +125,10 @@ function App(props: Props) {
     hasPremiumPlus,
     fetchModAmIList,
     homepageFetched,
+    defaultChannelClaim,
     doOpenAnnouncements,
     doSetLastViewedAnnouncement,
+    doSetDefaultChannel,
   } = props;
 
   const isMobile = useIsMobile();
@@ -339,6 +343,7 @@ function App(props: Props) {
     if (hasMyChannels) {
       fetchModBlockedList();
       fetchModAmIList();
+      if (activeChannelClaim && !defaultChannelClaim) doSetDefaultChannel(activeChannelClaim.claim_id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [hasMyChannels, hasNoChannels, hasActiveChannelClaim, setIncognito]);

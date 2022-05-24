@@ -3,7 +3,7 @@ import { selectMyChannelClaims, selectClaimsByUri, selectOdyseeMembershipForUri 
 import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
 import { doSetActiveChannel, doSetIncognito } from 'redux/actions/app';
 import { doFetchUserMemberships } from 'redux/actions/user';
-import { doSetClientSetting } from 'redux/actions/settings';
+import { doSetDefaultChannel } from 'redux/actions/settings';
 import { selectDefaultChannelClaim } from 'redux/selectors/settings';
 import ChannelSelector from './view';
 
@@ -25,7 +25,7 @@ const perform = {
   doSetActiveChannel,
   doSetIncognito,
   doFetchUserMemberships,
-  doSetClientSetting,
+  doSetDefaultChannel,
 };
 
 export default connect(select, perform)(ChannelSelector);
