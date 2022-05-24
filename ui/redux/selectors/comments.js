@@ -1,9 +1,10 @@
 // @flow
 import { createSelector } from 'reselect';
 import { createCachedSelector } from 're-reselect';
-import { selectMutedChannels } from 'redux/selectors/blocked';
+import { selectGeoBlockLists, selectMutedChannels } from 'redux/selectors/blocked';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { selectMentionSearchResults, selectMentionQuery } from 'redux/selectors/search';
+import { selectUserLocale } from 'redux/selectors/user';
 import { selectBlacklistedOutpointMap, selectFilteredOutpointMap } from 'lbryinc';
 import {
   selectClaimsById,
@@ -15,6 +16,7 @@ import {
 import { isClaimNsfw, getChannelFromClaim } from 'util/claim';
 import { selectSubscriptionUris } from 'redux/selectors/subscriptions';
 import { getCommentsListTitle } from 'util/comments';
+import { getGeoRestrictionForClaim } from 'util/geoRestriction';
 
 type State = { claims: any, comments: CommentsState, user: UserState };
 
@@ -208,6 +210,8 @@ const filterCommentsDepOnList = {
   blacklistedMap: selectBlacklistedOutpointMap,
   filteredMap: selectFilteredOutpointMap,
   showMatureContent: selectShowMatureContent,
+  geoBlockList: selectGeoBlockLists,
+  locale: selectUserLocale,
 };
 
 const filterCommentsPropKeys = Object.keys(filterCommentsDepOnList);
@@ -292,6 +296,8 @@ const filterComments = (comments: Array<Comment>, claimId?: string, filterInputs
     blacklistedMap,
     filteredMap,
     showMatureContent,
+    geoBlockList,
+    locale,
   } = filterProps;
 
   return comments
@@ -335,6 +341,13 @@ const filterComments = (comments: Array<Comment>, claimId?: string, filterInputs
             if (personalBlockList.includes(comment.channel_url)) {
               return false;
             }
+          }
+        }
+
+        if (channelClaim) {
+          const geoRestriction: ?GeoRestriction = getGeoRestrictionForClaim(channelClaim, locale, geoBlockList);
+          if (geoRestriction) {
+            return false;
           }
         }
 
