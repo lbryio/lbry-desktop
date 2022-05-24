@@ -35,11 +35,13 @@ type Props = {
   mediaDuration?: string,
   resolveUri: (string) => void,
   isResolvingUri: boolean,
+  claimIsMine: boolean,
   history: { push: (string) => void },
   thumbnail: string,
   title: string,
   placeholder: boolean,
   banState: { blacklisted?: boolean, filtered?: boolean, muted?: boolean, blocked?: boolean },
+  geoRestriction: ?GeoRestriction,
   getFile: (string) => void,
   streamingUrl: string,
   isMature: boolean,
@@ -66,12 +68,14 @@ function ClaimPreviewTile(props: Props) {
     uri,
     date,
     isResolvingUri,
+    claimIsMine,
     thumbnail,
     title,
     resolveUri,
     claim,
     placeholder,
     banState,
+    geoRestriction,
     getFile,
     streamingUrl,
     isMature,
@@ -144,6 +148,10 @@ function ClaimPreviewTile(props: Props) {
   if (isMature && !showMature) {
     // Unfortunately needed until this is resolved
     // https://github.com/lbryio/lbry-sdk/issues/2785
+    shouldHide = true;
+  }
+
+  if (!shouldHide && geoRestriction && !claimIsMine) {
     shouldHide = true;
   }
 

@@ -260,6 +260,19 @@ export default function ShowPage(props: Props) {
     );
   }
 
+  if (geoRestriction && !claimIsMine) {
+    return (
+      <div className="main--empty">
+        <Yrbl
+          title={__(isChannel ? 'Channel unavailable' : 'Content unavailable')}
+          subtitle={__(geoRestriction.message || '')}
+          type="sad"
+          alwaysShow
+        />
+      </div>
+    );
+  }
+
   if (claim.name.length && claim.name[0] === '@') {
     return <ChannelPage uri={uri} location={location} />;
   }
@@ -279,14 +292,6 @@ export default function ShowPage(props: Props) {
           }
         />
       </Page>
-    );
-  }
-
-  if (geoRestriction) {
-    return (
-      <div className="main--empty">
-        <Yrbl title={__('Content unavailable')} subtitle={__(geoRestriction.message || '')} type="sad" alwaysShow />
-      </div>
     );
   }
 

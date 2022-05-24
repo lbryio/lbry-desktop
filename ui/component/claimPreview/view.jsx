@@ -61,6 +61,7 @@ type Props = {
   type: string,
   nonClickable?: boolean,
   banState: { blacklisted?: boolean, filtered?: boolean, muted?: boolean, blocked?: boolean },
+  geoRestriction: ?GeoRestriction,
   hasVisitedUri: boolean,
   blockedUris: Array<string>,
   actions: boolean | Node | string | number,
@@ -145,6 +146,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     onClick,
     actions,
     banState,
+    geoRestriction,
     includeSupportAction,
     renderActions,
     hideMenu = false,
@@ -277,6 +279,10 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     shouldHide = true;
   }
 
+  if (!shouldHide && !claimIsMine && geoRestriction) {
+    shouldHide = true;
+  }
+
   if (!shouldHide && customShouldHide && claim) {
     if (customShouldHide(claim)) {
       shouldHide = true;
@@ -319,6 +325,10 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
 
   if ((shouldHide && !showNullPlaceholder) || (isLivestream && !ENABLE_NO_SOURCE_CLAIMS)) {
     return null;
+  }
+
+  if (geoRestriction && !claimIsMine) {
+    return null; // Ignore 'showNullPlaceholder'
   }
 
   if (placeholder === 'loading' || (uri && !claim && isResolvingUri)) {

@@ -4,6 +4,8 @@ import {
   selectIsUriResolving,
   selectTitleForUri,
   selectDateForUri,
+  selectGeoRestrictionForUri,
+  selectClaimIsMine,
 } from 'redux/selectors/claims';
 import { doFileGet } from 'redux/actions/file';
 import { doResolveUri } from 'redux/actions/claims';
@@ -25,9 +27,11 @@ const select = (state, props) => {
     mediaDuration,
     date: props.uri && selectDateForUri(state, props.uri),
     isResolvingUri: props.uri && selectIsUriResolving(state, props.uri),
+    claimIsMine: props.uri && selectClaimIsMine(state, claim),
     thumbnail: getThumbnailFromClaim(claim),
     title: props.uri && selectTitleForUri(state, props.uri),
     banState: selectBanStateForUri(state, props.uri),
+    geoRestriction: selectGeoRestrictionForUri(state, props.uri),
     showMature: selectShowMatureContent(state),
     isMature: claim ? isClaimNsfw(claim) : false,
     isLivestream,

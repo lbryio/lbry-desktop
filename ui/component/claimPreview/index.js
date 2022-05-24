@@ -7,6 +7,7 @@ import {
   makeSelectReflectingClaimForUri,
   selectTitleForUri,
   selectDateForUri,
+  selectGeoRestrictionForUri,
 } from 'redux/selectors/claims';
 import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
 import { makeSelectCollectionIsMine } from 'redux/selectors/collections';
@@ -42,6 +43,7 @@ const select = (state, props) => {
     isResolvingRepost: props.uri && selectIsUriResolving(state, props.repostUrl),
     nsfw: claim ? isClaimNsfw(claim) : false,
     banState: selectBanStateForUri(state, props.uri),
+    geoRestriction: selectGeoRestrictionForUri(state, props.uri),
     hasVisitedUri: props.uri && makeSelectHasVisitedUri(props.uri)(state),
     isSubscribed: props.uri && selectIsSubscribedForUri(state, props.uri),
     streamingUrl: props.uri && makeSelectStreamingUrlForUri(props.uri)(state),
