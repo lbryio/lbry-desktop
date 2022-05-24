@@ -14,6 +14,7 @@ const defaultState: ContentState = {
   recommendationClicks: {},
   loopList: undefined,
   lastViewedAnnouncement: '',
+  recsysEntries: {},
 };
 
 reducers[ACTIONS.SET_PRIMARY_URI] = (state, action) =>
@@ -120,6 +121,8 @@ reducers[ACTIONS.CLEAR_CONTENT_HISTORY_URI] = (state, action) => {
 reducers[ACTIONS.CLEAR_CONTENT_HISTORY_ALL] = (state) => ({ ...state, history: [] });
 
 reducers[ACTIONS.SET_LAST_VIEWED_ANNOUNCEMENT] = (state, action) => ({ ...state, lastViewedAnnouncement: action.data });
+
+reducers[ACTIONS.SET_RECSYS_ENTRIES] = (state, action) => ({ ...state, recsysEntries: action.data });
 
 // reducers[LBRY_REDUX_ACTIONS.PURCHASE_URI_FAILED] = (state, action) => {
 //   return {

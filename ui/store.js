@@ -45,7 +45,7 @@ function enableBatching(reducer) {
   };
 }
 
-const contentFilter = createFilter('content', ['positions', 'history', 'lastViewedAnnouncement']);
+const contentFilter = createFilter('content', ['positions', 'history', 'lastViewedAnnouncement', 'recsysEntries']);
 const fileInfoFilter = createFilter('fileInfo', [
   'fileListPublishedSort',
   'fileListDownloadedSort',

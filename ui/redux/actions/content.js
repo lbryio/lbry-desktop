@@ -16,10 +16,12 @@ import { makeSelectUrlsForCollectionId } from 'redux/selectors/collections';
 import { doToast } from 'redux/actions/notifications';
 import { doPurchaseUri } from 'redux/actions/file';
 import Lbry from 'lbry';
+import RecSys from 'recsys';
 import * as SETTINGS from 'constants/settings';
 import { selectCostInfoForUri, Lbryio } from 'lbryinc';
 import { selectClientSetting, selectosNotificationsEnabled, selectDaemonSettings } from 'redux/selectors/settings';
 import { selectIsActiveLivestreamForUri } from 'redux/selectors/livestream';
+import { selectRecsysEntries } from 'redux/selectors/content';
 
 const DOWNLOAD_POLL_INTERVAL = 1000;
 
@@ -381,5 +383,32 @@ export function doSetLastViewedAnnouncement(hash: string) {
       type: ACTIONS.SET_LAST_VIEWED_ANNOUNCEMENT,
       data: hash,
     });
+  };
+}
+
+export function doSetRecsysEntries(entries: { [ClaimId]: RecsysEntry }) {
+  return (dispatch: Dispatch) => {
+    dispatch({
+      type: ACTIONS.SET_RECSYS_ENTRIES,
+      data: entries,
+    });
+  };
+}
+
+/**
+ * Sends any lingering recsys entries from the previous session and deletes it.
+ *
+ * Should only be called on startup, before a new cycle of recsys data is
+ * collected.
+ *
+ * @returns {(function(Dispatch, GetState): void)|*}
+ */
+export function doSendPastRecsysEntries() {
+  return (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const entries = selectRecsysEntries(state);
+    if (entries) {
+      RecSys.sendEntries(entries, true);
+    }
   };
 }

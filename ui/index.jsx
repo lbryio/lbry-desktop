@@ -44,6 +44,7 @@ import 'scss/all.scss';
 // @if TARGET='web'
 // These overrides can't live in web/ because they need to use the same instance of `Lbry`
 import apiPublishCallViaWeb from 'web/setup/publish';
+import { doSendPastRecsysEntries } from 'redux/actions/content';
 
 // Sentry error logging setup
 // Will only work if you have a SENTRY_AUTH_TOKEN env
@@ -232,6 +233,7 @@ function AppWrapper() {
   useEffect(() => {
     if (persistDone) {
       app.store.dispatch(doToggle3PAnalytics(null, true));
+      app.store.dispatch(doSendPastRecsysEntries());
     }
   }, [persistDone]);
 

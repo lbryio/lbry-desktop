@@ -29,6 +29,7 @@ import debounce from 'util/debounce';
 import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
 import useInterval from 'effects/use-interval';
 import { lastBandwidthSelector } from './internal/plugins/videojs-http-streaming--override/playlist-selectors';
+import RecSys from 'recsys';
 
 // const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
 // const PLAY_TIMEOUT_LIMIT = 2000;
@@ -173,6 +174,7 @@ function VideoViewer(props: Props) {
 
   useInterval(
     () => {
+      RecSys.saveEntries();
       if (playerRef.current && isPlaying && !isLivestreamClaim) {
         handlePosition(playerRef.current);
       }

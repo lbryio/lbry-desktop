@@ -5,6 +5,7 @@ import { makeSelectRecommendedRecsysIdForClaimId } from 'redux/selectors/search'
 import { v4 as Uuidv4 } from 'uuid';
 import { parseURI } from 'util/lbryURI';
 import { getAuthToken } from 'util/saved-passwords';
+import * as ACTIONS from 'constants/action_types';
 import * as SETTINGS from 'constants/settings';
 import { X_LBRY_AUTH_TOKEN } from 'constants/token';
 import { makeSelectClaimForUri } from 'redux/selectors/claims';
@@ -33,12 +34,25 @@ const getClaimIdsFromUris = (uris) => {
 const recsys: Recsys = {
   entries: {},
   debug: false,
+
   /**
    * Provides for creating, updating, and sending Clickstream data object Entries.
    * Entries are Created either when recommendedContent loads, or when recommendedContent is clicked.
    * If recommended content is clicked, An Entry with parentUuid is created.
    * On page load, find an empty entry with your claimId, or create a new entry and record to it.
    */
+
+  /**
+   * Saves existing entries to persistence storage (in this case, Redux).
+   */
+  saveEntries: function () {
+    if (window && window.store) {
+      window.store.dispatch({
+        type: ACTIONS.SET_RECSYS_ENTRIES,
+        data: recsys.entries,
+      });
+    }
+  },
 
   /**
    * Called when RecommendedContent was clicked.
@@ -124,6 +138,8 @@ const recsys: Recsys = {
         recsys.entries[claimId].recsysId = null;
         recsys.entries[claimId].recClaimIds = [];
       }
+
+      recsys.saveEntries();
     }
     recsys.log('createRecsysEntry', claimId);
   },
@@ -131,7 +147,7 @@ const recsys: Recsys = {
   /**
    * Send event for claimId
    * @param claimId
-   * @param isTentative
+   * @param isTentative Visibility change rather than tab closed.
    */
   sendRecsysEntry: function (claimId, isTentative) {
     const shareTelemetry =
@@ -141,10 +157,6 @@ const recsys: Recsys = {
       const { events, ...entryData } = recsys.entries[claimId];
       const data = JSON.stringify(entryData);
 
-      if (!isTentative) {
-        delete recsys.entries[claimId];
-      }
-
       return fetch(recsysEndpoint, {
         method: 'POST',
         headers: {
@@ -152,11 +164,34 @@ const recsys: Recsys = {
           'Content-Type': 'application/json',
         },
         body: data,
-      }).catch((err) => {
-        console.log('RECSYS: failed to send entry', err);
-      });
+      })
+        .then(() => {
+          if (!isTentative) {
+            delete recsys.entries[claimId];
+            recsys.saveEntries();
+          }
+        })
+        .catch((err) => {
+          console.log('RECSYS: failed to send entry', err);
+        });
     }
     recsys.log('sendRecsysEntry', claimId);
+  },
+
+  sendEntries: function (entries, isResumedSend) {
+    if (entries) {
+      if (Object.keys(recsys.entries).length !== 0) {
+        // Typically called on startup only.
+        console.warn('RECSYS: sendEntries() called on non-empty state. Data will be overwritten.');
+      }
+
+      recsys.entries = entries;
+    }
+
+    Object.keys(recsys.entries).forEach((claimId) => {
+      recsys.entries[claimId].isResumedSend = isResumedSend;
+      recsys.sendRecsysEntry(claimId, false); // Send and delete.
+    });
   },
 
   /**
@@ -260,6 +295,7 @@ const recsys: Recsys = {
         const shouldSkip = recsys.entries[claimId].parentUuid && !recsys.entries[claimId].recClaimIds;
         if (!shouldSkip && ((claimId !== playingClaimId && floatingPlayer) || !floatingPlayer)) {
           recsys.entries[claimId]['pageExitedAt'] = Date.now();
+          recsys.saveEntries();
           // recsys.sendRecsysEntry(claimId); breaks pop out = off, not helping with browser close.
         }
         recsys.log('OnNavigate', claimId);
