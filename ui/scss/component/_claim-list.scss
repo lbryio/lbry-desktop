@@ -250,9 +250,11 @@
     }
   }
 
-  &:hover {
-    .claim__menu-button {
-      opacity: 1;
+  @media (any-pointer: fine) {
+    &:hover {
+      .claim__menu-button {
+        opacity: 1;
+      }
     }
   }
 
@@ -410,6 +412,7 @@
     @include handleChannelGif(6rem);
   }
 
+  // any-pointer media query prevents double click hover bug on ipad
   @media (any-pointer: fine) {
     // show watch later button and duration divs when hovered
     &:hover {
@@ -1480,10 +1483,12 @@ $claim-preview-progress-bar-height: 5px;
 }
 
 @media (min-width: $breakpoint-small) {
-  .claim-preview--tile:not(:hover),
-  .claim-preview__wrapper:not(:hover) {
-    .claim__menu-button:not(:focus):not([aria-expanded='true']) {
-      opacity: 0;
+  @media (any-pointer: fine) {
+    .claim-preview--tile:not(:hover),
+    .claim-preview__wrapper:not(:hover) {
+      .claim__menu-button:not(:focus):not([aria-expanded='true']) {
+        opacity: 0;
+      }
     }
   }
 }
