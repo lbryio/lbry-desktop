@@ -227,7 +227,6 @@ function VideoViewer(props: Props) {
     if (playNextUrl) {
       if (permanentUrl !== nextRecommendedUri) {
         if (nextRecommendedUri) {
-          if (collectionId) clearPosition(permanentUrl);
           doPlay(nextRecommendedUri);
         }
       } else {
@@ -249,7 +248,6 @@ function VideoViewer(props: Props) {
     setEnded(false);
     setPlayNextUrl(true);
   }, [
-    clearPosition,
     collectionId,
     doNavigate,
     doPlay,
@@ -509,7 +507,6 @@ function VideoViewer(props: Props) {
         doAnalyticsBuffer={doAnalyticsBuffer}
         claimRewards={claimRewards}
         uri={uri}
-        clearPosition={clearPosition}
         userClaimId={claim && claim.signing_channel && claim.signing_channel.claim_id}
         isLivestreamClaim={isLivestreamClaim}
         activeLivestreamForChannel={activeLivestreamForChannel}

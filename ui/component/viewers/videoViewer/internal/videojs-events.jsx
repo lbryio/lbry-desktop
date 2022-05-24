@@ -36,7 +36,6 @@ const VideoJsEvents = ({
   userId: ?number,
   claimValues: any,
   embedded: boolean,
-  clearPosition: (string) => void,
   uri: string,
   doAnalyticsView: (string, number) => any,
   doAnalyticsBuffer: (string, any) => void,
