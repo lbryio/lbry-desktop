@@ -267,13 +267,6 @@ const recsys: Recsys = {
     }
   },
 };
-// @if TARGET='web'
-document.addEventListener('visibilitychange', function logData() {
-  if (document.visibilityState === 'hidden') {
-    Object.keys(recsys.entries).map((claimId) => recsys.sendRecsysEntry(claimId, true));
-  }
-});
-// @endif
 
 history.listen(() => {
   recsys.onNavigate();
