@@ -410,31 +410,33 @@
     @include handleChannelGif(6rem);
   }
 
-  // show watch later button and duration divs when hovered
-  &:hover {
-    .media__thumb {
-      box-shadow: 0 0 0 1px rgba(var(--color-primary-dynamic), 1) inset;
-    }
-    .claim-preview__title {
-      color: var(--color-link);
-    }
-    .claim-preview__hover-actions {
-      display: block;
-    }
-    .claim-preview__file-property-overlay {
-      opacity: 1;
-    }
-    .button--file-action {
-      .icon {
-        stroke: #f3f4f6;
+  @media (any-pointer: fine) {
+    // show watch later button and duration divs when hovered
+    &:hover {
+      .media__thumb {
+        box-shadow: 0 0 0 1px rgba(var(--color-primary-dynamic), 1) inset;
       }
-    }
-    .ff-canvas {
-      opacity: 0 !important;
-      transition: opacity 1s !important;
-    }
-    .ff-image {
-      opacity: 1 !important;
+      .claim-preview__title {
+        color: var(--color-link);
+      }
+      .claim-preview__hover-actions {
+        display: block;
+      }
+      .claim-preview__file-property-overlay {
+        opacity: 1;
+      }
+      .button--file-action {
+        .icon {
+          stroke: #f3f4f6;
+        }
+      }
+      .ff-canvas {
+        opacity: 0 !important;
+        transition: opacity 1s !important;
+      }
+      .ff-image {
+        opacity: 1 !important;
+      }
     }
   }
 
@@ -970,7 +972,7 @@
     }
   }
 
-  @media (hover) {
+  @media (any-pointer: fine) {
     &:hover {
       cursor: pointer;
 
