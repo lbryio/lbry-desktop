@@ -58,6 +58,8 @@ declare type GenericClaim = {
   },
 };
 
+declare type ClaimId = string;
+
 declare type GenericMetadata = {
   title?: string,
   description?: string,
