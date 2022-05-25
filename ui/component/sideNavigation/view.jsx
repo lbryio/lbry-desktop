@@ -175,7 +175,7 @@ function SideNavigation(props: Props) {
   const isLargeScreen = useIsLargeScreen();
 
   const EXTRA_SIDEBAR_LINKS = GetLinksData(homepageData, isLargeScreen).map(
-    ({ pinnedUrls, pinnedClaimIds, ...theRest }) => theRest
+    ({ pinnedUrls, pinnedClaimIds, hideByDefault, ...theRest }) => theRest
   );
 
   const MOBILE_LINKS: Array<SideNavLink> = [

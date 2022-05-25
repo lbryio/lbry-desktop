@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
 import ModalCustomizeHomepage from './view';
 import * as SETTINGS from 'constants/settings';
-import { doHideModal } from 'redux/actions/app';
+import { doHideModal, doOpenModal } from 'redux/actions/app';
+import { doToast } from 'redux/actions/notifications';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { selectClientSetting } from 'redux/selectors/settings';
 import { selectHasOdyseeMembership } from 'redux/selectors/user';
@@ -13,6 +14,8 @@ const select = (state) => ({
 
 const perform = {
   doSetClientSetting,
+  doToast,
+  doOpenModal,
   doHideModal,
 };
 

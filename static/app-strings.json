@@ -2275,5 +2275,7 @@
   "Watch History": "Watch History",
   "Currently, your watch history is only saved locally.": "Currently, your watch history is only saved locally.",
   "Clear History": "Clear History",
+  "Reset homepage to defaults?": "Reset homepage to defaults?",
+  "Homepage restored to default.": "Homepage restored to default.",
   "--end--": "--end--"
 }

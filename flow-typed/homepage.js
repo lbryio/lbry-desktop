@@ -20,6 +20,7 @@ declare type RowDataItem = {
   extra?: any,
   pinnedUrls?: Array<string>,
   pinnedClaimIds?: Array<string>, // takes precedence over pinnedUrls
+  hideByDefault?: boolean,
   options?: {
     channelIds?: Array<string>,
     excludedChannelIds?: Array<string>,

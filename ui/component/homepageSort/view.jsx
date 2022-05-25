@@ -2,7 +2,6 @@
 import React, { useState } from 'react';
 import classnames from 'classnames';
 import Icon from 'component/common/icon';
-import { HOMEPAGE_EXCLUDED_CATEGORIES } from 'constants/homepage_languages';
 import * as ICONS from 'constants/icons';
 import 'scss/component/homepage-sort.scss';
 
@@ -49,27 +48,26 @@ function getInitialList(listId, savedOrder, homepageSections) {
   const savedHiddenOrder = savedOrder.hidden || [];
   const sectionKeys = Object.keys(homepageSections);
 
-  if (listId === 'ACTIVE') {
-    // Start with saved order, excluding obsolete items (i.e. category removed or not available in non-English)
-    const finalOrder = savedActiveOrder.filter((x) => sectionKeys.includes(x));
+  // From the saved entries, trim those that no longer exists in the latest (or different) Homepage.
+  let activeOrder: Array<string> = savedActiveOrder.filter((x) => sectionKeys.includes(x));
+  let hiddenOrder: Array<string> = savedHiddenOrder.filter((x) => sectionKeys.includes(x));
 
-    // Add new categories not seen previously.
-    sectionKeys.forEach((x) => {
-      if (!finalOrder.includes(x)) {
-        finalOrder.push(x);
+  // Add any new categories found into 'active' ...
+  sectionKeys.forEach((key: string) => {
+    if (!activeOrder.includes(key) && !hiddenOrder.includes(key)) {
+      if (homepageSections[key].hideByDefault) {
+        // ... unless it is a 'hideByDefault' category.
+        hiddenOrder.push(key);
+      } else {
+        activeOrder.push(key);
       }
-    });
+    }
+  });
 
-    // Exclude items that were moved to Hidden, or intentionally excluded from Homepage.
-    return finalOrder
-      .filter((x) => !savedHiddenOrder.includes(x))
-      .filter((x) => !HOMEPAGE_EXCLUDED_CATEGORIES.includes(x));
-  } else {
-    console.assert(listId === 'HIDDEN', `Unhandled listId: ${listId}`);
-    return savedHiddenOrder
-      .filter((x) => sectionKeys.includes(x))
-      .filter((x) => !HOMEPAGE_EXCLUDED_CATEGORIES.includes(x));
-  }
+  // Final check to exclude items that were previously moved to Hidden.
+  activeOrder = activeOrder.filter((x) => !hiddenOrder.includes(x));
+
+  return listId === 'ACTIVE' ? activeOrder : hiddenOrder;
 }
 
 // ****************************************************************************

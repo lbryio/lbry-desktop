@@ -2,7 +2,6 @@
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import * as CS from 'constants/claim_search';
-import { HOMEPAGE_EXCLUDED_CATEGORIES } from 'constants/homepage_languages';
 import { parseURI } from 'util/lbryURI';
 import moment from 'moment';
 import { toCapitalCase } from 'util/string';
@@ -24,6 +23,7 @@ export type HomepageCat = {
   excludedChannelIds?: Array<string>,
   searchLanguages?: Array<string>,
   mixIn?: Array<string>,
+  hideByDefault?: boolean,
 };
 
 function getLimitPerChannel(size, isChannel) {
@@ -94,6 +94,7 @@ export const getHomepageRowForCat = (key: string, cat: HomepageCat) => {
     title: cat.label,
     pinnedUrls: cat.pinnedUrls,
     pinnedClaimIds: cat.pinnedClaimIds,
+    hideByDefault: cat.hideByDefault,
     options: {
       claimType: cat.claimType || ['stream', 'repost'],
       channelIds: cat.channelIds,
@@ -337,18 +338,12 @@ export function GetLinksData(
   // @endif
   // **************************************************************************
 
-  // TODO: provide better method for exempting from homepage
   const entries = Object.entries(all);
   for (let i = 0; i < entries.length; ++i) {
     const key = entries[i][0];
     const val = entries[i][1];
 
-    // $FlowFixMe https://github.com/facebook/flow/issues/2221
-    if (isHomepage && HOMEPAGE_EXCLUDED_CATEGORIES.includes(key)) {
-      continue;
-    }
-
-    // $FlowFixMe https://github.com/facebook/flow/issues/2221
+    // $FlowIgnore (https://github.com/facebook/flow/issues/2221)
     rowData.push(getHomepageRowForCat(key, val));
   }
 

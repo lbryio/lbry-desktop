@@ -1,9 +1,12 @@
 // @flow
+import React from 'react';
+import classnames from 'classnames';
+
+import { getSortedRowData } from './helper';
+import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
 import * as PAGES from 'constants/pages';
-import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
-import React from 'react';
 import Page from 'component/page';
 import Button from 'component/button';
 import ClaimTilesDiscover from 'component/claimTilesDiscover';
@@ -17,16 +20,8 @@ import { GetLinksData } from 'util/buildHomepage';
 import { getLivestreamUris } from 'util/livestream';
 import ScheduledStreams from 'component/scheduledStreams';
 import { splitBySeparator } from 'util/lbryURI';
-import classnames from 'classnames';
 import Ads from 'web/component/ads';
 import Meme from 'web/component/meme';
-
-const FYP_SECTION: RowDataItem = {
-  id: 'FYP',
-  title: 'Recommended',
-  icon: ICONS.GLOBE,
-  link: `/$/${PAGES.FYP}`,
-};
 
 type HomepageOrder = { active: ?Array<string>, hidden: ?Array<string> };
 
@@ -86,34 +81,7 @@ function HomePage(props: Props) {
     showNsfw
   );
 
-  let sortedRowData: Array<RowDataItem> = [];
-  if (homepageOrder.active && authenticated) {
-    homepageOrder.active.forEach((key) => {
-      const dataIndex = rowData.findIndex((data) => data.id === key);
-      if (dataIndex !== -1) {
-        sortedRowData.push(rowData[dataIndex]);
-        rowData.splice(dataIndex, 1);
-      } else if (key === 'FYP') {
-        sortedRowData.push(FYP_SECTION);
-      }
-    });
-
-    if (homepageOrder.hidden) {
-      rowData.forEach((data: RowDataItem) => {
-        // $FlowIssue: null 'hidden' already avoided outside anonymous function.
-        if (!homepageOrder.hidden.includes(data.id)) {
-          sortedRowData.push(data);
-        }
-      });
-    }
-  } else {
-    rowData.forEach((key) => {
-      sortedRowData.push(key);
-      if (key.id === 'FOLLOWING' && hasMembership) {
-        sortedRowData.push(FYP_SECTION);
-      }
-    });
-  }
+  const sortedRowData: Array<RowDataItem> = getSortedRowData(authenticated, hasMembership, homepageOrder, rowData);
 
   type SectionHeaderProps = {
     title: string,

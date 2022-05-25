@@ -1,9 +1,11 @@
 // @flow
 import React from 'react';
+import './style.scss';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import HomepageSort from 'component/homepageSort';
 import MembershipSplash from 'component/membershipSplash';
+import * as MODALS from 'constants/modal_types';
 import * as SETTINGS from 'constants/settings';
 import { Modal } from 'modal/modal';
 
@@ -13,11 +15,13 @@ type Props = {
   hasMembership: ?boolean,
   homepageOrder: HomepageOrder,
   doSetClientSetting: (key: string, value: any, push: boolean) => void,
+  doToast: ({ message: string, isError?: boolean }) => void,
+  doOpenModal: (id: string, {}) => void,
   doHideModal: () => void,
 };
 
 export default function ModalCustomizeHomepage(props: Props) {
-  const { hasMembership, homepageOrder, doSetClientSetting, doHideModal } = props;
+  const { hasMembership, homepageOrder, doSetClientSetting, doToast, doOpenModal, doHideModal } = props;
   const order = React.useRef();
 
   function handleNewOrder(newOrder: HomepageOrder) {
@@ -32,13 +36,12 @@ export default function ModalCustomizeHomepage(props: Props) {
     if (order.current) {
       const orderToSave: HomepageOrder = order.current;
 
-      // ** Note: the forEach() is probably masking Flow from seeing that null active/hidden is already handled.
       if (orderToSave.active && orderToSave.hidden) {
         if (homepageOrder.active) {
           homepageOrder.active.forEach((x) => {
-            // $FlowFixMe: **
+            // $FlowIgnore: null case handled.
             if (!orderToSave.active.includes(x) && !orderToSave.hidden.includes(x)) {
-              // $FlowFixMe: **
+              // $FlowIgnore: null case handled.
               orderToSave.active.push(x);
             }
           });
@@ -46,9 +49,9 @@ export default function ModalCustomizeHomepage(props: Props) {
 
         if (homepageOrder.hidden) {
           homepageOrder.hidden.forEach((x) => {
-            // $FlowFixMe: **
+            // $FlowIgnore: null case handled.
             if (!orderToSave.active.includes(x) && !orderToSave.hidden.includes(x)) {
-              // $FlowFixMe: **
+              // $FlowIgnore: null case handled.
               orderToSave.hidden.push(x);
             }
           });
@@ -62,8 +65,25 @@ export default function ModalCustomizeHomepage(props: Props) {
     doHideModal();
   }
 
+  function handleReset() {
+    doOpenModal(MODALS.CONFIRM, {
+      title: __('Reset homepage to defaults?'),
+      subtitle: __('This action is permanent and cannot be undone'),
+      onConfirm: (closeModal) => {
+        doSetClientSetting(SETTINGS.HOMEPAGE_ORDER, { active: null, hidden: null }, true);
+        doToast({ message: __('Homepage restored to default.') });
+        closeModal();
+      },
+    });
+  }
+
   return (
-    <Modal isOpen type={hasMembership ? 'custom' : 'card'} onAborted={hasMembership ? undefined : doHideModal}>
+    <Modal
+      className="modal-customize-homepage"
+      isOpen
+      type={hasMembership ? 'custom' : 'card'}
+      onAborted={hasMembership ? undefined : doHideModal}
+    >
       {!hasMembership && (
         <Card
           title={__('Customize Homepage')}
@@ -79,9 +99,14 @@ export default function ModalCustomizeHomepage(props: Props) {
       {hasMembership && (
         <Card
           title={__('Customize Homepage')}
-          body={<HomepageSort onUpdate={handleNewOrder} />}
+          body={
+            <div className="modal-customize-homepage__body">
+              <HomepageSort onUpdate={handleNewOrder} />
+              <Button button="link" label={__('Reset')} onClick={handleReset} />
+            </div>
+          }
           actions={
-            <div className="section__actions">
+            <div className="modal-customize-homepage__actions section__actions">
               <Button button="primary" label={__('Save')} onClick={handleSave} />
               <Button button="link" label={__('Cancel')} onClick={doHideModal} />
             </div>

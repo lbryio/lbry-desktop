@@ -19,5 +19,3 @@ export function getHomepageLanguage(code) {
 }
 
 export default HOMEPAGE_LANGUAGES;
-
-export const HOMEPAGE_EXCLUDED_CATEGORIES = Object.freeze(['NEWS', 'WILD_WEST']);
