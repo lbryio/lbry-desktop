@@ -18,6 +18,8 @@ const FILTER_ALL = 'stream,repost';
 const FILTER_UPLOADS = 'stream';
 const FILTER_REPOSTS = 'repost';
 
+let session;
+
 type Props = {
   uploadCount: number,
   claimsByUri: { [string]: any },
@@ -27,7 +29,7 @@ type Props = {
   fetching: boolean,
   urls: Array<string>,
   urlTotal: number,
-  history: { replace: (string) => void, push: (string) => void },
+  history: { action: string, replace: (string) => void, push: (string) => void },
   page: number,
   pageSize: number,
   doFetchViewCount: (claimIdCsv: string) => void,
@@ -43,10 +45,15 @@ function FileListPublished(props: Props) {
     fetching,
     urls,
     urlTotal,
+    history,
     page,
     pageSize,
     doFetchViewCount,
   } = props;
+
+  const { action: historyAction } = history;
+  const refreshedPage = session === undefined;
+  const navigated = historyAction === 'POP' && !refreshedPage;
 
   const [filterBy, setFilterBy] = React.useState(FILTER_ALL);
   const params = {};
@@ -56,16 +63,20 @@ function FileListPublished(props: Props) {
 
   const paramsString = JSON.stringify(params);
 
+  React.useEffect(() => {
+    session = Date.now();
+  }, []);
+
   useEffect(() => {
     checkPendingPublishes();
   }, [checkPendingPublishes]);
 
   useEffect(() => {
-    if (paramsString && fetchClaimListMine) {
+    if (paramsString && fetchClaimListMine && !navigated) {
       const params = JSON.parse(paramsString);
       fetchClaimListMine(params.page, params.page_size, true, filterBy.split(','));
     }
-  }, [uploadCount, paramsString, filterBy, fetchClaimListMine]);
+  }, [uploadCount, paramsString, filterBy, fetchClaimListMine, navigated]);
 
   useFetchViewCount(!fetching, urls, claimsByUri, doFetchViewCount);
 
