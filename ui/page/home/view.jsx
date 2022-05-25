@@ -23,6 +23,8 @@ import { splitBySeparator } from 'util/lbryURI';
 import Ads from 'web/component/ads';
 import Meme from 'web/component/meme';
 
+const CATEGORY_LIVESTREAM_LIMIT = 3;
+
 type HomepageOrder = { active: ?Array<string>, hidden: ?Array<string> };
 
 type Props = {
@@ -66,7 +68,7 @@ function HomePage(props: Props) {
   const showPersonalizedTags = (authenticated || !IS_WEB) && followedTags && followedTags.length > 0;
   const showIndividualTags = showPersonalizedTags && followedTags.length < 5;
   const isLargeScreen = useIsLargeScreen();
-  const channelIds = subscribedChannels.map((sub) => splitBySeparator(sub.uri)[1]);
+  const subscriptionChannelIds = subscribedChannels.map((sub) => splitBySeparator(sub.uri)[1]);
 
   const rowData: Array<RowDataItem> = GetLinksData(
     homepageData,
@@ -128,7 +130,7 @@ function HomePage(props: Props) {
         {...options}
         showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
         hasSource
-        prefixUris={getLivestreamUris(activeLivestreams, options.channelIds)}
+        prefixUris={getLivestreamUris(activeLivestreams, options.channelIds).slice(0, CATEGORY_LIVESTREAM_LIMIT)}
         pins={{ urls: pinUrls, claimIds: pinnedClaimIds }}
         injectedItem={index === 0 && !hasPremiumPlus && { node: <Ads small type="video" tileLayout /> }}
         forceShowReposts={id !== 'FOLLOWING'}
@@ -196,11 +198,11 @@ function HomePage(props: Props) {
 
       {!fetchingActiveLivestreams && (
         <>
-          {authenticated && channelIds.length > 0 && !hideScheduledLivestreams && (
+          {authenticated && subscriptionChannelIds.length > 0 && !hideScheduledLivestreams && (
             <ScheduledStreams
-              channelIds={channelIds}
+              channelIds={subscriptionChannelIds}
               tileLayout
-              liveUris={getLivestreamUris(activeLivestreams, channelIds)}
+              liveUris={getLivestreamUris(activeLivestreams, subscriptionChannelIds)}
               limitClaimsPerChannel={2}
             />
           )}
