@@ -12,11 +12,12 @@ type Props = {
   claim: ?Claim,
   uri: string,
   isResolvingUri: boolean,
+  geoRestriction: ?GeoRestriction,
   odyseeMembership: ?string,
 };
 
 export default function WunderbarSuggestion(props: Props) {
-  const { claim, uri, isResolvingUri, odyseeMembership } = props;
+  const { claim, uri, isResolvingUri, odyseeMembership, geoRestriction } = props;
 
   if (isResolvingUri) {
     return (
@@ -29,6 +30,11 @@ export default function WunderbarSuggestion(props: Props) {
   }
 
   if (!claim) {
+    return null;
+  }
+
+  if (geoRestriction) {
+    // Could display something else in the future, but hide completely for now.
     return null;
   }
 
