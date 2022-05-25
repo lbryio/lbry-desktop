@@ -4,6 +4,7 @@ import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
 import { formatCredits } from 'util/format-credits';
 import FileDetails from 'component/fileDetails';
+import GeoRestictionInfo from 'component/geoRestictionInfo';
 import ClaimAuthor from 'component/claimAuthor';
 import FileTitle from 'component/fileTitle';
 import FileActions from 'component/fileActions';
@@ -53,6 +54,7 @@ function PostViewer(props: Props) {
   return (
     <div className="post">
       <FileTitle uri={uri} className="post__title" />
+      <GeoRestictionInfo uri={uri} />
       <div
         className={classnames('post__info', {
           'post__info--expanded': expand !== EXPAND.NONE,

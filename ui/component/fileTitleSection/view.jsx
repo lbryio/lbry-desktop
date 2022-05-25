@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { normalizeURI } from 'util/lbryURI';
 import FilePrice from 'component/filePrice';
+import GeoRestrictionInfo from 'component/geoRestictionInfo';
 import ClaimInsufficientCredits from 'component/claimInsufficientCredits';
 import FileSubtitle from 'component/fileSubtitle';
 import ClaimAuthor from 'component/claimAuthor';
@@ -59,6 +60,7 @@ export default function FileTitleSection(props: Props) {
               <span className="badge badge--tag-mature">{__('Mature')}</span>
             </span>
           )}
+          <GeoRestrictionInfo uri={uri} />
         </>
       }
       titleActions={<FilePrice uri={normalizeURI(uri)} type="filepage" />}
