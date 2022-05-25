@@ -160,7 +160,6 @@ function App(props: Props) {
   const hasMyChannels = myChannelClaimIds && myChannelClaimIds.length > 0;
   const hasNoChannels = myChannelClaimIds && myChannelClaimIds.length === 0;
   const shouldMigrateLanguage = LANGUAGE_MIGRATIONS[language];
-  const hasActiveChannelClaim = activeChannelClaim !== undefined;
   const renderFiledrop = !isMobile && isAuthenticated;
   const connectionStatus = useConnectionStatus();
 
@@ -343,10 +342,15 @@ function App(props: Props) {
     if (hasMyChannels) {
       fetchModBlockedList();
       fetchModAmIList();
-      if (activeChannelClaim && !defaultChannelClaim) doSetDefaultChannel(activeChannelClaim.claim_id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [hasMyChannels, hasNoChannels, hasActiveChannelClaim, setIncognito]);
+  }, [hasMyChannels, hasNoChannels, setIncognito]);
+
+  useEffect(() => {
+    if (hasMyChannels && activeChannelClaim && !defaultChannelClaim && prefsReady) {
+      doSetDefaultChannel(activeChannelClaim.claim_id);
+    }
+  }, [activeChannelClaim, defaultChannelClaim, doSetDefaultChannel, hasMyChannels, prefsReady]);
 
   useEffect(() => {
     // $FlowFixMe
