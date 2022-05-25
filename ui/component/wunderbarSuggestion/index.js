@@ -8,7 +8,7 @@ const select = (state, props) => {
   return {
     claim: selectClaimForUri(state, uri),
     isResolvingUri: selectIsUriResolving(state, uri),
-    odyseeMembershipByUri: selectOdyseeMembershipForUri(state, uri),
+    odyseeMembership: selectOdyseeMembershipForUri(state, uri),
   };
 };
 

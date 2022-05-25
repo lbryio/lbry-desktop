@@ -12,11 +12,11 @@ type Props = {
   claim: ?Claim,
   uri: string,
   isResolvingUri: boolean,
-  odyseeMembershipByUri: ?string,
+  odyseeMembership: ?string,
 };
 
 export default function WunderbarSuggestion(props: Props) {
-  const { claim, uri, isResolvingUri, odyseeMembershipByUri } = props;
+  const { claim, uri, isResolvingUri, odyseeMembership } = props;
 
   if (isResolvingUri) {
     return (
@@ -63,7 +63,7 @@ export default function WunderbarSuggestion(props: Props) {
           <div className="wunderbar__suggestion-title">{claim.value.title}</div>
           <div className="wunderbar__suggestion-name">
             {isChannel ? claim.name : (claim.signing_channel && claim.signing_channel.name) || __('Anonymous')}
-            <PremiumBadge membership={odyseeMembershipByUri} />
+            <PremiumBadge membership={odyseeMembership} />
           </div>
         </span>
       </div>
