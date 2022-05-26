@@ -212,6 +212,7 @@ function handleClaimAction(state: State, action: any): State {
     // $FlowFixMe
     const { claimsInChannel, stream, channel: channelFromResolve, collection } = resolveResponse;
     const channel = channelFromResolve || (stream && stream.signing_channel);
+    const repostSrcChannel = stream && stream.reposted_claim ? stream.reposted_claim.signing_channel : null;
 
     if (stream) {
       if (pendingById[stream.claim_id]) {
@@ -255,6 +256,12 @@ function handleClaimAction(state: State, action: any): State {
       updateIfValueChanged(state.claimsByUri, byUriDelta, channel.canonical_url, channel.claim_id);
       newResolvingUrls.delete(channel.canonical_url);
       newResolvingUrls.delete(channel.permanent_url);
+    }
+
+    if (repostSrcChannel && repostSrcChannel.claim_id) {
+      updateIfClaimChanged(state.byId, byIdDelta, repostSrcChannel.claim_id, repostSrcChannel);
+      updateIfValueChanged(state.claimsByUri, byUriDelta, repostSrcChannel.permanent_url, repostSrcChannel.claim_id);
+      updateIfValueChanged(state.claimsByUri, byUriDelta, repostSrcChannel.canonical_url, repostSrcChannel.claim_id);
     }
 
     if (collection) {
