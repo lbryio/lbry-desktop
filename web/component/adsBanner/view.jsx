@@ -7,6 +7,12 @@ import useShouldShowAds from 'effects/use-should-show-ads';
 
 const AD_SCRIPT_URL = 'https://widgets.outbrain.com/outbrain.js';
 
+const AD_CONFIG = {
+  AR_18: 'AR_18', // 5 tiles.
+  AR_60: 'AR_60', // 6 tiles. Doesn't work well on mobile (6 tiles compresses to 1, text only).
+  AR_3: 'AR_3', // 4 tiles on desktop, dynamic count on mobile.
+};
+
 // ****************************************************************************
 // ****************************************************************************
 
@@ -79,7 +85,7 @@ export default function AdsBanner(props: Props) {
       <div
         className="banner-ad__container OUTBRAIN"
         data-ob-contenturl="DROP_PERMALINK_HERE"
-        data-widget-id="AR_18"
+        data-widget-id={AD_CONFIG.AR_18}
         data-ob-installation-key="ADNIMKAJDGAG4GAO6AGG6H5KP"
         data-dark-mode={currentTheme === 'dark' ? 'true' : 'false'}
       />
