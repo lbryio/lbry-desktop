@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { LocalStorage } from 'util/storage';
 
 export const selectState = (state) => state.user || {};
 
@@ -126,7 +127,7 @@ export const selectOdyseeMembershipIsPremiumPlus = (state) => {
  */
 export const selectHasOdyseeMembership = (state) => {
   // @if process.env.NODE_ENV!='production'
-  const override = window.localStorage.getItem('hasMembershipOverride');
+  const override = LocalStorage.getItem('hasMembershipOverride');
   if (override) return override === 'true';
   // @endif
 

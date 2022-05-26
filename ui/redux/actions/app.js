@@ -45,8 +45,9 @@ import { selectUser, selectUserVerifiedEmail } from 'redux/selectors/user';
 import { doSetPrefsReady, doPreferenceGet, doPopulateSharedUserState, syncInvalidated } from 'redux/actions/sync';
 import { doAuthenticate } from 'redux/actions/user';
 import { lbrySettings as config, version as appVersion } from 'package.json';
-import analytics, { SHARE_INTERNAL } from 'analytics';
+import analytics from 'analytics';
 import { doSignOutCleanup } from 'util/saved-passwords';
+import { LocalStorage, LS } from 'util/storage';
 import { doNotificationSocketConnect } from 'redux/actions/websocket';
 import { stringifyServerParam, shouldSetSetting } from 'util/sync-settings';
 
@@ -348,7 +349,7 @@ export function doDaemonReady() {
     const state = getState();
 
     // TODO: call doFetchDaemonSettings, then get usage data, and call doAuthenticate once they are loaded into the store
-    const shareUsageData = IS_WEB || window.localStorage.getItem(SHARE_INTERNAL) === 'true';
+    const shareUsageData = IS_WEB || LocalStorage.getItem(LS.SHARE_INTERNAL) === 'true';
 
     dispatch(
       doAuthenticate(

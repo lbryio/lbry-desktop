@@ -9,6 +9,7 @@ import classnames from 'classnames';
 import { platform } from 'util/platform';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
+import { LocalStorage, LS } from 'util/storage';
 
 // prettier-ignore
 const AD_CONFIGS = Object.freeze({
@@ -64,7 +65,7 @@ function Ads(props: Props) {
   const mobileAds = platform.isAndroid() || platform.isIOS();
 
   // this is populated from app based on location
-  const isInEu = localStorage.getItem('gdprRequired') === 'true';
+  const isInEu = LocalStorage.getItem(LS.GDPR_REQUIRED) === 'true';
   const adConfig = isInEu ? AD_CONFIGS.EU : mobileAds ? AD_CONFIGS.MOBILE : AD_CONFIGS.DEFAULT;
 
   function resolveAdVisibility() {

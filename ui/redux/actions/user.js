@@ -15,8 +15,8 @@ import rewards from 'rewards';
 import { Lbryio } from 'lbryinc';
 import { DOMAIN, LOCALE_API } from 'config';
 import { getDefaultLanguage } from 'util/default-languages';
+import { LocalStorage, LS } from 'util/storage';
 
-const AUTH_IN_PROGRESS = 'authInProgress';
 export let sessionStorageAvailable = false;
 const CHECK_INTERVAL = 200;
 const AUTH_WAIT_TIMEOUT = 10000;
@@ -91,9 +91,9 @@ function checkAuthBusy() {
       if (!IS_WEB || !sessionStorageAvailable) {
         return resolve();
       }
-      const inProgress = window.sessionStorage.getItem(AUTH_IN_PROGRESS);
+      const inProgress = LocalStorage.getItem(LS.AUTH_IN_PROGRESS);
       if (!inProgress) {
-        window.sessionStorage.setItem(AUTH_IN_PROGRESS, 'true');
+        LocalStorage.setItem(LS.AUTH_IN_PROGRESS, 'true');
         return resolve();
       } else {
         if (Date.now() - time < AUTH_WAIT_TIMEOUT) {
@@ -175,7 +175,7 @@ export function doAuthenticate(
         return Lbryio.authenticate(DOMAIN, getDefaultLanguage());
       })
       .then((user) => {
-        if (sessionStorageAvailable) window.sessionStorage.removeItem(AUTH_IN_PROGRESS);
+        LocalStorage.removeItem(LS.AUTH_IN_PROGRESS);
         Lbryio.getAuthToken().then((token) => {
           dispatch({
             type: ACTIONS.AUTHENTICATION_SUCCESS,
@@ -199,7 +199,7 @@ export function doAuthenticate(
         });
       })
       .catch((error) => {
-        if (sessionStorageAvailable) window.sessionStorage.removeItem(AUTH_IN_PROGRESS);
+        LocalStorage.removeItem(LS.AUTH_IN_PROGRESS);
 
         dispatch({
           type: ACTIONS.AUTHENTICATION_FAILURE,

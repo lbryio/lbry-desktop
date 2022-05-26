@@ -9,8 +9,7 @@
  */
 
 import { v4 as uuid } from 'uuid';
-import { TUS_LOCKED_UPLOADS, TUS_REFRESH_LOCK, TUS_REMOVED_UPLOADS } from 'constants/storage';
-import { isLocalStorageAvailable } from 'util/storage';
+import { isLocalStorageAvailable, LocalStorage, LS } from 'util/storage';
 import { doUpdateUploadRemove, doUpdateUploadProgress } from 'redux/actions/publish';
 
 const localStorageAvailable = isLocalStorageAvailable();
@@ -32,7 +31,7 @@ function getTabId() {
 
 function getLockedUploads() {
   if (localStorageAvailable) {
-    const storedValue = window.localStorage.getItem(TUS_LOCKED_UPLOADS);
+    const storedValue = LocalStorage.getItem(LS.TUS_LOCKED_UPLOADS);
     return storedValue ? JSON.parse(storedValue) : {};
   }
   return {};
@@ -47,7 +46,7 @@ export function tusLockAndNotify(guid: string) {
   const lockedUploads = getLockedUploads();
   if (!lockedUploads[guid] && localStorageAvailable) {
     lockedUploads[guid] = getTabId();
-    window.localStorage.setItem(TUS_LOCKED_UPLOADS, JSON.stringify(lockedUploads));
+    LocalStorage.setItem(LS.TUS_LOCKED_UPLOADS, JSON.stringify(lockedUploads));
   }
 }
 
@@ -75,9 +74,9 @@ export function tusUnlockAndNotify(guid?: string) {
   }
 
   if (Object.keys(lockedUploads).length > 0) {
-    window.localStorage.setItem(TUS_LOCKED_UPLOADS, JSON.stringify(lockedUploads));
+    LocalStorage.setItem(LS.TUS_LOCKED_UPLOADS, JSON.stringify(lockedUploads));
   } else {
-    window.localStorage.removeItem(TUS_LOCKED_UPLOADS);
+    LocalStorage.removeItem(LS.TUS_LOCKED_UPLOADS);
   }
 }
 
@@ -87,7 +86,7 @@ export function tusUnlockAndNotify(guid?: string) {
 
 function getRemovedUploads() {
   if (localStorageAvailable) {
-    const storedValue = window.localStorage.getItem(TUS_REMOVED_UPLOADS);
+    const storedValue = LocalStorage.getItem(LS.TUS_REMOVED_UPLOADS);
     return storedValue ? storedValue.split(',') : [];
   }
   return [];
@@ -97,18 +96,18 @@ export function tusRemoveAndNotify(guid: string) {
   if (!localStorageAvailable) return;
   const removedUploads = getRemovedUploads();
   removedUploads.push(guid);
-  window.localStorage.setItem(TUS_REMOVED_UPLOADS, removedUploads.join(','));
+  LocalStorage.setItem(LS.TUS_REMOVED_UPLOADS, removedUploads.join(','));
 }
 
 export function tusClearRemovedUploads() {
   if (!localStorageAvailable) return;
-  window.localStorage.removeItem(TUS_REMOVED_UPLOADS);
+  LocalStorage.removeItem(LS.TUS_REMOVED_UPLOADS);
 }
 
 export function tusClearLockedUploads() {
   if (!localStorageAvailable) return;
-  window.localStorage.removeItem(TUS_LOCKED_UPLOADS);
-  window.localStorage.setItem(TUS_REFRESH_LOCK, Math.random());
+  LocalStorage.removeItem(LS.TUS_LOCKED_UPLOADS);
+  LocalStorage.setItem(LS.TUS_REFRESH_LOCK, String(Math.random()));
 }
 
 // ****************************************************************************
@@ -117,17 +116,17 @@ export function tusClearLockedUploads() {
 
 export function tusHandleTabUpdates(storageKey: string) {
   switch (storageKey) {
-    case TUS_LOCKED_UPLOADS:
+    case LS.TUS_LOCKED_UPLOADS:
       // The locked IDs are in localStorage, but related GUI is unaware.
       // Send a redux update to force an update.
       window.store.dispatch(doUpdateUploadProgress({ guid: 'force--update' }));
       break;
 
-    case TUS_REFRESH_LOCK:
+    case LS.TUS_REFRESH_LOCK:
       window.store.dispatch(doUpdateUploadProgress({ guid: 'refresh--lock' }));
       break;
 
-    case TUS_REMOVED_UPLOADS:
+    case LS.TUS_REMOVED_UPLOADS:
       // The other tab's store has removed this upload, so it's safe to do the
       // same without affecting rehydration.
       if (localStorageAvailable) {

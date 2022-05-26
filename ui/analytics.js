@@ -46,8 +46,6 @@ export const GA_DIMENSIONS = {
 const isProduction = process.env.NODE_ENV === 'production';
 const devInternalApis = process.env.LBRY_API_URL && process.env.LBRY_API_URL.includes('dev');
 
-export const SHARE_INTERNAL = 'shareInternal';
-
 const WATCHMAN_BACKEND_ENDPOINT = 'https://watchman.na-backend.odysee.com/reports/playback';
 const SEND_DATA_TO_WATCHMAN_INTERVAL = 10; // in seconds
 

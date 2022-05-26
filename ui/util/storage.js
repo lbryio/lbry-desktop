@@ -1,3 +1,21 @@
+// @flow
+
+// ****************************************************************************
+// ****************************************************************************
+
+export const LS = Object.freeze({
+  AUTH_IN_PROGRESS: 'authInProgress',
+  CHANNEL_LIVE_STATUS: 'channel-live-status',
+  GDPR_REQUIRED: 'gdprRequired', // <-- should be using 'locale/get', right?
+  SHARE_INTERNAL: 'shareInternal',
+  TUS_LOCKED_UPLOADS: 'tusLockedUploads',
+  TUS_REFRESH_LOCK: 'tusRefreshLock',
+  TUS_REMOVED_UPLOADS: 'tusRemovedUploads',
+});
+
+// ****************************************************************************
+// ****************************************************************************
+
 export function isLocalStorageAvailable() {
   try {
     return Boolean(window.localStorage);
@@ -24,14 +42,23 @@ export function getLocalStorageSummary() {
   }
 }
 
+// ****************************************************************************
+// LocalStorage (wrapper for 'window.localStorage')
+// ****************************************************************************
+
+// This assumes that local storage availability never changes after boot.
 const localStorageAvailable = isLocalStorageAvailable();
 
-export function getLocalStorageItem(key) {
-  return localStorageAvailable ? window.localStorage.getItem(key) : undefined;
-}
+export const LocalStorage = {
+  setItem: (key: string, value: string) => {
+    if (localStorageAvailable) window.localStorage.setItem(key, value);
+  },
 
-export function setLocalStorageItem(key, value) {
-  if (localStorageAvailable) {
-    window.localStorage.setItem(key, value);
-  }
-}
+  getItem: (key: string) => {
+    return localStorageAvailable ? window.localStorage.getItem(key) : undefined;
+  },
+
+  removeItem: (key: string) => {
+    if (localStorageAvailable) window.localStorage.removeItem(key);
+  },
+};

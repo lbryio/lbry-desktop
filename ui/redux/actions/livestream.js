@@ -10,10 +10,8 @@ import {
   filterUpcomingLiveStreamClaims,
 } from 'util/livestream';
 import moment from 'moment';
-import { isLocalStorageAvailable } from 'util/storage';
+import { LocalStorage, LS } from 'util/storage';
 import { isEmpty } from 'util/object';
-
-const localStorageAvailable = isLocalStorageAvailable();
 
 export const doFetchNoSourceClaims = (channelId: string) => async (dispatch: Dispatch, getState: GetState) => {
   dispatch({
@@ -118,20 +116,20 @@ const findActiveStreams = async (
 };
 
 export const doFetchChannelLiveStatus = (channelId: string) => async (dispatch: Dispatch) => {
-  const statusForId = `channel-live-status`;
-  const localStatus = localStorageAvailable && window.localStorage.getItem(statusForId);
+  const statusForId = LS.CHANNEL_LIVE_STATUS;
+  const localStatus = LocalStorage.getItem(statusForId);
 
   try {
     const { channelStatus, channelData } = await fetchLiveChannel(channelId);
     // store live state locally, and force 2 non-live statuses before returninig NOT LIVE. This allows for the stream to finish before disposing player.
     if (localStatus === LiveStatus.LIVE && channelStatus === LiveStatus.NOT_LIVE) {
-      localStorageAvailable && window.localStorage.removeItem(statusForId);
+      LocalStorage.removeItem(statusForId);
       return;
     }
 
     if (channelStatus === LiveStatus.NOT_LIVE && !localStatus) {
       dispatch({ type: ACTIONS.REMOVE_CHANNEL_FROM_ACTIVE_LIVESTREAMS, data: { channelId } });
-      localStorageAvailable && window.localStorage.removeItem(statusForId);
+      LocalStorage.removeItem(statusForId);
       return;
     }
 
@@ -148,10 +146,10 @@ export const doFetchChannelLiveStatus = (channelId: string) => async (dispatch: 
       dispatch({ type: ACTIONS.ADD_CHANNEL_TO_ACTIVE_LIVESTREAMS, data: { ...channelData } });
     }
 
-    localStorageAvailable && window.localStorage.setItem(statusForId, channelStatus);
+    LocalStorage.setItem(statusForId, channelStatus);
   } catch (err) {
     dispatch({ type: ACTIONS.REMOVE_CHANNEL_FROM_ACTIVE_LIVESTREAMS, data: { channelId } });
-    localStorageAvailable && window.localStorage.removeItem(statusForId);
+    LocalStorage.removeItem(statusForId);
   }
 };
 
