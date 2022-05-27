@@ -15,19 +15,16 @@ export function getGeoRestrictionForClaim(claim: ?StreamClaim, locale: LocaleInf
     const claimId: ?string = claim.claim_id;
     const channelId: ?string = getChannelIdFromClaim(claim);
 
-    if (!claimId || !channelId) {
-      console.log('Claim with blank data:', claim); // eslint-disable-line no-console
-      return null;
-    }
-
     let geoConfig: ?GeoConfig;
 
     // --- livestreams
     if (isStreamPlaceholderClaim(claim) && geoBlockLists.livestreams) {
+      // $FlowIgnore: null key is fine
       geoConfig = geoBlockLists.livestreams[channelId] || geoBlockLists.livestreams[claimId];
     }
     // --- videos (actually, everything else)
     else if (geoBlockLists.videos) {
+      // $FlowIgnore: null key is fine
       geoConfig = geoBlockLists.videos[channelId] || geoBlockLists.videos[claimId];
     }
 
