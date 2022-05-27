@@ -8,13 +8,7 @@ import {
 } from 'redux/selectors/sync';
 import { doUserSetReferrer } from 'redux/actions/user';
 import { doSetLastViewedAnnouncement } from 'redux/actions/content';
-import {
-  selectOdyseeMembershipIsPremiumPlus,
-  selectUser,
-  selectUserLocale,
-  selectUserVerifiedEmail,
-  selectHomepageFetched,
-} from 'redux/selectors/user';
+import { selectUser, selectUserLocale, selectUserVerifiedEmail, selectHomepageFetched } from 'redux/selectors/user';
 import { selectUnclaimedRewards } from 'redux/selectors/rewards';
 import { doFetchChannelListMine, doFetchCollectionListMine } from 'redux/actions/claims';
 import { selectMyChannelClaimIds } from 'redux/selectors/claims';
@@ -49,7 +43,6 @@ const select = (state) => ({
   syncFatalError: selectSyncFatalError(state),
   activeChannelClaim: selectActiveChannelClaim(state),
   myChannelClaimIds: selectMyChannelClaimIds(state),
-  hasPremiumPlus: selectOdyseeMembershipIsPremiumPlus(state),
   homepageFetched: selectHomepageFetched(state),
   defaultChannelClaim: selectDefaultChannelClaim(state),
 });

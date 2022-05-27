@@ -166,7 +166,13 @@ function ChannelContent(props: Props) {
           infiniteScroll={defaultInfiniteScroll}
           injectedItem={
             !hasPremiumPlus && {
-              node: <Ads small type="video" tileLayout />,
+              node: (index, lastVisibleIndex, pageSize) => {
+                if (pageSize && index < pageSize) {
+                  return index === lastVisibleIndex ? <Ads type="video" tileLayout={tileLayout} small /> : null;
+                } else {
+                  return index % (pageSize * 2) === 0 ? <Ads type="video" tileLayout={tileLayout} small /> : null;
+                }
+              },
             }
           }
           meta={

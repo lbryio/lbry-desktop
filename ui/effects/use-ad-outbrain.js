@@ -17,25 +17,25 @@ const OUTBRAIN_CONTAINER_KEY = 'outbrainSizeDiv';
 let script;
 
 /**
- * @param hasPremiumPlus
- * @param isAuthenticated
+ * @param hasPremiumPlus `undefined` if not yet fetched, boolean otherwise.
+ * @param isAuthenticated `undefined` if email is not fetched, boolean
+ *   otherwise.
  * @param pathname Reminder: the component using this effect must be listening
  *                 to path changes (e.g. useHistory, etc.). This value must not
  *                 come from window.location.pathname, which doesn't spark an
  *                 update.
  */
-export default function useAdOutbrain(hasPremiumPlus: boolean, isAuthenticated: boolean, pathname: string) {
-  // Only look at authentication for now. Eventually, we'll only use 'hasPremiumPlus'.
-  // Authenticated will return undefined if not yet populated, so wait and only show
-  // when returned as false
-  const isNotAuthenticated = isAuthenticated === false;
+export default function useAdOutbrain(hasPremiumPlus: ?boolean, isAuthenticated: ?boolean, pathname: string) {
+  // Still need to look at `isAuthenticated` because `hasPremiumPlus` remains
+  // in unfetched (`undefined) state in Incognito.
+  const loadScript = isAuthenticated === false || hasPremiumPlus === false;
 
-  const propRef = React.useRef({ isAuthenticated, pathname });
-  propRef.current = { isAuthenticated, pathname };
+  const propRef = React.useRef({ hasPremiumPlus, pathname });
+  propRef.current = { hasPremiumPlus, pathname };
 
   function resolveVisibility() {
     if (window[OUTBRAIN_CONTAINER_KEY]) {
-      if (propRef.current.isAuthenticated) {
+      if (propRef.current.hasPremiumPlus) {
         window[OUTBRAIN_CONTAINER_KEY].style.display = 'none';
       } else {
         window[OUTBRAIN_CONTAINER_KEY].style.display = EXCLUDED_PATHS.includes(propRef.current.pathname) ? 'none' : '';
@@ -44,7 +44,7 @@ export default function useAdOutbrain(hasPremiumPlus: boolean, isAuthenticated: 
   }
 
   React.useEffect(() => {
-    if (!inIFrame() && isNotAuthenticated && !script) {
+    if (!inIFrame() && loadScript && !script) {
       const loadTimer = setTimeout(() => {
         script = document.createElement('script');
         script.src = 'https://adncdnend.azureedge.net/adtags/odysee.adn.js';
@@ -57,10 +57,9 @@ export default function useAdOutbrain(hasPremiumPlus: boolean, isAuthenticated: 
 
       return () => clearTimeout(loadTimer);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isNotAuthenticated]);
+  }, [loadScript]);
 
   React.useEffect(() => {
     resolveVisibility();
-  }, [isAuthenticated, pathname]);
+  }, [hasPremiumPlus, pathname]);
 }

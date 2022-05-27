@@ -1,15 +1,17 @@
 // @flow
-import { SHOW_ADS } from 'config';
 import * as PAGES from 'constants/pages';
 import React, { useEffect } from 'react';
 import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
 import PremiumPlusTile from 'component/premiumPlusTile';
 import classnames from 'classnames';
+import useShouldShowAds from 'effects/use-should-show-ads';
 import { platform } from 'util/platform';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 import { LocalStorage, LS } from 'util/storage';
+
+const USE_ADNIMATION = true;
 
 // prettier-ignore
 const AD_CONFIGS = Object.freeze({
@@ -25,10 +27,30 @@ const AD_CONFIGS = Object.freeze({
     url: 'https://tg1.vidcrunch.com/api/adserver/spt?AV_TAGID=61dff05c599f1e20b01085d4&AV_PUBLISHERID=6182c8993c8ae776bd5635e9',
     tag: 'AV61dff05c599f1e20b01085d4',
   },
+  ADNIMATION: {
+    url: 'https://tg1.aniview.com/api/adserver/spt?AV_TAGID=6252bb6f28951333ec10a7a6&AV_PUBLISHERID=601d9a7f2e688a79e17c1265',
+    tag: 'AV6252bb6f28951333ec10a7a6',
+  },
 });
 
-// Internal use only. One-time update flag.
-let ad_blocker_detected;
+// ****************************************************************************
+// Helpers
+// ****************************************************************************
+
+function removeIfExists(querySelector) {
+  const element = document.querySelector(querySelector);
+  if (element) element.remove();
+}
+
+function resolveVidcrunchConfig() {
+  const mobileAds = platform.isAndroid() || platform.isIOS();
+  const isInEu = LocalStorage.getItem(LS.GDPR_REQUIRED) === 'true';
+  return isInEu ? AD_CONFIGS.EU : mobileAds ? AD_CONFIGS.MOBILE : AD_CONFIGS.DEFAULT;
+}
+
+// ****************************************************************************
+// Ads
+// ****************************************************************************
 
 type Props = {
   type: string,
@@ -37,17 +59,10 @@ type Props = {
   className?: string,
   noFallback?: boolean,
   // --- redux ---
-  claim: Claim,
-  isMature: boolean,
   userHasPremiumPlus: boolean,
   userCountry: string,
   doSetAdBlockerFound: (boolean) => void,
 };
-
-function removeIfExists(querySelector) {
-  const element = document.querySelector(querySelector);
-  if (element) element.remove();
-}
 
 function Ads(props: Props) {
   const {
@@ -61,46 +76,8 @@ function Ads(props: Props) {
     doSetAdBlockerFound,
   } = props;
 
-  const [shouldShowAds, setShouldShowAds] = React.useState(resolveAdVisibility());
-  const mobileAds = platform.isAndroid() || platform.isIOS();
-
-  // this is populated from app based on location
-  const isInEu = LocalStorage.getItem(LS.GDPR_REQUIRED) === 'true';
-  const adConfig = isInEu ? AD_CONFIGS.EU : mobileAds ? AD_CONFIGS.MOBILE : AD_CONFIGS.DEFAULT;
-
-  function resolveAdVisibility() {
-    // 'ad_blocker_detected' will be undefined at startup. Wait until we are
-    // sure it is not blocked (i.e. === false) before showing the component.
-    return ad_blocker_detected === false && SHOW_ADS && !userHasPremiumPlus && userCountry === 'US';
-  }
-
-  useEffect(() => {
-    if (ad_blocker_detected === undefined) {
-      let mounted = true;
-      const GOOGLE_AD_URL = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
-
-      fetch(GOOGLE_AD_URL)
-        .then((response) => {
-          const detected = response.redirected === true;
-          window.odysee_ad_blocker_detected = detected;
-          ad_blocker_detected = detected;
-          doSetAdBlockerFound(detected);
-        })
-        .catch(() => {
-          ad_blocker_detected = true;
-          doSetAdBlockerFound(true);
-        })
-        .finally(() => {
-          if (mounted) {
-            setShouldShowAds(resolveAdVisibility());
-          }
-        });
-
-      return () => {
-        mounted = false;
-      };
-    }
-  }, []);
+  const shouldShowAds = useShouldShowAds(userHasPremiumPlus, userCountry, doSetAdBlockerFound);
+  const adConfig = USE_ADNIMATION ? AD_CONFIGS.ADNIMATION : resolveVidcrunchConfig();
 
   // add script to DOM
   useEffect(() => {
@@ -122,11 +99,20 @@ function Ads(props: Props) {
           delete window.__VIDCRUNCH_CONFIG_618bb4d28aac298191eec411__;
           delete window.__player_618bb4d28aac298191eec411__;
 
+          const styles = document.querySelectorAll('body > style');
+          styles.forEach((s) => {
+            // We are asking Adnimation to supply us with a specific ID or
+            // pattern so that our query wouldn't break when they change their
+            // script. For now, this is the "best effort".
+            if (s.innerText && s.innerText.startsWith('#outbrain')) {
+              s.remove();
+            }
+          });
+
           // clean DOM elements from ad related elements
-          removeIfExists('[src^="https://cdn.vidcrunch.com/618bb4d28aac298191eec411.js"]');
-          removeIfExists('[src^="https://player.aniview.com/script/6.1/aniview.js"]');
-          removeIfExists('[id^="AVLoaderaniplayer_vidcrunch"]');
-          removeIfExists('#av_css_id');
+          removeIfExists('[src^="https://player.avplayer.com"]');
+          removeIfExists('[src^="https://gum.criteo.com"]');
+          removeIfExists('[id^="AVLoaderaniview_slot"]');
         };
       } catch (e) {}
     }
