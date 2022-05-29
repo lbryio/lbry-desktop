@@ -111,7 +111,6 @@ const VideoJsEvents = ({
 
   function onInitialPlay() {
     const player = playerRef.current;
-    console.log('onInitialPlay');
     updateMediaSession();
 
     const bigPlayButton = document.querySelector('.vjs-big-play-button');
