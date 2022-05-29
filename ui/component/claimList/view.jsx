@@ -208,17 +208,23 @@ export default function ClaimList(props: Props) {
   );
 
   React.useEffect(() => {
+    refreshBuffer();
+  }, [tileUris, injectedItem, lastVisibleIndex, pageSize]);
+
+  function refreshBuffer() {
     tileUris.forEach((uri, index) => {
       if (uri) {
         const inj = getInjectedItem(index);
         if (inj) {
           if (uriBuffer.indexOf(index) === -1) {
-            setUriBuffer([index]);
+            let newUriBUffer = uriBuffer;
+            newUriBUffer.push(index);
+            setUriBuffer(newUriBUffer);
           }
         }
       }
     });
-  }, [tileUris, injectedItem, lastVisibleIndex, pageSize]);
+  }
 
   const getInjectedItem = (index) => {
     if (injectedItem && injectedItem.node) {
@@ -243,6 +249,7 @@ export default function ClaimList(props: Props) {
           tileUris.map((uri, index) => {
             if (uri) {
               const inj = getInjectedItem(index);
+              if (inj) refreshBuffer();
               return (
                 <React.Fragment key={uri}>
                   {inj && inj}

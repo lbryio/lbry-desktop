@@ -176,17 +176,23 @@ function ClaimTilesDiscover(props: Props) {
   }, [doClaimSearch, shouldPerformSearch, optionsStringified]);
 
   React.useEffect(() => {
+    refreshBuffer();
+  }, [finalUris, injectedItem, lastVisibleIndex, pageSize]);
+
+  function refreshBuffer() {
     finalUris.forEach((uri, index) => {
       if (uri) {
         const inj = getInjectedItem(index);
         if (inj) {
           if (uriBuffer.indexOf(index) === -1) {
-            setUriBuffer([index]);
+            let newUriBUffer = uriBuffer;
+            newUriBUffer.push(index);
+            setUriBuffer(newUriBUffer);
           }
         }
       }
     });
-  }, [finalUris, injectedItem, lastVisibleIndex, pageSize]);
+  }
 
   // --------------------------------------------------------------------------
   // --------------------------------------------------------------------------
@@ -220,6 +226,7 @@ function ClaimTilesDiscover(props: Props) {
         ? finalUris.map((uri, i) => {
             if (uri) {
               const inj = getInjectedItem(i);
+              if (inj) refreshBuffer();
               return (
                 <React.Fragment key={uri}>
                   {inj && inj}
