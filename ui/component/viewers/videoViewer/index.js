@@ -40,6 +40,16 @@ const select = (state, props) => {
   const uri = props.uri;
 
   const claim = selectClaimForUri(state, uri);
+  const { signing_channel } = claim || {};
+  let channelTitle = null;
+  if (signing_channel) {
+    const { value, name } = signing_channel;
+    if (value && value.title) {
+      channelTitle = value.title;
+    } else {
+      channelTitle = name;
+    }
+  }
 
   // TODO: eventually this should be received from DB and not local state (https://github.com/lbryio/lbry-desktop/issues/6796)
   const position = urlParams.get('t') !== null ? urlParams.get('t') : selectContentPositionForUri(state, uri);
@@ -74,6 +84,7 @@ const select = (state, props) => {
     videoPlaybackRate: selectClientSetting(state, SETTINGS.VIDEO_PLAYBACK_RATE),
     thumbnail: selectThumbnailForUri(state, uri),
     claim,
+    channelTitle,
     homepageData: selectHomepageData(state),
     authenticated: selectUserVerifiedEmail(state),
     shareTelemetry: IS_WEB || selectDaemonSettings(state).share_usage_data,

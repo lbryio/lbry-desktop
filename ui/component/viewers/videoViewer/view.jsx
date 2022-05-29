@@ -75,6 +75,7 @@ type Props = {
   doToast: ({ message: string, linkText: string, linkTarget: string }) => void,
   doSetContentHistoryItem: (uri: string) => void,
   doClearContentHistoryUri: (uri: string) => void,
+  channelTitle: string,
 };
 
 /*
@@ -92,6 +93,7 @@ function VideoViewer(props: Props) {
     thumbnail,
     position,
     claim,
+    channelTitle,
     uri,
     muted,
     volume,
@@ -496,6 +498,7 @@ function VideoViewer(props: Props) {
         claimId={claimId}
         title={claim && ((claim.value && claim.value.title) || claim.name)}
         channelName={channelName}
+        channelTitle={channelTitle}
         userId={userId}
         allowPreRoll={!authenticated} // TODO: pull this into ads functionality so it's self contained
         internalFeatureEnabled={internalFeature}
