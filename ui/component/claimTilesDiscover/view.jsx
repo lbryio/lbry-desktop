@@ -185,9 +185,9 @@ function ClaimTilesDiscover(props: Props) {
         const inj = getInjectedItem(index);
         if (inj) {
           if (uriBuffer.indexOf(index) === -1) {
-            let newUriBUffer = uriBuffer;
-            newUriBUffer.push(index);
-            setUriBuffer(newUriBUffer);
+            const newUriBuffer = uriBuffer;
+            newUriBuffer.push(index);
+            setUriBuffer(newUriBuffer);
           }
         }
       }
