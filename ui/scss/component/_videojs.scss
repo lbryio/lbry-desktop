@@ -357,18 +357,21 @@ button.vjs-big-play-button {
 .vjs-chapters-button {
   order: 10 !important;
 }
+.vjs-subs-caps-button {
+  order: 11 !important;
+}
 .vjs-button--autoplay-next {
-  order: 10 !important;
+  order: 12 !important;
 }
 .vjs-playback-rate {
-  order: 11 !important;
+  order: 13 !important;
 }
 .vjs-chromecast-button,
 .vjs-airplay-button {
-  order: 12 !important;
+  order: 13 !important;
 }
 .vjs-quality-selector {
-  order: 13 !important;
+  order: 14 !important;
   display: flex;
 
   .vjs-icon-placeholder {
@@ -377,10 +380,10 @@ button.vjs-big-play-button {
   }
 }
 .vjs-button--theater-mode {
-  order: 14 !important;
+  order: 15 !important;
 }
 .vjs-fullscreen-control {
-  order: 15 !important;
+  order: 16 !important;
 }
 
 // livestream player
