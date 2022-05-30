@@ -189,10 +189,8 @@ function HomePage(props: Props) {
                 label={__('View More')}
               />
             )}
-            {isMobileScreen && !hasPremiumPlus && <AdsBanner key={`${currentTheme}:${title}`} />}
-            {!isMobileScreen && !hasPremiumPlus && (index === 0 || index % 2 === 0) && (
-              <AdsBanner key={`${currentTheme}:${title}`} />
-            )}
+            {isMobileScreen && <AdsBanner key={`${currentTheme}:${title}`} />}
+            {!isMobileScreen && (index === 0 || index % 2 === 0) && <AdsBanner key={`${currentTheme}:${title}`} />}
           </>
         )}
       </div>
