@@ -72,43 +72,13 @@
       display: block;
     }
 
-    div[style*='transform-origin: left bottom'],
-    div[style*='transform-origin: right bottom'] {
-      // [Floating ad]
-      // Hide for now since can't get it to work in a consistent manner between:
-      //   - EU and non-EU version
-      //   - issues in Firefox
-      //   - floater not taking browser zoom levels into account (close button off screen).
-      //   - many more...
-      display: none !important;
-    }
-
-    #aniBox {
-      transition: unset !important;
-    }
-
-    #aniBox[style*='height: 1px'] {
-      display: none;
-    }
-
     #aniBox,
     #av-container {
-      width: 100% !important;
-      height: unset !important;
-      aspect-ratio: 16 / 9 !important;
       border-radius: var(--border-radius);
     }
 
     .avp-p-wrapper > div {
-      border-radius: var(--border-radius) !important; // Needed for EU only
-    }
-
-    #av-container #av-inner #gui #close-btn {
-      // The current version started displaying the close button on video ads.
-      // It closes the video but leaves the container behind. Since there will
-      // be changes in the near future which the end result won't have this
-      // issue, just hide it for now.
-      display: none !important;
+      border-radius: var(--border-radius);
     }
   }
 
