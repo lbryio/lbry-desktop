@@ -134,7 +134,10 @@ function HomePage(props: Props) {
         {...options}
         showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
         hasSource
-        prefixUris={getLivestreamUris(activeLivestreams, options.channelIds).slice(0, CATEGORY_LIVESTREAM_LIMIT)}
+        prefixUris={getLivestreamUris(activeLivestreams, options.channelIds).slice(
+          0,
+          id === 'FOLLOWING' ? undefined : CATEGORY_LIVESTREAM_LIMIT
+        )}
         pins={{ urls: pinUrls, claimIds: pinnedClaimIds }}
         injectedItem={index === 0 && !hasPremiumPlus && { node: <Ads small type="video" tileLayout /> }}
         forceShowReposts={id !== 'FOLLOWING'}
