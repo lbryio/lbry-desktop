@@ -59,6 +59,7 @@ type Props = {
   className?: string,
   noFallback?: boolean,
   // --- redux ---
+  isAdBlockerFound: ?boolean,
   userHasPremiumPlus: boolean,
   userCountry: string,
   doSetAdBlockerFound: (boolean) => void,
@@ -69,6 +70,7 @@ function Ads(props: Props) {
     type = 'video',
     tileLayout,
     small,
+    isAdBlockerFound,
     userHasPremiumPlus,
     userCountry,
     className,
@@ -76,7 +78,7 @@ function Ads(props: Props) {
     doSetAdBlockerFound,
   } = props;
 
-  const shouldShowAds = useShouldShowAds(userHasPremiumPlus, userCountry, doSetAdBlockerFound);
+  const shouldShowAds = useShouldShowAds(userHasPremiumPlus, userCountry, isAdBlockerFound, doSetAdBlockerFound);
   const adConfig = USE_ADNIMATION ? AD_CONFIGS.ADNIMATION : resolveVidcrunchConfig();
 
   // add script to DOM

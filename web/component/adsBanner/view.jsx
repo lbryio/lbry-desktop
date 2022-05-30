@@ -35,6 +35,7 @@ const adsSignInDriver = (
 let gReferenceCounter = 0;
 
 type Props = {
+  isAdBlockerFound: ?boolean,
   userHasPremiumPlus: boolean,
   userCountry: string,
   currentTheme: string,
@@ -42,8 +43,8 @@ type Props = {
 };
 
 export default function AdsBanner(props: Props) {
-  const { userHasPremiumPlus, userCountry, currentTheme, doSetAdBlockerFound } = props;
-  const shouldShowAds = useShouldShowAds(userHasPremiumPlus, userCountry, doSetAdBlockerFound);
+  const { isAdBlockerFound, userHasPremiumPlus, userCountry, currentTheme, doSetAdBlockerFound } = props;
+  const shouldShowAds = useShouldShowAds(userHasPremiumPlus, userCountry, isAdBlockerFound, doSetAdBlockerFound);
 
   React.useEffect(() => {
     if (shouldShowAds) {
