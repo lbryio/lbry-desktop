@@ -15,11 +15,17 @@ export default function useShouldShowAds(
   const [shouldShowAds, setShouldShowAds] = React.useState(resolveAdVisibility());
 
   function resolveAdVisibility() {
-    // 'ad_blocker_detected' will be undefined at startup. Wait until we are
-    // sure it is not blocked (i.e. === false) before showing the component.
-    return ad_blocker_detected === false && SHOW_ADS && !hasPremiumPlus && (NO_COUNTRY_CHECK || userCountry === 'US');
+    // 'ad_blocker_detected' and 'hasPremiumPlus' will be undefined until
+    // fetched. Only show when it is exactly 'false'.
+    return (
+      SHOW_ADS &&
+      (NO_COUNTRY_CHECK || userCountry === 'US') &&
+      ad_blocker_detected === false &&
+      hasPremiumPlus === false
+    );
   }
 
+  // -- Check for ad-blockers
   React.useEffect(() => {
     if (ad_blocker_detected === undefined) {
       let mounted = true;
@@ -45,6 +51,11 @@ export default function useShouldShowAds(
       };
     }
   }, []);
+
+  // --- Check for Premium+
+  React.useEffect(() => {
+    setShouldShowAds(resolveAdVisibility());
+  }, [hasPremiumPlus]);
 
   return shouldShowAds;
 }
