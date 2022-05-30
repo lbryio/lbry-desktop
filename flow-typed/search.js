@@ -15,7 +15,7 @@ declare type SearchOptions = {
   MEDIA_IMAGE: string,
   MEDIA_APPLICATION: string,
   SORT: string,
-  SORT_ACCENDING: string,
+  SORT_ASCENDING: string,
   SORT_DESCENDING: string,
   EXACT: string,
   TIME_FILTER: string,

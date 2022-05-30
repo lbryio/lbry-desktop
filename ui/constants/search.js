@@ -24,7 +24,7 @@ export const SEARCH_OPTIONS = {
   MEDIA_IMAGE: 'image',
   MEDIA_APPLICATION: 'application',
   SORT: 'sort_by',
-  SORT_ACCENDING: '^release_time',
+  SORT_ASCENDING: '^release_time',
   SORT_DESCENDING: 'release_time',
   EXACT: 'exact',
   PRICE_FILTER_FREE: 'free_only',

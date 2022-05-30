@@ -33,7 +33,7 @@ const TIME_FILTER = {
 const SORT_BY = {
   '': 'Relevance',
   [SEARCH_OPTIONS.SORT_DESCENDING]: 'Newest first',
-  [SEARCH_OPTIONS.SORT_ACCENDING]: 'Oldest first',
+  [SEARCH_OPTIONS.SORT_ASCENDING]: 'Oldest first',
 };
 
 type Props = {
