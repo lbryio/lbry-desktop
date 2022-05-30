@@ -15,6 +15,12 @@
   }
 }
 
+.avp-p-wrapper {
+  // Hide by default, so that any stray floater won't be visible.
+  // We'll enable it only within our designated container.
+  display: none;
+}
+
 // Inline Video Ads
 // The default is coded for list-layout;
 // --tile and other modifiers adjust accordingly.
@@ -59,6 +65,11 @@
     @media (min-width: $breakpoint-large) {
       $width: calc(var(--file-list-thumbnail-width) * 1.2);
       width: $width;
+    }
+
+    .avp-p-wrapper {
+      // Only enable this within our container.
+      display: block;
     }
 
     div[style*='transform-origin: left bottom'],
