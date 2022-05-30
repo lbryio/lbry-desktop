@@ -76,7 +76,7 @@ class ErrorBoundary extends React.Component<Props, State> {
         <div className="main main--full-width main--empty">
           <Yrbl
             type="sad"
-            title={__('Aw shucks!')}
+            title={':(  ' + __('Aw shucks!')}
             subtitle={
               <I18nMessage
                 tokens={{
