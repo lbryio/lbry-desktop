@@ -75,7 +75,6 @@ type Props = {
   doToast: ({ message: string, linkText: string, linkTarget: string }) => void,
   doSetContentHistoryItem: (uri: string) => void,
   doClearContentHistoryUri: (uri: string) => void,
-  channelTitle: string,
 };
 
 /*
@@ -93,7 +92,6 @@ function VideoViewer(props: Props) {
     thumbnail,
     position,
     claim,
-    channelTitle,
     uri,
     muted,
     volume,
@@ -130,6 +128,8 @@ function VideoViewer(props: Props) {
   const adApprovedChannelIds = homepageData ? getAllIds(homepageData) : [];
   const claimId = claim && claim.claim_id;
   const channelClaimId = claim && claim.signing_channel && claim.signing_channel.claim_id;
+  const channelTitle =
+    (claim && claim.signing_channel && claim.signing_channel.value && claim.signing_channel.value.title) || '';
   const isAudio = contentType.includes('audio');
   const forcePlayer = FORCE_CONTENT_TYPE_PLAYER.includes(contentType);
   const {
