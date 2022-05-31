@@ -3,10 +3,11 @@
   font-weight: bold;
   line-height: 1;
   font-size: 1rem;
-  margin-bottom: var(--spacing-m);
+  // margin-bottom: var(--spacing-m);
 
   @media (min-width: $breakpoint-small) {
     font-size: 1.2rem;
-    margin-bottom: var(--spacing-l);
+    // margin-bottom: var(--spacing-l);
+    margin-bottom: 0;
   }
 }

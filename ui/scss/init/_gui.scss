@@ -568,7 +568,7 @@ img {
   font-weight: bold;
   line-height: 1;
   font-size: 1rem;
-  margin-bottom: var(--spacing-m);
+  // margin-bottom: var(--spacing-m);
 
   > .button {
     white-space: initial;
@@ -576,7 +576,7 @@ img {
 
   @media (min-width: $breakpoint-small) {
     font-size: 1.2rem;
-    margin-bottom: var(--spacing-l);
+    // margin-bottom: var(--spacing-l);
   }
 
   @media (max-width: $breakpoint-small) {
