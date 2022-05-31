@@ -17,7 +17,7 @@
 
 .avp-p-wrapper {
   // Hide by default, so that any stray floater won't be visible.
-  // We'll enable it only within our designated container.
+  // We'll enable it only within our designated container (see below).
   display: none;
 }
 
@@ -69,6 +69,10 @@
     .avp-p-wrapper {
       // Only enable this within our container.
       display: block;
+    }
+
+    .avp-p-wrapper.av-floating {
+      display: none;
     }
 
     #aniBox,
