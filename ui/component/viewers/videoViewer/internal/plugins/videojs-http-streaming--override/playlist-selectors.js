@@ -206,7 +206,7 @@ export const lastBandwidthSelector = function() {
   const originalHeight = hlsQualitySelector.config.originalHeight;
 
   if (hlsQualitySelector?.getCurrentQuality() === 'auto') {
-    hlsQualitySelector._qualityButton.menuButton_.$('.vjs-icon-placeholder').innerHTML = __('Auto %quality% --[Video quality popup. Long form.]--', { quality: selectedBandwidth.attributes.RESOLUTION.height + 'p' });
+    hlsQualitySelector._qualityButton.menuButton_.$('.vjs-icon-placeholder').innerHTML = __('Auto <span>%quality%</span> --[Video quality popup. Long form.]--', { quality: selectedBandwidth.attributes.RESOLUTION.height + 'p' });
   }
   
 

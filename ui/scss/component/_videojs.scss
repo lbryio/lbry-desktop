@@ -38,14 +38,14 @@ $control-bar-icon-size: 0.8rem;
     position: absolute;
     display: block;
     align-items: center;
-    width: 100%;
+    width: calc(100% - var(--spacing-m) * 2);
     height: 1rem;
     bottom: 90%;
-    margin: 1px 23px !important;
-    max-width: 96.5%;
+    margin: 1px var(--spacing-m) !important;
 
     @media (max-width: $breakpoint-small) {
-      max-width: 94.5%;
+      width: calc(100% - var(--spacing-s) * 2);
+      margin: 1px var(--spacing-s) !important;
     }
 
     .vjs-vtt-thumbnail-display {
@@ -189,12 +189,44 @@ $control-bar-icon-size: 0.8rem;
 }
 
 [dir] .vjs-menu-button-popup .vjs-menu .vjs-menu-content {
-  background-color: rgba(43, 51, 63);
+  //background-color: rgba(43, 51, 63);
+  background-color: rgba(var(--color-header-button-base), 0.9);
+  backdrop-filter: blur(4px);
+  border-radius: var(--border-radius);
+  border: 2px solid var(--color-header-background);
   max-height: 20em;
   margin-bottom: calc(var(--spacing-xxs) * -1); // Prevents accidental dismissal when the gap is hovered.
 
   li {
     font-size: $control-bar-popup-font-size;
+  }
+
+  .vjs-menu-title {
+    color: var(--color-text);
+    background-color: var(--color-header-background);
+  }
+
+  .vjs-menu-item {
+    color: var(--color-text);
+    margin: 2px;
+    margin-left: var(--spacing-s);
+    margin-right: var(--spacing-s);
+    &:first-child {
+      margin-top: var(--spacing-xxs);
+    }
+    &:last-child {
+      margin-bottom: var(--spacing-xxs);
+    }
+    &:hover {
+      color: var(--color-primary-contrast);
+      background-color: var(--color-primary);
+      border-radius: var(--border-radius);
+    }
+  }
+  .vjs-selected {
+    background-color: var(--color-primary);
+    border-radius: var(--border-radius);
+    color: var(--color-primary-contrast);
   }
 }
 

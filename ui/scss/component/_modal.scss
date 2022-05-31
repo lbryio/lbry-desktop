@@ -74,8 +74,15 @@
     .claim__menu-button {
       right: var(--spacing-xxs) !important;
     }
-    &:hover {
-      // background-color: unset;
+  }
+
+  .repost-wrapper {
+    .claim-preview__wrapper {
+      padding-top: var(--spacing-m);
+      border: 2px solid var(--color-border);
+      .claim-preview__actions {
+        margin-top: unset;
+      }
     }
   }
 
@@ -145,7 +152,8 @@
     }
 
     .button-toggle {
-      background-color: rgba(var(--color-header-button-base), 0.4) !important;
+      // background-color: rgba(var(--color-header-button-base), 0.4) !important;
+      background-color: var(--color-header-background) !important;
       &:hover {
         background-color: rgba(var(--color-header-button-base), 0.9) !important;
       }
@@ -153,20 +161,62 @@
 
     .button-toggle--active,
     .channel__list-item,
-    .button--secondary,
-    input {
-      background-color: rgba(var(--color-header-button-base), 0.9) !important;
+    .button--secondary {
+      // background-color: rgba(var(--color-header-button-base), 0.9) !important;
+      box-shadow: 0 0 0 2px var(--color-border) inset;
     }
     .channel__list-item {
       &:hover {
+        box-shadow: unset;
         background-color: var(--color-primary);
         color: var(--color-primary-contrast);
+      }
+    }
+
+    input,
+    select {
+      background-color: var(--color-header-background) !important;
+      box-shadow: 0 0 0 2px var(--color-border) inset;
+      &:hover {
+        background-color: var(--color-input-toggle-bg-hover) !important;
+      }
+      &:focus-visible {
+        border: unset;
+        background-color: var(--color-input-toggle-bg-hover) !important;
+        box-shadow: 0 0 0 2px var(--color-primary) inset;
       }
     }
 
     label {
       color: var(--color-text);
       font-size: var(--font-medium);
+    }
+
+    .checkbox,
+    .radio {
+      label {
+        &::before {
+          top: unset;
+          border: unset;
+          box-shadow: 0 0 0 2px var(--color-border) inset;
+        }
+        &::after {
+          top: 6px;
+        }
+      }
+      &:hover {
+        input {
+          border: unset !important;
+          // outline:unset !important;
+        }
+      }
+    }
+    .checkbox {
+      label {
+        &::after {
+          top: 8px !important;
+        }
+      }
     }
 
     [data-reach-menu-button] {

@@ -416,9 +416,9 @@ fieldset-group {
         border-color: var(--color-input-border);
         border-right-color: var(--color-input-prefix-border);
         //color: white;
-        background-color: var(--color-header-button);
+        background-color: var(--color-border);
         color: var(--color-text);
-        box-shadow: 0px 0px 0px 2px rgba(var(--color-text-base), 0.1) inset;
+        // box-shadow: 0px 0px 0px 2px rgba(var(--color-text-base), 0.1) inset;
       }
     }
 

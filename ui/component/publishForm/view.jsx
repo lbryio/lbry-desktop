@@ -593,7 +593,7 @@ function PublishForm(props: Props) {
 
   // Editing claim uri
   return (
-    <div className="card-stack uploadPage-wraper">
+    <div className="card-stack uploadPage-wrapper">
       <ChannelSelect hideAnon={isLivestreamMode} disabled={disabled} autoSet channelToSet={claimChannelId} />
 
       <PublishFile

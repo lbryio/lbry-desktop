@@ -25,7 +25,6 @@
 // The default is coded for list-layout;
 // --tile and other modifiers adjust accordingly.
 .ads__claim-item {
-  border-bottom: 1px solid var(--color-border);
   margin-top: var(--spacing-m);
   margin-bottom: var(--spacing-m);
   padding: var(--spacing-m);
@@ -83,6 +82,9 @@
   }
 
   &:hover {
+    .ads__title {
+      color: var(--color-primary);
+    }
     .ad__container {
       box-shadow: 0 0 0 1px rgba(var(--color-primary-dynamic), 1) inset;
     }
@@ -131,13 +133,13 @@
 
     .ads__subtitle {
       margin-top: var(--spacing-s);
-      color: rgba(var(--color-text-base), 0.6);
+      color: rgba(var(--color-text-base), 0.6) !important;
       font-weight: var(--font-weight-bold);
       line-height: 1rem;
       font-size: var(--font-xsmall);
 
       .icon {
-        color: var(--color-text);
+        color: var(--color-text) !important;
         width: 2.1rem;
         height: 2.1rem;
         float: left;
@@ -192,7 +194,9 @@
     padding-left: var(--spacing-s);
 
     .ads__title {
-      color: white;
+      color: var(--color-text);
+      font-size: var(--font-small);
+      font-weight: var(--font-weight-bold);
     }
   }
 
@@ -216,8 +220,36 @@
 }
 
 .ads__claim-text--small {
-  font-size: var(--font-small);
+  //  font-size: var(--font-small);
+  color: var(--color-text);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-body);
+  width: 100%;
 
+  .ads__title {
+    margin-bottom: var(--spacing-s);
+  }
+
+  .ads__subtitle {
+    color: rgba(var(--color-text-base), 0.6) !important;
+    font-size: var(--font-xsmall);
+    .icon {
+      color: var(--color-text) !important;
+      width: 2.1rem;
+      height: 2.1rem;
+      margin-right: var(--spacing-s);
+      float: left;
+    }
+  }
+  a {
+    display: block;
+    span {
+      display: unset;
+    }
+  }
+  span::after {
+    white-space: pre; /* or pre-wrap */
+  }
   @media (max-width: $breakpoint-small) {
     font-size: var(--font-xsmall);
   }

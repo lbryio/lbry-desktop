@@ -748,6 +748,39 @@ body {
     .card__main-actions {
       border-top: unset;
     }
+
+    input,
+    select {
+      box-shadow: 0 0 0 2px var(--color-border) inset;
+      &:hover {
+        background-color: var(--color-input-toggle-bg-hover);
+      }
+      &:focus-visible {
+        background-color: var(--color-input-toggle-bg-hover) !important;
+        box-shadow: 0 0 0 2px var(--color-primary) inset;
+      }
+    }
+
+    .checkbox,
+    .radio {
+      label {
+        &::before {
+          top: unset;
+          border: unset;
+          box-shadow: 0 0 0 2px var(--color-border) inset;
+        }
+        &::after {
+          top: 6px;
+        }
+      }
+    }
+    .checkbox {
+      label {
+        &::after {
+          top: 8px !important;
+        }
+      }
+    }
   }
 
   .button--secondary {

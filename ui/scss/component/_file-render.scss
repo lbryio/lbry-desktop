@@ -611,6 +611,17 @@ $control-bar-icon-size: 0.8rem;
     .vjs-quality-selector {
       .vjs-icon-placeholder {
         font-size: $control-bar-font-size;
+        span {
+          display: block;
+          margin-left: 24%;
+          margin-right: 24%;
+          font-size: var(--font-xxxsmall);
+          background: var(--color-primary);
+          font-weight: var(--font-weight-bold);
+          border-radius: var(--border-radius);
+          margin-top: -1px;
+          padding-top: 1px;
+        }
       }
     }
 
