@@ -105,7 +105,8 @@ const defaultState = {
   fetchingTxosError: undefined,
   pendingSupportTransactions: {},
   pendingTxos: [],
-
+  walletRollbackToDefault: false,
+  walletReconnectingToDefault: false,
   abandonClaimSupportError: undefined,
 };
 
@@ -320,12 +321,8 @@ export const walletReducer = handleActions(
     },
 
     [ACTIONS.ABANDON_CLAIM_SUPPORT_COMPLETED]: (state: WalletState, action: any): WalletState => {
-      const {
-        claimId,
-        type,
-        txid,
-        effective,
-      }: { claimId: string, type: string, txid: string, effective: string } = action.data;
+      const { claimId, type, txid, effective }: { claimId: string, type: string, txid: string, effective: string } =
+        action.data;
       const pendingtxs = Object.assign({}, state.pendingSupportTransactions);
 
       pendingtxs[claimId] = { txid, type, effective };
@@ -535,14 +532,22 @@ export const walletReducer = handleActions(
       ...state,
       latestBlock: action.data,
     }),
-    [ACTIONS.WALLET_RESTART]: (state: WalletState) => ({
+    [ACTIONS.WALLET_RESTART]: (state: WalletState, action: { data: boolean }) => ({
       ...state,
       walletReconnecting: true,
+      walletReconnectingToDefault: action.data,
+      walletRollbackToDefault: false,
     }),
 
     [ACTIONS.WALLET_RESTART_COMPLETED]: (state: WalletState) => ({
       ...state,
       walletReconnecting: false,
+      walletReconnectingToDefault: false,
+    }),
+
+    [ACTIONS.WALLET_ROLLBACK_DEFAULT]: (state: WalletState) => ({
+      ...state,
+      walletRollbackToDefault: true,
     }),
   },
   defaultState

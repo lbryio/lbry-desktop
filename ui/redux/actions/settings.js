@@ -85,7 +85,7 @@ export function doClearDaemonSetting(key) {
         });
       }
       if (key === DAEMON_SETTINGS.LBRYUM_SERVERS) {
-        dispatch(doWalletReconnect());
+        dispatch(doWalletReconnect(true));
       }
     });
     Lbry.settings_get().then((settings) => {

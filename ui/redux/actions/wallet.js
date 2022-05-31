@@ -524,10 +524,11 @@ export function doSupportAbandonForClaim(claimId, claimType, keep, preview) {
   };
 }
 
-export function doWalletReconnect() {
+export function doWalletReconnect(toDefaultServer = false) {
   return (dispatch, getState) => {
     dispatch({
       type: ACTIONS.WALLET_RESTART,
+      data: toDefaultServer,
     });
     let failed = false;
     // this basically returns null when it's done. :(
@@ -545,15 +546,24 @@ export function doWalletReconnect() {
         });
         dispatch(
           doToast({
-            message: __('Your servers were not available. Check your url and port, or switch back to defaults.'),
+            message: __('Your servers were not available. Rolling back to the default server.'),
             isError: true,
           })
         );
+        dispatch({
+          type: ACTIONS.WALLET_ROLLBACK_DEFAULT,
+        });
       }
     }, FIFTEEN_SECONDS);
     Lbry.wallet_reconnect().then(() => {
       clearTimeout(walletTimeout);
-      if (!failed) dispatch({ type: ACTIONS.WALLET_RESTART_COMPLETED });
+      if (failed) {
+        dispatch({
+          type: ACTIONS.WALLET_ROLLBACK_DEFAULT,
+        });
+      } else {
+        dispatch({ type: ACTIONS.WALLET_RESTART_COMPLETED });
+      }
     });
   };
 }
@@ -709,45 +719,44 @@ export const doCheckPendingTxs = () => (dispatch, getState) => {
 };
 
 // don't need hthis
-export const doSendCashTip = (tipParams, anonymous, userParams, claimId, stripeEnvironment, successCallback) => (
-  dispatch
-) => {
-  Lbryio.call(
-    'customer',
-    'tip',
-    {
-      // round to fix issues with floating point numbers
-      amount: Math.round(100 * tipParams.tipAmount), // convert from dollars to cents
-      creator_channel_name: tipParams.tipChannelName, // creator_channel_name
-      creator_channel_claim_id: tipParams.channelClaimId,
-      tipper_channel_name: anonymous ? '' : userParams.activeChannelName,
-      tipper_channel_claim_id: anonymous ? '' : userParams.activeChannelId,
-      currency: 'USD',
-      anonymous: anonymous,
-      source_claim_id: claimId,
-      environment: stripeEnvironment,
-    },
-    'post'
-  )
-    .then((customerTipResponse) => {
-      dispatch(
-        doToast({
-          message: __("You sent $%tipAmount% as a tip to %tipChannelName%, I'm sure they appreciate it!", {
-            tipAmount: tipParams.tipAmount,
-            tipChannelName: tipParams.tipChannelName,
-          }),
-        })
-      );
+export const doSendCashTip =
+  (tipParams, anonymous, userParams, claimId, stripeEnvironment, successCallback) => (dispatch) => {
+    Lbryio.call(
+      'customer',
+      'tip',
+      {
+        // round to fix issues with floating point numbers
+        amount: Math.round(100 * tipParams.tipAmount), // convert from dollars to cents
+        creator_channel_name: tipParams.tipChannelName, // creator_channel_name
+        creator_channel_claim_id: tipParams.channelClaimId,
+        tipper_channel_name: anonymous ? '' : userParams.activeChannelName,
+        tipper_channel_claim_id: anonymous ? '' : userParams.activeChannelId,
+        currency: 'USD',
+        anonymous: anonymous,
+        source_claim_id: claimId,
+        environment: stripeEnvironment,
+      },
+      'post'
+    )
+      .then((customerTipResponse) => {
+        dispatch(
+          doToast({
+            message: __("You sent $%tipAmount% as a tip to %tipChannelName%, I'm sure they appreciate it!", {
+              tipAmount: tipParams.tipAmount,
+              tipChannelName: tipParams.tipChannelName,
+            }),
+          })
+        );
 
-      if (successCallback) successCallback(customerTipResponse);
-    })
-    .catch((error) => {
-      // show error message from Stripe if one exists (being passed from backend by Beamer's API currently)
-      dispatch(
-        doToast({
-          message: error.message || __('Sorry, there was an error in processing your payment!'),
-          isError: true,
-        })
-      );
-    });
-};
+        if (successCallback) successCallback(customerTipResponse);
+      })
+      .catch((error) => {
+        // show error message from Stripe if one exists (being passed from backend by Beamer's API currently)
+        dispatch(
+          doToast({
+            message: error.message || __('Sorry, there was an error in processing your payment!'),
+            isError: true,
+          })
+        );
+      });
+  };
