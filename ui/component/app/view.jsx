@@ -21,6 +21,7 @@ import usePersistedState from 'effects/use-persisted-state';
 import useConnectionStatus from 'effects/use-connection-status';
 import Spinner from 'component/spinner';
 import LANGUAGES from 'constants/languages';
+import AdsSticky from 'web/component/adsSticky';
 import YoutubeWelcome from 'web/component/youtubeReferralWelcome';
 import {
   useDegradedPerformance,
@@ -558,6 +559,8 @@ function App(props: Props) {
             )}
             {getStatusNag()}
           </React.Suspense>
+
+          <AdsSticky />
         </React.Fragment>
       )}
     </div>
