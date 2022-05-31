@@ -63,6 +63,7 @@ const TIP_HAND_FLIP = 'TIPS/png/tip_hand_flip_$%20_with_border.png';
 const TIP_HAND_FLIP_COIN = 'TIPS/png/tip_hand_flip_coin_with_border.png';
 const TIP_HAND_FLIP_LBC = 'TIPS/png/tip_hand_flip_lbc_with_border.png';
 const DOGE = 'MISC/PNG/doge.png';
+const TWITCH = 'MISC/PNG/twitch.png';
 
 export const FREE_GLOBAL_STICKERS = [
   buildSticker('CAT', CAT_BORDER),
@@ -74,6 +75,7 @@ export const FREE_GLOBAL_STICKERS = [
   buildSticker('FIRE', FIRE_WITH_FRAME),
   buildSticker('SLIME', SLIME_WITH_FRAME),
   buildSticker('PISS', PISS),
+  buildSticker('TWITCH', TWITCH),
   buildSticker('BULL_RIDE', BULL_RIDE),
   buildSticker('ELIMINATED', ELIMINATED),
   buildSticker('EGG_CARTON', EGG_CARTON),
