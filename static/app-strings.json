@@ -1681,7 +1681,6 @@
   "Open Chromecast menu": "Open Chromecast menu",
   "Auto": "Auto",
   "Auto --[Video quality. Short form]--": "Auto",
-  "Auto %quality% --[Video quality popup. Long form.]--": "Auto %quality%",
   "Orig (%quality%) --[Video quality popup. Short form.]--": "Orig (%quality%)",
   "Original (%quality%) --[Video quality popup. Long form.]--": "Original (%quality%)",
   "Original --[Video quality button. Abbreviate to fit space.]--": "Original",
