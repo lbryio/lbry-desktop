@@ -578,6 +578,9 @@ img {
     font-size: 1.2rem;
     // margin-bottom: var(--spacing-l);
   }
+  @media (min-width: $breakpoint-medium) {
+    margin-bottom: -3.7rem;
+  }
 
   @media (max-width: $breakpoint-small) {
     margin-top: var(--spacing-s);

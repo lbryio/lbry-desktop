@@ -152,6 +152,13 @@
     }
   }
 
+  .ads__claim-text--small {
+    .ads__title {
+      font-size: var(--font-small) !important;
+      margin-bottom: 0;
+    }
+  }
+
   .ad__container {
     width: 100%;
   }
