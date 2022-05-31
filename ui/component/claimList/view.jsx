@@ -1,7 +1,7 @@
 // @flow
 import { MAIN_CLASS } from 'constants/classnames';
 import type { Node } from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import classnames from 'classnames';
 import ClaimPreview from 'component/claimPreview';
 import Spinner from 'component/spinner';
@@ -107,7 +107,7 @@ export default function ClaimList(props: Props) {
   } = props;
 
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
-  const [uriBuffer, setUriBuffer] = useState([]);
+  const uriBuffer = React.useRef([]);
 
   // Resolve the index for injectedItem, if provided; else injectedIndex will be 'undefined'.
   const listRef = React.useRef();
@@ -207,19 +207,6 @@ export default function ClaimList(props: Props) {
     />
   );
 
-  React.useEffect(() => {
-    tileUris.forEach((uri, index) => {
-      if (uri) {
-        const inj = getInjectedItem(index);
-        if (inj) {
-          if (uriBuffer.indexOf(index) === -1) {
-            setUriBuffer([index]);
-          }
-        }
-      }
-    });
-  }, [tileUris, injectedItem, lastVisibleIndex, pageSize]);
-
   const getInjectedItem = (index) => {
     if (injectedItem && injectedItem.node) {
       if (typeof injectedItem.node === 'function') {
@@ -243,11 +230,16 @@ export default function ClaimList(props: Props) {
           tileUris.map((uri, index) => {
             if (uri) {
               const inj = getInjectedItem(index);
+              if (inj) {
+                if (!uriBuffer.current.includes(index)) {
+                  uriBuffer.current.push(index);
+                }
+              }
               return (
                 <React.Fragment key={uri}>
                   {inj && inj}
-                  {(index < tileUris.length - uriBuffer.length ||
-                    (pageSize && index < pageSize - uriBuffer.length)) && (
+                  {(index < tileUris.length - uriBuffer.current.length ||
+                    (pageSize && index < pageSize - uriBuffer.current.length)) && (
                     <ClaimPreviewTile
                       uri={uri}
                       showHiddenByUser={showHiddenByUser}

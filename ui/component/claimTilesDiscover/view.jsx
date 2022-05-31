@@ -1,6 +1,6 @@
 // @flow
 import type { Node } from 'react';
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import Button from 'component/button';
 import ClaimPreviewTile from 'component/claimPreviewTile';
 import I18nMessage from 'component/i18nMessage';
@@ -102,7 +102,7 @@ function ClaimTilesDiscover(props: Props) {
   const claimSearchUris = claimSearchResults || [];
   const isUnfetchedClaimSearch = claimSearchResults === undefined;
   const resolvedPinUris = useResolvePins({ pins, claimsById, doResolveClaimIds, doResolveUris });
-  const [uriBuffer, setUriBuffer] = useState([]);
+  const uriBuffer = useRef([]);
 
   const timedOut = claimSearchResults === null;
   const shouldPerformSearch = !fetchingClaimSearch && !timedOut && claimSearchUris.length === 0;
@@ -175,19 +175,6 @@ function ClaimTilesDiscover(props: Props) {
     }
   }, [doClaimSearch, shouldPerformSearch, optionsStringified]);
 
-  React.useEffect(() => {
-    finalUris.forEach((uri, index) => {
-      if (uri) {
-        const inj = getInjectedItem(index);
-        if (inj) {
-          if (uriBuffer.indexOf(index) === -1) {
-            setUriBuffer([index]);
-          }
-        }
-      }
-    });
-  }, [finalUris, injectedItem, lastVisibleIndex, pageSize]);
-
   // --------------------------------------------------------------------------
   // --------------------------------------------------------------------------
 
@@ -220,10 +207,15 @@ function ClaimTilesDiscover(props: Props) {
         ? finalUris.map((uri, i) => {
             if (uri) {
               const inj = getInjectedItem(i);
+              if (inj) {
+                if (!uriBuffer.current.includes(i)) {
+                  uriBuffer.current.push(i);
+                }
+              }
               return (
                 <React.Fragment key={uri}>
                   {inj && inj}
-                  {(i < finalUris.length - uriBuffer.length || i < pageSize - uriBuffer.length) && (
+                  {(i < finalUris.length - uriBuffer.current.length || i < pageSize - uriBuffer.current.length) && (
                     <ClaimPreviewTile
                       showNoSourceClaims={hasNoSource || showNoSourceClaims}
                       uri={uri}
