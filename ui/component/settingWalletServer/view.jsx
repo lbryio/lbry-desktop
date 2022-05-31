@@ -30,6 +30,8 @@ type Props = {
   hasWalletServerPrefs: boolean,
   daemonStatus: DaemonStatus,
   walletReconnecting: boolean,
+  walletRollbackToDefault: boolean,
+  walletReconnectingToDefault: boolean,
 };
 
 function SettingWalletServer(props: Props) {
@@ -42,9 +44,12 @@ function SettingWalletServer(props: Props) {
     customWalletServers,
     hasWalletServerPrefs,
     walletReconnecting,
+    walletRollbackToDefault,
+    walletReconnectingToDefault,
   } = props;
 
-  const [advancedMode, setAdvancedMode] = useState(false);
+  const [usingCustomServer, setUsingCustomServer] = useState(false);
+  const [showCustomServers, setShowCustomServers] = useState(false);
 
   const walletStatus = daemonStatus && daemonStatus.wallet;
   const activeWalletServers: ServerStatus = (walletStatus && walletStatus.servers) || [];
@@ -73,7 +78,7 @@ function SettingWalletServer(props: Props) {
 
   useEffect(() => {
     if (hasWalletServerPrefs) {
-      setAdvancedMode(true);
+      setUsingCustomServer(true);
     }
   }, []);
 
@@ -84,8 +89,20 @@ function SettingWalletServer(props: Props) {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    if (walletRollbackToDefault) {
+      doClear();
+    }
+  }, [walletRollbackToDefault]);
+
+  useEffect(() => {
+    if (usingCustomServer) {
+      setShowCustomServers(true);
+    }
+  }, [usingCustomServer]);
+
   function doClear() {
-    setAdvancedMode(false);
+    setUsingCustomServer(false);
     clearWalletServers();
   }
 
@@ -112,7 +129,7 @@ function SettingWalletServer(props: Props) {
         <FormField
           type="radio"
           name="default_wallet_servers"
-          checked={!advancedMode}
+          checked={!usingCustomServer}
           label={__('Use official LBRY wallet servers')}
           onChange={(e) => {
             if (e.target.checked) {
@@ -123,9 +140,9 @@ function SettingWalletServer(props: Props) {
         <FormField
           type="radio"
           name="custom_wallet_servers"
-          checked={advancedMode}
+          checked={usingCustomServer}
           onChange={(e) => {
-            setAdvancedMode(e.target.checked);
+            setUsingCustomServer(e.target.checked);
             if (e.target.checked && customWalletServers.length) {
               setCustomWalletServers(stringifyServerParam(customWalletServers));
             }
@@ -133,7 +150,7 @@ function SettingWalletServer(props: Props) {
           label={__('Use custom wallet servers')}
         />
 
-        {advancedMode && (
+        {showCustomServers && (
           <div>
             {serverConfig &&
               serverConfig.map((entry, index) => {
@@ -151,7 +168,11 @@ function SettingWalletServer(props: Props) {
                       {host}:{port}
                     </h3>
                     <span className="help">
-                      {available ? __('Connected') : walletReconnecting ? __('Connecting...') : __('Not connected')}
+                      {available
+                        ? __('Connected')
+                        : walletReconnecting && !walletReconnectingToDefault
+                        ? __('Connecting...')
+                        : __('Not connected')}
                     </span>
                     <Button
                       button="close"

@@ -1,5 +1,9 @@
 import { connect } from 'react-redux';
-import { selectIsWalletReconnecting } from 'redux/selectors/wallet';
+import {
+  selectIsWalletReconnecting,
+  selectWalletRollbackToDefault,
+  selectWalletConnectingToDefault,
+} from 'redux/selectors/wallet';
 import * as DAEMON_SETTINGS from 'constants/daemon_settings';
 import {
   doSetDaemonSetting,
@@ -15,6 +19,8 @@ const select = (state) => ({
   customWalletServers: selectSavedWalletServers(state),
   hasWalletServerPrefs: selectHasWalletServerPrefs(state),
   walletReconnecting: selectIsWalletReconnecting(state),
+  walletRollbackToDefault: selectWalletRollbackToDefault(state),
+  walletReconnectingToDefault: selectWalletConnectingToDefault(state),
 });
 
 const perform = (dispatch) => ({

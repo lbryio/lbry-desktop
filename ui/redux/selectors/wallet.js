@@ -260,6 +260,13 @@ export const selectFilteredTransactionCount = createSelector(
 
 export const selectIsWalletReconnecting = createSelector(selectState, (state) => state.walletReconnecting);
 
+export const selectWalletRollbackToDefault = createSelector(selectState, (state) => state.walletRollbackToDefault);
+
+export const selectWalletConnectingToDefault = createSelector(
+  selectState,
+  (state) => state.walletReconnectingToDefault
+);
+
 export const selectIsFetchingUtxoCounts = createSelector(selectState, (state) => state.fetchingUtxoCounts);
 
 export const selectIsConsolidatingUtxos = createSelector(selectState, (state) => state.consolidatingUtxos);
