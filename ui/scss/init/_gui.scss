@@ -1355,3 +1355,38 @@ textarea:focus-visible {
 input:not(input:-webkit-autofill)::-webkit-contacts-auto-fill-button {
   background-color: var(--color-text);
 }
+
+#onetrust-consent-sdk #onetrust-banner-sdk {
+  background-color: var(--color-header-background);
+  backdrop-filter: blur(4px);
+
+  #onetrust-policy-title,
+  #onetrust-policy-text,
+  .ot-dpd-title,
+  .ot-dpd-desc {
+    color: var(--color-text);
+
+    .ot-link-btn {
+      color: var(--color-primary);
+    }
+  }
+
+  #onetrust-button-group {
+    button {
+      border: 0px solid transparent;
+      border-radius: var(--border-radius);
+      &:hover {
+        opacity: 1;
+      }
+    }
+    #onetrust-accept-btn-handler,
+    #onetrust-reject-all-handler {
+      background-color: var(--color-primary);
+    }
+
+    #onetrust-pc-btn-handler {
+      background-color: var(--color-header-button);
+      color: var(--color-text);
+    }
+  }
+}
