@@ -538,7 +538,7 @@
 $control-bar-height: 2.5rem;
 $control-bar-font-size: 0.9rem;
 $control-bar-popup-font-size: 0.8rem;
-$control-bar-icon-size: 2rem;
+$control-bar-icon-size: 1.9rem;
 
 .video-js-parent {
   height: 100%;
@@ -625,7 +625,7 @@ $control-bar-icon-size: 2rem;
     }
 
     .vjs-quality-selector {
-      margin-top: -5px;
+      margin-top: -6px;
       .vjs-icon-placeholder {
         font-size: $control-bar-font-size;
         span {
@@ -639,7 +639,7 @@ $control-bar-icon-size: 2rem;
           margin-top: -1px;
           //padding-top: 1px;
           padding-top: 0;
-          line-height: 14px;
+          line-height: 13px;
         }
       }
     }
@@ -649,7 +649,7 @@ $control-bar-icon-size: 2rem;
       .vjs-icon-placeholder {
         // Compensate: these icons in Font VideoJs are smaller than their peers.
         &:before {
-          font-size: calc(#{$control-bar-icon-size} * 1.2);
+          font-size: calc(#{$control-bar-icon-size} * 1.1);
         }
       }
     }
@@ -685,10 +685,10 @@ $control-bar-icon-size: 2rem;
 
     .vjs-chromecast-button,
     .vjs-airplay-button {
-      margin-top: -3px;
+      margin-top: -4px;
       margin-left: var(--spacing-xs);
       .vjs-icon-placeholder {
-        $chromecast-icon-size: 30px;
+        $chromecast-icon-size: 25px;
         width: $chromecast-icon-size;
         height: $chromecast-icon-size;
       }
@@ -717,6 +717,9 @@ $control-bar-icon-size: 2rem;
     .vjs-button--play-previous,
     .vjs-button--play-next,
     .vjs-mute-control {
+      .vjs-icon-placeholder::before {
+        font-size: 1.7rem;
+      }
       @media (max-width: $breakpoint-small) {
         width: 2.25rem;
       }
@@ -724,7 +727,7 @@ $control-bar-icon-size: 2rem;
 
     .vjs-button--play-previous,
     .vjs-button--play-next {
-      margin-top: -4px;
+      margin-top: -3px;
     }
     .vjs-button--play-next {
       margin-left: var(--spacing-xs);

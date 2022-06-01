@@ -330,7 +330,7 @@ button.vjs-big-play-button {
 
 .vjs-seek-to-live-control {
   margin-top: -4px !important;
-  margin-left: var(--spacing-xs) !important;
+  margin-left: calc(var(--spacing-s) + 4px) !important;
   @media (max-width: $breakpoint-small) {
     padding-left: 0 !important;
   }
