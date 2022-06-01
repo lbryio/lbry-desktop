@@ -107,9 +107,9 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
       nextRecommendedUri &&
       viewMode === VIEW_ALL_RELATED
     ) {
-      onRecommendationsLoaded(uri, claimId, uuid);
+      onRecommendationsLoaded(claimId, recommendedContentUris, uuid);
     }
-  }, [uri, recommendedContentUris, onRecommendationsLoaded, claimId, nextRecommendedUri, viewMode, uuid]);
+  }, [recommendedContentUris, onRecommendationsLoaded, claimId, nextRecommendedUri, viewMode, uuid]);
 
   function handleRecommendationClicked(e, clickedClaim) {
     if (claim) {

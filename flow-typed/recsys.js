@@ -4,7 +4,7 @@ declare type Recsys = {
 
   saveEntries: () => void,
   onClickedRecommended: (parentClaimId: ClaimId, newClaimId: ClaimId) => void,
-  onRecsLoaded: (uri: ?string, claimId: ClaimId, uuid: string) => void,
+  onRecsLoaded: (claimId: ClaimId, uris: Array<string>, uuid: string) => void,
   createRecsysEntry: (claimId: ClaimId, parentUuid?: ?string, uuid?: string) => void,
   sendRecsysEntry: (claimId: ClaimId, isTentative?: boolean) => ?Promise<?Response>,
   sendEntries: (entries: ?{ [ClaimId]: RecsysEntry }, isResumedSend: boolean) => void,
