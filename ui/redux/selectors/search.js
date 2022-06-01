@@ -52,31 +52,16 @@ export const makeSelectHasReachedMaxResultsLength = (query: string): ((state: St
     return hasReachedMaxResultsLength[query];
   });
 
-export const selectRecommendedContentRawForUri = createCachedSelector(
-  (state, uri) => uri,
-  selectClaimsByUri,
-  selectShowMatureContent,
-  selectClaimIsNsfwForUri, // (state, uri)
-  selectSearchResultByQuery,
-  (uri, claimsByUri, matureEnabled, isMature, searchUrisByQuery) => {
-    const claim = claimsByUri[uri];
-    if (claim?.value?.title) {
-      const options = getRecommendationSearchOptions(matureEnabled, isMature, claim.claim_id);
-      const normalizedSearchQuery = getRecommendationSearchKey(claim.value.title, options);
-      return searchUrisByQuery[normalizedSearchQuery];
-    }
-    return undefined;
-  }
-)((state, uri) => String(uri));
-
 export const selectRecommendedContentForUri = createCachedSelector(
   (state, uri) => uri,
   selectHistory,
-  selectRecommendedContentRawForUri, // (state, uri)
   selectClaimsByUri,
+  selectShowMatureContent,
   selectMutedChannels,
   selectAllCostInfoByUri,
-  (uri, history, rawRecommendations, claimsByUri, blockedChannels, costInfoByUri) => {
+  selectSearchResultByQuery,
+  selectClaimIsNsfwForUri, // (state, uri)
+  (uri, history, claimsByUri, matureEnabled, blockedChannels, costInfoByUri, searchUrisByQuery, isMature) => {
     const claim = claimsByUri[uri];
     if (!claim) return;
 
@@ -84,7 +69,13 @@ export const selectRecommendedContentForUri = createCachedSelector(
     // always grab the claimId - this value won't change for filtering
     const currentClaimId = claim.claim_id;
 
-    const searchResult = rawRecommendations;
+    const { title } = claim.value;
+    if (!title) return;
+
+    const options = getRecommendationSearchOptions(matureEnabled, isMature, claim.claim_id);
+    const normalizedSearchQuery = getRecommendationSearchKey(title, options);
+
+    let searchResult = searchUrisByQuery[normalizedSearchQuery];
 
     if (searchResult) {
       // Filter from recommended: The same claim and blocked channels
