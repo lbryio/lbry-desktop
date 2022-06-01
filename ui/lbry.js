@@ -1,6 +1,6 @@
 // @flow
 import analytics from 'analytics';
-import { FETCH_TIMEOUT } from 'constants/errors';
+import { FETCH_TIMEOUT, SDK_FETCH_TIMEOUT } from 'constants/errors';
 import { NO_AUTH, X_LBRY_AUTH_TOKEN } from 'constants/token';
 import fetchWithTimeout from 'util/fetch';
 
@@ -245,7 +245,7 @@ function resolveFetchErrorMsg(method: string, response: Response | string) {
         return `${method}: ${response.statusText} (${response.status})`;
     }
   } else if (response === FETCH_TIMEOUT) {
-    return `${method}: Your action timed out, but may have been completed.`;
+    return `${method}: ${SDK_FETCH_TIMEOUT}`; // Don't translate as clients will do a string match.
   } else {
     return `${method}: fetch failed.`;
   }

@@ -2276,5 +2276,7 @@
   "Clear History": "Clear History",
   "Reset homepage to defaults?": "Reset homepage to defaults?",
   "Homepage restored to default.": "Homepage restored to default.",
+  "The transaction timed out, but may have been completed. Please wait a few minutes, then check your wallet transactions before attempting to retry.": "The transaction timed out, but may have been completed. Please wait a few minutes, then check your wallet transactions before attempting to retry.",
+  "The transaction timed out, but may have been completed. Please wait a few minutes, then check your wallet transactions before attempting to retry. Note that due to current limitations, we are unable to re-link the tip sent to a new comment.": "The transaction timed out, but may have been completed. Please wait a few minutes, then check your wallet transactions before attempting to retry. Note that due to current limitations, we are unable to re-link the tip sent to a new comment.",
   "--end--": "--end--"
 }

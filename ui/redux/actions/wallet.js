@@ -1,6 +1,9 @@
 import * as ACTIONS from 'constants/action_types';
+import * as MODALS from 'constants/modal_types';
+import * as ERRORS from 'constants/errors';
 import Lbry from 'lbry';
 import { Lbryio } from 'lbryinc';
+import { doOpenModal } from 'redux/actions/app';
 import { doToast } from 'redux/actions/notifications';
 import {
   selectBalance,
@@ -345,7 +348,7 @@ export function doSetDraftTransactionAddress(address) {
   };
 }
 
-export function doSendTip(params, isSupport, successCallback, errorCallback, shouldNotify = true) {
+export function doSendTip(params, isSupport, successCallback, errorCallback, shouldNotify = true, purpose = '') {
   return (dispatch, getState) => {
     const state = getState();
     const balance = selectBalance(state);
@@ -395,18 +398,32 @@ export function doSendTip(params, isSupport, successCallback, errorCallback, sho
       const baseMsg = isSupport ? __('Boost transaction failed.') : __('Tip transaction failed.');
       const errMsg = typeof err === 'object' ? err.message : err;
 
-      // For now, spew to console for persistence until the Status Log component is ready.
-      // eslint-disable-next-line no-console
-      console.log(`${baseMsg}\n • ${errMsg}`);
+      if (errMsg.endsWith(ERRORS.SDK_FETCH_TIMEOUT)) {
+        let msg;
 
-      dispatch(
-        doToast({
-          message: baseMsg,
-          subMessage: errMsg,
-          isError: true,
-          duration: 'long',
-        })
-      );
+        switch (purpose) {
+          case 'comment':
+            msg = __(
+              'The transaction timed out, but may have been completed. Please wait a few minutes, then check your wallet transactions before attempting to retry. Note that due to current limitations, we are unable to re-link the tip sent to a new comment.'
+            );
+            break;
+
+          default:
+            msg = __(
+              'The transaction timed out, but may have been completed. Please wait a few minutes, then check your wallet transactions before attempting to retry.'
+            );
+            break;
+        }
+
+        dispatch(
+          doOpenModal(MODALS.CONFIRM, {
+            title: baseMsg,
+            body: msg,
+            onConfirm: (closeModal) => closeModal(),
+            hideCancel: true,
+          })
+        );
+      }
 
       dispatch({
         type: ACTIONS.SUPPORT_TRANSACTION_FAILED,

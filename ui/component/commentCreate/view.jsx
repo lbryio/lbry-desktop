@@ -72,7 +72,14 @@ type Props = {
     preferredCurrency: string,
     (any) => void
   ) => string,
-  doSendTip: (params: {}, isSupport: boolean, successCb: (any) => void, errorCb: (any) => void, boolean) => void,
+  doSendTip: (
+    params: {},
+    isSupport: boolean,
+    successCb: (any) => void,
+    errorCb: (any) => void,
+    boolean,
+    string
+  ) => void,
   doOpenModal: (id: string, any) => void,
   preferredCurrency: string,
   myChannelClaimIds: ?Array<string>,
@@ -314,7 +321,8 @@ export function CommentCreate(props: Props) {
           // reset the frontend so people can send a new comment
           setSubmitting(false);
         },
-        false
+        false,
+        'comment'
       );
     } else {
       const tipParams: TipParams = { tipAmount: Math.round(tipAmount * 100) / 100, tipChannelName, channelClaimId };
