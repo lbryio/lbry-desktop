@@ -204,7 +204,7 @@ $control-bar-icon-size: 0.8rem;
   border-radius: var(--border-radius);
   border: 2px solid var(--color-header-background);
   max-height: 20em;
-  margin-bottom: -2px; // Prevents accidental dismissal when the gap is hovered.
+  margin-bottom: -3px; // Prevents accidental dismissal when the gap is hovered.
 
   li {
     font-size: $control-bar-popup-font-size;
