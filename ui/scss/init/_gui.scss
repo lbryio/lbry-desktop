@@ -1351,3 +1351,7 @@ input:focus-visible:not(.wunderbar__input),
 textarea:focus-visible {
   box-shadow: 0px 0px 0px 2px var(--color-primary) inset;
 }
+
+input:not(input:-webkit-autofill)::-webkit-contacts-auto-fill-button {
+  background-color: var(--color-text);
+}
