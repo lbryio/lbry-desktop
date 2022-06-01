@@ -34,34 +34,46 @@ export default function AdsSticky(props: Props) {
   const {
     location: { pathname },
   } = useHistory();
+  const inAllowedPath = isPathAllowed(pathname);
+  const [refresh, setRefresh] = React.useState(0);
+
+  function isPathAllowed(pathname) {
+    for (const x of PATH_BLACKLIST) {
+      if ((x.exact && pathname === x.path) || (!x.exact && pathname.startsWith(x.path))) {
+        return false;
+      }
+    }
+    return true;
+  }
 
   // -- Mount script; 1 per session.
   React.useEffect(() => {
-    if (shouldShowAds && !gScript && !inIFrame()) {
+    // NOTE: there is a bug where AdsSticky cannot be loaded on a page where
+    // AdsBanner exists. As long as AdsSticky is loaded in a page without
+    // AdsBanner, they both can still be visible together later, says from
+    // navigating around.
+    //
+    // Adding inAllowedPath to the logic is a band-aid that relies on AdsBanner
+    // only being used in Homepage for now, which we currently happen to not
+    // place AdsSticky.
+
+    if (shouldShowAds && inAllowedPath && !gScript && !inIFrame()) {
       gScript = document.createElement('script');
       gScript.src = 'https://adncdnend.azureedge.net/adtags/odysee.adn.js';
       gScript.async = true;
-
+      gScript.addEventListener('load', () => setRefresh(Date.now()));
       // $FlowFixMe
       document.body.appendChild(gScript);
     }
-  }, [shouldShowAds]);
+  }, [shouldShowAds, inAllowedPath]);
 
   // -- Update visibility per pathname
   React.useEffect(() => {
     const container = window[OUTBRAIN_CONTAINER_KEY];
     if (container) {
-      for (const x of PATH_BLACKLIST) {
-        const found = (x.exact && pathname === x.path) || (!x.exact && pathname.startsWith(x.path));
-        if (found) {
-          container.style.display = 'none';
-          return;
-        }
-      }
-
-      container.style.display = '';
+      container.style.display = inAllowedPath ? '' : 'none';
     }
-  }, [pathname]);
+  }, [inAllowedPath, refresh]);
 
   // Nothing for us to mount; the ad script will handle everything.
   return null;
