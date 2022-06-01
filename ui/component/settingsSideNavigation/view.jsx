@@ -43,6 +43,11 @@ const SIDE_LINKS: Array<SideNavLink> = [
     section: SETTINGS_GRP.SYSTEM,
     icon: ICONS.SETTINGS,
   },
+  {
+    title: 'Content Hosting',
+    section: SETTINGS_GRP.STORAGE,
+    icon: ICONS.PUBLISH,
+  },
 ];
 
 export default function SettingsSideNavigation() {

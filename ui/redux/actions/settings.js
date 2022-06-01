@@ -104,35 +104,59 @@ export function doSetDaemonSetting(key, value, doNotDispatch = false) {
   return (dispatch, getState) => {
     const state = getState();
     const ready = selectPrefsReady(state);
-
     if (!ready) {
       return dispatch(doAlertWaitingForSync());
     }
-
+    dispatch({
+      type: ACTIONS.SETTING_DAEMON_SETTINGS,
+      data: {
+        val: true,
+      },
+    });
     const newSettings = {
       key,
       value: !value && value !== false ? null : value,
     };
-    Lbry.settings_set(newSettings).then((newSetting) => {
-      if (SDK_SYNC_KEYS.includes(key) && !doNotDispatch) {
+    Lbry.settings_set(newSettings)
+      .then((newSetting) => {
+        if (SDK_SYNC_KEYS.includes(key) && !doNotDispatch) {
+          dispatch({
+            type: ACTIONS.SHARED_PREFERENCE_SET,
+            data: { key: key, value: newSetting[key] },
+          });
+        }
+        // hardcoding this in lieu of a better solution
+        if (key === DAEMON_SETTINGS.LBRYUM_SERVERS) {
+          dispatch(doWalletReconnect());
+          // todo: add sdk reloadsettings() (or it happens automagically?)
+        }
+      })
+      .then(() => {
+        dispatch(doFetchDaemonSettings());
+      })
+      .then(() => {
         dispatch({
-          type: ACTIONS.SHARED_PREFERENCE_SET,
-          data: { key: key, value: newSetting[key] },
+          type: ACTIONS.SETTING_DAEMON_SETTINGS,
+          data: {
+            val: false,
+          },
         });
-      }
-      // hardcoding this in lieu of a better solution
-      if (key === DAEMON_SETTINGS.LBRYUM_SERVERS) {
-        dispatch(doWalletReconnect());
-        // todo: add sdk reloadsettings() (or it happens automagically?)
-      }
-    });
-    dispatch(doFetchDaemonSettings());
+      })
+      .catch((e) => {
+        console.log('error setting or fetching daemon setting', e.message);
+        dispatch({
+          type: ACTIONS.SETTING_DAEMON_SETTINGS,
+          data: {
+            val: false,
+          },
+        });
+      });
   };
 }
 
 export function doCleanBlobs() {
   return (dispatch) => {
-    Lbry.blob_clean().then(() => {
+    return Lbry.blob_clean().then(() => {
       dispatch(doFetchDaemonSettings());
       return 'done';
     });

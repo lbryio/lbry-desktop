@@ -548,6 +548,7 @@ body {
     border-top: unset;
 
     .settings__row {
+      align-items: flex-start;
       padding: var(--spacing-s);
       border-bottom: 1px solid var(--color-border);
       .checkbox {

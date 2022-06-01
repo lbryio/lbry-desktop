@@ -293,6 +293,9 @@
   &:only-child {
     border-top: none;
   }
+  &.section__actions--between {
+    align-items: flex-start;
+  }
 }
 
 .card__main-actions.settings__row {
@@ -301,6 +304,7 @@
     margin-top: 0;
     margin-bottom: 0;
   }
+  margin-bottom: var(--spacing-m);
 }
 
 .settings__row--title {

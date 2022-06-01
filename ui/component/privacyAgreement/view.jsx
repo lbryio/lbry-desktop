@@ -92,7 +92,7 @@ function PrivacyAgreement(props: Props) {
               )}
             </fieldset>
             <div className={'card__actions'}>
-              <Button button="primary" label={__(`Let's go`)} disabled={!share} type="submit" />
+              <Button button="primary" label={__(`Next`)} disabled={!share} type="submit" />
             </div>
             {share === NONE && (
               <p className="help">

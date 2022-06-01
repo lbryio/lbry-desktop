@@ -83,7 +83,7 @@
   // Input
   --color-input-bg-selected: var(--color-primary-alt);
   --color-input-color: #111111;
-  --color-input-label: var(--color-gray-5);
+  --color-input-label: var(--color-text-base);
   --color-input-placeholder: #212529;
   --color-input-bg: var(--color-white);
   --color-input-border: var(--color-border);
@@ -206,4 +206,13 @@
 
   --mui-background: #fff;
   --mui-button: var(--color-header-button);
+
+  // Storage vis
+  --color-storage-published: var(--color-brand-blue);
+  --color-storage-free: var(--color-gray-4);
+  --color-storage-used: var(--color-gray-7);
+  --color-storage-auto: #ff993c;
+  --color-storage-auto-free: #9f5f25;
+  --color-storage-viewed: #a93cff;
+  --color-storage-viewed-free: #602192;
 }

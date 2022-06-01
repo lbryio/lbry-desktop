@@ -14,6 +14,7 @@ settingLanguage.push('en');
 
 const defaultState = {
   isNight: false,
+  isSettingDaemonSettings: false,
   findingFFmpeg: false,
   loadedLanguages: [...Object.keys(window.i18n_messages), 'en'] || ['en'],
   customWalletServers: [],
@@ -91,6 +92,11 @@ reducers[ACTIONS.REHYDRATE] = (state, action) => {
 reducers[ACTIONS.FINDING_FFMPEG_STARTED] = (state) =>
   Object.assign({}, state, {
     findingFFmpeg: true,
+  });
+
+reducers[ACTIONS.SETTING_DAEMON_SETTINGS] = (state, action) =>
+  Object.assign({}, state, {
+    isSettingDaemonSettings: action.data.val,
   });
 
 reducers[ACTIONS.FINDING_FFMPEG_COMPLETED] = (state) =>

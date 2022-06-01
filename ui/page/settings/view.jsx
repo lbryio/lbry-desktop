@@ -5,6 +5,7 @@ import SettingAccount from 'component/settingAccount';
 import SettingAppearance from 'component/settingAppearance';
 import SettingContent from 'component/settingContent';
 import SettingSystem from 'component/settingSystem';
+import SettingStorage from 'component/settingStorage';
 
 type DaemonSettings = {
   download_dir: string,
@@ -51,6 +52,7 @@ class SettingsPage extends React.PureComponent<Props> {
             <SettingAccount />
             <SettingContent />
             <SettingSystem />
+            <SettingStorage />
           </div>
         )}
       </Page>
