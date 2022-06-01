@@ -538,7 +538,7 @@
 $control-bar-height: 2.5rem;
 $control-bar-font-size: 0.8rem;
 $control-bar-popup-font-size: 0.8rem;
-$control-bar-icon-size: 0.8rem;
+$control-bar-icon-size: 2rem;
 
 .video-js-parent {
   height: 100%;
@@ -563,8 +563,22 @@ $control-bar-icon-size: 0.8rem;
 
   // control-bar: time
   .vjs-control-bar {
+    .vjs-volume-panel {
+      .vjs-volume-horizontal {
+        margin-top: 0 !important;
+        height: $control-bar-height !important;
+      }
+      &:hover {
+        .vjs-volume-horizontal {
+          margin-top: 0;
+          height: $control-bar-height !important;
+        }
+      }
+    }
+
     .vjs-time-control {
-      line-height: $control-bar-height;
+      margin-left: var(--spacing-xs);
+      line-height: $control-bar-icon-size;
       font-size: $control-bar-font-size;
       display: flex;
     }
@@ -600,27 +614,31 @@ $control-bar-icon-size: 0.8rem;
     }
 
     .vjs-icon-placeholder {
-      font-size: $control-bar-icon-size; // videojs icon font
+      // font-size: $control-bar-icon-size; // videojs icon font
       line-height: $control-bar-height;
     }
 
     .vjs-icon-placeholder::before {
-      line-height: $control-bar-height;
+      font-size: $control-bar-icon-size;
+      line-height: $control-bar-icon-size;
     }
 
     .vjs-quality-selector {
+      margin-top: -5px;
       .vjs-icon-placeholder {
         font-size: $control-bar-font-size;
         span {
           display: block;
           margin-left: 24%;
           margin-right: 24%;
-          font-size: var(--font-xxxsmall);
+          font-size: 0.6rem;
           background: var(--color-primary);
           font-weight: var(--font-weight-bold);
-          border-radius: var(--border-radius);
+          border-radius: 4px;
           margin-top: -1px;
-          padding-top: 1px;
+          //padding-top: 1px;
+          padding-top: 0;
+          line-height: 14px;
         }
       }
     }
@@ -629,19 +647,26 @@ $control-bar-icon-size: 0.8rem;
     .vjs-fullscreen-control {
       .vjs-icon-placeholder {
         // Compensate: these icons in Font VideoJs are smaller than their peers.
-        font-size: calc(#{$control-bar-icon-size} * 1.2);
+        &:before {
+          font-size: calc(#{$control-bar-icon-size} * 1.2);
+        }
       }
     }
 
     .vjs-playback-rate {
+      margin-left: var(--spacing-xs);
       .vjs-playback-rate-value {
         font-size: $control-bar-font-size;
-        line-height: $control-bar-height;
+        line-height: $control-bar-icon-size;
       }
 
       .vjs-menu {
         width: 10em; // Extend the width to prevent a potential scrollbar from blocking the text.
         left: -3em; // Center the popup on top of the button that invoked it.
+      }
+
+      @media (max-width: $breakpoint-small) {
+        margin-right: calc(var(--spacing-s) * -1) !important;
       }
     }
 
@@ -659,8 +684,10 @@ $control-bar-icon-size: 0.8rem;
 
     .vjs-chromecast-button,
     .vjs-airplay-button {
+      margin-top: -3px;
+      margin-left: var(--spacing-xs);
       .vjs-icon-placeholder {
-        $chromecast-icon-size: 21px;
+        $chromecast-icon-size: 30px;
         width: $chromecast-icon-size;
         height: $chromecast-icon-size;
       }
@@ -671,14 +698,16 @@ $control-bar-icon-size: 0.8rem;
   .vjs-control-bar {
     .vjs-button--play-previous:first-child,
     .vjs-play-control:first-child {
-      margin-left: var(--spacing-xs);
+      margin-left: var(--spacing-s);
+      margin-right: var(--spacing-xs);
       @media (max-width: $breakpoint-small) {
         margin-left: 0;
       }
     }
 
     .vjs-fullscreen-control {
-      margin-right: var(--spacing-xs);
+      margin-right: var(--spacing-s);
+      margin-left: var(--spacing-xs);
       @media (max-width: $breakpoint-small) {
         margin-right: 0;
       }

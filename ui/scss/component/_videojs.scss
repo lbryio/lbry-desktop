@@ -32,6 +32,15 @@ $control-bar-icon-size: 0.8rem;
       }
     }
   }
+  @media (max-width: $breakpoint-small) {
+    .vjs-control {
+      margin-left: 0 !important;
+      margin-right: 0 !important;
+    }
+    .vjs-time-control {
+      padding-left: 0 !important;
+    }
+  }
 
   // Progress Bar
   .vjs-progress-control.vjs-control {
@@ -126,7 +135,7 @@ $control-bar-icon-size: 0.8rem;
 
     .vjs-volume-control.vjs-volume-horizontal {
       transition: 0.1s;
-      margin-top: 2px;
+      margin-top: -2px !important;
     }
   }
 }
@@ -195,7 +204,7 @@ $control-bar-icon-size: 0.8rem;
   border-radius: var(--border-radius);
   border: 2px solid var(--color-header-background);
   max-height: 20em;
-  margin-bottom: calc(var(--spacing-xxs) * -1); // Prevents accidental dismissal when the gap is hovered.
+  margin-bottom: -2px; // Prevents accidental dismissal when the gap is hovered.
 
   li {
     font-size: $control-bar-popup-font-size;
@@ -366,10 +375,6 @@ button.vjs-big-play-button {
 .vjs-playback-rate {
   order: 13 !important;
 }
-.vjs-chromecast-button,
-.vjs-airplay-button {
-  order: 13 !important;
-}
 .vjs-quality-selector {
   order: 14 !important;
   display: flex;
@@ -379,11 +384,16 @@ button.vjs-big-play-button {
     line-height: 1rem !important;
   }
 }
-.vjs-button--theater-mode {
+.vjs-chromecast-button,
+.vjs-airplay-button {
   order: 15 !important;
 }
-.vjs-fullscreen-control {
+
+.vjs-button--theater-mode {
   order: 16 !important;
+}
+.vjs-fullscreen-control {
+  order: 17 !important;
 }
 
 // livestream player
