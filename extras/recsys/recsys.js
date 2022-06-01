@@ -1,7 +1,7 @@
 // @flow
 import { RECSYS_ENDPOINT } from 'config';
 import { selectUser } from 'redux/selectors/user';
-import { makeSelectRecommendedRecsysIdForClaimId } from 'redux/selectors/search';
+import { makeSelectRecommendedRecsysIdForClaimId, selectRecommendedContentRawForUri } from 'redux/selectors/search';
 import { v4 as Uuidv4 } from 'uuid';
 import { parseURI } from 'util/lbryURI';
 import { getAuthToken } from 'util/saved-passwords';
@@ -82,13 +82,17 @@ const recsys: Recsys = {
    * plus recommended content, recsysId, etc.
    * Called from recommendedContent component
    */
-  onRecsLoaded: function (claimId, uris, uuid = '') {
+  onRecsLoaded: function (uri, claimId, uuid = '') {
     if (window && window.store) {
       const state = window.store.getState();
+      const rawRecommendations = selectRecommendedContentRawForUri(state, uri);
+      const rawUris = rawRecommendations ? rawRecommendations.uris : null;
+
       if (!recsys.entries[claimId]) {
         recsys.createRecsysEntry(claimId, null, uuid);
       }
-      const claimIds = getClaimIdsFromUris(uris);
+
+      const claimIds = getClaimIdsFromUris(rawUris);
       recsys.entries[claimId]['recsysId'] = makeSelectRecommendedRecsysIdForClaimId(claimId)(state) || recsysId;
       recsys.entries[claimId]['pageLoadedAt'] = Date.now();
 
