@@ -343,6 +343,11 @@
   padding-top: 3px;
   // padding-bottom:4px !important;
   height: 27px !important;
+  @media (max-width: 722px) {
+    position: fixed !important;
+    top: unset !important;
+    bottom: 97px;
+  }
 }
 
 /*
