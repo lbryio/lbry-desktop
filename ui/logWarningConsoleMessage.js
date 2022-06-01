@@ -10,21 +10,21 @@ export default function doLogWarningConsoleMessage() {
 
   console.log(
     '%cIf someone told you to copy / paste something here you have a chance of being scammed.',
-    style.normalText
+    style.normalText,
   );
 
   console.log(
     '%cPasting anything in here could give attackers access to your LBRY Credits or wallet.',
-    style.normalText
+    style.normalText,
   );
 
   console.log(
     "%cIf you don't understand exactly what you are doing here, please close this window and keep your LBRY Credits/wallet safe.",
-    style.redText
+    style.redText,
   );
 
   console.log(
     '%cIf you do understand exactly what you are doing, joins us, earn LBRY Credits, and make LBRY better! All of LBRY is open-source and we have a sweet secret handshake. Get started at https://lbry.tech/contribute',
-    style.normalText
+    style.normalText,
   );
 }

@@ -226,7 +226,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   enableBatching(persistedReducer),
   {}, // initial state
-  composeEnhancers(applyMiddleware(...middleware))
+  composeEnhancers(applyMiddleware(...middleware)),
 );
 
 const persistor = persistStore(store);

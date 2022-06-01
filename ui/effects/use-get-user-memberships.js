@@ -8,7 +8,7 @@ export default function useGetUserMemberships(
   convertClaimUrlsToIds: any, //
   doFetchUserMemberships: (string) => void, // fetch membership values and save in redux
   dependency?: any,
-  alreadyClaimIds?: boolean
+  alreadyClaimIds?: boolean,
 ) {
   // instantiate variable if it doesn't exist yet
   if (!window.checkedMemberships) window.checkedMemberships = {};
@@ -39,7 +39,7 @@ export default function useGetUserMemberships(
       const channelsToFetch = dedupedChannelIds.filter(
         // if value exists or is null it's been through the backend
         (channelClaimId) =>
-          !window.checkedMemberships[channelClaimId] && window.checkedMemberships[channelClaimId] !== null
+          !window.checkedMemberships[channelClaimId] && window.checkedMemberships[channelClaimId] !== null,
       );
 
       // create csv string for backend

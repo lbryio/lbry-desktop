@@ -277,7 +277,7 @@ export function doSendDraftTransaction(address, amount) {
         doToast({
           title: __('Insufficient credits'),
           message: __('Insufficient credits'),
-        })
+        }),
       );
       return;
     }
@@ -297,7 +297,7 @@ export function doSendDraftTransaction(address, amount) {
             subMessage: `${amount} LBC`,
             linkText: __('History'),
             linkTarget: '/wallet',
-          })
+          }),
         );
       } else {
         dispatch({
@@ -308,7 +308,7 @@ export function doSendDraftTransaction(address, amount) {
           doToast({
             message: __('Transaction failed'),
             isError: true,
-          })
+          }),
         );
       }
     };
@@ -323,7 +323,7 @@ export function doSendDraftTransaction(address, amount) {
           message: __('Transaction failed'),
           subMessage: resolveApiMessage(error?.message),
           isError: true,
-        })
+        }),
       );
     };
 
@@ -362,7 +362,7 @@ export function doSendTip(params, isSupport, successCallback, errorCallback, sho
         doToast({
           message: __('Insufficient credits'),
           isError: true,
-        })
+        }),
       );
       return;
     }
@@ -377,7 +377,7 @@ export function doSendTip(params, isSupport, successCallback, errorCallback, sho
             subMessage: `${params.amount} LBC`,
             linkText: __('History'),
             linkTarget: '/wallet',
-          })
+          }),
         );
       }
 
@@ -404,13 +404,13 @@ export function doSendTip(params, isSupport, successCallback, errorCallback, sho
         switch (purpose) {
           case 'comment':
             msg = __(
-              'The transaction timed out, but may have been completed. Please wait a few minutes, then check your wallet transactions before attempting to retry. Note that due to current limitations, we are unable to re-link the tip sent to a new comment.'
+              'The transaction timed out, but may have been completed. Please wait a few minutes, then check your wallet transactions before attempting to retry. Note that due to current limitations, we are unable to re-link the tip sent to a new comment.',
             );
             break;
 
           default:
             msg = __(
-              'The transaction timed out, but may have been completed. Please wait a few minutes, then check your wallet transactions before attempting to retry.'
+              'The transaction timed out, but may have been completed. Please wait a few minutes, then check your wallet transactions before attempting to retry.',
             );
             break;
         }
@@ -421,7 +421,7 @@ export function doSendTip(params, isSupport, successCallback, errorCallback, sho
             body: msg,
             onConfirm: (closeModal) => closeModal(),
             hideCancel: true,
-          })
+          }),
         );
       }
 
@@ -576,7 +576,7 @@ export function doWalletReconnect() {
         doToast({
           message: __('Your servers were not available. Check your url and port, or switch back to defaults.'),
           isError: true,
-        })
+        }),
       );
     }, FIFTEEN_SECONDS);
     Lbry.wallet_reconnect().then(() => {
@@ -709,14 +709,14 @@ export const doCheckPendingTxs = () => (dispatch, getState) => {
           dispatch(
             doToast({
               message: __('Your wallet is finished consolidating'),
-            })
+            }),
           );
         }
         if (noLongerPendingConsolidate.includes(pendingMassCLaimTxid)) {
           dispatch(
             doToast({
               message: __('Your tips have been collected'),
-            })
+            }),
           );
         }
         dispatch({
@@ -743,7 +743,7 @@ export const doSendCashTip = (
   claimId,
   stripeEnvironment,
   preferredCurrency,
-  successCallback
+  successCallback,
 ) => (dispatch) => {
   Lbryio.call(
     'customer',
@@ -760,7 +760,7 @@ export const doSendCashTip = (
       source_claim_id: claimId,
       environment: stripeEnvironment,
     },
-    'post'
+    'post',
   )
     .then((customerTipResponse) => {
       const fiatSymbol = preferredCurrency === 'USD' ? '$' : '€';
@@ -769,7 +769,7 @@ export const doSendCashTip = (
         doToast({
           message: __("Tip successfully sent. I'm sure they appreciate it!"),
           subMessage: `${fiatSymbol}${tipParams.tipAmount} ⇒ ${tipParams.tipChannelName}`,
-        })
+        }),
       );
 
       if (successCallback) successCallback(customerTipResponse);
@@ -780,7 +780,7 @@ export const doSendCashTip = (
         doToast({
           message: error.message || __('Sorry, there was an error in processing your payment!'),
           isError: true,
-        })
+        }),
       );
     });
 };

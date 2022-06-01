@@ -92,7 +92,7 @@ export default function SubscribeButton(props: Props) {
                 uri: uri,
                 notificationsDisabled: true,
               },
-              true
+              true,
             );
           }}
         />
@@ -121,7 +121,7 @@ export default function SubscribeButton(props: Props) {
               uri: permanentUrl,
               notificationsDisabled: true,
             },
-            true
+            true,
           );
         }}
       />
@@ -141,7 +141,7 @@ export default function SubscribeButton(props: Props) {
                   uri: permanentUrl,
                   notificationsDisabled: newNotificationsDisabled,
                 },
-                false
+                false,
               );
 
               doToast({
@@ -149,7 +149,7 @@ export default function SubscribeButton(props: Props) {
                   newNotificationsDisabled
                     ? 'Notifications turned off for %channel%'
                     : 'Notifications turned on for %channel%!',
-                  { channel: claimName }
+                  { channel: claimName },
                 ),
               });
 

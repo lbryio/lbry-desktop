@@ -89,7 +89,7 @@ export default function SettingsCreatorPage(props: Props) {
           .filter((t) => t !== '')
           .map((x) => {
             return { name: x };
-          })
+          }),
       );
     };
 
@@ -177,7 +177,7 @@ export default function SettingsCreatorPage(props: Props) {
       setMutedWordTags([...mutedWordTags, ...validatedNewTags]);
       commentBlockWords(
         activeChannelClaim,
-        validatedNewTags.map((x) => x.name)
+        validatedNewTags.map((x) => x.name),
       );
       setLastUpdated(Date.now());
     }

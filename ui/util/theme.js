@@ -18,7 +18,7 @@ export function resetColors(odysee = false) {
     document.documentElement !== null &&
       document.documentElement.style.setProperty(
         '--color-secondary-contrast',
-        'var(--color-secondary-contrast-static)'
+        'var(--color-secondary-contrast-static)',
       );
     document.documentElement !== null &&
       document.documentElement.style.setProperty('--color-link', 'var(--color-primary)');
@@ -31,7 +31,7 @@ function setPrimaryColor(rgb) {
   document.documentElement !== null &&
     document.documentElement.style.setProperty(
       '--color-primary-contrast',
-      getBrightness(rgb) > 155 ? 'black' : 'white'
+      getBrightness(rgb) > 155 ? 'black' : 'white',
     );
 }
 
@@ -46,7 +46,7 @@ function setSecondaryColor(rgb) {
   document.documentElement !== null &&
     document.documentElement.style.setProperty(
       '--color-secondary-contrast',
-      getBrightness(rgb) > 155 ? 'black' : 'white'
+      getBrightness(rgb) > 155 ? 'black' : 'white',
     );
 }
 

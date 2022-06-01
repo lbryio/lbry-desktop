@@ -16,7 +16,7 @@ import * as COLLECTIONS_CONSTS from 'constants/collections';
 import * as MODALS from 'constants/modal_types';
 
 const AbandonedChannelPreview = lazyImport(() =>
-  import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */)
+  import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */),
 );
 const FilePage = lazyImport(() => import('page/file' /* webpackChunkName: "filePage" */));
 const LivestreamPage = lazyImport(() => import('page/livestream' /* webpackChunkName: "livestream" */));
@@ -99,7 +99,7 @@ export default function ShowPage(props: Props) {
     blackListedOutpointMap &&
     Boolean(
       (signingChannel && blackListedOutpointMap[`${signingChannel.txid}:${signingChannel.nout}`]) ||
-        blackListedOutpointMap[`${claim.txid}:${claim.nout}`]
+        blackListedOutpointMap[`${claim.txid}:${claim.nout}`],
     );
 
   const shouldResolveUri =
@@ -168,7 +168,7 @@ export default function ShowPage(props: Props) {
         uri,
         false,
         true,
-        isMine === undefined && isAuthenticated ? { include_is_my_output: true, include_purchase_receipt: true } : {}
+        isMine === undefined && isAuthenticated ? { include_is_my_output: true, include_purchase_receipt: true } : {},
       );
     }
   }, [shouldResolveUri, doResolveUri, uri, isMine, isAuthenticated]);
@@ -275,7 +275,7 @@ export default function ShowPage(props: Props) {
         <Card
           title={uri}
           subtitle={__(
-            'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.'
+            'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.',
           )}
           actions={
             <div className="section__actions">

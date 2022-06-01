@@ -69,7 +69,7 @@ function TxoList(props: Props) {
       {
         environment: stripeEnvironment,
       },
-      'post'
+      'post',
     );
   }
 
@@ -80,7 +80,7 @@ function TxoList(props: Props) {
       {
         environment: stripeEnvironment,
       },
-      'post'
+      'post',
     );
   }
 

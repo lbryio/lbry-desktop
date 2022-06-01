@@ -424,7 +424,7 @@ export function doSetLanguage(language) {
             doToast({
               message: __('Failed to load %language% translations.', { language: languageName }),
               isError: true,
-            })
+            }),
           );
         });
     }
@@ -508,7 +508,7 @@ export function toggleAutoplayNext() {
     dispatch(
       doToast({
         message: autoplayNext ? __('Autoplay Next is off.') : __('Autoplay Next is on.'),
-      })
+      }),
     );
   };
 }

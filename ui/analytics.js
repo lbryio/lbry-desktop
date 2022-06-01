@@ -281,7 +281,7 @@ const analytics: Analytics = {
     canonicalUrl,
     passedPlayer,
     videoBitrate,
-    isLivestreamClaim
+    isLivestreamClaim,
   ) => {
     // populate values for watchman when video starts
     userId = passedUserId;

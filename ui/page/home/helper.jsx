@@ -31,7 +31,7 @@ export function getSortedRowData(
   authenticated: boolean,
   hasMembership: ?boolean,
   homepageOrder: HomepageOrder,
-  rowData: Array<RowDataItem>
+  rowData: Array<RowDataItem>,
 ) {
   let sortedRowData: Array<RowDataItem> = [];
 

@@ -61,7 +61,7 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
       return Boolean(
         (title && hasBlockedWords(title)) ||
           (name && hasBlockedWords(name)) ||
-          (CHECK_DESCRIPTION && description && hasBlockedWords(description))
+          (CHECK_DESCRIPTION && description && hasBlockedWords(description)),
       );
     }
     return false;

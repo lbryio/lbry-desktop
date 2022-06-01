@@ -122,7 +122,7 @@ const Header = (props: Props) => {
         }
       }
     },
-    [backNavDefault, goBack, history, props]
+    [backNavDefault, goBack, history, props],
   );
 
   React.useEffect(() => {

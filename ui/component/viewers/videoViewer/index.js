@@ -103,9 +103,9 @@ const perform = (dispatch) => ({
         (fileInfo) => {
           dispatch(doAnaltyicsPurchaseEvent(fileInfo));
         },
-        true
+        true,
       ),
-      dispatch(doSetPlayingUri({ uri, collectionId }))
+      dispatch(doSetPlayingUri({ uri, collectionId })),
     ),
   doAnalyticsView: (uri, timeToStart) => dispatch(doAnalyticsView(uri, timeToStart)),
   claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),

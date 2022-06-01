@@ -85,7 +85,7 @@ class UserEmailVerify extends React.PureComponent<Props, State> {
                 {
                   email,
                   verify_text: isReturningUser ? __('log in') : __('verify your account'),
-                }
+                },
               )}
             </p>
           }

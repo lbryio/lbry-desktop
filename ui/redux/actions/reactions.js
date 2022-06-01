@@ -33,7 +33,7 @@ export const doReactionLike = (uri: string) => (dispatch: Dispatch, getState: Ge
       clear_types: REACTION_TYPES.DISLIKE,
       ...(shouldRemove ? { remove: true } : {}),
     },
-    'post'
+    'post',
   )
     .then(() => {
       dispatch({ type: ACTIONS.REACTIONS_LIKE_COMPLETED, data: { claimId, shouldRemove } });
@@ -59,7 +59,7 @@ export const doReactionDislike = (uri: string) => (dispatch: Dispatch, getState:
       clear_types: REACTION_TYPES.LIKE,
       ...(shouldRemove ? { remove: true } : {}),
     },
-    'post'
+    'post',
   )
     .then(() => {
       dispatch({ type: ACTIONS.REACTIONS_DISLIKE_COMPLETED, data: { claimId, shouldRemove } });

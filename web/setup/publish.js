@@ -14,7 +14,7 @@ export default function apiPublishCallViaWeb(
   method: string,
   params: FileUploadSdkParams,
   resolve: Function,
-  reject: Function
+  reject: Function,
 ) {
   const { file_path: filePath, preview, remote_url: remoteUrl } = params;
   const isMarkdown = filePath && typeof filePath === 'object' && filePath.type === 'text/markdown';

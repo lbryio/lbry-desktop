@@ -78,5 +78,5 @@ export default handleActions(
       };
     },
   },
-  defaultState
+  defaultState,
 );

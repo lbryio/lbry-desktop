@@ -32,7 +32,7 @@ app.use(iframeDestroyerMiddleware);
 app.use(
   serve(DIST_ROOT, {
     maxage: 3600000, // set a cache time of one hour, helpful for mobile dev
-  })
+  }),
 );
 
 app.use(router.routes());

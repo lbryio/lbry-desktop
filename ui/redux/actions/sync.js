@@ -111,7 +111,7 @@ export function doSetSync(oldHash: string, newHash: string, data: any) {
 
 export const doGetSyncDesktop = (cb?: (any, any) => void, password?: string) => (
   dispatch: Dispatch,
-  getState: GetState
+  getState: GetState,
 ) => {
   const state = getState();
   const syncEnabled = selectClientSetting(state, SETTINGS.ENABLE_SYNC);

@@ -35,8 +35,8 @@ const COUNTRIES = Array.from(
         }
 
         return 0;
-      })
-  )
+      }),
+  ),
 );
 
 /* const TAB = {
@@ -191,7 +191,7 @@ export default function BuyPage(props: Props) {
                             type="select"
                             name="country-codes"
                             helper={__(
-                              'Only some countries are eligible at this time. We are working to make this available to everyone.'
+                              'Only some countries are eligible at this time. We are working to make this available to everyone.',
                             )}
                             value={country}
                             onChange={(e) => setCountry(e.target.value)}

@@ -13,7 +13,7 @@ export const selectResendingVerificationEmail = (state) => selectState(state).re
 export const selectHomepageFetched = (state) => selectState(state).homepageFetched;
 
 export const selectUserEmail = createSelector(selectUser, (user) =>
-  user ? user.primary_email || user.latest_claimed_email : null
+  user ? user.primary_email || user.latest_claimed_email : null,
 );
 
 export const selectUserPhone = createSelector(selectUser, (user) => (user ? user.phone_number : null));
@@ -23,13 +23,13 @@ export const selectUserCountryCode = createSelector(selectUser, (user) => (user 
 export const selectEmailToVerify = createSelector(
   selectState,
   selectUserEmail,
-  (state, userEmail) => state.emailToVerify || userEmail
+  (state, userEmail) => state.emailToVerify || userEmail,
 );
 
 export const selectPhoneToVerify = createSelector(
   selectState,
   selectUserPhone,
-  (state, userPhone) => state.phoneToVerify || userPhone
+  (state, userPhone) => state.phoneToVerify || userPhone,
 );
 
 export const selectYoutubeChannels = createSelector(selectUser, (user) => (user ? user.youtube_channels : null));
@@ -73,7 +73,7 @@ export const selectUserVerifiedEmail = createSelector(selectUser, (user) => user
 
 export const selectUserIsVerificationCandidate = createSelector(
   selectUser,
-  (user) => user && (!user.has_verified_email || !user.is_identity_verified)
+  (user) => user && (!user.has_verified_email || !user.is_identity_verified),
 );
 
 export const selectUserInviteStatusIsPending = (state) => selectState(state).inviteStatusIsPending;
@@ -82,7 +82,7 @@ export const selectUserInvitees = (state) => selectState(state).invitees;
 
 export const selectUserInviteStatusFailed = createSelector(
   selectUserInvitesRemaining,
-  () => selectUserInvitesRemaining === null
+  () => selectUserInvitesRemaining === null,
 );
 
 export const selectUserInviteStatusFetched = (state) => {
@@ -99,7 +99,7 @@ export const selectUserInviteReferralLink = (state) => selectState(state).referr
  * Clients should use selectUserInviteStatusFetched to check if the info has been fetched.
  */
 export const selectUserInviteReferralCode = createSelector(selectState, (state) =>
-  state.referralCode ? state.referralCode[0] : ''
+  state.referralCode ? state.referralCode[0] : '',
 );
 
 export const selectYouTubeImportPending = (state) => selectState(state).youtubeChannelImportPending;

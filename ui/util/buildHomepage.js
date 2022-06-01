@@ -107,7 +107,7 @@ export const getHomepageRowForCat = (key: string, cat: HomepageCat) => {
         moment()
           .subtract(cat.daysOfContent || 30, 'days')
           .startOf('hour')
-          .unix()
+          .unix(),
       )}`,
     },
   };
@@ -123,7 +123,7 @@ export function GetLinksData(
   subscribedChannels?: Array<Subscription>,
   followedTags?: Array<Tag>,
   showIndividualTags?: boolean,
-  showNsfw?: boolean
+  showNsfw?: boolean,
 ) {
   function getPageSize(originalSize) {
     return isLargeScreen ? originalSize * (3 / 2) : originalSize;
@@ -247,7 +247,7 @@ export function GetLinksData(
   const YOUTUBE_CREATOR_ROW = {
     title: __('CableTube Escape Artists'),
     link: `/$/${PAGES.DISCOVER}?${CS.CLAIM_TYPE}=${CS.CLAIM_STREAM}&${CS.CHANNEL_IDS_KEY}=${YOUTUBER_CHANNEL_IDS.join(
-      ','
+      ',',
     )}`,
     options: {
       claimType: ['stream'],

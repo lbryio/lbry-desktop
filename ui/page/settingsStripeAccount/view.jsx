@@ -76,7 +76,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
           refresh_url: failureStripeRedirectUrl,
           environment: stripeEnvironment,
         },
-        'post'
+        'post',
       ).then((accountLinkResponse) => {
         // stripe link for user to navigate to and confirm account
         const stripeConnectionUrl = accountLinkResponse.url;
@@ -102,7 +102,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
       {
         environment: stripeEnvironment,
       },
-      'post'
+      'post',
     )
       .then((accountStatusResponse) => {
         const yetToBeCashedOutBalance = accountStatusResponse.total_received_unpaid;
@@ -117,7 +117,7 @@ class StripeAccountConnection extends React.Component<Props, State> {
             {
               environment: stripeEnvironment,
             },
-            'post'
+            'post',
           ).then((accountListResponse: any) => {
             // TODO type this
             that.setState({

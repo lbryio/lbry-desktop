@@ -89,7 +89,7 @@ const startDaemon = async () => {
             'Daemon has Exited',
             'The daemon may have encountered an unexpected error, or another daemon instance is already running. \n\n' +
               'For more information please visit: \n' +
-              'https://lbry.com/faq/startup-troubleshooting'
+              'https://lbry.com/faq/startup-troubleshooting',
           );
         }
         app.quit();
@@ -119,7 +119,7 @@ const startLbryFirst = async () => {
           dialog.showErrorBox(
             'LbryFirst has Exited',
             'The lbryFirst may have encountered an unexpected error, or another lbryFirst instance is already running. \n\n',
-            e
+            e,
           );
         }
         app.quit();
@@ -241,7 +241,7 @@ app.on('will-quit', event => {
       },
       () => {
         app.quit();
-      }
+      },
     );
 
     event.preventDefault();
@@ -362,7 +362,7 @@ ipcMain.on('version-info-requested', () => {
         } else {
           onSuccess(res);
         }
-      }
+      },
     );
 
     if (alreadyRedirected) return;

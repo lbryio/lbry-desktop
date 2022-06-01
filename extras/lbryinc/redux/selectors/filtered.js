@@ -11,5 +11,5 @@ export const selectFilteredOutpointMap = createSelector(selectFilteredOutpoints,
         acc[outpoint] = 1;
         return acc;
       }, {})
-    : {}
+    : {},
 );

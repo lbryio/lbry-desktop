@@ -64,7 +64,7 @@ export default function NagLocaleSwitch(props: Props) {
       ? 'There are language translations available for your location! Do you want to switch from English?'
       : optionToSwitch === LOCALE_OPTIONS.BOTH
       ? 'Homepage and language translations are available for your location! Do you want to switch?'
-      : 'A homepage is available for your location! Do you want to switch?'
+      : 'A homepage is available for your location! Do you want to switch?',
   );
   // -- override for specific case due to feedback --
   if (userCountry === 'CA') message = 'There are translations available in French, do you want to switch from English?';

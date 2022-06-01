@@ -34,5 +34,5 @@ export const costInfoReducer = handleActions(
       };
     },
   },
-  defaultState
+  defaultState,
 );

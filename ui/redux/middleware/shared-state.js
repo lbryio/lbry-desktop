@@ -10,9 +10,9 @@ let timeout;
 export const buildSharedStateMiddleware = (
   actions: Array<string>,
   sharedStateFilters: {},
-  sharedStateCb?: (any) => void
+  sharedStateCb?: (any) => void,
 ) => ({ getState, dispatch }: { getState: () => { user: any, settings: any }, dispatch: (any) => void }) => (
-  next: ({}) => void
+  next: ({}) => void,
 ) => (action: { type: string, data: any }) => {
   // We don't care if sync is disabled here, we always want to backup preferences to the wallet
   if (!actions.includes(action.type) || typeof action === 'function') {

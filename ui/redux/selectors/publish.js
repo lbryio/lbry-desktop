@@ -47,7 +47,7 @@ export const selectPublishFormValues = createSelector(
     }
 
     return { ...formValues, language: actualLanguage };
-  }
+  },
 );
 
 export const makeSelectPublishFormValue = (item) => createSelector(selectState, (state) => state[item]);
@@ -71,7 +71,7 @@ export const selectMyClaimForUri = createCachedSelector(
     } else {
       if (caseSensitive) {
         return myClaims.find((claim) =>
-          !contentName ? claim.name === claimName : claim.name === contentName || claim.name === claimName
+          !contentName ? claim.name === claimName : claim.name === contentName || claim.name === claimName,
         );
       } else {
         contentName = contentName ? contentName.toLowerCase() : contentName;
@@ -83,7 +83,7 @@ export const selectMyClaimForUri = createCachedSelector(
         });
       }
     }
-  }
+  },
 )((state, caseSensitive = true) => `selectMyClaimForUri-${caseSensitive ? '1' : '0'}`);
 
 export const selectIsResolvingPublishUris = createSelector(
@@ -104,7 +104,7 @@ export const selectIsResolvingPublishUris = createSelector(
     }
 
     return false;
-  }
+  },
 );
 
 export const selectTakeOverAmount = createSelector(
@@ -132,14 +132,14 @@ export const selectTakeOverAmount = createSelector(
     }
 
     return null;
-  }
+  },
 );
 
 export const selectCurrentUploads = (state) => selectState(state).currentUploads;
 
 export const selectUploadCount = createSelector(
   selectCurrentUploads,
-  (currentUploads) => currentUploads && Object.keys(currentUploads).length
+  (currentUploads) => currentUploads && Object.keys(currentUploads).length,
 );
 
 export const selectIsScheduled = (state) => selectState(state).tags.some((t) => t.name === SCHEDULED_LIVESTREAM_TAG);

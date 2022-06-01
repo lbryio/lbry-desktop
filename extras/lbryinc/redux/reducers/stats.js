@@ -76,5 +76,5 @@ export const statsReducer = handleActions(
       return newState;
     },
   },
-  defaultState
+  defaultState,
 );

@@ -24,7 +24,7 @@ const YouTubeTOSPage = lazyImport(() => import('web/page/youtubetos' /* webpackC
 
 const SignInPage = lazyImport(() => import('page/signIn' /* webpackChunkName: "signIn" */));
 const SignInWalletPasswordPage = lazyImport(() =>
-  import('page/signInWalletPassword' /* webpackChunkName: "signInWalletPassword" */)
+  import('page/signInWalletPassword' /* webpackChunkName: "signInWalletPassword" */),
 );
 const SignUpPage = lazyImport(() => import('page/signUp' /* webpackChunkName: "signUp" */));
 const SignInVerifyPage = lazyImport(() => import('page/signInVerify' /* webpackChunkName: "signInVerify" */));
@@ -39,13 +39,13 @@ const NotificationsPage = lazyImport(() => import('page/notifications' /* webpac
 const CollectionPage = lazyImport(() => import('page/collection' /* webpackChunkName: "collection" */));
 const ChannelNew = lazyImport(() => import('page/channelNew' /* webpackChunkName: "channelNew" */));
 const ChannelsFollowingDiscoverPage = lazyImport(() =>
-  import('page/channelsFollowingDiscover' /* webpackChunkName: "channelsFollowingDiscover" */)
+  import('page/channelsFollowingDiscover' /* webpackChunkName: "channelsFollowingDiscover" */),
 );
 const ChannelsFollowingPage = lazyImport(() =>
-  import('page/channelsFollowing' /* webpackChunkName: "channelsFollowing" */)
+  import('page/channelsFollowing' /* webpackChunkName: "channelsFollowing" */),
 );
 const ChannelsFollowingManage = lazyImport(() =>
-  import('page/channelsFollowingManage' /* webpackChunkName: "channelsFollowing" */)
+  import('page/channelsFollowingManage' /* webpackChunkName: "channelsFollowing" */),
 );
 const ChannelsPage = lazyImport(() => import('page/channels' /* webpackChunkName: "channels" */));
 const CheckoutPage = lazyImport(() => import('page/checkoutPage' /* webpackChunkName: "checkoutPage" */));
@@ -54,7 +54,7 @@ const DiscoverPage = lazyImport(() => import('page/discover' /* webpackChunkName
 const EmbedWrapperPage = lazyImport(() => import('page/embedWrapper' /* webpackChunkName: "embedWrapper" */));
 const PopoutChatPage = lazyImport(() => import('page/popoutChatWrapper' /* webpackChunkName: "popoutChat" */));
 const FileListPublished = lazyImport(() =>
-  import('page/fileListPublished' /* webpackChunkName: "fileListPublished" */)
+  import('page/fileListPublished' /* webpackChunkName: "fileListPublished" */),
 );
 const FourOhFourPage = lazyImport(() => import('page/fourOhFour' /* webpackChunkName: "fourOhFour" */));
 const HelpPage = lazyImport(() => import('page/help' /* webpackChunkName: "help" */));
@@ -67,10 +67,10 @@ const PlaylistsPage = lazyImport(() => import('page/playlists' /* webpackChunkNa
 const WatchHistoryPage = lazyImport(() => import('page/watchHistory' /* webpackChunkName: "history" */));
 const LiveStreamSetupPage = lazyImport(() => import('page/livestreamSetup' /* webpackChunkName: "livestreamSetup" */));
 const LivestreamCurrentPage = lazyImport(() =>
-  import('page/livestreamCurrent' /* webpackChunkName: "livestreamCurrent" */)
+  import('page/livestreamCurrent' /* webpackChunkName: "livestreamCurrent" */),
 );
 const OdyseeMembershipPage = lazyImport(() =>
-  import('page/odyseeMembership' /* webpackChunkName: "odyseeMembership" */)
+  import('page/odyseeMembership' /* webpackChunkName: "odyseeMembership" */),
 );
 const OwnComments = lazyImport(() => import('page/ownComments' /* webpackChunkName: "ownComments" */));
 const PasswordResetPage = lazyImport(() => import('page/passwordReset' /* webpackChunkName: "passwordReset" */));
@@ -83,19 +83,19 @@ const RewardsPage = lazyImport(() => import('page/rewards' /* webpackChunkName: 
 const RewardsVerifyPage = lazyImport(() => import('page/rewardsVerify' /* webpackChunkName: "rewardsVerify" */));
 const SearchPage = lazyImport(() => import('page/search' /* webpackChunkName: "search" */));
 const SettingsStripeCard = lazyImport(() =>
-  import('page/settingsStripeCard' /* webpackChunkName: "settingsStripeCard" */)
+  import('page/settingsStripeCard' /* webpackChunkName: "settingsStripeCard" */),
 );
 const SettingsStripeAccount = lazyImport(() =>
-  import('page/settingsStripeAccount' /* webpackChunkName: "settingsStripeAccount" */)
+  import('page/settingsStripeAccount' /* webpackChunkName: "settingsStripeAccount" */),
 );
 const SettingsCreatorPage = lazyImport(() => import('page/settingsCreator' /* webpackChunkName: "settingsCreator" */));
 const SettingsNotificationsPage = lazyImport(() =>
-  import('page/settingsNotifications' /* webpackChunkName: "settingsNotifications" */)
+  import('page/settingsNotifications' /* webpackChunkName: "settingsNotifications" */),
 );
 const SettingsPage = lazyImport(() => import('page/settings' /* webpackChunkName: "settings" */));
 const ShowPage = lazyImport(() => import('page/show' /* webpackChunkName: "show" */));
 const TagsFollowingManagePage = lazyImport(() =>
-  import('page/tagsFollowingManage' /* webpackChunkName: "tagsFollowingManage" */)
+  import('page/tagsFollowingManage' /* webpackChunkName: "tagsFollowingManage" */),
 );
 const TagsFollowingPage = lazyImport(() => import('page/tagsFollowing' /* webpackChunkName: "tagsFollowing" */));
 const TopPage = lazyImport(() => import('page/top' /* webpackChunkName: "top" */));
@@ -195,7 +195,7 @@ function AppRouter(props: Props) {
 
   const categoryPages = React.useMemo(() => {
     const dynamicRoutes = GetLinksData(homepageData, isLargeScreen).filter(
-      (x: any) => x && x.route && (x.id !== 'WILD_WEST' || !wildWestDisabled)
+      (x: any) => x && x.route && (x.id !== 'WILD_WEST' || !wildWestDisabled),
     );
 
     return dynamicRoutes.map((dynamicRouteProps: RowDataItem) => (

@@ -9,7 +9,7 @@ const defaultState = {
 
 export const blacklistReducer = handleActions(
   {
-    [ACTIONS.FETCH_BLACK_LISTED_CONTENT_STARTED]: state => ({
+    [ACTIONS.FETCH_BLACK_LISTED_CONTENT_STARTED]: (state) => ({
       ...state,
       fetchingBlackListedOutpoints: true,
     }),
@@ -33,5 +33,5 @@ export const blacklistReducer = handleActions(
       };
     },
   },
-  defaultState
+  defaultState,
 );

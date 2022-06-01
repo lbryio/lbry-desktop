@@ -230,7 +230,7 @@ const collectionsReducer = handleActions(
       });
     },
   },
-  defaultState
+  defaultState,
 );
 
 export { collectionsReducer };

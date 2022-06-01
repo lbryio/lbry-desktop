@@ -37,7 +37,7 @@ export function doCommentList(
   page: number = 1,
   pageSize: number = 99999,
   sortBy: ?number = SORT_BY.NEWEST,
-  isLivestream?: boolean
+  isLivestream?: boolean,
 ) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
@@ -113,7 +113,7 @@ export function doCommentListOwn(
   channelId: string,
   page: number = 1,
   pageSize: number = 10,
-  sortBy: number = SORT_BY.NEWEST_NO_PINS
+  sortBy: number = SORT_BY.NEWEST_NO_PINS,
 ) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
@@ -168,7 +168,7 @@ export function doCommentListOwn(
             page_size: pageSize,
             no_totals: true,
             claim_ids: comments.map((c) => c.claim_id),
-          })
+          }),
         )
           .then((result) => {
             dispatch({
@@ -200,7 +200,7 @@ export function doCommentListOwn(
               doToast({
                 isError: true,
                 message: __('Failed to fetch comments.'),
-              })
+              }),
             );
             dispatch(doToast({ isError: true, message: `${error.message}` }));
             dispatch({ type: ACTIONS.COMMENT_LIST_FAILED, data: error });
@@ -241,7 +241,7 @@ export function doCommentById(commentId: string, toastIfNotFound: boolean = true
             doToast({
               isError: true,
               message: __('The requested comment is no longer available.'),
-            })
+            }),
           );
         } else {
           devToast(dispatch, error.message);
@@ -580,7 +580,7 @@ export function doCommentReact(commentId: string, type: string) {
             subMessage: reactedChannelNames.join(' • '),
             duration: 'long',
             isError: true,
-          })
+          }),
         );
         rejectReaction = true;
       }
@@ -639,7 +639,7 @@ export function doCommentCreate(uri: string, livestream: boolean, params: Commen
         dispatch,
         __('Failed to perform action.'),
         __('Please wait a while before re-submitting, or try refreshing the page.'),
-        'long'
+        'long',
       );
       return;
     }
@@ -653,7 +653,7 @@ export function doCommentCreate(uri: string, livestream: boolean, params: Commen
           dispatch,
           __('Commenting from multiple channels is not allowed.'),
           commentedChannelNames.join(' • '),
-          'long'
+          'long',
         );
         return;
       }
@@ -807,7 +807,7 @@ export function doCommentAbandon(
   commentId: string,
   deleterClaim?: Claim,
   deleterIsModOrAdmin?: boolean,
-  creatorClaim?: Claim
+  creatorClaim?: Claim,
 ) {
   return async (dispatch: Dispatch, getState: GetState) => {
     if (!deleterClaim) {
@@ -850,7 +850,7 @@ export function doCommentAbandon(
             doToast({
               message: 'Your channel is still being setup, try again in a few moments.',
               isError: true,
-            })
+            }),
           );
         }
       })
@@ -864,7 +864,7 @@ export function doCommentAbandon(
           doToast({
             message: 'Unable to delete this comment, please try again later.',
             isError: true,
-          })
+          }),
         );
       });
   };
@@ -915,7 +915,7 @@ export function doCommentUpdate(comment_id: string, comment: string) {
               doToast({
                 message: 'Your channel is still being setup, try again in a few moments.',
                 isError: true,
-              })
+              }),
             );
           }
         })
@@ -928,7 +928,7 @@ export function doCommentUpdate(comment_id: string, comment: string) {
             doToast({
               message: 'Unable to edit this comment, please try again later.',
               isError: true,
-            })
+            }),
           );
         });
     };
@@ -981,7 +981,7 @@ function doCommentModToggleBlock(
   blockLevel: string,
   timeoutSec: ?number,
   showLink: boolean = false,
-  offendingCommentId: ?string = undefined
+  offendingCommentId: ?string = undefined,
 ) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
@@ -997,7 +997,7 @@ function doCommentModToggleBlock(
         doToast({
           message: __('Create a channel to change this setting.'),
           isError: false,
-        })
+        }),
       );
     }
 
@@ -1085,8 +1085,8 @@ function doCommentModToggleBlock(
                 global_un_block: unblock ? blockLevel === BLOCK_LEVEL.ADMIN : undefined,
                 ...sharedModBlockParams,
                 time_out: unblock ? undefined : timeoutSec,
-              })
-            )
+              }),
+            ),
         )
           .then((response) => {
             const failures = [];
@@ -1130,7 +1130,7 @@ function doCommentModToggleBlock(
                   : __('Channel "%channel%" blocked.', { channel: commenterNameForAction }),
                 linkText: __(showLink ? 'See All' : ''),
                 linkTarget: '/settings/block_and_mute',
-              })
+              }),
             );
           })
           .catch(() => {
@@ -1174,11 +1174,11 @@ export function doCommentModBlock(
   commenterUri: string,
   offendingCommentId: ?string,
   timeoutSec: ?number,
-  showLink: boolean = true
+  showLink: boolean = true,
 ) {
   return (dispatch: Dispatch) => {
     return dispatch(
-      doCommentModToggleBlock(false, commenterUri, '', [], BLOCK_LEVEL.SELF, timeoutSec, showLink, offendingCommentId)
+      doCommentModToggleBlock(false, commenterUri, '', [], BLOCK_LEVEL.SELF, timeoutSec, showLink, offendingCommentId),
     );
   };
 }
@@ -1197,7 +1197,7 @@ export function doCommentModBlockAsAdmin(
   commenterUri: string,
   offendingCommentId: ?string,
   blockerId: ?string,
-  timeoutSec: ?number
+  timeoutSec: ?number,
 ) {
   return (dispatch: Dispatch) => {
     return dispatch(
@@ -1209,8 +1209,8 @@ export function doCommentModBlockAsAdmin(
         BLOCK_LEVEL.ADMIN,
         timeoutSec,
         false,
-        offendingCommentId
-      )
+        offendingCommentId,
+      ),
     );
   };
 }
@@ -1232,7 +1232,7 @@ export function doCommentModBlockAsModerator(
   offendingCommentId: ?string,
   creatorUri: string,
   blockerId: ?string,
-  timeoutSec: ?number
+  timeoutSec: ?number,
 ) {
   return (dispatch: Dispatch) => {
     return dispatch(
@@ -1244,8 +1244,8 @@ export function doCommentModBlockAsModerator(
         BLOCK_LEVEL.MODERATOR,
         timeoutSec,
         false,
-        offendingCommentId
-      )
+        offendingCommentId,
+      ),
     );
   };
 }
@@ -1288,7 +1288,7 @@ export function doCommentModUnBlockAsAdmin(commenterUri: string, blockerId: stri
 export function doCommentModUnBlockAsModerator(commenterUri: string, creatorUri: string, blockerId: string) {
   return (dispatch: Dispatch) => {
     return dispatch(
-      doCommentModToggleBlock(true, commenterUri, creatorUri, blockerId ? [blockerId] : [], BLOCK_LEVEL.MODERATOR)
+      doCommentModToggleBlock(true, commenterUri, creatorUri, blockerId ? [blockerId] : [], BLOCK_LEVEL.MODERATOR),
     );
   };
 }
@@ -1321,8 +1321,8 @@ export function doFetchModBlockedList() {
                 mod_channel_name: signatureData.name,
                 signature: signatureData.signature,
                 signing_ts: signatureData.signing_ts,
-              })
-            )
+              }),
+            ),
         )
           .then((res) => {
             let personalBlockList = [];
@@ -1393,7 +1393,7 @@ export function doFetchModBlockedList() {
                   delegated_blocked_channels,
                   moderatorBlockList,
                   moderatorTimeoutMap,
-                  moderatorBlockListDelegatorsMap
+                  moderatorBlockListDelegatorsMap,
                 );
               });
 
@@ -1474,7 +1474,7 @@ export const doUpdateBlockListForPublishedChannel = (channelClaim: ChannelClaim)
             blocked_channel_name: channelName,
           });
         }
-      })
+      }),
     );
   };
 };
@@ -1483,7 +1483,7 @@ export function doCommentModAddDelegate(
   modChannelId: string,
   modChannelName: string,
   creatorChannelClaim: ChannelClaim,
-  showToast: boolean = false
+  showToast: boolean = false,
 ) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const signature = await channelSignData(creatorChannelClaim.claim_id, creatorChannelClaim.name);
@@ -1509,7 +1509,7 @@ export function doCommentModAddDelegate(
               }),
               linkText: __('Manage'),
               linkTarget: `/${PAGES.SETTINGS_CREATOR}`,
-            })
+            }),
           );
         }
       })
@@ -1522,7 +1522,7 @@ export function doCommentModAddDelegate(
 export function doCommentModRemoveDelegate(
   modChannelId: string,
   modChannelName: string,
-  creatorChannelClaim: ChannelClaim
+  creatorChannelClaim: ChannelClaim,
 ) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const signature = await channelSignData(creatorChannelClaim.claim_id, creatorChannelClaim.name);
@@ -1601,8 +1601,8 @@ export function doFetchCommentModAmIList(channelClaim: ChannelClaim) {
                 channel_id: signatureData.claim_id,
                 signature: signatureData.signature,
                 signing_ts: signatureData.signing_ts,
-              })
-            )
+              }),
+            ),
         )
           .then((results) => {
             const delegatorsById = {};
@@ -1747,7 +1747,7 @@ export const doCommentWords = (channelClaim: ChannelClaim, words: Array<string>,
         doToast({
           message: err.message,
           isError: true,
-        })
+        }),
       );
     });
   };
@@ -1795,8 +1795,8 @@ export const doFetchBlockedWords = () => {
           channel_id: signatureData.claim_id,
           signature: signatureData.signature,
           signing_ts: signatureData.signing_ts,
-        })
-      )
+        }),
+      ),
     )
       .then((blockedWords) => {
         const blockedWordsByChannelId = {};

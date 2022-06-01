@@ -24,7 +24,7 @@ export default function WatchHistoryPage(props: Props) {
     historyUris,
     doResolveUris,
     PAGE_SIZE,
-    true
+    true,
   );
 
   function clearHistory() {

@@ -77,7 +77,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
         this.setState({
           message: __('Connection Failure'),
           details: __(
-            'Try closing all LBRY processes and starting again. If this still happens, your anti-virus software or firewall may be preventing LBRY from connecting. Contact hello@lbry.com if you think this is a software bug.'
+            'Try closing all LBRY processes and starting again. If this still happens, your anti-virus software or firewall may be preventing LBRY from connecting. Contact hello@lbry.com if you think this is a software bug.',
           ),
         });
       });
@@ -137,8 +137,8 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
           clearWalletServers();
           doShowSnackBar(
             __(
-              'The wallet server took a bit too long. Resetting defaults just in case. Shutdown (Cmd/Ctrl+Q) LBRY and restart if this continues.'
-            )
+              'The wallet server took a bit too long. Resetting defaults just in case. Shutdown (Cmd/Ctrl+Q) LBRY and restart if this continues.',
+            ),
           );
           this.setState({ waitingForWallet: 0 });
           this.updateStatusCallback(sdkStatus, walletStatus);
@@ -295,7 +295,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
               <React.Fragment>
                 <p>
                   {__(
-                    'You can try refreshing to fix it. If you still have issues, your anti-virus software or firewall may be preventing startup.'
+                    'You can try refreshing to fix it. If you still have issues, your anti-virus software or firewall may be preventing startup.',
                   )}
                 </p>
                 <p>

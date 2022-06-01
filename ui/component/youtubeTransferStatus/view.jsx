@@ -37,14 +37,14 @@ export default function YoutubeTransferStatus(props: Props) {
   const hasChannels = youtubeChannels && youtubeChannels.length > 0;
   const transferEnabled = youtubeChannels.some((status) => status.transferable);
   const hasPendingTransfers = youtubeChannels.some(
-    (status) => status.transfer_state === YOUTUBE_STATUSES.YOUTUBE_SYNC_PENDING_TRANSFER
+    (status) => status.transfer_state === YOUTUBE_STATUSES.YOUTUBE_SYNC_PENDING_TRANSFER,
   );
   const isYoutubeTransferComplete =
     hasChannels &&
     youtubeChannels.every(
       (channel) =>
         channel.transfer_state === YOUTUBE_STATUSES.YOUTUBE_SYNC_COMPLETED_TRANSFER ||
-        channel.sync_status === YOUTUBE_STATUSES.YOUTUBE_SYNC_ABANDONDED
+        channel.sync_status === YOUTUBE_STATUSES.YOUTUBE_SYNC_ABANDONDED,
     );
 
   const isNotElligible =

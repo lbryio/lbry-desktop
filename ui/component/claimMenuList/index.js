@@ -59,11 +59,11 @@ const select = (state, props) => {
     claimIsMine: selectClaimIsMine(state, claim),
     hasClaimInWatchLater: makeSelectCollectionForIdHasClaimUrl(
       COLLECTIONS_CONSTS.WATCH_LATER_ID,
-      contentPermanentUri
+      contentPermanentUri,
     )(state),
     hasClaimInFavorites: makeSelectCollectionForIdHasClaimUrl(
       COLLECTIONS_CONSTS.FAVORITES_ID,
-      contentPermanentUri
+      contentPermanentUri,
     )(state),
     channelIsMuted: makeSelectChannelIsMuted(contentChannelUri)(state),
     channelIsBlocked: makeSelectChannelIsBlocked(contentChannelUri)(state),
@@ -80,7 +80,7 @@ const select = (state, props) => {
     lastUsedCollection,
     hasClaimInLastUsedCollection: makeSelectCollectionForIdHasClaimUrl(
       lastUsedCollectionId,
-      contentPermanentUri
+      contentPermanentUri,
     )(state),
     lastUsedCollectionIsNotBuiltin:
       lastUsedCollectionId !== COLLECTIONS_CONSTS.WATCH_LATER_ID &&

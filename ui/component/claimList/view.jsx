@@ -13,7 +13,7 @@ import ClaimPreviewTile from 'component/claimPreviewTile';
 
 const Draggable = React.lazy(() =>
   // $FlowFixMe
-  import('react-beautiful-dnd' /* webpackChunkName: "dnd" */).then((module) => ({ default: module.Draggable }))
+  import('react-beautiful-dnd' /* webpackChunkName: "dnd" */).then((module) => ({ default: module.Draggable })),
 );
 
 const DEBOUNCE_SCROLL_HANDLER_MS = 150;
@@ -149,7 +149,7 @@ export default function ClaimList(props: Props) {
         onClick(e, claim, index);
       }
     },
-    [onClick]
+    [onClick],
   );
 
   const customShouldHide = React.useCallback((claim: StreamClaim) => {

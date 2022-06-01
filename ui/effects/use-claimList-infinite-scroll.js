@@ -12,7 +12,7 @@ export default function useClaimListInfiniteScroll(
   allUris: Array<string>,
   doResolveUris: (uris: Array<string>, returnCachedClaims: boolean, resolveReposts: boolean) => void,
   pageSize: number = 30,
-  disableListLock: boolean = false
+  disableListLock: boolean = false,
 ) {
   // Lock the full set of uris on mount, so we have a stable list for pagination.
   const [uris, setUris] = React.useState([]);

@@ -268,7 +268,7 @@ function CommentView(props: Props) {
         }
       }
     },
-    [ROUGH_HEADER_HEIGHT, isMobile]
+    [ROUGH_HEADER_HEIGHT, isMobile],
   );
 
   return (

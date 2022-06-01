@@ -652,7 +652,7 @@ function PublishForm(props: Props) {
             empty={__('No tags added')}
             limitSelect={TAGS_LIMIT}
             help={__(
-              "Add tags that are relevant to your content so those who're looking for it can find it more easily. If your content is best suited for mature audiences, ensure it is tagged 'mature'."
+              "Add tags that are relevant to your content so those who're looking for it can find it more easily. If your content is best suited for mature audiences, ensure it is tagged 'mature'.",
             )}
             placeholder={__('gaming, crypto')}
             onSelect={(newTags) => {

@@ -96,7 +96,7 @@ function UserSignUp(props: Props) {
     youtubeChannels.every(
       (channel) =>
         channel.transfer_state === YOUTUBE_STATUSES.YOUTUBE_SYNC_COMPLETED_TRANSFER ||
-        channel.sync_status === YOUTUBE_STATUSES.YOUTUBE_SYNC_ABANDONDED
+        channel.sync_status === YOUTUBE_STATUSES.YOUTUBE_SYNC_ABANDONDED,
     );
   // Complexity warning
   // We can't just check if we are currently fetching something

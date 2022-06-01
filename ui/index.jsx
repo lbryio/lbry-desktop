@@ -75,9 +75,9 @@ Lbry.setOverride(
         'publish',
         params,
         resolve,
-        reject
+        reject,
       );
-    })
+    }),
 );
 // @endif
 
@@ -114,7 +114,7 @@ Lbryio.setOverride(
     new Promise((resolve) => {
       const authTokenToReturn = authToken || getAuthToken();
       resolve(authTokenToReturn);
-    })
+    }),
 );
 
 rewards.setCallback('claimFirstRewardSuccess', () => {
@@ -133,7 +133,7 @@ ipcRenderer.on('open-uri-requested', (event, url, newSession) => {
     app.store.dispatch(
       doToast({
         message: __('Invalid LBRY URL requested'),
-      })
+      }),
     );
   }
 

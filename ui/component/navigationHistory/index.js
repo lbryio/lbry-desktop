@@ -15,11 +15,8 @@ const select = (state, props) => {
   };
 };
 
-const perform = dispatch => ({
-  clearHistoryUri: uri => dispatch(doClearContentHistoryUri(uri)),
+const perform = (dispatch) => ({
+  clearHistoryUri: (uri) => dispatch(doClearContentHistoryUri(uri)),
 });
 
-export default connect(
-  select,
-  perform
-)(UserHistory);
+export default connect(select, perform)(UserHistory);

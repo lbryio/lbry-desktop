@@ -339,7 +339,7 @@ export function doAlertWaitingForSync() {
             ? __('Sign in or create an account to change this setting.')
             : __('Please wait a bit, we are still getting your account ready.'),
         isError: false,
-      })
+      }),
     );
   };
 }
@@ -366,8 +366,8 @@ export function doDaemonReady() {
             analytics.trendingAlgorithmEvent(trendingAlgorithm);
           }
         },
-        undefined
-      )
+        undefined,
+      ),
     );
     dispatch({ type: ACTIONS.DAEMON_READY });
 
@@ -645,7 +645,7 @@ export function doGetAndPopulatePreferences(syncId /* ?: number */) {
         doToast({
           isError: true,
           message: __('Unable to load your saved preferences.'),
-        })
+        }),
       );
 
       dispatch({

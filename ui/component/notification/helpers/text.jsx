@@ -13,8 +13,8 @@ export function generateNotificationText(rule: string, notificationParams: any) 
   switch (rule) {
     default:
       console.log(`TEXT: Unhandled notification_rule:%c ${rule}`, 'color:yellow'); // eslint-disable-line
-    // eslint-disable-next-line no-fallthrough, (intended fallthrough)
-
+    // (intended fallthrough)
+    // eslint-disable-next-line no-fallthrough
     case RULE.NEW_CONTENT:
     case RULE.NEW_LIVESTREAM:
     case RULE.CREATOR_SUBSCRIBER:

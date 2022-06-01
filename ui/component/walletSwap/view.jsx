@@ -203,7 +203,7 @@ function WalletSwap(props: Props) {
         setNag({
           msg: __(
             'Received amount did not match order code %chargeCode%. Contact hello@lbry.com to resolve the payment.',
-            { chargeCode: swapInfo.chargeCode }
+            { chargeCode: swapInfo.chargeCode },
           ),
           type: 'error',
         });
@@ -448,7 +448,7 @@ function WalletSwap(props: Props) {
           tooltip
           size={16}
           customTooltipText={__(
-            'This page can be closed while the transactions are in progress.\nYou can view the status later from:\n • Wallet » Swap » View Past Swaps'
+            'This page can be closed while the transactions are in progress.\nYou can view the status later from:\n • Wallet » Swap » View Past Swaps',
           )}
         />
       </>
@@ -703,7 +703,7 @@ function WalletSwap(props: Props) {
       <Card
         title={<I18nMessage tokens={{ lbc: <LbcSymbol size={22} /> }}>Swap Crypto for %lbc%</I18nMessage>}
         subtitle={__(
-          'Send crypto to the address provided and you will be sent an equivalent amount of Credits. You can pay with BCH, LTC, ETH, USDC or DAI after starting the swap.'
+          'Send crypto to the address provided and you will be sent an equivalent amount of Credits. You can pay with BCH, LTC, ETH, USDC or DAI after starting the swap.',
         )}
         actions={getActionElement()}
         nag={nag ? <Nag relative type={nag.type} message={__(nag.msg)} /> : null}

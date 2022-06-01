@@ -46,21 +46,21 @@ export default function CollectionButtons(props: Props) {
 
       <div className="collection-preview__edit-group">
         {orderButton('', __('Move Top'), ICONS.UP_TOP, collectionIndex === 0, () =>
-          editCollection({ order: { from: collectionIndex, to: 0 } })
+          editCollection({ order: { from: collectionIndex, to: 0 } }),
         )}
 
         {orderButton('', __('Move Bottom'), ICONS.DOWN_BOTTOM, collectionIndex === lastCollectionIndex, () =>
-          editCollection({ order: { from: collectionIndex, to: lastCollectionIndex } })
+          editCollection({ order: { from: collectionIndex, to: lastCollectionIndex } }),
         )}
       </div>
 
       <div className="collection-preview__edit-group">
         {orderButton('', __('Move Up'), ICONS.UP, collectionIndex === 0, () =>
-          editCollection({ order: { from: collectionIndex, to: collectionIndex - 1 } })
+          editCollection({ order: { from: collectionIndex, to: collectionIndex - 1 } }),
         )}
 
         {orderButton('', __('Move Down'), ICONS.DOWN, collectionIndex === lastCollectionIndex, () =>
-          editCollection({ order: { from: collectionIndex, to: collectionIndex + 1 } })
+          editCollection({ order: { from: collectionIndex, to: collectionIndex + 1 } }),
         )}
       </div>
 
@@ -83,7 +83,7 @@ export default function CollectionButtons(props: Props) {
           />
 
           {orderButton('button-collection-delete-confirm bottom-right', __('Remove'), ICONS.DELETE, false, () =>
-            editCollection({ uris: [uri], remove: true })
+            editCollection({ uris: [uri], remove: true }),
           )}
         </div>
       )}

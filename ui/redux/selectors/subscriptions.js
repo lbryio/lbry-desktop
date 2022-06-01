@@ -18,12 +18,12 @@ const selectState = (state) => state.subscriptions || {};
 // Returns the list of channel uris a user is subscribed to
 export const selectSubscriptions = createSelector(
   selectState,
-  (state) => state.subscriptions && state.subscriptions.sort((a, b) => a.channelName.localeCompare(b.channelName))
+  (state) => state.subscriptions && state.subscriptions.sort((a, b) => a.channelName.localeCompare(b.channelName)),
 );
 
 export const selectSubscriptionUris = createSelector(
   selectSubscriptions,
-  (subscriptions) => subscriptions && subscriptions.map((sub) => sub.uri)
+  (subscriptions) => subscriptions && subscriptions.map((sub) => sub.uri),
 );
 
 export const selectLastActiveSubscriptions = (state) => selectState(state).lastActiveSubscriptions;
@@ -88,7 +88,7 @@ export const selectSuggestedChannels = createSelector(
       uri,
       label: suggestedChannels[uri],
     }));
-  }
+  },
 );
 
 export const selectFirstRunCompleted = (state) => selectState(state).firstRunCompleted;
@@ -108,7 +108,7 @@ export const selectSubscriptionsBeingFetched = createSelector(
     });
 
     return fetchingSubscriptionMap;
-  }
+  },
 );
 
 // Returns true if a user is subscribed to the channel associated with the uri passed in
@@ -133,7 +133,7 @@ export const selectIsSubscribedForUri = createCachedSelector(
     }
 
     return false;
-  }
+  },
 )((state, uri) => String(uri));
 
 /**
@@ -150,7 +150,7 @@ export const selectIsSubscribedForClaimId = createCachedSelector(
       return subscriptions.some((sub) => isURIEqual(sub.uri, permanentUrl));
     }
     return false;
-  }
+  },
 )((state, claimId) => String(claimId));
 
 export const makeSelectNotificationsDisabled = (uri) =>
@@ -179,5 +179,5 @@ export const makeSelectNotificationsDisabled = (uri) =>
       }
 
       return true;
-    }
+    },
   );

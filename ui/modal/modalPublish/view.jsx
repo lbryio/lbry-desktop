@@ -41,7 +41,7 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
       publishMessage = __('Your update is now pending. It will take a few minutes to appear for other users.');
     } else if (livestream) {
       publishMessage = __(
-        'Your livestream is now pending. You will be able to start shortly at the streaming dashboard.'
+        'Your livestream is now pending. You will be able to start shortly at the streaming dashboard.',
       );
     } else {
       publishMessage = __('Your content will be live shortly.');
@@ -65,7 +65,7 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
                 <p className="help">
                   <React.Fragment>
                     {__(
-                      `Upload will continue in the background, please do not shut down immediately. Leaving the app running helps the network, thank you!`
+                      `Upload will continue in the background, please do not shut down immediately. Leaving the app running helps the network, thank you!`,
                     )}{' '}
                     <Button button="link" href="https://lbry.com/faq/host-content" label={__('Learn More')} />
                   </React.Fragment>

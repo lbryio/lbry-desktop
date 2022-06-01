@@ -13,7 +13,7 @@ export default function useLazyLoading(
   elementRef: { current: ?ElementRef<any> },
   backgroundFallback: string = '',
   yOffsetPx: number = 500,
-  deps: Array<any> = []
+  deps: Array<any> = [],
 ) {
   const [srcLoaded, setSrcLoaded] = React.useState(false);
   const threshold = 0.01;
@@ -66,7 +66,7 @@ export default function useLazyLoading(
         root: null,
         rootMargin: `0px 0px ${calcRootMargin(yOffsetPx)}px 0px`,
         threshold: [threshold],
-      }
+      },
     );
 
     // $FlowFixMe

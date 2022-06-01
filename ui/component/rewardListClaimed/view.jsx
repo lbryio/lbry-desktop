@@ -30,7 +30,7 @@ const RewardListClaimed = (props: Props) => {
       subtitle={
         <div className="table__header-text">
           {__(
-            'Reward history is tied to your email. In case of lost or multiple wallets, your balance may differ from the amounts claimed'
+            'Reward history is tied to your email. In case of lost or multiple wallets, your balance may differ from the amounts claimed',
           )}
         </div>
       }
@@ -49,7 +49,7 @@ const RewardListClaimed = (props: Props) => {
               </tr>
             </thead>
             <tbody>
-              {rewards.reverse().map(reward => (
+              {rewards.reverse().map((reward) => (
                 <tr key={reward.id}>
                   <td>{reward.reward_title}</td>
                   <td>{reward.reward_amount}</td>

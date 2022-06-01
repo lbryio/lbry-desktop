@@ -133,7 +133,7 @@ export const selectRecommendedContentForUri = createCachedSelector(
 
           historyMatch = history.some(
             (historyItem) =>
-              (claimsByUri[historyItem.uri] && claimsByUri[historyItem.uri].claim_id) === nextRecommendedId
+              (claimsByUri[historyItem.uri] && claimsByUri[historyItem.uri].claim_id) === nextRecommendedId,
           );
         } catch (e) {}
 
@@ -150,7 +150,7 @@ export const selectRecommendedContentForUri = createCachedSelector(
     }
 
     return recommendedContent;
-  }
+  },
 )((state, uri) => String(uri));
 
 export const makeSelectRecommendedRecsysIdForClaimId = (claimId: string) =>
@@ -180,7 +180,7 @@ export const makeSelectRecommendedRecsysIdForClaimId = (claimId: string) =>
         }
       }
       return poweredBy;
-    }
+    },
   );
 
 export const makeSelectWinningUriForQuery = (query: string) => {
@@ -239,7 +239,7 @@ export const makeSelectWinningUriForQuery = (query: string) => {
       } else {
         return returnBeforePending;
       }
-    }
+    },
   );
 };
 
@@ -260,5 +260,5 @@ export const selectIsResolvingWinningUri = (state: State, query: string = '') =>
 
 export const makeSelectUrlForClaimId = (claimId: string) =>
   createSelector(makeSelectClaimForClaimId(claimId), (claim) =>
-    claim ? claim.canonical_url || claim.permanent_url : null
+    claim ? claim.canonical_url || claim.permanent_url : null,
   );

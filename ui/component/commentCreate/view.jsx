@@ -177,7 +177,7 @@ export function CommentCreate(props: Props) {
 
   function addEmoteToComment(emote: string) {
     setCommentValue(
-      commentValue + (commentValue && commentValue.charAt(commentValue.length - 1) !== ' ' ? ` ${emote} ` : `${emote} `)
+      commentValue + (commentValue && commentValue.charAt(commentValue.length - 1) !== ' ' ? ` ${emote} ` : `${emote} `),
     );
   }
 
@@ -322,7 +322,7 @@ export function CommentCreate(props: Props) {
           setSubmitting(false);
         },
         false,
-        'comment'
+        'comment',
       );
     } else {
       const tipParams: TipParams = { tipAmount: Math.round(tipAmount * 100) / 100, tipChannelName, channelClaimId };
@@ -345,7 +345,7 @@ export function CommentCreate(props: Props) {
           setTipSelector(false);
           setCommentFailure(false);
           setSubmitting(false);
-        }
+        },
       );
     }
   }
@@ -460,7 +460,7 @@ export function CommentCreate(props: Props) {
         channel_name: tipChannelName,
         environment: stripeEnvironment,
       },
-      'post'
+      'post',
     )
       .then((accountCheckResponse) => {
         if (accountCheckResponse === true && canReceiveFiatTip !== true) {

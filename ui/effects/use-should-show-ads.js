@@ -9,7 +9,7 @@ export default function useShouldShowAds(
   hasPremiumPlus: boolean,
   userCountry: string,
   isAdBlockerFound: ?boolean,
-  doSetAdBlockerFound: (boolean) => void
+  doSetAdBlockerFound: (boolean) => void,
 ) {
   const [shouldShowAds, setShouldShowAds] = React.useState(resolveAdVisibility());
 

@@ -12,7 +12,7 @@ const defaultState = {
 
 export const homepageReducer = handleActions(
   {
-    [ACTIONS.FETCH_FEATURED_CONTENT_STARTED]: state => ({
+    [ACTIONS.FETCH_FEATURED_CONTENT_STARTED]: (state) => ({
       ...state,
       fetchingFeaturedContent: true,
     }),
@@ -28,7 +28,7 @@ export const homepageReducer = handleActions(
       };
     },
 
-    [ACTIONS.FETCH_TRENDING_CONTENT_STARTED]: state => ({
+    [ACTIONS.FETCH_TRENDING_CONTENT_STARTED]: (state) => ({
       ...state,
       fetchingTrendingContent: true,
     }),
@@ -44,5 +44,5 @@ export const homepageReducer = handleActions(
       };
     },
   },
-  defaultState
+  defaultState,
 );

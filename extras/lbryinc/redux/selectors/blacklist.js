@@ -11,5 +11,5 @@ export const selectBlacklistedOutpointMap = createSelector(selectBlackListedOutp
         acc[outpoint] = 1;
         return acc;
       }, {})
-    : {}
+    : {},
 );

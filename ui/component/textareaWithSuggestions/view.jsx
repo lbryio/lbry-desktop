@@ -17,7 +17,7 @@ import TextareaSuggestionsGroup from './render-group';
 
 const SUGGESTION_REGEX = new RegExp(
   '((?:^| |\n)@[^\\s=&#$@%?:;/\\"<>%{}|^~[]*(?::[\\w]+)?)|((?:^| |\n):[\\w+-]*:?)',
-  'gm'
+  'gm',
 );
 
 /** Regex Explained step-by-step:
@@ -147,7 +147,7 @@ export default function TextareaWithSuggestions(props: Props) {
   const filteredSearch =
     canonicalSearch &&
     canonicalSearch.filter(
-      (uri) => shouldFilter(uri, filteredSubs) && shouldFilter(uri, filteredCommentors) && uri !== filteredTop
+      (uri) => shouldFilter(uri, filteredSubs) && shouldFilter(uri, filteredCommentors) && uri !== filteredTop,
     );
 
   let emoteNames;
@@ -196,7 +196,7 @@ export default function TextareaWithSuggestions(props: Props) {
   const allMatches =
     useSuggestionMatch(
       suggestionTerm || '',
-      allOptionsGrouped.map(({ label }) => label)
+      allOptionsGrouped.map(({ label }) => label),
     ) || [];
 
   /** --------- **/
@@ -298,7 +298,7 @@ export default function TextareaWithSuggestions(props: Props) {
       elem.focus();
       elem.setSelectionRange(newCursorPos, newCursorPos);
     },
-    [messageValue, inputRef, onChange, suggestionValue]
+    [messageValue, inputRef, onChange, suggestionValue],
   );
 
   /** ------- **/

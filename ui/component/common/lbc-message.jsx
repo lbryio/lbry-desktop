@@ -14,7 +14,7 @@ export default function LbcMessage(props: Props) {
     (originalString, lbcAmount, thirdArg) => {
       amount = lbcAmount;
       return `%lbc%`;
-    }
+    },
   );
 
   return (

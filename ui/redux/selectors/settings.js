@@ -40,7 +40,7 @@ export const selectHasWalletServerPrefs = createSelector(
   makeSelectSharedPreferencesForKey(DAEMON_SETTINGS.LBRYUM_SERVERS),
   (servers) => {
     return !!(servers && servers.length);
-  }
+  },
 );
 
 export const selectThemePath = createSelector(
@@ -50,7 +50,7 @@ export const selectThemePath = createSelector(
   (theme, automaticDarkModeEnabled, isNight) => {
     const dynamicTheme = automaticDarkModeEnabled && isNight ? 'dark' : theme;
     return dynamicTheme || 'light';
-  }
+  },
 );
 
 export const selectHomepageCode = (state) => {
@@ -109,5 +109,5 @@ export const selectosNotificationsEnabled = (state) => selectClientSetting(state
 
 export const selectDefaultChannelClaim = createSelector(
   (state) => selectClaimWithId(state, selectClientSetting(state, SETTINGS.ACTIVE_CHANNEL_CLAIM)),
-  (defaultChannelClaim) => defaultChannelClaim
+  (defaultChannelClaim) => defaultChannelClaim,
 );

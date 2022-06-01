@@ -44,7 +44,7 @@ export function doDeleteFile(
   deleteFromComputer?: boolean,
   abandonClaim?: boolean,
   cb: any,
-  claim: Claim
+  claim: Claim,
 ) {
   return (dispatch: Dispatch) => {
     if (abandonClaim) {
@@ -72,7 +72,7 @@ export function doDeleteFileAndMaybeGoBack(
   deleteFromComputer?: boolean,
   abandonClaim?: boolean,
   doGoBack: (any) => void,
-  claim: Claim
+  claim: Claim,
 ) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
@@ -101,8 +101,8 @@ export function doDeleteFileAndMaybeGoBack(
             }
           }
         },
-        claim
-      )
+        claim,
+      ),
     );
 
     if (playingUri.uri === uri) {
@@ -180,7 +180,7 @@ export function doFileGet(uri: string, saveFile: boolean = true, onSuccess?: (Ge
           doToast({
             message: `Failed to view ${uri}, please try again. If this problem persists, visit https://odysee.com/@OdyseeHelp:b?view=about for support.`,
             isError: true,
-          })
+          }),
         );
       });
   };
@@ -190,7 +190,7 @@ export function doPurchaseUri(
   uri: string,
   costInfo: { cost: number },
   saveFile: boolean = true,
-  onSuccess?: (GetResponse) => any
+  onSuccess?: (GetResponse) => any,
 ) {
   return (dispatch: Dispatch, getState: GetState) => {
     dispatch({

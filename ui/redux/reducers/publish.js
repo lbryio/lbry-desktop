@@ -256,5 +256,5 @@ export const publishReducer = handleActions(
       return state;
     },
   },
-  defaultState
+  defaultState,
 );

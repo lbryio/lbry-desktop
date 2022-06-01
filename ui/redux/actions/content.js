@@ -173,7 +173,7 @@ export function doPlayUri(
   skipCostCheck: boolean = false,
   saveFileOverride: boolean = false,
   cb?: () => void,
-  hideFailModal: boolean = false
+  hideFailModal: boolean = false,
 ) {
   return (dispatch: Dispatch, getState: () => any) => {
     const state = getState();
@@ -253,7 +253,7 @@ export function savePosition(uri: string, position: number) {
           claimId,
           outpoint,
           position,
-        })
+        }),
       );
     } catch (e) {
       console.error('localStorage not available');
@@ -305,7 +305,7 @@ export function doClearContentHistoryAll() {
 }
 
 export const doRecommendationUpdate = (claimId: string, urls: Array<string>, id: string, parentId: string) => (
-  dispatch: Dispatch
+  dispatch: Dispatch,
 ) => {
   dispatch({
     type: ACTIONS.RECOMMENDATION_UPDATED,
@@ -332,7 +332,7 @@ export function doToggleLoopList(collectionId: string, loop: boolean, hideToast:
       dispatch(
         doToast({
           message: loop ? __('Loop is on.') : __('Loop is off.'),
-        })
+        }),
       );
     }
   };
@@ -371,7 +371,7 @@ export function doToggleShuffleList(currentUri: string, collectionId: string, sh
       dispatch(
         doToast({
           message: shuffle ? __('Shuffle is on.') : __('Shuffle is off.'),
-        })
+        }),
       );
     }
   };

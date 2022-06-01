@@ -204,7 +204,7 @@ export default function FileRenderFloating(props: Props) {
 
   const clampToScreenOnResize = React.useCallback(
     debounce(restoreToRelativePosition, DEBOUNCE_WINDOW_RESIZE_HANDLER_MS),
-    []
+    [],
   );
 
   // For playlists when pressing next/previous etc and switching players
@@ -226,7 +226,7 @@ export default function FileRenderFloating(props: Props) {
     previousListUri,
     doNavigate,
     doUriInitiatePlay,
-    resetState
+    resetState,
   );
 
   // Establish web socket connection for viewer count.

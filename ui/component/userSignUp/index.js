@@ -41,13 +41,13 @@ const perform = (dispatch) => ({
     dispatch(
       doClaimRewardType(REWARD_TYPES.TYPE_CONFIRM_EMAIL, {
         notifyError: false,
-      })
+      }),
     ),
   claimNewUserReward: () =>
     dispatch(
       doClaimRewardType(REWARD_TYPES.NEW_USER, {
         notifyError: false,
-      })
+      }),
     ),
   setClientSetting: (setting, value, pushToPrefs) => dispatch(doSetClientSetting(setting, value, pushToPrefs)),
   doToggleInterestedInYoutubeSync: () => dispatch(doToggleInterestedInYoutubeSync()),

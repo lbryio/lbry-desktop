@@ -38,7 +38,7 @@ export default function ChannelsFollowingManage(props: Props) {
   const { uris, page, isLoadingPage, bumpPage } = useClaimListInfiniteScroll(
     subscribedChannelUris,
     doResolveUris,
-    FOLLOW_PAGE_SIZE
+    FOLLOW_PAGE_SIZE,
   );
 
   // Filtered query and their uris.
@@ -56,7 +56,8 @@ export default function ChannelsFollowingManage(props: Props) {
     } else {
       setFilteredUris(filteredUris);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps, (only need to respond to 'filterQuery')
+    // (only need to respond to 'filterQuery')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterQuery]);
 
   React.useEffect(() => {

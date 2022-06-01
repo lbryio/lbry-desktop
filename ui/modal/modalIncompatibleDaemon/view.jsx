@@ -25,7 +25,7 @@ class ModalIncompatibleDaemon extends React.PureComponent<Props> {
       >
         <p>
           {__(
-            'This app is running with an incompatible version of the LBRY protocol. You can still use it, but there may be issues. Re-run the installation package for best results.'
+            'This app is running with an incompatible version of the LBRY protocol. You can still use it, but there may be issues. Re-run the installation package for best results.',
           )}{' '}
           {/* I noticed the period below could end up on a line by itself. This is probably not the ideal solution, but seems better than not adding this. */}
           <span style={{ whiteSpace: 'nowrap' }}>

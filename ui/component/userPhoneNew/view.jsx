@@ -5,8 +5,8 @@ import Card from 'component/common/card';
 
 const os = require('os').type();
 const countryCodes = require('country-data')
-  .callingCountries.all.filter(_ => _.emoji)
-  .reduce((acc, cur) => acc.concat(cur.countryCallingCodes.map(_ => ({ ...cur, countryCallingCode: _ }))), [])
+  .callingCountries.all.filter((_) => _.emoji)
+  .reduce((acc, cur) => acc.concat(cur.countryCallingCodes.map((_) => ({ ...cur, countryCallingCode: _ }))), [])
   .sort((a, b) => {
     if (a.countryCallingCode < b.countryCallingCode) {
       return -1;
@@ -57,7 +57,7 @@ class UserPhoneNew extends React.PureComponent<Props, State> {
       }
       const fullNumber = `(${formattedNumber.substring(0, 3)}) ${formattedNumber.substring(
         3,
-        6
+        6,
       )}-${formattedNumber.substring(6)}`;
       return fullNumber.length <= 14 ? fullNumber : fullNumber.substring(0, 14);
     }
@@ -86,7 +86,7 @@ class UserPhoneNew extends React.PureComponent<Props, State> {
       <Card
         title={__('Enter your phone number')}
         subtitle={__(
-          'Enter your phone number and we will send you a verification code. We will not share your phone number with third parties.'
+          'Enter your phone number and we will send you a verification code. We will not share your phone number with third parties.',
         )}
         actions={
           <Form onSubmit={this.handleSubmit}>
@@ -105,7 +105,7 @@ class UserPhoneNew extends React.PureComponent<Props, State> {
                 name="phone"
                 value={this.state.phone}
                 error={phoneErrorMessage}
-                onChange={event => {
+                onChange={(event) => {
                   this.handleChanged(event);
                 }}
               />

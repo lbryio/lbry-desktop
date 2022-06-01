@@ -47,7 +47,7 @@ function parseURI(url, requireProto = false) {
       regexPartModifierSeparator + // modifier separator, modifier (stops at the first path separator or end)
       '(/?)' + // path separator, there should only be one (optional) slash to separate the stream and channel parts
       regexPartStreamOrChannelName +
-      regexPartModifierSeparator
+      regexPartModifierSeparator,
   );
   // chop off the querystring first
   let QSStrippedURL, qs;
@@ -102,7 +102,7 @@ function parseURI(url, requireProto = false) {
       throw new Error(
         __(`Channel names must be at least ${channelNameMinLength} characters.`, {
           channelNameMinLength,
-        })
+        }),
       );
     }
   }
@@ -110,11 +110,11 @@ function parseURI(url, requireProto = false) {
   // Validate and process modifier
   const [primaryClaimId, primaryClaimSequence, primaryBidPosition] = parseURIModifier(
     primaryModSeparator,
-    primaryModValue
+    primaryModValue,
   );
   const [secondaryClaimId, secondaryClaimSequence, secondaryBidPosition] = parseURIModifier(
     secondaryModSeparator,
-    secondaryModValue
+    secondaryModValue,
   );
   const streamName = includesChannel ? possibleStreamName : streamNameOrChannelName;
   const streamClaimId = includesChannel ? secondaryClaimId : primaryClaimId;
@@ -210,7 +210,7 @@ function buildURI(UrlObj, includeProto = true, protoDefault = 'lbry://') {
 
   if (!claimName && !channelName && !streamName) {
     console.error(
-      __("'claimName', 'channelName', and 'streamName' are all empty. One must be present to build a url.")
+      __("'claimName', 'channelName', and 'streamName' are all empty. One must be present to build a url."),
     );
   }
 
@@ -311,7 +311,7 @@ function convertToShareLink(URL) {
       secondaryClaimSequence,
     },
     true,
-    'https://open.lbry.com/'
+    'https://open.lbry.com/',
   );
 }
 

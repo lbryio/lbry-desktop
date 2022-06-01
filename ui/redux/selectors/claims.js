@@ -43,7 +43,7 @@ export const selectLatestClaimForUri = createSelector(
     const latestClaim = latestByUri[uri];
     // $FlowFixMe
     return latestClaim && Object.values(latestClaim)[0].stream;
-  }
+  },
 );
 
 export const selectClaimsByUri = createSelector(selectClaimIdsByUri, selectClaimsById, (byUri, byId) => {
@@ -145,7 +145,7 @@ export const selectClaimForUri = createCachedSelector(
         return claim;
       }
     }
-  }
+  },
 )((state, uri, returnRepost = true) => `${String(uri)}:${returnRepost ? '1' : '0'}`);
 
 // Note: this is deprecated. Use "selectClaimForUri(state, uri)" instead.
@@ -203,7 +203,7 @@ export const selectMyClaimsRaw = createSelector(selectState, selectClaimsById, (
 
 export const selectAbandoningById = (state: State) => selectState(state).abandoningById || {};
 export const selectAbandoningIds = createSelector(selectAbandoningById, (abandoningById) =>
-  Object.keys(abandoningById)
+  Object.keys(abandoningById),
 );
 
 export const makeSelectAbandoningClaimById = (claimId: string) =>
@@ -220,7 +220,7 @@ export const selectMyActiveClaims = createSelector(
   selectAbandoningIds,
   (myClaimIds, abandoningIds) => {
     return new Set(myClaimIds && myClaimIds.filter((claimId) => !abandoningIds.includes(claimId)));
-  }
+  },
 );
 
 // Helper for 'selectClaimIsMineForUri'.
@@ -236,7 +236,7 @@ const selectNormalizedAndVerifiedUri = createCachedSelector(
     } catch (e) {}
 
     return undefined;
-  }
+  },
 )((state, rawUri) => String(rawUri));
 
 export const selectClaimIsMine = (state: State, claim: ?Claim) => {
@@ -306,11 +306,11 @@ export const makeSelectMyPurchasesForPage = (query: ?string, page: number = 1) =
       return matchingFileInfos && matchingFileInfos.length
         ? matchingFileInfos.slice(start, end).map((fileInfo) => fileInfo.canonical_url || fileInfo.permanent_url)
         : [];
-    }
+    },
   );
 
 export const selectClaimWasPurchasedForUri = createSelector(selectClaimForUri, (claim) =>
-  Boolean(claim?.purchase_receipt !== undefined)
+  Boolean(claim?.purchase_receipt !== undefined),
 );
 
 export const selectAllFetchingChannelClaims = createSelector(selectState, (state) => state.fetchingChannelClaims || {});
@@ -388,7 +388,7 @@ export const selectDateForUri = createCachedSelector(
     }
     const dateObj = new Date(timestamp);
     return dateObj;
-  }
+  },
 )((state, uri) => String(uri));
 
 export const makeSelectAmountForUri = (uri: string) =>
@@ -451,7 +451,7 @@ export const selectMyClaimsPageNumber = createSelector(
   selectState,
   (state) => (state.claimListMinePage && state.claimListMinePage.items) || [],
 
-  (state) => (state.txoPage && state.txoPage.page) || 1
+  (state) => (state.txoPage && state.txoPage.page) || 1,
 );
 
 export const selectMyClaimsPageItemCount = (state: State) => selectState(state).myClaimsPageTotalResults || 1;
@@ -471,11 +471,11 @@ export const selectMyClaims = createSelector(
     });
 
     return [...claims];
-  }
+  },
 );
 
 export const selectMyClaimsWithoutChannels = createSelector(selectMyClaims, (myClaims) =>
-  myClaims.filter((claim) => claim && !claim.name.match(/^@/)).sort((a, b) => a.timestamp - b.timestamp)
+  myClaims.filter((claim) => claim && !claim.name.match(/^@/)).sort((a, b) => a.timestamp - b.timestamp),
 );
 
 export const selectMyClaimUrisWithoutChannels = createSelector(selectMyClaimsWithoutChannels, (myClaims) => {
@@ -496,7 +496,7 @@ export const selectMyClaimUrisWithoutChannels = createSelector(selectMyClaimsWit
 
 export const selectAllMyClaimsByOutpoint = createSelector(
   selectMyClaimsRaw,
-  (claims) => new Set(claims && claims.length ? claims.map((claim) => `${claim.txid}:${claim.nout}`) : null)
+  (claims) => new Set(claims && claims.length ? claims.map((claim) => `${claim.txid}:${claim.nout}`) : null),
 );
 
 export const selectMyClaimsOutpoints = createSelector(selectMyClaims, (myClaims) => {
@@ -542,7 +542,7 @@ export const selectMyChannelClaims = createSelector(selectMyChannelClaimIds, (my
 });
 
 export const selectMyChannelUrls = createSelector(selectMyChannelClaims, (claims) =>
-  claims ? claims.map((claim) => claim.canonical_url || claim.permanent_url) : undefined
+  claims ? claims.map((claim) => claim.canonical_url || claim.permanent_url) : undefined,
 );
 
 export const selectHasChannels = (state: State) => {
@@ -587,7 +587,7 @@ export const makeSelectTotalItemsForChannel = (uri: string) =>
 export const makeSelectTotalPagesForChannel = (uri: string, pageSize: number = 10) =>
   createSelector(
     selectChannelClaimCounts,
-    (byUri) => byUri && byUri[uri] && Math.ceil(byUri[normalizeURI(uri)] / pageSize)
+    (byUri) => byUri && byUri[uri] && Math.ceil(byUri[normalizeURI(uri)] / pageSize),
   );
 
 export const makeSelectNsfwCountFromUris = (uris: Array<string>) =>
@@ -598,7 +598,7 @@ export const makeSelectNsfwCountFromUris = (uris: Array<string>) =>
         return acc + 1;
       }
       return acc;
-    }, 0)
+    }, 0),
   );
 
 export const makeSelectOmittedCountForChannel = (uri: string) =>
@@ -609,7 +609,7 @@ export const makeSelectOmittedCountForChannel = (uri: string) =>
       if (claimsInChannel && typeof claimsInSearch === 'number' && claimsInSearch >= 0) {
         return claimsInChannel - claimsInSearch;
       } else return 0;
-    }
+    },
   );
 
 export const selectClaimIsNsfwForUri = createCachedSelector(
@@ -620,7 +620,7 @@ export const selectClaimIsNsfwForUri = createCachedSelector(
   // selectNaughtyTags(),
   (claim: Claim) => {
     return claim ? isClaimNsfw(claim) : false;
-  }
+  },
 )((state, uri) => String(uri));
 
 export const selectChannelForClaimUri = createCachedSelector(
@@ -638,7 +638,7 @@ export const selectChannelForClaimUri = createCachedSelector(
     } else {
       return includePrefix ? permanentUrl : permanentUrl.slice('lbry://'.length);
     }
-  }
+  },
 )((state, uri, includePrefix) => `${String(uri)}:${String(includePrefix)}`);
 
 // Returns the associated channel uri for a given claim uri
@@ -684,14 +684,14 @@ export const selectFetchingClaimSearchByQuery = (state: State) => selectState(st
 
 export const selectFetchingClaimSearch = createSelector(
   selectFetchingClaimSearchByQuery,
-  (fetchingClaimSearchByQuery) => Boolean(Object.keys(fetchingClaimSearchByQuery).length)
+  (fetchingClaimSearchByQuery) => Boolean(Object.keys(fetchingClaimSearchByQuery).length),
 );
 
 export const selectClaimSearchByQuery = createSelector(selectState, (state) => state.claimSearchByQuery || {});
 
 export const selectClaimSearchByQueryLastPageReached = createSelector(
   selectState,
-  (state) => state.claimSearchByQueryLastPageReached || {}
+  (state) => state.claimSearchByQueryLastPageReached || {},
 );
 
 export const selectShortUrlForUri = (state: State, uri: string) => {
@@ -813,7 +813,7 @@ export const selectIsMyChannelCountOverLimit = createSelector(
       return myClaimIds.length > CHANNEL_CREATION_LIMIT;
     }
     return false;
-  }
+  },
 );
 
 /**
@@ -860,5 +860,5 @@ export const selectGeoRestrictionForUri = createCachedSelector(
   selectUserLocale,
   (claim, geoBlockLists, locale: LocaleInfo) => {
     return getGeoRestrictionForClaim(claim, locale, geoBlockLists);
-  }
+  },
 )((state, uri) => String(uri));

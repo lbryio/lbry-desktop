@@ -62,7 +62,7 @@ export default function ModalRevokeClaim(props: Props) {
           <p>{__('Are you sure you want to unlock these Credits?')}</p>
           <p>
             {__(
-              'These Credits are permanently yours and can be unlocked at any time. Unlocking them allows you to spend them, but reduces discoverability of your content in lookups and search results. It is recommended you leave Credits locked until you need or want to spend them.'
+              'These Credits are permanently yours and can be unlocked at any time. Unlocking them allows you to spend them, but reduces discoverability of your content in lookups and search results. It is recommended you leave Credits locked until you need or want to spend them.',
             )}
           </p>
         </React.Fragment>

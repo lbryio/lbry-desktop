@@ -8,7 +8,7 @@ const defaultState = {
 
 export const filteredReducer = handleActions(
   {
-    [ACTIONS.FETCH_FILTERED_CONTENT_STARTED]: state => ({
+    [ACTIONS.FETCH_FILTERED_CONTENT_STARTED]: (state) => ({
       ...state,
       loading: true,
     }),
@@ -30,5 +30,5 @@ export const filteredReducer = handleActions(
       };
     },
   },
-  defaultState
+  defaultState,
 );

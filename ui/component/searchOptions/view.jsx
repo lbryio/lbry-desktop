@@ -168,7 +168,7 @@ const SearchOptions = (props: Props) => {
           tooltip
           size={16}
           customTooltipText={__(
-            'Find results that include all the given words in the exact order.\nThis can also be done by surrounding the search query with quotation marks (e.g. "hello world").'
+            'Find results that include all the given words in the exact order.\nThis can also be done by surrounding the search query with quotation marks (e.g. "hello world").',
           )}
         />
       </div>

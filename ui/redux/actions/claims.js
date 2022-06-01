@@ -32,7 +32,7 @@ export function doResolveUris(
   uris: Array<string>,
   returnCachedClaims: boolean = false,
   resolveReposts: boolean = true,
-  additionalOptions: any = {}
+  additionalOptions: any = {},
 ) {
   return (dispatch: Dispatch, getState: GetState) => {
     const normalizedUris = uris.map(normalizeURI);
@@ -171,8 +171,8 @@ export function doResolveClaimIds(claimIds: Array<string>) {
         },
         {
           useAutoPagination: idsToResolve.length > 50,
-        }
-      )
+        },
+      ),
     );
   };
 }
@@ -181,7 +181,7 @@ export function doResolveUri(
   uri: string,
   returnCachedClaims: boolean = false,
   resolveReposts: boolean = true,
-  additionalOptions: any = {}
+  additionalOptions: any = {},
 ) {
   return doResolveUris([uri], returnCachedClaims, resolveReposts, additionalOptions);
 }
@@ -190,7 +190,7 @@ export function doFetchClaimListMine(
   page: number = 1,
   pageSize: number = 99999,
   resolve: boolean = true,
-  filterBy: Array<string> = []
+  filterBy: Array<string> = [],
 ) {
   return (dispatch: Dispatch) => {
     dispatch({
@@ -243,7 +243,7 @@ export function doAbandonTxo(txo: Txo, cb: (string) => void) {
         doToast({
           message: isClaim ? 'Error abandoning your claim/support' : 'Error unlocking your tip',
           isError: true,
-        })
+        }),
       );
     };
 
@@ -266,7 +266,7 @@ export function doAbandonTxo(txo: Txo, cb: (string) => void) {
       dispatch(
         doToast({
           message: abandonMessage,
-        })
+        }),
       );
     };
 
@@ -338,7 +338,7 @@ export function doAbandonClaim(claim: Claim, cb: (string) => void) {
         doToast({
           message: isClaim ? 'Error abandoning your claim/support' : 'Error unlocking your tip',
           isError: true,
-        })
+        }),
       );
       if (cb) cb(ABANDON_STATES.ERROR);
     };
@@ -362,7 +362,7 @@ export function doAbandonClaim(claim: Claim, cb: (string) => void) {
       dispatch(
         doToast({
           message: abandonMessage,
-        })
+        }),
       );
       dispatch(doFetchTxoPage());
     };
@@ -638,7 +638,7 @@ export function doFetchCollectionListMine(page: number = 1, pageSize: number = 9
         doFetchItemsInCollections({
           collectionIds: items.map((claim) => claim.claim_id),
           page_size: 5,
-        })
+        }),
       );
     };
 
@@ -682,7 +682,7 @@ export function doClaimSearch(
     useAutoPagination?: boolean,
   } = {
     useAutoPagination: false,
-  }
+  },
 ) {
   const query = createNormalizedClaimSearchKey(options);
   return async (dispatch: Dispatch) => {
@@ -811,7 +811,7 @@ export function doCollectionPublish(
     languages?: Array<string>,
     claims: Array<string>,
   },
-  localId: string
+  localId: string,
 ) {
   return (dispatch: Dispatch): Promise<any> => {
     // $FlowFixMe
@@ -868,8 +868,8 @@ export function doCollectionPublish(
               data: {
                 claims: [collectionClaim],
               },
-            }
-          )
+            },
+          ),
         );
         dispatch({
           type: ACTIONS.COLLECTION_PENDING,
@@ -907,7 +907,7 @@ export function doCollectionPublishUpdate(
     claims?: Array<string>,
     channel_id?: string,
   },
-  isBackgroundUpdate?: boolean
+  isBackgroundUpdate?: boolean,
 ) {
   return (dispatch: Dispatch, getState: GetState): Promise<any> => {
     // TODO: implement one click update
@@ -1022,8 +1022,8 @@ export function doCheckPublishNameAvailability(name: string) {
         },
         {
           useAutoPagination: true,
-        }
-      )
+        },
+      ),
     ).then((result) => {
       dispatch({
         type: ACTIONS.CHECK_PUBLISH_NAME_COMPLETED,
@@ -1112,7 +1112,7 @@ export const doCheckPendingClaims = (onChannelConfirmed: Function) => (dispatch:
                 dispatch(
                   doFetchItemsInCollections({
                     collectionIds,
-                  })
+                  }),
                 );
               }
               const channelClaims = claims.filter((claim) => claim.value_type === 'channel');
@@ -1137,7 +1137,7 @@ export const doCheckPendingClaims = (onChannelConfirmed: Function) => (dispatch:
 
 export const doFetchLatestClaimForChannel = (uri: string, isEmbed?: boolean) => (
   dispatch: Dispatch,
-  getState: GetState
+  getState: GetState,
 ) => {
   const searchOptions = {
     limit_claims_per_channel: 1,
@@ -1154,7 +1154,7 @@ export const doFetchLatestClaimForChannel = (uri: string, isEmbed?: boolean) => 
       dispatch({
         type: ACTIONS.FETCH_LATEST_FOR_CHANNEL_DONE,
         data: { uri, results },
-      })
+      }),
     )
     .catch(() => dispatch({ type: ACTIONS.FETCH_LATEST_FOR_CHANNEL_FAIL }));
 };

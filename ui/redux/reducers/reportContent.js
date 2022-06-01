@@ -25,5 +25,5 @@ export default handleActions(
       error: action.data,
     }),
   },
-  defaultState
+  defaultState,
 );

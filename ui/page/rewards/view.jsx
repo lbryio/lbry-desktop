@@ -63,14 +63,14 @@ class RewardsPage extends PureComponent<Props> {
             <React.Fragment>
               <p>
                 {__(
-                  'This account must undergo review before you can participate in the rewards program. Not all users and regions may qualify.'
+                  'This account must undergo review before you can participate in the rewards program. Not all users and regions may qualify.',
                 )}{' '}
                 {__('This can take anywhere from a few hours to several days. Please be patient.')}
               </p>
 
               <p>
                 {__(
-                  'We apologize for this inconvenience, but have added this additional step to prevent abuse. Users on VPN or shared connections will continue to see this message and are not eligible for Rewards.'
+                  'We apologize for this inconvenience, but have added this additional step to prevent abuse. Users on VPN or shared connections will continue to see this message and are not eligible for Rewards.',
                 )}
               </p>
               <p>
@@ -151,7 +151,7 @@ class RewardsPage extends PureComponent<Props> {
           subtitle={
             claimed && claimed.length
               ? __(
-                  "You have claimed all available rewards! We're regularly adding more so be sure to check back later."
+                  "You have claimed all available rewards! We're regularly adding more so be sure to check back later.",
                 )
               : __('There are no rewards available at this time, please check back later.')
           }

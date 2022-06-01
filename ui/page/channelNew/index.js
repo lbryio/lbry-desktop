@@ -17,6 +17,6 @@ export default connect(select, (dispatch) => ({
     dispatch(
       doClaimRewardType(REWARD_TYPES.TYPE_CONFIRM_EMAIL, {
         notifyError: false,
-      })
+      }),
     ),
 }))(ChannelNew);

@@ -19,7 +19,7 @@ export const selectIsFetchingFileList = (state) => selectState(state).isFetching
 export const selectIsFetchingFileListDownloadedOrPublished = createSelector(
   selectIsFetchingFileList,
   selectIsFetchingClaimListMine,
-  (isFetchingFileList, isFetchingClaimListMine) => isFetchingFileList || isFetchingClaimListMine
+  (isFetchingFileList, isFetchingClaimListMine) => isFetchingFileList || isFetchingClaimListMine,
 );
 
 export const makeSelectFileInfoForUri = (uri) =>
@@ -59,7 +59,7 @@ export const selectFileInfosDownloaded = createSelector(
       const myClaimIds = myClaims.map((claim) => claim.claim_id);
 
       return fileInfo && myClaimIds.indexOf(fileInfo.claim_id) === -1 && (fileInfo.completed || fileInfo.written_bytes);
-    })
+    }),
 );
 
 export const selectDownloadingFileInfos = createSelector(
@@ -76,7 +76,7 @@ export const selectDownloadingFileInfos = createSelector(
     });
 
     return fileInfos;
-  }
+  },
 );
 
 export const selectTotalDownloadProgress = createSelector(selectDownloadingFileInfos, (fileInfos) => {
@@ -100,7 +100,7 @@ export const selectFileListDownloadedSort = (state) => selectState(state).fileLi
 export const selectDownloadedUris = createSelector(
   selectFileInfosDownloaded,
   // We should use permament_url but it doesn't exist in file_list
-  (info) => info.slice().map((claim) => `lbry://${claim.claim_name}#${claim.claim_id}`)
+  (info) => info.slice().map((claim) => `lbry://${claim.claim_name}#${claim.claim_id}`),
 );
 
 export const makeSelectMediaTypeForUri = (uri) =>
@@ -169,7 +169,7 @@ export const makeSelectSearchDownloadUrlsForPage = (query, page = 1) =>
             streamName: fileInfo.claim_name,
             channelName: fileInfo.channel_name,
             channelClaimId: fileInfo.channel_claim_id,
-          })
+          }),
         )
       : [];
   });

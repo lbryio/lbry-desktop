@@ -23,7 +23,7 @@ let activeSubsLastFetchedTime = 0;
 export function doToggleSubscription(
   subscription: SubscriptionArgs,
   followToast: boolean,
-  isSubscribed: boolean = false
+  isSubscribed: boolean = false,
 ) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const {
@@ -75,7 +75,7 @@ export function doToggleSubscription(
           message: __(!isSubscribed ? 'You followed %CHANNEL_NAME%!' : 'Unfollowed %CHANNEL_NAME%.', {
             CHANNEL_NAME: subscription.channelName,
           }),
-        })
+        }),
       );
     }
 

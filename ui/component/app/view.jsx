@@ -39,7 +39,7 @@ const FileDrop = lazyImport(() => import('component/fileDrop' /* webpackChunkNam
 const NagContinueFirstRun = lazyImport(() => import('component/nagContinueFirstRun' /* webpackChunkName: "nagCFR" */));
 const NagLocaleSwitch = lazyImport(() => import('component/nagLocaleSwitch' /* webpackChunkName: "nagLocaleSwitch" */));
 const NagDegradedPerformance = lazyImport(() =>
-  import('web/component/nag-degraded-performance' /* webpackChunkName: "NagDegradedPerformance" */)
+  import('web/component/nag-degraded-performance' /* webpackChunkName: "NagDegradedPerformance" */),
 );
 const NagNoUser = lazyImport(() => import('web/component/nag-no-user' /* webpackChunkName: "nag-no-user" */));
 const NagSunset = lazyImport(() => import('web/component/nag-sunset' /* webpackChunkName: "nag-sunset" */));
@@ -448,7 +448,8 @@ function App(props: Props) {
         // console.log(err); <-- disabling this ... it's clogging up Sentry logs.
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps, (one time after locale is fetched)
+    // (one time after locale is fetched)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locale]);
 
   useEffect(() => {

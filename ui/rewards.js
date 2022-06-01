@@ -64,7 +64,7 @@ rewards.claimReward = (type, rewardParams) => {
                     foundClaim.name.length &&
                     foundClaim.name[0] === '@' &&
                     foundClaim.txid.length &&
-                    foundClaim.type === 'claim'
+                    foundClaim.type === 'claim',
                 );
               if (claim) {
                 params.transaction_id = claim.txid;
@@ -86,7 +86,7 @@ rewards.claimReward = (type, rewardParams) => {
                     foundClaim.name.length &&
                     foundClaim.name[0] !== '@' &&
                     foundClaim.txid.length &&
-                    foundClaim.type === 'claim'
+                    foundClaim.type === 'claim',
                 );
               if (claim) {
                 params.transaction_id = claim.txid;
@@ -95,9 +95,9 @@ rewards.claimReward = (type, rewardParams) => {
                 reject(
                   claims.length
                     ? new Error(
-                        __('Please upload something and wait for confirmation by the network to claim this reward.')
+                        __('Please upload something and wait for confirmation by the network to claim this reward.'),
                       )
-                    : new Error(__('Please upload something to claim this reward.'))
+                    : new Error(__('Please upload something to claim this reward.')),
                 );
               }
             })

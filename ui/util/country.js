@@ -13,6 +13,6 @@ export const COUNTRIES = Array.from(
           return -1;
         }
         return 0;
-      })
-  )
+      }),
+  ),
 );

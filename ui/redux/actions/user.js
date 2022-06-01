@@ -126,7 +126,7 @@ export function doCheckUserOdyseeMemberships(user) {
         {
           environment: stripeEnvironment,
         },
-        'post'
+        'post',
       );
 
       let savedMemberships = [];
@@ -167,7 +167,7 @@ export function doAuthenticate(
   appVersion,
   shareUsageData = true,
   callbackForUsersWhoAreSharingData,
-  callInstall = true
+  callInstall = true,
 ) {
   return (dispatch) => {
     dispatch({
@@ -281,7 +281,7 @@ export function doUserPhoneNew(phone, countryCode) {
 
     Lbryio.call('user', 'phone_number_new', { phone_number: phone, country_code: countryCode }, 'post').then(
       success,
-      failure
+      failure,
     );
   };
 }
@@ -311,7 +311,7 @@ export function doUserPhoneVerify(verificationCode) {
         phone_number: phoneNumber,
         country_code: countryCode,
       },
-      'post'
+      'post',
     )
       .then((user) => {
         if (user.is_identity_verified) {
@@ -366,7 +366,7 @@ export function doUserEmailNew(email) {
 
           return Lbryio.call('user_email', 'resend_token', { email, only_if_expired: true }, 'post').then(
             success,
-            failure
+            failure,
           );
         }
         throw error;
@@ -461,7 +461,7 @@ export function doUserSignIn(email, password) {
 
           return Lbryio.call('user_email', 'resend_token', { email, only_if_expired: true }, 'post').then(
             success,
-            failure
+            failure,
           );
         }
         throw error;
@@ -555,7 +555,7 @@ export function doUserPasswordSet(newPassword, oldPassword, authToken) {
         ...(oldPassword ? { old_password: oldPassword } : {}),
         ...(authToken ? { auth_token: authToken } : {}),
       },
-      'post'
+      'post',
     ).then(success, failure);
   };
 }
@@ -626,7 +626,7 @@ export function doUserEmailVerify(verificationToken, recaptcha) {
         email,
         recaptcha,
       },
-      'post'
+      'post',
     )
       .then((userEmail) => {
         if (userEmail.is_verified) {
@@ -687,7 +687,7 @@ export function doUserInviteNew(email) {
         dispatch(
           doToast({
             message: __('Invite sent to %email_address%', { email_address: email }),
-          })
+          }),
         );
 
         dispatch(doFetchInviteStatus());
@@ -842,7 +842,7 @@ export function doClaimYoutubeChannels() {
                   });
                 }
                 return null;
-              })
+              }),
             ).then(() => {
               const actions = [
                 {
@@ -855,7 +855,7 @@ export function doClaimYoutubeChannels() {
               dispatch(batchActions(...actions));
             });
           }
-        })
+        }),
       )
       .catch((error) => {
         dispatch({

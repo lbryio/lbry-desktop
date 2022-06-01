@@ -145,7 +145,7 @@ export default function SettingSystem(props: Props) {
             <SettingsRow
               title={__('Save all viewed content to your downloads directory')}
               subtitle={__(
-                'Paid content and some file types are saved by default. Changing this setting will not affect previously downloaded content.'
+                'Paid content and some file types are saved by default. Changing this setting will not affect previously downloaded content.',
               )}
             >
               <FormField
@@ -179,7 +179,7 @@ export default function SettingSystem(props: Props) {
               subtitle={
                 <React.Fragment>
                   {__(
-                    `This is information like error logging, performance tracking, and usage statistics. It includes your IP address and basic system details, but no other identifying information (unless you sign in to lbry.tv)`
+                    `This is information like error logging, performance tracking, and usage statistics. It includes your IP address and basic system details, but no other identifying information (unless you sign in to lbry.tv)`,
                   )}{' '}
                   <Button button="link" label={__('Learn more')} href="https://odysee.com/$/privacypolicy" />
                 </React.Fragment>
@@ -216,7 +216,7 @@ export default function SettingSystem(props: Props) {
               <SettingsRow
                 title={__('Start minimized')}
                 subtitle={__(
-                  'Improve view speed and help the LBRY network by allowing the app to cuddle up in your system tray.'
+                  'Improve view speed and help the LBRY network by allowing the app to cuddle up in your system tray.',
                 )}
               >
                 <SettingAutoLaunch noLabels />
@@ -342,7 +342,7 @@ export default function SettingSystem(props: Props) {
             <SettingsRow
               title={__('Max connections')}
               subtitle={__(
-                'For users with good bandwidth, try a higher value to improve streaming and download speeds. Low bandwidth users may benefit from a lower setting. Default is 4.'
+                'For users with good bandwidth, try a higher value to improve streaming and download speeds. Low bandwidth users may benefit from a lower setting. Default is 4.',
               )}
             >
               {/* Disabling below until we get downloads to work with shared subscriptions code */}

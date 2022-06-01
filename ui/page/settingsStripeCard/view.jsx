@@ -109,7 +109,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
           {
             environment: stripeEnvironment,
           },
-          'post'
+          'post',
         )
           .then((customerStatusResponse) => {
             // user has a card saved if their defaultPaymentMethod has an id
@@ -154,7 +154,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
                 {
                   environment: stripeEnvironment,
                 },
-                'post'
+                'post',
               ).then((customerSetupResponse) => {
                 clientSecret = customerSetupResponse.client_secret;
 
@@ -170,7 +170,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
               {
                 environment: stripeEnvironment,
               },
-              'post'
+              'post',
             ).then((customerTransactionsResponse) => {
               that.setState({
                 customerTransactions: customerTransactionsResponse,
@@ -196,7 +196,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
                 {
                   environment: stripeEnvironment,
                 },
-                'post'
+                'post',
               ).then((customerSetupResponse) => {
                 clientSecret = customerSetupResponse.client_secret;
 
@@ -335,7 +335,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
               {
                 environment: stripeEnvironment,
               },
-              'post'
+              'post',
             ).then((customerStatusResponse) => {
               let card = customerStatusResponse.PaymentMethods[0].card;
 

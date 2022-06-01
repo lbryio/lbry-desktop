@@ -88,7 +88,7 @@ function ClaimListHeader(props: Props) {
         urlParams.get(CS.DURATION_KEY) ||
         urlParams.get(CS.TAGS_KEY) ||
         urlParams.get(CS.FEE_AMOUNT_KEY) ||
-        urlParams.get(CS.LANGUAGE_KEY)
+        urlParams.get(CS.LANGUAGE_KEY),
     );
 
   const languageValue = searchInLanguage

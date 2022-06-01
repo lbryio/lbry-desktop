@@ -25,7 +25,7 @@ class ModalDownloading extends React.PureComponent<Props> {
             <p>{__('Click "Begin Upgrade" to start the upgrade process.')}</p>
             <p>
               {__(
-                'The app will close (if not, quit with CTRL-Q), and you will be prompted to install the latest version of LBRY.'
+                'The app will close (if not, quit with CTRL-Q), and you will be prompted to install the latest version of LBRY.',
               )}
             </p>
             <p>

@@ -13,7 +13,7 @@ export default function fetchWithTimeout(ms, promise) {
       (err) => {
         clearTimeout(timeoutId);
         reject(err);
-      }
+      },
     );
   });
 }

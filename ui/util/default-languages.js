@@ -56,7 +56,7 @@ export function resolveLangForClaimSearch(
   languageSetting, // : string,
   searchInLanguageSetting, // : boolean,
   searchLanguages, // : ?Array<string>,
-  languageUrlParams = null // : ?string
+  languageUrlParams = null, // : ?string
 ) {
   const langParam = languageUrlParams;
 

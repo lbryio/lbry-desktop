@@ -92,7 +92,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
           'button--link': button === 'link',
         }
       : 'button--no-style',
-    className
+    className,
   );
 
   const innerRef = useRef(null);

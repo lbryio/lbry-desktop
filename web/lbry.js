@@ -224,7 +224,7 @@ function daemonCallWithResult(name, params = {}) {
       (result) => {
         resolve(result);
       },
-      reject
+      reject,
     );
   });
 }

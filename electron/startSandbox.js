@@ -31,7 +31,7 @@ export default async function startSandbox() {
     .on('error', err => {
       if (err.code === 'EADDRINUSE') {
         console.log(
-          `Server already listening at localhost:${port}. This is probably another LBRY app running. If not, games in the app will not work.`
+          `Server already listening at localhost:${port}. This is probably another LBRY app running. If not, games in the app will not work.`,
         );
       }
     });

@@ -228,7 +228,7 @@ export default function FilePage(props: Props) {
                 <div className="livestream__creator-message">
                   <h4>{__('Only visible to you')}</h4>
                   {__(
-                    'People who view this link will be redirected to your livestream. Make sure to use this for sharing so your title and thumbnail are displayed properly.'
+                    'People who view this link will be redirected to your livestream. Make sure to use this for sharing so your title and thumbnail are displayed properly.',
                   )}
                   <div className="section__actions">
                     <Button button="primary" navigate={`/$/${PAGES.LIVESTREAM}`} label={__('View livestream')} />

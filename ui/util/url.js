@@ -119,7 +119,7 @@ export const generateShareUrl = (
   rewardsApproved,
   includeStartTime,
   startTime,
-  listId
+  listId,
 ) => {
   let urlParams = new URLSearchParams();
   if (referralCode && rewardsApproved) {

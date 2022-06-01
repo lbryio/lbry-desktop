@@ -36,7 +36,7 @@ export const makeSelectCollectionIsMine = (id: string) =>
     selectBuiltinCollections,
     (publicIds, privateIds, builtinIds) => {
       return Boolean(publicIds.includes(id) || privateIds[id] || builtinIds[id]);
-    }
+    },
   );
 
 export const selectMyPublishedCollections = createSelector(
@@ -52,16 +52,16 @@ export const selectMyPublishedCollections = createSelector(
           ([key, val]) =>
             myIds.includes(key) &&
             // $FlowFixMe
-            !pending[key]
-        )
-      )
+            !pending[key],
+        ),
+      ),
     );
     // now add in edited:
     Object.entries(edited).forEach(([id, item]) => {
       myPublishedCollections[id] = item;
     });
     return myPublishedCollections;
-  }
+  },
 );
 
 export const selectMyPublishedMixedCollections = createSelector(selectMyPublishedCollections, (published) => {
@@ -70,7 +70,7 @@ export const selectMyPublishedMixedCollections = createSelector(selectMyPublishe
     Object.entries(published).filter(([key, collection]) => {
       // $FlowFixMe
       return collection.type === 'collection';
-    })
+    }),
   );
   return myCollections;
 });
@@ -81,7 +81,7 @@ export const selectMyPublishedPlaylistCollections = createSelector(selectMyPubli
     Object.entries(published).filter(([key, collection]) => {
       // $FlowFixMe
       return collection.type === 'playlist';
-    })
+    }),
   );
   return myCollections;
 });
@@ -115,7 +115,7 @@ export const makeSelectCollectionForId = (id: string) =>
     (bLists, rLists, uLists, eLists, pLists) => {
       const collection = bLists[id] || uLists[id] || eLists[id] || pLists[id] || rLists[id];
       return collection;
-    }
+    },
   );
 
 export const makeSelectClaimUrlInCollection = (url: string) =>
@@ -137,7 +137,7 @@ export const makeSelectClaimUrlInCollection = (url: string) =>
         });
       });
       return itemsInCollections.includes(url);
-    }
+    },
   );
 
 export const makeSelectCollectionForIdHasClaimUrl = (id: string, url: string) =>
@@ -174,7 +174,7 @@ export const makeSelectIndexForUrlInCollection = (url: string, id: string, ignor
         return claim;
       }
       return null;
-    }
+    },
   );
 
 export const makeSelectPreviousUrlForCollectionAndUrl = (id: string, url: string) =>
@@ -199,7 +199,7 @@ export const makeSelectPreviousUrlForCollectionAndUrl = (id: string, url: string
       } else {
         return null;
       }
-    }
+    },
   );
 
 export const makeSelectNextUrlForCollectionAndUrl = (id: string, url: string) =>
@@ -224,7 +224,7 @@ export const makeSelectNextUrlForCollectionAndUrl = (id: string, url: string) =>
       } else {
         return null;
       }
-    }
+    },
   );
 
 export const makeSelectNameForCollectionId = (id: string) =>

@@ -20,7 +20,7 @@ export function makeUploadRequest(
   token: string,
   params: FileUploadSdkParams,
   file: File | string,
-  isPreview?: boolean
+  isPreview?: boolean,
 ) {
   const { remote_url: remoteUrl } = params;
 

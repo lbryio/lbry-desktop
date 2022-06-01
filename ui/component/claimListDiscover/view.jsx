@@ -211,7 +211,7 @@ function ClaimListDiscover(props: Props) {
   const freshnessParam = freshness || urlParams.get(CS.FRESH_KEY) || defaultFreshness;
   const sortByParam = sortBy || urlParams.get(CS.SORT_BY_KEY) || CS.SORT_BY.NEWEST.key;
   const mutedAndBlockedChannelIds = Array.from(
-    new Set(mutedUris.concat(blockedUris).map((uri) => splitBySeparator(uri)[1]))
+    new Set(mutedUris.concat(blockedUris).map((uri) => splitBySeparator(uri)[1])),
   );
   const [hiddenBuffer, setHiddenBuffer] = React.useState([]);
 

@@ -78,15 +78,15 @@ export const selectTransactionItems = createSelector(selectTransactionsById, (by
       ...tx.claim_info.map((item) =>
         Object.assign({}, tx, item, {
           type: item.claim_name[0] === '@' ? TRANSACTIONS.CHANNEL : TRANSACTIONS.PUBLISH,
-        })
-      )
+        }),
+      ),
     );
     append.push(
       ...tx.support_info.map((item) =>
         Object.assign({}, tx, item, {
           type: !item.is_tip ? TRANSACTIONS.SUPPORT : TRANSACTIONS.TIP,
-        })
-      )
+        }),
+      ),
     );
     append.push(...tx.update_info.map((item) => Object.assign({}, tx, item, { type: TRANSACTIONS.UPDATE })));
     append.push(...tx.abandon_info.map((item) => Object.assign({}, tx, item, { type: TRANSACTIONS.ABANDON })));
@@ -95,7 +95,7 @@ export const selectTransactionItems = createSelector(selectTransactionsById, (by
       append.push(
         Object.assign({}, tx, {
           type: tx.value < 0 ? TRANSACTIONS.SPEND : TRANSACTIONS.RECEIVE,
-        })
+        }),
       );
     }
 
@@ -120,7 +120,7 @@ export const selectTransactionItems = createSelector(selectTransactionsById, (by
           nout: item.nout,
           confirmations: tx.confirmations,
         };
-      })
+      }),
     );
   });
 
@@ -151,7 +151,7 @@ export const selectRecentTransactions = createSelector(selectTransactionItems, (
 
 export const selectHasTransactions = createSelector(
   selectTransactionItems,
-  (transactions) => transactions && transactions.length > 0
+  (transactions) => transactions && transactions.length > 0,
 );
 
 export const selectIsFetchingTransactions = (state) => selectState(state).fetchingTransactions;
@@ -197,7 +197,7 @@ export const selectFilteredTransactions = createSelector(
     return transactions.filter((transaction) => {
       return filter === TRANSACTIONS.ALL || filter === transaction.type;
     });
-  }
+  },
 );
 
 export const selectTxoPageParams = (state) => selectState(state).txoFetchParams;
@@ -208,7 +208,7 @@ export const selectTxoPageNumber = createSelector(selectState, (state) => (state
 
 export const selectTxoItemCount = createSelector(
   selectState,
-  (state) => (state.txoPage && state.txoPage.total_items) || 1
+  (state) => (state.txoPage && state.txoPage.total_items) || 1,
 );
 
 export const selectFetchingTxosError = (state) => selectState(state).fetchingTxosError;
@@ -227,7 +227,7 @@ export const makeSelectLatestTransactions = createSelector(selectTransactionItem
 
 export const selectFilteredTransactionCount = createSelector(
   selectFilteredTransactions,
-  (filteredTransactions) => filteredTransactions.length
+  (filteredTransactions) => filteredTransactions.length,
 );
 
 export const selectIsWalletReconnecting = (state) => selectState(state).walletReconnecting;

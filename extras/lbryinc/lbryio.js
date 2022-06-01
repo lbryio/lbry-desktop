@@ -172,7 +172,7 @@ Lbryio.authenticate = (domain, language) => {
                       language: language || 'en',
                       app_id: appId,
                     },
-                    'post'
+                    'post',
                   )
                     .then((response) => {
                       if (!response.auth_token) {
@@ -194,7 +194,7 @@ Lbryio.authenticate = (domain, language) => {
                       return res(response);
                     })
                     .catch((error) => rej(error));
-                })
+                }),
             )
             .then((newUser) => {
               if (!newUser) {

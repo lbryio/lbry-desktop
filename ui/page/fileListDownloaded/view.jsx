@@ -129,7 +129,7 @@ function FileListDownloaded(props: Props) {
             <Paginate
               totalPages={Math.ceil(
                 Number(viewMode === VIEW_PURCHASES ? myPurchasesCount : downloadedUrlsCount) /
-                  Number(viewMode === VIEW_PURCHASES ? PURCHASES_PAGE_SIZE : PAGE_SIZE)
+                  Number(viewMode === VIEW_PURCHASES ? PURCHASES_PAGE_SIZE : PAGE_SIZE),
               )}
             />
           )}

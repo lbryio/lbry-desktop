@@ -117,8 +117,8 @@ export default function TagsSearch(props: Props) {
           .split(',')
           .slice(0, limitSelect - countWithoutSpecialTags)
           .map((newTag) => newTag.trim().toLowerCase())
-          .filter((newTag) => !UNALLOWED_TAGS.includes(newTag))
-      )
+          .filter((newTag) => !UNALLOWED_TAGS.includes(newTag)),
+      ),
     );
 
     // Split into individual tags, normalize the tags, and remove duplicates with a set.
@@ -245,7 +245,7 @@ export default function TagsSearch(props: Props) {
                       .replace(INTERNAL_TAG_PREFIX, '')
                       .split('-')
                       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                      .join(' ')
+                      .join(' '),
                   )}
                   checked={tagsPassedIn.some((te) => te.name === t)}
                   onChange={() => handleUtilityTagCheckbox(t)}

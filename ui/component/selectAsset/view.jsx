@@ -74,7 +74,7 @@ function SelectAsset(props: Props) {
         return json.type === 'success'
           ? onSuccess(`${json.message}`)
           : uploadError(
-              json.message || __('There was an error in the upload. The format or extension might not be supported.')
+              json.message || __('There was an error in the upload. The format or extension might not be supported.'),
             );
       })
       .catch((err) => {
@@ -130,7 +130,7 @@ function SelectAsset(props: Props) {
                 if (file.size >= THUMBNAIL_CDN_SIZE_LIMIT_BYTES) {
                   const maxSizeMB = THUMBNAIL_CDN_SIZE_LIMIT_BYTES / (1024 * 1024);
                   setUploadErrorMsg(
-                    __('Thumbnail size over %max_size%MB, please edit and reupload.', { max_size: maxSizeMB })
+                    __('Thumbnail size over %max_size%MB, please edit and reupload.', { max_size: maxSizeMB }),
                   );
                 }
               }

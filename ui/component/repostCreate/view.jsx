@@ -301,7 +301,7 @@ function RepostCreate(props: Props) {
               label={__('Open Repost in new tab')}
               iconRight={ICONS.EXTERNAL}
               href={`/$/${PAGES.REPOST_NEW}?${REPOST_PARAMS.FROM}=${encodeURIComponent(uri)}&to=${encodeURIComponent(
-                enteredRepostName
+                enteredRepostName,
               )}`}
               navigateTarget="_blank"
             />

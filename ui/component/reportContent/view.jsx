@@ -558,7 +558,7 @@ export default function ReportContent(props: Props) {
                   tooltip
                   size={16}
                   customTooltipText={__(
-                    'Set to "Anonymous" if you do not want to associate your channel in this report.'
+                    'Set to "Anonymous" if you do not want to associate your channel in this report.',
                   )}
                 />
                 <ChannelSelector />
@@ -572,7 +572,7 @@ export default function ReportContent(props: Props) {
                 disabled={!isSubmitterDetailsValid(input.type, input.category)}
                 onClick={() =>
                   setPage(
-                    input.category === REPORT_API.COPYRIGHT_ISSUES ? PAGE_SUBMITTER_DETAILS_ADDRESS : PAGE_CONFIRM
+                    input.category === REPORT_API.COPYRIGHT_ISSUES ? PAGE_SUBMITTER_DETAILS_ADDRESS : PAGE_CONFIRM,
                   )
                 }
               />

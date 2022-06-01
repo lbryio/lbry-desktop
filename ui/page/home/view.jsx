@@ -84,7 +84,7 @@ function HomePage(props: Props) {
     subscribedChannels,
     followedTags,
     showIndividualTags,
-    showNsfw
+    showNsfw,
   );
 
   const sortedRowData: Array<RowDataItem> = getSortedRowData(authenticated, hasMembership, homepageOrder, rowData);
@@ -136,7 +136,7 @@ function HomePage(props: Props) {
         hasSource
         prefixUris={getLivestreamUris(activeLivestreams, options.channelIds).slice(
           0,
-          id === 'FOLLOWING' ? undefined : CATEGORY_LIVESTREAM_LIMIT
+          id === 'FOLLOWING' ? undefined : CATEGORY_LIVESTREAM_LIMIT,
         )}
         pins={{ urls: pinUrls, claimIds: pinnedClaimIds }}
         injectedItem={index === 0 && !hasPremiumPlus && { node: <Ads small type="video" tileLayout /> }}
@@ -231,7 +231,7 @@ function HomePage(props: Props) {
       {sortedRowData.map(
         ({ id, title, route, link, icon, help, pinnedUrls: pinUrls, pinnedClaimIds, options = {} }, index) => {
           return getRowElements(id, title, route, link, icon, help, options, index, pinUrls, pinnedClaimIds);
-        }
+        },
       )}
     </Page>
   );

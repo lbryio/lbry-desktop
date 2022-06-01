@@ -12,7 +12,7 @@ export default function useFetchViewCount(
   shouldFetch: ?boolean,
   uris: Array<string>,
   claimsByUri: {},
-  doFetchViewCount: (string) => void
+  doFetchViewCount: (string) => void,
 ) {
   const [fetchedUris, setFetchedUris] = useState([]);
 

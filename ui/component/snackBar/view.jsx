@@ -40,7 +40,7 @@ class SnackBar extends React.PureComponent<Props> {
       () => {
         removeSnack();
       },
-      duration === 'long' ? 10000 : 5000
+      duration === 'long' ? 10000 : 5000,
     );
 
     return (

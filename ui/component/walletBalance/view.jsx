@@ -150,7 +150,7 @@ const WalletBalance = (props: Props) => {
               ) : (
                 <p className="help--warning">
                   {__(
-                    'Your wallet is not currently synced with lbry.tv. You are in control of backing up your wallet.'
+                    'Your wallet is not currently synced with lbry.tv. You are in control of backing up your wallet.',
                   )}
                   <HelpLink navigate={`/$/${PAGES.BACKUP}`} />
                 </p>

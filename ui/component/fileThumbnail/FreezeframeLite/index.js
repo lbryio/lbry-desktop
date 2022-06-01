@@ -79,7 +79,7 @@ class FreezeframeLite {
   }
 
   process(freeze) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const { $canvas, $image, $container } = freeze;
       const { clientWidth, clientHeight } = $image;
 
@@ -99,7 +99,7 @@ class FreezeframeLite {
         },
         {
           once: true,
-        }
+        },
       );
     });
   }
@@ -159,7 +159,7 @@ class FreezeframeLite {
   }
 
   emit(event, items, isPlaying) {
-    this.eventListeners[event].forEach(cb => {
+    this.eventListeners[event].forEach((cb) => {
       cb(items.length === 1 ? items[0] : items, isPlaying);
     });
   }

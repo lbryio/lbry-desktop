@@ -52,7 +52,7 @@ function addAutoplayNextButton(player: Player, toggleAutoplayNext: () => void, a
         toggleAutoplayNext();
       },
     },
-    autoplayNext
+    autoplayNext,
   );
 
   controlBar.addChild(autoplayButton);

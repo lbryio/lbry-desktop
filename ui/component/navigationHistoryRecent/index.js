@@ -6,7 +6,4 @@ const select = (state, props) => ({
   history: selectRecentHistory(state),
 });
 
-export default connect(
-  select,
-  null
-)(RecentUserHistory);
+export default connect(select, null)(RecentUserHistory);

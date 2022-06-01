@@ -27,11 +27,11 @@ function PublishDescription(props: Props) {
           name="content_description"
           label={__('Description')}
           placeholder={__(
-            'What is your content about? Use this space to include any other relevant details you may like to share about your content and channel.'
+            'What is your content about? Use this space to include any other relevant details you may like to share about your content and channel.',
           )}
           value={description}
           disabled={disabled}
-          onChange={value =>
+          onChange={(value) =>
             updatePublishForm({ description: !SIMPLE_SITE && advancedEditor ? value : value.target.value })
           }
           quickActionLabel={!SIMPLE_SITE && (advancedEditor ? __('Simple Editor') : __('Advanced Editor'))}

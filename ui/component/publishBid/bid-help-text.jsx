@@ -17,7 +17,7 @@ function BidHelpText(props: Props) {
       bidHelpText = __('You currently have the highest bid for this name.');
     } else if (!amountNeededForTakeover) {
       bidHelpText = __(
-        'Any amount will give you the highest bid, but larger amounts help your content be trusted and discovered.'
+        'Any amount will give you the highest bid, but larger amounts help your content be trusted and discovered.',
       );
     } else {
       bidHelpText = __(
@@ -25,7 +25,7 @@ function BidHelpText(props: Props) {
         {
           amount: amountNeededForTakeover,
           uri: uri,
-        }
+        },
       );
     }
   } else {

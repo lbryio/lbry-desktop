@@ -60,7 +60,7 @@ export const getSearchQueryString = (query: string, options: any = {}) => {
             SEARCH_OPTIONS.MEDIA_TEXT,
             SEARCH_OPTIONS.MEDIA_IMAGE,
             SEARCH_OPTIONS.MEDIA_APPLICATION,
-          ].reduce((acc, currentOption) => (options[currentOption] ? `${acc}${currentOption},` : acc), '')}`
+          ].reduce((acc, currentOption) => (options[currentOption] ? `${acc}${currentOption},` : acc), '')}`,
         );
       }
     }

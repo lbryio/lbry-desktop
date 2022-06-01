@@ -62,7 +62,7 @@ export default function ConfirmOdyseeMembershipPurchase(props: Props) {
           channel_name: userChannelName,
           price_id: priceId,
         },
-        'post'
+        'post',
       );
 
       // cleary query params
@@ -96,7 +96,7 @@ export default function ConfirmOdyseeMembershipPurchase(props: Props) {
 
       setTimeout(function () {
         const genericErrorMessage = __(
-          "Sorry, your purchase wasn't able to completed. Please contact support for possible next steps"
+          "Sorry, your purchase wasn't able to completed. Please contact support for possible next steps",
         );
 
         doToast({
@@ -125,7 +125,7 @@ export default function ConfirmOdyseeMembershipPurchase(props: Props) {
           environment: stripeEnvironment,
           membership_id: membershipId,
         },
-        'post'
+        'post',
       );
 
       setStatusText(__('Membership successfully canceled'));

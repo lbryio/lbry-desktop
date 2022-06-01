@@ -4,11 +4,8 @@ import ModalTransactionFailed from './view';
 
 const select = () => ({});
 
-const perform = dispatch => ({
+const perform = (dispatch) => ({
   closeModal: () => dispatch(doHideModal()),
 });
 
-export default connect(
-  select,
-  perform
-)(ModalTransactionFailed);
+export default connect(select, perform)(ModalTransactionFailed);

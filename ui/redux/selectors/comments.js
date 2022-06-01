@@ -80,20 +80,20 @@ export const selectPinnedCommentsForUri = createCachedSelector(
     }
 
     return pinnedComments;
-  }
+  },
 )((state, uri) => String(uri));
 
 export const selectModerationBlockList = createSelector(
   (state) => selectState(state).moderationBlockList,
   (moderationBlockList) => {
     return moderationBlockList ? moderationBlockList.reverse() : [];
-  }
+  },
 );
 export const selectAdminBlockList = createSelector(selectState, (state) =>
-  state.adminBlockList ? state.adminBlockList.reverse() : []
+  state.adminBlockList ? state.adminBlockList.reverse() : [],
 );
 export const selectModeratorBlockList = createSelector(selectState, (state) =>
-  state.moderatorBlockList ? state.moderatorBlockList.reverse() : []
+  state.moderatorBlockList ? state.moderatorBlockList.reverse() : [],
 );
 
 export const selectPersonalTimeoutMap = (state: State) => selectState(state).personalTimeoutMap;
@@ -161,13 +161,13 @@ export const selectTopLevelCommentsByClaimId = createSelector(
     });
 
     return comments;
-  }
+  },
 );
 
 export const selectCommentForCommentId = createSelector(
   (state, commentId) => commentId,
   selectCommentsById,
-  (commentId, comments) => comments[commentId]
+  (commentId, comments) => comments[commentId],
 );
 
 export const selectRepliesByParentId = createSelector(selectState, selectCommentsById, (state, byId) => {
@@ -192,7 +192,7 @@ export const selectFetchedCommentAncestors = (state: State) => selectState(state
 export const selectCommentAncestorsForId = createSelector(
   (state, commentId) => commentId,
   selectFetchedCommentAncestors,
-  (commentId, fetchedAncestors) => fetchedAncestors && fetchedAncestors[commentId]
+  (commentId, fetchedAncestors) => fetchedAncestors && fetchedAncestors[commentId],
 );
 
 export const selectCommentIdsForUri = (state: State, uri: string) => {
@@ -229,7 +229,7 @@ export const selectCommentsForUri = createCachedSelector(
   (uri, byClaimId, claimId, ...filterInputs) => {
     const comments = byClaimId && byClaimId[claimId];
     return filterComments(comments, claimId, filterInputs);
-  }
+  },
 )((state, uri) => String(uri));
 
 export const selectTopLevelCommentsForUri = createCachedSelector(
@@ -245,7 +245,7 @@ export const selectTopLevelCommentsForUri = createCachedSelector(
     } else {
       return [];
     }
-  }
+  },
 )((state, uri, maxCount = -1) => `${String(uri)}:${maxCount}`);
 
 export const makeSelectTopLevelTotalPagesForUri = (uri: string) =>
@@ -271,7 +271,7 @@ export const selectRepliesForParentId = createCachedSelector(
     // const comments = byParentId && byParentId[id];
 
     return filterComments(comments, undefined, filterInputs);
-  }
+  },
 )((state, id: string) => String(id));
 
 /**
@@ -492,7 +492,7 @@ export const selectChannelMentionData = createCachedSelector(
       hasNewResolvedResults,
       query,
     };
-  }
+  },
 )((state, uri, maxCount) => `${String(uri)}:${maxCount}`);
 
 /**

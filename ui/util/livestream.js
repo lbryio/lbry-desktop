@@ -35,7 +35,7 @@ type StreamData = {
 export function getLivestreamUris(
   activeLivestreams: ?LivestreamInfo,
   channelIds: ?Array<string>,
-  excludedChannelIds?: Array<string>
+  excludedChannelIds?: Array<string>,
 ) {
   let values = (activeLivestreams && Object.values(activeLivestreams)) || [];
 
@@ -157,7 +157,7 @@ export const killStream = async (channelId: string, channelName: string) => {
     const encodedChannelName = encodeURIComponent(channelName);
 
     const apiData = await fetch(
-      `${LIVESTREAM_KILL}channel_claim_id=${channelId}&channel_name=${encodedChannelName}&signature_ts=${streamData.t}&signature=${streamData.s}`
+      `${LIVESTREAM_KILL}channel_claim_id=${channelId}&channel_name=${encodedChannelName}&signature_ts=${streamData.t}&signature=${streamData.s}`,
     );
 
     const data = (await apiData.json()).data;
@@ -184,7 +184,7 @@ export const determineLiveClaim = (claims: any, activeLivestreams: any) => {
       const [distanceA, distanceB] = distanceFromStreamStart(
         claim,
         activeClaims[channelID],
-        activeLivestreams[channelID].startedStreaming
+        activeLivestreams[channelID].startedStreaming,
       );
 
       if (distanceA < distanceB) {

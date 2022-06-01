@@ -102,7 +102,7 @@ export default function SwipeableDrawer(props: Props) {
         }
         root.setAttribute(
           'style',
-          `transform: translateY(${positionToStop}px) !important; transition: transform ${TRANSITION_STR}`
+          `transform: translateY(${positionToStop}px) !important; transition: transform ${TRANSITION_STR}`,
         );
 
         setTimeout(() => {
@@ -212,7 +212,7 @@ export default function SwipeableDrawer(props: Props) {
             'style',
             `transform: translateY(${HEADER_HEIGHT_MOBILE + playerHeight}px); height: calc(100% - ${
               HEADER_HEIGHT_MOBILE + playerHeight
-            }px);`
+            }px);`,
           );
         }
 
@@ -220,7 +220,7 @@ export default function SwipeableDrawer(props: Props) {
         openPrev.current = open;
       }
     },
-    [open, playerHeight]
+    [open, playerHeight],
   );
 
   return (

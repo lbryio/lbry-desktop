@@ -123,7 +123,7 @@ export default function WalletSendTip(props: Props) {
     case TAB_BOOST:
       explainerText = __(
         'This refundable boost will improve the discoverability of this %claimTypeText% while active.',
-        { claimTypeText }
+        { claimTypeText },
       );
       break;
     case TAB_FIAT:
@@ -203,7 +203,7 @@ export default function WalletSendTip(props: Props) {
           userParams,
           claimId,
           stripeEnvironment,
-          preferredCurrency
+          preferredCurrency,
         );
         doHideModal();
       }

@@ -185,7 +185,7 @@ export default function ModalBlockChannel(props: Props) {
             offendingCommentId,
             contentChannelClaim.permanent_url,
             activeChannelClaim.claim_id,
-            duration
+            duration,
           );
         }
         break;
@@ -240,7 +240,7 @@ export default function ModalBlockChannel(props: Props) {
                     BLOCK.TIMEOUT,
                     'Timeout --[time-based ban instead of permanent]--',
                     !isTimeoutAvail,
-                    'Timeout (only available on content that you own)'
+                    'Timeout (only available on content that you own)',
                   )}
                 </fieldset>
                 {blockType === BLOCK.TIMEOUT && getTimeoutDurationElem()}

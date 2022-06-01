@@ -96,12 +96,12 @@ export const selectActiveChannelClaim = createSelector(
     });
 
     return myChannelClaimsByEffectiveAmount[0];
-  }
+  },
 );
 
 export const selectActiveChannelClaimId = createSelector(
   selectActiveChannelClaim,
-  (activeChannelClaim) => activeChannelClaim?.claim_id
+  (activeChannelClaim) => activeChannelClaim?.claim_id,
 );
 
 export const selectActiveChannelStakedLevel = (state) => {

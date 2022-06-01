@@ -97,17 +97,17 @@ class WalletBackup extends React.PureComponent<Props, State> {
           <ul>
             <li>
               {__(
-                'Your LBRY Credits, channels, and publishes are controllable by you and only you, via wallet file(s) stored locally on your computer.'
+                'Your LBRY Credits, channels, and publishes are controllable by you and only you, via wallet file(s) stored locally on your computer.',
               )}
             </li>
             <li>
               {__(
-                'If Sync is on, LBRY will backup your wallet and preferences. If disabled, you are responsible for keeping a backup.'
+                'If Sync is on, LBRY will backup your wallet and preferences. If disabled, you are responsible for keeping a backup.',
               )}
             </li>
             <li>
               {__(
-                'However, it is easy to back up manually. To backup your wallet, make a copy of the folder listed below:'
+                'However, it is easy to back up manually. To backup your wallet, make a copy of the folder listed below:',
               )}
             </li>
           </ul>

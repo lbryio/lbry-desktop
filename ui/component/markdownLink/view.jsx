@@ -70,7 +70,7 @@ function MarkdownLink(props: Props) {
       try {
         // This could be anything
         linkPathname = decodeURIComponent(
-          linkUrlObject.pathname.startsWith('//') ? linkUrlObject.pathname.slice(2) : linkUrlObject.pathname.slice(1)
+          linkUrlObject.pathname.startsWith('//') ? linkUrlObject.pathname.slice(2) : linkUrlObject.pathname.slice(1),
         );
       } catch (e) {}
 

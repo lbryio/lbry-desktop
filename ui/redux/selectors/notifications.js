@@ -14,7 +14,7 @@ export const makeSelectNotificationForCommentId = (id) =>
         (n) =>
           n.notification_parameters &&
           n.notification_parameters.dynamic &&
-          n.notification_parameters.dynamic.hash === id
+          n.notification_parameters.dynamic.hash === id,
       );
     return match;
   });

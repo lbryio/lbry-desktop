@@ -14,14 +14,14 @@ export const selectClaimedRewardsByTransactionId = createSelector(selectClaimedR
     const map = mapParam;
     map[reward.transaction_id] = reward;
     return map;
-  }, {})
+  }, {}),
 );
 
 export const selectUnclaimedRewards = (state) => selectState(state).unclaimedRewards;
 export const selectFetchingRewards = (state) => !!selectState(state).fetching;
 
 export const selectUnclaimedRewardValue = createSelector(selectUnclaimedRewards, (rewards) =>
-  rewards.reduce((sum, reward) => sum + reward.reward_amount, 0)
+  rewards.reduce((sum, reward) => sum + reward.reward_amount, 0),
 );
 
 export const selectClaimsPendingByType = (state) => selectState(state).claimPendingByType;
@@ -54,11 +54,11 @@ export const selectRewardContentClaimIds = createSelector(selectState, (state) =
 
 export const selectReferralReward = createSelector(
   selectUnclaimedRewards,
-  (unclaimedRewards) => unclaimedRewards.filter((reward) => reward.reward_type === REWARDS.TYPE_REFERRAL)[0]
+  (unclaimedRewards) => unclaimedRewards.filter((reward) => reward.reward_type === REWARDS.TYPE_REFERRAL)[0],
 );
 
 export const selectHasUnclaimedRefereeReward = createSelector(selectUnclaimedRewards, (unclaimedRewards) =>
-  unclaimedRewards.some((reward) => reward.reward_type === REWARDS.TYPE_REFEREE)
+  unclaimedRewards.some((reward) => reward.reward_type === REWARDS.TYPE_REFEREE),
 );
 
 export const selectIsClaimingInitialRewards = createSelector(selectClaimsPendingByType, (claimsPendingByType) => {

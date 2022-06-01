@@ -25,7 +25,7 @@ export default function ModalRemoveCard(props: Props) {
         environment: stripeEnvironment,
         payment_method_id: paymentMethodId,
       },
-      'post'
+      'post',
     ).then((removeCardResponse) => {
       // TODO: add toast here
       // closeModal();

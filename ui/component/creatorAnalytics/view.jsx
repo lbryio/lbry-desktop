@@ -73,10 +73,10 @@ export default function CreatorAnalytics(props: Props) {
                   subtitle={
                     error === GENERIC_ERROR
                       ? __(
-                          'There are no stats for this channel yet, it will take a few views. Make sure you are signed in with the correct email and have data sharing turned on.'
+                          'There are no stats for this channel yet, it will take a few views. Make sure you are signed in with the correct email and have data sharing turned on.',
                         )
                       : __(
-                          "You are not able to see this channel's stats. Make sure you are signed in with the correct email and have data sharing turned on."
+                          "You are not able to see this channel's stats. Make sure you are signed in with the correct email and have data sharing turned on.",
                         )
                   }
                 />

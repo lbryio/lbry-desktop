@@ -24,7 +24,7 @@ const WalletBalance = (props: Props) => {
       {
         environment: stripeEnvironment,
       },
-      'post'
+      'post',
     );
   }
 

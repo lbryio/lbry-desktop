@@ -4,7 +4,7 @@ import ModalUpgrade from './view';
 
 const select = () => ({});
 
-const perform = dispatch => ({
+const perform = (dispatch) => ({
   downloadUpgrade: () => dispatch(doDownloadUpgrade()),
   skipUpgrade: () => {
     dispatch(doHideModal());
@@ -12,7 +12,4 @@ const perform = dispatch => ({
   },
 });
 
-export default connect(
-  select,
-  perform
-)(ModalUpgrade);
+export default connect(select, perform)(ModalUpgrade);

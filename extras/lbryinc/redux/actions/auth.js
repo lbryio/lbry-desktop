@@ -2,7 +2,7 @@ import * as ACTIONS from 'constants/action_types';
 import { Lbryio } from 'lbryinc';
 
 export function doGenerateAuthToken(installationId) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.GENERATE_AUTH_TOKEN_STARTED,
     });
@@ -15,9 +15,9 @@ export function doGenerateAuthToken(installationId) {
         language: 'en',
         app_id: installationId,
       },
-      'post'
+      'post',
     )
-      .then(response => {
+      .then((response) => {
         if (!response.auth_token) {
           dispatch({
             type: ACTIONS.GENERATE_AUTH_TOKEN_FAILURE,

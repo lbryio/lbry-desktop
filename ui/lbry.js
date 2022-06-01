@@ -336,7 +336,7 @@ export function apiCall(method: string, params: ?{}, resolve: Function, reject: 
 function daemonCallWithResult(
   name: string,
   params: ?{} = {},
-  checkAuthNeededFn: ?(?{}) => boolean = undefined
+  checkAuthNeededFn: ?(?{}) => boolean = undefined,
 ): Promise<any> {
   return new Promise((resolve, reject) => {
     const skipAuth = checkAuthNeededFn ? !checkAuthNeededFn(params) : false;
@@ -347,7 +347,7 @@ function daemonCallWithResult(
       (result) => {
         resolve(result);
       },
-      reject
+      reject,
     );
   });
 }

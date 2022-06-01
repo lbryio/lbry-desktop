@@ -64,5 +64,5 @@ export const selectBanStateForUri = createCachedSelector(
     }
 
     return banState;
-  }
+  },
 )((state, uri) => String(uri));

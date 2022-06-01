@@ -5,7 +5,7 @@ import { LIVESTREAM_STATUS_CHECK_INTERVAL_SOON, LIVESTREAM_STATUS_CHECK_INTERVAL
 export default function useFetchLiveStatus(
   channelClaimId: ?string,
   doFetchChannelLiveStatus: (string) => void,
-  fasterPoll?: boolean
+  fasterPoll?: boolean,
 ) {
   // Find out current channels status + active live claim every 30 seconds
   React.useEffect(() => {

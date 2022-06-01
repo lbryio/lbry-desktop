@@ -12,7 +12,7 @@ export default function usePlayNext(
   previousListUri: ?string,
   doNavigate: boolean,
   doUriInitiatePlay: (playingOptions: PlayingUri, isPlayable: ?boolean, isFloating: ?boolean) => void,
-  resetState: () => void
+  resetState: () => void,
 ) {
   const { push } = useHistory();
 
@@ -32,7 +32,7 @@ export default function usePlayNext(
 
       resetState();
     },
-    [collectionId, doUriInitiatePlay, isFloating, push, resetState]
+    [collectionId, doUriInitiatePlay, isFloating, push, resetState],
   );
 
   React.useEffect(() => {

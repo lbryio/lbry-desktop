@@ -70,13 +70,13 @@ export default function LivestreamSetupPage(props: Props) {
     <div className="section__subtitle">
       <p>
         {__(
-          `Create a Livestream by first submitting your livestream details and waiting for approval confirmation. This can be done well in advance and will take a few minutes.`
+          `Create a Livestream by first submitting your livestream details and waiting for approval confirmation. This can be done well in advance and will take a few minutes.`,
         )}{' '}
         {__(
-          `Scheduled livestreams will appear at the top of your channel page and for your followers. Regular livestreams will only appear once you are actually live.`
+          `Scheduled livestreams will appear at the top of your channel page and for your followers. Regular livestreams will only appear once you are actually live.`,
         )}{' '}
         {__(
-          `Once the your livestream is confirmed, configure your streaming software (OBS, Restream, etc) and input the server URL along with the stream key in it.`
+          `Once the your livestream is confirmed, configure your streaming software (OBS, Restream, etc) and input the server URL along with the stream key in it.`,
         )}
       </p>
       <p>{__(`To ensure the best streaming experience with OBS, open settings -> output`)}</p>
@@ -94,13 +94,13 @@ export default function LivestreamSetupPage(props: Props) {
       <p>{__(`For streaming from your mobile device, we recommend PRISM Live Studio from the app store.`)}</p>
       <p>
         {__(
-          `After your stream:\nClick the Update button on the content page. This will allow you to select a replay or upload your own edited MP4. Replays are limited to 4 hours and may take a few minutes to show (use the Check For Replays button).`
+          `After your stream:\nClick the Update button on the content page. This will allow you to select a replay or upload your own edited MP4. Replays are limited to 4 hours and may take a few minutes to show (use the Check For Replays button).`,
         )}
       </p>
       <p>{__(`Click Save, then confirm, and you are done!`)}</p>
       <p>
         {__(
-          `Note: If you don't plan on publishing your replay, you'll want to delete your livestream and then start with a fresh one next time.`
+          `Note: If you don't plan on publishing your replay, you'll want to delete your livestream and then start with a fresh one next time.`,
         )}
       </p>
     </div>
@@ -314,7 +314,7 @@ export default function LivestreamSetupPage(props: Props) {
                   className="livestream__publish-intro"
                   title={__('No livestream publishes found')}
                   subtitle={__(
-                    'You need to upload your livestream details before you can go live. Please note: Replays must be published manually after your stream via the Update button on the livestream.'
+                    'You need to upload your livestream details before you can go live. Please note: Replays must be published manually after your stream via the Update button on the livestream.',
                   )}
                   actions={
                     <div className="section__actions">

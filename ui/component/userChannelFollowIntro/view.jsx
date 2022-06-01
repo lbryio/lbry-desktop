@@ -41,7 +41,7 @@ function UserChannelFollowIntro(props: Props) {
 
   const followingCount = (subscribedChannels && subscribedChannels.length) || 0;
   const followingCountIgnoringAutoFollows = (subscribedChannels || []).filter(
-    (channel) => !channelsToSubscribe.includes(channel.uri)
+    (channel) => !channelsToSubscribe.includes(channel.uri),
   ).length;
 
   // subscribe to odysee channels
@@ -71,7 +71,7 @@ function UserChannelFollowIntro(props: Props) {
       title={__('Find channels to follow')}
       subtitle={__(
         '%SITE_NAME% works better if you find and follow a couple creators you like. You can also block channels you never want to see.',
-        { SITE_NAME }
+        { SITE_NAME },
       )}
       actions={
         <div className="section__body">
@@ -102,7 +102,7 @@ function UserChannelFollowIntro(props: Props) {
                   : 'Nice! You are currently following %followingCount% creators',
                 {
                   followingCount: followingCountIgnoringAutoFollows,
-                }
+                },
               )}
               actionText={__('Continue')}
               onClick={onContinue}

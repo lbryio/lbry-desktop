@@ -96,7 +96,7 @@ class RecsysPlugin extends Component {
     const recsysEvent = newRecsysPlayerEvent(
       PlayerEvent.event.speed,
       this.player.currentTime(),
-      this.player.playbackRate()
+      this.player.playbackRate(),
     );
     this.log('onRateChange', recsysEvent);
     RecSys.onRecsysPlayerEvent(this.options_.videoId, recsysEvent);

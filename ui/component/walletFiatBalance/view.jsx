@@ -19,7 +19,7 @@ const WalletBalance = () => {
       {
         environment: stripeEnvironment,
       },
-      'post'
+      'post',
     );
   }
 

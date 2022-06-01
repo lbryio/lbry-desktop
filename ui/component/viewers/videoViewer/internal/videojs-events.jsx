@@ -86,7 +86,7 @@ const VideoJsEvents = ({
         uri,
         this, // pass the player
         bitrateAsBitsPerSecond,
-        isLivestreamClaim
+        isLivestreamClaim,
       );
     } else {
       // populates data for watchman, sends prom and matomo event
@@ -99,7 +99,7 @@ const VideoJsEvents = ({
         this, // pass the player
         // $FlowFixMe
         this.tech(true).vhs?.playlists?.media?.().attributes?.BANDWIDTH,
-        isLivestreamClaim
+        isLivestreamClaim,
       );
     }
 

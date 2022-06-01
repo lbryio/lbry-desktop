@@ -48,7 +48,7 @@ export default function WaitUntilOnPage(props: Props) {
 
       return false;
     },
-    [yOffset]
+    [yOffset],
   );
 
   // Handles "element is already in viewport when mounted".

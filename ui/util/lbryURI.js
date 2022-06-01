@@ -43,7 +43,7 @@ export function parseURI(url: string, requireProto: boolean = false): LbryUrlObj
       regexPartModifierSeparator + // modifier separator, modifier (stops at the first path separator or end)
       '(/?)' + // path separator, there should only be one (optional) slash to separate the stream and channel parts
       regexPartStreamOrChannelName +
-      regexPartModifierSeparator
+      regexPartModifierSeparator,
   );
   // chop off the querystring first
   let QSStrippedURL, qs;
@@ -97,7 +97,7 @@ export function parseURI(url: string, requireProto: boolean = false): LbryUrlObj
       throw new Error(
         __(`Channel names must be at least %channelNameMinLength% characters.`, {
           channelNameMinLength,
-        })
+        }),
       );
     }
   }
@@ -105,11 +105,11 @@ export function parseURI(url: string, requireProto: boolean = false): LbryUrlObj
   // Validate and process modifier
   const [primaryClaimId, primaryClaimSequence, primaryBidPosition] = parseURIModifier(
     primaryModSeparator,
-    primaryModValue
+    primaryModValue,
   );
   const [secondaryClaimId, secondaryClaimSequence, secondaryBidPosition] = parseURIModifier(
     secondaryModSeparator,
-    secondaryModValue
+    secondaryModValue,
   );
   const streamName = includesChannel ? possibleStreamName : streamNameOrChannelName;
   const streamClaimId = includesChannel ? secondaryClaimId : primaryClaimId;
@@ -315,7 +315,7 @@ export function convertToShareLink(URL: string) {
       secondaryClaimSequence,
     },
     true,
-    'https://open.lbry.com/'
+    'https://open.lbry.com/',
   );
 }
 

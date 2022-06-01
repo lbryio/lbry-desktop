@@ -51,11 +51,11 @@ export default handleActions(
       const subscriptionToRemove: Subscription = action.data;
 
       const newSubscriptions = state.subscriptions.filter(
-        (subscription) => !isURIEqual(subscription.uri, subscriptionToRemove.uri)
+        (subscription) => !isURIEqual(subscription.uri, subscriptionToRemove.uri),
       );
 
       const newFollowing = state.following.filter(
-        (subscription) => !isURIEqual(subscription.uri, subscriptionToRemove.uri)
+        (subscription) => !isURIEqual(subscription.uri, subscriptionToRemove.uri),
       );
 
       return {
@@ -102,7 +102,7 @@ export default handleActions(
     }),
     [ACTIONS.USER_STATE_POPULATE]: (
       state: SubscriptionState,
-      action: { data: { subscriptions: ?Array<string>, following: ?Array<Subscription> } }
+      action: { data: { subscriptions: ?Array<string>, following: ?Array<Subscription> } },
     ) => {
       const { subscriptions, following } = action.data;
       const incomingSubscriptions = Array.isArray(subscriptions) && subscriptions.length;
@@ -148,5 +148,5 @@ export default handleActions(
       };
     },
   },
-  defaultState
+  defaultState,
 );

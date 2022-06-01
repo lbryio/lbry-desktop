@@ -38,7 +38,7 @@ export const BrowserNotificationHints = () => {
         <li>{__("Notifications aren't available when in incognito or private mode.")}</li>
         <li>
           {__(
-            "On Firefox, notifications won't function if cookies are set to clear on browser close. Please disable or add an exception for Odysee, then refresh."
+            "On Firefox, notifications won't function if cookies are set to clear on browser close. Please disable or add an exception for Odysee, then refresh.",
           )}
         </li>
         <li>{__('For Brave, enable google push notifications in settings.')}</li>

@@ -114,5 +114,5 @@ export default handleActions(
       return state;
     },
   },
-  defaultState
+  defaultState,
 );

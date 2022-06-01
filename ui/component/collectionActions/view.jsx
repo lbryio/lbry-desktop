@@ -64,7 +64,7 @@ function CollectionActions(props: Props) {
         state: { forceAutoplay: true },
       });
     },
-    [collectionId, push]
+    [collectionId, push],
   );
 
   React.useEffect(() => {

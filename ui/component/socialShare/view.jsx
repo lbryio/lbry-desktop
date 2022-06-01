@@ -95,7 +95,7 @@ function SocialShare(props: Props) {
     lbryWebUrl,
     includeStartTime,
     startTimeSeconds,
-    includedCollectionId
+    includedCollectionId,
   );
   const shareUrl: string = generateShareUrl(
     SHARE_DOMAIN,
@@ -104,7 +104,7 @@ function SocialShare(props: Props) {
     rewardsApproved,
     includeStartTime,
     startTimeSeconds,
-    includedCollectionId
+    includedCollectionId,
   );
   const downloadUrl = `${generateDownloadUrl(name, claimId)}`;
 

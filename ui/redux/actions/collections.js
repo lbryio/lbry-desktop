@@ -23,7 +23,7 @@ export const doLocalCollectionCreate = (
   name: string,
   collectionItems: Array<string>,
   type: string,
-  sourceId: string
+  sourceId: string,
 ) => (dispatch: Dispatch) => {
   return dispatch({
     type: ACTIONS.COLLECTION_NEW,
@@ -42,7 +42,7 @@ export const doLocalCollectionCreate = (
 
 export const doCollectionDelete = (id: string, colKey: ?string = undefined) => (
   dispatch: Dispatch,
-  getState: GetState
+  getState: GetState,
 ) => {
   const state = getState();
   const claim = makeSelectClaimForClaimId(id)(state);
@@ -90,7 +90,7 @@ export const doFetchItemsInCollections = (
     collectionIds: Array<string>,
     pageSize?: number,
   },
-  resolveStartedCallback?: () => void
+  resolveStartedCallback?: () => void,
 ) => async (dispatch: Dispatch, getState: GetState) => {
   /*
   1) make sure all the collection claims are loaded into claims reducer, search/resolve if necessary.
@@ -139,7 +139,7 @@ export const doFetchItemsInCollections = (
 
     const mergeBatches = (
       arrayOfResults: Array<{ items: Array<Claim>, total_items: number }>,
-      claimList: Array<string>
+      claimList: Array<string>,
     ) => {
       const mergedResults: { items: Array<Claim>, total_items: number } = {
         items: [],
@@ -335,7 +335,7 @@ export const doFetchItemsInCollection = (options: { collectionId: string, pageSi
 
 export const doCollectionEdit = (collectionId: string, params: CollectionEditParams) => async (
   dispatch: Dispatch,
-  getState: GetState
+  getState: GetState,
 ) => {
   const state = getState();
   const collection: Collection = makeSelectCollectionForId(collectionId)(state);

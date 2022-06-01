@@ -4,11 +4,8 @@ import { doHideModal } from 'redux/actions/app';
 
 // const select = () => ({});
 //
-const perform = dispatch => ({
+const perform = (dispatch) => ({
   closeModal: () => dispatch(doHideModal()),
 });
 
-export default connect(
-  null,
-  perform
-)(ModalPasswordUnsave);
+export default connect(null, perform)(ModalPasswordUnsave);

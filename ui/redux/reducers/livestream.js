@@ -108,5 +108,5 @@ export default handleActions(
       return { ...state, socketConnectionById };
     },
   },
-  defaultState
+  defaultState,
 );

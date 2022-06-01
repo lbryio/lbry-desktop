@@ -29,7 +29,7 @@ export const doFetchNoSourceClaims = (channelId: string) => async (dispatch: Dis
         page_size: 20,
         page: 1,
         include_is_my_output: true,
-      })
+      }),
     );
 
     dispatch({
@@ -60,13 +60,13 @@ const fetchUpcomingLivestreamClaims = (channelIds: Array<string>, lang: ?Array<s
     },
     {
       useAutoPagination: true,
-    }
+    },
   );
 
 const fetchMostRecentLivestreamClaims = (
   channelIds: Array<string>,
   orderBy: Array<string> = ['release_time'],
-  lang: ?Array<string> = null
+  lang: ?Array<string> = null,
 ) =>
   doClaimSearch(
     {
@@ -83,7 +83,7 @@ const fetchMostRecentLivestreamClaims = (
     },
     {
       useAutoPagination: true,
-    }
+    },
   );
 
 const findActiveStreams = async (
@@ -91,7 +91,7 @@ const findActiveStreams = async (
   orderBy: Array<string>,
   liveChannels: any,
   dispatch,
-  lang: ?Array<string> = null
+  lang: ?Array<string> = null,
 ) => {
   // @Note: This can likely be simplified down to one query, but first we'll need to address the query limit / pagination issue.
 
@@ -109,7 +109,7 @@ const findActiveStreams = async (
   const allClaims = Object.assign(
     {},
     mostRecentClaims,
-    !isEmpty(startingSoonClaims) ? startingSoonClaims : upcomingClaims
+    !isEmpty(startingSoonClaims) ? startingSoonClaims : upcomingClaims,
   );
 
   return determineLiveClaim(allClaims, liveChannels);
@@ -155,7 +155,7 @@ export const doFetchChannelLiveStatus = (channelId: string) => async (dispatch: 
 
 export const doFetchActiveLivestreams = (
   orderBy: Array<string> = ['release_time'],
-  lang: ?Array<string> = null
+  lang: ?Array<string> = null,
 ) => async (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
   const now = Date.now();
@@ -186,7 +186,7 @@ export const doFetchActiveLivestreams = (
       nextOptions.order_by,
       liveChannels,
       dispatch,
-      nextOptions.any_languages
+      nextOptions.any_languages,
     );
     Object.values(currentlyLiveClaims).forEach((claim: any) => {
       const channelId = claim.stream.signing_channel.claim_id;

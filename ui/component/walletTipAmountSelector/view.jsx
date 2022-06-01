@@ -123,7 +123,7 @@ function WalletTipAmountSelector(props: Props) {
       {
         environment: stripeEnvironment,
       },
-      'post'
+      'post',
     ).then((customerStatusResponse) => {
       const defaultPaymentMethodId =
         customerStatusResponse.Customer &&
@@ -147,7 +147,7 @@ function WalletTipAmountSelector(props: Props) {
         channel_name: tipChannelName,
         environment: stripeEnvironment,
       },
-      'post'
+      'post',
     )
       .then((accountCheckResponse) => {
         if (accountCheckResponse === true && canReceiveFiatTip !== true) {
@@ -192,7 +192,7 @@ function WalletTipAmountSelector(props: Props) {
               __('Insufficient amount (%input_amount% Credits = %converted_amount% USD).', {
                 input_amount: amount,
                 converted_amount: convertToTwoDecimalsOrMore(convertedAmount, 4),
-              })
+              }),
             );
           } else {
             setTipError(__('Amount must have no more than 2 decimal places'));
@@ -215,7 +215,7 @@ function WalletTipAmountSelector(props: Props) {
           setTipError(
             __('Amount is lower than price of $%price_amount%', {
               price_amount: convertToTwoDecimalsOrMore(customTipAmount),
-            })
+            }),
           );
         } else {
           setTipError(false);
@@ -287,7 +287,7 @@ function WalletTipAmountSelector(props: Props) {
                 __('The current exchange rate for the submitted LBC amount is ~ $%exchange_amount%.', {
                   exchange_amount: convertToTwoDecimalsOrMore(convertedAmount),
                 })
-              : '')
+              : ''),
         )}
 
       {/* custom number input form */}
@@ -319,7 +319,7 @@ function WalletTipAmountSelector(props: Props) {
                 <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" />
                 {' ' + __('To Tip Creators')}
               </>,
-              'add-a-card-help-message'
+              'add-a-card-help-message',
             )
           : !canReceiveFiatTip
           ? getHelpMessage(__('Only creators that verify cash accounts can receive tips'))

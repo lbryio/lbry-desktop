@@ -137,7 +137,7 @@ const processLighthouseResults = (results: Array<any>) => {
 
 export const doSearch = (rawQuery: string, searchOptions: SearchOptions) => (
   dispatch: Dispatch,
-  getState: GetState
+  getState: GetState,
 ) => {
   const query = rawQuery.replace(/^lbry:\/\//i, '').replace(/\//, ' ');
 
@@ -216,7 +216,7 @@ export const doSearch = (rawQuery: string, searchOptions: SearchOptions) => (
 
 export const doUpdateSearchOptions = (newOptions: SearchOptions, additionalOptions: SearchOptions) => (
   dispatch: Dispatch,
-  getState: GetState
+  getState: GetState,
 ) => {
   const state = getState();
   const searchValue = selectSearchValue(state);
@@ -241,7 +241,7 @@ export const doSetMentionSearchResults = (query: string, uris: Array<string>) =>
 
 export const doFetchRecommendedContent = (uri: string, fyp: ?FypParam = null) => (
   dispatch: Dispatch,
-  getState: GetState
+  getState: GetState,
 ) => {
   const state = getState();
   const claim = selectClaimForUri(state, uri);
@@ -285,7 +285,7 @@ export const doFetchPersonalRecommendations = () => (dispatch: Dispatch, getStat
             page: 1,
             page_size: 50,
             no_totals: true,
-          })
+          }),
         ).finally(() => {
           dispatch({
             type: ACTIONS.FYP_FETCH_SUCCESS,
@@ -323,14 +323,14 @@ export const doRemovePersonalRecommendation = (uri: string) => (dispatch: Dispat
               doToast({
                 message: __('Recommendation removed.'),
                 subMessage: __('Thanks for the feedback!'),
-              })
+              }),
             );
           })
           .catch((err) => {
             console.log('doRemovePersonalRecommendation:', err);
           });
       },
-    })
+    }),
   );
 };
 

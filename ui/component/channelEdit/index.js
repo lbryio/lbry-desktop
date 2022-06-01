@@ -48,7 +48,7 @@ const perform = (dispatch) => ({
     return dispatch(
       doCreateChannel('@' + name, amount, optionalParams, (channelClaim) => {
         dispatch(doUpdateBlockListForPublishedChannel(channelClaim));
-      })
+      }),
     );
   },
   clearChannelErrors: () => dispatch(doClearChannelErrors()),

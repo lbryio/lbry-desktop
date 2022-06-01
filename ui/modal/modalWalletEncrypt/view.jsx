@@ -115,7 +115,7 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
         <Form onSubmit={() => this.submitEncryptForm()}>
           <p>
             {__(
-              'Encrypting your wallet will require a password to access your local wallet data when LBRY starts. Please enter a new password for your wallet.'
+              'Encrypting your wallet will require a password to access your local wallet data when LBRY starts. Please enter a new password for your wallet.',
             )}{' '}
             <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />.
           </p>
@@ -152,7 +152,7 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
 
           <div className="help--warning">
             {__(
-              'If your password is lost, it cannot be recovered. You will not be able to access your wallet without a password.'
+              'If your password is lost, it cannot be recovered. You will not be able to access your wallet without a password.',
             )}
           </div>
           <FormField

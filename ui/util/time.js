@@ -40,7 +40,7 @@ export function getTimeAgoStr(
   date: any,
   showFutureDate?: boolean,
   genericSecondsString?: boolean,
-  zeroDurationStr: string = 'Just now'
+  zeroDurationStr: string = 'Just now',
 ) {
   const suffixList = ['years', 'months', 'days', 'hours', 'minutes', 'seconds'];
   let duration = 0;

@@ -545,5 +545,5 @@ export const walletReducer = handleActions(
       walletReconnecting: false,
     }),
   },
-  defaultState
+  defaultState,
 );

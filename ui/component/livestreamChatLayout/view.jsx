@@ -116,7 +116,7 @@ export default function LivestreamChatLayout(props: Props) {
     claimsByUri,
     doFetchUserMemberships,
     [commentsByChronologicalOrder],
-    true
+    true,
   );
 
   const commentsToDisplay =
@@ -124,11 +124,11 @@ export default function LivestreamChatLayout(props: Props) {
   const commentsLength = commentsToDisplay && commentsToDisplay.length;
   const pinnedComment = pinnedComments.length > 0 ? pinnedComments[0] : null;
   const { superChatsChannelUrls, superChatsFiatAmount, superChatsLBCAmount } = getTipValues(
-    superChatsByChronologicalOrder
+    superChatsByChronologicalOrder,
   );
   const scrolledPastRecent = Boolean(
     (viewMode !== VIEW_MODES.SUPERCHAT || !resolvingSuperChats) &&
-      (!isMobile ? scrollPos < 0 : scrollPos < minScrollHeight)
+      (!isMobile ? scrollPos < 0 : scrollPos < minScrollHeight),
   );
 
   const restoreScrollPos = React.useCallback(() => {

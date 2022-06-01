@@ -17,7 +17,7 @@ export const selectSocketConnectionById = (state: State) => selectState(state).s
 export const selectSocketConnectionForId = createSelector(
   (state, claimId) => claimId,
   selectSocketConnectionById,
-  (claimId, byId) => claimId && byId[claimId]
+  (claimId, byId) => claimId && byId[claimId],
 );
 
 // select non-pending claims without sources for given channel
@@ -31,7 +31,7 @@ export const makeSelectLivestreamsForChannelId = (channelId: string) =>
           !claim.value.source &&
           claim.confirmations > 0 &&
           claim.signing_channel &&
-          claim.signing_channel.claim_id === channelId
+          claim.signing_channel.claim_id === channelId,
       )
       .sort((a, b) => b.timestamp - a.timestamp); // newest first
   });
@@ -52,7 +52,7 @@ export const makeSelectPendingLivestreamsForChannelId = (channelId: string) =>
         claim.value &&
         !claim.value.source &&
         claim.signing_channel &&
-        claim.signing_channel.claim_id === channelId
+        claim.signing_channel.claim_id === channelId,
     );
   });
 
@@ -67,7 +67,7 @@ export const selectIsActiveLivestreamForUri = createCachedSelector(
     const activeLivestreamValues = Object.values(activeLivestreams);
     // $FlowFixMe - unable to resolve claimUri
     return activeLivestreamValues.some((v) => v?.claimUri === uri);
-  }
+  },
 )((state, uri) => String(uri));
 
 export const selectActiveLivestreamForClaimId = createCachedSelector(
@@ -81,7 +81,7 @@ export const selectActiveLivestreamForClaimId = createCachedSelector(
     const activeLivestreamValues = Object.values(activeLivestreams);
     // $FlowFixMe - https://github.com/facebook/flow/issues/2221
     return activeLivestreamValues.find((v) => v?.claimId === claimId) || null;
-  }
+  },
 )((state, claimId) => String(claimId));
 
 export const selectActiveLivestreamForChannel = createCachedSelector(
@@ -92,11 +92,11 @@ export const selectActiveLivestreamForChannel = createCachedSelector(
       return null;
     }
     return activeLivestreams[channelId];
-  }
+  },
 )((state, channelId) => String(channelId));
 
 export const selectActiveLiveClaimForChannel = createCachedSelector(
   (state) => state,
   selectActiveLivestreamForChannel,
-  (state, activeLivestream) => activeLivestream && selectClaimForUri(state, activeLivestream.claimUri)
+  (state, activeLivestream) => activeLivestream && selectClaimForUri(state, activeLivestream.claimUri),
 )((state, channelId) => String(channelId));

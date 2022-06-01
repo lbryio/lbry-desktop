@@ -180,7 +180,7 @@ function VideoViewer(props: Props) {
         handlePosition(playerRef.current);
       }
     },
-    !isLivestreamClaim ? PLAY_POSITION_SAVE_INTERVAL_MS : null
+    !isLivestreamClaim ? PLAY_POSITION_SAVE_INTERVAL_MS : null,
   );
 
   const updateVolumeState = React.useCallback(
@@ -188,7 +188,7 @@ function VideoViewer(props: Props) {
       changeVolume(volume);
       changeMute(muted);
     }, 500),
-    []
+    [],
   );
 
   // force everything to recent when URI changes, can cause weird corner cases otherwise (e.g. navigate while autoplay is true)
@@ -221,7 +221,7 @@ function VideoViewer(props: Props) {
         doPlayUri(playUri, collectionId);
       }
     },
-    [collectionId, doPlayUri, isFloating, push]
+    [collectionId, doPlayUri, isFloating, push],
   );
 
   useEffect(() => {
@@ -344,7 +344,7 @@ function VideoViewer(props: Props) {
             () => {
               setLocalAutoplayNext((e) => !e);
             },
-            autoplayNext
+            autoplayNext,
           );
         }
       }

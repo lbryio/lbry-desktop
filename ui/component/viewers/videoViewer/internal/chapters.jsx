@@ -142,7 +142,7 @@ function load(player: any, timestampData: TimestampData, duration: number) {
       addMarkersOnProgressBar(
         // $FlowIssue: mixed
         values.map((v) => v.seconds),
-        duration
+        duration,
       );
 
       const chaptersButton = player?.controlBar?.chaptersButton;

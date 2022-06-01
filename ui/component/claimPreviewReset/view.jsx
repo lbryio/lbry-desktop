@@ -32,7 +32,7 @@ const ClaimPreviewReset = (props: Props) => {
       <span className={'claimPreviewReset__hint'}>
         {__(
           "If you're having trouble starting a stream or if your stream shows that you're live but aren't, try a reset. If the problem persists, please reach out at %SITE_HELP_EMAIL%.",
-          { SITE_HELP_EMAIL }
+          { SITE_HELP_EMAIL },
         )}
       </span>
       <Button

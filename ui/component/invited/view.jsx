@@ -118,7 +118,7 @@ function Invited(props: Props) {
       <Card
         title={__(`Welcome!`)}
         subtitle={__(
-          `Something went wrong with your invite link. You can set and claim your invite reward after signing in.`
+          `Something went wrong with your invite link. You can set and claim your invite reward after signing in.`,
         )}
         actions={
           <>

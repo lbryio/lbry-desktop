@@ -93,7 +93,7 @@ const OdyseeMembershipPage = (props: Props) => {
         {
           environment: stripeEnvironment,
         },
-        'post'
+        'post',
       );
 
       log('mine response');
@@ -150,7 +150,7 @@ const OdyseeMembershipPage = (props: Props) => {
           {
             environment: stripeEnvironment,
           },
-          'post'
+          'post',
         );
 
         log('customer/status response');
@@ -181,7 +181,7 @@ const OdyseeMembershipPage = (props: Props) => {
             channel_id: ODYSEE_CHANNEL.ID,
             channel_name: ODYSEE_CHANNEL.NAME,
           },
-          'post'
+          'post',
         );
 
         log('membership/list response');
@@ -232,7 +232,7 @@ const OdyseeMembershipPage = (props: Props) => {
       {
         environment: 'test',
       },
-      'post'
+      'post',
     );
     // $FlowFixMe
     location.reload();
@@ -264,22 +264,22 @@ const OdyseeMembershipPage = (props: Props) => {
     } else if (plan === 'Premium' && !channels) {
       // user has no channels
       featureString = __(
-        'You currently have no channels. To show your badge on a channel, please create a channel first. If you register a channel later you will be able to show a badge for up to three channels.'
+        'You currently have no channels. To show your badge on a channel, please create a channel first. If you register a channel later you will be able to show a badge for up to three channels.',
       );
     } else if (plan === 'Premium+' && !channels) {
       // user has no channels
       featureString = __(
-        'The no ads feature applies site-wide. You currently have no channels. To show your badge on a channel, please create a channel first. If you register a channel later you will be able to show a badge for up to three channels.'
+        'The no ads feature applies site-wide. You currently have no channels. To show your badge on a channel, please create a channel first. If you register a channel later you will be able to show a badge for up to three channels.',
       );
     } else if (plan === 'Premium' && incognito) {
       // user has incognito selected
       featureString = __(
-        'You currently have no channel selected and will not have a badge be visible, if you want to show a badge you can select a channel now, or you can show a badge for up to three channels in the future for free.'
+        'You currently have no channel selected and will not have a badge be visible, if you want to show a badge you can select a channel now, or you can show a badge for up to three channels in the future for free.',
       );
     } else if (plan === 'Premium+' && incognito) {
       // user has incognito selected
       featureString = __(
-        'The no ads feature applies site-wide. You currently have no channel selected and will not have a badge be visible, if you want to show a badge you can select a channel now, or you can show a badge for up to three channels in the future for free.'
+        'The no ads feature applies site-wide. You currently have no channel selected and will not have a badge be visible, if you want to show a badge you can select a channel now, or you can show a badge for up to three channels in the future for free.',
       );
     }
 
@@ -303,7 +303,7 @@ const OdyseeMembershipPage = (props: Props) => {
     );
 
     const noRefund = __(
-      'You can cancel Premium at any time (no refunds) and you can also close this window and choose a different membership option.'
+      'You can cancel Premium at any time (no refunds) and you can also close this window and choose a different membership option.',
     );
 
     return (
@@ -429,25 +429,25 @@ const OdyseeMembershipPage = (props: Props) => {
     <div className="section__subtitle">
       <p>
         {__(
-          'First of all, thank you for considering or purchasing a membership, it means a ton to us! A few important details to know:'
+          'First of all, thank you for considering or purchasing a membership, it means a ton to us! A few important details to know:',
         )}
       </p>
       <p>
         <ul>
           <li>
             {__(
-              'Exclusive and early access features include: recommended content, homepage customization, and the ability to post Odysee hyperlinks + images in comments. Account is also automatically eligible for Rewards. More to come later.'
+              'Exclusive and early access features include: recommended content, homepage customization, and the ability to post Odysee hyperlinks + images in comments. Account is also automatically eligible for Rewards. More to come later.',
             )}
           </li>
           <li>
             {__(
-              'The yearly Premium+ membership has a discount compared to monthly, and Premium is only available yearly.'
+              'The yearly Premium+ membership has a discount compared to monthly, and Premium is only available yearly.',
             )}
           </li>
           <li>{__('These are limited time rates, so get in early!')}</li>
           <li>
             {__(
-              'There may be higher tiers available in the future for creators and anyone else who wants to support us.'
+              'There may be higher tiers available in the future for creators and anyone else who wants to support us.',
             )}
           </li>
           <li>

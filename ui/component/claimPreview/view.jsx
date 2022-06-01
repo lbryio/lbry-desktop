@@ -39,7 +39,7 @@ import * as ICONS from 'constants/icons';
 import { useIsMobile } from 'effects/use-screensize';
 
 const AbandonedChannelPreview = lazyImport(() =>
-  import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */)
+  import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */),
 );
 
 // preview images used on the landing page and on the channel page

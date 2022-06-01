@@ -18,7 +18,7 @@ const Thumbnail = (props: Props) => {
         {
           'card__media--nsfw': shouldObscure,
         },
-        className
+        className,
       )}
       src={src}
     />

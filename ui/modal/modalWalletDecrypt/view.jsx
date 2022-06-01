@@ -51,7 +51,7 @@ class ModalWalletDecrypt extends React.PureComponent<Props, State> {
       >
         <p>
           {__(
-            'Your wallet has been encrypted with a local password, performing this action will remove this password.'
+            'Your wallet has been encrypted with a local password, performing this action will remove this password.',
           )}{' '}
           <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />.
         </p>

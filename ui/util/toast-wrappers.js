@@ -6,7 +6,7 @@ export function dispatchToast(
   message: string,
   subMessage: string = '',
   duration: 'default' | 'long' = 'default',
-  isError: boolean = true
+  isError: boolean = true,
 ) {
   return dispatch(doToast({ message, subMessage: subMessage || undefined, duration: duration, isError }));
 }

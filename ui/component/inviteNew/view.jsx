@@ -42,7 +42,7 @@ function InviteNew(props: Props) {
         analytics.apiLogPublish(matchingChannel);
       }
     },
-    [setReferralSource]
+    [setReferralSource],
   );
 
   const topChannel =

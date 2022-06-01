@@ -158,7 +158,7 @@ function ListBlocked(props: Props) {
     switch (view) {
       case VIEW.BLOCKED:
         return __(
-          "Blocked channels will be invisible to you in the app. They will not be able to comment on your content, nor reply to your comments left on other channels' content."
+          "Blocked channels will be invisible to you in the app. They will not be able to comment on your content, nor reply to your comments left on other channels' content.",
         );
       case VIEW.ADMIN:
         return __('This is the global block list.');
@@ -166,7 +166,7 @@ function ListBlocked(props: Props) {
         return __('List of channels that you have blocked as a moderator, along with the list of delegators.');
       case VIEW.MUTED:
         return __(
-          'Muted channels will be invisible to you in the app. They will not know they are muted and can still interact with you and your content.'
+          'Muted channels will be invisible to you in the app. They will not know they are muted and can still interact with you and your content.',
         );
     }
   }

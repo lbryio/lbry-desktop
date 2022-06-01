@@ -34,7 +34,7 @@ self.addEventListener('push', (event) => {
         badge: NOTIFICATION_BADGE,
         icon: NOTIFICATION_ICON,
       });
-    })()
+    })(),
   );
 });
 
@@ -52,7 +52,7 @@ self.addEventListener('notificationclick', async (event) => {
         client = await client.focus();
         return client.navigate(event.notification.data.url);
       }
-    })()
+    })(),
   );
 });
 

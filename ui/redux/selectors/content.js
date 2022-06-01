@@ -35,7 +35,7 @@ export const makeSelectIsPlaying = (uri: string) =>
 export const selectIsUriCurrentlyPlaying = createSelector(
   (state, uri) => uri,
   selectPlayingUri,
-  (uri, playingUri) => Boolean(playingUri.uri === uri)
+  (uri, playingUri) => Boolean(playingUri.uri === uri),
 );
 
 export const makeSelectIsPlayerFloating = (location: UrlLocation) =>
@@ -74,7 +74,7 @@ export const selectContentPositionForUri = (state: State, uri: string) => {
 export const selectHistory = (state: State) => selectState(state).history || [];
 
 export const selectHistoryPageCount = createSelector(selectHistory, (history) =>
-  Math.ceil(history.length / HISTORY_ITEMS_PER_PAGE)
+  Math.ceil(history.length / HISTORY_ITEMS_PER_PAGE),
 );
 
 export const makeSelectHistoryForPage = (page: number) =>
@@ -173,7 +173,7 @@ export const makeSelectFileRenderModeForUri = (uri: string) =>
       }
 
       return RENDER_MODES.UNSUPPORTED;
-    }
+    },
   );
 
 export const selectInsufficientCreditsForUri = (state: State, uri: string) => {

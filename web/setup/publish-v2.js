@@ -37,7 +37,7 @@ export function makeResumableUploadRequest(
   token: string,
   params: FileUploadSdkParams,
   file: File | string,
-  isPreview?: boolean
+  isPreview?: boolean,
 ) {
   return new Promise<any>((resolve, reject) => {
     if (!RESUMABLE_ENDPOINT) {
@@ -106,7 +106,7 @@ export function makeResumableUploadRequest(
               // ...(uploader._offsetBeforeRetry ? { offsetBeforeRetry: uploader._offsetBeforeRetry } : {}),
               ...(customErr ? { original: errMsg } : {}),
             },
-          })
+          }),
         );
       },
       onProgress: (bytesUploaded, bytesTotal) => {

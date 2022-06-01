@@ -214,7 +214,7 @@ export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispat
     dispatch(
       doOpenModal(MODALS.PUBLISH_PREVIEW, {
         previewResponse,
-      })
+      }),
     );
   };
 
@@ -271,7 +271,7 @@ export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispat
         isEdit,
         filePath,
         lbryFirstError,
-      })
+      }),
     );
     dispatch(doCheckPendingClaims());
     // @if TARGET='app'
@@ -354,7 +354,7 @@ export const doPublishResume = (publishPayload: any) => (dispatch: Dispatch, get
         uri: url,
         isEdit,
         lbryFirstError,
-      })
+      }),
     );
 
     dispatch(doCheckPendingClaims());
@@ -403,7 +403,7 @@ export const doResetThumbnailStatus = () => (dispatch: Dispatch) => {
           uploadThumbnailStatus: THUMBNAIL_STATUSES.API_DOWN,
           thumbnail: '',
         },
-      })
+      }),
     );
 };
 
@@ -431,7 +431,7 @@ export const doUploadThumbnail = (
   fsAdapter?: any,
   fs?: any,
   path?: any,
-  cb?: (string) => void
+  cb?: (string) => void,
 ) => (dispatch: Dispatch) => {
   let thumbnail, fileExt, fileName, fileType, stats, size;
 
@@ -446,8 +446,8 @@ export const doUploadThumbnail = (
             nsfw: false,
           },
         },
-        doError(error)
-      )
+        doError(error),
+      ),
     );
   };
 
@@ -472,7 +472,7 @@ export const doUploadThumbnail = (
       .then((json) => {
         if (json.type !== 'success') {
           return uploadError(
-            json.message || __('There was an error in the upload. The format or extension might not be supported.')
+            json.message || __('There was an error in the upload. The format or extension might not be supported.'),
           );
         }
 
@@ -495,7 +495,7 @@ export const doUploadThumbnail = (
         if (message === 'Failed to fetch') {
           // message = __('Thumbnail upload service may be down, try again later.');
           message = __(
-            'Thumbnail upload service may be down, try again later. Some plugins like AdGuard Français may be blocking the service. If using Brave, go to brave://adblock and disable it, or turn down shields.'
+            'Thumbnail upload service may be down, try again later. Some plugins like AdGuard Français may be blocking the service. If using Brave, go to brave://adblock and disable it, or turn down shields.',
           );
         }
 
@@ -554,7 +554,7 @@ export const doUploadThumbnail = (
 };
 
 export const doPrepareEdit = (claim: StreamClaim, uri: string, fileInfo: FileListItem, fs: any) => (
-  dispatch: Dispatch
+  dispatch: Dispatch,
 ) => {
   const { name, amount, value = {} } = claim;
   const channelName = (claim && claim.signing_channel && claim.signing_channel.name) || null;
@@ -619,7 +619,7 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string, fileInfo: FileLis
 
 export const doPublish = (success: Function, fail: Function, preview: Function, payload: any) => (
   dispatch: Dispatch,
-  getState: () => {}
+  getState: () => {},
 ) => {
   if (!preview) {
     dispatch({ type: ACTIONS.PUBLISH_START });
@@ -738,7 +738,7 @@ export const doCheckReflectingFiles = () => (dispatch: Dispatch, getState: GetSt
 export function doUpdateUploadAdd(
   file: File | string,
   params: { [key: string]: any },
-  uploader: TusUploader | XMLHttpRequest
+  uploader: TusUploader | XMLHttpRequest,
 ) {
   return (dispatch: Dispatch, getState: GetState) => {
     dispatch({
@@ -749,7 +749,7 @@ export function doUpdateUploadAdd(
 }
 
 export const doUpdateUploadProgress = (props: { guid: string, progress?: string, status?: string }) => (
-  dispatch: Dispatch
+  dispatch: Dispatch,
 ) =>
   dispatch({
     type: ACTIONS.UPDATE_UPLOAD_PROGRESS,

@@ -8,7 +8,7 @@ const express = require('express');
 const app = express();
 
 console.log(
-  chalk.magenta(`Compiling ${chalk.underline('main')} and ${chalk.underline('render')}, this will take a while.`)
+  chalk.magenta(`Compiling ${chalk.underline('main')} and ${chalk.underline('render')}, this will take a while.`),
 );
 
 let [mainConfig, renderConfig] = require('../webpack.electron.config.js');

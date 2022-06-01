@@ -10,7 +10,7 @@ export default function useLighthouse(
   showMature: boolean,
   size: number = 5,
   additionalOptions: any = {},
-  throttleMs: number = 500
+  throttleMs: number = 500,
 ) {
   const [results, setResults] = React.useState();
   const [loading, setLoading] = React.useState();
@@ -28,7 +28,7 @@ export default function useLighthouse(
         .then(({ body: results }) => {
           if (isSubscribed) {
             setResults(
-              results.map((result) => `lbry://${result.name}#${result.claimId}`).filter((uri) => isURIValid(uri))
+              results.map((result) => `lbry://${result.name}#${result.claimId}`).filter((uri) => isURIValid(uri)),
             );
             setLoading(false);
           }

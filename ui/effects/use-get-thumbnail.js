@@ -7,7 +7,7 @@ export default function useGetThumbnail(
   claim: ?Claim,
   streamingUrl: ?string,
   getFile: (string) => void,
-  shouldHide: boolean
+  shouldHide: boolean,
 ) {
   let thumbnailToUse;
 

@@ -82,7 +82,7 @@ function FileDrop(props: Props) {
       updatePublishForm({ filePath: selectedFile });
       hideDropArea();
     },
-    [updatePublishForm, hideDropArea]
+    [updatePublishForm, hideDropArea],
   );
 
   // Clear timers when unmounted

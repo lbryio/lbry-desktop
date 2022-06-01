@@ -12,7 +12,7 @@ const select = (state, props) => {
     resolvingSuperchats: Boolean(
       viewMode === VIEW_MODES.SUPERCHAT &&
         comments &&
-        comments.some(({ channel_url }) => selectIsUriResolving(state, channel_url))
+        comments.some(({ channel_url }) => selectIsUriResolving(state, channel_url)),
     ),
   };
 };

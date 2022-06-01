@@ -60,7 +60,7 @@ function SettingWalletServer(props: Props) {
     () => () => {
       hasAvailableRef.current = availableServers;
     },
-    [availableServers]
+    [availableServers],
   );
 
   useEffect(
@@ -69,7 +69,7 @@ function SettingWalletServer(props: Props) {
         doClear();
       }
     },
-    []
+    [],
   );
 
   useEffect(() => {
@@ -150,7 +150,7 @@ function SettingWalletServer(props: Props) {
               serverConfig.map((entry, index) => {
                 const [host, port] = entry;
                 const available = activeWalletServers.some(
-                  (s) => s.host === entry[0] && String(s.port) === entry[1] && s.availability
+                  (s) => s.host === entry[0] && String(s.port) === entry[1] && s.availability,
                 );
 
                 return (

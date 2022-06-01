@@ -45,7 +45,7 @@ function SyncPassword(props: Props) {
       <Card
         title={__('Enter your wallet password')}
         subtitle={__(
-          'You set your wallet password when you previously installed LBRY. This may have been on different device.'
+          'You set your wallet password when you previously installed LBRY. This may have been on different device.',
         )}
         actions={
           <div>

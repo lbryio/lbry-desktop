@@ -15,7 +15,7 @@ type Props = {
   doClearEmailEntry: () => void,
   doUserFetch: () => void,
   doToast: ({ message: string }) => void,
-  history: { push: string => void },
+  history: { push: (string) => void },
   location: { search: string },
   passwordSetPending: boolean,
   passwordSetError: ?string,
@@ -47,8 +47,8 @@ function UserPasswordReset(props: Props) {
             auth_token: authToken,
             new_password: password,
           },
-          'post'
-        )
+          'post',
+        ),
       )
       .then(doUserFetch)
       .then(() => {
@@ -58,7 +58,7 @@ function UserPasswordReset(props: Props) {
         });
         push(`/`);
       })
-      .catch(error => {
+      .catch((error) => {
         setLoading(false);
         setError(error.message);
       });
@@ -83,7 +83,7 @@ function UserPasswordReset(props: Props) {
                 name="password_set"
                 label={__('New Password')}
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
               />
 
               <div className="section__actions">

@@ -223,7 +223,7 @@ export class FormField extends React.PureComponent<Props, State> {
                   setTimeout(() => {
                     instance.setSelection(
                       { line: to.line, ch: baseIndex + urlLineText.lastIndexOf('(') + 1 },
-                      { line: to.line, ch: baseIndex + urlLineText.lastIndexOf(')') }
+                      { line: to.line, ch: baseIndex + urlLineText.lastIndexOf(')') },
                     );
                   }, 25);
                 }

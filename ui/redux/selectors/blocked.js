@@ -21,7 +21,7 @@ export const selectMutedAndBlockedChannelIds = createSelector(
     const mutedUris = state.blockedChannels;
     const blockedUris = commentsState.moderationBlockList;
     return Array.from(
-      new Set((mutedUris || []).concat(blockedUris || []).map((uri) => splitBySeparator(uri)[1]))
+      new Set((mutedUris || []).concat(blockedUris || []).map((uri) => splitBySeparator(uri)[1])),
     ).sort();
-  }
+  },
 );

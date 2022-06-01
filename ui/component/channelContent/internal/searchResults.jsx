@@ -45,7 +45,7 @@ export function SearchResults(props: Props) {
             `&s=${encodeURIComponent(searchQuery)}` +
             `&channel_id=${encodeURIComponent(claimId)}` +
             `&nsfw=${showMature ? 'true' : 'false'}` +
-            `&size=${SEARCH_PAGE_SIZE}`
+            `&size=${SEARCH_PAGE_SIZE}`,
         )
         .then(({ body: results }) => {
           const urls = results.map(({ name, claimId }) => {

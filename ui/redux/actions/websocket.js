@@ -101,7 +101,7 @@ export const doNotificationSocketConnect = (enableNotifications) => (dispatch) =
           break;
       }
     },
-    'notification'
+    'notification',
   );
 };
 
@@ -154,7 +154,7 @@ export const doCommentSocketConnect = (uri, channelName, claimId, subCategory) =
         dispatch(doFetchChannelLiveStatus(channel_id));
       }
     },
-    `${subCategory || COMMENT_WS_SUBCATEGORIES.VIEWER} comment`
+    `${subCategory || COMMENT_WS_SUBCATEGORIES.VIEWER} comment`,
   );
 
   dispatch(doSetSocketConnection(true, claimId, subCategory || COMMENT_WS_SUBCATEGORIES.VIEWER));

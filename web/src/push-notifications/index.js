@@ -45,7 +45,7 @@ export default new Proxy(
         throw new Error('Push notifications are not supported in this browser environment.');
       }
     },
-  }
+  },
 );
 
 const subscriptionMetaData = () => {

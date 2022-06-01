@@ -32,7 +32,7 @@ const registerPlugin = videojs.registerPlugin || videojs.plugin;
  */
 
 /* eslint-disable no-self-compare */
-const isNumber = n => typeof n === 'number' && n === n;
+const isNumber = (n) => typeof n === 'number' && n === n;
 /* eslint-enable no-self-compare */
 
 /**
@@ -41,7 +41,7 @@ const isNumber = n => typeof n === 'number' && n === n;
  * @param  {String} s
  * @return {Boolean}
  */
-const hasNoWhitespace = s => typeof s === 'string' && /^\S+$/.test(s);
+const hasNoWhitespace = (s) => typeof s === 'string' && /^\S+$/.test(s);
 
 /**
  * Overlay component.
@@ -53,7 +53,7 @@ class Overlay extends Component {
   constructor(player, options) {
     super(player, options);
 
-    ['start', 'end'].forEach(key => {
+    ['start', 'end'].forEach((key) => {
       const value = this.options_[key];
 
       if (isNumber(value)) {
@@ -74,8 +74,8 @@ class Overlay extends Component {
     // its GUID magic), but the anonymous function approach avoids any issues
     // caused by crappy libraries clobbering Function.prototype.bind.
     // - https://github.com/videojs/video.js/issues/3097
-    ['endListener_', 'rewindListener_', 'startListener_'].forEach(name => {
-      this[name] = e => Overlay.prototype[name].call(this, e);
+    ['endListener_', 'rewindListener_', 'startListener_'].forEach((name) => {
+      this[name] = (e) => Overlay.prototype[name].call(this, e);
     });
 
     // If the start event is a timeupdate, we need to watch for rewinds (i.e.,
@@ -85,7 +85,7 @@ class Overlay extends Component {
     }
 
     this.debug(
-      `created, listening to "${this.startEvent_}" for "start" and "${this.endEvent_ || 'nothing'}" for "end"`
+      `created, listening to "${this.startEvent_}" for "start" and "${this.endEvent_ || 'nothing'}" for "end"`,
     );
 
     if (this.startEvent_ === 'immediate') {
@@ -306,12 +306,12 @@ videojs.registerComponent('Overlay', Overlay);
  * @function plugin
  * @param    {Object} [options={}]
  */
-const plugin = function(options) {
+const plugin = function (options) {
   const settings = videojs.mergeOptions(defaults, options);
 
   // De-initialize the plugin if it already has an array of overlays.
   if (Array.isArray(this.overlays_)) {
-    this.overlays_.forEach(overlay => {
+    this.overlays_.forEach((overlay) => {
       this.removeChild(overlay);
       if (this.controlBar) {
         this.controlBar.removeChild(overlay);
@@ -326,7 +326,7 @@ const plugin = function(options) {
   // because it doesn't make sense to pass it to each Overlay component.
   delete settings.overlays;
 
-  this.overlays_ = overlays.map(o => {
+  this.overlays_ = overlays.map((o) => {
     const mergeOptions = videojs.mergeOptions(settings, o);
     const attachToControlBar =
       typeof mergeOptions.attachToControlBar === 'string' || mergeOptions.attachToControlBar === true;

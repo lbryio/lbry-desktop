@@ -78,7 +78,7 @@ class UserVerify extends React.PureComponent<Props> {
             icon={ICONS.PHONE}
             title={__('Verify phone number')}
             subtitle={__(
-              'You will receive an SMS text message confirming your phone number is valid. May not be available in all regions.'
+              'You will receive an SMS text message confirming your phone number is valid. May not be available in all regions.',
             )}
             actions={
               <Fragment>
@@ -145,7 +145,7 @@ class UserVerify extends React.PureComponent<Props> {
               <>
                 <p>
                   {__(
-                    'A moderator can approve you within our discord server. Please review the instructions within #rewards-approval carefully.'
+                    'A moderator can approve you within our discord server. Please review the instructions within #rewards-approval carefully.',
                   )}
                 </p>
                 <p>{__('You will be asked to provide proof of identity.')}</p>

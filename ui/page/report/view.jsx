@@ -43,7 +43,7 @@ class ReportPage extends React.Component {
           <Card
             title={__('Report an issue or request a feature')}
             subtitle={__(
-              'Please describe the problem you experienced or the feature you want to see and any information you think might be useful to us. Links to screenshots are great!'
+              'Please describe the problem you experienced or the feature you want to see and any information you think might be useful to us. Links to screenshots are great!',
             )}
             actions={
               <>

@@ -154,7 +154,7 @@ export default appState => {
       },
       buttonIndex => {
         if (buttonIndex === 1) app.quit();
-      }
+      },
     );
   });
 

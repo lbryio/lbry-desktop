@@ -27,7 +27,7 @@ const PublishStreamReleaseDate = (props: Props) => {
     const shouldPublishLater = !publishLater;
     setPublishLater(shouldPublishLater);
     onDateTimePickerChanged(
-      shouldPublishLater ? moment().add('1', 'hour').add('30', 'minutes').startOf('hour').toDate() : 'DEFAULT'
+      shouldPublishLater ? moment().add('1', 'hour').add('30', 'minutes').startOf('hour').toDate() : 'DEFAULT',
     );
   };
 
@@ -48,10 +48,10 @@ const PublishStreamReleaseDate = (props: Props) => {
 
   const helpText = !publishLater
     ? __(
-        'Confirmation process takes a few minutes, but then you can go live anytime. The stream is not shown anywhere until you are broadcasting.'
+        'Confirmation process takes a few minutes, but then you can go live anytime. The stream is not shown anywhere until you are broadcasting.',
       )
     : __(
-        'Your scheduled streams will appear on your channel page and for your followers. Chat will not be active until 5 minutes before the start time.'
+        'Your scheduled streams will appear on your channel page and for your followers. Chat will not be active until 5 minutes before the start time.',
       );
 
   return (

@@ -166,7 +166,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   // if already has a quality set, no need to notify
   const [initialQualityChange, setInitialQualityChange] = usePersistedState(
     'initial-quality-change',
-    Boolean(defaultQuality)
+    Boolean(defaultQuality),
   );
 
   const isMobile = useIsMobile();

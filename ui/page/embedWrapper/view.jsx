@@ -116,7 +116,7 @@ export default function EmbedWrapperPage(props: Props) {
     blackListedOutpoints.some(
       (outpoint) =>
         (channelUrl && outpoint.txid === channelTxid && outpoint.nout === channelNout) ||
-        (outpoint.txid === txid && outpoint.nout === nout)
+        (outpoint.txid === txid && outpoint.nout === nout),
     );
 
   const thumbnail = useThumbnail(claimThumbnail, containerRef);
@@ -191,7 +191,7 @@ export default function EmbedWrapperPage(props: Props) {
       <Card
         title={uri}
         subtitle={__(
-          'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.'
+          'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.',
         )}
         actions={
           <div className="section__actions">

@@ -138,7 +138,7 @@ export default function CommentList(props: Props) {
   // Display comments immediately if not fetching reactions
   // If not, wait to show comments until reactions are fetched
   const [readyToDisplayComments, setReadyToDisplayComments] = React.useState(
-    Boolean(othersReactsById) || !ENABLE_COMMENT_REACTIONS
+    Boolean(othersReactsById) || !ENABLE_COMMENT_REACTIONS,
   );
 
   // get commenter claim ids for checking premium status
@@ -152,7 +152,7 @@ export default function CommentList(props: Props) {
     claimsByUri,
     doFetchUserMemberships,
     [topLevelComments],
-    true
+    true,
   );
 
   const handleReset = React.useCallback(() => {
