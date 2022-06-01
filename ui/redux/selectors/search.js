@@ -1,5 +1,7 @@
 // @flow
+import { getSearchQueryString } from 'util/query-params';
 import { selectShowMatureContent } from 'redux/selectors/settings';
+import { SEARCH_OPTIONS } from 'constants/search';
 import {
   selectClaimsByUri,
   makeSelectClaimForUri,
@@ -12,10 +14,11 @@ import { parseURI } from 'util/lbryURI';
 import { isClaimNsfw } from 'util/claim';
 import { createSelector } from 'reselect';
 import { createCachedSelector } from 're-reselect';
-import { createNormalizedSearchKey, getRecommendationSearchKey, getRecommendationSearchOptions } from 'util/search';
+import { createNormalizedSearchKey, getRecommendationSearchOptions } from 'util/search';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectHistory } from 'redux/selectors/content';
 import { selectAllCostInfoByUri } from 'lbryinc';
+import { SIMPLE_SITE } from 'config';
 
 type State = { claims: any, search: SearchState, user: UserState };
 
@@ -63,6 +66,7 @@ export const selectRecommendedContentForUri = createCachedSelector(
   selectClaimIsNsfwForUri, // (state, uri)
   (uri, history, claimsByUri, matureEnabled, blockedChannels, costInfoByUri, searchUrisByQuery, isMature) => {
     const claim = claimsByUri[uri];
+
     if (!claim) return;
 
     let recommendedContent;
@@ -70,10 +74,26 @@ export const selectRecommendedContentForUri = createCachedSelector(
     const currentClaimId = claim.claim_id;
 
     const { title } = claim.value;
+
     if (!title) return;
 
-    const options = getRecommendationSearchOptions(matureEnabled, isMature, claim.claim_id);
-    const normalizedSearchQuery = getRecommendationSearchKey(title, options);
+    const options: {
+      size: number,
+      nsfw?: boolean,
+      isBackgroundSearch?: boolean,
+    } = { size: 20, nsfw: matureEnabled, isBackgroundSearch: true };
+
+    if (SIMPLE_SITE) {
+      options[SEARCH_OPTIONS.CLAIM_TYPE] = SEARCH_OPTIONS.INCLUDE_FILES;
+      options[SEARCH_OPTIONS.MEDIA_VIDEO] = true;
+      options[SEARCH_OPTIONS.PRICE_FILTER_FREE] = true;
+    }
+    if (matureEnabled || (!matureEnabled && !isMature)) {
+      options[SEARCH_OPTIONS.RELATED_TO] = claim.claim_id;
+    }
+
+    const searchQuery = getSearchQueryString(title.replace(/\//, ' '), options);
+    const normalizedSearchQuery = createNormalizedSearchKey(searchQuery);
 
     let searchResult = searchUrisByQuery[normalizedSearchQuery];
 
@@ -149,7 +169,8 @@ export const makeSelectRecommendedRecsysIdForClaimId = (claimId: string) =>
         }
 
         const options = getRecommendationSearchOptions(matureEnabled, isMature, claimId);
-        const normalizedSearchQuery = getRecommendationSearchKey(title, options);
+        const searchQuery = getSearchQueryString(title.replace(/\//, ' '), options);
+        const normalizedSearchQuery = createNormalizedSearchKey(searchQuery);
 
         const searchResult = searchUrisByQuery[normalizedSearchQuery];
         if (searchResult) {
