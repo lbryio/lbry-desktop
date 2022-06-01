@@ -151,15 +151,36 @@
       border-left: 1px solid var(--color-border);
     }
 
-    .button-toggle {
+    button.button-toggle {
       // background-color: rgba(var(--color-header-button-base), 0.4) !important;
       background-color: var(--color-header-background) !important;
+      border: 2px solid var(--color-border);
+      border-right: 0px;
       &:hover {
-        background-color: rgba(var(--color-header-button-base), 0.9) !important;
+        background-color: var(--color-border) !important;
+        border: 2px solid transparent;
+        border-right: 0px;
+      }
+      &:last-of-type {
+        border-right: 2px solid var(--color-border);
+        &:hover {
+          border-right: 2px solid transparent;
+        }
+      }
+      .button__label {
+        margin-right: 2px;
       }
     }
 
-    .button-toggle--active,
+    button.button-toggle--active {
+      background-color: var(--color-border) !important;
+      border: 2px solid transparent;
+      border-right: 0px;
+      &:last-child {
+        border-right: 2px solid transparent;
+      }
+    }
+
     .channel__list-item,
     .button--secondary {
       // background-color: rgba(var(--color-header-button-base), 0.9) !important;
