@@ -417,7 +417,7 @@ export function doSendTip(params, isSupport, successCallback, errorCallback, sho
       });
 
       if (errorCallback) {
-        errorCallback();
+        errorCallback(err);
       }
     };
 
