@@ -536,7 +536,7 @@
 
 // DRY: we'll soon move vjs items to videojs.scss, so just duplicate these for now.
 $control-bar-height: 2.5rem;
-$control-bar-font-size: 0.8rem;
+$control-bar-font-size: 0.9rem;
 $control-bar-popup-font-size: 0.8rem;
 $control-bar-icon-size: 2rem;
 
@@ -720,6 +720,14 @@ $control-bar-icon-size: 2rem;
       @media (max-width: $breakpoint-small) {
         width: 2.25rem;
       }
+    }
+
+    .vjs-button--play-previous,
+    .vjs-button--play-next {
+      margin-top: -4px;
+    }
+    .vjs-button--play-next {
+      margin-left: var(--spacing-xs);
     }
   }
 

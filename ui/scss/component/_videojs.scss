@@ -328,11 +328,24 @@ button.vjs-big-play-button {
   }
 }
 
+.vjs-seek-to-live-control {
+  margin-top: -4px !important;
+  margin-left: var(--spacing-xs) !important;
+  @media (max-width: $breakpoint-small) {
+    padding-left: 0 !important;
+  }
+  .vjs-icon-placeholder {
+    &::before {
+      font-size: 0.9rem !important;
+    }
+  }
+}
+
 // Rearrange icons
-.vjs-play-control {
+.vjs-button--play-previous {
   order: 1 !important;
 }
-.vjs-button--play-previous {
+.vjs-play-control {
   order: 2 !important;
 }
 .vjs-button--play-next {
