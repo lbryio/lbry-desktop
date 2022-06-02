@@ -2319,7 +2319,6 @@
   "Hosting": "Hosting",
   "Viewed Hosting": "Viewed Hosting",
   "Auto Hosting": "Auto Hosting",
-  "* Note that as\n                peer-to-peer software, your IP address and potentially other system information can be sent to other\n                users, though this information is not stored permanently.": "* Note that as\n                peer-to-peer software, your IP address and potentially other system information can be sent to other\n                users, though this information is not stored permanently.",
   "Help creators and improve the P2P data network by hosting content.": "Help creators and improve the P2P data network by hosting content.",
   "I'm happy with my settings": "I'm happy with my settings",
   "We've noticed you already have some settings.": "We've noticed you already have some settings.",
@@ -2328,5 +2327,6 @@
   "Custom Hosting": "Custom Hosting",
   "Automatic Hosting downloads a small slice of content currently active on the network.": "Automatic Hosting downloads a small slice of content currently active on the network.",
   "Automatic Hosting (GB)": "Automatic Hosting (GB)",
+  "* Note that as peer-to-peer software, your IP address and potentially other system information can be sent to other users, though this information is not stored permanently.": "* Note that as peer-to-peer software, your IP address and potentially other system information can be sent to other users, though this information is not stored permanently.",
   "--end--": "--end--"
 }
