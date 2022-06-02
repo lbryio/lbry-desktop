@@ -305,124 +305,114 @@ function AppRouter(props: Props) {
 
   return (
     <React.Suspense fallback={<LoadingBarOneOff />}>
-      {categoryPages.length && (
-        <Switch>
-          <Redirect
-            from={`/$/${PAGES.DEPRECATED__CHANNELS_FOLLOWING_MANAGE}`}
-            to={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
-          />
-          <Redirect from={`/$/${PAGES.DEPRECATED__CHANNELS_FOLLOWING}`} to={`/$/${PAGES.CHANNELS_FOLLOWING}`} />
-          <Redirect from={`/$/${PAGES.DEPRECATED__TAGS_FOLLOWING}`} to={`/$/${PAGES.TAGS_FOLLOWING}`} />
-          <Redirect from={`/$/${PAGES.DEPRECATED__TAGS_FOLLOWING_MANAGE}`} to={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`} />
-          <Redirect from={`/$/${PAGES.DEPRECATED__PUBLISH}`} to={`/$/${PAGES.UPLOAD}`} />
-          <Redirect from={`/$/${PAGES.DEPRECATED__PUBLISHED}`} to={`/$/${PAGES.UPLOADS}`} />
+      <Switch>
+        <Redirect
+          from={`/$/${PAGES.DEPRECATED__CHANNELS_FOLLOWING_MANAGE}`}
+          to={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
+        />
+        <Redirect from={`/$/${PAGES.DEPRECATED__CHANNELS_FOLLOWING}`} to={`/$/${PAGES.CHANNELS_FOLLOWING}`} />
+        <Redirect from={`/$/${PAGES.DEPRECATED__TAGS_FOLLOWING}`} to={`/$/${PAGES.TAGS_FOLLOWING}`} />
+        <Redirect from={`/$/${PAGES.DEPRECATED__TAGS_FOLLOWING_MANAGE}`} to={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`} />
+        <Redirect from={`/$/${PAGES.DEPRECATED__PUBLISH}`} to={`/$/${PAGES.UPLOAD}`} />
+        <Redirect from={`/$/${PAGES.DEPRECATED__PUBLISHED}`} to={`/$/${PAGES.UPLOADS}`} />
 
-          <Route path={`/`} exact component={HomePage} />
+        <Route path={`/`} exact component={HomePage} />
 
-          {(!wildWestDisabled || tagParams) && <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />}
-          {categoryPages}
+        {(!wildWestDisabled || tagParams) && <Route path={`/$/${PAGES.DISCOVER}`} exact component={DiscoverPage} />}
+        {categoryPages}
 
-          <Route path={`/$/${PAGES.AUTH_SIGNIN}`} exact component={SignInPage} />
-          <Route path={`/$/${PAGES.AUTH_PASSWORD_RESET}`} exact component={PasswordResetPage} />
-          <Route path={`/$/${PAGES.AUTH_PASSWORD_SET}`} exact component={PasswordSetPage} />
-          <Route path={`/$/${PAGES.AUTH}`} exact component={SignUpPage} />
-          <Route path={`/$/${PAGES.AUTH}/*`} exact component={SignUpPage} />
+        <Route path={`/$/${PAGES.AUTH_SIGNIN}`} exact component={SignInPage} />
+        <Route path={`/$/${PAGES.AUTH_PASSWORD_RESET}`} exact component={PasswordResetPage} />
+        <Route path={`/$/${PAGES.AUTH_PASSWORD_SET}`} exact component={PasswordSetPage} />
+        <Route path={`/$/${PAGES.AUTH}`} exact component={SignUpPage} />
+        <Route path={`/$/${PAGES.AUTH}/*`} exact component={SignUpPage} />
 
-          <Route path={`/$/${PAGES.HELP}`} exact component={HelpPage} />
+        <Route path={`/$/${PAGES.HELP}`} exact component={HelpPage} />
 
-          <Route path={`/$/${PAGES.CODE_2257}`} exact component={Code2257Page} />
-          <Route path={`/$/${PAGES.PRIVACY_POLICY}`} exact component={PrivacyPolicyPage} />
-          <Route path={`/$/${PAGES.TOS}`} exact component={TOSPage} />
-          <Route path={`/$/${PAGES.FYP}`} exact component={FypPage} />
-          <Route path={`/$/${PAGES.YOUTUBE_TOS}`} exact component={YouTubeTOSPage} />
+        <Route path={`/$/${PAGES.CODE_2257}`} exact component={Code2257Page} />
+        <Route path={`/$/${PAGES.PRIVACY_POLICY}`} exact component={PrivacyPolicyPage} />
+        <Route path={`/$/${PAGES.TOS}`} exact component={TOSPage} />
+        <Route path={`/$/${PAGES.FYP}`} exact component={FypPage} />
+        <Route path={`/$/${PAGES.YOUTUBE_TOS}`} exact component={YouTubeTOSPage} />
 
-          <Route path={`/$/${PAGES.AUTH_VERIFY}`} exact component={SignInVerifyPage} />
-          <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />
-          <Route path={`/$/${PAGES.TOP}`} exact component={TopPage} />
-          <Route path={`/$/${PAGES.SETTINGS}`} exact component={SettingsPage} />
-          <Route path={`/$/${PAGES.INVITE}/:referrer`} exact component={InvitedPage} />
-          <Route path={`/$/${PAGES.CHECKOUT}`} exact component={CheckoutPage} />
-          <Route path={`/$/${PAGES.REPORT_CONTENT}`} exact component={ReportContentPage} />
-          <Route {...props} path={`/$/${PAGES.LIST}/:collectionId`} component={CollectionPage} />
+        <Route path={`/$/${PAGES.AUTH_VERIFY}`} exact component={SignInVerifyPage} />
+        <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />
+        <Route path={`/$/${PAGES.TOP}`} exact component={TopPage} />
+        <Route path={`/$/${PAGES.SETTINGS}`} exact component={SettingsPage} />
+        <Route path={`/$/${PAGES.INVITE}/:referrer`} exact component={InvitedPage} />
+        <Route path={`/$/${PAGES.CHECKOUT}`} exact component={CheckoutPage} />
+        <Route path={`/$/${PAGES.REPORT_CONTENT}`} exact component={ReportContentPage} />
+        <Route {...props} path={`/$/${PAGES.LIST}/:collectionId`} component={CollectionPage} />
 
-          <PrivateRoute {...props} exact path={`/$/${PAGES.YOUTUBE_SYNC}`} component={YoutubeSyncPage} />
-          <PrivateRoute {...props} exact path={`/$/${PAGES.TAGS_FOLLOWING}`} component={TagsFollowingPage} />
-          <PrivateRoute
-            {...props}
-            exact
-            path={`/$/${PAGES.CHANNELS_FOLLOWING}`}
-            component={isAuthenticated || !IS_WEB ? ChannelsFollowingPage : DiscoverPage}
-          />
-          <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`} component={SettingsNotificationsPage} />
-          <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} component={SettingsStripeCard} />
-          <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`} component={SettingsStripeAccount} />
-          <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_UPDATE_PWD}`} component={UpdatePasswordPage} />
-          <PrivateRoute
-            {...props}
-            exact
-            path={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
-            component={ChannelsFollowingDiscoverPage}
-          />
-          <PrivateRoute
-            {...props}
-            exact
-            path={`/$/${PAGES.CHANNELS_FOLLOWING_MANAGE}`}
-            component={ChannelsFollowingManage}
-          />
-          <PrivateRoute {...props} path={`/$/${PAGES.INVITE}`} component={InvitePage} />
-          <PrivateRoute {...props} path={`/$/${PAGES.CHANNEL_NEW}`} component={ChannelNew} />
-          <PrivateRoute {...props} path={`/$/${PAGES.REPOST_NEW}`} component={RepostNew} />
-          <PrivateRoute {...props} path={`/$/${PAGES.UPLOADS}`} component={FileListPublished} />
-          <PrivateRoute {...props} path={`/$/${PAGES.CREATOR_DASHBOARD}`} component={CreatorDashboard} />
-          <PrivateRoute {...props} path={`/$/${PAGES.UPLOAD}`} component={PublishPage} />
-          <PrivateRoute {...props} path={`/$/${PAGES.REPORT}`} component={ReportPage} />
-          <PrivateRoute {...props} path={`/$/${PAGES.REWARDS}`} exact component={RewardsPage} />
-          <PrivateRoute {...props} path={`/$/${PAGES.REWARDS_VERIFY}`} component={RewardsVerifyPage} />
-          <PrivateRoute {...props} path={`/$/${PAGES.LIBRARY}`} component={LibraryPage} />
-          <PrivateRoute {...props} path={`/$/${PAGES.LISTS}`} component={ListsPage} />
-          <PrivateRoute {...props} path={`/$/${PAGES.PLAYLISTS}`} component={PlaylistsPage} />
-          <PrivateRoute {...props} path={`/$/${PAGES.WATCH_HISTORY}`} component={WatchHistoryPage} />
-          <PrivateRoute {...props} path={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`} component={TagsFollowingManagePage} />
-          <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_BLOCKED_MUTED}`} component={ListBlockedPage} />
-          <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_CREATOR}`} component={SettingsCreatorPage} />
-          <PrivateRoute {...props} path={`/$/${PAGES.WALLET}`} exact component={WalletPage} />
-          <PrivateRoute {...props} path={`/$/${PAGES.CHANNELS}`} component={ChannelsPage} />
-          <PrivateRoute {...props} path={`/$/${PAGES.LIVESTREAM}`} component={LiveStreamSetupPage} />
-          <PrivateRoute {...props} path={`/$/${PAGES.LIVESTREAM_CURRENT}`} component={LivestreamCurrentPage} />
-          <PrivateRoute {...props} path={`/$/${PAGES.BUY}`} component={BuyPage} />
-          <PrivateRoute {...props} path={`/$/${PAGES.RECEIVE}`} component={ReceivePage} />
-          <PrivateRoute {...props} path={`/$/${PAGES.SEND}`} component={SendPage} />
-          <PrivateRoute {...props} path={`/$/${PAGES.SWAP}`} component={SwapPage} />
-          <PrivateRoute {...props} path={`/$/${PAGES.NOTIFICATIONS}`} component={NotificationsPage} />
-          <PrivateRoute {...props} path={`/$/${PAGES.AUTH_WALLET_PASSWORD}`} component={SignInWalletPasswordPage} />
-          <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_OWN_COMMENTS}`} component={OwnComments} />
-          <PrivateRoute {...props} path={`/$/${PAGES.ODYSEE_MEMBERSHIP}`} component={OdyseeMembershipPage} />
+        <PrivateRoute {...props} exact path={`/$/${PAGES.YOUTUBE_SYNC}`} component={YoutubeSyncPage} />
+        <PrivateRoute {...props} exact path={`/$/${PAGES.TAGS_FOLLOWING}`} component={TagsFollowingPage} />
+        <PrivateRoute
+          {...props}
+          exact
+          path={`/$/${PAGES.CHANNELS_FOLLOWING}`}
+          component={isAuthenticated || !IS_WEB ? ChannelsFollowingPage : DiscoverPage}
+        />
+        <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`} component={SettingsNotificationsPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} component={SettingsStripeCard} />
+        <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`} component={SettingsStripeAccount} />
+        <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_UPDATE_PWD}`} component={UpdatePasswordPage} />
+        <PrivateRoute
+          {...props}
+          exact
+          path={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
+          component={ChannelsFollowingDiscoverPage}
+        />
+        <PrivateRoute
+          {...props}
+          exact
+          path={`/$/${PAGES.CHANNELS_FOLLOWING_MANAGE}`}
+          component={ChannelsFollowingManage}
+        />
+        <PrivateRoute {...props} path={`/$/${PAGES.INVITE}`} component={InvitePage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.CHANNEL_NEW}`} component={ChannelNew} />
+        <PrivateRoute {...props} path={`/$/${PAGES.REPOST_NEW}`} component={RepostNew} />
+        <PrivateRoute {...props} path={`/$/${PAGES.UPLOADS}`} component={FileListPublished} />
+        <PrivateRoute {...props} path={`/$/${PAGES.CREATOR_DASHBOARD}`} component={CreatorDashboard} />
+        <PrivateRoute {...props} path={`/$/${PAGES.UPLOAD}`} component={PublishPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.REPORT}`} component={ReportPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.REWARDS}`} exact component={RewardsPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.REWARDS_VERIFY}`} component={RewardsVerifyPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.LIBRARY}`} component={LibraryPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.LISTS}`} component={ListsPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.PLAYLISTS}`} component={PlaylistsPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.WATCH_HISTORY}`} component={WatchHistoryPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`} component={TagsFollowingManagePage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_BLOCKED_MUTED}`} component={ListBlockedPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_CREATOR}`} component={SettingsCreatorPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.WALLET}`} exact component={WalletPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.CHANNELS}`} component={ChannelsPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.LIVESTREAM}`} component={LiveStreamSetupPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.LIVESTREAM_CURRENT}`} component={LivestreamCurrentPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.BUY}`} component={BuyPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.RECEIVE}`} component={ReceivePage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.SEND}`} component={SendPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.SWAP}`} component={SwapPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.NOTIFICATIONS}`} component={NotificationsPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.AUTH_WALLET_PASSWORD}`} component={SignInWalletPasswordPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_OWN_COMMENTS}`} component={OwnComments} />
+        <PrivateRoute {...props} path={`/$/${PAGES.ODYSEE_MEMBERSHIP}`} component={OdyseeMembershipPage} />
 
-          <Route path={`/$/${PAGES.POPOUT}/:channelName/:streamName`} component={PopoutChatPage} />
+        <Route path={`/$/${PAGES.POPOUT}/:channelName/:streamName`} component={PopoutChatPage} />
 
-          <Route
-            path={`/$/${PAGES.EMBED}/:claimName`}
-            exact
-            component={embedLatestPath ? () => <EmbedWrapperPage uri={uri} /> : EmbedWrapperPage}
-          />
-          <Route path={`/$/${PAGES.EMBED}/:claimName/:claimId`} exact component={EmbedWrapperPage} />
+        <Route
+          path={`/$/${PAGES.EMBED}/:claimName`}
+          exact
+          component={embedLatestPath ? () => <EmbedWrapperPage uri={uri} /> : EmbedWrapperPage}
+        />
+        <Route path={`/$/${PAGES.EMBED}/:claimName/:claimId`} exact component={EmbedWrapperPage} />
 
-          {/* Below need to go at the end to make sure we don't match any of our pages first */}
-          <Route
-            path={`/$/${PAGES.LATEST}/:channelName`}
-            exact
-            render={() => <ShowPage uri={uri} latestContentPath />}
-          />
-          <Route
-            path={`/$/${PAGES.LIVE_NOW}/:channelName`}
-            exact
-            render={() => <ShowPage uri={uri} liveContentPath />}
-          />
-          <Route path="/:claimName" exact render={() => <ShowPage uri={uri} />} />
-          <Route path="/:claimName/:streamName" exact render={() => <ShowPage uri={uri} />} />
-          <Route path="/*" component={FourOhFourPage} />
-        </Switch>
-      )}
+        {/* Below need to go at the end to make sure we don't match any of our pages first */}
+        <Route path={`/$/${PAGES.LATEST}/:channelName`} exact render={() => <ShowPage uri={uri} latestContentPath />} />
+        <Route path={`/$/${PAGES.LIVE_NOW}/:channelName`} exact render={() => <ShowPage uri={uri} liveContentPath />} />
+        <Route path="/:claimName" exact render={() => <ShowPage uri={uri} />} />
+        <Route path="/:claimName/:streamName" exact render={() => <ShowPage uri={uri} />} />
+        <Route path="/*" component={FourOhFourPage} />
+      </Switch>
     </React.Suspense>
   );
 }

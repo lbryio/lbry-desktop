@@ -13,7 +13,7 @@ import {
   makeSelectUrlsForCollectionId,
   makeSelectIsResolvingCollectionForId,
 } from 'redux/selectors/collections';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
+import { selectHomepageFetched, selectUserVerifiedEmail } from 'redux/selectors/user';
 import { doResolveUri, doFetchLatestClaimForChannel } from 'redux/actions/claims';
 import { doBeginPublish } from 'redux/actions/publish';
 import { doOpenModal } from 'redux/actions/app';
@@ -60,6 +60,7 @@ const select = (state, props) => {
     isResolvingCollection: makeSelectIsResolvingCollectionForId(collectionId)(state),
     isAuthenticated: selectUserVerifiedEmail(state),
     geoRestriction: selectGeoRestrictionForUri(state, uri),
+    homepageFetched: selectHomepageFetched(state),
   };
 };
 
