@@ -6,30 +6,18 @@ import Button from 'component/button';
 import PremiumPlusTile from 'component/premiumPlusTile';
 import classnames from 'classnames';
 import useShouldShowAds from 'effects/use-should-show-ads';
-import { platform } from 'util/platform';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
-import { LocalStorage, LS } from 'util/storage';
-
-const USE_ADNIMATION = true;
 
 // prettier-ignore
 const AD_CONFIGS = Object.freeze({
-  DEFAULT: {
-    url: 'https://cdn.vidcrunch.com/integrations/618bb4d28aac298191eec411/Lbry_Odysee.com_Responsive_Floating_DFP_Rev70_1011.js',
-    tag: 'vidcrunchJS537102317',
-  },
-  MOBILE: {
-    url: 'https://cdn.vidcrunch.com/integrations/618bb4d28aac298191eec411/Lbry_Odysee.com_Mobile_Floating_DFP_Rev70_1611.js',
-    tag: 'vidcrunchJS199212779',
-  },
-  EU: {
-    url: 'https://tg1.vidcrunch.com/api/adserver/spt?AV_TAGID=61dff05c599f1e20b01085d4&AV_PUBLISHERID=6182c8993c8ae776bd5635e9',
-    tag: 'AV61dff05c599f1e20b01085d4',
-  },
   ADNIMATION: {
     url: 'https://tg1.aniview.com/api/adserver/spt?AV_TAGID=6252bb6f28951333ec10a7a6&AV_PUBLISHERID=601d9a7f2e688a79e17c1265',
     tag: 'AV6252bb6f28951333ec10a7a6',
+  },
+  ADNIMATION_FILEPAGE: {
+    url: 'https://tg1.aniview.com/api/adserver/spt?AV_TAGID=62558336037e0f3df07ff0a8&AV_PUBLISHERID=601d9a7f2e688a79e17c1265',
+    tag: 'AV62558336037e0f3df07ff0a8',
   },
 });
 
@@ -42,18 +30,13 @@ function removeIfExists(querySelector) {
   if (element) element.remove();
 }
 
-function resolveVidcrunchConfig() {
-  const mobileAds = platform.isAndroid() || platform.isIOS();
-  const isInEu = LocalStorage.getItem(LS.GDPR_REQUIRED) === 'true';
-  return isInEu ? AD_CONFIGS.EU : mobileAds ? AD_CONFIGS.MOBILE : AD_CONFIGS.DEFAULT;
-}
-
 // ****************************************************************************
 // Ads
 // ****************************************************************************
 
 type Props = {
   type: string,
+  filePage?: boolean,
   tileLayout?: boolean,
   small?: boolean,
   className?: string,
@@ -68,6 +51,7 @@ type Props = {
 function Ads(props: Props) {
   const {
     type = 'video',
+    filePage = false,
     tileLayout,
     small,
     isAdBlockerFound,
@@ -79,7 +63,7 @@ function Ads(props: Props) {
   } = props;
 
   const shouldShowAds = useShouldShowAds(userHasPremiumPlus, userCountry, isAdBlockerFound, doSetAdBlockerFound);
-  const adConfig = USE_ADNIMATION ? AD_CONFIGS.ADNIMATION : resolveVidcrunchConfig();
+  const adConfig = filePage ? AD_CONFIGS.ADNIMATION_FILEPAGE : AD_CONFIGS.ADNIMATION;
 
   // add script to DOM
   useEffect(() => {
@@ -98,7 +82,6 @@ function Ads(props: Props) {
           // clear aniview state to allow ad reload
           delete window.aniplayerPos;
           delete window.storageAni;
-          delete window.__VIDCRUNCH_CONFIG_618bb4d28aac298191eec411__;
           delete window.__player_618bb4d28aac298191eec411__;
 
           const styles = document.querySelectorAll('body > style');
@@ -118,7 +101,7 @@ function Ads(props: Props) {
         };
       } catch (e) {}
     }
-  }, [shouldShowAds]);
+  }, [shouldShowAds, adConfig]);
 
   const adsSignInDriver = (
     <I18nMessage
