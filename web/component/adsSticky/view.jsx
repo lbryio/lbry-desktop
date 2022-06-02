@@ -12,6 +12,11 @@ const OUTBRAIN_CONTAINER_KEY = 'outbrainSizeDiv';
 let gScript;
 
 type Props = {
+  uri: ?string,
+  // --- redux ---
+  isContentClaim: boolean,
+  isChannelClaim: boolean,
+  authenticated: ?boolean,
   isAdBlockerFound: ?boolean,
   userHasPremiumPlus: boolean,
   userCountry: string,
@@ -20,24 +25,35 @@ type Props = {
 };
 
 export default function AdsSticky(props: Props) {
-  const { isAdBlockerFound, userHasPremiumPlus, userCountry, homepageData, doSetAdBlockerFound } = props;
+  const {
+    isContentClaim,
+    isChannelClaim,
+    authenticated,
+    isAdBlockerFound,
+    userHasPremiumPlus,
+    userCountry,
+    homepageData,
+    doSetAdBlockerFound,
+  } = props;
+
   const { location } = useHistory();
   const [refresh, setRefresh] = React.useState(0);
 
-  const inAllowedPath = isPathAllowed(location.pathname);
+  // Global condition on whether ads should be activated:
   const shouldShowAds = useShouldShowAds(userHasPremiumPlus, userCountry, isAdBlockerFound, doSetAdBlockerFound);
-  const shouldLoadSticky = inAllowedPath && !gScript && !inIFrame() && !platform.isMobile();
+  // Global conditions aside, should the Sticky be shown for this path:
+  const inAllowedPath = shouldShowAdsForPath(location.pathname, isContentClaim, isChannelClaim, authenticated);
+  // Final answer:
+  const shouldLoadSticky = shouldShowAds && inAllowedPath && !gScript && !inIFrame() && !platform.isMobile();
 
-  function isPathAllowed(pathname) {
-    const categoryValues = Object.values(homepageData);
+  function shouldShowAdsForPath(pathname, isContentClaim, isChannelClaim, authenticated) {
     // $FlowIssue: mixed type
-    const pathIsCategory = categoryValues.some((x) => pathname.startsWith(`/$/${x?.name}`));
-    return pathIsCategory;
+    const pathIsCategory = Object.values(homepageData).some((x) => pathname.startsWith(`/$/${x?.name}`));
+    return pathIsCategory || isChannelClaim || (isContentClaim && !authenticated);
   }
 
-  // -- Mount script; 1 per session.
   React.useEffect(() => {
-    if (shouldShowAds && shouldLoadSticky) {
+    if (shouldLoadSticky) {
       gScript = document.createElement('script');
       gScript.src = 'https://adncdnend.azureedge.net/adtags/odysee.adn.js';
       gScript.async = true;
@@ -45,9 +61,8 @@ export default function AdsSticky(props: Props) {
       // $FlowFixMe
       document.body.appendChild(gScript);
     }
-  }, [shouldShowAds, shouldLoadSticky]);
+  }, [shouldLoadSticky]);
 
-  // -- Update visibility per pathname
   React.useEffect(() => {
     const container = window[OUTBRAIN_CONTAINER_KEY];
     if (container) {
@@ -55,8 +70,7 @@ export default function AdsSticky(props: Props) {
     }
   }, [inAllowedPath, refresh]);
 
-  // Nothing for us to mount; the ad script will handle everything.
-  return null;
+  return null; // Nothing for us to mount; the ad script will handle everything.
 }
 
 // ****************************************************************************

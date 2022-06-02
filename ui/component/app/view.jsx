@@ -560,7 +560,7 @@ function App(props: Props) {
             {getStatusNag()}
           </React.Suspense>
 
-          <AdsSticky />
+          <AdsSticky uri={uri} />
         </React.Fragment>
       )}
     </div>
