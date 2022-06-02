@@ -13,15 +13,11 @@ type Props = {
 function HostingSplashCustom(props: Props) {
   const { handleNextPage, handleGoBack } = props;
 
-  function handleSubmit() {
-    handleNextPage();
-  }
-
   return (
     <section className="main--contained">
       <div className={'first-run__wrapper'}>
         <SettingStorage isWelcome />
-        <Form onSubmit={handleSubmit} className="section__body">
+        <Form onSubmit={handleNextPage} className="section__body">
           <div className={'card__actions'}>
             <Button button="primary" label={__(`Let's go`)} type="submit" />
             <Button button="link" label={__(`Go back`)} onClick={handleGoBack} />

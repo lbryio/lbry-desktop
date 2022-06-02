@@ -24,6 +24,10 @@ type Props = {
   diskSpace: DiskSpace,
 };
 
+const TWENTY_PERCENT = 0.2;
+const TEN_PERCENT = 0.1;
+const MINIMUM_VIEW_SETTING = '0.01';
+
 function SettingViewHosting(props: Props) {
   const {
     diskSpace,
@@ -41,8 +45,8 @@ function SettingViewHosting(props: Props) {
   const freeMB = diskSpace && Math.floor(Number(diskSpace.free) / 1024);
   const getGB = (val) => (Number(val) / 1024).toFixed(2);
   const recommendedSpace =
-    freeMB > totalMB * 0.2 // plenty of space?
-      ? Math.ceil(Number(getGB(totalMB * 0.1))) // 10% of total
+    freeMB > totalMB * TWENTY_PERCENT // plenty of space?
+      ? Math.ceil(Number(getGB(totalMB * TEN_PERCENT))) // 10% of total
       : Math.ceil(Number(getGB(viewBlobSpace))); // current amount to avoid deleting
   // daemon settings come in as 'number', but we manage them as 'String'.
   const [contentBlobSpaceLimitGB, setContentBlobSpaceLimit] = React.useState(
@@ -55,7 +59,7 @@ function SettingViewHosting(props: Props) {
     if (gb === '') {
       setContentBlobSpaceLimit('');
     } else if (gb === '0') {
-      setContentBlobSpaceLimit('0.01'); // setting 0 means unlimited.
+      setContentBlobSpaceLimit(MINIMUM_VIEW_SETTING); // setting 0 means unlimited.
     } else {
       if (isTrulyANumber(Number(gb))) {
         setContentBlobSpaceLimit(gb);
@@ -69,7 +73,7 @@ function SettingViewHosting(props: Props) {
     } else {
       await setDaemonSetting(
         DAEMON_SETTINGS.BLOB_STORAGE_LIMIT_MB,
-        String(contentBlobSpaceLimitGB === '0.01' ? '1' : convertGbToMbStr(contentBlobSpaceLimitGB))
+        contentBlobSpaceLimitGB === MINIMUM_VIEW_SETTING ? '1' : convertGbToMbStr(contentBlobSpaceLimitGB)
       );
     }
     await cleanBlobs();
@@ -152,7 +156,7 @@ function SettingViewHosting(props: Props) {
           onWheel={(e) => e.preventDefault()}
           label={__(`View Hosting Limit (GB)`)}
           onChange={(e) => handleContentLimitChange(e.target.value)}
-          value={Number(contentBlobSpaceLimitGB) <= Number('0.01') ? '0' : contentBlobSpaceLimitGB}
+          value={Number(contentBlobSpaceLimitGB) <= Number(MINIMUM_VIEW_SETTING) ? '0' : contentBlobSpaceLimitGB}
         />
       </div>
     </>

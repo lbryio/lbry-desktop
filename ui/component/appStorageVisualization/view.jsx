@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import I18nMessage from 'component/i18nMessage';
 
 type Props = {
   // --- select ---
@@ -18,7 +19,7 @@ function StorageViz(props: Props) {
     return (
       <div className={'storage__wrapper'}>
         <div className={'storage__bar'}>
-          <div className="help">Cannot get disk space information.</div>
+          <div className="help">{__('Cannot get disk space information.')}</div>
         </div>
       </div>
     );
@@ -64,29 +65,57 @@ function StorageViz(props: Props) {
         <div className={'storage__legend-item'}>
           <div className={'storage__legend-item-swatch storage__legend-item-swatch--private'} />
           <div className={'storage__legend-item-label'}>
-            <label>Publishes</label>
+            <label>{__('Publishes --[legend, storage category]--')}</label>
             <div className={'help'}>{`${getGB(privateBlobSpace)} GB`}</div>
           </div>
         </div>
         <div className={'storage__legend-item'}>
           <div className={'storage__legend-item-swatch storage__legend-item-swatch--auto'} />
           <div className={'storage__legend-item-label'}>
-            <label>Auto Hosting</label>
+            <label>{__('Auto Hosting --[legend, storage category]--')}</label>
             <div className={'help'}>
-              {autoHostingLimit === 0 ? __('Disabled') : `${getGB(autoBlobSpace)} of ${getGB(autoHostingLimit)} GB`}
+              {autoHostingLimit === 0 ? (
+                __('Disabled')
+              ) : (
+                <I18nMessage
+                  tokens={{
+                    spaceUsed: getGB(autoBlobSpace),
+                    limit: getGB(autoHostingLimit),
+                  }}
+                >
+                  %spaceUsed% of %limit% GB
+                </I18nMessage>
+              )}
+              {
+                <I18nMessage
+                  tokens={{
+                    spaceUsed: getGB(viewBlobSpace),
+                    limit: viewHostingLimit !== 0 ? getGB(viewHostingLimit) : getGB(viewFree),
+                  }}
+                >
+                  %spaceUsed% of %limit% Free GB
+                </I18nMessage>
+              }
             </div>
           </div>
         </div>
         <div className={'storage__legend-item'}>
           <div className={'storage__legend-item-swatch storage__legend-item-swatch--viewed'} />
           <div className={'storage__legend-item-label'}>
-            <label>View Hosting</label>
+            <label>{__('View Hosting --[legend, storage category]--')}</label>
             <div className={'help'}>
-              {viewHostingLimit === 1
-                ? __('Disabled')
-                : `${getGB(viewBlobSpace)} of ${
-                    viewHostingLimit !== 0 ? getGB(viewHostingLimit) : `${getGB(viewFree)} Free`
-                  } GB`}
+              {viewHostingLimit === 1 ? (
+                __('Disabled')
+              ) : (
+                <I18nMessage
+                  tokens={{
+                    spaceUsed: getGB(viewBlobSpace),
+                    limit: viewHostingLimit !== 0 ? getGB(viewHostingLimit) : getGB(viewFree),
+                  }}
+                >
+                  %spaceUsed% of %limit% Free GB
+                </I18nMessage>
+              )}
             </div>
           </div>
         </div>
@@ -94,7 +123,7 @@ function StorageViz(props: Props) {
           <div className={'storage__legend-item'}>
             <div className={'storage__legend-item-swatch storage__legend-item-swatch--free'} />
             <div className={'storage__legend-item-label'}>
-              <label>Free</label>
+              <label>{__('Free --[legend, unused disk space]--')}</label>
               <div className={'help'}>{`${getGB(unallocFree)} GB`}</div>
             </div>
           </div>

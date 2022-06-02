@@ -53,7 +53,7 @@ export default function SettingStorage(props: Props) {
               title={__('Enable Data Hosting')}
               subtitle={
                 <React.Fragment>
-                  {__('Help improve the P2P data network (and make LBRY happy) by hosting data.')}{' '}
+                  {__('Help improve the P2P data network (and make LBRY users happy) by hosting data.')}
                 </React.Fragment>
               }
               footer={<AppStorageViz />}
@@ -66,7 +66,7 @@ export default function SettingStorage(props: Props) {
               disabled={!saveBlobs}
               subtitle={
                 <React.Fragment>
-                  {__("View History Hosting lets you choose how much storage to use helping content you've consumed.")}{' '}
+                  {__("View History Hosting lets you choose how much storage to use hosting content you've consumed.")}{' '}
                   <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/host-content" />
                 </React.Fragment>
               }
@@ -79,7 +79,7 @@ export default function SettingStorage(props: Props) {
               disabled={!saveBlobs}
               subtitle={
                 <React.Fragment>
-                  {__('Automatic Hosting downloads a small slice of content currently active on the network.')}{' '}
+                  {__('Automatic Hosting downloads a small portion of content active on the network.')}{' '}
                   <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/host-content" />
                 </React.Fragment>
               }
