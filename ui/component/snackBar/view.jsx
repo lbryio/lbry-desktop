@@ -12,16 +12,33 @@ type Props = {
   snackCount: number,
 };
 
-class SnackBar extends React.PureComponent<Props> {
+type State = {
+  isHovering: boolean,
+};
+
+class SnackBar extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
+    this.state = { isHovering: false };
     this.intervalId = null;
+
+    (this: any).handleMouseEnter = this.handleMouseEnter.bind(this);
+    (this: any).handleMouseLeave = this.handleMouseLeave.bind(this);
   }
 
   intervalId: ?IntervalID;
 
+  handleMouseEnter() {
+    this.setState({ isHovering: true });
+  }
+
+  handleMouseLeave() {
+    this.setState({ isHovering: false });
+  }
+
   render() {
     const { snack, snackCount, removeSnack } = this.props;
+    const { isHovering } = this.state;
 
     if (!snack) {
       clearInterval(this.intervalId);
@@ -36,12 +53,14 @@ class SnackBar extends React.PureComponent<Props> {
       clearInterval(this.intervalId);
     }
 
-    this.intervalId = setInterval(
-      () => {
-        removeSnack();
-      },
-      duration === 'long' ? 10000 : 5000
-    );
+    if (!isHovering) {
+      this.intervalId = setInterval(
+        () => {
+          removeSnack();
+        },
+        duration === 'long' ? 10000 : 5000
+      );
+    }
 
     return (
       <div
@@ -50,6 +69,8 @@ class SnackBar extends React.PureComponent<Props> {
           'snack-bar--stacked-error': snackCount > 1 && isError,
           'snack-bar--stacked-non-error': snackCount > 1 && !isError,
         })}
+        onMouseEnter={this.handleMouseEnter}
+        onMouseLeave={this.handleMouseLeave}
       >
         <div className="snack-bar__message">
           <Icon icon={isError ? ICONS.ALERT : ICONS.COMPLETED} size={18} />
