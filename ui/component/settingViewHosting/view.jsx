@@ -117,7 +117,7 @@ function SettingViewHosting(props: Props) {
               <Button
                 disabled={
                   // disabled if settings are equal or not valid amounts
-                  (viewHostingLimit === 1 && contentBlobSpaceLimitGB === '0') ||
+                  (viewHostingLimit === 1 && contentBlobSpaceLimitGB <= MINIMUM_VIEW_SETTING) ||
                   (unlimited && viewHostingLimit === 0) ||
                   (!unlimited &&
                     String(viewHostingLimit) ===
@@ -136,7 +136,7 @@ function SettingViewHosting(props: Props) {
               <Button
                 disabled={
                   // disabled if settings are equal or not valid amounts
-                  (viewHostingLimit === 1 && contentBlobSpaceLimitGB === '0') ||
+                  (viewHostingLimit === 1 && contentBlobSpaceLimitGB <= MINIMUM_VIEW_SETTING) ||
                   (unlimited && viewHostingLimit === 0) ||
                   (!unlimited &&
                     (String(viewHostingLimit) === convertGbToMbStr(contentBlobSpaceLimitGB) ||

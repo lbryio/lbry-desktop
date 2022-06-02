@@ -86,16 +86,6 @@ function StorageViz(props: Props) {
                   %spaceUsed% of %limit% GB
                 </I18nMessage>
               )}
-              {
-                <I18nMessage
-                  tokens={{
-                    spaceUsed: getGB(viewBlobSpace),
-                    limit: viewHostingLimit !== 0 ? getGB(viewHostingLimit) : getGB(viewFree),
-                  }}
-                >
-                  %spaceUsed% of %limit% Free GB
-                </I18nMessage>
-              }
             </div>
           </div>
         </div>
