@@ -293,9 +293,8 @@ export function doSendDraftTransaction(address, amount) {
         });
         dispatch(
           doToast({
-            message: __("Tip successfully sent. I'm sure they appreciate it!"),
-            subMessage: `${amount} LBC`,
-            linkText: __('History'),
+            message: __('Credits successfully sent.'),
+            linkText: `${amount} LBC`,
             linkTarget: '/wallet',
           })
         );
@@ -371,11 +370,9 @@ export function doSendTip(params, isSupport, successCallback, errorCallback, sho
       if (shouldNotify) {
         dispatch(
           doToast({
-            message: shouldSupport
-              ? __('Boost transaction successful.')
-              : __("Tip successfully sent. I'm sure they appreciate it!"),
-            subMessage: `${params.amount} LBC`,
-            linkText: __('History'),
+            message: shouldSupport ? __('Boost transaction successful.') : __('Tip successfully sent.'),
+            subMessage: __("I'm sure they appreciate it!"),
+            linkText: `${params.amount} LBC`,
             linkTarget: '/wallet',
           })
         );
@@ -767,8 +764,10 @@ export const doSendCashTip = (
 
       dispatch(
         doToast({
-          message: __("Tip successfully sent. I'm sure they appreciate it!"),
-          subMessage: `${fiatSymbol}${tipParams.tipAmount} ⇒ ${tipParams.tipChannelName}`,
+          message: __('Tip successfully sent.'),
+          subMessage: __("I'm sure they appreciate it!"),
+          linkText: `${fiatSymbol}${tipParams.tipAmount} ⇒ ${tipParams.tipChannelName}`,
+          linkTarget: '/wallet',
         })
       );
 
