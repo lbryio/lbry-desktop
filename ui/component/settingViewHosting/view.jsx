@@ -13,6 +13,7 @@ type SetDaemonSettingArg = boolean | string | number;
 
 type Props = {
   // --- select ---
+  viewBlobSpace: number,
   viewHostingLimit: number,
   disabled?: boolean,
   isSetting: boolean,
@@ -20,14 +21,32 @@ type Props = {
   setDaemonSetting: (string, ?SetDaemonSettingArg) => void,
   cleanBlobs: () => string,
   getDaemonStatus: () => void,
+  diskSpace: DiskSpace,
 };
 
 function SettingViewHosting(props: Props) {
-  const { viewHostingLimit, setDaemonSetting, cleanBlobs, getDaemonStatus, disabled, isSetting } = props;
+  const {
+    diskSpace,
+    viewHostingLimit,
+    viewBlobSpace,
+    setDaemonSetting,
+    cleanBlobs,
+    getDaemonStatus,
+    disabled,
+    isSetting,
+  } = props;
 
+  // best effort to recommend a hosting amount default for the user
+  const totalMB = diskSpace && Math.floor(Number(diskSpace.total) / 1024);
+  const freeMB = diskSpace && Math.floor(Number(diskSpace.free) / 1024);
+  const getGB = (val) => (Number(val) / 1024).toFixed(2);
+  const recommendedSpace =
+    freeMB > totalMB * 0.2 // plenty of space?
+      ? Math.ceil(Number(getGB(totalMB * 0.1))) // 10% of total
+      : Math.ceil(Number(getGB(viewBlobSpace))); // current amount to avoid deleting
   // daemon settings come in as 'number', but we manage them as 'String'.
   const [contentBlobSpaceLimitGB, setContentBlobSpaceLimit] = React.useState(
-    viewHostingLimit === 0 ? '0.01' : String(viewHostingLimit / 1024)
+    viewHostingLimit === 0 ? String(recommendedSpace) : String(viewHostingLimit / 1024)
   );
 
   const [unlimited, setUnlimited] = React.useState(viewHostingLimit === 0);
