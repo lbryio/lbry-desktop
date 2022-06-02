@@ -317,13 +317,27 @@ export function doSendDraftTransaction(address, amount) {
         type: ACTIONS.SEND_TRANSACTION_FAILED,
         data: { error: error.message },
       });
-      dispatch(
-        doToast({
-          message: __('Transaction failed'),
-          subMessage: resolveApiMessage(error?.message),
-          isError: true,
-        })
-      );
+
+      const errMsg = typeof error === 'object' ? error.message : error;
+      if (errMsg.endsWith(ERRORS.SDK_FETCH_TIMEOUT)) {
+        dispatch(
+          doOpenModal(MODALS.CONFIRM, {
+            title: __('Transaction failed'),
+            body:
+              'The transaction timed out, but may have been completed. Please wait a few minutes, then check your wallet transactions before attempting to retry.',
+            onConfirm: (closeModal) => closeModal(),
+            hideCancel: true,
+          })
+        );
+      } else {
+        dispatch(
+          doToast({
+            message: __('Transaction failed'),
+            subMessage: resolveApiMessage(error?.message),
+            isError: true,
+          })
+        );
+      }
     };
 
     Lbry.wallet_send({
