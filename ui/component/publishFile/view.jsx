@@ -96,8 +96,8 @@ function PublishFile(props: Props) {
     inEditMode,
   } = props;
 
-  const RECOMMENDED_BITRATE = 6000000;
-  const MAX_BITRATE = 12000000;
+  const RECOMMENDED_BITRATE = 8500000;
+  const MAX_BITRATE = 16500000;
   const TV_PUBLISH_SIZE_LIMIT_BYTES = WEB_PUBLISH_SIZE_LIMIT_GB * 1073741824;
   const TV_PUBLISH_SIZE_LIMIT_GB_STR = String(WEB_PUBLISH_SIZE_LIMIT_GB);
 
@@ -278,10 +278,10 @@ function PublishFile(props: Props) {
         <p className="help--warning">
           {bitRateIsOverMax
             ? __(
-                'Your video has a bitrate over ~12 Mbps and cannot be processed at this time. We suggest transcoding to provide viewers the best experience.'
+                'Your video has a bitrate over ~16 Mbps and cannot be processed at this time. We suggest transcoding to provide viewers the best experience.'
               )
             : __(
-                'Your video has a bitrate over 5 Mbps. We suggest transcoding to provide viewers the best experience.'
+                'Your video has a bitrate over 8 Mbps. We suggest transcoding to provide viewers the best experience.'
               )}{' '}
           <Button
             button="link"
@@ -296,7 +296,7 @@ function PublishFile(props: Props) {
       return (
         <p className="help--warning">
           {__(
-            'Your video may not be the best format. Use MP4s in H264/AAC format and a friendly bitrate (under 5 Mbps) and resolution (720p) for more reliable streaming.'
+            'Your video may not be the best format. Use MP4s in H264/AAC format and a friendly bitrate (under 8 Mbps) for more reliable streaming.'
           )}{' '}
           <Button
             button="link"
@@ -324,7 +324,7 @@ function PublishFile(props: Props) {
       return (
         <p className="help">
           {__(
-            'For video content, use MP4s in H264/AAC format and a friendly bitrate (under 5 Mbps) and resolution (720p) for more reliable streaming. %SITE_NAME% uploads are restricted to %limit% GB.',
+            'For video content, use MP4s in H264/AAC format and a friendly bitrate (under 8 Mbps) for more reliable streaming. %SITE_NAME% uploads are restricted to %limit% GB.',
             { SITE_NAME, limit: TV_PUBLISH_SIZE_LIMIT_GB_STR }
           )}{' '}
           <Button
@@ -332,19 +332,6 @@ function PublishFile(props: Props) {
             label={__('Upload Guide')}
             href="https://odysee.com/@OdyseeHelp:b/uploadguide:1?lc=e280f6e6fdec3f5fd4043954c71add50b3fd2d6a9f3ddba979b459da6ae4a1f4"
           />
-        </p>
-      );
-    }
-    // @endif
-
-    // @if TARGET='app'
-    if (!isStillEditing) {
-      return (
-        <p className="help">
-          {__(
-            'For video content, use MP4s in H264/AAC format and a friendly bitrate (under 5 Mbps) and resolution (720p) for more reliable streaming.'
-          )}{' '}
-          <Button button="link" label={__('Upload Guide')} href="https://odysee.com/@OdyseeHelp:b/uploadguide:1" />
         </p>
       );
     }
