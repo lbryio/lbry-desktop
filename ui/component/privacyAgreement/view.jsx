@@ -72,9 +72,9 @@ function PrivacyAgreement(props: Props) {
                     {__('No')} <span>😢</span>
                   </>
                 }
-                helper={__(`* Note that as
-                peer-to-peer software, your IP address and potentially other system information can be sent to other
-                users, though this information is not stored permanently.`)}
+                helper={__(
+                  `* Note that as peer-to-peer software, your IP address and potentially other system information can be sent to other users, though this information is not stored permanently.`
+                )}
                 onChange={(e) => setShare(NONE)}
               />
               {authenticated && (
@@ -92,7 +92,7 @@ function PrivacyAgreement(props: Props) {
               )}
             </fieldset>
             <div className={'card__actions'}>
-              <Button button="primary" label={__(`Let's go`)} disabled={!share} type="submit" />
+              <Button button="primary" label={__(`Next`)} disabled={!share} type="submit" />
             </div>
             {share === NONE && (
               <p className="help">

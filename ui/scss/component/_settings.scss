@@ -29,3 +29,95 @@
   text-align: right;
   padding-top: var(--spacing-m);
 }
+
+.storage__wrapper {
+  .storage__bar {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: var(--spacing-xl);
+    background-color: var(--color-storage-free);
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    border-radius: var(--border-radius);
+    > :last-of-type {
+      border-bottom-right-radius: var(--border-radius);
+      border-top-right-radius: var(--border-radius);
+    }
+    .storage__other {
+      height: 100%;
+      background-color: var(--color-gray-7);
+      border-top-left-radius: var(--border-radius);
+      border-bottom-left-radius: var(--border-radius);
+    }
+    .storage__private {
+      height: 100%;
+      background-color: var(--color-storage-published);
+    }
+    box-sizing: border-box;
+
+    .storage__viewed {
+      height: 100%;
+      background-color: var(--color-storage-viewed-free);
+      border: var(--color-storage-viewed) 1px solid;
+      box-sizing: border-box;
+      .storage__viewed--used {
+        height: 100%;
+        background-color: var(--color-storage-viewed);
+        box-sizing: border-box;
+      }
+    }
+
+    .storage__auto {
+      height: 100%;
+      background-color: var(--color-storage-auto-free);
+      border: var(--color-storage-auto) 1px solid;
+      box-sizing: border-box;
+      .storage__auto--used {
+        height: 100%;
+        background-color: var(--color-storage-auto);
+      }
+    }
+  }
+  .storage__legend-wrapper {
+    margin-top: var(--spacing-m);
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    .storage__legend-item {
+      display: flex;
+      flex-direction: row;
+      .storage__legend-item-swatch {
+        padding: var(--spacing-xs);
+        margin-right: var(--spacing-s);
+        width: var(--spacing-l);
+        border-radius: var(--border-radius);
+      }
+      .storage__legend-item-label {
+        margin-right: var(--spacing-m);
+        display: flex;
+        flex-direction: column;
+        .help {
+          margin-top: 0;
+        }
+      }
+
+      .storage__legend-item-swatch--other {
+        background-color: var(--color-gray-7);
+      }
+      .storage__legend-item-swatch--private {
+        background-color: var(--color-storage-published);
+      }
+      .storage__legend-item-swatch--viewed {
+        background-color: var(--color-storage-viewed);
+      }
+      .storage__legend-item-swatch--auto {
+        background-color: var(--color-storage-auto);
+      }
+      .storage__legend-item-swatch--free {
+        background-color: var(--color-storage-free);
+      }
+    }
+  }
+}

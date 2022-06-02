@@ -9,10 +9,23 @@ const homepages = require('homepages');
 const selectState = (state) => state.settings || {};
 
 export const selectDaemonSettings = createSelector(selectState, (state) => state.daemonSettings);
+export const selectSettingDaemonSettings = createSelector(selectState, (state) => state.isSettingDaemonSettings);
 
 export const selectDaemonStatus = createSelector(selectState, (state) => state.daemonStatus);
 
 export const selectFfmpegStatus = createSelector(selectDaemonStatus, (status) => status.ffmpeg_status);
+export const selectViewBlobSpace = createSelector(
+  selectDaemonStatus,
+  (status) => status.disk_space.content_blobs_storage_used_mb
+);
+export const selectAutoBlobSpace = createSelector(
+  selectDaemonStatus,
+  (status) => status.disk_space.seed_blobs_storage_used_mb
+);
+export const selectPrivateBlobSpace = createSelector(
+  selectDaemonStatus,
+  (status) => status.disk_space.published_blobs_storage_used_mb
+);
 
 export const selectFindingFFmpeg = createSelector(selectState, (state) => state.findingFFmpeg || false);
 
@@ -81,6 +94,10 @@ export const selectHomepageData = createSelector(
     return homepages[homepageCode] || homepages['en'] || {};
   }
 );
+
+export const selectSaveBlobs = createSelector(selectDaemonSettings, (state) => state.save_blobs || false);
+export const selectAutoHostingLimit = createSelector(selectDaemonSettings, (state) => state.network_storage_limit || 0);
+export const selectViewHostingLimit = createSelector(selectDaemonSettings, (state) => state.blob_storage_limit || 0);
 
 export const selectosNotificationsEnabled = makeSelectClientSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED);
 

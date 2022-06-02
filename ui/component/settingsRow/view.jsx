@@ -9,10 +9,11 @@ type Props = {
   useVerticalSeparator?: boolean, // Show a separator line between Label and Value. Useful when there are multiple Values.
   disabled?: boolean,
   children?: React$Node,
+  footer?: React$Node,
 };
 
 export default function SettingsRow(props: Props) {
-  const { title, subtitle, multirow, useVerticalSeparator, disabled, children } = props;
+  const { title, subtitle, multirow, useVerticalSeparator, disabled, children, footer } = props;
   return (
     <div
       className={classnames('card__main-actions settings__row', {
@@ -23,6 +24,7 @@ export default function SettingsRow(props: Props) {
       <div className="settings__row--title">
         <p>{title}</p>
         {subtitle && <p className="settings__row--subtitle">{subtitle}</p>}
+        {footer && footer}
       </div>
       <div
         className={classnames('settings__row--value', {

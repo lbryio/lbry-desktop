@@ -1197,7 +1197,7 @@ export function doFetchModBlockedList() {
                       if (blockedChannel.blocked_channel_name) {
                         const channelUri = buildURI({
                           channelName: blockedChannel.blocked_channel_name,
-                          claimId: blockedChannel.blocked_channel_id,
+                          channelClaimId: blockedChannel.blocked_channel_id,
                         });
 
                         if (!blockedList.find((blockedChannel) => isURIEqual(blockedChannel.channelUri, channelUri))) {
@@ -1215,7 +1215,7 @@ export function doFetchModBlockedList() {
                         if (blockedByMap !== undefined) {
                           const blockedByChannelUri = buildURI({
                             channelName: blockedChannel.blocked_by_channel_name,
-                            claimId: blockedChannel.blocked_by_channel_id,
+                            channelClaimId: blockedChannel.blocked_by_channel_id,
                           });
 
                           if (blockedByMap[channelUri]) {

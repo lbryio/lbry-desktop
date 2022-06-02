@@ -53,4 +53,5 @@ export const SETTINGS_GRP = {
   ACCOUNT: 'account',
   CONTENT: 'content',
   SYSTEM: 'system',
+  STORAGE: 'Storage',
 };

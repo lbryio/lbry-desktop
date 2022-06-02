@@ -10,7 +10,6 @@ import I18nMessage from 'component/i18nMessage';
 import SettingAutoLaunch from 'component/settingAutoLaunch';
 import SettingClosingBehavior from 'component/settingClosingBehavior';
 import SettingCommentsServer from 'component/settingCommentsServer';
-import SettingDataHosting from 'component/settingDataHosting';
 import SettingShareUrl from 'component/settingShareUrl';
 import SettingsRow from 'component/settingsRow';
 import SettingWalletServer from 'component/settingWalletServer';
@@ -150,24 +149,6 @@ export default function SettingSystem(props: Props) {
                 onChange={() => setDaemonSetting('save_files', !daemonSettings.save_files)}
                 checked={daemonSettings.save_files}
               />
-            </SettingsRow>
-            <SettingsRow
-              title={__('Data Hosting')}
-              multirow
-              subtitle={
-                <React.Fragment>
-                  {__('Help improve the P2P data network (and make LBRY happy) by hosting data.')}{' '}
-                  {__("View History Hosting lets you choose how much storage to use helping content you've consumed.")}{' '}
-                  {/* {__( */}
-                  {/*  'Automatic Hosting lets you delegate some amount of storage for the network to automatically download and host.' */}
-                  {/* )}{' '} */}
-                  {__('Playing videos may exceed your history hosting limit until cleanup runs every 30 minutes.')}
-                  <br />
-                  <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/host-content" />
-                </React.Fragment>
-              }
-            >
-              <SettingDataHosting />
             </SettingsRow>
             <SettingsRow
               title={__('Share usage and diagnostic data')}

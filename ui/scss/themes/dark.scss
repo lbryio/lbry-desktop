@@ -200,4 +200,13 @@
     radial-gradient(circle at 50% 117%, rgba(25, 25, 25, 0.2) 0, #202020 100%);
 
   --mui-background: #000;
+
+  // storage vis
+  --color-storage-published: var(--color-brand-blue);
+  --color-storage-free: var(--color-gray-4);
+  --color-storage-used: var(--color-gray-7);
+  --color-storage-auto: #ff993c;
+  --color-storage-auto-free: #9f5f25;
+  --color-storage-viewed: #a93cff;
+  --color-storage-viewed-free: #602192;
 }
