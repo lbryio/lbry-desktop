@@ -327,10 +327,9 @@ reducers[ACTIONS.DISK_SPACE] = (state, action) => {
 };
 
 reducers[ACTIONS.SYNC_STATE_POPULATE] = (state, action) => {
-  const { welcomeVersion, allowAnalytics } = action.data;
+  const { allowAnalytics } = action.data;
   return {
     ...state,
-    ...(welcomeVersion !== undefined ? { welcomeVersion } : {}),
     ...(allowAnalytics !== undefined ? { allowAnalytics } : {}),
   };
 };
