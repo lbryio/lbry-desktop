@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [Unreleased]
+
+## Added
+ - Add top in language category for non-english on homepage ([#7585](https://github.com/lbryio/lbry-desktop/pull/7585))
+
+## Fixed
+ - Better handle empty collections ([#7571](https://github.com/lbryio/lbry-desktop/pull/7571))
+ - Better handle thumbnails in uploads/collections ([#7574](https://github.com/lbryio/lbry-desktop/pull/7574))
+ - Work towards supporting collections of any claim type ([#7578](https://github.com/lbryio/lbry-desktop/pull/7578))
+ - Improve handling of downed custom servers on startup ([#7593](https://github.com/lbryio/lbry-desktop/pull/7593))
+
 ## [0.53.3] - [2022-04-27]
 
 ## Fixed
