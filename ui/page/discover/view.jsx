@@ -77,13 +77,8 @@ function DiscoverPage(props: Props) {
   const channelIds = dynamicRouteProps?.options?.channelIds || undefined;
   const excludedChannelIds = dynamicRouteProps?.options?.excludedChannelIds || undefined;
 
-  const isFollowing = followedTags.map(({ name }) => name).includes(tag);
-  let label = isFollowing ? __('Following --[button label indicating a channel has been followed]--') : __('Follow');
-  if (isHovering && isFollowing) {
-    label = __('Unfollow');
-  }
+  const isFollowing = React.useMemo(() => followedTags.some((t) => t.name === tag), [tag, followedTags]);
 
-  const includeLivestreams = !tagsQuery;
   const filters = { contentTypes: isCategory && !isWildWest ? CATEGORY_CONTENT_TYPES_FILTER : CS.CONTENT_TYPES };
 
   // **************************************************************************
@@ -102,7 +97,18 @@ function DiscoverPage(props: Props) {
       );
     }
 
+    // NOTE: the if-block below will never run because a Tag page is also
+    // "!dynamicRouteProps". However, using the existing channel Follow button
+    // to follow a tag looks confusing, so I'll leave things as-is for now.
+
     if (tag && !isMobile) {
+      let label = isFollowing
+        ? __('Following --[button label indicating a channel has been followed]--')
+        : __('Follow');
+      if (isHovering && isFollowing) {
+        label = __('Unfollow');
+      }
+
       return (
         <Button
           ref={buttonRef}
@@ -120,6 +126,7 @@ function DiscoverPage(props: Props) {
   }
 
   function getSubSection() {
+    const includeLivestreams = !tagsQuery;
     if (includeLivestreams) {
       return (
         <LivestreamSection
@@ -148,60 +155,86 @@ function DiscoverPage(props: Props) {
     }
   }
 
+  function getHeaderLabel() {
+    let headerLabel;
+    if (repostedClaim) {
+      headerLabel = __('Reposts of %uri%', { uri: repostedUri });
+    } else if (tag) {
+      headerLabel = (
+        <span>
+          <Icon icon={ICONS.TAG} size={10} />
+          {(tag === CS.TAGS_ALL && __('All Content')) || (tag === CS.TAGS_FOLLOWED && __('Followed Tags')) || tag}
+
+          <Button
+            className="claim-search__tags-link"
+            button="link"
+            label={__('Manage Tags')}
+            navigate={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`}
+          />
+        </span>
+      );
+    } else {
+      headerLabel = (
+        <span>
+          <Icon icon={(dynamicRouteProps && dynamicRouteProps.icon) || ICONS.DISCOVER} size={10} />
+          {(dynamicRouteProps && __(`${dynamicRouteProps.title}`)) || __('All Content')}
+        </span>
+      );
+    }
+    return headerLabel;
+  }
+
+  function getAds() {
+    return (
+      !isWildWest &&
+      !hasPremiumPlus && {
+        node: (index, lastVisibleIndex, pageSize) => {
+          if (pageSize && index < pageSize) {
+            return index === lastVisibleIndex ? <Ads small type="video" tileLayout={tileLayout} /> : null;
+          } else {
+            return index % (pageSize * 2) === 0 ? <Ads small type="video" tileLayout={tileLayout} /> : null;
+          }
+        },
+      }
+    );
+  }
+
+  function getReleaseTime() {
+    const categoryReleaseTime = dynamicRouteProps?.options?.releaseTime;
+
+    if (isWildWest) {
+      // The homepage definition currently does not support 'start-of-week', so
+      // continue to hardcode here for now.
+      return `>${Math.floor(moment().subtract(0, 'hour').startOf('week').unix())}`;
+    } else if (categoryReleaseTime) {
+      const hasFreshnessOverride = orderParam === CS.ORDER_BY_TOP && freshnessParam !== null;
+      if (!hasFreshnessOverride) {
+        return categoryReleaseTime;
+      }
+    }
+
+    return undefined;
+  }
+
+  function handleFollowClick() {
+    if (tag) {
+      doToggleTagFollowDesktop(tag);
+      const nowFollowing = !isFollowing;
+      analytics.tagFollowEvent(tag, nowFollowing, 'tag-page');
+    }
+  }
+
+  // **************************************************************************
+  // **************************************************************************
+
   React.useEffect(() => {
     if (repostedUri && !repostedClaimIsResolved) {
       doResolveUri(repostedUri);
     }
   }, [repostedUri, repostedClaimIsResolved, doResolveUri]);
 
-  function handleFollowClick() {
-    if (tag) {
-      doToggleTagFollowDesktop(tag);
-
-      const nowFollowing = !isFollowing;
-      analytics.tagFollowEvent(tag, nowFollowing, 'tag-page');
-    }
-  }
-
-  let headerLabel;
-  if (repostedClaim) {
-    headerLabel = __('Reposts of %uri%', { uri: repostedUri });
-  } else if (tag) {
-    headerLabel = (
-      <span>
-        <Icon icon={ICONS.TAG} size={10} />
-        {(tag === CS.TAGS_ALL && __('All Content')) || (tag === CS.TAGS_FOLLOWED && __('Followed Tags')) || tag}
-
-        <Button
-          className="claim-search__tags-link"
-          button="link"
-          label={__('Manage Tags')}
-          navigate={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`}
-        />
-      </span>
-    );
-  } else {
-    headerLabel = (
-      <span>
-        <Icon icon={(dynamicRouteProps && dynamicRouteProps.icon) || ICONS.DISCOVER} size={10} />
-        {(dynamicRouteProps && __(`${dynamicRouteProps.title}`)) || __('All Content')}
-      </span>
-    );
-  }
-
-  const categoryReleaseTime = dynamicRouteProps?.options?.releaseTime;
-  let releaseTime;
-
-  if (isWildWest) {
-    // The homepage definition currently does not support 'start-of-week', so
-    // continue to hardcode here for now.
-    releaseTime = `>${Math.floor(moment().subtract(0, 'hour').startOf('week').unix())}`;
-  } else if (categoryReleaseTime) {
-    const hasFreshnessOverride = orderParam === CS.ORDER_BY_TOP && freshnessParam !== null;
-    if (!hasFreshnessOverride) {
-      releaseTime = categoryReleaseTime;
-    }
-  }
+  // **************************************************************************
+  // **************************************************************************
 
   return (
     <Page
@@ -219,25 +252,14 @@ function DiscoverPage(props: Props) {
           defaultOrderBy={isWildWest || tags ? CS.ORDER_BY_TRENDING : undefined}
           claimType={claimType ? [claimType] : undefined}
           defaultStreamType={isCategory && !isWildWest ? [CS.FILE_VIDEO, CS.FILE_AUDIO, CS.FILE_DOCUMENT] : undefined}
-          headerLabel={headerLabel}
+          headerLabel={getHeaderLabel()}
           tags={tags}
           hiddenNsfwMessage={<HiddenNsfw type="page" />}
           repostedClaimId={repostedClaim ? repostedClaim.claim_id : null}
-          injectedItem={
-            !isWildWest &&
-            !hasPremiumPlus && {
-              node: (index, lastVisibleIndex, pageSize) => {
-                if (pageSize && index < pageSize) {
-                  return index === lastVisibleIndex ? <Ads small type="video" tileLayout={tileLayout} /> : null;
-                } else {
-                  return index % (pageSize * 2) === 0 ? <Ads small type="video" tileLayout={tileLayout} /> : null;
-                }
-              },
-            }
-          }
+          injectedItem={getAds()}
           // TODO: find a better way to determine discover / wild west vs other modes release times
           // for now including && !tags so that
-          releaseTime={releaseTime || undefined}
+          releaseTime={getReleaseTime()}
           feeAmount={isWildWest || tags ? CS.FEE_AMOUNT_ANY : undefined}
           channelIds={channelIds}
           excludedChannelIds={excludedChannelIds}
