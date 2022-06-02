@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## Added
  - Add top in language category for non-english on homepage ([#7585](https://github.com/lbryio/lbry-desktop/pull/7585))
+ - Auto hosting in settings and hosting first run page ([#7598](https://github.com/lbryio/lbry-desktop/pull/7598))  
 
 ## Fixed
  - Better handle empty collections ([#7571](https://github.com/lbryio/lbry-desktop/pull/7571))
