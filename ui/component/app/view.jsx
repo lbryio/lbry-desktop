@@ -143,7 +143,6 @@ function App(props: Props) {
   const shouldMigrateLanguage = LANGUAGE_MIGRATIONS[language];
   const hasActiveChannelClaim = activeChannelId !== undefined;
   const isPersonalized = hasVerifiedEmail;
-  const renderFiledrop = isAuthenticated;
 
   useEffect(() => {
     if (userId) {
@@ -349,7 +348,7 @@ function App(props: Props) {
     >
       <Router />
       <ModalRouter />
-      {renderFiledrop && <FileDrop />}
+      <FileDrop />
       <FileRenderFloating />
       {isEnhancedLayout && <Yrbl className="yrbl--enhanced" />}
 

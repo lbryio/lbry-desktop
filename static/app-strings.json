@@ -2310,5 +2310,7 @@
   "%spaceUsed% of %limit% Free GB": "%spaceUsed% of %limit% Free GB",
   "Disabled": "Disabled",
   "Free --[legend, unused disk space]--": "Free",
+  "Top content in %language%": "Top content in %language%",
+  "Apply": "Apply",
   "--end--": "--end--"
 }
