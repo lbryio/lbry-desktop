@@ -25,6 +25,9 @@ type Props = {
   saveBlobs: boolean,
 };
 
+const TWENTY_PERCENT = 0.2;
+const TEN_PRECNT = 0.1;
+
 function HostingSplash(props: Props) {
   const {
     handleNextPage,
@@ -53,10 +56,10 @@ function HostingSplash(props: Props) {
 
   function getManagedLimitMB() {
     const value =
-      freeMB > totalMB * 0.2 // lots of free space?
-        ? blobSpaceUsed > totalMB * 0.1 // using more than 10%?
+      freeMB > totalMB * TWENTY_PERCENT // lots of free space?
+        ? blobSpaceUsed > totalMB * TEN_PRECNT // using more than 10%?
           ? (freeMB + blobSpaceUsed) / 2 // e.g. 40g used plus 30g free, knock back to 35g limit, freeing to 35g
-          : totalMB * 0.1 // let it go up to 10%
+          : totalMB * TEN_PRECNT // let it go up to 10%
         : (freeMB + blobSpaceUsed) / 2; // e.g. 40g used plus 10g free, knock back to 25g limit, freeing to 25g
     return value > 10240 ? Math.floor(value / 1024) * 1024 : 0;
   }
