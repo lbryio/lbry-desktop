@@ -30,7 +30,7 @@ export default function ModalConfirm(props: Props) {
   }
 
   return (
-    <Modal isOpen type="card" onAborted={doHideModal}>
+    <Modal isOpen type="custom">
       <Card
         title={title}
         subtitle={subtitle}
