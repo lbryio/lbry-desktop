@@ -475,3 +475,21 @@
     margin: 0;
   }
 }
+
+.channel__selector {
+  width: 100%;
+  .menu__link {
+    width: 100% !important;
+    .claim-preview__title {
+      text-align: left;
+    }
+    .comment__badge {
+      flex: 1;
+      text-align: left;
+    }
+    .icon--ChevronDown {
+      margin-left: auto;
+      margin-right: 0;
+    }
+  }
+}

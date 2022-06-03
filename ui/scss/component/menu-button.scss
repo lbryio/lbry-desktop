@@ -144,12 +144,21 @@ reach-portal {
 .menu__list--header {
   @extend .menu__list;
 
+  margin-top: 10px;
+
   .channel__selector {
     margin: 0px;
     display: flex;
 
     .icon--ChevronDown {
       margin-left: var(--spacing-s);
+    }
+  }
+
+  .MuiPaper-root {
+    top: calc(var(--header-height) - 11px) !important;
+    @media (max-width: $breakpoint-small) {
+      top: calc(var(--header-height-mobile) - 11px) !important;
     }
   }
 
@@ -175,8 +184,6 @@ reach-portal {
       color: var(--color-odysee-contrast) !important;
     }
   }
-
-  margin-top: 10px;
 }
 
 .menu__list--comments {
