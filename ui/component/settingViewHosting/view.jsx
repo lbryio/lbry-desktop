@@ -101,10 +101,11 @@ function SettingViewHosting(props: Props) {
   }
 
   React.useEffect(() => {
-    if (unlimited) {
+    // basically handle setUnlimited
+    if (unlimited && viewHostingLimit !== 0) {
       handleApply();
     }
-  }, [unlimited]);
+  }, [unlimited, viewHostingLimit]);
 
   return (
     <>
