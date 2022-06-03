@@ -55,47 +55,50 @@ const PublishStreamReleaseDate = (props: Props) => {
       );
 
   return (
-    <div className="">
-      <label htmlFor="date-picker-input">{__('When do you want to go live?')}</label>
+    <>
+      <h2 className="card__title">{__('Date')}</h2>
+      <div className="card--date">
+        <label htmlFor="date-picker-input">{__('When do you want to go live?')}</label>
 
-      <div className={'w-full flex flex-col mt-s md:mt-0 md:h-12 md:items-center md:flex-row'}>
-        <FormField
-          type="radio"
-          name="anytime"
-          disabled={false}
-          onChange={handleToggle}
-          checked={!publishLater}
-          label={__('Anytime')}
-        />
-
-        <div className={'md:ml-m mt-s md:mt-0'}>
+        <div className={'w-full flex flex-col mt-s md:mt-0 md:h-12 md:items-center md:flex-row'}>
           <FormField
             type="radio"
-            name="scheduled_time"
+            name="anytime"
             disabled={false}
             onChange={handleToggle}
-            checked={publishLater}
-            label={__('Scheduled Time')}
+            checked={!publishLater}
+            label={__('Anytime')}
           />
-        </div>
-        {publishLater && (
-          <div className="form-field-date-picker mb-0 controls md:ml-m">
-            <DateTimePicker
-              className="date-picker-input w-full md:w-auto mt-s md:mt-0"
-              calendarClassName="form-field-calendar"
-              onChange={onDateTimePickerChanged}
-              value={date}
-              format="y-MM-dd h:mm a"
-              disableClock
-              clearIcon={null}
-              minDate={moment().add('30', 'minutes').toDate()}
+
+          <div className={'md:ml-m mt-s md:mt-0'}>
+            <FormField
+              type="radio"
+              name="scheduled_time"
+              disabled={false}
+              onChange={handleToggle}
+              checked={publishLater}
+              label={__('Scheduled Time')}
             />
           </div>
-        )}
-      </div>
+          {publishLater && (
+            <div className="form-field-date-picker mb-0 controls md:ml-m">
+              <DateTimePicker
+                className="date-picker-input w-full md:w-auto mt-s md:mt-0"
+                calendarClassName="form-field-calendar"
+                onChange={onDateTimePickerChanged}
+                value={date}
+                format="y-MM-dd h:mm a"
+                disableClock
+                clearIcon={null}
+                minDate={moment().add('30', 'minutes').toDate()}
+              />
+            </div>
+          )}
+        </div>
 
-      <p className={'form-field__hint mt-m'}>{helpText}</p>
-    </div>
+        <p className={'form-field__hint mt-m'}>{helpText}</p>
+      </div>
+    </>
   );
 };
 

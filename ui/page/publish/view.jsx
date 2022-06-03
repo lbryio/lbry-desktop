@@ -25,14 +25,7 @@ function PublishPage(props: Props) {
   }
 
   return (
-    <Page
-      noFooter
-      noSideNavigation
-      backout={{
-        title: __('Upload'),
-        backLabel: __('Back'),
-      }}
-    >
+    <Page className="uploadPage-wrapper" noFooter>
       {balance === 0 && <YrblWalletEmpty />}
       {balance !== 0 && fetchingChannels ? (
         <div className="main--empty">

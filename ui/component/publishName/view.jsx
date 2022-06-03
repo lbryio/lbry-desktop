@@ -70,7 +70,7 @@ function PublishName(props: Props) {
     <>
       <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">
         <fieldset-section>
-          <label>{__('Name')}</label>
+          <label>{__('URL')}</label>
           <div className="form-field__prefix">{prefix}</div>
         </fieldset-section>
         <FormField
@@ -83,6 +83,7 @@ function PublishName(props: Props) {
           onBlur={() => setBlurred(true)}
         />
       </fieldset-group>
+
       <div className="form-field__help">
         <NameHelpText
           uri={uri}

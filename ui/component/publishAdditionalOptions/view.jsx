@@ -9,6 +9,7 @@ import LicenseType from './license-type';
 import Card from 'component/common/card';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import { sortLanguageMap } from 'util/default-languages';
+import PublishBid from 'component/publishBid';
 
 // @if TARGET='app'
 // import ErrorText from 'component/common/error-text';
@@ -39,6 +40,7 @@ function PublishAdditionalOptions(props: Props) {
     licenseUrl,
     updatePublishForm,
     showSchedulingOptions,
+    disabled,
     // user,
     // useLBRYUploader,
     // needsYTAuth,
@@ -112,14 +114,20 @@ function PublishAdditionalOptions(props: Props) {
   // @endif
 
   return (
-    <Card
-      className="card--enable-overflow"
-      actions={
-        <React.Fragment>
-          {!hideSection && (
-            <div className={classnames({ 'card--disabled': !name })}>
-              {/* @if TARGET='app' */}
-              {/* {showLbryFirstCheckbox && (
+    <>
+      <h2 className="card__title">{__('Additional Options')}</h2>
+      <Card
+        className="card--enable-overflow card--publish-section card--additional-options"
+        actions={
+          <React.Fragment>
+            {!hideSection && (
+              <>
+                <div className="publish-row">
+                  <PublishBid disabled={disabled} />
+                </div>
+                <div className={classnames({ 'card--disabled': !name })}>
+                  {/* @if TARGET='app' */}
+                  {/* {showLbryFirstCheckbox && (
                 <div className="section">
                   <>
                     <FormField
@@ -152,55 +160,57 @@ function PublishAdditionalOptions(props: Props) {
                   </>
                 </div>
               )} */}
-              {/* @endif */}
-              <div className="section">
-                {!showSchedulingOptions && <PublishReleaseDate />}
+                  {/* @endif */}
+                  <div className="section">
+                    <div className="publish-row">{!showSchedulingOptions && <PublishReleaseDate />}</div>
 
-                <FormField
-                  label={__('Language')}
-                  type="select"
-                  name="content_language"
-                  value={language}
-                  onChange={(event) => updatePublishForm({ languages: [event.target.value] })}
-                >
-                  {sortLanguageMap(SUPPORTED_LANGUAGES).map(([langKey, langName]) => (
-                    <option key={langKey} value={langKey}>
-                      {langName}
-                    </option>
-                  ))}
-                </FormField>
+                    <div className="publish-row">
+                      <FormField
+                        label={__('Language')}
+                        type="select"
+                        name="content_language"
+                        value={language}
+                        onChange={(event) => updatePublishForm({ languages: [event.target.value] })}
+                      >
+                        {sortLanguageMap(SUPPORTED_LANGUAGES).map(([langKey, langName]) => (
+                          <option key={langKey} value={langKey}>
+                            {langName}
+                          </option>
+                        ))}
+                      </FormField>
+                    </div>
 
-                <LicenseType
-                  licenseType={licenseType}
-                  otherLicenseDescription={otherLicenseDescription}
-                  licenseUrl={licenseUrl}
-                  handleLicenseChange={(newLicenseType, newLicenseUrl) =>
-                    updatePublishForm({
-                      licenseType: newLicenseType,
-                      licenseUrl: newLicenseUrl,
-                    })
-                  }
-                  handleLicenseDescriptionChange={(event) =>
-                    updatePublishForm({
-                      otherLicenseDescription: event.target.value,
-                    })
-                  }
-                  handleLicenseUrlChange={(event) => updatePublishForm({ licenseUrl: event.target.value })}
-                />
-              </div>
+                    <div className="publish-row">
+                      <LicenseType
+                        licenseType={licenseType}
+                        otherLicenseDescription={otherLicenseDescription}
+                        licenseUrl={licenseUrl}
+                        handleLicenseChange={(newLicenseType, newLicenseUrl) =>
+                          updatePublishForm({
+                            licenseType: newLicenseType,
+                            licenseUrl: newLicenseUrl,
+                          })
+                        }
+                        handleLicenseDescriptionChange={(event) =>
+                          updatePublishForm({
+                            otherLicenseDescription: event.target.value,
+                          })
+                        }
+                        handleLicenseUrlChange={(event) => updatePublishForm({ licenseUrl: event.target.value })}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </>
+            )}
+
+            <div className="section__actions">
+              <Button label={hideSection ? __('Show') : __('Hide')} button="link" onClick={toggleHideSection} />
             </div>
-          )}
-
-          <div className="section__actions">
-            <Button
-              label={hideSection ? __('Additional Options') : __('Hide')}
-              button="link"
-              onClick={toggleHideSection}
-            />
-          </div>
-        </React.Fragment>
-      }
-    />
+          </React.Fragment>
+        }
+      />
+    </>
   );
 }
 

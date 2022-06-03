@@ -149,6 +149,12 @@ function PublishFile(props: Props) {
     }
   }, [currentFileType, mode, isStillEditing, updatePublishForm]);
 
+  // Reset title when form gets cleared
+
+  useEffect(() => {
+    updatePublishForm({ title: title });
+  }, [filePath]);
+
   // Initialize default file source state for each mode.
   useEffect(() => {
     setShowSourceSelector(false);
@@ -365,9 +371,7 @@ function PublishFile(props: Props) {
   }
 
   function handleTitleChange(event) {
-    const title = event.target.value;
-    // Update title
-    updatePublishForm({ title });
+    updatePublishForm({ title: event.target.value });
   }
 
   function handleFileReaderLoaded(event: ProgressEvent) {
@@ -430,6 +434,10 @@ function PublishFile(props: Props) {
       updateFileInfo(0, file.size, isVideo);
     }
 
+    // Strip off extention and replace invalid characters
+    let fileName = name || (file.name && file.name.substr(0, file.name.lastIndexOf('.'))) || '';
+    autofillTitle(file);
+
     if (isTextPost) {
       // Create reader
       const reader = new FileReader();
@@ -457,8 +465,6 @@ function PublishFile(props: Props) {
       // File.path will be undefined from web due to browser security, so it will default to the File Object.
       filePath: file.path || file,
     };
-    // Strip off extention and replace invalid characters
-    let fileName = name || (file.name && file.name.substr(0, file.name.lastIndexOf('.'))) || '';
 
     if (!isStillEditing) {
       publishFormParams.name = parseName(fileName);
@@ -469,12 +475,19 @@ function PublishFile(props: Props) {
     updatePublishForm(publishFormParams);
   }
 
+  function autofillTitle(file) {
+    const newTitle = (file && file.name && file.name.substr(0, file.name.lastIndexOf('.'))) || name || '';
+    if (!title) updatePublishForm({ title: newTitle });
+  }
+
   const showFileUpload = mode === PUBLISH_MODES.FILE || PUBLISH_MODES.LIVESTREAM;
   const isPublishPost = mode === PUBLISH_MODES.POST;
 
   return (
     <Card
-      className={disabled || balance === 0 ? 'card--disabled' : ''}
+      className={classnames({
+        'card--disabled': disabled || balance === 0,
+      })}
       title={
         <div>
           {header} {/* display mode buttons from parent */}
@@ -482,8 +495,8 @@ function PublishFile(props: Props) {
           {inProgress && (
             <div>
               <Button
-                button="close"
-                label={__('New --[clears Publish Form]--')}
+                button="alt"
+                label={__('Clear --[clears Publish Form]--')}
                 icon={ICONS.REFRESH}
                 onClick={doClearPublish}
               />
@@ -493,216 +506,227 @@ function PublishFile(props: Props) {
       }
       subtitle={subtitle || (isStillEditing && __('You are currently editing your upload.'))}
       actions={
-        <React.Fragment>
-          <PublishName uri={uri} />
-          <FormField
-            type="text"
-            name="content_title"
-            label={__('Title')}
-            placeholder={__('Descriptive titles work best')}
-            disabled={disabled}
-            value={title}
-            onChange={handleTitleChange}
-          />
-          {/* Decide whether to show file upload or replay selector */}
-          {/* @if TARGET='web' */}
-          <>
-            {showSourceSelector && (
-              <fieldset-section>
-                <div className="section__actions--between section__actions--align-bottom">
-                  <div>
-                    <label>{__('Replay video available')}</label>
-                    <div className="button-group">
-                      {fileSelectorModes.map((fmode) => (
-                        <Button
-                          key={fmode.label}
-                          icon={fmode.icon || undefined}
-                          iconSize={18}
-                          label={fmode.label}
-                          button="alt"
-                          onClick={() => {
-                            // $FlowFixMe
-                            handleFileSource(fmode.actionName);
-                          }}
-                          className={classnames('button-toggle', {
-                            'button-toggle--active': fileSource === fmode.actionName,
-                          })}
-                        />
-                      ))}
-                    </div>
-                  </div>
-                  {fileSource === SOURCE_SELECT && (
-                    <Button
-                      button="secondary"
-                      label={__('Check for Replays')}
-                      disabled={isCheckingLivestreams}
-                      icon={ICONS.REFRESH}
-                      onClick={() => checkLivestreams(channelId, channelName)}
-                    />
-                  )}
-                </div>
-              </fieldset-section>
-            )}
-
-            {fileSource === SOURCE_UPLOAD && showFileUpload && (
+        <>
+          {/* <h2 className="card__title">{__('File')}</h2> */}
+          <div className="card--file">
+            <React.Fragment>
+              {/* Decide whether to show file upload or replay selector */}
+              {/* @if TARGET='web' */}
               <>
+                {showSourceSelector && (
+                  <fieldset-section>
+                    <div className="section__actions--between section__actions--align-bottom">
+                      <div>
+                        <label>{__('Replay video available')}</label>
+                        <div className="button-group">
+                          {fileSelectorModes.map((fmode) => (
+                            <Button
+                              key={fmode.label}
+                              icon={fmode.icon || undefined}
+                              iconSize={18}
+                              label={fmode.label}
+                              button="alt"
+                              onClick={() => {
+                                // $FlowFixMe
+                                handleFileSource(fmode.actionName);
+                              }}
+                              className={classnames('button-toggle', {
+                                'button-toggle--active': fileSource === fmode.actionName,
+                              })}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                      {fileSource === SOURCE_SELECT && (
+                        <Button
+                          button="secondary"
+                          label={__('Check for Replays')}
+                          disabled={isCheckingLivestreams}
+                          icon={ICONS.REFRESH}
+                          onClick={() => checkLivestreams(channelId, channelName)}
+                        />
+                      )}
+                    </div>
+                  </fieldset-section>
+                )}
+
+                {fileSource === SOURCE_UPLOAD && showFileUpload && (
+                  <>
+                    <FileSelector
+                      disabled={disabled}
+                      currentPath={currentFile}
+                      onFileChosen={handleFileChange}
+                      // https://stackoverflow.com/questions/19107685/safari-input-type-file-accept-video-ignores-mp4-files
+                      accept={SIMPLE_SITE ? 'video/mp4,video/x-m4v,video/*,audio/*' : undefined}
+                      placeholder={
+                        SIMPLE_SITE ? __('Select video or audio file to upload') : __('Select a file to upload')
+                      }
+                    />
+                    {getUploadMessage()}
+                  </>
+                )}
+                {fileSource === SOURCE_SELECT && showFileUpload && hasLivestreamData && !isCheckingLivestreams && (
+                  <>
+                    <fieldset-section>
+                      <label>{__('Select Replay')}</label>
+                      <div className="table__wrapper">
+                        <table className="table table--livestream-data">
+                          <tbody>
+                            {livestreamData
+                              .slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+                              .map((item, i) => (
+                                <tr
+                                  onClick={() => setSelectedFileIndex((currentPage - 1) * PAGE_SIZE + i)}
+                                  key={item.id}
+                                  className={classnames('livestream__data-row', {
+                                    'livestream__data-row--selected':
+                                      selectedFileIndex === (currentPage - 1) * PAGE_SIZE + i,
+                                  })}
+                                >
+                                  <td>
+                                    <FormField
+                                      type="radio"
+                                      checked={selectedFileIndex === (currentPage - 1) * PAGE_SIZE + i}
+                                      label={null}
+                                      onClick={() => setSelectedFileIndex((currentPage - 1) * PAGE_SIZE + i)}
+                                      className="livestream__data-row-radio"
+                                    />
+                                  </td>
+                                  <td>
+                                    <div className="livestream_thumb_container">
+                                      {item.data.thumbnails.slice(0, 3).map((thumb) => (
+                                        <img key={thumb} className="livestream___thumb" src={thumb} />
+                                      ))}
+                                    </div>
+                                  </td>
+                                  <td>
+                                    {item.data.fileDuration && isNaN(item.data.fileDuration)
+                                      ? item.data.fileDuration
+                                      : `${Math.floor(item.data.fileDuration / 60)} ${
+                                          Math.floor(item.data.fileDuration / 60) > 1 ? __('minutes') : __('minute')
+                                        }`}
+                                    <div className="table__item-label">
+                                      {`${moment(item.data.uploadedAt).from(moment())}`}
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <CopyableText
+                                      primaryButton
+                                      copyable={normalizeUrlForProtocol(item.data.fileLocation)}
+                                      snackMessage={__('Url copied.')}
+                                    />
+                                  </td>
+                                </tr>
+                              ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </fieldset-section>
+                    <fieldset-group class="fieldset-group--smushed fieldgroup--paginate">
+                      <fieldset-section>
+                        <ReactPaginate
+                          pageCount={totalPages}
+                          pageRangeDisplayed={2}
+                          previousLabel="‹"
+                          nextLabel="›"
+                          activeClassName="pagination__item--selected"
+                          pageClassName="pagination__item"
+                          previousClassName="pagination__item pagination__item--previous"
+                          nextClassName="pagination__item pagination__item--next"
+                          breakClassName="pagination__item pagination__item--break"
+                          marginPagesDisplayed={2}
+                          onPageChange={(e) => handlePaginateReplays(e.selected + 1)}
+                          forcePage={currentPage - 1}
+                          initialPage={currentPage - 1}
+                          containerClassName="pagination"
+                        />
+                      </fieldset-section>
+                    </fieldset-group>
+                  </>
+                )}
+                {fileSource === SOURCE_SELECT && showFileUpload && !hasLivestreamData && !isCheckingLivestreams && (
+                  <div className="main--empty empty">
+                    <Empty text={__('No replays found.')} />
+                  </div>
+                )}
+                {fileSource === SOURCE_SELECT && showFileUpload && isCheckingLivestreams && (
+                  <div className="main--empty empty">
+                    <Spinner small />
+                  </div>
+                )}
+              </>
+              <FormField
+                type="text"
+                name="content_title"
+                label={__('Title')}
+                placeholder={__('Descriptive titles work best')}
+                disabled={disabled}
+                value={title}
+                onChange={handleTitleChange}
+                className="fieldset-group"
+              />
+              <PublishName uri={uri} />
+
+              {/* @endif */}
+              {/* @if TARGET='app' */}
+              {showFileUpload && (
                 <FileSelector
                   label={__('File')}
                   disabled={disabled}
                   currentPath={currentFile}
                   onFileChosen={handleFileChange}
                   // https://stackoverflow.com/questions/19107685/safari-input-type-file-accept-video-ignores-mp4-files
-                  accept={SIMPLE_SITE ? 'video/mp4,video/x-m4v,video/*,audio/*' : undefined}
-                  placeholder={SIMPLE_SITE ? __('Select video or audio file to upload') : __('Select a file to upload')}
+                  placeholder={__('Select file to upload')}
                 />
-                {getUploadMessage()}
-              </>
-            )}
-            {fileSource === SOURCE_SELECT && showFileUpload && hasLivestreamData && !isCheckingLivestreams && (
-              <>
-                <fieldset-section>
-                  <label>{__('Select Replay')}</label>
-                  <div className="table__wrapper">
-                    <table className="table table--livestream-data">
-                      <tbody>
-                        {livestreamData.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE).map((item, i) => (
-                          <tr
-                            onClick={() => setSelectedFileIndex((currentPage - 1) * PAGE_SIZE + i)}
-                            key={item.id}
-                            className={classnames('livestream__data-row', {
-                              'livestream__data-row--selected': selectedFileIndex === (currentPage - 1) * PAGE_SIZE + i,
-                            })}
-                          >
-                            <td>
-                              <FormField
-                                type="radio"
-                                checked={selectedFileIndex === (currentPage - 1) * PAGE_SIZE + i}
-                                label={null}
-                                onClick={() => setSelectedFileIndex((currentPage - 1) * PAGE_SIZE + i)}
-                                className="livestream__data-row-radio"
-                              />
-                            </td>
-                            <td>
-                              <div className="livestream_thumb_container">
-                                {item.data.thumbnails.slice(0, 3).map((thumb) => (
-                                  <img key={thumb} className="livestream___thumb" src={thumb} />
-                                ))}
-                              </div>
-                            </td>
-                            <td>
-                              {item.data.fileDuration && isNaN(item.data.fileDuration)
-                                ? item.data.fileDuration
-                                : `${Math.floor(item.data.fileDuration / 60)} ${
-                                    Math.floor(item.data.fileDuration / 60) > 1 ? __('minutes') : __('minute')
-                                  }`}
-                              <div className="table__item-label">
-                                {`${moment(item.data.uploadedAt).from(moment())}`}
-                              </div>
-                            </td>
-                            <td>
-                              <CopyableText
-                                primaryButton
-                                copyable={normalizeUrlForProtocol(item.data.fileLocation)}
-                                snackMessage={__('Url copied.')}
-                              />
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </fieldset-section>
-                <fieldset-group class="fieldset-group--smushed fieldgroup--paginate">
-                  <fieldset-section>
-                    <ReactPaginate
-                      pageCount={totalPages}
-                      pageRangeDisplayed={2}
-                      previousLabel="‹"
-                      nextLabel="›"
-                      activeClassName="pagination__item--selected"
-                      pageClassName="pagination__item"
-                      previousClassName="pagination__item pagination__item--previous"
-                      nextClassName="pagination__item pagination__item--next"
-                      breakClassName="pagination__item pagination__item--break"
-                      marginPagesDisplayed={2}
-                      onPageChange={(e) => handlePaginateReplays(e.selected + 1)}
-                      forcePage={currentPage - 1}
-                      initialPage={currentPage - 1}
-                      containerClassName="pagination"
-                    />
-                  </fieldset-section>
-                </fieldset-group>
-              </>
-            )}
-            {fileSource === SOURCE_SELECT && showFileUpload && !hasLivestreamData && !isCheckingLivestreams && (
-              <div className="main--empty empty">
-                <Empty text={__('No replays found.')} />
-              </div>
-            )}
-            {fileSource === SOURCE_SELECT && showFileUpload && isCheckingLivestreams && (
-              <div className="main--empty empty">
-                <Spinner small />
-              </div>
-            )}
-          </>
-          {/* @endif */}
-          {/* @if TARGET='app' */}
-          {showFileUpload && (
-            <FileSelector
-              label={__('File')}
-              disabled={disabled}
-              currentPath={currentFile}
-              onFileChosen={handleFileChange}
-              // https://stackoverflow.com/questions/19107685/safari-input-type-file-accept-video-ignores-mp4-files
-              placeholder={__('Select file to upload')}
-            />
-          )}
-          {showFileUpload && (
-            <FormField
-              type="checkbox"
-              checked={userOptimize}
-              disabled={!optimizeAvail}
-              onChange={() => setUserOptimize(!userOptimize)}
-              label={__('Optimize and transcode video')}
-              name="optimize"
-            />
-          )}
-          {showFileUpload && !ffmpegAvail && (
-            <p className="help">
-              <I18nMessage
-                tokens={{
-                  settings_link: <Button button="link" navigate="/$/settings" label={__('Settings')} />,
-                }}
-              >
-                FFmpeg not configured. More in %settings_link%.
-              </I18nMessage>
-            </p>
-          )}
-          {showFileUpload && Boolean(size) && ffmpegAvail && optimize && isVid && (
-            <p className="help">
-              <I18nMessage
-                tokens={{
-                  size: Math.ceil(sizeInMB),
-                  processTime: getTimeForMB(sizeInMB),
-                  units: getUnitsForMB(sizeInMB),
-                }}
-              >
-                Transcoding this %size% MB file should take under %processTime% %units%.
-              </I18nMessage>
-            </p>
-          )}
-          {/* @endif */}
-          {isPublishPost && (
-            <PostEditor
-              label={__('Post --[noun, markdown post tab button]--')}
-              uri={uri}
-              disabled={disabled}
-              fileMimeType={fileMimeType}
-              setPrevFileText={setPrevFileText}
-              setCurrentFileType={setCurrentFileType}
-            />
-          )}
-        </React.Fragment>
+              )}
+              {showFileUpload && (
+                <FormField
+                  type="checkbox"
+                  checked={userOptimize}
+                  disabled={!optimizeAvail}
+                  onChange={() => setUserOptimize(!userOptimize)}
+                  label={__('Optimize and transcode video')}
+                  name="optimize"
+                />
+              )}
+              {showFileUpload && !ffmpegAvail && (
+                <p className="help">
+                  <I18nMessage
+                    tokens={{
+                      settings_link: <Button button="link" navigate="/$/settings" label={__('Settings')} />,
+                    }}
+                  >
+                    FFmpeg not configured. More in %settings_link%.
+                  </I18nMessage>
+                </p>
+              )}
+              {showFileUpload && Boolean(size) && ffmpegAvail && optimize && isVid && (
+                <p className="help">
+                  <I18nMessage
+                    tokens={{
+                      size: Math.ceil(sizeInMB),
+                      processTime: getTimeForMB(sizeInMB),
+                      units: getUnitsForMB(sizeInMB),
+                    }}
+                  >
+                    Transcoding this %size% MB file should take under %processTime% %units%.
+                  </I18nMessage>
+                </p>
+              )}
+              {/* @endif */}
+              {isPublishPost && (
+                <PostEditor
+                  label={__('Post --[noun, markdown post tab button]--')}
+                  uri={uri}
+                  disabled={disabled}
+                  fileMimeType={fileMimeType}
+                  setPrevFileText={setPrevFileText}
+                  setCurrentFileType={setCurrentFileType}
+                />
+              )}
+            </React.Fragment>
+          </div>
+        </>
       }
     />
   );

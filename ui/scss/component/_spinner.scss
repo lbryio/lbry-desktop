@@ -56,3 +56,12 @@
 .spinnerArea--centered {
   text-align: center;
 }
+
+.button--primary {
+  .spinner {
+    height: 30px;
+    .rect {
+      background-color: var(--color-primary-contrast);
+    }
+  }
+}

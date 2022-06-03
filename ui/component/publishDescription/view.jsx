@@ -20,26 +20,30 @@ function PublishDescription(props: Props) {
   }
 
   return (
-    <Card
-      actions={
-        <FormField
-          type={!SIMPLE_SITE && advancedEditor ? 'markdown' : 'textarea'}
-          name="content_description"
-          label={__('Description')}
-          placeholder={__(
-            'What is your content about? Use this space to include any other relevant details you may like to share about your content and channel.'
-          )}
-          value={description}
-          disabled={disabled}
-          onChange={value =>
-            updatePublishForm({ description: !SIMPLE_SITE && advancedEditor ? value : value.target.value })
-          }
-          quickActionLabel={!SIMPLE_SITE && (advancedEditor ? __('Simple Editor') : __('Advanced Editor'))}
-          quickActionHandler={toggleMarkdown}
-          textAreaMaxLength={FF_MAX_CHARS_IN_DESCRIPTION}
-        />
-      }
-    />
+    <>
+      {disabled && <h2 className="card__title card__title-disabled">{__('Description')}</h2>}
+      {!disabled && <h2 className="card__title">{__('Description')}</h2>}
+      <Card
+        className="card--description"
+        actions={
+          <FormField
+            type={!SIMPLE_SITE && advancedEditor ? 'markdown' : 'textarea'}
+            name="content_description"
+            placeholder={__(
+              'What is your content about? Use this space to include any other relevant details you may like to share about your content and channel.'
+            )}
+            value={description}
+            disabled={disabled}
+            onChange={(value) =>
+              updatePublishForm({ description: !SIMPLE_SITE && advancedEditor ? value : value.target.value })
+            }
+            quickActionLabel={!SIMPLE_SITE && (advancedEditor ? __('Simple Editor') : __('Advanced Editor'))}
+            quickActionHandler={toggleMarkdown}
+            textAreaMaxLength={FF_MAX_CHARS_IN_DESCRIPTION}
+          />
+        }
+      />
+    </>
   );
 }
 

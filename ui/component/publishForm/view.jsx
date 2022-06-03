@@ -20,7 +20,6 @@ import TagsSelect from 'component/tagsSelect';
 import PublishDescription from 'component/publishDescription';
 import PublishPrice from 'component/publishPrice';
 import PublishFile from 'component/publishFile';
-import PublishBid from 'component/publishBid';
 import PublishAdditionalOptions from 'component/publishAdditionalOptions';
 import PublishFormErrors from 'component/publishFormErrors';
 import SelectThumbnail from 'component/selectThumbnail';
@@ -593,7 +592,7 @@ function PublishForm(props: Props) {
 
   // Editing claim uri
   return (
-    <div className="card-stack uploadPage-wrapper">
+    <div className="card-stack">
       <ChannelSelect hideAnon={isLivestreamMode} disabled={disabled} autoSet channelToSet={claimChannelId} />
 
       <PublishFile
@@ -635,15 +634,17 @@ function PublishForm(props: Props) {
         }
       />
 
+      {mode !== PUBLISH_MODES.POST && <PublishDescription disabled={formDisabled} />}
+
       {!publishing && (
         <div className={classnames({ 'card--disabled': formDisabled })}>
           {showSchedulingOptions && <Card body={<PublishStreamReleaseDate />} />}
 
-          {mode !== PUBLISH_MODES.POST && <PublishDescription disabled={formDisabled} />}
-
           <Card actions={<SelectThumbnail livestreamData={livestreamData} />} />
 
-          <label style={{ marginTop: 'var(--spacing-l)' }}>{__('Tags')}</label>
+          <h2 className="card__title" style={{ marginTop: 'var(--spacing-l)' }}>
+            {__('Tags')}
+          </h2>
           <TagsSelect
             suggestMature={!SIMPLE_SITE}
             disableAutoFocus
@@ -671,7 +672,6 @@ function PublishForm(props: Props) {
             tagsChosen={tags}
           />
 
-          <PublishBid disabled={isStillEditing || formDisabled} />
           {!isLivestreamMode && <PublishPrice disabled={formDisabled} />}
 
           <PublishAdditionalOptions disabled={formDisabled} showSchedulingOptions={showSchedulingOptions} />
@@ -696,7 +696,7 @@ function PublishForm(props: Props) {
         </div>
         <p className="help">
           {!formDisabled && !formValid ? (
-            <PublishFormErrors mode={mode} waitForFile={waitingForFile} overMaxBitrate={overMaxBitrate} />
+            <PublishFormErrors title={title} mode={mode} waitForFile={waitingForFile} overMaxBitrate={overMaxBitrate} />
           ) : (
             <I18nMessage
               tokens={{

@@ -122,34 +122,35 @@ function SelectThumbnail(props: Props) {
 
   return (
     <>
+      <h2 className="card__title">{__('Thumbnail')}</h2>
       {status !== THUMBNAIL_STATUSES.IN_PROGRESS && (
-        <>
-          <label>{__('Thumbnail')}</label>
-          <div className="column">
-            {thumbPreview}
-            {publishForm && thumbUploaded ? (
-              <div className="column__item">
-                <p>{__('Upload complete.')}</p>
-                <div className="section__actions">
-                  <Button button="link" label={__('New thumbnail')} onClick={resetThumbnailStatus} />
-                </div>
+        <div className="column card--thumbnail">
+          {thumbPreview}
+          {publishForm && thumbUploaded ? (
+            <div className="column__item">
+              <p>{__('Upload complete.')}</p>
+              <div className="section__actions">
+                <Button button="link" label={__('New thumbnail')} onClick={resetThumbnailStatus} />
               </div>
-            ) : (
-              <div className="column__item">
-                {manualInput ? (
+            </div>
+          ) : (
+            <div className="column__item">
+              {manualInput ? (
+                <>
                   <FormField
                     type="text"
                     name="content_thumbnail"
-                    label="URL"
                     placeholder="https://images.fbi.gov/alien"
                     value={thumbnail}
                     disabled={formDisabled}
                     onChange={handleThumbnailChange}
                   />
-                ) : (
+                  {!thumbUploaded && <p className="help">{__('Enter a URL for your thumbnail.')}</p>}
+                </>
+              ) : (
+                <>
                   <FileSelector
                     currentPath={thumbnailPath}
-                    label={__('Thumbnail')}
                     placeholder={__('Choose an enticing thumbnail')}
                     accept={accept}
                     onFileChosen={(file) =>
@@ -159,44 +160,42 @@ function SelectThumbnail(props: Props) {
                       })
                     }
                   />
-                )}
-                <div className="card__actions">
+                  {!thumbUploaded && (
+                    <p className="help">
+                      {__('Upload your thumbnail to %domain%. Recommended ratio is 16:9, %max_size%MB max.', {
+                        domain: DOMAIN,
+                        max_size: THUMBNAIL_CDN_SIZE_LIMIT_BYTES / (1024 * 1024),
+                      })}
+                    </p>
+                  )}
+                </>
+              )}
+              <div className="card__actions">
+                <Button
+                  button="link"
+                  label={manualInput ? __('Use thumbnail upload tool') : __('Enter a thumbnail URL')}
+                  onClick={() =>
+                    updatePublishForm({
+                      uploadThumbnailStatus: manualInput ? THUMBNAIL_STATUSES.READY : THUMBNAIL_STATUSES.MANUAL,
+                    })
+                  }
+                />
+                {status === THUMBNAIL_STATUSES.READY && isSupportedVideo && IS_WEB && (
+                  // Disabled on desktop until this is resolved
+                  // https://github.com/electron/electron/issues/20750#issuecomment-709505902
                   <Button
                     button="link"
-                    label={manualInput ? __('Use thumbnail upload tool') : __('Enter a thumbnail URL')}
-                    onClick={() =>
-                      updatePublishForm({
-                        uploadThumbnailStatus: manualInput ? THUMBNAIL_STATUSES.READY : THUMBNAIL_STATUSES.MANUAL,
-                      })
-                    }
+                    label={__('Take a snapshot from your video')}
+                    onClick={() => openModal(MODALS.AUTO_GENERATE_THUMBNAIL, { filePath: actualFilePath })}
                   />
-                  {status === THUMBNAIL_STATUSES.READY && isSupportedVideo && IS_WEB && (
-                    // Disabled on desktop until this is resolved
-                    // https://github.com/electron/electron/issues/20750#issuecomment-709505902
-                    <Button
-                      button="link"
-                      label={__('Take a snapshot from your video')}
-                      onClick={() => openModal(MODALS.AUTO_GENERATE_THUMBNAIL, { filePath: actualFilePath })}
-                    />
-                  )}
-                </div>
+                )}
               </div>
-            )}
-          </div>
-        </>
+            </div>
+          )}
+        </div>
       )}
 
       {status === THUMBNAIL_STATUSES.IN_PROGRESS && <p>{__('Uploading thumbnail')}...</p>}
-      {!thumbUploaded && (
-        <p className="help">
-          {manualInput
-            ? __('Enter a URL for your thumbnail.')
-            : __('Upload your thumbnail to %domain%. Recommended ratio is 16:9, %max_size%MB max.', {
-                domain: DOMAIN,
-                max_size: THUMBNAIL_CDN_SIZE_LIMIT_BYTES / (1024 * 1024),
-              })}
-        </p>
-      )}
     </>
   );
 }

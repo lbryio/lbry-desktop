@@ -39,9 +39,11 @@ const PublishReleaseDate = (props: Props) => {
   const isNew = releaseTime === undefined;
   const isEdit = !isNew || allowDefault === false;
 
-  const showEditBtn = isNew && releaseTimeEdited === undefined && allowDefault !== false;
+  // const showEditBtn = isNew && releaseTimeEdited === undefined && allowDefault !== false;
+  const showEditBtn = false;
   const showDefaultBtn = isNew && releaseTimeEdited !== undefined && allowDefault !== false;
-  const showDatePicker = isEdit || releaseTimeEdited !== undefined;
+  // const showDatePicker = isEdit || releaseTimeEdited !== undefined;
+  const showDatePicker = true;
 
   const onDateTimePickerChanged = (value) => {
     if (value) {

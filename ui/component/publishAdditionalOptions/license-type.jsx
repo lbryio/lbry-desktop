@@ -78,7 +78,7 @@ class LicenseType extends React.PureComponent<Props> {
 
         {licenseType === OTHER && (
           <fieldset>
-            <legend>{__('Provide a description and link to your license')}</legend>
+            <div className="form-field__help">{__('Provide a description and link to your license')}</div>
             <fieldset-group>
               <FormField
                 label={__('License description')}
