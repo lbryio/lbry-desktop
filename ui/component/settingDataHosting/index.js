@@ -14,7 +14,7 @@ const select = (state) => ({
 const perform = (dispatch) => ({
   getDaemonStatus: () => dispatch(doGetDaemonStatus()),
   setDaemonSetting: (key, value) => dispatch(doSetDaemonSetting(key, value)),
-  cleanBlobs: () => dispatch(doCleanBlobs()),
+  cleanBlobs: () => dispatch(doCleanBlobs(false)),
 });
 
 export default connect(select, perform)(SettingWalletServer);
