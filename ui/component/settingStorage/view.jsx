@@ -45,7 +45,7 @@ export default function SettingStorage(props: Props) {
         </h2>
       </div>
       <Card
-        id={SETTINGS_GRP.SYSTEM}
+        id={SETTINGS_GRP.STORAGE}
         isBodyList
         body={
           <>
