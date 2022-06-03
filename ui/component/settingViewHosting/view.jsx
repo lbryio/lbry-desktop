@@ -67,6 +67,16 @@ function SettingViewHosting(props: Props) {
     }
   }
 
+  function getContentLimitValue() {
+    if (contentBlobSpaceLimitGB === '') {
+      return '';
+    } else if (Number(contentBlobSpaceLimitGB) <= Number(MINIMUM_VIEW_SETTING)) {
+      return '0';
+    } else {
+      return contentBlobSpaceLimitGB;
+    }
+  }
+
   async function handleApply() {
     if (unlimited) {
       await setDaemonSetting(DAEMON_SETTINGS.BLOB_STORAGE_LIMIT_MB, '0');
@@ -91,10 +101,11 @@ function SettingViewHosting(props: Props) {
   }
 
   React.useEffect(() => {
-    if (unlimited) {
+    // basically handle setUnlimited
+    if (unlimited && viewHostingLimit !== 0) {
       handleApply();
     }
-  }, [unlimited]);
+  }, [unlimited, viewHostingLimit]);
 
   return (
     <>
@@ -120,6 +131,9 @@ function SettingViewHosting(props: Props) {
                   (viewHostingLimit === 1 && contentBlobSpaceLimitGB <= MINIMUM_VIEW_SETTING) ||
                   (unlimited && viewHostingLimit === 0) ||
                   (!unlimited &&
+                    (String(viewHostingLimit) === convertGbToMbStr(contentBlobSpaceLimitGB) ||
+                      !isValidHostingAmount(String(contentBlobSpaceLimitGB)))) ||
+                  (!unlimited &&
                     String(viewHostingLimit) ===
                       convertGbToMbStr(
                         contentBlobSpaceLimitGB || !isValidHostingAmount(String(contentBlobSpaceLimitGB))
@@ -139,8 +153,10 @@ function SettingViewHosting(props: Props) {
                   (viewHostingLimit === 1 && contentBlobSpaceLimitGB <= MINIMUM_VIEW_SETTING) ||
                   (unlimited && viewHostingLimit === 0) ||
                   (!unlimited &&
-                    (String(viewHostingLimit) === convertGbToMbStr(contentBlobSpaceLimitGB) ||
-                      !isValidHostingAmount(String(contentBlobSpaceLimitGB)))) ||
+                    String(viewHostingLimit) ===
+                      convertGbToMbStr(
+                        contentBlobSpaceLimitGB || !isValidHostingAmount(String(contentBlobSpaceLimitGB))
+                      )) ||
                   isSetting ||
                   disabled
                 }
@@ -156,7 +172,7 @@ function SettingViewHosting(props: Props) {
           onWheel={(e) => e.preventDefault()}
           label={__(`View Hosting Limit (GB)`)}
           onChange={(e) => handleContentLimitChange(e.target.value)}
-          value={Number(contentBlobSpaceLimitGB) <= Number(MINIMUM_VIEW_SETTING) ? '0' : contentBlobSpaceLimitGB}
+          value={getContentLimitValue()}
         />
       </div>
     </>

@@ -7,9 +7,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import classnames from 'classnames';
 import Button from 'component/button';
-// @if TARGET='app'
 import { IS_MAC } from 'component/app/view';
-// @endif
 import { useIsMediumScreen } from 'effects/use-screensize';
 
 type SideNavLink = {
