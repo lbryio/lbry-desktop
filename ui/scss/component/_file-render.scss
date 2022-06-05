@@ -535,10 +535,14 @@
 // ****************************************************************************
 
 // DRY: we'll soon move vjs items to videojs.scss, so just duplicate these for now.
-$control-bar-height: 2.5rem;
+// $control-bar-height: 48px;
+$control-bar-height: 48px;
+$control-bar-height-mobile: 44px;
 $control-bar-font-size: 0.9rem;
 $control-bar-popup-font-size: 0.8rem;
-$control-bar-icon-size: 1.9rem;
+// $control-bar-icon-size: 1.9rem;
+$control-bar-icon-size: 36px;
+$control-bar-icon-size-mobile: 30px;
 
 .video-js-parent {
   height: 100%;
@@ -565,22 +569,31 @@ $control-bar-icon-size: 1.9rem;
   .vjs-control-bar {
     .vjs-volume-panel {
       .vjs-volume-horizontal {
-        margin-top: 0 !important;
+        margin-top: 5.5px !important;
         height: $control-bar-height !important;
+        @media (max-width: $breakpoint-small) {
+          height: $control-bar-height-mobile !important;
+        }
       }
       &:hover {
         .vjs-volume-horizontal {
-          margin-top: 0;
+          margin-top: 5.5px !important;
           height: $control-bar-height !important;
+          @media (max-width: $breakpoint-small) {
+            height: $control-bar-height-mobile !important;
+          }
         }
       }
     }
 
     .vjs-time-control {
       margin-left: var(--spacing-xs);
-      line-height: $control-bar-icon-size;
+      line-height: $control-bar-height;
       font-size: $control-bar-font-size;
       display: flex;
+      @media (max-width: $breakpoint-small) {
+        line-height: $control-bar-height-mobile !important;
+      }
     }
 
     .vjs-current-time {
@@ -609,37 +622,57 @@ $control-bar-icon-size: 1.9rem;
 
   // control-bar: menu, button and icon
   .vjs-control-bar {
+    // margin-bottom:-4px;
     .vjs-menu-button {
       font-size: $control-bar-font-size;
       line-height: $control-bar-height;
     }
 
     .vjs-icon-placeholder {
-      // font-size: $control-bar-icon-size; // videojs icon font
       line-height: $control-bar-height;
     }
 
     .vjs-icon-placeholder::before {
       font-size: $control-bar-icon-size;
-      line-height: $control-bar-icon-size;
+      line-height: $control-bar-height;
+      @media (max-width: $breakpoint-small) {
+        font-size: $control-bar-icon-size-mobile !important;
+        line-height: $control-bar-height-mobile !important;
+      }
     }
 
     .vjs-quality-selector {
-      margin-top: -6px;
+      // margin-top: -6px;
       .vjs-icon-placeholder {
         font-size: $control-bar-font-size;
         span {
           display: block;
-          margin-left: 24%;
-          margin-right: 24%;
-          font-size: 0.6rem;
-          background: var(--color-primary);
-          font-weight: var(--font-weight-bold);
-          border-radius: 4px;
-          margin-top: -1px;
-          //padding-top: 1px;
-          padding-top: 0;
-          line-height: 13px;
+          margin-top: -3px;
+          span {
+            display: block;
+            margin-left: 24%;
+            margin-right: 24%;
+            font-size: 0.6rem;
+            background: var(--color-primary);
+            font-weight: var(--font-weight-bold);
+            border-radius: 4px;
+            margin-top: -1px;
+            //padding-top: 1px;
+            padding-top: 0;
+            line-height: 13px;
+          }
+        }
+      }
+      @media (max-width: $breakpoint-small) {
+        width: 3rem;
+        .vjs-icon-placeholder {
+          span {
+            span {
+              margin-left: 20%;
+              margin-right: 20%;
+              // font-size: 0.5rem;
+            }
+          }
         }
       }
     }
@@ -654,11 +687,10 @@ $control-bar-icon-size: 1.9rem;
       }
     }
 
-    .vjs-playback-rate {
-      margin-left: var(--spacing-xs);
+    div.vjs-playback-rate {
       .vjs-playback-rate-value {
         font-size: $control-bar-font-size;
-        line-height: $control-bar-icon-size;
+        line-height: $control-bar-height;
       }
 
       .vjs-menu {
@@ -667,11 +699,15 @@ $control-bar-icon-size: 1.9rem;
       }
 
       @media (max-width: $breakpoint-small) {
-        margin-right: calc(var(--spacing-s) * -1) !important;
+        margin-right: calc(var(--spacing-xs) * -1) !important;
+        width: 3rem;
+        .vjs-playback-rate-value {
+          line-height: $control-bar-height-mobile;
+        }
       }
     }
 
-    .vjs-chapters-button {
+    div.vjs-chapters-button {
       .vjs-menu {
         width: 20em;
         left: -3em;
@@ -681,16 +717,33 @@ $control-bar-icon-size: 1.9rem;
         text-align: left;
         padding: var(--spacing-xxxs) var(--spacing-s);
       }
+      button {
+        // font-size:inherit;
+        // line-height:10px;
+      }
+    }
+    button.vjs-chapters-button {
+      display: block;
+      margin-top: -0px;
     }
 
     .vjs-chromecast-button,
     .vjs-airplay-button {
-      margin-top: -4px;
       margin-left: var(--spacing-xs);
+      margin-right: 2px;
       .vjs-icon-placeholder {
-        $chromecast-icon-size: 25px;
+        $chromecast-icon-size: 30.5px;
+        margin-top: 1.5px;
         width: $chromecast-icon-size;
         height: $chromecast-icon-size;
+      }
+
+      @media (max-width: $breakpoint-small) {
+        .vjs-icon-placeholder {
+          margin-top: 2px;
+          width: 23px;
+          height: 23px;
+        }
       }
     }
   }
@@ -710,6 +763,7 @@ $control-bar-icon-size: 1.9rem;
       margin-right: var(--spacing-s);
       margin-left: var(--spacing-xs);
       @media (max-width: $breakpoint-small) {
+        width: 2.5rem;
         margin-right: 0;
       }
     }
@@ -718,19 +772,17 @@ $control-bar-icon-size: 1.9rem;
     .vjs-button--play-next,
     .vjs-mute-control {
       .vjs-icon-placeholder::before {
-        font-size: 1.7rem;
+        // font-size: 1.9rem;
+        font-size: $control-bar-icon-size;
       }
       @media (max-width: $breakpoint-small) {
         width: 2.25rem;
       }
     }
 
-    .vjs-button--play-previous,
-    .vjs-button--play-next {
-      margin-top: -5px;
-    }
     .vjs-button--play-next {
       margin-left: var(--spacing-xs);
+      margin-right: var(--spacing-xs);
     }
   }
 

@@ -1,7 +1,9 @@
-$control-bar-height: 2.5rem;
+// $control-bar-height: 2.6rem;
+$control-bar-height: 48px;
+$control-bar-height-mobile: 44px;
 $control-bar-font-size: 0.8rem;
 $control-bar-popup-font-size: 0.8rem;
-$control-bar-icon-size: 0.8rem;
+// $control-bar-icon-size: 0.8rem;
 
 .video-js {
   font-size: 12px;
@@ -21,6 +23,10 @@ $control-bar-icon-size: 0.8rem;
       width: 100%;
       background: rgba(20, 20, 20, 0.45);
       background: linear-gradient(0deg, rgba(0, 0, 0, 0.85) 10%, rgba(0, 0, 0, 0) 100%);
+    }
+
+    @media (max-width: $breakpoint-small) {
+      height: $control-bar-height-mobile;
     }
   }
 
@@ -48,13 +54,13 @@ $control-bar-icon-size: 0.8rem;
     display: block;
     align-items: center;
     width: calc(100% - var(--spacing-m) * 2);
-    height: 1rem;
+    height: 2px;
     bottom: 90%;
-    margin: 1px var(--spacing-m) !important;
+    margin: 1px var(--spacing-m) 7px !important;
 
     @media (max-width: $breakpoint-small) {
       width: calc(100% - var(--spacing-s) * 2);
-      margin: 1px var(--spacing-s) !important;
+      margin: 1px var(--spacing-s) 7px !important;
     }
 
     .vjs-vtt-thumbnail-display {
@@ -135,7 +141,7 @@ $control-bar-icon-size: 0.8rem;
 
     .vjs-volume-control.vjs-volume-horizontal {
       transition: 0.1s;
-      margin-top: -2px !important;
+      // margin-top: -2px !important;
     }
   }
 }
@@ -204,7 +210,7 @@ $control-bar-icon-size: 0.8rem;
   border-radius: var(--border-radius);
   border: 2px solid var(--color-header-background);
   max-height: 20em;
-  margin-bottom: -3px; // Prevents accidental dismissal when the gap is hovered.
+  // margin-bottom: -3px; // Prevents accidental dismissal when the gap is hovered.
 
   li {
     font-size: $control-bar-popup-font-size;
@@ -261,8 +267,11 @@ $control-bar-icon-size: 0.8rem;
 
 .vjs-chromecast-button {
   .vjs-icon-placeholder {
-    width: 19px;
-    height: 19px;
+    width: 22px;
+    height: 22px;
+  }
+  @media (max-width: $breakpoint-small) {
+    width: 2.5rem !important;
   }
 }
 
@@ -329,14 +338,33 @@ button.vjs-big-play-button {
 }
 
 .vjs-seek-to-live-control {
-  margin-top: -4px !important;
   margin-left: calc(var(--spacing-s) + 4px) !important;
-  @media (max-width: $breakpoint-small) {
-    padding-left: 0 !important;
-  }
   .vjs-icon-placeholder {
     &::before {
-      font-size: 0.9rem !important;
+      font-size: 1rem !important;
+    }
+  }
+  .vjs-seek-to-live-text {
+    font-size: $control-bar-font-size;
+  }
+  @media (max-width: $breakpoint-small) {
+    padding-left: 0 !important;
+    .vjs-icon-placeholder {
+      &::before {
+        font-size: 22px !important;
+      }
+    }
+  }
+}
+.video-js {
+  .vjs-seek-to-live-control {
+    @media (max-width: $breakpoint-small) {
+      padding-left: 0 !important;
+      .vjs-icon-placeholder {
+        &::before {
+          font-size: 14px !important;
+        }
+      }
     }
   }
 }
@@ -376,16 +404,16 @@ button.vjs-big-play-button {
 .vjs-custom-control-spacer {
   order: 9 !important;
 }
-.vjs-chapters-button {
+.vjs-subs-caps-button {
   order: 10 !important;
 }
-.vjs-subs-caps-button {
+.vjs-button--autoplay-next {
   order: 11 !important;
 }
-.vjs-button--autoplay-next {
+.vjs-playback-rate {
   order: 12 !important;
 }
-.vjs-playback-rate {
+.vjs-chapters-button {
   order: 13 !important;
 }
 .vjs-quality-selector {

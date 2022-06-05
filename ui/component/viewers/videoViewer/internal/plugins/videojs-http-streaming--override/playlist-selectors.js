@@ -207,7 +207,7 @@ export const lastBandwidthSelector = function() {
 
   if (hlsQualitySelector?.getCurrentQuality() === 'auto') {
     const qualityLabel = selectedBandwidth.attributes.RESOLUTION.height + 'p';
-    hlsQualitySelector._qualityButton.menuButton_.$('.vjs-icon-placeholder').innerHTML = `${__('Auto --[Video quality. Short form]--')}<span>${qualityLabel}</span>`;
+    hlsQualitySelector._qualityButton.menuButton_.$('.vjs-icon-placeholder').innerHTML = `<span>${__('Auto --[Video quality. Short form]--')}<span>${qualityLabel}</span></span>`;
   }
 
   return selectedBandwidth;
