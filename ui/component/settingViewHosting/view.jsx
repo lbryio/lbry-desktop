@@ -41,8 +41,8 @@ function SettingViewHosting(props: Props) {
   } = props;
 
   // best effort to recommend a hosting amount default for the user
-  const totalMB = diskSpace && Math.floor(Number(diskSpace.total) / 1024);
-  const freeMB = diskSpace && Math.floor(Number(diskSpace.free) / 1024);
+  const totalMB = diskSpace && Math.floor(diskSpace.total / 1024);
+  const freeMB = diskSpace && Math.floor(diskSpace.free / 1024);
   const getGB = (val) => (Number(val) / 1024).toFixed(2);
   const recommendedSpace =
     freeMB > totalMB * TWENTY_PERCENT // plenty of space?

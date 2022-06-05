@@ -25,8 +25,8 @@ function StorageViz(props: Props) {
     );
   }
 
-  const totalMB = diskSpace && Math.floor(Number(diskSpace.total) / 1024);
-  const freeMB = diskSpace && Math.floor(Number(diskSpace.free) / 1024);
+  const totalMB = diskSpace && Math.floor(diskSpace.total / 1024);
+  const freeMB = diskSpace && Math.floor(diskSpace.free / 1024);
   const otherMB = totalMB - (freeMB + viewBlobSpace + autoBlobSpace + privateBlobSpace);
   const autoFree = autoHostingLimit - autoBlobSpace;
   const viewFree = viewHostingLimit > 0 ? viewHostingLimit - viewBlobSpace : freeMB - autoFree;

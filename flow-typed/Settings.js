@@ -8,6 +8,6 @@ declare type WalletServerDetails = {
 };
 
 declare type DiskSpace = {
-  total: string,
-  free: string,
+  total: number,
+  free: number,
 };
