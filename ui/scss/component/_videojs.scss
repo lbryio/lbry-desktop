@@ -245,6 +245,10 @@ $control-bar-popup-font-size: 0.8rem;
   }
 }
 
+.vjs-workinghover .vjs-menu-button-popup:hover .vjs-menu {
+  display: none;
+}
+
 .vjs-slider-horizontal {
   background-color: #474747 !important;
 }

@@ -541,8 +541,7 @@ $control-bar-height-mobile: 44px;
 $control-bar-font-size: 0.9rem;
 $control-bar-popup-font-size: 0.8rem;
 // $control-bar-icon-size: 1.9rem;
-$control-bar-icon-size: 36px;
-$control-bar-icon-size-mobile: 30px;
+$control-bar-icon-size: 30px;
 
 .video-js-parent {
   height: 100%;
@@ -636,13 +635,12 @@ $control-bar-icon-size-mobile: 30px;
       font-size: $control-bar-icon-size;
       line-height: $control-bar-height;
       @media (max-width: $breakpoint-small) {
-        font-size: $control-bar-icon-size-mobile !important;
         line-height: $control-bar-height-mobile !important;
       }
     }
 
     .vjs-quality-selector {
-      // margin-top: -6px;
+      margin-left: var(--spacing-xs);
       .vjs-icon-placeholder {
         font-size: $control-bar-font-size;
         span {
@@ -688,6 +686,8 @@ $control-bar-icon-size-mobile: 30px;
     }
 
     div.vjs-playback-rate {
+      margin-left: var(--spacing-xs);
+      margin-right: calc(var(--spacing-xs) * -1);
       .vjs-playback-rate-value {
         font-size: $control-bar-font-size;
         line-height: $control-bar-height;
@@ -732,8 +732,8 @@ $control-bar-icon-size-mobile: 30px;
       margin-left: var(--spacing-xs);
       margin-right: 2px;
       .vjs-icon-placeholder {
-        $chromecast-icon-size: 30.5px;
-        margin-top: 1.5px;
+        $chromecast-icon-size: 25px;
+        margin-top: 3px;
         width: $chromecast-icon-size;
         height: $chromecast-icon-size;
       }
@@ -741,8 +741,8 @@ $control-bar-icon-size-mobile: 30px;
       @media (max-width: $breakpoint-small) {
         .vjs-icon-placeholder {
           margin-top: 2px;
-          width: 23px;
-          height: 23px;
+          width: 26px;
+          height: 26px;
         }
       }
     }
@@ -772,7 +772,7 @@ $control-bar-icon-size-mobile: 30px;
     .vjs-button--play-next,
     .vjs-mute-control {
       .vjs-icon-placeholder::before {
-        // font-size: 1.9rem;
+        font-size: 26px !important;
         font-size: $control-bar-icon-size;
       }
       @media (max-width: $breakpoint-small) {

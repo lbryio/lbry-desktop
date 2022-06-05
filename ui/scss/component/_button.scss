@@ -179,8 +179,8 @@ a.button--alt {
     order: 1;
     background-repeat: no-repeat;
     // background-position: center;
-    background-position: center 9.5px;
-    background-size: 28px;
+    background-position: center 12.5px;
+    background-size: 23px;
     padding: 10px;
     opacity: 0.8 !important;
     margin-left: var(--spacing-xs);
@@ -205,7 +205,7 @@ a.button--alt {
   display: block;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 28px;
+  background-size: 23px;
 
   &:focus:not(:focus-visible) {
     display: block;
@@ -214,7 +214,7 @@ a.button--alt {
   }
 
   @media (max-width: $breakpoint-small) {
-    background-size: 24px;
+    background-size: 26px;
   }
 }
 
