@@ -41,8 +41,8 @@ function HostingSplash(props: Props) {
     handleDone,
   } = props;
 
-  const totalMB = diskSpace && Math.floor(Number(diskSpace.total) / 1024);
-  const freeMB = diskSpace && Math.floor(Number(diskSpace.free) / 1024);
+  const totalMB = diskSpace && Math.floor(diskSpace.total / 1024);
+  const freeMB = diskSpace && Math.floor(diskSpace.free / 1024);
   const blobSpaceUsed = viewBlobSpace + autoBlobSpace;
 
   const [hostingChoice, setHostingChoice] = React.useState('MANAGED');

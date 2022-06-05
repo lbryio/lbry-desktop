@@ -14,8 +14,8 @@ export const diskSpaceLinux = (path) => {
       // C:\            185087700 120552556  64535144  66% /mnt/c
       const dfResult = stdout.split('\n')[1].split(/\s+/);
       resolve({
-        total: dfResult[1],
-        free: dfResult[3],
+        total: Number(dfResult[1]),
+        free: Number(dfResult[3]),
       });
     });
   });
@@ -57,8 +57,8 @@ export const diskSpaceWindows = (path) => {
       const [drive, freeSpace, totalSize] = driveLine.split(' ').filter((x) => x);
 
       resolve({
-        total: totalSize,
-        free: freeSpace,
+        total: Math.floor(Number(totalSize) / 1024),
+        free: Math.floor(Number(freeSpace) / 1024),
       });
     });
   });
