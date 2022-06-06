@@ -73,6 +73,19 @@ export default function HelpPage(props: Props) {
       />
 
       <Card
+        title={__('Email change and account deletion')}
+        subtitle={
+          <I18nMessage tokens={{ channel: <strong>#support</strong>, help_email: SITE_HELP_EMAIL }}>
+            Email address changes and account removal are processed manually on request via email. Email must come from
+            the original email being changed, or we'll need need to verify ownership another way.
+          </I18nMessage>
+        }
+        actions={
+          <Button button="secondary" label={__('Email Us')} icon={ICONS.WEB} href={`mailto:${SITE_HELP_EMAIL}`} />
+        }
+      />
+
+      <Card
         title={__('Report a bug or suggest something')}
         subtitle={__('Did you find something wrong? Think Odysee could add something useful and cool?')}
         actions={

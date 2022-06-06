@@ -73,6 +73,11 @@ export default function ModalRevokeClaim(props: Props) {
           <p>
             {__('This will permanently remove your channel. Content published under this channel will be orphaned.')}
           </p>
+          <p>
+            {__(
+              'If this is a YouTube synced channel, it cannot be reprocessed again. Reach out to us via the Help page if you are not sure about deletion.'
+            )}
+          </p>
           <p>{__('Are you sure? Type %name% to confirm that you wish to remove the channel.', { name })}</p>
           <FormField type={'text'} onChange={(e) => setChannelName(e.target.value)} />
         </React.Fragment>
