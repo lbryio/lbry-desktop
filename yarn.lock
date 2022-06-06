@@ -17283,7 +17283,7 @@ videojs-logo@^2.1.4:
 
 "videojs-vtt-thumbnails@https://github.com/OdyseeTeam/videojs-vtt-thumbnails":
   version "0.0.13"
-  resolved "https://github.com/OdyseeTeam/videojs-vtt-thumbnails#260a63aa9679992adcd4c2bd42cb042595db9f4b"
+  resolved "https://github.com/OdyseeTeam/videojs-vtt-thumbnails#a834a01fb0f159289e84fffa420c169d45b524ac"
   dependencies:
     global "^4.4.0"
     request "^2.88.2"

@@ -64,10 +64,12 @@ $control-bar-popup-font-size: 0.8rem;
     }
 
     .vjs-vtt-thumbnail-display {
-      margin-top: -122px;
+      margin-top: -37px;
       border: 1px solid white;
       background-color: black !important;
       visibility: hidden;
+      position: absolute;
+      border-radius: 7px;
     }
 
     // Circle play head
