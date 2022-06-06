@@ -73,7 +73,8 @@ export default function LivestreamSection(props: Props) {
     const langCsv = resolveLangForClaimSearch(languageSetting, searchInLanguage, searchLanguages, langParam);
     const lang = langCsv ? langCsv.split(',') : null;
     doFetchActiveLivestreams(CS.ORDER_BY_NEW_VALUE, lang);
-    // eslint-disable-next-line react-hooks/exhaustive-deps, (on mount only)
+    // (on mount only)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   React.useEffect(() => {

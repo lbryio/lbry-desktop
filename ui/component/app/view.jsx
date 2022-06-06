@@ -448,7 +448,8 @@ function App(props: Props) {
         // console.log(err); <-- disabling this ... it's clogging up Sentry logs.
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps, (one time after locale is fetched)
+    // (one time after locale is fetched)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [locale]);
 
   useEffect(() => {
