@@ -15,7 +15,7 @@ import events from './videojs-events';
 import eventTracking from 'videojs-event-tracking';
 import functions from './videojs-functions';
 import hlsQualitySelector from './plugins/videojs-hls-quality-selector/plugin';
-import keyboardShorcuts from './videojs-keyboard-shortcuts';
+import keyboardShorcuts from './videojs-shortcuts';
 import LbryVolumeBarClass from './lbry-volume-bar';
 import Chromecast from './chromecast';
 import playerjs from 'player.js';
@@ -103,6 +103,8 @@ type Props = {
   activeLivestreamForChannel: any,
   doToast: ({ message: string, linkText: string, linkTarget: string }) => void,
 };
+const VIDEOJS_CONTROL_BAR_CLASS = 'ControlBar';
+const VIDEOJS_VOLUME_PANEL_CLASS = 'VolumePanel';
 
 const IS_IOS = platform.isIOS();
 const IS_MOBILE = platform.isMobile();
@@ -176,13 +178,22 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   const tapToUnmuteRef = useRef();
   const tapToRetryRef = useRef();
   const playerServerRef = useRef();
+  const volumePanelRef = useRef();
+
+  const keyDownHandlerRef = useRef();
+  const videoScrollHandlerRef = useRef();
+  const volumePanelScrollHandlerRef = useRef();
 
   const { url: livestreamVideoUrl } = activeLivestreamForChannel || {};
   const overrideNativeVhs = !platform.isIPhone();
   const showQualitySelector = (!isLivestreamClaim && overrideNativeVhs) || livestreamVideoUrl;
 
   // initiate keyboard shortcuts
-  const { curried_function } = keyboardShorcuts({
+  const {
+    createKeyDownShortcutsHandler,
+    createVideoScrollShortcutsHandler,
+    createVolumePanelScrollShortcutsHandler,
+  } = keyboardShorcuts({
     isMobile,
     isLivestreamClaim,
     toggleVideoTheaterMode,
@@ -370,7 +381,23 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // Set reference in component state
       playerRef.current = vjsPlayer;
 
-      window.addEventListener('keydown', curried_function(playerRef, containerRef));
+      // volume control div, used for changing volume when scrolled over
+      volumePanelRef.current = playerRef.current
+        .getChild(VIDEOJS_CONTROL_BAR_CLASS)
+        .getChild(VIDEOJS_VOLUME_PANEL_CLASS)
+        .el();
+
+      const keyDownHandler = createKeyDownShortcutsHandler(playerRef, containerRef);
+      const videoScrollHandler = createVideoScrollShortcutsHandler(playerRef, containerRef);
+      const volumePanelHandler = createVolumePanelScrollShortcutsHandler(volumePanelRef, playerRef, containerRef);
+      window.addEventListener('keydown', keyDownHandler);
+      const containerDiv = containerRef.current;
+      containerDiv && containerDiv.addEventListener('wheel', videoScrollHandler);
+      if (volumePanelRef.current) volumePanelRef.current.addEventListener('wheel', volumePanelHandler);
+
+      keyDownHandlerRef.current = keyDownHandler;
+      videoScrollHandlerRef.current = videoScrollHandler;
+      volumePanelScrollHandlerRef.current = volumePanelHandler;
 
       const controlBar = document.querySelector('.vjs-control-bar');
       if (controlBar) {
@@ -441,7 +468,14 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
     // Cleanup
     return () => {
-      window.removeEventListener('keydown', curried_function);
+      window.removeEventListener('keydown', keyDownHandlerRef.current);
+      const containerDiv = containerRef.current;
+      // $FlowFixMe
+      containerDiv && containerDiv.removeEventListener('wheel', videoScrollHandlerRef.current);
+
+      if (volumePanelRef.current) {
+        volumePanelRef.current.removeEventListener('wheel', volumePanelScrollHandlerRef.current);
+      }
 
       const player = playerRef.current;
       if (player) {

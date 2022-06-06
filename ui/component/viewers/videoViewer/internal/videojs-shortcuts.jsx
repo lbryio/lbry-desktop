@@ -6,6 +6,8 @@ import isUserTyping from 'util/detect-typing';
 
 const SEEK_STEP_5 = 5;
 const SEEK_STEP = 10; // time to seek in seconds
+const VOLUME_CHANGE_ON_SCROLL = 0.05;
+const PRECISE_VOLUME_CHANGE_ON_SCROLL = 0.01;
 
 // check if active (clicked) element is part of video div, used for keyboard shortcuts (volume etc)
 function activeElementIsPartOfVideoElement() {
@@ -14,24 +16,24 @@ function activeElementIsPartOfVideoElement() {
   return videoElementParent.contains(activeElement);
 }
 
-function volumeUp(event, playerRef) {
+function volumeUp(event, playerRef, checkIsActive = true, amount = 0.05) {
   // dont run if video element is not active element (otherwise runs when scrolling using keypad)
   const videoElementIsActive = activeElementIsPartOfVideoElement();
   const player = playerRef.current;
-  if (!player || !videoElementIsActive) return;
+  if (!player || (checkIsActive && !videoElementIsActive)) return;
   event.preventDefault();
-  player.volume(player.volume() + 0.05);
+  player.volume(player.volume() + amount);
   OVERLAY.showVolumeverlay(player, Math.round(player.volume() * 100));
   player.userActive(true);
 }
 
-function volumeDown(event, playerRef) {
+function volumeDown(event, playerRef, checkIsActive = true, amount = 0.05) {
   // dont run if video element is not active element (otherwise runs when scrolling using keypad)
   const videoElementIsActive = activeElementIsPartOfVideoElement();
   const player = playerRef.current;
-  if (!player || !videoElementIsActive) return;
+  if (!player || (checkIsActive && !videoElementIsActive)) return;
   event.preventDefault();
-  player.volume(player.volume() - 0.05);
+  player.volume(player.volume() - amount);
   OVERLAY.showVolumeverlay(player, Math.round(player.volume() * 100));
   player.userActive(true);
 }
@@ -94,7 +96,7 @@ function changePlaybackSpeed(shouldSpeedUp: boolean, playerRef) {
   }
 }
 
-const VideoJsKeyboardShorcuts = ({
+const VideoJsShorcuts = ({
   playNext,
   playPrevious,
   toggleVideoTheaterMode,
@@ -163,15 +165,65 @@ const VideoJsKeyboardShorcuts = ({
     if (e.keyCode === KEYCODES.NINE) seekVideo(90 / 100, playerRef, containerRef, true);
   }
 
-  var curried_function = function (playerRef: any, containerRef: any) {
+  const handleVideoScrollWheel = (event, playerRef, containerRef) => {
+    // Handle precise volume control when scrolling over the video player while holding down the "SHIFT"-key
+    const player = playerRef.current;
+    const videoNode = containerRef.current && containerRef.current.querySelector('video');
+
+    if (!videoNode || !player || isUserTyping() || !event.shiftKey) return;
+
+    event.preventDefault();
+
+    const delta = event.deltaY;
+
+    if (delta > 0) {
+      volumeDown(event, playerRef, false, PRECISE_VOLUME_CHANGE_ON_SCROLL);
+    } else if (delta < 0) {
+      volumeUp(event, playerRef, false, PRECISE_VOLUME_CHANGE_ON_SCROLL);
+    }
+  };
+
+  const handleVolumeBarScrollWheel = (event, volumeElement, playerRef, containerRef) => {
+    // Handle generic and precise volume control when scrolling over the volume bar
+    const player = playerRef.current;
+    const videoNode = containerRef.current && containerRef.current.querySelector('video');
+
+    if (!volumeElement || !player || !videoNode || isUserTyping()) return;
+
+    event.preventDefault();
+    event.stopImmediatePropagation();
+
+    const delta = event.deltaY;
+    const changeAmount = event.shiftKey ? PRECISE_VOLUME_CHANGE_ON_SCROLL : VOLUME_CHANGE_ON_SCROLL;
+
+    if (delta > 0) {
+      volumeDown(event, playerRef, false, changeAmount);
+    } else if (delta < 0) {
+      volumeUp(event, playerRef, false, changeAmount);
+    }
+  };
+
+  const createKeyDownShortcutsHandler = function (playerRef: any, containerRef: any) {
     return function curried_func(e: any) {
       handleKeyDown(e, playerRef, containerRef);
     };
   };
+  const createVideoScrollShortcutsHandler = function (playerRef: any, containerRef: any) {
+    return function curried_func(e: any) {
+      handleVideoScrollWheel(e, playerRef, containerRef);
+    };
+  };
+  const createVolumePanelScrollShortcutsHandler = function (volumeElement: any, playerRef: any, containerRef: any) {
+    return function curried_func(e: any) {
+      handleVolumeBarScrollWheel(e, volumeElement, playerRef, containerRef);
+    };
+  };
 
   return {
-    curried_function,
+    createKeyDownShortcutsHandler,
+    createVideoScrollShortcutsHandler,
+    createVolumePanelScrollShortcutsHandler,
   };
 };
 
-export default VideoJsKeyboardShorcuts;
+export default VideoJsShorcuts;
