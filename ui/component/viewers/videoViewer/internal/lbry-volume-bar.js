@@ -11,6 +11,12 @@ const VIDEOJS_VOLUME_PANEL_CLASS = 'VolumePanel';
 const VIDEOJS_VOLUME_CONTROL_CLASS = 'VolumeControl';
 const VIDEOJS_VOLUME_BAR_CLASS = 'VolumeBar';
 
+/**
+ * LbryVolumeBarClass
+ *
+ * NOTE_1: https://github.com/lbryio/lbry-desktop/pull/5034 Stop propagation of
+ *         mouse down/up events for it to work in Floating Player.
+ */
 class LbryVolumeBarClass extends videojs.getComponent(VIDEOJS_VOLUME_BAR_CLASS) {
   constructor(player, options = {}) {
     super(player, options);
@@ -34,12 +40,12 @@ class LbryVolumeBarClass extends videojs.getComponent(VIDEOJS_VOLUME_BAR_CLASS) 
 
   handleMouseDown(event) {
     super.handleMouseDown(event);
-    event.stopPropagation();
+    event.stopPropagation(); // @see NOTE_1
   }
 
   handleMouseMove(event) {
     super.handleMouseMove(event);
-    event.stopPropagation();
+    event.stopPropagation(); // @see NOTE_1
   }
 }
 

@@ -6,8 +6,8 @@ import isUserTyping from 'util/detect-typing';
 
 const SEEK_STEP_5 = 5;
 const SEEK_STEP = 10; // time to seek in seconds
-const VOLUME_CHANGE_ON_SCROLL = 0.05;
-const PRECISE_VOLUME_CHANGE_ON_SCROLL = 0.01;
+const VOLUME_STEP = 0.05;
+const VOLUME_STEP_FINE = 0.01;
 
 // check if active (clicked) element is part of video div, used for keyboard shortcuts (volume etc)
 function activeElementIsPartOfVideoElement() {
@@ -16,7 +16,7 @@ function activeElementIsPartOfVideoElement() {
   return videoElementParent.contains(activeElement);
 }
 
-function volumeUp(event, playerRef, checkIsActive = true, amount = 0.05) {
+function volumeUp(event, playerRef, checkIsActive = true, amount = VOLUME_STEP) {
   // dont run if video element is not active element (otherwise runs when scrolling using keypad)
   const videoElementIsActive = activeElementIsPartOfVideoElement();
   const player = playerRef.current;
@@ -27,7 +27,7 @@ function volumeUp(event, playerRef, checkIsActive = true, amount = 0.05) {
   player.userActive(true);
 }
 
-function volumeDown(event, playerRef, checkIsActive = true, amount = 0.05) {
+function volumeDown(event, playerRef, checkIsActive = true, amount = VOLUME_STEP) {
   // dont run if video element is not active element (otherwise runs when scrolling using keypad)
   const videoElementIsActive = activeElementIsPartOfVideoElement();
   const player = playerRef.current;
@@ -166,10 +166,10 @@ const VideoJsShorcuts = ({
   }
 
   const handleVideoScrollWheel = (event, playerRef, containerRef) => {
-    // Handle precise volume control when scrolling over the video player while holding down the "SHIFT"-key
     const player = playerRef.current;
     const videoNode = containerRef.current && containerRef.current.querySelector('video');
 
+    // SHIFT key required. Scrolling the page will be the priority.
     if (!videoNode || !player || isUserTyping() || !event.shiftKey) return;
 
     event.preventDefault();
@@ -177,14 +177,13 @@ const VideoJsShorcuts = ({
     const delta = event.deltaY;
 
     if (delta > 0) {
-      volumeDown(event, playerRef, false, PRECISE_VOLUME_CHANGE_ON_SCROLL);
+      volumeDown(event, playerRef, false, VOLUME_STEP_FINE);
     } else if (delta < 0) {
-      volumeUp(event, playerRef, false, PRECISE_VOLUME_CHANGE_ON_SCROLL);
+      volumeUp(event, playerRef, false, VOLUME_STEP_FINE);
     }
   };
 
   const handleVolumeBarScrollWheel = (event, volumeElement, playerRef, containerRef) => {
-    // Handle generic and precise volume control when scrolling over the volume bar
     const player = playerRef.current;
     const videoNode = containerRef.current && containerRef.current.querySelector('video');
 
@@ -194,7 +193,7 @@ const VideoJsShorcuts = ({
     event.stopImmediatePropagation();
 
     const delta = event.deltaY;
-    const changeAmount = event.shiftKey ? PRECISE_VOLUME_CHANGE_ON_SCROLL : VOLUME_CHANGE_ON_SCROLL;
+    const changeAmount = event.shiftKey ? VOLUME_STEP_FINE : VOLUME_STEP;
 
     if (delta > 0) {
       volumeDown(event, playerRef, false, changeAmount);
