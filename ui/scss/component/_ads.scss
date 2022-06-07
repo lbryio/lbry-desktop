@@ -408,9 +408,168 @@ $BANNER_BORDER: 1px;
 
 .banner-ad {
   margin-top: var(--spacing-l);
-  background-color: var(--color-ads-background);
-  border: $BANNER_BORDER solid var(--color-border);
-  border-radius: var(--border-radius);
+  .banner-ad__driver {
+    float: unset;
+    max-width: 100%;
+    width: 100%;
+    height: 27px;
+    border: unset;
+    @media (max-width: $breakpoint-small) {
+      height: 25px;
+      .banner-ad__driver-label {
+        padding-top: 5px !important;
+      }
+      .button__label {
+        padding-top: 3px !important;
+      }
+    }
+    .banner-ad__driver-label {
+      background-color: var(--color-primary);
+      border-radius: 0 0 0 var(--border-radius);
+      margin-right: 2px;
+      padding-top: 4px;
+      font-weight: bold;
+    }
+    .banner-ad__driver-value {
+      width: 100%;
+      border: unset;
+      background-image: linear-gradient(to right, var(--color-primary), rgba(var(--color-primary-dynamic), 0));
+    }
+    .button__label {
+      color: var(--color-primary) !important;
+      background: var(--color-background);
+      border-radius: 0 var(--border-radius) var(--border-radius) var(--border-radius);
+      padding: 2px 4px 2px 4px;
+      margin-top: 2px;
+      &:hover {
+        color: var(--color-text) !important;
+      }
+    }
+    .banner-ad__driver-label,
+    .banner-ad__driver-value {
+      color: var(--color-primary-contrast) !important;
+    }
+  }
+
+  .ob-widget-footer {
+    background-image: linear-gradient(to right, rgba(var(--color-primary-dynamic), 0), var(--color-primary)) !important;
+    width: 100%;
+    height: 31px;
+    margin-top: var(--spacing-s);
+    border-radius: 0 var(--border-radius) 0 0 !important;
+
+    .ob_what {
+      margin: 2px;
+      background-color: var(--color-background) !important;
+      padding: 3px !important;
+      padding-bottom: 0px !important;
+      border-radius: var(--border-radius) var(--border-radius) 0 var(--border-radius);
+    }
+  }
+
+  .banner-ad__container {
+    padding: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    max-width: unset !important;
+    background-color: unset !important;
+    .ob-grid-header-text {
+      display: none;
+    }
+    .ob-widget-header {
+      margin: 0;
+      margin-top: var(--spacing-s);
+    }
+    .ob-widget-items-container {
+      padding-left: 0 !important;
+      padding-right: 0 !important;
+      .ob-dynamic-rec-container {
+        .ob-rec-image-container {
+          box-shadow: 0 0 0 1px rgba(var(--color-primary-dynamic), 0.3);
+          border-radius: var(--border-radius);
+        }
+        .ob-rec-text {
+          font-size: var(--font-small) !important;
+          color: var(--color-text) !important;
+          font-weight: 600 !important;
+          margin-top: 0 !important;
+        }
+        .ob-rec-description {
+          color: rgba(var(--color-text-base), 0.6) !important;
+        }
+        .ob-rec-source {
+          color: rgba(var(--color-text-base), 0.6) !important;
+
+          &:after {
+            color: var(--color-primary);
+            font-weight: bold;
+          }
+          &:hover {
+            color: var(--color-text);
+          }
+        }
+        .ob-sub-units {
+          margin-top: var(--spacing-xs);
+        }
+        &:hover {
+          .ob-rec-image-container {
+            box-shadow: 0 0 0 1px rgba(var(--color-primary-dynamic), 1);
+          }
+          .ob-rec-text {
+            color: var(--color-primary) !important;
+          }
+        }
+      }
+
+      @media (max-width: $breakpoint-large) {
+        grid-template-columns: repeat(4, minmax(min-content, 1fr)) !important;
+        .ob-dynamic-rec-container {
+          &:nth-child(6n) {
+            display: none;
+          }
+          &:nth-child(4n) {
+            display: none;
+          }
+        }
+      }
+
+      @media (max-width: $breakpoint-medium) {
+        grid-template-columns: repeat(3, minmax(min-content, 1fr)) !important;
+        .ob-dynamic-rec-container {
+          &:nth-child(6n) {
+            display: none;
+          }
+          &:nth-child(4n) {
+            display: none;
+          }
+          &:nth-child(2n) {
+            display: none;
+          }
+        }
+      }
+
+      @media (max-width: $breakpoint-small) {
+        grid-template-columns: repeat(1, minmax(min-content, 1fr)) !important;
+        .ob-dynamic-rec-container {
+          &:nth-child(6n) {
+            display: none;
+          }
+          &:nth-child(5n) {
+            display: none;
+          }
+          &:nth-child(4n) {
+            display: none;
+          }
+          &:nth-child(3n) {
+            display: none;
+          }
+          &:nth-child(2n) {
+            display: none;
+          }
+        }
+      }
+    }
+  }
 }
 
 .banner-ad__container {

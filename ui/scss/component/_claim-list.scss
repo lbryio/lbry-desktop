@@ -1038,7 +1038,7 @@
   }
 
   @media (max-width: $breakpoint-medium) and (min-width: $breakpoint-small) {
-    $width: calc((100vw - var(--side-nav-width--micro) - var(--spacing-xl) * 3) / 3);
+    $width: calc((100% - var(--spacing-m) * 2) / 3);
     width: $width;
     @include handleClaimTileGifThumbnail($width);
 
