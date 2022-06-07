@@ -119,12 +119,13 @@ function ChannelThumbnail(props: Props) {
         'channel-thumbnail--resolving': isResolving,
       })}
     >
+      {/* width: use the same size for all 'small' variants so that caching works better */}
       <OptimizedImage
         alt={__('Channel profile picture')}
         className={!channelThumbnail ? 'channel-thumbnail__default' : 'channel-thumbnail__custom'}
         src={(!thumbLoadError && channelThumbnail) || defaultAvatar}
-        width={xxsmall ? 16 : small || xsmall ? 64 : 160}
-        quality={xxsmall ? 16 : small || xsmall ? 85 : 95}
+        width={xxsmall || xsmall || small ? 64 : 160}
+        quality={95}
         loading={noLazyLoad ? undefined : 'lazy'}
         onError={() => {
           if (setThumbUploadError) {
