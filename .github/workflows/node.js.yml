@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: Borales/actions-yarn@v2.3.0
+      - uses: Borales/actions-yarn@v3.0.0
       - run: yarn lint
 
   build:
