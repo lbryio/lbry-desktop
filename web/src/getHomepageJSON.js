@@ -1,6 +1,8 @@
 const path = require('path');
 const memo = {};
 
+const FORMAT = { ROKU: 'roku' };
+
 const loadAnnouncements = (homepageKeys) => {
   const fs = require('fs');
   const announcements = {};
@@ -44,7 +46,15 @@ const getHomepageJsonV1 = () => {
   return v1;
 };
 
-const getHomepageJsonV2 = () => {
+const reformatV2Categories = (categories, format) => {
+  if (format === FORMAT.ROKU) {
+    return categories && Object.entries(categories).map(([key, value]) => value);
+  } else {
+    return categories;
+  }
+};
+
+const getHomepageJsonV2 = (format) => {
   if (!memo.homepageData) {
     return {};
   }
@@ -53,7 +63,8 @@ const getHomepageJsonV2 = () => {
   const homepageKeys = Object.keys(memo.homepageData);
   homepageKeys.forEach((hp) => {
     v2[hp] = {
-      ...memo.homepageData[hp],
+      categories: reformatV2Categories(memo.homepageData[hp].categories, format),
+      meme: memo.homepageData[hp].meme,
       announcement: memo.announcements[hp],
     };
   });
