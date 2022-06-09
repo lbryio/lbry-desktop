@@ -5,6 +5,7 @@ import { LIVESTREAM_STATUS_CHECK_INTERVAL_SOON, LIVESTREAM_STATUS_CHECK_INTERVAL
 export default function useFetchLiveStatus(
   channelClaimId: ?string,
   doFetchChannelLiveStatus: (string) => void,
+  poll?: boolean,
   fasterPoll?: boolean
 ) {
   // Find out current channels status + active live claim every 30 seconds
@@ -12,12 +13,14 @@ export default function useFetchLiveStatus(
     if (!channelClaimId) return;
 
     const fetch = () => doFetchChannelLiveStatus(channelClaimId || '');
-    const interval = fasterPoll ? LIVESTREAM_STATUS_CHECK_INTERVAL_SOON : LIVESTREAM_STATUS_CHECK_INTERVAL;
 
     fetch();
 
-    const intervalId = setInterval(fetch, interval);
+    if (poll) {
+      const interval = fasterPoll ? LIVESTREAM_STATUS_CHECK_INTERVAL_SOON : LIVESTREAM_STATUS_CHECK_INTERVAL;
+      const intervalId = setInterval(fetch, interval);
 
-    return () => clearInterval(intervalId);
-  }, [channelClaimId, doFetchChannelLiveStatus, fasterPoll]);
+      return () => clearInterval(intervalId);
+    }
+  }, [channelClaimId, doFetchChannelLiveStatus, fasterPoll, poll]);
 }

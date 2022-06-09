@@ -10,7 +10,6 @@ import {
   filterUpcomingLiveStreamClaims,
 } from 'util/livestream';
 import moment from 'moment';
-import { LocalStorage, LS } from 'util/storage';
 import { isEmpty } from 'util/object';
 
 export const doFetchNoSourceClaims = (channelId: string) => async (dispatch: Dispatch, getState: GetState) => {
@@ -116,20 +115,11 @@ const findActiveStreams = async (
 };
 
 export const doFetchChannelLiveStatus = (channelId: string) => async (dispatch: Dispatch) => {
-  const statusForId = LS.CHANNEL_LIVE_STATUS;
-  const localStatus = LocalStorage.getItem(statusForId);
-
   try {
     const { channelStatus, channelData } = await fetchLiveChannel(channelId);
-    // store live state locally, and force 2 non-live statuses before returninig NOT LIVE. This allows for the stream to finish before disposing player.
-    if (localStatus === LiveStatus.LIVE && channelStatus === LiveStatus.NOT_LIVE) {
-      LocalStorage.removeItem(statusForId);
-      return;
-    }
 
-    if (channelStatus === LiveStatus.NOT_LIVE && !localStatus) {
+    if (channelStatus === LiveStatus.NOT_LIVE) {
       dispatch({ type: ACTIONS.REMOVE_CHANNEL_FROM_ACTIVE_LIVESTREAMS, data: { channelId } });
-      LocalStorage.removeItem(statusForId);
       return;
     }
 
@@ -145,11 +135,8 @@ export const doFetchChannelLiveStatus = (channelId: string) => async (dispatch: 
       channelData[channelId].claimUri = liveClaim.stream.canonical_url;
       dispatch({ type: ACTIONS.ADD_CHANNEL_TO_ACTIVE_LIVESTREAMS, data: { ...channelData } });
     }
-
-    LocalStorage.setItem(statusForId, channelStatus);
   } catch (err) {
     dispatch({ type: ACTIONS.REMOVE_CHANNEL_FROM_ACTIVE_LIVESTREAMS, data: { channelId } });
-    LocalStorage.removeItem(statusForId);
   }
 };
 

@@ -97,7 +97,7 @@ function ChannelContent(props: Props) {
   const isInitialized = Boolean(activeLivestreamForChannel) || activeLivestreamInitialized;
   const isChannelBroadcasting = Boolean(activeLivestreamForChannel);
 
-  useFetchLiveStatus(claimId, doFetchChannelLiveStatus);
+  useFetchLiveStatus(claimId, doFetchChannelLiveStatus, true);
 
   const showScheduledLiveStreams = claimType !== 'collection'; // ie. not on the playlist page.
 

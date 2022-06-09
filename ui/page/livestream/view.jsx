@@ -107,16 +107,7 @@ export default function LivestreamPage(props: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const claimReleaseStartingSoonStatic = () =>
-    releaseTime.isBetween(moment(), moment().add(LIVESTREAM_STARTS_SOON_BUFFER, 'minutes'));
-
-  const claimReleaseStartedRecentlyStatic = () =>
-    releaseTime.isBetween(moment().subtract(LIVESTREAM_STARTED_RECENTLY_BUFFER, 'minutes'), moment());
-
-  // Find out current channels status + active live claim every 30 seconds (or 15 if not live)
-  const fasterPoll = !isCurrentClaimLive && (claimReleaseStartingSoonStatic() || claimReleaseStartedRecentlyStatic());
-
-  useFetchLiveStatus(livestreamChannelId, doFetchChannelLiveStatus, fasterPoll);
+  useFetchLiveStatus(livestreamChannelId, doFetchChannelLiveStatus);
 
   React.useEffect(() => {
     setActiveStreamUri(!isCurrentClaimLive && isChannelBroadcasting ? activeLivestreamForChannel.claimUri : false);
