@@ -717,9 +717,8 @@ $control-bar-icon-size: 30px;
         text-align: left;
         padding: var(--spacing-xxxs) var(--spacing-s);
       }
-      button {
-        // font-size:inherit;
-        // line-height:10px;
+      @media (max-width: $breakpoint-small) {
+        width: 3em;
       }
     }
     button.vjs-chapters-button {
