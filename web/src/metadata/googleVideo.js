@@ -33,7 +33,7 @@ function truncateDescription(description, maxChars = 200) {
 const Generate = {
   author: (claim) => {
     const channelName = claim?.signing_channel?.value?.title || claim?.signing_channel?.name;
-    const channelUrl = lbryToOdyseeUrl(claim.signing_channel);
+    const channelUrl = claim?.signing_channel && lbryToOdyseeUrl(claim.signing_channel);
     if (channelName && channelUrl) {
       return { '@type': 'Person', name: channelName, url: channelUrl };
     }
