@@ -323,7 +323,7 @@ ipcMain.on('get-disk-space', async (event) => {
     rendererWindow.webContents.send('send-disk-space', { diskSpace });
   } catch (e) {
     rendererWindow.webContents.send('send-disk-space', { error: e.message || e });
-    console.log('Failed to start LbryFirst', e);
+    console.log('Failed to get disk space', e);
   }
 });
 

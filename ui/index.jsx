@@ -103,8 +103,6 @@ ipcRenderer.on('send-disk-space', (event, result) => {
   }
 });
 
-ipcRenderer.send('get-disk-space');
-// @if TARGET='app'
 ipcRenderer.on('open-uri-requested', (event, url, newSession) => {
   function handleError() {
     app.store.dispatch(
@@ -191,7 +189,6 @@ document.addEventListener('click', (event) => {
     target = target.parentNode;
   }
 });
-// @endif
 
 document.addEventListener('dragover', (event) => {
   event.preventDefault();

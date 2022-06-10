@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import I18nMessage from 'component/i18nMessage';
+import { ipcRenderer } from 'electron';
 
 type Props = {
   // --- select ---
@@ -14,6 +15,9 @@ type Props = {
 
 function StorageViz(props: Props) {
   const { diskSpace, viewHostingLimit, autoHostingLimit, viewBlobSpace, autoBlobSpace, privateBlobSpace } = props;
+  React.useEffect(() => {
+    ipcRenderer.send('get-disk-space');
+  }, []);
 
   if (!diskSpace || !diskSpace.total) {
     return (
