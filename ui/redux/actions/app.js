@@ -341,7 +341,6 @@ export function doDaemonReady() {
     );
     dispatch({ type: ACTIONS.DAEMON_READY });
 
-    // @if TARGET='app'
     dispatch(doBalanceSubscribe());
     dispatch(doSetAutoLaunch());
     dispatch(doFindFFmpeg());
@@ -352,7 +351,7 @@ export function doDaemonReady() {
       dispatch(doCheckUpgradeAvailable());
     }
     dispatch(doCheckUpgradeSubscribe());
-    // @endif
+    ipcRenderer.send('get-disk-space');
   };
 }
 
