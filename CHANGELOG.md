@@ -3,11 +3,14 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.53.4-alpha.6] - [2022-06-09]
+## [0.53.4-alpha.7] - [2022-06-10]
 
 ## Added
  - Add top in language category for non-english on homepage ([#7585](https://github.com/lbryio/lbry-desktop/pull/7585))
  - Auto hosting in settings and hosting first run page ([#7598](https://github.com/lbryio/lbry-desktop/pull/7598))  
+
+### Changed
+- Updated lbry-sdk to [0.107.2](https://github.com/lbryio/lbry-sdk/releases/tag/v0.107.2)
 
 ## Fixed
  - Better handle empty collections ([#7571](https://github.com/lbryio/lbry-desktop/pull/7571))
