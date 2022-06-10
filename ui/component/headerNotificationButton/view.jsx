@@ -163,35 +163,31 @@ export default function NotificationHeaderButton(props: Props) {
     }
 
     return (
-      <>
-        <a onClick={() => handleNotificationClick(notification)}>
-          <div
-            className={
-              is_read ? 'menu__list--notification' : 'menu__list--notification menu__list--notification-unread'
-            }
-            key={id}
-          >
-            <div className="notification__icon">{icon}</div>
-            <div className="menu__list--notification-info">
-              <div className="menu__list--notification-type">
-                {generateNotificationTitle(notification_rule, notification_parameters, channelName)}
-              </div>
-              <div
-                className={
-                  type === 'comments' ? 'menu__list--notification-title blockquote' : 'menu__list--notification-title'
-                }
-              >
-                {generateNotificationText(notification_rule, notification_parameters)}
-              </div>
-              {!is_read && <span>•</span>}
-              <DateTime timeAgo date={active_at} />
+      <a onClick={() => handleNotificationClick(notification)} key={id}>
+        <div
+          className={is_read ? 'menu__list--notification' : 'menu__list--notification menu__list--notification-unread'}
+          key={id}
+        >
+          <div className="notification__icon">{icon}</div>
+          <div className="menu__list--notification-info">
+            <div className="menu__list--notification-type">
+              {generateNotificationTitle(notification_rule, notification_parameters, channelName)}
             </div>
-            <div className="delete-notification" onClick={(e) => handleNotificationDelete(e, id)}>
-              <Icon icon={ICONS.DELETE} sectionIcon />
+            <div
+              className={
+                type === 'comments' ? 'menu__list--notification-title blockquote' : 'menu__list--notification-title'
+              }
+            >
+              {generateNotificationText(notification_rule, notification_parameters)}
             </div>
+            {!is_read && <span>•</span>}
+            <DateTime timeAgo date={active_at} />
           </div>
-        </a>
-      </>
+          <div className="delete-notification" onClick={(e) => handleNotificationDelete(e, id)}>
+            <Icon icon={ICONS.DELETE} sectionIcon />
+          </div>
+        </div>
+      </a>
     );
   }
 
