@@ -208,7 +208,7 @@ const VideoJsEvents = ({
       navigator.mediaSession.metadata = new window.MediaMetadata({
         title: claimValues.title,
         artist: channelTitle,
-        artwork: [{ src: claimValues.thumbnail.url }],
+        artwork: claimValues?.thumbnail?.url ? [{ src: claimValues.thumbnail.url }] : undefined,
       });
 
       // $FlowFixMe
