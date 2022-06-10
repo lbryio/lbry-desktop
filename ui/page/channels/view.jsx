@@ -138,17 +138,15 @@ export default function ChannelsPage(props: Props) {
       {!(channelUrls && channelUrls.length) && (
         <React.Fragment>
           {!fetchingChannels ? (
-            <section className="main--empty">
-              <Yrbl
-                title={__('No channels')}
-                subtitle={__("You haven't created a channel yet. All of your beautiful channels will be listed here!")}
-                actions={
-                  <div className="section__actions">
-                    <Button button="primary" label={__('Create Channel')} navigate={`/$/${PAGES.CHANNEL_NEW}`} />
-                  </div>
-                }
-              />
-            </section>
+            <Yrbl
+              title={__('No channels')}
+              subtitle={__("You haven't created a channel yet. All of your beautiful channels will be listed here!")}
+              actions={
+                <div className="section__actions">
+                  <Button button="primary" label={__('Create Channel')} navigate={`/$/${PAGES.CHANNEL_NEW}`} />
+                </div>
+              }
+            />
           ) : (
             <section className="main--empty">
               <Spinner delayed />

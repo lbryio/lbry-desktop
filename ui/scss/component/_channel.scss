@@ -828,5 +828,8 @@ $actions-z-index: 2;
   }
   @media (max-width: $breakpoint-small) {
     padding: var(--spacing-s);
+    .yrbl__wrap {
+      margin-top: var(--spacing-l);
+    }
   }
 }
