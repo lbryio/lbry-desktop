@@ -826,4 +826,7 @@ $actions-z-index: 2;
       }
     }
   }
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-s);
+  }
 }
