@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.53.4-alpha.7] - [2022-06-10]
+## [0.53.4] - [2022-06-10]
 
 ## Added
  - Add top in language category for non-english on homepage ([#7585](https://github.com/lbryio/lbry-desktop/pull/7585))
@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
  - Work towards supporting collections of any claim type ([#7578](https://github.com/lbryio/lbry-desktop/pull/7578))
  - Improve handling of downed custom servers on startup ([#7593](https://github.com/lbryio/lbry-desktop/pull/7593))
  - Hide watch progress in related if being played ([#7606](https://github.com/lbryio/lbry-desktop/pull/7606))
+ - IPC disk space calls wait for daemon ready; refresh on vis. component load ([#7610](https://github.com/lbryio/lbry-desktop/pull/7610))
 
 ## [0.53.3] - [2022-04-27]
 
