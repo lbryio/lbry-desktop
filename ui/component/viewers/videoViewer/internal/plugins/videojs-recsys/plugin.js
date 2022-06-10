@@ -66,7 +66,7 @@ class RecsysPlugin extends Component {
     player.on('seeked', (event) => this.onSeeked(event));
 
     // Event trigger to send recsys event
-    player.on('dispose', (event) => this.onDispose(event));
+    player.on('playerClosed', (event) => this.onDispose(event));
   }
 
   onPlay(event) {

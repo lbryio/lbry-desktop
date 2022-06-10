@@ -98,6 +98,9 @@ function overrideHoverTooltip(player: any, tsData: TimestampData, duration: numb
       .getChild('mouseTimeDisplay')
       .getChild('timeTooltip');
 
+    // sometimes old 'right' rule is persisted and messes up styling
+    timeTooltip.el().style.removeProperty('right');
+
     timeTooltip.update = function (seekBarRect, seekBarPoint, time) {
       const values = Object.values(tsData);
       // $FlowIssue: mixed
@@ -153,6 +156,19 @@ function load(player: any, timestampData: TimestampData, duration: number) {
   });
 }
 
+function deleteHoverInformation(player) {
+  try {
+    const timeTooltip = player
+      .getChild('controlBar')
+      .getChild('progressControl')
+      .getChild('seekBar')
+      .getChild('mouseTimeDisplay')
+      .getChild('timeTooltip');
+
+    delete timeTooltip.update;
+  } catch {}
+}
+
 export function parseAndLoad(player: any, claim: StreamClaim) {
   console.assert(claim, 'null claim');
 
@@ -166,6 +182,8 @@ export function parseAndLoad(player: any, claim: StreamClaim) {
   if (tsData && duration) {
     load(player, tsData, duration);
     overrideHoverTooltip(player, tsData, duration);
+  } else {
+    deleteHoverInformation(player);
   }
 }
 

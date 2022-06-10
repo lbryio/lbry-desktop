@@ -29,8 +29,6 @@ import { useIsMobile } from 'effects/use-screensize';
 import { platform } from 'util/platform';
 import usePersistedState from 'effects/use-persisted-state';
 
-const canAutoplay = require('./plugins/canAutoplay');
-
 require('@silvermine/videojs-chromecast')(videojs);
 require('@silvermine/videojs-airplay')(videojs);
 
@@ -46,7 +44,11 @@ export type Player = {
   hlsQualitySelector: ?any,
   i18n: (any) => void,
   // -- base videojs --
-  controlBar: { addChild: (string, any) => void },
+  controlBar: {
+    addChild: (string | any, ?any, ?number) => void,
+    getChild: (string) => void,
+    removeChild: (string) => void,
+  },
   loadingSpinner: any,
   autoplay: (any) => boolean,
   tech: (?boolean) => { vhs: ?any },
@@ -60,6 +62,7 @@ export type Player = {
   isFullscreen: () => boolean,
   muted: (?boolean) => boolean,
   on: (string, (any) => void) => void,
+  off: (string, (any) => void) => void,
   one: (string, (any) => void) => void,
   play: () => Promise<any>,
   playbackRate: (?number) => number,
@@ -103,7 +106,6 @@ type Props = {
   activeLivestreamForChannel: any,
   doToast: ({ message: string, linkText: string, linkTarget: string }) => void,
 };
-const VIDEOJS_CONTROL_BAR_CLASS = 'ControlBar';
 const VIDEOJS_VOLUME_PANEL_CLASS = 'VolumePanel';
 
 const IS_IOS = platform.isIOS();
@@ -242,7 +244,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       liveTolerance: 10,
     },
     inactivityTimeout: 2000,
-    autoplay: autoplay,
     muted: startMuted,
     poster: poster, // thumb looks bad in app, and if autoplay, flashing poster is annoying
     plugins: { eventTracking: true, overlay: OVERLAY.OVERLAY_DATA },
@@ -263,11 +264,12 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     suppressNotSupportedError: true,
   };
 
+  // TODO: would be nice to pull this out into functions file
   // Initialize video.js
-  function initializeVideoPlayer(el, canAutoplayVideo) {
-    if (!el) return;
+  function initializeVideoPlayer(domElement) {
+    if (!domElement) return;
 
-    const vjs = videojs(el, videoJsOptions, async () => {
+    const vjs = videojs(domElement, videoJsOptions, async () => {
       const player = playerRef.current;
       const adapter = new playerjs.VideoJSAdapter(player);
 
@@ -276,8 +278,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       // runAds(internalFeatureEnabled, allowPreRoll, player, embedded);
 
-      initializeEvents();
-
       // Replace volume bar with custom LBRY volume bar
       LbryVolumeBarClass.replaceExisting(player);
 
@@ -285,16 +285,16 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       player.reloadSourceOnError({ errorInterval: 10 });
 
       // Initialize mobile UI.
-      player.mobileUi();
+      player.mobileUi({
+        fullscreen: {
+          enterOnRotate: false,
+        },
+        touchControls: {
+          seekSeconds: 10,
+        },
+      });
 
       player.i18n();
-
-      if (!embedded) {
-        window.player.bigPlayButton && window.player.bigPlayButton.hide();
-      } else {
-        const bigPlayButton = document.querySelector('.vjs-big-play-button');
-        if (bigPlayButton) bigPlayButton.style.setProperty('display', 'block', 'important');
-      }
 
       // Add quality selector to player
       if (showQualitySelector) {
@@ -320,29 +320,10 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       // set playsinline for mobile
       player.children_[0].setAttribute('playsinline', '');
 
-      if (canAutoplayVideo === true) {
-        // show waiting spinner as video is loading
-        player.addClass('vjs-waiting');
-        // document.querySelector('.vjs-big-play-button').style.setProperty('display', 'none', 'important');
-      } else {
-        // $FlowFixMe
-        document.querySelector('.vjs-big-play-button').style.setProperty('display', 'block', 'important');
-      }
+      // immediately show control bar while video is loading
+      player.userActive(true);
 
-      // I think this is a callback function
-      const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
-
-      onPlayerReady(player, videoNode);
       adapter.ready();
-
-      // sometimes video doesnt start properly, this addresses the edge case
-      if (autoplay) {
-        const videoDiv = window.player.children_[0];
-        if (videoDiv) {
-          videoDiv.click();
-        }
-        window.player.userActive(true);
-      }
 
       Chromecast.initialize(player);
       player.airPlay();
@@ -366,26 +347,72 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   // This lifecycle hook is only called once (on mount), or when `isAudio` or `source` changes.
   useEffect(() => {
     (async function () {
-      let canAutoplayVideo = await canAutoplay.video({ timeout: 2000, inline: true });
-      canAutoplayVideo = canAutoplayVideo.result === true;
+      let vjsPlayer;
+      const vjsParent = document.querySelector('.video-js-parent');
 
-      const vjsElement = createVideoPlayerDOM(containerRef.current);
-      const vjsPlayer = initializeVideoPlayer(vjsElement, canAutoplayVideo);
-      if (!vjsPlayer) {
-        return;
+      let canUseOldPlayer = window.oldSavedDiv && vjsParent;
+      const isLivestream = isLivestreamClaim && userClaimId;
+      // make an additional check and reinstantiate if switching between player types
+      // switching between types on iOS causes issues and this is a faster solution
+      if (vjsParent && window.player) {
+        const oldVideoType = window.player.isLivestream ? 'livestream' : 'video';
+        const switchFromLivestreamToVideo = oldVideoType === 'livestream' && !isLivestream;
+        const switchFromVideoToLivestream = oldVideoType === 'video' && isLivestream;
+        if (switchFromLivestreamToVideo || switchFromVideoToLivestream) {
+          canUseOldPlayer = false;
+          window.player.dispose();
+        }
       }
 
-      // Add reference to player to global scope
-      window.player = vjsPlayer;
+      // initialize videojs if it hasn't been done yet
+      if (!canUseOldPlayer) {
+        const vjsElement = createVideoPlayerDOM(containerRef.current);
+        vjsPlayer = initializeVideoPlayer(vjsElement);
+        if (!vjsPlayer) {
+          return;
+        }
+
+        // Add reference to player to global scope
+        window.player = vjsPlayer;
+      } else {
+        vjsPlayer = window.player;
+      }
+
+      // Add recsys plugin
+      if (shareTelemetry) {
+        vjsPlayer.recsys.options_ = {
+          videoId: claimId,
+          userId: userId,
+          embedded: embedded,
+        };
+
+        vjsPlayer.recsys.lastTimeUpdate = null;
+        vjsPlayer.recsys.currentTimeUpdate = null;
+        vjsPlayer.recsys.inPause = false;
+        vjsPlayer.recsys.watchedDuration = { total: 0, lastTimestamp: -1 };
+      }
+
+      if (!embedded) {
+        vjsPlayer.bigPlayButton && window.player.bigPlayButton.hide();
+      } else {
+        // $FlowIssue
+        vjsPlayer.bigPlayButton?.show();
+      }
+
+      // I think this is a callback function
+      const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
+
+      // add theatre and autoplay next button and initiate player events
+      onPlayerReady(vjsPlayer, videoNode);
 
       // Set reference in component state
       playerRef.current = vjsPlayer;
 
+      initializeEvents();
+
       // volume control div, used for changing volume when scrolled over
-      volumePanelRef.current = playerRef.current
-        .getChild(VIDEOJS_CONTROL_BAR_CLASS)
-        .getChild(VIDEOJS_VOLUME_PANEL_CLASS)
-        .el();
+      // $FlowIssue
+      volumePanelRef.current = playerRef.current?.controlBar?.getChild(VIDEOJS_VOLUME_PANEL_CLASS)?.el();
 
       const keyDownHandler = createKeyDownShortcutsHandler(playerRef, containerRef);
       const videoScrollHandler = createVideoScrollShortcutsHandler(playerRef, containerRef);
@@ -399,12 +426,15 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       videoScrollHandlerRef.current = videoScrollHandler;
       volumePanelScrollHandlerRef.current = volumePanelHandler;
 
-      const controlBar = document.querySelector('.vjs-control-bar');
-      if (controlBar) {
-        controlBar.style.setProperty('opacity', '1', 'important');
-      }
+      // $FlowIssue
+      vjsPlayer.controlBar?.show();
 
-      if (isLivestreamClaim && userClaimId) {
+      vjsPlayer.poster(poster);
+
+      let contentUrl;
+      // TODO: pull this function into videojs-functions
+      // determine which source to use and load it
+      if (isLivestream) {
         vjsPlayer.isLivestream = true;
         vjsPlayer.addClass('livestreamPlayer');
         vjsPlayer.src({ type: 'application/x-mpegURL', src: livestreamVideoUrl });
@@ -421,22 +451,80 @@ export default React.memo<Props>(function VideoJs(props: Props) {
           vjsPlayer.claimSrcVhs = { type: 'application/x-mpegURL', src: response.url };
           vjsPlayer.src(vjsPlayer.claimSrcVhs);
 
-          const trimmedPath = response.url.substring(0, response.url.lastIndexOf('/'));
-          const thumbnailPath = trimmedPath + '/stream_sprite.vtt';
-
-          // disable thumbnails on mobile for now
-          if (!IS_MOBILE) {
-            vjsPlayer.vttThumbnails({
-              src: thumbnailPath,
-              showTimestamp: true,
-            });
-          }
+          contentUrl = response.url;
         } else {
           vjsPlayer.src(vjsPlayer.claimSrcOriginal);
         }
       }
 
+      // bugfix thumbnails showing up if new video doesn't have them
+      if (typeof vjsPlayer.vttThumbnails.detach === 'function') {
+        vjsPlayer.vttThumbnails.detach();
+      }
+
+      // initialize hover thumbnails
+      if (contentUrl) {
+        const trimmedPath = contentUrl.substring(0, contentUrl.lastIndexOf('/'));
+        const thumbnailPath = trimmedPath + '/stream_sprite.vtt';
+
+        // progress bar hover thumbnails
+        if (!IS_MOBILE) {
+          // if src is a function, it's already been initialized
+          if (typeof vjsPlayer.vttThumbnails.src === 'function') {
+            vjsPlayer.vttThumbnails.src(thumbnailPath);
+          } else {
+            // otherwise, initialize plugin
+            vjsPlayer.vttThumbnails({
+              src: thumbnailPath,
+              showTimestamp: true,
+            });
+          }
+        }
+      }
+
       vjsPlayer.load();
+
+      if (canUseOldPlayer) {
+        // $FlowIssue
+        document.querySelector('.video-js-parent')?.append(window.oldSavedDiv);
+      }
+
+      // allow tap to unmute if no perms on iOS
+      if (autoplay && !embedded) {
+        const promise = vjsPlayer.play();
+
+        window.player.userActive(true);
+
+        if (promise !== undefined) {
+          promise
+            .then((_) => {
+              // $FlowIssue
+              vjsPlayer?.controlBar.el().classList.add('vjs-transitioning-video');
+            })
+            .catch((error) => {
+              const noPermissionError = typeof error === 'object' && error.name && error.name === 'NotAllowedError';
+
+              if (noPermissionError) {
+                if (IS_IOS) {
+                  // autoplay not allowed, mute video, play and show 'tap to unmute' button
+                  // $FlowIssue
+                  vjsPlayer?.muted(true);
+                  // $FlowIssue
+                  vjsPlayer?.play();
+                  // $FlowIssue
+                  document.querySelector('.video-js--tap-to-unmute')?.style.setProperty('visibility', 'visible');
+                  // $FlowIssue
+                  document
+                    .querySelector('.video-js--tap-to-unmute')
+                    ?.style.setProperty('display', 'inline', 'important');
+                } else {
+                  // $FlowIssue
+                  vjsPlayer?.bigPlayButton?.show();
+                }
+              }
+            });
+        }
+      }
 
       // fix invisible vidcrunch overlay on IOS  << TODO: does not belong here. Move to ads.jsx (#739)
       if (IS_IOS) {
@@ -477,14 +565,45 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         volumePanelRef.current.removeEventListener('wheel', volumePanelScrollHandlerRef.current);
       }
 
+      const chapterMarkers = document.getElementsByClassName('vjs-chapter-marker');
+      while (chapterMarkers.length > 0) {
+        // $FlowIssue
+        chapterMarkers[0].parentNode?.removeChild(chapterMarkers[0]);
+      }
+
       const player = playerRef.current;
       if (player) {
         try {
           window.cast.framework.CastContext.getInstance().getCurrentSession().endSession(false);
         } catch {}
 
-        player.dispose();
-        window.player = undefined;
+        window.player.switchedFromDefaultQuality = false;
+
+        window.player.userActive(false);
+        window.player.pause();
+
+        if (IS_IOS) {
+          // $FlowIssue
+          window.player.controlBar?.playToggle?.hide();
+        }
+
+        // $FlowIssue
+        window.player?.controlBar?.getChild('ChaptersButton')?.hide();
+
+        // this solves an issue with portrait videos
+        // $FlowIssue
+        const videoDiv = window.player?.tech_?.el(); // video element
+        if (videoDiv) videoDiv.style.top = '0px';
+
+        window.player.controlBar.el().classList.add('vjs-transitioning-video');
+
+        window.oldSavedDiv = window.player.el();
+
+        window.player.trigger('playerClosed');
+
+        window.player.currentTime(0);
+
+        window.player.claimSrcVhs = null;
       }
     };
   }, [isAudio, source, reload, userClaimId, isLivestreamClaim]);

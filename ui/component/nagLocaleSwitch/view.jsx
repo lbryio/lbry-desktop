@@ -57,6 +57,7 @@ export default function NagLocaleSwitch(props: Props) {
   const [switchOption, setSwitchOption] = React.useState(optionToSwitch);
 
   if (localeSwitchDismissed || !optionToSwitch) return null;
+  if (!onFrontPage) return null;
 
   let message = __(
     // If no homepage, only suggest language switch

@@ -106,11 +106,13 @@ const onPlayerReady = (player, options) => {
     }
   };
 
-  if (videojs.browser.IS_IOS) {
-    window.addEventListener('orientationchange', rotationHandler);
-  } else {
-    // addEventListener('orientationchange') is not a user interaction on Android
-    screen.orientation.onchange = rotationHandler;
+  if (player.options.enterOnRotate) {
+    if (videojs.browser.IS_IOS) {
+      window.addEventListener('orientationchange', rotationHandler);
+    } else {
+      // addEventListener('orientationchange') is not a user interaction on Android
+      screen.orientation.onchange = rotationHandler;
+    }
   }
 
   player.on('ended', (_) => {
@@ -149,8 +151,7 @@ const onPlayerReady = (player, options) => {
  *           Never shows if the endscreen plugin is present
  */
 function mobileUi(options) {
-  // if (videojs.browser.IS_ANDROID || videojs.browser.IS_IOS) {
-  if (videojs.browser.IS_ANDROID) {
+  if (videojs.browser.IS_ANDROID || videojs.browser.IS_IOS) {
     this.ready(() => onPlayerReady(this, videojs.mergeOptions(defaults, options)));
   }
 }

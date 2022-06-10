@@ -29,11 +29,14 @@ import debounce from 'util/debounce';
 import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
 import useInterval from 'effects/use-interval';
 import { lastBandwidthSelector } from './internal/plugins/videojs-http-streaming--override/playlist-selectors';
+import { platform } from 'util/platform';
 import RecSys from 'recsys';
 
 // const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
 // const PLAY_TIMEOUT_LIMIT = 2000;
 const PLAY_POSITION_SAVE_INTERVAL_MS = 15000;
+
+const IS_IOS = platform.isIOS();
 
 type Props = {
   position: number,
@@ -161,6 +164,7 @@ function VideoViewer(props: Props) {
 
   React.useEffect(() => {
     if (isPlaying) {
+      // save the updated watch time
       doSetContentHistoryItem(claim.permanent_url);
     }
   }, [isPlaying]);
@@ -209,6 +213,7 @@ function VideoViewer(props: Props) {
 
   const doPlay = useCallback(
     (playUri) => {
+      if (!playUri) return;
       setDoNavigate(false);
       if (!isFloating) {
         const navigateUrl = formatLbryUrlForWeb(playUri);
@@ -227,27 +232,23 @@ function VideoViewer(props: Props) {
   useEffect(() => {
     if (!doNavigate) return;
 
-    if (playNextUrl) {
-      if (permanentUrl !== nextRecommendedUri) {
-        if (nextRecommendedUri) {
-          doPlay(nextRecommendedUri);
-        }
-      } else {
-        setReplay(true);
-      }
-    } else {
-      if (videoNode) {
-        const currentTime = videoNode.currentTime;
+    const shouldPlayNextUrl = playNextUrl && nextRecommendedUri && permanentUrl !== nextRecommendedUri;
+    const shouldPlayPreviousUrl = !playNextUrl && previousListUri && permanentUrl !== previousListUri;
 
-        if (currentTime <= 5) {
-          if (previousListUri && permanentUrl !== previousListUri) doPlay(previousListUri);
-        } else {
-          videoNode.currentTime = 0;
-        }
-        setDoNavigate(false);
-      }
+    // play next video if someone hits Next button
+    if (shouldPlayNextUrl) {
+      doPlay(nextRecommendedUri);
+      // rewind if video is over 5 seconds and they hit the back button
+    } else if (videoNode && videoNode.currentTime > 5) {
+      videoNode.currentTime = 0;
+      // move to previous video when they hit back button if behind 5 seconds
+    } else if (shouldPlayPreviousUrl) {
+      doPlay(previousListUri);
+    } else {
+      setReplay(true);
     }
-    if (!ended) setDoNavigate(false);
+
+    setDoNavigate(false);
     setEnded(false);
     setPlayNextUrl(true);
   }, [
@@ -262,6 +263,7 @@ function VideoViewer(props: Props) {
     videoNode,
   ]);
 
+  // functionality to run on video end
   React.useEffect(() => {
     if (!ended) return;
 
@@ -274,13 +276,21 @@ function VideoViewer(props: Props) {
 
     if (embedded) {
       setIsEndedEmbed(true);
+      // show autoplay countdown div if not playlist
     } else if (!collectionId && autoplayNext) {
       setShowAutoplayCountdown(true);
+      // if a playlist, navigate to next item
     } else if (collectionId) {
       setDoNavigate(true);
     }
 
     clearPosition(uri);
+
+    if (IS_IOS && !autoplayNext) {
+      // show play button on ios if video is paused with no autoplay on
+      // $FlowFixMe
+      document.querySelector('.vjs-touch-overlay')?.classList.add('show-play-toggle'); // eslint-disable-line no-unused-expressions
+    }
   }, [adUrl, autoplayNext, clearPosition, collectionId, embedded, ended, setAdUrl, uri]);
 
   // MORE ON PLAY STUFF
@@ -300,7 +310,7 @@ function VideoViewer(props: Props) {
     analytics.videoIsPlaying(false, player);
   }
 
-  function onDispose(event, player) {
+  function onPlayerClosed(event, player) {
     handlePosition(player);
     analytics.videoIsPlaying(false, player);
   }
@@ -328,6 +338,7 @@ function VideoViewer(props: Props) {
   };
 
   const onPlayerReady = useCallback((player: Player, videoNode: any) => {
+    // add buttons and initialize some settings for the player
     if (!embedded) {
       setVideoNode(videoNode);
       player.muted(muted);
@@ -335,6 +346,21 @@ function VideoViewer(props: Props) {
       player.playbackRate(videoPlaybackRate);
       if (!isMarkdownOrComment) {
         addTheaterModeButton(player, toggleVideoTheaterMode);
+        // if part of a playlist
+
+        // remove old play next/previous buttons if they exist
+        const controlBar = player.controlBar;
+        if (controlBar) {
+          const existingPlayNextButton = controlBar.getChild('PlayNextButton');
+          if (existingPlayNextButton) controlBar.removeChild('PlayNextButton');
+
+          const existingPlayPreviousButton = controlBar.getChild('PlayPreviousButton');
+          if (existingPlayPreviousButton) controlBar.removeChild('PlayPreviousButton');
+
+          const existingAutoplayButton = controlBar.getChild('AutoplayNextButton');
+          if (existingAutoplayButton) controlBar.removeChild('AutoplayNextButton');
+        }
+
         if (collectionId) {
           addPlayNextButton(player, doPlayNext);
           addPlayPreviousButton(player, doPlayPrevious);
@@ -349,74 +375,36 @@ function VideoViewer(props: Props) {
         }
       }
     }
-
-    // currently not being used, but leaving for time being
-    // const shouldPlay = !embedded || autoplayIfEmbedded;
-    // // https://blog.videojs.com/autoplay-best-practices-with-video-js/#Programmatic-Autoplay-and-Success-Failure-Detection
-    // if (shouldPlay) {
-    //   const playPromise = player.play();
-    //
-    //   const timeoutPromise = new Promise((resolve, reject) =>
-    //     setTimeout(() => reject(PLAY_TIMEOUT_ERROR), PLAY_TIMEOUT_LIMIT)
-    //   );
-    //
-    //   // if user hasn't interacted with document, mute video and play it
-    //   Promise.race([playPromise, timeoutPromise]).catch((error) => {
-    //     console.log(error);
-    //     console.log(playPromise);
-    //
-    //     const noPermissionError = typeof error === 'object' && error.name && error.name === 'NotAllowedError';
-    //     const isATimeoutError = error === PLAY_TIMEOUT_ERROR;
-    //
-    //     if (noPermissionError) {
-    //       // if (player.paused()) {
-    //       //   document.querySelector('.vjs-big-play-button').style.setProperty('display', 'block', 'important');
-    //       // }
-    //
-    //       centerPlayButton();
-    //
-    //       // to turn muted autoplay on
-    //       // if (player.autoplay() && !player.muted()) {
-    //         // player.muted(true);
-    //         // player.play();
-    //       // }
-    //     }
-    //     setIsPlaying(false);
-    //   });
-    // }
-
     // PR: #5535
     // Move the restoration to a later `loadedmetadata` phase to counter the
     // delay from the header-fetch. This is a temp change until the next
     // re-factoring.
-    player.on('loadedmetadata', () => restorePlaybackRate(player));
+    const restorePlaybackRateEvent = () => restorePlaybackRate(player);
 
     // Override the "auto" algorithm to post-process the result
-    player.on('loadedmetadata', () => {
+    const overrideAutoAlgorithm = () => {
       const vhs = player.tech(true).vhs;
       if (vhs) {
         // https://github.com/videojs/http-streaming/issues/749#issuecomment-606972884
         vhs.selectPlaylist = lastBandwidthSelector;
       }
-    });
+    };
 
-    player.on('ended', () => setEnded(true));
-    player.on('play', onPlay);
-    player.on('pause', (event) => onPause(event, player));
-    player.on('dispose', (event) => onDispose(event, player));
-
-    player.on('error', () => {
+    const onPauseEvent = (event) => onPause(event, player);
+    const onPlayerClosedEvent = (event) => onPlayerClosed(event, player);
+    const onVolumeChange = () => {
+      if (player) {
+        updateVolumeState(player.volume(), player.muted());
+      }
+    };
+    const onPlayerEnded = () => setEnded(true);
+    const onError = () => {
       const error = player.error();
       if (error) {
         analytics.sentryError('Video.js error', error);
       }
-    });
-    player.on('volumechange', () => {
-      if (player) {
-        updateVolumeState(player.volume(), player.muted());
-      }
-    });
-    player.on('ratechange', () => {
+    };
+    const onRateChange = () => {
       const HAVE_NOTHING = 0; // https://docs.videojs.com/player#readyState
       if (player && player.readyState() !== HAVE_NOTHING) {
         // The playbackRate occasionally resets to 1, typically when loading a fresh video or when 'src' changes.
@@ -425,11 +413,43 @@ function VideoViewer(props: Props) {
         // [ ] Ideally, the controlBar should be hidden to prevent users from changing the rate while loading.
         setVideoPlaybackRate(player.playbackRate());
       }
-    });
+    };
 
-    if (position && !isLivestreamClaim) {
-      player.currentTime(position);
-    }
+    const moveToPosition = () => {
+      // update current time based on previous position
+      if (position && !isLivestreamClaim) {
+        player.currentTime(position);
+      }
+    };
+
+    // load events onto player
+    player.on('play', onPlay);
+    player.on('pause', onPauseEvent);
+    player.on('playerClosed', onPlayerClosedEvent);
+    player.on('ended', onPlayerEnded);
+    player.on('error', onError);
+    player.on('volumechange', onVolumeChange);
+    player.on('ratechange', onRateChange);
+    player.on('loadedmetadata', overrideAutoAlgorithm);
+    player.on('loadedmetadata', restorePlaybackRateEvent);
+    player.one('loadedmetadata', moveToPosition);
+
+    const cancelOldEvents = () => {
+      player.off('play', onPlay);
+      player.off('pause', onPauseEvent);
+      player.off('playerClosed', onPlayerClosedEvent);
+      player.off('ended', onPlayerEnded);
+      player.off('error', onError);
+      player.off('volumechange', onVolumeChange);
+      player.off('ratechange', onRateChange);
+      player.off('loadedmetadata', overrideAutoAlgorithm);
+      player.off('loadedmetadata', restorePlaybackRateEvent);
+      player.off('playerClosed', cancelOldEvents);
+      player.off('loadedmetadata', moveToPosition);
+    };
+
+    // turn off old events to prevent duplicate runs
+    player.on('playerClosed', cancelOldEvents);
 
     Chapters.parseAndLoad(player, claim);
 

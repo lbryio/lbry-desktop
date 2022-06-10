@@ -331,7 +331,7 @@ $control-bar-popup-font-size: 0.8rem;
 
 // TODO: make sure there's no bad side effects of this
 button.vjs-big-play-button {
-  display: none !important;
+  display: none;
 }
 
 .vjs-big-play-centered {
@@ -464,4 +464,17 @@ button.vjs-big-play-button {
   height: 100%;
   background-color: var(--color-error);
   width: 2px;
+}
+
+// don't show Tap To Unmute button on mobile miniplayer
+.content__viewer--floating.content__viewer--mobile {
+  .video-js--tap-to-unmute {
+    visibility: hidden !important;
+  }
+}
+
+.vjs-transitioning-video {
+  opacity: 1 !important;
+  display: flex !important;
+  visibility: visible !important;
 }

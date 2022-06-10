@@ -113,8 +113,8 @@ const VideoJsEvents = ({
     const player = playerRef.current;
     updateMediaSession();
 
-    const bigPlayButton = document.querySelector('.vjs-big-play-button');
-    if (bigPlayButton) bigPlayButton.style.setProperty('display', 'none');
+    // $FlowIssue
+    player.bigPlayButton?.hide();
 
     if (player && (player.muted() || player.volume() === 0)) {
       // The css starts as "hidden". We make it visible here without
@@ -222,6 +222,13 @@ const VideoJsEvents = ({
     }
   }
 
+  function removeControlBar() {
+    setTimeout(function () {
+      window.player.controlBar.el().classList.remove('vjs-transitioning-video');
+      window.player.controlBar.show();
+    }, 1000 * 2); // wait 2 seconds to hide control bar
+  }
+
   useEffect(() => {
     const player = playerRef.current;
     if (replay && player) {
@@ -240,17 +247,23 @@ const VideoJsEvents = ({
     // used for tracking buffering for watchman
     player.on('tracking:buffered', doTrackingBuffered);
 
-    // hide forcing control bar show
-    player.on('canplaythrough', function () {
-      setTimeout(function () {
-        // $FlowFixMe
-        const vjsControlBar = document.querySelector('.vjs-control-bar');
-        if (vjsControlBar) vjsControlBar.style.removeProperty('opacity');
-      }, 1000 * 3); // wait 3 seconds to hit control bar
+    player.on('loadstart', function () {
+      if (embedded) {
+        // $FlowIssue
+        player.bigPlayButton?.show();
+      }
     });
-    player.on('playing', function () {
-      // $FlowFixMe
-      document.querySelector('.vjs-big-play-button').style.setProperty('display', 'none', 'important');
+
+    player.on('playing', removeControlBar);
+    player.on('playerClosed', () => {
+      player.off('play', onInitialPlay);
+      player.off('volumechange', onVolumeChange);
+      player.off('error', onError);
+      // custom tracking plugin, event used for watchman data, and marking view/getting rewards
+      player.off('tracking:firstplay', doTrackingFirstPlay);
+      // used for tracking buffering for watchman
+      player.off('tracking:buffered', doTrackingBuffered);
+      player.off('playing', removeControlBar);
     });
     // player.on('ended', onEnded);
 

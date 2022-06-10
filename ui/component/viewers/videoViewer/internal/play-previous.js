@@ -11,7 +11,7 @@ class PlayPreviousButton extends videojs.getComponent('Button') {
 }
 
 export function addPlayPreviousButton(player: Player, playPreviousURI: () => void) {
-  const controlBar = player.getChild('controlBar');
+  const controlBar = player.controlBar;
 
   const playPrevious = new PlayPreviousButton(player, {
     name: 'PlayPreviousButton',
@@ -21,5 +21,7 @@ export function addPlayPreviousButton(player: Player, playPreviousURI: () => voi
     },
   });
 
-  controlBar.addChild(playPrevious, {}, 0);
+  if (controlBar) {
+    controlBar.addChild(playPrevious, {}, 0);
+  }
 }
