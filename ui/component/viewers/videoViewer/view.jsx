@@ -229,9 +229,11 @@ function VideoViewer(props: Props) {
     [collectionId, doPlayUri, isFloating, push]
   );
 
+  /** handle play next/play previous buttons **/
   useEffect(() => {
     if (!doNavigate) return;
 
+    // playNextUrl is set (either true or false) when the Next/Previous buttons are clicked
     const shouldPlayNextUrl = playNextUrl && nextRecommendedUri && permanentUrl !== nextRecommendedUri;
     const shouldPlayPreviousUrl = !playNextUrl && previousListUri && permanentUrl !== previousListUri;
 

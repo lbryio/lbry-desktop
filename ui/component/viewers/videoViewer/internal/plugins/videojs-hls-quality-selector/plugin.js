@@ -46,9 +46,11 @@ class HlsQualitySelectorPlugin {
 
     // Listen for source changes
     this.player.on('loadedmetadata', (e) => {
+      const { qualityToSet, switchedFromDefaultQuality, claimSrcVhs } = this.player;
+
       // if there was a quality option selected to default to, set it using the setQuality function
       // as if it was being clicked on, on loadedmetadata
-      if (this.player.qualityToSet && !this.player.switchedFromDefaultQuality) {
+      if (qualityToSet && !switchedFromDefaultQuality && claimSrcVhs) {
         this.setQuality(this.player.qualityToSet);
 
         // Add this attribute to the video player so later it can be checked and avoid switching again
