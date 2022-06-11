@@ -44,7 +44,7 @@ export default function NotificationHeaderButton(props: Props) {
     deleteNotification,
     doSeeAllNotifications,
   } = props;
-  const list = notifications.slice(0, 5);
+  const list = notifications.slice(0, 20);
 
   const { push } = useHistory();
   const notificationsEnabled = authenticated && (ENABLE_UI_NOTIFICATIONS || (user && user.experimental_ui));

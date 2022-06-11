@@ -195,7 +195,6 @@ reach-portal {
   .MuiMenu-list {
     padding: 0;
     backdrop-filter: blur(4px) !important;
-
     background-color: unset !important;
   }
   .MuiMenu-list--paper {
@@ -216,7 +215,8 @@ reach-portal {
   }
 
   .menu__list--notifications-list {
-    overflow: hidden !important;
+    overflow-y: scroll;
+    height: 388px;
     .menu__list--notification {
       position: relative;
       overflow: hidden !important;
@@ -279,6 +279,10 @@ reach-portal {
               font-size: var(--font-xsmall);
               font-weight: 400;
             }
+          }
+
+          .comment__badge {
+            display: none;
           }
 
           span {
@@ -398,6 +402,10 @@ reach-portal {
           color: var(--color-primary-contrast);
         }
       }
+    }
+
+    &::-webkit-scrollbar-track {
+      background: rgba(var(--color-header-background-base), 0.8);
     }
   }
 
