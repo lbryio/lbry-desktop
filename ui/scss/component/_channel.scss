@@ -393,6 +393,12 @@ $actions-z-index: 2;
     }
   }
 
+  .channel__title {
+    .comment__badge {
+      margin-left: var(--spacing-s);
+    }
+  }
+
   @media (max-width: $breakpoint-small) {
     padding-left: var(--spacing-m);
     margin-top: calc(var(--channel-thumbnail-width) + var(--spacing-l));

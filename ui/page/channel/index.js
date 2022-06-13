@@ -6,6 +6,7 @@ import {
   selectCurrentChannelPage,
   selectClaimForUri,
   makeSelectClaimIsPending,
+  selectOdyseeMembershipForChannelId,
 } from 'redux/selectors/claims';
 import { selectMyUnpublishedCollections } from 'redux/selectors/collections';
 import { selectBlacklistedOutpointMap, doFetchSubCount, selectSubCountForUri } from 'lbryinc';
@@ -37,6 +38,7 @@ const select = (state, props) => {
     mutedChannels: selectMutedChannels(state),
     unpublishedCollections: selectMyUnpublishedCollections(state),
     lang: selectLanguage(state),
+    odyseeMembership: selectOdyseeMembershipForChannelId(state, claim.claim_id),
   };
 };
 

@@ -28,6 +28,7 @@ import TruncatedText from 'component/common/truncated-text';
 import PlaceholderTx from 'static/img/placeholderTx.gif';
 import Tooltip from 'component/common/tooltip';
 import { toCompactNotation } from 'util/string';
+import PremiumBadge from 'component/common/premium-badge';
 
 export const PAGE_VIEW_QUERY = `view`;
 export const DISCUSSION_PAGE = `discussion`;
@@ -60,6 +61,7 @@ type Props = {
   mutedChannels: Array<string>,
   unpublishedCollections: CollectionGroup,
   lang: string,
+  odyseeMembership: string,
 };
 
 function ChannelPage(props: Props) {
@@ -80,6 +82,7 @@ function ChannelPage(props: Props) {
     mutedChannels,
     unpublishedCollections,
     lang,
+    odyseeMembership,
   } = props;
   const {
     push,
@@ -241,7 +244,6 @@ function ChannelPage(props: Props) {
             className="channel__thumbnail--channel-page"
             uri={uri}
             allowGifs
-            showMemberBadge
             isChannel
             hideStakedIndicator
           />
@@ -249,6 +251,7 @@ function ChannelPage(props: Props) {
             <TruncatedText lines={2} showTooltip>
               {title || (channelName && '@' + channelName)}
             </TruncatedText>
+            <PremiumBadge membership={odyseeMembership} />
           </h1>
           <div className="channel__meta">
             <Tooltip title={formattedSubCount} followCursor placement="top">
