@@ -20,6 +20,7 @@ const STATIC_ASSET_PATHS = [
   '/public/img/thumbnail-broken.png',
   '/public/img/thumbnail-missing.png',
   '/public/img/total-background.png',
+  '/public/img/cookie.svg',
 ];
 
 async function redirectMiddleware(ctx, next) {
