@@ -205,6 +205,16 @@ $control-bar-popup-font-size: 0.8rem;
   opacity: 1;
 }
 
+.vjs-lock-showing {
+  @media (max-width: $breakpoint-small) {
+    width: 8em !important;
+    // overflow-y:scroll;
+    .vjs-menu-content {
+      max-height: 176px !important;
+    }
+  }
+}
+
 [dir] .vjs-menu-button-popup .vjs-menu .vjs-menu-content {
   //background-color: rgba(43, 51, 63);
   background-color: rgba(var(--color-header-button-base), 0.9);
@@ -238,6 +248,18 @@ $control-bar-popup-font-size: 0.8rem;
       color: var(--color-primary-contrast);
       background-color: var(--color-primary);
       border-radius: var(--border-radius);
+    }
+
+    @media (max-width: $breakpoint-small) {
+      padding: 0.1em 0;
+      margin-left: var(--spacing-xxs);
+      margin-right: var(--spacing-xxs);
+      &:first-child {
+        margin-top: var(--spacing-xxs);
+      }
+      &:last-child {
+        margin-bottom: var(--spacing-xxs);
+      }
     }
   }
   .vjs-selected {

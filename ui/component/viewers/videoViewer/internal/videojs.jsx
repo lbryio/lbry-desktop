@@ -16,6 +16,7 @@ import eventTracking from 'videojs-event-tracking';
 import functions from './videojs-functions';
 import hlsQualitySelector from './plugins/videojs-hls-quality-selector/plugin';
 import keyboardShorcuts from './videojs-shortcuts';
+import LbryPlaybackRateMenuButton from './lbry-playback-rate';
 import LbryVolumeBarClass from './lbry-volume-bar';
 import Chromecast from './chromecast';
 import playerjs from 'player.js';
@@ -278,8 +279,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       // runAds(internalFeatureEnabled, allowPreRoll, player, embedded);
 
-      // Replace volume bar with custom LBRY volume bar
       LbryVolumeBarClass.replaceExisting(player);
+      LbryPlaybackRateMenuButton.replaceExisting(player);
 
       // Add reloadSourceOnError plugin
       player.reloadSourceOnError({ errorInterval: 10 });
