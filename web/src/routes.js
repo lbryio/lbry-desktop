@@ -42,13 +42,17 @@ router.get(`/$/api/content/v2/get`, async (ctx) => getHomepage(ctx, 2));
 
 router.get(`/$/download/:claimName/:claimId`, async (ctx) => {
   const streamUrl = await getStreamUrl(ctx);
-  const downloadUrl = `${streamUrl}?download=1`;
-  ctx.redirect(downloadUrl);
+  if (streamUrl) {
+    const downloadUrl = `${streamUrl}?download=1`;
+    ctx.redirect(downloadUrl);
+  }
 });
 
 router.get(`/$/stream/:claimName/:claimId`, async (ctx) => {
   const streamUrl = await getStreamUrl(ctx);
-  ctx.redirect(streamUrl);
+  if (streamUrl) {
+    ctx.redirect(streamUrl);
+  }
 });
 
 router.get(`/$/activate`, async (ctx) => {
