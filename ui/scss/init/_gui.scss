@@ -1615,6 +1615,10 @@ img {
 // Fix Lightbox (Image viewer) modal backdrop bug
 // Context: transform, filter and perspective break "position: fixed" in child element
 .lb-open-lightbox {
+  .ReactModal__Content {
+    transform: unset !important;
+  }
+
   .modal {
     -webkit-backdrop-filter: unset;
     backdrop-filter: unset;
