@@ -751,7 +751,10 @@ svg + .button__label {
     width: 100%;
     text-align: center;
     border-radius: var(--border-radius);
-    border: 1px solid var(--color-border);
+    // border: 1px solid var(--color-border);
+    &:not(.button-toggle--active) {
+      border-right: 2px solid var(--color-border) !important;
+    }
 
     &:not(:first-of-type) {
       margin-top: var(--spacing-s);

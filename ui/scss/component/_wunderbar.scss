@@ -29,7 +29,9 @@
     background-color: transparent;
     color: var(--color-text);
     border-radius: 0;
-    margin-right: var(--spacing-l);
+    // margin-right: var(--spacing-l);
+    margin-top: 5px;
+    margin-right: 64px;
 
     &:focus {
       box-shadow: none;

@@ -471,8 +471,29 @@
 }
 
 .ReactModal__Overlay {
+  .ReactModal__Content {
+    transform: scale(0);
+    transition: transform 0.2s;
+  }
   .button--close {
     margin: 0;
+    @media (max-width: $breakpoint-small) {
+      width: var(--height-input);
+      height: var(--height-input);
+      margin: var(--spacing-s);
+      background: var(--color-primary);
+      .button__content {
+        align-items: center;
+        justify-content: center;
+      }
+    }
+  }
+}
+
+.ReactModal__Overlay--after-open {
+  .ReactModal__Content {
+    transform: scale(1);
+    transition: transform 0.4s;
   }
 }
 

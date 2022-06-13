@@ -25,7 +25,25 @@
   z-index: 9999;
 
   @media (max-width: $breakpoint-small) {
-    background-color: rgba(var(--color-header-background-base), 0.95);
+    // background-color: rgba(var(--color-header-background-base), 0.95);
+    background-color: rgba(var(--color-header-background-base), 0.4);
+    padding: var(--spacing-s);
+    // // border:
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+    // border: 2px solid black;
+
+    .ReactModal__Content {
+      border: 2px solid black;
+      border-radius: var(--border-radius);
+      .card {
+        padding: var(--spacing-m);
+        border: unset;
+        .card__title {
+          margin-top: var(--spacing-s);
+        }
+      }
+    }
   }
 }
 
@@ -102,10 +120,22 @@
     .card__main-actions {
       .section__actions {
         .button {
+          margin-top: var(--spacing-m);
           margin-right: var(--spacing-m);
+          padding: 0;
           .button__content {
             .button__label {
               font-size: var(--font-small);
+            }
+          }
+        }
+        .button--primary {
+          .button__content {
+            .icon {
+              margin-left: var(--spacing-s);
+            }
+            .button__label {
+              margin-right: var(--spacing-s);
             }
           }
         }
