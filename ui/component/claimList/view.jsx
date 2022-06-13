@@ -239,7 +239,8 @@ export default function ClaimList(props: Props) {
                 <React.Fragment key={uri}>
                   {inj && inj}
                   {(index < tileUris.length - uriBuffer.current.length ||
-                    (pageSize && index < pageSize - uriBuffer.current.length)) && (
+                    (pageSize && index < pageSize - uriBuffer.current.length) ||
+                    (pageSize && tileUris.length % pageSize !== 0)) && (
                     <ClaimPreviewTile
                       uri={uri}
                       showHiddenByUser={showHiddenByUser}
