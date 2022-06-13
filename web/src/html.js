@@ -380,8 +380,16 @@ async function getHtml(ctx) {
   }
 
   if (!requestPath.includes('$')) {
-    const parsedUri = parseURI(normalizeClaimUrl(requestPath.slice(1)));
-    const claimUri = buildURI({ ...parsedUri, startTime: undefined });
+    let parsedUri, claimUri;
+
+    try {
+      parsedUri = parseURI(normalizeClaimUrl(requestPath.slice(1)));
+      claimUri = buildURI({ ...parsedUri, startTime: undefined });
+    } catch (err) {
+      ctx.status = 404;
+      return err.message;
+    }
+
     const claim = await resolveClaimOrRedirect(ctx, claimUri);
     const referrerQuery = escapeHtmlProperty(getParameterByName('r', ctx.request.url));
 
