@@ -1,0 +1,147 @@
+@import '../init/breakpoints';
+
+.stickerSelector {
+  animation: menu-animate-in var(--animation-duration) var(--animation-style);
+  border-radius: var(--border-radius);
+  background-color: rgba(var(--color-primary-dynamic), 0.01);
+  border: 1px solid var(--color-border);
+
+  .stickerSelector__header {
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 0;
+    align-items: center;
+    padding: var(--spacing-xxs);
+    background-color: var(--color-header-background);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    color: var(--color-text);
+
+    .stickerSelector__headerTitle {
+      font-weight: 900;
+      padding: 0;
+    }
+  }
+
+  .navigation__wrapper {
+    height: unset;
+    border-left: 1px solid var(--color-border);
+    background-color: var(--color-header-background);
+
+    .navigation-links {
+      li {
+        margin-bottom: 1px;
+        .button {
+          padding: unset;
+          color: var(--color-text);
+          background-color: var(--color-header-button);
+
+          .button__content {
+            justify-content: unset;
+            flex-direction: unset;
+            width: unset;
+
+            .button__label {
+              font-size: var(--font-small);
+              margin: 0 var(--spacing-s);
+              color: var(--color-text);
+            }
+            .icon {
+              stroke: var(--color-text);
+            }
+          }
+
+          &:hover {
+            background-color: var(--color-primary);
+            .button__content {
+              .button__label {
+                color: var(--color-primary-contrast);
+              }
+              .icon {
+                stroke: var(--color-primary-contrast);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.stickerSelector__list {
+  display: flex;
+
+  .stickerSelector__listBody {
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    max-height: 28vh;
+    padding: var(--spacing-s);
+
+    .button--file-action {
+      width: 4.8rem;
+      height: 5.1rem;
+      overflow: hidden;
+      margin: unset;
+      padding: var(--spacing-s);
+
+      .button__content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        .stickerItem--paid {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+
+          img {
+            margin-bottom: var(--spacing-s);
+          }
+
+          .superChat--light {
+            position: absolute;
+            display: inline;
+            bottom: 0;
+            left: var(--spacing-xxs);
+            right: var(--spacing-xxs);
+            border: 1px solid var(--color-text);
+            padding-top: 1px;
+            padding-bottom: 0px;
+            font-size: var(--font-xsmall);
+          }
+        }
+      }
+
+      @media (max-width: $breakpoint-xsmall) {
+        width: 4rem;
+        height: 4.3rem;
+      }
+    }
+  }
+
+  .stickerSelector__listBody-rowItems {
+    display: flex;
+    flex-wrap: wrap;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    button {
+      background-color: unset !important;
+      padding: var(--spacing-xxxs) !important;
+      margin-right: var(--spacing-xxxs) !important;
+      margin-bottom: var(--spacing-xxxs) !important;
+
+      .button__content {
+        align-items: center;
+        flex-direction: unset !important;
+      }
+      img {
+        margin: auto !important;
+      }
+
+      &:hover {
+        background-color: rgba(var(--color-primary-dynamic), 0.2) !important;
+      }
+    }
+  }
+}
