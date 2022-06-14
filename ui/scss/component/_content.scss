@@ -93,7 +93,6 @@
 
           .icon {
             flex-shrink: 0;
-            // width:20px;
           }
         }
       }
@@ -101,11 +100,63 @@
       .autoplay-countdown {
         display: none;
       }
+
+      .vjs-play-control {
+        transform: unset !important;
+        display: inline-block !important;
+        position: fixed !important;
+        top: 12px !important;
+        left: calc(50% - 80px) !important;
+        height: 32px !important;
+        width: 32px !important;
+        background-color: rgba(var(--color-primary-static), 0.6) !important;
+        border-radius: 50% !important;
+        opacity: 1 !important;
+        pointer-events: unset !important;
+        padding: 15px !important;
+
+        .vjs-icon-placeholder {
+          &::before {
+            font-size: 2.2em !important;
+            line-height: 32px !important;
+            background-size: 60%;
+            pointer-events: none;
+          }
+        }
+
+        span {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          z-index: 100;
+          &::before {
+            line-height: 32px !important;
+          }
+        }
+        .vjs-control-text {
+          display: none !important;
+        }
+      }
     }
 
     .vjs-control-bar {
       display: inline-block !important;
       opacity: 1 !important;
+
+      .vjs-progress-control.vjs-control {
+        top: 40px;
+        margin: unset !important;
+        width: 100%;
+        max-width: 100%;
+        .vjs-slider {
+          margin: 0 !important;
+          div,
+          span {
+            height: 3px !important;
+          }
+        }
+      }
 
       &::before {
         background: unset !important;
@@ -114,43 +165,6 @@
 
     .vjs-control {
       display: none;
-    }
-
-    .vjs-play-control {
-      transform: unset !important;
-      display: inline-block !important;
-      position: fixed !important;
-      top: 12px !important;
-      left: calc(50% - 80px) !important;
-      height: 32px !important;
-      width: 32px !important;
-      background-color: rgba(var(--color-primary-static), 0.6) !important;
-      border-radius: 50% !important;
-      opacity: 1 !important;
-      pointer-events: unset !important;
-      padding: 15px !important;
-
-      .vjs-icon-placeholder {
-        &::before {
-          font-size: 2.2em !important;
-          line-height: 32px !important;
-          background-size: 60%;
-        }
-      }
-
-      span {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 100;
-        &::before {
-          line-height: 32px !important;
-        }
-      }
-      .vjs-control-text {
-        display: none !important;
-      }
     }
 
     .vjs-play-control.vjs-playing {
@@ -168,21 +182,6 @@
     .vjs-play-control.vjs-ended {
       .vjs-icon-placeholder::before {
         content: '' !important;
-      }
-    }
-
-    .video-js {
-      .vjs-progress-control.vjs-control {
-        top: 38px;
-        margin: unset !important;
-        max-width: 100%;
-        .vjs-slider {
-          margin: 0 !important;
-          div,
-          span {
-            height: 2px !important;
-          }
-        }
       }
     }
 

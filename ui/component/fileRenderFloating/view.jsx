@@ -375,15 +375,15 @@ export default function FileRenderFloating(props: Props) {
 
   return (
     <Draggable
-      onDrag={!isMobile ? handleDragMove : undefined}
-      onStart={!isMobile ? handleDragStart : undefined}
-      onStop={!isMobile ? handleDragStop : undefined}
+      onDrag={handleDragMove}
+      onStart={handleDragStart}
+      onStop={handleDragStop}
       defaultPosition={position}
       position={isFloating ? position : { x: 0, y: 0 }}
       bounds="parent"
-      disabled={noFloatingPlayer}
-      handle={!isMobile ? '.draggable' : ''}
+      handle=".draggable"
       cancel=".button"
+      disabled={noFloatingPlayer}
     >
       <div
         className={classnames([CONTENT_VIEWER_CLASS], {
