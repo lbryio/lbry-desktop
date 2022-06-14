@@ -15,12 +15,18 @@ const defaultState: LivestreamState = {
   socketConnectionById: {},
 };
 
+/**
+ * Update state.viewersById with the latest data
+ * @param {object} activeLivestreams - streams with fetched data
+ * @param {object} originalState - streams with only their view counts
+ * @returns {*} - updated viewersById object if active streams passed, otherwise return old data
+ */
 function updateViewersById(activeLivestreams, originalState) {
   if (activeLivestreams) {
     const viewersById = Object.assign({}, originalState);
     Object.values(activeLivestreams).forEach((data) => {
       // $FlowFixMe: mixed
-      if (data.claimId && data.viewCount) {
+      if (data && data.claimId && data.viewCount) {
         // $FlowFixMe: mixed
         viewersById[data.claimId] = data.viewCount;
       }
