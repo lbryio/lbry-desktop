@@ -256,10 +256,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       subsCapsButton: !IS_IOS,
     },
     techOrder: ['chromecast', 'html5'],
-    chromecast: {
-      requestTitleFn: (src) => title || '',
-      requestSubtitleFn: (src) => channelTitle || '',
-    },
+    ...Chromecast.getOptions(),
     bigPlayButton: embedded, // only show big play button if embedded
     liveui: isLivestreamClaim,
     suppressNotSupportedError: true,
@@ -344,6 +341,10 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   //     if (player) player.hlsQualitySelector({ displayCurrentQuality: true });
   //   }
   // }, [showQualitySelector]);
+
+  useEffect(() => {
+    Chromecast.updateTitles(title, channelTitle);
+  }, [title, channelTitle]);
 
   // This lifecycle hook is only called once (on mount), or when `isAudio` or `source` changes.
   useEffect(() => {
