@@ -63,6 +63,10 @@ class SettingsStripeCard extends React.Component<Props, State> {
   componentDidMount() {
     let that = this;
 
+    that.setState({
+      cardNameValue: '',
+    });
+
     const { preferredCurrency, locale } = this.props;
 
     // use preferredCurrency if it's set on client, otherwise use USD, unless in Europe then use EUR
@@ -134,11 +138,14 @@ class SettingsStripeCard extends React.Component<Props, State> {
                 bottomOfDisplay: bottomOfDisplay,
               };
 
+              const formattedEmailName = cardDetails.topOfDisplay + ' ' + cardDetails.bottomOfDisplay;
+
               that.setState({
                 currentFlowStage: 'cardConfirmed',
                 pageTitle: 'Payment Methods',
                 userCardDetails: cardDetails,
                 paymentMethodId: customerStatusResponse.PaymentMethods[0].id,
+                cardName: customerStatusResponse.PaymentMethods[0].billing_details.name || formattedEmailName,
               });
 
               // otherwise, prompt them to save a card
@@ -250,13 +257,19 @@ class SettingsStripeCard extends React.Component<Props, State> {
           });
 
           card.on('ready', function () {
-            card.focus();
+            // focus on the name input
+            document.querySelector('#card-name').focus();
           });
 
           var email = that.props.email;
 
           function submitForm(event) {
             event.preventDefault();
+
+            const cardUserName = document.querySelector('#card-name').value;
+            if (!cardUserName) {
+              return (document.querySelector('.sr-field-error').innerHTML = __('Please enter the name on the card'));
+            }
 
             // if client secret wasn't loaded properly
             if (!clientSecret) {
@@ -269,11 +282,16 @@ class SettingsStripeCard extends React.Component<Props, State> {
 
             changeLoadingState(true);
 
+            const name = document.querySelector('#card-name').value;
+
             stripe
               .confirmCardSetup(clientSecret, {
                 payment_method: {
                   card: card,
-                  billing_details: { email: email },
+                  billing_details: {
+                    email,
+                    name,
+                  },
                 },
               })
               .then(function (result) {
@@ -353,11 +371,14 @@ class SettingsStripeCard extends React.Component<Props, State> {
                 bottomOfDisplay,
               };
 
+              const formattedEmailName = cardDetails.topOfDisplay + ' ' + cardDetails.bottomOfDisplay;
+
               that.setState({
                 currentFlowStage: 'cardConfirmed',
                 pageTitle: 'Payment Methods',
                 userCardDetails: cardDetails,
                 paymentMethodId: customerStatusResponse.PaymentMethods[0].id,
+                cardName: customerStatusResponse.PaymentMethods[0].billing_details.name || formattedEmailName,
               });
             });
 
@@ -382,6 +403,12 @@ class SettingsStripeCard extends React.Component<Props, State> {
 
     const { setPreferredCurrency } = this.props;
 
+    function clearErrorMessage() {
+      const errorElement = document.querySelector('.sr-field-error');
+
+      errorElement.innerHTML = '';
+    }
+
     // when user changes currency in selector
     function onCurrencyChange(event) {
       const { value } = event.target;
@@ -395,9 +422,37 @@ class SettingsStripeCard extends React.Component<Props, State> {
       setPreferredCurrency(value);
     }
 
+    function onChangeCardName(event) {
+      const { value } = event.target;
+
+      const numberOrSpecialCharacter = /[0-9!@#$%^&*()_+=[\]{};:"\\|,<>?~]/;
+
+      const errorElement = document.querySelector('.sr-field-error');
+
+      if (numberOrSpecialCharacter.test(value)) {
+        errorElement.innerHTML = __('Special characters and numbers are not allowed');
+      } else if (value.length > 48) {
+        errorElement.innerHTML = __('Name must be less than 48 characters long');
+      } else {
+        errorElement.innerHTML = '';
+
+        that.setState({
+          cardNameValue: value,
+        });
+      }
+    }
+
     const { scriptFailedToLoad, openModal } = this.props;
 
-    const { currentFlowStage, pageTitle, userCardDetails, paymentMethodId, preferredCurrency } = this.state;
+    const {
+      currentFlowStage,
+      pageTitle,
+      userCardDetails,
+      paymentMethodId,
+      preferredCurrency,
+      cardName,
+      cardNameValue,
+    } = this.state;
 
     return (
       <Page noFooter noSideNavigation className="card-stack" backout={{ title: __(pageTitle), backLabel: __('Back') }}>
@@ -410,7 +465,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
 
         {/* initial markup to show while getting information */}
         {currentFlowStage === 'loading' && (
-          <div className="headerCard toConfirmCard">
+          <div className="getting-card-status">
             <Card title={__('Connect your card with Odysee')} subtitle={__('Getting your card connection status...')} />
           </div>
         )}
@@ -419,9 +474,19 @@ class SettingsStripeCard extends React.Component<Props, State> {
         {currentFlowStage === 'confirmingCard' && (
           <div className="sr-root">
             <div className="sr-main">
-              <div className="sr-payment-form card cardInput">
+              <div className="">
                 <div className="sr-form-row">
-                  <label className="payment-details">Card Details</label>
+                  <label className="payment-details">{__('Name on card')}</label>
+                  <input
+                    type="text"
+                    id="card-name"
+                    onChange={onChangeCardName}
+                    value={cardNameValue}
+                    onBlur={clearErrorMessage}
+                  />
+                </div>
+                <div className="sr-form-row">
+                  <label className="payment-details">{__('Card details')}</label>
                   <div className="sr-input sr-element sr-card-element" id="card-element" />
                 </div>
                 <div className="sr-field-error" id="card-errors" role="alert" />
@@ -454,7 +519,7 @@ class SettingsStripeCard extends React.Component<Props, State> {
                 <>
                   <Plastic
                     type={userCardDetails.brand}
-                    name={userCardDetails.topOfDisplay + ' ' + userCardDetails.bottomOfDisplay}
+                    name={cardName}
                     expiry={userCardDetails.expiryMonth + '/' + userCardDetails.expiryYear}
                     number={'____________' + userCardDetails.lastFour}
                   />

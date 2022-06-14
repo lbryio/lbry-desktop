@@ -423,3 +423,23 @@ pre {
 .currency-to-use-selector {
   margin: 0 auto;
 }
+
+// center loading div
+.getting-card-status .card__header--between {
+  justify-content: center;
+}
+
+#card-name {
+  width: 284px;
+  box-shadow: unset;
+  color: #32325d;
+  background-color: white;
+}
+
+.payment-details {
+  display: block;
+}
+
+.sr-field-error {
+  color: var(--color-text-error);
+}
