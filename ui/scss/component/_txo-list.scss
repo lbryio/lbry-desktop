@@ -1,0 +1,32 @@
+.txo__radios {
+  display: flex;
+  flex-direction: row;
+}
+
+.txo__export {
+  display: none;
+
+  @media (min-width: $breakpoint-small) {
+    display: block;
+  }
+}
+
+.txo__table_header {
+  width: 124px;
+  display: inline-block;
+}
+
+// displaying fiat transactions (incoming/outgoing) in wallet
+.wallet__fiat-transactions {
+  text-align: center;
+  margin-top: 13px;
+  margin-bottom: 9px;
+  font-size: 13px;
+  color: rgb(171, 171, 171);
+}
+
+.txo__radios_container,
+.txo__radios,
+.txo__radios_fieldset {
+  display: inline !important;
+}
