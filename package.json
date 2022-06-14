@@ -1,6 +1,6 @@
 {
   "name": "lbry",
-  "version": "0.53.4",
+  "version": "0.53.5-test109",
   "description": "A browser for the LBRY network, a digital marketplace controlled by its users.",
   "keywords": [
     "lbry"
@@ -243,5 +243,6 @@
     "lbrynetDaemonDir": "static/daemon",
     "lbrynetDaemonFileName": "lbrynet"
   },
-  "packageManager": "yarn@3.2.0"
+  "packageManager": "yarn@3.2.0",
+  "stableVersion": "0.53.4"
 }
