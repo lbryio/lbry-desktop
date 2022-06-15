@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 import * as PAGES from 'constants/pages';
@@ -33,7 +34,7 @@ const adsSignInDriver = (
 // AdsBanner
 // ****************************************************************************
 
-let gReferenceCounter = 0;
+let gScript;
 
 type Props = {
   isAdBlockerFound: ?boolean,
@@ -45,35 +46,32 @@ type Props = {
 
 export default function AdsBanner(props: Props) {
   const { isAdBlockerFound, userHasPremiumPlus, userCountry, currentTheme, doSetAdBlockerFound } = props;
+  const { location } = useHistory();
+
   const shouldShowAds = useShouldShowAds(userHasPremiumPlus, userCountry, isAdBlockerFound, doSetAdBlockerFound);
+  const shouldLoadScript = shouldShowAds && !gScript;
   const isMobile = useIsMobile();
 
   React.useEffect(() => {
-    if (shouldShowAds) {
+    // Must check `!gScript` again here since we have multiple instances of the
+    // component. The first one will load the script.
+    if (shouldLoadScript && !gScript) {
       try {
-        const script = document.createElement('script');
-        script.src = AD_SCRIPT_URL;
-        script.async = true;
-        script.onload = () => {
-          ++gReferenceCounter;
-        };
-
+        gScript = document.createElement('script');
+        gScript.src = AD_SCRIPT_URL;
+        gScript.async = true;
         // $FlowFixMe
-        document.body.appendChild(script);
-        return () => {
-          // $FlowFixMe
-          document.body.removeChild(script);
-
-          if (--gReferenceCounter <= 0) {
-            // Note: This method has the bad requirement of the parent having to
-            // mount and dismount all banners in the same cycle.
-            delete window.OBR;
-            // TODO: clear styles after the team adds an ID or class for us to query.
-          }
-        };
+        document.body.appendChild(gScript);
       } catch (e) {}
     }
-  }, [shouldShowAds]);
+  }, [shouldLoadScript]);
+
+  React.useEffect(() => {
+    if (window?.OBR?.extern) {
+      window.OBR.extern.reloadWidget();
+      window.OBR.extern.refreshWidget();
+    }
+  }, [location.pathname]);
 
   if (!shouldShowAds) {
     return null;
