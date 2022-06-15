@@ -206,7 +206,7 @@ export default function YoutubeSync(props: Props) {
                       ),
                     }}
                   >
-                    This will verify you are an active YouTuber with over 300 subscribers and original content. Channel
+                    This will verify you are an active YouTuber with over 100 subscribers and original content. Channel
                     names cannot be changed once chosen, please be extra careful. %learn_more%.
                   </I18nMessage>
                 </div>
