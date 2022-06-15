@@ -246,7 +246,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     },
     inactivityTimeout: 2000,
     muted: startMuted,
-    poster: poster, // thumb looks bad in app, and if autoplay, flashing poster is annoying
     plugins: { eventTracking: true, overlay: OVERLAY.OVERLAY_DATA },
     controlBar: {
       currentTimeDisplay: !isLivestreamClaim,
