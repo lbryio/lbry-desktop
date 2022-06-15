@@ -49,7 +49,7 @@ export default function AdsSticky(props: Props) {
   function shouldShowAdsForPath(pathname, isContentClaim, isChannelClaim, authenticated) {
     // $FlowIssue: mixed type
     const pathIsCategory = Object.values(homepageData).some((x) => pathname.startsWith(`/$/${x?.name}`));
-    return pathIsCategory || isChannelClaim || (isContentClaim && !authenticated);
+    return pathIsCategory || isChannelClaim || (isContentClaim && !authenticated) || pathname === '/';
   }
 
   React.useEffect(() => {
