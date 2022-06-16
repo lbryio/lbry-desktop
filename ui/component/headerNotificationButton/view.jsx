@@ -21,6 +21,7 @@ import UriIndicator from 'component/uriIndicator';
 import { generateNotificationTitle } from '../notification/helpers/title';
 import { generateNotificationText } from '../notification/helpers/text';
 import { parseURI } from 'util/lbryURI';
+import { NavLink } from 'react-router-dom';
 
 type Props = {
   notifications: Array<Notification>,
@@ -115,6 +116,15 @@ export default function NotificationHeaderButton(props: Props) {
     push(notificationLink);
   }
 
+  function getWebUri(notification) {
+    const { notification_parameters } = notification;
+    let notificationLink = formatLbryUrlForWeb(notification_parameters.device.target);
+    if (notification_parameters.dynamic.hash) {
+      notificationLink += '?lc=' + notification_parameters.dynamic.hash + '&view=discussion';
+    }
+    return notificationLink;
+  }
+
   function menuEntry(notification) {
     const { id, active_at, notification_rule, notification_parameters, is_read, type } = notification;
 
@@ -163,7 +173,7 @@ export default function NotificationHeaderButton(props: Props) {
     }
 
     return (
-      <a onClick={() => handleNotificationClick(notification)} key={id}>
+      <NavLink onClick={() => handleNotificationClick(notification)} key={id} to={getWebUri(notification)}>
         <div
           className={is_read ? 'menu__list--notification' : 'menu__list--notification menu__list--notification-unread'}
           key={id}
@@ -187,7 +197,7 @@ export default function NotificationHeaderButton(props: Props) {
             <Icon icon={ICONS.DELETE} sectionIcon />
           </div>
         </div>
-      </a>
+      </NavLink>
     );
   }
 
@@ -218,9 +228,9 @@ export default function NotificationHeaderButton(props: Props) {
               )}
             </div>
 
-            <a onClick={handleMenuClick}>
+            <NavLink onClick={handleMenuClick} to={`/$/${PAGES.NOTIFICATIONS}`}>
               <div className="menu__list--notifications-more">{__('View all')}</div>
-            </a>
+            </NavLink>
           </MuiMenu>
         </ClickAwayListener>
       </>
