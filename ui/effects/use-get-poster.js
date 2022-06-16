@@ -4,7 +4,7 @@ import React from 'react';
 // $FlowFixMe cannot resolve ...
 import FileRenderPlaceholder from 'static/img/fileRenderPlaceholder.png';
 
-export default function useThumbnail(claimThumbnail: ?string, containerRef: any) {
+export default function useGetPoster(claimThumbnail: ?string, containerRef: any) {
   const [thumbnail, setThumbnail] = React.useState(FileRenderPlaceholder);
 
   React.useEffect(() => {

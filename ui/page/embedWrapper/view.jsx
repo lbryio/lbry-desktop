@@ -13,7 +13,7 @@ import { useHistory } from 'react-router';
 import Yrbl from 'component/yrbl';
 // $FlowFixMe cannot resolve ...
 import useFetchLiveStatus from 'effects/use-fetch-live';
-import useThumbnail from 'effects/use-thumbnail';
+import useGetPoster from 'effects/use-get-poster';
 
 type Props = {
   uri: string,
@@ -119,7 +119,7 @@ export default function EmbedWrapperPage(props: Props) {
         (outpoint.txid === txid && outpoint.nout === nout)
     );
 
-  const thumbnail = useThumbnail(claimThumbnail, containerRef);
+  const thumbnail = useGetPoster(claimThumbnail, containerRef);
 
   React.useEffect(() => {
     if (!latestClaimUrl && liveContentPath && claimId) {

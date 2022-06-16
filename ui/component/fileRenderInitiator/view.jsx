@@ -15,7 +15,7 @@ import { LivestreamContext } from 'page/livestream/view';
 import { formatLbryUrlForWeb } from 'util/url';
 import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
 import useFetchLiveStatus from 'effects/use-fetch-live';
-import useThumbnail from 'effects/use-thumbnail';
+import useGetPoster from 'effects/use-get-poster';
 
 type Props = {
   channelClaimId: ?string,
@@ -108,7 +108,7 @@ export default function FileRenderInitiator(props: Props) {
   // in case of a livestream outside of the livestream page component, like embed
   useFetchLiveStatus(isLivestreamClaim && !livestreamPage ? channelClaimId : undefined, doFetchChannelLiveStatus);
 
-  const thumbnail = useThumbnail(claimThumbnail, containerRef);
+  const thumbnail = useGetPoster(claimThumbnail, containerRef);
 
   function handleClick() {
     if (embedded && !isPlayable) {
