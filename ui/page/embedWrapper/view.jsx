@@ -92,7 +92,6 @@ export default function EmbedWrapperPage(props: Props) {
     location: { search },
   } = useHistory();
 
-  const containerRef = React.useRef<any>();
   const [livestreamsFetched, setLivestreamsFetched] = React.useState(false);
 
   const channelUrl = channelUri && formatLbryChannelName(channelUri);
@@ -119,7 +118,7 @@ export default function EmbedWrapperPage(props: Props) {
         (outpoint.txid === txid && outpoint.nout === nout)
     );
 
-  const thumbnail = useGetPoster(claimThumbnail, containerRef);
+  const thumbnail = useGetPoster(claimThumbnail);
 
   React.useEffect(() => {
     if (!latestClaimUrl && liveContentPath && claimId) {

@@ -76,8 +76,6 @@ export default function FileRenderInitiator(props: Props) {
 
   const isMobile = useIsMobile();
 
-  const containerRef = React.useRef<any>();
-
   const { search, href, state: locationState, pathname } = location;
   const urlParams = search && new URLSearchParams(search);
   const collectionId = urlParams && urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID);
@@ -108,7 +106,7 @@ export default function FileRenderInitiator(props: Props) {
   // in case of a livestream outside of the livestream page component, like embed
   useFetchLiveStatus(isLivestreamClaim && !livestreamPage ? channelClaimId : undefined, doFetchChannelLiveStatus);
 
-  const thumbnail = useGetPoster(claimThumbnail, containerRef);
+  const thumbnail = useGetPoster(claimThumbnail);
 
   function handleClick() {
     if (embedded && !isPlayable) {
@@ -157,7 +155,6 @@ export default function FileRenderInitiator(props: Props) {
 
   return (
     <div
-      ref={containerRef}
       onClick={disabled ? undefined : shouldRedirect ? doAuthRedirect : handleClick}
       style={thumbnail && !obscurePreview ? { backgroundImage: `url("${thumbnail}")` } : {}}
       className={
