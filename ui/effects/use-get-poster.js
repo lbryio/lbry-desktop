@@ -1,6 +1,7 @@
 // @flow
-import { getThumbnailCdnUrl } from 'util/thumbnail';
 import React from 'react';
+import { THUMBNAIL_WIDTH_POSTER, THUMBNAIL_HEIGHT_POSTER } from 'config';
+import { getThumbnailCdnUrl } from 'util/thumbnail';
 // $FlowFixMe cannot resolve ...
 import FileRenderPlaceholder from 'static/img/fileRenderPlaceholder.png';
 
@@ -11,7 +12,13 @@ export default function useGetPoster(claimThumbnail: ?string) {
     if (!claimThumbnail) {
       setThumbnail(FileRenderPlaceholder);
     } else {
-      setThumbnail(getThumbnailCdnUrl({ thumbnail: claimThumbnail, width: 1280, height: 720 }));
+      setThumbnail(
+        getThumbnailCdnUrl({
+          thumbnail: claimThumbnail,
+          width: THUMBNAIL_WIDTH_POSTER,
+          height: THUMBNAIL_HEIGHT_POSTER,
+        })
+      );
     }
   }, [claimThumbnail]);
 

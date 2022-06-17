@@ -2,9 +2,9 @@
 import type { Node } from 'react';
 import {
   THUMBNAIL_WIDTH,
-  THUMBNAIL_WIDTH_MOBILE,
+  THUMBNAIL_WIDTH_POSTER,
   THUMBNAIL_HEIGHT,
-  THUMBNAIL_HEIGHT_MOBILE,
+  THUMBNAIL_HEIGHT_POSTER,
   THUMBNAIL_QUALITY,
   MISSING_THUMB_DEFAULT,
 } from 'config';
@@ -74,8 +74,8 @@ function FileThumbnail(props: Props) {
     } else {
       url = getThumbnailCdnUrl({
         thumbnail,
-        width: isMobile && tileLayout ? THUMBNAIL_WIDTH_MOBILE : THUMBNAIL_WIDTH,
-        height: isMobile && tileLayout ? THUMBNAIL_HEIGHT_MOBILE : THUMBNAIL_HEIGHT,
+        width: isMobile && tileLayout ? THUMBNAIL_WIDTH_POSTER : THUMBNAIL_WIDTH,
+        height: isMobile && tileLayout ? THUMBNAIL_HEIGHT_POSTER : THUMBNAIL_HEIGHT,
         quality: THUMBNAIL_QUALITY,
       });
     }
