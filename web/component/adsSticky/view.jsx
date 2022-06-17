@@ -52,6 +52,18 @@ export default function AdsSticky(props: Props) {
     return pathIsCategory || isChannelClaim || (isContentClaim && !authenticated) || pathname === '/';
   }
 
+  function closeSticky() {
+    const container = document.getElementsByClassName('AR_28')[0];
+    if (
+      container &&
+      container.parentElement &&
+      container.parentElement.parentElement &&
+      container.parentElement.parentElement.parentElement
+    ) {
+      container.parentElement.parentElement.parentElement.remove();
+    }
+  }
+
   React.useEffect(() => {
     if (shouldLoadSticky) {
       gScript = document.createElement('script');
@@ -66,6 +78,14 @@ export default function AdsSticky(props: Props) {
   React.useEffect(() => {
     const container = window[OUTBRAIN_CONTAINER_KEY];
     if (container) {
+      if (document.getElementsByClassName('close-sticky').length < 1) {
+        const closeButton = window.document.createElement('div');
+        closeButton.classList.add('close-sticky');
+        closeButton.innerHTML = '✖';
+        closeButton.onclick = closeSticky;
+        container.appendChild(closeButton);
+      }
+
       container.style.display = inAllowedPath ? '' : 'none';
     }
   }, [inAllowedPath, refresh]);
