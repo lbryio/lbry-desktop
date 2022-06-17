@@ -175,7 +175,7 @@
   --color-editor-hr-preview: #cccccc;
 
   // Ads
-  --color-ads-background: #fae5ff;
+  --color-ads-background: var(--color-header-background);
   --color-ads-link: var(--color-link);
 
   // Scrollbar
