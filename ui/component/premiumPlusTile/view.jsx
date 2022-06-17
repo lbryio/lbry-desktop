@@ -54,7 +54,7 @@ const PremiumPlusTile = (props: Props) => {
                     <span className="channel-name">{channel}</span>
                     <br />
                   </div>
-                  <span sclassName="view_count">{time}</span>
+                  <span className="view_count">{time}</span>
                 </div>
               </div>
             </div>
