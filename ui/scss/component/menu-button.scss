@@ -216,7 +216,7 @@ reach-portal {
 
   .menu__list--notifications-list {
     overflow-y: scroll;
-    height: 388px;
+    max-height: 388px;
     .menu__list--notification {
       position: relative;
       overflow: hidden !important;
