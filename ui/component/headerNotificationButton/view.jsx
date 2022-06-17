@@ -93,6 +93,7 @@ export default function NotificationHeaderButton(props: Props) {
 
   function handleNotificationDelete(e, id) {
     e.stopPropagation();
+    e.preventDefault();
     deleteNotification(id);
   }
 
