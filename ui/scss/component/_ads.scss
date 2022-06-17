@@ -324,14 +324,38 @@
 // ****************************************************************************
 
 .OUTBRAIN {
-  border-radius: var(--border-radius) 0 0 0 !important;
+  // border-radius: var(--border-radius) 0 0 0 !important;
   height: unset !important;
+  background-color: var(--color-ads-background);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  padding: var(--spacing-xxs);
 
   .ob-widget .ob-unit.ob-rec-text {
     font-size: 12px !important;
   }
 
-  background-color: var(--color-ads-background);
+  &:not(.banner-ad__container) {
+    border-radius: var(--border-radius) !important;
+    overflow: hidden;
+
+    .ob-rec-image-container {
+      border: unset !important;
+      .ob-rec-image {
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+    }
+    .ob-sub-units {
+      margin-left: 0 !important;
+    }
+
+    .AR_28.ob-widget {
+      .ob-unit.ob-rec-text {
+        font-size: var(--font-xxsmall) !important;
+      }
+    }
+  }
 }
 
 .closeButton {
