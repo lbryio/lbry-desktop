@@ -42,7 +42,18 @@
     background-image: url('~ui/component/membershipSplash/astronaut_n_friends.png');
     background-size: 100%;
     border-radius: var(--border-radius);
-    box-shadow: 0 0 0 1px rgba(var(--color-primary-dynamic), 0.1) inset;
+    box-shadow: 0 0 0 1px var(--color-header-background) inset;
+
+    .avp-p-wrapper {
+      background-color: unset !important;
+      .avp-content-container {
+        background-color: unset !important;
+        // box-shadow: 0 0 0 1px black inset;
+        div {
+          background-color: unset !important;
+        }
+      }
+    }
 
     video {
       width: 100% !important;
@@ -326,13 +337,22 @@
 .OUTBRAIN {
   // border-radius: var(--border-radius) 0 0 0 !important;
   height: unset !important;
-  background-color: var(--color-ads-background);
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
-  padding: var(--spacing-xxs);
 
   .ob-widget .ob-unit.ob-rec-text {
     font-size: 12px !important;
+  }
+
+  .ob-widget {
+    padding: var(--spacing-xxs);
+    background-color: var(--color-ads-background);
+    -webkit-backdrop-filter: blur(4px);
+    backdrop-filter: blur(4px);
+
+    .ob_what {
+      background: var(--color-header-background);
+      border-radius: 10px;
+      padding: 0 !important;
+    }
   }
 
   &:not(.banner-ad__container) {
