@@ -3,6 +3,7 @@ import 'scss/component/_header.scss';
 
 import { ENABLE_UI_NOTIFICATIONS, ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import { Menu, MenuList, MenuButton } from '@reach/menu-button';
+import { useHistory } from 'react-router';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import Button from 'component/button';
@@ -29,6 +30,7 @@ export default function HeaderMenuButtons(props: HeaderMenuButtonProps) {
   const livestreamEnabled = Boolean(ENABLE_NO_SOURCE_CLAIMS && user && !user.odysee_live_disabled);
 
   const uploadProps = { requiresAuth: !authenticated };
+  const { push } = useHistory();
 
   return (
     <div className="header__buttons">
@@ -53,6 +55,14 @@ export default function HeaderMenuButtons(props: HeaderMenuButtonProps) {
           )}
         </MenuList>
       </Menu>
+
+      {!authenticated && (
+        <Tooltip title={__('Settings')}>
+          <Button className="header__navigationItem--icon" onClick={() => push(`/$/${PAGES.SETTINGS}`)}>
+            <Icon size={18} icon={ICONS.SETTINGS} aria-hidden />
+          </Button>
+        </Tooltip>
+      )}
 
       {notificationsEnabled && <NotificationHeaderButton />}
 
