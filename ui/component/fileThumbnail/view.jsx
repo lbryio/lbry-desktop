@@ -18,6 +18,7 @@ import Thumb from './thumb';
 
 type Props = {
   uri: string,
+  tileLayout?: boolean,
   thumbnail: ?string, // externally sourced image
   children?: Node,
   allowGifs: boolean,
@@ -27,7 +28,16 @@ type Props = {
 };
 
 function FileThumbnail(props: Props) {
-  const { claim, uri, doResolveUri, thumbnail: rawThumbnail, children, allowGifs = false, className } = props;
+  const {
+    claim,
+    uri,
+    tileLayout,
+    doResolveUri,
+    thumbnail: rawThumbnail,
+    children,
+    allowGifs = false,
+    className,
+  } = props;
 
   const passedThumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
   const thumbnailFromClaim =
@@ -64,8 +74,8 @@ function FileThumbnail(props: Props) {
     } else {
       url = getThumbnailCdnUrl({
         thumbnail,
-        width: isMobile ? THUMBNAIL_WIDTH_MOBILE : THUMBNAIL_WIDTH,
-        height: isMobile ? THUMBNAIL_HEIGHT_MOBILE : THUMBNAIL_HEIGHT,
+        width: isMobile && tileLayout ? THUMBNAIL_WIDTH_MOBILE : THUMBNAIL_WIDTH,
+        height: isMobile && tileLayout ? THUMBNAIL_HEIGHT_MOBILE : THUMBNAIL_HEIGHT,
         quality: THUMBNAIL_QUALITY,
       });
     }

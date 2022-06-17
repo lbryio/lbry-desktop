@@ -251,7 +251,7 @@ function ClaimPreviewTile(props: Props) {
       })}
     >
       <NavLink {...navLinkProps} role="none" tabIndex={-1} aria-hidden>
-        <FileThumbnail thumbnail={thumbnailUrl} allowGifs>
+        <FileThumbnail thumbnail={thumbnailUrl} allowGifs tileLayout>
           {!isChannel && (
             <React.Fragment>
               <div className="claim-preview__hover-actions">

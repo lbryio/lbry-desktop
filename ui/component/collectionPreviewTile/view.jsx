@@ -142,7 +142,7 @@ function CollectionPreviewTile(props: Props) {
       })}
     >
       <NavLink {...navLinkProps}>
-        <FileThumbnail uri={collectionItemUrls && collectionItemUrls.length && collectionItemUrls[0]}>
+        <FileThumbnail uri={collectionItemUrls && collectionItemUrls.length && collectionItemUrls[0]} tileLayout>
           <React.Fragment>
             <div className="claim-preview__claim-property-overlay">
               <CollectionCount count={collectionCount} />
