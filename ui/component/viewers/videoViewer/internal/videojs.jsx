@@ -604,6 +604,9 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
         window.player.currentTime(0);
 
+        // stop streams running in background
+        window.player.loadTech_('html5', null);
+
         window.player.claimSrcVhs = null;
       }
     };
