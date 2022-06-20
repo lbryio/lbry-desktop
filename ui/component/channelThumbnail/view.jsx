@@ -50,6 +50,7 @@ function ChannelThumbnail(props: Props) {
     setThumbUploadError,
     ThumbUploadError,
   } = props;
+  const [retries, setRetries] = React.useState(3);
   const [thumbLoadError, setThumbLoadError] = React.useState(ThumbUploadError);
   const shouldResolve = !isResolving && claim === undefined;
   const thumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
@@ -58,6 +59,15 @@ function ChannelThumbnail(props: Props) {
   const channelThumbnail = thumbnailPreview || thumbnail || defaultAvatar;
   const isGif = channelThumbnail && channelThumbnail.endsWith('gif');
   const showThumb = (!obscure && !!thumbnail) || thumbnailPreview;
+  const avatarSrc = React.useMemo(() => {
+    if (retries <= 0) {
+      return defaultAvatar;
+    }
+    if (!thumbLoadError) {
+      return channelThumbnail;
+    }
+    return defaultAvatar;
+  }, [retries, thumbLoadError, channelThumbnail, defaultAvatar]);
 
   // Generate a random color class based on the first letter of the channel name
   const { channelName } = parseURI(uri);
@@ -100,9 +110,10 @@ function ChannelThumbnail(props: Props) {
         <OptimizedImage
           alt={__('Channel profile picture')}
           className={!channelThumbnail ? 'channel-thumbnail__default' : 'channel-thumbnail__custom'}
-          src={(!thumbLoadError && channelThumbnail) || defaultAvatar}
+          src={avatarSrc}
           loading={noLazyLoad ? undefined : 'lazy'}
           onError={() => {
+            setRetries((retries) => retries - 1);
             if (setThumbUploadError) {
               setThumbUploadError(true);
             } else {
