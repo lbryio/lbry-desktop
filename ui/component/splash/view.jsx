@@ -241,8 +241,12 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
 
     return (
       <div className="splash">
-        <h1 className="splash__title">LBRY</h1>
-        <div className="splash__details">{details}</div>
+        {!error && (
+          <>
+            <h1 className="splash__title">LBRY</h1>
+            <div className="splash__details">{details}</div>
+          </>
+        )}
 
         {!animationHidden && !error && (
           <css-doodle class="doodle">
@@ -290,7 +294,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
         )}
         {error && (
           <Card
-            title={__('Error starting up')}
+            title={<h1 className="splash__error-title">{__('Error starting up')}</h1>}
             subtitle={
               <React.Fragment>
                 <p>

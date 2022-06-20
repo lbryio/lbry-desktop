@@ -28,6 +28,13 @@
   margin-top: -1rem;
 }
 
+.splash__error-title {
+  font-size: 22px;
+  line-height: 1;
+  font-weight: var(--font-weight-bold);
+  color: #fff;
+}
+
 .splash__animation-toggle {
   position: fixed;
   top: var(--spacing-l);
