@@ -138,7 +138,7 @@ const ClaimCollectionAdd = (props: Props) => {
             )}
           </fieldset-section>
           <div className="card__actions">
-            <Button button="secondary" label={__('Done')} disabled={addNewCollection} onClick={closeModal} />
+            <Button button="primary" label={__('Done')} disabled={addNewCollection} onClick={closeModal} />
           </div>
         </div>
       }

@@ -17,6 +17,7 @@ class ModalSocialShare extends React.PureComponent<Props> {
     return (
       <Modal isOpen onAborted={closeModal} type="card">
         <Card
+          className="card--share"
           title={__('Share')}
           actions={<SocialShare uri={uri} webShareable={webShareable} collectionId={collectionId} />}
         />
