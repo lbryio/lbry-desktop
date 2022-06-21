@@ -46,12 +46,18 @@ $nag-error-z-index: 999;
 }
 
 .nag--error {
-  background-color: #000;
+  background-color: rgba(0, 0, 0, 0.9);
   color: var(--color-text-error);
   z-index: $nag-error-z-index;
   border-radius: var(--border-radius);
-  margin-top: var(--spacing-s);
-  margin-bottom: var(--spacing-s);
+  left: var(--spacing-s);
+  right: var(--spacing-s);
+  bottom: var(--spacing-s);
+  width: unset;
+  // margin-right:100px;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  box-sizing: border-box;
 }
 
 .nag__message {
