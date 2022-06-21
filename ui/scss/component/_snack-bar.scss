@@ -2,15 +2,18 @@
   bottom: 2rem;
   right: 2rem;
   max-width: 20rem;
-  background-color: var(--color-primary);
+  background-color: rgba(var(--color-primary-static), 0.9);
   color: var(--color-primary-contrast);
   border-radius: var(--border-radius);
+  border: 2px solid var(--color-primary);
   padding: var(--spacing-s) var(--spacing-m) var(--spacing-s) var(--spacing-m);
   position: fixed;
   transition: all var(--transition-duration) var(--transition-type);
   z-index: 10000; // hack to get it over react modal
   display: flex;
   flex-direction: column;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
 
   .button__label {
     color: var(--color-primary-contrast);
@@ -38,6 +41,7 @@
 }
 
 .snack-bar--stacked-non-error {
+  /*
   box-shadow: // The top layer shadow
     0 1px 1px var(--color-border),
     // The second layer
@@ -48,6 +52,7 @@
   //0 20px 0 -10px var(--color-primary),
   //// The third layer shadow
   //0 20px 1px -9px var(--color-border);
+  */
 }
 
 .snack-bar--stacked-error {
