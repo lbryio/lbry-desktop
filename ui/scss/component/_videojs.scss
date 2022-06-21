@@ -64,7 +64,7 @@ $control-bar-popup-font-size: 0.8rem;
     }
 
     .vjs-vtt-thumbnail-display {
-      margin-top: -37px;
+      margin-top: -16px;
       border: 1px solid white;
       background-color: black !important;
       visibility: hidden;
@@ -88,7 +88,7 @@ $control-bar-popup-font-size: 0.8rem;
       }
       .vjs-progress-holder {
         margin-top: -0.1em !important;
-        height: 0.4em !important;
+        height: 0.35em !important;
       }
     }
 
@@ -499,4 +499,9 @@ button.vjs-big-play-button {
   opacity: 1 !important;
   display: flex !important;
   visibility: visible !important;
+}
+
+// add padding to the progress bar to make hover easier
+.vjs-progress-control.vjs-control {
+  padding-top: 21px;
 }
