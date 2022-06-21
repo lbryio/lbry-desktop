@@ -314,9 +314,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         });
       }
 
-      // set playsinline for mobile
-      player.children_[0].setAttribute('playsinline', '');
-
       // immediately show control bar while video is loading
       player.userActive(true);
 
@@ -431,6 +428,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       vjsPlayer.controlBar?.show();
 
       vjsPlayer.poster(poster);
+
+      vjsPlayer.el().childNodes[0].setAttribute('playsinline', '');
 
       let contentUrl;
       // TODO: pull this function into videojs-functions
