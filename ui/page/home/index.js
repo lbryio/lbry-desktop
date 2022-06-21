@@ -34,7 +34,6 @@ const select = (state) => ({
   homepageOrder: selectClientSetting(state, SETTINGS.HOMEPAGE_ORDER),
   hasMembership: selectHasOdyseeMembership(state),
   hasPremiumPlus: selectOdyseeMembershipIsPremiumPlus(state),
-  currentTheme: selectClientSetting(state, SETTINGS.THEME),
 });
 
 const perform = (dispatch) => ({
