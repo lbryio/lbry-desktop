@@ -14,6 +14,7 @@ const AD_CONFIGS = Object.freeze({
   ADNIMATION: {
     // url: 'https://tg1.aniview.com/api/adserver/spt?AV_TAGID=6252bb6f28951333ec10a7a6&AV_PUBLISHERID=601d9a7f2e688a79e17c1265',
     // tag: 'AV6252bb6f28951333ec10a7a6',
+    // ^-- supposed to use the above, but not working, so coded to use ADNIMATION_FILEPAGE
     url: 'https://tg1.aniview.com/api/adserver/spt?AV_TAGID=62558336037e0f3df07ff0a8&AV_PUBLISHERID=601d9a7f2e688a79e17c1265',
     tag: 'AV6252bb6f28951333ec10a7a6',
   },
@@ -126,9 +127,7 @@ function Ads(props: Props) {
           })}
         >
           <div className="ad__container">
-            {/* <div id={adConfig.tag} /> */}
-            <div id="AV6252bb6f28951333ec10a7a6" />
-            <div id="AV62558336037e0f3df07ff0a8" />
+            <div id={adConfig.tag} />
           </div>
           <div
             className={classnames('ads__claim-text', {
