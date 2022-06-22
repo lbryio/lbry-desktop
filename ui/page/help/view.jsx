@@ -6,16 +6,23 @@ import Button from 'component/button';
 import Page from 'component/page';
 import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
+import { getAuthToken } from 'util/saved-passwords';
+import CopyableText from 'component/copyableText';
 
 import * as MODALS from 'constants/modal_types';
 
 type Props = {
   announcement: string,
   doOpenModal: (string, ?{}) => void,
+  user: any,
 };
 
 export default function HelpPage(props: Props) {
-  const { announcement, doOpenModal } = props;
+  const { announcement, doOpenModal, user } = props;
+
+  const canViewToken = process.env.ENABLE_WIP_FEATURES || (user && user.internal_feature);
+
+  const authToken = canViewToken && getAuthToken();
 
   return (
     <Page className="card-stack">
@@ -94,6 +101,25 @@ export default function HelpPage(props: Props) {
           </div>
         }
       />
+
+      {canViewToken && authToken && (
+        <Card
+          className="section"
+          title={__('Your Access Token')}
+          actions={
+            <>
+              <CopyableText
+                primaryButton
+                enableInputMask
+                name="access-token"
+                label={__('Authentication Token - do not share, this works like a password!')}
+                copyable={authToken}
+                snackMessage={__('Copied token')}
+              />
+            </>
+          }
+        />
+      )}
     </Page>
   );
 }
