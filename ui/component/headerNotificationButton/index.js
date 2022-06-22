@@ -20,7 +20,7 @@ const perform = (dispatch, ownProps) => ({
   readNotification: ([id]) => dispatch(doReadNotifications([id])),
   seeNotification: ([id]) => dispatch(doSeeNotifications([id])),
   deleteNotification: (id) => dispatch(doDeleteNotification(id)),
-  doSeeAllNotifications: doSeeAllNotifications,
+  doSeeAllNotifications: () => dispatch(doSeeAllNotifications()),
 });
 
 export default connect(select, perform)(NotificationHeaderButton);

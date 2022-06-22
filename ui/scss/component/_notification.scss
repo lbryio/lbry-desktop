@@ -338,6 +338,8 @@ $contentMaxWidth: 60rem;
   display: flex;
   align-items: center;
   justify-content: center;
+  transform: scale(1);
+  transition: transform 0.4s;
 
   .notification__count {
     margin-bottom: -2px;
@@ -346,6 +348,10 @@ $contentMaxWidth: 60rem;
   @media (max-width: $breakpoint-small) {
     right: 0rem;
   }
+}
+
+.notification__bubble-hidden {
+  transform: scale(0);
 }
 
 .notification__bubble--small {

@@ -327,6 +327,9 @@ reach-portal {
           display: inline-block;
           font-size: var(--font-xxsmall);
           margin-right: var(--spacing-xxxs);
+          &.dot {
+            font-size: var(--font-small);
+          }
         }
         .sticker__comment {
           margin-left: 0;
