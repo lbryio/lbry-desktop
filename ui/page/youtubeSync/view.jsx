@@ -197,6 +197,7 @@ export default function YoutubeSync(props: Props) {
                 <div className="help--card-actions">
                   <I18nMessage
                     tokens={{
+                      count: 100,
                       learn_more: (
                         <Button
                           button="link"
@@ -206,8 +207,8 @@ export default function YoutubeSync(props: Props) {
                       ),
                     }}
                   >
-                    This will verify you are an active YouTuber with over 100 subscribers and original content. Channel
-                    names cannot be changed once chosen, please be extra careful. %learn_more%.
+                    This will verify you are an active YouTuber with over %count% subscribers and original content.
+                    Channel names cannot be changed once chosen, please be extra careful. %learn_more%.
                   </I18nMessage>
                 </div>
               </Form>

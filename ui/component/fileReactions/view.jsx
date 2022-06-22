@@ -97,12 +97,12 @@ export default function FileReactions(props: Props) {
 
   return (
     <>
-       {channelTitle && !isCollection && (
+      {channelTitle && !isCollection && (
         <NudgeFloating
           name="nudge:support-acknowledge"
           text={__('Let %channel% know you enjoyed this!', { channel: channelTitle })}
         />
-       )}
+      )}
 
       <div className={'ratio-wrapper'}>
         <Button
