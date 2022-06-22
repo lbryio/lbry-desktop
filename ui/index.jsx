@@ -213,6 +213,8 @@ function AppWrapper() {
       const enabled = makeSelectClientSetting(SETTINGS.ENABLE_PRERELEASE_UPDATES)(state);
       if (enabled) {
         autoUpdater.allowPrerelease = true;
+      } else {
+        autoUpdater.allowPrerelease = false;
       }
     }
   }, [persistDone]);

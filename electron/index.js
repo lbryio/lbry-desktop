@@ -34,6 +34,7 @@ try {
   upgradeDisabled = false;
 }
 autoUpdater.autoDownload = !upgradeDisabled;
+autoUpdater.allowPrerelease = false;
 
 // This is set to true if an auto update has been downloaded through the Electron
 // auto-update system and is ready to install. If the user declined an update earlier,
