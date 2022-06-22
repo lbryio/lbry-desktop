@@ -88,6 +88,7 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
   // e.g. never in a floating popup. With that, we can grab the FYP ID from
   // the search param directly. Otherwise, the parent component would need to
   // pass it.
+  // @see https://www.notion.so/FYP-Design-Notes-727782dde2cb485290c530ae96a34285
   const { search } = location;
   const urlParams = new URLSearchParams(search);
   const fypId = urlParams.get(FYP_ID);

@@ -171,11 +171,12 @@ export const doSearch = (rawQuery: string, searchOptions: SearchOptions) => (
   const cmd = isSearchingRecommendations ? lighthouse.searchRecommendations : lighthouse.search;
 
   cmd(queryWithOptions)
-    .then((data: { body: Array<{ name: string, claimId: string }>, poweredBy: string }) => {
-      const { body: result, poweredBy } = data;
+    .then((data: SearchResults) => {
+      const { body: result, poweredBy, uuid } = data;
       const uris = processLighthouseResults(result);
 
       if (isSearchingRecommendations) {
+        // Temporarily resolve using `claim_search` until the SDK bug is fixed.
         const claimIds = result.map((x) => x.claimId);
         dispatch(doResolveClaimIds(claimIds)).finally(() => {
           dispatch({
@@ -185,7 +186,8 @@ export const doSearch = (rawQuery: string, searchOptions: SearchOptions) => (
               from: from,
               size: size,
               uris,
-              recsys: poweredBy,
+              poweredBy,
+              uuid,
             },
           });
         });
@@ -201,7 +203,8 @@ export const doSearch = (rawQuery: string, searchOptions: SearchOptions) => (
           from: from,
           size: size,
           uris,
-          recsys: poweredBy,
+          poweredBy,
+          uuid,
         },
       });
 

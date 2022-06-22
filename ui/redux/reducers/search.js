@@ -32,7 +32,7 @@ export default handleActions(
       searching: true,
     }),
     [ACTIONS.SEARCH_SUCCESS]: (state: SearchState, action: SearchSuccess): SearchState => {
-      const { query, uris, from, size, recsys } = action.data;
+      const { query, uris, from, size, poweredBy: recsys, uuid } = action.data;
       const normalizedQuery = createNormalizedSearchKey(query);
       const urisForQuery = state.resultsByQuery[normalizedQuery] && state.resultsByQuery[normalizedQuery]['uris'];
 
@@ -44,7 +44,7 @@ export default handleActions(
       // The returned number of urls is less than the page size, so we're on the last page
       const noMoreResults = size && uris.length < size;
 
-      const results = { uris: newUris, recsys };
+      const results = { uris: newUris, recsys, uuid };
       return {
         ...state,
         searching: false,
