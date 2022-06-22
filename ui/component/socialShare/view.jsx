@@ -175,11 +175,43 @@ function SocialShare(props: Props) {
         <Button
           className="share"
           iconSize={24}
+          icon={ICONS.FACEBOOK}
+          title={__('Share on Facebook')}
+          href={`https://facebook.com/sharer/sharer.php?u=${encodedLbryURL}`}
+        />
+        <Button
+          className="share"
+          iconSize={24}
           icon={ICONS.REDDIT}
           title={__('Share on Reddit')}
           href={`https://reddit.com/submit?url=${encodedLbryURL}`}
         />
-        {IOS && (
+        {!isMobile ? (
+          <Button
+            className="share"
+            iconSize={24}
+            icon={ICONS.WHATSAPP}
+            title={__('Share on WhatsApp')}
+            href={`https://web.whatsapp.com/send?text=${encodedLbryURL}`}
+          />
+        ) : (
+          <Button
+            className="share"
+            iconSize={24}
+            icon={ICONS.WHATSAPP}
+            title={__('Share on WhatsApp')}
+            href={`whatsapp://send?text=${encodedLbryURL}`}
+          />
+        )}
+        {!IOS ? (
+          <Button
+            className="share"
+            iconSize={24}
+            icon={ICONS.TELEGRAM}
+            title={__('Share on Telegram')}
+            href={`https://t.me/share/url?url=${encodedLbryURL}`}
+          />
+        ) : (
           // Only ios client supports share urls
           <Button
             className="share"
@@ -189,20 +221,6 @@ function SocialShare(props: Props) {
             href={`tg://msg_url?url=${encodedLbryURL}&amp;text=text`}
           />
         )}
-        <Button
-          className="share"
-          iconSize={24}
-          icon={ICONS.LINKEDIN}
-          title={__('Share on LinkedIn')}
-          href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedLbryURL}`}
-        />
-        <Button
-          className="share"
-          iconSize={24}
-          icon={ICONS.FACEBOOK}
-          title={__('Share on Facebook')}
-          href={`https://facebook.com/sharer/sharer.php?u=${encodedLbryURL}`}
-        />
         {webShareable && !isCollection && (
           <Button
             className="share"

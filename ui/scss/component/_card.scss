@@ -89,6 +89,26 @@
       stroke: var(--color-primary-contrast) !important;
     }
   }
+  .section__actions {
+    margin-top: var(--spacing-m);
+  }
+
+  @media (max-width: $breakpoint-small) {
+    .section__actions {
+      .share {
+        .icon {
+          margin-right: var(--spacing-xxs);
+          margin-bottom: var(--spacing-xs);
+        }
+      }
+      &:last-child {
+        margin-right: 0 !important;
+        .icon {
+          margin-right: 0 !important;
+        }
+      }
+    }
+  }
 }
 
 .card--inline {

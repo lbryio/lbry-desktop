@@ -174,10 +174,7 @@
 
   @media (max-width: $breakpoint-medium) {
     flex-wrap: wrap;
-
-    > * {
-      margin-bottom: var(--spacing-s);
-    }
+    margin-bottom: var(--spacing-s);
   }
 
   [aria-expanded='true'].button--file-action:last-of-type {

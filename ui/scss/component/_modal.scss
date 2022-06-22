@@ -37,7 +37,7 @@
       border: 2px solid black;
       border-radius: var(--border-radius);
       .card {
-        padding: var(--spacing-m);
+        padding: var(--spacing-s);
         border: unset;
         .card__title {
           margin-top: var(--spacing-s);
@@ -121,7 +121,7 @@
       .section__actions {
         .button {
           margin-top: var(--spacing-m);
-          margin-right: var(--spacing-m);
+          margin-right: var(--spacing-s);
           padding: 0;
           .button__content {
             .button__label {
