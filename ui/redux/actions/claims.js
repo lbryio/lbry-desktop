@@ -135,7 +135,7 @@ export function doResolveUris(
       });
 
       if (collectionIds.length) {
-        dispatch(doFetchItemsInCollections({ collectionIds: collectionIds, pageSize: 5 }));
+        dispatch(doFetchItemsInCollections({ collectionIds: collectionIds, pageSize: 50 }));
       }
 
       return result;
