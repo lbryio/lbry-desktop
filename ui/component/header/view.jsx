@@ -21,6 +21,7 @@ import WunderBar from 'component/wunderbar';
 type Props = {
   authenticated: boolean,
   authHeader: boolean,
+  authRedirect?: string, // Redirects to '/' by default.
   backout: {
     backLabel?: string,
     backNavDefault?: string,
@@ -56,6 +57,7 @@ const Header = (props: Props) => {
   const {
     authenticated,
     authHeader,
+    authRedirect,
     backout,
     balance,
     emailToVerify,
@@ -105,6 +107,8 @@ const Header = (props: Props) => {
   const sidebarLabel = sidebarOpen
     ? __('Close sidebar - hide channels you are following.')
     : __('Expand sidebar - view channels you are following.');
+
+  const authRedirectParam = authRedirect ? `?redirect=${authRedirect}` : '';
 
   const onBackout = React.useCallback(
     (e: any) => {
@@ -169,8 +173,18 @@ const Header = (props: Props) => {
         </>
       ) : !isMobile ? (
         <div className="header__authButtons">
-          <Button navigate={`/$/${PAGES.AUTH_SIGNIN}`} button="link" label={__('Log In')} disabled={user === null} />
-          <Button navigate={`/$/${PAGES.AUTH}`} button="primary" label={__('Sign Up')} disabled={user === null} />
+          <Button
+            navigate={`/$/${PAGES.AUTH_SIGNIN}${authRedirectParam}`}
+            button="link"
+            label={__('Log In')}
+            disabled={user === null}
+          />
+          <Button
+            navigate={`/$/${PAGES.AUTH}${authRedirectParam}`}
+            button="primary"
+            label={__('Sign Up')}
+            disabled={user === null}
+          />
         </div>
       ) : (
         <HeaderProfileMenuButton />

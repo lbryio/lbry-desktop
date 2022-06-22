@@ -17,6 +17,7 @@ const Footer = lazyImport(() => import('web/component/footer' /* webpackChunkNam
 
 type Props = {
   authPage: boolean,
+  authRedirect?: string, // Redirects to '/' by default.
   backout: {
     backLabel?: string,
     backNavDefault?: string,
@@ -43,6 +44,7 @@ type Props = {
 function Page(props: Props) {
   const {
     authPage = false,
+    authRedirect,
     backout,
     chatDisabled,
     children,
@@ -95,6 +97,7 @@ function Page(props: Props) {
       {!noHeader && (
         <Header
           authHeader={authPage}
+          authRedirect={authRedirect}
           backout={backout}
           sidebarOpen={sidebarOpen}
           isAbsoluteSideNavHidden={isAbsoluteSideNavHidden}
