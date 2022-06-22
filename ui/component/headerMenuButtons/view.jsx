@@ -57,11 +57,18 @@ export default function HeaderMenuButtons(props: HeaderMenuButtonProps) {
       </Menu>
 
       {!authenticated && (
-        <Tooltip title={__('Settings')}>
-          <Button className="header__navigationItem--icon" onClick={() => push(`/$/${PAGES.SETTINGS}`)}>
-            <Icon size={18} icon={ICONS.SETTINGS} aria-hidden />
-          </Button>
-        </Tooltip>
+        <>
+          <Tooltip title={__('Settings')}>
+            <Button className="header__navigationItem--icon" onClick={() => push(`/$/${PAGES.SETTINGS}`)}>
+              <Icon size={18} icon={ICONS.SETTINGS} aria-hidden />
+            </Button>
+          </Tooltip>
+          <Tooltip title={__('Help')}>
+            <Button className="header__navigationItem--icon" onClick={() => push(`/$/${PAGES.HELP}`)}>
+              <Icon size={18} icon={ICONS.HELP} aria-hidden />
+            </Button>
+          </Tooltip>
+        </>
       )}
 
       {notificationsEnabled && <NotificationHeaderButton />}
