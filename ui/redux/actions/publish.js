@@ -20,7 +20,7 @@ import { push } from 'connected-react-router';
 import analytics from 'analytics';
 import { doOpenModal } from 'redux/actions/app';
 import { CC_LICENSES, COPYRIGHT, OTHER, NONE, PUBLIC_DOMAIN } from 'constants/licenses';
-import { IMG_CDN_PUBLISH_URL, IMG_CDN_STATUS_URL } from 'constants/cdn_urls';
+import { IMG_CDN_PUBLISH_URL } from 'constants/cdn_urls';
 import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
 import { creditsToString } from 'util/format-credits';
 import Lbry from 'lbry';
@@ -381,30 +381,13 @@ export const doResetThumbnailStatus = () => (dispatch: Dispatch) => {
     },
   });
 
-  return fetch(IMG_CDN_STATUS_URL)
-    .then((res) => res.json())
-    .then((json) => {
-      if (json.status !== 'online') {
-        throw Error();
-      }
-
-      return dispatch({
-        type: ACTIONS.UPDATE_PUBLISH_FORM,
-        data: {
-          uploadThumbnailStatus: THUMBNAIL_STATUSES.READY,
-          thumbnail: '',
-        },
-      });
-    })
-    .catch(() =>
-      dispatch({
-        type: ACTIONS.UPDATE_PUBLISH_FORM,
-        data: {
-          uploadThumbnailStatus: THUMBNAIL_STATUSES.API_DOWN,
-          thumbnail: '',
-        },
-      })
-    );
+  return dispatch({
+    type: ACTIONS.UPDATE_PUBLISH_FORM,
+    data: {
+      uploadThumbnailStatus: THUMBNAIL_STATUSES.READY,
+      thumbnail: '',
+    },
+  });
 };
 
 export const doBeginPublish = (name: string) => (dispatch: Dispatch) => {
