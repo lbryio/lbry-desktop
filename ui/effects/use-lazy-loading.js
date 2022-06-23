@@ -26,8 +26,36 @@ export default function useLazyLoading(
     return Math.ceil(value * devicePixelRatio);
   }
 
+  function loadImgFromDataset(target, backgroundFallback, setSrcLoadedFn) {
+    // lazy-loaded <img>:
+    if (target.dataset.src) {
+      // $FlowFixMe
+      target.src = target.dataset.src;
+      setSrcLoadedFn(true);
+      // No fallback handling here (clients have access to 'onerror' on the image ref).
+      return;
+    }
+
+    // lazy-loaded `background-image`:
+    if (target.dataset.backgroundImage) {
+      if (backgroundFallback) {
+        const tmpImage = new Image();
+        tmpImage.onerror = () => {
+          target.style.backgroundImage = `url(${backgroundFallback})`;
+        };
+        tmpImage.src = target.dataset.backgroundImage;
+      }
+      target.style.backgroundImage = `url(${target.dataset.backgroundImage})`;
+    }
+  }
+
   useEffect(() => {
     if (!elementRef.current) {
+      return;
+    }
+
+    if (!window.IntersectionObserver) {
+      loadImgFromDataset(elementRef.current, backgroundFallback, setSrcLoaded);
       return;
     }
 
@@ -36,29 +64,8 @@ export default function useLazyLoading(
         entries.forEach((entry) => {
           if (entry.intersectionRatio >= threshold) {
             const { target } = entry;
-
             observer.unobserve(target);
-
-            // useful for lazy loading img tags
-            if (target.dataset.src) {
-              // $FlowFixMe
-              target.src = target.dataset.src;
-              setSrcLoaded(true);
-              // No fallback handling here (clients have access to 'onerror' on the image ref).
-              return;
-            }
-
-            // useful for lazy loading background images on divs
-            if (target.dataset.backgroundImage) {
-              if (backgroundFallback) {
-                const tmpImage = new Image();
-                tmpImage.onerror = () => {
-                  target.style.backgroundImage = `url(${backgroundFallback})`;
-                };
-                tmpImage.src = target.dataset.backgroundImage;
-              }
-              target.style.backgroundImage = `url(${target.dataset.backgroundImage})`;
-            }
+            loadImgFromDataset(target, backgroundFallback, setSrcLoaded);
           }
         });
       },
