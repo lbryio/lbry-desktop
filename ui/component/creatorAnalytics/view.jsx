@@ -39,7 +39,7 @@ export default function CreatorAnalytics(props: Props) {
   React.useEffect(() => {
     if (claimId && channelForEffect && channelHasClaims) {
       setFetchingStats(true);
-      Lbryio.call('reports', 'content', { claim_id: claimId })
+      Lbryio.call('channel', 'stats', { claim_id: claimId })
         .then((res) => {
           setFetchingStats(false);
           setStats(res);
