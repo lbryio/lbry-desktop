@@ -125,6 +125,7 @@
           padding: 0;
           .button__content {
             .button__label {
+              margin-left: var(--spacing-s);
               font-size: var(--font-small);
             }
           }
