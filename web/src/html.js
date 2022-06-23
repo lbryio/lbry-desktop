@@ -13,7 +13,7 @@ const {
 const {
   generateEmbedUrl,
   getParameterByName,
-  getThumbnailCdnUrl,
+  getThumbnailCardCdnUrl,
   escapeHtmlProperty,
   unscapeHtmlProperty,
 } = require('../../ui/util/web');
@@ -98,7 +98,7 @@ function buildOgMetadata(overrideOptions = {}) {
     `<meta property="og:site_name" content="${SITE_NAME || SITE_TITLE}"/>\n` +
     `<meta property="og:description" content="${cleanDescription}" />\n` +
     `<meta property="og:image" content="${
-      getThumbnailCdnUrl(image) || getThumbnailCdnUrl(OG_IMAGE_URL) || `${URL}/public/v2-og.png`
+      getThumbnailCardCdnUrl(image) || getThumbnailCardCdnUrl(OG_IMAGE_URL) || `${URL}/public/v2-og.png`
     }" />\n` +
     `<meta property="og:type" content="website"/>\n` +
     '<meta name="twitter:card" content="summary_large_image"/>\n' +
@@ -107,7 +107,7 @@ function buildOgMetadata(overrideOptions = {}) {
     }" />\n` +
     `<meta name="twitter:description" content="${cleanDescription}" />\n` +
     `<meta name="twitter:image" content="${
-      getThumbnailCdnUrl(image) || getThumbnailCdnUrl(OG_IMAGE_URL) || `${URL}/public/v2-og.png`
+      getThumbnailCardCdnUrl(image) || getThumbnailCardCdnUrl(OG_IMAGE_URL) || `${URL}/public/v2-og.png`
     }"/>\n` +
     '<meta property="fb:app_id" content="1673146449633983" />\n' +
     `<link rel="canonical" content="${SITE_CANONICAL_URL || URL}"/>` +
@@ -158,7 +158,7 @@ async function buildClaimOgMetadata(uri, claim, overrideOptions = {}, referrerQu
   const media = value && (value.video || value.audio || value.image);
   const source = value && value.source;
   const channel = signing_channel && signing_channel.name;
-  let thumbnail = value && value.thumbnail && value.thumbnail.url && getThumbnailCdnUrl(value.thumbnail.url);
+  let thumbnail = value && value.thumbnail && value.thumbnail.url && getThumbnailCardCdnUrl(value.thumbnail.url);
   const mediaType = source && source.media_type;
   const mediaDuration = media && media.duration;
   const claimTitle = escapeHtmlProperty((value && value.title) || claimName);
@@ -184,8 +184,8 @@ async function buildClaimOgMetadata(uri, claim, overrideOptions = {}, referrerQu
 
   const claimThumbnail =
     escapeHtmlProperty(thumbnail) ||
-    getThumbnailCdnUrl(imageThumbnail) ||
-    getThumbnailCdnUrl(OG_IMAGE_URL) ||
+    getThumbnailCardCdnUrl(imageThumbnail) ||
+    getThumbnailCardCdnUrl(OG_IMAGE_URL) ||
     `${URL}/public/v2-og.png`;
 
   const getOgType = (streamType, liveStream) => {

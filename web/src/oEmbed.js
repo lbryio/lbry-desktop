@@ -4,7 +4,7 @@ const {
   generateEmbedIframeData,
   generateEmbedUrlEncoded,
   getParameterByName,
-  getThumbnailCdnUrl,
+  getThumbnailCardCdnUrl,
   escapeHtmlProperty,
 } = require('../../ui/util/web');
 const { lbryProxy: Lbry } = require('../lbry');
@@ -50,7 +50,7 @@ function generateOEmbedData(claim, embedlyReferrer, timestamp, referral) {
   const authorName = authorClaim ? authorClaim.value.title || authorClaim.name : 'Anonymous';
   const authorUrlPath = authorClaim && authorClaim.canonical_url.replace('lbry://', '').replace('#', ':');
   const authorUrl = authorClaim ? `${URL}/${authorUrlPath}` : null;
-  const thumbnailUrl = value && value.thumbnail && value.thumbnail.url && getThumbnailCdnUrl(value.thumbnail.url);
+  const thumbnailUrl = value && value.thumbnail && value.thumbnail.url && getThumbnailCardCdnUrl(value.thumbnail.url);
 
   const embedUrl = generateEmbedUrlEncoded(claim.name, claim.claim_id, timestamp, referral);
   const videoUrl =

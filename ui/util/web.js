@@ -50,18 +50,17 @@ function generateNewestUrl(channelName, newestType) {
   return `${URL}/$/${newestType}/${channelName}`;
 }
 
-function getThumbnailCdnUrl(url) {
+function getThumbnailCardCdnUrl(url) {
   if (
     !THUMBNAIL_CARDS_CDN_URL ||
     !url ||
-    (url && (url.includes('https://twitter-card') || url.includes('https://cards.odysee.com')))
+    (url && (url.includes('https://twitter-card') || url.includes('https://cards.odycdn.com')))
   ) {
     return url;
   }
 
   if (url && !url.startsWith('data:image')) {
-    const encodedURL = Buffer.from(url).toString('base64');
-    return `${THUMBNAIL_CARDS_CDN_URL}${encodedURL}.jpg`;
+    return `${THUMBNAIL_CARDS_CDN_URL}${url}`;
   }
 }
 
@@ -101,7 +100,7 @@ module.exports = {
   generateEmbedUrl,
   generateEmbedUrlEncoded,
   getParameterByName,
-  getThumbnailCdnUrl,
+  getThumbnailCardCdnUrl,
   escapeHtmlProperty,
   unscapeHtmlProperty,
   generateNewestUrl,
