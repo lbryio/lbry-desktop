@@ -6,6 +6,7 @@ import PublishReleaseDate from './view';
 const select = (state) => ({
   releaseTime: makeSelectPublishFormValue('releaseTime')(state),
   releaseTimeEdited: makeSelectPublishFormValue('releaseTimeEdited')(state),
+  releaseTimeError: makeSelectPublishFormValue('releaseTimeError')(state),
 });
 
 const perform = (dispatch) => ({

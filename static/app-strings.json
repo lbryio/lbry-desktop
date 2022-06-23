@@ -1939,6 +1939,8 @@
   "Release date": "Release date",
   "Scheduled for": "Scheduled for",
   "Set custom release date": "Set custom release date",
+  "Cannot set to a future date.": "Cannot set to a future date.",
+  "Invalid date/time.": "Invalid date/time.",
   "Now": "Now",
   "Set to current date and time": "Set to current date and time",
   "Remove custom release date": "Remove custom release date",

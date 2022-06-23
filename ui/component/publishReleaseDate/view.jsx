@@ -14,6 +14,7 @@ function dateToLinuxTimestamp(date: Date) {
 const NOW = 'now';
 const DEFAULT = 'default';
 const RESET_TO_ORIGINAL = 'reset-to-original';
+const FUTURE_DATE_ERROR = 'Cannot set to a future date.';
 
 type Props = {
   releaseTime: ?number,
@@ -35,6 +36,7 @@ const PublishReleaseDate = (props: Props) => {
   } = props;
   const maxDate = useMaxDate ? new Date() : undefined;
   const [date, setDate] = React.useState(releaseTime ? linuxTimestampToDate(releaseTime) : new Date());
+  const [error, setError] = React.useState([]);
 
   const isNew = releaseTime === undefined;
   const isEdit = !isNew || allowDefault === false;
@@ -45,7 +47,38 @@ const PublishReleaseDate = (props: Props) => {
   // const showDatePicker = isEdit || releaseTimeEdited !== undefined;
   const showDatePicker = true;
 
+  const updateError = (action, error) => {
+    switch (action) {
+      case 'remove':
+        setError((prev) => prev.filter((x) => x !== error));
+        break;
+
+      case 'clear':
+        setError([]);
+        break;
+
+      case 'add':
+        setError((prev) => {
+          const nextError = prev.slice();
+          if (!nextError.includes(error)) {
+            nextError.push(error);
+            return nextError;
+          }
+          return prev;
+        });
+        break;
+    }
+  };
+
   const onDateTimePickerChanged = (value) => {
+    const isValueInFuture = maxDate && value && value.getTime() > maxDate.getTime();
+    if (isValueInFuture) {
+      updateError('add', FUTURE_DATE_ERROR);
+      return;
+    }
+
+    updateError('remove', FUTURE_DATE_ERROR);
+
     if (value) {
       newDate(value);
     } else {
@@ -60,6 +93,8 @@ const PublishReleaseDate = (props: Props) => {
   };
 
   function newDate(value: string | Date) {
+    updateError('clear', FUTURE_DATE_ERROR);
+
     switch (value) {
       case NOW:
         const newDate = new Date();
@@ -88,23 +123,38 @@ const PublishReleaseDate = (props: Props) => {
     }
   }
 
+  function handleBlur(event) {
+    if (event.target.name === 'minute' || event.target.name === 'day') {
+      const validity = event?.target?.validity;
+      if (validity.rangeOverflow || validity.rangeUnderflow) {
+        updateError('add', event.target.name);
+      } else if (error.includes(event.target.name)) {
+        updateError('remove', event.target.name);
+      }
+    }
+  }
+
   useEffect(() => {
     return () => {
       updatePublishForm({ releaseTimeEdited: undefined });
     };
   }, []);
 
+  useEffect(() => {
+    updatePublishForm({ releaseTimeError: error.join(';') });
+  }, [error]);
+
   return (
     <div className="form-field-date-picker">
       <label>{__('Release date')}</label>
-      <div className="controls">
+      <div className="form-field-date-picker__controls">
         {showDatePicker && (
           <DateTimePicker
             className="date-picker-input"
             calendarClassName="form-field-calendar"
+            onBlur={handleBlur}
             onChange={onDateTimePickerChanged}
             value={date}
-            maxDate={maxDate}
             format="y-MM-dd h:mm a"
             disableClock
             clearIcon={null}
@@ -141,6 +191,12 @@ const PublishReleaseDate = (props: Props) => {
             aria-label={__('Remove custom release date')}
             onClick={() => newDate(DEFAULT)}
           />
+        )}
+        {error.length > 0 && (
+          <span className="form-field-date-picker__error">
+            {error.includes(FUTURE_DATE_ERROR) && <span>{__(FUTURE_DATE_ERROR)}</span>}
+            {(!error.includes(FUTURE_DATE_ERROR) || error.length > 1) && <span>{__('Invalid date/time.')}</span>}
+          </span>
         )}
       </div>
     </div>

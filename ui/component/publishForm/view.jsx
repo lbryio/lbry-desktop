@@ -54,6 +54,7 @@ type Props = {
   thumbnailPath: ?string,
   description: ?string,
   language: string,
+  releaseTimeError: ?string,
   nsfw: boolean,
   contentIsFree: boolean,
   fee: {
@@ -109,6 +110,7 @@ function PublishForm(props: Props) {
     title,
     bid,
     bidError,
+    releaseTimeError,
     uploadThumbnailStatus,
     resetThumbnailStatus,
     updatePublishForm,
@@ -236,6 +238,7 @@ function PublishForm(props: Props) {
     bid &&
     thumbnail &&
     !bidError &&
+    !releaseTimeError &&
     !emptyPostError &&
     !(thumbnailError && !thumbnailUploaded) &&
     !(uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS);

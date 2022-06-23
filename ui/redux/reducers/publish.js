@@ -78,6 +78,7 @@ const defaultState: PublishState = {
   language: '',
   releaseTime: undefined,
   releaseTimeEdited: undefined,
+  releaseTimeError: false,
   releaseAnytime: false,
   nsfw: false,
   channel: CHANNEL_ANONYMOUS,

@@ -596,15 +596,6 @@ fieldset-section {
     display: block;
   }
 
-  .controls {
-    display: flex;
-
-    .date-picker-input,
-    .button--link {
-      margin-right: var(--spacing-m);
-    }
-  }
-
   .react-datetime-picker__button {
     svg {
       stroke: var(--color-text);
@@ -799,6 +790,32 @@ fieldset-section {
 
   .react-calendar__month-view__days__day--neighboringMonth {
     color: var(--color-gray-5);
+  }
+}
+
+.form-field-date-picker__header {
+  display: flex;
+
+  label {
+    margin-right: var(--spacing-m);
+  }
+}
+
+.form-field-date-picker__error {
+  color: var(--color-error);
+  align-self: center;
+
+  span {
+    margin-right: var(--spacing-xs);
+  }
+}
+
+.form-field-date-picker__controls {
+  display: flex;
+
+  .date-picker-input,
+  .button--link {
+    margin-right: var(--spacing-m);
   }
 }
 
