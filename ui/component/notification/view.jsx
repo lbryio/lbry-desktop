@@ -121,6 +121,8 @@ export default function Notification(props: Props) {
       case RULE.MISSED_OUT:
       case RULE.REWARDS_APPROVAL_PROMPT:
         return `/$/${PAGES.REWARDS_VERIFY}?redirect=/$/${PAGES.REWARDS}`;
+      case RULE.FIAT_TIP:
+        return `/$/${PAGES.WALLET}?fiatType=incoming&tab=fiat-payment-history&currency=fiat`;
       default:
         return notification_parameters.device.target;
     }
