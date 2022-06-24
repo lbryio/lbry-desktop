@@ -510,13 +510,29 @@ export default React.memo<Props>(function VideoJs(props: Props) {
                   // $FlowIssue
                   vjsPlayer?.muted(true);
                   // $FlowIssue
-                  vjsPlayer?.play();
-                  // $FlowIssue
-                  document.querySelector('.video-js--tap-to-unmute')?.style.setProperty('visibility', 'visible');
-                  // $FlowIssue
-                  document
-                    .querySelector('.video-js--tap-to-unmute')
-                    ?.style.setProperty('display', 'inline', 'important');
+                  const mutedPlayPromise = vjsPlayer?.play();
+                  if (mutedPlayPromise !== undefined) {
+                    mutedPlayPromise
+                      .then(() => {
+                        const tapToUnmuteButton = document.querySelector('.video-js--tap-to-unmute');
+
+                        // $FlowIssue
+                        tapToUnmuteButton?.style.setProperty('visibility', 'visible');
+                        // $FlowIssue
+                        tapToUnmuteButton?.style.setProperty('display', 'inline', 'important');
+                      })
+                      .catch((error) => {
+                        // $FlowFixMe
+                        vjsPlayer?.addClass('vjs-paused');
+                        // $FlowFixMe
+                        vjsPlayer?.addClass('vjs-has-started');
+
+                        // $FlowFixMe
+                        document.querySelector('.vjs-touch-overlay')?.classList.add('show-play-toggle');
+                        // $FlowFixMe
+                        document.querySelector('.vjs-play-control')?.classList.add('vjs-paused');
+                      });
+                  }
                 } else {
                   // $FlowIssue
                   vjsPlayer?.bigPlayButton?.show();
