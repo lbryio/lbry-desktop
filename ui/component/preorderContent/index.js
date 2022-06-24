@@ -1,8 +1,5 @@
 import { connect } from 'react-redux';
-import {
-  selectClaimForUri,
-  selectPreorderTag,
-} from 'redux/selectors/claims';
+import { selectClaimForUri, selectPreorderTagForUri } from 'redux/selectors/claims';
 import { doHideModal } from 'redux/actions/app';
 import { preOrderPurchase } from 'redux/actions/wallet';
 import { selectClientSetting } from 'redux/selectors/settings';
@@ -10,7 +7,7 @@ import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { withRouter } from 'react-router';
 import * as SETTINGS from 'constants/settings';
 import { getChannelIdFromClaim, getChannelNameFromClaim } from 'util/claim';
-import WalletSendTip from './view';
+import PreorderContent from './view';
 
 const select = (state, props) => {
   const { uri } = props;
@@ -33,7 +30,7 @@ const select = (state, props) => {
     channelClaimId,
     tipChannelName,
     preferredCurrency: selectClientSetting(state, SETTINGS.PREFERRED_CURRENCY),
-    preorderTag: selectPreorderTag(state, props.uri),
+    preorderTag: selectPreorderTagForUri(state, props.uri),
   };
 };
 
@@ -42,4 +39,4 @@ const perform = {
   preOrderPurchase,
 };
 
-export default withRouter(connect(select, perform)(WalletSendTip));
+export default withRouter(connect(select, perform)(PreorderContent));

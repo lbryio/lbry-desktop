@@ -5,7 +5,7 @@ import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 import { Lbryio } from 'lbryinc';
 import { getStripeEnvironment } from 'util/stripe';
-let stripeEnvironment = getStripeEnvironment();
+const stripeEnvironment = getStripeEnvironment();
 
 type Props = {
   preorderTag: string,
@@ -38,17 +38,18 @@ export default function PreorderButton(props: Props) {
   async function checkIfAlreadyPurchased() {
     try {
       // get card payments customer has made
-      let customerTransactionResponse = await getPaymentHistory();
+      const customerTransactionResponse = await getPaymentHistory();
 
-      let matchingTransaction = false;
-      for (const transaction of customerTransactionResponse) {
-        if (claimId === transaction.source_claim_id) {
-          matchingTransaction = true;
+      // if they have a transaction for this claim already, assume it's a preorder
+      // note: this *could* be spoofed, because it doesn't check versus the amount,
+      // but should be OK for now
+      if (customerTransactionResponse?.length) {
+        for (const transaction of customerTransactionResponse) {
+          if (claimId === transaction.source_claim_id) {
+            setHasAlreadyPreordered(true);
+            break;
+          }
         }
-      }
-
-      if (matchingTransaction) {
-        setHasAlreadyPreordered(true);
       }
     } catch (err) {
       console.log(err);
@@ -69,43 +70,43 @@ export default function PreorderButton(props: Props) {
 
   return (
     <>
-      {preorderTag && !hasAlreadyPreordered && !myUpload && (<div>
-        <Button
-          // ref={buttonRef}
-          iconColor="red"
-          className={'preorder-button'}
-          // largestLabel={isMobile && shrinkOnMobile ? '' : subscriptionLabel}
-          icon={fiatIconToUse}
-          button="primary"
-          label={`Preorder now for ${fiatSymbolToUse}${preorderTag}`}
-          // title={titlePrefix}
-          requiresAuth
-          onClick={() => doOpenModal(MODALS.PREORDER_CONTENT, { uri, checkIfAlreadyPurchased })}
-        />
-      </div>)}
-      {preorderTag && hasAlreadyPreordered && !myUpload && (<div>
-        <Button
-          // ref={buttonRef}
-          iconColor="red"
-          className={'preorder-button'}
-          // largestLabel={isMobile && shrinkOnMobile ? '' : subscriptionLabel}
-          button="primary"
-          label={'You have preordered this content'}
-          // title={titlePrefix}
-          requiresAuth
-        />
-      </div>)}
-      {preorderTag && myUpload && (<div>
-        <Button
-          // ref={buttonRef}
-          iconColor="red"
-          className={'preorder-button'}
-          // largestLabel={isMobile && shrinkOnMobile ? '' : subscriptionLabel}
-          button="primary"
-          label={'You cannot preorder your own content'}
-          // title={titlePrefix}
-        />
-      </div>)}
+      {preorderTag && !hasAlreadyPreordered && !myUpload && (
+        <div>
+          <Button
+            iconColor="red"
+            className={'preorder-button'}
+            icon={fiatIconToUse}
+            button="primary"
+            label={__('Preorder now for %fiatSymbolToUse%%preorderTag%', {
+              fiatSymbolToUse,
+              preorderTag,
+            })}
+            requiresAuth
+            onClick={() => doOpenModal(MODALS.PREORDER_CONTENT, { uri, checkIfAlreadyPurchased })}
+          />
+        </div>
+      )}
+      {preorderTag && hasAlreadyPreordered && !myUpload && (
+        <div>
+          <Button
+            iconColor="red"
+            className={'preorder-button'}
+            button="primary"
+            label={__('You have preordered this content')}
+            requiresAuth
+          />
+        </div>
+      )}
+      {preorderTag && myUpload && (
+        <div>
+          <Button
+            iconColor="red"
+            className={'preorder-button'}
+            button="primary"
+            label={__('You cannot preorder your own content')}
+          />
+        </div>
+      )}
     </>
   );
 }

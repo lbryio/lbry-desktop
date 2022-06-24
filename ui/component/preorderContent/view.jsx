@@ -88,12 +88,11 @@ export default function PreorderContent(props: Props) {
     });
   }, [setHasSavedCard]);
 
-  // text for modal header
-  const titleText = 'Preorder Your Content';
+  const modalHeaderText = __('Preorder Your Content');
 
-  // icon to use or explainer text to show per tab
-  let explainerText =
-    'This content is not available yet but you' + ' can pre-order it now so you can access it as soon as it goes live';
+  let subtitleText = __(
+    'This content is not available yet but you can pre-order ' + 'it now so you can access it as soon as it goes live'
+  );
 
   // when the form button is clicked
   function handleSubmit() {
@@ -130,42 +129,36 @@ export default function PreorderContent(props: Props) {
   }
 
   function buildButtonText() {
-    return `Preorder your content for ${fiatSymbolToUse}${tipAmount.toString()}`;
+    return __('Preorder your content for %fiatSymbolToUse%%tipAmount%', {
+      fiatSymbolToUse,
+      tipAmount: tipAmount.toString(),
+    });
   }
 
   return (
     <Form onSubmit={handleSubmit}>
       {!waitingForBackend && (
         <Card
-          title={titleText}
+          title={modalHeaderText}
           className={'preorder-content-modal'}
-          subtitle={
-            <>
-              {/* short explainer under the button */}
-              <div className="section__subtitle">{explainerText}</div>
-            </>
-          }
+          subtitle={<div className="section__subtitle">{subtitleText}</div>}
           actions={
-            // confirm purchase card
+            // confirm purchase functionality
             <>
-              {/*  */}
               <div className="handle-submit-area">
                 <Button
                   autoFocus
                   onClick={handleSubmit}
                   button="primary"
-                  // label={__('Confirm')}
                   label={buildButtonText()}
                   disabled={!hasCardSaved}
                 />
 
                 {!hasCardSaved && (
-                  <>
-                    <div className="add-card-prompt">
-                      <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" />
-                      {' ' + __('To Preorder Content')}
-                    </div>
-                  </>
+                  <div className="add-card-prompt">
+                    <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" />
+                    {' ' + __('To Preorder Content')}
+                  </div>
                 )}
               </div>
             </>
@@ -175,14 +168,9 @@ export default function PreorderContent(props: Props) {
       {/* processing payment card */}
       {waitingForBackend && (
         <Card
-          title={titleText}
+          title={modalHeaderText}
           className={'preorder-content-modal-loading'}
-          subtitle={
-            <>
-              {/* short explainer under the button */}
-              <div className="section__subtitle">{'Processing your purchase...'}</div>
-            </>
-          }
+          subtitle={<div className="section__subtitle">{__('Processing your purchase...')}</div>}
         />
       )}
     </Form>

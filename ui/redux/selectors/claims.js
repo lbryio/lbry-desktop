@@ -680,7 +680,7 @@ export const selectTagsForUri = createCachedSelector(selectMetadataForUri, (meta
   return metadata && metadata.tags ? metadata.tags.filter((tag) => !INTERNAL_TAGS.includes(tag)) : [];
 })((state, uri) => String(uri));
 
-export const selectPreorderTag = createCachedSelector(selectMetadataForUri, (metadata: ?GenericMetadata) => {
+export const selectPreorderTagForUri = createCachedSelector(selectMetadataForUri, (metadata: ?GenericMetadata) => {
   const matchingTag = metadata && metadata.tags && metadata.tags.find((tag) => tag.includes('preorder:'));
   if (matchingTag) return matchingTag.slice(9);
 })((state, uri) => String(uri));
