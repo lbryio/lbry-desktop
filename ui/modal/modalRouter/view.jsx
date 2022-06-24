@@ -70,8 +70,6 @@ import ModalWalletEncrypt from 'modal/modalWalletEncrypt';
 
 import ModalWalletUnlock from 'modal/modalWalletUnlock';
 
-import ModalYoutubeWelcome from 'modal/modalYoutubeWelcome';
-
 function getModal(id) {
   switch (id) {
     case MODALS.UPGRADE:
@@ -128,8 +126,6 @@ function getModal(id) {
       return ModalRewardCode;
     case MODALS.COMMENT_ACKNOWEDGEMENT:
       return ModalCommentAcknowledgement;
-    case MODALS.YOUTUBE_WELCOME:
-      return ModalYoutubeWelcome;
     case MODALS.SET_REFERRER:
       return ModalSetReferrer;
     case MODALS.SIGN_OUT:
