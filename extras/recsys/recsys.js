@@ -93,6 +93,9 @@ const recsys: Recsys = {
 
       if (!recsys.entries[claimId]) {
         recsys.createRecsysEntry(claimId, null, uuid || recommendedMeta.uuid);
+      } else if (!recsys.entries[claimId].uuid) {
+        // Stubs might not have the uuid ready at the time. Refill now.
+        recsys.entries[claimId].uuid = uuid || recommendedMeta.uuid;
       }
 
       const claimIds = getClaimIdsFromUris(uris);
