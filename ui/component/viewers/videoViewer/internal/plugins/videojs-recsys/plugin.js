@@ -129,7 +129,11 @@ class RecsysPlugin extends Component {
     if (this.watchedDuration.lastTimestamp !== curTimeSec && !this.inPause) {
       this.watchedDuration.total += 1;
       this.watchedDuration.lastTimestamp = curTimeSec;
+
       RecSys.updateRecsysEntry(this.options_.videoId, 'totalPlayTime', this.watchedDuration.total);
+      if (this.watchedDuration.total === 1 || this.watchedDuration.total % 5 === 0) {
+        RecSys.saveEntries();
+      }
     }
   }
 
