@@ -1,0 +1,55 @@
+.preorder-button {
+  background-color: var(--color-primary);
+  margin-top: 2px;
+  margin-bottom: 2px;
+
+  svg {
+    stroke: white;
+  }
+}
+
+.preorder-content-modal {
+  max-width: 580px;
+}
+
+section.preorder-content-modal {
+  h2.card__title, .section__subtitle, .handle-submit-area {
+    text-align: center;
+  }
+
+  .button {
+    margin: 0 auto;
+  }
+
+  .card__title-section {
+    margin: 0 auto;
+  }
+
+  .section__subtitle {
+    max-width: 421px;
+  }
+
+  .card__main-actions {
+    padding-top: 0px;
+  }
+
+  .add-card-prompt {
+    margin: 0 auto;
+    margin-top: 11px;
+  }
+}
+
+
+section.preorder-content-modal-loading {
+  h2.card__title, .section__subtitle {
+    text-align: center;
+  }
+
+  .card__title-section {
+    margin: 0 auto;
+  }
+
+  .section__subtitle {
+    margin-top: 27px;
+  }
+}

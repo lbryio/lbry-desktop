@@ -797,3 +797,55 @@ export const doSendCashTip = (
       );
     });
 };
+
+export const preOrderPurchase = (
+  tipParams,
+  anonymous,
+  userParams,
+  claimId,
+  stripeEnvironment,
+  preferredCurrency,
+  successCallback,
+  failureCallback
+) => (dispatch) => {
+  Lbryio.call(
+    'customer',
+    'tip',
+    {
+      // round to fix issues with floating point numbers
+      amount: Math.round(100 * tipParams.tipAmount), // convert from dollars to cents
+      creator_channel_name: tipParams.tipChannelName, // creator_channel_name
+      creator_channel_claim_id: tipParams.channelClaimId,
+      tipper_channel_name: userParams.activeChannelName,
+      tipper_channel_claim_id: userParams.activeChannelId,
+      currency: preferredCurrency || 'USD',
+      anonymous: anonymous,
+      source_claim_id: claimId,
+      environment: stripeEnvironment,
+    },
+    'post'
+  )
+    .then((customerTipResponse) => {
+      dispatch(
+        doToast({
+          message: __('Preorder completed successfully'),
+          subMessage: __("You will be able to see the content as soon as it's available!"),
+          // linkText: `${fiatSymbol}${tipParams.tipAmount} ⇒ ${tipParams.tipChannelName}`,
+          // linkTarget: '/wallet',
+        })
+      );
+
+      if (successCallback) successCallback(customerTipResponse);
+    })
+    .catch((error) => {
+      // show error message from Stripe if one exists (being passed from backend by Beamer's API currently)
+      dispatch(
+        doToast({
+          message: error.message || __('Sorry, there was an error in processing your payment!'),
+          isError: true,
+        })
+      );
+
+      if (failureCallback) failureCallback(error);
+    });
+};

@@ -8,17 +8,13 @@ type Props = {
   transactions: any,
 };
 
-const WalletBalance = (props: Props) => {
+const WalletFiatAccountHistory = (props: Props) => {
   // receive transactions from parent component
   const { transactions } = props;
 
-  let accountTransactions;
+  let accountTransactions = transactions;
 
-  // reverse so most recent payments come first
-  if (transactions && transactions.length) {
-    accountTransactions = transactions.reverse();
-  }
-
+  // TODO: should add pagination here
   // if there are more than 10 transactions, limit it to 10 for the frontend
   // if (accountTransactions && accountTransactions.length > 10) {
   //   accountTransactions.length = 10;
@@ -104,4 +100,4 @@ const WalletBalance = (props: Props) => {
   );
 };
 
-export default WalletBalance;
+export default WalletFiatAccountHistory;

@@ -1,3 +1,3 @@
-import FiatAccountHistory from './view';
+import WalletFiatAccountHistory from './view';
 
-export default FiatAccountHistory;
+export default WalletFiatAccountHistory;
