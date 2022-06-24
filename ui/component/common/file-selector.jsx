@@ -47,7 +47,24 @@ class FileSelector extends React.PureComponent<Props> {
   };
 
   handleDirectoryInputSelection = () => {
-    remote.dialog.showOpenDialog({ properties: ['openDirectory'] }).then((result) => {
+    var defaultPath;
+    var properties;
+    var isWin = process.platform === 'win32';
+    var type = this.props.type;
+
+    if (isWin === true) {
+      defaultPath = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
+    }
+
+    if (type === 'openFile') {
+      properties = ['openFile'];
+    }
+
+    if (type === 'openDirectory') {
+      properties = ['openDirectory'];
+    }
+
+    remote.dialog.showOpenDialog({ properties, defaultPath }).then((result) => {
       const path = result && result.filePaths[0];
       if (path) {
         // $FlowFixMe
@@ -82,7 +99,11 @@ class FileSelector extends React.PureComponent<Props> {
               autoFocus={autoFocus}
               button="primary"
               disabled={disabled}
-              onClick={type === 'openDirectory' ? this.handleDirectoryInputSelection : this.fileInputButton}
+              onClick={
+                type === 'openDirectory' || type === 'openFile'
+                  ? this.handleDirectoryInputSelection
+                  : this.fileInputButton
+              }
               label={__('Browse')}
             />
           }
