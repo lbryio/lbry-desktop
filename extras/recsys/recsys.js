@@ -156,6 +156,13 @@ const recsys: Recsys = {
     recsys.log('createRecsysEntry', claimId);
   },
 
+  updateRecsysEntry: function (claimId, key, value) {
+    const entry = recsys.entries[claimId];
+    if (entry) {
+      entry[key] = value;
+    }
+  },
+
   /**
    * Send event for claimId
    * @param claimId
