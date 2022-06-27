@@ -21,7 +21,7 @@ type Props = {
 };
 
 function HomePage(props: Props) {
-  const { followedTags, subscribedChannels, authenticated, showNsfw, homepageData } = props;
+  const { followedTags, subscribedChannels, showNsfw, homepageData } = props;
   const showPersonalizedChannels = subscribedChannels && subscribedChannels.length > 0;
   const showPersonalizedTags = followedTags && followedTags.length > 0;
   const showIndividualTags = showPersonalizedTags && followedTags.length < 5;
@@ -31,7 +31,6 @@ function HomePage(props: Props) {
     homepageData,
     isLargeScreen,
     true,
-    authenticated,
     showPersonalizedChannels,
     showPersonalizedTags,
     subscribedChannels,

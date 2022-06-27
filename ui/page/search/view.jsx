@@ -16,7 +16,6 @@ type Props = {
   search: (string, SearchOptions) => void,
   isSearching: boolean,
   uris: Array<string>,
-  isAuthenticated: boolean,
   hasReachedMaxResultsLength: boolean,
 };
 
