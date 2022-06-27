@@ -24,7 +24,6 @@ type Props = {
   repostedClaim: ?GenericClaim,
   doToggleTagFollowDesktop: (string) => void,
   doResolveUri: (string) => void,
-  isAuthenticated: boolean,
   dynamicRouteProps: RowDataItem,
   tileLayout: boolean,
 };

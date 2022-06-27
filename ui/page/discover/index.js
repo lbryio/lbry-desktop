@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { doResolveUri } from 'redux/actions/claims';
 import { selectClaimForUri } from 'redux/selectors/claims';
 import * as SETTINGS from 'constants/settings';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectFollowedTags } from 'redux/selectors/tags';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
@@ -18,7 +17,6 @@ const select = (state, props) => {
     followedTags: selectFollowedTags(state),
     repostedUri: repostedUri,
     repostedClaim: repostedUri ? selectClaimForUri(state, repostedUri) : null,
-    isAuthenticated: selectUserVerifiedEmail(state),
     tileLayout: makeSelectClientSetting(SETTINGS.TILE_LAYOUT)(state),
   };
 };
