@@ -15,7 +15,6 @@ type Props = {
   metadata: StreamMetadata,
   openFolder: (string) => void,
   contentType: string,
-  user: ?any,
   pendingAmount: string,
   openModal: (id: string, { uri: string }) => void,
   claimIsMine: boolean,
