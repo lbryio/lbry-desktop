@@ -225,7 +225,7 @@ export default function FilePage(props: Props) {
         {!isMarkdown && (
           <div className="file-page__secondary-content">
             <section className="file-page__media-actions">
-              <PreorderButton  uri={uri} />
+              <PreorderButton uri={uri} />
               {claimIsMine && isLivestream && (
                 <div className="livestream__creator-message">
                   <h4>{__('Only visible to you')}</h4>

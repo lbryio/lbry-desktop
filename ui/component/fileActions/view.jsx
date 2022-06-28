@@ -117,7 +117,7 @@ export default function FileActions(props: Props) {
     <div className="media__actions">
       {ENABLE_FILE_REACTIONS && <FileReactions uri={uri} />}
 
-      { !isAPreorder && <ClaimSupportButton uri={uri} fileAction />}
+      {!isAPreorder && <ClaimSupportButton uri={uri} fileAction />}
 
       <ClaimCollectionAddButton uri={uri} fileAction />
 

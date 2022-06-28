@@ -59,11 +59,8 @@ export default function PreorderContent(props: Props) {
     setTipAmount(Number(preorderTag));
   }, [preorderTag]);
 
-  /** STATE **/
   const [tipAmount, setTipAmount] = React.useState(0);
-
   const [waitingForBackend, setWaitingForBackend] = React.useState(false);
-
   const [hasCardSaved, setHasSavedCard] = React.useState(true);
 
   // check if user has a payment method saved
@@ -89,12 +86,10 @@ export default function PreorderContent(props: Props) {
   }, [setHasSavedCard]);
 
   const modalHeaderText = __('Preorder Your Content');
-
-  let subtitleText = __(
-    'This content is not available yet but you can pre-order ' + 'it now so you can access it as soon as it goes live'
+  const subtitleText = __(
+    'This content is not available yet but you can pre-order it now so you can access it as soon as it goes live.'
   );
 
-  // when the form button is clicked
   function handleSubmit() {
     const tipParams: TipParams = {
       tipAmount,
@@ -123,15 +118,12 @@ export default function PreorderContent(props: Props) {
     );
   }
 
-  let fiatSymbolToUse = '$';
-  if (preferredCurrency === 'EUR') {
-    fiatSymbolToUse = '€';
-  }
+  const fiatSymbolToUse = preferredCurrency === 'EUR' ? '€' : '$';
 
   function buildButtonText() {
-    return __('Preorder your content for %fiatSymbolToUse%%tipAmount%', {
-      fiatSymbolToUse,
-      tipAmount: tipAmount.toString(),
+    return __('Preorder your content for %tip_currency%%tip_amount%', {
+      tip_currency: fiatSymbolToUse,
+      tip_amount: tipAmount.toString(),
     });
   }
 
@@ -156,6 +148,7 @@ export default function PreorderContent(props: Props) {
 
                 {!hasCardSaved && (
                   <div className="add-card-prompt">
+                    {/* FIX_THIS: no split strings please. Use <i18Message> */}
                     <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" />
                     {' ' + __('To Preorder Content')}
                   </div>
