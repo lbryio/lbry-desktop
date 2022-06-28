@@ -561,8 +561,6 @@ export const selectIsUriResolving = (state: State, uri: string) => {
   return resolvingUris && resolvingUris.includes(uri);
 };
 
-export const selectPlayingUri = (state: State) => selectState(state).playingUri;
-
 export const selectChannelClaimCounts = createSelector(selectState, (state) => state.channelClaimCounts || {});
 
 export const makeSelectPendingClaimForUri = (uri: string) =>

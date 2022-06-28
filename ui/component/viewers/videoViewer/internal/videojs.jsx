@@ -82,7 +82,8 @@ type Props = {
   claimId: ?string,
   title: ?string,
   channelTitle: string,
-  embedded: boolean,
+  embedded: boolean, // `/$/embed`
+  embeddedInternal: boolean, // Markdown (Posts and Comments)
   internalFeatureEnabled: ?boolean,
   isAudio: boolean,
   poster: ?string,
@@ -142,6 +143,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     title,
     channelTitle,
     embedded,
+    embeddedInternal,
     // internalFeatureEnabled, // for people on the team to test new features internally
     isAudio,
     poster,
@@ -310,7 +312,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         player.recsys({
           videoId: claimId,
           userId: userId,
-          embedded: embedded,
+          embedded: embedded || embeddedInternal,
         });
       }
 
@@ -381,7 +383,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         vjsPlayer.recsys.options_ = {
           videoId: claimId,
           userId: userId,
-          embedded: embedded,
+          embedded: embedded || embeddedInternal,
         };
 
         vjsPlayer.recsys.lastTimeUpdate = null;

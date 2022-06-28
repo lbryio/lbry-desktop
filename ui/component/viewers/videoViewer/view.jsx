@@ -525,6 +525,7 @@ function VideoViewer(props: Props) {
         playNext={doPlayNext}
         playPrevious={doPlayPrevious}
         embedded={embedded}
+        embeddedInternal={isMarkdownOrComment}
         claimValues={claim.value}
         doAnalyticsView={doAnalyticsView}
         doAnalyticsBuffer={doAnalyticsBuffer}
