@@ -1,16 +1,12 @@
 import { connect } from 'react-redux';
-// import { makeSelectCoverForUri, makeSelectAvatarForUri } from 'redux/selectors/claims';
 import Wallpaper from './view';
+import * as SETTINGS from 'constants/settings';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
 
-/*
-const select = (state, props) => {
-  if (props.uri && (props.uri.indexOf('@') !== -1 || props.uri.indexOf('#') !== -1)) {
-    return {
-      cover: makeSelectCoverForUri(props.uri)(state),
-      avatar: makeSelectAvatarForUri(props.uri)(state),
-    };
-  } else return {};
-};
-*/
+const select = (state) => ({
+  disableBackground: makeSelectClientSetting(SETTINGS.DISABLE_BACKGROUND)(state),
+});
 
-export default connect()(Wallpaper);
+const perform = {};
+
+export default connect(select, perform)(Wallpaper);
