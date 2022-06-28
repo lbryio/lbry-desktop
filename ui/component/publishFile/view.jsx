@@ -325,6 +325,7 @@ function PublishFile(props: Props) {
           {showFileUpload && (
             <>
               <FileSelector
+                type="openFile"
                 label={__('File')}
                 disabled={disabled}
                 currentPath={currentFile}
