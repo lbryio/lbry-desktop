@@ -186,6 +186,13 @@ export default function YoutubeTransferStatus(props: Props) {
                               total_subs: totalSubs,
                             })}
                           </div>
+                          <div className="help--inline">
+                            {' '}
+                            {__(
+                              '*Not all content may be processed. Click Learn More at the bottom to understand sync limitations '
+                            )}{' '}
+                          </div>
+
                           <div className="progress__item">
                             {__('Claim your channel')}
                             <Icon icon={ICONS.NOT_COMPLETED} className={classnames('progress__complete-icon')} />
@@ -213,6 +220,7 @@ export default function YoutubeTransferStatus(props: Props) {
                   label={youtubeChannels.length > 1 ? __('Claim Channels') : __('Claim Channel')}
                 />
               )}
+              {addNewChannel && <Button button="link" label={__('Add Another Channel')} onClick={addNewChannel} />}
               <Button
                 button={isYoutubeTransferComplete ? 'primary' : 'link'}
                 label={__('Explore %SITE_NAME%', { SITE_NAME })}
@@ -226,12 +234,7 @@ export default function YoutubeTransferStatus(props: Props) {
                 : __('You will be able to claim your channel once it has finished syncing.')}{' '}
               {youtubeImportPending &&
                 __('You will not be able to edit the channel or content until the transfer process completes.')}{' '}
-              <Button
-                button="link"
-                label={__('Learn More')}
-                href="https://odysee.com/@OdyseeHelp:b/youtube-sync:b#transfer"
-              />{' '}
-              {addNewChannel && <Button button="link" label={__('Add Another Channel')} onClick={addNewChannel} />}
+              <Button button="link" label={__('Learn More')} href="https://odysee.com/@OdyseeHelp:b/youtube-sync:b" />
             </p>
           </>
         }
