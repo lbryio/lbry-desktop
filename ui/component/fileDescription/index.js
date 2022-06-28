@@ -7,7 +7,6 @@ import {
 } from 'redux/selectors/claims';
 import { makeSelectPendingAmountByUri } from 'redux/selectors/wallet';
 import { doOpenModal } from 'redux/actions/app';
-import { selectUser } from 'redux/selectors/user';
 import FileDescription from './view';
 
 const select = (state, props) => {
@@ -17,7 +16,6 @@ const select = (state, props) => {
     claim,
     claimIsMine: selectClaimIsMine(state, claim),
     metadata: makeSelectMetadataForUri(props.uri)(state),
-    user: selectUser(state),
     pendingAmount: makeSelectPendingAmountByUri(props.uri)(state),
     tags: makeSelectTagsForUri(props.uri)(state),
   };
