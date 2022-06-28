@@ -6,12 +6,20 @@ export const selectState = (state) => state.app || {};
 
 export const selectPlatform = createSelector(selectState, (state) => state.platform);
 
-export const selectUpdateUrl = createSelector(selectPlatform, (platform) => {
+export const selectRemoteVersion = createSelector(selectState, (state) => state.remoteVersion);
+
+export const selectUpdateUrl = createSelector(selectPlatform, selectRemoteVersion, (platform, releaseVersion) => {
   switch (platform) {
     case 'darwin':
       return 'https://lbry.com/get/lbry.dmg';
     case 'linux':
-      return 'https://lbry.com/get/lbry.deb';
+      // releaseVersion can be used as the tag name
+      // Example: v0.53.5-alpha.test7495b
+      // When downloading, we need to remove the initial
+      // v, ending up with a file name like
+      // LBRY_0.53.5-alpha.test7495b.deb
+      const fileName = 'LBRY_' + (releaseVersion || '').replace('v', '') + '.deb';
+      return `https://github.com/lbryio/lbry-desktop/releases/download/${releaseVersion}/${fileName}`;
     case 'win32':
       return 'https://lbry.com/get/lbry.exe';
     default:
@@ -20,8 +28,6 @@ export const selectUpdateUrl = createSelector(selectPlatform, (platform) => {
 });
 
 export const selectHasClickedComment = createSelector(selectState, (state) => state.hasClickedComment);
-
-export const selectRemoteVersion = createSelector(selectState, (state) => state.remoteVersion);
 
 export const selectIsUpgradeAvailable = createSelector(selectState, (state) => state.isUpgradeAvailable);
 
