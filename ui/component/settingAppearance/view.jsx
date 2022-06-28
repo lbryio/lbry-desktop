@@ -12,7 +12,7 @@ import ThemeSelector from 'component/themeSelector';
 import homepages from 'homepages';
 
 type Props = {
-  background: boolean,
+  disableBackground: boolean,
   clock24h: boolean,
   searchInLanguage: boolean,
   hideBalance: boolean,
@@ -21,7 +21,7 @@ type Props = {
 };
 
 export default function SettingAppearance(props: Props) {
-  const { clock24h, background, searchInLanguage, hideBalance, setClientSetting, setSearchInLanguage } = props;
+  const { clock24h, disableBackground, searchInLanguage, hideBalance, setClientSetting, setSearchInLanguage } = props;
 
   return (
     <>
@@ -68,8 +68,8 @@ export default function SettingAppearance(props: Props) {
               <FormField
                 type="checkbox"
                 name="background"
-                onChange={() => setClientSetting(SETTINGS.BACKGROUND, !background)}
-                checked={background}
+                onChange={() => setClientSetting(SETTINGS.DISABLE_BACKGROUND, !disableBackground)}
+                checked={disableBackground}
               />
             </SettingsRow>
             <SettingsRow title={__('Hide wallet balance in header')}>

@@ -4,7 +4,7 @@ import * as SETTINGS from 'constants/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 
 const select = (state) => ({
-  background: makeSelectClientSetting(SETTINGS.BACKGROUND)(state),
+  disableBackground: makeSelectClientSetting(SETTINGS.DISABLE_BACKGROUND)(state),
 });
 
 const perform = {};
