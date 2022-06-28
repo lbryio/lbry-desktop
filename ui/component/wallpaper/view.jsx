@@ -8,10 +8,11 @@ type Props = {
   // cover: ?string,
   // avatar: ?string,
   reset: ?boolean,
+  background: ?boolean,
 };
 
 const Wallpaper = (props: Props) => {
-  // const { cover, avatar } = props;
+  const { background } = props;
 
   /*
   if (avatar) {
@@ -227,12 +228,13 @@ const Wallpaper = (props: Props) => {
         }}
       />
    */
+
   return (
     <>
       <div
         className={'background-image'}
         style={{
-          backgroundImage: `url(${freeezepeach})`,
+          backgroundImage: background ? `url(${freeezepeach})` : `none`,
         }}
       />
       <div className={'theme'} />

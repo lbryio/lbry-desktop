@@ -14,6 +14,7 @@ export const THEME = 'theme';
 export const THEMES = 'themes';
 export const AUTOMATIC_DARK_MODE_ENABLED = 'automatic_dark_mode_enabled';
 export const CLOCK_24H = 'clock_24h';
+export const BACKGROUND = 'background';
 export const AUTOPLAY_MEDIA = 'autoplay';
 export const AUTOPLAY_NEXT = 'autoplay_next';
 export const OS_NOTIFICATIONS_ENABLED = 'os_notifications_enabled';

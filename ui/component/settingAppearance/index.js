@@ -5,6 +5,7 @@ import { makeSelectClientSetting } from 'redux/selectors/settings';
 import SettingAppearance from './view';
 
 const select = (state) => ({
+  background: makeSelectClientSetting(SETTINGS.BACKGROUND)(state),
   clock24h: makeSelectClientSetting(SETTINGS.CLOCK_24H)(state),
   searchInLanguage: makeSelectClientSetting(SETTINGS.SEARCH_IN_LANGUAGE)(state),
   hideBalance: makeSelectClientSetting(SETTINGS.HIDE_BALANCE)(state),
