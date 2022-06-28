@@ -1,0 +1,17 @@
+.progress__item {
+  display: flex;
+  align-items: center;
+
+  &:not(:first-of-type) {
+    margin-top: var(--spacing-s);
+  }
+}
+
+.progress__complete-icon {
+  margin-left: var(--spacing-s);
+}
+
+.progress__complete-icon--completed {
+  @extend .progress__complete-icon;
+  stroke: var(--color-primary);
+}
