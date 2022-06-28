@@ -15,7 +15,6 @@ import ModalClaimCollectionAdd from 'modal/modalClaimCollectionAdd';
 
 import ModalCommentAcknowledgement from 'modal/modalCommentAcknowledgement';
 
-import ModalConfirmAge from 'modal/modalConfirmAge';
 import ModalConfirmThumbnailUpload from 'modal/modalConfirmThumbnailUpload';
 
 import ModalConfirmTransaction from 'modal/modalConfirmTransaction';
@@ -38,8 +37,6 @@ import ModalMobileSearch from 'modal/modalMobileSearch';
 import ModalOpenExternalResource from 'modal/modalOpenExternalResource';
 
 import ModalPasswordUnsave from 'modal/modalPasswordUnsave';
-
-import ModalPhoneCollection from 'modal/modalPhoneCollection';
 
 import ModalPublish from 'modal/modalPublish';
 import ModalPublishPreview from 'modal/modalPublishPreview';
@@ -94,8 +91,7 @@ function getModal(id) {
       return ModalAffirmPurchase;
     case MODALS.CONFIRM_CLAIM_REVOKE:
       return ModalRevokeClaim;
-    case MODALS.PHONE_COLLECTION:
-      return ModalPhoneCollection;
+
     case MODALS.FIRST_SUBSCRIPTION:
       return ModalFirstSubscription;
     case MODALS.SEND_TIP:
@@ -130,8 +126,6 @@ function getModal(id) {
       return ModalSetReferrer;
     case MODALS.SIGN_OUT:
       return ModalSignOut;
-    case MODALS.CONFIRM_AGE:
-      return ModalConfirmAge;
     case MODALS.FILE_SELECTION:
       return ModalFileSelection;
     case MODALS.LIQUIDATE_SUPPORTS:
