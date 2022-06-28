@@ -42,7 +42,7 @@ const select = (state, props) => {
     stakedLevel: selectStakedLevelForChannelUri(state, channel_url),
     linkedCommentAncestors: selectFetchedCommentAncestors(state),
     totalReplyPages: makeSelectTotalReplyPagesForParentId(comment_id)(state),
-    selectOdyseeMembershipForUri: channel_url && selectOdyseeMembershipForUri(state, channel_url),
+    commenterMembership: channel_url && selectOdyseeMembershipForUri(state, channel_url),
     repliesFetching: selectIsFetchingCommentsForParentId(state, comment_id),
     fetchedReplies: selectRepliesForParentId(state, comment_id),
   };

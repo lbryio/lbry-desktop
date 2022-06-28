@@ -59,7 +59,7 @@ type MarkdownProps = {
   disableTimestamps?: boolean,
   stakedLevel?: number,
   setUserMention?: (boolean) => void,
-  hasMembership?: string,
+  hasMembership?: boolean,
 };
 
 // ****************************************************************************
