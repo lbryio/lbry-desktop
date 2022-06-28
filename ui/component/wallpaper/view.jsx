@@ -234,7 +234,7 @@ const Wallpaper = (props: Props) => {
       <div
         className={'background-image'}
         style={{
-          backgroundImage: background ? `url(${freeezepeach})` : `none`,
+          backgroundImage: background ? `none` : `url(${freeezepeach})`,
         }}
       />
       <div className={'theme'} />
