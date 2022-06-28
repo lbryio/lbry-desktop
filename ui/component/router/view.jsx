@@ -37,7 +37,6 @@ import ChannelsPage from 'page/channels';
 import CreatorDashboard from 'page/creatorDashboard';
 import DiscoverPage from 'page/discover';
 import FileListPublished from 'page/fileListPublished';
-import FourOhFourPage from 'page/fourOhFour';
 import HelpPage from 'page/help';
 import LibraryPage from 'page/library';
 import ListBlockedPage from 'page/listBlocked';
@@ -279,7 +278,6 @@ function AppRouter(props: Props) {
       {/* Below need to go at the end to make sure we don't match any of our pages first */}
       <Route path="/:claimName" exact component={ShowPage} />
       <Route path="/:claimName/:streamName" exact component={ShowPage} />
-      <Route path="/*" component={FourOhFourPage} />
     </Switch>
   );
 }

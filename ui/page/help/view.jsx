@@ -183,7 +183,6 @@ class HelpPage extends React.PureComponent<Props, State> {
           }
         />
 
-        {/* @if TARGET='app' */}
         <Card
           title={__('View your log')}
           subtitle={
@@ -214,92 +213,101 @@ class HelpPage extends React.PureComponent<Props, State> {
         />
 
         <WalletBackup />
-        {/* @endif */}
-        <>
-          <Card
-            title={__('About --[About section in Help Page]--')}
-            subtitle={
-              this.state.upgradeAvailable !== null && this.state.upgradeAvailable ? (
-                <span>
-                  {__('A newer version of LBRY is available.')}{' '}
-                  <Button button="link" href={newVerLink} label={__('Download now!')} />
-                </span>
-              ) : null
-            }
-            isBodyList
-            body={
-              <div className="table__wrapper">
-                <table className="table table--stretch">
-                  <tbody>
-                    <tr>
-                      <td>{__('App')}</td>
-                      <td>
-                        {this.state.uiVersion ? this.state.uiVersion + ' - ' : ''}
-                        <Button
-                          button="link"
-                          label={__('Changelog')}
-                          href="https://github.com/lbryio/lbry-desktop/blob/master/CHANGELOG.md"
-                        />
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>{__('Daemon (lbrynet)')}</td>
-                      <td>{ver ? ver.lbrynet_version : __('Loading...')}</td>
-                    </tr>
-                    <tr>
-                      <td>{__('Connected Email')}</td>
-                      <td>
-                        {user && user.primary_email ? (
-                          <React.Fragment>
-                            {user.primary_email}{' '}
-                            <Button
-                              button="link"
-                              navigate={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`}
-                              label={__('Update mailing preferences')}
-                            />
-                          </React.Fragment>
-                        ) : (
-                          <React.Fragment>
-                            <span className="empty">{__('none')} </span>
-                            <Button button="link" onClick={() => doAuth()} label={__('set email')} />
-                          </React.Fragment>
-                        )}
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>{__('Reward Eligible')}</td>
-                      <td>{user && user.is_reward_approved ? __('Yes') : __('No')}</td>
-                    </tr>
-                    <tr>
-                      <td>{__('Platform')}</td>
-                      <td>{platform}</td>
-                    </tr>
-                    <tr>
-                      <td>{__('Installation ID')}</td>
-                      <td>{this.state.lbryId}</td>
-                    </tr>
-                    <tr>
-                      <td>{__('Access Token')}</td>
-                      <td>
-                        {this.state.accessTokenHidden && (
-                          <Button button="link" label={__('View')} onClick={this.showAccessToken} />
-                        )}
-                        {!this.state.accessTokenHidden && accessToken && (
-                          <div>
-                            <p>{accessToken}</p>
-                            <div className="help--warning">
-                              {__('This is equivalent to a password. Do not post or share this.')}
-                            </div>
+        <Card
+          title={__('Odysee Connect --[Section in Help Page]--')}
+          isBodyList
+          body={
+            <div className="table__wrapper">
+              <table className="table table--stretch">
+                <tbody>
+                  <tr>
+                    <td>{__('Connected Email')}</td>
+                    <td>
+                      {user && user.primary_email ? (
+                        <React.Fragment>
+                          {user.primary_email}{' '}
+                          <Button
+                            button="link"
+                            navigate={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`}
+                            label={__('Update mailing preferences')}
+                          />
+                        </React.Fragment>
+                      ) : (
+                        <React.Fragment>
+                          <span className="empty">{__('none')} </span>
+                          <Button button="link" onClick={() => doAuth()} label={__('set email')} />
+                        </React.Fragment>
+                      )}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>{__('Reward Eligible')}</td>
+                    <td>{user && user.is_reward_approved ? __('Yes') : __('No')}</td>
+                  </tr>
+                  <tr>
+                    <td>{__('Access Token')}</td>
+                    <td>
+                      {this.state.accessTokenHidden && (
+                        <Button button="link" label={__('View')} onClick={this.showAccessToken} />
+                      )}
+                      {!this.state.accessTokenHidden && accessToken && (
+                        <div>
+                          <p>{accessToken}</p>
+                          <div className="help--warning">
+                            {__('This is equivalent to a password. Do not post or share this.')}
                           </div>
-                        )}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            }
-          />
-        </>
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          }
+        />
+        <Card
+          title={__('About --[About section in Help Page]--')}
+          subtitle={
+            this.state.upgradeAvailable !== null && this.state.upgradeAvailable ? (
+              <span>
+                {__('A newer version of LBRY is available.')}{' '}
+                <Button button="link" href={newVerLink} label={__('Download now!')} />
+              </span>
+            ) : null
+          }
+          isBodyList
+          body={
+            <div className="table__wrapper">
+              <table className="table table--stretch">
+                <tbody>
+                  <tr>
+                    <td>{__('App')}</td>
+                    <td>
+                      {this.state.uiVersion ? this.state.uiVersion + ' - ' : ''}
+                      <Button
+                        button="link"
+                        label={__('Changelog')}
+                        href="https://github.com/lbryio/lbry-desktop/blob/master/CHANGELOG.md"
+                      />
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>{__('Daemon (lbrynet)')}</td>
+                    <td>{ver ? ver.lbrynet_version : __('Loading...')}</td>
+                  </tr>
+                  <tr>
+                    <td>{__('Platform')}</td>
+                    <td>{platform}</td>
+                  </tr>
+                  <tr>
+                    <td>{__('Installation ID')}</td>
+                    <td>{this.state.lbryId}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          }
+        />
       </Page>
     );
   }
