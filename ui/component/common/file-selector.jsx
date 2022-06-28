@@ -47,10 +47,10 @@ class FileSelector extends React.PureComponent<Props> {
   };
 
   handleDirectoryInputSelection = () => {
-    var defaultPath;
-    var properties;
-    var isWin = process.platform === 'win32';
-    var type = this.props.type;
+    let defaultPath;
+    let properties;
+    let isWin = process.platform === 'win32';
+    let type = this.props.type;
 
     if (isWin === true) {
       defaultPath = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
