@@ -7,13 +7,15 @@ import { Modal } from 'modal/modal';
 import LastReleaseChanges from 'component/lastReleaseChanges';
 
 type Props = {
-  closeModal: any => any,
+  closeModal: (any) => any,
   declineAutoUpdate: () => any,
+  errorWhileUpdating: boolean,
 };
 
 const ModalAutoUpdateDownloaded = (props: Props) => {
-  const { closeModal, declineAutoUpdate } = props;
+  const { closeModal, declineAutoUpdate, errorWhileUpdating } = props;
   const [disabled, setDisabled] = useState(false);
+  const isDownloading = disabled && !errorWhileUpdating;
 
   const handleConfirm = () => {
     setDisabled(true);
@@ -31,13 +33,14 @@ const ModalAutoUpdateDownloaded = (props: Props) => {
       type="confirm"
       contentLabel={__('Upgrade Downloaded')}
       title={__('LBRY leveled up')}
-      confirmButtonLabel={__('Upgrade Now')}
+      confirmButtonLabel={isDownloading ? __('Downloading...') : __('Upgrade Now')}
       abortButtonLabel={__('Not Now')}
-      confirmButtonDisabled={disabled}
+      confirmButtonDisabled={isDownloading}
       onConfirmed={handleConfirm}
       onAborted={handleAbort}
     >
       <LastReleaseChanges />
+      {errorWhileUpdating && <p>__('There was an error while updating. Please try again.')</p>}
     </Modal>
   );
 };

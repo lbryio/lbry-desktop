@@ -220,6 +220,18 @@ export function doNotifyUpdateAvailable(e) {
   };
 }
 
+export function doAutoUpdateReset() {
+  return {
+    type: ACTIONS.AUTO_UPDATE_RESET,
+  };
+}
+
+export function doAutoUpdateFail() {
+  return {
+    type: ACTIONS.AUTO_UPDATE_FAILED,
+  };
+}
+
 /*
   Initiate a timer that will check for an app upgrade every 10 minutes.
  */

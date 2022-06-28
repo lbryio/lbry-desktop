@@ -22,6 +22,8 @@ import {
   doUpdateDownloadProgress,
   doNotifyUpdateAvailable,
   doShowUpgradeInstallationError,
+  doAutoUpdateReset,
+  doAutoUpdateFail,
 } from 'redux/actions/app';
 import { isURIValid } from 'util/lbryURI';
 import { setSearchApi } from 'redux/actions/search';
@@ -129,8 +131,21 @@ ipcRenderer.on('open-uri-requested', (event, url, newSession) => {
   handleError();
 });
 
+autoUpdater.on('checking-for-update', () => {
+  app.store.dispatch(doAutoUpdateReset());
+});
+
 autoUpdater.on('update-available', (e) => {
+  app.store.dispatch(doAutoUpdateReset());
   app.store.dispatch(doNotifyUpdateAvailable(e));
+});
+
+autoUpdater.on('update-downloaded', () => {
+  app.store.dispatch(doAutoUpdateReset());
+});
+
+autoUpdater.on('error', () => {
+  app.store.dispatch(doAutoUpdateFail());
 });
 
 ipcRenderer.on('upgrade-installing-error', () => {
