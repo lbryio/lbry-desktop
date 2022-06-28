@@ -433,6 +433,10 @@ autoUpdater.on('update-downloaded', () => {
   }
 });
 
+autoUpdater.on('update-available', () => {
+  updateState = UPDATE_STATE_UPDATES_FOUND;
+});
+
 autoUpdater.on('update-not-available', () => {
   updateState = UPDATE_STATE_NO_UPDATES_FOUND;
 });

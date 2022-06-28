@@ -7,7 +7,6 @@ import { selectUnclaimedRewards } from 'redux/selectors/rewards';
 import { doFetchChannelListMine, doFetchCollectionListMine, doResolveUris } from 'redux/actions/claims';
 import { selectMyChannelUrls, selectMyChannelClaimIds } from 'redux/selectors/claims';
 import * as SETTINGS from 'constants/settings';
-import * as MODALS from 'constants/modal_types';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import {
   makeSelectClientSetting,
@@ -25,7 +24,7 @@ import {
 import { doGetWalletSyncPreference, doSetLanguage } from 'redux/actions/settings';
 import { doSyncLoop } from 'redux/actions/sync';
 import {
-  doOpenModal,
+  doDownloadUpgradeRequested,
   doSignIn,
   doGetAndPopulatePreferences,
   doSetActiveChannel,
@@ -61,7 +60,7 @@ const perform = (dispatch) => ({
   fetchCollectionListMine: () => dispatch(doFetchCollectionListMine()),
   setLanguage: (language) => dispatch(doSetLanguage(language)),
   signIn: () => dispatch(doSignIn()),
-  requestDownloadUpgrade: () => dispatch(doOpenModal(MODALS.UPGRADE)),
+  requestDownloadUpgrade: () => dispatch(doDownloadUpgradeRequested()),
   updatePreferences: () => dispatch(doGetAndPopulatePreferences()),
   getWalletSyncPref: () => dispatch(doGetWalletSyncPreference()),
   syncLoop: (noInterval) => dispatch(doSyncLoop(noInterval)),

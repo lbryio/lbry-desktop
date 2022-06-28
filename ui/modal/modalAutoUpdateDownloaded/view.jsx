@@ -40,7 +40,7 @@ const ModalAutoUpdateDownloaded = (props: Props) => {
       onAborted={handleAbort}
     >
       <LastReleaseChanges />
-      {errorWhileUpdating && <p>__('There was an error while updating. Please try again.')</p>}
+      {errorWhileUpdating && <p>{__('There was an error while updating. Please try again.')}</p>}
     </Modal>
   );
 };
