@@ -54,6 +54,8 @@ export const selectAutoUpdateDownloaded = createSelector(selectState, (state) =>
 
 export const selectAutoUpdateDeclined = createSelector(selectState, (state) => state.autoUpdateDeclined);
 
+export const selectAutoUpdateFailed = createSelector(selectState, (state) => state.autoUpdateFailed);
+
 export const selectIsUpdateModalDisplayed = createSelector(selectState, (state) => {
   return [MODALS.AUTO_UPDATE_DOWNLOADED, MODALS.UPGRADE, MODALS.DOWNLOADING].includes(state.modal);
 });

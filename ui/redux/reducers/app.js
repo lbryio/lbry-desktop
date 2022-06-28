@@ -27,6 +27,7 @@ export type AppState = {
   badgeNumber: number,
   volume: number,
   autoUpdateDeclined: boolean,
+  autoUpdateFailed: boolean,
   modalsAllowed: boolean,
   downloadProgress: ?number,
   upgradeDownloading: ?boolean,
@@ -64,6 +65,7 @@ const defaultState: AppState = {
   muted: false,
   autoUpdateDownloaded: false,
   autoUpdateDeclined: false,
+  autoUpdateFailed: false,
   modalsAllowed: true,
   hasClickedComment: false,
   downloadProgress: undefined,
@@ -150,6 +152,16 @@ reducers[ACTIONS.AUTO_UPDATE_DOWNLOADED] = (state) =>
 reducers[ACTIONS.AUTO_UPDATE_DECLINED] = (state) =>
   Object.assign({}, state, {
     autoUpdateDeclined: true,
+  });
+
+reducers[ACTIONS.AUTO_UPDATE_RESET] = (state) =>
+  Object.assign({}, state, {
+    autoUpdateFailed: false,
+  });
+
+reducers[ACTIONS.AUTO_UPDATE_FAILED] = (state) =>
+  Object.assign({}, state, {
+    autoUpdateFailed: true,
   });
 
 reducers[ACTIONS.UPGRADE_DOWNLOAD_COMPLETED] = (state, action) =>
