@@ -17,18 +17,21 @@ const RESET_TO_ORIGINAL = 'reset-to-original';
 const FUTURE_DATE_ERROR = 'Cannot set to a future date.';
 
 type Props = {
-  releaseTime: ?number,
-  releaseTimeEdited: ?number,
-  updatePublishForm: ({}) => void,
   allowDefault: ?boolean,
   showNowBtn: ?boolean,
   useMaxDate: ?boolean,
+  // --- redux:
+  releaseTime: ?number,
+  releaseTimeEdited: ?number,
+  clock24h: boolean,
+  updatePublishForm: ({}) => void,
 };
 
 const PublishReleaseDate = (props: Props) => {
   const {
     releaseTime,
     releaseTimeEdited,
+    clock24h,
     updatePublishForm,
     allowDefault = true,
     showNowBtn = true,
@@ -155,7 +158,7 @@ const PublishReleaseDate = (props: Props) => {
             onBlur={handleBlur}
             onChange={onDateTimePickerChanged}
             value={date}
-            format="y-MM-dd h:mm a"
+            format={clock24h ? 'y-MM-dd HH:mm' : 'y-MM-dd h:mm a'}
             disableClock
             clearIcon={null}
           />
