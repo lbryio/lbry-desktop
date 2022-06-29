@@ -253,7 +253,7 @@ export default React.memo<MarkdownProps>(function MarkdownPreview(props: Markdow
   }
 
   return (
-    <div dir="auto" className={classnames('markdown-preview', className)}>
+    <div dir="auto" className={classnames('notranslate markdown-preview', className)}>
       {
         remark()
           .use(remarkAttr, remarkAttrOpts)
