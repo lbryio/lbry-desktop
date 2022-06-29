@@ -57,7 +57,7 @@ export default function FileReactions(props: Props) {
           <div className="button__fire-particle6" />
         </>
       )}
-      {formatNumberWithCommas(likeCount, 0)}
+      <span>{formatNumberWithCommas(likeCount, 0)}</span>
     </>
   );
 
@@ -70,7 +70,7 @@ export default function FileReactions(props: Props) {
           <div className="button__slime-drop2" />
         </>
       )}
-      {formatNumberWithCommas(dislikeCount, 0)}
+      <span>{formatNumberWithCommas(dislikeCount, 0)}</span>
     </>
   );
 
