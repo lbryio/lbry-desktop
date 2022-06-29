@@ -184,6 +184,8 @@ export function parseAndLoad(player: any, claim: StreamClaim) {
     overrideHoverTooltip(player, tsData, duration);
   } else {
     deleteHoverInformation(player);
+    // $FlowIssue
+    player?.controlBar?.getChild('ChaptersButton')?.hide();
   }
 }
 
