@@ -16399,7 +16399,7 @@ vfile@^2.0.0:
     unist-util-stringify-position "^1.0.0"
     vfile-message "^1.0.0"
 
-"video.js@^6 || ^7", "video.js@^6.0.1 || ^7", video.js@^7.0.0, video.js@^7.18.1, "video.js@^7.2.0 || ^6.6.0":
+"video.js@^6 || ^7", "video.js@^6.0.1 || ^7", video.js@^7.0.0, video.js@^7.19.2, "video.js@^7.2.0 || ^6.6.0":
   version "7.19.2"
   resolved "https://registry.yarnpkg.com/video.js/-/video.js-7.19.2.tgz#83396db819b61e25328c020c0191dbe7a2187403"
   integrity sha512-+rV/lJ1bDoMW3SbYlRp0eC9//RgvfBpEQ0USOyx44tHVxVyMjq+G9jZoiulsDXaIp4BX9q5+/y87TbZUysXBHA==
