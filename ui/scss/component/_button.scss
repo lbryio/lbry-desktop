@@ -350,6 +350,51 @@ a.button--alt {
   background-color: transparent;
   margin-right: var(--spacing-m);
   padding: 0 var(--spacing-xxs);
+
+  &.button--comment-icons {
+    height: initial;
+    padding: 5px;
+  }
+
+  &.button--file-action-active {
+    .icon {
+      fill: var(--color-primary-alt);
+      stroke: var(--color-primary) !important; //fixme
+      color: var(--color-primary);
+    }
+  }
+
+  @media (max-width: $breakpoint-small) {
+    padding: 0 0;
+  }
+
+  .icon {
+    &:not(.color-override) {
+      stroke: var(--color-text);
+    }
+  }
+
+  .button__label {
+    min-width: 10px;
+  }
+
+  &:last-child {
+    margin-right: 0;
+  }
+
+  &:hover {
+    .button__label {
+      color: var(--color-link);
+    }
+  }
+}
+
+.button--comment-icons {
+  /* @extend .button--alt;
+  color: var(--color-text);
+  background-color: transparent;
+  margin-right: var(--spacing-m);
+  padding: 0 var(--spacing-xxs);
   height: initial;
   padding: 5px;
 
@@ -383,7 +428,7 @@ a.button--alt {
     .button__label {
       color: var(--color-link);
     }
-  }
+  } */
 }
 
 [aria-expanded='true'].button--file-action {

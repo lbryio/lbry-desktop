@@ -261,7 +261,7 @@ export class FormField extends React.PureComponent<Props> {
                 {!noEmojis && openEmoteMenu && (
                   <Button
                     type="alt"
-                    className="button--file-action"
+                    className="button--file-action button--comment-icons"
                     title="Emotes"
                     onClick={openEmoteMenu}
                     icon={ICONS.EMOJI}
