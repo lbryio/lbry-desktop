@@ -123,6 +123,9 @@ export function makeResumableUploadRequest(
           xhr.setRequestHeader('Tus-Resumable', '1.0.0');
           xhr.setRequestHeader(X_LBRY_AUTH_TOKEN, token);
           xhr.responseType = 'json';
+          xhr.onloadstart = () => {
+            window.store.dispatch(doUpdateUploadProgress({ guid, status: 'notify' }));
+          };
           xhr.onload = () => {
             window.store.dispatch(doUpdateUploadRemove(guid));
             resolve(xhr);

@@ -75,7 +75,11 @@ export default function WebUploadItem(props: Props) {
     }
 
     if (!uploader) {
-      return __('Stopped.');
+      if (status === 'notify') {
+        return __('File uploaded to server.');
+      } else {
+        return __('Stopped.');
+      }
     }
 
     if (resumable) {
@@ -87,6 +91,8 @@ export default function WebUploadItem(props: Props) {
             return __('Failed.');
           case 'conflict':
             return __('Stopped. Duplicate session detected.');
+          case 'notify':
+            return __('Processing file. Please wait...');
           default:
             return status;
         }
@@ -108,7 +114,14 @@ export default function WebUploadItem(props: Props) {
       // Should still be uploading. Don't show.
       return null;
     } else {
-      // Refreshed or connection broken.
+      // Refreshed or connection broken ...
+
+      if (status === 'notify') {
+        // ... but 'notify' sent, so we have to assume it is processed.
+        // Can't do much until the polling API is available.
+        return null;
+      }
+
       const isFileActive = file instanceof File;
       return (
         <Button
@@ -129,6 +142,42 @@ export default function WebUploadItem(props: Props) {
 
   function getCancelButton() {
     if (!locked) {
+      if (status === 'notify') {
+        return (
+          <Button
+            button="link"
+            label={__('Remove')}
+            onClick={() => {
+              doOpenModal(MODALS.CONFIRM, {
+                title: __('Remove entry?'),
+                body: (
+                  <>
+                    <p>
+                      {__('The file was successfully uploaded, but we could not retrieve the confirmation status.')}
+                    </p>
+                    <p>
+                      {__(
+                        'Wait 5-10 minutes, then refresh and check the Uploads list and Wallet transactions before attempting to re-upload.'
+                      )}
+                    </p>
+                    <p className="section__subtitle">
+                      {__('This entry can be safely removed if the transaction is visible in those pages.')}
+                    </p>
+                    <div className="help--warning">
+                      <p>{__('Press OK to clear this entry from the "Currently Uploading" list.')}</p>
+                    </div>
+                  </>
+                ),
+                onConfirm: (closeModal) => {
+                  doUpdateUploadRemove(params.guid);
+                  closeModal();
+                },
+              });
+            }}
+          />
+        );
+      }
+
       return <Button label={__('Cancel')} button="link" onClick={handleCancel} />;
     }
   }

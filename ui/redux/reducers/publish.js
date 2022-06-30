@@ -239,8 +239,14 @@ export const publishReducer = handleActions(
             uploadKeys.forEach((key) => {
               const params = newPublish.currentUploads[key].params;
               if (!params || Object.keys(params).length === 0) {
+                // The intended payload for the API is corrupted, so no point
+                // retaining. Remove from the pending-uploads list.
                 delete newPublish.currentUploads[key];
               } else {
+                // The data is still good, so we can resume upload. We just need
+                // to delete the previous reference of the tus-uploader (no
+                // longer functional, will be re-created). An empty 'uploader'
+                // also tells the GUI that we just rebooted.
                 delete newPublish.currentUploads[key].uploader;
               }
             });
