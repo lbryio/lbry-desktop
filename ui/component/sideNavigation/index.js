@@ -8,7 +8,7 @@ import { selectUserVerifiedEmail, selectUser, selectOdyseeMembershipName } from 
 import { selectHomepageData } from 'redux/selectors/settings';
 import { doSignOut } from 'redux/actions/app';
 import { selectUnseenNotificationCount } from 'redux/selectors/notifications';
-import { selectPurchaseUriSuccess, selectOdyseeMembershipForUri } from 'redux/selectors/claims';
+import { selectPurchaseUriSuccess } from 'redux/selectors/claims';
 
 import SideNavigation from './view';
 
@@ -22,7 +22,6 @@ const select = (state) => ({
   user: selectUser(state),
   homepageData: selectHomepageData(state),
   odyseeMembership: selectOdyseeMembershipName(state),
-  odyseeMembershipByUri: (uri) => selectOdyseeMembershipForUri(state, uri),
 });
 
 export default connect(select, {

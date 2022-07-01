@@ -17,7 +17,7 @@ import Icon from 'component/common/icon';
 import MarkdownPreview from 'component/common/markdown-preview';
 import OptimizedImage from 'component/optimizedImage';
 import React from 'react';
-import PremiumBadge from 'component/common/premium-badge';
+import PremiumBadge from 'component/premiumBadge';
 
 type Props = {
   comment: Comment,

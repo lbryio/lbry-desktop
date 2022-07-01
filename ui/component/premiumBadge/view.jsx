@@ -1,14 +1,15 @@
 // @flow
 import 'scss/component/_comment-badge.scss';
 
+import React from 'react';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
-import React from 'react';
-import CommentBadge from './comment-badge';
+import CommentBadge from 'component/common/comment-badge';
 import Button from 'component/button';
 
 type Props = {
-  membership: ?string,
+  uri?: string,
+  membership: ?string, // Retrieved from redux if `uri` is provided; else uses the given `membership` directly.
   linkPage?: boolean,
   placement?: string,
   className?: string,

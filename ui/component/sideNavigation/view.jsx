@@ -17,7 +17,7 @@ import { useIsMobile, useIsLargeScreen } from 'effects/use-screensize';
 import { GetLinksData } from 'util/buildHomepage';
 import { platform } from 'util/platform';
 import { DOMAIN, ENABLE_UI_NOTIFICATIONS, ENABLE_NO_SOURCE_CLAIMS } from 'config';
-import PremiumBadge from 'component/common/premium-badge';
+import PremiumBadge from 'component/premiumBadge';
 
 const touch = platform.isTouch();
 
@@ -146,7 +146,6 @@ type Props = {
   homepageData: any,
   doClearClaimSearch: () => void,
   odyseeMembership: ?string,
-  odyseeMembershipByUri: (uri: string) => string,
   doFetchLastActiveSubs: (force?: boolean, count?: number) => void,
 };
 
@@ -168,7 +167,6 @@ function SideNavigation(props: Props) {
     followedTags,
     doClearClaimSearch,
     odyseeMembership,
-    odyseeMembershipByUri,
     doFetchLastActiveSubs,
   } = props;
 
@@ -352,11 +350,7 @@ function SideNavigation(props: Props) {
             </li>
           )}
           {displayedSubscriptions.map((subscription) => (
-            <SubscriptionListItem
-              key={subscription.uri}
-              subscription={subscription}
-              odyseeMembershipByUri={odyseeMembershipByUri}
-            />
+            <SubscriptionListItem key={subscription.uri} subscription={subscription} />
           ))}
           {!!subscriptionFilter && !displayedSubscriptions.length && (
             <li>
@@ -577,14 +571,11 @@ function SideNavigation(props: Props) {
 
 type SubItemProps = {
   subscription: Subscription,
-  odyseeMembershipByUri: (uri: string) => string,
 };
 
 function SubscriptionListItem(props: SubItemProps) {
-  const { subscription, odyseeMembershipByUri } = props;
+  const { subscription } = props;
   const { uri, channelName } = subscription;
-
-  const membership = odyseeMembershipByUri(uri);
 
   return (
     <li className="navigation-link__wrapper navigation__subscription">
@@ -598,7 +589,7 @@ function SubscriptionListItem(props: SubItemProps) {
           <ClaimPreviewTitle uri={uri} />
           <span dir="auto" className="channel-name">
             {channelName}
-            <PremiumBadge membership={membership} />
+            <PremiumBadge uri={uri} />
           </span>
         </div>
       </Button>

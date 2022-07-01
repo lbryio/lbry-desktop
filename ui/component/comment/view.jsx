@@ -46,7 +46,7 @@ import OptimizedImage from 'component/optimizedImage';
 import { getChannelFromClaim } from 'util/claim';
 import { parseSticker } from 'util/comments';
 import { useIsMobile } from 'effects/use-screensize';
-import PremiumBadge from 'component/common/premium-badge';
+import PremiumBadge from 'component/premiumBadge';
 import Spinner from 'component/spinner';
 
 const AUTO_EXPAND_ALL_REPLIES = false;

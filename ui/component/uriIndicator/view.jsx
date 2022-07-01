@@ -3,7 +3,7 @@ import type { Node } from 'react';
 import React from 'react';
 import classnames from 'classnames';
 import Button from 'component/button';
-import PremiumBadge from 'component/common/premium-badge';
+import PremiumBadge from 'component/premiumBadge';
 import { stripLeadingAtSign } from 'util/string';
 
 type ChannelInfo = { uri: string, name: string, title: string };
@@ -23,7 +23,6 @@ type Props = {
   // --- redux ---
   claim: ?Claim,
   isResolvingUri: boolean,
-  odyseeMembership: string,
   comment?: boolean,
   resolveUri: (string) => void,
 };
@@ -94,7 +93,6 @@ class UriIndicator extends React.PureComponent<Props> {
       hideAnonymous = false,
       showAtSign,
       className,
-      odyseeMembership,
       comment,
       showMemberBadge = true,
     } = this.props;
@@ -127,7 +125,7 @@ class UriIndicator extends React.PureComponent<Props> {
       const inner = (
         <span dir="auto" className={classnames('channel-name', { 'channel-name--inline': inline })}>
           <p>{showAtSign ? channelName : stripLeadingAtSign(channelTitle)}</p>
-          {!comment && showMemberBadge && <PremiumBadge membership={odyseeMembership} />}
+          {!comment && showMemberBadge && <PremiumBadge uri={uri} />}
         </span>
       );
 

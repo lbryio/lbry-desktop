@@ -8,7 +8,7 @@ import FreezeframeWrapper from 'component/fileThumbnail/FreezeframeWrapper';
 import OptimizedImage from 'component/optimizedImage';
 import { AVATAR_DEFAULT } from 'config';
 import useGetUserMemberships from 'effects/use-get-user-memberships';
-import PremiumBadge from 'component/common/premium-badge';
+import PremiumBadge from 'component/premiumBadge';
 
 type Props = {
   thumbnail: ?string,
@@ -29,7 +29,6 @@ type Props = {
   setThumbUploadError: (boolean) => void,
   ThumbUploadError: boolean,
   claimsByUri: { [string]: any },
-  odyseeMembership: string,
   doFetchUserMemberships: (claimIdCsv: string) => void,
   showMemberBadge?: boolean,
   isChannel?: boolean,
@@ -55,7 +54,6 @@ function ChannelThumbnail(props: Props) {
     setThumbUploadError,
     ThumbUploadError,
     claimsByUri,
-    odyseeMembership,
     doFetchUserMemberships,
     showMemberBadge,
     isChannel,
@@ -71,7 +69,7 @@ function ChannelThumbnail(props: Props) {
   const showThumb = (!obscure && !!thumbnail) || thumbnailPreview;
 
   const badgeProps = {
-    membership: odyseeMembership,
+    uri,
     linkPage: isChannel,
     placement: isChannel ? 'bottom' : undefined,
     hideTooltip,

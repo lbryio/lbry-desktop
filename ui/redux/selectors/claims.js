@@ -820,41 +820,26 @@ export const selectIsMyChannelCountOverLimit = createSelector(
 );
 
 /**
- * Given a uri of a channel, check if there an Odysee membership value
+ * Given a uri of a channel, check if there is an Odysee membership value.
  * @param state
  * @param uri
  * @returns {*}
  */
 export const selectOdyseeMembershipForUri = (state: State, uri: string) => {
   const claim = selectClaimForUri(state, uri);
-
-  const uploaderChannelClaimId = getChannelIdFromClaim(claim);
-
-  // looks for the uploader id
-  if (uploaderChannelClaimId) {
-    const matchingMembershipOfUser =
-      state.user &&
-      state.user.odyseeMembershipsPerClaimIds &&
-      state.user.odyseeMembershipsPerClaimIds[uploaderChannelClaimId];
-
-    return matchingMembershipOfUser;
-  }
-
-  return undefined;
+  const channelId = getChannelIdFromClaim(claim);
+  return channelId ? selectOdyseeMembershipForChannelId(state, channelId) : undefined;
 };
 
 /**
- * Given a uri of a channel, check if there an Odysee membership value
+ * Given a channel ID, check if there is an Odysee membership value.
  * @param state
  * @param channelId
  * @returns {*}
  */
 export const selectOdyseeMembershipForChannelId = (state: State, channelId: string) => {
-  // looks for the uploader id
-  const matchingMembershipOfUser =
-    state.user && state.user.odyseeMembershipsPerClaimIds && state.user.odyseeMembershipsPerClaimIds[channelId];
-
-  return matchingMembershipOfUser;
+  // TODO: should access via selector, not from `state` directly.
+  return state.user && state.user.odyseeMembershipsPerClaimIds && state.user.odyseeMembershipsPerClaimIds[channelId];
 };
 
 export const selectGeoRestrictionForUri = createCachedSelector(

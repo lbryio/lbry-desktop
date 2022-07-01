@@ -9,7 +9,7 @@ import ChannelTitle from 'component/channelTitle';
 import Icon from 'component/common/icon';
 import { useHistory } from 'react-router';
 import useGetUserMemberships from 'effects/use-get-user-memberships';
-import PremiumBadge from 'component/common/premium-badge';
+import PremiumBadge from 'component/premiumBadge';
 
 type Props = {
   selectedChannelUrl: string, // currently selected channel
@@ -138,13 +138,10 @@ type ListItemProps = {
   isSelected?: boolean,
   claimsByUri: { [string]: any },
   doFetchUserMemberships: (claimIdCsv: string) => void,
-  odyseeMembershipByUri: (uri: string) => string,
 };
 
 function ChannelListItem(props: ListItemProps) {
-  const { uri, isSelected = false, claimsByUri, doFetchUserMemberships, odyseeMembershipByUri } = props;
-
-  const membership = odyseeMembershipByUri(uri);
+  const { uri, isSelected = false, claimsByUri, doFetchUserMemberships } = props;
 
   const shouldFetchUserMemberships = true;
   useGetUserMemberships(shouldFetchUserMemberships, [uri], claimsByUri, doFetchUserMemberships, [uri]);
@@ -153,7 +150,7 @@ function ChannelListItem(props: ListItemProps) {
     <div className={classnames('channel__list-item', { 'channel__list-item--selected': isSelected })}>
       <ChannelThumbnail uri={uri} hideStakedIndicator xsmall noLazyLoad />
       <ChannelTitle uri={uri} />
-      <PremiumBadge membership={membership} />
+      <PremiumBadge uri={uri} />
       {isSelected && <Icon icon={ICONS.DOWN} />}
     </div>
   );
