@@ -72,6 +72,7 @@
 
     .vjs-current-time {
       display: none !important;
+      opacity: 0;
     }
 
     .content__wrapper--floating {
@@ -162,6 +163,12 @@
         background: unset !important;
       }
     }
+
+    /*
+    .content__floating-link{
+      display:none;
+    }
+    */
 
     .vjs-control {
       display: none;
