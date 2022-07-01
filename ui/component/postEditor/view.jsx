@@ -1,6 +1,6 @@
 // @flow
 import React, { useEffect } from 'react';
-import { FormField } from 'component/common/form';
+import { FormFieldAreaAdvanced } from 'component/common/form';
 
 type Props = {
   uri: ?string,
@@ -99,7 +99,7 @@ function PostEditor(props: Props) {
   ]);
 
   return (
-    <FormField
+    <FormFieldAreaAdvanced
       type={'markdown'}
       name="content_post"
       label={label}

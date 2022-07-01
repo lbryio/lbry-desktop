@@ -29,7 +29,12 @@ select,
     background-color: var(--color-secondary);
   }
 }
-
+textarea {
+  height: var(--height-input);
+  border-radius: var(--border-radius);
+  color: var(--color-input);
+  background-color: var(--color-input-bg);
+}
 @media (min-width: $breakpoint-small) {
   textarea {
     height: var(--height-input);
@@ -532,6 +537,7 @@ fieldset-group {
 }
 
 .form-field__quick-action {
+  text-align: right;
   font-size: var(--font-xsmall);
 }
 

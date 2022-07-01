@@ -2054,4 +2054,15 @@ export const icons = {
       <path d="M12.5,23.24v-1A10.74,10.74,0,0,1,23.24,11.52" />
     </g>
   ),
+  [ICONS.SIMPLE_EDITOR]: buildIcon(
+    <g>
+      <path d="M1 18V6c0-1 1-2 2-2h18c1 0 2 1 2 2v12c0 1-1 2-2 2H3c-1 0-2-1-2-2ZM5 7v4" />
+    </g>
+  ),
+  [ICONS.ADVANCED_EDITOR]: buildIcon(
+    <g>
+      <path d="M1 20V4c0-1 1-2 2-2h18c1 0 2 1 2 2v16c0 1-1 2-2 2H3c-1 0-2-1-2-2ZM1 11h22" />
+      <path d="M5 8V6h2v2H5ZM11 8V6h2v2h-2ZM17 8V6h2v2h-2ZM5 14v4" />
+    </g>
+  ),
 };
