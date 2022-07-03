@@ -6,44 +6,13 @@ import { batchActions } from 'util/batch-actions';
 
 import * as ACTIONS from 'constants/action_types';
 import { doClaimRewardType, doRewardList } from 'redux/actions/rewards';
-import { selectEmailToVerify, selectPhoneToVerify, selectUserCountryCode, selectUser } from 'redux/selectors/user';
+import { selectUser } from 'redux/selectors/user';
 import rewards from 'rewards';
 import { Lbryio } from 'lbryinc';
 import { DOMAIN } from 'config';
 import { getDefaultLanguage } from 'util/default-languages';
 const AUTH_IN_PROGRESS = 'authInProgress';
 export let sessionStorageAvailable = false;
-
-export function doFetchInviteStatus(shouldCallRewardList = true) {
-  return (dispatch) => {
-    dispatch({
-      type: ACTIONS.USER_INVITE_STATUS_FETCH_STARTED,
-    });
-
-    Promise.all([Lbryio.call('user', 'invite_status'), Lbryio.call('user_referral_code', 'list')])
-      .then(([status, code]) => {
-        if (shouldCallRewardList) {
-          dispatch(doRewardList());
-        }
-
-        dispatch({
-          type: ACTIONS.USER_INVITE_STATUS_FETCH_SUCCESS,
-          data: {
-            invitesRemaining: status.invites_remaining ? status.invites_remaining : 0,
-            invitees: status.invitees,
-            referralLink: `${Lbryio.CONNECTION_STRING}user/refer?r=${code}`,
-            referralCode: code,
-          },
-        });
-      })
-      .catch((error) => {
-        dispatch({
-          type: ACTIONS.USER_INVITE_STATUS_FETCH_FAILURE,
-          data: { error },
-        });
-      });
-  };
-}
 
 export function doInstallNew(appVersion, os = null, firebaseToken = null, callbackForUsersWhoAreSharingData, domain) {
   const payload = { app_version: appVersion, domain };
@@ -208,95 +177,6 @@ export function doUserPhoneNew(phone, countryCode) {
       success,
       failure
     );
-  };
-}
-
-export function doUserPhoneVerifyFailure(error) {
-  return {
-    type: ACTIONS.USER_PHONE_VERIFY_FAILURE,
-    data: { error },
-  };
-}
-
-export function doUserPhoneVerify(verificationCode) {
-  return (dispatch, getState) => {
-    const phoneNumber = selectPhoneToVerify(getState());
-    const countryCode = selectUserCountryCode(getState());
-
-    dispatch({
-      type: ACTIONS.USER_PHONE_VERIFY_STARTED,
-      code: verificationCode,
-    });
-
-    Lbryio.call(
-      'user',
-      'phone_number_confirm',
-      {
-        verification_code: verificationCode,
-        phone_number: phoneNumber,
-        country_code: countryCode,
-      },
-      'post'
-    )
-      .then((user) => {
-        if (user.is_identity_verified) {
-          dispatch({
-            type: ACTIONS.USER_PHONE_VERIFY_SUCCESS,
-            data: { user },
-          });
-          dispatch(doClaimRewardType(rewards.TYPE_NEW_USER));
-        }
-      })
-      .catch((error) => dispatch(doUserPhoneVerifyFailure(error)));
-  };
-}
-
-export function doUserEmailToVerify(email) {
-  return (dispatch) => {
-    dispatch({
-      type: ACTIONS.USER_EMAIL_VERIFY_SET,
-      data: { email },
-    });
-  };
-}
-
-export function doUserEmailNew(email) {
-  return (dispatch) => {
-    dispatch({
-      type: ACTIONS.USER_EMAIL_NEW_STARTED,
-      email,
-    });
-
-    const success = () => {
-      dispatch({
-        type: ACTIONS.USER_EMAIL_NEW_SUCCESS,
-        data: { email },
-      });
-      dispatch(doUserFetch());
-    };
-
-    const failure = (error) => {
-      dispatch({
-        type: ACTIONS.USER_EMAIL_NEW_FAILURE,
-        data: { error },
-      });
-    };
-
-    Lbryio.call('user_email', 'new', { email, send_verification_email: true }, 'post')
-      .catch((error) => {
-        if (error.response && error.response.status === 409) {
-          dispatch({
-            type: ACTIONS.USER_EMAIL_NEW_EXISTS,
-          });
-
-          return Lbryio.call('user_email', 'resend_token', { email, only_if_expired: true }, 'post').then(
-            success,
-            failure
-          );
-        }
-        throw error;
-      })
-      .then(success, failure);
   };
 }
 
@@ -530,41 +410,6 @@ export function doUserEmailVerifyFailure(error) {
   };
 }
 
-export function doUserEmailVerify(verificationToken, recaptcha) {
-  return (dispatch, getState) => {
-    const email = selectEmailToVerify(getState());
-
-    dispatch({
-      type: ACTIONS.USER_EMAIL_VERIFY_STARTED,
-      code: verificationToken,
-      recaptcha,
-    });
-
-    Lbryio.call(
-      'user_email',
-      'confirm',
-      {
-        verification_token: verificationToken,
-        email,
-        recaptcha,
-      },
-      'post'
-    )
-      .then((userEmail) => {
-        if (userEmail.is_verified) {
-          dispatch({
-            type: ACTIONS.USER_EMAIL_VERIFY_SUCCESS,
-            data: { email },
-          });
-          dispatch(doUserFetch());
-        } else {
-          throw new Error('Your email is still not verified.'); // shouldn't happen
-        }
-      })
-      .catch((error) => dispatch(doUserEmailVerifyFailure(error)));
-  };
-}
-
 export function doFetchAccessToken() {
   return (dispatch) => {
     const success = (token) =>
@@ -573,34 +418,6 @@ export function doFetchAccessToken() {
         data: { token },
       });
     Lbryio.getAuthToken().then(success);
-  };
-}
-
-export function doUserIdentityVerify(stripeToken) {
-  return (dispatch) => {
-    dispatch({
-      type: ACTIONS.USER_IDENTITY_VERIFY_STARTED,
-      token: stripeToken,
-    });
-
-    Lbryio.call('user', 'verify_identity', { stripe_token: stripeToken }, 'post')
-      .then((user) => {
-        if (user.is_identity_verified) {
-          dispatch({
-            type: ACTIONS.USER_IDENTITY_VERIFY_SUCCESS,
-            data: { user },
-          });
-          dispatch(doClaimRewardType(rewards.TYPE_NEW_USER));
-        } else {
-          throw new Error('Your identity is still not verified. This should not happen.'); // shouldn't happen
-        }
-      })
-      .catch((error) => {
-        dispatch({
-          type: ACTIONS.USER_IDENTITY_VERIFY_FAILURE,
-          data: { error: error.toString() },
-        });
-      });
   };
 }
 

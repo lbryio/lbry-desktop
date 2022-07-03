@@ -13,7 +13,6 @@ import { useIsLargeScreen } from 'effects/use-screensize';
 import { GetLinksData } from 'util/buildHomepage';
 
 type Props = {
-  authenticated: boolean,
   followedTags: Array<Tag>,
   subscribedChannels: Array<Subscription>,
   showNsfw: boolean,

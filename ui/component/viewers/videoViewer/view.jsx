@@ -43,7 +43,6 @@ type Props = {
   toggleVideoTheaterMode: () => void,
   toggleAutoplayNext: () => void,
   setVideoPlaybackRate: (number) => void,
-  authenticated: boolean,
   userId: number,
   homepageData?: { [string]: HomepageCat },
   shareTelemetry: boolean,

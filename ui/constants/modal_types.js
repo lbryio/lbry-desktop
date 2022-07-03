@@ -33,7 +33,6 @@ export const WALLET_UNLOCK = 'wallet_unlock';
 export const WALLET_SYNC = 'wallet_sync';
 export const WALLET_PASSWORD_UNSAVE = 'wallet_password_unsave';
 export const CREATE_CHANNEL = 'create_channel';
-export const SET_REFERRER = 'set_referrer';
 export const SIGN_OUT = 'sign_out';
 export const LIQUIDATE_SUPPORTS = 'liquidate_supports';
 export const MASS_TIP_UNLOCK = 'mass_tip_unlock';
