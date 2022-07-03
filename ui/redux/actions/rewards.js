@@ -4,7 +4,6 @@ import { doToast } from 'redux/actions/notifications';
 import * as ACTIONS from 'constants/action_types';
 import { selectUnclaimedRewards } from 'redux/selectors/rewards';
 import { selectUserIsRewardApproved } from 'redux/selectors/user';
-// import { doFetchInviteStatus } from 'redux/actions/user';
 import rewards from 'rewards';
 
 export function doRewardList() {

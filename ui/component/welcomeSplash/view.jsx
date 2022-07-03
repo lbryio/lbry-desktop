@@ -9,7 +9,6 @@ import YrblHappy from 'static/img/yrblhappy.svg';
 type Props = {
   setWelcomeVersion: (number) => void,
   setShareDataInternal: (boolean) => void,
-  authenticated: boolean,
   handleNextPage: () => void,
   diskSpace?: DiskSpace,
 };

@@ -226,18 +226,20 @@ function AppRouter(props: Props) {
         />
       ))}
 
+      {/* Odysee signin */}
       <Route path={`/$/${PAGES.AUTH_SIGNIN}`} exact component={SignInPage} />
       <Route path={`/$/${PAGES.AUTH_PASSWORD_RESET}`} exact component={PasswordResetPage} />
       <Route path={`/$/${PAGES.AUTH_PASSWORD_SET}`} exact component={PasswordSetPage} />
       <Route path={`/$/${PAGES.AUTH}`} exact component={SignUpPage} />
       <Route path={`/$/${PAGES.AUTH}/*`} exact component={SignUpPage} />
+      <Route path={`/$/${PAGES.AUTH_VERIFY}`} exact component={SignInVerifyPage} />
+
       <Route path={`/$/${PAGES.WELCOME}`} exact component={Welcome} />
 
       <Route path={`/$/${PAGES.HELP}`} exact component={HelpPage} />
       {/* @if TARGET='app' */}
       <Route path={`/$/${PAGES.BACKUP}`} exact component={BackupPage} />
       {/* @endif */}
-      <Route path={`/$/${PAGES.AUTH_VERIFY}`} exact component={SignInVerifyPage} />
       <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />
       <Route path={`/$/${PAGES.TOP}`} exact component={TopPage} />
       <Route path={`/$/${PAGES.SETTINGS}`} exact component={SettingsPage} />

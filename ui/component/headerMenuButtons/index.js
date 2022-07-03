@@ -4,11 +4,10 @@ import { selectActiveChannelStakedLevel } from 'redux/selectors/app';
 import { selectClientSetting } from 'redux/selectors/settings';
 import * as SETTINGS from 'constants/settings';
 import HeaderMenuButtons from './view';
-import { selectUserVerifiedEmail, selectUser } from 'redux/selectors/user';
+import { selectUser } from 'redux/selectors/user';
 
 const select = (state) => ({
   activeChannelStakedLevel: selectActiveChannelStakedLevel(state),
-  authenticated: selectUserVerifiedEmail(state),
   automaticDarkModeEnabled: selectClientSetting(state, SETTINGS.AUTOMATIC_DARK_MODE_ENABLED),
   currentTheme: selectClientSetting(state, SETTINGS.THEME),
   user: selectUser(state),

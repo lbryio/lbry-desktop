@@ -51,7 +51,6 @@ import ModalRevokeClaim from 'modal/modalRevokeClaim';
 import ModalRewardCode from 'modal/modalRewardCode';
 import ModalSendTip from 'modal/modalSendTip';
 import ModalRepost from 'modal/modalRepost';
-import ModalSetReferrer from 'modal/modalSetReferrer';
 import ModalSignOut from 'modal/modalSignOut';
 import ModalSocialShare from 'modal/modalSocialShare';
 import ModalSupportsLiquidate from 'modal/modalSupportsLiquidate';
@@ -122,8 +121,6 @@ function getModal(id) {
       return ModalRewardCode;
     case MODALS.COMMENT_ACKNOWEDGEMENT:
       return ModalCommentAcknowledgement;
-    case MODALS.SET_REFERRER:
-      return ModalSetReferrer;
     case MODALS.SIGN_OUT:
       return ModalSignOut;
     case MODALS.FILE_SELECTION:

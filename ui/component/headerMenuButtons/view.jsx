@@ -12,7 +12,6 @@ import React from 'react';
 import Tooltip from 'component/common/tooltip';
 
 type HeaderMenuButtonProps = {
-  authenticated: boolean,
   automaticDarkModeEnabled: boolean,
   currentTheme: string,
   user: ?User,
