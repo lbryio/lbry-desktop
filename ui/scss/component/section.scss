@@ -4,6 +4,10 @@
   ~ .section {
     margin-top: var(--spacing-l);
   }
+
+  &.help {
+    color: var(--color-text);
+  }
 }
 
 .section--padded {

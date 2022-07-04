@@ -290,6 +290,12 @@ body {
             margin-top: 0;
             .channel-name {
               margin-top: 0;
+              p {
+                width: 181px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              }
             }
           }
           span,

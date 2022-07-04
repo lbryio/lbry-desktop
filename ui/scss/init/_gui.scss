@@ -411,6 +411,14 @@ img {
   }
 }
 
+.error {
+  padding: var(--spacing-s);
+  margin-bottom: var(--spacing-s);
+  border-radius: var(--border-radius);
+  background-color: rgba(255, 0, 0, 0.1);
+  border: 1px solid red;
+}
+
 .error__wrapper {
   background-color: var(--color-error);
   padding: var(--spacing-s);
@@ -1149,7 +1157,7 @@ img {
 
 [data-reach-menu-popover] {
   @media (max-width: $breakpoint-small) {
-    width: calc(100% - var(--spacing-xs) * 2);
+    // width: calc(100% - var(--spacing-xs) * 2);
     max-width: calc(100% - var(--spacing-xs) * 2);
   }
 }

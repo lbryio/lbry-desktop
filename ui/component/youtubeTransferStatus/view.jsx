@@ -159,7 +159,7 @@ export default function YoutubeTransferStatus(props: Props) {
                       properties={false}
                     />
                   ) : (
-                    <div className="section--padded">
+                    <div className="error">
                       {isNotEligible ? (
                         <div>{__('%channelName% is not eligible to be synced', { channelName })}</div>
                       ) : (

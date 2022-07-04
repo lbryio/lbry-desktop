@@ -401,6 +401,10 @@ $thumbnailWidthSmall: 2rem;
     }
   }
 
+  .icon--ExternalLink {
+    margin-left: 0 !important;
+  }
+
   &:hover {
     .comment__menu-help {
       color: var(--color-primary-contrast);

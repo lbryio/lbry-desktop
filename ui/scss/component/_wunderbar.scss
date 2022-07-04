@@ -128,6 +128,7 @@
   padding-top: var(--spacing-xs);
   background-color: var(--color-background);
   border-radius: 0 0 var(--border-radius) var(--border-radius);
+  border: 2px solid var(--color-header-background);
 
   [data-highlighted] {
     .button {
@@ -247,6 +248,9 @@
   @extend .help;
   margin-top: 0;
   color: var(--color-text);
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .wunderbar__more-results {

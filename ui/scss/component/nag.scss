@@ -1,6 +1,6 @@
 $nag-z-index: 997;
 $nag-helpful-z-index: 998;
-$nag-error-z-index: 999;
+$nag-error-z-index: 99999999999;
 
 .nag {
   z-index: $nag-z-index;
@@ -54,7 +54,6 @@ $nag-error-z-index: 999;
   right: var(--spacing-s);
   bottom: var(--spacing-s);
   width: unset;
-  // margin-right:100px;
   -webkit-backdrop-filter: blur(4px);
   backdrop-filter: blur(4px);
   box-sizing: border-box;

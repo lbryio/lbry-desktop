@@ -76,10 +76,6 @@ $recent-msg-button__height: 2rem;
     .recommended-content__toggles {
       margin-right: var(--spacing-xs);
 
-      .button-toggle:nth-child(2) {
-        // margin-left: 2px;
-      }
-
       .button-toggle--active {
         &:hover {
           p,
@@ -246,7 +242,6 @@ $recent-msg-button__height: 2rem;
 
     .button-toggle:not(.button-toggle--active) {
       color: var(--color-text);
-      // background-color: var(--color-header-button) !important;
       &:hover {
         filter: invert(100);
         .icon {
@@ -269,6 +264,10 @@ $recent-msg-button__height: 2rem;
     padding: 0 var(--spacing-s);
     padding-top: 0;
     padding-right: 0;
+
+    .button-toggle:last-of-type {
+      margin-right: var(--spacing-s) !important;
+    }
   }
 
   @media (max-width: $breakpoint-small) {
