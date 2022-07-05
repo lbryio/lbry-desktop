@@ -77,8 +77,8 @@ export const selectWeeklyWatchClaimedThisWeek = createSelector(selectUnclaimedRe
   if (weeklyWatch && weeklyWatch.data && weeklyWatch.data.last_claimed) {
     const last = new Date(weeklyWatch.data.last_claimed);
     const diff = new Date() - last;
-    const diffDays = Math.ceil(diff / (1000 * 60 * 60 * 24));
-    return diffDays < 6;
+    const diffDays = diff / (1000 * 60 * 60 * 24);
+    return diffDays < 6.5;
   }
   return false;
 });
