@@ -270,7 +270,7 @@ function DiscoverPage(props: Props) {
           }
           meta={getMeta()}
           hasSource
-          forceShowReposts={dynamicRouteProps}
+          hideRepostsOverride={dynamicRouteProps ? true : undefined}
           searchLanguages={dynamicRouteProps?.options?.searchLanguages}
         />
       </ClaimSearchFilterContext.Provider>

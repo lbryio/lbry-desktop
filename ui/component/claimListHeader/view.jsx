@@ -88,7 +88,8 @@ function ClaimListHeader(props: Props) {
         urlParams.get(CS.DURATION_KEY) ||
         urlParams.get(CS.TAGS_KEY) ||
         urlParams.get(CS.FEE_AMOUNT_KEY) ||
-        urlParams.get(CS.LANGUAGE_KEY)
+        urlParams.get(CS.LANGUAGE_KEY) ||
+        filterCtx?.repost?.hideReposts
     );
 
   const languageValue = searchInLanguage
@@ -102,6 +103,27 @@ function ClaimListHeader(props: Props) {
   const shouldHighlight = searchInLanguage
     ? languageParam !== languageSetting && languageParam !== null
     : languageParam !== CS.LANGUAGES_ALL && languageParam !== null;
+
+  function getHideRepostsElem(filterCtx, contentType) {
+    if (filterCtx?.repost) {
+      return (
+        <div className={classnames(`card claim-search__menus`)}>
+          <FormField
+            label={__('Hide reposts')}
+            name="hide_reposts"
+            type="checkbox"
+            checked={filterCtx.repost.hideReposts}
+            disabled={contentType === CS.CLAIM_REPOST}
+            onChange={() => {
+              filterCtx.repost.setHideReposts((prev) => !prev);
+            }}
+          />
+        </div>
+      );
+    } else {
+      return null;
+    }
+  }
 
   React.useEffect(() => {
     if (action !== 'POP' && isFiltered()) {
@@ -507,6 +529,7 @@ function ClaimListHeader(props: Props) {
                 </div>
               )}
             </div>
+            {getHideRepostsElem(filterCtx, contentTypeParam)}
           </>
         )}
       </div>

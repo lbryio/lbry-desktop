@@ -31,7 +31,7 @@ type Props = {
   pageSize?: number,
 
   fetchViewCount?: boolean,
-  forceShowReposts?: boolean,
+  hideRepostsOverride?: boolean, // undefined = use SETTINGS.HIDE_REPOSTS; true/false: use this.
   hasNoSource?: boolean,
   hasSource?: boolean,
   hideAdvancedFilter?: boolean,
@@ -165,7 +165,7 @@ function ClaimListDiscover(props: Props) {
     hideFilters = false,
     claimIds,
     maxPages,
-    forceShowReposts = false,
+    hideRepostsOverride,
     languageSetting,
     searchLanguages,
     searchInLanguage,
@@ -214,6 +214,7 @@ function ClaimListDiscover(props: Props) {
     new Set(mutedUris.concat(blockedUris).map((uri) => splitBySeparator(uri)[1]))
   );
   const [hiddenBuffer, setHiddenBuffer] = React.useState([]);
+  const hideRepostsEffective = resolveHideReposts(hideReposts, hideRepostsOverride);
 
   const langParam = urlParams.get(CS.LANGUAGE_KEY) || null;
   const searchInSelectedLang = searchInLanguage && !ignoreSearchInLanguage;
@@ -438,7 +439,7 @@ function ClaimListDiscover(props: Props) {
     }
   }
 
-  if (hideReposts && !options.reposted_claim_id && !forceShowReposts) {
+  if (hideRepostsEffective && !options.reposted_claim_id) {
     if (Array.isArray(options.claim_type)) {
       if (options.claim_type.length > 1) {
         options.claim_type = options.claim_type.filter((claimType) => claimType !== 'repost');
@@ -599,6 +600,14 @@ function ClaimListDiscover(props: Props) {
       if (claimSearchResult && !claimSearchResultLastPageReached) {
         setPage(page + 1);
       }
+    }
+  }
+
+  function resolveHideReposts(hideRepostSetting, hideRepostOverride) {
+    if (hideRepostOverride === undefined || hideRepostOverride === null) {
+      return hideRepostSetting;
+    } else {
+      return hideRepostOverride;
     }
   }
 
