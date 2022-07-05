@@ -9,7 +9,6 @@ import Icon from 'component/common/icon';
 import NotificationBubble from 'component/notificationBubble';
 import React from 'react';
 import Tooltip from 'component/common/tooltip';
-import { formatLbryUrlForWeb } from 'util/url';
 import Notification from 'component/notification';
 import DateTime from 'component/dateTime';
 import ChannelThumbnail from 'component/channelThumbnail';
@@ -18,6 +17,7 @@ import Button from 'component/button';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import { RULE } from 'constants/notifications';
 import UriIndicator from 'component/uriIndicator';
+import { getNotificationLink } from '../notification/helpers/target';
 import { generateNotificationTitle } from '../notification/helpers/title';
 import { generateNotificationText } from '../notification/helpers/text';
 import { parseURI } from 'util/lbryURI';
@@ -106,26 +106,18 @@ export default function NotificationHeaderButton(props: Props) {
   if (!notificationsEnabled) return null;
 
   function handleNotificationClick(notification) {
-    const { id, notification_parameters, is_read } = notification;
+    const { id, is_read } = notification;
 
     if (!is_read) {
       seeNotification([id]);
       readNotification([id]);
     }
-    let notificationLink = formatLbryUrlForWeb(notification_parameters.device.target);
-    if (notification_parameters.dynamic?.hash) {
-      notificationLink += '?lc=' + notification_parameters.dynamic.hash + '&view=discussion';
-    }
-    push(notificationLink);
+
+    push(getNotificationLink(notification));
   }
 
   function getWebUri(notification) {
-    const { notification_parameters } = notification;
-    let notificationLink = formatLbryUrlForWeb(notification_parameters.device.target);
-    if (notification_parameters.dynamic?.hash) {
-      notificationLink += '?lc=' + notification_parameters.dynamic.hash + '&view=discussion';
-    }
-    return notificationLink;
+    return getNotificationLink(notification);
   }
 
   function menuEntry(notification) {

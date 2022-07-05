@@ -1,14 +1,11 @@
 // @flow
 import { lazyImport } from 'util/lazyImport';
-import { formatLbryUrlForWeb } from 'util/url';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
 import { NavLink } from 'react-router-dom';
-import { PAGE_VIEW_QUERY, DISCUSSION_PAGE } from 'page/channel/view';
 import { parseURI } from 'util/lbryURI';
 import { RULE } from 'constants/notifications';
 import { useHistory } from 'react-router';
 import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
 import Button from 'component/button';
 import ChannelThumbnail from 'component/channelThumbnail';
 import classnames from 'classnames';
@@ -18,9 +15,9 @@ import Icon from 'component/common/icon';
 import NotificationContentChannelMenu from 'component/notificationContentChannelMenu';
 import React from 'react';
 import UriIndicator from 'component/uriIndicator';
+import { getNotificationLink, getNotificationTarget } from './helpers/target';
 import { generateNotificationTitle } from './helpers/title';
 import { generateNotificationText } from './helpers/text';
-import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 
 const CommentCreate = lazyImport(() => import('component/commentCreate' /* webpackChunkName: "comments" */));
 const CommentReactions = lazyImport(() => import('component/commentReactions' /* webpackChunkName: "comments" */));
@@ -46,7 +43,9 @@ export default function Notification(props: Props) {
     notification_rule === RULE.COMMENT ||
     notification_rule === RULE.COMMENT_REPLY ||
     notification_rule === RULE.CREATOR_COMMENT;
-  const notificationTarget = getNotificationTarget();
+
+  const notificationTarget = getNotificationTarget(notification);
+  const notificationLink = getNotificationLink(notification, notificationTarget);
 
   const creatorIcon = (channelUrl, channelThumbnail) => (
     <UriIndicator uri={channelUrl} link showAtSign channelInfo={{ uri: channelUrl, name: '' }}>
@@ -91,12 +90,6 @@ export default function Notification(props: Props) {
       icon = <Icon icon={ICONS.NOTIFICATION} sectionIcon />;
   }
 
-  let notificationLink = formatLbryUrlForWeb(notificationTarget);
-  let urlParams = new URLSearchParams();
-  if (isCommentNotification && notification_parameters.dynamic.hash) {
-    urlParams.append(LINKED_COMMENT_QUERY_PARAM, notification_parameters.dynamic.hash);
-  }
-
   let channelName;
   if (channelUrl) {
     try {
@@ -104,29 +97,7 @@ export default function Notification(props: Props) {
     } catch (e) {}
   }
 
-  try {
-    const { isChannel } = parseURI(notificationTarget);
-    if (isChannel) urlParams.append(PAGE_VIEW_QUERY, DISCUSSION_PAGE);
-  } catch (e) {}
-
-  notificationLink += `?${urlParams.toString()}`;
   const navLinkProps = { to: notificationLink, onClick: (e) => e.stopPropagation() };
-
-  function getNotificationTarget() {
-    switch (notification_rule) {
-      case RULE.WEEKLY_WATCH_REMINDER:
-      case RULE.DAILY_WATCH_AVAILABLE:
-      case RULE.DAILY_WATCH_REMIND:
-        return `/$/${PAGES.CHANNELS_FOLLOWING}`;
-      case RULE.MISSED_OUT:
-      case RULE.REWARDS_APPROVAL_PROMPT:
-        return `/$/${PAGES.REWARDS_VERIFY}?redirect=/$/${PAGES.REWARDS}`;
-      case RULE.FIAT_TIP:
-        return `/$/${PAGES.WALLET}?fiatType=incoming&tab=fiat-payment-history&currency=fiat`;
-      default:
-        return notification_parameters.device.target;
-    }
-  }
 
   function handleNotificationClick() {
     if (!is_read) readNotification();
