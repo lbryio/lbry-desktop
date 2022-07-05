@@ -13,7 +13,14 @@ import * as MODALS from 'constants/modal_types';
 import React, { Fragment, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { doDaemonReady, doAutoUpdate, doOpenModal, doHideModal, doToggle3PAnalytics } from 'redux/actions/app';
+import {
+  doDaemonReady,
+  doAutoUpdate,
+  doOpenModal,
+  doHideModal,
+  doToggle3PAnalytics,
+  doMinVersionSubscribe,
+} from 'redux/actions/app';
 import Lbry, { apiCall } from 'lbry';
 import { isURIValid } from 'util/lbryURI';
 import { setSearchApi } from 'redux/actions/search';
@@ -252,9 +259,16 @@ function AppWrapper() {
         app.store.dispatch(doFetchUserLocale());
       }, 25);
 
+      const nonCriticalTimer = setTimeout(() => {
+        app.store.dispatch(doMinVersionSubscribe());
+      }, 5000);
+
       analytics.startupEvent(Date.now());
 
-      return () => clearTimeout(timer);
+      return () => {
+        clearTimeout(timer);
+        clearTimeout(nonCriticalTimer);
+      };
     }
   }, [readyToLaunch, persistDone]);
 

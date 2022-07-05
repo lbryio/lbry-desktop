@@ -4,6 +4,7 @@ import isDev from 'electron-is-dev';
 import { ipcRenderer, remote } from 'electron';
 // @endif
 import path from 'path';
+import { MINIMUM_VERSION, URL } from 'config';
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import * as SETTINGS from 'constants/settings';
@@ -266,6 +267,33 @@ export function doCheckUpgradeSubscribe() {
       type: ACTIONS.CHECK_UPGRADE_SUBSCRIBE,
       data: { checkUpgradeTimer },
     });
+  };
+}
+
+export function doMinVersionCheck() {
+  return (dispatch) => {
+    fetch(`${URL}/$/minVersion/v1/get`)
+      .then((response) => response.json())
+      .then((json) => {
+        if (json?.status === 'success' && json?.data && MINIMUM_VERSION) {
+          const liveMinimumVersion = Number(json.data);
+          if (liveMinimumVersion > MINIMUM_VERSION) {
+            dispatch({ type: ACTIONS.RELOAD_REQUIRED });
+          }
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+}
+
+export function doMinVersionSubscribe() {
+  return (dispatch) => {
+    dispatch(doMinVersionCheck());
+
+    const CHECK_UPGRADE_INTERVAL_MS = 60 * 60 * 1000;
+    setInterval(() => dispatch(doMinVersionCheck()), CHECK_UPGRADE_INTERVAL_MS);
   };
 }
 
