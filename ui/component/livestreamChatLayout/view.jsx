@@ -266,7 +266,14 @@ export default function LivestreamChatLayout(props: Props) {
               actions={
                 <div className="section__actions">
                   {openedPopoutWindow && (
-                    <Button button="secondary" label={__('Close Popout')} onClick={() => openedPopoutWindow.close()} />
+                    <Button
+                      button="secondary"
+                      label={__('Close Popout')}
+                      onClick={() => {
+                        openedPopoutWindow.close();
+                        setPopoutWindow(undefined);
+                      }}
+                    />
                   )}
 
                   {chatHidden && (

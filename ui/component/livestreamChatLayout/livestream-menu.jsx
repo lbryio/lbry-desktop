@@ -34,17 +34,32 @@ export default function LivestreamMenu(props: Props) {
     location: { pathname },
   } = useHistory();
 
+  const initialPopoutUnload = React.useRef(false);
+
   const [showTimestamps, setShowTimestamps] = usePersistedState('live-timestamps', false);
 
   function handlePopout() {
     if (setPopoutWindow) {
-      const newWindow = window.open('/$/popout' + pathname, 'Popout Chat', 'height=700,width=400');
+      const popoutWindow = window.open('/$/popout' + pathname, 'Popout Chat', 'height=700,width=400');
 
-      // Add function to newWindow when closed (either manually or from button component)
-      newWindow.onbeforeunload = () => setPopoutWindow(undefined);
+      // Adds function to popoutWindow when unloaded and verify if it was closed
+      const handleUnload = (e) => {
+        if (!initialPopoutUnload.current) {
+          initialPopoutUnload.current = true;
+        } else {
+          const timer = setInterval((a, b) => {
+            if (popoutWindow.closed) {
+              clearInterval(timer);
+              setPopoutWindow(undefined);
+            }
+          }, 300);
+        }
+      };
 
-      if (window.focus) newWindow.focus();
-      setPopoutWindow(newWindow);
+      popoutWindow.onunload = handleUnload;
+
+      if (window.focus) popoutWindow.focus();
+      setPopoutWindow(popoutWindow);
     }
   }
 
