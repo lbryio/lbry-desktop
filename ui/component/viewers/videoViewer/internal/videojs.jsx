@@ -450,7 +450,9 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       if (isLivestream) {
         vjsPlayer.isLivestream = true;
         vjsPlayer.addClass('livestreamPlayer');
-        vjsPlayer.src({ type: 'application/x-mpegURL', src: livestreamVideoUrl });
+        // temp workaround for CDN issue, remove in a few weeks.
+        const templivestreamVideoUrl = livestreamVideoUrl + '?cachebust=1';
+        vjsPlayer.src({ type: 'application/x-mpegURL', src: templivestreamVideoUrl });
       } else {
         vjsPlayer.isLivestream = false;
         vjsPlayer.removeClass('livestreamPlayer');
