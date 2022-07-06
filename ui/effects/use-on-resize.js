@@ -14,5 +14,6 @@ export function useOnResize(cb) {
 
       return () => window.removeEventListener('resize', handleResize);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isWindowClient]);
 }

@@ -26,7 +26,7 @@ import React, { useEffect, useState } from 'react';
 import { parseURI } from 'util/lbryURI';
 import DateTime from 'component/dateTime';
 import Button from 'component/button';
-import Expandable from 'component/expandable';
+import Expandable from 'component/common/expandable';
 import MarkdownPreview from 'component/common/markdown-preview';
 import CommentBadge from 'component/common/comment-badge';
 import ChannelThumbnail from 'component/channelThumbnail';
@@ -87,8 +87,6 @@ type Props = {
   threadLevel?: number,
   threadDepthLevel?: number,
 };
-
-const LENGTH_TO_COLLAPSE = 300;
 
 function CommentView(props: Props) {
   const {
@@ -176,7 +174,6 @@ function CommentView(props: Props) {
   const contentChannelClaim = getChannelFromClaim(claim);
   const commentByOwnerOfContent = contentChannelClaim && contentChannelClaim.permanent_url === authorUri;
   const stickerFromMessage = parseSticker(message);
-  const isExpandable = editedMessage.length >= LENGTH_TO_COLLAPSE;
 
   let channelOwnerOfContent;
   try {
@@ -388,8 +385,8 @@ function CommentView(props: Props) {
                     <div className="sticker__comment">
                       <OptimizedImage src={stickerFromMessage.url} waitLoad loading="lazy" />
                     </div>
-                  ) : isExpandable ? (
-                    <Expandable beginCollapsed>
+                  ) : (
+                    <Expandable>
                       <MarkdownPreview
                         content={message}
                         promptLinks
@@ -398,14 +395,6 @@ function CommentView(props: Props) {
                         hasMembership={Boolean(commenterMembership)}
                       />
                     </Expandable>
-                  ) : (
-                    <MarkdownPreview
-                      content={message}
-                      promptLinks
-                      parentCommentId={commentId}
-                      stakedLevel={stakedLevel}
-                      hasMembership={Boolean(commenterMembership)}
-                    />
                   )}
                 </div>
 
