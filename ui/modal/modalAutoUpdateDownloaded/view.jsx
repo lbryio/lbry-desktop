@@ -1,5 +1,5 @@
 // @flow
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // @if TARGET='app'
 import { ipcRenderer } from 'electron';
 // @endif
@@ -10,15 +10,16 @@ type Props = {
   closeModal: (any) => any,
   declineAutoUpdate: () => any,
   errorWhileUpdating: boolean,
+  isDownloading: boolean,
+  isUpdateAvailable: boolean,
 };
 
 const ModalAutoUpdateDownloaded = (props: Props) => {
-  const { closeModal, declineAutoUpdate, errorWhileUpdating } = props;
-  const [disabled, setDisabled] = useState(false);
-  const isDownloading = disabled && !errorWhileUpdating;
+  const { closeModal, declineAutoUpdate, errorWhileUpdating, isDownloading, isUpdateAvailable } = props;
+  const [waitingForAutoUpdateResponse, setWaitingForAutoUpdateResponse] = useState(false);
 
   const handleConfirm = () => {
-    setDisabled(true);
+    setWaitingForAutoUpdateResponse(true);
     ipcRenderer.send('autoUpdateAccepted');
   };
 
@@ -27,6 +28,10 @@ const ModalAutoUpdateDownloaded = (props: Props) => {
     closeModal();
   };
 
+  useEffect(() => {
+    setWaitingForAutoUpdateResponse(false);
+  }, [errorWhileUpdating, isDownloading, isUpdateAvailable]);
+
   return (
     <Modal
       isOpen
@@ -34,8 +39,8 @@ const ModalAutoUpdateDownloaded = (props: Props) => {
       contentLabel={__('Upgrade Downloaded')}
       title={__('LBRY leveled up')}
       confirmButtonLabel={isDownloading ? __('Downloading...') : __('Upgrade Now')}
-      abortButtonLabel={__('Not Now')}
-      confirmButtonDisabled={isDownloading}
+      abortButtonLabel={isDownloading ? __('Keep browsing') : __('Not Now')}
+      confirmButtonDisabled={!isUpdateAvailable || isDownloading || waitingForAutoUpdateResponse}
       onConfirmed={handleConfirm}
       onAborted={handleAbort}
     >

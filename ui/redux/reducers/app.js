@@ -26,6 +26,7 @@ export type AppState = {
   hasSignature: boolean,
   badgeNumber: number,
   volume: number,
+  autoUpdateDownloading: boolean,
   autoUpdateDeclined: boolean,
   autoUpdateFailed: boolean,
   modalsAllowed: boolean,
@@ -63,6 +64,7 @@ const defaultState: AppState = {
   upgradeSkipped: sessionStorage.getItem('upgradeSkipped') === 'true',
   // @endif
   muted: false,
+  autoUpdateDownloading: false,
   autoUpdateDownloaded: false,
   autoUpdateDeclined: false,
   autoUpdateFailed: false,
@@ -144,9 +146,18 @@ reducers[ACTIONS.UPGRADE_CANCELLED] = (state) =>
     modal: null,
   });
 
+reducers[ACTIONS.AUTO_UPDATE_DOWNLOADING] = (state) =>
+  Object.assign({}, state, {
+    autoUpdateDownloading: true,
+    autoUpdateDownloaded: false,
+    autoUpdateFailed: false,
+  });
+
 reducers[ACTIONS.AUTO_UPDATE_DOWNLOADED] = (state) =>
   Object.assign({}, state, {
+    autoUpdateDownloading: false,
     autoUpdateDownloaded: true,
+    autoUpdateFailed: false,
   });
 
 reducers[ACTIONS.AUTO_UPDATE_DECLINED] = (state) =>
@@ -157,10 +168,14 @@ reducers[ACTIONS.AUTO_UPDATE_DECLINED] = (state) =>
 reducers[ACTIONS.AUTO_UPDATE_RESET] = (state) =>
   Object.assign({}, state, {
     autoUpdateFailed: false,
+    autoUpdateDownloading: false,
+    autoUpdateDownloaded: false,
   });
 
 reducers[ACTIONS.AUTO_UPDATE_FAILED] = (state) =>
   Object.assign({}, state, {
+    autoUpdateDownloading: false,
+    autoUpdateDownloaded: false,
     autoUpdateFailed: true,
   });
 

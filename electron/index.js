@@ -417,9 +417,9 @@ process.on('uncaughtException', error => {
 });
 
 // Auto updater
-// autoUpdater.on('download-progress', (p) => {
-//   rendererWindow.webContents.send('download-progress-update', p);
-// });
+autoUpdater.on('download-progress', () => {
+  updateState = UPDATE_STATE_DOWNLOADING;
+});
 
 autoUpdater.on('update-downloaded', () => {
   updateState = UPDATE_STATE_DOWNLOADED;
@@ -434,6 +434,9 @@ autoUpdater.on('update-downloaded', () => {
 });
 
 autoUpdater.on('update-available', () => {
+  if (updateState === UPDATE_STATE_DOWNLOADING) {
+    return;
+  }
   updateState = UPDATE_STATE_UPDATES_FOUND;
 });
 
@@ -442,6 +445,10 @@ autoUpdater.on('update-not-available', () => {
 });
 
 autoUpdater.on('error', () => {
+  if (updateState === UPDATE_STATE_DOWNLOADING) {
+    updateState = UPDATE_STATE_UPDATES_FOUND;
+    return;
+  }
   updateState = UPDATE_STATE_INIT;
 });
 
@@ -504,6 +511,10 @@ ipcMain.on('autoUpdateAccepted', () => {
   // sure it has been downloaded first.
   if (updateState === UPDATE_STATE_DOWNLOADED) {
     autoUpdater.quitAndInstall();
+    return;
+  }
+
+  if (updateState !== UPDATE_STATE_UPDATES_FOUND) {
     return;
   }
 

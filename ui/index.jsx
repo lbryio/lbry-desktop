@@ -22,6 +22,7 @@ import {
   doUpdateDownloadProgress,
   doNotifyUpdateAvailable,
   doShowUpgradeInstallationError,
+  doAutoUpdateDownloading,
   doAutoUpdateReset,
   doAutoUpdateFail,
 } from 'redux/actions/app';
@@ -131,12 +132,15 @@ ipcRenderer.on('open-uri-requested', (event, url, newSession) => {
   handleError();
 });
 
+autoUpdater.on('download-progress', () => {
+  app.store.dispatch(doAutoUpdateDownloading());
+});
+
 autoUpdater.on('checking-for-update', () => {
   app.store.dispatch(doAutoUpdateReset());
 });
 
 autoUpdater.on('update-available', (e) => {
-  app.store.dispatch(doAutoUpdateReset());
   app.store.dispatch(doNotifyUpdateAvailable(e));
 });
 

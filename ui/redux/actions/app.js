@@ -220,6 +220,12 @@ export function doNotifyUpdateAvailable(e) {
   };
 }
 
+export function doAutoUpdateDownloading() {
+  return {
+    type: ACTIONS.AUTO_UPDATE_DOWNLOADING,
+  };
+}
+
 export function doAutoUpdateReset() {
   return {
     type: ACTIONS.AUTO_UPDATE_RESET,
