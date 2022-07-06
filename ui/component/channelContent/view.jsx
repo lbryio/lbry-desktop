@@ -78,7 +78,7 @@ function ChannelContent(props: Props) {
   } = useHistory();
 
   // In Channel Page, ignore SETTINGS.HIDE_REPOSTS and show reposts by default:
-  const [hideReposts, setHideReposts] = usePersistedState('hideRepostsChannelPage');
+  const [hideReposts, setHideReposts] = usePersistedState('hideRepostsChannelPage', false);
 
   const claimSearchFilterCtx = {
     contentTypes: CS.CONTENT_TYPES,
