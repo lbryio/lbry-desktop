@@ -1,0 +1,67 @@
+// Refined from
+// https://github.com/ctrl-freaks/freezeframe.js/tree/master/packages/freezeframe/src
+
+$base-zindex: 0;
+$transition-duration: 300ms;
+
+// Classnames must line up with classes in classes.js
+.ff-container {
+  position: absolute;
+
+  .ff-image {
+    z-index: $base-zindex;
+    vertical-align: top;
+    opacity: 0;
+    border-radius: var(--border-radius);
+  }
+
+  .ff-canvas {
+    border-radius: var(--border-radius);
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    vertical-align: top;
+    opacity: 0;
+
+    &.ff-canvas-ready {
+      transition: opacity $transition-duration;
+      opacity: 1;
+    }
+  }
+
+  &.ff-active {
+    .ff-image {
+      opacity: 1;
+    }
+    .ff-canvas.ff-canvas-ready {
+      transition: none;
+      opacity: 0;
+    }
+    .ff-overlay {
+      display: none;
+    }
+  }
+
+  &.ff-inactive {
+    .ff-canvas.ff-canvas-ready {
+      transition: opacity $transition-duration;
+      opacity: 1;
+    }
+    .ff-image {
+      transition: opacity $transition-duration;
+      transition-delay: 170ms;
+      opacity: 0;
+    }
+  }
+
+  &.ff-responsive {
+    max-width: 100%;
+
+    .ff-image,
+    .ff-canvas {
+      width: 100%;
+    }
+  }
+}

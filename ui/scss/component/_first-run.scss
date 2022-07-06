@@ -1,0 +1,35 @@
+.first-run__image-wrapper {
+  .privacy-img {
+    min-width: 100%;
+    height: 30vh;
+  }
+  height: 100%;
+}
+
+.first-run__wrapper {
+  margin: auto;
+  .first-run__left {
+    min-height: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+}
+
+.first-run__actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  @media (min-width: $breakpoint-small) {
+    justify-content: flex-start;
+    :not(:first-child) {
+      margin-left: var(--spacing-s);
+    }
+  }
+}
+
+.first-run__code {
+  padding: var(--spacing-s);
+  background-color: var(--color-card-background);
+}
