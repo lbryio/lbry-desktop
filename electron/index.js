@@ -463,7 +463,7 @@ ipcMain.on('download-upgrade', (event, params) => {
     autoUpdater.downloadUpdate();
     return;
   }
-  
+
   const { url, options } = params;
   const dir = fs.mkdtempSync(app.getPath('temp') + path.sep);
 
