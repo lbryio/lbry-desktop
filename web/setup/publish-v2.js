@@ -147,7 +147,7 @@ export function makeResumableUploadRequest(
           xhr.send(jsonPayload);
         }
 
-        setTimeout(() => makeNotifyRequest(), 15000);
+        makeNotifyRequest();
       },
     });
 
