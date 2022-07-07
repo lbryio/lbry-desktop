@@ -171,7 +171,7 @@ function ChannelContent(props: Props) {
             streamType={SIMPLE_SITE ? CS.CONTENT_ALL : undefined}
             channelIds={[claimId]}
             claimType={claimType}
-            feeAmount={CS.FEE_AMOUNT_ANY}
+            feeAmount={undefined}
             defaultOrderBy={CS.ORDER_BY_NEW}
             pageSize={dynamicPageSize}
             infiniteScroll={defaultInfiniteScroll}

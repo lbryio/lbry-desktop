@@ -260,7 +260,7 @@ function DiscoverPage(props: Props) {
           // TODO: find a better way to determine discover / wild west vs other modes release times
           // for now including && !tags so that
           releaseTime={getReleaseTime()}
-          feeAmount={isWildWest || tags ? CS.FEE_AMOUNT_ANY : undefined}
+          feeAmount={undefined}
           channelIds={channelIds}
           excludedChannelIds={excludedChannelIds}
           limitClaimsPerChannel={
