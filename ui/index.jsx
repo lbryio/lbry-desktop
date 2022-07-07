@@ -21,6 +21,10 @@ import {
   doToggle3PAnalytics,
   doUpdateDownloadProgress,
   doNotifyUpdateAvailable,
+  doShowUpgradeInstallationError,
+  doAutoUpdateDownloading,
+  doAutoUpdateReset,
+  doAutoUpdateFail,
 } from 'redux/actions/app';
 import { isURIValid } from 'util/lbryURI';
 import { setSearchApi } from 'redux/actions/search';
@@ -128,8 +132,28 @@ ipcRenderer.on('open-uri-requested', (event, url, newSession) => {
   handleError();
 });
 
+autoUpdater.on('download-progress', () => {
+  app.store.dispatch(doAutoUpdateDownloading());
+});
+
+autoUpdater.on('checking-for-update', () => {
+  app.store.dispatch(doAutoUpdateReset());
+});
+
 autoUpdater.on('update-available', (e) => {
   app.store.dispatch(doNotifyUpdateAvailable(e));
+});
+
+autoUpdater.on('update-downloaded', () => {
+  app.store.dispatch(doAutoUpdateReset());
+});
+
+autoUpdater.on('error', () => {
+  app.store.dispatch(doAutoUpdateFail());
+});
+
+ipcRenderer.on('upgrade-installing-error', () => {
+  app.store.dispatch(doShowUpgradeInstallationError());
 });
 
 ipcRenderer.on('download-progress-update', (e, p) => {
@@ -208,6 +232,8 @@ function AppWrapper() {
       const enabled = makeSelectClientSetting(SETTINGS.ENABLE_PRERELEASE_UPDATES)(state);
       if (enabled) {
         autoUpdater.allowPrerelease = true;
+      } else {
+        autoUpdater.allowPrerelease = false;
       }
     }
   }, [persistDone]);

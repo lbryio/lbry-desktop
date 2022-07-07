@@ -29,6 +29,10 @@
       "from": "./static/font",
       "to": "static/font",
       "filter": ["**/*"]
+    },
+    {
+      "from": "./static/app-update.yml",
+      "to": "app-update.yml"
     }
   ],
   "publish": [

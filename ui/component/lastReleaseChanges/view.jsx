@@ -5,11 +5,12 @@ import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 
 type Props = {
+  releaseVersion: string,
   hideReleaseVersion?: boolean,
 };
 
 const LastReleaseChanges = (props: Props) => {
-  const { hideReleaseVersion } = props;
+  const { hideReleaseVersion, releaseVersion } = props;
   const [releaseTag, setReleaseTag] = useState('');
   const [releaseChanges, setReleaseChanges] = useState('');
   const [fetchingReleaseChanges, setFetchingReleaseChanges] = useState(false);
@@ -35,7 +36,7 @@ const LastReleaseChanges = (props: Props) => {
   );
 
   useEffect(() => {
-    const lastReleaseUrl = 'https://api.github.com/repos/lbryio/lbry-desktop/releases/latest';
+    const lastReleaseUrl = `https://api.github.com/repos/lbryio/lbry-desktop/releases/tags/${releaseVersion}`;
     const options = {
       method: 'GET',
       headers: { Accept: 'application/vnd.github.v3+json' },
@@ -54,7 +55,7 @@ const LastReleaseChanges = (props: Props) => {
         setFetchingReleaseChanges(false);
         setFetchReleaseFailed(true);
       });
-  }, []);
+  }, [releaseVersion, setFetchingReleaseChanges, setReleaseTag, setReleaseChanges, setFetchReleaseFailed]);
 
   if (fetchingReleaseChanges) {
     return <p>{__('Loading...')}</p>;

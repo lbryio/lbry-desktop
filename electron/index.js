@@ -22,6 +22,7 @@ import { diskSpaceLinux, diskSpaceWindows, diskSpaceMac } from '../ui/util/disks
 const { download } = require('electron-dl');
 const remote = require('@electron/remote/main');
 const os = require('os');
+const sudo = require('sudo-prompt');
 
 remote.initialize();
 const filePath = path.join(process.resourcesPath, 'static', 'upgradeDisabled');
@@ -33,28 +34,22 @@ try {
   upgradeDisabled = false;
 }
 autoUpdater.autoDownload = !upgradeDisabled;
+autoUpdater.allowPrerelease = false;
 
-// This is set to true if an auto update has been downloaded through the Electron
-// auto-update system and is ready to install. If the user declined an update earlier,
-// it will still install on shutdown.
-let autoUpdateDownloaded = false;
+const UPDATE_STATE_INIT = 0;
+const UPDATE_STATE_CHECKING = 1;
+const UPDATE_STATE_UPDATES_FOUND = 2;
+const UPDATE_STATE_NO_UPDATES_FOUND = 3;
+const UPDATE_STATE_DOWNLOADING = 4;
+const UPDATE_STATE_DOWNLOADED = 5;
+let updateState = UPDATE_STATE_INIT;
+let updateDownloadItem;
+
+const isAutoUpdateSupported = ['win32', 'darwin'].includes(process.platform) || !!process.env.APPIMAGE;
 
 // This is used to keep track of whether we are showing the special dialog
 // that we show on Windows after you decline an upgrade and close the app later.
 let showingAutoUpdateCloseAlert = false;
-
-// This is used to prevent downloading updates multiple times when
-// using the auto updater API.
-// As read in the documentation:
-// "Calling autoUpdater.checkForUpdates() twice will download the update two times."
-// https://www.electronjs.org/docs/latest/api/auto-updater#autoupdatercheckforupdates
-let keepCheckingForUpdates = true;
-
-// Auto updater doesn't support Linux installations (only trough AppImages)
-// this is why, for that case, we download a full executable (.deb package)
-// as a fallback support. This variable will be used to prevent
-// multiple downloads when auto updater isn't supported.
-let downloadUpgradeInProgress = false;
 
 // Keep a global reference, if you don't, they will be closed automatically when the JavaScript
 // object is garbage collected.
@@ -243,7 +238,8 @@ app.on('activate', () => {
 app.on('will-quit', event => {
   if (
     process.platform === 'win32' &&
-    autoUpdateDownloaded &&
+    updateState === UPDATE_STATE_DOWNLOADED &&
+    isAutoUpdateSupported &&
     !appState.autoUpdateAccepted &&
     !showingAutoUpdateCloseAlert
   ) {
@@ -325,87 +321,6 @@ ipcMain.on('get-disk-space', async (event) => {
     rendererWindow.webContents.send('send-disk-space', { error: e.message || e });
     console.log('Failed to get disk space', e);
   }
-});
-
-ipcMain.on('download-upgrade', async (event, params) => {
-  if (downloadUpgradeInProgress) {
-    return;
-  }
-
-  const { url, options } = params;
-  const dir = fs.mkdtempSync(app.getPath('temp') + path.sep);
-  options.onProgress = function(p) {
-    rendererWindow.webContents.send('download-progress-update', p);
-  };
-  options.directory = dir;
-  options.onCompleted = function(c) {
-    downloadUpgradeInProgress = false;
-    rendererWindow.webContents.send('download-update-complete', c);
-  };
-  const win = BrowserWindow.getFocusedWindow();
-  downloadUpgradeInProgress = true;
-  await download(win, url, options).catch(e => console.log('e', e));
-});
-
-ipcMain.on('upgrade', (event, installerPath) => {
-  app.on('quit', () => {
-    console.log('Launching upgrade installer at', installerPath);
-    // This gets triggered called after *all* other quit-related events, so
-    // we'll only get here if we're fully prepared and quitting for real.
-    shell.openPath(installerPath);
-  });
-  // what to do if no shutdown in a long time?
-  console.log('Update downloaded to', installerPath);
-  console.log('The app will close and you will be prompted to install the latest version of LBRY.');
-  console.log('After the install is complete, please reopen the app.');
-  app.quit();
-});
-
-ipcMain.on('check-for-updates', (event, autoDownload) => {
-  // Prevent downloading the same update multiple times.
-  if (!keepCheckingForUpdates) {
-    return;
-  }
-
-  keepCheckingForUpdates = false;
-  autoUpdater.autoDownload = autoDownload;
-  autoUpdater.checkForUpdates();
-});
-
-autoUpdater.on('update-downloaded', () => {
-  autoUpdateDownloaded = true;
-
-  // If this download was trigger by
-  // autoUpdateAccepted it means, the user
-  // wants to install the new update but
-  // needed to downloaded the files first.
-  if (appState.autoUpdateAccepted) {
-    autoUpdater.quitAndInstall();
-  }
-});
-
-autoUpdater.on('update-not-available', () => {
-  keepCheckingForUpdates = true;
-});
-
-ipcMain.on('autoUpdateAccepted', () => {
-  appState.autoUpdateAccepted = true;
-
-  // quitAndInstall can only be called if the
-  // update has been downloaded. Since the user
-  // can disable auto updates, we have to make
-  // sure it has been downloaded first.
-  if (autoUpdateDownloaded) {
-    autoUpdater.quitAndInstall();
-    return;
-  }
-
-  // If the update hasn't been downloaded,
-  // start downloading it. After it's done, the
-  // event 'update-downloaded' will be triggered,
-  // where we will be able to resume the
-  // update installation.
-  autoUpdater.downloadUpdate();
 });
 
 ipcMain.on('version-info-requested', () => {
@@ -499,4 +414,163 @@ process.on('uncaughtException', error => {
   appState.isQuitting = true;
   if (daemon) daemon.quit();
   app.exit(1);
+});
+
+// Auto updater
+autoUpdater.on('download-progress', () => {
+  updateState = UPDATE_STATE_DOWNLOADING;
+});
+
+autoUpdater.on('update-downloaded', () => {
+  updateState = UPDATE_STATE_DOWNLOADED;
+
+  // If this download was trigger by
+  // autoUpdateAccepted it means, the user
+  // wants to install the new update but
+  // needed to downloaded the files first.
+  if (appState.autoUpdateAccepted) {
+    autoUpdater.quitAndInstall();
+  }
+});
+
+autoUpdater.on('update-available', () => {
+  if (updateState === UPDATE_STATE_DOWNLOADING) {
+    return;
+  }
+  updateState = UPDATE_STATE_UPDATES_FOUND;
+});
+
+autoUpdater.on('update-not-available', () => {
+  updateState = UPDATE_STATE_NO_UPDATES_FOUND;
+});
+
+autoUpdater.on('error', () => {
+  if (updateState === UPDATE_STATE_DOWNLOADING) {
+    updateState = UPDATE_STATE_UPDATES_FOUND;
+    return;
+  }
+  updateState = UPDATE_STATE_INIT;
+});
+
+// Manual (.deb) update
+ipcMain.on('cancel-download-upgrade', () => {
+  if (updateDownloadItem) {
+    // Cancel the download and execute the onCancel
+    // callback set in the options.
+    updateDownloadItem.cancel();
+  }
+});
+
+ipcMain.on('download-upgrade', (event, params) => {
+  if (updateState !== UPDATE_STATE_UPDATES_FOUND) {
+    return;
+  }
+  if (isAutoUpdateSupported) {
+    updateState = UPDATE_STATE_DOWNLOADING;
+    autoUpdater.downloadUpdate();
+    return;
+  }
+
+  const { url, options } = params;
+  const dir = fs.mkdtempSync(app.getPath('temp') + path.sep);
+
+  updateState = UPDATE_STATE_DOWNLOADING;
+
+  // Grab the download item's handler to allow
+  // cancelling the operation if required.
+  options.onStarted = function(downloadItem) {
+    updateDownloadItem = downloadItem;
+  };
+  options.onCancel = function() {
+    updateState = UPDATE_STATE_UPDATES_FOUND;
+    updateDownloadItem = undefined;
+  };
+  options.onProgress = function(p) {
+    rendererWindow.webContents.send('download-progress-update', p);
+  };
+  options.onCompleted = function(c) {
+    updateState = UPDATE_STATE_DOWNLOADED;
+    updateDownloadItem = undefined;
+    rendererWindow.webContents.send('download-update-complete', c);
+  };
+  options.directory = dir;
+  const win = BrowserWindow.getFocusedWindow();
+  download(win, url, options).catch(e => {
+    updateState = UPDATE_STATE_UPDATES_FOUND;
+    console.log('e', e);
+  });
+});
+
+// Update behavior
+ipcMain.on('autoUpdateAccepted', () => {
+  appState.autoUpdateAccepted = true;
+
+  // quitAndInstall can only be called if the
+  // update has been downloaded. Since the user
+  // can disable auto updates, we have to make
+  // sure it has been downloaded first.
+  if (updateState === UPDATE_STATE_DOWNLOADED) {
+    autoUpdater.quitAndInstall();
+    return;
+  }
+
+  if (updateState !== UPDATE_STATE_UPDATES_FOUND) {
+    return;
+  }
+
+  // If the update hasn't been downloaded,
+  // start downloading it. After it's done, the
+  // event 'update-downloaded' will be triggered,
+  // where we will be able to resume the
+  // update installation.
+  updateState = UPDATE_STATE_DOWNLOADING;
+  autoUpdater.downloadUpdate();
+});
+
+ipcMain.on('check-for-updates', (event, autoDownload) => {
+  if (![UPDATE_STATE_INIT, UPDATE_STATE_NO_UPDATES_FOUND].includes(updateState)) {
+    return;
+  }
+
+  updateState = UPDATE_STATE_CHECKING;
+
+  // If autoDownload is true, checkForUpdates will begin the
+  // download automatically.
+  if (autoDownload) {
+    updateState = UPDATE_STATE_DOWNLOADING;
+  }
+
+  autoUpdater.autoDownload = autoDownload;
+  autoUpdater.checkForUpdates();
+});
+
+ipcMain.on('upgrade', (event, installerPath) => {
+  // what to do if no shutdown in a long time?
+  console.log('Update downloaded to', installerPath);
+  console.log('The app will close and you will be prompted to install the latest version of LBRY.');
+  console.log('After the install is complete, please reopen the app.');
+
+  // Prevent .deb package from opening with archive manager (Ubuntu >= 20)
+  if (process.platform === 'linux' && !process.env.APPIMAGE) {
+    sudo.exec(`dpkg -i ${installerPath}`, { name: app.name }, (err, stdout, stderr) => {
+      if (err || stderr) {
+        rendererWindow.webContents.send('upgrade-installing-error');
+        return;
+      }
+
+      // Re-launch the application when the installation finishes.
+      app.relaunch();
+      app.quit();
+    });
+
+    return;
+  }
+
+  app.on('quit', () => {
+    console.log('Launching upgrade installer at', installerPath);
+    // This gets triggered called after *all* other quit-related events, so
+    // we'll only get here if we're fully prepared and quitting for real.
+    shell.openPath(installerPath);
+  });
+  app.quit();
 });

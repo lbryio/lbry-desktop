@@ -6,12 +6,20 @@ export const selectState = (state) => state.app || {};
 
 export const selectPlatform = createSelector(selectState, (state) => state.platform);
 
-export const selectUpdateUrl = createSelector(selectPlatform, (platform) => {
+export const selectRemoteVersion = createSelector(selectState, (state) => state.remoteVersion);
+
+export const selectUpdateUrl = createSelector(selectPlatform, selectRemoteVersion, (platform, releaseVersion) => {
   switch (platform) {
     case 'darwin':
       return 'https://lbry.com/get/lbry.dmg';
     case 'linux':
-      return 'https://lbry.com/get/lbry.deb';
+      // releaseVersion can be used as the tag name
+      // Example: v0.53.5-alpha.test7495b
+      // When downloading, we need to remove the initial
+      // v, ending up with a file name like
+      // LBRY_0.53.5-alpha.test7495b.deb
+      const fileName = 'LBRY_' + (releaseVersion || '').replace('v', '') + '.deb';
+      return `https://github.com/lbryio/lbry-desktop/releases/download/${releaseVersion}/${fileName}`;
     case 'win32':
       return 'https://lbry.com/get/lbry.exe';
     default:
@@ -21,9 +29,11 @@ export const selectUpdateUrl = createSelector(selectPlatform, (platform) => {
 
 export const selectHasClickedComment = createSelector(selectState, (state) => state.hasClickedComment);
 
-export const selectRemoteVersion = createSelector(selectState, (state) => state.remoteVersion);
-
 export const selectIsUpgradeAvailable = createSelector(selectState, (state) => state.isUpgradeAvailable);
+
+export const selectUpgradeInitialized = createSelector(selectState, (state) => state.upgradeInitialized);
+
+export const selectUpgradeFailedInstallation = createSelector(selectState, (state) => state.upgradeFailedInstallation);
 
 export const selectUpgradeFilename = createSelector(selectPlatform, selectRemoteVersion, (platform, version) => {
   switch (platform) {
@@ -46,11 +56,13 @@ export const selectIsUpgradeSkipped = createSelector(selectState, (state) => sta
 
 export const selectUpgradeDownloadPath = createSelector(selectState, (state) => state.downloadPath);
 
-export const selectUpgradeDownloadItem = createSelector(selectState, (state) => state.downloadItem);
-
 export const selectAutoUpdateDownloaded = createSelector(selectState, (state) => state.autoUpdateDownloaded);
 
 export const selectAutoUpdateDeclined = createSelector(selectState, (state) => state.autoUpdateDeclined);
+
+export const selectAutoUpdateFailed = createSelector(selectState, (state) => state.autoUpdateFailed);
+
+export const selectAutoUpdateDownloading = createSelector(selectState, (state) => state.autoUpdateDownloading);
 
 export const selectIsUpdateModalDisplayed = createSelector(selectState, (state) => {
   return [MODALS.AUTO_UPDATE_DOWNLOADED, MODALS.UPGRADE, MODALS.DOWNLOADING].includes(state.modal);
