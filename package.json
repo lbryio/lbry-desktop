@@ -161,7 +161,7 @@
     "localforage": "^1.7.1",
     "lodash-es": "^4.17.21",
     "mammoth": "^1.4.16",
-    "moment": "^2.29.2",
+    "moment": "^2.29.4",
     "node-abi": "^2.5.1",
     "node-fetch": "^2.6.7",
     "node-html-parser": "^5.1.0",
