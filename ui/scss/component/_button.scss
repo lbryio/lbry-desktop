@@ -393,14 +393,6 @@ a.button--alt {
   height: initial;
   padding: 5px;
 
-  &.button--comment-icons-active {
-    .icon {
-      fill: var(--color-primary-alt);
-      stroke: var(--color-primary) !important; //fixme
-      color: var(--color-primary);
-    }
-  }
-
   @media (max-width: $breakpoint-small) {
     padding: 0 0;
   }
