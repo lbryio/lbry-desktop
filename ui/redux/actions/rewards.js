@@ -144,7 +144,7 @@ export function doClaimEligiblePurchaseRewards() {
     if (unclaimedRewards.find((ur) => ur.reward_type === rewards.TYPE_FIRST_STREAM)) {
       dispatch(doClaimRewardType(rewards.TYPE_FIRST_STREAM));
     } else {
-      if (!selectWeeklyWatchClaimedThisWeek(state)) {
+      if (selectWeeklyWatchClaimedThisWeek(state) === false) {
         dispatch(doClaimRewardType(rewards.TYPE_WEEKLY_WATCH, { failSilently: true }));
       }
     }

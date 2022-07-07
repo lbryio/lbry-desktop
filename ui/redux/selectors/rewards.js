@@ -80,7 +80,7 @@ export const selectWeeklyWatchClaimedThisWeek = createSelector(selectUnclaimedRe
     const diffDays = diff / (1000 * 60 * 60 * 24);
     return diffDays < 6.5;
   }
-  return false;
+  return undefined;
 });
 
 export const selectIsRewardApproved = createSelector(selectUser, (user) => user && user.is_reward_approved);
