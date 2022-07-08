@@ -290,10 +290,12 @@ export function doMinVersionCheck() {
 
 export function doMinVersionSubscribe() {
   return (dispatch) => {
+    // @if process.env.NODE_ENV='production'
     dispatch(doMinVersionCheck());
 
     const CHECK_UPGRADE_INTERVAL_MS = 60 * 60 * 1000;
     setInterval(() => dispatch(doMinVersionCheck()), CHECK_UPGRADE_INTERVAL_MS);
+    // @endif
   };
 }
 
