@@ -142,7 +142,9 @@ export default function WebUploadItem(props: Props) {
 
   function getCancelButton() {
     if (!locked) {
-      if (status === 'notify') {
+      if (parseInt(progress) === 100) {
+        return null;
+      } else if (status === 'notify') {
         return (
           <Button
             button="link"
