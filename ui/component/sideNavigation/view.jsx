@@ -6,15 +6,13 @@ import * as KEYCODES from 'constants/keycodes';
 import React from 'react';
 import Button from 'component/button';
 import classnames from 'classnames';
-import Icon from 'component/common/icon';
 import NotificationBubble from 'component/notificationBubble';
 import DebouncedInput from 'component/common/debounced-input';
-import I18nMessage from 'component/i18nMessage';
 import ChannelThumbnail from 'component/channelThumbnail';
 import { useIsMobile, isTouch } from 'effects/use-screensize';
 import { IS_MAC } from 'component/app/view';
 import { useHistory } from 'react-router';
-import { DOMAIN, ENABLE_UI_NOTIFICATIONS } from 'config';
+import { ENABLE_UI_NOTIFICATIONS } from 'config';
 
 const FOLLOWED_ITEM_INITIAL_LIMIT = 10;
 const touch = isTouch();
@@ -184,7 +182,6 @@ function SideNavigation(props: Props) {
   ];
 
   const notificationsEnabled = ENABLE_UI_NOTIFICATIONS || (user && user.experimental_ui);
-  const isAuthenticated = Boolean(email);
 
   const [pulseLibrary, setPulseLibrary] = React.useState(false);
   const [expandSubscriptions, setExpandSubscriptions] = React.useState(false);
@@ -357,23 +354,6 @@ function SideNavigation(props: Props) {
     return () => window.removeEventListener('keydown', handleKeydown);
   }, [sidebarOpen, setSidebarOpen, isAbsolute]);
 
-  const unAuthNudge =
-    DOMAIN === 'lbry.tv' ? null : (
-      <div className="navigation__auth-nudge">
-        <span>
-          <I18nMessage tokens={{ lbc: <Icon icon={ICONS.LBC} /> }}>
-            Sign up to earn %lbc% for you and your favorite creators.
-          </I18nMessage>
-        </span>
-        <Button
-          button="secondary"
-          label={__('Sign Up')}
-          navigate={`/$/${PAGES.AUTH}?src=sidenav_nudge`}
-          disabled={user === null}
-        />{' '}
-      </div>
-    );
-
   const helpLinks = (
     <ul className="navigation__tertiary navigation-links--small">
       <li className="navigation-link">
@@ -437,7 +417,6 @@ function SideNavigation(props: Props) {
 
             {getSubscriptionSection()}
             {getFollowedTagsSection()}
-            {!isAuthenticated && sidebarOpen && unAuthNudge}
           </div>
         )}
         {(!canDisposeMenu || sidebarOpen) && shouldRenderLargeMenu && helpLinks}

@@ -2,8 +2,6 @@ import { createSelector } from 'reselect';
 
 export const selectState = (state) => state.user || {};
 
-export const selectAuthenticationIsPending = createSelector(selectState, (state) => state.authenticationIsPending);
-
 export const selectUserIsPending = createSelector(selectState, (state) => state.userIsPending);
 
 export const selectUser = createSelector(selectState, (state) => state.user);
@@ -21,20 +19,12 @@ export const selectUserEmail = createSelector(selectUser, (user) =>
   user ? user.primary_email || user.latest_claimed_email : null
 );
 
-export const selectUserPhone = createSelector(selectUser, (user) => (user ? user.phone_number : null));
-
 export const selectUserCountryCode = createSelector(selectUser, (user) => (user ? user.country_code : null));
 
 export const selectEmailToVerify = createSelector(
   selectState,
   selectUserEmail,
   (state, userEmail) => state.emailToVerify || userEmail
-);
-
-export const selectPhoneToVerify = createSelector(
-  selectState,
-  selectUserPhone,
-  (state, userPhone) => state.phoneToVerify || userPhone
 );
 
 export const selectYoutubeChannels = createSelector(selectUser, (user) => (user ? user.youtube_channels : null));

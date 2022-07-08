@@ -53,9 +53,7 @@ export default function SettingAccount(props: Props) {
               </SettingsRow>
             )}
 
-            {/* @if TARGET='app' */}
             <SyncToggle disabled={walletEncrypted && !storedPassword && storedPassword !== ''} />
-            {/* @endif */}
 
             {hasChannels && (
               <SettingsRow title={__('Comments')} subtitle={__('View your past comments.')}>

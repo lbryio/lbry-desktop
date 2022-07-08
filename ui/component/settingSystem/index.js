@@ -11,7 +11,7 @@ import {
 import { doSetDaemonSetting, doClearDaemonSetting, doFindFFmpeg } from 'redux/actions/settings';
 import { selectAllowAnalytics } from 'redux/selectors/app';
 import { selectDaemonSettings, selectFfmpegStatus, selectFindingFFmpeg } from 'redux/selectors/settings';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
+import { selectUserVerifiedEmail } from 'redux/selectors/user'; // here
 
 import SettingSystem from './view';
 

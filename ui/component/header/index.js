@@ -6,12 +6,11 @@ import { selectClientSetting } from 'redux/selectors/settings';
 import { selectGetSyncErrorMessage } from 'redux/selectors/sync';
 import { selectHasNavigated } from 'redux/selectors/app';
 import { selectTotalBalance, selectBalance } from 'redux/selectors/wallet';
-import { selectUserVerifiedEmail, selectEmailToVerify, selectUser } from 'redux/selectors/user';
+import { selectEmailToVerify, selectUser } from 'redux/selectors/user';
 import * as SETTINGS from 'constants/settings';
 import Header from './view';
 
 const select = (state) => ({
-  authenticated: selectUserVerifiedEmail(state),
   balance: selectBalance(state),
   emailToVerify: selectEmailToVerify(state),
   hasNavigated: selectHasNavigated(state),

@@ -15,7 +15,6 @@ type Props = {
   uri: string,
   claim: StreamClaim,
   metadata: StreamMetadata,
-  user: ?any,
   tags: any,
   pendingAmount: number,
   doOpenModal: (id: string, {}) => void,

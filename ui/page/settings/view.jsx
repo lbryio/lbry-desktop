@@ -14,7 +14,6 @@ type DaemonSettings = {
 
 type Props = {
   daemonSettings: DaemonSettings,
-  isAuthenticated: boolean,
   enterSettings: () => void,
   exitSettings: () => void,
 };

@@ -128,7 +128,6 @@ export function GetLinksData(
   all: any, // HomepageData type?
   isLargeScreen: boolean,
   isHomepage?: boolean = false,
-  authenticated?: boolean,
   showPersonalizedChannels?: boolean,
   showPersonalizedTags?: boolean,
   subscribedChannels?: Array<Subscription>,
@@ -170,6 +169,7 @@ export function GetLinksData(
   // **************************************************************************
   // @if CUSTOM_HOMEPAGE='false'
 
+  /*
   const YOUTUBER_CHANNEL_IDS = [
     'fb364ef587872515f545a5b4b3182b58073f230f',
     '589276465a23c589801d874f484cc39f307d7ec7',
@@ -253,21 +253,7 @@ export function GetLinksData(
     'ff80e24f41a2d706c70df9779542cba4715216c9',
     'e8f68563d242f6ac9784dcbc41dd86c28a9391d6',
   ];
-
-  const YOUTUBE_CREATOR_ROW = {
-    title: __('CableTube Escape Artists'),
-    link: `/$/${PAGES.DISCOVER}?${CS.CLAIM_TYPE}=${CS.CLAIM_STREAM}&${CS.CHANNEL_IDS_KEY}=${YOUTUBER_CHANNEL_IDS.join(
-      ','
-    )}`,
-    options: {
-      claimType: ['stream'],
-      orderBy: CS.ORDER_BY_NEW_VALUE,
-      pageSize: getPageSize(12),
-      channelIds: YOUTUBER_CHANNEL_IDS,
-      limitClaimsPerChannel: 1,
-      releaseTime: `>${Math.floor(moment().subtract(1, 'months').startOf('week').unix())}`,
-    },
-  };
+  */
 
   const TOP_CONTENT_TODAY = {
     title: __('Top Content from Today'),
@@ -351,9 +337,6 @@ export function GetLinksData(
   }
 
   if (!CUSTOM_HOMEPAGE) {
-    if (!authenticated) {
-      rowData.push(YOUTUBE_CREATOR_ROW);
-    }
     rowData.push(TOP_CONTENT_TODAY);
     if (language !== 'en') {
       rowData.push(LANGUAGE_CATEGORY);

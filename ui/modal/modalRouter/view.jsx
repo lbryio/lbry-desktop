@@ -15,7 +15,6 @@ import ModalClaimCollectionAdd from 'modal/modalClaimCollectionAdd';
 
 import ModalCommentAcknowledgement from 'modal/modalCommentAcknowledgement';
 
-import ModalConfirmAge from 'modal/modalConfirmAge';
 import ModalConfirmThumbnailUpload from 'modal/modalConfirmThumbnailUpload';
 
 import ModalConfirmTransaction from 'modal/modalConfirmTransaction';
@@ -39,8 +38,6 @@ import ModalOpenExternalResource from 'modal/modalOpenExternalResource';
 
 import ModalPasswordUnsave from 'modal/modalPasswordUnsave';
 
-import ModalPhoneCollection from 'modal/modalPhoneCollection';
-
 import ModalPublish from 'modal/modalPublish';
 import ModalPublishPreview from 'modal/modalPublishPreview';
 
@@ -54,7 +51,6 @@ import ModalRevokeClaim from 'modal/modalRevokeClaim';
 import ModalRewardCode from 'modal/modalRewardCode';
 import ModalSendTip from 'modal/modalSendTip';
 import ModalRepost from 'modal/modalRepost';
-import ModalSetReferrer from 'modal/modalSetReferrer';
 import ModalSignOut from 'modal/modalSignOut';
 import ModalSocialShare from 'modal/modalSocialShare';
 import ModalSupportsLiquidate from 'modal/modalSupportsLiquidate';
@@ -69,8 +65,6 @@ import ModalWalletDecrypt from 'modal/modalWalletDecrypt';
 import ModalWalletEncrypt from 'modal/modalWalletEncrypt';
 
 import ModalWalletUnlock from 'modal/modalWalletUnlock';
-
-import ModalYoutubeWelcome from 'modal/modalYoutubeWelcome';
 
 function getModal(id) {
   switch (id) {
@@ -96,8 +90,7 @@ function getModal(id) {
       return ModalAffirmPurchase;
     case MODALS.CONFIRM_CLAIM_REVOKE:
       return ModalRevokeClaim;
-    case MODALS.PHONE_COLLECTION:
-      return ModalPhoneCollection;
+
     case MODALS.FIRST_SUBSCRIPTION:
       return ModalFirstSubscription;
     case MODALS.SEND_TIP:
@@ -128,14 +121,8 @@ function getModal(id) {
       return ModalRewardCode;
     case MODALS.COMMENT_ACKNOWEDGEMENT:
       return ModalCommentAcknowledgement;
-    case MODALS.YOUTUBE_WELCOME:
-      return ModalYoutubeWelcome;
-    case MODALS.SET_REFERRER:
-      return ModalSetReferrer;
     case MODALS.SIGN_OUT:
       return ModalSignOut;
-    case MODALS.CONFIRM_AGE:
-      return ModalConfirmAge;
     case MODALS.FILE_SELECTION:
       return ModalFileSelection;
     case MODALS.LIQUIDATE_SUPPORTS:
