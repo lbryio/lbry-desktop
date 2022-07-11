@@ -35,6 +35,7 @@
 
   .header__menu--right {
     .header__navigationItem--balance {
+      transition: border-radius 0.4s;
       .button__label {
         margin-left: var(--spacing-xxs) !important;
       }
@@ -44,8 +45,7 @@
         }
       }
     }
-    .header__navigationItem--balance {
-      transition: border-radius 0.4s;
+    .header__navigationItem--balance-round {
       @media (max-width: $breakpoint-large) {
         border-radius: 50%;
         .button__label {

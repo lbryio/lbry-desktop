@@ -156,7 +156,10 @@ const Header = (props: Props) => {
                 ) : (
                   <Button
                     navigate={`/$/${PAGES.WALLET}`}
-                    className="button--file-action header__navigationItem--balance"
+                    className={classnames('button--file-action header__navigationItem--balance', {
+                      'header__navigationItem--balance-round':
+                        hideBalance || Number(roundedTotalBalance) === 0 || !prefsReady,
+                    })}
                     label={
                       hideBalance || Number(roundedTotalBalance) === 0 || !prefsReady
                         ? __(isMobile ? 'Wallet' : 'Your Wallet')
