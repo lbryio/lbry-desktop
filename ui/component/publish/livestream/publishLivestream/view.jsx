@@ -373,20 +373,22 @@ function PublishLivestream(props: Props) {
               />
               <PublishName uri={uri} />
               <>
-                <fieldset-section>
-                  <label style={{ marginBottom: 'var(--spacing-s)' }}>
-                    {inEditMode && (
-                      <FormField
-                        name="reuse-replay"
-                        key="reuse-replay"
-                        type="radio"
-                        checked={replaySource === 'keep'}
-                        onClick={() => updateReplayOption('keep')}
-                      />
-                    )}
-                    {__('Update only')}
-                  </label>
-                </fieldset-section>
+                {inEditMode && (
+                  <fieldset-section>
+                    <label style={{ marginBottom: 'var(--spacing-s)' }}>
+                      {inEditMode && (
+                        <FormField
+                          name="reuse-replay"
+                          key="reuse-replay"
+                          type="radio"
+                          checked={replaySource === 'keep'}
+                          onClick={() => updateReplayOption('keep')}
+                        />
+                      )}
+                      {__('Update only')}
+                    </label>
+                  </fieldset-section>
+                )}
                 {(fileSource === SOURCE_SELECT || inEditMode) && hasLivestreamData && !isCheckingLivestreams && (
                   <>
                     <label>
