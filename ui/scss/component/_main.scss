@@ -291,7 +291,6 @@ body {
             .channel-name {
               margin-top: 0;
               p {
-                width: 181px;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 white-space: nowrap;
@@ -313,11 +312,6 @@ body {
         display: none;
         width: 1.4rem;
         height: 1.4rem;
-        /*
-        @media (max-width: $breakpoint-small) {
-          display: flex;
-          margin-right: var(--spacing-xs);
-        }*/
       }
     }
 
