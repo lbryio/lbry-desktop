@@ -1,13 +1,11 @@
 // @flow
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
-import * as PUBLISH_MODES from 'constants/publish_types';
+import { useHistory } from 'react-router';
 import I18nMessage from 'component/i18nMessage';
 import React from 'react';
 import Page from 'component/page';
-import Spinner from 'component/spinner';
 import Button from 'component/button';
-import ChannelSelector from 'component/channelSelector';
 import Yrbl from 'component/yrbl';
 import Lbry from 'lbry';
 import { toHex } from 'util/hex';
@@ -15,9 +13,13 @@ import { FormField } from 'component/common/form';
 import CopyableText from 'component/copyableText';
 import Card from 'component/common/card';
 import ClaimList from 'component/claimList';
-import usePersistedState from 'effects/use-persisted-state';
 import { LIVESTREAM_RTMP_URL } from 'constants/livestream';
 import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
+import classnames from 'classnames';
+import LivestreamForm from 'component/publish/livestream/livestreamForm';
+import Icon from 'component/common/icon';
+import { useIsMobile } from 'effects/use-screensize';
+import YrblWalletEmpty from 'component/yrblWalletEmpty';
 
 type Props = {
   hasChannels: boolean,
@@ -26,11 +28,13 @@ type Props = {
   pendingClaims: Array<Claim>,
   doNewLivestream: (string) => void,
   fetchNoSourceClaims: (string) => void,
+  clearPublish: () => void,
   myLivestreamClaims: Array<StreamClaim>,
-  fetchingLivestreams: boolean,
   channelId: ?string,
   channelName: ?string,
   user: ?User,
+  balance: number,
+  editingURI: ?string,
 };
 
 export default function LivestreamSetupPage(props: Props) {
@@ -42,28 +46,38 @@ export default function LivestreamSetupPage(props: Props) {
     pendingClaims,
     doNewLivestream,
     fetchNoSourceClaims,
+    clearPublish,
     myLivestreamClaims,
-    fetchingLivestreams,
     channelId,
     channelName,
     user,
+    balance,
+    editingURI,
   } = props;
 
-  const [sigData, setSigData] = React.useState({ signature: undefined, signing_ts: undefined });
-  const [showHelp, setShowHelp] = usePersistedState('livestream-help-seen', true);
+  const isMobile = useIsMobile();
+  const {
+    location: { search },
+  } = useHistory();
+  const urlParams = new URLSearchParams(search);
+  const urlTab = urlParams.get('t');
+  const urlSource = urlParams.get('s');
 
-  const hasLivestreamClaims = Boolean(myLivestreamClaims.length || pendingClaims.length);
+  const [sigData, setSigData] = React.useState({ signature: undefined, signing_ts: undefined });
+
   const { odysee_live_disabled: liveDisabled } = user || {};
 
   const livestreamEnabled = Boolean(ENABLE_NO_SOURCE_CLAIMS && user && !liveDisabled);
+
+  const [isClear, setIsClear] = React.useState(false);
 
   function createStreamKey() {
     if (!channelId || !channelName || !sigData.signature || !sigData.signing_ts) return null;
     return `${channelId}?d=${toHex(channelName)}&s=${sigData.signature}&t=${sigData.signing_ts}`;
   }
 
+  const formTitle = !editingURI ? __('Go Live') : __('Edit Livestream');
   const streamKey = createStreamKey();
-
   const pendingLength = pendingClaims.length;
   const totalLivestreamClaims = pendingClaims.concat(myLivestreamClaims);
   const helpText = (
@@ -105,6 +119,11 @@ export default function LivestreamSetupPage(props: Props) {
       </p>
     </div>
   );
+
+  function createNewLivestream() {
+    setTab('Publish');
+    doNewLivestream(`/$/${PAGES.UPLOAD}`);
+  }
 
   React.useEffect(() => {
     // ensure we have a channel
@@ -161,11 +180,11 @@ export default function LivestreamSetupPage(props: Props) {
     return (
       <div className={'w-full flex items-center justify-between'}>
         <span>{title}</span>
-        {!hideBtn && (
+        {!hideBtn && !isMobile && (
           <Button
             button="primary"
             iconRight={ICONS.ADD}
-            onClick={() => doNewLivestream(`/$/${PAGES.UPLOAD}?type=${PUBLISH_MODES.LIVESTREAM.toLowerCase()}`)}
+            onClick={() => createNewLivestream()}
             label={__('Create or Schedule a New Stream')}
           />
         )}
@@ -173,224 +192,256 @@ export default function LivestreamSetupPage(props: Props) {
     );
   };
 
+  const [tab, setTab] = React.useState(urlTab || 'Publish');
+
+  React.useEffect(() => {
+    if (editingURI) {
+      setTab('Publish');
+    }
+  }, [editingURI]);
+
+  React.useEffect(() => {
+    if (urlTab) {
+      setTab(urlTab);
+    }
+  }, [urlTab]);
+
+  const HeaderMenu = (e) => {
+    return (
+      <>
+        <Button
+          key={'Publish'}
+          iconSize={18}
+          label={'Publish'}
+          button="alt"
+          onClick={() => {
+            setTab('Publish');
+          }}
+          disabled={e.disabled}
+          className={classnames('button-toggle', { 'button-toggle--active': tab === 'Publish' })}
+        />
+        <Button
+          key={'Setup'}
+          iconSize={18}
+          label={'Local Setup'}
+          button="alt"
+          onClick={() => {
+            setTab('Setup');
+          }}
+          disabled={e.disabled || e.isEditing}
+          className={classnames('button-toggle', { 'button-toggle--active': tab === 'Setup' })}
+        />
+      </>
+    );
+  };
+
+  function resetForm() {
+    clearPublish();
+    setTab('Publish');
+  }
+
   return (
-    <Page>
-      {/* channel selector */}
-      {!fetchingChannels && (
-        <>
-          <div className="section__actions--between">
-            <ChannelSelector hideAnon />
-          </div>
-        </>
-      )}
+    <Page className="uploadPage-wrapper">
+      {balance < 0.01 && <YrblWalletEmpty />}
+      <h1 className="page__title">
+        <Icon icon={ICONS.VIDEO} />
+        <label>
+          {formTitle}
+          {!isClear && <Button onClick={() => resetForm()} icon={ICONS.REFRESH} button="primary" label="Clear" />}
+        </label>
+      </h1>
+      <HeaderMenu disabled={balance < 0.01} isEditing={editingURI} />
 
-      {/* livestreaming disabled */}
-      {!livestreamEnabled && (
-        <div style={{ marginTop: '11px' }}>
-          <h2 style={{ marginBottom: '15px' }}>
-            {__('This account has livestreaming disabled, please reach out to hello@odysee.com for assistance.')}
-          </h2>
-        </div>
-      )}
-
-      {/* show livestreaming frontend */}
-      {livestreamEnabled && (
-        <div className="card-stack">
-          {/* getting channel data */}
-          {fetchingChannels && (
-            <div className="main--empty">
-              <Spinner delayed />
+      {tab === 'Setup' && (
+        <div className={editingURI ? 'disabled' : ''}>
+          {/* livestreaming disabled */}
+          {!livestreamEnabled && (
+            <div style={{ marginTop: '11px' }}>
+              <h2 style={{ marginBottom: '15px' }}>
+                {__('This account has livestreaming disabled, please reach out to hello@odysee.com for assistance.')}
+              </h2>
             </div>
           )}
 
-          {/* no channels yet */}
-          {!fetchingChannels && !hasChannels && (
-            <Yrbl
-              type="happy"
-              title={__("You haven't created a channel yet, let's fix that!")}
-              actions={
-                <div className="section__actions">
-                  <Button button="primary" navigate={`/$/${PAGES.CHANNEL_NEW}`} label={__('Create A Channel')} />
-                </div>
-              }
-            />
-          )}
-
-          {/* getting livestreams */}
-          {fetchingLivestreams && !fetchingChannels && !hasLivestreamClaims && (
-            <div className="main--empty">
-              <Spinner delayed />
-            </div>
-          )}
-
-          {!fetchingChannels && channelId && (
-            <>
-              <Card
-                titleActions={
-                  <Button
-                    button="close"
-                    icon={showHelp ? ICONS.UP : ICONS.DOWN}
-                    onClick={() => setShowHelp(!showHelp)}
-                  />
-                }
-                title={__('Go Live on Odysee')}
-                subtitle={<>{__(`Expand to learn more about setting up a livestream.`)} </>}
-                actions={showHelp && helpText}
-              />
-              {streamKey && totalLivestreamClaims.length > 0 && (
-                <Card
-                  className="section"
-                  title={__('Your stream key')}
+          {/* show livestreaming frontend */}
+          {livestreamEnabled && (
+            <div className="card-stack">
+              {/* no channels yet */}
+              {!fetchingChannels && !hasChannels && (
+                <Yrbl
+                  type="happy"
+                  title={__("You haven't created a channel yet, let's fix that!")}
                   actions={
-                    <>
-                      <CopyableText
-                        primaryButton
-                        name="stream-server"
-                        label={__('Stream server')}
-                        copyable={LIVESTREAM_RTMP_URL}
-                        snackMessage={__('Copied stream server URL.')}
-                      />
-                      <CopyableText
-                        primaryButton
-                        enableInputMask
-                        name="livestream-key"
-                        label={__('Stream key (can be reused)')}
-                        copyable={streamKey}
-                        snackMessage={__('Copied stream key.')}
-                      />
-                    </>
+                    <div className="section__actions">
+                      <Button button="primary" navigate={`/$/${PAGES.CHANNEL_NEW}`} label={__('Create A Channel')} />
+                    </div>
                   }
                 />
               )}
 
-              {totalLivestreamClaims.length > 0 ? (
+              {!fetchingChannels && channelId && (
                 <>
-                  {Boolean(pendingClaims.length) && (
-                    <div className="section">
-                      <ClaimList
-                        header={__('Your pending livestreams uploads')}
-                        uris={pendingClaims.map((claim) => claim.permanent_url)}
-                      />
-                    </div>
-                  )}
-                  {Boolean(myLivestreamClaims.length) && (
+                  <Card
+                    className={classnames('section card--livestream-key', {
+                      disabled: !streamKey || totalLivestreamClaims.length === 0,
+                    })}
+                    actions={
+                      <>
+                        <CopyableText
+                          primaryButton
+                          enableInputMask={!streamKey || totalLivestreamClaims.length === 0}
+                          name="stream-server"
+                          label={__('Stream server')}
+                          copyable={LIVESTREAM_RTMP_URL}
+                          snackMessage={__('Copied stream server URL.')}
+                          disabled={!streamKey || totalLivestreamClaims.length === 0}
+                        />
+                        <CopyableText
+                          primaryButton
+                          enableInputMask
+                          name="livestream-key"
+                          label={__('Stream key (can be reused)')}
+                          copyable={!streamKey || totalLivestreamClaims.length === 0 ? LIVESTREAM_RTMP_URL : streamKey}
+                          snackMessage={__('Copied stream key.')}
+                        />
+                      </>
+                    }
+                  />
+                  {totalLivestreamClaims.length > 0 ? (
                     <>
-                      {Boolean(upcomingStreams.length) && (
-                        <div className="section">
+                      {Boolean(pendingClaims.length) && (
+                        <div className="section card--livestream-past">
                           <ClaimList
-                            header={<ListHeader title={__('Your Scheduled Livestreams')} />}
-                            uris={upcomingStreams.map((claim) => claim.permanent_url)}
+                            header={__('Your pending livestreams uploads')}
+                            uris={pendingClaims.map((claim) => claim.permanent_url)}
                           />
                         </div>
                       )}
-                      <div className="section">
-                        <ClaimList
-                          header={
-                            <ListHeader title={__('Your Past Livestreams')} hideBtn={Boolean(upcomingStreams.length)} />
-                          }
-                          empty={
-                            <I18nMessage
-                              tokens={{
-                                check_again: (
-                                  <Button
-                                    button="link"
-                                    onClick={() => fetchNoSourceClaims(channelId)}
-                                    label={__('Check again')}
-                                  />
-                                ),
-                              }}
-                            >
-                              Nothing here yet. %check_again%
-                            </I18nMessage>
-                          }
-                          uris={pastStreams.map((claim) => claim.permanent_url)}
-                        />
-                      </div>
+                      {Boolean(myLivestreamClaims.length) && (
+                        <>
+                          {Boolean(upcomingStreams.length) && (
+                            <div className="section">
+                              <ClaimList
+                                header={<ListHeader title={__('Your Scheduled Livestreams')} />}
+                                uris={upcomingStreams.map((claim) => claim.permanent_url)}
+                              />
+                            </div>
+                          )}
+                          <div className="section card--livestream-past">
+                            <ClaimList
+                              header={
+                                <ListHeader
+                                  title={__('Your Past Livestreams')}
+                                  hideBtn={Boolean(upcomingStreams.length)}
+                                />
+                              }
+                              empty={
+                                <I18nMessage
+                                  tokens={{
+                                    check_again: (
+                                      <Button
+                                        button="link"
+                                        onClick={() => fetchNoSourceClaims(channelId)}
+                                        label={__('Check again')}
+                                      />
+                                    ),
+                                  }}
+                                >
+                                  Nothing here yet. %check_again%
+                                </I18nMessage>
+                              }
+                              uris={pastStreams.map((claim) => claim.permanent_url)}
+                            />
+                          </div>
+                        </>
+                      )}
                     </>
+                  ) : (
+                    <Yrbl
+                      className="livestream__publish-intro"
+                      title={__('No livestream publishes found')}
+                      subtitle={__(
+                        'You need to upload your livestream details before you can go live. Please note: Replays must be published manually after your stream via the Update button on the livestream.'
+                      )}
+                      actions={
+                        <div className="section__actions">
+                          <Button
+                            button="primary"
+                            onClick={() => createNewLivestream()}
+                            label={__('Create A Livestream')}
+                          />
+                          <Button
+                            button="alt"
+                            onClick={() => {
+                              fetchNoSourceClaims(channelId);
+                            }}
+                            label={__('Check again...')}
+                          />
+                        </div>
+                      }
+                    />
                   )}
-                </>
-              ) : (
-                <Yrbl
-                  className="livestream__publish-intro"
-                  title={__('No livestream publishes found')}
-                  subtitle={__(
-                    'You need to upload your livestream details before you can go live. Please note: Replays must be published manually after your stream via the Update button on the livestream.'
-                  )}
-                  actions={
-                    <div className="section__actions">
-                      <Button
-                        button="primary"
-                        onClick={() =>
-                          doNewLivestream(`/$/${PAGES.UPLOAD}?type=${PUBLISH_MODES.LIVESTREAM.toLowerCase()}`)
-                        }
-                        label={__('Create A Livestream')}
+                  <Card className="card--livestream-instructions" title="Instructions" actions={helpText} />
+
+                  {/* Debug Stuff */}
+                  {streamKey && false && activeChannelClaim && (
+                    <div style={{ marginTop: 'var(--spacing-l)' }}>
+                      <h3>Debug Info</h3>
+
+                      {/* Channel ID */}
+                      <FormField
+                        name={'channelId'}
+                        label={'Channel ID'}
+                        type={'text'}
+                        defaultValue={activeChannelClaim.claim_id}
+                        readOnly
                       />
-                      <Button
-                        button="alt"
-                        onClick={() => {
-                          fetchNoSourceClaims(channelId);
-                        }}
-                        label={__('Check again...')}
+
+                      {/* Signature */}
+                      <FormField
+                        name={'signature'}
+                        label={'Signature'}
+                        type={'text'}
+                        defaultValue={sigData.signature}
+                        readOnly
+                      />
+
+                      {/* Signature TS */}
+                      <FormField
+                        name={'signaturets'}
+                        label={'Signature Timestamp'}
+                        type={'text'}
+                        defaultValue={sigData.signing_ts}
+                        readOnly
+                      />
+
+                      {/* Hex Data */}
+                      <FormField
+                        name={'datahex'}
+                        label={'Hex Data'}
+                        type={'text'}
+                        defaultValue={toHex(activeChannelClaim.name)}
+                        readOnly
+                      />
+
+                      {/* Channel Public Key */}
+                      <FormField
+                        name={'channelpublickey'}
+                        label={'Public Key'}
+                        type={'text'}
+                        defaultValue={activeChannelClaim.value.public_key}
+                        readOnly
                       />
                     </div>
-                  }
-                />
+                  )}
+                </>
               )}
-
-              {/* Debug Stuff */}
-              {streamKey && false && activeChannelClaim && (
-                <div style={{ marginTop: 'var(--spacing-l)' }}>
-                  <h3>Debug Info</h3>
-
-                  {/* Channel ID */}
-                  <FormField
-                    name={'channelId'}
-                    label={'Channel ID'}
-                    type={'text'}
-                    defaultValue={activeChannelClaim.claim_id}
-                    readOnly
-                  />
-
-                  {/* Signature */}
-                  <FormField
-                    name={'signature'}
-                    label={'Signature'}
-                    type={'text'}
-                    defaultValue={sigData.signature}
-                    readOnly
-                  />
-
-                  {/* Signature TS */}
-                  <FormField
-                    name={'signaturets'}
-                    label={'Signature Timestamp'}
-                    type={'text'}
-                    defaultValue={sigData.signing_ts}
-                    readOnly
-                  />
-
-                  {/* Hex Data */}
-                  <FormField
-                    name={'datahex'}
-                    label={'Hex Data'}
-                    type={'text'}
-                    defaultValue={toHex(activeChannelClaim.name)}
-                    readOnly
-                  />
-
-                  {/* Channel Public Key */}
-                  <FormField
-                    name={'channelpublickey'}
-                    label={'Public Key'}
-                    type={'text'}
-                    defaultValue={activeChannelClaim.value.public_key}
-                    readOnly
-                  />
-                </div>
-              )}
-            </>
+            </div>
           )}
         </div>
+      )}
+      {tab === 'Publish' && (
+        <LivestreamForm setClearStatus={setIsClear} disabled={balance < 0.01} urlSource={urlSource} />
       )}
     </Page>
   );

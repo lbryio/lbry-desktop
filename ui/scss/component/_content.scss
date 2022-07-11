@@ -402,7 +402,8 @@
   background-color: #000;
 
   &.content__loading--document {
-    background-color: var(--color-background);
+    // background-color: var(--color-background);
+    background-color: transparent;
     padding: calc(var(--spacing-xl) * 5) 0;
 
     .content__loading-text {

@@ -116,13 +116,6 @@ function FileListPublished(props: Props) {
                       onClick={() => fetchClaimListMine(params.page, params.page_size, true, filterBy.split(','))}
                     />
                   )}
-                  <Button
-                    icon={ICONS.PUBLISH}
-                    button="primary"
-                    label={__('Upload')}
-                    navigate={`/$/${PAGES.UPLOAD}`}
-                    onClick={() => clearPublish()}
-                  />
                 </div>
               }
               persistedStorageKey="claim-list-published"

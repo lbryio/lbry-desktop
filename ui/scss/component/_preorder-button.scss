@@ -13,7 +13,9 @@
 }
 
 section.preorder-content-modal {
-  h2.card__title, .section__subtitle, .handle-submit-area {
+  h2.card__title,
+  .section__subtitle,
+  .handle-submit-area {
     text-align: center;
   }
 
@@ -39,9 +41,9 @@ section.preorder-content-modal {
   }
 }
 
-
 section.preorder-content-modal-loading {
-  h2.card__title, .section__subtitle {
+  h2.card__title,
+  .section__subtitle {
     text-align: center;
   }
 

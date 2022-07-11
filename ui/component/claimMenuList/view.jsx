@@ -53,11 +53,13 @@ type Props = {
   claimInCollection: boolean,
   collectionId: string,
   isMyCollection: boolean,
+  isLivestreamClaim?: boolean,
+  isPostClaim?: boolean,
   fypId?: string,
   doToast: ({ message: string, isError?: boolean }) => void,
   claimIsMine: boolean,
   fileInfo: FileListItem,
-  prepareEdit: ({}, string, {}) => void,
+  prepareEdit: ({}, string, string) => void,
   isSubscribed: boolean,
   doChannelSubscribe: (SubscriptionArgs) => void,
   doChannelUnsubscribe: (SubscriptionArgs) => void,
@@ -99,6 +101,8 @@ function ClaimMenuList(props: Props) {
     hasClaimInFavorites,
     collectionId,
     isMyCollection,
+    isLivestreamClaim,
+    isPostClaim,
     fypId,
     doToast,
     claimIsMine,
@@ -119,6 +123,7 @@ function ClaimMenuList(props: Props) {
     lastUsedCollectionIsNotBuiltin,
     doRemovePersonalRecommendation,
   } = props;
+
   const [doShuffle, setDoShuffle] = React.useState(false);
   const incognitoClaim = contentChannelUri && !contentChannelUri.includes('@');
   const isChannel = !incognitoClaim && !contentSigningChannel;
@@ -133,6 +138,7 @@ function ClaimMenuList(props: Props) {
     : __('Follow');
 
   const { push, replace } = useHistory();
+  const claimType = isLivestreamClaim ? 'livestream' : isPostClaim ? 'post' : 'upload';
 
   const fetchItems = React.useCallback(() => {
     if (collectionId) {
@@ -221,8 +227,7 @@ function ClaimMenuList(props: Props) {
       }
       const editUri = buildURI(uriObject);
 
-      push(`/$/${PAGES.UPLOAD}`);
-      prepareEdit(claim, editUri, fileInfo);
+      prepareEdit(claim, editUri, claimType);
     } else {
       const channelUrl = claim.name + ':' + claim.claim_id;
       push(`/${channelUrl}?${PAGE_VIEW_QUERY}=${EDIT_PAGE}`);

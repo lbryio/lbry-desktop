@@ -28,6 +28,7 @@ type Props = {
   limitShow?: number,
   user: User,
   disableControlTags?: boolean,
+  help?: string,
 };
 
 const UNALLOWED_TAGS = ['lbry-first'];
@@ -62,6 +63,7 @@ export default function TagsSearch(props: Props) {
     limitShow = 5,
     user,
     disableControlTags,
+    help,
   } = props;
   const [newTag, setNewTag] = useState('');
   const doesTagMatch = (name) => {
@@ -226,6 +228,7 @@ export default function TagsSearch(props: Props) {
                   />
                 ))}
               </ul>
+              <div className="form-field__hint mt-m">{help}</div>
             </section>
           )}
         </fieldset-section>

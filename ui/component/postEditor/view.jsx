@@ -14,7 +14,7 @@ type Props = {
   fetchStreamingUrl: (string) => void,
   setPrevFileText: (string) => void,
   updatePublishForm: ({}) => void,
-  setCurrentFileType: (string) => void,
+  // setCurrentFileType: (string) => void,
 };
 
 function PostEditor(props: Props) {
@@ -30,7 +30,7 @@ function PostEditor(props: Props) {
     setPrevFileText,
     fetchStreamingUrl,
     updatePublishForm,
-    setCurrentFileType,
+    // setCurrentFileType,
   } = props;
 
   const editing = isStillEditing && uri;
@@ -82,7 +82,7 @@ function PostEditor(props: Props) {
       // Editing same file (previously published)
       // User can use a different file to replace the content
       if (!ready && !filePath && !fileText && streamingUrl && fileMimeType === 'text/markdown') {
-        setCurrentFileType(fileMimeType);
+        // setCurrentFileType(fileMimeType);
         updateEditorText(streamingUrl);
       }
     }
@@ -95,7 +95,7 @@ function PostEditor(props: Props) {
     streamingUrl,
     setPrevFileText,
     updatePublishForm,
-    setCurrentFileType,
+    // setCurrentFileType,
   ]);
 
   return (

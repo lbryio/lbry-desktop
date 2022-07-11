@@ -31,13 +31,15 @@ import { doToast } from 'redux/actions/notifications';
 import { doChannelSubscribe, doChannelUnsubscribe } from 'redux/actions/subscriptions';
 import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
-import { selectListShuffle } from 'redux/selectors/content';
+import { selectListShuffle, makeSelectFileRenderModeForUri } from 'redux/selectors/content';
 import { doToggleLoopList, doToggleShuffleList } from 'redux/actions/content';
+import { isStreamPlaceholderClaim } from 'util/claim';
+import * as RENDER_MODES from 'constants/file_render_modes';
 import ClaimPreview from './view';
-import fs from 'fs';
 
 const select = (state, props) => {
-  const claim = selectClaimForUri(state, props.uri, false);
+  const { uri } = props;
+  const claim = selectClaimForUri(state, uri, false);
   const collectionId = props.collectionId;
   const repostedClaim = claim && claim.reposted_claim;
   const contentClaim = repostedClaim || claim;
@@ -49,6 +51,9 @@ const select = (state, props) => {
   const playNextUri = shuffle && shuffle[0];
   const lastUsedCollectionId = selectLastUsedCollection(state);
   const lastUsedCollection = makeSelectCollectionForId(lastUsedCollectionId)(state);
+  const isLivestreamClaim = isStreamPlaceholderClaim(claim);
+  const permanentUrl = (claim && claim.permanent_url) || '';
+  const isPostClaim = makeSelectFileRenderModeForUri(permanentUrl)(state) === RENDER_MODES.MARKDOWN;
 
   return {
     claim,
@@ -56,6 +61,8 @@ const select = (state, props) => {
     contentClaim,
     contentSigningChannel,
     contentChannelUri,
+    isLivestreamClaim,
+    isPostClaim,
     claimIsMine: selectClaimIsMine(state, claim),
     hasClaimInWatchLater: makeSelectCollectionForIdHasClaimUrl(
       COLLECTIONS_CONSTS.WATCH_LATER_ID,
@@ -89,7 +96,7 @@ const select = (state, props) => {
 };
 
 const perform = (dispatch) => ({
-  prepareEdit: (publishData, uri, fileInfo) => dispatch(doPrepareEdit(publishData, uri, fileInfo, fs)),
+  prepareEdit: (publishData, uri, claimType) => dispatch(doPrepareEdit(publishData, uri, claimType)),
   doToast: (props) => dispatch(doToast(props)),
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   doChannelMute: (channelUri) => dispatch(doChannelMute(channelUri)),

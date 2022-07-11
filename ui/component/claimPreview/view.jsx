@@ -27,7 +27,7 @@ import ClaimPreviewSubtitle from 'component/claimPreviewSubtitle';
 import ClaimRepostAuthor from 'component/claimRepostAuthor';
 import FileDownloadLink from 'component/fileDownloadLink';
 import FileWatchLaterLink from 'component/fileWatchLaterLink';
-import PublishPending from 'component/publishPending';
+import PublishPending from 'component/publish/shared/publishPending';
 import ClaimMenuList from 'component/claimMenuList';
 import ClaimPreviewReset from 'component/claimPreviewReset';
 import ClaimPreviewLoading from './claim-preview-loading';

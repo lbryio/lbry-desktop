@@ -21,7 +21,8 @@
   --color-background-base: 32, 32, 32;
   --color-background: rgba(var(--color-background-base), 1);
   --color-background-overlay: #0c0d0e95;
-  --color-border: rgba(68, 68, 68, 0.5);
+  --color-border-base: 68, 68, 68;
+  --color-border: rgba(var(--color-border-base), 0.5);
   --color-card-background: var(--color-header-background);
   --color-card-background-highlighted: #241c30;
 

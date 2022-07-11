@@ -316,6 +316,18 @@ input-submit {
   @extend input-submit;
 }
 
+.input-max-counter {
+  display: inline;
+  font-size: var(--font-xsmall) !important;
+  float: right;
+  opacity: 0.6;
+}
+
+.input-max-counter-error {
+  @extend .input-max-counter;
+  color: var(--color-text-error);
+}
+
 input-submit {
   align-items: center;
 
@@ -513,6 +525,7 @@ fieldset-group {
 }
 
 .form-field__hint {
+  opacity: 0.8;
   font-size: var(--font-xsmall);
   color: var(--color-input-label);
 }

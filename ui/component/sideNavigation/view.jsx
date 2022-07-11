@@ -16,7 +16,7 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import { useIsMobile, useIsLargeScreen } from 'effects/use-screensize';
 import { GetLinksData } from 'util/buildHomepage';
 import { platform } from 'util/platform';
-import { DOMAIN, ENABLE_UI_NOTIFICATIONS, ENABLE_NO_SOURCE_CLAIMS } from 'config';
+import { DOMAIN, ENABLE_UI_NOTIFICATIONS } from 'config';
 import PremiumBadge from 'component/premiumBadge';
 
 const touch = platform.isTouch();
@@ -30,12 +30,6 @@ type SideNavLink = {
   extra?: Node,
   hideForUnauth?: boolean,
   noI18n?: boolean,
-};
-
-const GO_LIVE: SideNavLink = {
-  title: 'Go Live',
-  link: `/$/${PAGES.LIVESTREAM}`,
-  icon: ICONS.VIDEO,
 };
 
 const getHomeButton = (additionalAction) => ({
@@ -176,12 +170,27 @@ function SideNavigation(props: Props) {
     ({ pinnedUrls, pinnedClaimIds, hideByDefault, ...theRest }) => theRest
   );
 
-  const MOBILE_LINKS: Array<SideNavLink> = [
+  const MOBILE_PUBLISH: Array<SideNavLink> = [
+    {
+      title: 'Go Live',
+      link: `/$/${PAGES.LIVESTREAM}`,
+      icon: ICONS.VIDEO,
+      hideForUnauth: true,
+    },
     {
       title: 'Upload',
       link: `/$/${PAGES.UPLOAD}`,
       icon: ICONS.PUBLISH,
+      hideForUnauth: true,
     },
+    {
+      title: 'Post',
+      link: `/$/${PAGES.POST}`,
+      icon: ICONS.POST,
+      hideForUnauth: true,
+    },
+  ];
+  const MOBILE_LINKS: Array<SideNavLink> = [
     {
       title: 'New Channel',
       link: `/$/${PAGES.CHANNEL_NEW}`,
@@ -253,8 +262,6 @@ function SideNavigation(props: Props) {
 
   const notificationsEnabled = ENABLE_UI_NOTIFICATIONS || (user && user.experimental_ui);
   const isAuthenticated = Boolean(email);
-
-  const livestreamEnabled = Boolean(ENABLE_NO_SOURCE_CLAIMS && user && !user.odysee_live_disabled);
 
   const [pulseLibrary, setPulseLibrary] = React.useState(false);
   const [expandTags, setExpandTags] = React.useState(false);
@@ -505,10 +512,7 @@ function SideNavigation(props: Props) {
       >
         {(!canDisposeMenu || sidebarOpen) && (
           <div className="navigation-inner-container">
-            <ul className="navigation-links--absolute mobile-only">
-              {notificationsEnabled && getLink(NOTIFICATIONS)}
-              {email && livestreamEnabled && getLink(GO_LIVE)}
-            </ul>
+            <ul className="navigation-links--absolute mobile-only">{notificationsEnabled && getLink(NOTIFICATIONS)}</ul>
 
             <ul
               className={classnames('navigation-links', {
@@ -547,6 +551,9 @@ function SideNavigation(props: Props) {
               )}
             </ul>
 
+            <ul className="navigation-links--absolute mobile-only">
+              {email && MOBILE_PUBLISH.map((linkProps) => getLink(linkProps))}
+            </ul>
             <ul className="navigation-links--absolute mobile-only">
               {email && MOBILE_LINKS.map((linkProps) => getLink(linkProps))}
               {!email && UNAUTH_LINKS.map((linkProps) => getLink(linkProps))}

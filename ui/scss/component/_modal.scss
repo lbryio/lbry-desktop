@@ -304,10 +304,16 @@
   margin-top: var(--spacing-s);
   padding: var(--spacing-s);
 
-  background-color: var(--color-error);
-  border-left: 2px solid var(--color-text-error);
+  background-color: rgba(255, 0, 0, 0.02);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-text-error);
+  border-left: 3px solid var(--color-text-error);
   color: var(--color-text-error);
   list-style: none;
   overflow-y: scroll;
   white-space: pre-wrap;
+
+  li {
+    margin-bottom: 0;
+  }
 }

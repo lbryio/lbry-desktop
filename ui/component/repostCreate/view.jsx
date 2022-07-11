@@ -15,7 +15,7 @@ import ClaimPreview from 'component/claimPreview';
 import { URL as SITE_URL, URL_LOCAL, URL_DEV } from 'config';
 import HelpLink from 'component/common/help-link';
 import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
-import BidHelpText from 'component/publishBid/bid-help-text';
+import BidHelpText from 'component/publish/shared/publishBid/bid-help-text';
 import Spinner from 'component/spinner';
 import { REPOST_PARAMS } from 'page/repost/view';
 

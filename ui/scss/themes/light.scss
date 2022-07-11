@@ -24,7 +24,8 @@
   --color-secondary-alt-2: #fefcf6;
 
   // Structure
-  --color-border: rgba(0, 0, 0, 0.2);
+  --color-border-base: 0, 0, 0;
+  --color-border: rgba(var(--color-border-base), 0.2);
   --color-background-base: 231, 231, 231;
   --color-background: rgba(var(--color-background-base), 1);
   --color-background-overlay: rgba(18, 18, 18, 0.9);

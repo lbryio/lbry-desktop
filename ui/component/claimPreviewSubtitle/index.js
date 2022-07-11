@@ -2,7 +2,8 @@ import * as PAGES from 'constants/pages';
 import { connect } from 'react-redux';
 import { selectClaimForUri, makeSelectClaimIsPending } from 'redux/selectors/claims';
 import { selectLanguage } from 'redux/selectors/settings';
-import { doClearPublish, doPrepareEdit } from 'redux/actions/publish';
+// import { doClearPublish, doPrepareEdit } from 'redux/actions/publish';
+import { doClearPublish } from 'redux/actions/publish';
 import { push } from 'connected-react-router';
 import ClaimPreviewSubtitle from './view';
 import { doFetchSubCount, selectSubCountForUri } from 'lbryinc';
@@ -24,7 +25,7 @@ const select = (state, props) => {
 const perform = (dispatch) => ({
   beginPublish: (name) => {
     dispatch(doClearPublish());
-    dispatch(doPrepareEdit({ name }));
+    // dispatch(doPrepareEdit({ name }));
     dispatch(push(`/$/${PAGES.UPLOAD}`));
   },
   fetchSubCount: (claimId) => dispatch(doFetchSubCount(claimId)),

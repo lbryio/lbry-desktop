@@ -23,11 +23,9 @@ type Props = {
   doShowSnackBar: (string) => void,
 };
 
-/* NEKO MARK */
 const ScheduledStreams = (props: Props) => {
   const {
     channelIds,
-    // tileLayout,
     liveUris = [],
     limitClaimsPerChannel,
     setClientSetting,

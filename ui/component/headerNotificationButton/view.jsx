@@ -208,7 +208,7 @@ export default function NotificationHeaderButton(props: Props) {
 
         <ClickAwayListener onClickAway={handleClickAway}>
           <MuiMenu {...menuProps}>
-            <div className="menu__list--notifications-header" />
+            {/* <div className="menu__list--notifications-header" /> */}
             <div className="menu__list--notifications-list">
               {list.map((notification) => {
                 return menuEntry(notification);

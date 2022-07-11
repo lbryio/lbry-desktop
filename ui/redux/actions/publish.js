@@ -393,8 +393,8 @@ export const doResetThumbnailStatus = () => (dispatch: Dispatch) => {
 export const doBeginPublish = (name: string) => (dispatch: Dispatch) => {
   dispatch(doClearPublish());
   // $FlowFixMe
-  dispatch(doPrepareEdit({ name }));
-  dispatch(push(`/$/${PAGES.UPLOAD}`));
+  // dispatch(doPrepareEdit({ name }));
+  // dispatch(push(`/$/${PAGES.UPLOAD}`));
 };
 
 export const doClearPublish = () => (dispatch: Dispatch) => {
@@ -536,9 +536,7 @@ export const doUploadThumbnail = (
   }
 };
 
-export const doPrepareEdit = (claim: StreamClaim, uri: string, fileInfo: FileListItem, fs: any) => (
-  dispatch: Dispatch
-) => {
+export const doPrepareEdit = (claim: StreamClaim, uri: string, claimType: string) => (dispatch: Dispatch) => {
   const { name, amount, value = {} } = claim;
   const channelName = (claim && claim.signing_channel && claim.signing_channel.name) || null;
   const {
@@ -598,6 +596,18 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string, fileInfo: FileLis
   }
 
   dispatch({ type: ACTIONS.DO_PREPARE_EDIT, data: publishData });
+
+  switch (claimType) {
+    case 'post':
+      dispatch(push(`/$/${PAGES.POST}`));
+      break;
+    case 'livestream':
+      dispatch(push(`/$/${PAGES.LIVESTREAM}`));
+      break;
+    default:
+      dispatch(push(`/$/${PAGES.UPLOAD}`));
+      break;
+  }
 };
 
 export const doPublish = (success: Function, fail: Function, preview: Function, payload: any) => (

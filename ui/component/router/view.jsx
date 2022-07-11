@@ -69,13 +69,17 @@ const LiveStreamSetupPage = lazyImport(() => import('page/livestreamSetup' /* we
 const LivestreamCurrentPage = lazyImport(() =>
   import('page/livestreamCurrent' /* webpackChunkName: "livestreamCurrent" */)
 );
+const LivestreamCreatePage = lazyImport(() =>
+  import('page/livestreamCreate' /* webpackChunkName: "livestreamCreate" */)
+);
 const OdyseeMembershipPage = lazyImport(() =>
   import('page/odyseeMembership' /* webpackChunkName: "odyseeMembership" */)
 );
 const OwnComments = lazyImport(() => import('page/ownComments' /* webpackChunkName: "ownComments" */));
 const PasswordResetPage = lazyImport(() => import('page/passwordReset' /* webpackChunkName: "passwordReset" */));
 const PasswordSetPage = lazyImport(() => import('page/passwordSet' /* webpackChunkName: "passwordSet" */));
-const PublishPage = lazyImport(() => import('page/publish' /* webpackChunkName: "publish" */));
+const UploadPage = lazyImport(() => import('page/upload' /* webpackChunkName: "publish" */));
+const PostPage = lazyImport(() => import('page/post' /* webpackChunkName: "post" */));
 const ReportContentPage = lazyImport(() => import('page/reportContent' /* webpackChunkName: "reportContent" */));
 const ReportPage = lazyImport(() => import('page/report' /* webpackChunkName: "report" */));
 const RepostNew = lazyImport(() => import('page/repost' /* webpackChunkName: "repost" */));
@@ -373,7 +377,8 @@ function AppRouter(props: Props) {
         <PrivateRoute {...props} path={`/$/${PAGES.REPOST_NEW}`} component={RepostNew} />
         <PrivateRoute {...props} path={`/$/${PAGES.UPLOADS}`} component={FileListPublished} />
         <PrivateRoute {...props} path={`/$/${PAGES.CREATOR_DASHBOARD}`} component={CreatorDashboard} />
-        <PrivateRoute {...props} path={`/$/${PAGES.UPLOAD}`} component={PublishPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.UPLOAD}`} component={UploadPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.POST}`} component={PostPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.REPORT}`} component={ReportPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.REWARDS}`} exact component={RewardsPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.REWARDS_VERIFY}`} component={RewardsVerifyPage} />
@@ -386,6 +391,7 @@ function AppRouter(props: Props) {
         <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_CREATOR}`} component={SettingsCreatorPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.WALLET}`} exact component={WalletPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.CHANNELS}`} component={ChannelsPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.LIVESTREAM_CREATE}`} component={LivestreamCreatePage} />
         <PrivateRoute {...props} path={`/$/${PAGES.LIVESTREAM}`} component={LiveStreamSetupPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.LIVESTREAM_CURRENT}`} component={LivestreamCurrentPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.BUY}`} component={BuyPage} />

@@ -80,7 +80,7 @@ export default function TagsSelect(props: Props) {
     ((showClose && !hasClosed) || !showClose) && (
       <Card
         className="card--tags"
-        icon={ICONS.TAG}
+        // icon={ICONS.TAG}
         title={
           hideHeader ? null : (
             <React.Fragment>
@@ -89,14 +89,6 @@ export default function TagsSelect(props: Props) {
                 <Button button="close" icon={ICONS.REMOVE} onClick={handleClose} />
               )}
             </React.Fragment>
-          )
-        }
-        subtitle={
-          help !== false && (
-            <span>
-              {help || __("The tags you follow will change what's trending for you.")}{' '}
-              <Button button="link" label={__('Learn more')} href="https://odysee.com/@OdyseeHelp:b/OdyseeBasics:c" />.
-            </span>
           )
         }
         actions={
@@ -111,6 +103,19 @@ export default function TagsSelect(props: Props) {
               placeholder={placeholder}
               limitShow={limitShow}
               limitSelect={limitSelect}
+              help={
+                help !== false && (
+                  <span>
+                    {help || __("The tags you follow will change what's trending for you.")}{' '}
+                    <Button
+                      button="link"
+                      label={__('Learn more')}
+                      href="https://odysee.com/@OdyseeHelp:b/OdyseeBasics:c"
+                    />
+                    .
+                  </span>
+                )
+              }
             />
           </React.Fragment>
         }
