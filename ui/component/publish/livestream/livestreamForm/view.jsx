@@ -148,6 +148,7 @@ function LivestreamForm(props: Props) {
 
   const mode = PUBLISH_MODES.LIVESTREAM;
   const [publishMode, setPublishMode] = React.useState('New');
+  const [replaySource, setReplaySource] = React.useState('keep');
   const [isCheckingLivestreams, setCheckingLivestreams] = React.useState(false);
 
   // Used to check if the url name has changed:
@@ -519,13 +520,17 @@ function LivestreamForm(props: Props) {
           checkLivestreams={fetchLivestreams}
           channelId={claimChannelId}
           channelName={activeChannelName}
+          setReplaySource={setReplaySource}
+          replaySource={replaySource}
         />
 
         <PublishDescription disabled={disabled} />
 
         {!publishing && (
           <div className={classnames({ 'card--disabled': disabled })}>
-            <Card body={<PublishStreamReleaseDate />} />
+            {(publishMode === 'New' || (publishMode === 'Edit' && replaySource === 'keep')) && (
+              <Card body={<PublishStreamReleaseDate />} />
+            )}
 
             <Card actions={<SelectThumbnail livestreamData={livestreamData} />} />
 
@@ -562,8 +567,7 @@ function LivestreamForm(props: Props) {
             <PublishAdditionalOptions
               isLivestream={isLivestreamMode}
               disabled={disabled}
-              // showSchedulingOptions={publishMode === 'New'}
-              showSchedulingOptions
+              showSchedulingOptions={publishMode === 'New' || (publishMode === 'Edit' && replaySource)}
             />
           </div>
         )}

@@ -44,6 +44,8 @@ type Props = {
   fileSource: string,
   changeFileSource: (string) => void,
   inEditMode: boolean,
+  setReplaySource: (string) => void,
+  replaySource?: string,
 };
 
 function PublishLivestream(props: Props) {
@@ -67,6 +69,8 @@ function PublishLivestream(props: Props) {
     fileSource,
     changeFileSource,
     inEditMode,
+    setReplaySource,
+    replaySource,
   } = props;
 
   const livestreamDataStr = JSON.stringify(livestreamData);
@@ -75,7 +79,6 @@ function PublishLivestream(props: Props) {
   const [selectedFileIndex, setSelectedFileIndex] = useState(null);
   const PAGE_SIZE = 4;
   const [currentPage, setCurrentPage] = useState(1);
-  const [replaySource, setReplaySource] = useState('keep');
 
   const totalPages =
     hasLivestreamData && livestreamData.length > PAGE_SIZE ? Math.ceil(livestreamData.length / PAGE_SIZE) : 1;
