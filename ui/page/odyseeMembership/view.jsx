@@ -526,35 +526,31 @@ const OdyseeMembershipPage = (props: Props) => {
                                   <>
                                     {/* dont show a monthly Premium membership option (yearly only) */}
                                     {!(
-                                      price.StripePrice.recurring.interval === 'month' &&
+                                      price.recurring.interval === 'month' &&
                                       membershipOption.Membership.name === 'Premium'
                                     ) && (
                                       <>
-                                        {price.StripePrice.currency === currencyToUse && (
+                                        {price.currency === currencyToUse && (
                                           <div>
                                             <h4 className="membership_info">
-                                              <b>{__('Interval')}:</b>{' '}
-                                              {convertIntervalVariableToString(price.StripePrice)}
+                                              <b>{__('Interval')}:</b> {convertIntervalVariableToString(price)}
                                             </h4>
                                             <h4 className="membership_info">
-                                              <b>{__('Price')}:</b> {buildCurrencyDisplay(price.StripePrice)}
-                                              {price.StripePrice.unit_amount / 100}/
-                                              {capitalizedInterval(price.StripePrice.recurring.interval)}
+                                              <b>{__('Price')}:</b> {buildCurrencyDisplay(price)}
+                                              {price.unit_amount / 100}/{capitalizedInterval(price.recurring.interval)}
                                             </h4>
                                             <Button
                                               button="primary"
-                                              onClick={(e) =>
-                                                purchaseMembership(e, membershipOption, price.StripePrice)
-                                              }
+                                              onClick={(e) => purchaseMembership(e, membershipOption, price)}
                                               membership-id={membershipOption.Membership.id}
                                               membership-subscription-period={membershipOption.Membership.type}
-                                              price-id={price.StripePrice.id}
+                                              price-id={price.id}
                                               className="membership_button"
                                               label={__('Join via %interval% membership', {
-                                                interval: price.StripePrice.recurring.interval,
+                                                interval: price.recurring.interval,
                                               })}
                                               icon={ICONS.FINANCE}
-                                              interval={price.StripePrice.recurring.interval}
+                                              interval={price.recurring.interval}
                                               plan={membershipOption.Membership.name}
                                             />
                                           </div>
