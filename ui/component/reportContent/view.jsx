@@ -57,13 +57,15 @@ const DEFAULT_INPUT_DATA = {
 };
 
 type Props = {
+  // --- urlParams ---
   claimId: string,
+  // --- redux ---
   claim: StreamClaim,
   isReporting: boolean,
   error: string,
   activeChannelClaim: ?ChannelClaim,
   incognito: boolean,
-  doClaimSearch: (any) => void,
+  doClaimSearch: (any) => Promise<any>,
   doReportContent: (string, string) => void,
 };
 
@@ -85,9 +87,11 @@ export default function ReportContent(props: Props) {
         page: 1,
         no_totals: true,
         claim_ids: [claimId],
+      }).finally(() => {
+        setIsResolvingClaim(false);
       });
     }
-  }, [claim, claimId]);
+  }, [claim, claimId, doClaimSearch]);
 
   // On mount, pause player and get the timestamp, if applicable.
   React.useEffect(() => {
@@ -102,17 +106,8 @@ export default function ReportContent(props: Props) {
       const str = (n) => n.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
       updateInput('timestamp', str(h) + ':' + str(m) + ':' + str(s));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  React.useEffect(() => {
-    let timer;
-    if (isResolvingClaim) {
-      timer = setTimeout(() => {
-        setIsResolvingClaim(false);
-      }, 3000);
-    }
-    return () => clearTimeout(timer);
-  }, [isResolvingClaim]);
 
   function onSubmit() {
     if (!claim) {

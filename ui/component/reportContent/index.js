@@ -3,7 +3,7 @@ import { doReportContent } from 'redux/actions/reportContent';
 import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
 import { selectIsReportingContent, selectReportContentError } from 'redux/selectors/reportContent';
 import { doClaimSearch } from 'redux/actions/claims';
-import { makeSelectClaimForClaimId } from 'redux/selectors/claims';
+import { selectClaimForClaimId } from 'redux/selectors/claims';
 import { withRouter } from 'react-router';
 import ReportContent from './view';
 
@@ -18,13 +18,13 @@ const select = (state, props) => {
     activeChannelClaim: selectActiveChannelClaim(state),
     incognito: selectIncognito(state),
     claimId: claimId,
-    claim: makeSelectClaimForClaimId(claimId)(state),
+    claim: selectClaimForClaimId(state, claimId),
   };
 };
 
-const perform = (dispatch) => ({
-  doClaimSearch: (options) => dispatch(doClaimSearch(options)),
-  doReportContent: (category, params) => dispatch(doReportContent(category, params)),
-});
+const perform = {
+  doClaimSearch,
+  doReportContent,
+};
 
 export default withRouter(connect(select, perform)(ReportContent));
