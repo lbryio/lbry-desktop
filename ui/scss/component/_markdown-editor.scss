@@ -95,7 +95,7 @@
   }
 
   .cm-s-easymde .cm-link {
-    color: var(--color-editor-link);
+    color: var(--color-border);
   }
 
   .cm-s-easymde .cm-url {
@@ -114,10 +114,15 @@
       padding-right: 0;
       padding-left: 0;
       border: transparent;
+      margin-right: var(--spacing-xxs);
 
       &:hover {
-        color: var(--color-primary-dynamic);
+        color: var(--color-header-link);
+        background-color: var(--color-border);
       }
+      /* &:active {
+        background-color: var(--color-border);
+      } */
     }
   }
 }
