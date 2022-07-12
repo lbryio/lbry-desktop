@@ -6,6 +6,7 @@ import { selectGetSyncErrorMessage } from 'redux/selectors/sync';
 import { selectHasNavigated } from 'redux/selectors/app';
 import { selectTotalBalance, selectBalance } from 'redux/selectors/wallet';
 import * as SETTINGS from 'constants/settings';
+import { doLbrysyncRegister } from 'redux/actions/lbrysync';
 import Header from './view';
 
 const select = (state) => ({
@@ -18,6 +19,7 @@ const select = (state) => ({
 });
 
 const perform = (dispatch) => ({
+  lbrysyncRegister: (username, password) => dispatch(doLbrysyncRegister(username, password)),
   signOut: () => dispatch(doSignOut()),
 });
 
