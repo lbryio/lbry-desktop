@@ -137,29 +137,37 @@ export default function ShowPage(props: Props) {
 
   useEffect(() => {
     if (canonicalUrl) {
-      const urlPath = pathname + hash;
-      const fullParams =
-        urlPath.indexOf('?') > 0 ? urlPath.substring(urlPath.indexOf('?')) : search.length > 0 ? search : '';
-      const canonicalUrlPath = '/' + canonicalUrl.replace(/^lbry:\/\//, '').replace(/#/g, ':') + fullParams;
+      const statePos =
+        hash.indexOf('#state') > -1
+          ? hash.indexOf('#state')
+          : hash.indexOf('&state') > -1
+          ? hash.indexOf('&state')
+          : undefined;
+      const pageHash = statePos === undefined ? hash : hash.substring(0, statePos);
+      const urlPath = pathname + pageHash;
+      const path = urlPath.slice(1).replace(/:/g, '#');
+      // parseURI can parse queries and hashes when they are mixed with the uri
+      let queryString, pathHash;
+      try {
+        ({ queryString, pathHash } = parseURI(path));
+      } catch (e) {}
+      const canonicalUrlPath = '/' + canonicalUrl.replace(/^lbry:\/\//, '').replace(/#/g, ':');
 
       // replaceState will fail if on a different domain (like webcache.googleusercontent.com)
       const hostname = isDev ? 'localhost' : DOMAIN;
 
-      if (canonicalUrlPath !== pathname && hostname === window.location.hostname && fullParams !== search) {
-        const urlParams = new URLSearchParams(search);
-        let replaceUrl = canonicalUrlPath;
+      let replaceUrl = canonicalUrlPath;
+      if (canonicalUrlPath !== urlPath && hostname === window.location.hostname) {
+        const urlParams = new URLSearchParams(search || queryString);
         if (urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID)) {
           const listId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID) || '';
           urlParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, listId);
-          replaceUrl += `?${urlParams.toString()}`;
         }
-        history.replaceState(history.state, '', replaceUrl);
-      }
 
-      const windowHref = window.location.href;
-      const noUrlParams = search.length === 0;
-      if (windowHref.includes('?') && noUrlParams) {
-        history.replaceState(history.state, '', windowHref.substring(0, windowHref.length - 1));
+        if (urlParams.toString()) replaceUrl += `?${urlParams.toString()}`;
+        if (pathHash || (!pathHash && !queryString && pageHash)) replaceUrl += String(pathHash || pageHash);
+
+        history.replaceState(history.state, '', replaceUrl);
       }
     }
   }, [canonicalUrl, pathname, hash, search]);

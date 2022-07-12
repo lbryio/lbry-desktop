@@ -13,6 +13,8 @@ declare type LbryUrlObj = {
   primaryBidPosition?: number,
   secondaryBidPosition?: number,
   startTime?: number,
+  queryString?: string,
+  pathHash?: string,
 
   // Below are considered deprecated and should not be used due to unreliableness with claim.canonical_url
   claimName?: string,

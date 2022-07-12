@@ -31,18 +31,26 @@ import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { selectDaemonSettings, selectClientSetting, selectHomepageData } from 'redux/selectors/settings';
 import { toggleVideoTheaterMode, toggleAutoplayNext, doSetClientSetting } from 'redux/actions/settings';
 import { selectUserVerifiedEmail, selectUser } from 'redux/selectors/user';
+import { parseURI } from 'util/lbryURI';
 import { doToast } from 'redux/actions/notifications';
 
 const select = (state, props) => {
-  const { search } = props.location;
+  const { search, pathname, hash } = props.location;
   const urlParams = new URLSearchParams(search);
   const autoplay = urlParams.get('autoplay');
   const uri = props.uri;
 
+  const urlPath = `lbry://${(pathname + hash).slice(1)}`;
+  let startTime;
+  try {
+    ({ startTime } = parseURI(urlPath));
+  } catch (e) {}
+
   const claim = selectClaimForUri(state, uri);
 
   // TODO: eventually this should be received from DB and not local state (https://github.com/lbryio/lbry-desktop/issues/6796)
-  const position = urlParams.get('t') !== null ? urlParams.get('t') : selectContentPositionForUri(state, uri);
+  const position =
+    startTime || (urlParams.get('t') !== null ? urlParams.get('t') : selectContentPositionForUri(state, uri));
   const userId = selectUser(state) && selectUser(state).id;
   const internalFeature = selectUser(state) && selectUser(state).internal_feature;
   const playingUri = selectPlayingUri(state);

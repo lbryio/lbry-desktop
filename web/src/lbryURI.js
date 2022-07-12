@@ -108,17 +108,18 @@ function parseURI(url, requireProto = false) {
   }
 
   // Validate and process modifier
-  const [primaryClaimId, primaryClaimSequence, primaryBidPosition] = parseURIModifier(
+  const [primaryClaimId, primaryClaimSequence, primaryBidPosition, primaryPathHash] = parseURIModifier(
     primaryModSeparator,
     primaryModValue
   );
-  const [secondaryClaimId, secondaryClaimSequence, secondaryBidPosition] = parseURIModifier(
+  const [secondaryClaimId, secondaryClaimSequence, secondaryBidPosition, secondaryPathHash] = parseURIModifier(
     secondaryModSeparator,
     secondaryModValue
   );
   const streamName = includesChannel ? possibleStreamName : streamNameOrChannelName;
   const streamClaimId = includesChannel ? secondaryClaimId : primaryClaimId;
   const channelClaimId = includesChannel && primaryClaimId;
+  const pathHash = primaryPathHash || secondaryPathHash;
 
   return {
     isChannel,
@@ -132,6 +133,7 @@ function parseURI(url, requireProto = false) {
     ...(primaryBidPosition ? { primaryBidPosition: parseInt(primaryBidPosition, 10) } : {}),
     ...(secondaryBidPosition ? { secondaryBidPosition: parseInt(secondaryBidPosition, 10) } : {}),
     ...(startTime ? { startTime: parseInt(startTime, 10) } : {}),
+    ...(pathHash ? { pathHash } : {}),
 
     // The values below should not be used for new uses of parseURI
     // They will not work properly with canonical_urls
@@ -146,6 +148,7 @@ function parseURIModifier(modSeperator, modValue) {
   let claimId;
   let claimSequence;
   let bidPosition;
+  let pathHash;
 
   if (modSeperator) {
     if (!modValue) {
@@ -162,7 +165,17 @@ function parseURIModifier(modSeperator, modValue) {
   }
 
   if (claimId && (claimId.length > claimIdMaxLength || !claimId.match(/^[0-9a-f]+$/))) {
-    throw new Error(__(`Invalid claim ID ${claimId}.`, { claimId }));
+    const hashIndex = claimId.indexOf('#');
+
+    if (hashIndex >= 0) {
+      pathHash = claimId.substring(hashIndex);
+      claimId = claimId.substring(0, hashIndex);
+      // As a pre-caution to catch future odd urls coming in,
+      // validate the new claimId length and characters again after stripping off the pathHash
+      [claimId] = parseURIModifier(modSeperator, claimId);
+    } else {
+      throw new Error(__(`Invalid claim ID %claimId%.`, { claimId }));
+    }
   }
 
   if (claimSequence && !claimSequence.match(/^-?[1-9][0-9]*$/)) {
@@ -173,7 +186,7 @@ function parseURIModifier(modSeperator, modValue) {
     throw new Error(__('Bid position must be a number.'));
   }
 
-  return [claimId, claimSequence, bidPosition];
+  return [claimId, claimSequence, bidPosition, pathHash];
 }
 
 /**

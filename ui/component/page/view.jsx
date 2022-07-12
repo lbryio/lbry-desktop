@@ -64,7 +64,7 @@ function Page(props: Props) {
   } = props;
 
   const {
-    location: { pathname },
+    location: { pathname, hash },
   } = useHistory();
 
   const theaterMode = renderMode === 'video' || renderMode === 'audio' ? videoTheaterMode : false;
@@ -73,11 +73,10 @@ function Page(props: Props) {
   const isLandscapeRotated = useIsMobileLandscape();
   const [sidebarOpen, setSidebarOpen] = usePersistedState('sidebar', false);
 
-  const url = pathname.slice(1).replace(/:/g, '#');
+  const urlPath = `lbry://${(pathname + hash).slice(1).replace(/:/g, '#')}`;
   let isOnFilePage = false;
   try {
-    const url = pathname.slice(1).replace(/:/g, '#');
-    const { isChannel } = parseURI(url);
+    const { isChannel } = parseURI(urlPath);
 
     if (!isChannel) isOnFilePage = true;
   } catch (e) {}
@@ -93,7 +92,7 @@ function Page(props: Props) {
 
   return (
     <>
-      <Wallpaper uri={url} />
+      <Wallpaper uri={urlPath} />
       {!noHeader && (
         <Header
           authHeader={authPage}

@@ -205,7 +205,7 @@ async function buildClaimOgMetadata(uri, claim, overrideOptions = {}, referrerQu
   const title = overrideOptions.title || claimTitle;
   const description = overrideOptions.description || claimDescription;
   const cleanDescription = removeMd(description);
-  const claimPath = `${URL}/${claim.canonical_url.replace('lbry://', '').replace('#', ':')}`;
+  const claimPath = `${URL}/${claim.canonical_url.replace('lbry://', '').replace(/#/g, ':')}`;
 
   let head = '';
 

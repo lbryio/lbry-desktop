@@ -5,7 +5,7 @@ import { lazyImport } from 'util/lazyImport';
 import { tusUnlockAndNotify, tusHandleTabUpdates } from 'util/tus';
 import analytics from 'analytics';
 import { setSearchUserId } from 'redux/actions/search';
-import { normalizeURI } from 'util/lbryURI';
+import { parseURI, buildURI } from 'util/lbryURI';
 import { generateGoogleCacheUrl } from 'util/url';
 import Router from 'component/router/index';
 import ModalRouter from 'modal/modalRouter';
@@ -187,7 +187,10 @@ function App(props: Props) {
 
   let uri;
   try {
-    uri = normalizeURI(path);
+    // here queryString and startTime are "removed" from the buildURI process
+    // to build only the uri itself
+    const { queryString, startTime, ...parsedUri } = parseURI(path);
+    uri = buildURI({ ...parsedUri });
   } catch (e) {
     const match = path.match(/[#/:]/);
 
