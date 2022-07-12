@@ -1375,6 +1375,12 @@ img {
   }
 }
 
+.input--currency-select {
+  label {
+    margin-top: 2.5px !important;
+  }
+}
+
 [data-reach-menu-popover] {
   @media (max-width: $breakpoint-small) {
     // width: calc(100% - var(--spacing-xs) * 2);
