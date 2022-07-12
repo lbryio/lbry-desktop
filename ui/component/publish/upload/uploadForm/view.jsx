@@ -240,7 +240,7 @@ function UploadForm(props: Props) {
     if (isStillEditing || inEditMode) {
       submitLabel = __('Saving...');
     } else {
-      submitLabel = __('Preparing...');
+      submitLabel = __('Uploading...');
     }
   } else if (previewing) {
     submitLabel = <Spinner type="small" />;
