@@ -210,12 +210,11 @@ export class FormFieldAreaAdvanced extends React.PureComponent<Props> {
                   {...inputProps}
                 />
               )}
-
               <div className="form-field__textarea-info">
                 {!noEmojis && openEmoteMenu && (
                   <Button
                     type="alt"
-                    className="button--file-action"
+                    className="button--comment-icons"
                     title="Emotes"
                     onClick={openEmoteMenu}
                     icon={ICONS.EMOJI}
