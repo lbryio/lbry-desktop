@@ -70,11 +70,9 @@ _Note: If coming from a deb install, the directory structure is different and yo
 
 ## Usage
 
-Double click the installed application to interact with the LBRY network.
+Start the installed application to interact with the LBRY network.
 
 ## Running from Source
-
-You can run the web version (lbry.tv), the electron app, or both at the same time.
 
 #### Prerequisites
 
