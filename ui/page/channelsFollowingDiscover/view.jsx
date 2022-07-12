@@ -17,6 +17,7 @@ type Props = {
   subscribedChannels: Array<Subscription>,
   blockedChannels: Array<string>,
   homepageData: any,
+  discoverData: ?Array<string>,
 };
 
 type ChannelsFollowingItem = {
@@ -27,16 +28,20 @@ type ChannelsFollowingItem = {
 };
 
 function ChannelsFollowingDiscover(props: Props) {
-  const { followedTags, subscribedChannels, blockedChannels, homepageData } = props;
+  const { followedTags, subscribedChannels, blockedChannels, homepageData, discoverData } = props;
   const { PRIMARY_CONTENT, LATEST } = homepageData;
+
   let channelIds;
-  if (CUSTOM_HOMEPAGE) {
+  if (discoverData) {
+    channelIds = discoverData;
+  } else if (CUSTOM_HOMEPAGE) {
     if (LATEST) {
       channelIds = LATEST.channelIds;
     } else if (PRIMARY_CONTENT) {
       channelIds = PRIMARY_CONTENT.channelIds;
     }
   }
+
   let rowData: Array<ChannelsFollowingItem> = [];
   const notChannels = subscribedChannels
     .map(({ uri }) => uri)

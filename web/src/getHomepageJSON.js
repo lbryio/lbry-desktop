@@ -65,6 +65,7 @@ const getHomepageJsonV2 = (format) => {
     v2[hp] = {
       categories: reformatV2Categories(memo.homepageData[hp].categories, format),
       meme: memo.homepageData[hp].meme,
+      discover: memo.homepageData[hp].discover,
       announcement: memo.announcements[hp],
     };
   });
