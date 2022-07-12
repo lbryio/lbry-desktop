@@ -4,6 +4,7 @@ import Page from 'component/page';
 import ClaimListDiscover from 'component/claimListDiscover';
 import * as CS from 'constants/claim_search';
 import { CUSTOM_HOMEPAGE, SIMPLE_SITE } from 'config';
+import { parseClaimIdFromPermanentUrl } from 'util/url';
 
 const MORE_CHANNELS_ANCHOR = 'MoreChannels';
 
@@ -15,7 +16,7 @@ type Props = {
 };
 
 function ChannelsFollowingDiscover(props: Props) {
-  const { /* subscribedChannels, */ homepageData, discoverData } = props;
+  const { subscribedChannels, homepageData, discoverData } = props;
   const { PRIMARY_CONTENT, LATEST } = homepageData;
 
   let channelIds;
@@ -36,6 +37,7 @@ function ChannelsFollowingDiscover(props: Props) {
         defaultFreshness={CS.FRESH_ALL}
         claimType={CS.CLAIM_CHANNEL}
         claimIds={CUSTOM_HOMEPAGE && channelIds ? channelIds : undefined}
+        excludedChannelIds={subscribedChannels.map((x) => parseClaimIdFromPermanentUrl(x.uri))}
         scrollAnchor={MORE_CHANNELS_ANCHOR}
         maxPages={SIMPLE_SITE ? 3 : undefined}
         hideFilters={SIMPLE_SITE}
