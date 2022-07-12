@@ -70,6 +70,7 @@ type Props = {
   doToast: ({ message: string }) => void,
   isTopLevel?: boolean,
   hideActions?: boolean,
+  hideContextMenu?: boolean,
   othersReacts: ?{
     like: number,
     dislike: number,
@@ -106,6 +107,7 @@ function CommentView(props: Props) {
     doToast,
     isTopLevel,
     hideActions,
+    hideContextMenu,
     othersReacts,
     playingUri,
     stakedLevel,
@@ -331,24 +333,26 @@ function CommentView(props: Props) {
                 </span>
               )}
             </div>
-            <div className="comment__menu">
-              <Menu>
-                <MenuButton className="menu__button">
-                  <Icon size={18} icon={ICONS.MORE_VERTICAL} />
-                </MenuButton>
-                <CommentMenuList
-                  uri={uri}
-                  isTopLevel={isTopLevel}
-                  isPinned={isPinned}
-                  commentId={commentId}
-                  authorUri={authorUri}
-                  commentIsMine={commentIsMine}
-                  handleEditComment={handleEditComment}
-                  supportAmount={supportAmount}
-                  setQuickReply={setQuickReply}
-                />
-              </Menu>
-            </div>
+            {!hideContextMenu && (
+              <div className="comment__menu">
+                <Menu>
+                  <MenuButton className="menu__button">
+                    <Icon size={18} icon={ICONS.MORE_VERTICAL} />
+                  </MenuButton>
+                  <CommentMenuList
+                    uri={uri}
+                    isTopLevel={isTopLevel}
+                    isPinned={isPinned}
+                    commentId={commentId}
+                    authorUri={authorUri}
+                    commentIsMine={commentIsMine}
+                    handleEditComment={handleEditComment}
+                    supportAmount={supportAmount}
+                    setQuickReply={setQuickReply}
+                  />
+                </Menu>
+              </div>
+            )}
           </div>
           <div>
             {isEditing ? (
@@ -417,7 +421,8 @@ function CommentView(props: Props) {
                     <Spinner text={numDirectReplies > 1 ? __('Loading Replies') : __('Loading Reply')} type="small" />
                   </span>
                 ) : (
-                  numDirectReplies > 0 && (
+                  numDirectReplies > 0 &&
+                  !hideActions && (
                     <div className="comment__actions">
                       {!showReplies ? (
                         openNewThread ? (
