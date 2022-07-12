@@ -20,7 +20,7 @@ const select = (state) => ({
   ffmpegStatus: selectFfmpegStatus(state),
   findingFFmpeg: selectFindingFFmpeg(state),
   walletEncrypted: selectWalletIsEncrypted(state),
-  isAuthenticated: selectUserVerifiedEmail(state),
+  isAuthenticated: selectUserVerifiedEmail(state), // odysee
   allowAnalytics: selectAllowAnalytics(state),
 });
 

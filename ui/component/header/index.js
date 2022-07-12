@@ -7,6 +7,7 @@ import { selectGetSyncErrorMessage } from 'redux/selectors/sync';
 import { selectHasNavigated } from 'redux/selectors/app';
 import { selectTotalBalance, selectBalance } from 'redux/selectors/wallet';
 import { selectEmailToVerify, selectUser } from 'redux/selectors/user';
+import { doLbrysyncRegister } from 'redux/actions/lbrysync';
 import * as SETTINGS from 'constants/settings';
 import Header from './view';
 
@@ -24,6 +25,7 @@ const select = (state) => ({
 const perform = (dispatch) => ({
   clearEmailEntry: () => dispatch(doClearEmailEntry()),
   clearPasswordEntry: () => dispatch(doClearPasswordEntry()),
+  lbrysyncRegister: (username, password) => dispatch(doLbrysyncRegister(username, password)),
   signOut: () => dispatch(doSignOut()),
 });
 
