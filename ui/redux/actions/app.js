@@ -4,7 +4,7 @@ import isDev from 'electron-is-dev';
 import { ipcRenderer, remote } from 'electron';
 // @endif
 import path from 'path';
-import { MINIMUM_VERSION, URL } from 'config';
+import { MINIMUM_VERSION, IGNORE_MINIMUM_VERSION, URL } from 'config';
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import * as SETTINGS from 'constants/settings';
@@ -290,12 +290,13 @@ export function doMinVersionCheck() {
 
 export function doMinVersionSubscribe() {
   return (dispatch) => {
-    // @if process.env.NODE_ENV='production'
-    dispatch(doMinVersionCheck());
+    if (IGNORE_MINIMUM_VERSION === 'true') {
+      return;
+    }
 
+    dispatch(doMinVersionCheck());
     const CHECK_UPGRADE_INTERVAL_MS = 60 * 60 * 1000;
     setInterval(() => dispatch(doMinVersionCheck()), CHECK_UPGRADE_INTERVAL_MS);
-    // @endif
   };
 }
 

@@ -4,6 +4,7 @@ require('dotenv-defaults').config({ silent: false });
 
 const config = {
   MINIMUM_VERSION: process.env.MINIMUM_VERSION,
+  IGNORE_MINIMUM_VERSION: process.env.IGNORE_MINIMUM_VERSION,
   WEBPACK_WEB_PORT: process.env.WEBPACK_WEB_PORT,
   WEBPACK_ELECTRON_PORT: process.env.WEBPACK_ELECTRON_PORT,
   WEB_SERVER_PORT: process.env.WEB_SERVER_PORT,
