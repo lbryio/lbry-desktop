@@ -333,6 +333,26 @@
         }
       }
     }
+
+    .button--file-action--tooltip-wrapper {
+      display: flex;
+      flex: auto;
+      padding: 0 !important;
+
+      .button--file-action--tooltip {
+        width: 100%;
+      }
+    }
+    .ratio-wrapper {
+      .button--file-action--tooltip-wrapper {
+        display: inline;
+        margin: 0;
+
+        .button--file-action--tooltip {
+          padding: 0px var(--spacing-xxs);
+        }
+      }
+    }
   }
 }
 
