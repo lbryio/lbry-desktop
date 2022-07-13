@@ -1,4 +1,4 @@
-# Odysee Frontend - Odysee.com
+# Odysee Frontend - Odysee.com 
 
 This repo contains the UI and front end code that powers Odysee.com.
 
