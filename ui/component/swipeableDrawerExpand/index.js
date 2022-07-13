@@ -3,7 +3,7 @@ import { doToggleAppDrawer } from 'redux/actions/app';
 import DrawerExpandButton from './view';
 
 const perform = {
-  onClick: doToggleAppDrawer,
+  doToggleAppDrawer,
 };
 
 export default connect(null, perform)(DrawerExpandButton);

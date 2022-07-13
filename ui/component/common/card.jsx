@@ -24,9 +24,14 @@ type Props = {
   onClick?: () => void,
   children?: Node,
   secondPane?: Node,
+  slimHeader?: boolean,
+  colorHeader?: boolean,
+  singlePane?: boolean,
+  headerActions?: Node,
+  gridHeader?: boolean,
 };
 
-export default function Card(props: Props) {
+function Card(props: Props) {
   const {
     title,
     subtitle,
@@ -45,7 +50,13 @@ export default function Card(props: Props) {
     onClick,
     children,
     secondPane,
+    slimHeader,
+    colorHeader,
+    singlePane,
+    headerActions,
+    gridHeader,
   } = props;
+
   const [expanded, setExpanded] = useState(defaultExpand);
   const expandable = defaultExpand !== undefined;
 
@@ -63,52 +74,61 @@ export default function Card(props: Props) {
         }
       }}
     >
-      <div className="card__first-pane">
+      <FirstPaneWrapper singlePane={singlePane}>
         {(title || subtitle) && (
           <div
             className={classnames('card__header--between', {
               'card__header--nowrap': noTitleWrap,
+              'card__header--slim': slimHeader,
+              'card__header--bg-color': colorHeader,
+              'card__header--grid': gridHeader,
             })}
           >
-            <div
-              className={classnames('card__title-section', {
-                'card__title-section--body-list': isBodyList,
-                'card__title-section--smallx': smallTitle,
-              })}
-            >
+            <div className={classnames('card__title-section', { 'card__title-section--body-list': isBodyList })}>
               {icon && <Icon sectionIcon icon={icon} />}
-              <div>
-                {isPageTitle && <h1 className="card__title">{title}</h1>}
-                {!isPageTitle && (
-                  <h2 className={classnames('card__title', { 'card__title--small': smallTitle })}>{title}</h2>
+
+              <div className="card__title-text">
+                <TitleWrapper isPageTitle={isPageTitle} smallTitle={smallTitle}>
+                  {title}
+                </TitleWrapper>
+
+                {subtitle && (
+                  <div className={classnames('card__subtitle', { 'card__subtitle--small': smallTitle })}>
+                    {subtitle}
+                  </div>
                 )}
-                {subtitle && <div className="card__subtitle">{subtitle}</div>}
               </div>
             </div>
-            <div className="card__title-actions-container">
-              {titleActions && (
-                <div
-                  className={classnames('card__title-actions', {
-                    'card__title-actions--small': smallTitle,
-                  })}
-                >
-                  {titleActions}
-                </div>
-              )}
-              {expandable && (
-                <div className="card__title-actions">
-                  <Button
-                    button="alt"
-                    aria-expanded={expanded}
-                    aria-label={expanded ? __('Less') : __('More')}
-                    icon={expanded ? ICONS.SUBTRACT : ICONS.ADD}
-                    onClick={() => setExpanded(!expanded)}
-                  />
-                </div>
-              )}
-            </div>
+
+            {(titleActions || expandable) && (
+              <div className="card__title-actions-container">
+                {titleActions && (
+                  <div
+                    className={classnames('card__title-actions', {
+                      'card__title-actions--small': smallTitle,
+                    })}
+                  >
+                    {titleActions}
+                  </div>
+                )}
+                {expandable && (
+                  <div className="card__title-actions">
+                    <Button
+                      button="alt"
+                      aria-expanded={expanded}
+                      aria-label={expanded ? __('Less') : __('More')}
+                      icon={expanded ? ICONS.SUBTRACT : ICONS.ADD}
+                      onClick={() => setExpanded(!expanded)}
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+
+            {headerActions}
           </div>
         )}
+
         {(!expandable || (expandable && expanded)) && (
           <>
             {body && (
@@ -125,9 +145,40 @@ export default function Card(props: Props) {
             {children && <div className="card__main-actions">{children}</div>}
           </>
         )}
+
         {nag}
-      </div>
+      </FirstPaneWrapper>
+
       {secondPane && <div className="card__second-pane">{secondPane}</div>}
     </section>
   );
 }
+
+type FirstPaneProps = {
+  singlePane?: boolean,
+  children: any,
+};
+
+const FirstPaneWrapper = (props: FirstPaneProps) => {
+  const { singlePane, children } = props;
+
+  return singlePane ? children : <div className="card__first-pane">{children}</div>;
+};
+
+type TitleProps = {
+  isPageTitle?: boolean,
+  smallTitle?: boolean,
+  children?: any,
+};
+
+const TitleWrapper = (props: TitleProps) => {
+  const { isPageTitle, smallTitle, children } = props;
+
+  return isPageTitle ? (
+    <h1 className="card__title">{children}</h1>
+  ) : (
+    <h2 className={classnames('card__title', { 'card__title--small': smallTitle })}>{children}</h2>
+  );
+};
+
+export default Card;

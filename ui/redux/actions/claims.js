@@ -22,7 +22,7 @@ import { creditsToString } from 'util/format-credits';
 import { batchActions } from 'util/batch-actions';
 import { createNormalizedClaimSearchKey } from 'util/claim';
 import { PAGE_SIZE } from 'constants/claim';
-import { makeSelectClaimIdsForCollectionId } from 'redux/selectors/collections';
+import { selectClaimIdsForCollectionId } from 'redux/selectors/collections';
 import { doFetchItemsInCollections } from 'redux/actions/collections';
 
 let onChannelConfirmCallback;
@@ -184,6 +184,21 @@ export function doResolveUri(
   additionalOptions: any = {}
 ) {
   return doResolveUris([uri], returnCachedClaims, resolveReposts, additionalOptions);
+}
+
+export function doGetClaimFromUriResolve(uri: string) {
+  return async (dispatch: Dispatch) => {
+    let claim;
+    await dispatch(doResolveUri(uri, true))
+      .then((response) =>
+        Object.values(response).forEach((resposne) => {
+          claim = resposne;
+        })
+      )
+      .catch((e) => {});
+
+    return claim;
+  };
 }
 
 export function doFetchClaimListMine(
@@ -947,7 +962,7 @@ export function doCollectionPublishUpdate(
 
     if (isBackgroundUpdate && updateParams.claim_id) {
       const state = getState();
-      updateParams['claims'] = makeSelectClaimIdsForCollectionId(updateParams.claim_id)(state);
+      updateParams['claims'] = selectClaimIdsForCollectionId(state, updateParams.claim_id);
     } else if (options.claims) {
       updateParams['claims'] = options.claims;
     }

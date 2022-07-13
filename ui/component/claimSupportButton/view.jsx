@@ -2,9 +2,7 @@
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import React from 'react';
-import classnames from 'classnames';
-import Button from 'component/button';
-import Tooltip from 'component/common/tooltip';
+import FileActionButton from 'component/common/file-action-button';
 
 type Props = {
   uri: string,
@@ -19,6 +17,8 @@ type Props = {
 export default function ClaimSupportButton(props: Props) {
   const { uri, fileAction, isRepost, disableSupport, doOpenModal, preferredCurrency } = props;
 
+  if (disableSupport) return null;
+
   const currencyToUse = preferredCurrency;
 
   const iconToUse = {
@@ -32,17 +32,14 @@ export default function ClaimSupportButton(props: Props) {
     },
   };
 
-  return disableSupport ? null : (
-    <Tooltip title={__('Support this claim')} arrow={false}>
-      <Button
-        button={!fileAction ? 'alt' : undefined}
-        className={classnames('support-claim-button', { 'button--file-action': fileAction })}
-        icon={iconToUse[currencyToUse].icon}
-        iconSize={iconToUse[currencyToUse].iconSize}
-        label={isRepost ? __('Support Repost') : __('Support --[button to support a claim]--')}
-        requiresAuth
-        onClick={() => doOpenModal(MODALS.SEND_TIP, { uri, isSupport: true })}
-      />
-    </Tooltip>
+  return (
+    <FileActionButton
+      title={__('Support this content')}
+      label={isRepost ? __('Support Repost') : __('Support --[button to support a claim]--')}
+      icon={iconToUse[currencyToUse].icon}
+      iconSize={iconToUse[currencyToUse].iconSize}
+      onClick={() => doOpenModal(MODALS.SEND_TIP, { uri, isSupport: true })}
+      noStyle={!fileAction}
+    />
   );
 }

@@ -1,6 +1,6 @@
 // @flow
 import { CHANNEL_CREATION_LIMIT } from 'config';
-import { normalizeURI, parseURI, isURIValid } from 'util/lbryURI';
+import { normalizeURI, parseURI, isURIValid, buildURI } from 'util/lbryURI';
 import { selectGeoBlockLists } from 'redux/selectors/blocked';
 import { selectUserLocale, selectYoutubeChannels } from 'redux/selectors/user';
 import { selectSupportsByOutpoint } from 'redux/selectors/wallet';
@@ -12,6 +12,10 @@ import {
   getChannelIdFromClaim,
   isStreamPlaceholderClaim,
   getThumbnailFromClaim,
+  getClaimRepostedAmount,
+  getNameFromClaim,
+  getChannelFromClaim,
+  getChannelTitleFromClaim,
 } from 'util/claim';
 import * as CLAIM from 'constants/claim';
 import { INTERNAL_TAGS } from 'constants/tags';
@@ -24,9 +28,11 @@ const selectState = (state: State) => state.claims || {};
 export const selectById = (state: State) => selectState(state).byId || {};
 export const selectPendingClaimsById = (state: State) => selectState(state).pendingById || {};
 
-export const selectClaimsById = createSelector(selectById, selectPendingClaimsById, (byId, pendingById) => {
+export const selectClaimsById = (state: State) => {
+  const byId = selectById(state);
+  const pendingById = selectPendingClaimsById(state);
   return Object.assign(byId, pendingById); // do I need merged to keep metadata?
-});
+};
 
 export const selectClaimIdsByUri = (state: State) => selectState(state).claimsByUri || {};
 export const selectCurrentChannelPage = (state: State) => selectState(state).currentChannelPage || 1;
@@ -75,9 +81,14 @@ export const selectClaimsByUri = createSelector(selectClaimIdsByUri, selectClaim
  * @param claimId
  * @returns {*}
  */
-export const selectClaimWithId = (state: State, claimId: string) => {
+export const selectClaimForId = (state: State, claimId: string) => {
   const byId = selectClaimsById(state);
   return byId[claimId];
+};
+
+export const selectClaimUriForId = (state: State, claimId: string) => {
+  const claim = selectClaimForId(state, claimId);
+  return claim && (claim.canonical_url || claim.permanent_url);
 };
 
 export const selectAllClaimsByChannel = createSelector(selectState, (state) => state.paginatedClaimsByChannel || {});
@@ -147,6 +158,19 @@ export const selectClaimForUri = createCachedSelector(
     }
   }
 )((state, uri, returnRepost = true) => `${String(uri)}:${returnRepost ? '1' : '0'}`);
+
+export const selectHasClaimForUri = (state: State, uri: string) => {
+  const claim = selectClaimForUri(state, uri);
+  return Boolean(claim);
+};
+
+export const selectHasResolvedClaimForUri = (state: State, uri: string) => {
+  // This selector assumes that `uri` is never null and is valid. It
+  // cannot differentiate whether the undefined claim is due to being
+  // unresolved or an invalid `uri`. Client beware.
+  const claim = selectClaimForUri(state, uri);
+  return claim !== undefined;
+};
 
 // Note: this is deprecated. Use "selectClaimForUri(state, uri)" instead.
 export const makeSelectClaimForUri = (uri: string, returnRepost: boolean = true) =>
@@ -412,9 +436,15 @@ export const makeSelectContentTypeForUri = (uri: string) =>
     return source ? source.media_type : undefined;
   });
 
-export const selectThumbnailForUri = createCachedSelector(selectClaimForUri, (claim) => {
+export const selectThumbnailForUri = (state: State, uri: string) => {
+  const claim = selectClaimForUri(state, uri);
   return getThumbnailFromClaim(claim);
-})((state, uri) => String(uri));
+};
+
+export const selectThumbnailForId = (state: State, claimId: string) => {
+  const claim = selectClaimForId(state, claimId);
+  return getThumbnailFromClaim(claim);
+};
 
 export const makeSelectCoverForUri = (uri: string) =>
   createSelector(makeSelectClaimForUri(uri), (claim) => {
@@ -508,7 +538,7 @@ export const selectMyClaimsOutpoints = createSelector(selectMyClaims, (myClaims)
 });
 
 export const selectFetchingMyChannels = (state: State) => selectState(state).fetchingMyChannels;
-export const selectFetchingMyCollections = (state: State) => selectState(state).fetchingMyCollections;
+export const selectIsFetchingMyCollections = (state: State) => selectState(state).isFetchingMyCollections;
 
 export const selectMyChannelClaimIds = (state: State) => selectState(state).myChannelClaims;
 
@@ -621,6 +651,20 @@ export const selectClaimIsNsfwForUri = createCachedSelector(
   }
 )((state, uri) => String(uri));
 
+export const selectChannelForUri = (state: State, uri: string) => {
+  const claim = selectClaimForUri(state, uri);
+  return getChannelFromClaim(claim);
+};
+export const selectChannelTitleForUri = (state: State, uri: string) => {
+  const channel = selectChannelForUri(state, uri);
+  return getChannelTitleFromClaim(channel);
+};
+
+export const selectChannelNameForId = (state: State, claimId: string) => {
+  const uri = selectClaimUriForId(state, claimId);
+  return selectChannelForClaimUri(state, uri);
+};
+
 export const selectChannelForClaimUri = createCachedSelector(
   (state, uri, includePrefix) => includePrefix,
   selectClaimForUri,
@@ -638,6 +682,11 @@ export const selectChannelForClaimUri = createCachedSelector(
     }
   }
 )((state, uri, includePrefix) => `${String(uri)}:${String(includePrefix)}`);
+
+export const selectChannelNameForClaimUri = (state: State, uri: string) => {
+  const channel = selectChannelForClaimUri(state, uri);
+  return getNameFromClaim(channel);
+};
 
 // Returns the associated channel uri for a given claim uri
 // accepts a regular claim uri lbry://something
@@ -850,3 +899,19 @@ export const selectGeoRestrictionForUri = createCachedSelector(
     return getGeoRestrictionForClaim(claim, locale, geoBlockLists);
   }
 )((state, uri) => String(uri));
+
+export const selectClaimRepostedAmountForUri = (state: State, uri: string) => {
+  const claim = selectClaimForUri(state);
+  return getClaimRepostedAmount(claim);
+};
+
+export const selectTakeOverAmountForName = (state: State, name: string) => {
+  if (!name) {
+    return null;
+  }
+
+  const shortUri = buildURI({ streamName: name });
+  const winningClaim = selectClaimForUri(state, shortUri);
+
+  return winningClaim ? winningClaim.meta.effective_amount || winningClaim.amount : null;
+};

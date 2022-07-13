@@ -246,16 +246,16 @@ export default function WalletSendTip(props: Props) {
 
   React.useEffect(() => {
     if (!hasSelected && hasSelectedTab && activeTab !== hasSelectedTab) {
-      setActiveTab(hasSelectedTab);
+      setActiveTab(claimIsMine ? TAB_BOOST : hasSelectedTab);
       setSelected(true);
     }
-  }, [activeTab, hasSelected, hasSelectedTab, setActiveTab]);
+  }, [activeTab, claimIsMine, hasSelected, hasSelectedTab, setActiveTab]);
 
   React.useEffect(() => {
     if (!hasSelectedTab && activeTab !== hasSelectedTab) {
-      setPersistentTab(activeTab);
+      setPersistentTab(claimIsMine ? TAB_BOOST : activeTab);
     }
-  }, [activeTab, hasSelectedTab, setPersistentTab]);
+  }, [activeTab, claimIsMine, hasSelectedTab, setPersistentTab]);
 
   /** RENDER **/
 

@@ -46,6 +46,7 @@ export const VIEW_IMAGE = 'view_image';
 export const BLOCK_CHANNEL = 'block_channel';
 export const MIN_CHANNEL_AGE = 'min_channel_age';
 export const COLLECTION_ADD = 'collection_add';
+export const COLLECTION_CREATE = 'collection_create';
 export const COLLECTION_DELETE = 'collection_delete';
 export const CONFIRM_REMOVE_CARD = 'CONFIRM_REMOVE_CARD';
 export const CONFIRM_REMOVE_COMMENT = 'CONFIRM_REMOVE_COMMENT';

@@ -750,14 +750,19 @@ export function doSetAdBlockerFound(found) {
   };
 }
 
-export function doToggleAppDrawer(open) {
+export function doToggleAppDrawer(type) {
   return (dispatch, getState) => {
     const state = getState();
-    const isOpen = selectAppDrawerOpen(state);
+    const openDrawer = selectAppDrawerOpen(state);
+    const isOpen = openDrawer && openDrawer === type;
 
-    dispatch({
-      type: ACTIONS.DRAWER_OPENED,
-      data: !isOpen,
-    });
+    if (isOpen) {
+      dispatch({ type: ACTIONS.DRAWER_CLOSED });
+    } else {
+      dispatch({ type: ACTIONS.DRAWER_OPENED, data: type });
+    }
   };
 }
+
+export const doSetMainPlayerDimension = (dimensions) => (dispatch) =>
+  dispatch({ type: ACTIONS.SET_MAIN_PLAYER_DIMENSIONS, data: dimensions });

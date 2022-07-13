@@ -374,7 +374,7 @@ function ClaimListHeader(props: Props) {
                         return (
                           <option key={type} value={type}>
                             {/* i18fixme */}
-                            {type === CS.CLAIM_COLLECTION && __('List')}
+                            {type === CS.CLAIM_COLLECTION && __('Playlist')}
                             {type === CS.CLAIM_CHANNEL && __('Channel')}
                             {type === CS.CLAIM_REPOST && __('Repost')}
                             {type === CS.FILE_VIDEO && __('Video')}

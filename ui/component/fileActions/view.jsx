@@ -5,7 +5,6 @@ import * as PAGES from 'constants/pages';
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import React from 'react';
-import Button from 'component/button';
 import { buildURI } from 'util/lbryURI';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
 import * as RENDER_MODES from 'constants/file_render_modes';
@@ -16,7 +15,10 @@ import FileReactions from 'component/fileReactions';
 import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
 import Icon from 'component/common/icon';
 import { webDownloadClaim } from 'util/downloadClaim';
-import Tooltip from 'component/common/tooltip';
+import ClaimShareButton from 'component/claimShareButton';
+import ClaimRepostButton from 'component/claimRepostButton';
+import ClaimPublishButton from './internal/claimPublishButton';
+import ClaimDeleteButton from './internal/claimDeleteButton';
 
 type Props = {
   uri: string,
@@ -121,53 +123,16 @@ export default function FileActions(props: Props) {
 
       {!isAPreorder && <ClaimSupportButton uri={uri} fileAction />}
 
-      <ClaimCollectionAddButton uri={uri} fileAction />
+      <ClaimCollectionAddButton uri={uri} />
 
-      {!hideRepost && !isMobile && !isLivestreamClaim && (
-        <Tooltip title={__('Repost')} arrow={false}>
-          <Button
-            button="alt"
-            className="button--file-action"
-            icon={ICONS.REPOST}
-            label={
-              claimMeta.reposted > 1 ? __(`%repost_total% Reposts`, { repost_total: claimMeta.reposted }) : __('Repost')
-            }
-            requiresAuth
-            onClick={handleRepostClick}
-          />
-        </Tooltip>
-      )}
+      {!hideRepost && !isMobile && !isLivestreamClaim && <ClaimRepostButton uri={uri} />}
 
-      <Tooltip title={__('Share')} arrow={false}>
-        <Button
-          className="button--file-action"
-          icon={ICONS.SHARE}
-          label={__('Share')}
-          onClick={() => doOpenModal(MODALS.SOCIAL_SHARE, { uri, webShareable, collectionId })}
-        />
-      </Tooltip>
+      <ClaimShareButton uri={uri} fileAction webShareable={webShareable} collectionId={collectionId} />
 
       {claimIsMine && !isMobile && (
         <>
-          <Tooltip title={isLivestreamClaim ? __('Update or Publish Replay') : __('Edit')} arrow={false}>
-            <div style={{ margin: '0px' }}>
-              <Button
-                className="button--file-action"
-                icon={ICONS.EDIT}
-                label={isLivestreamClaim ? __('Update or Publish Replay') : __('Edit')}
-                onClick={() => doPrepareEdit(claim, editUri, claimType)}
-              />
-            </div>
-          </Tooltip>
-
-          <Tooltip title={__('Remove from your library')} arrow={false}>
-            <Button
-              className="button--file-action"
-              icon={ICONS.DELETE}
-              description={__('Delete')}
-              onClick={() => doOpenModal(MODALS.CONFIRM_FILE_REMOVE, { uri })}
-            />
-          </Tooltip>
+          <ClaimPublishButton uri={uri} isLivestreamClaim={isLivestreamClaim} />
+          <ClaimDeleteButton uri={uri} />
         </>
       )}
 

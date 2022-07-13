@@ -14,6 +14,7 @@ import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import ThumbnailBrokenImage from 'component/selectThumbnail/thumbnail-broken.png';
 import { AVATAR_DEFAULT, THUMBNAIL_CDN_SIZE_LIMIT_BYTES } from 'config';
 import * as ICONS from 'constants/icons';
+import * as PUBLISH from 'constants/publish';
 
 export const DEFAULT_BID_FOR_FIRST_CHANNEL = 0.01;
 
@@ -48,7 +49,6 @@ function UserFirstChannel(props: Props) {
   const [thumbError, setThumbError] = React.useState(false);
   const [params, setParams]: [any, (any) => void] = React.useState(getChannelParams());
 
-  const LANG_NONE = 'none';
   const [languageParam, setLanguageParam] = useState([]);
   const primaryLanguage = Array.isArray(languageParam) && languageParam.length && languageParam[0];
   const [nameError, setNameError] = useState(undefined);
@@ -83,14 +83,14 @@ function UserFirstChannel(props: Props) {
   function handleLanguageChange(index, code) {
     let langs = [...languageParam];
     if (index === 0) {
-      if (code === LANG_NONE) {
+      if (code === PUBLISH.LANG_NONE) {
         // clear all
         langs = [];
       } else {
         langs[0] = code;
       }
     } else {
-      if (code === LANG_NONE || code === langs[0]) {
+      if (code === PUBLISH.LANG_NONE || code === langs[0]) {
         langs.splice(1, 1);
       } else {
         langs[index] = code;
@@ -203,7 +203,7 @@ function UserFirstChannel(props: Props) {
                 value={primaryLanguage}
                 helper={__('Your main content language')}
               >
-                <option key={'pri-langNone'} value={LANG_NONE}>
+                <option key={'pri-langNone'} value={PUBLISH.LANG_NONE}>
                   {__('None selected')}
                 </option>
                 {sortLanguageMap(SUPPORTED_LANGUAGES).map(([langKey, langName]) => (

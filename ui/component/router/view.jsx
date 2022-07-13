@@ -62,8 +62,7 @@ const InvitePage = lazyImport(() => import('page/invite' /* webpackChunkName: "i
 const InvitedPage = lazyImport(() => import('page/invited' /* webpackChunkName: "invited" */));
 const LibraryPage = lazyImport(() => import('page/library' /* webpackChunkName: "library" */));
 const ListBlockedPage = lazyImport(() => import('page/listBlocked' /* webpackChunkName: "listBlocked" */));
-const ListsPage = lazyImport(() => import('page/lists' /* webpackChunkName: "lists" */));
-const PlaylistsPage = lazyImport(() => import('page/playlists' /* webpackChunkName: "lists" */));
+const PlaylistsPage = lazyImport(() => import('page/playlists/view' /* webpackChunkName: "playlists" */));
 const WatchHistoryPage = lazyImport(() => import('page/watchHistory' /* webpackChunkName: "history" */));
 const LiveStreamSetupPage = lazyImport(() => import('page/livestreamSetup' /* webpackChunkName: "livestreamSetup" */));
 const LivestreamCurrentPage = lazyImport(() =>
@@ -290,6 +289,7 @@ function AppRouter(props: Props) {
       defaultChannelRef.current &&
       pathname !== `/$/${PAGES.UPLOAD}` &&
       !pathname.includes(`/$/${PAGES.LIST}/`) &&
+      !pathname.includes(`/$/${PAGES.PLAYLIST}/`) &&
       pathname !== `/$/${PAGES.CREATOR_DASHBOARD}` &&
       pathname !== `/$/${PAGES.LIVESTREAM}`
     ) {
@@ -347,6 +347,7 @@ function AppRouter(props: Props) {
         <Route path={`/$/${PAGES.CHECKOUT}`} exact component={CheckoutPage} />
         <Route path={`/$/${PAGES.REPORT_CONTENT}`} exact component={ReportContentPage} />
         <Route {...props} path={`/$/${PAGES.LIST}/:collectionId`} component={CollectionPage} />
+        <Route {...props} path={`/$/${PAGES.PLAYLIST}/:collectionId`} component={CollectionPage} />
 
         <PrivateRoute {...props} exact path={`/$/${PAGES.YOUTUBE_SYNC}`} component={YoutubeSyncPage} />
         <PrivateRoute {...props} exact path={`/$/${PAGES.TAGS_FOLLOWING}`} component={TagsFollowingPage} />
@@ -383,7 +384,7 @@ function AppRouter(props: Props) {
         <PrivateRoute {...props} path={`/$/${PAGES.REWARDS}`} exact component={RewardsPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.REWARDS_VERIFY}`} component={RewardsVerifyPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.LIBRARY}`} component={LibraryPage} />
-        <PrivateRoute {...props} path={`/$/${PAGES.LISTS}`} component={ListsPage} />
+        <PrivateRoute {...props} path={`/$/${PAGES.LISTS}`} component={PlaylistsPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.PLAYLISTS}`} component={PlaylistsPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.WATCH_HISTORY}`} component={WatchHistoryPage} />
         <PrivateRoute {...props} path={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`} component={TagsFollowingManagePage} />

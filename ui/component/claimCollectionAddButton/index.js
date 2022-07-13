@@ -2,20 +2,17 @@ import { connect } from 'react-redux';
 import { doOpenModal } from 'redux/actions/app';
 import CollectionAddButton from './view';
 import { selectClaimForUri } from 'redux/selectors/claims';
-import { makeSelectClaimUrlInCollection } from 'redux/selectors/collections';
+import { selectClaimSavedForUrl } from 'redux/selectors/collections';
 
 const select = (state, props) => {
   const { uri } = props;
 
-  const claim = selectClaimForUri(state, uri);
-
-  // $FlowFixMe
-  const { permanent_url: permanentUrl, value } = claim || {};
-  const streamType = (value && value.stream_type) || '';
+  const { permanent_url: permanentUrl, value } = selectClaimForUri(state, uri) || {};
+  const { stream_type: streamType } = value || {};
 
   return {
     streamType,
-    isSaved: permanentUrl && makeSelectClaimUrlInCollection(permanentUrl)(state),
+    isSaved: permanentUrl && selectClaimSavedForUrl(state, permanentUrl),
   };
 };
 

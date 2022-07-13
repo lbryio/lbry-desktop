@@ -87,7 +87,6 @@ type Props = {
   internalFeatureEnabled: ?boolean,
   isAudio: boolean,
   poster: ?string,
-  replay: boolean,
   shareTelemetry: boolean,
   source: string,
   sourceType: string,
@@ -148,7 +147,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     // internalFeatureEnabled, // for people on the team to test new features internally
     isAudio,
     poster,
-    replay,
     shareTelemetry,
     source,
     sourceType,
@@ -216,7 +214,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     tapToRetryRef,
     setReload,
     playerRef,
-    replay,
     claimValues,
     userId,
     claimId,

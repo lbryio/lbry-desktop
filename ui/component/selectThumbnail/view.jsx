@@ -22,6 +22,7 @@ type Props = {
   thumbnailParam: ?string,
   thumbnailParamError: boolean,
   thumbnailParamStatus: string,
+  optional?: boolean,
   openModal: (id: string, {}) => void,
   updatePublishForm: ({}) => void,
   updateThumbnailParams: ({}) => void,
@@ -42,6 +43,7 @@ function SelectThumbnail(props: Props) {
     updateThumbnailParams,
     thumbnailPath,
     resetThumbnailStatus,
+    optional,
   } = props;
 
   const publishForm = !updateThumbnailParams;
@@ -122,7 +124,7 @@ function SelectThumbnail(props: Props) {
 
   return (
     <>
-      <h2 className="card__title">{__('Thumbnail')}</h2>
+      <h2 className="card__title">{optional ? __('Thumbnail (Optional)') : __('Thumbnail')}</h2>
       {status !== THUMBNAIL_STATUSES.IN_PROGRESS && (
         <div className="column card--thumbnail">
           {thumbPreview}

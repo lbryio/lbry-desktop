@@ -11,62 +11,76 @@ import {
 import { useIsMobile } from 'effects/use-screensize';
 import { getImageProxyUrl, getThumbnailCdnUrl } from 'util/thumbnail';
 import React from 'react';
-import FreezeframeWrapper from './FreezeframeWrapper';
-import Placeholder from './placeholder.png';
+import FreezeframeWrapper from 'component/common/freezeframe-wrapper';
 import classnames from 'classnames';
-import Thumb from './thumb';
+import Thumb from './internal/thumb';
 
 type Props = {
-  uri: string,
+  uri?: string,
   tileLayout?: boolean,
   thumbnail: ?string, // externally sourced image
   children?: Node,
   allowGifs: boolean,
   claim: ?StreamClaim,
-  doResolveUri: (string) => void,
   className?: string,
+  small?: boolean,
+  forcePlaceholder?: boolean,
+  // -- redux --
+  hasResolvedClaim: ?boolean, // undefined if uri is not given (irrelevant); boolean otherwise.
+  thumbnailFromClaim: ?string,
+  doResolveUri: (uri: string) => void,
 };
 
 function FileThumbnail(props: Props) {
   const {
-    claim,
     uri,
     tileLayout,
-    doResolveUri,
     thumbnail: rawThumbnail,
     children,
     allowGifs = false,
     className,
+    small,
+    forcePlaceholder,
+    // -- redux --
+    hasResolvedClaim,
+    thumbnailFromClaim,
+    doResolveUri,
   } = props;
 
-  const passedThumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
-  const thumbnailFromClaim =
-    uri && claim && claim.value && claim.value.thumbnail ? claim.value.thumbnail.url : undefined;
-  const thumbnail = passedThumbnail || thumbnailFromClaim;
-
-  const hasResolvedClaim = claim !== undefined;
-  const isGif = thumbnail && thumbnail.endsWith('gif');
   const isMobile = useIsMobile();
 
+  const passedThumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
+  const thumbnail = passedThumbnail || thumbnailFromClaim;
+  const isGif = thumbnail && thumbnail.endsWith('gif');
+
   React.useEffect(() => {
-    if (!hasResolvedClaim && uri && !passedThumbnail) {
+    if (hasResolvedClaim === false && uri && !passedThumbnail) {
       doResolveUri(uri);
     }
-  }, [hasResolvedClaim, uri, doResolveUri, passedThumbnail]);
+  }, [hasResolvedClaim, passedThumbnail, doResolveUri, uri]);
 
   if (!allowGifs && isGif) {
     const url = getImageProxyUrl(thumbnail);
+
     return (
-      <FreezeframeWrapper src={url} className={classnames('media__thumb', className)}>
-        {children}
-      </FreezeframeWrapper>
+      url && (
+        <FreezeframeWrapper
+          small={small}
+          src={url}
+          className={classnames('media__thumb', className, {
+            'media__thumb--resolving': hasResolvedClaim === false,
+            'media__thumb--small': small,
+          })}
+        >
+          {children}
+        </FreezeframeWrapper>
+      )
     );
   }
 
   const fallback = MISSING_THUMB_DEFAULT ? getThumbnailCdnUrl({ thumbnail: MISSING_THUMB_DEFAULT }) : undefined;
 
-  let url = thumbnail || (hasResolvedClaim ? Placeholder : '');
-  // @if TARGET='web'
+  let url = thumbnail || (hasResolvedClaim ? MISSING_THUMB_DEFAULT : '');
   // Pass image urls through a compression proxy
   if (thumbnail) {
     if (isGif) {
@@ -80,21 +94,22 @@ function FileThumbnail(props: Props) {
       });
     }
   }
-  // @endif
 
   const thumbnailUrl = url ? url.replace(/'/g, "\\'") : '';
 
-  if (hasResolvedClaim || thumbnailUrl) {
+  if (hasResolvedClaim || thumbnailUrl || (forcePlaceholder && !uri)) {
     return (
-      <Thumb thumb={thumbnailUrl} fallback={fallback} className={className}>
+      <Thumb small={small} thumb={thumbnailUrl || MISSING_THUMB_DEFAULT} fallback={fallback} className={className}>
         {children}
       </Thumb>
     );
   }
+
   return (
     <div
       className={classnames('media__thumb', className, {
-        'media__thumb--resolving': !hasResolvedClaim,
+        'media__thumb--resolving': hasResolvedClaim === false,
+        'media__thumb--small': small,
       })}
     >
       {children}

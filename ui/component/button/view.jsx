@@ -36,6 +36,8 @@ type Props = {
   pathname: string,
   emailVerified: boolean,
   requiresAuth: ?boolean,
+  requiresChannel: ?boolean,
+  hasChannels: boolean,
   myref: any,
   dispatch: any,
   'aria-label'?: string,
@@ -69,6 +71,8 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     activeClass,
     emailVerified,
     requiresAuth,
+    requiresChannel,
+    hasChannels,
     myref,
     dispatch, // <button> doesn't know what to do with dispatch
     pathname,
@@ -195,8 +199,12 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     }
   }
 
-  if (requiresAuth && !emailVerified) {
-    let redirectUrl = `/$/${PAGES.AUTH}?redirect=${pathname}`;
+  if ((requiresAuth && !emailVerified) || (requiresChannel && !hasChannels)) {
+    // requiresChannel can be used for both requiresAuth and requiresChannel,
+    // since if the button requiresChannel, it also implies it requiresAuth in order to proceed
+    // so using requiresChannel means: unauth users are sent to signup, auth users to create channel
+    const page = !emailVerified ? PAGES.AUTH : PAGES.CHANNEL_NEW;
+    let redirectUrl = `/$/${page}?redirect=${pathname}`;
 
     if (authSrc) {
       redirectUrl += `&src=${authSrc}`;

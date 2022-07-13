@@ -26,7 +26,7 @@ type State = {
   abandoningById: { [string]: boolean },
   fetchingChannelClaims: { [string]: number },
   fetchingMyChannels: boolean,
-  fetchingMyCollections: boolean,
+  isFetchingMyCollections: boolean,
   fetchingClaimSearchByQuery: { [string]: boolean },
   purchaseUriSuccess: boolean,
   myPurchases: ?Array<string>,
@@ -82,7 +82,7 @@ const defaultState = {
   fetchingMyPurchases: false,
   fetchingMyPurchasesError: undefined,
   fetchingMyChannels: false,
-  fetchingMyCollections: false,
+  isFetchingMyCollections: false,
   abandoningById: {},
   pendingById: {},
   reflectingById: {},
@@ -442,7 +442,7 @@ reducers[ACTIONS.FETCH_CHANNEL_LIST_FAILED] = (state: State, action: any): State
 
 reducers[ACTIONS.FETCH_COLLECTION_LIST_STARTED] = (state: State): State => ({
   ...state,
-  fetchingMyCollections: true,
+  isFetchingMyCollections: true,
 });
 
 reducers[ACTIONS.FETCH_COLLECTION_LIST_COMPLETED] = (state: State, action: any): State => {
@@ -487,14 +487,14 @@ reducers[ACTIONS.FETCH_COLLECTION_LIST_COMPLETED] = (state: State, action: any):
     byId: resolveDelta(state.byId, byIdDelta),
     pendingById: resolveDelta(state.pendingById, pendingByIdDelta),
     claimsByUri: resolveDelta(state.claimsByUri, byUriDelta),
-    fetchingMyCollections: false,
+    isFetchingMyCollections: false,
     myCollectionClaims: Array.from(myCollectionClaimsSet),
     myClaims: myClaimIds ? Array.from(myClaimIds) : null,
   };
 };
 
 reducers[ACTIONS.FETCH_COLLECTION_LIST_FAILED] = (state: State): State => {
-  return { ...state, fetchingMyCollections: false };
+  return { ...state, isFetchingMyCollections: false };
 };
 
 reducers[ACTIONS.FETCH_CHANNEL_CLAIMS_STARTED] = (state: State, action: any): State => {

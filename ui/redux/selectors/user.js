@@ -18,6 +18,8 @@ export const selectUserEmail = createSelector(selectUser, (user) =>
 
 export const selectUserPhone = createSelector(selectUser, (user) => (user ? user.phone_number : null));
 
+export const selectUserCreationDate = (state) => selectUser(state)?.created_at || null;
+
 export const selectUserCountryCode = createSelector(selectUser, (user) => (user ? user.country_code : null));
 
 export const selectEmailToVerify = createSelector(

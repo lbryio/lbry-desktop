@@ -62,22 +62,22 @@ const NOTIFICATIONS: SideNavLink = {
 
 const WATCH_LATER: SideNavLink = {
   title: 'Watch Later',
-  link: `/$/${PAGES.LIST}/watchlater`,
+  link: `/$/${PAGES.PLAYLIST}/watchlater`,
   icon: ICONS.TIME,
   hideForUnauth: true,
 };
 
 const FAVORITES: SideNavLink = {
   title: 'Favorites',
-  link: `/$/${PAGES.LIST}/favorites`,
+  link: `/$/${PAGES.PLAYLIST}/favorites`,
   icon: ICONS.STAR,
   hideForUnauth: true,
 };
 
 const PLAYLISTS: SideNavLink = {
-  title: 'Lists',
-  link: `/$/${PAGES.LISTS}`,
-  icon: ICONS.STACK,
+  title: 'Playlists',
+  link: `/$/${PAGES.PLAYLISTS}`,
+  icon: ICONS.PLAYLIST,
   hideForUnauth: true,
 };
 

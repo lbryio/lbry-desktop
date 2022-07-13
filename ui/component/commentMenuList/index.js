@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { doChannelMute } from 'redux/actions/blocked';
 import { doCommentPin, doCommentModAddDelegate } from 'redux/actions/comments';
 import { doOpenModal } from 'redux/actions/app';
-import { doSetPlayingUri } from 'redux/actions/content';
+import { doClearPlayingUri } from 'redux/actions/content';
 import { doToast } from 'redux/actions/notifications';
 import { selectClaimIsMine, selectClaimForUri } from 'redux/selectors/claims';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
@@ -23,7 +23,7 @@ const select = (state, props) => {
 
 const perform = (dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
-  clearPlayingUri: () => dispatch(doSetPlayingUri({ uri: null })),
+  clearPlayingUri: () => dispatch(doClearPlayingUri()),
   muteChannel: (channelUri) => dispatch(doChannelMute(channelUri)),
   pinComment: (commentId, claimId, remove) => dispatch(doCommentPin(commentId, claimId, remove)),
   commentModAddDelegate: (modChanId, modChanName, creatorChannelClaim) =>

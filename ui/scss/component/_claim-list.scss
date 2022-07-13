@@ -25,6 +25,13 @@
   }
 }
 
+.claim-list--no-margin {
+  li {
+    @include list-hover-effect;
+    margin: 0px !important;
+  }
+}
+
 .claim__menu-button {
   .icon {
     transition: transform 0.2s;
@@ -92,6 +99,13 @@
     position: static;
     transform: none;
   }
+}
+
+.claim-list__header-label--playlist-page {
+  @extend .claim-list__header-label;
+  position: relative;
+  transform: translateY(-100%);
+  margin-bottom: 0px;
 }
 
 .claim-list__conjuction {
@@ -254,6 +268,11 @@
     &:hover {
       .claim__menu-button {
         opacity: 1;
+      }
+
+      .collection-preview-overlay__grid {
+        opacity: 1;
+        transition: 0.3s;
       }
     }
   }
@@ -555,47 +574,6 @@
   }
 }
 
-.claim-preview--collection-mine {
-  height: 108px;
-  .media__thumb {
-    position: absolute;
-    right: 0;
-
-    .claim-preview__hover-actions {
-      display: none;
-    }
-  }
-
-  .claim-preview__text {
-    position: absolute;
-    right: var(--spacing-s);
-    width: var(--file-list-thumbnail-width);
-    background-color: var(--color-header-background);
-    padding: var(--spacing-xxxs);
-    border-radius: var(--border-radius) var(--border-radius) 0 0;
-
-    .claim-preview-info {
-      .claim-preview__title {
-        margin-right: 0;
-        font-size: var(--font-xxsmall);
-      }
-    }
-    .media__subtitle {
-      .button__content {
-        .channel-name {
-          font-size: var(--font-xxxsmall);
-        }
-      }
-      .date_time {
-        font-size: var(--font-xxxsmall) !important;
-      }
-    }
-    .claim-tile__info {
-      padding-bottom: 0;
-    }
-  }
-}
-
 .claim-preview--pending {
   opacity: 0.6;
   .claim-tile__info {
@@ -729,6 +707,17 @@
 
 .claim-preview-info {
   align-items: flex-start;
+
+  a,
+  .claim-preview__title {
+    max-width: 100%;
+  }
+}
+
+.claim-preview-info {
+  &.playlist-title {
+    flex-direction: column;
+  }
 }
 
 .claim-preview-info,
@@ -991,7 +980,8 @@
       .claim__menu-button {
         opacity: 1;
       }
-      .collection-preview__overlay-thumbs {
+
+      .collection-preview-overlay__grid {
         opacity: 1;
         transition: 0.3s;
       }
@@ -1307,6 +1297,35 @@ $claim-preview-progress-bar-height: 5px;
   margin-bottom: -1px; // Offset it slightly because it doesn't look aligned next to all lowercase text + the @ from a channel
 }
 
+.claim-preview__list-index {
+  @extend .center-self;
+  width: 15px;
+  position: absolute;
+  transform: translateX(-23px);
+  text-align: end;
+}
+
+.claim-preview__hover-actions-grid {
+  display: grid;
+  justify-items: end;
+  justify-content: space-between;
+
+  .claim-preview__hover-actions {
+    margin: 0px var(--spacing-xxs);
+    margin-bottom: var(--spacing-xxs);
+
+    &.second-item {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    &.third-item {
+      grid-column: 2;
+      grid-row: 2;
+    }
+  }
+}
+
 // div that displays watch later button
 .claim-preview__hover-actions {
   // if the user is using a mouse
@@ -1383,6 +1402,8 @@ $claim-preview-progress-bar-height: 5px;
 }
 
 .claim-preview__active {
+  background-color: rgba(var(--color-primary-dynamic), 0.2);
+
   .claim-preview__title {
     color: var(--color-link);
   }
@@ -1391,15 +1412,18 @@ $claim-preview-progress-bar-height: 5px;
     box-shadow: 0 0 0 1px rgba(var(--color-primary-dynamic), 1) inset;
   }
 
-  .claim-preview:not(.claim-preview--collection-mine):before {
+  .media__thumb:after {
     position: absolute;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%);
     top: 0px;
-    left: 68px;
     content: '▸';
     z-index: 1;
-    font-size: 4.6rem;
+    font-size: 3rem;
     color: #fff;
     text-shadow: 0 0 3px var(--color-primary), 0 0 5px var(--color-primary);
+    max-height: 100%;
 
     @media (max-width: $breakpoint-small) {
       top: -2px;
@@ -1514,8 +1538,36 @@ $claim-preview-progress-bar-height: 5px;
 }
 
 .claim-preview__overlay-properties--small {
+  @extend .claim-preview__overlay-properties;
   line-height: 0.9;
   font-size: var(--font-xxsmall);
+  color: var(--color-text);
+
+  @media (min-width: $breakpoint-small) {
+    &.playlist-channel {
+      display: flex;
+      gap: 0.5rem;
+
+      .ff-container {
+        width: 100%;
+        height: 100%;
+
+        .ff-canvas {
+          max-width: 100%;
+          max-height: 100%;
+        }
+
+        .ff-image {
+          width: 100% !important;
+          height: 100% !important;
+        }
+      }
+    }
+  }
+
+  &.visibility-icon {
+    color: var(--color-text);
+  }
 }
 
 .claim__tags {
@@ -1574,4 +1626,23 @@ $claim-preview-progress-bar-height: 5px;
       display: block;
     }
   }
+}
+
+.claim-list__scroll-to-recent {
+  margin-bottom: var(--spacing-xxs);
+  position: absolute;
+  right: 50%;
+  transform: translateX(50%);
+  z-index: 1600;
+
+  font-size: var(--font-xsmall);
+  padding: var(--spacing-xxs) var(--spacing-s);
+  bottom: var(--spacing-xxs);
+
+  background-color: var(--color-header-button) !important;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--color-text);
+
+  transition: opacity 0.2s ease, visibility 0.2s ease;
 }

@@ -10,7 +10,7 @@ import {
   selectGeoRestrictionForUri,
 } from 'redux/selectors/claims';
 import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
-import { makeSelectCollectionIsMine } from 'redux/selectors/collections';
+import { selectCollectionIsMine } from 'redux/selectors/collections';
 
 import { doResolveUri } from 'redux/actions/claims';
 import { doFileGet } from 'redux/actions/file';
@@ -22,7 +22,7 @@ import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
 import { isClaimNsfw, isStreamPlaceholderClaim } from 'util/claim';
 import ClaimPreview from './view';
 import formatMediaDuration from 'util/formatMediaDuration';
-import { doClearContentHistoryUri } from 'redux/actions/content';
+import { doClearContentHistoryUri, doUriInitiatePlay } from 'redux/actions/content';
 
 const select = (state, props) => {
   const claim = props.uri && selectClaimForUri(state, props.uri);
@@ -50,7 +50,7 @@ const select = (state, props) => {
     isLivestream,
     isLivestreamActive: isLivestream && selectIsActiveLivestreamForUri(state, props.uri),
     livestreamViewerCount: isLivestream && claim ? selectViewersForId(state, claim.claim_id) : undefined,
-    isCollectionMine: makeSelectCollectionIsMine(props.collectionId)(state),
+    isCollectionMine: selectCollectionIsMine(state, props.collectionId),
     lang: selectLanguage(state),
   };
 };
@@ -59,6 +59,8 @@ const perform = (dispatch) => ({
   resolveUri: (uri) => dispatch(doResolveUri(uri)),
   getFile: (uri) => dispatch(doFileGet(uri, false)),
   doClearContentHistoryUri: (uri) => dispatch(doClearContentHistoryUri(uri)),
+  doUriInitiatePlay: (playingOptions, isPlayable, isFloating) =>
+    dispatch(doUriInitiatePlay(playingOptions, isPlayable, isFloating)),
 });
 
 export default connect(select, perform)(ClaimPreview);

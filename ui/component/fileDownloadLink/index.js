@@ -8,7 +8,7 @@ import {
 } from 'redux/selectors/file_info';
 import { selectCostInfoForUri } from 'lbryinc';
 import { doOpenModal } from 'redux/actions/app';
-import { doSetPlayingUri, doDownloadUri } from 'redux/actions/content';
+import { doClearPlayingUri, doDownloadUri } from 'redux/actions/content';
 import FileDownloadLink from './view';
 
 const select = (state, props) => {
@@ -27,7 +27,7 @@ const select = (state, props) => {
 
 const perform = (dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
-  pause: () => dispatch(doSetPlayingUri({ uri: null })),
+  pause: () => dispatch(doClearPlayingUri()),
   download: (uri) => dispatch(doDownloadUri(uri)),
 });
 

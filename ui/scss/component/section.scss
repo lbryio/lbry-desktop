@@ -78,11 +78,6 @@
   }
 }
 
-.section__header-action-stack {
-  display: flex;
-  flex-direction: column;
-}
-
 .section__flex {
   display: flex;
   align-items: flex-start;
@@ -127,6 +122,31 @@
   color: var(--color-text-subtitle);
   margin: var(--spacing-s) 0;
   font-size: var(--font-body);
+}
+
+.align-end {
+  display: flex;
+  align-items: flex-end;
+}
+
+.text-ellipsis {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.center-self {
+  align-self: center;
+}
+
+.justify-space-between {
+  justify-content: space-between;
+}
+
+.align-center {
+  display: flex;
+  align-items: center;
 }
 
 .section__divider {

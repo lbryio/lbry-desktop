@@ -1,5 +1,4 @@
 // @flow
-import { useEffect } from 'react';
 import analytics from 'analytics';
 
 const isDev = process.env.NODE_ENV !== 'production';
@@ -15,7 +14,6 @@ const VideoJsEvents = ({
   tapToRetryRef,
   setReload,
   playerRef,
-  replay,
   claimId,
   userId,
   claimValues,
@@ -32,7 +30,6 @@ const VideoJsEvents = ({
   tapToRetryRef: any, // DOM element
   setReload: any, // react hook
   playerRef: any, // DOM element
-  replay: boolean,
   claimId: ?string,
   userId: ?number,
   claimValues: any,
@@ -228,13 +225,6 @@ const VideoJsEvents = ({
       window.player.controlBar.show();
     }, 1000 * 2); // wait 2 seconds to hide control bar
   }
-
-  useEffect(() => {
-    const player = playerRef.current;
-    if (replay && player) {
-      player.play();
-    }
-  }, [replay]);
 
   function initializeEvents() {
     const player = playerRef.current;

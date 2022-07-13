@@ -109,4 +109,11 @@
       }
     }
   }
+
+  &.fixed {
+    position: fixed;
+    bottom: 0;
+    top: unset;
+    margin: 0px;
+  }
 }

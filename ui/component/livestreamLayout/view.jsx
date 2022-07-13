@@ -11,6 +11,7 @@ import { PRIMARY_PLAYER_WRAPPER_CLASS } from 'page/file/view';
 import FileRenderInitiator from 'component/fileRenderInitiator';
 import LivestreamScheduledInfo from 'component/livestreamScheduledInfo';
 import * as ICONS from 'constants/icons';
+import * as DRAWERS from 'constants/drawer_types';
 import SwipeableDrawer from 'component/swipeableDrawer';
 import DrawerExpandButton from 'component/swipeableDrawerExpand';
 import LivestreamMenu from 'component/livestreamChatLayout/livestream-menu';
@@ -104,6 +105,8 @@ export default function LivestreamLayout(props: Props) {
         {isMobile && !isLandscapeRotated && !hideComments && (
           <React.Suspense fallback={null}>
             <SwipeableDrawer
+              startOpen
+              type={DRAWERS.CHAT}
               title={
                 <ChatModeSelector
                   superChats={superChats}
@@ -131,7 +134,7 @@ export default function LivestreamLayout(props: Props) {
               />
             </SwipeableDrawer>
 
-            <DrawerExpandButton label={__('Open Live Chat')} />
+            <DrawerExpandButton icon={ICONS.CHAT} label={__('Open Live Chat')} type={DRAWERS.CHAT} />
           </React.Suspense>
         )}
 

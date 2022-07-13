@@ -10,6 +10,8 @@ import usePersistedState from 'effects/use-persisted-state';
 import useGetLastVisibleSlot from 'effects/use-get-last-visible-slot';
 import debounce from 'util/debounce';
 import ClaimPreviewTile from 'component/claimPreviewTile';
+import Button from 'component/button';
+import { useIsMobile } from 'effects/use-screensize';
 
 const Draggable = React.lazy(() =>
   // $FlowFixMe
@@ -61,7 +63,16 @@ type Props = {
   unavailableUris?: Array<string>,
   showMemberBadge?: boolean,
   inWatchHistory?: boolean,
+  smallThumbnail?: boolean,
+  showIndexes?: boolean,
+  playItemsOnClick?: boolean,
+  disableClickNavigation?: boolean,
+  setActiveListItemRef?: any,
+  setListRef?: any,
   onHidden: (string) => void,
+  doDisablePlayerDrag?: (disable: boolean) => void,
+  restoreScrollPos?: () => void,
+  setHasActive?: (has: boolean) => void,
 };
 
 export default function ClaimList(props: Props) {
@@ -103,12 +114,24 @@ export default function ClaimList(props: Props) {
     unavailableUris,
     showMemberBadge,
     inWatchHistory,
+    smallThumbnail,
+    showIndexes,
+    playItemsOnClick,
+    disableClickNavigation,
+    setActiveListItemRef,
+    setListRef,
     onHidden,
+    doDisablePlayerDrag,
+    restoreScrollPos,
+    setHasActive,
   } = props;
+
+  const isMobile = useIsMobile();
 
   const [currentSort, setCurrentSort] = usePersistedState(persistedStorageKey, SORT_NEW);
   const uriBuffer = React.useRef([]);
 
+  const currentActiveItem = React.useRef();
   // Resolve the index for injectedItem, if provided; else injectedIndex will be 'undefined'.
   const listRef = React.useRef();
   const findLastVisibleSlot = injectedItem && injectedItem.node && injectedItem.index === undefined;
@@ -201,9 +224,15 @@ export default function ClaimList(props: Props) {
       swipeLayout={swipeLayout}
       showEdit={showEdit}
       dragHandleProps={draggableProvided && draggableProvided.dragHandleProps}
+      wrapperElement={draggableProvided ? 'div' : undefined}
       unavailableUris={unavailableUris}
       showMemberBadge={showMemberBadge}
       inWatchHistory={inWatchHistory}
+      smallThumbnail={smallThumbnail}
+      showIndexes={showIndexes}
+      playItemsOnClick={playItemsOnClick}
+      disableClickNavigation={disableClickNavigation}
+      doDisablePlayerDrag={doDisablePlayerDrag}
     />
   );
 
@@ -222,6 +251,40 @@ export default function ClaimList(props: Props) {
 
     return null;
   };
+
+  React.useEffect(() => {
+    if (setHasActive) {
+      // used in case the active item is deleted
+      setHasActive(sortedUris.some((uri) => activeUri && uri === activeUri));
+    }
+  }, [activeUri, setHasActive, sortedUris]);
+
+  const listRefCb = React.useCallback(
+    (node) => {
+      if (node) {
+        if (droppableProvided) droppableProvided.innerRef(node);
+        if (setListRef) setListRef(node);
+      }
+    },
+    [droppableProvided, setListRef]
+  );
+
+  const listItemCb = React.useCallback(
+    ({ node, isActive, draggableProvidedRef }) => {
+      if (node) {
+        if (draggableProvidedRef) draggableProvidedRef(node);
+
+        // currentActiveItem.current !== node prevents re-scrolling during the same render
+        // so it should only auto scroll when the active item switches, the button to scroll is clicked
+        // or the list itself changes (switch between floating player vs file page)
+        if (isActive && setActiveListItemRef && currentActiveItem.current !== node) {
+          setActiveListItemRef(node);
+          currentActiveItem.current = node;
+        }
+      }
+    },
+    [setActiveListItemRef]
+  );
 
   return tileLayout && !header ? (
     <>
@@ -269,11 +332,7 @@ export default function ClaimList(props: Props) {
       )}
     </>
   ) : (
-    <section
-      className={classnames('claim-list', {
-        'claim-list--small': type === 'small',
-      })}
-    >
+    <section className={classnames('claim-list', { 'claim-list--no-margin': showIndexes })}>
       {header !== false && (
         <React.Fragment>
           {header && (
@@ -311,7 +370,7 @@ export default function ClaimList(props: Props) {
             'swipe-list': swipeLayout,
           })}
           {...(droppableProvided && droppableProvided.droppableProps)}
-          ref={droppableProvided ? droppableProvided.innerRef : listRef}
+          ref={listRefCb}
         >
           {droppableProvided ? (
             <>
@@ -326,13 +385,46 @@ export default function ClaimList(props: Props) {
                         transform = transform.replace(/\(.+,/, '(0,');
                       }
 
+                      // doDisablePlayerDrag is a function brought by fileRenderFloating if is floating
+                      const isDraggingFromFloatingPlayer = draggableSnapshot.isDragging && doDisablePlayerDrag;
+                      const isDraggingFromMobile = draggableSnapshot.isDragging && isMobile;
+                      const topForDrawer = Number(
+                        // $FlowFixMe
+                        document.documentElement?.style?.getPropertyValue('--content-height') || 0
+                      );
+                      const playerInfo = isDraggingFromFloatingPlayer && document.querySelector('.content__info');
+                      const playerElem = isDraggingFromFloatingPlayer && document.querySelector('.content__viewer');
+                      const playerTransform = playerElem && playerElem.style.transform;
+                      let playerTop =
+                        playerTransform &&
+                        Number(
+                          playerTransform.substring(playerTransform.indexOf(', ') + 2, playerTransform.indexOf('px)'))
+                        );
+                      if (playerElem && navigator.userAgent.toLowerCase().indexOf('firefox') !== -1) {
+                        playerTop -= playerElem.offsetHeight;
+                      }
+
                       const style = {
                         ...draggableProvided.draggableProps.style,
                         transform,
+                        top: isDraggingFromFloatingPlayer
+                          ? draggableProvided.draggableProps.style.top - playerInfo?.offsetTop - Number(playerTop)
+                          : isDraggingFromMobile
+                          ? draggableProvided.draggableProps.style.top - topForDrawer
+                          : draggableProvided.draggableProps.style.top,
+                        left: isDraggingFromFloatingPlayer ? undefined : draggableProvided.draggableProps.style.left,
+                        right: isDraggingFromFloatingPlayer ? undefined : draggableProvided.draggableProps.style.right,
                       };
+                      const isActive = activeUri && uri === activeUri;
 
                       return (
-                        <li ref={draggableProvided.innerRef} {...draggableProvided.draggableProps} style={style}>
+                        <li
+                          ref={(node) =>
+                            listItemCb({ node, isActive, draggableProvidedRef: draggableProvided.innerRef })
+                          }
+                          {...draggableProvided.draggableProps}
+                          style={style}
+                        >
                           {/* https://github.com/atlassian/react-beautiful-dnd/issues/1756 */}
                           <div style={{ display: 'none' }} {...draggableProvided.dragHandleProps} />
                           {getClaimPreview(uri, index, draggableProvided)}
@@ -353,6 +445,15 @@ export default function ClaimList(props: Props) {
             ))
           )}
         </ul>
+      )}
+
+      {restoreScrollPos && (
+        <Button
+          button="secondary"
+          className="claim-list__scroll-to-recent"
+          label={__('Scroll to Playing')}
+          onClick={restoreScrollPos}
+        />
       )}
 
       {!timedOut && urisLength === 0 && !loading && !noEmpty && (

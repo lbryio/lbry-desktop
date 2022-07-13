@@ -2,14 +2,16 @@ import { connect } from 'react-redux';
 import { selectMyChannelUrls } from 'redux/selectors/claims';
 import * as SETTINGS from 'constants/settings';
 import { doOpenModal } from 'redux/actions/app';
-import { doSetPlayingUri } from 'redux/actions/content';
+import { doClearPlayingUri } from 'redux/actions/content';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { selectShowMatureContent, selectClientSetting } from 'redux/selectors/settings';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
+import { makeSelectIsPlayerFloating } from 'redux/selectors/content';
+import { withRouter } from 'react-router';
 
 import SettingContent from './view';
 
-const select = (state) => ({
+const select = (state, props) => ({
   isAuthenticated: selectUserVerifiedEmail(state),
   floatingPlayer: selectClientSetting(state, SETTINGS.FLOATING_PLAYER),
   autoplayMedia: selectClientSetting(state, SETTINGS.AUTOPLAY_MEDIA),
@@ -21,12 +23,13 @@ const select = (state) => ({
   instantPurchaseEnabled: selectClientSetting(state, SETTINGS.INSTANT_PURCHASE_ENABLED),
   instantPurchaseMax: selectClientSetting(state, SETTINGS.INSTANT_PURCHASE_MAX),
   enablePublishPreview: selectClientSetting(state, SETTINGS.ENABLE_PUBLISH_PREVIEW),
+  isFloating: makeSelectIsPlayerFloating(props.location)(state),
 });
 
 const perform = (dispatch) => ({
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
-  clearPlayingUri: () => dispatch(doSetPlayingUri({ uri: null })),
+  clearPlayingUri: () => dispatch(doClearPlayingUri()),
   openModal: (id, params) => dispatch(doOpenModal(id, params)),
 });
 
-export default connect(select, perform)(SettingContent);
+export default withRouter(connect(select, perform)(SettingContent));

@@ -19,7 +19,8 @@ type Props = {
   metadata: StreamMetadata,
   analyticsPurchaseEvent: (GetResponse) => void,
   playingUri: PlayingUri,
-  setPlayingUri: (?string) => void,
+  setPlayingUri: (params: PlayingUri) => void,
+  cancelCb?: () => void,
 };
 
 function ModalAffirmPurchase(props: Props) {
@@ -31,6 +32,7 @@ function ModalAffirmPurchase(props: Props) {
     analyticsPurchaseEvent,
     playingUri,
     setPlayingUri,
+    cancelCb,
   } = props;
   const [success, setSuccess] = React.useState(false);
   const [purchasing, setPurchasing] = React.useState(false);
@@ -44,16 +46,17 @@ function ModalAffirmPurchase(props: Props) {
       analyticsPurchaseEvent(fileInfo);
 
       if (playingUri.uri !== uri) {
-        setPlayingUri(uri);
+        setPlayingUri({ ...playingUri, uri });
       }
     });
   }
 
   function cancelPurchase() {
-    if (playingUri.uri && isURIEqual(uri, playingUri.uri)) {
-      setPlayingUri(null);
+    if (playingUri.uri && isURIEqual(uri, playingUri.uri) && !playingUri.collection.collectionId) {
+      setPlayingUri({ ...playingUri, uri: null });
     }
 
+    if (cancelCb) cancelCb();
     closeModal();
   }
 

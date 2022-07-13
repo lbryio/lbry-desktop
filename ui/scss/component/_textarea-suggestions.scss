@@ -213,10 +213,12 @@
     border-bottom: 1px solid var(--color-border);
   }
   .card {
-    padding: var(--spacing-xxs) !important;
-    padding-bottom: 0 !important;
-    .card__main-actions {
-      padding-top: 0;
+    &:not(.playlist-card--drawer-header) {
+      padding: var(--spacing-xxs) !important;
+      padding-bottom: 0 !important;
+      .card__main-actions {
+        padding-top: 0;
+      }
     }
   }
   .card::-webkit-scrollbar {

@@ -1025,6 +1025,12 @@ $control-bar-icon-size: 30px;
   width: 100%;
   text-align: center;
   font-size: var(--font-small);
+
+  .button--link {
+    .button__content {
+      align-items: normal;
+    }
+  }
 }
 .autoplay-countdown__counter {
   margin-top: var(--spacing-m);

@@ -182,3 +182,19 @@ export function generateGoogleCacheUrl(search, path) {
     }
   }
 }
+
+const CLAIM_ID_LENGTH = 40;
+
+export function parseClaimIdFromPermanentUrl(url, failureId = '0') {
+  // - `parseURI` is too expensive for large loops, so this serves as a lighter
+  // alternative when iterating a list of permanent URLs.
+  // - It does not verify the permanent URL format, so only use this for areas
+  // where parsing failure is not fatal (e.g. if parsing for ist of IDs to
+  // resolve, missing a few wouldn't matter since components can resolve
+  // individually).
+  const parts = url.split('#');
+  const id = parts[parts.length - 1];
+  return id && id.length === CLAIM_ID_LENGTH ? id : failureId;
+}
+
+export const getPathForPage = (page) => `/$/${page}/`;

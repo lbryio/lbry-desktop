@@ -16,7 +16,7 @@ function ClaimType(props: Props) {
   const size = small ? COL.ICON_SIZE : undefined;
 
   if (claimType === 'collection') {
-    return <Icon size={size} icon={ICONS.STACK} />;
+    return <Icon size={size} icon={ICONS.PLAYLIST} />;
   } else if (claimType === 'channel') {
     return <Icon size={size} icon={ICONS.CHANNEL} />;
   } else if (claimType === 'repost') {

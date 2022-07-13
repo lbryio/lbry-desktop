@@ -6,7 +6,7 @@ import { parseURI } from 'util/lbryURI';
 import { YOUTUBE_STATUSES } from 'lbryinc';
 import Page from 'component/page';
 import SubscribeButton from 'component/subscribeButton';
-import ShareButton from 'component/shareButton';
+import ClaimShareButton from 'component/claimShareButton';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
 import { useHistory } from 'react-router';
 import Button from 'component/button';
@@ -132,7 +132,7 @@ function ChannelPage(props: Props) {
           <p>
             <I18nMessage
               tokens={{
-                pick: <Button button="link" navigate={`/$/${PAGES.LISTS}`} label={__('Pick')} />,
+                pick: <Button button="link" navigate={`/$/${PAGES.PLAYLISTS}`} label={__('Pick')} />,
               }}
             >
               You have unpublished lists! %pick% one and publish it!
@@ -229,7 +229,7 @@ function ChannelPage(props: Props) {
               navigate={`/$/${PAGES.CHANNELS}`}
             />
           )}
-          {!channelIsBlackListed && <ShareButton uri={uri} />}
+          {!channelIsBlackListed && <ClaimShareButton uri={uri} webShareable />}
           {!(isBlocked || isMuted) && <ClaimSupportButton uri={uri} />}
           {!(isBlocked || isMuted) && (!channelIsBlackListed || isSubscribed) && <SubscribeButton uri={permanentUrl} />}
           {/* TODO: add channel collections <ClaimCollectionAddButton uri={uri} fileAction /> */}

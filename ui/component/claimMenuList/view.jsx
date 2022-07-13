@@ -7,6 +7,7 @@ import * as COLLECTIONS_CONSTS from 'constants/collections';
 import React from 'react';
 import classnames from 'classnames';
 import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
+import { PUBLISH_PAGE, EDIT_PAGE, PAGE_VIEW_QUERY } from 'page/collection/view';
 import Icon from 'component/common/icon';
 import {
   generateShareUrl,
@@ -17,10 +18,9 @@ import {
 } from 'util/url';
 import { useHistory } from 'react-router';
 import { buildURI, parseURI } from 'util/lbryURI';
+import ButtonAddToQueue from 'component/buttonAddToQueue';
 
 const SHARE_DOMAIN = SHARE_DOMAIN_URL || URL;
-const PAGE_VIEW_QUERY = 'view';
-const EDIT_PAGE = 'edit';
 
 type SubscriptionArgs = {
   channelName: string,
@@ -47,7 +47,6 @@ type Props = {
   doCommentModUnBlock: (string) => void,
   doCommentModBlockAsAdmin: (commenterUri: string, offendingCommentId: ?string, blockerId: ?string) => void,
   doCommentModUnBlockAsAdmin: (string, string) => void,
-  doCollectionEdit: (string, any) => void,
   hasClaimInWatchLater: boolean,
   hasClaimInFavorites: boolean,
   claimInCollection: boolean,
@@ -56,7 +55,7 @@ type Props = {
   isLivestreamClaim?: boolean,
   isPostClaim?: boolean,
   fypId?: string,
-  doToast: ({ message: string, isError?: boolean }) => void,
+  doToast: ({ message: string, isError?: boolean, linkText?: string, linkTarget?: string }) => void,
   claimIsMine: boolean,
   fileInfo: FileListItem,
   prepareEdit: ({}, string, string) => void,
@@ -64,16 +63,23 @@ type Props = {
   doChannelSubscribe: (SubscriptionArgs) => void,
   doChannelUnsubscribe: (SubscriptionArgs) => void,
   isChannelPage: boolean,
-  editedCollection: Collection,
+  hasEdits: Collection,
   isAuthenticated: boolean,
   playNextUri: string,
   resolvedList: boolean,
   fetchCollectionItems: (string) => void,
-  doToggleShuffleList: (string) => void,
+  doToggleShuffleList: (params: { currentUri?: string, collectionId: string, hideToast?: boolean }) => void,
   lastUsedCollection: ?Collection,
   hasClaimInLastUsedCollection: boolean,
   lastUsedCollectionIsNotBuiltin: boolean,
   doRemovePersonalRecommendation: (uri: string) => void,
+  collectionEmpty: boolean,
+  doPlaylistAddAndAllowPlaying: (params: {
+    uri: string,
+    collectionName: string,
+    collectionId: string,
+    push: (uri: string) => void,
+  }) => void,
 };
 
 function ClaimMenuList(props: Props) {
@@ -96,7 +102,6 @@ function ClaimMenuList(props: Props) {
     doCommentModUnBlock,
     doCommentModBlockAsAdmin,
     doCommentModUnBlockAsAdmin,
-    doCollectionEdit,
     hasClaimInWatchLater,
     hasClaimInFavorites,
     collectionId,
@@ -112,7 +117,7 @@ function ClaimMenuList(props: Props) {
     doChannelSubscribe,
     doChannelUnsubscribe,
     isChannelPage = false,
-    editedCollection,
+    hasEdits,
     isAuthenticated,
     playNextUri,
     resolvedList,
@@ -122,7 +127,15 @@ function ClaimMenuList(props: Props) {
     hasClaimInLastUsedCollection,
     lastUsedCollectionIsNotBuiltin,
     doRemovePersonalRecommendation,
+    collectionEmpty,
+    doPlaylistAddAndAllowPlaying,
   } = props;
+
+  const {
+    push,
+    replace,
+    location: { search },
+  } = useHistory();
 
   const [doShuffle, setDoShuffle] = React.useState(false);
   const incognitoClaim = contentChannelUri && !contentChannelUri.includes('@');
@@ -137,7 +150,6 @@ function ClaimMenuList(props: Props) {
     ? __('Unfollow')
     : __('Follow');
 
-  const { push, replace } = useHistory();
   const claimType = isLivestreamClaim ? 'livestream' : isPostClaim ? 'post' : 'upload';
 
   const fetchItems = React.useCallback(() => {
@@ -148,7 +160,7 @@ function ClaimMenuList(props: Props) {
 
   React.useEffect(() => {
     if (doShuffle && resolvedList) {
-      doToggleShuffleList(collectionId);
+      doToggleShuffleList({ collectionId });
       if (playNextUri) {
         const navigateUrl = formatLbryUrlForWeb(playNextUri);
         push({
@@ -178,12 +190,24 @@ function ClaimMenuList(props: Props) {
     // $FlowFixMe
     (contentClaim.value.stream_type === 'audio' || contentClaim.value.stream_type === 'video');
 
-  function handleAdd(source, name, collectionId) {
-    doToast({
-      message: source ? __('Item removed from %name%', { name }) : __('Item added to %name%', { name }),
-    });
-    if (contentClaim) {
-      doCollectionEdit(collectionId, { uris: [contentClaim.permanent_url], remove: source, type: 'playlist' });
+  function handleAdd(claimIsInPlaylist, name, collectionId) {
+    const itemUrl = contentClaim?.canonical_url;
+
+    if (itemUrl) {
+      const urlParams = new URLSearchParams(search);
+      urlParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
+
+      doPlaylistAddAndAllowPlaying({
+        uri: itemUrl,
+        collectionName: name,
+        collectionId,
+        push: (pushUri) =>
+          push({
+            pathname: formatLbryUrlForWeb(pushUri),
+            search: urlParams.toString(),
+            state: { collectionId, forceAutoplay: true },
+          }),
+      });
     }
   }
 
@@ -230,7 +254,7 @@ function ClaimMenuList(props: Props) {
       prepareEdit(claim, editUri, claimType);
     } else {
       const channelUrl = claim.name + ':' + claim.claim_id;
-      push(`/${channelUrl}?${PAGE_VIEW_QUERY}=${EDIT_PAGE}`);
+      push(`/${channelUrl}?${PAGE_VIEW_QUERY}=${PUBLISH_PAGE}`);
     }
   }
 
@@ -278,7 +302,6 @@ function ClaimMenuList(props: Props) {
     push(`/$/${PAGES.REPORT_CONTENT}?claimId=${contentClaim && contentClaim.claim_id}`);
   }
 
-  const shouldShow = !IS_WEB || (IS_WEB && isAuthenticated);
   return (
     <Menu>
       <MenuButton
@@ -308,33 +331,46 @@ function ClaimMenuList(props: Props) {
           {/* COLLECTION OPERATIONS */}
           {collectionId && isCollectionClaim ? (
             <>
-              <MenuItem className="comment__menu-option" onSelect={() => push(`/$/${PAGES.LIST}/${collectionId}`)}>
-                <a className="menu__link" href={`/$/${PAGES.LIST}/${collectionId}`}>
+              <MenuItem className="comment__menu-option" onSelect={() => push(`/$/${PAGES.PLAYLIST}/${collectionId}`)}>
+                <a className="menu__link" href={`/$/${PAGES.PLAYLIST}/${collectionId}`}>
                   <Icon aria-hidden icon={ICONS.VIEW} />
-                  {__('View List')}
+                  {__('View Playlist')}
                 </a>
               </MenuItem>
-              <MenuItem
-                className="comment__menu-option"
-                onSelect={() => {
-                  if (!resolvedList) fetchItems();
-                  setDoShuffle(true);
-                }}
-              >
-                <div className="menu__link">
-                  <Icon aria-hidden icon={ICONS.SHUFFLE} />
-                  {__('Shuffle Play')}
-                </div>
-              </MenuItem>
+              {!collectionEmpty && (
+                <MenuItem
+                  className="comment__menu-option"
+                  onSelect={() => {
+                    if (!resolvedList) fetchItems();
+                    setDoShuffle(true);
+                  }}
+                >
+                  <div className="menu__link">
+                    <Icon aria-hidden icon={ICONS.SHUFFLE} />
+                    {__('Shuffle Play')}
+                  </div>
+                </MenuItem>
+              )}
               {isMyCollection && (
                 <>
+                  {!collectionEmpty && (
+                    <MenuItem
+                      className="comment__menu-option"
+                      onSelect={() => push(`/$/${PAGES.PLAYLIST}/${collectionId}?${PAGE_VIEW_QUERY}=${PUBLISH_PAGE}`)}
+                    >
+                      <div className="menu__link">
+                        <Icon aria-hidden iconColor={'red'} icon={ICONS.PUBLISH} />
+                        {hasEdits ? __('Publish') : __('Update')}
+                      </div>
+                    </MenuItem>
+                  )}
                   <MenuItem
                     className="comment__menu-option"
-                    onSelect={() => push(`/$/${PAGES.LIST}/${collectionId}?view=edit`)}
+                    onSelect={() => push(`/$/${PAGES.PLAYLIST}/${collectionId}?${PAGE_VIEW_QUERY}=${EDIT_PAGE}`)}
                   >
                     <div className="menu__link">
-                      <Icon aria-hidden iconColor={'red'} icon={ICONS.PUBLISH} />
-                      {editedCollection ? __('Publish') : __('Edit List')}
+                      <Icon aria-hidden icon={ICONS.EDIT} />
+                      {__('Edit')}
                     </div>
                   </MenuItem>
                   <MenuItem
@@ -343,69 +379,78 @@ function ClaimMenuList(props: Props) {
                   >
                     <div className="menu__link">
                       <Icon aria-hidden icon={ICONS.DELETE} />
-                      {__('Delete List')}
+                      {__('Delete Playlist')}
                     </div>
                   </MenuItem>
                 </>
               )}
             </>
           ) : (
-            shouldShow &&
             isPlayable && (
               <>
-                {/* WATCH LATER */}
-                <MenuItem
-                  className="comment__menu-option"
-                  onSelect={() => handleAdd(hasClaimInWatchLater, __('Watch Later'), COLLECTIONS_CONSTS.WATCH_LATER_ID)}
-                >
-                  <div className="menu__link">
-                    <Icon aria-hidden icon={hasClaimInWatchLater ? ICONS.DELETE : ICONS.TIME} />
-                    {hasClaimInWatchLater ? __('In Watch Later') : __('Watch Later')}
-                  </div>
-                </MenuItem>
-                {/* FAVORITES LIST */}
-                <MenuItem
-                  className="comment__menu-option"
-                  onSelect={() => handleAdd(hasClaimInFavorites, __('Favorites'), COLLECTIONS_CONSTS.FAVORITES_ID)}
-                >
-                  <div className="menu__link">
-                    <Icon aria-hidden icon={hasClaimInFavorites ? ICONS.DELETE : ICONS.STAR} />
-                    {hasClaimInFavorites ? __('In Favorites') : __('Favorites')}
-                  </div>
-                </MenuItem>
-                {/* CURRENTLY ONLY SUPPORT PLAYLISTS FOR PLAYABLE; LATER DIFFERENT TYPES */}
-                <MenuItem
-                  className="comment__menu-option"
-                  onSelect={() => openModal(MODALS.COLLECTION_ADD, { uri, type: 'playlist' })}
-                >
-                  <div className="menu__link">
-                    <Icon aria-hidden icon={ICONS.STACK} />
-                    {__('Add to Lists')}
-                  </div>
-                </MenuItem>
-                {lastUsedCollection && lastUsedCollectionIsNotBuiltin && (
-                  <MenuItem
-                    className="comment__menu-option"
-                    onSelect={() =>
-                      handleAdd(hasClaimInLastUsedCollection, lastUsedCollection.name, lastUsedCollection.id)
-                    }
-                  >
-                    <div className="menu__link">
-                      {!hasClaimInLastUsedCollection && <Icon aria-hidden icon={ICONS.ADD} />}
-                      {hasClaimInLastUsedCollection && <Icon aria-hidden icon={ICONS.DELETE} />}
-                      {!hasClaimInLastUsedCollection &&
-                        __('Add to %collection%', { collection: lastUsedCollection.name })}
-                      {hasClaimInLastUsedCollection && __('In %collection%', { collection: lastUsedCollection.name })}
-                    </div>
-                  </MenuItem>
+                {/* QUEUE */}
+                {contentClaim && <ButtonAddToQueue uri={contentClaim.permanent_url} menuItem />}
+
+                {isAuthenticated && (
+                  <>
+                    {/* WATCH LATER */}
+                    <MenuItem
+                      className="comment__menu-option"
+                      onSelect={() =>
+                        handleAdd(hasClaimInWatchLater, __('Watch Later'), COLLECTIONS_CONSTS.WATCH_LATER_ID)
+                      }
+                    >
+                      <div className="menu__link">
+                        <Icon aria-hidden icon={hasClaimInWatchLater ? ICONS.DELETE : ICONS.TIME} />
+                        {hasClaimInWatchLater ? __('In Watch Later') : __('Watch Later')}
+                      </div>
+                    </MenuItem>
+                    {/* FAVORITES LIST */}
+                    <MenuItem
+                      className="comment__menu-option"
+                      onSelect={() => handleAdd(hasClaimInFavorites, __('Favorites'), COLLECTIONS_CONSTS.FAVORITES_ID)}
+                    >
+                      <div className="menu__link">
+                        <Icon aria-hidden icon={hasClaimInFavorites ? ICONS.DELETE : ICONS.STAR} />
+                        {hasClaimInFavorites ? __('In Favorites') : __('Favorites')}
+                      </div>
+                    </MenuItem>
+                    {/* CURRENTLY ONLY SUPPORT PLAYLISTS FOR PLAYABLE; LATER DIFFERENT TYPES */}
+                    <MenuItem
+                      className="comment__menu-option"
+                      onSelect={() => openModal(MODALS.COLLECTION_ADD, { uri, type: 'playlist' })}
+                    >
+                      <div className="menu__link">
+                        <Icon aria-hidden icon={ICONS.PLAYLIST_ADD} />
+                        {__('Add to Playlist')}
+                      </div>
+                    </MenuItem>
+                    {lastUsedCollection && lastUsedCollectionIsNotBuiltin && (
+                      <MenuItem
+                        className="comment__menu-option"
+                        onSelect={() =>
+                          handleAdd(hasClaimInLastUsedCollection, lastUsedCollection.name, lastUsedCollection.id)
+                        }
+                      >
+                        <div className="menu__link">
+                          {!hasClaimInLastUsedCollection && <Icon aria-hidden icon={ICONS.ADD} />}
+                          {hasClaimInLastUsedCollection && <Icon aria-hidden icon={ICONS.DELETE} />}
+                          {!hasClaimInLastUsedCollection &&
+                            __('Add to %collection%', { collection: lastUsedCollection.name })}
+                          {hasClaimInLastUsedCollection &&
+                            __('In %collection%', { collection: lastUsedCollection.name })}
+                        </div>
+                      </MenuItem>
+                    )}
+                    <hr className="menu__separator" />
+                  </>
                 )}
-                <hr className="menu__separator" />
               </>
             )
           )}
         </>
 
-        {shouldShow && (
+        {isAuthenticated && (
           <>
             {!isChannelPage && (
               <>

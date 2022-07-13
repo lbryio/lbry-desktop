@@ -17,9 +17,9 @@ import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
 import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
 import { parseURI } from 'util/lbryURI';
 import PreviewOverlayProperties from 'component/previewOverlayProperties';
-import FileDownloadLink from 'component/fileDownloadLink';
 import FileHideRecommendation from 'component/fileHideRecommendation';
 import FileWatchLaterLink from 'component/fileWatchLaterLink';
+import ButtonAddToQueue from 'component/buttonAddToQueue';
 import ClaimRepostAuthor from 'component/claimRepostAuthor';
 import ClaimMenuList from 'component/claimMenuList';
 import CollectionPreviewOverlay from 'component/collectionPreviewOverlay';
@@ -59,6 +59,7 @@ type Props = {
   swipeLayout: boolean,
   onHidden?: (string) => void,
   pulse?: boolean,
+  collectionFirstUrl: ?string,
 };
 
 // preview image cards used in related video functionality, channel overview page and homepage
@@ -94,6 +95,7 @@ function ClaimPreviewTile(props: Props) {
     swipeLayout = false,
     onHidden,
     pulse,
+    collectionFirstUrl,
   } = props;
   const isRepost = claim && claim.repost_channel_url;
   const isCollection = claim && claim.value_type === 'collection';
@@ -111,7 +113,7 @@ function ClaimPreviewTile(props: Props) {
   const collectionClaimId = isCollection && claim && claim.claim_id;
   const shouldFetch = claim === undefined;
   const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, placeholder) || thumbnail;
-  const canonicalUrl = claim && claim.canonical_url;
+  const canonicalUrl = claim && ((isCollection && collectionFirstUrl) || claim.canonical_url);
   const repostedContentUri = claim && (claim.reposted_claim ? claim.reposted_claim.permanent_url : claim.permanent_url);
   const listId = collectionId || collectionClaimId;
   const navigateUrl =
@@ -254,32 +256,30 @@ function ClaimPreviewTile(props: Props) {
         <FileThumbnail thumbnail={thumbnailUrl} allowGifs tileLayout>
           {!isChannel && (
             <React.Fragment>
-              <div className="claim-preview__hover-actions">
-                {isPlayable && <FileWatchLaterLink focusable={false} uri={repostedContentUri} />}
-              </div>
-              {fypId && (
-                <div className="claim-preview__hover-actions">
-                  {isStream && <FileHideRecommendation focusable={false} uri={repostedContentUri} />}
+              {((fypId && isStream) || isPlayable) && (
+                <div className="claim-preview__hover-actions-grid">
+                  {fypId && isStream && (
+                    <div className="claim-preview__hover-actions">
+                      <FileHideRecommendation focusable={false} uri={repostedContentUri} />
+                    </div>
+                  )}
+
+                  {isPlayable && (
+                    <>
+                      <FileWatchLaterLink focusable={false} uri={repostedContentUri} />
+                      <ButtonAddToQueue focusable={false} uri={repostedContentUri} />
+                    </>
+                  )}
                 </div>
               )}
-              {/* @if TARGET='app' */}
-              <div className="claim-preview__hover-actions">
-                {isStream && <FileDownloadLink focusable={false} uri={canonicalUrl} hideOpenButton />}
-              </div>
-              {/* @endif */}
+
               <div className="claim-preview__file-property-overlay">
                 <PreviewOverlayProperties uri={uri} properties={liveProperty || properties} />
               </div>
               <ClaimPreviewProgress uri={uri} />
             </React.Fragment>
           )}
-          {isCollection && (
-            <React.Fragment>
-              <div className="claim-preview__collection-wrapper">
-                <CollectionPreviewOverlay collectionId={listId} uri={uri} />
-              </div>
-            </React.Fragment>
-          )}
+          {isCollection && <CollectionPreviewOverlay collectionId={listId} />}
         </FileThumbnail>
       </NavLink>
       <div className="claim-tile__header">

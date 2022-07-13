@@ -3,26 +3,14 @@ import { selectClaimForUri, selectThumbnailForUri } from 'redux/selectors/claims
 import { isStreamPlaceholderClaim, getChannelIdFromClaim } from 'util/claim';
 import { selectActiveLivestreamForChannel } from 'redux/selectors/livestream';
 import {
-  makeSelectNextUrlForCollectionAndUrl,
-  makeSelectPreviousUrlForCollectionAndUrl,
+  selectNextUrlForCollectionAndUrl,
+  selectPreviousUrlForCollectionAndUrl,
+  selectIndexForUrlInCollection,
 } from 'redux/selectors/collections';
 import * as SETTINGS from 'constants/settings';
-import * as COLLECTIONS_CONSTS from 'constants/collections';
-import {
-  doChangeVolume,
-  doChangeMute,
-  doAnalyticsBuffer,
-  doAnaltyicsPurchaseEvent,
-  doAnalyticsView,
-} from 'redux/actions/app';
+import { doChangeVolume, doChangeMute, doAnalyticsBuffer, doAnalyticsView } from 'redux/actions/app';
 import { selectVolume, selectMute } from 'redux/selectors/app';
-import {
-  savePosition,
-  clearPosition,
-  doPlayUri,
-  doSetPlayingUri,
-  doSetContentHistoryItem,
-} from 'redux/actions/content';
+import { savePosition, clearPosition, doUriInitiatePlay, doSetContentHistoryItem } from 'redux/actions/content';
 import { makeSelectIsPlayerFloating, selectContentPositionForUri, selectPlayingUri } from 'redux/selectors/content';
 import { selectRecommendedContentForUri } from 'redux/selectors/search';
 import VideoViewer from './view';
@@ -54,26 +42,22 @@ const select = (state, props) => {
   const userId = selectUser(state) && selectUser(state).id;
   const internalFeature = selectUser(state) && selectUser(state).internal_feature;
   const playingUri = selectPlayingUri(state);
-  const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID) || playingUri.collectionId;
+  const collectionId = playingUri.collection.collectionId;
   const isMarkdownOrComment = playingUri.source === 'markdown' || playingUri.source === 'comment';
 
-  let nextRecommendedUri;
-  let previousListUri;
-  if (collectionId) {
-    nextRecommendedUri = makeSelectNextUrlForCollectionAndUrl(collectionId, uri)(state);
-    previousListUri = makeSelectPreviousUrlForCollectionAndUrl(collectionId, uri)(state);
-  } else {
-    const recommendedContent = selectRecommendedContentForUri(state, uri);
-    nextRecommendedUri = recommendedContent && recommendedContent[0];
-  }
+  const nextPlaylistUri = collectionId && selectNextUrlForCollectionAndUrl(state, uri, collectionId);
+  const previousPlaylistUri = collectionId && selectPreviousUrlForCollectionAndUrl(state, uri, collectionId);
+  const recomendedContent = selectRecommendedContentForUri(state, uri);
+  const nextRecommendedUri = recomendedContent && recomendedContent[0];
 
   return {
     position,
     userId,
     internalFeature,
     collectionId,
+    nextPlaylistUri,
     nextRecommendedUri,
-    previousListUri,
+    previousListUri: previousPlaylistUri,
     isMarkdownOrComment,
     autoplayIfEmbedded: Boolean(autoplay),
     autoplayNext: selectClientSetting(state, SETTINGS.AUTOPLAY_NEXT),
@@ -90,6 +74,7 @@ const select = (state, props) => {
     activeLivestreamForChannel: selectActiveLivestreamForChannel(state, getChannelIdFromClaim(claim)),
     isLivestreamClaim: isStreamPlaceholderClaim(claim),
     defaultQuality: selectClientSetting(state, SETTINGS.DEFAULT_VIDEO_QUALITY),
+    currentPlaylistItemIndex: selectIndexForUrlInCollection(state, uri, collectionId),
   };
 };
 
@@ -102,19 +87,7 @@ const perform = (dispatch) => ({
   toggleVideoTheaterMode: () => dispatch(toggleVideoTheaterMode()),
   toggleAutoplayNext: () => dispatch(toggleAutoplayNext()),
   setVideoPlaybackRate: (rate) => dispatch(doSetClientSetting(SETTINGS.VIDEO_PLAYBACK_RATE, rate)),
-  doPlayUri: (uri, collectionId) =>
-    dispatch(
-      doPlayUri(
-        uri,
-        false,
-        false,
-        (fileInfo) => {
-          dispatch(doAnaltyicsPurchaseEvent(fileInfo));
-        },
-        true
-      ),
-      dispatch(doSetPlayingUri({ uri, collectionId }))
-    ),
+  doPlayUri: (params) => dispatch(doUriInitiatePlay(params, true, true)),
   doAnalyticsView: (uri, timeToStart) => dispatch(doAnalyticsView(uri, timeToStart)),
   claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
   doToast: (props) => dispatch(doToast(props)),

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { selectClaimIsMine, selectClaimForUri } from 'redux/selectors/claims';
 import { makeSelectFilePartlyDownloaded } from 'redux/selectors/file_info';
-import { makeSelectEditedCollectionForId } from 'redux/selectors/collections';
+import { selectCollectionHasEditsForId } from 'redux/selectors/collections';
 import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
 import PreviewOverlayProperties from './view';
 
@@ -11,7 +11,7 @@ const select = (state, props) => {
 
   return {
     claim,
-    editedCollection: makeSelectEditedCollectionForId(claimId)(state),
+    hasEdits: selectCollectionHasEditsForId(state, claimId),
     downloaded: makeSelectFilePartlyDownloaded(props.uri)(state),
     isSubscribed: selectIsSubscribedForUri(state, props.uri),
     claimIsMine: selectClaimIsMine(state, claim),

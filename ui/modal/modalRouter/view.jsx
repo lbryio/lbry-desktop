@@ -13,6 +13,7 @@ const MAP = Object.freeze({
   [MODALS.AUTO_UPDATE_DOWNLOADED]: lazyImport(() => import('modal/modalAutoUpdateDownloaded' /* webpackChunkName: "modalAutoUpdateDownloaded" */)),
   [MODALS.BLOCK_CHANNEL]: lazyImport(() => import('modal/modalBlockChannel' /* webpackChunkName: "modalBlockChannel" */)),
   [MODALS.COLLECTION_ADD]: lazyImport(() => import('modal/modalClaimCollectionAdd' /* webpackChunkName: "modalClaimCollectionAdd" */)),
+  [MODALS.COLLECTION_CREATE]: lazyImport(() => import('modal/modalCollectionCreate/index' /* webpackChunkName: "modalCollectionCreate" */)),
   [MODALS.COLLECTION_DELETE]: lazyImport(() => import('modal/modalRemoveCollection' /* webpackChunkName: "modalRemoveCollection" */)),
   [MODALS.CONFIRM]: lazyImport(() => import('modal/modalConfirm' /* webpackChunkName: "modalConfirm" */)),
   [MODALS.CONFIRM_AGE]: lazyImport(() => import('modal/modalConfirmAge' /* webpackChunkName: "modalConfirmAge" */)),
@@ -61,16 +62,16 @@ type Props = {
   modal: { id: string, modalProps: {} },
   error: { message: string },
   location: { pathname: string },
-  hideModal: () => void,
+  doHideModal: () => void,
 };
 
 function ModalRouter(props: Props) {
-  const { modal, error, location, hideModal } = props;
+  const { modal, error, location, doHideModal } = props;
   const { pathname } = location;
 
   React.useEffect(() => {
-    hideModal();
-  }, [pathname, hideModal]);
+    doHideModal();
+  }, [pathname, doHideModal]);
 
   if (error) {
     const ModalError = MAP[MODALS.ERROR];
@@ -94,7 +95,7 @@ function ModalRouter(props: Props) {
 
   return (
     <React.Suspense fallback={<LoadingBarOneOff />}>
-      <SelectedModal {...modalProps} />
+      <SelectedModal {...modalProps} doHideModal={doHideModal} />
     </React.Suspense>
   );
 }

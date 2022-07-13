@@ -47,7 +47,8 @@ export type AppState = {
   activeChannel: ?string,
   incognito: boolean,
   adBlockerFound: ?boolean, // undefined = unknown; true/false = yes/no;
-  appDrawerOpen: boolean,
+  appDrawerOpen: boolean | string,
+  mainPlayerDimensions: { height: ?number, width: ?number },
 };
 
 const defaultState: AppState = {
@@ -89,6 +90,7 @@ const defaultState: AppState = {
   incognito: false,
   adBlockerFound: undefined,
   appDrawerOpen: false,
+  mainPlayerDimensions: { height: undefined, width: undefined },
 };
 
 // @@router comes from react-router
@@ -335,10 +337,21 @@ reducers[ACTIONS.SET_AD_BLOCKER_FOUND] = (state, action) => {
   };
 };
 
+reducers[ACTIONS.SET_MAIN_PLAYER_DIMENSIONS] = (state, action) => {
+  return { ...state, mainPlayerDimensions: action.data };
+};
+
 reducers[ACTIONS.DRAWER_OPENED] = (state, action) => {
   return {
     ...state,
     appDrawerOpen: action.data,
+  };
+};
+
+reducers[ACTIONS.DRAWER_CLOSED] = (state, action) => {
+  return {
+    ...state,
+    appDrawerOpen: false,
   };
 };
 

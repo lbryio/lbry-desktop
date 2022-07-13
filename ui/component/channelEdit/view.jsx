@@ -17,6 +17,7 @@ import { MINIMUM_PUBLISH_BID, INVALID_NAME_ERROR, ESTIMATED_FEE } from 'constant
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
 import Card from 'component/common/card';
 import * as PAGES from 'constants/pages';
+import * as PUBLISH from 'constants/publish';
 import analytics from 'analytics';
 import LbcSymbol from 'component/common/lbc-symbol';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
@@ -27,8 +28,6 @@ import ThumbnailBrokenImage from 'component/selectThumbnail/thumbnail-broken.png
 import Gerbil from 'component/channelThumbnail/gerbil.png';
 
 const NEKODEV = false; // Temporary flag to hide unfinished progress
-
-const LANG_NONE = 'none';
 
 const MAX_TAG_SELECT = 5;
 
@@ -189,14 +188,14 @@ function ChannelForm(props: Props) {
   function handleLanguageChange(index, code) {
     let langs = [...languageParam];
     if (index === 0) {
-      if (code === LANG_NONE) {
+      if (code === PUBLISH.LANG_NONE) {
         // clear all
         langs = [];
       } else {
         langs[0] = code;
       }
     } else {
-      if (code === LANG_NONE || code === langs[0]) {
+      if (code === PUBLISH.LANG_NONE || code === langs[0]) {
         langs.splice(1, 1);
       } else {
         langs[index] = code;
@@ -501,7 +500,7 @@ function ChannelForm(props: Props) {
                       value={primaryLanguage}
                       helper={__('Your main content language')}
                     >
-                      <option key={'pri-langNone'} value={LANG_NONE}>
+                      <option key={'pri-langNone'} value={PUBLISH.LANG_NONE}>
                         {__('None selected')}
                       </option>
                       {sortLanguageMap(SUPPORTED_LANGUAGES).map(([langKey, langName]) => (
@@ -519,7 +518,7 @@ function ChannelForm(props: Props) {
                       disabled={!languageParam[0]}
                       helper={__('Your other content language')}
                     >
-                      <option key={'sec-langNone'} value={LANG_NONE}>
+                      <option key={'sec-langNone'} value={PUBLISH.LANG_NONE}>
                         {__('None selected')}
                       </option>
                       {sortLanguageMap(SUPPORTED_LANGUAGES).map(([langKey, langName]) => (

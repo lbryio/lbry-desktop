@@ -12,7 +12,7 @@ const select = (state, props) => ({
 
 const perform = (dispatch) => ({
   analyticsPurchaseEvent: (fileInfo) => dispatch(doAnaltyicsPurchaseEvent(fileInfo)),
-  setPlayingUri: (uri) => dispatch(doSetPlayingUri({ uri })),
+  setPlayingUri: (params) => dispatch(doSetPlayingUri(params)),
   closeModal: () => dispatch(doHideModal()),
   loadVideo: (uri, onSuccess) => dispatch(doPlayUri(uri, true, undefined, onSuccess)),
 });

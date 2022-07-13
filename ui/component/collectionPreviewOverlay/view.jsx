@@ -4,43 +4,42 @@ import { withRouter } from 'react-router-dom';
 import FileThumbnail from 'component/fileThumbnail';
 
 type Props = {
-  uri: string,
   collectionId: string,
-  collectionName: string,
-  collectionCount: number,
-  editedCollection?: Collection,
-  pendingCollection?: Collection,
-  claim: ?Claim,
+  // redux
   collectionItemUrls: Array<string>,
-  fetchCollectionItems: (string) => void,
+  collectionThumbnail: ?string,
+  doFetchItemsInCollection: (options: CollectionFetchParams) => void,
 };
 
 function CollectionPreviewOverlay(props: Props) {
-  const { collectionId, collectionItemUrls, fetchCollectionItems } = props;
+  const { collectionId, collectionItemUrls, collectionThumbnail, doFetchItemsInCollection } = props;
 
   React.useEffect(() => {
     if (!collectionItemUrls) {
-      fetchCollectionItems(collectionId);
+      doFetchItemsInCollection({ collectionId, pageSize: 3 });
     }
-  }, [collectionId, collectionItemUrls, fetchCollectionItems]);
+  }, [collectionId, collectionItemUrls, doFetchItemsInCollection]);
 
-  if (collectionItemUrls && collectionItemUrls.length > 0) {
-    const displayed = collectionItemUrls.slice(0, 2);
-
-    return (
-      <div className="collection-preview__overlay-thumbs">
-        <div className="collection-preview__overlay-side" />
-        <div className="collection-preview__overlay-grid">
-          {displayed.map((uri) => (
-            <div className="collection-preview__overlay-grid-items" key={uri}>
-              <FileThumbnail uri={uri} />
-            </div>
-          ))}
-        </div>
-      </div>
-    );
+  if (!collectionItemUrls || collectionItemUrls.length === 0) {
+    return null;
   }
-  return null;
+
+  // if the playlist's thumbnail is the first item of the list, then don't show it again
+  // on the preview overlay (show the second and third instead)
+  const isThumbnailFirstItem = collectionItemUrls.length > 2 && !collectionThumbnail;
+  const displayedItems = isThumbnailFirstItem ? collectionItemUrls.slice(1, 3) : collectionItemUrls.slice(0, 2);
+
+  return (
+    <div className="claim-preview__collection-wrapper">
+      <ul className="ul--no-style collection-preview-overlay__grid">
+        {displayedItems.map((uri) => (
+          <li className="li--no-style collection-preview-overlay__grid-item" key={uri}>
+            <FileThumbnail uri={uri} />
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
 export default withRouter(CollectionPreviewOverlay);

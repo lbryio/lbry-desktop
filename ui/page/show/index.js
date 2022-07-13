@@ -9,9 +9,9 @@ import {
   selectLatestClaimForUri,
 } from 'redux/selectors/claims';
 import {
-  makeSelectCollectionForId,
-  makeSelectUrlsForCollectionId,
-  makeSelectIsResolvingCollectionForId,
+  selectCollectionForId,
+  selectUrlsForCollectionId,
+  selectIsResolvingCollectionForId,
 } from 'redux/selectors/collections';
 import { selectHomepageFetched, selectUserVerifiedEmail } from 'redux/selectors/user';
 import { doResolveUri, doFetchLatestClaimForChannel } from 'redux/actions/claims';
@@ -54,10 +54,10 @@ const select = (state, props) => {
     claimIsMine: selectClaimIsMine(state, claim),
     claimIsPending: makeSelectClaimIsPending(uri)(state),
     isLivestream: isStreamPlaceholderClaim(claim),
-    collection: makeSelectCollectionForId(collectionId)(state),
+    collection: selectCollectionForId(state, collectionId),
     collectionId,
-    collectionUrls: makeSelectUrlsForCollectionId(collectionId)(state),
-    isResolvingCollection: makeSelectIsResolvingCollectionForId(collectionId)(state),
+    collectionUrls: selectUrlsForCollectionId(state, collectionId),
+    isResolvingCollection: selectIsResolvingCollectionForId(state, collectionId),
     isAuthenticated: selectUserVerifiedEmail(state),
     geoRestriction: selectGeoRestrictionForUri(state, uri),
     homepageFetched: selectHomepageFetched(state),

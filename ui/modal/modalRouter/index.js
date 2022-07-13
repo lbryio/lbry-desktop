@@ -10,7 +10,7 @@ const select = (state, props) => ({
 });
 
 const perform = {
-  hideModal: doHideModal,
+  doHideModal,
 };
 
 export default connect(select, perform)(ModalRouter);

@@ -1,7 +1,7 @@
 // @flow
 // Widths are taken from "ui/scss/init/vars.scss"
 import React, { useRef } from 'react';
-import { getWindowAngle, isWindowLandscapeForAngle } from 'component/fileRenderFloating/helper-functions';
+import { getWindowAngle, isWindowLandscapeForAngle } from 'util/window';
 const DEFAULT_SCREEN_SIZE = 1080;
 
 export function useWindowSize() {

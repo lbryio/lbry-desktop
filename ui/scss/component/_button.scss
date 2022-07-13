@@ -119,6 +119,10 @@
   }
 }
 
+.button--alt-no-style {
+  background-color: unset;
+}
+
 a.button--alt {
   @media (max-width: $breakpoint-small) {
     .button__label {
@@ -872,10 +876,6 @@ svg + .button__label {
   }
 
   &.button-collection-delete-confirm {
-    background-color: green;
-  }
-
-  &.button-collection-delete-cancel {
     background-color: red;
   }
 

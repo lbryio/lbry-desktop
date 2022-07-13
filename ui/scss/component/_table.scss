@@ -290,3 +290,70 @@ td {
     }
   }
 }
+
+.table--playlists {
+  .table-column__playlist {
+    min-width: 10rem;
+    width: 46%;
+    @media (max-width: $breakpoint-medium) {
+      width: 62%;
+    }
+  }
+
+  .table-column__meta {
+    width: 42%;
+
+    label {
+      display: none;
+      color: var(--color-text);
+      font-size: var(--font-medium);
+    }
+    @media (max-width: $breakpoint-medium) {
+      width: 20%;
+      label {
+        display: unset;
+      }
+    }
+  }
+
+  .table-column__visibility {
+    text-align: left;
+    display: inline-block;
+    width: 33%;
+    @media (max-width: $breakpoint-medium) {
+      display: none;
+    }
+  }
+
+  .table-column__create-at {
+    text-align: left;
+    display: inline-block;
+    width: 33%;
+    @media (max-width: $breakpoint-medium) {
+      display: none;
+    }
+  }
+
+  .table-column__update-at {
+    display: inline-block;
+    text-align: left;
+    width: 33%;
+    @media (max-width: $breakpoint-medium) {
+      display: none;
+    }
+  }
+
+  .table-column__action {
+    text-align: left;
+    width: 12%;
+    @media (max-width: $breakpoint-medium) {
+      width: 18%;
+    }
+  }
+
+  thead {
+    th {
+      border-bottom: unset;
+    }
+  }
+}

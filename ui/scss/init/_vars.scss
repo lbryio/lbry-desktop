@@ -58,8 +58,6 @@
   --spacing-main-padding: var(--spacing-xl);
   --floating-viewer-width: 32rem;
   --floating-viewer-height: 18rem; // 32 * 9/16
-  --floating-viewer-info-height: 4rem;
-  --floating-viewer-container-height: calc(var(--floating-viewer-height) + var(--floating-viewer-info-height));
   --option-select-width: 8rem;
 
   // Text
@@ -113,6 +111,8 @@
   --body-scrollbar-width: 12px;
   --scrollbar-width: 6px;
   --scrollbar-radius: 0.5rem;
+
+  --floating-player-z-index: 9999;
 }
 
 @media (max-width: $breakpoint-small) {

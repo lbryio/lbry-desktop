@@ -4,8 +4,10 @@
 import { Global } from '@emotion/react';
 
 import type { ElementRef } from 'react';
+import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import * as RENDER_MODES from 'constants/file_render_modes';
+import { DEFAULT_INITIAL_FLOATING_POS } from 'constants/player';
 import React from 'react';
 import Button from 'component/button';
 import classnames from 'classnames';
@@ -19,7 +21,6 @@ import { onFullscreenChange } from 'util/full-screen';
 import { generateListSearchUrlParams, formatLbryChannelName } from 'util/url';
 import { useIsMobile, useIsMobileLandscape, useIsLandscapeScreen } from 'effects/use-screensize';
 import debounce from 'util/debounce';
-import { useHistory } from 'react-router';
 import { isURIEqual } from 'util/lbryURI';
 import AutoplayCountdown from 'component/autoplayCountdown';
 import usePlayNext from 'effects/use-play-next';
@@ -32,7 +33,8 @@ import {
   getMaxLandscapeHeight,
   getAmountNeededToCenterVideo,
   getPossiblePlayerHeight,
-} from './helper-functions';
+} from 'util/window';
+import PlaylistCard from 'component/playlistCard';
 
 // scss/init/vars.scss
 // --header-height
@@ -62,6 +64,7 @@ type Props = {
   primaryUri: ?string,
   videoTheaterMode: boolean,
   collectionId: string,
+  collectionSidebarId: ?string,
   costInfo: any,
   claimWasPurchased: boolean,
   nextListUri: string,
@@ -75,9 +78,16 @@ type Props = {
   isLivestreamClaim: boolean,
   geoRestriction: ?GeoRestriction,
   appDrawerOpen: boolean,
+  playingCollection: Collection,
+  hasClaimInQueue: boolean,
+  mainPlayerDimensions: { height: number, width: number },
+  firstCollectionItemUrl: ?string,
+  isMature: boolean,
   doCommentSocketConnect: (string, string, string) => void,
   doCommentSocketDisconnect: (string, string) => void,
   doClearPlayingUri: () => void,
+  doClearQueueList: () => void,
+  doOpenModal: (id: string, {}) => void,
 };
 
 export default function FileRenderFloating(props: Props) {
@@ -94,6 +104,7 @@ export default function FileRenderFloating(props: Props) {
     primaryUri,
     videoTheaterMode,
     collectionId,
+    collectionSidebarId,
     costInfo,
     claimWasPurchased,
     nextListUri,
@@ -107,9 +118,16 @@ export default function FileRenderFloating(props: Props) {
     videoAspectRatio,
     geoRestriction,
     appDrawerOpen,
+    playingCollection,
+    hasClaimInQueue,
+    mainPlayerDimensions,
+    firstCollectionItemUrl,
+    isMature,
     doCommentSocketConnect,
     doCommentSocketDisconnect,
     doClearPlayingUri,
+    doClearQueueList,
+    doOpenModal,
   } = props;
 
   const isMobile = useIsMobile();
@@ -120,33 +138,27 @@ export default function FileRenderFloating(props: Props) {
   const initialPlayerHeight = React.useRef();
   const resizedBetweenFloating = React.useRef();
 
-  const {
-    location: { state },
-  } = useHistory();
-  const hideFloatingPlayer = state && state.hideFloatingPlayer;
-
   const { uri: playingUrl, source: playingUriSource, primaryUri: playingPrimaryUri } = playingUri;
 
   const isComment = playingUriSource === 'comment';
   const mainFilePlaying = Boolean(!isFloating && primaryUri && isURIEqual(uri, primaryUri));
-  const noFloatingPlayer = !isFloating || !floatingPlayerEnabled || hideFloatingPlayer;
+  const noFloatingPlayer = !isFloating || !floatingPlayerEnabled;
 
   const [fileViewerRect, setFileViewerRect] = React.useState();
   const [wasDragging, setWasDragging] = React.useState(false);
   const [doNavigate, setDoNavigate] = React.useState(false);
   const [shouldPlayNext, setPlayNext] = React.useState(true);
   const [countdownCanceled, setCountdownCanceled] = React.useState(false);
-  const [position, setPosition] = usePersistedState('floating-file-viewer:position', {
-    x: -25,
-    y: window.innerHeight - 400,
-  });
-  const relativePosRef = React.useRef({ x: 0, y: 0 });
+  const [forceDisable, setForceDisable] = React.useState(false);
+  const [position, setPosition] = usePersistedState('floating-file-viewer:position', DEFAULT_INITIAL_FLOATING_POS);
+  const relativePosRef = React.useRef(calculateRelativePos(position.x, position.y));
   const noPlayerHeight = fileViewerRect?.height === 0;
 
   const navigateUrl =
     (playingPrimaryUri || playingUrl || '') + (collectionId ? generateListSearchUrlParams(collectionId) : '');
 
   const isFree = costInfo && costInfo.cost === 0;
+  const isLoading = !costInfo || (!streamingUrl && !costInfo.cost);
   const canViewFile = isFree || claimWasPurchased;
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode) || isCurrentClaimLive;
   const isReadyToPlay = isCurrentClaimLive || (isPlayable && streamingUrl);
@@ -158,9 +170,13 @@ export default function FileRenderFloating(props: Props) {
   // ****************************************************************************
 
   const handleResize = React.useCallback(() => {
-    const element = mainFilePlaying
-      ? document.querySelector(`.${PRIMARY_PLAYER_WRAPPER_CLASS}`)
+    const filePageElement = document.querySelector(`.${PRIMARY_PLAYER_WRAPPER_CLASS}`);
+
+    const playingElement = mainFilePlaying
+      ? filePageElement
       : document.querySelector(`.${INLINE_PLAYER_WRAPPER_CLASS}`);
+
+    const element = playingElement || filePageElement;
 
     if (!element) return;
 
@@ -198,8 +214,11 @@ export default function FileRenderFloating(props: Props) {
 
     const newX = Math.round(relativePosRef.current.x * screenW);
     const newY = Math.round(relativePosRef.current.y * screenH);
+    const clampPosition = clampFloatingPlayerToScreen({ x: newX, y: newY });
 
-    setPosition(clampFloatingPlayerToScreen(newX, newY));
+    if (![clampPosition.x, clampPosition.y].some(isNaN)) {
+      setPosition(clampPosition);
+    }
   }, [setPosition]);
 
   const clampToScreenOnResize = React.useCallback(
@@ -222,7 +241,7 @@ export default function FileRenderFloating(props: Props) {
     isFloating,
     collectionId,
     shouldPlayNext,
-    nextListUri,
+    nextListUri || firstCollectionItemUrl,
     previousListUri,
     doNavigate,
     doUriInitiatePlay,
@@ -258,10 +277,11 @@ export default function FileRenderFloating(props: Props) {
   ]);
 
   React.useEffect(() => {
-    if (playingPrimaryUri || playingUrl || noPlayerHeight) {
+    if (playingPrimaryUri || playingUrl || noPlayerHeight || collectionSidebarId) {
       handleResize();
+      setCountdownCanceled(false);
     }
-  }, [handleResize, playingPrimaryUri, theaterMode, playingUrl, noPlayerHeight]);
+  }, [handleResize, playingPrimaryUri, theaterMode, playingUrl, noPlayerHeight, collectionSidebarId]);
 
   // Listen to main-window resizing and adjust the floating player position accordingly:
   React.useEffect(() => {
@@ -278,7 +298,8 @@ export default function FileRenderFloating(props: Props) {
     }
 
     function onWindowResize() {
-      return isFloating ? clampToScreenOnResize() : handleResize();
+      if (isFloating) clampToScreenOnResize();
+      if (collectionSidebarId || !isFloating) handleResize();
     }
 
     window.addEventListener('resize', onWindowResize);
@@ -290,7 +311,7 @@ export default function FileRenderFloating(props: Props) {
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clampToScreenOnResize, handleResize, isFloating]);
+  }, [clampToScreenOnResize, handleResize, isFloating, collectionSidebarId]);
 
   React.useEffect(() => {
     // Initial update for relativePosRef:
@@ -324,15 +345,15 @@ export default function FileRenderFloating(props: Props) {
   }, [playingUrl]);
 
   React.useEffect(() => {
-    if (!primaryUri && !floatingPlayerEnabled && playingUrl && !playingUriSource) {
+    if (primaryUri && uri && primaryUri !== uri && !floatingPlayerEnabled && playingUrl) {
       doClearPlayingUri();
     }
-  }, [doClearPlayingUri, floatingPlayerEnabled, playingUriSource, playingUrl, primaryUri]);
+  }, [doClearPlayingUri, floatingPlayerEnabled, playingUrl, primaryUri, uri]);
 
   if (
     geoRestriction ||
-    !isPlayable ||
-    !uri ||
+    (!isPlayable && !collectionSidebarId) ||
+    (!uri && !collectionSidebarId) ||
     (isFloating && noFloatingPlayer) ||
     (collectionId && !isFloating && ((!canViewFile && !nextListUri) || countdownCanceled)) ||
     (isLivestreamClaim && !isCurrentClaimLive)
@@ -366,7 +387,7 @@ export default function FileRenderFloating(props: Props) {
     let newPos = { x, y };
 
     if (newPos.x !== position.x || newPos.y !== position.y) {
-      newPos = clampFloatingPlayerToScreen(newPos.x, newPos.y);
+      newPos = clampFloatingPlayerToScreen(newPos);
 
       setPosition(newPos);
       relativePosRef.current = calculateRelativePos(newPos.x, newPos.y);
@@ -374,97 +395,140 @@ export default function FileRenderFloating(props: Props) {
   }
 
   return (
-    <Draggable
-      onDrag={handleDragMove}
-      onStart={handleDragStart}
-      onStop={handleDragStop}
-      defaultPosition={position}
-      position={isFloating ? position : { x: 0, y: 0 }}
-      bounds="parent"
-      handle=".draggable"
-      cancel=".button"
-      disabled={noFloatingPlayer}
-    >
-      <div
-        className={classnames([CONTENT_VIEWER_CLASS], {
-          [FLOATING_PLAYER_CLASS]: isFloating,
-          'content__viewer--inline': !isFloating,
-          'content__viewer--secondary': isComment,
-          'content__viewer--theater-mode': theaterMode && mainFilePlaying && !isCurrentClaimLive && !isMobile,
-          'content__viewer--disable-click': wasDragging,
-          'content__viewer--mobile': isMobile && !isLandscapeRotated && !playingUriSource,
-        })}
-        style={
-          !isFloating && fileViewerRect
-            ? {
-                width: fileViewerRect.width,
-                height: appDrawerOpen ? `${getMaxLandscapeHeight()}px` : fileViewerRect.height,
-                left: fileViewerRect.x,
-                top:
-                  isMobile && !playingUriSource
-                    ? HEADER_HEIGHT_MOBILE
-                    : fileViewerRect.windowOffset + fileViewerRect.top - HEADER_HEIGHT,
-              }
-            : {}
-        }
-      >
-        {uri && videoAspectRatio && fileViewerRect ? (
-          <PlayerGlobalStyles
-            videoAspectRatio={videoAspectRatio}
-            theaterMode={theaterMode}
-            appDrawerOpen={appDrawerOpen && !isLandscapeRotated && !isTabletLandscape}
-            initialPlayerHeight={initialPlayerHeight}
-            isFloating={isFloating}
-            fileViewerRect={fileViewerRect}
-            mainFilePlaying={mainFilePlaying}
-            isLandscapeRotated={isLandscapeRotated}
-            isTabletLandscape={isTabletLandscape}
-          />
-        ) : null}
+    <>
+      {(uri && videoAspectRatio) || collectionSidebarId ? (
+        <PlayerGlobalStyles
+          videoAspectRatio={videoAspectRatio}
+          theaterMode={theaterMode}
+          appDrawerOpen={appDrawerOpen && !isLandscapeRotated && !isTabletLandscape}
+          initialPlayerHeight={initialPlayerHeight}
+          isFloating={isFloating}
+          fileViewerRect={fileViewerRect || mainPlayerDimensions}
+          mainFilePlaying={mainFilePlaying}
+          isLandscapeRotated={isLandscapeRotated}
+          isTabletLandscape={isTabletLandscape}
+        />
+      ) : null}
 
-        <div className={classnames('content__wrapper', { 'content__wrapper--floating': isFloating })}>
-          {isFloating && (
-            <Button
-              title={__('Close')}
-              onClick={() => doSetPlayingUri({ uri: null })}
-              icon={ICONS.REMOVE}
-              button="primary"
-              className="content__floating-close"
-            />
-          )}
+      {uri && isPlayable && (
+        <Draggable
+          onDrag={handleDragMove}
+          onStart={handleDragStart}
+          onStop={handleDragStop}
+          defaultPosition={position}
+          position={isFloating ? position : { x: 0, y: 0 }}
+          bounds="parent"
+          handle=".draggable"
+          cancel=".button"
+          disabled={noFloatingPlayer || forceDisable}
+        >
+          <div
+            className={classnames([CONTENT_VIEWER_CLASS], {
+              [FLOATING_PLAYER_CLASS]: isFloating,
+              'content__viewer--inline': !isFloating,
+              'content__viewer--secondary': isComment,
+              'content__viewer--theater-mode': theaterMode && mainFilePlaying && !isCurrentClaimLive && !isMobile,
+              'content__viewer--disable-click': wasDragging,
+              'content__viewer--mobile': isMobile && !isLandscapeRotated && !playingUriSource,
+            })}
+            style={
+              !isFloating && fileViewerRect
+                ? {
+                    width: fileViewerRect.width,
+                    height: appDrawerOpen ? `${getMaxLandscapeHeight()}px` : fileViewerRect.height,
+                    left: fileViewerRect.x,
+                    top:
+                      isMobile && !playingUriSource
+                        ? HEADER_HEIGHT_MOBILE
+                        : fileViewerRect.windowOffset + fileViewerRect.top - HEADER_HEIGHT,
+                  }
+                : {}
+            }
+          >
+            <div className={classnames('content__wrapper', { 'content__wrapper--floating': isFloating })}>
+              {isFloating && (
+                <Button
+                  title={__('Close')}
+                  onClick={() => {
+                    if (hasClaimInQueue) {
+                      doOpenModal(MODALS.CONFIRM, {
+                        title: __('Close Player'),
+                        subtitle: __('Are you sure you want to close the player and clear the current Queue?'),
+                        onConfirm: (closeModal) => {
+                          doClearPlayingUri();
+                          doClearQueueList();
+                          closeModal();
+                        },
+                      });
+                    } else {
+                      doClearPlayingUri();
+                    }
+                  }}
+                  icon={ICONS.REMOVE}
+                  button="primary"
+                  className="content__floating-close"
+                />
+              )}
 
-          {isReadyToPlay ? (
-            <FileRender className={classnames({ draggable: !isMobile })} uri={uri} />
-          ) : collectionId && !canViewFile ? (
-            <div className="content__loading">
-              <AutoplayCountdown
-                nextRecommendedUri={nextListUri}
-                doNavigate={() => setDoNavigate(true)}
-                doReplay={() => doUriInitiatePlay({ uri, collectionId }, false, isFloating)}
-                doPrevious={() => {
-                  setPlayNext(false);
-                  setDoNavigate(true);
-                }}
-                onCanceled={() => setCountdownCanceled(true)}
-                skipPaid
-              />
+              {isReadyToPlay && !isMature ? (
+                <FileRender className={classnames({ draggable: !isMobile })} uri={uri} />
+              ) : isLoading ? (
+                <LoadingScreen status={__('Loading')} />
+              ) : (
+                (!collectionId || !canViewFile || isMature) && (
+                  <div className="content__loading">
+                    <AutoplayCountdown
+                      uri={uri}
+                      nextRecommendedUri={nextListUri || firstCollectionItemUrl}
+                      doNavigate={() => setDoNavigate(true)}
+                      doReplay={() => doUriInitiatePlay({ uri, collection: { collectionId } }, false, isFloating)}
+                      doPrevious={
+                        !previousListUri
+                          ? undefined
+                          : () => {
+                              setPlayNext(false);
+                              setDoNavigate(true);
+                            }
+                      }
+                      onCanceled={() => setCountdownCanceled(true)}
+                      skipPaid
+                      skipMature
+                    />
+                  </div>
+                )
+              )}
+
+              {isFloating && (
+                <div className={classnames('content__info', { draggable: !isMobile })}>
+                  <div className="content-info__text">
+                    <div className="claim-preview__title" title={title || uri}>
+                      <Button
+                        label={title || uri}
+                        navigate={navigateUrl}
+                        button="link"
+                        className="content__floating-link"
+                      />
+                    </div>
+
+                    <UriIndicator link uri={uri} />
+                  </div>
+
+                  {playingCollection && collectionSidebarId !== collectionId && (
+                    <PlaylistCard
+                      id={collectionId}
+                      uri={uri}
+                      disableClickNavigation
+                      doDisablePlayerDrag={setForceDisable}
+                      isFloating
+                    />
+                  )}
+                </div>
+              )}
             </div>
-          ) : (
-            <LoadingScreen status={__('Loading')} />
-          )}
-
-          {isFloating && (
-            <div className={classnames('content__info', { draggable: !isMobile })}>
-              <div className="claim-preview__title" title={title || uri}>
-                <Button label={title || uri} navigate={navigateUrl} button="link" className="content__floating-link" />
-              </div>
-
-              <UriIndicator link uri={uri} />
-            </div>
-          )}
-        </div>
-      </div>
-    </Draggable>
+          </div>
+        </Draggable>
+      )}
+    </>
   );
 }
 
@@ -493,6 +557,8 @@ const PlayerGlobalStyles = (props: GlobalStylesProps) => {
     isTabletLandscape,
   } = props;
 
+  const justChanged = React.useRef();
+
   const isMobile = useIsMobile();
   const isMobilePlayer = isMobile && !isFloating; // to avoid miniplayer -> file page only
 
@@ -511,13 +577,29 @@ const PlayerGlobalStyles = (props: GlobalStylesProps) => {
   // Handles video shrink + center on mobile view
   // direct DOM manipulation due to performance for every scroll
   React.useEffect(() => {
-    if (!isMobilePlayer || !mainFilePlaying || appDrawerOpen || isLandscapeRotated || isTabletLandscape) return;
+    if (!isMobilePlayer || !mainFilePlaying || isLandscapeRotated || isTabletLandscape) return;
 
     const viewer = document.querySelector(`.${CONTENT_VIEWER_CLASS}`);
-    if (viewer) viewer.style.height = `${heightForViewer}px`;
+    if (viewer) {
+      if (!appDrawerOpen && heightForViewer) viewer.style.height = `${heightForViewer}px`;
+
+      if (!appDrawerOpen) {
+        const htmlEl = document.querySelector('html');
+        if (htmlEl) htmlEl.scrollTop = 0;
+      }
+
+      justChanged.current = true;
+    }
+
+    if (appDrawerOpen) return;
 
     function handleScroll() {
       const rootEl = getRootEl();
+
+      if (justChanged.current) {
+        justChanged.current = false;
+        return;
+      }
 
       const viewer = document.querySelector(`.${CONTENT_VIEWER_CLASS}`);
       const videoNode = document.querySelector('.vjs-tech');
@@ -548,10 +630,6 @@ const PlayerGlobalStyles = (props: GlobalStylesProps) => {
     window.addEventListener('scroll', handleScroll);
 
     return () => {
-      // clear the added styles on unmount
-      const viewer = document.querySelector(`.${CONTENT_VIEWER_CLASS}`);
-      // $FlowFixMe
-      if (viewer) viewer.style.height = undefined;
       const touchOverlay = document.querySelector('.vjs-touch-overlay');
       if (touchOverlay) touchOverlay.removeAttribute('style');
 
@@ -569,9 +647,12 @@ const PlayerGlobalStyles = (props: GlobalStylesProps) => {
   ]);
 
   React.useEffect(() => {
-    if (appDrawerOpen && videoGreaterThanLandscape && isMobilePlayer) {
+    if (videoGreaterThanLandscape && isMobilePlayer) {
       const videoNode = document.querySelector('.vjs-tech');
-      if (videoNode) videoNode.style.top = `${amountNeededToCenter}px`;
+      if (videoNode) {
+        const top = appDrawerOpen ? amountNeededToCenter : 0;
+        videoNode.style.top = `${top}px`;
+      }
     }
 
     if (isMobile && isFloating) {
@@ -654,6 +735,17 @@ const PlayerGlobalStyles = (props: GlobalStylesProps) => {
               ? `${heightResult} !important`
               : undefined,
           ...maxHeight,
+        },
+
+        '.playlist-card': {
+          maxHeight:
+            !isMobile && !theaterMode && mainFilePlaying
+              ? `${heightForViewer}px`
+              : isMobile
+              ? '100%'
+              : fileViewerRect
+              ? `${fileViewerRect.height}px`
+              : undefined,
         },
       }}
     />

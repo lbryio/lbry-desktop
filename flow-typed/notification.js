@@ -17,6 +17,10 @@ declare type ToastParams = {
   linkTarget?: string,
   isError?: boolean,
   duration?: 'default' | 'long',
+  actionText?: string,
+  action?: () => void,
+  secondaryActionText?: string,
+  secondaryAction?: () => void,
 };
 
 declare type Toast = {

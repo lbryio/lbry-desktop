@@ -260,7 +260,6 @@ body {
   }
 
   .file-page__recommended {
-    height: 0%;
     width: 32rem;
     margin-left: var(--spacing-l);
 
@@ -341,41 +340,6 @@ body {
       width: 100%;
     }
 
-    .card__header--between {
-      align-items: flex-start !important;
-
-      .card__title-actions {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        padding: var(--spacing-s);
-
-        button {
-          margin-top: var(--spacing-xxs);
-        }
-      }
-    }
-
-    .card__title-actions-container {
-      position: absolute;
-      top: 0;
-      right: 0;
-      height: unset;
-      display: unset;
-      flex-direction: unset;
-      .card__title-actions {
-        padding: 0;
-        .button {
-          height: 2rem;
-          padding: 0.5rem;
-        }
-      }
-
-      @media (max-width: $breakpoint-small) {
-        top: calc(var(--spacing-s) * -1);
-      }
-    }
-
     .file-page__recommended-collection__row {
       display: block;
       max-width: unset;
@@ -439,30 +403,6 @@ body {
     }
   }
 
-  .file-page__playlist-collection {
-    @extend .file-page__recommended-collection;
-
-    .card__first-pane {
-      .card__header--between {
-        .card__title-section {
-          display: unset !important;
-        }
-      }
-    }
-
-    .file-page__playlist-collection__row {
-      @extend .file-page__recommended-collection__row;
-
-      .button--file-action {
-        &:hover {
-          .icon {
-            stroke: white !important;
-          }
-        }
-      }
-    }
-  }
-
   @media (max-width: $breakpoint-medium) {
     flex-direction: column;
     > :first-child {
@@ -505,10 +445,10 @@ body {
     gap: var(--spacing-l);
 
     .file-page__recommended,
-    .file-page__playlist-collection {
-      margin: 0 !important;
-      height: 100% !important;
-      width: 100% !important;
+    .playlist-card {
+      margin-left: 0px;
+      height: 100%;
+      width: 100%;
       overflow: hidden;
     }
   }

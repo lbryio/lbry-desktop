@@ -14,7 +14,7 @@ import PremiumBadge from 'component/premiumBadge';
 type Props = {
   selectedChannelUrl: string, // currently selected channel
   channels: ?Array<ChannelClaim>,
-  onChannelSelect: (url: string) => void,
+  onChannelSelect?: (id: ?string) => void,
   hideAnon?: boolean,
   activeChannelClaim: ?ChannelClaim,
   doSetActiveChannel: (claimId: ?string, override?: boolean) => void,
@@ -38,6 +38,7 @@ export default function ChannelSelector(props: Props) {
     channels,
     activeChannelClaim,
     doSetActiveChannel,
+    onChannelSelect,
     incognito,
     doSetIncognito,
     odyseeMembershipByUri,
@@ -63,11 +64,14 @@ export default function ChannelSelector(props: Props) {
   const activeChannelUrl = activeChannelClaim && activeChannelClaim.permanent_url;
 
   function handleChannelSelect(channelClaim) {
+    const { claim_id: id } = channelClaim;
+
     doSetIncognito(false);
-    doSetActiveChannel(channelClaim.claim_id);
+    doSetActiveChannel(id);
+    if (onChannelSelect) onChannelSelect(id);
 
     if (storeSelection) {
-      doSetDefaultChannel(channelClaim.claim_id);
+      doSetDefaultChannel(id);
     }
   }
 
@@ -138,7 +142,12 @@ export default function ChannelSelector(props: Props) {
               </MenuItem>
             ))}
           {!hideAnon && (
-            <MenuItem onSelect={() => doSetIncognito(true)}>
+            <MenuItem
+              onSelect={() => {
+                doSetIncognito(true);
+                if (onChannelSelect) onChannelSelect(undefined);
+              }}
+            >
               <IncognitoSelector />
             </MenuItem>
           )}

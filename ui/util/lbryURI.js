@@ -342,3 +342,8 @@ export function isURIEqual(uriA: string, uriB: string) {
   const b = uriB && uriB.replace(/:/g, '#');
   return a === b;
 }
+
+export function parseName(newName: string) {
+  let INVALID_URI_CHARS = new RegExp(regexInvalidURI, 'gu');
+  return newName.replace(INVALID_URI_CHARS, '-');
+}

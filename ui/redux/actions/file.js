@@ -6,20 +6,16 @@ import { shell } from 'electron';
 // @endif
 import Lbry from 'lbry';
 import { selectClaimForUri } from 'redux/selectors/claims';
-import { doAbandonClaim } from 'redux/actions/claims';
+import { doAbandonClaim, doGetClaimFromUriResolve } from 'redux/actions/claims';
 import { batchActions } from 'util/batch-actions';
 
 import { doHideModal } from 'redux/actions/app';
 import { goBack } from 'connected-react-router';
-import { doSetPlayingUri } from 'redux/actions/content';
+import { doClearPlayingUri } from 'redux/actions/content';
 import { selectPlayingUri } from 'redux/selectors/content';
 import { doToast } from 'redux/actions/notifications';
 import { selectBalance } from 'redux/selectors/wallet';
-import {
-  makeSelectFileInfoForUri,
-  selectDownloadingByOutpoint,
-  makeSelectStreamingUrlForUri,
-} from 'redux/selectors/file_info';
+import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import { isStreamPlaceholderClaim } from 'util/claim';
 
 type Dispatch = (action: any) => any;
@@ -106,7 +102,7 @@ export function doDeleteFileAndMaybeGoBack(
     );
 
     if (playingUri.uri === uri) {
-      actions.push(doSetPlayingUri({ uri: null }));
+      actions.push(doClearPlayingUri());
     }
     // it would be nice to stay on the claim if you just want to delete it
     // we need to alter autoplay to not start downloading again after you delete it
@@ -116,9 +112,12 @@ export function doDeleteFileAndMaybeGoBack(
 }
 
 export function doFileGet(uri: string, saveFile: boolean = true, onSuccess?: (GetResponse) => any) {
-  return (dispatch: Dispatch, getState: () => any) => {
+  return async (dispatch: Dispatch, getState: () => any) => {
     const state = getState();
-    const claim = selectClaimForUri(state, uri);
+    let claim = selectClaimForUri(state, uri);
+    if (!claim) {
+      claim = await dispatch(doGetClaimFromUriResolve(uri));
+    }
     const isLivestreamClaim = isStreamPlaceholderClaim(claim);
     const { nout, txid } = claim;
     const outpoint = `${txid}:${nout}`;
@@ -200,23 +199,6 @@ export function doPurchaseUri(
 
     const state = getState();
     const balance = selectBalance(state);
-    const fileInfo = makeSelectFileInfoForUri(uri)(state);
-    const downloadingByOutpoint = selectDownloadingByOutpoint(state);
-    const alreadyDownloading = fileInfo && !!downloadingByOutpoint[fileInfo.outpoint];
-    const alreadyStreaming = makeSelectStreamingUrlForUri(uri)(state);
-
-    if (!saveFile && (alreadyDownloading || alreadyStreaming)) {
-      dispatch({
-        type: ACTIONS.PURCHASE_URI_FAILED,
-        data: { uri, error: `Already fetching uri: ${uri}` },
-      });
-
-      if (onSuccess) {
-        onSuccess(fileInfo);
-      }
-
-      return;
-    }
 
     const { cost } = costInfo;
     if (parseFloat(cost) > balance) {

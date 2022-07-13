@@ -160,7 +160,7 @@ function SocialShare(props: Props) {
             name="share_collection_id_checkbox"
             onChange={() => setIncludeCollectionId(!includeCollectionId)}
             checked={includeCollectionId}
-            label={__('Include List ID')}
+            label={__('Include Playlist ID')}
           />
         </div>
       )}

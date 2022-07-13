@@ -4,7 +4,7 @@ import * as ACTIONS from 'constants/action_types';
 const reducers = {};
 const defaultState: ContentState = {
   primaryUri: null, // Top level content uri triggered from the file page
-  playingUri: {},
+  playingUri: { uri: undefined, collection: {} },
   channelClaimCounts: {},
   positions: {},
   history: [],
@@ -12,7 +12,6 @@ const defaultState: ContentState = {
   recommendationParentId: {},
   recommendationUrls: {},
   recommendationClicks: {},
-  loopList: undefined,
   lastViewedAnnouncement: '',
   recsysEntries: {},
 };
@@ -29,24 +28,8 @@ reducers[ACTIONS.SET_PLAYING_URI] = (state, action) =>
       source: action.data.source,
       pathname: action.data.pathname,
       commentId: action.data.commentId,
-      collectionId: action.data.collectionId,
+      collection: action.data.collection,
       primaryUri: state.primaryUri,
-    },
-  });
-
-reducers[ACTIONS.TOGGLE_LOOP_LIST] = (state, action) =>
-  Object.assign({}, state, {
-    loopList: {
-      collectionId: action.data.collectionId,
-      loop: action.data.loop,
-    },
-  });
-
-reducers[ACTIONS.TOGGLE_SHUFFLE_LIST] = (state, action) =>
-  Object.assign({}, state, {
-    shuffleList: {
-      collectionId: action.data.collectionId,
-      newUrls: action.data.newUrls,
     },
   });
 

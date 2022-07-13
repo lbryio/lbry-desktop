@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { selectClaimWithId, selectMyChannelClaims, selectStakedLevelForChannelUri } from 'redux/selectors/claims';
+import { selectClaimForId, selectMyChannelClaims, selectStakedLevelForChannelUri } from 'redux/selectors/claims';
 import { selectUserEmail } from 'redux/selectors/user';
 import { selectDefaultChannelClaim } from 'redux/selectors/settings';
 
@@ -67,7 +67,7 @@ export const selectSplashAnimationEnabled = (state) => selectState(state).splash
 export const selectActiveChannelId = (state) => selectState(state).activeChannel;
 
 export const selectActiveChannelClaim = createSelector(
-  (state) => selectClaimWithId(state, selectActiveChannelId(state)), // i.e. 'byId[activeChannelId]' specifically, instead of just 'byId'.
+  (state) => selectClaimForId(state, selectActiveChannelId(state)), // i.e. 'byId[activeChannelId]' specifically, instead of just 'byId'.
   (state) => selectUserEmail(state),
   selectDefaultChannelClaim,
   selectMyChannelClaims,
@@ -99,10 +99,10 @@ export const selectActiveChannelClaim = createSelector(
   }
 );
 
-export const selectActiveChannelClaimId = createSelector(
-  selectActiveChannelClaim,
-  (activeChannelClaim) => activeChannelClaim?.claim_id
-);
+export const selectActiveChannelClaimId = (state) => {
+  const activeChannelClaim = selectActiveChannelClaim(state);
+  return activeChannelClaim?.claim_id;
+};
 
 export const selectActiveChannelStakedLevel = (state) => {
   const activeChannelClaim = selectActiveChannelClaim(state);
@@ -118,3 +118,10 @@ export const selectIncognito = (state) => selectState(state).incognito;
 
 export const selectAdBlockerFound = (state) => selectState(state).adBlockerFound;
 export const selectAppDrawerOpen = (state) => selectState(state).appDrawerOpen;
+export const selectMainPlayerDimensions = (state) => selectState(state).mainPlayerDimensions;
+export const selectHasAppDrawerOpen = (state) => Boolean(selectAppDrawerOpen(state));
+
+export const selectIsDrawerOpenForType = (state, type) => {
+  const appDrawerOpen = selectAppDrawerOpen(state);
+  return appDrawerOpen === type;
+};

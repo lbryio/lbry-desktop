@@ -6,7 +6,9 @@ import {
   selectDateForUri,
   selectGeoRestrictionForUri,
   selectClaimIsMine,
+  selectCanonicalUrlForUri,
 } from 'redux/selectors/claims';
+import { selectUrlsForCollectionId } from 'redux/selectors/collections';
 import { doFileGet } from 'redux/actions/file';
 import { doResolveUri } from 'redux/actions/claims';
 import { selectViewCountForUri, selectBanStateForUri } from 'lbryinc';
@@ -21,6 +23,10 @@ const select = (state, props) => {
   const media = claim && claim.value && (claim.value.video || claim.value.audio);
   const mediaDuration = media && media.duration && formatMediaDuration(media.duration, { screenReader: true });
   const isLivestream = isStreamPlaceholderClaim(claim);
+  const isCollection = claim && claim.value_type === 'collection';
+  const collectionClaimId = isCollection && claim && claim.claim_id;
+  const collectionUrls = collectionClaimId && selectUrlsForCollectionId(state, collectionClaimId);
+  const collectionFirstItem = collectionUrls && collectionUrls[0];
 
   return {
     claim,
@@ -38,6 +44,7 @@ const select = (state, props) => {
     isLivestreamActive: isLivestream && selectIsActiveLivestreamForUri(state, props.uri),
     livestreamViewerCount: isLivestream && claim ? selectViewersForId(state, claim.claim_id) : undefined,
     viewCount: selectViewCountForUri(state, props.uri),
+    collectionFirstUrl: collectionFirstItem && selectCanonicalUrlForUri(state, collectionFirstItem),
   };
 };
 

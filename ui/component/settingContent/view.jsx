@@ -32,6 +32,7 @@ type Props = {
   instantPurchaseEnabled: boolean,
   instantPurchaseMax: Price,
   enablePublishPreview: boolean,
+  isFloating: boolean,
   // --- perform ---
   setClientSetting: (string, boolean | string | number) => void,
   clearPlayingUri: () => void,
@@ -51,6 +52,7 @@ export default function SettingContent(props: Props) {
     instantPurchaseEnabled,
     instantPurchaseMax,
     enablePublishPreview,
+    isFloating,
     setClientSetting,
     clearPlayingUri,
     openModal,
@@ -72,7 +74,7 @@ export default function SettingContent(props: Props) {
                 name="floating_player"
                 onChange={() => {
                   setClientSetting(SETTINGS.FLOATING_PLAYER, !floatingPlayer);
-                  clearPlayingUri();
+                  if (isFloating && !floatingPlayer === false) clearPlayingUri();
                 }}
                 checked={floatingPlayer}
               />

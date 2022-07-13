@@ -254,6 +254,20 @@ $actions-z-index: 2;
   width: 3rem;
 }
 
+.playlist-channel {
+  .channel-thumbnail--xsmall {
+    height: 2.1rem !important;
+    width: 2.1rem !important;
+
+    div,
+    img,
+    canvas {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+}
+
 .channel-thumbnail--xsmall {
   height: 2.1rem;
   width: 2.1rem;

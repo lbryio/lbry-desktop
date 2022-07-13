@@ -6,12 +6,14 @@ import {
   selectClaimIsMineForUri,
   makeSelectContentTypeForUri,
   selectClaimForUri,
+  selectCanonicalUrlForUri,
 } from 'redux/selectors/claims';
 import { makeSelectMediaTypeForUri, makeSelectFileNameForUri } from 'redux/selectors/file_info';
 import { selectBalance } from 'redux/selectors/wallet';
 import { selectCostInfoForUri } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import * as RENDER_MODES from 'constants/file_render_modes';
+import * as COLLECTIONS_CONSTS from 'constants/collections';
 import path from 'path';
 import { FORCE_CONTENT_TYPE_PLAYER, FORCE_CONTENT_TYPE_COMIC } from 'constants/claim';
 
@@ -23,36 +25,67 @@ type State = { claims: any, content: ContentState, user: UserState };
 export const selectState = (state: State) => state.content || {};
 
 export const selectPlayingUri = (state: State) => selectState(state).playingUri;
+export const selectPlayingCollection = (state: State) => selectPlayingUri(state).collection;
+export const selectPlayingCollectionId = (state: State) => selectPlayingCollection(state).collectionId;
 export const selectPrimaryUri = (state: State) => selectState(state).primaryUri;
-export const selectListLoop = (state: State) => selectState(state).loopList;
-export const selectListShuffle = (state: State) => selectState(state).shuffleList;
 export const selectLastViewedAnnouncement = (state: State) => selectState(state).lastViewedAnnouncement;
 export const selectRecsysEntries = (state: State) => selectState(state).recsysEntries;
+
+export const selectIsPlayingCollectionForId = (state: State, id: string) => selectPlayingCollectionId(state) === id;
+
+export const selectPlayingCollectionIfPlayingForId = (state: State, id: string) => {
+  const playingCollection = selectPlayingCollection(state);
+  return playingCollection.collectionId === id && playingCollection;
+};
+export const selectIsCollectionPlayingForId = (state: State, id: string) =>
+  Boolean(selectPlayingCollectionIfPlayingForId(state, id));
+
+export const selectListShuffleForId = (state: State, id: string) => {
+  const playingCollection = selectPlayingCollectionIfPlayingForId(state, id);
+  return playingCollection && playingCollection.shuffle;
+};
+export const selectListIsShuffledForId = (state: State, id: string) => Boolean(selectListShuffleForId(state, id));
+
+export const selectListIsLoopedForId = (state: State, id: string) => {
+  const playingCollection = selectPlayingCollectionIfPlayingForId(state, id);
+  return Boolean(playingCollection && playingCollection.loop);
+};
 
 export const makeSelectIsPlaying = (uri: string) =>
   createSelector(selectPrimaryUri, (primaryUri) => primaryUri === uri);
 
-export const selectIsUriCurrentlyPlaying = createSelector(
-  (state, uri) => uri,
-  selectPlayingUri,
-  (uri, playingUri) => Boolean(playingUri.uri === uri)
-);
+export const selectIsUriCurrentlyPlaying = (state: State, uri: string) => {
+  const { uri: playingUrl } = selectPlayingUri(state);
+  if (!playingUrl) return false;
+
+  const canonicalUrl = selectCanonicalUrlForUri(state, uri);
+  return canonicalUrl === playingUrl;
+};
 
 export const makeSelectIsPlayerFloating = (location: UrlLocation) =>
   createSelector(selectPrimaryUri, selectPlayingUri, (primaryUri, playingUri) => {
     if (!playingUri.uri) return false;
 
-    const { pathname, search } = location;
-    const hasSecondarySource = Boolean(playingUri.source);
-    const isComment = playingUri.source === 'comment';
-    const isInlineSecondaryPlayer =
-      hasSecondarySource && playingUri.uri !== primaryUri && pathname === playingUri.pathname;
+    const { source, uri, primaryUri: playingPrimaryUri, pathname: playingPathName, collection } = playingUri;
 
-    if (isComment && isInlineSecondaryPlayer && search && search !== '?view=discussion') return true;
+    const { pathname, search } = location;
+    const urlParams = new URLSearchParams(search);
+    const discussionPage = urlParams.get('view') === 'discussion';
+    const pageCollectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID);
+
+    const hasSecondarySource = Boolean(source);
+    const isComment = source === 'comment';
+    const isQueue = source === 'queue';
+    const isInlineSecondaryPlayer = hasSecondarySource && uri !== primaryUri && playingPathName === pathname;
+
+    if ((isQueue && primaryUri !== playingUri.uri) || (isComment && isInlineSecondaryPlayer && discussionPage)) {
+      return true;
+    }
 
     if (
+      (isQueue && (primaryUri === uri || pageCollectionId !== collection.collectionId)) ||
       isInlineSecondaryPlayer ||
-      (hasSecondarySource && !isComment ? playingUri.primaryUri === primaryUri : playingUri.uri === primaryUri)
+      (hasSecondarySource && !isComment && primaryUri ? playingPrimaryUri === primaryUri : uri === primaryUri)
     ) {
       return false;
     }

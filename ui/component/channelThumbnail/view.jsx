@@ -4,7 +4,7 @@ import { parseURI } from 'util/lbryURI';
 import { getImageProxyUrl } from 'util/thumbnail';
 import classnames from 'classnames';
 import Gerbil from './gerbil.png';
-import FreezeframeWrapper from 'component/fileThumbnail/FreezeframeWrapper';
+import FreezeframeWrapper from 'component/common/freezeframe-wrapper';
 import OptimizedImage from 'component/optimizedImage';
 import { AVATAR_DEFAULT } from 'config';
 import useGetUserMemberships from 'effects/use-get-user-memberships';
@@ -98,12 +98,19 @@ function ChannelThumbnail(props: Props) {
   if (isGif && !allowGifs) {
     const url = getImageProxyUrl(channelThumbnail);
     return (
-      <FreezeframeWrapper
-        src={url}
-        className={classnames('channel-thumbnail', className, { 'channel-thumbnail--xxsmall': xxsmall })}
-      >
-        {showMemberBadge && <PremiumBadge {...badgeProps} />}
-      </FreezeframeWrapper>
+      url && (
+        <FreezeframeWrapper
+          src={url}
+          className={classnames('channel-thumbnail', className, {
+            'channel-thumbnail--small': small,
+            'channel-thumbnail--xsmall': xsmall,
+            'channel-thumbnail--xxsmall': xxsmall,
+            'channel-thumbnail--resolving': isResolving,
+          })}
+        >
+          {showMemberBadge ? <PremiumBadge {...badgeProps} /> : null}
+        </FreezeframeWrapper>
+      )
     );
   }
 

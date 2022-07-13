@@ -1,21 +1,21 @@
 // @flow
 import 'scss/component/_swipeable-drawer.scss';
 
-// $FlowFixMe
+// $FlowFixMe;
 import { Global } from '@emotion/react';
 // $FlowFixMe
 import { grey } from '@mui/material/colors';
 
 import { HEADER_HEIGHT_MOBILE } from 'component/fileRenderFloating/view';
 import { PRIMARY_PLAYER_WRAPPER_CLASS, PRIMARY_IMAGE_WRAPPER_CLASS } from 'page/file/view';
-import { getMaxLandscapeHeight } from 'component/fileRenderFloating/helper-functions';
+import { getMaxLandscapeHeight } from 'util/window';
 import Drawer from '@mui/material/Drawer';
 import * as ICONS from 'constants/icons';
 import * as React from 'react';
+import * as DRAWERS from 'constants/drawer_types';
 import Button from 'component/button';
 import classnames from 'classnames';
 
-const DRAWER_PULLER_HEIGHT = 42;
 const TRANSITION_MS = 225;
 const TRANSITION_STR = `${TRANSITION_MS}ms cubic-bezier(0, 0, 0.2, 1) 0ms`;
 
@@ -24,14 +24,18 @@ type Props = {
   title: any,
   hasSubtitle?: boolean,
   actions?: any,
+  type: string,
+  startOpen?: boolean,
   // -- redux --
   open: boolean,
   theme: string,
-  toggleDrawer: () => void,
+  doToggleAppDrawer: (type: string) => void,
 };
 
 export default function SwipeableDrawer(props: Props) {
-  const { title, hasSubtitle, children, open, theme, actions, toggleDrawer } = props;
+  const { title, hasSubtitle, children, type, startOpen, open, theme, actions, doToggleAppDrawer } = props;
+
+  const pullerHeight = type === DRAWERS.PLAYLIST ? 110 : 42;
 
   const drawerRoot = React.useRef();
   const backdropRef = React.useRef();
@@ -42,6 +46,13 @@ export default function SwipeableDrawer(props: Props) {
   const openPrev = React.useRef(open);
 
   const [playerHeight, setPlayerHeight] = React.useState(getMaxLandscapeHeight());
+
+  const landscapePlayerHeight = HEADER_HEIGHT_MOBILE + getMaxLandscapeHeight();
+  const contentHeight = HEADER_HEIGHT_MOBILE + playerHeight;
+
+  function toggleDrawer() {
+    doToggleAppDrawer(type);
+  }
 
   function handleTouchMove(e) {
     const touchPosY = e.touches[0].clientY;
@@ -62,7 +73,7 @@ export default function SwipeableDrawer(props: Props) {
       const backdrop = backdropRef.current;
       if (backdrop) {
         const isDraggingAboveVideo = touchPosY < playerHeight + HEADER_HEIGHT_MOBILE;
-        let backdropTop = HEADER_HEIGHT_MOBILE + playerHeight;
+        let backdropTop = contentHeight;
         // $FlowFixMe
         let backdropHeight = document.documentElement.getBoundingClientRect().height - backdropTop;
         let opacity = ((touchPosY - HEADER_HEIGHT_MOBILE) / backdropHeight) * -1 + 1;
@@ -94,8 +105,10 @@ export default function SwipeableDrawer(props: Props) {
       const backdrop = backdropRef.current;
 
       if (draggedBeforeCloseLimit) {
-        const minDrawerHeight = HEADER_HEIGHT_MOBILE + playerHeight;
+        const minDrawerHeight = contentHeight;
         const positionToStop = drawerMovedFullscreen ? HEADER_HEIGHT_MOBILE : minDrawerHeight;
+        // $FlowFixMe
+        document.documentElement?.style?.setProperty('--content-height', String(positionToStop));
 
         if (paperRef.current) {
           paperRef.current.setAttribute('style', `transform: none !important; transition: transform ${TRANSITION_STR}`);
@@ -174,6 +187,14 @@ export default function SwipeableDrawer(props: Props) {
   }, []);
 
   React.useEffect(() => {
+    if (startOpen && !open) {
+      toggleDrawer();
+    }
+    // on page mount
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  React.useEffect(() => {
     // Drawer will follow the cover image on resize, so it's always visible
     handleResize();
 
@@ -210,17 +231,17 @@ export default function SwipeableDrawer(props: Props) {
         if (!isFullscreenDrawer || openStateChanged) {
           node.setAttribute(
             'style',
-            `transform: translateY(${HEADER_HEIGHT_MOBILE + playerHeight}px); height: calc(100% - ${
-              HEADER_HEIGHT_MOBILE + playerHeight
-            }px);`
+            `transform: translateY(${landscapePlayerHeight}px); height: calc(100% - ${landscapePlayerHeight}px);`
           );
+          // $FlowFixMe
+          document.documentElement?.style?.setProperty('--content-height', String(landscapePlayerHeight));
         }
 
         drawerRoot.current = node;
         openPrev.current = open;
       }
     },
-    [open, playerHeight]
+    [landscapePlayerHeight, open]
   );
 
   return (
@@ -234,15 +255,16 @@ export default function SwipeableDrawer(props: Props) {
         disableEnforceFocus
         ModalProps={{ keepMounted: true, sx: { zIndex: '2' } }}
         BackdropProps={{ ref: backdropRef, open, sx: { backgroundColor: 'black' } }}
-        PaperProps={{ ref: paperRef, sx: { height: `calc(100% - ${DRAWER_PULLER_HEIGHT}px)` } }}
+        PaperProps={{ ref: paperRef, sx: { height: `calc(100% - ${pullerHeight}px)` } }}
       >
         {open && (
-          <div className="swipeable-drawer__header" style={{ top: -DRAWER_PULLER_HEIGHT }}>
+          <div className="swipeable-drawer__header" style={{ top: -pullerHeight, height: pullerHeight }}>
             <Puller theme={theme} />
             <HeaderContents
               title={title}
               hasSubtitle={hasSubtitle}
               actions={actions}
+              type={type}
               handleClose={handleCloseDrawer}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
@@ -291,11 +313,12 @@ type HeaderProps = {
   title: any,
   hasSubtitle?: boolean,
   actions?: any,
+  type: string,
   handleClose: () => void,
 };
 
 const HeaderContents = (props: HeaderProps) => {
-  const { title, hasSubtitle, actions, handleClose, ...divProps } = props;
+  const { title, hasSubtitle, actions, handleClose, type, ...divProps } = props;
 
   return (
     <div
@@ -309,7 +332,12 @@ const HeaderContents = (props: HeaderProps) => {
       <div className="swipeable-drawer__header-actions">
         {actions}
 
-        <Button icon={ICONS.REMOVE} iconSize={16} onClick={handleClose} />
+        <Button
+          button={type === DRAWERS.PLAYLIST ? 'close' : undefined}
+          icon={ICONS.REMOVE}
+          iconSize={16}
+          onClick={handleClose}
+        />
       </div>
     </div>
   );
