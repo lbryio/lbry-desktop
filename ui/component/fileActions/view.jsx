@@ -131,7 +131,7 @@ export default function FileActions(props: Props) {
 
       {claimIsMine && !isMobile && (
         <>
-          <ClaimPublishButton uri={uri} isLivestreamClaim={isLivestreamClaim} />
+          <ClaimPublishButton uri={uri} claimType={claimType} />
           <ClaimDeleteButton uri={uri} />
         </>
       )}
@@ -168,7 +168,7 @@ export default function FileActions(props: Props) {
                       className="comment__menu-option"
                       onSelect={() => {
                         doPrepareEdit(claim, editUri, claimType);
-                        push(`/$/${PAGES.UPLOAD}`);
+                        // push(`/$/${PAGES.UPLOAD}`);
                       }}
                     >
                       <div className="menu__link">
