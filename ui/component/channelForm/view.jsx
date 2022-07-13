@@ -94,10 +94,11 @@ function ChannelForm(props: Props) {
   const [nameError, setNameError] = React.useState(undefined);
   const [bidError, setBidError] = React.useState('');
   const [isUpload, setIsUpload] = React.useState({ cover: false, thumbnail: false });
-  const [coverError, setCoverError] = React.useState(false);
   const [thumbError, setThumbError] = React.useState(false);
   const { claim_id: claimId } = claim || {};
   const [params, setParams]: [any, (any) => void] = React.useState(getChannelParams());
+  const [coverError, setCoverError] = React.useState(false);
+  const [coverPreview, setCoverPreview] = React.useState(params.coverUrl);
   const { channelName } = parseURI(uri);
   const name = params.name;
   const isNewChannel = !uri;
@@ -206,7 +207,8 @@ function ChannelForm(props: Props) {
     setThumbError(false);
   }
 
-  function handleCoverChange(coverUrl: string, uploadSelected: boolean) {
+  function handleCoverChange(coverUrl: string, uploadSelected: boolean, preview: ?string) {
+    setCoverPreview(preview || '');
     setParams({ ...params, coverUrl });
     setIsUpload({ ...isUpload, cover: uploadSelected });
     setCoverError(false);
@@ -259,7 +261,7 @@ function ChannelForm(props: Props) {
     }
   }, [hasClaimedInitialRewards, claimInitialRewards]);
 
-  const coverSrc = coverError ? ThumbnailBrokenImage : params.coverUrl;
+  const coverSrc = coverError ? ThumbnailBrokenImage : coverPreview;
 
   let thumbnailPreview;
   if (!params.thumbnailUrl) {
@@ -281,7 +283,7 @@ function ChannelForm(props: Props) {
               title={__('Cover')}
               onClick={() =>
                 openModal(MODALS.IMAGE_UPLOAD, {
-                  onUpdate: (coverUrl, isUpload) => handleCoverChange(coverUrl, isUpload),
+                  onUpdate: (coverUrl, isUpload, preview) => handleCoverChange(coverUrl, isUpload, preview),
                   title: __('Edit Cover Image'),
                   helpText: __('(6.25:1)'),
                   assetName: __('Cover Image'),
