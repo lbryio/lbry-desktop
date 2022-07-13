@@ -630,8 +630,10 @@ export function doGetAndPopulatePreferences(syncId /* ?: number */) {
   return (dispatch, getState) => {
     const state = getState();
     const syncEnabled = selectClientSetting(state, SETTINGS.ENABLE_SYNC);
-    const hasVerifiedEmail = state.user && state.user.user && state.user.user.has_verified_email;
+    const hasVerifiedEmail = selectUserVerifiedEmail(state);
     let preferenceKey;
+    // TODO: the logic should match `runPreferences`, but since this function is
+    // only hit as a successful sync callback, it doesn't matter for now.
     // @if TARGET='app'
     preferenceKey = syncEnabled && hasVerifiedEmail ? 'shared' : 'local';
     // @endif
@@ -648,7 +650,6 @@ export function doGetAndPopulatePreferences(syncId /* ?: number */) {
         }
 
         // @if TARGET='app'
-
         const { settings } = savedPreferences.value;
         if (settings) {
           Object.entries(settings).forEach(([key, val]) => {
