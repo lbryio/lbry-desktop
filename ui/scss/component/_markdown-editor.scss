@@ -118,11 +118,11 @@
 
       &:hover {
         color: var(--color-header-link);
-        background-color: var(--color-border);
+        background-color: var(--color-editor-button-hover-bg);
       }
     }
     button.active {
-      background: var(--color-border);
+      background: var(--color-editor-button-active-bg);
     }
   }
 }
