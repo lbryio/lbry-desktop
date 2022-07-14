@@ -3473,4 +3473,31 @@ export const icons = {
       </svg>
     );
   },
+  [ICONS.COMEDY]: (props: IconProps) => {
+    const { size = 24, color = 'currentColor', ...otherProps } = props;
+
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        height={size}
+        width={size}
+        fill="none"
+        stroke={color}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...otherProps}
+      >
+        <path d="M2.000 13.500 A10.000 10.000 0 1 0 22.000 13.500 A10.000 10.000 0 1 0 2.000 13.500 Z" />
+        <path d="M2.834,9.495A2.5,2.5,0,0,1,1.5,5,2.5,2.5,0,1,1,5,1.5,2.5,2.5,0,0,1,9.35,3.855" />
+        <path d="M21.166,9.495A2.5,2.5,0,0,0,22.5,5,2.5,2.5,0,1,0,19,1.5a2.5,2.5,0,0,0-4.35,2.355" />
+        <path d="M8.500 14.000 A3.500 3.500 0 1 0 15.500 14.000 A3.500 3.500 0 1 0 8.500 14.000 Z" />
+        <path d="M18.5,14a6.5,6.5,0,0,1-13,0" />
+        <path d="M8.5 7L8.5 10" />
+        <path d="M10 8.5L7 8.5" />
+        <path d="M15.5 7L15.5 10" />
+        <path d="M17 8.5L14 8.5" />
+      </svg>
+    );
+  },
 };

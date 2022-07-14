@@ -213,3 +213,4 @@ export const PLAYLIST = 'Playlist';
 export const PLAYLIST_ADD = 'PlaylistAdd';
 export const PLAYLIST_FILLED = 'PlaylistFilled';
 export const ARRANGE = 'Arrange';
+export const COMEDY = 'Comedy';
