@@ -18,6 +18,7 @@ import { getPasswordFromCookie } from 'util/saved-passwords';
 import * as DAEMON_SETTINGS from 'constants/daemon_settings';
 import SettingEnablePrereleases from 'component/settingEnablePrereleases';
 import SettingDisableAutoUpdates from 'component/settingDisableAutoUpdates';
+import * as MODALS from 'constants/modal_types';
 
 const IS_MAC = process.platform === 'darwin';
 
@@ -56,6 +57,7 @@ type Props = {
   updateWalletStatus: () => void,
   confirmForgetPassword: ({}) => void,
   toggle3PAnalytics: (boolean) => void,
+  openModal: (string, any) => void,
 };
 
 export default function SettingSystem(props: Props) {
@@ -75,6 +77,7 @@ export default function SettingSystem(props: Props) {
     updateWalletStatus,
     confirmForgetPassword,
     toggle3PAnalytics,
+    openModal,
   } = props;
 
   const [clearingCache, setClearingCache] = React.useState(false);
@@ -389,6 +392,20 @@ export default function SettingSystem(props: Props) {
                   clearCache();
                 }}
                 disabled={clearingCache}
+              />
+            </SettingsRow>
+            <SettingsRow
+              title={__('Export Wallet')}
+              subtitle={__('Export encrypted sync data for import in another app.')}
+            >
+              <Button
+                button="primary"
+                className="expandable__button"
+                label={__('Export')}
+                aria-label={__('Export wallet')}
+                onClick={() => {
+                  openModal(MODALS.WALLET_EXPORT, {});
+                }}
               />
             </SettingsRow>
           </>

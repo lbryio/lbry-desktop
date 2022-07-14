@@ -46,3 +46,4 @@ export const COLLECTION_ADD = 'collection_add';
 export const COLLECTION_DELETE = 'collection_delete';
 export const CONFIRM_REMOVE_CARD = 'CONFIRM_REMOVE_CARD';
 export const CONFIRM_REMOVE_COMMENT = 'CONFIRM_REMOVE_COMMENT';
+export const WALLET_EXPORT = 'WALLET_EXPORT';
