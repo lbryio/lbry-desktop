@@ -380,6 +380,20 @@ export default function SettingSystem(props: Props) {
               <SettingShareUrl />
             </SettingsRow>
             <SettingsRow
+              title={__('Export Wallet')}
+              subtitle={__('Export encrypted sync data for import in another app.')}
+            >
+              <Button
+                button="primary"
+                className="expandable__button"
+                label={__('Export')}
+                aria-label={__('Export wallet')}
+                onClick={() => {
+                  openModal(MODALS.WALLET_EXPORT, {});
+                }}
+              />
+            </SettingsRow>
+            <SettingsRow
               title={__('Clear application cache')}
               subtitle={__('This might fix issues that you are having. Your wallet will not be affected.')}
             >
@@ -392,20 +406,6 @@ export default function SettingSystem(props: Props) {
                   clearCache();
                 }}
                 disabled={clearingCache}
-              />
-            </SettingsRow>
-            <SettingsRow
-              title={__('Export Wallet')}
-              subtitle={__('Export encrypted sync data for import in another app.')}
-            >
-              <Button
-                button="primary"
-                className="expandable__button"
-                label={__('Export')}
-                aria-label={__('Export wallet')}
-                onClick={() => {
-                  openModal(MODALS.WALLET_EXPORT, {});
-                }}
               />
             </SettingsRow>
           </>
