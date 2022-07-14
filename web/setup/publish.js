@@ -3,6 +3,7 @@ import * as tus from 'tus-js-client';
 import { v4 as uuid } from 'uuid';
 import { makeUploadRequest } from './publish-v1';
 import { makeResumableUploadRequest } from './publish-v2';
+import { COMMIT_ID } from 'config';
 import { PUBLISH_TIMEOUT_BUT_LIKELY_SUCCESSFUL } from 'constants/errors';
 
 // A modified version of Lbry.apiCall that allows
@@ -63,7 +64,16 @@ export default function apiPublishCallViaWeb(
               return Promise.reject(new Error(PUBLISH_TIMEOUT_BUT_LIKELY_SUCCESSFUL));
             }
           }
-          error = new Error(xhr.response.error.message);
+          // $FlowFixMe - flow's constructor for Error is outdated.
+          error = new Error(xhr.response.error.message, {
+            cause: {
+              response_url: xhr.responseURL,
+              commit_id: COMMIT_ID,
+              publish_version: useV1 ? 'v1' : 'v2',
+              ...(useV1 ? { type: isMarkdown ? 'markdown' : preview ? 'preview' : remoteUrl ? 'replay' : '?' } : {}),
+              ...(!tus.isSupported ? { is_tus_supported: tus.isSupported } : {}),
+            },
+          });
         } else {
           error = new Error(__('Upload likely timed out. Try a smaller file while we work on this.'));
         }
