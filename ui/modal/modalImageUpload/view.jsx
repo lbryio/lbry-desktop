@@ -8,7 +8,7 @@ type Props = {
   currentValue: string,
   title: string,
   helpText: string,
-  onUpdate: (string, boolean) => void,
+  onUpdate: (string, boolean, ?string) => void,
   assetName: string,
 };
 
@@ -18,11 +18,12 @@ function ModalImageUpload(props: Props) {
   return (
     <Modal isOpen type="card" onAborted={closeModal} contentLabel={title}>
       <SelectAsset
-        onUpdate={(a, b) => onUpdate(a, b)}
+        onUpdate={onUpdate}
         currentValue={currentValue}
         assetName={assetName}
         recommended={helpText}
         onDone={closeModal}
+        buildImagePreview
       />
     </Modal>
   );

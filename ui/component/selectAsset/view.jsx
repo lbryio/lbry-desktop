@@ -15,15 +15,35 @@ const SPEECH_UPLOADING = 'UPLOADING';
 type Props = {
   assetName: string,
   currentValue: ?string,
-  onUpdate: (string, boolean) => void,
+  onUpdate: (string, boolean, ?string) => void,
   recommended: string,
   title: string,
   onDone?: () => void,
   inline?: boolean,
+  // When uploading pictures, the upload service
+  // can return success but the image isn't ready
+  // to be displayed yet. This is when a local preview
+  // comes in handy. The preview (base 64) will be
+  // passed to the onUpdate function after the
+  // upload service returns success.
+  buildImagePreview?: boolean,
 };
 
+function filePreview(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      resolve(reader.result.toString());
+    };
+    reader.onerror = () => {
+      resolve(undefined);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 function SelectAsset(props: Props) {
-  const { onUpdate, onDone, assetName, currentValue, recommended, title, inline } = props;
+  const { onUpdate, onDone, assetName, currentValue, recommended, title, inline, buildImagePreview } = props;
   const [pathSelected, setPathSelected] = React.useState('');
   const [fileSelected, setFileSelected] = React.useState<any>(null);
   const [uploadStatus, setUploadStatus] = React.useState(SPEECH_READY);
@@ -36,9 +56,15 @@ function SelectAsset(props: Props) {
       setError(error);
     };
 
-    const onSuccess = (thumbnailUrl) => {
+    const onSuccess = async (thumbnailUrl) => {
+      let preview;
       setUploadStatus(SPEECH_READY);
-      onUpdate(thumbnailUrl, !useUrl);
+
+      if (buildImagePreview) {
+        preview = await filePreview(fileSelected);
+      }
+
+      onUpdate(thumbnailUrl, !useUrl, preview);
 
       if (onDone) {
         onDone();
