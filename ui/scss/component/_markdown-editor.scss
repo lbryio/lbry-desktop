@@ -120,9 +120,9 @@
         color: var(--color-header-link);
         background-color: var(--color-border);
       }
-      /* &:active {
-        background-color: var(--color-border);
-      } */
+    }
+    button.active {
+      background: var(--color-border);
     }
   }
 }
