@@ -1,6 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
+import * as MODALS from 'constants/modal_types';
 import { SETTINGS_GRP } from 'constants/settings';
 import React from 'react';
 import Button from 'component/button';
@@ -17,10 +18,11 @@ type Props = {
   user: User,
   hasChannels: boolean,
   doWalletStatus: () => void,
+  openModal: (string, any) => void,
 };
 
 export default function SettingAccount(props: Props) {
-  const { isAuthenticated, walletEncrypted, user, hasChannels, doWalletStatus } = props;
+  const { isAuthenticated, walletEncrypted, user, hasChannels, doWalletStatus, openModal } = props;
   const [storedPassword, setStoredPassword] = React.useState(false);
 
   // Determine if password is stored.
@@ -106,6 +108,20 @@ export default function SettingAccount(props: Props) {
 
             <SettingsRow title={__('Purchases')} subtitle={__('View your purchased content.')}>
               <Button button="inverse" label={__('Manage')} icon={ICONS.ARROW_RIGHT} navigate={`/$/${PAGES.LIBRARY}`} />
+            </SettingsRow>
+            <SettingsRow
+              title={__('Export Wallet')}
+              subtitle={__('Export encrypted sync data for import in another app.')}
+            >
+              <Button
+                button="secondary"
+                className="expandable__button"
+                label={__('Export')}
+                aria-label={__('Export wallet')}
+                onClick={() => {
+                  openModal(MODALS.WALLET_EXPORT, {});
+                }}
+              />
             </SettingsRow>
           </>
         }

@@ -55,6 +55,7 @@ const MAP = Object.freeze({
   [MODALS.WALLET_ENCRYPT]: lazyImport(() => import('modal/modalWalletEncrypt' /* webpackChunkName: "modalWalletEncrypt" */)),
   [MODALS.WALLET_PASSWORD_UNSAVE]: lazyImport(() => import('modal/modalPasswordUnsave' /* webpackChunkName: "modalPasswordUnsave" */)),
   [MODALS.WALLET_UNLOCK]: lazyImport(() => import('modal/modalWalletUnlock' /* webpackChunkName: "modalWalletUnlock" */)),
+  [MODALS.WALLET_EXPORT]: lazyImport(() => import('modal/modalWalletExport' /* webpackChunkName: "modalWalletUnlock" */)),
   [MODALS.YOUTUBE_WELCOME]: lazyImport(() => import('modal/modalYoutubeWelcome' /* webpackChunkName: "modalYoutubeWelcome" */)),
 });
 
