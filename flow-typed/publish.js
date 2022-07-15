@@ -69,6 +69,7 @@ declare type FileUploadSdkParams = {
   // Temporary values; remove when passing to SDK
   guid: string,
   uploadUrl?: string,
+  isMarkdown: boolean,
 };
 
 declare type FileUploadItem = {

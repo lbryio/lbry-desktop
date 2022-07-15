@@ -1,9 +1,9 @@
 // @flow
 import * as tus from 'tus-js-client';
 import { v4 as uuid } from 'uuid';
+import { generateError } from './publish-error';
 import { makeUploadRequest } from './publish-v1';
 import { makeResumableUploadRequest } from './publish-v2';
-import { COMMIT_ID } from 'config';
 import { PUBLISH_TIMEOUT_BUT_LIKELY_SUCCESSFUL } from 'constants/errors';
 
 // A modified version of Lbry.apiCall that allows
@@ -18,10 +18,11 @@ export default function apiPublishCallViaWeb(
   reject: Function
 ) {
   const { file_path: filePath, preview, remote_url: remoteUrl } = params;
-  const isMarkdown = filePath && typeof filePath === 'object' && filePath.type === 'text/markdown';
+  const isMarkdown = filePath ? typeof filePath === 'object' && filePath.type === 'text/markdown' : false;
+  params.isMarkdown = isMarkdown;
 
   if (!filePath && !remoteUrl) {
-    const { claim_id: claimId, ...otherParams } = params;
+    const { claim_id: claimId, isMarkdown, ...otherParams } = params;
     return apiCall(method, otherParams, resolve, reject);
   }
 
@@ -57,25 +58,18 @@ export default function apiPublishCallViaWeb(
         if (xhr.status >= 200 && xhr.status < 300 && !xhr.response.error) {
           return resolve(xhr.response.result);
         } else if (xhr.response.error) {
+          // -- Temp handling until odysee-api/issues/401 is addressed --------
           if (xhr.responseURL.endsWith('/notify')) {
-            // Temp handling until odysee-api/issues/401 is addressed.
             const errMsg = xhr.response.error.message;
             if (errMsg === 'file currently locked' || errMsg.endsWith('no such file or directory')) {
-              return Promise.reject(new Error(PUBLISH_TIMEOUT_BUT_LIKELY_SUCCESSFUL));
+              return Promise.reject(generateError(PUBLISH_TIMEOUT_BUT_LIKELY_SUCCESSFUL, params, xhr));
             }
           }
-          // $FlowFixMe - flow's constructor for Error is outdated.
-          error = new Error(xhr.response.error.message, {
-            cause: {
-              response_url: xhr.responseURL,
-              commit_id: COMMIT_ID,
-              publish_version: useV1 ? 'v1' : 'v2',
-              ...(useV1 ? { type: isMarkdown ? 'markdown' : preview ? 'preview' : remoteUrl ? 'replay' : '?' } : {}),
-              ...(!tus.isSupported ? { is_tus_supported: tus.isSupported } : {}),
-            },
-          });
+          // -------------------------------------------------------------------
+
+          error = generateError(xhr.response.error.message, params, xhr);
         } else {
-          error = new Error(__('Upload likely timed out. Try a smaller file while we work on this.'));
+          error = generateError(__('Upload likely timed out. Try a smaller file while we work on this.'), params, xhr);
         }
       }
 

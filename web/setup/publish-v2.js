@@ -4,6 +4,7 @@ import NoopUrlStorage from 'tus-js-client/lib/noopUrlStorage';
 import analytics from '../../ui/analytics';
 import { X_LBRY_AUTH_TOKEN } from '../../ui/constants/token';
 import { doUpdateUploadAdd, doUpdateUploadProgress, doUpdateUploadRemove } from '../../ui/redux/actions/publish';
+import { generateError } from './publish-error';
 import { LBRY_WEB_PUBLISH_API_V2 } from 'config';
 
 const RESUMABLE_ENDPOINT = LBRY_WEB_PUBLISH_API_V2;
@@ -48,7 +49,7 @@ export function makeResumableUploadRequest(
       reject(new Error('Publish: v2 does not support remote_url'));
     }
 
-    const { uploadUrl, guid, ...sdkParams } = params;
+    const { uploadUrl, guid, isMarkdown, ...sdkParams } = params;
 
     const jsonPayload = JSON.stringify({
       jsonrpc: '2.0',
@@ -97,17 +98,7 @@ export function makeResumableUploadRequest(
         window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
         analytics.sentryError(getTusErrorType(errMsg), { onError: err, tusUpload: uploader });
 
-        reject(
-          // $FlowFixMe - flow's constructor for Error is incorrect.
-          new Error(customErr || err, {
-            cause: {
-              // ...(uploader._fingerprint ? { fingerprint: uploader._fingerprint } : {}),
-              // ...(uploader._retryAttempt ? { retryAttempt: uploader._retryAttempt } : {}),
-              // ...(uploader._offsetBeforeRetry ? { offsetBeforeRetry: uploader._offsetBeforeRetry } : {}),
-              ...(customErr ? { original: errMsg } : {}),
-            },
-          })
-        );
+        reject(generateError(customErr || err, params, null, uploader));
       },
       onProgress: (bytesUploaded, bytesTotal) => {
         const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
@@ -137,7 +128,7 @@ export function makeResumableUploadRequest(
               setTimeout(() => makeNotifyRequest(), 10000); // Auto-retry after 10s delay.
             } else {
               window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
-              reject(new Error(`There was a problem in the processing. Please retry. (${xhr.status})`));
+              reject(generateError(`Failed to process the file. Please retry. (${xhr.status})`, params, xhr, uploader));
             }
           };
           xhr.onabort = () => {
