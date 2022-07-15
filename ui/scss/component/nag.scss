@@ -1,0 +1,132 @@
+$nag-z-index: 997;
+$nag-helpful-z-index: 998;
+$nag-error-z-index: 99999999999;
+
+.nag {
+  z-index: $nag-z-index;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: var(--spacing-s);
+  background-color: var(--color-nag);
+  color: var(--color-white);
+  font-weight: var(--font-weight-bold);
+  text-align: center;
+
+  .button--link {
+    font-weight: var(--font-weight-bold);
+    color: var(--color-white);
+    text-decoration: underline;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    text-align: left;
+  }
+}
+
+.nag--inline {
+  position: absolute;
+  top: 0;
+  bottom: auto;
+  z-index: 1 !important; /* booooooo */
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+}
+
+.nag--relative {
+  position: relative;
+}
+
+.nag--helpful {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  z-index: $nag-helpful-z-index;
+  // border-radius: var(--border-radius);
+  margin-top: var(--spacing-s);
+}
+
+.nag--error {
+  background-color: rgba(0, 0, 0, 0.9);
+  color: var(--color-text-error);
+  z-index: $nag-error-z-index;
+  border-radius: var(--border-radius);
+  left: var(--spacing-s);
+  right: var(--spacing-s);
+  bottom: var(--spacing-s);
+  width: unset;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+  box-sizing: border-box;
+}
+
+.nag__message {
+  display: inline;
+
+  @media (max-width: $breakpoint-small) {
+    &::after {
+      content: '';
+      display: block;
+    }
+  }
+}
+
+.nag__button {
+  line-height: 1;
+  margin-left: var(--spacing-s);
+  margin-right: var(--spacing-s);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-white);
+  padding: var(--spacing-xxs);
+  color: var(--color-white);
+  font-weight: var(--font-weight-bold);
+
+  &:hover {
+    background-color: var(--color-white);
+    color: var(--color-nag);
+  }
+
+  @media (max-width: $breakpoint-small) {
+    margin-left: 0;
+    margin-top: var(--spacing-s);
+  }
+}
+
+.nag__button--helpful {
+  &:hover {
+    color: var(--color-primary);
+  }
+}
+
+.nag__button--error {
+  color: var(--color-text-error);
+  border-color: var(--color-text-error);
+
+  &:hover {
+    background-color: var(--color-text-error);
+    color: var(--color-white);
+  }
+}
+
+.nag__close {
+  margin-left: auto;
+  right: var(--spacing-m);
+  position: absolute;
+  border: none;
+
+  svg {
+    stroke-width: 4px;
+  }
+}
+
+.nag__select {
+  display: inline;
+  color: var(--color-text);
+
+  select {
+    width: unset;
+    min-width: 10rem;
+    padding-right: unset;
+    margin: 0px var(--spacing-s);
+    height: var(--height-button-mobile);
+  }
+}

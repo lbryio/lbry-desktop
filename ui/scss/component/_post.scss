@@ -1,0 +1,128 @@
+.post {
+  $card-bg: var(--color-card-background);
+  $bg: var(--color-background);
+  @include font-serif;
+
+  .card {
+    border: 0;
+
+    &:after {
+      content: '';
+      display: block;
+      height: 20rem;
+      background-image: linear-gradient(to top, $bg, $card-bg);
+    }
+  }
+}
+
+.post {
+  height: 100%;
+  width: 43rem;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: unset;
+  min-width: unset;
+
+  .channel-thumbnail {
+    @include handleChannelGif(2.5rem);
+  }
+
+  @media (min-width: $breakpoint-large) {
+    width: 52rem;
+  }
+  @media (max-width: $breakpoint-small) {
+    width: 100%;
+  }
+}
+
+.post__title {
+  font-size: 2rem;
+  line-height: 1.2;
+  margin-top: 0;
+  margin-bottom: var(--spacing-s);
+  font-weight: var(--font-weight-bold);
+
+  :first-child {
+    display: inline-block;
+    margin-right: var(--spacing-s);
+  }
+
+  @media (min-width: $breakpoint-small) {
+    margin-top: var(--spacing-xl);
+    font-size: 3rem;
+    line-height: 1;
+  }
+}
+
+.post__info {
+  @include font-sans;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  line-height: 0;
+  margin-bottom: var(--spacing-l);
+  font-size: var(--font-small);
+
+  .credit-amount {
+    margin-right: var(--spacing-s);
+  }
+}
+
+.post__info--expanded {
+  margin-bottom: var(--spacing-s);
+}
+
+.post__info--grouped {
+  display: flex;
+  .button--link {
+    margin-right: var(--spacing-s);
+  }
+  .button--link:last-of-type {
+    margin-right: 0;
+  }
+
+  .dim {
+    color: var(--color-text-subtitle);
+    stroke: var(--color-text-subtitle);
+  }
+}
+
+.post__info--credit-details {
+  @include font-sans;
+  margin-top: var(--spacing-l);
+  margin-bottom: var(--spacing-l);
+  // width: 75%;
+
+  .tag {
+    margin-top: 0;
+  }
+}
+
+.post__date {
+  // display: block;
+  display: flex;
+  // margin-top: var(--spacing-s);
+  font-size: var(--font-small);
+  color: var(--color-help);
+
+  .date_time {
+    color: var(--color-text-subtitle);
+    margin-right: var(--spacing-m);
+    font-size: var(--font-small);
+  }
+}
+
+.file-render--document {
+  font-size: var(--font-large);
+  height: auto;
+  max-height: none;
+  // overflow: auto;
+  margin-bottom: var(--spacing-l);
+}
+
+@media (min-width: 1600px) {
+  .file-page__post-comments .card__first-pane {
+    width: 52rem;
+    margin: 0 auto;
+  }
+}

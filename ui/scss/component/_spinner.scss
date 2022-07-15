@@ -1,0 +1,67 @@
+.spinner {
+  width: 50px;
+  height: 40px;
+
+  font-size: 10px;
+  margin: var(--spacing-s);
+  text-align: center;
+
+  .rect {
+    width: 6px;
+    height: 100%;
+
+    animation: sk-stretchdelay 1.2s infinite ease-in-out;
+    display: inline-block;
+    margin: 0 2px;
+
+    &.rect2 {
+      animation-delay: -1.1s;
+    }
+
+    &.rect3 {
+      animation-delay: -1s;
+    }
+
+    &.rect4 {
+      animation-delay: -0.9s;
+    }
+
+    &.rect5 {
+      animation-delay: -0.8s;
+    }
+  }
+}
+
+.spinner--dark {
+  .rect {
+    background-color: var(--color-spinner-dark);
+  }
+}
+
+.spinner--light {
+  .rect {
+    background-color: var(--color-spinner-light);
+  }
+}
+
+.spinner--small {
+  height: 10px;
+  display: inline-block;
+
+  .rect {
+    width: 3px;
+  }
+}
+
+.spinnerArea--centered {
+  text-align: center;
+}
+
+.button--primary {
+  .spinner {
+    height: 30px;
+    .rect {
+      background-color: var(--color-primary-contrast);
+    }
+  }
+}

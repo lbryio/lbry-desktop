@@ -1,0 +1,50 @@
+import { getLanguageName } from './languages';
+
+// supported_browser_languages
+const SUPPORTED_LANGUAGES = {
+  af: getLanguageName('af'),
+  en: getLanguageName('en'),
+  da: getLanguageName('da'),
+  'zh-Hans': getLanguageName('zh-Hans'),
+  'zh-Hant': getLanguageName('zh-Hant'),
+  hr: getLanguageName('hr'),
+  nl: getLanguageName('nl'),
+  no: getLanguageName('no'),
+  fi: getLanguageName('fi'),
+  fr: getLanguageName('fr'),
+  de: getLanguageName('de'),
+  gu: getLanguageName('gu'),
+  hi: getLanguageName('hi'),
+  hu: getLanguageName('hu'),
+  id: getLanguageName('id'),
+  ja: getLanguageName('ja'),
+  jv: getLanguageName('jv'),
+  it: getLanguageName('it'),
+  ms: getLanguageName('ms'),
+  ml: getLanguageName('ml'),
+  mr: getLanguageName('mr'),
+  pa: getLanguageName('pa'),
+  pl: getLanguageName('pl'),
+  pt: getLanguageName('pt'),
+  'pt-BR': getLanguageName('pt-BR'),
+  ro: getLanguageName('ro'),
+  ru: getLanguageName('ru'),
+  sr: getLanguageName('sr'),
+  sk: getLanguageName('sk'),
+  th: getLanguageName('th'),
+  ur: getLanguageName('ur'),
+  ca: getLanguageName('ca'),
+  es: getLanguageName('es'),
+  sv: getLanguageName('sv'),
+  tl: getLanguageName('tl'),
+  tr: getLanguageName('tr'),
+  cs: getLanguageName('cs'),
+  kn: getLanguageName('kn'),
+  uk: getLanguageName('uk'),
+  vi: getLanguageName('vi'),
+  ar: getLanguageName('ar'),
+};
+
+// Properties: language code (e.g. 'ja')
+// Values: name of the language in native form (e.g. '日本語')
+export default SUPPORTED_LANGUAGES;

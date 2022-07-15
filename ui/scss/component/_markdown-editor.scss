@@ -1,0 +1,126 @@
+.CodeMirror {
+  border: 1px solid var(--color-input-border);
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+  background: rgba(var(--color-header-background-base), 1);
+  color: var(--color-input);
+
+  .CodeMirror-placeholder {
+    opacity: 0.5;
+  }
+}
+
+.CodeMirror-wrap {
+  overflow: hidden;
+}
+
+.editor-toolbar {
+  background-color: var(--color-header-background);
+  border: none;
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+  border-right: 1px solid var(--color-input-border);
+  border-top: 1px solid var(--color-input-border);
+  border-left: 1px solid var(--color-input-border);
+
+  opacity: 1; // ?
+
+  &:hover {
+    opacity: 1; // ?
+  }
+
+  &.disabled-for-preview a:not(.no-disable) {
+    border-color: transparent;
+    opacity: 0.3;
+  }
+
+  &.fullscreen {
+    &::before,
+    &::after {
+      display: none;
+    }
+  }
+
+  button {
+    color: var(--color-header-link);
+    border-color: transparent;
+    transition: opacity 0.3s ease;
+  }
+
+  i.separator {
+    border: none;
+  }
+}
+
+.editor-statusbar {
+  .editor-statusbar__upload-hint {
+    display: block;
+    float: left;
+    margin-left: 0;
+  }
+}
+
+.form-field--SimpleMDE {
+  margin-top: var(--spacing-l);
+
+  .cm-s-easymde {
+    border-color: var(--color-input-border);
+  }
+
+  .cm-s-easymde .CodeMirror-cursor {
+    border-left: 1px solid var(--color-editor-cursor);
+  }
+
+  .cm-s-easymde .CodeMirror-selected {
+    background: var(--color-editor-selected);
+  }
+
+  .cm-s-easymde .cm-hr {
+    color: var(--color-editor-tag);
+  }
+
+  .cm-s-easymde .cm-tag {
+    color: var(--color-editor-tag);
+  }
+
+  .cm-s-easymde .cm-attribute {
+    color: var(--color-editor-attr);
+  }
+
+  .cm-s-easymde .cm-string {
+    color: var(--color-editor-string);
+  }
+
+  .cm-s-easymde .cm-comment {
+    background: var(--color-editor-inline-code-bg);
+    padding: 3px 0px; // @todo: should fill up line-spacing instead of harcoded.
+  }
+
+  .cm-s-easymde .cm-link {
+    color: var(--color-editor-link);
+  }
+
+  .cm-s-easymde .cm-url {
+    color: var(--color-editor-url);
+    font-style: italic;
+  }
+
+  .cm-s-easymde .cm-quote {
+    color: var(--color-editor-quote);
+    font-style: italic;
+  }
+
+  // Overriding the lbry/components form styling
+  .editor-toolbar {
+    button:not(.button) {
+      padding-right: 0;
+      padding-left: 0;
+      background-color: transparent !important;
+      border: transparent;
+
+      &:hover {
+        color: var(--color-header-link-active);
+      }
+    }
+  }
+}

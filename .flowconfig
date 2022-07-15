@@ -1,0 +1,57 @@
+[ignore]
+.*\.typeface\.json
+.*/node_modules/findup/.*
+.*/node_modules/react-plastic/.*
+.*/node_modules/raf-schd/.*
+.*/node_modules/react-beautiful-dnd/.*
+.*/node_modules/@emotion/.*
+
+[include]
+
+[libs]
+
+[lints]
+
+[options]
+suppress_comment=\\(.\\|\n\\)*\\$FlowFixMe
+suppress_comment=\\(.\\|\n\\)*\\$FlowIssue
+suppress_comment=\\(.\\|\n\\)*\\$FlowIgnore
+module.name_mapper='^constants\(.*\)$' -> '<PROJECT_ROOT>/ui/constants\1'
+module.name_mapper='^contexts\(.*\)$' -> '<PROJECT_ROOT>/ui/contexts\1'
+module.name_mapper='^util\(.*\)$' -> '<PROJECT_ROOT>/ui/util\1'
+module.name_mapper='^redux\(.*\)$' -> '<PROJECT_ROOT>/ui/redux\1'
+module.name_mapper='^types\(.*\)$' -> '<PROJECT_ROOT>/ui/types\1'
+module.name_mapper='^component\(.*\)$' -> '<PROJECT_ROOT>/ui/component\1'
+module.name_mapper='^page\(.*\)$' -> '<PROJECT_ROOT>/ui/page\1'
+module.name_mapper='^lbry\(.*\)$' -> '<PROJECT_ROOT>/ui/lbry\1'
+module.name_mapper='^modal\(.*\)$' -> '<PROJECT_ROOT>/ui/modal\1'
+module.name_mapper='^app\(.*\)$' -> '<PROJECT_ROOT>/ui/app\1'
+module.name_mapper='^native\(.*\)$' -> '<PROJECT_ROOT>/ui/native\1'
+module.name_mapper='^analytics\(.*\)$' -> '<PROJECT_ROOT>/ui/analytics\1'
+module.name_mapper='^recsys\(.*\)$' -> '<PROJECT_ROOT>/extras/recsys\1'
+module.name_mapper='^rewards\(.*\)$' -> '<PROJECT_ROOT>/ui/rewards\1'
+module.name_mapper='^i18n\(.*\)$' -> '<PROJECT_ROOT>/ui/i18n\1'
+module.name_mapper='^effects\(.*\)$' -> '<PROJECT_ROOT>/ui/effects\1'
+module.name_mapper='^comments\(.*\)$' -> '<PROJECT_ROOT>/ui/comments\1'
+module.name_mapper='^locale\(.*\)$' -> '<PROJECT_ROOT>/ui/locale\1'
+module.name_mapper='^config\(.*\)$' -> '<PROJECT_ROOT>/config\1'
+module.name_mapper='^web\/component\(.*\)$' -> '<PROJECT_ROOT>/web/component\1'
+module.name_mapper='^web\/effects\(.*\)$' -> '<PROJECT_ROOT>/web/effects\1'
+module.name_mapper='^web\/page\(.*\)$' -> '<PROJECT_ROOT>/web/page\1'
+module.name_mapper='^homepage\(.*\)$' -> '<PROJECT_ROOT>/ui/util/homepage\1'
+module.name_mapper='^scss\/component\(.*\)$' -> '<PROJECT_ROOT>/ui/scss/component/\1'
+module.name_mapper='^\$web\(.*\)$' -> '<PROJECT_ROOT>/web\1'
+module.name_mapper='^\$ui\(.*\)$' -> '<PROJECT_ROOT>/ui\1'
+
+esproposal.optional_chaining=enable
+
+; Extensions
+module.file_ext=.js
+module.file_ext=.jsx
+module.file_ext=.json
+module.file_ext=.css
+module.file_ext=.scss
+
+
+
+[strict]

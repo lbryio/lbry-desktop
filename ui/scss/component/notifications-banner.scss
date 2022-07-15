@@ -1,0 +1,41 @@
+@import '../init/breakpoints';
+
+.browserNotificationsBanner {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+  justify-content: space-between;
+  width: 100%;
+
+  @media (max-width: $breakpoint-small) {
+    flex-direction: column;
+    margin-bottom: var(--spacing-m);
+  }
+}
+
+.browserNotificationsBanner__actions {
+  display: flex;
+  align-items: center;
+
+  @media (max-width: $breakpoint-small) {
+    margin-top: var(--spacing-l);
+  }
+}
+
+.browserNotificationsBanner__overview {
+  display: flex;
+  align-items: center;
+}
+
+.browserNotificationsBanner__icon {
+  margin-right: var(--spacing-m);
+  flex-shrink: 0;
+}
+.browserNotificationsBanner__button {
+  margin-right: var(--spacing-m);
+}
+
+.notificationsBlocked__subText {
+  color: var(--color-text-subtitle);
+  font-size: var(--font-small);
+}

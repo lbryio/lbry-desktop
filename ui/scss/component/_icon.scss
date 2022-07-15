@@ -1,0 +1,93 @@
+.icon__wrapper {
+  background-color: var(--color-header-background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  margin-top: 0;
+  margin-bottom: 0;
+  height: 3.5rem;
+  width: 3.5rem;
+  border-radius: calc(3.5rem / 2);
+  position: relative;
+
+  .icon {
+    position: absolute;
+    stroke: var(--color-text);
+  }
+}
+
+.icon__wrapper--Heart {
+  background-color: var(--color-follow-bg);
+
+  .icon {
+    stroke: var(--color-follow-icon);
+    fill: var(--color-follow-icon);
+  }
+}
+
+.icon__wrapper--Eye {
+  background-color: var(--color-view-bg);
+
+  .icon {
+    stroke: var(--color-view-icon);
+  }
+}
+
+.icon__wrapper--Anonymous {
+  background-color: var(--color-gray-1);
+
+  .icon {
+    stroke: var(--color-black);
+  }
+}
+
+.icon--help {
+  color: var(--color-subtitle);
+  margin-left: var(--spacing-xs);
+  opacity: 0.7;
+}
+
+.icon--hidden {
+  margin-right: var(--spacing-s);
+}
+
+.icon__lbc {
+  vertical-align: middle;
+}
+
+.icon__lbc--before-text {
+  margin-left: 4px;
+}
+
+.icon__lbc--after-text {
+  margin-right: 2px;
+}
+
+.icon__lbc--title {
+  margin-bottom: 4px;
+}
+
+.icon--Fire {
+  position: relative;
+
+  &:after {
+    content: '';
+    height: 20px;
+    width: 20px;
+    background-color: red;
+    top: 0;
+    right: 0;
+    position: absolute;
+  }
+}
+
+.icon--margin-right {
+  margin-right: var(--spacing-xs);
+}
+
+.icon--langFilter {
+  color: var(--color-live);
+  margin-left: var(--spacing-xs);
+  opacity: 0.9;
+}

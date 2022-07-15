@@ -1,0 +1,60 @@
+.nudge {
+  z-index: 3;
+  position: absolute;
+  top: 4rem;
+  left: 0;
+  white-space: normal;
+  overflow: visible;
+  padding: var(--spacing-m);
+  border-radius: var(--border-radius);
+  box-shadow: var(--card-box-shadow);
+  background-color: var(--color-secondary);
+  color: var(--color-secondary-contrast);
+  font-weight: bold;
+
+  .button--close {
+    .icon {
+      stroke: var(--color-secondary-contrast);
+    }
+
+    &:hover {
+      background-color: var(--color-primary);
+
+      .icon {
+        stroke: var(--color-primary-contrast);
+      }
+    }
+  }
+
+  @media (min-width: $breakpoint-small) {
+    top: calc(var(--height-button) + var(--spacing-s));
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    height: 1rem;
+    width: 1rem;
+    top: -0.5rem;
+    left: 1rem;
+    transform: rotate(45deg);
+    background-color: var(--color-secondary);
+  }
+}
+
+.nudge__wrapper {
+  width: 10rem;
+  margin-right: var(--spacing-m);
+
+  @media (min-width: $breakpoint-small) {
+    width: 12.5rem;
+  }
+
+  .nudge__text {
+    display: -webkit-box;
+    max-width: 200px;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}

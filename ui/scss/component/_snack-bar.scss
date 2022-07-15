@@ -1,0 +1,121 @@
+.snack-bar {
+  bottom: 2rem;
+  right: 2rem;
+  max-width: 20rem;
+  background-color: rgba(var(--color-primary-static), 0.9);
+  color: var(--color-primary-contrast);
+  border-radius: var(--border-radius);
+  border: 2px solid var(--color-primary);
+  padding: var(--spacing-s) var(--spacing-m) var(--spacing-s) var(--spacing-m);
+  position: fixed;
+  transition: all var(--transition-duration) var(--transition-type);
+  z-index: 10000; // hack to get it over react modal
+  display: flex;
+  flex-direction: column;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+
+  .button__label {
+    color: var(--color-primary-contrast);
+  }
+
+  @media (max-width: $breakpoint-small) {
+    bottom: var(--spacing-xxs);
+    right: var(--spacing-xxs);
+  }
+}
+
+.snack-bar--upgrade {
+  @extend .snack-bar;
+  left: auto;
+  right: 2rem;
+  background-color: var(--color-snack-bg-upgrade);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.snack-bar--error {
+  background-color: var(--color-snack-bg-error);
+}
+
+.snack-bar--stacked-non-error {
+  /*
+  box-shadow: // The top layer shadow
+    0 1px 1px var(--color-border),
+    // The second layer
+    0 10px 0 -5px var(--color-primary),
+    // The second layer shadow
+    0 10px 1px -4px var(--color-border);
+  //// The third layer
+  //0 20px 0 -10px var(--color-primary),
+  //// The third layer shadow
+  //0 20px 1px -9px var(--color-border);
+  */
+}
+
+.snack-bar--stacked-error {
+  box-shadow: // The top layer shadow
+    0 1px 1px var(--color-border),
+    // The second layer
+    0 10px 0 -5px var(--color-snack-bg-error),
+    // The second layer shadow
+    0 10px 1px -4px var(--color-border);
+  //// The third layer
+  //0 20px 0 -10px var(--color-snack-bg-error),
+  //// The third layer shadow
+  //0 20px 1px -9px var(--color-border);
+}
+
+.snack-bar--notification {
+  @extend .card;
+  background-color: var(--color-card-background);
+  color: var(--color-text);
+}
+
+.snack-bar__action {
+  display: inline-block;
+  margin: var(--spacing-s) 0;
+  margin-left: auto;
+  min-width: min-content;
+  color: var(--color-white);
+  font-size: var(--font-small);
+
+  span:hover {
+    text-decoration: underline;
+  }
+}
+
+.snack-bar__message {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  font-size: var(--font-body);
+
+  .credit-amount {
+    color: inherit;
+  }
+
+  .icon--CheckCircle,
+  .icon--AlertCircle {
+    margin-right: var(--spacing-m);
+    min-width: 1rem;
+  }
+}
+
+.snack-bar__messageText {
+  min-width: 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.snack-bar__messageText--sub {
+  font-size: var(--font-small);
+  opacity: 0.8;
+}
+
+.snack-bar__close {
+  color: var(--color-primary-contrast);
+  margin-left: var(--spacing-m);
+}

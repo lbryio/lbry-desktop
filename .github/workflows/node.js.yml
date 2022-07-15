@@ -1,0 +1,57 @@
+# This workflow will do a clean install of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+
+name: Node.js CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: Borales/actions-yarn@v3.0.0
+      - run: yarn lint
+
+  build:
+    needs: ['lint']
+    name: 'build'
+    strategy:
+      matrix:
+        node-version: [14.x]
+        os:
+          - ubuntu-latest
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Build
+        run: |
+          yarn global add cross-env
+          yarn
+          yarn compile:web
+        env:
+          # UI
+          WELCOME_VERSION: 1.0
+          DOMAIN: odysee.com
+          URL: https://odysee.com
+          SHARE_DOMAIN_URL: https://odysee.com
+          SITE_TITLE: Odysee
+          SITE_NAME: Odysee
+          SHOW_ADS: false
+          YRBL_HAPPY_IMG_URL: https://player.odycdn.com/api/v3/streams/free/yrbl-happy/7aa50a7e5adaf48691935d55e45d697547392929/839d9a
+          YRBL_SAD_IMG_URL: https://player.odycdn.com/api/v3/streams/free/yrbl-sad/c2d9649633d974e5ffb503925e1f17d951f1bd0f/f262dd
+          ENABLE_COMMENT_REACTIONS: true
+          ENABLE_NO_SOURCE_CLAIMS: true
+          DEFAULT_LANGUAGE: en
+          KNOWN_APP_DOMAINS: lbry.tv,lbry.lat,odysee.com
+          CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS: 4

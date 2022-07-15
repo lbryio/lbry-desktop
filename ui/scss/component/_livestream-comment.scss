@@ -1,0 +1,248 @@
+@import '../init/breakpoints';
+@import '../init/mixins';
+@import '../component/superchat';
+
+.livestream__comment {
+  list-style-type: none;
+  position: relative;
+
+  .date_time {
+    color: var(--color-text-subtitle);
+    opacity: var(--live-timestamp-opacity);
+  }
+
+  &:hover {
+    background-color: rgba(var(--color-primary-dynamic), 0.06);
+
+    .date_time {
+      opacity: 0.5;
+    }
+  }
+
+  .comment__author {
+    color: rgba(var(--color-text-base), 0.5);
+    margin-top: var(--spacing-xxs);
+    max-width: unset;
+
+    .button__content {
+      max-width: unset;
+    }
+
+    &:hover {
+      color: var(--color-primary) !important;
+    }
+  }
+
+  .channel-name {
+    color: var(--color-secondary);
+    &:hover {
+      color: var(--color-primary);
+    }
+  }
+
+  @media (min-width: $breakpoint-small) {
+    &:not(:hover) {
+      .menu__button:not(:focus):not([aria-expanded='true']) {
+        opacity: 0;
+      }
+    }
+  }
+
+  .channel-name {
+    font-size: var(--font-xsmall);
+  }
+}
+
+.livestream__comment--mobile {
+  @extend .livestream__comment;
+
+  display: flex;
+  justify-content: space-between;
+  padding: 0;
+  padding-left: var(--spacing-xxxs);
+
+  .livestreamComment__menu {
+    position: relative;
+    right: 0;
+    top: var(--spacing-xxs);
+    .menu__button {
+      opacity: 1;
+    }
+  }
+
+  .comment__author {
+    color: var(--color-primary);
+  }
+
+  span,
+  p {
+    font-size: var(--font-xsmall) !important;
+  }
+}
+
+.livestream__comment--mentioned {
+  background-color: var(--color-card-background-highlighted);
+}
+
+.livestreamComment__info {
+  overflow: hidden;
+
+  .comment__badge svg {
+    height: 1.4rem;
+    width: 1.4rem;
+  }
+}
+
+.livestream__comment--superchat {
+  background-color: rgba(var(--color-primary-dynamic), 0.05);
+  //background-color: var(--color-card-background-highlighted);
+  box-shadow: 2px 0px 0px 0px var(--color-primary) inset;
+  display: unset;
+  padding-left: 0;
+
+  + .livestream__comment--superchat {
+    margin-bottom: var(--spacing-xxs);
+  }
+
+  .livestreamComment__body {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: unset;
+    flex: unset;
+    margin-left: 3px;
+
+    .freezeframe-wrapper,
+    .channel-thumbnail--xsmall {
+      margin-left: var(--spacing-xs);
+    }
+  }
+
+  .livestreamComment__info {
+    margin-top: calc(var(--spacing-xxs) / 2);
+  }
+
+  .button__content {
+    color: var(--color-primary);
+  }
+
+  .date_time {
+    opacity: 1;
+  }
+  .livestreamComment__menu {
+    position: absolute;
+  }
+
+  &::before {
+    display: none;
+    position: absolute;
+    left: 0;
+    height: 100%;
+    max-height: 4rem;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    width: 5px;
+    background-color: var(--color-superchat);
+    content: '';
+  }
+}
+
+.livestreamComment__body {
+  display: flex;
+  align-items: flex-start;
+  margin-left: var(--spacing-s);
+  overflow: hidden;
+
+  .channel-thumbnail {
+    @include handleChannelGif(2rem);
+    margin-top: var(--spacing-s);
+    flex-shrink: 0;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    margin-left: 0;
+  }
+}
+
+.livestreamComment__menu {
+  position: absolute;
+  right: 2px;
+  top: 2px;
+
+  [aria-expanded='true'].menu__button {
+    opacity: 1;
+    background-color: var(--color-header-background);
+    border-radius: var(--border-radius);
+    .icon {
+      stroke: var(--color-primary);
+    }
+  }
+}
+
+.livestreamComment__superchatBanner {
+  @extend .superChat;
+
+  border-radius: 0;
+  display: inline-block;
+  position: relative;
+  width: 90%;
+  background-image: linear-gradient(to right, var(--color-primary), rgba(var(--color-primary-dynamic), 0));
+  padding: 4px 2px 2px 4px;
+
+  .superChat {
+    background-color: var(--color-header-background);
+    padding-top: 5px !important;
+  }
+
+  .credit-amount {
+    color: var(--color-text);
+    svg {
+      margin-bottom: -2px;
+    }
+  }
+}
+
+// This is just a two small circles that overlap to make it look like
+// the banner and the left border are connected
+.livestreamComment__superchatBanner--corner {
+  height: calc(var(--border-radius) * 2);
+  width: calc(var(--border-radius) * 2);
+  border-radius: 50%;
+  position: absolute;
+  background-color: var(--color-superchat);
+  bottom: 0;
+  left: 0;
+  transform: translateX(0) translateY(50%);
+
+  &::after {
+    content: '';
+    height: calc(var(--border-radius) * 2);
+    width: calc(var(--border-radius) * 2);
+    border-top-left-radius: var(--border-radius);
+    background-color: var(--color-card-background);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    transform: translateX(25%) translateY(50%);
+  }
+}
+
+.livestreamComment__text {
+  padding-right: var(--spacing-s);
+  padding-bottom: var(--spacing-xxs);
+
+  .markdown-preview {
+    p {
+      word-break: break-word;
+    }
+
+    .channel-name {
+      font-size: var(--font-small);
+    }
+
+    .button--link {
+      .icon {
+        flex-shrink: 0;
+      }
+    }
+  }
+}

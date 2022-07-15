@@ -1,0 +1,148 @@
+.livestream {
+  flex: 1;
+  width: 100%;
+  padding-top: var(--aspect-ratio-standard);
+  position: relative;
+  border-radius: var(--border-radius);
+
+  .media__thumb,
+  iframe {
+    overflow: hidden;
+    border-radius: var(--border-radius);
+    height: 100%;
+    max-height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  ~ .notice-message {
+    margin-top: var(--spacing-m);
+  }
+}
+
+.livestream__channel-link {
+  margin-bottom: var(--spacing-xl);
+  box-shadow: 0 0 0 rgba(246, 72, 83, 0.4);
+  animation: livePulse 2s infinite;
+  padding: var(--spacing-m);
+
+  background: rgba(var(--color-primary-dynamic), 0.1);
+  border-radius: var(--border-radius);
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+@keyframes livePulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(246, 72, 83, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(246, 72, 83, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(246, 72, 83, 0);
+  }
+}
+
+.livestream__publish-checkbox {
+  margin: var(--spacing-l) 0;
+
+  .checkbox,
+  .radio {
+    margin-top: var(--spacing-m);
+
+    label {
+      color: #444;
+    }
+  }
+}
+
+.livestream__creator-message {
+  background-color: #fde68a;
+  padding: var(--spacing-m);
+  color: black;
+  border-radius: var(--border-radius);
+
+  h4 {
+    font-weight: bold;
+    font-size: var(--font-small);
+    margin-bottom: var(--spacing-s);
+  }
+}
+
+.livestream__publish-intro {
+  margin-top: var(--spacing-l);
+}
+
+.livestream__viewer-count {
+  display: flex;
+  align-items: center;
+
+  .icon {
+    margin-left: var(--spacing-xxs);
+  }
+}
+
+.table--livestream-data {
+  td:nth-of-type(1) {
+    max-width: 4rem;
+  }
+  td:nth-of-type(2) {
+    min-width: 8.5rem;
+  }
+  td:nth-of-type(3) {
+    width: 4rem;
+    min-width: 9rem;
+  }
+  td:nth-of-type(4) {
+    display: none;
+  }
+  @media (min-width: $breakpoint-small) {
+    td:nth-of-type(1) {
+      max-width: 4rem;
+    }
+    td:nth-of-type(2) {
+      width: 40%;
+    }
+    td:nth-of-type(3) {
+      width: 5rem;
+    }
+    td:nth-of-type(4) {
+      width: 100%;
+      display: table-cell;
+    }
+  }
+}
+
+.livestream_thumb_container {
+  height: 4rem;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+}
+
+.livestream___thumb {
+  padding: 0 var(--spacing-xxs);
+  object-fit: cover;
+}
+
+.livestream-list {
+  margin-bottom: var(--spacing-l);
+  border-bottom: 1px solid var(--color-border);
+
+  .claim-list__header-label {
+    margin-top: 0;
+  }
+}
+
+.livestream-list--view-more {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: var(--spacing-s);
+}

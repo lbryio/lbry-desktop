@@ -1,0 +1,4 @@
+[defaults]
+url = https://sentry.odysee.tv/
+org = odysee
+project = odysee-web

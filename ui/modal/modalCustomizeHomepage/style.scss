@@ -1,0 +1,10 @@
+.modal-customize-homepage__body {
+  display: flex;
+  flex-direction: column;
+
+  button {
+    align-self: flex-end;
+    margin-right: var(--spacing-s);
+    margin-bottom: var(--spacing-s);
+  }
+}

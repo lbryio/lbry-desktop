@@ -1,0 +1,26 @@
+// "--color-text-error" is too bright, while "--color-error" isn't adjusted for
+// light theme. Using the value of RED_COLOR from icon.jsx.
+$text-color: #e2495e;
+
+.geo-restriction-info {
+  display: flex;
+  margin: var(--spacing-m) 0;
+  align-items: center;
+  flex-direction: column;
+  background: var(--color-card-background);
+  border-radius: var(--border-radius);
+  color: $text-color;
+}
+
+.geo-restriction-info__container {
+  display: flex;
+  align-items: center;
+  margin-top: var(--spacing-l);
+  margin-bottom: var(--spacing-l);
+}
+
+.geo-restriction-info__title {
+  font-size: var(--font-large);
+  font-style: italic;
+  margin-left: var(--spacing-s);
+}

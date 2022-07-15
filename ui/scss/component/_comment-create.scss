@@ -1,0 +1,294 @@
+@import '../init/breakpoints';
+
+$thumbnailWidth: 1.5rem;
+$thumbnailWidthSmall: 1rem;
+
+.content_comment {
+  position: relative;
+}
+
+.commentCreate {
+  font-size: var(--font-small);
+  position: relative;
+
+  .section {
+    margin-top: var(--spacing-xs);
+  }
+
+  .button--file-action {
+    &:hover {
+      background-color: var(--color-primary) !important;
+      color: var(--color-primary-contrast);
+    }
+  }
+
+  .section__actions {
+    .button,
+    .button--link {
+      background-color: var(--color-header-background);
+      color: var(--color-text);
+      border-radius: var(--border-radius);
+      &:hover {
+        background-color: var(--color-primary);
+        color: var(--color-primary-contrast);
+      }
+    }
+    .button--link {
+      // flex: auto;
+      margin-top: -2px;
+      height: var(--height-button);
+      .button__content {
+        justify-content: center;
+      }
+      .button__label {
+        margin-top: 1px;
+        line-height: 18px;
+      }
+    }
+    .button--alt {
+      margin-top: -2px;
+    }
+
+    @media (max-width: $breakpoint-small) {
+      margin-top: var(--spacing-s);
+      .button--alt {
+        flex: auto;
+        .button__content {
+          justify-content: center;
+        }
+      }
+      .button--link {
+        flex: auto;
+        height: 2rem;
+      }
+    }
+  }
+
+  fieldset-section,
+  .form-field--SimpleMDE {
+    margin-top: 0;
+  }
+
+  .form-field__two-column {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    .comment__char-count-mde {
+      margin-left: auto;
+      min-width: 40px;
+      text-align: center;
+      margin-bottom: 8px;
+      // margin-right: var(--spacing-s);
+      padding-left: 4px;
+      padding-right: 4px;
+      padding-top: 5px;
+      border-radius: var(--border-radius);
+      height: var(--height-input-slim);
+    }
+
+    .button--file-action {
+      padding: 0px;
+      height: var(--height-input-slim);
+      background: var(--color-header-background);
+      margin-bottom: 8px;
+      .button__content {
+        .icon {
+          width: var(--height-input-slim);
+          height: var(--height-input-slim);
+          padding: 4px;
+          border-radius: var(--border-radius);
+        }
+      }
+
+      &:hover {
+        background-color: var(--color-primary) !important;
+        .button__content {
+          .icon {
+            stroke: var(--color-primary-contrast);
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: $breakpoint-small) {
+    .MuiTextField-root {
+      .button--primary {
+        .button__content {
+          .icon {
+            stroke: var(--color-primary-contrast);
+            margin-left: 1px;
+            margin-right: -1px;
+          }
+        }
+      }
+      textarea#create__comment,
+      textarea#create__reply {
+        box-shadow: unset;
+      }
+    }
+  }
+
+  @media (min-width: $breakpoint-small) {
+    fieldset-section + .section {
+      margin-top: var(--spacing-m);
+    }
+  }
+}
+
+@media (max-width: $breakpoint-small) {
+  .empty__wrap {
+    p {
+      font-size: var(--font-small);
+      text-align: center;
+    }
+  }
+}
+
+.comment-create--drawer {
+  .MuiPaper-root {
+    //background-color: var(--color-background) !important;
+
+    span {
+      color: var(--color-text);
+    }
+  }
+}
+
+.commentCreate--reply {
+  margin-top: var(--spacing-m);
+  position: relative;
+}
+
+.commentCreate--nestedReply {
+  margin-top: var(--spacing-s);
+  margin-left: calc((#{$thumbnailWidthSmall} + var(--spacing-xs)) * 2 + var(--spacing-m) + 4px);
+
+  @media (min-width: $breakpoint-small) {
+    margin-left: calc((#{$thumbnailWidth} + var(--spacing-m)) * 2 + var(--spacing-m) + 4px);
+  }
+}
+
+.commentCreate--bottom {
+  padding-bottom: 0;
+}
+
+.comment-create__label-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: baseline;
+  flex-wrap: wrap;
+  width: 100%;
+
+  .comment-create__label {
+    white-space: nowrap;
+    margin-right: var(--spacing-xs);
+  }
+
+  fieldset-section {
+    max-width: 10rem;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    fieldset-section {
+      font-size: var(--font-xxsmall);
+    }
+
+    span {
+      font-size: var(--font-xxsmall);
+    }
+
+    select {
+      height: 1rem;
+      margin: var(--spacing-xxs) 0px;
+    }
+  }
+}
+
+.commentCreate__supportCommentPreview {
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-s);
+  margin: var(--spacing-s) 0;
+
+  .commentCreate__supportCommentPreviewAmount {
+    margin-right: var(--spacing-m);
+    font-size: var(--font-large);
+  }
+
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-xs);
+
+    span {
+      font-size: var(--font-xsmall);
+    }
+  }
+}
+
+.comment-create__min-amount-notice {
+  margin-top: calc(var(--spacing-xxs) - 2px);
+  padding-top: calc(var(--spacing-xs) + 1px);
+  height: var(--height-button);
+  .icon {
+    margin-bottom: -3px; // TODO fix few instances of these (find "-2px")
+  }
+
+  @media (max-width: $breakpoint-small) {
+    margin: 0px;
+    padding-top: calc(var(--spacing-xs) + 3px);
+    font-size: var(--font-xsmall);
+  }
+}
+
+.commentCreate__stickerPreview {
+  @extend .commentCreate;
+  display: flex;
+  //border: 1px solid var(--color-border);
+  background-color: var(--color-header-background);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-s);
+  margin: var(--spacing-s) 0;
+  overflow: hidden;
+  width: 100%;
+  height: 10rem;
+
+  .commentCreate__stickerPreviewInfo {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .commentCreate__stickerPreviewImage {
+    width: 100%;
+    height: 100%;
+    margin-left: var(--spacing-m);
+  }
+
+  .filePrice {
+    height: 1.5rem;
+    width: 10rem;
+
+    .credit-amount:not(:last-child) {
+      &::after {
+        margin-left: var(--spacing-xxs);
+        content: '/';
+      }
+    }
+
+    .credit-amount:not(:first-child) {
+      margin-left: var(--spacing-xxs);
+    }
+  }
+
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-xs);
+    height: 7rem;
+
+    span {
+      font-size: var(--font-xsmall);
+    }
+  }
+}

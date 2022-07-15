@@ -1,0 +1,25 @@
+.comment__badge {
+  padding-right: var(--spacing-xxs);
+
+  .icon {
+    margin-bottom: -4px;
+    height: 1rem;
+    width: 1rem;
+  }
+}
+
+// fix badge becoming red when hovered
+div[role='menuitem'] .channel__list-item .comment__badge svg,
+.comment__badge svg {
+  stroke: unset !important;
+}
+
+// icon is a bit bright and loud
+.icon--PremiumPlus {
+  filter: brightness(0.92);
+}
+
+// increase sidebar brightness
+span > div.navigation__subscription-title > span > span.comment__badge {
+  filter: brightness(1.2);
+}

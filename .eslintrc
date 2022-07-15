@@ -1,0 +1,72 @@
+{
+  "parser": "babel-eslint",
+  "extends": ["standard", "standard-jsx", "plugin:react/recommended", "plugin:flowtype/recommended"],
+  "plugins": ["flowtype", "import", "react-hooks"],
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "globals": {
+    "__static": true,
+    "i18n": true,
+    "__": true,
+    "app": true,
+    "IS_WEB": true,
+    "WEBPACK_PORT": true
+  },
+  "settings": {
+	"react": {
+		"version": "detect"
+	}
+  },
+  "rules": {
+    "brace-style": 0,
+    "camelcase": 0,
+    "comma-dangle": ["error", {
+      "arrays": "always-multiline",
+      "objects": "always-multiline",
+      "imports": "always-multiline",
+      "exports": "always-multiline",
+      "functions": "never"
+    }],
+    "handle-callback-err": 0,
+    "indent": 0,
+    "jsx-quotes": ["error", "prefer-double"],
+    "new-cap": 0,
+    "no-console": 1,
+    "no-control-regex": 0,
+    "no-multi-spaces": 0,
+    "no-redeclare": 0,
+    "no-return-await": 0,
+    "object-curly-spacing": 0,
+    "one-var": 0,
+    "prefer-promise-reject-errors": 0,
+    "promise/param-names": 0,
+    "react/jsx-indent": 0,
+    "react/jsx-no-comment-textnodes": 0,
+    "react-hooks/exhaustive-deps": "warn",
+    "react-hooks/rules-of-hooks": "error",
+    "react/no-unescaped-entities": 0,
+    "space-before-function-paren": [
+      "warn",
+      {
+        "anonymous": "never",
+        "named": "never",
+        "asyncArrow": "always"
+      }
+    ],
+    "standard/object-curly-even-spacing": 0,
+    "standard/no-callback-literal": 0,
+    "react/display-name": 0,
+    "semi": [
+      "error",
+      "always",
+      {
+        "omitLastInOneLineBlock": true
+      }
+    ]
+  }
+}

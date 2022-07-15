@@ -1,0 +1,421 @@
+$thumbnailWidth: 4rem;
+$contentMaxWidth: 60rem;
+
+.notifications__empty {
+  background-color: var(--color-card-background);
+  padding: var(--spacing-l);
+}
+
+.notification_list {
+  .notification__wrapper {
+    border-radius: var(--border-radius);
+    margin-bottom: var(--spacing-xxs);
+    background-color: rgba(var(--color-header-background-base), 0.6);
+
+    &:first-of-type {
+      border-top: none;
+    }
+
+    .notification__menu {
+      margin-right: var(--spacing-s);
+      .icon {
+        stroke: var(--color-text);
+      }
+
+      .menu__button {
+        .icon {
+          transition: transform 0.2s;
+        }
+      }
+
+      [aria-expanded='true'].menu__button {
+        opacity: 1;
+        background-color: rgba(var(--color-header-button-base), 0.9);
+        border-radius: 50%;
+        outline: 2px solid var(--color-header-background);
+        .icon {
+          stroke: var(--color-primary);
+          transform: rotate(-90deg);
+        }
+      }
+    }
+
+    .commentCreate {
+      border-top: 1px solid var(--color-border);
+      padding-top: var(--spacing-s);
+
+      .commentCreate__label {
+        color: var(--color-text);
+      }
+      textarea,
+      select,
+      .button:not(.button--file-action) {
+        background-color: var(--color-background);
+      }
+      .button {
+        border-radius: var(--border-radius);
+      }
+      .comment__char-count-mde {
+        padding-right: 0px;
+      }
+
+      .button--file-action {
+        .button__content {
+          .icon {
+            background: var(--color-header-button);
+          }
+        }
+      }
+    }
+
+    &:hover {
+      cursor: pointer;
+      background-color: rgba(var(--color-header-background-base), 0.9);
+      .menu__button {
+        opacity: 1;
+      }
+      .notification__text {
+        color: var(--color-primary);
+      }
+    }
+
+    @media (max-width: $breakpoint-small) {
+      .notification__menu {
+        margin-right: calc(var(--spacing-xs) * -1);
+        .menu__button {
+          opacity: 1;
+        }
+      }
+
+      .MuiAutocomplete-root {
+        background-color: var(--color-background);
+        border-radius: var(--border-radius);
+      }
+    }
+  }
+
+  .commentCreate,
+  .comment__content {
+    margin: var(--spacing-m);
+    margin-bottom: 0;
+  }
+}
+
+.notification__icon {
+  display: flex;
+  align-items: flex-start;
+  margin-top: var(--spacing-xxs);
+
+  .icon__wrapper {
+    width: 1rem;
+    height: 1rem;
+    padding: 1.2rem;
+    border-radius: var(--border-radius);
+    margin-right: var(--spacing-m);
+
+    @media (min-width: $breakpoint-small) {
+      padding: 1.5rem;
+    }
+  }
+
+  @media (min-width: $breakpoint-small) {
+    align-items: center;
+    margin-left: var(--spacing-m);
+  }
+
+  @media (max-width: $breakpoint-medium) {
+    margin-top: var(--spacing-xxs);
+  }
+}
+
+.notification__wrapper {
+  width: 100%;
+  display: flex;
+  padding: var(--spacing-m) 0;
+  justify-content: space-between;
+  flex-direction: column;
+
+  .channel-thumbnail {
+    @include handleChannelGif(3rem);
+  }
+
+  .date_time {
+    font-size: var(--font-small);
+  }
+
+  .icon__wrapper {
+    background-color: rgba(var(--color-primary-dynamic), 0.1);
+  }
+
+  &:hover {
+    .icon__wrapper {
+      background-color: rgba(var(--color-primary-dynamic), 0.2);
+    }
+  }
+
+  @media (max-width: $breakpoint-small) {
+    .channel-thumbnail {
+      @include handleChannelGif(2rem);
+    }
+  }
+
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-s);
+  }
+
+  .comment__creator-like {
+    height: 0.8rem;
+    width: 0.8rem;
+    margin-left: 3px;
+    z-index: 3;
+    position: absolute;
+    top: 0.4rem;
+    left: 0.4rem;
+  }
+}
+
+.notification__wrapper--unread {
+  box-shadow: 2px 0px 0px 0px rgba(var(--color-primary-dynamic), 0.7) inset;
+  justify-content: space-between;
+
+  @media (max-width: $breakpoint-small) {
+    padding: var(--spacing-s);
+  }
+
+  &:hover {
+    box-shadow: 2px 0px 0px 0px rgba(var(--color-primary-dynamic), 1) inset;
+  }
+}
+
+.notificationContent__wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+
+  @media (min-width: $breakpoint-small) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.notification__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  max-width: $contentMaxWidth;
+
+  @media (min-width: $breakpoint-small) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.notificationContent__thumbnail {
+  @include thumbnail;
+  position: relative;
+  margin-left: auto;
+  height: auto;
+  width: 100%;
+  margin-top: var(--spacing-s);
+
+  @media (min-width: $breakpoint-small) {
+    height: thumbnailWidth;
+    width: calc(#{$thumbnailWidth} * 16 / 9);
+    max-width: calc(#{$thumbnailWidth} * 16 / 9);
+    margin-left: var(--spacing-m);
+    margin-top: 0;
+    min-width: 0;
+  }
+}
+
+.notificationText__wrapper {
+  max-width: calc(#{$contentMaxWidth} - (#{$thumbnailWidth} * 16 / 9) - var(--spacing-m));
+
+  .sticker__comment {
+    width: 4.5rem;
+    height: 4.5rem;
+  }
+}
+
+.notification__title {
+  position: relative;
+  font-size: var(--font-xsmall);
+  color: var(--color-text-subtitle);
+  // margin-bottom: var(--spacing-xxs);
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+
+  .channel-name {
+    font-size: unset;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    margin-bottom: 0;
+  }
+}
+
+.notification__claim-title {
+  font-weight: var(--font-weight-bold);
+}
+
+.notification__text {
+  font-size: var(--font-small);
+  color: var(--color-text);
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.notification__text,
+.notification__title {
+  flex-shrink: 1;
+}
+
+.notification__text--replies {
+  font-style: italic;
+
+  blockquote {
+    padding-left: var(--spacing-xs);
+    border-left: 2px solid;
+    color: var(--color-text) !important;
+  }
+}
+
+.notification__time {
+  font-size: var(--font-small);
+  color: var(--color-text);
+  flex-shrink: 0;
+  margin-top: var(--spacing-s);
+
+  @media (min-width: $breakpoint-small) {
+    margin-left: var(--spacing-s);
+    margin-top: 0;
+  }
+}
+
+.notification__reactions {
+  display: flex;
+  margin: var(--spacing-m);
+  margin-bottom: 0;
+
+  @media (min-width: $breakpoint-small) {
+    margin-left: 5rem;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    margin-left: 3rem;
+  }
+
+  > *:not(:last-of-type) {
+    margin-right: var(--spacing-m);
+  }
+
+  .button__label {
+    margin-left: var(--spacing-xs);
+  }
+}
+
+.notification__bubble {
+  height: 1.4rem;
+  width: 1.4rem;
+  border-radius: 50%;
+  border: 1.5px solid var(--color-background);
+  background-color: var(--color-notification);
+  position: absolute;
+  top: -0.4rem;
+  right: -0.4rem;
+  color: white;
+  font-size: var(--font-small);
+  font-weight: bold;
+  line-height: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: scale(1);
+  transition: transform 0.4s;
+
+  .notification__count {
+    margin-bottom: -2px;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    right: 0rem;
+  }
+}
+
+.notification__bubble-hidden {
+  transform: scale(0);
+}
+
+.notification__bubble--small {
+  font-size: var(--font-xxsmall);
+}
+
+.notification__bubble--inline {
+  @extend .notification__bubble;
+  top: 0.75rem;
+  right: 1rem;
+}
+
+.notification__extra {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-right: var(--spacing-m);
+  flex-direction: row-reverse;
+
+  @media (min-width: $breakpoint-small) {
+    margin-left: var(--spacing-s);
+    margin-top: 0;
+    flex-direction: row;
+  }
+}
+
+.notification__markSeen {
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  margin-left: var(--spacing-s);
+  margin-top: var(--spacing-s);
+
+  @media (min-width: $breakpoint-small) {
+    margin-top: 0;
+  }
+}
+
+.notification__menu {
+  margin-right: var(--spacing-m);
+
+  .icon {
+    stroke: var(--color-text-help);
+  }
+}
+
+.notification-page {
+  @media (max-width: $breakpoint-small) {
+    .claim-list__header {
+      display: block;
+    }
+
+    .claim-list__alt-controls--wrap {
+      display: block;
+      text-align: right;
+
+      .button {
+        margin-bottom: var(--spacing-s);
+      }
+
+      fieldset-section {
+        margin-left: 0;
+      }
+    }
+  }
+}

@@ -1,0 +1,260 @@
+@import '../../../../../../scss/init/_breakpoints.scss';
+
+.playlist-claim-preview__wrapper {
+  display: table;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  width: 100%;
+
+  .table-column__thumbnail {
+    display: table-cell;
+    width: calc(var(--file-list-thumbnail-width) * 1.2 + var(--spacing-m));
+    height: 100%;
+    padding-left: var(--spacing-m);
+    vertical-align: middle;
+
+    .collection-preview-overlay__grid {
+      height: calc(100% - 2px) !important;
+      margin: 1px;
+      border-radius: var(--border-radius) 0 0 var(--border-radius);
+      .collection-preview-overlay__grid-item {
+        margin: 4px !important;
+        margin-bottom: 0 !important;
+        transform: unset;
+        .media__thumb {
+          height: 96%;
+        }
+      }
+    }
+    span {
+      font-size: var(--font-small);
+      font-weight: bold;
+    }
+
+    .ff-responsive {
+      max-height: 100%;
+
+      .ff-canvas {
+        max-height: 100%;
+        opacity: 1 !important;
+      }
+
+      .ff-image {
+        opacity: 0 !important;
+      }
+    }
+
+    @media (max-width: $breakpoint-medium) {
+      width: calc(var(--file-list-thumbnail-width) + var(--spacing-m));
+    }
+    @media (max-width: $breakpoint-small) {
+      width: calc(var(--file-list-thumbnail-width) * 0.8 + var(--spacing-m));
+      .media__thumb {
+        width: calc(var(--file-list-thumbnail-width) * 0.8) !important;
+
+        .collection-preview-overlay__grid-item {
+          .media__thumb {
+            width: unset !important;
+          }
+        }
+      }
+    }
+  }
+
+  .table-column__title {
+    display: table-cell;
+    width: calc(46% - (calc(var(--file-list-thumbnail-width) * 1.2) + var(--spacing-m)));
+    height: 100%;
+    vertical-align: middle;
+    padding-left: var(--spacing-m);
+
+    h2 {
+      color: var(--color-text);
+      svg,
+      span {
+        display: inline-block;
+      }
+      svg {
+        margin-bottom: 5px;
+        margin-right: var(--spacing-s);
+      }
+    }
+    .channel-thumbnail--xsmall {
+      width: var(--font-base) !important;
+      height: var(--font-base) !important;
+      margin-bottom: 2px;
+    }
+    a {
+      color: rgba(var(--color-text-base), 0.6);
+      &:hover {
+        color: rgba(var(--color-text-base), 1);
+      }
+    }
+    @media (max-width: $breakpoint-medium) {
+      width: calc(62% - (calc(var(--file-list-thumbnail-width)) + var(--spacing-m)));
+    }
+    @media (max-width: $breakpoint-small) {
+      display: block;
+      height: 1rem;
+      width: calc(100% - var(--spacing-m));
+      padding-left: var(--spacing-s);
+      h2 {
+        span {
+          display: -webkit-box;
+        }
+      }
+      .icon {
+        display: none;
+      }
+    }
+  }
+
+  .table-column__meta {
+    display: table-cell;
+    width: 42%;
+    height: 100%;
+    vertical-align: middle;
+    @media (max-width: $breakpoint-medium) {
+      width: 20%;
+    }
+    @media (max-width: $breakpoint-xsmall) {
+      position: absolute;
+      bottom: var(--spacing-m);
+      display: block;
+      height: calc(var(--font-xsmall) * 3);
+      width: 100%;
+      padding-left: var(--spacing-s);
+    }
+  }
+
+  .table-column__visibility {
+    display: inline-block;
+    width: 33%;
+    height: 100%;
+    span {
+      font-size: var(--font-base) !important;
+      line-height: 1.5;
+    }
+    .icon {
+      height: var(--font-base) !important;
+      margin-right: var(--spacing-xxs);
+    }
+
+    @media (max-width: $breakpoint-medium) {
+      display: block;
+      width: unset;
+    }
+    @media (max-width: $breakpoint-xsmall) {
+      // height: var(--font-xxsmall);
+      height: 3px;
+      .icon {
+        margin-bottom: -1px;
+        margin-right: 2px;
+        height: var(--font-xxxsmall) !important;
+      }
+      span {
+        line-height: var(--font-xxsmall);
+        font-size: var(--font-xxsmall) !important;
+      }
+    }
+  }
+
+  .table-column__create-at {
+    display: inline-block;
+    width: 33%;
+    span {
+      font-size: var(--font-base) !important;
+    }
+    .icon {
+      height: var(--font-base) !important;
+      margin-bottom: -2px;
+      margin-right: var(--spacing-xxs);
+    }
+
+    @media (max-width: $breakpoint-medium) {
+      display: block;
+      width: unset;
+      span {
+        width: 100%;
+      }
+    }
+    @media (max-width: $breakpoint-xsmall) {
+      height: var(--font-xxsmall);
+      .icon {
+        margin-bottom: -1px;
+        margin-right: 2px;
+        height: var(--font-xxxsmall) !important;
+      }
+      span {
+        line-height: var(--font-xxsmall);
+        font-size: var(--font-xxsmall) !important;
+      }
+    }
+  }
+
+  .table-column__update-at {
+    display: inline-block;
+    width: 33%;
+
+    span {
+      font-size: var(--font-base) !important;
+    }
+    .icon {
+      height: var(--font-base) !important;
+      margin-bottom: -2px;
+      margin-right: var(--spacing-xxs);
+    }
+    @media (max-width: $breakpoint-medium) {
+      display: block;
+      width: unset;
+    }
+    @media (max-width: $breakpoint-xsmall) {
+      height: var(--font-xxsmall);
+      .icon {
+        margin-bottom: -1px;
+        margin-right: 2px;
+        height: var(--font-xxxsmall) !important;
+      }
+      span {
+        line-height: var(--font-xxsmall);
+        font-size: var(--font-xxsmall) !important;
+      }
+    }
+  }
+
+  .table-column__action {
+    display: table-cell;
+    width: 12%;
+    vertical-align: middle;
+    .button {
+      border: 2px solid var(--color-border);
+      margin-right: var(--spacing-m);
+    }
+    @media (max-width: $breakpoint-medium) {
+      width: 18%;
+    }
+    @media (max-width: $breakpoint-xsmall) {
+      position: relative;
+      width: 0%;
+      .button {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        .button__label {
+          display: none;
+        }
+      }
+    }
+  }
+
+  &:hover {
+    .media__thumb {
+      box-shadow: 0 0 0 1px rgba(var(--color-primary-dynamic), 1) inset;
+    }
+    .table-column__title {
+      h2 {
+        color: var(--color-primary);
+      }
+    }
+  }
+}

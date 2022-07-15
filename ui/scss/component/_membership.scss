@@ -1,0 +1,81 @@
+.membership_title {
+  margin-top: var(--spacing-l);
+  font-size: 18px;
+  font-weight: var(--font-weight-bold);
+
+  .comment__badge {
+    margin-left: var(--spacing-s);
+
+    svg {
+      height: 2rem;
+      width: 2rem;
+    }
+  }
+}
+
+.membership_title:first-of-type {
+  margin-top: 0;
+}
+
+.membership_subtitle {
+  font-size: var(--font-small);
+  color: var(--color-text-subtitle);
+  margin-bottom: var(--spacing-s);
+}
+
+.membership_info {
+  font-size: var(--font-small);
+}
+
+.membership_button {
+  display: block;
+  margin-bottom: 18px;
+  margin-top: 10px;
+}
+
+.cancel-membership-button {
+  display: block;
+  margin-bottom: 18px;
+  margin-top: 13px;
+}
+
+.explanation-text {
+  margin-bottom: 16px;
+}
+
+.premium-explanation-text {
+  .icon--ChevronDown,
+  .icon--ChevronUp {
+    height: 24px;
+    width: 24px;
+  }
+  .icon--ChevronUp {
+    margin-top: -2px;
+    margin-bottom: 2px;
+  }
+
+  .card__main-actions {
+    margin-bottom: 15px;
+  }
+
+  .button--close {
+    margin-top: 3px;
+    // left: 223px;
+    width: 34px;
+  }
+
+  .section__subtitle {
+    margin-bottom: 25px;
+  }
+
+  margin-bottom: 21px;
+}
+
+.getPaymentCard {
+  font-size: 19px;
+  margin-bottom: 10px;
+}
+
+.membership-bolded {
+  color: var(--color-text);
+}
