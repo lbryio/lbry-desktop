@@ -266,7 +266,6 @@ function PublishLivestream(props: Props) {
 
     // File path is not supported on web for security reasons so we use the name instead.
     setCurrentFile(file.path || file.name);
-    console.log('publishFormParams: ', publishFormParams);
     updatePublishForm(publishFormParams);
   }
 

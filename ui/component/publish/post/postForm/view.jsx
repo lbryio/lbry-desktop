@@ -181,7 +181,7 @@ function PostForm(props: Props) {
 
   const [previewing, setPreviewing] = React.useState(false);
 
-  const formTitle = !editingURI ? __('Post an Article') : __('Edit Post');
+  const formTitle = !editingURI ? __('Post an article') : __('Edit post');
   const isClear = !title && !name && !thumbnail;
 
   useEffect(() => {
@@ -471,7 +471,7 @@ function PostForm(props: Props) {
                   <Button
                     button="link"
                     href="https://odysee.com/@OdyseeHelp:b/Community-Guidelines:c"
-                    label={__('community guidelines', { site_name: SITE_NAME })}
+                    label={__('Community Guidelines')}
                   />
                 ),
               }}

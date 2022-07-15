@@ -13,7 +13,7 @@ const CollectionCreate = (props: Props) => {
 
   function handleClose(newCollectionName: string) {
     closeModal();
-    doToast({ message: __('Succesfully created "%playlist_name%"', { playlist_name: newCollectionName }) });
+    doToast({ message: __('Successfully created "%playlist_name%"', { playlist_name: newCollectionName }) });
   }
 
   return (

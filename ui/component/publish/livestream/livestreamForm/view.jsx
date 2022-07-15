@@ -598,7 +598,7 @@ function LivestreamForm(props: Props) {
                     <Button
                       button="link"
                       href="https://odysee.com/@OdyseeHelp:b/Community-Guidelines:c"
-                      label={__('community guidelines', { site_name: SITE_NAME })}
+                      label={__('Community Guidelines')}
                     />
                   ),
                 }}

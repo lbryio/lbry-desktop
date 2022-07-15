@@ -8,10 +8,12 @@ import FileSelector from 'component/common/file-selector';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import { FormField } from 'component/common/form';
+import I18nMessage from 'component/i18nMessage';
 import Spinner from 'component/spinner';
 import * as PUBLISH_MODES from 'constants/publish_types';
 import PublishName from 'component/publish/shared/publishName';
 import classnames from 'classnames';
+import * as PAGES from 'constants/pages';
 import { SOURCE_SELECT } from 'constants/publish_sources';
 import { NEW_LIVESTREAM_REPLAY_API } from 'constants/livestream';
 
@@ -215,8 +217,19 @@ function PublishFile(props: Props) {
   function linkReplays() {
     return (
       <p className="help--link">
-        {__('Would you like to publish a ')}
-        <Button button="link" label={__('Livestream Replay instead')} navigate="/$/livestream?s=Replay" />?
+        <I18nMessage
+          tokens={{
+            livestream_replay_instead: (
+              <Button
+                button="link"
+                label={__('Livestream Replay instead')}
+                navigate={`/$/${PAGES.LIVESTREAM}?s=Replay`}
+              />
+            ),
+          }}
+        >
+          Would you like to publish a %livestream_replay_instead%?
+        </I18nMessage>
       </p>
     );
   }
