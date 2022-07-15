@@ -18,14 +18,13 @@ import { NEW_LIVESTREAM_REPLAY_API } from 'constants/livestream';
 type Props = {
   uri: ?string,
   mode: ?string,
+  disabled: boolean,
+  // --- redux ---
   name: ?string,
   title: ?string,
   filePath: string | WebFile,
   isStillEditing: boolean,
   balance: number,
-  doUpdatePublishForm: ({}) => void,
-  disabled: boolean,
-  doToast: ({ message: string, isError?: boolean }) => void,
   size: number,
   duration: number,
   isVid: boolean,
@@ -34,7 +33,8 @@ type Props = {
   fileSource: string,
   myClaimForUri: ?StreamClaim,
   activeChannelClaim: ?ChannelClaim,
-  // inEditMode: boolean,
+  doUpdatePublishForm: ({}) => void,
+  doToast: ({ message: string, isError?: boolean }) => void,
 };
 
 function PublishFile(props: Props) {

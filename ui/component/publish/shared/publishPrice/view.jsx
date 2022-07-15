@@ -4,9 +4,10 @@ import { FormField, FormFieldPrice } from 'component/common/form';
 // import Card from 'component/common/card';
 
 type Props = {
+  disabled: boolean,
+  // --- redux ---
   contentIsFree: boolean,
   fee: Fee,
-  disabled: boolean,
   updatePublishForm: ({}) => void,
 };
 

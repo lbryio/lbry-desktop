@@ -7,8 +7,9 @@ import usePersistedState from 'effects/use-persisted-state';
 import Card from 'component/common/card';
 
 type Props = {
-  description: ?string,
   disabled: boolean,
+  // --- redux ---
+  description: ?string,
   updatePublishForm: ({}) => void,
 };
 

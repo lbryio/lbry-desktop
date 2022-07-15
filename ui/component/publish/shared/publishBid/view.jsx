@@ -17,7 +17,7 @@ type Props = {
   updatePublishForm: ({}) => void,
 };
 
-function PublishName(props: Props) {
+function PublishBid(props: Props) {
   const { name, myClaimForUri, bid, isResolvingUri, amountNeededForTakeover, updatePublishForm, balance } = props;
   const [bidError, setBidError] = useState(undefined);
   const previousBidAmount = myClaimForUri && Number(myClaimForUri.amount);
@@ -74,4 +74,4 @@ function PublishName(props: Props) {
   );
 }
 
-export default PublishName;
+export default PublishBid;

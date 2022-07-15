@@ -1,17 +1,17 @@
 import { connect } from 'react-redux';
-import { makeSelectPublishFormValue, selectIsStillEditing } from 'redux/selectors/publish';
-import UploadPage from './view';
+import { selectPublishFormValue, selectIsStillEditing } from 'redux/selectors/publish';
+import PublishFormErrors from './view';
 
 const select = (state) => ({
-  bid: makeSelectPublishFormValue('bid')(state),
-  name: makeSelectPublishFormValue('name')(state),
-  title: makeSelectPublishFormValue('title')(state),
-  bidError: makeSelectPublishFormValue('bidError')(state),
-  editingURI: makeSelectPublishFormValue('editingURI')(state),
-  uploadThumbnailStatus: makeSelectPublishFormValue('uploadThumbnailStatus')(state),
-  thumbnail: makeSelectPublishFormValue('thumbnail')(state),
-  thumbnailError: makeSelectPublishFormValue('thumbnailError')(state),
+  bid: selectPublishFormValue(state, 'bid'),
+  name: selectPublishFormValue(state, 'name'),
+  title: selectPublishFormValue(state, 'title'),
+  bidError: selectPublishFormValue(state, 'bidError'),
+  editingURI: selectPublishFormValue(state, 'editingURI'),
+  uploadThumbnailStatus: selectPublishFormValue(state, 'uploadThumbnailStatus'),
+  thumbnail: selectPublishFormValue(state, 'thumbnail'),
+  thumbnailError: selectPublishFormValue(state, 'thumbnailError'),
   isStillEditing: selectIsStillEditing(state),
 });
 
-export default connect(select, null)(UploadPage);
+export default connect(select)(PublishFormErrors);

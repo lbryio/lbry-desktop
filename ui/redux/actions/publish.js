@@ -14,7 +14,7 @@ import {
   // selectMyClaimsWithoutChannels,
   selectReflectingById,
 } from 'redux/selectors/claims';
-import { makeSelectPublishFormValue, selectPublishFormValues, selectMyClaimForUri } from 'redux/selectors/publish';
+import { selectPublishFormValue, selectPublishFormValues, selectMyClaimForUri } from 'redux/selectors/publish';
 import { doError, doToast } from 'redux/actions/notifications';
 import { push } from 'connected-react-router';
 import analytics from 'analytics';
@@ -220,8 +220,8 @@ export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispat
 
   const noFileParam = !filePath || filePath === NO_FILE;
   const state = getState();
-  const editingUri = makeSelectPublishFormValue('editingURI')(state) || '';
-  const remoteUrl = makeSelectPublishFormValue('remoteFileUrl')(state);
+  const editingUri = selectPublishFormValue(state, 'editingURI') || '';
+  const remoteUrl = selectPublishFormValue(state, 'remoteFileUrl');
   const claim = makeSelectClaimForUri(editingUri)(state) || {};
   const hasSourceFile = claim.value && claim.value.source;
   const redirectToLivestream = noFileParam && !hasSourceFile && !remoteUrl;

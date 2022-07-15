@@ -1,35 +1,27 @@
 import { connect } from 'react-redux';
 import { selectBalance } from 'redux/selectors/wallet';
-import { selectIsStillEditing, makeSelectPublishFormValue, selectMyClaimForUri } from 'redux/selectors/publish';
-import { doUpdatePublishForm, doClearPublish } from 'redux/actions/publish';
-// import { selectIsStreamPlaceholderForUri } from 'redux/selectors/claims';
+import { selectIsStillEditing, selectPublishFormValue, selectMyClaimForUri } from 'redux/selectors/publish';
+import { doUpdatePublishForm } from 'redux/actions/publish';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { doToast } from 'redux/actions/notifications';
-import { selectFfmpegStatus } from 'redux/selectors/settings';
-import UploadPage from './view';
+import PublishFile from './view';
 
 const select = (state, props) => ({
-  name: makeSelectPublishFormValue('name')(state),
-  title: makeSelectPublishFormValue('title')(state),
-  filePath: makeSelectPublishFormValue('filePath')(state),
-  remoteUrl: makeSelectPublishFormValue('remoteFileUrl')(state),
-  optimize: makeSelectPublishFormValue('optimize')(state),
+  name: selectPublishFormValue(state, 'name'),
+  title: selectPublishFormValue(state, 'title'),
+  filePath: selectPublishFormValue(state, 'filePath'),
   isStillEditing: selectIsStillEditing(state),
   balance: selectBalance(state),
-  publishing: makeSelectPublishFormValue('publishing')(state),
-  ffmpegStatus: selectFfmpegStatus(state),
-  size: makeSelectPublishFormValue('fileSize')(state),
-  duration: makeSelectPublishFormValue('fileDur')(state),
-  isVid: makeSelectPublishFormValue('fileVid')(state),
+  size: selectPublishFormValue(state, 'fileSize'),
+  duration: selectPublishFormValue(state, 'fileDur'),
+  isVid: selectPublishFormValue(state, 'fileVid'),
   myClaimForUri: selectMyClaimForUri(state),
   activeChannelClaim: selectActiveChannelClaim(state),
-  // isLivestreamClaim: selectIsStreamPlaceholderForUri(state, props.uri),
 });
 
 const perform = {
-  doClearPublish,
   doUpdatePublishForm,
   doToast,
 };
 
-export default connect(select, perform)(UploadPage);
+export default connect(select, perform)(PublishFile);

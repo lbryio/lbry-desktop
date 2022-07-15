@@ -1,18 +1,17 @@
 import { connect } from 'react-redux';
 import { selectBalance } from 'redux/selectors/wallet';
 import {
-  makeSelectPublishFormValue,
+  selectPublishFormValue,
   selectMyClaimForUri,
   selectIsResolvingPublishUris,
   selectTakeOverAmount,
 } from 'redux/selectors/publish';
-import { doUpdatePublishForm, doPrepareEdit } from 'redux/actions/publish';
-import UploadPage from './view';
+import { doUpdatePublishForm } from 'redux/actions/publish';
+import PublishBid from './view';
 
 const select = (state) => ({
-  name: makeSelectPublishFormValue('name')(state),
-  bid: makeSelectPublishFormValue('bid')(state),
-  uri: makeSelectPublishFormValue('uri')(state),
+  name: selectPublishFormValue(state, 'name'),
+  bid: selectPublishFormValue(state, 'bid'),
   isResolvingUri: selectIsResolvingPublishUris(state),
   balance: selectBalance(state),
   myClaimForUri: selectMyClaimForUri(state),
@@ -21,7 +20,6 @@ const select = (state) => ({
 
 const perform = (dispatch) => ({
   updatePublishForm: (value) => dispatch(doUpdatePublishForm(value)),
-  prepareEdit: (claim, uri) => dispatch(doPrepareEdit(claim, uri)),
 });
 
-export default connect(select, perform)(UploadPage);
+export default connect(select, perform)(PublishBid);

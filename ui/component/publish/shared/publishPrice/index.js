@@ -1,15 +1,15 @@
 import { connect } from 'react-redux';
-import { makeSelectPublishFormValue } from 'redux/selectors/publish';
+import { selectPublishFormValue } from 'redux/selectors/publish';
 import { doUpdatePublishForm } from 'redux/actions/publish';
-import UploadPage from './view';
+import PublishPrice from './view';
 
 const select = (state) => ({
-  contentIsFree: makeSelectPublishFormValue('contentIsFree')(state),
-  fee: makeSelectPublishFormValue('fee')(state),
+  contentIsFree: selectPublishFormValue(state, 'contentIsFree'),
+  fee: selectPublishFormValue(state, 'fee'),
 });
 
 const perform = (dispatch) => ({
   updatePublishForm: (values) => dispatch(doUpdatePublishForm(values)),
 });
 
-export default connect(select, perform)(UploadPage);
+export default connect(select, perform)(PublishPrice);

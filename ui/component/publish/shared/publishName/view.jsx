@@ -9,6 +9,7 @@ import { useIsMobile } from 'effects/use-screensize';
 
 type Props = {
   name: string,
+  // TODO: unclear whether 'uri' comes from client or redux. It's currently both.
   uri: string,
   isStillEditing: boolean,
   myClaimForUri: ?StreamClaim,

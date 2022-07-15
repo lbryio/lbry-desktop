@@ -4,7 +4,7 @@ import { doResolveUri, doCheckPublishNameAvailability } from 'redux/actions/clai
 import {
   selectPublishFormValues,
   selectIsStillEditing,
-  makeSelectPublishFormValue,
+  selectPublishFormValue,
   selectMyClaimForUri,
 } from 'redux/selectors/publish';
 import { selectIsStreamPlaceholderForUri } from 'redux/selectors/claims';
@@ -40,9 +40,9 @@ const select = (state) => {
     // If I clicked the "edit" button, have I changed the uri?
     // Need this to make it easier to find the source on previously published content
     isStillEditing: selectIsStillEditing(state),
-    filePath: makeSelectPublishFormValue('filePath')(state),
-    remoteUrl: makeSelectPublishFormValue('remoteFileUrl')(state),
-    publishSuccess: makeSelectPublishFormValue('publishSuccess')(state),
+    filePath: selectPublishFormValue(state, 'filePath'),
+    remoteUrl: selectPublishFormValue(state, 'remoteFileUrl'),
+    publishSuccess: selectPublishFormValue(state, 'publishSuccess'),
     totalRewardValue: selectUnclaimedRewardValue(state),
     modal: selectModal(state),
     enablePublishPreview: selectClientSetting(state, SETTINGS.ENABLE_PUBLISH_PREVIEW),

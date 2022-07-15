@@ -5,6 +5,9 @@ import { isNameValid } from 'util/lbryURI';
 import { INVALID_NAME_ERROR } from 'constants/claim';
 
 type Props = {
+  waitForFile: boolean,
+  overMaxBitrate: boolean,
+  // --- redux ---
   title: ?string,
   name: ?string,
   bid: ?string,
@@ -15,8 +18,6 @@ type Props = {
   uploadThumbnailStatus: string,
   thumbnail: string,
   thumbnailError: boolean,
-  waitForFile: boolean,
-  overMaxBitrate: boolean,
 };
 
 function PublishFormErrors(props: Props) {

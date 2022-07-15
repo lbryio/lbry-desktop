@@ -1,18 +1,18 @@
 import { connect } from 'react-redux';
 import { doUpdatePublishForm, doPrepareEdit } from 'redux/actions/publish';
 import {
-  makeSelectPublishFormValue,
+  selectPublishFormValue,
   selectIsStillEditing,
   selectMyClaimForUri,
   selectTakeOverAmount,
   selectCurrentUploads,
 } from 'redux/selectors/publish';
 import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
-import UploadPage from './view';
+import PublishName from './view';
 
 const select = (state) => ({
-  name: makeSelectPublishFormValue('name')(state),
-  uri: makeSelectPublishFormValue('uri')(state),
+  name: selectPublishFormValue(state, 'name'),
+  uri: selectPublishFormValue(state, 'uri'),
   isStillEditing: selectIsStillEditing(state),
   myClaimForUri: selectMyClaimForUri(state),
   myClaimForUriCaseInsensitive: selectMyClaimForUri(state, false),
@@ -27,4 +27,4 @@ const perform = (dispatch) => ({
   prepareEdit: (claim, uri) => dispatch(doPrepareEdit(claim, uri)),
 });
 
-export default connect(select, perform)(UploadPage);
+export default connect(select, perform)(PublishName);

@@ -56,7 +56,7 @@ export const selectPublishFormValues = createSelector(
   }
 );
 
-export const makeSelectPublishFormValue = (item) => createSelector(selectState, (state) => state[item]);
+export const selectPublishFormValue = (state, item) => selectState(state)[item];
 
 export const selectMyClaimForUri = createCachedSelector(
   selectPublishFormValues,
