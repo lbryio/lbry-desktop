@@ -2,17 +2,33 @@
 
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+## [Unreleased for desktop]
+
+### Added
+ - Checkbox to disable background wallpaper ([#7630](https://github.com/lbryio/lbry-desktop/pull/7630))
+ 
+### Fixed
+ - Better handle cover uploads ([#7647](https://github.com/lbryio/lbry-desktop/pull/7647))
+ - Use default path when first choosing file on windows ([#7625](https://github.com/lbryio/lbry-desktop/pull/7625))
+ - Emoji button hover ([#7620](https://github.com/lbryio/lbry-desktop/pull/7620))
+ - Prevent infinite retries on thumbs ([#7618](https://github.com/lbryio/lbry-desktop/pull/7618))
+ - Double splash/error on app startup ([#7615](https://github.com/lbryio/lbry-desktop/pull/7615))
+ - App updates are now more coherent, also debs work. ([#7502](https://github.com/lbryio/lbry-desktop/pull/7502))
+ 
+### Changed
+- Upgraded Electron to v15.5.5 ([#7614](https://github.com/lbryio/lbry-desktop/pull/7614))
+
 
 ## [0.53.4] - [2022-06-10]
 
-## Added
+### Added
  - Add top in language category for non-english on homepage ([#7585](https://github.com/lbryio/lbry-desktop/pull/7585))
  - Auto hosting in settings and hosting first run page ([#7598](https://github.com/lbryio/lbry-desktop/pull/7598))  
 
 ### Changed
 - Updated lbry-sdk to [0.107.2](https://github.com/lbryio/lbry-sdk/releases/tag/v0.107.2)
 
-## Fixed
+### Fixed
  - Better handle empty collections ([#7571](https://github.com/lbryio/lbry-desktop/pull/7571))
  - Better handle thumbnails in uploads/collections ([#7574](https://github.com/lbryio/lbry-desktop/pull/7574))
  - Work towards supporting collections of any claim type ([#7578](https://github.com/lbryio/lbry-desktop/pull/7578))
@@ -22,7 +38,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [0.53.3] - [2022-04-27]
 
-## Fixed
+### Fixed
  - Reverted lbry.tv changes that broke production login ([#7569](https://github.com/lbryio/lbry-desktop/pull/7569))
  - Reverted lbry.tv changes that broke login ([#7570](https://github.com/lbryio/lbry-desktop/pull/7570))
 
@@ -33,7 +49,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 - Removed some lbrytv references ([#7560](https://github.com/lbryio/lbry-desktop/pull/7560))
 - Removed some lbrytv player references ([#7552](https://github.com/lbryio/lbry-desktop/pull/7552))
 
-## Fixed
+### Fixed
 - Repost style issues ([#7559](https://github.com/lbryio/lbry-desktop/pull/7559))
 - Disappearing sidebar thumbs ([#7556](https://github.com/lbryio/lbry-desktop/pull/7556))
 - Restore tags sidebar link ([#7555](https://github.com/lbryio/lbry-desktop/pull/7555))
