@@ -53,6 +53,17 @@
         }
       }
     }
+
+    .channel-thumbnail--badgeBorder {
+      border-bottom: 1px solid #c35321;
+      .comment__badge {
+        left: 20%;
+        .icon {
+          width: 10px;
+          margin-bottom: 0px;
+        }
+      }
+    }
   }
 
   .button--link {
