@@ -106,7 +106,6 @@ function ChannelThumbnail(props: Props) {
             'channel-thumbnail--xsmall': xsmall,
             'channel-thumbnail--xxsmall': xxsmall,
             'channel-thumbnail--resolving': isResolving,
-            'channel-thumbnail--badgeBorder': showMemberBadge,
           })}
         >
           {showMemberBadge ? <PremiumBadge {...badgeProps} /> : null}
@@ -123,7 +122,6 @@ function ChannelThumbnail(props: Props) {
         'channel-thumbnail--xsmall': xsmall,
         'channel-thumbnail--xxsmall': xxsmall,
         'channel-thumbnail--resolving': isResolving,
-        'channel-thumbnail--badgeBorder': showMemberBadge,
       })}
     >
       {/* width: use the same size for all 'small' variants so that caching works better */}
