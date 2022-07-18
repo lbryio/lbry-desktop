@@ -71,7 +71,7 @@ export function makeResumableUploadRequest(
     const uploader = new tus.Upload(file, {
       ...urlOptions,
       chunkSize: UPLOAD_CHUNK_SIZE_BYTE,
-      retryDelays: [8000, 10000, 15000, 20000, 30000],
+      retryDelays: [8000, 15000, 30000],
       parallelUploads: 1,
       storeFingerprintForResuming: false,
       urlStorage: new NoopUrlStorage(),
@@ -93,6 +93,8 @@ export function makeResumableUploadRequest(
         let customErr;
         if (status === STATUS_LOCKED || errMsg === 'file currently locked') {
           customErr = 'File is locked. Try resuming after waiting a few minutes';
+        } else if (errMsg.startsWith('tus: failed to upload chunk at offset')) {
+          customErr = 'Error uploading chunk. Click "retry" in the Uploads page to resume upload.';
         }
 
         window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));

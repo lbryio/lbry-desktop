@@ -122,7 +122,13 @@ export default function WebUploadItem(props: Props) {
         return null;
       }
 
-      const isFileActive = file instanceof File;
+      let isFileActive = file instanceof File;
+      // #631: There are logs showing that some users can't resume no matter how
+      // many times they tried, which seems to indicate the net::ERR_UPLOAD_FILE_CHANGED
+      // problem. Since we can't programmatically detect this scenario, always
+      // assume so and ask the user to re-select the file.
+      isFileActive = false;
+
       return (
         <Button
           label={isFileActive ? __('Resume') : __('Retry')}
