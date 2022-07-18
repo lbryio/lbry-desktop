@@ -83,6 +83,7 @@ type Props = {
   mainPlayerDimensions: { height: number, width: number },
   firstCollectionItemUrl: ?string,
   isMature: boolean,
+  location: { state?: { overrideFloating?: boolean } },
   doCommentSocketConnect: (string, string, string) => void,
   doCommentSocketDisconnect: (string, string) => void,
   doClearPlayingUri: () => void,
@@ -123,12 +124,16 @@ export default function FileRenderFloating(props: Props) {
     mainPlayerDimensions,
     firstCollectionItemUrl,
     isMature,
+    location,
     doCommentSocketConnect,
     doCommentSocketDisconnect,
     doClearPlayingUri,
     doClearQueueList,
     doOpenModal,
   } = props;
+
+  const { state } = location;
+  const { overrideFloating } = state || {};
 
   const isMobile = useIsMobile();
   const isTabletLandscape = useIsLandscapeScreen() && !isMobile;
@@ -142,7 +147,7 @@ export default function FileRenderFloating(props: Props) {
 
   const isComment = playingUriSource === 'comment';
   const mainFilePlaying = Boolean(!isFloating && primaryUri && isURIEqual(uri, primaryUri));
-  const noFloatingPlayer = !isFloating || !floatingPlayerEnabled;
+  const noFloatingPlayer = !overrideFloating && (!isFloating || !floatingPlayerEnabled);
 
   const [fileViewerRect, setFileViewerRect] = React.useState();
   const [wasDragging, setWasDragging] = React.useState(false);
@@ -345,10 +350,10 @@ export default function FileRenderFloating(props: Props) {
   }, [playingUrl]);
 
   React.useEffect(() => {
-    if (primaryUri && uri && primaryUri !== uri && !floatingPlayerEnabled && playingUrl) {
+    if (primaryUri && uri && primaryUri !== uri && !overrideFloating && !floatingPlayerEnabled && playingUrl) {
       doClearPlayingUri();
     }
-  }, [doClearPlayingUri, floatingPlayerEnabled, playingUrl, primaryUri, uri]);
+  }, [doClearPlayingUri, floatingPlayerEnabled, overrideFloating, playingUrl, primaryUri, uri]);
 
   if (
     geoRestriction ||

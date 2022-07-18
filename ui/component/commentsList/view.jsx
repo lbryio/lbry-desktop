@@ -64,6 +64,7 @@ type Props = {
   resetComments: (claimId: string) => void,
   claimsByUri: { [string]: any },
   doFetchUserMemberships: (claimIdCsv: string) => void,
+  doPopOutInlinePlayer: (param: { source: string }) => void,
 };
 
 export default function CommentList(props: Props) {
@@ -97,6 +98,7 @@ export default function CommentList(props: Props) {
     resetComments,
     claimsByUri,
     doFetchUserMemberships,
+    doPopOutInlinePlayer,
   } = props;
 
   const threadRedirect = React.useRef(false);
@@ -163,12 +165,14 @@ export default function CommentList(props: Props) {
   function refreshComments() {
     // Invalidate existing comments
     setPage(0);
+    doPopOutInlinePlayer({ source: 'comment' });
   }
 
   function changeSort(newSort) {
     if (sort !== newSort) {
       setSort(newSort);
       refreshComments();
+      doPopOutInlinePlayer({ source: 'comment' });
     }
   }
 

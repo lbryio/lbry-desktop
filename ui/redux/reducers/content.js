@@ -26,7 +26,7 @@ reducers[ACTIONS.SET_PLAYING_URI] = (state, action) =>
     playingUri: {
       uri: action.data.uri,
       source: action.data.source,
-      pathname: action.data.pathname,
+      location: action.data.location,
       commentId: action.data.commentId,
       collection: action.data.collection,
       primaryUri: state.primaryUri,

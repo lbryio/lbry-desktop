@@ -193,7 +193,7 @@ function VideoViewer(props: Props) {
   const isFirstRender = React.useRef(true);
   const playerRef = React.useRef(null);
 
-  const addAutoplayNextButton = useAutoplayNext(playerRef, autoplayNext);
+  const addAutoplayNextButton = useAutoplayNext(playerRef, autoplayNext, isMarkdownOrComment);
   const addTheaterModeButton = useTheaterMode(playerRef, videoTheaterMode);
 
   React.useEffect(() => {

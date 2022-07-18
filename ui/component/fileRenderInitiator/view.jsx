@@ -16,13 +16,15 @@ import { formatLbryUrlForWeb } from 'util/url';
 import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
 import useFetchLiveStatus from 'effects/use-fetch-live';
 import useGetPoster from 'effects/use-get-poster';
+import { LiveCommentContext } from 'component/livestreamComment/view';
+import { ExpandableContext } from 'component/common/expandable';
 
 type Props = {
   channelClaimId: ?string,
   isPlaying: boolean,
   fileInfo: FileListItem,
   uri: string,
-  history: { push: (string) => void },
+  history: { push: (params: string | { pathname: string, state: ?{} }) => void },
   location: { search: ?string, pathname: string, href: string, state: { forceAutoplay: boolean } },
   obscurePreview: boolean,
   insufficientCredits: boolean,
@@ -71,6 +73,9 @@ export default function FileRenderInitiator(props: Props) {
     doFetchChannelLiveStatus,
   } = props;
 
+  const { isLiveComment } = React.useContext(LiveCommentContext) || {};
+  const { setExpanded, disableExpanded } = React.useContext(ExpandableContext) || {};
+
   const theaterMode = renderMode === 'video' || renderMode === 'audio' ? videoTheaterMode : false;
   const { livestreamPage, layountRendered } = React.useContext(LivestreamContext) || {};
 
@@ -109,18 +114,30 @@ export default function FileRenderInitiator(props: Props) {
   const thumbnail = useGetPoster(claimThumbnail);
 
   function handleClick() {
-    if (embedded && !isPlayable) {
+    if (isLiveComment || (embedded && !isPlayable)) {
       const formattedUrl = formatLbryUrlForWeb(uri);
-      history.push(formattedUrl);
+      history.push({ pathname: formattedUrl, state: isLiveComment ? { overrideFloating: true } : undefined });
     } else {
       viewFile();
+
+      // In case of inline player where play button is reachable -> set is expanded
+      if (setExpanded && disableExpanded) {
+        setExpanded(true);
+        disableExpanded(true);
+      }
     }
   }
 
   // Wrap this in useCallback because we need to use it to the view effect
   // If we don't a new instance will be created for every render and react will think the dependencies have changed, which will add/remove the listener for every render
   const viewFile = React.useCallback(() => {
-    const playingOptions = { uri, collection: { collectionId }, pathname, source: undefined, commentId: undefined };
+    const playingOptions = {
+      uri,
+      collection: { collectionId },
+      location: { pathname, search },
+      source: undefined,
+      commentId: undefined,
+    };
 
     if (parentCommentId) {
       playingOptions.source = 'comment';
@@ -130,7 +147,7 @@ export default function FileRenderInitiator(props: Props) {
     }
 
     doUriInitiatePlay(playingOptions, isPlayable);
-  }, [collectionId, doUriInitiatePlay, isMarkdownPost, isPlayable, parentCommentId, pathname, uri]);
+  }, [collectionId, doUriInitiatePlay, isMarkdownPost, isPlayable, parentCommentId, pathname, search, uri]);
 
   React.useEffect(() => {
     // avoid selecting 'video' anymore -> can cause conflicts with Ad popup videos

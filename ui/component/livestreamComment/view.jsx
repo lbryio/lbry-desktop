@@ -34,6 +34,8 @@ type Props = {
   claimsByUri: { [string]: any },
 };
 
+export const LiveCommentContext = React.createContext<any>();
+
 export default function LivestreamComment(props: Props) {
   const {
     comment,
@@ -134,14 +136,17 @@ export default function LivestreamComment(props: Props) {
               {removed ? (
                 <Empty text={__('[Removed]')} />
               ) : (
-                <MarkdownPreview
-                  content={message}
-                  promptLinks
-                  stakedLevel={stakedLevel}
-                  disableTimestamps
-                  setUserMention={setUserMention}
-                  hasMembership={Boolean(odyseeMembership)}
-                />
+                // Context only to avoid prop drilling -> get straight to the target component
+                <LiveCommentContext.Provider value={{ isLiveComment: true }}>
+                  <MarkdownPreview
+                    content={message}
+                    promptLinks
+                    stakedLevel={stakedLevel}
+                    disableTimestamps
+                    setUserMention={setUserMention}
+                    hasMembership={Boolean(odyseeMembership)}
+                  />
+                </LiveCommentContext.Provider>
               )}
             </div>
           )}

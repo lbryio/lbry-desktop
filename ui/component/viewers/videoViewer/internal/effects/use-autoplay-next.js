@@ -64,10 +64,10 @@ function addAutoplayNextButton(player: Player, toggleAutoplayNext: () => void, a
 // useAutoplayNext
 // ****************************************************************************
 
-export default function useAutoplayNext(playerRef: any, autoplayNext: boolean) {
+export default function useAutoplayNext(playerRef: any, autoplayNext: boolean, isMarkdownOrComment: boolean) {
   React.useEffect(() => {
     const player = playerRef.current;
-    if (player) {
+    if (player && !isMarkdownOrComment) {
       const touchOverlay = player.getChild('TouchOverlay');
       const controlBar = player.getChild('controlBar') || touchOverlay.getChild('controlBar');
       const autoplayButton = controlBar.getChild('AutoplayNextButton');
@@ -80,7 +80,7 @@ export default function useAutoplayNext(playerRef: any, autoplayNext: boolean) {
         autoplayButton.setAttribute('aria-checked', autoplayNext);
       }
     }
-  }, [autoplayNext]);
+  }, [autoplayNext, isMarkdownOrComment]);
 
   return addAutoplayNextButton;
 }

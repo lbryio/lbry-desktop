@@ -21,6 +21,7 @@ import {
   selectCommentAncestorsForId,
 } from 'redux/selectors/comments';
 import { doCommentReset, doCommentList, doCommentById, doCommentReactList } from 'redux/actions/comments';
+import { doPopOutInlinePlayer } from 'redux/actions/content';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { getChannelIdFromClaim } from 'util/claim';
 import { doFetchUserMemberships } from 'redux/actions/user';
@@ -63,6 +64,7 @@ const perform = {
   fetchReacts: doCommentReactList,
   resetComments: doCommentReset,
   doFetchUserMemberships,
+  doPopOutInlinePlayer,
 };
 
 export default connect(select, perform)(CommentsList);

@@ -41,6 +41,8 @@ const select = (state, props) => {
   const urlParams = new URLSearchParams(search);
   const collectionSidebarId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID);
 
+  const isFloating = makeSelectIsPlayerFloating(location)(state);
+
   const playingUri = selectPlayingUri(state);
   const {
     uri,
@@ -50,6 +52,8 @@ const select = (state, props) => {
   const claim = uri && selectClaimForUri(state, uri);
   const { claim_id: claimId, signing_channel: channelClaim, permanent_url } = claim || {};
   const { canonical_url: channelUrl } = channelClaim || {};
+  const playingFromQueue = playingUri.source === COLLECTIONS_CONSTS.QUEUE_ID;
+  const isInlinePlayer = Boolean(playingUri.source) && !isFloating;
 
   return {
     claimId,
@@ -58,9 +62,9 @@ const select = (state, props) => {
     playingUri,
     primaryUri: selectPrimaryUri(state),
     title: selectTitleForUri(state, uri),
-    isFloating: makeSelectIsPlayerFloating(location)(state),
+    isFloating,
     streamingUrl: makeSelectStreamingUrlForUri(uri)(state),
-    floatingPlayerEnabled: playingUri.source === 'queue' || selectClientSetting(state, SETTINGS.FLOATING_PLAYER),
+    floatingPlayerEnabled: playingFromQueue || isInlinePlayer || selectClientSetting(state, SETTINGS.FLOATING_PLAYER),
     renderMode: makeSelectFileRenderModeForUri(uri)(state),
     videoTheaterMode: selectClientSetting(state, SETTINGS.VIDEO_THEATER_MODE),
     costInfo: selectCostInfoForUri(state, uri),

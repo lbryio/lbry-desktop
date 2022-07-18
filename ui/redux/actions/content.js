@@ -44,6 +44,7 @@ import {
   selectListIsLoopedForId,
   selectPlayingCollectionId,
   selectIsUriCurrentlyPlaying,
+  makeSelectIsPlayerFloating,
 } from 'redux/selectors/content';
 import { isCanonicalUrl } from 'util/claim';
 
@@ -148,25 +149,24 @@ export function doSetPrimaryUri(uri: ?string) {
 }
 
 export const doClearPlayingUri = () => (dispatch: Dispatch) => dispatch(doSetPlayingUri({ uri: null, collection: {} }));
-export const doClearPlayingCollection = () => (dispatch: Dispatch, getState: GetState) => {
+export const doClearPlayingCollection = () => (dispatch: Dispatch) =>
+  dispatch(doChangePlayingUriParam({ collection: { collectionId: null } }));
+
+export const doPopOutInlinePlayer = ({ source }: { source: string }) => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
+  const isFloating = makeSelectIsPlayerFloating(window.location)(state);
   const playingUri = selectPlayingUri(state);
-  dispatch(doSetPlayingUri({ ...playingUri, collection: { collectionId: null } }));
+
+  if (playingUri.source === source && !isFloating) {
+    const floatingPlayerEnabled = selectClientSetting(state, SETTINGS.FLOATING_PLAYER);
+
+    if (floatingPlayerEnabled) return dispatch(doChangePlayingUriParam({ source: null }));
+
+    return dispatch(doClearPlayingUri());
+  }
 };
 
-export function doSetPlayingUri({
-  uri,
-  source,
-  pathname,
-  commentId,
-  collection,
-}: {
-  uri: ?string,
-  source?: string,
-  commentId?: string,
-  pathname?: string,
-  collection: PlayingCollection,
-}) {
+export function doSetPlayingUri({ uri, source, location, commentId, collection }: PlayingUri) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     let url = uri;
@@ -187,8 +187,17 @@ export function doSetPlayingUri({
 
     dispatch({
       type: ACTIONS.SET_PLAYING_URI,
-      data: { uri: url, source, pathname, commentId, collection },
+      data: { uri: url, source, location, commentId, collection },
     });
+  };
+}
+
+export function doChangePlayingUriParam(newParams: any) {
+  return (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const playingUri = selectPlayingUri(state);
+
+    return dispatch(doSetPlayingUri({ ...playingUri, ...newParams }));
   };
 }
 
@@ -267,17 +276,13 @@ export function doUriInitiatePlay(
         if (itemsToAdd) {
           dispatch(doCollectionEdit(COLLECTIONS_CONSTS.QUEUE_ID, { uris: [...itemsToAdd], type: 'playlist' }));
         }
-        dispatch(doSetPlayingUri({ ...playingUri, ...playingOptions, collection: { ...playingCollection } }));
+        dispatch(doChangePlayingUriParam({ ...playingOptions, collection: { ...playingCollection } }));
       } else {
         if (collection.collectionId === playingCollection.collectionId) {
           // keep current playingCollection data like loop or shuffle if plpaying the same
-          dispatch(
-            doSetPlayingUri({ ...playingUri, ...playingOptions, collection: { ...playingCollection, ...collection } })
-          );
+          dispatch(doChangePlayingUriParam({ ...playingOptions, collection: { ...playingCollection, ...collection } }));
         } else {
-          dispatch(
-            doSetPlayingUri({ ...playingUri, ...playingOptions, collection: willPlayCollection ? collection : {} })
-          );
+          dispatch(doChangePlayingUriParam({ ...playingOptions, collection: willPlayCollection ? collection : {} }));
         }
       }
     }
@@ -357,7 +362,7 @@ export function doPlaylistAddAndAllowPlaying({
 
     const startPlaying = () => {
       if (isUriPlaying) {
-        dispatch(doSetPlayingUri({ ...playingUri, collection: { collectionId } }));
+        dispatch(doChangePlayingUriParam({ collection: { collectionId } }));
       } else {
         dispatch(
           doUriInitiatePlay(
@@ -385,7 +390,7 @@ export function doPlaylistAddAndAllowPlaying({
 
         if (playingUrl) {
           // adds the queue collection id to the playingUri data so it can be used and updated by other components
-          if (!hasPlayingUriInQueue) dispatch(doSetPlayingUri({ ...playingUri, ...paramsToAdd }));
+          if (!hasPlayingUriInQueue) dispatch(doChangePlayingUriParam({ ...paramsToAdd }));
         } else {
           // There is nothing playing and added a video to queue -> the first item will play on the floating player with the list open
           dispatch(doUriInitiatePlay({ uri, ...paramsToAdd }, true, true));
@@ -585,7 +590,7 @@ export const doToggleLoopList = (params: { collectionId: string, hideToast?: boo
   const { collection: playingCollection } = playingUri;
   const loopOn = selectListIsLoopedForId(state, collectionId);
 
-  dispatch(doSetPlayingUri({ ...playingUri, collection: { ...playingCollection, collectionId, loop: !loopOn } }));
+  dispatch(doChangePlayingUriParam({ collection: { ...playingCollection, collectionId, loop: !loopOn } }));
 
   if (!hideToast) {
     return dispatch(doToast({ message: !loopOn ? __('Loop is on.') : __('Loop is off.') }));
@@ -619,13 +624,9 @@ export const doToggleShuffleList = (params: { currentUri?: string, collectionId:
       newUrls.splice(0, 0, currentUri);
     }
 
-    dispatch(
-      doSetPlayingUri({ ...playingUri, collection: { ...playingCollection, collectionId, shuffle: { newUrls } } })
-    );
+    dispatch(doChangePlayingUriParam({ collection: { ...playingCollection, collectionId, shuffle: { newUrls } } }));
   } else {
-    dispatch(
-      doSetPlayingUri({ ...playingUri, collection: { ...playingCollection, collectionId, shuffle: undefined } })
-    );
+    dispatch(doChangePlayingUriParam({ collection: { ...playingCollection, collectionId, shuffle: undefined } }));
   }
 
   if (!hideToast) {

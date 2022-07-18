@@ -66,11 +66,16 @@ export const makeSelectIsPlayerFloating = (location: UrlLocation) =>
   createSelector(selectPrimaryUri, selectPlayingUri, (primaryUri, playingUri) => {
     if (!playingUri.uri) return false;
 
-    const { source, uri, primaryUri: playingPrimaryUri, pathname: playingPathName, collection } = playingUri;
+    const { source, uri, primaryUri: playingPrimaryUri, location: playingLocation, collection } = playingUri;
 
+    const { pathname: playingPathName, search: playingSearch } = playingLocation || {};
     const { pathname, search } = location;
+
     const urlParams = new URLSearchParams(search);
-    const discussionPage = urlParams.get('view') === 'discussion';
+    const playingUrlParams = new URLSearchParams(playingSearch);
+    const viewParam = urlParams.get('view');
+    const playingLocationTab = playingUrlParams.get('view');
+    const isOnDifferentTab = viewParam && viewParam !== playingLocationTab;
     const pageCollectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID);
 
     const hasSecondarySource = Boolean(source);
@@ -78,7 +83,7 @@ export const makeSelectIsPlayerFloating = (location: UrlLocation) =>
     const isQueue = source === 'queue';
     const isInlineSecondaryPlayer = hasSecondarySource && uri !== primaryUri && playingPathName === pathname;
 
-    if ((isQueue && primaryUri !== playingUri.uri) || (isComment && isInlineSecondaryPlayer && discussionPage)) {
+    if ((isQueue && primaryUri !== playingUri.uri) || (isInlineSecondaryPlayer && isOnDifferentTab)) {
       return true;
     }
 

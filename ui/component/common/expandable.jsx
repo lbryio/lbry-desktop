@@ -10,12 +10,15 @@ type Props = {
   children: React$Node | Array<React$Node>,
 };
 
+export const ExpandableContext = React.createContext<any>();
+
 export default function Expandable(props: Props) {
   const { children } = props;
 
   const ref = React.useRef();
 
   const [expanded, setExpanded] = React.useState(false);
+  const [disabled, disableExpanded] = React.useState(false);
   const [childRect, setRect] = React.useState();
 
   const childOverflows = childRect && childRect.height > COLLAPSED_HEIGHT;
@@ -46,7 +49,7 @@ export default function Expandable(props: Props) {
   useOnResize(() => expandableRef(ref.current));
 
   return (
-    <>
+    <ExpandableContext.Provider value={{ setExpanded, disableExpanded }}>
       <div
         className={classnames('expandable', {
           'expandable--open': expanded,
@@ -57,7 +60,7 @@ export default function Expandable(props: Props) {
         {children}
       </div>
 
-      {childOverflows && (
+      {childOverflows && !disabled && (
         <Button
           button="link"
           className="expandable__button"
@@ -65,6 +68,6 @@ export default function Expandable(props: Props) {
           onClick={handleClick}
         />
       )}
-    </>
+    </ExpandableContext.Provider>
   );
 }

@@ -14,7 +14,6 @@ type Props = {
   allowPreview?: boolean,
   children: React.Node,
   parentCommentId?: string,
-  isMarkdownPost?: boolean,
   simpleLinks?: boolean,
   myChannelUrls: ?Array<string>,
   setUserMention?: (boolean) => void,
@@ -28,7 +27,6 @@ function MarkdownLink(props: Props) {
     embed = false,
     allowPreview = false,
     parentCommentId,
-    isMarkdownPost,
     simpleLinks = false,
     myChannelUrls,
     setUserMention,
@@ -114,7 +112,7 @@ function MarkdownLink(props: Props) {
         uri={lbryUrlFromLink || decodedUri}
         autoEmbed={embed}
         parentCommentId={parentCommentId}
-        isMarkdownPost={isMarkdownPost}
+        isMarkdownPost
         allowPreview={allowPreview}
       >
         {children}

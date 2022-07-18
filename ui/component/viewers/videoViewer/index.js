@@ -60,7 +60,7 @@ const select = (state, props) => {
     previousListUri: previousPlaylistUri,
     isMarkdownOrComment,
     autoplayIfEmbedded: Boolean(autoplay),
-    autoplayNext: selectClientSetting(state, SETTINGS.AUTOPLAY_NEXT),
+    autoplayNext: !isMarkdownOrComment && selectClientSetting(state, SETTINGS.AUTOPLAY_NEXT),
     volume: selectVolume(state),
     muted: selectMute(state),
     videoPlaybackRate: selectClientSetting(state, SETTINGS.VIDEO_PLAYBACK_RATE),
