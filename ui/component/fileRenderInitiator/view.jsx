@@ -25,7 +25,12 @@ type Props = {
   fileInfo: FileListItem,
   uri: string,
   history: { push: (params: string | { pathname: string, state: ?{} }) => void },
-  location: { search: ?string, pathname: string, href: string, state: { forceAutoplay: boolean } },
+  location: {
+    search: ?string,
+    pathname: string,
+    href: string,
+    state: ?{ forceAutoplay?: boolean, forceDisableAutoplay?: boolean },
+  },
   obscurePreview: boolean,
   insufficientCredits: boolean,
   claimThumbnail?: string,
@@ -82,13 +87,13 @@ export default function FileRenderInitiator(props: Props) {
   const isMobile = useIsMobile();
 
   const { search, href, state: locationState, pathname } = location;
+  const { forceAutoplay: forceAutoplayParam, forceDisableAutoplay } = locationState || {};
   const urlParams = search && new URLSearchParams(search);
   const collectionId = urlParams && urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID);
 
   // check if there is a time or autoplay parameter, if so force autoplay
   const urlTimeParam = href && href.indexOf('t=') > -1;
-  const forceAutoplayParam = locationState && locationState.forceAutoplay;
-  const shouldAutoplay = !embedded && (forceAutoplayParam || urlTimeParam || autoplay);
+  const shouldAutoplay = !forceDisableAutoplay && !embedded && (forceAutoplayParam || urlTimeParam || autoplay);
 
   const isFree = costInfo && costInfo.cost === 0;
   const canViewFile = isLivestreamClaim
