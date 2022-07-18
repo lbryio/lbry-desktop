@@ -52,7 +52,7 @@ type Props = {
 };
 
 export default function PlaylistCard(props: Props) {
-  const { collectionName, useDrawer, hasCollectionById, playingItemIndex, collectionLength } = props;
+  const { collectionName, useDrawer, hasCollectionById, playingItemIndex, collectionLength, collectionEmpty } = props;
 
   const [showEdit, setShowEdit] = React.useState(false);
 
@@ -74,7 +74,7 @@ export default function PlaylistCard(props: Props) {
         />
 
         <SwipeableDrawer
-          startOpen
+          startOpen={!collectionEmpty}
           type={DRAWERS.PLAYLIST}
           title={
             // returns the card title element
