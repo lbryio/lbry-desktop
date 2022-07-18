@@ -21,7 +21,7 @@ class ModalError extends React.PureComponent<Props> {
     // The thumbnail error shouldn't be routed here, but it's troublesome to create a different path.
     let errorMessage = typeof error === 'string' ? error : error.message;
     const skipLog =
-      errorMessage.startsWith('Failed to download') ||
+      (errorMessage && errorMessage.startsWith('Failed to download')) ||
       /^Thumbnail size over (.*)MB, please edit and reupload.$/.test(errorMessage);
 
     if (error.cause) {
