@@ -121,10 +121,10 @@ function PublishLivestream(props: Props) {
   }, [mode, hasLivestreamData]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const normalizeUrlForProtocol = (url) => {
-    if (url.startsWith('https://')) {
+    if (url && url.startsWith('https://')) {
       return url;
     } else {
-      if (url.startsWith('http://')) {
+      if (url && url.startsWith('http://')) {
         return url;
       } else if (url) {
         return `https://${url}`;
