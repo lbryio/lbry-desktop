@@ -458,19 +458,7 @@ export function doCreateChannel(name: string, amount: number, optionalParams: an
       return;
     }
 
-    const createParams: {
-      name: string,
-      bid: string,
-      blocking: true,
-      title?: string,
-      cover_url?: string,
-      thumbnail_url?: string,
-      description?: string,
-      website_url?: string,
-      email?: string,
-      tags?: Array<Tag>,
-      languages?: Array<string>,
-    } = {
+    const createParams: ChannelCreateParam = {
       name,
       bid: creditsToString(amount),
       blocking: true,

@@ -113,6 +113,28 @@ declare type ClaimListResponse = {
   total_pages: number,
 };
 
+declare type ChannelCreateParam = {
+  name: string, // name of the channel prefixed with '@'
+  bid: number,  // amount to back the claim"
+  allow_duplicate_name?: boolean, // create new channel even if one already exists with given name. default: false.
+  title?: string, // title of the publication
+  description?: string, // description of the publication
+  email?: string, // email of channel owner
+  website_url?: string, // website url
+  featured?: Array<string>, // claim_ids of featured content in channel
+  tags?: Array<string>, // content tags
+  languages?: Array<string>, // languages used by the channel, using RFC 5646 format
+  locations?: Array<string>, // locations of the channel, consisting of 2 letter `country` code and a `state`, `city` and a postal `code` along with a `latitude` and `longitude`
+  thumbnail_url?: string, // thumbnail url
+  cover_url?: string, // url of cover image,
+  account_id?: string, // account to use for holding the transaction
+  wallet_id?: string, // restrict operation to specific wallet
+  funding_account_ids?: Array<string>, // ids of accounts to fund this transaction
+  claim_address?: string, // address where the channel is sent to, if not specified it will be determined automatically from the account
+  preview?: boolean, // do not broadcast the transaction
+  blocking?: boolean, // wait until transaction is in mempool
+};
+
 declare type ChannelCreateResponse = GenericTxResponse & {
   outputs: Array<ChannelClaim>,
 };

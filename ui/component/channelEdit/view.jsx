@@ -32,12 +32,19 @@ const NEKODEV = false; // Temporary flag to hide unfinished progress
 const MAX_TAG_SELECT = 5;
 
 type Props = {
+  uri: string,
+  onDone: () => void,
+  disabled: boolean,
+  openModal: (
+    id: string,
+    { onUpdate: (string, boolean) => void, assetName: string, helpText: string, currentValue: string, title: string }
+  ) => void,
+  // --- redux ---
   claim: ChannelClaim,
   title: string,
   amount: number,
   coverUrl: string,
   thumbnailUrl: string,
-  location: { search: string },
   description: string,
   website: string,
   email: string,
@@ -53,13 +60,6 @@ type Props = {
   creatingChannel: boolean,
   clearChannelErrors: () => void,
   claimInitialRewards: () => void,
-  onDone: () => void,
-  openModal: (
-    id: string,
-    { onUpdate: (string, boolean) => void, assetName: string, helpText: string, currentValue: string, title: string }
-  ) => void,
-  uri: string,
-  disabled: boolean,
   isClaimingInitialRewards: boolean,
   hasClaimedInitialRewards: boolean,
 };
@@ -123,7 +123,6 @@ function ChannelForm(props: Props) {
     );
   }, [isClaimingInitialRewards, creatingChannel, updatingChannel, nameError, bidError, isNewChannel, params.name]);
 
-  // const channelColor = 'ff0000';
   const [overrideColor, toggleColorOverride] = React.useState(false);
 
   function getChannelParams() {
@@ -218,7 +217,6 @@ function ChannelForm(props: Props) {
 
   function handleSubmit() {
     if (uri) {
-      console.log('Params A: ', params);
       updateChannel(params).then((success) => {
         if (success) {
           onDone();
@@ -276,7 +274,6 @@ function ChannelForm(props: Props) {
   }
 
   // TODO clear and bail after submit
-  // <div className={classnames('main--contained', { 'card--disabled': disabled })}></div>
   return (
     <>
       <div className={classnames({ 'card--disabled': disabled })}>
