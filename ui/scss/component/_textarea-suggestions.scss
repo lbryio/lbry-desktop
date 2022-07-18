@@ -216,6 +216,9 @@
     &:not(.playlist-card--drawer-header) {
       padding: var(--spacing-xxs) !important;
       padding-bottom: 0 !important;
+      @media (max-width: $breakpoint-small) {
+        padding-top: 1px !important;
+      }
       .card__main-actions {
         padding-top: 0;
       }

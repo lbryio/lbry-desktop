@@ -105,7 +105,7 @@ export default function LivestreamLayout(props: Props) {
             {isMobile && !isLandscapeRotated && !hideComments && (
               <React.Suspense fallback={null}>
                 <SwipeableDrawer
-                  startOpen
+                  // startOpen
                   type={DRAWERS.CHAT}
                   title={
                     <ChatModeSelector
