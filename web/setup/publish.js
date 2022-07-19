@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid';
 import { generateError } from './publish-error';
 import { makeUploadRequest } from './publish-v1';
 import { makeResumableUploadRequest } from './publish-v2';
-import { PUBLISH_TIMEOUT_BUT_LIKELY_SUCCESSFUL } from 'constants/errors';
+import { PUBLISH_TIMEOUT_BUT_LIKELY_SUCCESSFUL, SDK_LEDGER_TRANSACTION_TIMEOUT } from 'constants/errors';
 
 // A modified version of Lbry.apiCall that allows
 // to perform calling methods at arbitrary urls
@@ -58,14 +58,16 @@ export default function apiPublishCallViaWeb(
         if (xhr.status >= 200 && xhr.status < 300 && !xhr.response.error) {
           return resolve(xhr.response.result);
         } else if (xhr.response.error) {
-          // -- Temp handling until odysee-api/issues/401 is addressed --------
           if (xhr.responseURL.endsWith('/notify')) {
             const errMsg = xhr.response.error.message;
-            if (errMsg === 'file currently locked' || errMsg.endsWith('no such file or directory')) {
+            if (
+              errMsg === 'file currently locked' || // until odysee-api/issues/401 is addressed
+              errMsg.endsWith('no such file or directory') || // until odysee-api/issues/401 is addressed
+              errMsg.startsWith(SDK_LEDGER_TRANSACTION_TIMEOUT)
+            ) {
               return Promise.reject(generateError(PUBLISH_TIMEOUT_BUT_LIKELY_SUCCESSFUL, params, xhr));
             }
           }
-          // -------------------------------------------------------------------
 
           error = generateError(xhr.response.error.message, params, xhr);
         } else {

@@ -6,12 +6,10 @@ import { X_LBRY_AUTH_TOKEN } from '../../ui/constants/token';
 import { doUpdateUploadAdd, doUpdateUploadProgress, doUpdateUploadRemove } from '../../ui/redux/actions/publish';
 import { generateError } from './publish-error';
 import { LBRY_WEB_PUBLISH_API_V2 } from 'config';
-import { PUBLISH_TIMEOUT_BUT_LIKELY_SUCCESSFUL } from 'constants/errors';
 
 const RESUMABLE_ENDPOINT = LBRY_WEB_PUBLISH_API_V2;
 const RESUMABLE_ENDPOINT_METHOD = 'publish';
 const UPLOAD_CHUNK_SIZE_BYTE = 25 * 1024 * 1024;
-const PUBLISH_FETCH_TIMEOUT_MS = 60000;
 
 const STATUS_CONFLICT = 409;
 const STATUS_LOCKED = 423;
@@ -117,7 +115,6 @@ export function makeResumableUploadRequest(
           xhr.setRequestHeader('Content-Type', 'application/json');
           xhr.setRequestHeader('Tus-Resumable', '1.0.0');
           xhr.setRequestHeader(X_LBRY_AUTH_TOKEN, token);
-          xhr.timeout = PUBLISH_FETCH_TIMEOUT_MS;
           xhr.responseType = 'json';
           xhr.onloadstart = () => {
             window.store.dispatch(doUpdateUploadProgress({ guid, status: 'notify' }));
@@ -125,10 +122,6 @@ export function makeResumableUploadRequest(
           xhr.onload = () => {
             window.store.dispatch(doUpdateUploadRemove(guid));
             resolve(xhr);
-          };
-          xhr.ontimeout = () => {
-            window.store.dispatch(doUpdateUploadProgress({ guid, status: 'notify' }));
-            reject(generateError(PUBLISH_TIMEOUT_BUT_LIKELY_SUCCESSFUL, params, xhr, uploader));
           };
           xhr.onerror = () => {
             if (retries > 0 && xhr.status === 0) {
