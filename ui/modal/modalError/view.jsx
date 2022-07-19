@@ -32,8 +32,12 @@ class ModalError extends React.PureComponent<Props> {
       }
     }
 
-    if (process.env.NODE_ENV === 'production' && !skipLog) {
-      Lbryio.call('event', 'desktop_error', { error_message: errorMessage });
+    if (!skipLog) {
+      if (process.env.NODE_ENV === 'production') {
+        Lbryio.call('event', 'desktop_error', { error_message: errorMessage });
+      } else {
+        console.log(`%c'event/desktop_error' (skipped):\n${errorMessage}`, 'color:yellow');
+      }
     }
   }
 
