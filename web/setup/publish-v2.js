@@ -102,7 +102,7 @@ export function makeResumableUploadRequest(
         window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
         analytics.sentryError(getTusErrorType(errMsg), { onError: err, tusUpload: uploader });
 
-        reject(generateError(customErr || err, params, null, uploader));
+        reject(generateError(customErr || err, params, null, uploader, customErr ? err : null));
       },
       onProgress: (bytesUploaded, bytesTotal) => {
         const percentage = ((bytesUploaded / bytesTotal) * 100).toFixed(2);
