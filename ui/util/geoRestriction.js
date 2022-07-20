@@ -1,5 +1,5 @@
 // @flow
-import { getChannelIdFromClaim, isStreamPlaceholderClaim } from 'util/claim';
+import { getChannelIdFromClaim, isChannelClaim, isStreamPlaceholderClaim } from 'util/claim';
 
 /**
  * Returns the geo restriction for the given claim, or null if not restricted.
@@ -24,8 +24,13 @@ export function getGeoRestrictionForClaim(claim: ?StreamClaim, locale: LocaleInf
     }
     // --- videos (actually, everything else)
     else if (geoBlockLists.videos) {
-      // $FlowIgnore: null key is fine
-      geoConfig = geoBlockLists.videos[channelId] || geoBlockLists.videos[claimId];
+      if (isChannelClaim(claim)) {
+        // $FlowIgnore: null key is fine
+        geoConfig = geoBlockLists.videos[channelId];
+      } else {
+        // $FlowIgnore: null key is fine
+        geoConfig = geoBlockLists.videos[claimId] || geoBlockLists.videos[channelId];
+      }
     }
 
     if (geoConfig) {
