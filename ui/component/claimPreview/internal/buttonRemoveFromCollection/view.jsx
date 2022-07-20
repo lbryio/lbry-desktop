@@ -2,6 +2,7 @@
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import Button from 'component/button';
+import { COL_TYPES } from 'constants/collections';
 
 type Props = {
   uri: string,
@@ -9,7 +10,7 @@ type Props = {
   focusable: boolean,
   // -- redux --
   doToast: (props: { message: string }) => void,
-  doCollectionEdit: (id: string, any) => void,
+  doCollectionEdit: (id: string, CollectionEditParams) => void,
 };
 
 function ButtonAddToQueue(props: Props) {
@@ -20,7 +21,7 @@ function ButtonAddToQueue(props: Props) {
 
     doToast({ message: __('Item removed') });
 
-    doCollectionEdit(collectionId, { uris: [uri], remove: true, type: 'playlist' });
+    doCollectionEdit(collectionId, { uris: [uri], remove: true, type: COL_TYPES.PLAYLIST });
   }
 
   return (

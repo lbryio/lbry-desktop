@@ -1,11 +1,12 @@
 // @flow
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
-import { useHistory } from 'react-router-dom';
 import { FormField } from 'component/common/form';
+import { COL_TYPES } from 'constants/collections';
 
 type Props = {
   claim: Claim,
@@ -82,7 +83,7 @@ function ModalRemoveCollection(props: Props) {
                       description,
                       items: collectionUrls,
                       thumbnail: { url: thumbnail_url },
-                      type: 'playlist',
+                      type: COL_TYPES.PLAYLIST,
                     };
                     doLocalCollectionCreate(createParams);
                   }

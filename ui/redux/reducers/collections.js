@@ -12,7 +12,7 @@ const defaultState: CollectionState = {
       name: COLS.WATCH_LATER_NAME,
       createdAt: undefined,
       updatedAt: getCurrentTimeInSec(),
-      type: COLS.COL_TYPE_PLAYLIST,
+      type: COLS.COL_TYPES.PLAYLIST,
     },
     favorites: {
       items: [],
@@ -20,7 +20,7 @@ const defaultState: CollectionState = {
       name: COLS.FAVORITES_NAME,
       createdAt: undefined,
       updatedAt: getCurrentTimeInSec(),
-      type: COLS.COL_TYPE_PLAYLIST,
+      type: COLS.COL_TYPES.PLAYLIST,
     },
   },
   resolved: {},
@@ -36,7 +36,7 @@ const defaultState: CollectionState = {
     id: COLS.QUEUE_ID,
     name: COLS.QUEUE_NAME,
     updatedAt: getCurrentTimeInSec(),
-    type: COLS.COL_TYPE_PLAYLIST,
+    type: COLS.COL_TYPES.PLAYLIST,
   },
 };
 

@@ -6,7 +6,7 @@ declare type Collection = {
   thumbnail?: {
     url?: string,
   },
-  type: string,
+  type: CollectionType,
   createdAt?: ?number,
   updatedAt: number,
   totalItems?: number,
@@ -14,6 +14,8 @@ declare type Collection = {
   editsCleared?: boolean,
   sourceId?: string, // if copied, claimId of original collection
 };
+
+declare type CollectionType = 'playlist' | 'channelList' | 'collection'; // Must match COL_TYPES
 
 declare type CollectionState = {
   unpublished: CollectionGroup,
@@ -40,7 +42,7 @@ declare type CollectionCreateParams = {
     url?: string,
   },
   items: ?Array<string>,
-  type: string,
+  type: CollectionType,
   sourceId?: string, // if copied, claimId of original collection
 };
 
@@ -49,7 +51,7 @@ declare type CollectionEditParams = {
   remove?: boolean,
   replace?: boolean,
   order?: { from: number, to: number },
-  type?: string,
+  type?: CollectionType,
   name?: string,
   description?: string,
   thumbnail?: {

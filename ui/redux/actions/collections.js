@@ -14,6 +14,7 @@ import {
 } from 'redux/selectors/collections';
 import * as COLS from 'constants/collections';
 import { isPermanentUrl } from 'util/claim';
+import { resolveCollectionType } from 'util/collections';
 import { parseClaimIdFromPermanentUrl } from 'util/url';
 
 const FETCH_BATCH_SIZE = 50;
@@ -262,7 +263,7 @@ export const doFetchItemsInCollections = (
       const streamTypes = new Set();
 
       let newItems = [];
-      let isPlaylist;
+      let collectionType;
 
       if (collectionItems) {
         collectionItems.forEach((collectionItem) => {
@@ -273,11 +274,8 @@ export const doFetchItemsInCollections = (
           }
           resolvedItemsByUrl[collectionItem.canonical_url] = collectionItem;
         });
-        isPlaylist =
-          valueTypes.size === 1 &&
-          valueTypes.has('stream') &&
-          ((streamTypes.size === 1 && (streamTypes.has('audio') || streamTypes.has('video'))) ||
-            (streamTypes.size === 2 && streamTypes.has('audio') && streamTypes.has('video')));
+
+        collectionType = resolveCollectionType(valueTypes, streamTypes);
       }
 
       newCollectionObjectsById[collectionId] = {
@@ -285,7 +283,7 @@ export const doFetchItemsInCollections = (
         id: collectionId,
         name: title || name,
         itemCount: claim.value.claims.length,
-        type: isPlaylist ? 'playlist' : 'collection',
+        type: collectionType,
         updatedAt: timestamp,
         description,
         thumbnail,
@@ -480,7 +478,7 @@ export const doClearQueueList = () => (dispatch: Dispatch, getState: GetState) =
   const hasItemsInQueue = selectHasItemsInQueue(state);
 
   if (hasItemsInQueue) {
-    return dispatch(doCollectionEdit(COLS.QUEUE_ID, { remove: true, type: 'playlist' }));
+    return dispatch(doCollectionEdit(COLS.QUEUE_ID, { remove: true, type: COLS.COL_TYPES.PLAYLIST }));
   }
 };
 

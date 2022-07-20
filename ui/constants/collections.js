@@ -8,8 +8,11 @@ export const PLACEHOLDER = 'My Awesome Playlist';
 export const COLLECTION_ID = 'lid';
 export const COLLECTION_INDEX = 'linx';
 
-export const COL_TYPE_PLAYLIST = 'playlist';
-export const COL_TYPE_CHANNELS = 'channelList';
+export const COL_TYPES = Object.freeze({
+  PLAYLIST: 'playlist',
+  CHANNELS: 'channelList',
+  COLLECTION: 'collection', // temp placeholder for mixed content
+});
 
 export const WATCH_LATER_ID = 'watchlater';
 export const WATCH_LATER_NAME = 'Watch Later';

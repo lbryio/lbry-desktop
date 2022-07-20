@@ -2,6 +2,7 @@
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
+import { COL_TYPES } from 'constants/collections';
 import * as PAGES from 'constants/pages';
 // @if TARGET='app'
 import { ipcRenderer } from 'electron';
@@ -274,7 +275,7 @@ export function doUriInitiatePlay(
             );
 
         if (itemsToAdd) {
-          dispatch(doCollectionEdit(COLLECTIONS_CONSTS.QUEUE_ID, { uris: [...itemsToAdd], type: 'playlist' }));
+          dispatch(doCollectionEdit(COLLECTIONS_CONSTS.QUEUE_ID, { uris: [...itemsToAdd], type: COL_TYPES.PLAYLIST }));
         }
         dispatch(doChangePlayingUriParam({ ...playingOptions, collection: { ...playingCollection } }));
       } else {
@@ -317,9 +318,12 @@ export function doPlaylistAddAndAllowPlaying({
     let collectionId = id;
     if (createNew) {
       dispatch(
-        doLocalCollectionCreate({ name: collectionName, items: uri ? [uri] : [], type: 'playlist' }, (newId) => {
-          collectionId = newId;
-        })
+        doLocalCollectionCreate(
+          { name: collectionName, items: uri ? [uri] : [], type: COL_TYPES.PLAYLIST },
+          (newId) => {
+            collectionId = newId;
+          }
+        )
       );
     } else if (collectionId && uri) {
       if (collectionId === COLLECTIONS_CONSTS.QUEUE_ID) {
@@ -340,11 +344,11 @@ export function doPlaylistAddAndAllowPlaying({
           doCollectionEdit(COLLECTIONS_CONSTS.QUEUE_ID, {
             uris: playingUrl && playingUrl !== uri && !hasPlayingUriInQueue ? [...itemsToAdd, uri] : [uri],
             remove: hasClaimInQueue,
-            type: 'playlist',
+            type: COL_TYPES.PLAYLIST,
           })
         );
       } else {
-        dispatch(doCollectionEdit(collectionId, { uris: [uri], remove, type: 'playlist' }));
+        dispatch(doCollectionEdit(collectionId, { uris: [uri], remove, type: COL_TYPES.PLAYLIST }));
       }
     }
 

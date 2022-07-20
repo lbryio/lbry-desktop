@@ -186,7 +186,7 @@ export const selectMyPublishedMixedCollections = createSelector(selectMyPublishe
     // $FlowFixMe
     Object.entries(published).filter(([key, collection]) => {
       // $FlowFixMe
-      return collection.type === 'collection';
+      return collection.type === COLLECTIONS_CONSTS.COL_TYPES.COLLECTION;
     })
   );
   return myCollections;
@@ -197,7 +197,7 @@ export const selectMyPublishedPlaylistCollections = createSelector(selectMyPubli
     // $FlowFixMe
     Object.entries(published).filter(([key, collection]) => {
       // $FlowFixMe
-      return collection.type === 'playlist';
+      return collection.type === COLLECTIONS_CONSTS.COL_TYPES.PLAYLIST;
     })
   );
   return myCollections;

@@ -4,6 +4,7 @@ import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import * as MODALS from 'constants/modal_types';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
+import { COL_TYPES } from 'constants/collections';
 import React from 'react';
 import classnames from 'classnames';
 import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
@@ -418,7 +419,7 @@ function ClaimMenuList(props: Props) {
                     {/* CURRENTLY ONLY SUPPORT PLAYLISTS FOR PLAYABLE; LATER DIFFERENT TYPES */}
                     <MenuItem
                       className="comment__menu-option"
-                      onSelect={() => openModal(MODALS.COLLECTION_ADD, { uri, type: 'playlist' })}
+                      onSelect={() => openModal(MODALS.COLLECTION_ADD, { uri, type: COL_TYPES.PLAYLIST })}
                     >
                       <div className="menu__link">
                         <Icon aria-hidden icon={ICONS.PLAYLIST_ADD} />
