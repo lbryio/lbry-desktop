@@ -264,7 +264,7 @@ const Header = (props: Props) => {
             {!authHeader && !isMobile && (
               <div className="header__center">
                 <WunderBar />
-                <HeaderMenuButtons />
+                <HeaderMenuButtons authRedirect={authRedirect} />
               </div>
             )}
 

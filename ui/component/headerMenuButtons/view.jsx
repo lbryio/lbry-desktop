@@ -14,20 +14,22 @@ type HeaderMenuButtonProps = {
   activeChannelStakedLevel: number,
   authenticated: boolean,
   user: ?User,
+  authRedirect?: string,
   doOpenModal: (string, {}) => void,
 };
 
 export default function HeaderMenuButtons(props: HeaderMenuButtonProps) {
-  const { authenticated, user } = props;
+  const { authenticated, user, authRedirect } = props;
 
   const livestreamEnabled = Boolean(ENABLE_NO_SOURCE_CLAIMS && user && !user.odysee_live_disabled);
+  const authRedirectParam = authRedirect ? `?redirect=${authRedirect}` : '';
 
   const uploadProps = { requiresAuth: !authenticated };
   const { push } = useHistory();
 
   return authenticated ? (
     <div className="header__buttons">
-      <Tooltip title={__('Upload a file')}>
+      <Tooltip title={__('Upload')}>
         <Button className="header__navigationItem--icon" navigate={`/$/${PAGES.UPLOAD}`}>
           <Icon size={18} icon={ICONS.PUBLISH} aria-hidden />
         </Button>
@@ -46,10 +48,22 @@ export default function HeaderMenuButtons(props: HeaderMenuButtonProps) {
       </Tooltip>
     </div>
   ) : (
-    <Tooltip title={__('Settings')}>
-      <Button className="header__navigationItem--icon" onClick={() => push(`/$/${PAGES.SETTINGS}`)}>
-        <Icon size={18} icon={ICONS.SETTINGS} aria-hidden />
-      </Button>
-    </Tooltip>
+    <>
+      <Tooltip title={__('Publish')}>
+        <Button className="header__navigationItem--icon" onClick={() => push(`/$/${PAGES.AUTH}${authRedirectParam}`)}>
+          <Icon size={18} icon={ICONS.PUBLISH} aria-hidden />
+        </Button>
+      </Tooltip>
+      <Tooltip title={__('Settings')}>
+        <Button className="header__navigationItem--icon" onClick={() => push(`/$/${PAGES.SETTINGS}`)}>
+          <Icon size={18} icon={ICONS.SETTINGS} aria-hidden />
+        </Button>
+      </Tooltip>
+      <Tooltip title={__('Help')}>
+        <Button className="header__navigationItem--icon" onClick={() => push(`/$/${PAGES.HELP}`)}>
+          <Icon size={18} icon={ICONS.HELP} aria-hidden />
+        </Button>
+      </Tooltip>
+    </>
   );
 }
