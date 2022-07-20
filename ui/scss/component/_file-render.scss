@@ -686,7 +686,7 @@ $control-bar-icon-size: 30px;
     }
 
     div.vjs-playback-rate {
-      margin-left: var(--spacing-xs);
+      // margin-left: var(--spacing-xs);
       margin-right: calc(var(--spacing-xs) * -1);
       .vjs-playback-rate-value {
         font-size: $control-bar-font-size;
@@ -708,8 +708,9 @@ $control-bar-icon-size: 30px;
     }
 
     div.vjs-chapters-button {
+      right: calc(var(--spacing-xs) * -1);
       .vjs-menu {
-        width: 20em;
+        width: 19em;
         left: -3em;
       }
 

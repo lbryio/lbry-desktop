@@ -236,8 +236,8 @@ $control-bar-popup-font-size: 0.8rem;
   .vjs-menu-item {
     color: var(--color-text);
     margin: 2px;
-    margin-left: var(--spacing-s);
-    margin-right: var(--spacing-s);
+    margin-left: var(--spacing-xxs);
+    margin-right: var(--spacing-xxs);
     &:first-child {
       margin-top: var(--spacing-xxs);
     }
@@ -438,10 +438,10 @@ button.vjs-big-play-button {
 .vjs-button--autoplay-next {
   order: 11 !important;
 }
-.vjs-playback-rate {
+.vjs-chapters-button {
   order: 12 !important;
 }
-.vjs-chapters-button {
+.vjs-playback-rate {
   order: 13 !important;
 }
 .vjs-quality-selector {
