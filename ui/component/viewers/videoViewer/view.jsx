@@ -145,9 +145,9 @@ function VideoViewer(props: Props) {
         return prevNextItem.current;
       }
     } else {
-      return autoplayNext ? nextRecommendedUri : undefined;
+      return autoplayNext && !isLivestreamClaim ? nextRecommendedUri : undefined;
     }
-  }, [autoplayNext, currentPlaylistItemIndex, nextPlaylistUri, nextRecommendedUri]);
+  }, [autoplayNext, currentPlaylistItemIndex, isLivestreamClaim, nextPlaylistUri, nextRecommendedUri]);
 
   // and "play previous" behaviours
   const prevPreviousItem = React.useRef(previousListUri);
