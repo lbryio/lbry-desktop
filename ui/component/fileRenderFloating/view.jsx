@@ -322,8 +322,7 @@ export default function FileRenderFloating(props: Props) {
     // Initial update for relativePosRef:
     relativePosRef.current = calculateRelativePos(position.x, position.y);
 
-    // only on mount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- Only on mount
   }, []);
 
   React.useEffect(() => {

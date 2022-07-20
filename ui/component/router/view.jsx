@@ -295,8 +295,7 @@ function AppRouter(props: Props) {
     ) {
       doSetActiveChannel(null, true);
     }
-    // only on pathname change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- Only on 'pathname' change
   }, [pathname]);
 
   // react-router doesn't decode pathanmes before doing the route matching check

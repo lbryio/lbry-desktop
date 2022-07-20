@@ -118,8 +118,7 @@ function ChannelPage(props: Props) {
 
     return discussionWasMounted && currentView === PAGE.DISCUSSION;
 
-    // only re-calculate on discussionWasMounted or uri change
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only re-calculate on discussionWasMounted or uri change
   }, [discussionWasMounted, uri]);
 
   const hasUnpublishedCollections = unpublishedCollections && Object.keys(unpublishedCollections).length;

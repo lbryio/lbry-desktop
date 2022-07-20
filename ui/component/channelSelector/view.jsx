@@ -85,8 +85,7 @@ export default function ChannelSelector(props: Props) {
       doSetIncognito(true);
     }
 
-    // on mount, if we get to autoSet a channel, set it.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- On mount if we get to autoSet a channel, set it.
   }, []);
 
   return (

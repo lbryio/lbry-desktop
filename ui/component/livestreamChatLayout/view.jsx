@@ -235,8 +235,8 @@ export default function LivestreamChatLayout(props: Props) {
         return () => clearTimeout(timer);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [commentsLength]); // (Just respond to 'commentsLength' updates and nothing else)
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- Just respond to 'commentsLength' and nothing else
+  }, [commentsLength]);
 
   // Restore Scroll Pos after mobile input opens keyboard and avoid scroll height conflicts
   React.useEffect(() => {

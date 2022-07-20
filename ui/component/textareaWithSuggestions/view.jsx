@@ -313,8 +313,8 @@ export default function TextareaWithSuggestions(props: Props) {
       inputElement.focus();
       if (messageValue) inputElement.setSelectionRange(messageValue.length, messageValue.length);
     }
-    // do NOT listen to messageValue change, otherwise will autofocus while typing
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- do NOT listen to messageValue, otherwise will autofocus while typing
   }, [autoFocus, inputRef]);
 
   React.useEffect(() => {
