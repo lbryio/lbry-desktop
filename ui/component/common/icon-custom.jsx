@@ -3500,4 +3500,27 @@ export const icons = {
       </svg>
     );
   },
+  [ICONS.RABBIT_HOLE]: (props: IconProps) => {
+    const { size = 24, color = 'currentColor', ...otherProps } = props;
+
+    return (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        height={size}
+        width={size}
+        fill="none"
+        stroke={color}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        {...otherProps}
+      >
+        <path d="M17.865,21.451a.5.5,0,0,1-.488.609H6.123a.5.5,0,0,1-.488-.609L7.5,13.06H16Z" />
+        <path d="M4 13.06L20 13.06" />
+        <path d="M6.611 17.06L16.889 17.06" />
+        <path d="M11,13.06a47.171,47.171,0,0,0-1.5-8c-.851-2.554-2.077-3.474-3.5-3-1.5.5-1,2-.5,4s2.5,7,2.5,7" />
+        <path d="M15,13.06l1.067-3.18a4.529,4.529,0,0,0,.943.37c1.195.318,2.263-.393,1.7-1.683A7.652,7.652,0,0,0,16.648,6.02C16,5.446,14.9,4.456,13.972,5.071,12.216,6.241,11.5,13.06,11.5,13.06" />
+      </svg>
+    );
+  },
 };
