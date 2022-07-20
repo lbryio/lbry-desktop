@@ -68,9 +68,14 @@ export function makeUploadRequest(
       reject(generateError(__('There was a problem with your upload. Please try again.'), params, xhr));
     };
     xhr.ontimeout = () => {
-      analytics.error(`publish-v1: timed out after ${PUBLISH_FETCH_TIMEOUT_MS / 1000}s`);
-      window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
-      reject(generateError(PUBLISH_TIMEOUT_BUT_LIKELY_SUCCESSFUL, params, xhr));
+      if (isPreview) {
+        analytics.error(`publish-v1: preview timed out after ${PUBLISH_FETCH_TIMEOUT_MS / 1000}s`);
+        resolve(null);
+      } else {
+        analytics.error(`publish-v1: timed out after ${PUBLISH_FETCH_TIMEOUT_MS / 1000}s`);
+        window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
+        reject(generateError(PUBLISH_TIMEOUT_BUT_LIKELY_SUCCESSFUL, params, xhr));
+      }
     };
     xhr.onabort = () => {
       window.store.dispatch(doUpdateUploadRemove(guid));

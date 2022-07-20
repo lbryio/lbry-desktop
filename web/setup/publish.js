@@ -54,6 +54,11 @@ export default function apiPublishCallViaWeb(
   return makeRequest(token, params, fileField, preview)
     .then((xhr) => {
       let error;
+
+      if (preview && xhr === null) {
+        return resolve(null);
+      }
+
       if (xhr && xhr.response) {
         if (xhr.status >= 200 && xhr.status < 300 && !xhr.response.error) {
           return resolve(xhr.response.result);

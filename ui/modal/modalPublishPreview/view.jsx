@@ -108,7 +108,7 @@ const ModalPublishPreview = (props: Props) => {
   const livestream =
     (uri && isLivestreamClaim) ||
     //   $FlowFixMe
-    (previewResponse.outputs[0] && previewResponse.outputs[0].value && !previewResponse.outputs[0].value.source);
+    (previewResponse?.outputs[0] && previewResponse.outputs[0].value && !previewResponse.outputs[0].value.source);
   // leave the confirm modal up if we're not going straight to upload/reflecting
   // @if TARGET='web'
   React.useEffect(() => {
@@ -155,8 +155,8 @@ const ModalPublishPreview = (props: Props) => {
   //   $FlowFixMe add outputs[0] etc to PublishResponse type
   const isOptimizeAvail = filePath && filePath !== '' && isVid && ffmpegStatus.available;
 
-  var modalTitle = 'Upload';
-  var confirmBtnText = 'Save';
+  let modalTitle = 'Upload';
+  let confirmBtnText = 'Save';
 
   if (isStillEditing) {
     if (livestream || isLivestreamClaim) {
