@@ -25,6 +25,7 @@ declare type PlayingUri = {
   commentId?: string,
   collection: PlayingCollection,
   source?: string,
+  sourceId?: string,
 };
 
 declare type PlayingCollection = {

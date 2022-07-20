@@ -22,16 +22,7 @@ reducers[ACTIONS.SET_PRIMARY_URI] = (state, action) =>
   });
 
 reducers[ACTIONS.SET_PLAYING_URI] = (state, action) =>
-  Object.assign({}, state, {
-    playingUri: {
-      uri: action.data.uri,
-      source: action.data.source,
-      location: action.data.location,
-      commentId: action.data.commentId,
-      collection: action.data.collection,
-      primaryUri: state.primaryUri,
-    },
-  });
+  Object.assign({}, state, { playingUri: { ...action.data, primaryUri: state.primaryUri } });
 
 reducers[ACTIONS.SET_CONTENT_POSITION] = (state, action) => {
   const { claimId, outpoint, position } = action.data;

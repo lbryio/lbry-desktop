@@ -4,6 +4,7 @@ import * as React from 'react';
 import Button from 'component/button';
 import FileRenderInitiator from 'component/fileRenderInitiator';
 import UriIndicator from 'component/uriIndicator';
+import { v4 as uuid } from 'uuid';
 
 type Props = {
   uri: string,
@@ -19,7 +20,11 @@ type Props = {
   allowPreview: boolean,
 };
 
-class ClaimLink extends React.Component<Props> {
+type State = {
+  claimLinkId: string,
+};
+
+class ClaimLink extends React.Component<Props, State> {
   static defaultProps = {
     href: null,
     link: false,
@@ -28,6 +33,15 @@ class ClaimLink extends React.Component<Props> {
     isResolvingUri: false,
     allowPreview: false,
   };
+
+  constructor(props: Props) {
+    super(props);
+
+    // each claimLink in a page will have a unique id for identifying duplicates (same URI multiple times)
+    this.state = {
+      claimLinkId: uuid(),
+    };
+  }
 
   componentDidMount() {
     this.resolve(this.props);
@@ -57,9 +71,12 @@ class ClaimLink extends React.Component<Props> {
       isMarkdownPost,
       allowPreview,
     } = this.props;
+
+    const claimLinkId = this.state.claimLinkId;
     const isUnresolved = (!isResolvingUri && !claim) || !claim;
     const isPlayingInline =
       playingUri.uri === uri &&
+      playingUri.sourceId === claimLinkId &&
       ((playingUri.source === 'comment' && parentCommentId === playingUri.commentId) ||
         playingUri.source === 'markdown');
 
@@ -82,8 +99,14 @@ class ClaimLink extends React.Component<Props> {
     if (allowPreview) {
       return (
         <div className="claim-link">
-          <div className={isPlayingInline ? INLINE_PLAYER_WRAPPER_CLASS : 'embed__inline-wrapper'}>
-            <FileRenderInitiator uri={uri} parentCommentId={parentCommentId} isMarkdownPost={isMarkdownPost} embedded />
+          <div className={isPlayingInline ? INLINE_PLAYER_WRAPPER_CLASS : 'embed__inline-wrapper'} id={claimLinkId}>
+            <FileRenderInitiator
+              uri={uri}
+              parentCommentId={parentCommentId}
+              isMarkdownPost={isMarkdownPost}
+              embedded
+              claimLinkId={claimLinkId}
+            />
           </div>
           <Button button="link" className="preview-link__url" label={uri} navigate={uri} />
         </div>

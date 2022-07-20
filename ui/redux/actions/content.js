@@ -167,7 +167,7 @@ export const doPopOutInlinePlayer = ({ source }: { source: string }) => (dispatc
   }
 };
 
-export function doSetPlayingUri({ uri, source, location, commentId, collection }: PlayingUri) {
+export function doSetPlayingUri({ uri, source, sourceId, location, commentId, collection }: PlayingUri) {
   return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     let url = uri;
@@ -188,7 +188,7 @@ export function doSetPlayingUri({ uri, source, location, commentId, collection }
 
     dispatch({
       type: ACTIONS.SET_PLAYING_URI,
-      data: { uri: url, source, location, commentId, collection },
+      data: { uri: url, source, sourceId, location, commentId, collection },
     });
   };
 }

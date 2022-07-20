@@ -210,7 +210,10 @@ export default function FileRenderFloating(props: Props) {
 
     // $FlowFixMe
     setFileViewerRect({ ...objectRect, windowOffset: window.pageYOffset });
-  }, [isMobile, mainFilePlaying, videoAspectRatio]);
+
+    // force re-calculate when sourceId changes (playing a new claimLink on the same page)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isMobile, mainFilePlaying, videoAspectRatio, playingUri.sourceId]);
 
   const restoreToRelativePosition = React.useCallback(() => {
     const SCROLL_BAR_PX = 12; // root: --body-scrollbar-width

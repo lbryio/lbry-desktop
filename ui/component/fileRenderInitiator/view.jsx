@@ -47,6 +47,7 @@ type Props = {
   embedded?: boolean,
   parentCommentId?: string,
   isMarkdownPost?: boolean,
+  claimLinkId?: string,
   doUriInitiatePlay: (playingOptions: PlayingUri, isPlayable: boolean) => void,
   doFetchChannelLiveStatus: (string) => void,
 };
@@ -74,6 +75,7 @@ export default function FileRenderInitiator(props: Props) {
     embedded,
     parentCommentId,
     isMarkdownPost,
+    claimLinkId,
     doUriInitiatePlay,
     doFetchChannelLiveStatus,
   } = props;
@@ -136,11 +138,12 @@ export default function FileRenderInitiator(props: Props) {
   // Wrap this in useCallback because we need to use it to the view effect
   // If we don't a new instance will be created for every render and react will think the dependencies have changed, which will add/remove the listener for every render
   const viewFile = React.useCallback(() => {
-    const playingOptions = {
+    const playingOptions: PlayingUri = {
       uri,
       collection: { collectionId },
       location: { pathname, search },
       source: undefined,
+      sourceId: claimLinkId,
       commentId: undefined,
     };
 
@@ -152,7 +155,17 @@ export default function FileRenderInitiator(props: Props) {
     }
 
     doUriInitiatePlay(playingOptions, isPlayable);
-  }, [collectionId, doUriInitiatePlay, isMarkdownPost, isPlayable, parentCommentId, pathname, search, uri]);
+  }, [
+    claimLinkId,
+    collectionId,
+    doUriInitiatePlay,
+    isMarkdownPost,
+    isPlayable,
+    parentCommentId,
+    pathname,
+    search,
+    uri,
+  ]);
 
   React.useEffect(() => {
     // avoid selecting 'video' anymore -> can cause conflicts with Ad popup videos
