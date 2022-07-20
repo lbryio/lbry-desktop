@@ -8,7 +8,7 @@ import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectClientSetting } from 'redux/selectors/settings';
 import { withRouter } from 'react-router';
 import {
-  makeSelectIsPlaying,
+  selectFileIsPlayingOnPage,
   selectShouldObscurePreviewForUri,
   selectInsufficientCreditsForUri,
   makeSelectFileRenderModeForUri,
@@ -31,7 +31,7 @@ const select = (state, props) => {
     claimThumbnail: getThumbnailFromClaim(claim),
     fileInfo: makeSelectFileInfoForUri(uri)(state),
     obscurePreview: selectShouldObscurePreviewForUri(state, uri),
-    isPlaying: makeSelectIsPlaying(uri)(state),
+    isPlaying: selectFileIsPlayingOnPage(state, uri),
     insufficientCredits: selectInsufficientCreditsForUri(state, uri),
     autoplay: selectClientSetting(state, SETTINGS.AUTOPLAY_MEDIA),
     costInfo: selectCostInfoForUri(state, uri),

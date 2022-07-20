@@ -2,20 +2,24 @@ import { connect } from 'react-redux';
 import { makeSelectFileInfoForUri, makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
 import { selectClaimWasPurchasedForUri } from 'redux/selectors/claims';
 import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
-import { makeSelectFileRenderModeForUri, selectPrimaryUri } from 'redux/selectors/content';
+import { makeSelectFileRenderModeForUri, selectFileIsPlayingOnPage } from 'redux/selectors/content';
 import { withRouter } from 'react-router';
 import { doAnalyticsView } from 'redux/actions/app';
 import FileRenderInline from './view';
 import { selectCostInfoForUri } from 'lbryinc';
 
-const select = (state, props) => ({
-  fileInfo: makeSelectFileInfoForUri(props.uri)(state),
-  isPlaying: selectPrimaryUri(state) === props.uri,
-  streamingUrl: makeSelectStreamingUrlForUri(props.uri)(state),
-  renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
-  costInfo: selectCostInfoForUri(state, props.uri),
-  claimWasPurchased: selectClaimWasPurchasedForUri(state, props.uri),
-});
+const select = (state, props) => {
+  const { uri } = props;
+
+  return {
+    fileInfo: makeSelectFileInfoForUri(uri)(state),
+    isPlaying: selectFileIsPlayingOnPage(state, uri),
+    streamingUrl: makeSelectStreamingUrlForUri(uri)(state),
+    renderMode: makeSelectFileRenderModeForUri(uri)(state),
+    costInfo: selectCostInfoForUri(state, uri),
+    claimWasPurchased: selectClaimWasPurchasedForUri(state, uri),
+  };
+};
 
 const perform = (dispatch) => ({
   triggerAnalyticsView: (uri, timeToStart) => dispatch(doAnalyticsView(uri, timeToStart)),

@@ -51,8 +51,12 @@ export const selectListIsLoopedForId = (state: State, id: string) => {
   return Boolean(playingCollection && playingCollection.loop);
 };
 
-export const makeSelectIsPlaying = (uri: string) =>
-  createSelector(selectPrimaryUri, (primaryUri) => primaryUri === uri);
+export const selectFileIsPlayingOnPage = (state: State, uri: string) => {
+  const primaryUri = selectPrimaryUri(state);
+  const url = selectCanonicalUrlForUri(state, uri);
+
+  return primaryUri === url;
+};
 
 export const selectIsUriCurrentlyPlaying = (state: State, uri: string) => {
   const { uri: playingUrl } = selectPlayingUri(state);
