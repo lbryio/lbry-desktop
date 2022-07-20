@@ -260,7 +260,11 @@ const VideoJsEvents = ({
     if (isLivestreamClaim && player) {
       player.liveTracker.on('liveedgechange', async () => {
         // Only respond to when we fall behind
-        if (player.liveTracker.atLiveEdge()) return;
+        if (player.liveTracker.atLiveEdge()) {
+          player.playbackRate(1);
+          return;
+        }
+
         // Don't respond to when user has paused the player
         if (player.paused()) return;
 
