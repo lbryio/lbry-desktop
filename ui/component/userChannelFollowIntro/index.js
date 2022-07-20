@@ -1,12 +1,13 @@
 import { connect } from 'react-redux';
 import { doChannelSubscribe } from 'redux/actions/subscriptions';
-import { selectHomepageData, selectLanguage } from 'redux/selectors/settings';
+import { selectHomepageData, selectLanguage, selectHomepageDiscover } from 'redux/selectors/settings';
 import { selectPrefsReady } from 'redux/selectors/sync';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import UserChannelFollowIntro from './view';
 
 const select = (state) => ({
   homepageData: selectHomepageData(state),
+  discoverData: selectHomepageDiscover(state),
   language: selectLanguage(state),
   prefsReady: selectPrefsReady(state),
   subscribedChannels: selectSubscriptions(state),

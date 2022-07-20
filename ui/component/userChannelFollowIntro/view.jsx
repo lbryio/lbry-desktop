@@ -11,6 +11,7 @@ import React from 'react';
 
 type Props = {
   homepageData: any,
+  discoverData: ?Array<string>,
   language: string,
   prefsReady: boolean,
   subscribedChannels: Array<Subscription>,
@@ -19,7 +20,7 @@ type Props = {
 };
 
 function UserChannelFollowIntro(props: Props) {
-  const { homepageData, language, prefsReady, subscribedChannels, channelSubscribe, onContinue } = props;
+  const { homepageData, discoverData, language, prefsReady, subscribedChannels, channelSubscribe, onContinue } = props;
 
   const { PRIMARY_CONTENT, LATEST } = homepageData;
 
@@ -31,7 +32,9 @@ function UserChannelFollowIntro(props: Props) {
     .filter((x) => x !== '');
 
   let channelIds;
-  if (CUSTOM_HOMEPAGE) {
+  if (discoverData) {
+    channelIds = discoverData;
+  } else if (CUSTOM_HOMEPAGE) {
     if (LATEST) {
       channelIds = LATEST.channelIds;
     } else if (PRIMARY_CONTENT) {
