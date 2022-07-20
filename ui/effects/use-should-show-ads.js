@@ -5,6 +5,8 @@ import { SHOW_ADS } from 'config';
 const NO_COUNTRY_CHECK = true;
 const GOOGLE_AD_URL = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
 
+let fetch_locked = false;
+
 export default function useShouldShowAds(
   hasPremiumPlus: boolean,
   userCountry: string,
@@ -22,7 +24,9 @@ export default function useShouldShowAds(
   }
 
   React.useEffect(() => {
-    if (isAdBlockerFound === undefined) {
+    if (isAdBlockerFound === undefined && !fetch_locked) {
+      fetch_locked = true;
+
       fetch(GOOGLE_AD_URL)
         .then((response) => {
           const detected = response.redirected === true;
@@ -30,13 +34,17 @@ export default function useShouldShowAds(
         })
         .catch(() => {
           doSetAdBlockerFound(true);
+        })
+        .finally(() => {
+          fetch_locked = false;
         });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- On mount only
   }, []);
 
   React.useEffect(() => {
     setShouldShowAds(resolveAdVisibility());
-  }, [hasPremiumPlus, isAdBlockerFound]);
+  }, [hasPremiumPlus, isAdBlockerFound, userCountry]);
 
   return shouldShowAds;
 }
