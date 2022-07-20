@@ -255,7 +255,7 @@ function ClaimMenuList(props: Props) {
       prepareEdit(claim, editUri, claimType);
     } else {
       const channelUrl = claim.name + ':' + claim.claim_id;
-      push(`/${channelUrl}?${PAGE_VIEW_QUERY}=${PUBLISH_PAGE}`);
+      push(`/${channelUrl}?${PAGE_VIEW_QUERY}=${EDIT_PAGE}`);
     }
   }
 
