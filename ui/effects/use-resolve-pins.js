@@ -43,8 +43,7 @@ export default function useResolvePins(props: Props) {
         setResolvedPinUris(pins.claimIds.map<string>((id) => claimsById[id]?.canonical_url));
       }
     }
-    // Only do this over a false->true->false transition for hasResolvedPinUris.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- Only do this over a false->true->false transition for hasResolvedPinUris.
   }, [hasResolvedPinUris]);
 
   return resolvedPinUris;

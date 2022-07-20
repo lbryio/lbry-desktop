@@ -112,8 +112,7 @@ export default function ShowPage(props: Props) {
     if (!canonicalUrl && isNewestPath) {
       doResolveUri(uri);
     }
-    // only for mount on a latest content page
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only for mount on a latest content page
   }, []);
 
   useEffect(() => {

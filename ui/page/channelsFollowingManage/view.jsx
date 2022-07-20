@@ -56,8 +56,7 @@ export default function ChannelsFollowingManage(props: Props) {
     } else {
       setFilteredUris(filteredUris);
     }
-    // (only need to respond to 'filterQuery')
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- Only need to respond to 'filterQuery'
   }, [filterQuery]);
 
   React.useEffect(() => {

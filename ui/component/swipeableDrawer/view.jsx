@@ -190,8 +190,7 @@ export default function SwipeableDrawer(props: Props) {
     if (startOpen && !open) {
       toggleDrawer();
     }
-    // on page mount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- on mount only
   }, []);
 
   React.useEffect(() => {
@@ -218,8 +217,7 @@ export default function SwipeableDrawer(props: Props) {
       }
     };
 
-    // close drawer on unmount
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- close drawer on unmount
   }, []);
 
   const drawerElemRef = React.useCallback(

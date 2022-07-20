@@ -50,8 +50,7 @@ function SignInVerifyPage(props: Props) {
     if (!needsRecaptcha && !isAuthenticationSuccess && !verificationApiHistory.called) {
       verifyUser();
     }
-    // (on mount only)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- On mount only
   }, []);
 
   React.useEffect(() => {

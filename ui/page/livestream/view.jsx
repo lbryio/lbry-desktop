@@ -85,8 +85,7 @@ export default function LivestreamPage(props: Props) {
     if (claimId && channelName && !socketConnection?.connected) {
       doCommentSocketConnect(uri, channelName, claimId);
     }
-    // willAutoplay mount only
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- willAutoplay mount only
   }, [channelUrl, claim, doCommentSocketConnect, doCommentSocketDisconnect, socketConnection, uri]);
 
   React.useEffect(() => {
@@ -103,8 +102,7 @@ export default function LivestreamPage(props: Props) {
         if (claimId && channelName) doCommentSocketDisconnect(claimId, channelName);
       }
     };
-    // only on unmount -> leave page
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only on unmount -> leave page
   }, []);
 
   useFetchLiveStatus(isStreamPlaying ? undefined : livestreamChannelId, doFetchChannelLiveStatus);

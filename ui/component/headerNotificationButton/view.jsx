@@ -105,7 +105,7 @@ export default function NotificationHeaderButton(props: Props) {
 
   if (!notificationsEnabled) return null;
 
-  function handleNotificationClick(notification) {
+  function handleNotificationClick(notification, disableAutoplay) {
     const { id, is_read } = notification;
 
     if (!is_read) {
@@ -113,7 +113,10 @@ export default function NotificationHeaderButton(props: Props) {
       readNotification([id]);
     }
 
-    push(getNotificationLink(notification));
+    push({
+      pathname: getNotificationLink(notification),
+      state: !disableAutoplay ? undefined : { forceDisableAutoplay: true },
+    });
   }
 
   function getWebUri(notification) {
@@ -125,6 +128,7 @@ export default function NotificationHeaderButton(props: Props) {
 
     let channelUrl;
     let icon;
+    let disableAutoplay = false;
     switch (notification_rule) {
       case RULE.CREATOR_SUBSCRIBER:
         icon = <Icon icon={ICONS.SUBSCRIBE} sectionIcon />;
@@ -133,10 +137,12 @@ export default function NotificationHeaderButton(props: Props) {
       case RULE.CREATOR_COMMENT:
         channelUrl = notification_parameters.dynamic.comment_author;
         icon = creatorIcon(channelUrl, notification_parameters?.dynamic?.comment_author_thumbnail);
+        disableAutoplay = true;
         break;
       case RULE.COMMENT_REPLY:
         channelUrl = notification_parameters.dynamic.reply_author;
         icon = creatorIcon(channelUrl, notification_parameters?.dynamic?.comment_author_thumbnail);
+        disableAutoplay = true;
         break;
       case RULE.NEW_CONTENT:
         channelUrl = notification_parameters.dynamic.channel_url;
@@ -168,7 +174,11 @@ export default function NotificationHeaderButton(props: Props) {
     }
 
     return (
-      <NavLink onClick={() => handleNotificationClick(notification)} key={id} to={getWebUri(notification)}>
+      <NavLink
+        onClick={() => handleNotificationClick(notification, disableAutoplay)}
+        key={id}
+        to={{ pathname: getWebUri(notification), state: !disableAutoplay ? undefined : { forceDisableAutoplay: true } }}
+      >
         <div
           className={is_read ? 'menu__list--notification' : 'menu__list--notification menu__list--notification-unread'}
           key={id}
