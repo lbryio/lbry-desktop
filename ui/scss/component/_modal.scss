@@ -1,0 +1,162 @@
+.ReactModal__Body--open {
+  #app {
+    @media (max-width: $breakpoint-small) {
+      height: 100vh;
+      overflow-y: hidden;
+    }
+  }
+
+  [data-reach-menu] {
+    z-index: 10000;
+  }
+}
+
+.modal-overlay {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  align-items: center;
+  background-color: var(--color-background-overlay);
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  z-index: 9999;
+  z-index: 9999;
+
+  @media (max-width: $breakpoint-small) {
+    background-color: rgba(var(--color-header-background-base), 0.95);
+  }
+}
+
+.modal {
+  @extend .card;
+  background-color: var(--color-modal-background);
+  line-height: 1.55;
+  min-width: 500px;
+  max-width: var(--modal-width);
+  overflow: auto;
+  padding: var(--spacing-l);
+  word-break: break-word;
+  background-color: var(--color-modal-background) !important;
+  border-radius: var(--border-radius);
+  border: 2px solid #000;
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+
+  .card {
+    .card__main-actions {
+      border-top: unset;
+    }
+
+    input {
+      &:focus {
+        border: 1px solid var(--color-primary);
+        box-shadow: unset;
+      }
+    }
+  }
+
+  &:focus,
+  &:focus-visible {
+    box-shadow: none !important;
+    background-color: var(--color-modal-background) !important;
+  }
+
+  .claim-preview__wrapper {
+    &:hover {
+      background-color: unset;
+    }
+  }
+
+  @media (max-width: $breakpoint-small) {
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    min-width: auto;
+    margin-bottom: 0;
+    border-radius: 0;
+
+    .card {
+      box-shadow: none;
+      border: none;
+    }
+  }
+
+  .button--close {
+    z-index: 10000;
+    margin-top: var(--spacing-s);
+  }
+}
+
+.modal--card-internal {
+  padding: 0;
+  border: none;
+
+  .card {
+    margin: 0;
+
+    padding: var(--spacing-l);
+
+    .button-toggle:not(.button-toggle--active) {
+      &.button--alt {
+        background-color: rgba(var(--color-header-button-base), 0.4);
+        &:hover {
+          background-color: rgba(var(--color-header-button-base), 0.9) !important;
+        }
+      }
+    }
+
+    .button-toggle--active,
+    .channel__list-item,
+    .button--secondary,
+    input {
+    }
+    .channel__list-item {
+      &:hover {
+        background-color: var(--color-feature-background);
+        color: var(--color-primary-contrast);
+      }
+    }
+
+    .button-toggle--active {
+      background-color: var(--color-feature-background);
+    }
+
+    label {
+      color: var(--color-text);
+      font-size: var(--font-medium);
+    }
+
+    @media (max-width: $breakpoint-small) {
+      .card__main-actions {
+        border-top: unset !important;
+      }
+    }
+  }
+}
+
+.error-modal__content {
+  display: flex;
+  padding: 0 var(--spacing-m) var(--spacing-m) var(--spacing-m);
+}
+
+.error-modal {
+  max-width: none;
+  width: var(--modal-width);
+  white-space: pre-wrap;
+}
+
+.error-modal__error-list {
+  max-width: var(--modal-width);
+  max-height: 400px;
+  margin-top: var(--spacing-s);
+  padding: var(--spacing-s);
+
+  background-color: var(--color-error);
+  border-left: 2px solid var(--color-text-error);
+  color: var(--color-text-error);
+  list-style: none;
+  overflow-y: scroll;
+  white-space: pre-wrap;
+}

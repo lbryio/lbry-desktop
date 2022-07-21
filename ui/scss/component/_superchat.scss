@@ -1,0 +1,25 @@
+.superChat {
+  border-radius: var(--border-radius);
+  background-color: linear-gradient(to right, var(--color-superchat), var(--color-superchat-3));
+  padding: 0.2rem var(--spacing-xs);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-xsmall);
+
+  .credit-amount {
+    color: var(--color-superchat-text);
+  }
+}
+
+.superChat--light {
+  @extend .superChat;
+  background-color: rgba(var(--color-primary-dynamic), 0.8);
+  margin-bottom: 2px;
+  padding-top: 5px;
+
+  .credit-amount {
+    color: var(--color-primary-contrast);
+    .icon {
+      margin-bottom: 0;
+    }
+  }
+}
