@@ -54,7 +54,7 @@ const AUTO_EXPAND_ALL_REPLIES = false;
 type Props = {
   comment: Comment,
   myChannelIds: ?Array<string>,
-  clearPlayingUri: () => void,
+  doClearPlayingUri: () => void,
   uri: string,
   claim: StreamClaim,
   claimIsMine: boolean, // if you control the claim which this comment was posted on
@@ -93,7 +93,7 @@ function CommentView(props: Props) {
   const {
     comment,
     myChannelIds,
-    clearPlayingUri,
+    doClearPlayingUri,
     claim,
     uri,
     updateComment,
@@ -217,7 +217,7 @@ function CommentView(props: Props) {
 
   function handleEditComment() {
     if (playingUri.source === 'comment') {
-      clearPlayingUri();
+      doClearPlayingUri();
     }
     setEditing(true);
   }
