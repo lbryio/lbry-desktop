@@ -106,9 +106,15 @@ export function getUriForSearchTerm(term: string) {
  * @param matureEnabled
  * @param claimIsMature
  * @param claimId
+ * @param language
  * @returns {{size: number, nsfw: boolean, isBackgroundSearch: boolean}}
  */
-export function getRecommendationSearchOptions(matureEnabled: boolean, claimIsMature: boolean, claimId: string) {
+export function getRecommendationSearchOptions(
+  matureEnabled: boolean,
+  claimIsMature: boolean,
+  claimId: string,
+  language: ?string
+) {
   const options = { size: 20, nsfw: matureEnabled, isBackgroundSearch: true };
 
   if (SIMPLE_SITE) {
@@ -119,6 +125,10 @@ export function getRecommendationSearchOptions(matureEnabled: boolean, claimIsMa
 
   if (matureEnabled || !claimIsMature) {
     options[SEARCH_OPTIONS.RELATED_TO] = claimId;
+  }
+
+  if (language) {
+    options[SEARCH_OPTIONS.LANGUAGE] = language;
   }
 
   return options;

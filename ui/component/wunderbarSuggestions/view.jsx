@@ -36,18 +36,20 @@ const WUNDERBAR_INPUT_DEBOUNCE_MS = 1000;
 const LIGHTHOUSE_MIN_CHARACTERS = 3;
 
 type Props = {
-  searchQuery: ?string,
   onSearch: (string) => void,
-  navigateToSearchPage: (string) => void,
-  doResolveUris: (string) => void,
-  doShowSnackBar: (string) => void,
-  showMature: boolean,
   isMobile: boolean,
-  doCloseMobileSearch: () => void,
   channelsOnly?: boolean,
   noTopSuggestion?: boolean,
   noBottomLinks?: boolean,
   customSelectAction?: (string) => void,
+  // --- redux ---
+  searchInLanguage: boolean,
+  languageSetting: string,
+  showMature: boolean,
+  doResolveUris: (string) => void,
+  navigateToSearchPage: (string) => void,
+  doShowSnackBar: (string) => void,
+  doCloseMobileSearch: () => void,
 };
 
 export default function WunderBarSuggestions(props: Props) {
@@ -62,6 +64,8 @@ export default function WunderBarSuggestions(props: Props) {
     noTopSuggestion,
     noBottomLinks,
     customSelectAction,
+    searchInLanguage,
+    languageSetting,
   } = props;
   const inputRef: ElementRef<any> = React.useRef();
   const viewResultsRef: ElementRef<any> = React.useRef();
@@ -79,9 +83,7 @@ export default function WunderBarSuggestions(props: Props) {
   const [term, setTerm] = React.useState(queryFromUrl);
   const [debouncedTerm, setDebouncedTerm] = React.useState('');
   const searchSize = isMobile ? 20 : 5;
-  const additionalOptions = channelsOnly
-    ? { isBackgroundSearch: false, [SEARCH_OPTIONS.CLAIM_TYPE]: SEARCH_OPTIONS.INCLUDE_CHANNELS }
-    : {};
+  const additionalOptions = getAdditionalOptions(channelsOnly, searchInLanguage ? languageSetting : null);
   const { results, loading } = useLighthouse(debouncedTerm, showMature, searchSize, additionalOptions, 0);
   const noResults = debouncedTerm && !loading && results && results.length === 0;
   const nameFromQuery = debouncedTerm.trim().replace(/\s+/g, '').replace(/:/g, '#');
@@ -103,6 +105,21 @@ export default function WunderBarSuggestions(props: Props) {
 
   const isTyping = debouncedTerm !== term;
   const showPlaceholder = isTyping || loading;
+
+  function getAdditionalOptions(channelsOnly: ?boolean, language: ?string) {
+    const additionalOptions = {};
+
+    if (channelsOnly) {
+      additionalOptions.isBackgroundSearch = false;
+      additionalOptions[SEARCH_OPTIONS.CLAIM_TYPE] = SEARCH_OPTIONS.INCLUDE_CHANNELS;
+    }
+
+    if (language) {
+      additionalOptions[SEARCH_OPTIONS.LANGUAGE] = language;
+    }
+
+    return additionalOptions;
+  }
 
   function handleSelect(value) {
     if (!value) {

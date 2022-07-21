@@ -1005,6 +1005,10 @@ svg + .button__label {
   // margin-top: var(--spacing-xs);
   display: flex;
 
+  .icon--langFilter {
+    margin-right: var(--spacing-s);
+  }
+
   .button-toggle:nth-child(2) {
     margin-left: 2px;
     @media (min-width: $breakpoint-small) {

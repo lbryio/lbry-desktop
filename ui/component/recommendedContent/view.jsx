@@ -13,6 +13,7 @@ import { FYP_ID } from 'constants/urlParams';
 import classnames from 'classnames';
 import RecSys from 'recsys';
 import { getClaimMetadata } from 'util/claim';
+import LangFilterIndicator from 'component/langFilterIndicator';
 
 const VIEW_ALL_RELATED = 'view_all_related';
 const VIEW_MORE_FROM = 'view_more_from';
@@ -24,6 +25,7 @@ type Props = {
   recommendedContentUris: Array<string>,
   nextRecommendedUri: string,
   isSearching: boolean,
+  searchInLanguage: boolean,
   doFetchRecommendedContent: (string, ?FypParam) => void,
   claim: ?StreamClaim,
   claimId: string,
@@ -39,6 +41,7 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
     recommendedContentUris,
     nextRecommendedUri,
     isSearching,
+    searchInLanguage,
     claim,
     location,
     hasPremiumPlus,
@@ -127,6 +130,8 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
       titleActions={
         signingChannel && (
           <div className="recommended-content__bubble">
+            {searchInLanguage && <LangFilterIndicator />}
+
             <Button
               className={classnames('button-bubble', {
                 'button-bubble--active': viewMode === VIEW_ALL_RELATED,

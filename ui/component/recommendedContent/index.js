@@ -5,6 +5,8 @@ import { doFetchRecommendedContent } from 'redux/actions/search';
 import { selectRecommendedContentForUri, selectIsSearching } from 'redux/selectors/search';
 import { selectOdyseeMembershipIsPremiumPlus } from 'redux/selectors/user';
 import RecommendedContent from './view';
+import { selectClientSetting } from 'redux/selectors/settings';
+import * as SETTINGS from 'constants/settings';
 
 const select = (state, props) => {
   const recommendedContentUris = selectRecommendedContentForUri(state, props.uri);
@@ -15,6 +17,7 @@ const select = (state, props) => {
     recommendedContentUris,
     nextRecommendedUri,
     isSearching: selectIsSearching(state),
+    searchInLanguage: selectClientSetting(state, SETTINGS.SEARCH_IN_LANGUAGE),
     hasPremiumPlus: selectOdyseeMembershipIsPremiumPlus(state),
   };
 };

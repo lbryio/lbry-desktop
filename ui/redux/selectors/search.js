@@ -1,5 +1,5 @@
 // @flow
-import { selectShowMatureContent } from 'redux/selectors/settings';
+import { selectClientSetting, selectLanguage, selectShowMatureContent } from 'redux/selectors/settings';
 import {
   selectClaimsByUri,
   selectClaimForClaimId,
@@ -17,6 +17,7 @@ import { createNormalizedSearchKey, getRecommendationSearchKey, getRecommendatio
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectHistory } from 'redux/selectors/content';
 import { selectAllCostInfoByUri } from 'lbryinc';
+import * as SETTINGS from 'constants/settings';
 
 type State = { claims: any, search: SearchState, user: UserState };
 
@@ -58,13 +59,18 @@ export const selectRecommendedContentRawForUri = createCachedSelector(
   selectShowMatureContent,
   selectClaimIsNsfwForUri, // (state, uri)
   selectSearchResultByQuery,
-  (uri, claimsByUri, matureEnabled, isMature, searchUrisByQuery) => {
+  selectLanguage,
+  (state) => selectClientSetting(state, SETTINGS.SEARCH_IN_LANGUAGE),
+  (uri, claimsByUri, matureEnabled, isMature, searchUrisByQuery, languageSetting, searchInLanguage) => {
     const claim = claimsByUri[uri];
+    const language = searchInLanguage ? languageSetting : null;
+
     if (claim?.value?.title) {
-      const options = getRecommendationSearchOptions(matureEnabled, isMature, claim.claim_id);
+      const options = getRecommendationSearchOptions(matureEnabled, isMature, claim.claim_id, language);
       const normalizedSearchQuery = getRecommendationSearchKey(claim.value.title, options);
       return searchUrisByQuery[normalizedSearchQuery];
     }
+
     return undefined;
   }
 )((state, uri) => String(uri));
@@ -146,12 +152,15 @@ export const selectRecommendedMetaForClaimId = createCachedSelector(
   selectClaimForClaimId,
   selectShowMatureContent,
   selectSearchResultByQuery,
-  (claim, matureEnabled, searchUrisByQuery) => {
+  selectLanguage,
+  (state) => selectClientSetting(state, SETTINGS.SEARCH_IN_LANGUAGE),
+  (claim, matureEnabled, searchUrisByQuery, languageSetting, searchInLanguage) => {
     if (claim && claim?.value?.title && claim.claim_id) {
       const isMature = isClaimNsfw(claim);
       const title = claim.value.title;
+      const language = searchInLanguage ? languageSetting : null;
 
-      const options = getRecommendationSearchOptions(matureEnabled, isMature, claim.claim_id);
+      const options = getRecommendationSearchOptions(matureEnabled, isMature, claim.claim_id, language);
       const normalizedSearchQuery = getRecommendationSearchKey(title, options);
 
       const searchResult = searchUrisByQuery[normalizedSearchQuery];

@@ -1,9 +1,10 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
+import * as SETTINGS from 'constants/settings';
 import { doOpenModal } from 'redux/actions/app';
 import { doToast } from 'redux/actions/notifications';
-import { selectShowMatureContent } from 'redux/selectors/settings';
+import { selectClientSetting, selectLanguage, selectShowMatureContent } from 'redux/selectors/settings';
 import { selectClaimForUri, selectClaimIdForUri, selectClaimIsNsfwForUri } from 'redux/selectors/claims';
 import { doClaimSearch, doResolveClaimIds, doResolveUris } from 'redux/actions/claims';
 import { buildURI, isURIValid } from 'util/lbryURI';
@@ -78,6 +79,7 @@ type SearchOptions = {
   related_to?: string,
   nsfw?: boolean,
   isBackgroundSearch?: boolean,
+  language?: string,
   gid?: string, // for fyp only
   uuid?: string, // for fyp only
 };
@@ -250,9 +252,17 @@ export const doFetchRecommendedContent = (uri: string, fyp: ?FypParam = null) =>
   const claim = selectClaimForUri(state, uri);
   const matureEnabled = selectShowMatureContent(state);
   const claimIsMature = selectClaimIsNsfwForUri(state, uri);
+  const languageSetting = selectLanguage(state);
+  const searchInLanguage = selectClientSetting(state, SETTINGS.SEARCH_IN_LANGUAGE);
+  const language = searchInLanguage ? languageSetting : null;
 
   if (claim && claim.value && claim.claim_id) {
-    const options: SearchOptions = getRecommendationSearchOptions(matureEnabled, claimIsMature, claim.claim_id);
+    const options: SearchOptions = getRecommendationSearchOptions(
+      matureEnabled,
+      claimIsMature,
+      claim.claim_id,
+      language
+    );
 
     if (fyp) {
       options['gid'] = fyp.gid;

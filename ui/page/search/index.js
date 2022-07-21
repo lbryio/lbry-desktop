@@ -7,15 +7,18 @@ import {
   selectSearchOptions,
   makeSelectHasReachedMaxResultsLength,
 } from 'redux/selectors/search';
-import { selectShowMatureContent } from 'redux/selectors/settings';
+import { selectClientSetting, selectLanguage, selectShowMatureContent } from 'redux/selectors/settings';
 import { getSearchQueryString } from 'util/query-params';
 import { selectOdyseeMembershipIsPremiumPlus } from 'redux/selectors/user';
 import SearchPage from './view';
+import * as SETTINGS from 'constants/settings';
 
 const select = (state, props) => {
   const showMature = selectShowMatureContent(state);
   const urlParams = new URLSearchParams(props.location.search);
   const hasPremiumPlus = selectOdyseeMembershipIsPremiumPlus(state);
+  const languageSetting = selectLanguage(state);
+  const searchInLanguage = selectClientSetting(state, SETTINGS.SEARCH_IN_LANGUAGE);
 
   let urlQuery = urlParams.get('q') || null;
   if (urlQuery) {
@@ -26,6 +29,7 @@ const select = (state, props) => {
     ...selectSearchOptions(state),
     isBackgroundSearch: false,
     nsfw: showMature,
+    ...(searchInLanguage ? { language: languageSetting } : {}),
   };
 
   const query = getSearchQueryString(urlQuery, searchOptions);

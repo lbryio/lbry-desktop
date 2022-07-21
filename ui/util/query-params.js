@@ -77,7 +77,7 @@ export const getSearchQueryString = (query: string, options: any = {}) => {
   }
 
   const additionalOptions = {};
-  const { related_to, nsfw, free_only, gid, uuid } = options;
+  const { related_to, nsfw, free_only, language, gid, uuid } = options;
 
   if (related_to) {
     additionalOptions[SEARCH_OPTIONS.RELATED_TO] = related_to;
@@ -94,6 +94,10 @@ export const getSearchQueryString = (query: string, options: any = {}) => {
 
   if (nsfw === false) {
     additionalOptions[SEARCH_OPTIONS.INCLUDE_MATURE] = false;
+  }
+
+  if (language) {
+    additionalOptions[SEARCH_OPTIONS.LANGUAGE] = language;
   }
 
   if (additionalOptions) {

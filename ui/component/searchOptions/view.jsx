@@ -6,6 +6,7 @@ import { Form, FormField } from 'component/common/form';
 import Button from 'component/button';
 import Icon from 'component/common/icon';
 import classnames from 'classnames';
+import LangFilterIndicator from 'component/langFilterIndicator';
 
 const CLAIM_TYPES = {
   [SEARCH_OPTIONS.INCLUDE_FILES]: 'Files',
@@ -41,12 +42,21 @@ type Props = {
   options: {},
   simple: boolean,
   expanded: boolean,
+  searchInLanguage: boolean,
   toggleSearchExpanded: () => void,
   onSearchOptionsChanged: (string) => void,
 };
 
 const SearchOptions = (props: Props) => {
-  const { options, simple, setSearchOption, expanded, toggleSearchExpanded, onSearchOptionsChanged } = props;
+  const {
+    options,
+    simple,
+    setSearchOption,
+    expanded,
+    searchInLanguage,
+    toggleSearchExpanded,
+    onSearchOptionsChanged,
+  } = props;
 
   const stringifiedOptions = JSON.stringify(options);
 
@@ -216,13 +226,16 @@ const SearchOptions = (props: Props) => {
 
   return (
     <div>
-      <Button
-        button="alt"
-        label={__('Filter')}
-        icon={ICONS.FILTER}
-        iconRight={expanded ? ICONS.UP : ICONS.DOWN}
-        onClick={toggleSearchExpanded}
-      />
+      <div>
+        <Button
+          button="alt"
+          label={__('Filter')}
+          icon={ICONS.FILTER}
+          iconRight={expanded ? ICONS.UP : ICONS.DOWN}
+          onClick={toggleSearchExpanded}
+        />
+        {searchInLanguage && <LangFilterIndicator />}
+      </div>
       <Form
         className={classnames('search__options', {
           'search__options--expanded': expanded,
