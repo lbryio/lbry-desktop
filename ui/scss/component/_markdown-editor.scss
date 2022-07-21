@@ -114,10 +114,15 @@
       padding-right: 0;
       padding-left: 0;
       border: transparent;
+      margin-right: var(--spacing-xxs);
 
       &:hover {
-        color: var(--color-header-link-active);
+        color: var(--color-header-link);
+        background-color: var(--color-editor-button-hover-bg);
       }
+    }
+    button.active {
+      background: var(--color-editor-button-active-bg);
     }
   }
 }
