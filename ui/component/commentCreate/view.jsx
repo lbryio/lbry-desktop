@@ -495,6 +495,15 @@ export function CommentCreate(props: Props) {
             type={advancedEditor ? 'markdown' : 'textarea'}
             textAreaMaxLength={FF_MAX_CHARS_IN_COMMENT}
           />
+          <FormField
+            label={
+              <div className="commentCreate__labelWrapper">
+                <span className="commentCreate__label">{(isReply ? __('Replying as') : __('Comment as')) + ' '}</span>
+                <SelectChannel tiny />
+              </div>
+            }
+            type={advancedEditor ? 'markdown' : 'textarea'}
+          />
         </>
       )}
 
