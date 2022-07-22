@@ -710,7 +710,8 @@ $control-bar-icon-size: 30px;
     div.vjs-chapters-button {
       right: calc(var(--spacing-xs) * -1);
       .vjs-menu {
-        width: 19em;
+        min-width: 12em;
+        max-width: 19em;
         left: -3em;
       }
 
