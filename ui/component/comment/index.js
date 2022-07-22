@@ -9,7 +9,7 @@ import {
 } from 'redux/selectors/claims';
 import { doCommentUpdate, doCommentList } from 'redux/actions/comments';
 import { doToast } from 'redux/actions/notifications';
-import { doClearPlayingUri } from 'redux/actions/content';
+import { doClearPlayingUri, doClearPlayingSource } from 'redux/actions/content';
 import {
   selectFetchedCommentAncestors,
   selectOthersReactsForComment,
@@ -50,6 +50,7 @@ const select = (state, props) => {
 
 const perform = {
   doClearPlayingUri,
+  doClearPlayingSource,
   updateComment: doCommentUpdate,
   fetchReplies: doCommentList,
   doToast,

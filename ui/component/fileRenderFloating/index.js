@@ -25,7 +25,7 @@ import {
 import { selectClientSetting } from 'redux/selectors/settings';
 import { doClearQueueList } from 'redux/actions/collections';
 import { selectCostInfoForUri } from 'lbryinc';
-import { doUriInitiatePlay, doSetPlayingUri, doClearPlayingUri } from 'redux/actions/content';
+import { doUriInitiatePlay, doClearPlayingUri, doClearPlayingSource } from 'redux/actions/content';
 import { doFetchRecommendedContent } from 'redux/actions/search';
 import { withRouter } from 'react-router';
 import { selectHasAppDrawerOpen, selectMainPlayerDimensions } from 'redux/selectors/app';
@@ -91,12 +91,12 @@ const select = (state, props) => {
 const perform = {
   doFetchRecommendedContent,
   doUriInitiatePlay,
-  doSetPlayingUri,
   doCommentSocketConnect,
   doCommentSocketDisconnect,
   doClearPlayingUri,
   doClearQueueList,
   doOpenModal,
+  doClearPlayingSource,
 };
 
 export default withRouter(connect(select, perform)(FileRenderFloating));

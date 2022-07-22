@@ -1,3 +1,6 @@
+export const INLINE_PLAYER_WRAPPER_CLASS = 'inline-player__wrapper';
+export const FLOATING_PLAYER_CLASS = 'content__viewer--floating';
+
 export const VIDEO_ALMOST_FINISHED_THRESHOLD = 0.8;
 export const VIDEO_PLAYBACK_RATES = Object.freeze([0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2]);
 

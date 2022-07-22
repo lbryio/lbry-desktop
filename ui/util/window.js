@@ -1,5 +1,5 @@
 // @flow
-import { FLOATING_PLAYER_CLASS } from 'component/fileRenderFloating/view';
+import { FLOATING_PLAYER_CLASS } from 'constants/player';
 
 export function getRootEl() {
   return document && document.documentElement;

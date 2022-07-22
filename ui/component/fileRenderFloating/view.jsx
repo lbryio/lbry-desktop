@@ -7,7 +7,7 @@ import type { ElementRef } from 'react';
 import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import * as RENDER_MODES from 'constants/file_render_modes';
-import { DEFAULT_INITIAL_FLOATING_POS } from 'constants/player';
+import { INLINE_PLAYER_WRAPPER_CLASS, FLOATING_PLAYER_CLASS, DEFAULT_INITIAL_FLOATING_POS } from 'constants/player';
 import React from 'react';
 import Button from 'component/button';
 import classnames from 'classnames';
@@ -44,9 +44,7 @@ export const HEADER_HEIGHT_MOBILE = 56;
 
 const DEBOUNCE_WINDOW_RESIZE_HANDLER_MS = 100;
 
-export const INLINE_PLAYER_WRAPPER_CLASS = 'inline-player__wrapper';
-export const CONTENT_VIEWER_CLASS = 'content__viewer';
-export const FLOATING_PLAYER_CLASS = 'content__viewer--floating';
+const CONTENT_VIEWER_CLASS = 'content__viewer';
 
 // ****************************************************************************
 // ****************************************************************************
@@ -71,7 +69,6 @@ type Props = {
   previousListUri: string,
   doFetchRecommendedContent: (uri: string) => void,
   doUriInitiatePlay: (playingOptions: PlayingUri, isPlayable: ?boolean, isFloating: ?boolean) => void,
-  doSetPlayingUri: ({ uri?: ?string }) => void,
   isCurrentClaimLive?: boolean,
   videoAspectRatio: number,
   socketConnection: { connected: ?boolean },
@@ -89,6 +86,7 @@ type Props = {
   doClearPlayingUri: () => void,
   doClearQueueList: () => void,
   doOpenModal: (id: string, {}) => void,
+  doClearPlayingSource: () => void,
 };
 
 export default function FileRenderFloating(props: Props) {
@@ -114,7 +112,6 @@ export default function FileRenderFloating(props: Props) {
     isLivestreamClaim,
     doFetchRecommendedContent,
     doUriInitiatePlay,
-    doSetPlayingUri,
     isCurrentClaimLive,
     videoAspectRatio,
     geoRestriction,
@@ -130,6 +127,7 @@ export default function FileRenderFloating(props: Props) {
     doClearPlayingUri,
     doClearQueueList,
     doOpenModal,
+    doClearPlayingSource,
   } = props;
 
   const { state } = location;
@@ -286,10 +284,7 @@ export default function FileRenderFloating(props: Props) {
 
   React.useEffect(() => {
     if (playingPrimaryUri || playingUrl || noPlayerHeight || collectionSidebarId) {
-      setTimeout(function () {
-        handleResize();
-      }, 0.1);
-
+      handleResize();
       setCountdownCanceled(false);
     }
   }, [handleResize, playingPrimaryUri, theaterMode, playingUrl, noPlayerHeight, collectionSidebarId]);
@@ -336,9 +331,9 @@ export default function FileRenderFloating(props: Props) {
       // When the player begins floating, remove the comment source
       // so that it doesn't try to resize again in case of going back
       // to the origin's comment section and fail to position correctly
-      doSetPlayingUri({ ...playingUri, source: null });
+      doClearPlayingSource();
     }
-  }, [doSetPlayingUri, isComment, isFloating, playingUri]);
+  }, [doClearPlayingSource, isComment, isFloating]);
 
   React.useEffect(() => {
     if (isFloating) doFetchRecommendedContent(uri);

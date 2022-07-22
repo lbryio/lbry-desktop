@@ -150,6 +150,7 @@ export function doSetPrimaryUri(uri: ?string) {
 }
 
 export const doClearPlayingUri = () => (dispatch: Dispatch) => dispatch(doSetPlayingUri({ uri: null, collection: {} }));
+export const doClearPlayingSource = () => (dispatch: Dispatch) => dispatch(doChangePlayingUriParam({ source: null }));
 export const doClearPlayingCollection = () => (dispatch: Dispatch) =>
   dispatch(doChangePlayingUriParam({ collection: { collectionId: null } }));
 
@@ -161,7 +162,7 @@ export const doPopOutInlinePlayer = ({ source }: { source: string }) => (dispatc
   if (playingUri.source === source && !isFloating) {
     const floatingPlayerEnabled = selectClientSetting(state, SETTINGS.FLOATING_PLAYER);
 
-    if (floatingPlayerEnabled) return dispatch(doChangePlayingUriParam({ source: null }));
+    if (floatingPlayerEnabled) return dispatch(doClearPlayingSource());
 
     return dispatch(doClearPlayingUri());
   }

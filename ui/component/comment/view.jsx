@@ -14,6 +14,7 @@ import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import * as KEYCODES from 'constants/keycodes';
 import { COMMENT_HIGHLIGHTED } from 'constants/classnames';
+import { INLINE_PLAYER_WRAPPER_CLASS } from 'constants/player';
 import {
   SORT_BY,
   COMMENT_PAGE_SIZE_REPLIES,
@@ -87,6 +88,7 @@ type Props = {
   repliesFetching: boolean,
   threadLevel?: number,
   threadDepthLevel?: number,
+  doClearPlayingSource: () => void,
 };
 
 function CommentView(props: Props) {
@@ -119,7 +121,10 @@ function CommentView(props: Props) {
     repliesFetching,
     threadLevel = 0,
     threadDepthLevel = 0,
+    doClearPlayingSource,
   } = props;
+
+  const commentElemRef = React.useRef();
 
   const {
     channel_url: authorUri,
@@ -215,17 +220,25 @@ function CommentView(props: Props) {
     setCommentValue(!SIMPLE_SITE && advancedEditor ? event : event.target.value);
   }
 
-  function handleEditComment() {
-    if (playingUri.source === 'comment') {
-      doClearPlayingUri();
+  function handleEditComment(isEditing: boolean) {
+    if (playingUri.source === 'comment' && commentElemRef.current) {
+      const claimLink = commentElemRef.current.querySelector(`.${INLINE_PLAYER_WRAPPER_CLASS}`);
+
+      if (isEditing && playingUri.sourceId === claimLink?.id) {
+        doClearPlayingUri();
+      } else {
+        doClearPlayingSource();
+      }
     }
-    setEditing(true);
+
+    setEditing(isEditing);
   }
 
   function handleSubmit() {
     updateComment(commentId, editedMessage);
     if (setQuickReply) setQuickReply({ ...quickReply, comment_id: commentId, comment: editedMessage });
     setEditing(false);
+    doClearPlayingSource();
   }
 
   function handleCommentReply() {
@@ -235,6 +248,7 @@ function CommentView(props: Props) {
     } else {
       setReplying(!isReplying);
     }
+    doClearPlayingSource();
   }
 
   function handleTimeClick() {
@@ -250,6 +264,7 @@ function CommentView(props: Props) {
 
   const linkedCommentRef = React.useCallback(
     (node) => {
+      if (node) commentElemRef.current = node;
       if (node !== null && window.pendingLinkedCommentScroll) {
         delete window.pendingLinkedCommentScroll;
 
@@ -290,7 +305,7 @@ function CommentView(props: Props) {
         )}
       </div>
 
-      <div className="comment__content" ref={isLinkedComment || isThreadComment ? linkedCommentRef : undefined}>
+      <div className="comment__content" ref={isLinkedComment || isThreadComment ? linkedCommentRef : commentElemRef}>
         <div
           className={classnames('comment__body-container', {
             [COMMENT_HIGHLIGHTED]: isLinkedComment || (isThreadComment && !linkedCommentId),
@@ -345,7 +360,7 @@ function CommentView(props: Props) {
                     commentId={commentId}
                     authorUri={authorUri}
                     commentIsMine={commentIsMine}
-                    handleEditComment={handleEditComment}
+                    handleEditComment={() => handleEditComment(true)}
                     supportAmount={supportAmount}
                     setQuickReply={setQuickReply}
                   />
@@ -374,7 +389,7 @@ function CommentView(props: Props) {
                     requiresAuth={IS_WEB}
                     disabled={message === editedMessage}
                   />
-                  <Button button="link" label={__('Cancel')} onClick={() => setEditing(false)} />
+                  <Button button="link" label={__('Cancel')} onClick={() => handleEditComment(false)} />
                 </div>
               </Form>
             ) : (
