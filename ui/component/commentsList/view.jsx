@@ -43,7 +43,7 @@ type Props = {
   channelId?: string,
   claimIsMine: boolean,
   isFetchingComments: boolean,
-  isFetchingCommentsById: boolean,
+  isFetchingTopLevelComments: boolean,
   isFetchingReacts: boolean,
   linkedCommentId?: string,
   totalComments: number,
@@ -78,6 +78,7 @@ export default function CommentList(props: Props) {
     channelId,
     claimIsMine,
     isFetchingComments,
+    isFetchingTopLevelComments,
     isFetchingReacts,
     linkedCommentId,
     totalComments,
@@ -453,7 +454,9 @@ export default function CommentList(props: Props) {
             </div>
           )}
 
-          {(threadCommentId ? !readyToDisplayComments : isFetchingComments || (hasDefaultExpansion && moreBelow)) && (
+          {(threadCommentId
+            ? !readyToDisplayComments
+            : isFetchingTopLevelComments || (hasDefaultExpansion && moreBelow)) && (
             <div className="main--empty" ref={spinnerRef}>
               <Spinner type="small" />
             </div>

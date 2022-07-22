@@ -26,6 +26,7 @@ export const selectCommentsById = (state: State) => selectState(state).commentBy
 export const selectCommentIdsByClaimId = (state: State) => selectState(state).byId;
 export const selectIsFetchingComments = (state: State) => selectState(state).isLoading;
 export const selectIsFetchingCommentsById = (state: State) => selectState(state).isLoadingById;
+export const selectIsFetchingCommentsByParentId = (state: State) => selectState(state).isLoadingByParentId;
 const selectTotalCommentsById = (state: State) => selectState(state).totalCommentsById;
 export const selectIsFetchingReacts = (state: State) => selectState(state).isFetchingReacts;
 
@@ -35,7 +36,12 @@ export const selectMyReactsForComment = (state: State, commentIdChannelId: strin
   return state.comments.myReactsByCommentId && state.comments.myReactsByCommentId[commentIdChannelId];
 };
 export const selectIsFetchingCommentsForParentId = (state: State, parentId: string) => {
-  return selectState(state).isLoadingByParentId[parentId];
+  return selectIsFetchingCommentsByParentId(state)[parentId];
+};
+export const selectIsFetchingTopLevelComments = (state: State) => {
+  const isFetching = selectIsFetchingComments(state);
+  const notFetchingReplies = Object.keys(selectIsFetchingCommentsByParentId(state)).length === 0;
+  return isFetching && notFetchingReplies;
 };
 
 export const selectOthersReacts = (state: State) => state.comments.othersReactsByCommentId;
