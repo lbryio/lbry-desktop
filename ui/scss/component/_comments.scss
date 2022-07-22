@@ -285,6 +285,11 @@ $thumbnailWidthSmall: 2rem;
 
   .comment__author--creator {
     margin-top: 0;
+    &:hover {
+      .channel-name {
+        color: var(--primary-contrast);
+      }
+    }
   }
 
   .comment__badge svg {
