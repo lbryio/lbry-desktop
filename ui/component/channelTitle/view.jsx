@@ -12,8 +12,11 @@ function ChannelTitle(props: Props) {
   const { title, claim, isComment, fallback } = props;
 
   if (isComment) {
-    if (!title) return fallback && fallback[0] && fallback[0].substring(0, fallback[0].indexOf(':'));
-    else return title;
+    if (!title) {
+      return fallback && fallback[0] && fallback[0].substring(0, fallback[0].indexOf(':'))
+        ? fallback[0].substring(0, fallback[0].indexOf(':'))
+        : fallback;
+    } else return title;
   }
 
   if (!claim) {
