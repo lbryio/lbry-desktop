@@ -320,6 +320,7 @@ async function getHtml(ctx) {
     html = fs.readFileSync(path.join(__dirname, '/../dist/index.html'), 'utf8');
   }
 
+  const query = ctx.query;
   const requestPath = unscapeHtmlProperty(decodeURIComponent(ctx.path));
 
   if (requestPath.length === 0) {
@@ -330,10 +331,6 @@ async function getHtml(ctx) {
   if (ctx?.request?.url) {
     ctx.request.url = encodeURIComponent(escapeHtmlProperty(decodeURIComponent(ctx.request.url)));
   }
-  if (ctx?.query) {
-    ctx.query = encodeURIComponent(escapeHtmlProperty(ctx.query));
-  }
-  const query = ctx.query;
 
   const invitePath = `/$/${PAGES.INVITE}/`;
   const embedPath = `/$/${PAGES.EMBED}/`;
