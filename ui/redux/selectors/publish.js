@@ -162,7 +162,8 @@ export const selectCollectionClaimParamsForUri = (state: State, uri: string, col
   const collectionChannelId = getChannelIdFromClaim(claim);
   const tags = makeSelectMetadataItemForUri(uri, 'tags')(state);
   const languages = makeSelectMetadataItemForUri(uri, 'languages')(state);
-  const collectionClaimIds = selectClaimIdsForCollectionId(state, collectionId);
+  // removes falsey values from string array
+  const collectionClaimIds = selectClaimIdsForCollectionId(state, collectionId).filter(Boolean);
 
   const collectionParams: CollectionPublishParams = {
     thumbnail_url: getThumbnailFromClaim(claim),
