@@ -451,7 +451,12 @@ function PostForm(props: Props) {
       )}
       <section>
         <div className="section__actions">
-          <Button button="primary" onClick={handlePublish} label={submitLabel} disabled={isFormIncomplete} />
+          <Button
+            button="primary"
+            onClick={handlePublish}
+            label={submitLabel}
+            disabled={isFormIncomplete || !formValid}
+          />
           <ChannelSelect disabled={isFormIncomplete} autoSet channelToSet={claimChannelId} isPublishMenu />
         </div>
         <p className="help">
