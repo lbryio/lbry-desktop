@@ -470,12 +470,7 @@ button.vjs-big-play-button {
   .vjs-current-time,
   .vjs-duration,
   .vjs-time-divider,
-  .vjs-button--theater-mode,
-  //.vjs-quality-selector,
-  //.vjs-chromecast-button,
-  .vjs-button--autoplay-next
-  //,.vjs-progress-control
-  {
+  .vjs-button--autoplay-next {
     // hiding progress control for now
     display: none !important;
   }

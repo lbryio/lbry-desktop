@@ -454,9 +454,13 @@ body {
   }
 }
 
+.file-page__secondary-content {
+  @media (min-width: $breakpoint-small) and (max-width: $breakpoint-medium) {
+    padding-right: calc(var(--spacing-s) + 12px) !important;
+  }
+}
 .card__title-section--body-list {
   display: unset !important;
-  // width: 100%;
   div {
     flex: auto;
   }
@@ -605,6 +609,88 @@ body {
   }
 }
 
+.main--livestream--theater-mode {
+  .livestream__chat {
+    resize: none;
+    position: relative;
+    top: unset !important;
+    margin-top: var(--spacing-m);
+    margin-bottom: var(--spacing-m);
+    margin-right: var(--spacing-s);
+  }
+
+  .chat-resize {
+    display: none !important;
+  }
+
+  .livestreamDiscussion__header {
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+  }
+
+  .livestream__comment-create {
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+  }
+
+  .file-page__media-actions {
+    flex: 1;
+  }
+
+  .file-page__secondary-content {
+    display: flex;
+    flex-direction: row;
+    margin-left: auto;
+    margin-right: auto;
+    justify-content: center;
+    width: 100%;
+    max-width: var(--page-max-width--filepage);
+  }
+
+  padding-left: 0;
+  padding-right: 0;
+  margin-left: 0;
+  margin-right: 0;
+  margin-top: 0;
+  width: 100vw;
+  max-width: none;
+
+  > :first-child {
+    margin-right: 0;
+  }
+
+  .file-page__info {
+    padding: 0 var(--spacing-m);
+    margin-top: var(--spacing-m);
+    max-width: var(--page-max-width--filepage);
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .file-page__video-container {
+    max-height: unset;
+  }
+
+  .file-page__recommended {
+    @media (max-width: $breakpoint-medium) {
+      width: 100%;
+    }
+  }
+
+  .file-page__secondary-content {
+    padding: 0 var(--spacing-s);
+    flex-direction: row;
+
+    @media (max-width: $breakpoint-medium) {
+      flex-direction: column;
+    }
+  }
+
+  .file-page__recommended {
+    margin-top: 10px;
+  }
+}
+
 .main--full-width {
   @extend .main;
   max-width: none;
@@ -616,6 +702,34 @@ body {
   padding: 0 !important;
   width: 100vw !important;
   height: 100vh !important;
+
+  .livestream-hyperchats__wrapper {
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    .livestream__chat--popout {
+      border-radius: 0;
+      .livestreamComments__wrapper {
+        height: calc(100vh - 50px) !important;
+        .livestream__comment-create {
+          padding: 0 var(--spacing-xxs);
+        }
+      }
+    }
+  }
+  @media (min-width: $breakpoint-small) {
+    .livestream__chat--popout {
+      border-radius: 0;
+      .livestreamComments__wrapper {
+        height: calc(100vh - 55px) !important;
+        .livestream__comment-create {
+          padding-bottom: var(--spacing-s);
+        }
+      }
+    }
+  }
 }
 
 .main--auth-page {

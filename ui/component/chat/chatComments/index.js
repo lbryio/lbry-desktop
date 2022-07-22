@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import { selectIsFetchingComments } from 'redux/selectors/comments';
 import { selectIsUriResolving } from 'redux/selectors/claims';
-import { VIEW_MODES } from 'ui/component/livestreamChatLayout/view';
-import LivestreamComments from './view';
+import { VIEW_MODES } from 'ui/component/chat/view';
+import ChatComments from './view';
 
 const select = (state, props) => {
   const { comments, viewMode } = props;
@@ -17,4 +17,4 @@ const select = (state, props) => {
   };
 };
 
-export default connect(select)(LivestreamComments);
+export default connect(select)(ChatComments);

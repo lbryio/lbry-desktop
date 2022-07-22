@@ -12,17 +12,17 @@
   }
 
   &:hover {
-    background-color: rgba(var(--color-primary-dynamic), 0.06);
+    background-color: rgba(var(--color-header-background-base), 0.4);
 
     .date_time {
       opacity: 0.5;
     }
   }
 
-  .comment__author {
+  .comment__author:not(.comment__author--creator) {
     color: rgba(var(--color-text-base), 0.5);
     margin-top: var(--spacing-xxs);
-    max-width: unset;
+    max-width: calc(100% - 110px);
 
     .button__content {
       max-width: unset;
@@ -30,6 +30,10 @@
 
     &:hover {
       color: var(--color-primary) !important;
+    }
+
+    @media (max-width: $breakpoint-small) {
+      max-width: unset;
     }
   }
 
@@ -59,7 +63,6 @@
   display: flex;
   justify-content: space-between;
   padding: 0;
-  padding-left: var(--spacing-xxxs);
 
   .livestreamComment__menu {
     position: relative;
@@ -81,26 +84,40 @@
 }
 
 .livestream__comment--mentioned {
-  background-color: var(--color-card-background-highlighted);
+  background-color: rgba(var(--color-header-background-base), 0.6);
 }
 
 .livestreamComment__info {
   overflow: hidden;
+  width: 100%;
 
-  .comment__badge svg {
-    height: 1.4rem;
-    width: 1.4rem;
+  .comment__author {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .comment__badge {
+    .icon {
+      height: var(--font-body);
+      width: var(--font-body);
+      margin-bottom: -2px;
+    }
+    .icon--BadgeStreamer {
+      height: calc(var(--font-body) + 2px);
+      width: calc(var(--font-body) + 2px);
+      margin-bottom: -4px;
+    }
   }
 }
 
-.livestream__comment--superchat {
-  background-color: rgba(var(--color-primary-dynamic), 0.05);
-  //background-color: var(--color-card-background-highlighted);
-  box-shadow: 2px 0px 0px 0px var(--color-primary) inset;
+.livestream__comment--hyperchat {
+  background-color: rgba(var(--color-text-base), 0.02);
+  box-shadow: 2px 0px 0px 0px rgba(var(--color-text-base), 0.4) inset;
   display: unset;
   padding-left: 0;
 
-  + .livestream__comment--superchat {
+  + .livestream__comment--hyperchat {
     margin-bottom: var(--spacing-xxs);
   }
 
@@ -132,6 +149,10 @@
     position: absolute;
   }
 
+  .livestreamComment__menu {
+    top: 2px;
+  }
+
   &::before {
     display: none;
     position: absolute;
@@ -141,8 +162,48 @@
     border-top-right-radius: 2px;
     border-bottom-right-radius: 2px;
     width: 5px;
-    background-color: var(--color-superchat);
+    background-color: var(--color-hyperchat);
     content: '';
+  }
+}
+
+.hyperchat-level1 {
+  box-shadow: 2px 0px 0px 0px mix(#de0050, #ffa236, 0%) inset;
+  background-color: rgba(mix(#de0050, #ffa236, 0%), 0.05);
+  .livestreamComment__hyperchatBanner {
+    background-image: linear-gradient(to right, mix(#de0050, #ffa236, 0%), transparent);
+  }
+}
+
+.hyperchat-level2 {
+  box-shadow: 2px 0px 0px 0px mix(#de0050, #ffa236, 25%) inset;
+  background-color: rgba(mix(#de0050, #ffa236, 25%), 0.05);
+  .livestreamComment__hyperchatBanner {
+    background-image: linear-gradient(to right, mix(#de0050, #ffa236, 25%), transparent);
+  }
+}
+
+.hyperchat-level3 {
+  box-shadow: 2px 0px 0px 0px mix(#de0050, #ffa236, 50%) inset;
+  background-color: rgba(mix(#de0050, #ffa236, 50%), 0.05);
+  .livestreamComment__hyperchatBanner {
+    background-image: linear-gradient(to right, mix(#de0050, #ffa236, 50%), transparent);
+  }
+}
+
+.hyperchat-level4 {
+  box-shadow: 2px 0px 0px 0px mix(#de0050, #ffa236, 75%) inset;
+  background-color: rgba(mix(#de0050, #ffa236, 75%), 0.05);
+  .livestreamComment__hyperchatBanner {
+    background-image: linear-gradient(to right, mix(#de0050, #ffa236, 75%), transparent);
+  }
+}
+
+.hyperchat-level5 {
+  box-shadow: 2px 0px 0px 0px mix(#de0050, #ffa236, 100%) inset;
+  background-color: rgba(mix(#de0050, #ffa236, 100%), 0.05);
+  .livestreamComment__hyperchatBanner {
+    background-image: linear-gradient(to right, mix(#de0050, #ffa236, 100%), transparent);
   }
 }
 
@@ -165,64 +226,57 @@
 
 .livestreamComment__menu {
   position: absolute;
-  right: 2px;
-  top: 2px;
+  right: var(--spacing-s);
+  top: var(--spacing-xxs);
+  width: 20px;
+  height: 20px;
 
-  [aria-expanded='true'].menu__button {
-    opacity: 1;
-    background-color: var(--color-header-background);
-    border-radius: var(--border-radius);
-    .icon {
-      stroke: var(--color-primary);
+  @media (min-width: $breakpoint-small) {
+    .menu__button {
+      background: var(--color-background);
+      border-radius: 50%;
+      padding: 2px;
+      border: 2px solid transparent;
+      transition: transform 0.4s;
+      .icon {
+        width: 16px;
+        height: 16px;
+      }
+    }
+    [aria-expanded='true'].menu__button {
+      opacity: 1;
+      background-color: rgba(var(--color-header-button-base), 0.9);
+      border: 2px solid var(--color-header-background);
+      transform: rotate(90deg);
+      .icon {
+        stroke: var(--color-primary);
+      }
     }
   }
 }
 
-.livestreamComment__superchatBanner {
-  @extend .superChat;
+.livestreamComment__hyperchatBanner {
+  @extend .hyperChat;
 
   border-radius: 0;
   display: inline-block;
   position: relative;
   width: 90%;
-  background-image: linear-gradient(to right, var(--color-primary), rgba(var(--color-primary-dynamic), 0));
-  padding: 4px 2px 2px 4px;
+  background-image: linear-gradient(to right, rgba(var(--color-text-base), 0.4), transparent);
+  padding: 2px;
+  margin-left: 2px;
+  display: flex;
 
-  .superChat {
+  .hyperChat {
     background-color: var(--color-header-background);
-    padding-top: 5px !important;
   }
 
   .credit-amount {
     color: var(--color-text);
     svg {
+      height: var(--font-small);
       margin-bottom: -2px;
     }
-  }
-}
-
-// This is just a two small circles that overlap to make it look like
-// the banner and the left border are connected
-.livestreamComment__superchatBanner--corner {
-  height: calc(var(--border-radius) * 2);
-  width: calc(var(--border-radius) * 2);
-  border-radius: 50%;
-  position: absolute;
-  background-color: var(--color-superchat);
-  bottom: 0;
-  left: 0;
-  transform: translateX(0) translateY(50%);
-
-  &::after {
-    content: '';
-    height: calc(var(--border-radius) * 2);
-    width: calc(var(--border-radius) * 2);
-    border-top-left-radius: var(--border-radius);
-    background-color: var(--color-card-background);
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    transform: translateX(25%) translateY(50%);
   }
 }
 
@@ -231,8 +285,29 @@
   padding-bottom: var(--spacing-xxs);
 
   .markdown-preview {
-    p {
+    p,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6,
+    tr,
+    th,
+    td,
+    li {
       word-break: break-word;
+    }
+
+    .task-list-item {
+      margin-left: var(--spacing-m);
+      input[type='checkbox'] {
+        height: 26px;
+        width: 18px;
+        margin-bottom: -8px;
+        margin-right: var(--spacing-xxxs);
+        border: 2px solid var(--color-border);
+      }
     }
 
     .channel-name {
@@ -243,6 +318,23 @@
       .icon {
         flex-shrink: 0;
       }
+    }
+
+    .menu__button {
+      opacity: 1 !important;
+      color: var(--color-primary);
+      &:hover {
+        color: var(--color-primary);
+      }
+    }
+
+    .comment__badge {
+      display: none;
+    }
+
+    .emote {
+      max-width: 1.25rem;
+      max-height: 1.25rem;
     }
   }
 }

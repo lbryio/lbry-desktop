@@ -1,25 +1,13 @@
-.superChat {
+.hyperChat {
   border-radius: var(--border-radius);
-  background-color: linear-gradient(to right, var(--color-superchat), var(--color-superchat-3));
-  padding: 0.2rem var(--spacing-xs);
+  background-color: linear-gradient(to right, var(--color-hyperchat), var(--color-hyperchat-3));
+  padding: 4px var(--spacing-xs);
+  padding-bottom: 2px !important;
   font-weight: var(--font-weight-bold);
   font-size: var(--font-xsmall);
+  color: var(--color-primary-contrast);
 
   .credit-amount {
-    color: var(--color-superchat-text);
-  }
-}
-
-.superChat--light {
-  @extend .superChat;
-  background-color: rgba(var(--color-primary-dynamic), 0.8);
-  margin-bottom: 2px;
-  padding-top: 5px;
-
-  .credit-amount {
-    color: var(--color-primary-contrast);
-    .icon {
-      margin-bottom: 0;
-    }
+    color: var(--color-hyperchat-text);
   }
 }

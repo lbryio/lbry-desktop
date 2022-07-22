@@ -50,9 +50,9 @@
   @extend .tabs__list--channel-page;
   padding-left: var(--spacing-m) !important;
   border: 0 !important;
-  border-bottom: 1px solid var(--color-border) !important;
   border-radius: 0 !important;
   margin-bottom: 0px !important;
+  height: unset !important;
 
   + .tab__divider {
     display: none;

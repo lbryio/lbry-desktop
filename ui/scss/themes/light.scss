@@ -8,8 +8,8 @@
   --color-primary-text-hover: #ffffff;
   --color-odysee: rgba(var(--color-primary-static), 1);
   --color-odysee-contrast: var(--color-primary-contrast-static);
-  --color-secondary-static: 137, 0, 116;
-  --color-secondary-dynamic: 239, 102, 152;
+  --color-secondary-static: 133, 0, 88;
+  --color-secondary-dynamic: 133, 0, 88;
   --color-secondary: rgba(var(--color-secondary-dynamic), 1);
   --color-secondary-contrast-static: #ffffff;
   --color-secondary-contrast: #ffffff;
@@ -127,13 +127,15 @@
   --color-comment-threadline-hover: var(--color-primary);
 
   // Superchat
-  --color-superchat-text: var(--color-black);
-  --color-superchat: #fcd34d;
-  --color-superchat__light: #fcd34d50;
-  --color-superchat-2: #fde68a;
-  --color-superchat-3: #fef3c7;
-  --color-superchat-3__light: #fef3c750;
-  --color-superchat-4: #fffbeb;
+  --color-hyperchat-text: var(--color-primary-contrast);
+  --color-hyperchat: rgba(var(--color-primary-dynamic), 1);
+  --color-hyperchat-light: #fcd34d50;
+  $test: color-mix(in srgb, #34c9eb 20%, white);
+  --color-hyperchat-2: #fde68a;
+
+  --color-hyperchat-3: #fef3c7;
+  --color-hyperchat-3__light: #fef3c750;
+  --color-hyperchat-4: #fffbeb;
 
   // Color
   --color-focus: #8dbff0;

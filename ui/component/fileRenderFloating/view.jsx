@@ -286,7 +286,10 @@ export default function FileRenderFloating(props: Props) {
 
   React.useEffect(() => {
     if (playingPrimaryUri || playingUrl || noPlayerHeight || collectionSidebarId) {
-      handleResize();
+      setTimeout(function () {
+        handleResize();
+      }, 0.1);
+
       setCountdownCanceled(false);
     }
   }, [handleResize, playingPrimaryUri, theaterMode, playingUrl, noPlayerHeight, collectionSidebarId]);
@@ -434,7 +437,7 @@ export default function FileRenderFloating(props: Props) {
               [FLOATING_PLAYER_CLASS]: isFloating,
               'content__viewer--inline': !isFloating,
               'content__viewer--secondary': isComment,
-              'content__viewer--theater-mode': theaterMode && mainFilePlaying && !isCurrentClaimLive && !isMobile,
+              'content__viewer--theater-mode': theaterMode && mainFilePlaying && !isMobile,
               'content__viewer--disable-click': wasDragging,
               'content__viewer--mobile': isMobile && !isLandscapeRotated && !playingUriSource,
             })}

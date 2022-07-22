@@ -4,7 +4,11 @@ import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import { isURIValid } from 'util/lbryURI';
 import Button from 'component/button';
+import CommentMenuList from 'component/commentMenuList';
+import ChannelTitle from 'component/channelTitle';
+
 import ClaimLink from 'component/claimLink';
+import { Menu, MenuButton } from '@reach/menu-button';
 import { useIsMobile } from 'effects/use-screensize';
 
 type Props = {
@@ -15,8 +19,9 @@ type Props = {
   children: React.Node,
   parentCommentId?: string,
   simpleLinks?: boolean,
-  myChannelUrls: ?Array<string>,
+  activeChannelClaim: any,
   setUserMention?: (boolean) => void,
+  isComment?: boolean,
 };
 
 function MarkdownLink(props: Props) {
@@ -28,8 +33,9 @@ function MarkdownLink(props: Props) {
     allowPreview = false,
     parentCommentId,
     simpleLinks = false,
-    myChannelUrls,
     setUserMention,
+    isComment,
+    activeChannelClaim,
   } = props;
 
   const isMobile = useIsMobile();
@@ -38,6 +44,7 @@ function MarkdownLink(props: Props) {
   try {
     decodedUri = decodeURI(href);
   } catch (e) {}
+  const isChannel = decodedUri && decodedUri.replace('#', ':').indexOf(':', decodedUri.indexOf(':') + 1) !== -1;
 
   let element = <span>{children}</span>;
 
@@ -46,7 +53,10 @@ function MarkdownLink(props: Props) {
   const protocol = href ? protocolRegex.exec(href) : null;
   const isMention = href && href.startsWith('lbry://@');
   const mentionedMyChannel =
-    isMention && (myChannelUrls ? myChannelUrls.some((url) => url.replace('#', ':') === href) : false);
+    isMention &&
+    activeChannelClaim &&
+    activeChannelClaim.canonical_url &&
+    activeChannelClaim.canonical_url.replace('#', ':') === href;
 
   React.useEffect(() => {
     if (mentionedMyChannel && setUserMention) setUserMention(true);
@@ -85,6 +95,10 @@ function MarkdownLink(props: Props) {
     }
   }
 
+  function isMe(claim, title) {
+    return claim && title && claim.replace('#', ':') === title;
+  }
+
   // Return timestamp link if it starts with '?t=' (only possible from remark-timestamp).
   // Return plain text if no valid url.
   // Return external link if protocol is http or https.
@@ -107,23 +121,40 @@ function MarkdownLink(props: Props) {
       />
     );
   } else if (!simpleLinks && ((protocol && protocol[0] === 'lbry:' && isURIValid(decodedUri)) || lbryUrlFromLink)) {
-    element = (
-      <ClaimLink
-        uri={lbryUrlFromLink || decodedUri}
-        autoEmbed={embed}
-        parentCommentId={parentCommentId}
-        isMarkdownPost
-        allowPreview={allowPreview}
-      >
-        {children}
-      </ClaimLink>
-    );
+    if (!embed && isComment && isMention && isChannel && setUserMention) {
+      element = (
+        <Menu>
+          <MenuButton className="menu__button" onClick={(e) => e.stopPropagation()}>
+            <ChannelTitle uri={decodedUri} fallback={children} isComment />
+          </MenuButton>
+
+          <CommentMenuList
+            authorName={children}
+            uri={lbryUrlFromLink || decodedUri}
+            authorUri={lbryUrlFromLink || decodedUri}
+            commentIsMine={isMe(activeChannelClaim && activeChannelClaim.short_url, lbryUrlFromLink || decodedUri)}
+            isLiveComment
+          />
+        </Menu>
+      );
+    } else {
+      element = (
+        <ClaimLink
+          uri={lbryUrlFromLink || decodedUri}
+          autoEmbed={embed}
+          parentCommentId={parentCommentId}
+          isMarkdownPost
+          allowPreview={allowPreview}
+        >
+          {children}
+        </ClaimLink>
+      );
+    }
   } else if (
     simpleLinks ||
     (protocol && (protocol[0] === 'http:' || protocol[0] === 'https:' || protocol[0] === 'mailto:'))
   ) {
     const isLbryLink = href.startsWith('lbry://');
-
     element = (
       <Button
         button="link"

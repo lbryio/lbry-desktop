@@ -11,6 +11,8 @@ import {
   selectActiveLivestreamInitialized,
   selectSocketConnectionForId,
 } from 'redux/selectors/livestream';
+import { selectClientSetting } from 'redux/selectors/settings';
+import * as SETTINGS from 'constants/settings';
 import { selectIsUriCurrentlyPlaying } from 'redux/selectors/content';
 import { doFetchChannelLiveStatus } from 'redux/actions/livestream';
 import LivestreamPage from './view';
@@ -31,6 +33,7 @@ const select = (state, props) => {
     activeLivestreamInitialized: selectActiveLivestreamInitialized(state),
     socketConnection: selectSocketConnectionForId(state, claimId),
     isStreamPlaying: selectIsUriCurrentlyPlaying(state, uri),
+    theaterMode: selectClientSetting(state, SETTINGS.VIDEO_THEATER_MODE),
   };
 };
 

@@ -181,6 +181,7 @@ export const MUSIC = 'MusicCategory';
 export const BADGE_MOD = 'BadgeMod';
 export const BADGE_ADMIN = 'BadgeAdmin';
 export const BADGE_STREAMER = 'BadgeStreamer';
+export const BADGE_SPROUT = 'BadgeSprout';
 export const REPLAY = 'Replay';
 export const REPEAT = 'Repeat';
 export const SHUFFLE = 'Shuffle';

@@ -4,10 +4,17 @@ import React from 'react';
 type Props = {
   claim: ?ChannelClaim,
   title: ?string,
+  isComment?: Boolean,
+  fallback?: any,
 };
 
 function ChannelTitle(props: Props) {
-  const { title, claim } = props;
+  const { title, claim, isComment, fallback } = props;
+
+  if (isComment) {
+    if (!title) return fallback;
+    else return title;
+  }
 
   if (!claim) {
     return null;

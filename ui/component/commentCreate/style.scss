@@ -1,4 +1,4 @@
-@import '../init/breakpoints';
+@import '../../scss/init/breakpoints';
 
 $emote-item-size--small: 2.5rem;
 $emote-item-size--big: 3rem;
@@ -26,6 +26,65 @@ $sticker-item-size: 5rem;
   }
 }
 
+// -- STICKERS --
+.sticker-categories {
+  position: absolute;
+  top: 44px;
+  left: 2px;
+  background: var(--color-header-background);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-xs);
+
+  img {
+    display: block;
+    width: 1.6rem;
+    height: 1.6rem;
+    margin-bottom: var(--spacing-xs);
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.emote-categories {
+  position: absolute;
+  top: 49px;
+  left: 2px;
+  background: var(--color-header-background);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-xs);
+
+  img,
+  svg {
+    display: block;
+    width: 1.3rem;
+    height: 1.3rem;
+    margin-bottom: var(--spacing-xs);
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+  // tmp fix
+  svg {
+    margin-bottom: var(--spacing-xs) !important;
+  }
+}
+
+.chatImage-category-title {
+  font-size: var(--font-small);
+  padding-left: var(--spacing-xxs);
+  width: 100%;
+  font-weight: var(--font-weight-bold);
+
+  @media (min-width: $breakpoint-small) {
+    padding-top: var(--spacing-xs);
+  }
+
+  @media (max-width: $breakpoint-small) {
+    font-size: var(--font-xsmall);
+  }
+}
+
 .emote-selector__items {
   display: grid;
   grid-template-columns: repeat(auto-fit, $emote-item-size--small);
@@ -34,8 +93,12 @@ $sticker-item-size: 5rem;
 
   button {
     margin: 0px !important;
-    padding: var(--spacing-xs);
+    padding: var(--spacing-xxxs) !important;
     height: unset;
+
+    &:hover {
+      background-color: var(--color-header-background);
+    }
 
     &:first-child {
       margin-right: 0px;
@@ -49,23 +112,15 @@ $sticker-item-size: 5rem;
     }
 
     @media (min-width: $breakpoint-small) {
-      padding: var(--spacing-s);
+      padding: var(--spacing-xxxs);
     }
   }
 
+  /*
   @media (min-width: $breakpoint-small) {
     grid-template-columns: repeat(auto-fit, $emote-item-size--big);
   }
-}
-
-// -- STICKERS --
-.selector-menu--stickers {
-  @extend .selector-menu;
-  padding-top: 0px;
-
-  @media (min-width: $breakpoint-small) {
-    border: 0;
-  }
+  */
 }
 
 .sticker-selector__items {
@@ -86,40 +141,10 @@ $sticker-item-size: 5rem;
       img {
         margin-bottom: var(--spacing-s);
       }
-
-      .superChat--light {
-        position: absolute;
-        display: inline;
-        bottom: 0;
-        .credit-amount {
-          color: var(--color-primary-contrast) !important;
-        }
-      }
     }
 
     img {
       margin: 0px;
     }
-  }
-}
-
-.sticker-selector__row-title {
-  font-size: var(--font-small);
-  padding-left: var(--spacing-xxs);
-  width: 100%;
-  text-align: center;
-  position: sticky;
-  top: 0px;
-  background-color: var(--color-tabs-background);
-  border-radius: var(--border-radius);
-  font-weight: 900;
-  z-index: 1;
-
-  @media (min-width: $breakpoint-small) {
-    padding-top: var(--spacing-xs);
-  }
-
-  @media (max-width: $breakpoint-small) {
-    font-size: var(--font-xsmall);
   }
 }

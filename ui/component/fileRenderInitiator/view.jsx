@@ -16,7 +16,7 @@ import { formatLbryUrlForWeb } from 'util/url';
 import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
 import useFetchLiveStatus from 'effects/use-fetch-live';
 import useGetPoster from 'effects/use-get-poster';
-import { LiveCommentContext } from 'component/livestreamComment/view';
+import { ChatCommentContext } from 'component/chat/chatComment/view';
 import { ExpandableContext } from 'component/common/expandable';
 
 type Props = {
@@ -80,7 +80,7 @@ export default function FileRenderInitiator(props: Props) {
     doFetchChannelLiveStatus,
   } = props;
 
-  const { isLiveComment } = React.useContext(LiveCommentContext) || {};
+  const { isLiveComment } = React.useContext(ChatCommentContext) || {};
   const { setExpanded, disableExpanded } = React.useContext(ExpandableContext) || {};
 
   const theaterMode = renderMode === 'video' || renderMode === 'audio' ? videoTheaterMode : false;

@@ -64,14 +64,14 @@ export function getLivestreamUris(
   return values.map((v) => v.claimUri);
 }
 
-export function getTipValues(superChatsByAmount: Array<Comment>) {
+export function getTipValues(hyperChatsByAmount: Array<Comment>) {
   let superChatsChannelUrls = [];
   let superChatsFiatAmount = 0;
   let superChatsLBCAmount = 0;
 
-  if (superChatsByAmount) {
-    superChatsByAmount.forEach((superChat) => {
-      const { is_fiat: isFiat, support_amount: tipAmount, channel_url: uri } = superChat;
+  if (hyperChatsByAmount) {
+    hyperChatsByAmount.forEach((hyperChat) => {
+      const { is_fiat: isFiat, support_amount: tipAmount, channel_url: uri } = hyperChat;
 
       if (isFiat) {
         superChatsFiatAmount = superChatsFiatAmount + tipAmount;

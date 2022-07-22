@@ -1,13 +1,13 @@
 // @flow
-import 'scss/component/_comment-selectors.scss';
-
-import { EMOTES_48px as EMOTES } from 'constants/emotes';
+import { EMOTES_48px as ODYSEE_EMOTES } from 'constants/emotes';
 import * as ICONS from 'constants/icons';
+import Icon from 'component/common/icon';
 import Button from 'component/button';
 import CreditAmount from 'component/common/credit-amount';
 import React from 'react';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
 import { FREE_GLOBAL_STICKERS, PAID_GLOBAL_STICKERS } from 'constants/stickers';
+import './style.scss';
 
 export const SELECTOR_TABS = {
   EMOJI: 0,
@@ -58,28 +58,32 @@ type EmojisProps = {
 
 const EmojisPanel = (emojisProps: EmojisProps) => {
   const { handleSelect, closeSelector } = emojisProps;
+  const defaultRowProps = { handleSelect };
 
   return (
     <div className="selector-menu">
       <Button button="close" icon={ICONS.REMOVE} onClick={closeSelector} />
+      {false && (
+        <>
+          <div className="emote-categories">
+            <Icon icon={ICONS.TIME} />
+            <img
+              src="https://thumbnails.odycdn.com/optimize/s:200:0/quality:95/plain/https://thumbnails.lbry.com/UCMvVQIAfsGwzrfPLxiaIG8g"
+              style={{ borderRadius: '50%' }}
+            />
+            <img src="https://static.odycdn.com/emoticons/48%20px/smile%402x.png" />
+            <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/144/twitter/141/grinning-face_1f600.png" />
+            <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/twitter/322/bear_1f43b.png" />
+            <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/twitter/322/basketball_1f3c0.png" />
+            <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/twitter/322/sparkling-heart_1f496.png" />
+            <img src="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/240/twitter/322/pirate-flag_1f3f4-200d-2620-fe0f.png" />
+          </div>
 
-      <div className="emote-selector__items">
-        {EMOTES.map((emote) => {
-          const { name, url } = emote;
-
-          return (
-            <Button
-              key={name}
-              title={name}
-              button="alt"
-              className="button--file-action"
-              onClick={() => handleSelect(name)}
-            >
-              <img src={url} loading="lazy" />
-            </Button>
-          );
-        })}
-      </div>
+          <EmoteCategory title={__('Recently used')} {...defaultRowProps} />
+          <EmoteCategory title={__('Member exclusive')} {...defaultRowProps} />
+        </>
+      )}
+      <EmoteCategory title={__('Odysee')} images={ODYSEE_EMOTES} {...defaultRowProps} />
     </div>
   );
 };
@@ -96,49 +100,99 @@ const StickersPanel = (stickersProps: StickersProps) => {
   const defaultRowProps = { handleSelect };
 
   return (
-    <div className="selector-menu--stickers">
+    <div className="selector-menu">
       <Button button="close" icon={ICONS.REMOVE} onClick={closeSelector} />
 
-      <StickersRow title={__('Free')} stickers={FREE_GLOBAL_STICKERS} {...defaultRowProps} />
-      {!claimIsMine && <StickersRow title={__('Tips')} stickers={PAID_GLOBAL_STICKERS} {...defaultRowProps} />}
+      {false && (
+        <>
+          <div className="emote-categories">
+            <Icon icon={ICONS.TIME} />
+            <img
+              src="https://thumbnails.odycdn.com/optimize/s:200:0/quality:95/plain/https://thumbnails.lbry.com/UCMvVQIAfsGwzrfPLxiaIG8g"
+              style={{ borderRadius: '50%' }}
+            />
+            <img src="https://static.odycdn.com/stickers/MISC/PNG/fire.png" />
+            <img src="https://static.odycdn.com/stickers/TIPS/png/with%20borderlarge$tip.png" />
+          </div>
+          <StickerCategory title={__('Recently used')} {...defaultRowProps} />
+          <StickerCategory title={__('Member exclusive')} {...defaultRowProps} />
+        </>
+      )}
+
+      <StickerCategory title={__('Free')} images={FREE_GLOBAL_STICKERS} {...defaultRowProps} />
+      {!claimIsMine && <StickerCategory title={__('Tips')} images={PAID_GLOBAL_STICKERS} {...defaultRowProps} />}
     </div>
   );
 };
 
 type RowProps = {
   title: string,
-  stickers: any,
+  images?: any,
   handleSelect: (string) => void,
 };
 
-const StickersRow = (rowProps: RowProps) => {
-  const { title, stickers, handleSelect } = rowProps;
+const EmoteCategory = (rowProps: RowProps) => {
+  const { images, handleSelect } = rowProps;
 
   return (
-    <div className="sticker-selector__body-row">
-      <label id={title} className="sticker-selector__row-title">
+    <>
+      {/*
+      <label id={title} className="chatImage-category-title">
         {title}
       </label>
+      */}
+      <div className="emote-selector__items">
+        {images &&
+          images.map((emote) => {
+            const { name, url } = emote;
+            return (
+              <Button
+                key={name}
+                title={name}
+                button="alt"
+                className="button--file-action"
+                onClick={() => handleSelect(name)}
+              >
+                <img src={url} loading="lazy" />
+              </Button>
+            );
+          })}
+      </div>
+    </>
+  );
+};
+
+const StickerCategory = (rowProps: RowProps) => {
+  const { images, handleSelect } = rowProps;
+
+  return (
+    <div>
+      {/*
+        <label id={title} className="chatImage-category-title">
+          {title}
+        </label>
+      */}
 
       <div className="sticker-selector__items">
-        {stickers.map((sticker) => {
-          const { price, url, name } = sticker;
+        {images &&
+          images.map((sticker) => {
+            const { price, url, name } = sticker;
 
-          return (
-            <Button
-              key={name}
-              title={name}
-              button="alt"
-              className="button--file-action"
-              onClick={() => handleSelect(sticker)}
-            >
-              <StickerWrapper price={price}>
-                <img src={url} loading="lazy" />
-                {price && price > 0 && <CreditAmount superChatLight amount={price} size={2} isFiat />}
-              </StickerWrapper>
-            </Button>
-          );
-        })}
+            return (
+              <Button
+                key={name}
+                title={name}
+                button="alt"
+                className="button--file-action"
+                onClick={() => handleSelect(sticker)}
+              >
+                <StickerWrapper price={price}>
+                  <img src={url} loading="lazy" />
+                  {price && price > 0 && <CreditAmount superChatLight amount={price} size={2} isFiat />}
+                </StickerWrapper>
+              </Button>
+            );
+          })}
       </div>
     </div>
   );

@@ -10,7 +10,7 @@ import React from 'react';
 import { useIsMobile } from 'effects/use-screensize';
 import useFetchLiveStatus from 'effects/use-fetch-live';
 
-const LivestreamChatLayout = lazyImport(() => import('component/livestreamChatLayout' /* webpackChunkName: "chat" */));
+const ChatLayout = lazyImport(() => import('component/chat' /* webpackChunkName: "chat" */));
 
 type Props = {
   activeLivestreamForChannel: any,
@@ -27,6 +27,7 @@ type Props = {
   doCommentSocketDisconnect: (claimId: string, channelName: string) => void,
   doFetchChannelLiveStatus: (string) => void,
   doUserSetReferrer: (string) => void,
+  theaterMode?: Boolean,
 };
 
 export const LivestreamContext = React.createContext<any>();
@@ -47,6 +48,7 @@ export default function LivestreamPage(props: Props) {
     doCommentSocketDisconnect,
     doFetchChannelLiveStatus,
     doUserSetReferrer,
+    theaterMode,
   } = props;
 
   const isMobile = useIsMobile();
@@ -163,12 +165,9 @@ export default function LivestreamPage(props: Props) {
   }, [uri, stringifiedClaim, isAuthenticated, doUserSetReferrer]);
 
   React.useEffect(() => {
-    if (!layountRendered) return;
-
     doSetPrimaryUri(uri);
-
     return () => doSetPrimaryUri(null);
-  }, [doSetPrimaryUri, layountRendered, uri]);
+  }, [doSetPrimaryUri, uri, isStreamPlaying]);
 
   return (
     <Page
@@ -177,10 +176,11 @@ export default function LivestreamPage(props: Props) {
       livestream
       chatDisabled={hideComments}
       rightSide={
+        !theaterMode &&
         !hideComments &&
         isInitialized && (
           <React.Suspense fallback={null}>
-            <LivestreamChatLayout uri={uri} setLayountRendered={setLayountRendered} />
+            <ChatLayout uri={uri} setLayountRendered={setLayountRendered} />
           </React.Suspense>
         )
       }
@@ -195,6 +195,7 @@ export default function LivestreamPage(props: Props) {
             showLivestream={showLivestream}
             showScheduledInfo={showScheduledInfo}
             activeStreamUri={activeStreamUri}
+            theaterMode={theaterMode}
           />
         </LivestreamContext.Provider>
       )}

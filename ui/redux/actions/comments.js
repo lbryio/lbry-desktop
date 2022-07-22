@@ -323,7 +323,7 @@ export function doCommentReset(claimId: string) {
   };
 }
 
-export function doSuperChatList(uri: string) {
+export function doHyperChatList(uri: string) {
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const claim = selectClaimsByUri(state)[uri];

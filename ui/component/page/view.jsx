@@ -67,7 +67,8 @@ function Page(props: Props) {
     location: { pathname, hash },
   } = useHistory();
 
-  const theaterMode = renderMode === 'video' || renderMode === 'audio' ? videoTheaterMode : false;
+  const theaterMode =
+    renderMode === 'video' || renderMode === 'audio' || renderMode === 'unsupported' ? videoTheaterMode : false;
   const isMediumScreen = useIsMediumScreen();
   const isMobile = useIsMobile();
   const isLandscapeRotated = useIsMobileLandscape();
@@ -143,7 +144,8 @@ function Page(props: Props) {
               'main--settings-page': settingsPage,
               'main--markdown': isMarkdown,
               'main--theater-mode': isOnFilePage && theaterMode && !livestream && !isMarkdown && !isMobile,
-              'main--livestream': livestream && !chatDisabled,
+              'main--livestream': livestream && !chatDisabled && !theaterMode,
+              'main--livestream--theater-mode': livestream && !chatDisabled && theaterMode,
               'main--popout-chat': isPopoutWindow,
             })}
           >

@@ -14,12 +14,12 @@ import * as ICONS from 'constants/icons';
 import * as DRAWERS from 'constants/drawer_types';
 import SwipeableDrawer from 'component/swipeableDrawer';
 import DrawerExpandButton from 'component/swipeableDrawerExpand';
-import LivestreamMenu from 'component/livestreamChatLayout/livestream-menu';
+import LivestreamMenu from 'component/chat/livestream-menu';
 import Icon from 'component/common/icon';
 import CreditAmount from 'component/common/credit-amount';
 import { getTipValues } from 'util/livestream';
 
-const LivestreamChatLayout = lazyImport(() => import('component/livestreamChatLayout' /* webpackChunkName: "chat" */));
+const ChatLayout = lazyImport(() => import('component/chat' /* webpackChunkName: "chat" */));
 
 const VIEW_MODES = {
   CHAT: 'chat',
@@ -37,6 +37,7 @@ type Props = {
   uri: string,
   superChats: Array<Comment>,
   activeViewers?: number,
+  theaterMode: boolean,
 };
 
 export default function LivestreamLayout(props: Props) {
@@ -51,95 +52,108 @@ export default function LivestreamLayout(props: Props) {
     uri,
     superChats,
     activeViewers,
+    theaterMode,
   } = props;
 
   const isMobile = useIsMobile();
   const isLandscapeRotated = useIsMobileLandscape();
 
-  const [superchatsHidden, setSuperchatsHidden] = React.useState(false);
+  const [hyperchatsHidden, setHyperchatsHidden] = React.useState(false);
   const [chatViewMode, setChatViewMode] = React.useState(VIEW_MODES.CHAT);
 
   if (!claim || !claim.signing_channel) return null;
 
   const { name: channelName } = claim.signing_channel;
 
-  // TODO: use this to show the 'user is not live functionality'
-  // console.log('show livestream, currentclaimlive, activestreamurl');
-  // console.log(showLivestream, isCurrentClaimLive, activeStreamUri);
-
   return (
-    <>
-      <div className="section card-stack">
-        <div className={PRIMARY_PLAYER_WRAPPER_CLASS}>
-          <FileRenderInitiator
-            uri={claim.canonical_url}
-            customAction={showScheduledInfo && <LivestreamScheduledInfo releaseTimeMs={releaseTimeMs} />}
-          />
+    <section className="card-stack file-page__video">
+      <div className={PRIMARY_PLAYER_WRAPPER_CLASS}>
+        <FileRenderInitiator
+          videoTheaterMode={theaterMode}
+          uri={claim.canonical_url}
+          customAction={showScheduledInfo && <LivestreamScheduledInfo releaseTimeMs={releaseTimeMs} />}
+        />
+      </div>
+      <div className="file-page__secondary-content">
+        <div className="file-page__media-actions">
+          <div className="section card-stack">
+            {hideComments && !showScheduledInfo && (
+              <div className="help--notice">
+                {channelName
+                  ? __('%channel% has disabled chat for this stream. Enjoy the stream!', { channel: channelName })
+                  : __('This channel has disabled chat for this stream. Enjoy the stream!')}
+              </div>
+            )}
+
+            {!activeStreamUri && !showScheduledInfo && !isCurrentClaimLive && (
+              <div className="help--notice" style={{ marginTop: '20px' }}>
+                {channelName
+                  ? __("%channelName% isn't live right now, but the chat is! Check back later to watch the stream.", {
+                      channelName,
+                    })
+                  : __("This channel isn't live right now, but the chat is! Check back later to watch the stream.")}
+              </div>
+            )}
+
+            {activeStreamUri !== uri && (
+              <LivestreamLink
+                title={__("Click here to access the stream that's currently active")}
+                claimUri={activeStreamUri}
+              />
+            )}
+
+            {isMobile && !isLandscapeRotated && !hideComments && (
+              <React.Suspense fallback={null}>
+                <SwipeableDrawer
+                  startOpen
+                  type={DRAWERS.CHAT}
+                  title={
+                    <ChatModeSelector
+                      superChats={superChats}
+                      chatViewMode={chatViewMode}
+                      setChatViewMode={(mode) => setChatViewMode(mode)}
+                      activeViewers={activeViewers}
+                    />
+                  }
+                  hasSubtitle={activeViewers}
+                  actions={
+                    <LivestreamMenu
+                      noSuperchats={!superChats || superChats.length === 0}
+                      hyperchatsHidden={hyperchatsHidden}
+                      toggleHyperchats={() => setHyperchatsHidden(!hyperchatsHidden)}
+                      isMobile
+                    />
+                  }
+                >
+                  <ChatLayout
+                    uri={uri}
+                    hideHeader
+                    hyperchatsHidden={hyperchatsHidden}
+                    customViewMode={chatViewMode}
+                    setCustomViewMode={(mode) => setChatViewMode(mode)}
+                  />
+                </SwipeableDrawer>
+
+                <DrawerExpandButton icon={ICONS.CHAT} label={__('Open Live Chat')} type={DRAWERS.CHAT} />
+              </React.Suspense>
+            )}
+
+            <FileTitleSection uri={uri} livestream isLive={showLivestream} />
+          </div>
         </div>
 
-        {hideComments && !showScheduledInfo && (
-          <div className="help--notice">
-            {channelName
-              ? __('%channel% has disabled chat for this stream. Enjoy the stream!', { channel: channelName })
-              : __('This channel has disabled chat for this stream. Enjoy the stream!')}
-          </div>
-        )}
-
-        {!activeStreamUri && !showScheduledInfo && !isCurrentClaimLive && (
-          <div className="help--notice" style={{ marginTop: '20px' }}>
-            {channelName
-              ? __("%channelName% isn't live right now, but the chat is! Check back later to watch the stream.", {
-                  channelName,
-                })
-              : __("This channel isn't live right now, but the chat is! Check back later to watch the stream.")}
-          </div>
-        )}
-
-        {activeStreamUri !== uri && (
-          <LivestreamLink
-            title={__("Click here to access the stream that's currently active")}
-            claimUri={activeStreamUri}
-          />
-        )}
-
-        {isMobile && !isLandscapeRotated && !hideComments && (
+        {theaterMode && (
           <React.Suspense fallback={null}>
-            <SwipeableDrawer
-              type={DRAWERS.CHAT}
-              title={
-                <ChatModeSelector
-                  superChats={superChats}
-                  chatViewMode={chatViewMode}
-                  setChatViewMode={(mode) => setChatViewMode(mode)}
-                  activeViewers={activeViewers}
-                />
-              }
-              hasSubtitle={activeViewers}
-              actions={
-                <LivestreamMenu
-                  noSuperchats={!superChats || superChats.length === 0}
-                  superchatsHidden={superchatsHidden}
-                  toggleSuperchats={() => setSuperchatsHidden(!superchatsHidden)}
-                  isMobile
-                />
-              }
-            >
-              <LivestreamChatLayout
-                uri={uri}
-                hideHeader
-                superchatsHidden={superchatsHidden}
-                customViewMode={chatViewMode}
-                setCustomViewMode={(mode) => setChatViewMode(mode)}
-              />
-            </SwipeableDrawer>
-
-            <DrawerExpandButton icon={ICONS.CHAT} label={__('Open Live Chat')} type={DRAWERS.CHAT} />
+            <ChatLayout
+              uri={uri}
+              hyperchatsHidden={hyperchatsHidden}
+              customViewMode={chatViewMode}
+              setCustomViewMode={(mode) => setChatViewMode(mode)}
+            />
           </React.Suspense>
         )}
-
-        <FileTitleSection uri={uri} livestream isLive={showLivestream} />
       </div>
-    </>
+    </section>
   );
 }
 

@@ -61,6 +61,7 @@ type MarkdownProps = {
   stakedLevel?: number,
   setUserMention?: (boolean) => void,
   hasMembership?: boolean,
+  isComment?: boolean,
 };
 
 // ****************************************************************************
@@ -160,6 +161,7 @@ export default React.memo<MarkdownProps>(function MarkdownPreview(props: Markdow
     stakedLevel,
     setUserMention,
     hasMembership,
+    isComment,
   } = props;
 
   const strippedContent = content
@@ -198,6 +200,7 @@ export default React.memo<MarkdownProps>(function MarkdownPreview(props: Markdow
               simpleLinks={simpleLinks}
               allowPreview={isStakeEnoughForPreview(stakedLevel) || hasMembership}
               setUserMention={setUserMention}
+              isComment={isComment}
             />
           ),
       // Workaraund of remarkOptions.Fragment

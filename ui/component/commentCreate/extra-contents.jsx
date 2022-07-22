@@ -1,5 +1,5 @@
 // @flow
-import 'scss/component/_comment-selectors.scss';
+import './style.scss';
 
 import React from 'react';
 import * as ICONS from 'constants/icons';

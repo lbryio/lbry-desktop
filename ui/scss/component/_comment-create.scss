@@ -15,13 +15,6 @@ $thumbnailWidthSmall: 1rem;
     margin-top: var(--spacing-xs);
   }
 
-  .button--file-action {
-    &:hover {
-      background-color: var(--color-primary) !important;
-      color: var(--color-primary-contrast);
-    }
-  }
-
   .section__actions {
     .button,
     .button--link {

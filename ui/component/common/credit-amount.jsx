@@ -21,7 +21,7 @@ type Props = {
   showLBC?: boolean,
   showPlus: boolean,
   size?: number,
-  superChat?: boolean,
+  hyperChat?: boolean,
   superChatLight?: boolean,
 };
 
@@ -51,8 +51,8 @@ class CreditAmount extends React.PureComponent<Props> {
       showLBC,
       showPlus,
       size,
-      superChat,
-      superChatLight,
+      hyperChat,
+      // superChatLight,
     } = this.props;
     const minimumRenderableAmount = 10 ** (-1 * precision);
 
@@ -103,7 +103,7 @@ class CreditAmount extends React.PureComponent<Props> {
     return (
       <span
         title={amount && !hideTitle ? formatFullPrice(amount, 2) : ''}
-        className={classnames(className, { superChat: superChat, 'superChat--light': superChatLight })}
+        className={classnames(className, { hyperChat: hyperChat })}
       >
         {customAmounts
           ? Object.values(customAmounts).map((amount, index) => (

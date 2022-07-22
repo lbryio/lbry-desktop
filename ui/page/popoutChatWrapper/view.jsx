@@ -1,6 +1,6 @@
 // @flow
 import { formatLbryChannelName } from 'util/url';
-import LivestreamChatLayout from 'component/livestreamChatLayout';
+import ChatLayout from 'component/chat';
 import Page from 'component/page';
 import React from 'react';
 
@@ -34,7 +34,7 @@ export default function PopoutChatPage(props: Props) {
 
   return (
     <Page noSideNavigation noFooter noHeader isPopoutWindow>
-      <LivestreamChatLayout uri={uri} isPopoutWindow />
+      <ChatLayout uri={uri} isPopoutWindow />
     </Page>
   );
 }
