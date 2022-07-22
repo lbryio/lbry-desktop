@@ -440,7 +440,7 @@ function PublishFile(props: Props) {
                   disabled={disabled}
                   currentPath={currentFile}
                   onFileChosen={handleFileChange}
-                  accept={SIMPLE_SITE ? 'video/mp4,video/x-m4v,video/*,audio/*,image/*' : undefined}
+                  // accept={SIMPLE_SITE ? 'video/mp4,video/x-m4v,video/*,audio/*,image/*' : undefined}
                   placeholder={
                     SIMPLE_SITE ? __('Select video, audio or image file to upload') : __('Select a file to upload')
                   }
