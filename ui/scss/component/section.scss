@@ -125,7 +125,8 @@
 }
 
 .align-end {
-  display: flex;
+  display: inline-flex;
+  max-width: 100%;
   align-items: flex-end;
 }
 
