@@ -44,7 +44,7 @@ function MarkdownLink(props: Props) {
   try {
     decodedUri = decodeURI(href);
   } catch (e) {}
-  const isChannel = decodedUri && decodedUri.replace('#', ':').indexOf(':', decodedUri.indexOf(':') + 1) !== -1;
+  // const isChannel = decodedUri && decodedUri.replace('#', ':').indexOf(':', decodedUri.indexOf(':') + 1) !== -1;
 
   let element = <span>{children}</span>;
 
@@ -121,7 +121,7 @@ function MarkdownLink(props: Props) {
       />
     );
   } else if (!simpleLinks && ((protocol && protocol[0] === 'lbry:' && isURIValid(decodedUri)) || lbryUrlFromLink)) {
-    if (!embed && isComment && isMention && isChannel && setUserMention) {
+    if (isComment && isMention && setUserMention) {
       element = (
         <Menu>
           <MenuButton className="menu__button" onClick={(e) => e.stopPropagation()}>
