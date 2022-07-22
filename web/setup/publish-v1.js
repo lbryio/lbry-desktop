@@ -24,6 +24,7 @@ export function makeUploadRequest(
   file: File | string,
   isPreview?: boolean
 ) {
+  const originalParams = { ...params };
   const { remote_url: remoteUrl } = params;
 
   const body = new FormData();
@@ -66,7 +67,7 @@ export function makeUploadRequest(
     };
     xhr.onerror = () => {
       window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
-      reject(generateError(__('There was a problem with your upload. Please try again.'), params, xhr));
+      reject(generateError(__('There was a problem with your upload. Please try again.'), originalParams, xhr));
     };
     xhr.ontimeout = () => {
       if (isPreview) {

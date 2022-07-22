@@ -7,7 +7,8 @@ function generateCause(
   v1Type: ?string,
   xhr: ?any,
   uploader: ?TusUploader = null,
-  originalMsg: ?(string | Error) = null
+  originalMsg: ?(string | Error) = null,
+  misc: ?{} = {}
 ) {
   return {
     cause: {
@@ -19,6 +20,7 @@ function generateCause(
       ...(uploader?._retryAttempt ? { retryAttempt: uploader?._retryAttempt } : {}),
       ...(!tus.isSupported ? { isTusSupported: tus.isSupported } : {}),
       ...(originalMsg ? { original: typeof originalMsg === 'string' ? originalMsg : originalMsg.message } : {}),
+      ...(misc || {}),
     },
   };
 }
@@ -30,10 +32,17 @@ export function generateError(
   tusUploader: ?TusUploader = null,
   originalErrMsg: ?(string | Error) = null
 ) {
-  const { preview: isPreview, remote_url: remoteUrl, isMarkdown } = params;
+  const { uploadUrl, guid, isMarkdown, ...sdkParams } = params;
+  const { preview: isPreview, remote_url: remoteUrl } = sdkParams;
+
   const useV1 = remoteUrl || isMarkdown || isPreview || !tus.isSupported; // TODO: DRY
   const v1Type = !useV1 ? null : isPreview ? 'preview' : isMarkdown ? 'markdown' : remoteUrl ? 'replay' : '?';
+  let misc;
+
+  if (useV1) {
+    misc = { ...sdkParams };
+  }
 
   // $FlowIgnore - flow's constructor for Error is incorrect.
-  return new Error(errMsg, generateCause(v1Type, xhr, tusUploader, originalErrMsg));
+  return new Error(errMsg, generateCause(v1Type, xhr, tusUploader, originalErrMsg, misc));
 }
