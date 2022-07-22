@@ -251,7 +251,8 @@ function DiscoverPage(props: Props) {
           tileLayout={repostedUri ? false : tileLayout}
           defaultOrderBy={isWildWest || tags ? CS.ORDER_BY_TRENDING : undefined}
           claimType={claimType ? [claimType] : undefined}
-          defaultStreamType={isCategory && !isWildWest ? [CS.FILE_VIDEO, CS.FILE_AUDIO, CS.FILE_DOCUMENT] : undefined}
+          defaultStreamType={undefined}
+          // defaultStreamType={isCategory && !isWildWest ? [CS.FILE_VIDEO, CS.FILE_AUDIO, CS.FILE_DOCUMENT] : undefined} remove due to claim search bug with reposts
           headerLabel={getHeaderLabel()}
           tags={tags}
           hiddenNsfwMessage={<HiddenNsfw type="page" />}
