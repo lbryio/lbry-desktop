@@ -376,7 +376,7 @@ async function getHtml(ctx) {
   }
 
   if (requestPath === `/$/${PAGES.SEARCH}` || requestPath === `/$/${PAGES.SEARCH}/`) {
-    return buildSearchPageHead(html, requestPath, query.q);
+    return buildSearchPageHead(html, requestPath, encodeURIComponent(escapeHtmlProperty(query.q)));
   }
 
   if (!requestPath.includes('$')) {
