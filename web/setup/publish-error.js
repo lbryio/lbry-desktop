@@ -39,7 +39,7 @@ export function generateError(
   const v1Type = !useV1 ? null : isPreview ? 'preview' : isMarkdown ? 'markdown' : remoteUrl ? 'replay' : '?';
   let misc;
 
-  if (useV1) {
+  if (errMsg && typeof errMsg === 'string' && errMsg.startsWith('Stream')) {
     misc = { ...sdkParams };
   }
 
