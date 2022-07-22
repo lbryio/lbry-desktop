@@ -430,49 +430,42 @@ function CommentView(props: Props) {
                   </div>
                 )}
 
-                {repliesFetching && (!fetchedReplies || fetchedReplies.length === 0) ? (
-                  <span className="comment__actions comment__replies-loading">
-                    <Spinner text={numDirectReplies > 1 ? __('Loading Replies') : __('Loading Reply')} type="small" />
-                  </span>
-                ) : (
-                  numDirectReplies > 0 &&
-                  !hideActions && (
-                    <div className="comment__actions">
-                      {!showReplies ? (
-                        openNewThread ? (
-                          <Button
-                            label={__('Continue Thread')}
-                            button="link"
-                            onClick={handleOpenNewThread}
-                            iconRight={ICONS.ARROW_RIGHT}
-                          />
-                        ) : (
-                          <Button
-                            label={
-                              numDirectReplies < 2
-                                ? __('Show reply')
-                                : __('Show %count% replies', { count: numDirectReplies })
-                            }
-                            button="link"
-                            onClick={() => {
-                              setShowReplies(true);
-                              if (page === 0) {
-                                setPage(1);
-                              }
-                            }}
-                            iconRight={ICONS.DOWN}
-                          />
-                        )
+                {numDirectReplies > 0 && !hideActions && (
+                  <div className="comment__actions">
+                    {!showReplies ? (
+                      openNewThread ? (
+                        <Button
+                          label={__('Continue Thread')}
+                          button="link"
+                          onClick={handleOpenNewThread}
+                          iconRight={ICONS.ARROW_RIGHT}
+                        />
                       ) : (
                         <Button
-                          label={__('Hide replies')}
+                          label={
+                            numDirectReplies < 2
+                              ? __('Show reply')
+                              : __('Show %count% replies', { count: numDirectReplies })
+                          }
                           button="link"
-                          onClick={() => setShowReplies(false)}
-                          iconRight={ICONS.UP}
+                          onClick={() => {
+                            setShowReplies(true);
+                            if (page === 0) {
+                              setPage(1);
+                            }
+                          }}
+                          iconRight={ICONS.DOWN}
                         />
-                      )}
-                    </div>
-                  )
+                      )
+                    ) : (
+                      <Button
+                        label={__('Hide replies')}
+                        button="link"
+                        onClick={() => setShowReplies(false)}
+                        iconRight={ICONS.UP}
+                      />
+                    )}
+                  </div>
                 )}
 
                 {isReplying && (
@@ -499,19 +492,24 @@ function CommentView(props: Props) {
           </div>
         </div>
 
-        {showReplies && (
-          <CommentsReplies
-            threadLevel={threadLevel}
-            uri={uri}
-            parentId={commentId}
-            linkedCommentId={linkedCommentId}
-            threadCommentId={threadCommentId}
-            numDirectReplies={numDirectReplies}
-            onShowMore={() => setPage(page + 1)}
-            hasMore={page < totalReplyPages}
-            threadDepthLevel={threadDepthLevel}
-          />
-        )}
+        {showReplies &&
+          (repliesFetching && (!fetchedReplies || fetchedReplies.length === 0) ? (
+            <div className="empty empty--centered-tight">
+              <Spinner type="small" />
+            </div>
+          ) : (
+            <CommentsReplies
+              threadLevel={threadLevel}
+              uri={uri}
+              parentId={commentId}
+              linkedCommentId={linkedCommentId}
+              threadCommentId={threadCommentId}
+              numDirectReplies={numDirectReplies}
+              onShowMore={() => setPage(page + 1)}
+              hasMore={page < totalReplyPages}
+              threadDepthLevel={threadDepthLevel}
+            />
+          ))}
       </div>
     </li>
   );
