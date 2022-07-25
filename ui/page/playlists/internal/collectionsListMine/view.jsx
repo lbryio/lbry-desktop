@@ -19,10 +19,15 @@ import PageItemsLabel from './internal/page-items-label';
 type Props = {
   publishedCollections: CollectionGroup,
   unpublishedCollections: CollectionGroup,
+  editedCollections: CollectionGroup,
+  savedCollections: CollectionGroup,
+  savedCollectionIds: ClaimIds,
   isFetchingCollections: boolean,
   areBuiltinCollectionsEmpty: boolean,
   hasCollections: boolean,
   doOpenModal: (id: string) => void,
+  doResolveClaimIds: (ids: ClaimIds) => void,
+  doFetchItemsInCollections: ({}) => void,
 };
 
 // Avoid prop drilling
@@ -32,10 +37,15 @@ export default function CollectionsListMine(props: Props) {
   const {
     publishedCollections,
     unpublishedCollections,
+    editedCollections,
+    savedCollections,
+    savedCollectionIds,
     isFetchingCollections,
     areBuiltinCollectionsEmpty,
     hasCollections,
     doOpenModal,
+    doResolveClaimIds,
+    doFetchItemsInCollections,
   } = props;
 
   const isMobile = useIsMobile();
@@ -56,6 +66,8 @@ export default function CollectionsListMine(props: Props) {
 
   const unpublishedCollectionsList = (Object.keys(unpublishedCollections || {}): any);
   const publishedList = (Object.keys(publishedCollections || {}): any);
+  const editedList = (Object.keys(editedCollections || {}): any);
+  const savedList = (Object.keys(savedCollections || {}): any);
   const collectionsUnresolved = unpublishedCollectionsList.length === 0 && publishedList.length === 0 && hasCollections;
   const playlistShowCount = isMobile ? COLS.PLAYLIST_SHOW_COUNT.MOBILE : COLS.PLAYLIST_SHOW_COUNT.DEFAULT;
 
@@ -63,13 +75,17 @@ export default function CollectionsListMine(props: Props) {
     React.useMemo(() => {
       switch (filterType) {
         case COLS.LIST_TYPE.ALL:
-          return unpublishedCollectionsList.concat(publishedList);
+          return [...unpublishedCollectionsList, ...publishedList, ...editedList, ...savedList];
         case COLS.LIST_TYPE.PRIVATE:
           return unpublishedCollectionsList;
         case COLS.LIST_TYPE.PUBLIC:
           return publishedList;
+        case COLS.LIST_TYPE.EDITED:
+          return editedList;
+        case COLS.LIST_TYPE.SAVED:
+          return savedList;
       }
-    }, [filterType, publishedList, unpublishedCollectionsList]) || [];
+    }, [editedList, filterType, publishedList, savedList, unpublishedCollectionsList]) || [];
 
   const page = (collectionsToShow.length > playlistShowCount && Number(urlParams.get('page'))) || 1;
   const firstItemIndexForPage = playlistShowCount * (page - 1);
@@ -89,8 +105,8 @@ export default function CollectionsListMine(props: Props) {
     }
 
     return result.sort((a, b) => {
-      const itemA = unpublishedCollections[a] || publishedCollections[a];
-      const itemB = unpublishedCollections[b] || publishedCollections[b];
+      const itemA = unpublishedCollections[a] || publishedCollections[a] || editedCollections[a] || savedCollections[a];
+      const itemB = unpublishedCollections[b] || publishedCollections[b] || editedCollections[b] || savedCollections[b];
       const firstItem =
         // Timestamps are reversed since newest timestamps will be higher, so show the highest number first
         [COLS.SORT_KEYS.UPDATED_AT, COLS.SORT_KEYS.CREATED_AT].includes(sortOption.key)
@@ -119,7 +135,16 @@ export default function CollectionsListMine(props: Props) {
       }
       return 0;
     });
-  }, [collectionsToShow, publishedCollections, searchText, sortOption.key, sortOption.value, unpublishedCollections]);
+  }, [
+    collectionsToShow,
+    editedCollections,
+    publishedCollections,
+    savedCollections,
+    searchText,
+    sortOption.key,
+    sortOption.value,
+    unpublishedCollections,
+  ]);
 
   const totalLength = collectionsToShow.length;
   const filteredCollectionsLength = filteredCollections.length;
@@ -128,6 +153,13 @@ export default function CollectionsListMine(props: Props) {
     totalPages >= page ? firstItemIndexForPage : 0,
     lastItemIndexForPage
   );
+
+  React.useEffect(() => {
+    if (savedCollectionIds.length > 0) {
+      doResolveClaimIds(savedCollectionIds);
+      doFetchItemsInCollections({ collectionIds: savedCollectionIds });
+    }
+  }, [doFetchItemsInCollections, doResolveClaimIds, savedCollectionIds]);
 
   function handleCreatePlaylist() {
     doOpenModal(MODALS.COLLECTION_CREATE);

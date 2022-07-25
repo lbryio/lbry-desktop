@@ -82,7 +82,7 @@ declare type ChannelMetadata = GenericMetadata & {
 
 declare type CollectionMetadata = GenericMetadata & {
   claims: Array<string>,
-}
+};
 
 declare type StreamMetadata = GenericMetadata & {
   license?: string, // License "title" ex: Creative Commons, Custom copyright
@@ -154,7 +154,7 @@ declare type ClaimActionResolveInfo = {
     claimsInChannel: ?number,
     collection: ?CollectionClaim,
   },
-}
+};
 
 declare type ChannelUpdateParams = {
   claim_id: string,
@@ -170,7 +170,7 @@ declare type ChannelUpdateParams = {
   languages?: Array<string>,
   locations?: Array<string>,
   blocking?: boolean,
-}
+};
 
 declare type ChannelPublishParams = {
   name: string,
@@ -184,7 +184,7 @@ declare type ChannelPublishParams = {
   email?: string,
   tags?: Array<string>,
   languages?: Array<string>,
-}
+};
 
 declare type CollectionUpdateParams = {
   claim_id: string,
@@ -201,7 +201,7 @@ declare type CollectionUpdateParams = {
   languages?: Array<string>,
   locations?: Array<string>,
   blocking?: boolean,
-}
+};
 
 declare type CollectionPublishParams = {
   name: string,
@@ -213,4 +213,6 @@ declare type CollectionPublishParams = {
   description?: string,
   tags?: Array<string>,
   languages?: Array<string>,
-}
+};
+
+declare type ClaimIds = Array<string>;

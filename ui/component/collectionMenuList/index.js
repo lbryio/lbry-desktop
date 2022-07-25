@@ -4,6 +4,7 @@ import {
   selectIsCollectionBuiltInForId,
   selectPublishedCollectionNotEditedForId,
   selectCollectionIsEmptyForId,
+  selectCollectionIsMine,
 } from 'redux/selectors/collections';
 import { doOpenModal } from 'redux/actions/app';
 import { selectListShuffleForId } from 'redux/selectors/content';
@@ -21,6 +22,7 @@ const select = (state, props) => {
     isBuiltin: selectIsCollectionBuiltInForId(state, collectionId),
     publishedNotEdited: selectPublishedCollectionNotEditedForId(state, collectionId),
     collectionEmpty: selectCollectionIsEmptyForId(state, collectionId),
+    isMyCollection: selectCollectionIsMine(state, collectionId),
   };
 };
 

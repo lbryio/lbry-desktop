@@ -40,7 +40,13 @@ export const PLAYLIST_ICONS = {
   [QUEUE_ID]: ICONS.PLAYLIST,
 };
 
-export const LIST_TYPE = Object.freeze({ ALL: 'All', PRIVATE: 'Private', PUBLIC: 'Public' });
+export const LIST_TYPE = Object.freeze({
+  ALL: 'All',
+  PRIVATE: 'Private',
+  PUBLIC: 'Public',
+  EDITED: 'Edited',
+  SAVED: 'Saved',
+});
 export const PLAYLIST_SHOW_COUNT = Object.freeze({ DEFAULT: 12, MOBILE: 6 });
 
 export const SORT_ORDER = Object.freeze({
