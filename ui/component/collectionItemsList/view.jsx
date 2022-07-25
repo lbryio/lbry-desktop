@@ -16,6 +16,7 @@ type Props = {
   // -- redux --
   collection: Collection,
   isPrivateCollection: boolean,
+  isEditedCollection: boolean,
   isResolvingCollection: boolean,
   collectionUrls: Array<string>,
   doCollectionEdit: (id: string, params: CollectionEditParams) => void,
@@ -27,6 +28,7 @@ const CollectionItemsList = (props: Props) => {
     collectionId,
     collection,
     isPrivateCollection,
+    isEditedCollection,
     collectionUrls,
     isResolvingCollection,
     doCollectionEdit,
@@ -39,7 +41,8 @@ const CollectionItemsList = (props: Props) => {
   const { totalItems } = collection || {};
 
   const urlsReady = collectionUrls && (totalItems === undefined || totalItems === collectionUrls.length);
-  const shouldFetchItems = isPrivateCollection || (!urlsReady && collectionId && !didTryResolve && !collection);
+  const shouldFetchItems =
+    isPrivateCollection || isEditedCollection || (!urlsReady && collectionId && !didTryResolve && !collection);
 
   function handleOnDragEnd(result: any) {
     const { source, destination } = result;

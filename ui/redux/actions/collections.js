@@ -11,6 +11,7 @@ import {
   selectUnpublishedCollectionForId,
   selectEditedCollectionForId,
   selectHasItemsInQueue,
+  selectMyEditedCollections,
 } from 'redux/selectors/collections';
 import * as COLS from 'constants/collections';
 import { isPermanentUrl } from 'util/claim';
@@ -90,6 +91,11 @@ function isPrivateCollectionId(collectionId: string) {
   return collectionId.includes('-');
 }
 
+function isEditedCollection(state: any, collectionId: string) {
+  const editedCollections = selectMyEditedCollections(state);
+  return editedCollections.hasOwnProperty(collectionId);
+}
+
 export const doFetchItemsInCollections = (
   resolveItemsOptions: {
     collectionIds: Array<string>,
@@ -117,6 +123,7 @@ export const doFetchItemsInCollections = (
   const privateCollectionIds = [];
   const collectionIdsToSearch = [];
 
+  // -- Fill up 'privateCollectionIds' and 'collectionIdsToSearch':
   collectionIds.forEach((id) => {
     if (isPrivateCollectionId(id)) {
       privateCollectionIds.push(id);
@@ -125,6 +132,7 @@ export const doFetchItemsInCollections = (
     }
   });
 
+  // -- Resolve collections:
   if (collectionIdsToSearch.length) {
     // TODO: this might fail if there are >50 collections due to the claim_search
     // limitation. The `useAutoPagination` parameter might slow things down
@@ -207,8 +215,9 @@ export const doFetchItemsInCollections = (
   const invalidCollectionIds = [];
   const promisedCollectionItemFetches = [];
 
+  // -- Collect requests for resolving items in each collection:
   collectionIds.forEach((collectionId) => {
-    if (isPrivateCollectionId(collectionId)) {
+    if (isPrivateCollectionId(collectionId) || isEditedCollection(state, collectionId)) {
       const collection = selectCollectionForId(state, collectionId);
       if (collection?.items.length > 0) {
         promisedCollectionItemFetches.push(
@@ -237,14 +246,14 @@ export const doFetchItemsInCollections = (
     }
   });
 
-  // $FlowFixMe
-  const collectionItemsById: Array<{
-    claimId: string,
-    items: ?Array<GenericClaim>,
-  }> = await Promise.all(promisedCollectionItemFetches);
+  // -- Await results:
+  type CollectionItemFetchResult = { claimId: string, items: ?Array<GenericClaim> };
+  const collectionItemsById: Array<CollectionItemFetchResult> = await Promise.all(promisedCollectionItemFetches);
 
   const newCollectionObjectsById = {};
   const resolvedItemsByUrl = {};
+
+  // -- Process results:
   collectionItemsById.forEach((entry) => {
     // $FlowFixMe
     const collectionItems: Array<any> = entry.items;
