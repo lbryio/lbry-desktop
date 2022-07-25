@@ -13,9 +13,10 @@ function ChannelTitle(props: Props) {
 
   if (isComment) {
     if (!title) {
-      return fallback && fallback[0] && fallback[0].substring(0, fallback[0].indexOf(':'))
-        ? fallback[0].substring(0, fallback[0].indexOf(':'))
-        : fallback;
+      let cleanFallback = fallback && fallback[0] && fallback[0].substring(fallback[0].indexOf('@'));
+      return cleanFallback && cleanFallback.substring(0, cleanFallback.indexOf(':'))
+        ? cleanFallback.substring(0, cleanFallback.indexOf(':'))
+        : cleanFallback;
     } else return title;
   }
 
