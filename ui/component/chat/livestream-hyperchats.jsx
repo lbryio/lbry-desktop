@@ -88,9 +88,8 @@ export default function LivestreamHyperchats(props: Props) {
             const basedAmount = is_fiat && exchangeRate ? support_amount : support_amount * 10 * exchangeRate;
 
             return showTooltip ? (
-              <Tooltip disabled title={isSticker ? stickerImg : comment}>
+              <Tooltip disabled title={isSticker ? stickerImg : comment} key={comment_id}>
                 <div
-                  key={comment_id}
                   className={classnames('livestream-hyperchat', {
                     'livestream-hyperchat--mobile': isMobile,
                     'hyperchat-preview-level1': basedAmount >= 5,
