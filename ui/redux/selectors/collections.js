@@ -71,6 +71,16 @@ export const selectEditedCollectionForId = (state: State, id: string) => {
   return editedCollections[id];
 };
 
+export const selectCollectionNameForId = (state: State, id: string) => {
+  const collection = selectCollectionForId(state, id);
+  return collection?.name;
+};
+
+export const selectCollectionDescriptionForId = (state: State, id: string) => {
+  const collection = selectCollectionForId(state, id);
+  return collection?.description;
+};
+
 export const selectCollectionHasEditsForId = (state: State, id: string) => {
   const editedCollection = selectEditedCollectionForId(state, id);
   return Boolean(editedCollection && !editedCollection.editsCleared);

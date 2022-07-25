@@ -4,14 +4,12 @@ import { useHistory } from 'react-router';
 import { EDIT_PAGE, PAGE_VIEW_QUERY } from 'page/collection/view';
 import Card from 'component/common/card';
 import CollectionActions from '../collectionActions';
-import ClaimDescription from 'component/claimDescription';
-import Icon from 'component/common/icon';
 import Button from 'component/button';
-import ClaimAuthor from 'component/claimAuthor';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
 import * as ICONS from 'constants/icons';
 import Spinner from 'component/spinner';
-import CollectionPrivateIcon from 'component/common/collection-private-icon';
+import CollectionTitle from './internal/collectionTitle';
+import CollectionSubtitle from './internal/collectionSubtitle';
 
 type Props = {
   collectionId: string,
@@ -21,11 +19,7 @@ type Props = {
   setUnavailable: (uris: Array<string>) => void,
   // -- redux --
   uri: string,
-  collection: Collection,
-  collectionCount: number,
   claimIsPending: boolean,
-  collectionHasEdits: boolean,
-  publishedCollectionCount: ?number,
   isMyCollection: boolean,
   doCollectionEdit: (collectionId: string, params: CollectionEditParams) => void,
 };
@@ -39,31 +33,17 @@ const CollectionHeader = (props: Props) => {
     setUnavailable,
     // -- redux --
     uri,
-    collection,
-    collectionCount,
     claimIsPending,
-    collectionHasEdits,
-    publishedCollectionCount,
     isMyCollection,
     doCollectionEdit,
   } = props;
 
   const { push } = useHistory();
   const isBuiltin = COLLECTIONS_CONSTS.BUILTIN_PLAYLISTS.includes(collectionId);
-  const listName = collection?.name;
 
   return (
     <Card
-      title={
-        <span>
-          <Icon
-            icon={COLLECTIONS_CONSTS.PLAYLIST_ICONS[collectionId] || ICONS.PLAYLIST}
-            className="icon--margin-right"
-          />
-          {isBuiltin ? __(listName) : listName}
-          {collectionHasEdits ? __(' (Published playlist with pending changes)') : undefined}
-        </span>
-      }
+      title={<CollectionTitle collectionId={collectionId} />}
       titleActions={
         unavailableUris.length > 0 ? (
           <Button
@@ -93,24 +73,7 @@ const CollectionHeader = (props: Props) => {
           )
         )
       }
-      subtitle={
-        <div>
-          <span className="collection__subtitle">
-            {collectionHasEdits
-              ? __('Published count: %published_count%, edited count: %edited_count%', {
-                  published_count: publishedCollectionCount,
-                  edited_count: collectionCount,
-                })
-              : collectionCount === 1
-              ? __('1 item')
-              : __('%collectionCount% items', { collectionCount })}
-          </span>
-
-          <ClaimDescription uri={uri} description={collection?.description} />
-
-          {uri ? <ClaimAuthor uri={uri} /> : <CollectionPrivateIcon />}
-        </div>
-      }
+      subtitle={<CollectionSubtitle collectionId={collectionId} />}
       body={
         <CollectionActions
           uri={uri}
