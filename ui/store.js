@@ -6,7 +6,7 @@ import { createFilter, createBlacklistFilter } from 'redux-persist-transform-fil
 import localForage from 'localforage';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import { createMemoryHistory, createBrowserHistory } from 'history';
+import { createBrowserHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
 import createRootReducer from './reducers';
 import Lbry from 'lbry';
@@ -14,7 +14,6 @@ import { createAnalyticsMiddleware } from 'redux/middleware/analytics';
 import { buildSharedStateMiddleware } from 'redux/middleware/shared-state';
 import { doSyncLoop } from 'redux/actions/sync';
 import { getAuthToken } from 'util/saved-passwords';
-import { generateInitialUrl } from 'util/url';
 import { X_LBRY_AUTH_TOKEN } from 'constants/token';
 
 function isFunction(object) {
@@ -116,15 +115,7 @@ const persistOptions = {
 };
 
 let history;
-// @if TARGET='app'
-history = createMemoryHistory({
-  initialEntries: [generateInitialUrl(window.location.hash)],
-  initialIndex: 0,
-});
-// @endif
-// @if TARGET='web'
 history = createBrowserHistory();
-// @endif
 
 const triggerSharedStateActions = [
   ACTIONS.CHANNEL_SUBSCRIBE,
@@ -135,17 +126,13 @@ const triggerSharedStateActions = [
   ACTIONS.TOGGLE_TAG_FOLLOW,
   ACTIONS.CREATE_CHANNEL_COMPLETED,
   ACTIONS.SYNC_CLIENT_SETTINGS,
-  // Disabled until we can overwrite preferences
   ACTIONS.SHARED_PREFERENCE_SET,
   ACTIONS.COLLECTION_EDIT,
   ACTIONS.COLLECTION_DELETE,
   ACTIONS.COLLECTION_NEW,
   ACTIONS.COLLECTION_PENDING,
-  ACTIONS.SET_LAST_VIEWED_ANNOUNCEMENT,
   ACTIONS.COLLECTION_TOGGLE_SAVE,
-  // MAYBE COLLECTOIN SAVE
-  // ACTIONS.SET_WELCOME_VERSION,
-  // ACTIONS.SET_ALLOW_ANALYTICS,
+  ACTIONS.SET_LAST_VIEWED_ANNOUNCEMENT,
 ];
 
 /**

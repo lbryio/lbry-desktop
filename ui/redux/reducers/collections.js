@@ -72,15 +72,9 @@ const collectionsReducer = handleActions(
       const { collectionId } = action.data;
 
       if (saved.includes(collectionId)) {
-        return {
-          ...state,
-          saved: saved.filter((savedId) => savedId !== collectionId),
-        };
+        return { ...state, saved: saved.filter((savedId) => savedId !== collectionId) };
       } else {
-        return {
-          ...state,
-          saved: [...saved, collectionId],
-        };
+        return { ...state, saved: [...saved, collectionId] };
       }
     },
 
@@ -206,6 +200,7 @@ const collectionsReducer = handleActions(
     },
     [ACTIONS.USER_STATE_POPULATE]: (state, action) => {
       const { builtinCollections, savedCollections, unpublishedCollections, editedCollections } = action.data;
+
       return {
         ...state,
         edited: editedCollections || state.edited,
