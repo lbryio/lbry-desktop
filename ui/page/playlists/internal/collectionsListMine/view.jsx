@@ -27,7 +27,6 @@ type Props = {
   hasCollections: boolean,
   doOpenModal: (id: string) => void,
   doResolveClaimIds: (ids: ClaimIds) => void,
-  doFetchItemsInCollections: ({}) => void,
 };
 
 // Avoid prop drilling
@@ -45,7 +44,6 @@ export default function CollectionsListMine(props: Props) {
     hasCollections,
     doOpenModal,
     doResolveClaimIds,
-    doFetchItemsInCollections,
   } = props;
 
   const isMobile = useIsMobile();
@@ -71,21 +69,22 @@ export default function CollectionsListMine(props: Props) {
   const collectionsUnresolved = unpublishedCollectionsList.length === 0 && publishedList.length === 0 && hasCollections;
   const playlistShowCount = isMobile ? COLS.PLAYLIST_SHOW_COUNT.MOBILE : COLS.PLAYLIST_SHOW_COUNT.DEFAULT;
 
-  const collectionsToShow =
-    React.useMemo(() => {
-      switch (filterType) {
-        case COLS.LIST_TYPE.ALL:
-          return [...unpublishedCollectionsList, ...publishedList, ...editedList, ...savedList];
-        case COLS.LIST_TYPE.PRIVATE:
-          return unpublishedCollectionsList;
-        case COLS.LIST_TYPE.PUBLIC:
-          return publishedList;
-        case COLS.LIST_TYPE.EDITED:
-          return editedList;
-        case COLS.LIST_TYPE.SAVED:
-          return savedList;
-      }
-    }, [editedList, filterType, publishedList, savedList, unpublishedCollectionsList]) || [];
+  const collectionsToShow = React.useMemo(() => {
+    switch (filterType) {
+      case COLS.LIST_TYPE.ALL:
+        return unpublishedCollectionsList.concat(publishedList).concat(savedList);
+      case COLS.LIST_TYPE.PRIVATE:
+        return unpublishedCollectionsList;
+      case COLS.LIST_TYPE.PUBLIC:
+        return publishedList;
+      case COLS.LIST_TYPE.EDITED:
+        return editedList;
+      case COLS.LIST_TYPE.SAVED:
+        return savedList;
+      default:
+        return [];
+    }
+  }, [editedList, filterType, publishedList, savedList, unpublishedCollectionsList]);
 
   const page = (collectionsToShow.length > playlistShowCount && Number(urlParams.get('page'))) || 1;
   const firstItemIndexForPage = playlistShowCount * (page - 1);
@@ -157,9 +156,8 @@ export default function CollectionsListMine(props: Props) {
   React.useEffect(() => {
     if (savedCollectionIds.length > 0) {
       doResolveClaimIds(savedCollectionIds);
-      doFetchItemsInCollections({ collectionIds: savedCollectionIds });
     }
-  }, [doFetchItemsInCollections, doResolveClaimIds, savedCollectionIds]);
+  }, [doResolveClaimIds, savedCollectionIds]);
 
   function handleCreatePlaylist() {
     doOpenModal(MODALS.COLLECTION_CREATE);

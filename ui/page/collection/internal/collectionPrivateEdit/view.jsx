@@ -63,12 +63,15 @@ function CollectionForm(props: Props) {
 
   React.useEffect(() => {
     if (collection && collectionResetPending.current) {
-      setParams({
+      const resetParams = {
         uris: collectionUrls,
         name,
         description,
         thumbnail,
-      });
+      };
+
+      setParams(resetParams);
+      initialParams.current = resetParams;
       collectionResetPending.current = false;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

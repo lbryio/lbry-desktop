@@ -427,7 +427,7 @@ export const selectNameForCollectionId = createSelector(
 
 export const selectThumbnailForCollectionId = (state: State, id: string) => {
   const collection = selectCollectionForId(state, id);
-  return collection.thumbnail?.url;
+  return collection && collection.thumbnail?.url;
 };
 
 export const selectUpdatedAtForCollectionId = createSelector(
@@ -435,7 +435,7 @@ export const selectUpdatedAtForCollectionId = createSelector(
   selectUserCreationDate,
   selectEditedCollectionForId,
   (collection, userCreatedAt, edited) => {
-    const collectionUpdatedAt = (edited?.updatedAt || collection.updatedAt) * 1000;
+    const collectionUpdatedAt = (edited?.updatedAt || collection?.updatedAt || 0) * 1000;
 
     const userCreationDate = moment(userCreatedAt).format('MMMM DD YYYY');
     const collectionUpdatedDate = moment(collectionUpdatedAt).format('MMMM DD YYYY');
@@ -458,7 +458,7 @@ export const selectCreatedAtForCollectionId = (state: State, id: string) => {
     return userCreatedAt;
   }
 
-  if (collection.createdAt) return collection.createdAt * 1000;
+  if (collection?.createdAt) return collection.createdAt * 1000;
 
   const publishedClaim = selectPublishedCollectionClaimForId(state, id);
   if (publishedClaim) return publishedClaim.meta?.creation_timestamp * 1000;

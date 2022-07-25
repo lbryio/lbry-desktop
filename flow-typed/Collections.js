@@ -63,3 +63,10 @@ declare type CollectionFetchParams = {
   collectionId: string,
   pageSize?: number,
 };
+
+declare type CollectionItemFetchResult = {
+  claimId: string,
+  items: ?Array<GenericClaim>,
+};
+
+declare type CollectionItemsFetchResult = Array<CollectionItemFetchResult>;

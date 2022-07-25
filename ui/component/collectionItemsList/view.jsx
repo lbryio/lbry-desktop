@@ -20,7 +20,7 @@ type Props = {
   isResolvingCollection: boolean,
   collectionUrls: Array<string>,
   doCollectionEdit: (id: string, params: CollectionEditParams) => void,
-  doFetchItemsInCollection: ({}, ?() => void) => void,
+  doFetchItemsInCollection: (options: { collectionId: string, pageSize?: number }) => void,
 };
 
 const CollectionItemsList = (props: Props) => {
@@ -36,13 +36,10 @@ const CollectionItemsList = (props: Props) => {
     ...claimListProps
   } = props;
 
-  const [didTryResolve, setDidTryResolve] = React.useState();
-
   const { totalItems } = collection || {};
 
   const urlsReady = collectionUrls && (totalItems === undefined || totalItems === collectionUrls.length);
-  const shouldFetchItems =
-    isPrivateCollection || isEditedCollection || (!urlsReady && collectionId && !didTryResolve && !collection);
+  const shouldFetchItems = isPrivateCollection || isEditedCollection || (!urlsReady && collectionId && !collection);
 
   function handleOnDragEnd(result: any) {
     const { source, destination } = result;
@@ -56,7 +53,7 @@ const CollectionItemsList = (props: Props) => {
   }
   React.useEffect(() => {
     if (shouldFetchItems) {
-      doFetchItemsInCollection({ collectionId }, () => setDidTryResolve(true));
+      doFetchItemsInCollection({ collectionId });
     }
   }, [collectionId, doFetchItemsInCollection, shouldFetchItems]);
 
