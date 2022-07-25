@@ -43,12 +43,14 @@ type Props = {
   hasCollectionById: boolean,
   isFloating?: boolean,
   playingCollectionId: ?string,
+  collectionSavedForId: boolean,
   createUnpublishedCollection: (string, Array<any>, ?string) => void,
   doCollectionEdit: (string, CollectionEditParams) => void,
   doDisablePlayerDrag?: (disable: boolean) => void,
   doClearPlayingCollection: () => void,
   doOpenModal: (id: string, props: {}) => void,
   doClearQueueList: () => void,
+  doToggleCollectionSavedForId: (id: string) => void,
 };
 
 export default function PlaylistCard(props: Props) {
@@ -132,6 +134,8 @@ const PlaylistCardComponent = (props: PlaylistCardProps) => {
     doClearPlayingCollection,
     doOpenModal,
     doClearQueueList,
+    doToggleCollectionSavedForId,
+    collectionSavedForId,
     ...cardProps
   } = props;
 
@@ -294,24 +298,31 @@ const PlaylistCardComponent = (props: PlaylistCardProps) => {
 
               <section>
                 <Button
+                  requiresAuth
                   title={__('Copy')}
                   className="button-toggle"
                   icon={ICONS.COPY}
                   onClick={() => doOpenModal(MODALS.COLLECTION_CREATE, { sourceId: id })}
                 />
 
-                {isMyCollection ? (
-                  !collectionEmpty && (
-                    <Button
-                      title={__('Arrange')}
-                      className={classnames('button-toggle', { 'button-toggle--active': showEdit })}
-                      icon={ICONS.ARRANGE}
-                      onClick={() => setShowEdit(!showEdit)}
-                    />
-                  )
-                ) : (
-                  <Button title={__('Save')} className="button-toggle" icon={ICONS.PLAYLIST_ADD} onClick={() => {}} />
-                )}
+                {isMyCollection
+                  ? !collectionEmpty && (
+                      <Button
+                        title={__('Arrange')}
+                        className={classnames('button-toggle', { 'button-toggle--active': showEdit })}
+                        icon={ICONS.ARRANGE}
+                        onClick={() => setShowEdit(!showEdit)}
+                      />
+                    )
+                  : id && (
+                      <Button
+                        requiresAuth
+                        title={__('Save')}
+                        className="button-toggle"
+                        icon={collectionSavedForId ? ICONS.PLAYLIST_FILLED : ICONS.PLAYLIST_ADD}
+                        onClick={() => doToggleCollectionSavedForId(id)}
+                      />
+                    )}
               </section>
             </div>
           )

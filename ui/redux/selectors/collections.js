@@ -40,6 +40,11 @@ export const selectUnpublishedCollectionsList = createSelector(
   (unpublishedCollections) => Object.keys(unpublishedCollections || {})
 );
 
+export const selectCollectionSavedForId = (state: State, id: string) => {
+  const savedIds = selectSavedCollectionIds(state);
+  return savedIds.includes(id);
+};
+
 export const selectHasCollections = createSelector(
   selectUnpublishedCollectionsList,
   selectMyCollectionIds,

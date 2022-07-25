@@ -25,7 +25,9 @@ type Props = {
   setShowEdit: (boolean) => void,
   isBuiltin: boolean,
   collectionEmpty: boolean,
+  collectionSavedForId: boolean,
   doOpenModal: (id: string, props: {}) => void,
+  doToggleCollectionSavedForId: (id: string) => void,
 };
 
 function CollectionActions(props: Props) {
@@ -37,8 +39,10 @@ function CollectionActions(props: Props) {
     isBuiltin,
     showEdit,
     setShowEdit,
+    collectionSavedForId,
     collectionEmpty,
     doOpenModal,
+    doToggleCollectionSavedForId,
   } = props;
 
   const isMobile = useIsMobile();
@@ -74,6 +78,7 @@ function CollectionActions(props: Props) {
 
       <div className="section">
         <Button
+          requiresAuth
           title={__('Copy')}
           className="button-toggle"
           icon={ICONS.COPY}
@@ -90,7 +95,13 @@ function CollectionActions(props: Props) {
             />
           )
         ) : (
-          <Button title={__('Save')} className="button-toggle" icon={ICONS.PLAYLIST_ADD} onClick={() => {}} />
+          <Button
+            requiresAuth
+            title={__('Save')}
+            className="button-toggle"
+            icon={collectionSavedForId ? ICONS.PLAYLIST_FILLED : ICONS.PLAYLIST_ADD}
+            onClick={() => doToggleCollectionSavedForId(collectionId)}
+          />
         )}
       </div>
     </div>

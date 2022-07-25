@@ -11,18 +11,19 @@ import {
 } from 'redux/selectors/claims';
 import {
   selectCollectionForId,
-  // selectPublishedCollectionForId, // for "save" or "copy" action
   selectPublishedCollectionForId,
   selectUnpublishedCollectionForId,
   selectEditedCollectionForId,
   selectHasItemsInQueue,
   selectMyEditedCollections,
   selectUrlsForCollectionId,
+  selectCollectionSavedForId,
 } from 'redux/selectors/collections';
 import * as COLS from 'constants/collections';
 import { resolveCollectionType } from 'util/collections';
 import { isPermanentUrl, getThumbnailFromClaim } from 'util/claim';
 import { parseClaimIdFromPermanentUrl } from 'util/url';
+import { doToast } from 'redux/actions/notifications';
 
 const FETCH_BATCH_SIZE = 50;
 
@@ -32,7 +33,7 @@ export const doLocalCollectionCreate = (params: CollectionCreateParams, cb?: (id
 ) => {
   const { items, sourceId } = params;
 
-  const id = uuid();
+  const id = uuid(); // start with a uuid, this becomes a claimId after publish
   if (cb) cb(id);
 
   if (sourceId) {
@@ -50,7 +51,7 @@ export const doLocalCollectionCreate = (params: CollectionCreateParams, cb?: (id
       data: {
         entry: {
           ...params,
-          id: id, // start with a uuid, this becomes a claimId after publish
+          id: id,
           items: sourceCollectionItems,
           description: sourceDescription,
           thumbnail: { url: thumbnailUrl },
@@ -63,28 +64,13 @@ export const doLocalCollectionCreate = (params: CollectionCreateParams, cb?: (id
     type: ACTIONS.COLLECTION_NEW,
     data: {
       entry: {
-        id: id, // start with a uuid, this becomes a claimId after publish
+        id: id,
         items: items || [],
         ...params,
       },
     },
   });
 };
-
-// export const doSaveCollectionForId = (collectionId: string) => (dispatch: Dispatch, getState: GetState) => {
-//   const state = getState();
-//   const collection = selectCollectionForId(state, collectionId);
-
-//   return dispatch({
-//     type: ACTIONS.COLLECTION_NEW,
-//     data: {
-//       entry: {
-//         id: uuid(),
-//         ...collection,
-//       },
-//     },
-//   });
-// };
 
 export const doCollectionDelete = (id: string, colKey: ?string = undefined) => (
   dispatch: Dispatch,
@@ -108,29 +94,13 @@ export const doCollectionDelete = (id: string, colKey: ?string = undefined) => (
   return collectionDelete();
 };
 
-// Given a collection, save its collectionId to be resolved and displayed in Library
-// export const doCollectionSave = (
-//   id: string,
-// ) => (dispatch: Dispatch) => {
-//   return dispatch({
-//     type: ACTIONS.COLLECTION_SAVE,
-//     data: {
-//       id: id,
-//     },
-//   });
-// };
+export const doToggleCollectionSavedForId = (collectionId: string) => (dispatch: Dispatch, getState: GetState) => {
+  const state = getState();
+  const isSaved = selectCollectionSavedForId(state, collectionId);
 
-// Given a collection and name, copy it to a local private collection with a name
-// export const doCollectionCopy = (
-//   id: string,
-// ) => (dispatch: Dispatch) => {
-//   return dispatch({
-//     type: ACTIONS.COLLECTION_COPY,
-//     data: {
-//       id: id,
-//     },
-//   });
-// };
+  dispatch(doToast({ message: !isSaved ? __('Added to saved Playlists!') : __('Removed from saved Playlists.') }));
+  dispatch({ type: ACTIONS.COLLECTION_TOGGLE_SAVE, data: { collectionId } });
+};
 
 function isPrivateCollectionId(collectionId: string) {
   // Private (unpublished) collections uses UUID.

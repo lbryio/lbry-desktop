@@ -67,6 +67,23 @@ const collectionsReducer = handleActions(
       };
     },
 
+    [ACTIONS.COLLECTION_TOGGLE_SAVE]: (state, action) => {
+      const { saved } = state;
+      const { collectionId } = action.data;
+
+      if (saved.includes(collectionId)) {
+        return {
+          ...state,
+          saved: saved.filter((savedId) => savedId !== collectionId),
+        };
+      } else {
+        return {
+          ...state,
+          saved: [...saved, collectionId],
+        };
+      }
+    },
+
     [ACTIONS.COLLECTION_DELETE]: (state, action) => {
       const { edited: editList, unpublished: unpublishedList, pending: pendingList, lastUsedCollection } = state;
       const { id, collectionKey } = action.data;
