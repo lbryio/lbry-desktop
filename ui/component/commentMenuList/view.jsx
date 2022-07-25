@@ -216,7 +216,7 @@ function CommentMenuList(props: Props) {
         ) : (
           <div className="comment__menu-title no-border">{__("That's you...")}</div>
         ))}
-      {!commentIsMine && claimIsMine && (
+      {!activeChannelIsCreator && !commentIsMine && claimIsMine && (
         <div className="comment__menu-title">{__("That's one of your channels...")}</div>
       )}
 
