@@ -10,12 +10,14 @@ import { formatLbryUrlForWeb } from 'util/url';
 import Button from 'component/button';
 
 type Props = {
-  uri: string,
+  uri?: string,
+  sourceId?: string,
   onlyCreate?: boolean,
-  closeForm: (newCollectionName?: string) => void,
+  closeForm: (newCollectionName?: string, newCollectionId?: string) => void,
   // -- redux --
+  sourceCollectionName?: string,
   doPlaylistAddAndAllowPlaying: (params: {
-    uri: string,
+    uri?: string,
     collectionName: string,
     createNew: boolean,
     push: (uri: string) => void,
@@ -23,7 +25,7 @@ type Props = {
 };
 
 function FormNewCollection(props: Props) {
-  const { uri, onlyCreate, closeForm, doPlaylistAddAndAllowPlaying } = props;
+  const { uri, sourceId, onlyCreate, closeForm, sourceCollectionName, doPlaylistAddAndAllowPlaying } = props;
 
   const {
     push,
@@ -31,18 +33,19 @@ function FormNewCollection(props: Props) {
   } = useHistory();
 
   const buttonref: ElementRef<any> = React.useRef();
-  const newCollectionName = React.useRef('');
 
-  const [disabled, setDisabled] = React.useState(true);
+  const [newCollectionName, setCollectionName] = React.useState(
+    sourceCollectionName ? __('%copied_playlist_name% (copy)', { copied_playlist_name: sourceCollectionName }) : ''
+  );
 
   function handleNameInput(e) {
     const { value } = e.target;
-    newCollectionName.current = value;
-    setDisabled(value.length === 0);
+    setCollectionName(value);
   }
 
   function handleAddCollection() {
-    const name = newCollectionName.current;
+    const name = newCollectionName;
+    let id;
 
     const urlParams = new URLSearchParams(search);
     urlParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, COLLECTIONS_CONSTS.WATCH_LATER_ID);
@@ -50,6 +53,7 @@ function FormNewCollection(props: Props) {
     doPlaylistAddAndAllowPlaying({
       uri,
       collectionName: name,
+      sourceId,
       createNew: true,
       push: (pushUri) =>
         push({
@@ -57,9 +61,14 @@ function FormNewCollection(props: Props) {
           search: urlParams.toString(),
           state: { collectionId: COLLECTIONS_CONSTS.WATCH_LATER_ID, forceAutoplay: true },
         }),
+      createCb: !sourceId
+        ? undefined
+        : (newId) => {
+            id = newId;
+          },
     });
 
-    closeForm(name);
+    closeForm(name, id);
   }
 
   function altEnterListener(e: SyntheticKeyboardEvent<*>) {
@@ -97,7 +106,7 @@ function FormNewCollection(props: Props) {
             icon={ICONS.COMPLETED}
             title={__('Confirm')}
             className="button-toggle"
-            disabled={disabled}
+            disabled={newCollectionName.length === 0}
             onClick={handleAddCollection}
             ref={buttonref}
           />
@@ -113,6 +122,7 @@ function FormNewCollection(props: Props) {
         </>
       }
       onChange={handleNameInput}
+      value={newCollectionName}
     />
   );
 }

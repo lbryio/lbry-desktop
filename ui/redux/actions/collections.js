@@ -3,7 +3,12 @@ import * as ACTIONS from 'constants/action_types';
 import { v4 as uuid } from 'uuid';
 import Lbry from 'lbry';
 import { doClaimSearch, doAbandonClaim } from 'redux/actions/claims';
-import { selectClaimForClaimId, selectPermanentUrlForUri } from 'redux/selectors/claims';
+import {
+  selectClaimForClaimId,
+  selectPermanentUrlForUri,
+  selectClaimForId,
+  makeSelectMetadataItemForUri,
+} from 'redux/selectors/claims';
 import {
   selectCollectionForId,
   // selectPublishedCollectionForId, // for "save" or "copy" action
@@ -12,21 +17,47 @@ import {
   selectEditedCollectionForId,
   selectHasItemsInQueue,
   selectMyEditedCollections,
+  selectUrlsForCollectionId,
 } from 'redux/selectors/collections';
 import * as COLS from 'constants/collections';
-import { isPermanentUrl } from 'util/claim';
 import { resolveCollectionType } from 'util/collections';
+import { isPermanentUrl, getThumbnailFromClaim } from 'util/claim';
 import { parseClaimIdFromPermanentUrl } from 'util/url';
 
 const FETCH_BATCH_SIZE = 50;
 
 export const doLocalCollectionCreate = (params: CollectionCreateParams, cb?: (id: any) => void) => (
-  dispatch: Dispatch
+  dispatch: Dispatch,
+  getState: GetState
 ) => {
-  const { items } = params;
-  const id = uuid();
+  const { items, sourceId } = params;
 
+  const id = uuid();
   if (cb) cb(id);
+
+  if (sourceId) {
+    const state = getState();
+    const sourceCollectionItems = selectUrlsForCollectionId(state, sourceId);
+    const sourceCollection = selectCollectionForId(state, sourceId);
+    const sourceCollectionClaim = selectClaimForId(state, sourceId);
+    const sourceDescription =
+      sourceCollection.description ||
+      makeSelectMetadataItemForUri(sourceCollectionClaim?.canonical_url, 'description')(state);
+    const thumbnailUrl = sourceCollection.thumbnail?.url || getThumbnailFromClaim(sourceCollectionClaim);
+
+    return dispatch({
+      type: ACTIONS.COLLECTION_NEW,
+      data: {
+        entry: {
+          ...params,
+          id: id, // start with a uuid, this becomes a claimId after publish
+          items: sourceCollectionItems,
+          description: sourceDescription,
+          thumbnail: { url: thumbnailUrl },
+        },
+      },
+    });
+  }
 
   return dispatch({
     type: ACTIONS.COLLECTION_NEW,
@@ -39,6 +70,21 @@ export const doLocalCollectionCreate = (params: CollectionCreateParams, cb?: (id
     },
   });
 };
+
+// export const doSaveCollectionForId = (collectionId: string) => (dispatch: Dispatch, getState: GetState) => {
+//   const state = getState();
+//   const collection = selectCollectionForId(state, collectionId);
+
+//   return dispatch({
+//     type: ACTIONS.COLLECTION_NEW,
+//     data: {
+//       entry: {
+//         id: uuid(),
+//         ...collection,
+//       },
+//     },
+//   });
+// };
 
 export const doCollectionDelete = (id: string, colKey: ?string = undefined) => (
   dispatch: Dispatch,

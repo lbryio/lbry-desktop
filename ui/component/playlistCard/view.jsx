@@ -292,20 +292,27 @@ const PlaylistCardComponent = (props: PlaylistCardProps) => {
                 <ShuffleButton url={playingItemUrl} id={id} />
               </section>
 
-              {isMyCollection && !collectionEmpty && (
-                <section>
-                  <Button
-                    title={__('Arrange')}
-                    className={classnames('button-toggle', { 'button-toggle--active': showEdit })}
-                    icon={ICONS.ARRANGE}
-                    onClick={() => setShowEdit(!showEdit)}
-                  />
+              <section>
+                <Button
+                  title={__('Copy')}
+                  className="button-toggle"
+                  icon={ICONS.COPY}
+                  onClick={() => doOpenModal(MODALS.COLLECTION_CREATE, { sourceId: id })}
+                />
 
-                  {/* TODO:
-                    SAVE BUTTON
-                  */}
-                </section>
-              )}
+                {isMyCollection ? (
+                  !collectionEmpty && (
+                    <Button
+                      title={__('Arrange')}
+                      className={classnames('button-toggle', { 'button-toggle--active': showEdit })}
+                      icon={ICONS.ARRANGE}
+                      onClick={() => setShowEdit(!showEdit)}
+                    />
+                  )
+                ) : (
+                  <Button title={__('Save')} className="button-toggle" icon={ICONS.PLAYLIST_ADD} onClick={() => {}} />
+                )}
+              </section>
             </div>
           )
         }

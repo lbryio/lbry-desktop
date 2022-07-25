@@ -1,5 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
+import * as MODALS from 'constants/modal_types';
 import React from 'react';
 import Button from 'component/button';
 import { useIsMobile } from 'effects/use-screensize';
@@ -24,10 +25,21 @@ type Props = {
   setShowEdit: (boolean) => void,
   isBuiltin: boolean,
   collectionEmpty: boolean,
+  doOpenModal: (id: string, props: {}) => void,
 };
 
 function CollectionActions(props: Props) {
-  const { uri, claimId, isMyCollection, collectionId, isBuiltin, showEdit, setShowEdit, collectionEmpty } = props;
+  const {
+    uri,
+    claimId,
+    isMyCollection,
+    collectionId,
+    isBuiltin,
+    showEdit,
+    setShowEdit,
+    collectionEmpty,
+    doOpenModal,
+  } = props;
 
   const isMobile = useIsMobile();
 
@@ -60,16 +72,27 @@ function CollectionActions(props: Props) {
         )}
       </SectionElement>
 
-      {!collectionEmpty && isMyCollection && (
-        <div className="section">
-          <Button
-            title={__('Arrange')}
-            className={classnames('button-toggle', { 'button-toggle--active': showEdit })}
-            icon={ICONS.ARRANGE}
-            onClick={() => setShowEdit(!showEdit)}
-          />
-        </div>
-      )}
+      <div className="section">
+        <Button
+          title={__('Copy')}
+          className="button-toggle"
+          icon={ICONS.COPY}
+          onClick={() => doOpenModal(MODALS.COLLECTION_CREATE, { sourceId: collectionId })}
+        />
+
+        {isMyCollection ? (
+          !collectionEmpty && (
+            <Button
+              title={__('Arrange')}
+              className={classnames('button-toggle', { 'button-toggle--active': showEdit })}
+              icon={ICONS.ARRANGE}
+              onClick={() => setShowEdit(!showEdit)}
+            />
+          )
+        ) : (
+          <Button title={__('Save')} className="button-toggle" icon={ICONS.PLAYLIST_ADD} onClick={() => {}} />
+        )}
+      </div>
     </div>
   );
 }

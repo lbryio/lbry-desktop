@@ -2383,5 +2383,6 @@
   "Are you sure you want to quit and clear the current Queue?": "Are you sure you want to quit and clear the current Queue?",
   "The current video will keep playing.": "The current video will keep playing.",
   "Error uploading chunk. Click \"retry\" in the Uploads page to resume upload.": "Error uploading chunk. Click \"retry\" in the Uploads page to resume upload.",
+  "%copied_playlist_name% (copy)": "%copied_playlist_name% (copy)",
   "--end--": "--end--"
 }

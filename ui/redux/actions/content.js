@@ -303,14 +303,18 @@ export function doPlaylistAddAndAllowPlaying({
   uri,
   collectionName,
   collectionId: id,
+  sourceId,
   createNew,
   push: pushPlay,
+  createCb,
 }: {
   uri?: string,
   collectionName: string,
   collectionId?: string,
+  sourceId?: string,
   createNew?: boolean,
   push?: (uri: string) => void,
+  createCb?: (id: string) => void,
 }) {
   return (dispatch: Dispatch, getState: () => any) => {
     const state = getState();
@@ -320,9 +324,10 @@ export function doPlaylistAddAndAllowPlaying({
     if (createNew) {
       dispatch(
         doLocalCollectionCreate(
-          { name: collectionName, items: uri ? [uri] : [], type: COL_TYPES.PLAYLIST },
+          { name: collectionName, items: uri ? [uri] : [], type: COL_TYPES.PLAYLIST, sourceId },
           (newId) => {
             collectionId = newId;
+            if (createCb) createCb(newId);
           }
         )
       );

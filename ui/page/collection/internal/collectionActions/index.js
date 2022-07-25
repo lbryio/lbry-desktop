@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { selectClaimForUri } from 'redux/selectors/claims';
 import { selectCollectionIsMine, selectCollectionIsEmptyForId } from 'redux/selectors/collections';
+import { doOpenModal } from 'redux/actions/app';
 import CollectionActions from './view';
 
 const select = (state, props) => {
@@ -15,4 +16,8 @@ const select = (state, props) => {
   };
 };
 
-export default connect(select)(CollectionActions);
+const perform = {
+  doOpenModal,
+};
+
+export default connect(select, perform)(CollectionActions);
