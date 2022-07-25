@@ -10,7 +10,6 @@ import {
 } from 'redux/selectors/collections';
 import { selectIsFetchingMyCollections } from 'redux/selectors/claims';
 import { doOpenModal } from 'redux/actions/app';
-import { doResolveClaimIds } from 'redux/actions/claims';
 import { doFetchItemsInCollections } from 'redux/actions/collections';
 import CollectionsListMine from './view';
 
@@ -27,7 +26,6 @@ const select = (state) => ({
 
 const perform = {
   doOpenModal,
-  doResolveClaimIds,
   doFetchItemsInCollections,
 };
 

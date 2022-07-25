@@ -26,7 +26,7 @@ type Props = {
   areBuiltinCollectionsEmpty: boolean,
   hasCollections: boolean,
   doOpenModal: (id: string) => void,
-  doResolveClaimIds: (ids: ClaimIds) => void,
+  doFetchItemsInCollections: (params: { collectionIds: ClaimIds }) => void,
 };
 
 // Avoid prop drilling
@@ -43,7 +43,7 @@ export default function CollectionsListMine(props: Props) {
     areBuiltinCollectionsEmpty,
     hasCollections,
     doOpenModal,
-    doResolveClaimIds,
+    doFetchItemsInCollections,
   } = props;
 
   const isMobile = useIsMobile();
@@ -155,9 +155,9 @@ export default function CollectionsListMine(props: Props) {
 
   React.useEffect(() => {
     if (savedCollectionIds.length > 0) {
-      doResolveClaimIds(savedCollectionIds);
+      doFetchItemsInCollections({ collectionIds: savedCollectionIds });
     }
-  }, [doResolveClaimIds, savedCollectionIds]);
+  }, [doFetchItemsInCollections, savedCollectionIds]);
 
   function handleCreatePlaylist() {
     doOpenModal(MODALS.COLLECTION_CREATE);

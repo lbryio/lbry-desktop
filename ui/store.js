@@ -142,6 +142,7 @@ const triggerSharedStateActions = [
   ACTIONS.COLLECTION_NEW,
   ACTIONS.COLLECTION_PENDING,
   ACTIONS.SET_LAST_VIEWED_ANNOUNCEMENT,
+  ACTIONS.COLLECTION_TOGGLE_SAVE,
   // MAYBE COLLECTOIN SAVE
   // ACTIONS.SET_WELCOME_VERSION,
   // ACTIONS.SET_ALLOW_ANALYTICS,
@@ -182,7 +183,7 @@ const sharedStateFilters = {
   sharing_3P: { source: 'app', property: 'allowAnalytics' },
   builtinCollections: { source: 'collections', property: 'builtin' },
   editedCollections: { source: 'collections', property: 'edited' },
-  // savedCollections: { source: 'collections', property: 'saved' },
+  savedCollections: { source: 'collections', property: 'saved' },
   unpublishedCollections: { source: 'collections', property: 'unpublished' },
   lastViewedAnnouncement: { source: 'content', property: 'lastViewedAnnouncement' },
 };
