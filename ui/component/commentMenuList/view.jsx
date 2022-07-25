@@ -23,6 +23,7 @@ type Props = {
   isTopLevel: boolean,
   isPinned: boolean,
   commentIsMine: boolean, // if this comment was signed by an owned channel
+  channelIsMine: boolean,
   disableEdit?: boolean,
   disableRemove?: boolean,
   supportAmount?: any,
@@ -57,6 +58,7 @@ function CommentMenuList(props: Props) {
     authorUri,
     authorName,
     commentIsMine,
+    channelIsMine,
     commentId,
     activeChannelClaim,
     isTopLevel,
@@ -216,7 +218,7 @@ function CommentMenuList(props: Props) {
         ) : (
           <div className="comment__menu-title no-border">{__("That's you...")}</div>
         ))}
-      {!activeChannelIsCreator && !commentIsMine && claimIsMine && (
+      {!activeChannelIsCreator && !commentIsMine && channelIsMine && (
         <div className="comment__menu-title">{__("That's one of your channels...")}</div>
       )}
 
@@ -318,7 +320,7 @@ function CommentMenuList(props: Props) {
         </>
       )}
 
-      {isLiveComment && !commentIsMine && claimIsMine && (
+      {isLiveComment && !commentIsMine && channelIsMine && (
         <MenuItem className="comment__menu-option" onSelect={() => doSetActiveChannel(authorId)}>
           <div className="menu__link">
             <Icon aria-hidden icon={ICONS.REFRESH} />

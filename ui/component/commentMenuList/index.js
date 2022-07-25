@@ -20,6 +20,7 @@ const select = (state, props) => {
     claimIsMine: selectClaimIsMine(state, claim),
     isAuthenticated: selectUserVerifiedEmail(state),
     activeChannelClaim: selectActiveChannelClaim(state),
+    channelIsMine: selectClaimIsMine(state, authorClaim),
     playingUri: selectPlayingUri(state),
     moderationDelegatorsById: selectModerationDelegatorsById(state),
     authorTitle: selectTitleForUri(state, props.authorUri),
