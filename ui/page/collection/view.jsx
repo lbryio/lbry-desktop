@@ -3,14 +3,11 @@ import React from 'react';
 import CollectionItemsList from 'component/collectionItemsList';
 import Page from 'component/page';
 import * as PAGES from 'constants/pages';
+import { COLLECTION_PAGE as CP } from 'constants/urlParams';
 import { useHistory } from 'react-router-dom';
 import CollectionPublish from './internal/collectionPublish';
 import CollectionPrivateEdit from './internal/collectionPrivateEdit';
 import CollectionHeader from './internal/collectionHeader';
-
-export const PAGE_VIEW_QUERY = 'view';
-export const EDIT_PAGE = 'edit';
-export const PUBLISH_PAGE = 'publish';
 
 type Props = {
   collectionId: string,
@@ -45,8 +42,9 @@ export default function CollectionPage(props: Props) {
   const { name, totalItems } = collection || {};
 
   const urlParams = new URLSearchParams(search);
-  const publishing = urlParams.get(PAGE_VIEW_QUERY) === PUBLISH_PAGE;
-  const editing = urlParams.get(PAGE_VIEW_QUERY) === EDIT_PAGE;
+  const publishing = urlParams.get(CP.QUERIES.VIEW) === CP.VIEWS.PUBLISH;
+  const editing = urlParams.get(CP.QUERIES.VIEW) === CP.VIEWS.EDIT;
+
   const editPage = editing || publishing;
   const urlsReady =
     collectionUrls && (totalItems === undefined || (totalItems && totalItems === collectionUrls.length));

@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { useHistory } from 'react-router';
-import { EDIT_PAGE, PAGE_VIEW_QUERY } from 'page/collection/view';
+import { COLLECTION_PAGE as CP } from 'constants/urlParams';
 import Card from 'component/common/card';
 import CollectionActions from '../collectionActions';
 import Button from 'component/button';
@@ -68,7 +68,7 @@ const CollectionHeader = (props: Props) => {
               title={__('Edit')}
               className="button-toggle"
               icon={ICONS.EDIT}
-              onClick={() => push(`?${PAGE_VIEW_QUERY}=${EDIT_PAGE}`)}
+              onClick={() => push(`?${CP.QUERIES.VIEW}=${CP.VIEWS.EDIT}`)}
             />
           )
         )
