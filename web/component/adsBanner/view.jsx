@@ -84,7 +84,7 @@ export default function AdsBanner(props: Props) {
         <div className="banner-ad__driver-value">{adsSignInDriver}</div>
       </div>
       <div
-        className="banner-ad__container OUTBRAIN"
+        className="banner-ad__container OUTBRAIN xx"
         data-ob-contenturl="DROP_PERMALINK_HERE"
         data-widget-id={!isMobile ? AD_CONFIG.AR_60 : AD_CONFIG.AR_18}
         data-ob-installation-key="ADNIMKAJDGAG4GAO6AGG6H5KP"

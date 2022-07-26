@@ -15,12 +15,6 @@
   }
 }
 
-.avp-p-wrapper {
-  // Hide by default, so that any stray floater won't be visible.
-  // We'll enable it only within our designated container (see below).
-  display: none;
-}
-
 // Inline Video Ads
 // The default is coded for list-layout;
 // --tile and other modifiers adjust accordingly.
@@ -44,17 +38,6 @@
     border-radius: var(--border-radius);
     box-shadow: 0 0 0 1px var(--color-header-background) inset;
 
-    .avp-p-wrapper {
-      background-color: unset !important;
-      .avp-content-container {
-        background-color: unset !important;
-        // box-shadow: 0 0 0 1px black inset;
-        div {
-          background-color: unset !important;
-        }
-      }
-    }
-
     video {
       width: 100% !important;
       height: 100% !important;
@@ -75,36 +58,6 @@
     @media (min-width: $breakpoint-large) {
       $width: calc(var(--file-list-thumbnail-width) * 1.2);
       width: $width;
-    }
-
-    .avp-p-wrapper {
-      // Only enable this within our container.
-      display: block;
-    }
-
-    .avp-p-wrapper.av-floating {
-      display: none;
-    }
-
-    #aniBox,
-    #av-container {
-      border-radius: var(--border-radius);
-    }
-
-    .avp-p-wrapper > div {
-      border-radius: var(--border-radius);
-    }
-  }
-
-  &:hover {
-    .ads__title {
-      color: var(--color-primary);
-    }
-    .ad__container {
-      box-shadow: 0 0 0 1px rgba(var(--color-primary-dynamic), 1) inset;
-    }
-    video {
-      border: 1px solid rgba(var(--color-primary-dynamic), 1);
     }
   }
 }
@@ -176,26 +129,6 @@
 
   .ads__claim-text {
     max-width: 100%;
-  }
-
-  #close-btn {
-    left: unset !important;
-    right: 0 !important;
-    border: none !important;
-    border-radius: 0 var(--border-radius) 0 var(--border-radius) !important;
-    background-color: var(--color-primary) !important;
-  }
-
-  .visible {
-    display: none !important;
-    position: absolute !important;
-    top: 0px !important;
-    z-index: 99 !important;
-    width: 3rem !important;
-    height: 3rem !important;
-    background-color: var(--color-primary) !important;
-    border-radius: 0 var(--border-radius) 0 var(--border-radius) !important;
-    background-size: 60% !important;
   }
 }
 
@@ -328,140 +261,6 @@
 
 .exp-ui__logo {
   display: none;
-}
-
-// ****************************************************************************
-// Outbrain
-// ****************************************************************************
-
-.OUTBRAIN {
-  // border-radius: var(--border-radius) 0 0 0 !important;
-  height: unset !important;
-
-  .ob-widget .ob-unit.ob-rec-text {
-    font-size: 12px !important;
-  }
-
-  &:not(.banner-ad__container) {
-    border-radius: var(--border-radius) 0 var(--border-radius) var(--border-radius) !important;
-    overflow: hidden;
-
-    .ob-rec-image-container {
-      border: unset !important;
-      .ob-rec-image {
-        padding: 0 !important;
-        margin: 0 !important;
-      }
-    }
-    .ob-sub-units {
-      margin-left: 0 !important;
-    }
-
-    .AR_28.ob-widget {
-      .ob-unit.ob-rec-text {
-        font-size: var(--font-xxsmall) !important;
-      }
-    }
-  }
-
-  .AR_28 {
-    position: absolute;
-    bottom: 0 !important;
-    background-color: var(--color-ads-background);
-    -webkit-backdrop-filter: blur(4px);
-    backdrop-filter: blur(4px);
-    padding: var(--spacing-xxs);
-
-    .ob-widget-footer {
-      position: absolute !important;
-      top: -24px !important;
-      left: 0;
-      height: 24px;
-      background-color: var(--color-header-background) !important;
-      border-radius: var(--border-radius) var(--border-radius) 0 0;
-      padding: 0 !important;
-    }
-  }
-}
-
-.close-sticky {
-  position: absolute;
-  right: 0;
-  bottom: 71px;
-  width: 2rem;
-  height: 26px;
-  padding-top: 2px;
-  background-color: var(--color-primary);
-  color: var(--color-primary-contrast);
-  border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
-  text-align: center;
-
-  opacity: 0;
-  animation: fadeIn 1s;
-  animation-delay: 5s;
-  animation-fill-mode: forwards;
-
-  &:hover {
-    cursor: pointer;
-  }
-
-  @media (max-width: 722px) {
-    position: fixed !important;
-    top: unset !important;
-    bottom: 71px;
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-.closeButton {
-  background-color: var(--color-primary) !important;
-  color: var(--color-primary-contrast) !important;
-  border-radius: var(--border-radius) var(--border-radius) 0 0 !important;
-  top: -27px !important;
-  width: 2rem !important;
-  padding-top: 3px;
-  // padding-bottom:4px !important;
-  height: 27px !important;
-  @media (max-width: 722px) {
-    position: fixed !important;
-    top: unset !important;
-    bottom: 97px;
-  }
-}
-
-.ob-widget-items-container {
-  padding-left: var(--spacing-xs);
-  padding-right: var(--spacing-xs);
-  border-radius: var(--border-radius) 0 0 0;
-}
-
-// ****************************************************************************
-// Neko Patch
-// ****************************************************************************
-
-.ad__container {
-  div {
-    max-width: unset !important;
-  }
-}
-
-#av-container #av-inner #gui::before {
-  background: unset !important;
-  #timeline #timeline-progress {
-    background: var(--color-primary) !important;
-  }
-}
-
-#av-container #av-inner #gui #timeline #timeline-progress {
-  background: var(--color-primary) !important;
 }
 
 // ****************************************************************************
@@ -700,3 +499,61 @@ $BANNER_BORDER: 1px;
     padding: calc(var(--spacing-xxxs) / 2) var(--spacing-xxxs);
   }
 }
+
+.OUTBRAIN {
+  display: none;
+  &.VISIBLE {
+    display: block;
+  }
+  &.LEFT {
+    .ob-widget.ob-grid-layout.ob-read-next-layout {
+      left: calc(var(--spacing-s) + 93px) !important;
+    }
+  }
+  .ob-widget.ob-grid-layout.ob-read-next-layout {
+    transition: left var(--resizing-animation-timing);
+    .ob-widget-items-container {
+      background: var(--color-header-background) !important;
+      height: 90px;
+      -webkit-backdrop-filter: blur(4px);
+      backdrop-filter: blur(4px);
+
+      .ob-rec-text {
+        color: var(--color-text);
+        margin-right: calc(var(--spacing-xs) + 28px);
+      }
+      .ob-rec-source {
+        color: var(--color-text);
+        opacity: 0.6;
+      }
+    }
+    &:hover {
+      .ob-rec-text {
+        color: var(--color-primary);
+      }
+    }
+    @media (min-width: $breakpoint-small) {
+      bottom: var(--spacing-s) !important;
+      right: unset !important;
+      left: calc(var(--spacing-s) + 230px) !important;
+    }
+
+    @media (max-width: $breakpoint-small) {
+      &.ob-mobile-read-next {
+        .ob-read-next-close-container {
+          left: unset;
+          top: var(--spacing-xxs);
+          right: var(--spacing-xxs);
+          width: 28px;
+          height: 28px;
+        }
+        .ob-rec-image-container {
+          flex: 0 0 90px !important;
+        }
+      }
+    }
+  }
+}
+
+// .ob-grid-layout.ob-read-next-visible .ob-read-next-close-container
+// .ob-read-next-layout .ob-unit.ob-rec-image-container

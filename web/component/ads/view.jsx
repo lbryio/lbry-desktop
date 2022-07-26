@@ -1,6 +1,6 @@
 // @flow
 import * as PAGES from 'constants/pages';
-import React, { useEffect } from 'react';
+import React from 'react';
 import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
 import PremiumPlusTile from 'component/premiumPlusTile';
@@ -22,15 +22,6 @@ const AD_CONFIGS = Object.freeze({
     tag: 'AV6252bb6f28951333ec10a7a6',
   },
 });
-
-// ****************************************************************************
-// Helpers
-// ****************************************************************************
-
-function removeIfExists(querySelector) {
-  const element = document.querySelector(querySelector);
-  if (element) element.remove();
-}
 
 // ****************************************************************************
 // Ads
@@ -67,39 +58,18 @@ function Ads(props: Props) {
   const shouldShowAds = useShouldShowAds(userHasPremiumPlus, userCountry, isAdBlockerFound, doSetAdBlockerFound);
   const adConfig = filePage ? AD_CONFIGS.ADNIMATION_FILEPAGE : AD_CONFIGS.ADNIMATION;
 
-  // add script to DOM
-  useEffect(() => {
+  React.useEffect(() => {
     if (shouldShowAds) {
       let script;
       try {
         script = document.createElement('script');
         script.src = adConfig.url;
-        // $FlowFixMe
-        document.head.appendChild(script);
+        // $FlowIgnore
+        document.body.appendChild(script);
 
         return () => {
-          // $FlowFixMe
-          document.head.removeChild(script);
-
-          // clear aniview state to allow ad reload
-          delete window.aniplayerPos;
-          delete window.storageAni;
-          delete window.__player_618bb4d28aac298191eec411__;
-
-          const styles = document.querySelectorAll('body > style');
-          styles.forEach((s) => {
-            // We are asking Adnimation to supply us with a specific ID or
-            // pattern so that our query wouldn't break when they change their
-            // script. For now, this is the "best effort".
-            if (s.innerText && s.innerText.startsWith('#outbrain')) {
-              s.remove();
-            }
-          });
-
-          // clean DOM elements from ad related elements
-          removeIfExists('[src^="https://player.avplayer.com"]');
-          removeIfExists('[src^="https://gum.criteo.com"]');
-          removeIfExists('[id^="AVLoaderaniview_slot"]');
+          // $FlowIgnore
+          document.body.removeChild(script);
         };
       } catch (e) {}
     }
@@ -139,7 +109,6 @@ function Ads(props: Props) {
               {__('Ad')}
               <br />
               {__('Hate these?')}
-              {/* __('No ads, a custom badge and access to exclusive features, try Odysee Premium!') */}
             </div>
             <div className="ads__subtitle">
               <Icon icon={ICONS.UPGRADE} />

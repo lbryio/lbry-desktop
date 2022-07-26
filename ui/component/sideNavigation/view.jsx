@@ -451,6 +451,14 @@ function SideNavigation(props: Props) {
         gdprDiv.style.display = 'none';
       }
     }
+    const ad = document.getElementsByClassName('OUTBRAIN')[0];
+    if (!isMobile && ad) {
+      if (!sidebarOpen) {
+        ad.classList.add('LEFT');
+      } else {
+        ad.classList.remove('LEFT');
+      }
+    }
   }, [sidebarOpen]);
 
   React.useEffect(() => {

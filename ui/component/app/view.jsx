@@ -243,6 +243,7 @@ function App(props: Props) {
     }
 
     if (localeLangs && !embedPath && !localeSwitchDismissed && homepageFetched) {
+      window.nag = true;
       const noLanguageSet = language === 'en' && languages.length === 1;
       return <NagLocaleSwitch localeLangs={localeLangs} noLanguageSet={noLanguageSet} onFrontPage={pathname === '/'} />;
     }
@@ -416,6 +417,8 @@ function App(props: Props) {
     }
 
     if (inIframe() || !locale || !locale.gdpr_required) {
+      const ad = document.getElementsByClassName('OUTBRAIN')[0];
+      if (ad) ad.classList.add('VISIBLE');
       return;
     }
 
@@ -433,8 +436,14 @@ function App(props: Props) {
 
     const secondScript = document.createElement('script');
     // OneTrust asks to add this
-    secondScript.innerHTML = 'function OptanonWrapper() { }';
+    secondScript.innerHTML = 'function OptanonWrapper() { window.gdprCallback() }';
 
+    window.gdprCallback = () => {
+      const ad = document.getElementsByClassName('OUTBRAIN')[0];
+      if (window.OnetrustActiveGroups.indexOf('C0002') !== -1 || window.OnetrustActiveGroups.indexOf('C0002') !== -1) {
+        if (ad) ad.classList.add('VISIBLE');
+      }
+    };
     // $FlowFixMe
     document.head.appendChild(script);
     // $FlowFixMe
