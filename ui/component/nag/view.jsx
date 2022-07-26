@@ -1,4 +1,5 @@
 // @flow
+import { v4 as uuid } from 'uuid';
 import type { Node } from 'react';
 import * as ICONS from 'constants/icons';
 import classnames from 'classnames';
@@ -16,6 +17,8 @@ type Props = {
   relative?: boolean,
   onClick?: () => void,
   onClose?: () => void,
+  // --- redux ---
+  doUpdateVisibleNagIds: (id: string, shown: boolean) => void,
 };
 
 export default function Nag(props: Props) {
@@ -30,9 +33,19 @@ export default function Nag(props: Props) {
     type,
     inline,
     relative,
+    doUpdateVisibleNagIds,
   } = props;
 
   const buttonProps = onClick ? { onClick } : href ? { href } : null;
+
+  React.useEffect(() => {
+    const id = uuid();
+    doUpdateVisibleNagIds(id, true);
+
+    return () => {
+      doUpdateVisibleNagIds(id, false);
+    };
+  }, []);
 
   return (
     <div

@@ -192,3 +192,12 @@ export function doDeleteNotification(notificationId: number) {
       });
   };
 }
+
+export function doUpdateVisibleNagIds(id: string, shown: boolean) {
+  return (dispatch: Dispatch, getState: GetState) => {
+    dispatch({
+      type: shown ? ACTIONS.NAG_SHOWN : ACTIONS.NAG_DISMISSED,
+      data: id,
+    });
+  };
+}
