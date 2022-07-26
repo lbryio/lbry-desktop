@@ -27,8 +27,9 @@ const defaultState: CollectionState = {
   unpublished: {}, // sync
   lastUsedCollection: undefined,
   edited: {},
+  updated: {},
   pending: {},
-  saved: [],
+  savedIds: [],
   isResolvingCollectionById: {},
   error: null,
   queue: {
@@ -68,13 +69,13 @@ const collectionsReducer = handleActions(
     },
 
     [ACTIONS.COLLECTION_TOGGLE_SAVE]: (state, action) => {
-      const { saved } = state;
+      const { savedIds } = state;
       const { collectionId } = action.data;
 
-      if (saved.includes(collectionId)) {
-        return { ...state, saved: saved.filter((savedId) => savedId !== collectionId) };
+      if (savedIds.includes(collectionId)) {
+        return { ...state, savedIds: savedIds.filter((savedId) => savedId !== collectionId) };
       } else {
-        return { ...state, saved: [...saved, collectionId] };
+        return { ...state, savedIds: [...savedIds, collectionId] };
       }
     },
 
@@ -157,24 +158,17 @@ const collectionsReducer = handleActions(
     },
 
     [ACTIONS.COLLECTION_EDIT]: (state, action) => {
-      const { collectionKey, collection, collectionId } = action.data;
-      const id = collection?.id || collectionId;
+      const { collectionKey, collection } = action.data;
+      const id = collection.id;
 
-      const { [collectionKey]: lists } = state;
-      const currentCollectionState = lists[id];
+      const { [collectionKey]: currentCollections } = state;
 
-      const newCollection = Object.assign({}, currentCollectionState);
-      if (collection) {
-        Object.assign(newCollection, collection);
-        if (collectionKey === COLS.COL_KEY_EDITED) delete newCollection.editsCleared;
-      } else if (collectionKey === COLS.COL_KEY_EDITED) {
-        newCollection.editsCleared = true;
-      }
+      const newCollection = Object.assign({}, collection);
       newCollection.updatedAt = getCurrentTimeInSec();
 
       return {
         ...state,
-        [collectionKey]: { ...lists, [id]: newCollection },
+        [collectionKey]: { ...currentCollections, [id]: newCollection },
         lastUsedCollection: id,
       };
     },
@@ -199,14 +193,21 @@ const collectionsReducer = handleActions(
       });
     },
     [ACTIONS.USER_STATE_POPULATE]: (state, action) => {
-      const { builtinCollections, savedCollections, unpublishedCollections, editedCollections } = action.data;
+      const {
+        builtinCollections,
+        savedCollectionIds,
+        unpublishedCollections,
+        editedCollections,
+        updatedCollections,
+      } = action.data;
 
       return {
         ...state,
         edited: editedCollections || state.edited,
+        updated: updatedCollections || state.updated,
         unpublished: unpublishedCollections || state.unpublished,
         builtin: builtinCollections || state.builtin,
-        saved: savedCollections || state.saved,
+        savedIds: savedCollectionIds || state.savedIds,
       };
     },
     [ACTIONS.COLLECTION_ITEMS_RESOLVE_COMPLETED]: (state, action) => {

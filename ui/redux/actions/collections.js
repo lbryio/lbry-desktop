@@ -480,8 +480,13 @@ export const doCollectionEdit = (collectionId: string, params: CollectionEditPar
   });
 };
 
-export const doClearEditsForCollectionid = (collectionId: string) => (dispatch: Dispatch) =>
-  dispatch({ type: ACTIONS.COLLECTION_EDIT, data: { collectionKey: COLS.COL_KEY_EDITED, collectionId } });
+export const doClearEditsForCollectionId = (id: String) => (dispatch: Dispatch, getState: GetState) => {
+  dispatch({ type: ACTIONS.COLLECTION_DELETE, data: { id, collectionKey: 'edited' } });
+
+  const state = getState();
+  const collection = selectCollectionForId(state, id);
+  dispatch({ type: ACTIONS.COLLECTION_EDIT, data: { collectionKey: COLS.COL_KEY_UPDATED, collection } });
+};
 
 export const doClearQueueList = () => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();

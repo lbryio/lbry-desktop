@@ -29,6 +29,7 @@ export const BUILTIN_PLAYLISTS = [WATCH_LATER_ID, FAVORITES_ID, QUEUE_ID];
 
 export const COL_KEY_BUILTIN = 'builtin';
 export const COL_KEY_EDITED = 'edited';
+export const COL_KEY_UPDATED = 'updated';
 export const COL_KEY_UNPUBLISHED = 'unpublished';
 export const COL_KEY_PUBLISHED = 'published';
 export const COL_KEY_PENDING = 'pending';

@@ -70,7 +70,14 @@ const subscriptionsFilter = createFilter('subscriptions', ['subscriptions']);
 const blockedFilter = createFilter('blocked', ['blockedChannels']);
 const coinSwapsFilter = createFilter('coinSwap', ['coinSwaps']);
 const settingsFilter = createBlacklistFilter('settings', ['loadedLanguages', 'language']);
-const collectionsFilter = createFilter('collections', ['builtin', 'saved', 'unpublished', 'edited', 'pending']);
+const collectionsFilter = createFilter('collections', [
+  'builtin',
+  'savedIds',
+  'unpublished',
+  'edited',
+  'updated',
+  'pending',
+]);
 const whiteListedReducers = [
   'claims',
   'fileInfo',
@@ -170,7 +177,8 @@ const sharedStateFilters = {
   sharing_3P: { source: 'app', property: 'allowAnalytics' },
   builtinCollections: { source: 'collections', property: 'builtin' },
   editedCollections: { source: 'collections', property: 'edited' },
-  savedCollections: { source: 'collections', property: 'saved' },
+  updatedCollections: { source: 'collections', property: 'updated' },
+  savedCollectionIds: { source: 'collections', property: 'savedIds' },
   unpublishedCollections: { source: 'collections', property: 'unpublished' },
   lastViewedAnnouncement: { source: 'content', property: 'lastViewedAnnouncement' },
 };

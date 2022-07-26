@@ -11,7 +11,6 @@ declare type Collection = {
   updatedAt: number,
   totalItems?: number,
   itemCount?: number,
-  editsCleared?: boolean,
   sourceId?: string, // if copied, claimId of original collection
 };
 
@@ -22,8 +21,9 @@ declare type CollectionState = {
   resolved: CollectionGroup,
   pending: CollectionGroup,
   edited: CollectionGroup,
+  updated: CollectionGroup,
   builtin: CollectionGroup,
-  saved: Array<string>,
+  savedIds: Array<string>,
   isResolvingCollectionById: { [string]: boolean },
   error?: string | null,
   queue: Collection,
@@ -31,6 +31,11 @@ declare type CollectionState = {
 
 declare type CollectionGroup = {
   [string]: Collection,
+};
+
+declare type UpdatedCollection = {
+  id: string,
+  updatedAt: number,
 };
 
 declare type CollectionList = Array<Collection>;

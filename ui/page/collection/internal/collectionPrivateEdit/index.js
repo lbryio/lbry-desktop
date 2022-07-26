@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { doClearEditsForCollectionid, doCollectionEdit } from 'redux/actions/collections';
+import { doClearEditsForCollectionId, doCollectionEdit } from 'redux/actions/collections';
 import { doOpenModal } from 'redux/actions/app';
 import {
   selectCollectionForId,
@@ -21,7 +21,7 @@ const select = (state, props) => {
 
 const perform = {
   doCollectionEdit,
-  doClearEditsForCollectionid,
+  doClearEditsForCollectionId,
   doOpenModal,
 };
 
