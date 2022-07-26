@@ -4,7 +4,12 @@ import { doSetAdBlockerFound } from 'redux/actions/app';
 import { selectClaimForUri } from 'redux/selectors/claims';
 import { selectAdBlockerFound } from 'redux/selectors/app';
 import { selectHomepageData } from 'redux/selectors/settings';
-import { selectOdyseeMembershipIsPremiumPlus, selectUserCountry, selectUserVerifiedEmail } from 'redux/selectors/user';
+import {
+  selectOdyseeMembershipIsPremiumPlus,
+  selectUserCountry,
+  selectUserVerifiedEmail,
+  selectUserLocale,
+} from 'redux/selectors/user';
 import { isChannelClaim, isStreamPlaceholderClaim } from 'util/claim';
 
 const select = (state, props) => {
@@ -18,6 +23,7 @@ const select = (state, props) => {
     userHasPremiumPlus: selectOdyseeMembershipIsPremiumPlus(state),
     userCountry: selectUserCountry(state),
     homepageData: selectHomepageData(state),
+    locale: selectUserLocale(state),
   };
 };
 

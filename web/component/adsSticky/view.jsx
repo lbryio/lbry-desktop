@@ -20,6 +20,7 @@ type Props = {
   userHasPremiumPlus: boolean,
   userCountry: string,
   homepageData: any,
+  locale: ?LocaleInfo,
   doSetAdBlockerFound: (boolean) => void,
 };
 
@@ -32,6 +33,7 @@ export default function AdsSticky(props: Props) {
     userHasPremiumPlus,
     userCountry,
     homepageData,
+    locale,
     doSetAdBlockerFound,
   } = props;
 
@@ -69,6 +71,8 @@ export default function AdsSticky(props: Props) {
     if (container) {
       container.style.display = inAllowedPath ? '' : 'none';
     }
+    const ad = document.getElementsByClassName('OUTBRAIN')[0];
+    if (ad && locale && !locale.gdpr_required) ad.classList.add('VISIBLE');
   }, [inAllowedPath, refresh]);
 
   return null; // Nothing for us to mount; the ad script will handle everything.
