@@ -221,8 +221,7 @@ function CommentMenuList(props: Props) {
       {!activeChannelIsCreator && !commentIsMine && channelIsMine && (
         <div className="comment__menu-title">{__("That's one of your channels...")}</div>
       )}
-
-      {isAuthenticated && isLiveComment && setQuickReply && !commentIsMine && !claimIsMine && (
+      {isAuthenticated && isLiveComment && setQuickReply && !commentIsMine && !channelIsMine && (
         <>
           <MenuItem
             className="comment__menu-option menu__link"
@@ -236,7 +235,6 @@ function CommentMenuList(props: Props) {
           <hr className="menu__separator" />
         </>
       )}
-
       {activeChannelIsCreator && isTopLevel && (
         <MenuItem
           className="comment__menu-option menu__link"
@@ -248,38 +246,32 @@ function CommentMenuList(props: Props) {
           </span>
         </MenuItem>
       )}
-
       {isPinned && isLiveComment && isMobile && (
         <MenuItem className="comment__menu-option menu__link" onSelect={handleDismissPin}>
           <Icon aria-hidden icon={ICONS.DISMISS_ALL} />
           {__('Dismiss Pin')}
         </MenuItem>
       )}
-
-      {activeChannelIsCreator &&
-        activeChannelClaim &&
-        activeChannelClaim.permanent_url !== authorUri &&
-        activeChannelClaim.permanent_url.indexOf(authorUri.replace('#', ':')) !== -1 && (
-          <MenuItem className="comment__menu-option" onSelect={assignAsModerator}>
-            <div className="menu__link">
-              <Icon aria-hidden icon={ICONS.ADD} />
-              {__('Add as moderator')}
-            </div>
-            <span className="comment__menu-help">
-              {activeChannelClaim
-                ? __('Assign this user to moderate %channel%.', { channel: activeChannelClaim.name })
-                : __('Assign this user to moderate your channel.')}
-            </span>
-          </MenuItem>
-        )}
-
+      // todo: filter out already active mods (bug with activeModeratorInfo?)
+      {activeChannelIsCreator && activeChannelClaim && activeChannelClaim.permanent_url !== authorUri && (
+        <MenuItem className="comment__menu-option" onSelect={assignAsModerator}>
+          <div className="menu__link">
+            <Icon aria-hidden icon={ICONS.ADD} />
+            {__('Add as moderator')}
+          </div>
+          <span className="comment__menu-help">
+            {activeChannelClaim
+              ? __('Assign this user to moderate %channel%.', { channel: activeChannelClaim.name })
+              : __('Assign this user to moderate your channel.')}
+          </span>
+        </MenuItem>
+      )}
       {commentIsMine && activeChannelClaim && activeChannelClaim.permanent_url === authorUri && !disableEdit && (
         <MenuItem className="comment__menu-option menu__link" onSelect={handleEditComment}>
           <Icon aria-hidden icon={ICONS.EDIT} />
           {__('Edit')}
         </MenuItem>
       )}
-
       {!disableRemove &&
         activeChannelClaim &&
         (activeChannelIsModerator ||
@@ -293,8 +285,7 @@ function CommentMenuList(props: Props) {
             </div>
           </MenuItem>
         )}
-
-      {!commentIsMine && !claimIsMine && (
+      {!commentIsMine && !channelIsMine && (
         <>
           <MenuItem
             className="comment__menu-option"
@@ -319,7 +310,6 @@ function CommentMenuList(props: Props) {
           </MenuItem>
         </>
       )}
-
       {isLiveComment && !commentIsMine && channelIsMine && (
         <MenuItem className="comment__menu-option" onSelect={() => doSetActiveChannel(authorId)}>
           <div className="menu__link">
@@ -328,7 +318,6 @@ function CommentMenuList(props: Props) {
           </div>
         </MenuItem>
       )}
-
       {IS_WEB && !isLiveComment && (
         <MenuItem className="comment__menu-option" onSelect={handleCopyCommentLink}>
           <div className="menu__link">
@@ -337,7 +326,6 @@ function CommentMenuList(props: Props) {
           </div>
         </MenuItem>
       )}
-
       {activeChannelClaim && !isLiveComment && (
         <div className="comment__menu-active">
           <ChannelThumbnail xsmall noLazyLoad uri={activeChannelClaim.permanent_url} />
