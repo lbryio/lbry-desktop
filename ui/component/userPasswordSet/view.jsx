@@ -7,7 +7,7 @@ import Card from 'component/common/card';
 import { Form, FormField } from 'component/common/form';
 import ErrorText from 'component/common/error-text';
 import Button from 'component/button';
-import Nag from 'component/common/nag';
+import Nag from 'component/nag';
 import Spinner from 'component/spinner';
 
 type Props = {
@@ -15,7 +15,7 @@ type Props = {
   doClearEmailEntry: () => void,
   doUserFetch: () => void,
   doToast: ({ message: string }) => void,
-  history: { push: string => void },
+  history: { push: (string) => void },
   location: { search: string },
   passwordSetPending: boolean,
   passwordSetError: ?string,
@@ -58,7 +58,7 @@ function UserPasswordReset(props: Props) {
         });
         push(`/`);
       })
-      .catch(error => {
+      .catch((error) => {
         setLoading(false);
         setError(error.message);
       });
@@ -83,7 +83,7 @@ function UserPasswordReset(props: Props) {
                 name="password_set"
                 label={__('New Password')}
                 value={password}
-                onChange={e => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
               />
 
               <div className="section__actions">

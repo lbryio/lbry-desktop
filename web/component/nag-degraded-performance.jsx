@@ -1,7 +1,7 @@
 // @flow
 import { DOMAIN } from 'config';
 import React from 'react';
-import Nag from 'component/common/nag';
+import Nag from 'component/nag';
 import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
 

@@ -6,7 +6,7 @@ import { Lbryio } from 'lbryinc';
 import Card from 'component/common/card';
 import LbcSymbol from 'component/common/lbc-symbol';
 import Spinner from 'component/spinner';
-import Nag from 'component/common/nag';
+import Nag from 'component/nag';
 import CopyableText from 'component/copyableText';
 import Icon from 'component/common/icon';
 import QRCode from 'component/common/qr-code';

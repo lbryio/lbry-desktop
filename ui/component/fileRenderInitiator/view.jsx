@@ -9,7 +9,7 @@ import classnames from 'classnames';
 import * as PAGES from 'constants/pages';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import Button from 'component/button';
-import Nag from 'component/common/nag';
+import Nag from 'component/nag';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
 import { LivestreamContext } from 'page/livestream/view';
 import { formatLbryUrlForWeb } from 'util/url';

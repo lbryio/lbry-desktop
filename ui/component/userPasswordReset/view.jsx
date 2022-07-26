@@ -8,12 +8,12 @@ import { Form, FormField } from 'component/common/form';
 import { EMAIL_REGEX } from 'constants/email';
 import ErrorText from 'component/common/error-text';
 import Button from 'component/button';
-import Nag from 'component/common/nag';
+import Nag from 'component/nag';
 
 type Props = {
   user: ?User,
   doToast: ({ message: string }) => void,
-  doUserPasswordReset: string => void,
+  doUserPasswordReset: (string) => void,
   doClearPasswordEntry: () => void,
   doClearEmailEntry: () => void,
   passwordResetPending: boolean,
@@ -80,7 +80,7 @@ function UserPasswordReset(props: Props) {
                 autoComplete="on"
                 label={__('Email')}
                 value={email}
-                onChange={e => setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
               />
 
               <div className="section__actions">

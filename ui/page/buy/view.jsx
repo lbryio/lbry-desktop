@@ -11,7 +11,7 @@ import { FormField } from 'component/common/form';
 import { SUPPORTED_MOONPAY_COUNTRIES } from 'constants/moonpay';
 import { useHistory } from 'react-router';
 import Button from 'component/button';
-import Nag from 'component/common/nag';
+import Nag from 'component/nag';
 import LbcSymbol from 'component/common/lbc-symbol';
 import { SIMPLE_SITE } from 'config';
 // import classnames from 'classnames';

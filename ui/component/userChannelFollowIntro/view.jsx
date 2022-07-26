@@ -6,7 +6,7 @@ import { COMMUNITY_CHANNELS } from 'constants/channels';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import ClaimListDiscover from 'component/claimListDiscover';
-import Nag from 'component/common/nag';
+import Nag from 'component/nag';
 import React from 'react';
 
 type Props = {

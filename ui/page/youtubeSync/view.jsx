@@ -13,7 +13,7 @@ import { isNameValid } from 'util/lbryURI';
 import { Lbryio } from 'lbryinc';
 import { useHistory } from 'react-router';
 import YoutubeTransferStatus from 'component/youtubeTransferStatus';
-import Nag from 'component/common/nag';
+import Nag from 'component/nag';
 import { getDefaultLanguage, sortLanguageMap } from 'util/default-languages';
 
 const STATUS_TOKEN_PARAM = 'status_token';
