@@ -252,7 +252,7 @@ function CommentMenuList(props: Props) {
           {__('Dismiss Pin')}
         </MenuItem>
       )}
-      // todo: filter out already active mods (bug with activeModeratorInfo?)
+      {/* todo: filter out already active mods (bug with activeModeratorInfo?) */}
       {activeChannelIsCreator && activeChannelClaim && activeChannelClaim.permanent_url !== authorUri && (
         <MenuItem className="comment__menu-option" onSelect={assignAsModerator}>
           <div className="menu__link">
