@@ -28,6 +28,10 @@
   flex-direction: row;
   width: 100%;
 
+  .avp-view.avp-horizontal {
+    cursor: pointer !important;
+  }
+
   .ad__container {
     aspect-ratio: 16 / 9;
     $minWidth: calc(var(--file-list-thumbnail-width) * 0.8);
@@ -37,6 +41,24 @@
     background-size: 100%;
     border-radius: var(--border-radius);
     box-shadow: 0 0 0 1px var(--color-header-background) inset;
+
+    .avp-floating-container {
+      background: unset !important;
+      .avp-content-container {
+        background: unset !important;
+        div {
+          background: unset !important;
+        }
+      }
+    }
+
+    .avp-close-button-overlay {
+      &:hover {
+        svg {
+          fill: var(--color-primary);
+        }
+      }
+    }
 
     video {
       width: 100% !important;
@@ -58,6 +80,12 @@
     @media (min-width: $breakpoint-large) {
       $width: calc(var(--file-list-thumbnail-width) * 1.2);
       width: $width;
+
+      canvas {
+        width: 100% !important;
+        height: 100% !important;
+        border-radius: var(--border-radius);
+      }
     }
   }
 }
