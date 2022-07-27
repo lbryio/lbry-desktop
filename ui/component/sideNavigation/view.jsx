@@ -453,14 +453,14 @@ function SideNavigation(props: Props) {
     }
 
     const ad = document.getElementsByClassName('OUTBRAIN')[0];
-    if (!isMobile && ad) {
-      if (!sidebarOpen) {
+    if (ad) {
+      if (!sidebarOpen || isMobile) {
         ad.classList.add('LEFT');
       } else {
         ad.classList.remove('LEFT');
       }
     }
-  }, [sidebarOpen]);
+  }, [sidebarOpen, isMobile]);
 
   React.useEffect(() => {
     doFetchLastActiveSubs();

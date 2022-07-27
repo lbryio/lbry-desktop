@@ -423,7 +423,7 @@ function App(props: Props) {
       const ad = document.getElementsByClassName('OUTBRAIN')[0];
       if (ad) {
         if (!nagsShown) ad.classList.add('VISIBLE');
-        if (!sidebarOpen) ad.classList.add('LEFT');
+        if (!sidebarOpen || isMobile) ad.classList.add('LEFT');
       }
       return;
     }
