@@ -447,7 +447,7 @@ function App(props: Props) {
     window.gdprCallback = () => {
       if (window.OnetrustActiveGroups.indexOf('C0002') !== -1 || window.OnetrustActiveGroups.indexOf('C0002') !== -1) {
         const ad = document.getElementsByClassName('OUTBRAIN')[0];
-        if (ad) ad.classList.add('VISIBLE');
+        if (ad && !window.nagsShown) ad.classList.add('VISIBLE');
       }
     };
     // $FlowFixMe
@@ -482,6 +482,7 @@ function App(props: Props) {
   }, [locale]);
 
   useEffect(() => {
+    window.nagsShown = nagsShown;
     if (nagsShown) {
       const ad = document.getElementsByClassName('VISIBLE')[0];
       if (ad) ad.classList.remove('VISIBLE');
