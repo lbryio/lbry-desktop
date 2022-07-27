@@ -88,6 +88,7 @@ type Props = {
   fetchModAmIList: () => void,
   homepageFetched: boolean,
   defaultChannelClaim: ?any,
+  nagsShown: boolean,
   doOpenAnnouncements: () => void,
   doSetLastViewedAnnouncement: (hash: string) => void,
   doSetDefaultChannel: (claimId: string) => void,
@@ -124,6 +125,7 @@ function App(props: Props) {
     fetchModAmIList,
     homepageFetched,
     defaultChannelClaim,
+    nagsShown,
     doOpenAnnouncements,
     doSetLastViewedAnnouncement,
     doSetDefaultChannel,
@@ -141,6 +143,7 @@ function App(props: Props) {
   const [localeLangs, setLocaleLangs] = React.useState();
   const [localeSwitchDismissed] = usePersistedState('locale-switch-dismissed', false);
   const [lbryTvApiStatus, setLbryTvApiStatus] = useState(STATUS_OK);
+  const [sidebarOpen] = usePersistedState('sidebar', false);
 
   const { pathname, hash, search, hostname } = location;
   const [retryingSync, setRetryingSync] = useState(false);
@@ -418,7 +421,10 @@ function App(props: Props) {
 
     if (inIframe() || !locale || !locale.gdpr_required) {
       const ad = document.getElementsByClassName('OUTBRAIN')[0];
-      if (ad) ad.classList.add('VISIBLE');
+      if (ad) {
+        if (!nagsShown) ad.classList.add('VISIBLE');
+        if (!sidebarOpen || isMobile) ad.classList.add('LEFT');
+      }
       return;
     }
 
@@ -439,9 +445,9 @@ function App(props: Props) {
     secondScript.innerHTML = 'function OptanonWrapper() { window.gdprCallback() }';
 
     window.gdprCallback = () => {
-      const ad = document.getElementsByClassName('OUTBRAIN')[0];
       if (window.OnetrustActiveGroups.indexOf('C0002') !== -1 || window.OnetrustActiveGroups.indexOf('C0002') !== -1) {
-        if (ad) ad.classList.add('VISIBLE');
+        const ad = document.getElementsByClassName('OUTBRAIN')[0];
+        if (ad && !window.nagsShown) ad.classList.add('VISIBLE');
       }
     };
     // $FlowFixMe
@@ -474,6 +480,17 @@ function App(props: Props) {
       }
     }
   }, [locale]);
+
+  useEffect(() => {
+    window.nagsShown = nagsShown;
+    if (nagsShown) {
+      const ad = document.getElementsByClassName('VISIBLE')[0];
+      if (ad) ad.classList.remove('VISIBLE');
+    } else {
+      const ad = document.getElementsByClassName('OUTBRAIN')[0];
+      if (ad) ad.classList.add('VISIBLE');
+    }
+  }, [nagsShown]);
 
   // ready for sync syncs, however after signin when hasVerifiedEmail, that syncs too.
   useEffect(() => {
