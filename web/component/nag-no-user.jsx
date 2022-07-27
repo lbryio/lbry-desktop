@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import Nag from 'component/common/nag';
+import Nag from 'component/nag';
 
 export default function NagNoUser() {
   return (

@@ -1,7 +1,7 @@
 // @flow
 import * as PAGES from 'constants/pages';
 import React from 'react';
-import Nag from 'component/common/nag';
+import Nag from 'component/nag';
 import { useHistory } from 'react-router';
 
 type Props = {

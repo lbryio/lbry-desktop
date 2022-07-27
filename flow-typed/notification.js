@@ -96,6 +96,7 @@ declare type NotificationState = {
   notifications: Array<Notification>,
   errors: Array<ErrorNotification>,
   toasts: Array<Toast>,
+  nagIds: Array<string>,
 };
 
 declare type WebNotification = {

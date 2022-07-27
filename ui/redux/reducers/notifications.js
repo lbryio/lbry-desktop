@@ -9,6 +9,7 @@ const defaultState: NotificationState = {
   fetchingNotifications: false,
   toasts: [],
   errors: [],
+  nagIds: [],
 };
 
 export default handleActions(
@@ -152,6 +153,27 @@ export default handleActions(
         ...state,
         errors: newErrors,
       };
+    },
+    [ACTIONS.NAG_SHOWN]: (state: NotificationState, action: any) => {
+      const id = action.data;
+      if (!state.nagIds.includes(id)) {
+        const nagIds = state.nagIds.slice();
+        nagIds.push(id);
+        return { ...state, nagIds };
+      } else {
+        return state;
+      }
+    },
+    [ACTIONS.NAG_DISMISSED]: (state: NotificationState, action: any) => {
+      const id = action.data;
+      if (state.nagIds.includes(id)) {
+        return {
+          ...state,
+          nagIds: state.nagIds.filter((x) => x !== id),
+        };
+      } else {
+        return state;
+      }
     },
   },
   defaultState

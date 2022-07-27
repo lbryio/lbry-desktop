@@ -10,7 +10,7 @@ import I18nMessage from 'component/i18nMessage';
 import { useHistory } from 'react-router-dom';
 import Card from 'component/common/card';
 import ErrorText from 'component/common/error-text';
-import Nag from 'component/common/nag';
+import Nag from 'component/nag';
 import classnames from 'classnames';
 import LoginGraphic from 'component/loginGraphic';
 

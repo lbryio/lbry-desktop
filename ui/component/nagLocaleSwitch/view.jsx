@@ -2,7 +2,7 @@
 import { FormField } from 'component/common/form';
 import * as MODALS from 'constants/modal_types';
 import HOMEPAGE_LANGUAGES, { getHomepageLanguage } from 'constants/homepage_languages';
-import Nag from 'component/common/nag';
+import Nag from 'component/nag';
 import React from 'react';
 import usePersistedState from 'effects/use-persisted-state';
 import { getLanguageEngName, getLanguageName } from 'constants/languages';

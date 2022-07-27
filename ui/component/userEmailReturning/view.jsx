@@ -8,7 +8,7 @@ import { EMAIL_REGEX } from 'constants/email';
 import { useHistory } from 'react-router-dom';
 import UserEmailVerify from 'component/userEmailVerify';
 import Card from 'component/common/card';
-import Nag from 'component/common/nag';
+import Nag from 'component/nag';
 import classnames from 'classnames';
 import LoginGraphic from 'component/loginGraphic';
 

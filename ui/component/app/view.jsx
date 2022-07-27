@@ -15,7 +15,7 @@ import Yrbl from 'component/yrbl';
 import FileRenderFloating from 'component/fileRenderFloating';
 import { withRouter } from 'react-router';
 import usePrevious from 'effects/use-previous';
-import Nag from 'component/common/nag';
+import Nag from 'component/nag';
 import REWARDS from 'rewards';
 import usePersistedState from 'effects/use-persisted-state';
 import useConnectionStatus from 'effects/use-connection-status';

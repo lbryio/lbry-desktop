@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import Nag from 'component/common/nag';
+import Nag from 'component/nag';
 import I18nMessage from 'component/i18nMessage';
 import * as PAGES from 'constants/pages';
 import { useHistory } from 'react-router';

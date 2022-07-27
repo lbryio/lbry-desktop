@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import Nag from 'component/common/nag';
+import Nag from 'component/nag';
 import TagsSelect from 'component/tagsSelect';
 import Button from 'component/button';
 import { Form } from 'component/common/form';

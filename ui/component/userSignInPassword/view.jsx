@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import Card from 'component/common/card';
-import Nag from 'component/common/nag';
+import Nag from 'component/nag';
 import UserPasswordReset from 'component/userPasswordReset';
 
 type Props = {

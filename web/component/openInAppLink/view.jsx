@@ -2,7 +2,7 @@
 import React from 'react';
 import { withRouter } from 'react-router';
 import { formatWebUrlIntoLbryUrl } from 'util/url';
-import Nag from 'component/common/nag';
+import Nag from 'component/nag';
 import usePersistedState from 'effects/use-persisted-state';
 
 const userAgent = navigator.userAgent.toLowerCase();
@@ -13,7 +13,7 @@ const addDaysToMs = (initialNumberInMs: number, daysToAdd: number) => {
 };
 
 type Props = {
-  history: { replace: string => void, push: string => void },
+  history: { replace: (string) => void, push: (string) => void },
   location: { search: string, pathname: string },
   uri: string,
   user: ?User,
@@ -36,7 +36,7 @@ function OpenInAppLink(props: Props) {
   let isDesktopUser = false;
   user &&
     user.device_types &&
-    user.device_types.forEach(usedDevice => {
+    user.device_types.forEach((usedDevice) => {
       if (usedDevice === 'mobile') {
         isAndroidUser = true;
       } else if (usedDevice === 'desktop') {
