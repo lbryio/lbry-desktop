@@ -18,6 +18,7 @@ import {
   selectThemePath,
   selectDefaultChannelClaim,
 } from 'redux/selectors/settings';
+import { selectAnyNagsShown } from 'redux/selectors/notifications';
 import { selectModal, selectActiveChannelClaim, selectIsReloadRequired } from 'redux/selectors/app';
 import { selectUploadCount } from 'redux/selectors/publish';
 import { doOpenAnnouncements, doSetLanguage, doSetDefaultChannel } from 'redux/actions/settings';
@@ -45,6 +46,7 @@ const select = (state) => ({
   myChannelClaimIds: selectMyChannelClaimIds(state),
   homepageFetched: selectHomepageFetched(state),
   defaultChannelClaim: selectDefaultChannelClaim(state),
+  nagsShown: selectAnyNagsShown(state),
 });
 
 const perform = {

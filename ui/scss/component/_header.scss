@@ -341,7 +341,7 @@
   }
 
   @media (max-width: $breakpoint-small) {
-    // margin: 0;
+    margin-right: 0;
     width: calc(var(--header-height-mobile) - var(--spacing-m));
     height: calc(var(--header-height-mobile) - var(--spacing-m));
   }

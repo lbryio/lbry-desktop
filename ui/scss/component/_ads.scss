@@ -536,6 +536,13 @@ $BANNER_BORDER: 1px;
       bottom: var(--spacing-s) !important;
       right: unset !important;
       left: calc(var(--spacing-s) + 230px) !important;
+
+      &.ob-mobile-read-next {
+        width: 388px !important;
+        .ob-widget-items-container {
+          border-radius: var(--border-radius);
+        }
+      }
     }
 
     @media (max-width: $breakpoint-small) {
