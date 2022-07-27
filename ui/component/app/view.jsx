@@ -421,9 +421,8 @@ function App(props: Props) {
 
     if (inIframe() || !locale || !locale.gdpr_required) {
       const ad = document.getElementsByClassName('OUTBRAIN')[0];
-      console.log('nags: ', nagsShown);
       if (ad) {
-        ad.classList.add('VISIBLE');
+        if (!nagsShown) ad.classList.add('VISIBLE');
         if (!sidebarOpen) ad.classList.add('LEFT');
       }
       return;

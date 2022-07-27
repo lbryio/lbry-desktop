@@ -1,8 +1,9 @@
-import { connect } from 'react-redux';
 import AdsSticky from './view';
+import { connect } from 'react-redux';
 import { doSetAdBlockerFound } from 'redux/actions/app';
-import { selectClaimForUri } from 'redux/selectors/claims';
 import { selectAdBlockerFound } from 'redux/selectors/app';
+import { selectClaimForUri } from 'redux/selectors/claims';
+import { selectAnyNagsShown } from 'redux/selectors/notifications';
 import { selectHomepageData } from 'redux/selectors/settings';
 import {
   selectOdyseeMembershipIsPremiumPlus,
@@ -24,6 +25,7 @@ const select = (state, props) => {
     userCountry: selectUserCountry(state),
     homepageData: selectHomepageData(state),
     locale: selectUserLocale(state),
+    nagsShown: selectAnyNagsShown(state),
   };
 };
 
