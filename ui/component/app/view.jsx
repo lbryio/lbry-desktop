@@ -34,7 +34,6 @@ import LANGUAGE_MIGRATIONS from 'constants/language-migrations';
 import { useIsMobile } from 'effects/use-screensize';
 import getLanguagesForCountry from 'constants/country_languages';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
-import TemporaryImport from 'static/img/cookie.svg';
 
 const FileDrop = lazyImport(() => import('component/fileDrop' /* webpackChunkName: "fileDrop" */));
 const NagContinueFirstRun = lazyImport(() => import('component/nagContinueFirstRun' /* webpackChunkName: "nagCFR" */));
