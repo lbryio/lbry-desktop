@@ -727,10 +727,28 @@ export const selectTagsForUri = createCachedSelector(selectMetadataForUri, (meta
   return metadata && metadata.tags ? metadata.tags.filter((tag) => !INTERNAL_TAGS.includes(tag)) : [];
 })((state, uri) => String(uri));
 
+export const selectPurchaseTagForUri = createCachedSelector(selectMetadataForUri, (metadata: ?GenericMetadata) => {
+  const matchingTag = metadata && metadata.tags && metadata.tags.find((tag) => tag.includes('purchase:'));
+  if (matchingTag) return matchingTag.slice(9);
+})((state, uri) => String(uri));
+
 export const selectPreorderTagForUri = createCachedSelector(selectMetadataForUri, (metadata: ?GenericMetadata) => {
   const matchingTag = metadata && metadata.tags && metadata.tags.find((tag) => tag.includes('preorder:'));
   if (matchingTag) return matchingTag.slice(9);
 })((state, uri) => String(uri));
+
+export const selectPreorderedTagForUri = createCachedSelector(selectMetadataForUri, (metadata: ?GenericMetadata) => {
+  const matchingTag = metadata && metadata.tags && metadata.tags.find((tag) => tag.includes('preordered:'));
+  if (matchingTag) return matchingTag.slice(9);
+})((state, uri) => String(uri));
+
+export const selectPreorderContentClaimIdForUri = createCachedSelector(
+  selectMetadataForUri,
+  (metadata: ?GenericMetadata) => {
+    const matchingTag = metadata && metadata.tags && metadata.tags.find((tag) => tag.includes('full upload:'));
+    if (matchingTag) return matchingTag.slice(12);
+  }
+)((state, uri) => String(uri));
 
 export const selectFetchingClaimSearchByQuery = (state: State) => selectState(state).fetchingClaimSearchByQuery || {};
 
@@ -914,4 +932,12 @@ export const selectTakeOverAmountForName = (state: State, name: string) => {
   const winningClaim = selectClaimForUri(state, shortUri);
 
   return winningClaim ? winningClaim.meta.effective_amount || winningClaim.amount : null;
+};
+
+export const selectMyPurchasedClaims = createSelector(selectState, (state) => state.myPurchasedClaims || []);
+
+export const selectPurchaseMadeForClaimId = (state: State, claimId: string) => {
+  const purchasedClaimIds = selectMyPurchasedClaims(state);
+
+  return purchasedClaimIds && purchasedClaimIds.includes(claimId);
 };

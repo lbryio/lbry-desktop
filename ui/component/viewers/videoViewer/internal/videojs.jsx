@@ -106,6 +106,7 @@ type Props = {
   userClaimId: ?string,
   activeLivestreamForChannel: any,
   doToast: ({ message: string, linkText: string, linkTarget: string }) => void,
+  isPurchasedContent: boolean,
 };
 
 const VIDEOJS_VOLUME_PANEL_CLASS = 'VolumePanel';
@@ -166,6 +167,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     isLivestreamClaim,
     activeLivestreamForChannel,
     doToast,
+    isPurchasedContent,
   } = props;
 
   // used to notify about default quality setting
@@ -441,6 +443,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       vjsPlayer.el().childNodes[0].setAttribute('playsinline', '');
 
+      console.log(source);
+
       let contentUrl;
       // TODO: pull this function into videojs-functions
       // determine which source to use and load it
@@ -499,6 +503,12 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       if (canUseOldPlayer) {
         // $FlowIssue
         document.querySelector('.video-js-parent')?.append(window.oldSavedDiv);
+      }
+
+      // disable right-click (context-menu) for purchased content
+      if (isPurchasedContent) {
+        const player = document.querySelector('video.vjs-tech');
+        if (player) player.setAttribute('oncontextmenu', 'return false;');
       }
 
       // allow tap to unmute if no perms on iOS

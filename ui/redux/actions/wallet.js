@@ -805,12 +805,13 @@ export const preOrderPurchase = (
   claimId,
   stripeEnvironment,
   preferredCurrency,
+  type,
   successCallback,
   failureCallback
 ) => (dispatch) => {
   Lbryio.call(
     'customer',
-    'tip',
+    'new_transaction',
     {
       // round to fix issues with floating point numbers
       amount: Math.round(100 * tipParams.tipAmount), // convert from dollars to cents
@@ -818,10 +819,13 @@ export const preOrderPurchase = (
       creator_channel_claim_id: tipParams.channelClaimId,
       tipper_channel_name: userParams.activeChannelName,
       tipper_channel_claim_id: userParams.activeChannelId,
-      currency: preferredCurrency || 'USD',
+      // currency: preferredCurrency || 'USD',
+      currency: 'USD', // hardcode to USD at the moment
       anonymous: anonymous,
       source_claim_id: claimId,
       environment: stripeEnvironment,
+      target_claim_id: claimId,
+      type,
     },
     'post'
   )

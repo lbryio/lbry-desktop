@@ -62,6 +62,9 @@ type State = {
   checkingPending: boolean,
   checkingReflecting: boolean,
   latestByUri: { [string]: any },
+  myPurchasedClaims: ?Array<string>,
+  fetchingMyPurchasedClaims: ?boolean,
+  fetchingMyPurchasedClaimsError: ?string,
 };
 
 const reducers = {};
@@ -111,6 +114,9 @@ const defaultState = {
   checkingPending: false,
   checkingReflecting: false,
   latestByUri: {},
+  myPurchasedClaims: [],
+  fetchingMyPurchasedClaims: undefined,
+  fetchingMyPurchasedClaimsError: undefined,
 };
 
 // ****************************************************************************
@@ -1036,3 +1042,26 @@ export function claimsReducer(state: State = defaultState, action: any) {
   if (handler) return handler(state, action);
   return state;
 }
+
+reducers[ACTIONS.CHECK_IF_PURCHASED_STARTED] = (state: State): State => {
+  return {
+    ...state,
+    fetchingMyPurchasedClaims: true,
+  };
+};
+
+reducers[ACTIONS.CHECK_IF_PURCHASED_FAILED] = (state: State, action: any): State => {
+  return Object.assign({}, state, {
+    fetchingMyPurchasedClaims: false,
+    fetchingMyPurchasedClaimsError: action.data,
+  });
+};
+
+reducers[ACTIONS.CHECK_IF_PURCHASED_COMPLETED] = (state: State, action: any): State => {
+  let oldPurchasedClaims = state.myPurchasedClaims || [];
+
+  return Object.assign({}, state, {
+    myPurchasedClaims: [...oldPurchasedClaims, action.data],
+    fetchingMyPurchasedClaims: false,
+  });
+};

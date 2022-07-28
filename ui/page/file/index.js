@@ -7,6 +7,7 @@ import {
   selectIsStreamPlaceholderForUri,
   selectClaimForUri,
   selectClaimWasPurchasedForUri,
+  selectPurchaseTagForUri,
 } from 'redux/selectors/claims';
 import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import { LINKED_COMMENT_QUERY_PARAM, THREAD_COMMENT_QUERY_PARAM } from 'constants/comment';
@@ -24,6 +25,7 @@ import { DISABLE_COMMENTS_TAG } from 'constants/tags';
 import { doToggleAppDrawer, doSetMainPlayerDimension } from 'redux/actions/app';
 import { getChannelIdFromClaim } from 'util/claim';
 import { doFileGet } from 'redux/actions/file';
+import { doCheckIfPurchasedClaimId } from 'redux/actions/claims';
 
 import FilePage from './view';
 
@@ -54,6 +56,8 @@ const select = (state, props) => {
     commentsListTitle: selectCommentsListTitleForUri(state, uri),
     claimWasPurchased: selectClaimWasPurchasedForUri(state, uri),
     isUriPlaying: selectIsUriCurrentlyPlaying(state, uri),
+    purchaseTag: selectPurchaseTagForUri(state, props.uri),
+    claimId: claim.claim_id,
   };
 };
 
@@ -65,6 +69,7 @@ const perform = {
   doToggleAppDrawer,
   doFileGet,
   doSetMainPlayerDimension,
+  doCheckIfPurchasedClaimId,
 };
 
 export default withRouter(connect(select, perform)(FilePage));

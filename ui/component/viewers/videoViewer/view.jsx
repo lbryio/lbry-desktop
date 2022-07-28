@@ -79,6 +79,8 @@ type Props = {
   doSetContentHistoryItem: (uri: string) => void,
   doClearContentHistoryUri: (uri: string) => void,
   currentPlaylistItemIndex: ?number,
+  isPurchasedContent: boolean,
+  purchaseMadeForClaimId: boolean,
 };
 
 /*
@@ -128,6 +130,8 @@ function VideoViewer(props: Props) {
     doToast,
     doSetContentHistoryItem,
     currentPlaylistItemIndex,
+    isPurchasedContent,
+    // purchaseMadeForClaimId,
   } = props;
 
   const playerEndedDuration = React.useRef();
@@ -623,6 +627,7 @@ function VideoViewer(props: Props) {
         activeLivestreamForChannel={activeLivestreamForChannel}
         defaultQuality={defaultQuality}
         doToast={doToast}
+        isPurchasedContent={isPurchasedContent}
       />
     </div>
   );

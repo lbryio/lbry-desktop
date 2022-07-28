@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectClaimForUri, selectThumbnailForUri } from 'redux/selectors/claims';
+import { selectClaimForUri, selectThumbnailForUri, selectPurchaseTagForUri, selectPurchaseMadeForClaimId } from 'redux/selectors/claims';
 import { isStreamPlaceholderClaim, getChannelIdFromClaim } from 'util/claim';
 import { selectActiveLivestreamForChannel } from 'redux/selectors/livestream';
 import {
@@ -75,6 +75,8 @@ const select = (state, props) => {
     isLivestreamClaim: isStreamPlaceholderClaim(claim),
     defaultQuality: selectClientSetting(state, SETTINGS.DEFAULT_VIDEO_QUALITY),
     currentPlaylistItemIndex: selectIndexForUrlInCollection(state, uri, collectionId),
+    isPurchasedContent: Boolean(selectPurchaseTagForUri(state, props.uri)),
+    purchaseMadeForClaimId: selectPurchaseMadeForClaimId(state, claim.claim_id),
   };
 };
 

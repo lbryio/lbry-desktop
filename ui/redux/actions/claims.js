@@ -24,6 +24,9 @@ import { createNormalizedClaimSearchKey } from 'util/claim';
 import { PAGE_SIZE } from 'constants/claim';
 import { selectClaimIdsForCollectionId } from 'redux/selectors/collections';
 import { doFetchItemsInCollections } from 'redux/actions/collections';
+import { Lbryio } from 'lbryinc';
+import { getStripeEnvironment } from 'util/stripe';
+const stripeEnvironment = getStripeEnvironment();
 
 let onChannelConfirmCallback;
 let checkPendingInterval;
@@ -1161,3 +1164,40 @@ export const doFetchLatestClaimForChannel = (uri: string, isEmbed?: boolean) => 
     )
     .catch(() => dispatch({ type: ACTIONS.FETCH_LATEST_FOR_CHANNEL_FAIL }));
 };
+
+export function doCheckIfPurchasedClaimId(claimId: string) {
+  return async (dispatch: Dispatch) => {
+    dispatch({
+      type: ACTIONS.CHECK_IF_PURCHASED_STARTED,
+    });
+
+    // we'll check if there's anything for the targeted id
+    // if we're on a preorder and there is, build the purchase url with the reference (if exists)
+    // if we're on a purchase and there is, show the video
+    try {
+      const response = await Lbryio.call(
+        'customer',
+        'list',
+        {
+          environment: stripeEnvironment,
+          target_claim_id_filter: claimId,
+        },
+        'post'
+      );
+
+      let matchingClaimId = response && response.length && response[0].target_claim_id;
+
+      return dispatch({
+        type: ACTIONS.CHECK_IF_PURCHASED_COMPLETED,
+        data: matchingClaimId,
+      });
+    } catch (err) {
+      return dispatch({
+        type: ACTIONS.CHECK_IF_PURCHASED_FAILED,
+        data: {
+          error: err.message,
+        },
+      });
+    }
+  };
+}
