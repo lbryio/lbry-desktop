@@ -40,6 +40,7 @@ const CollectionItemsList = (props: Props) => {
 
   const urlsReady = collectionUrls && (totalItems === undefined || totalItems === collectionUrls.length);
   const shouldFetchItems = isPrivateCollection || isEditedCollection || (!urlsReady && collectionId && !collection);
+  const didInitialFetch = React.useRef(!shouldFetchItems);
 
   function handleOnDragEnd(result: any) {
     const { source, destination } = result;
@@ -52,8 +53,9 @@ const CollectionItemsList = (props: Props) => {
     doCollectionEdit(collectionId, { order: { from, to } });
   }
   React.useEffect(() => {
-    if (shouldFetchItems) {
+    if (shouldFetchItems && !didInitialFetch.current) {
       doFetchItemsInCollection({ collectionId });
+      didInitialFetch.current = true;
     }
   }, [collectionId, doFetchItemsInCollection, shouldFetchItems]);
 
