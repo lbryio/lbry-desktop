@@ -300,6 +300,7 @@ export const doFetchItemsInCollections = (resolveItemsOptions: {
         name: title || name,
         itemCount: claim.value.claims.length,
         type: collectionType,
+        createdAt: claim.meta?.creation_timestamp,
         updatedAt: timestamp,
         description,
         thumbnail,
