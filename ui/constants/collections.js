@@ -33,7 +33,7 @@ export const COL_KEY_UPDATED = 'updated';
 export const COL_KEY_UNPUBLISHED = 'unpublished';
 export const COL_KEY_PUBLISHED = 'published';
 export const COL_KEY_PENDING = 'pending';
-export const COL_KEY_SAVED = 'saved';
+export const COL_KEY_SAVED = 'savedIds';
 
 export const PLAYLIST_ICONS = {
   [FAVORITES_ID]: ICONS.STAR,

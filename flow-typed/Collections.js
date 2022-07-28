@@ -21,7 +21,7 @@ declare type CollectionState = {
   resolved: CollectionGroup,
   pending: CollectionGroup,
   edited: CollectionGroup,
-  updated: CollectionGroup,
+  updated: UpdatedCollectionGroup,
   builtin: CollectionGroup,
   savedIds: Array<string>,
   resolvingById: { [id: string]: boolean },
@@ -30,7 +30,11 @@ declare type CollectionState = {
 };
 
 declare type CollectionGroup = {
-  [string]: Collection,
+  [id: string]: Collection,
+};
+
+declare type UpdatedCollectionGroup = {
+  [id: string]: UpdatedCollection,
 };
 
 declare type UpdatedCollection = {

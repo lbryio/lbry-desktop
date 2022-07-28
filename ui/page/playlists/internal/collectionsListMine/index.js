@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {
-  selectMyPublishedPlaylistCollections,
+  selectMyPublishedCollections,
   selectMyUnpublishedCollections,
   selectMyEditedCollections,
   selectMyUpdatedCollections,
@@ -15,7 +15,7 @@ import { doFetchItemsInCollections } from 'redux/actions/collections';
 import CollectionsListMine from './view';
 
 const select = (state) => ({
-  publishedCollections: selectMyPublishedPlaylistCollections(state),
+  publishedCollections: selectMyPublishedCollections(state),
   unpublishedCollections: selectMyUnpublishedCollections(state),
   editedCollections: selectMyEditedCollections(state),
   updatedCollections: selectMyUpdatedCollections(state),

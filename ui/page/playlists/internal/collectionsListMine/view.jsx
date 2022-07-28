@@ -106,18 +106,17 @@ export default function CollectionsListMine(props: Props) {
     }
 
     return result.sort((a, b) => {
-      const itemA =
-        updatedCollections[a] ||
-        unpublishedCollections[a] ||
-        publishedCollections[a] ||
-        editedCollections[a] ||
-        savedCollections[a];
-      const itemB =
-        updatedCollections[b] ||
-        unpublishedCollections[b] ||
-        publishedCollections[b] ||
-        editedCollections[b] ||
-        savedCollections[b];
+      const itemA = Object.assign(
+        {},
+        unpublishedCollections[a] || publishedCollections[a] || editedCollections[a] || savedCollections[a]
+      );
+      const itemB = Object.assign(
+        {},
+        unpublishedCollections[b] || publishedCollections[b] || editedCollections[b] || savedCollections[b]
+      );
+      if (updatedCollections[a]) Object.assign(itemA, updatedCollections[a]);
+      if (updatedCollections[b]) Object.assign(itemA, updatedCollections[b]);
+
       const firstItem =
         // Timestamps are reversed since newest timestamps will be higher, so show the highest number first
         [COLS.SORT_KEYS.UPDATED_AT, COLS.SORT_KEYS.CREATED_AT].includes(sortOption.key)

@@ -419,7 +419,7 @@ type SharedData = {
     sharing_3P?: boolean,
     unpublishedCollections: CollectionGroup,
     editedCollections: CollectionGroup,
-    updatedCollections: UpdatedCollection,
+    updatedCollections: UpdatedCollectionGroup,
     builtinCollections: CollectionGroup,
     savedCollectionIds: Array<string>,
     lastViewedAnnouncement: string,

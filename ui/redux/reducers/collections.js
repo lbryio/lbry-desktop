@@ -210,7 +210,7 @@ const collectionsReducer = handleActions(
     },
     [ACTIONS.COLLECTION_ITEMS_RESOLVE_COMPLETED]: (state, action) => {
       const { resolvedPrivateCollectionIds, resolvedCollections, failedCollectionIds } = action.data;
-      const { pending, edited, resolvingById, resolved } = state;
+      const { pending, edited, resolvingById, resolved, updated } = state;
       const newPending = Object.assign({}, pending);
       const newEdited = Object.assign({}, edited);
       const newResolved = Object.assign({}, resolved, resolvedCollections);
@@ -227,6 +227,9 @@ const collectionsReducer = handleActions(
           delete newResolving[resolvedId];
           if (newPending[resolvedId]) {
             delete newPending[resolvedId];
+          }
+          if (updated[resolvedId]['updatedAt'] < resolvedCollections[resolvedId]['updatedAt']) {
+            delete updated[resolvedId];
           }
         });
       }

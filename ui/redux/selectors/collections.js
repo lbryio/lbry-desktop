@@ -223,17 +223,6 @@ export const selectMyPublishedMixedCollections = createSelector(selectMyPublishe
   return myCollections;
 });
 
-export const selectMyPublishedPlaylistCollections = createSelector(selectMyPublishedCollections, (published) => {
-  const myCollections = fromEntries(
-    // $FlowFixMe
-    Object.entries(published).filter(([key, collection]) => {
-      // $FlowFixMe
-      return collection.type === COLLECTIONS_CONSTS.COL_TYPES.PLAYLIST;
-    })
-  );
-  return myCollections;
-});
-
 export const selectMyPublishedCollectionForId = (state: State, id: string) => {
   const myPublishedCollections = selectMyPublishedCollections(state);
   return myPublishedCollections[id];
