@@ -237,20 +237,20 @@ export const doFetchItemsInCollections = (resolveItemsOptions: {
         const collectionItem: CollectionItemFetchResult = { claimId: collectionId, items: [] };
         collectionItemsById.push(collectionItem);
       }
+    }
+
+    const claim = selectClaimForClaimId(state, collectionId);
+    if (!claim) {
+      invalidCollectionIds.push(collectionId);
     } else {
-      const claim = selectClaimForClaimId(state, collectionId);
-      if (!claim) {
-        invalidCollectionIds.push(collectionId);
-      } else {
-        promisedCollectionItemFetches.push(
-          fetchItemsForCollectionClaim(
-            collectionId,
-            claim.value.claims && claim.value.claims.length,
-            claim.value.claims,
-            pageSize
-          )
-        );
-      }
+      promisedCollectionItemFetches.push(
+        fetchItemsForCollectionClaim(
+          collectionId,
+          claim.value.claims && claim.value.claims.length,
+          claim.value.claims,
+          pageSize
+        )
+      );
     }
   });
 
@@ -272,7 +272,7 @@ export const doFetchItemsInCollections = (resolveItemsOptions: {
     } else if (collectionItems) {
       const claim = selectClaimForClaimId(state, collectionId);
 
-      const editedCollection = selectEditedCollectionForId(state, collectionId);
+      const { items: editedCollectionItems } = selectEditedCollectionForId(state, collectionId) || {};
       const { name, timestamp, value } = claim || {};
       const { title, description, thumbnail } = value;
       const valueTypes = new Set();
@@ -303,17 +303,8 @@ export const doFetchItemsInCollections = (resolveItemsOptions: {
         updatedAt: timestamp,
         description,
         thumbnail,
+        key: editedCollectionItems === collectionItems ? 'edited' : undefined,
       };
-
-      if (editedCollection && timestamp > editedCollection['updatedAt']) {
-        dispatch({
-          type: ACTIONS.COLLECTION_DELETE,
-          data: {
-            id: collectionId,
-            collectionKey: 'edited',
-          },
-        });
-      }
     } else {
       invalidCollectionIds.push(collectionId);
     }

@@ -211,25 +211,34 @@ const collectionsReducer = handleActions(
     [ACTIONS.COLLECTION_ITEMS_RESOLVE_COMPLETED]: (state, action) => {
       const { resolvedPrivateCollectionIds, resolvedCollections, failedCollectionIds } = action.data;
       const { pending, edited, resolvingById, resolved, updated } = state;
+
+      const resolvedFiltered = {};
+      const editedResolved = {};
+      Object.entries(resolvedCollections).forEach(([key, val]) => {
+        // $FlowFixMe
+        if (val.key !== 'edited') {
+          resolvedFiltered[key] = val;
+        } else {
+          editedResolved[key] = val;
+        }
+      });
+
       const newPending = Object.assign({}, pending);
-      const newEdited = Object.assign({}, edited);
-      const newResolved = Object.assign({}, resolved, resolvedCollections);
+      const newResolved = Object.assign({}, resolved, resolvedFiltered);
+      const newEdited = Object.assign({}, edited, editedResolved);
 
       const resolvedIds = Object.keys(resolvedCollections);
       const newResolving = Object.assign({}, resolvingById);
       if (resolvedCollections && Object.keys(resolvedCollections).length) {
         resolvedIds.forEach((resolvedId) => {
-          if (newEdited[resolvedId]) {
-            if (newEdited[resolvedId]['updatedAt'] < resolvedCollections[resolvedId]['updatedAt']) {
-              delete newEdited[resolvedId];
+          if (updated[resolvedId]) {
+            if (updated[resolvedId]['updatedAt'] < resolvedCollections[resolvedId]['updatedAt']) {
+              delete updated[resolvedId];
             }
           }
           delete newResolving[resolvedId];
           if (newPending[resolvedId]) {
             delete newPending[resolvedId];
-          }
-          if (updated[resolvedId]['updatedAt'] < resolvedCollections[resolvedId]['updatedAt']) {
-            delete updated[resolvedId];
           }
         });
       }
