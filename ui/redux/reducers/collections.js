@@ -30,7 +30,7 @@ const defaultState: CollectionState = {
   updated: {},
   pending: {},
   savedIds: [],
-  isResolvingCollectionById: {},
+  resolvingById: {},
   error: null,
   queue: {
     items: [],
@@ -181,16 +181,14 @@ const collectionsReducer = handleActions(
 
     [ACTIONS.COLLECTION_ITEMS_RESOLVE_STARTED]: (state, action) => {
       const { ids } = action.data;
-      const { isResolvingCollectionById } = state;
-      const newResolving = Object.assign({}, isResolvingCollectionById);
+      const { resolvingById } = state;
+
+      const newResolving = Object.assign({}, resolvingById);
       ids.forEach((id) => {
         newResolving[id] = true;
       });
-      return Object.assign({}, state, {
-        ...state,
-        error: '',
-        isResolvingCollectionById: newResolving,
-      });
+
+      return { ...state, error: '', resolvingById: newResolving };
     },
     [ACTIONS.USER_STATE_POPULATE]: (state, action) => {
       const {
@@ -212,13 +210,13 @@ const collectionsReducer = handleActions(
     },
     [ACTIONS.COLLECTION_ITEMS_RESOLVE_COMPLETED]: (state, action) => {
       const { resolvedPrivateCollectionIds, resolvedCollections, failedCollectionIds } = action.data;
-      const { pending, edited, isResolvingCollectionById, resolved } = state;
+      const { pending, edited, resolvingById, resolved } = state;
       const newPending = Object.assign({}, pending);
       const newEdited = Object.assign({}, edited);
       const newResolved = Object.assign({}, resolved, resolvedCollections);
 
       const resolvedIds = Object.keys(resolvedCollections);
-      const newResolving = Object.assign({}, isResolvingCollectionById);
+      const newResolving = Object.assign({}, resolvingById);
       if (resolvedCollections && Object.keys(resolvedCollections).length) {
         resolvedIds.forEach((resolvedId) => {
           if (newEdited[resolvedId]) {
@@ -250,19 +248,19 @@ const collectionsReducer = handleActions(
         pending: newPending,
         resolved: newResolved,
         edited: newEdited,
-        isResolvingCollectionById: newResolving,
+        resolvingById: newResolving,
       });
     },
     [ACTIONS.COLLECTION_ITEMS_RESOLVE_FAILED]: (state, action) => {
       const { ids } = action.data;
-      const { isResolvingCollectionById } = state;
-      const newResolving = Object.assign({}, isResolvingCollectionById);
+      const { resolvingById } = state;
+      const newResolving = Object.assign({}, resolvingById);
       ids.forEach((id) => {
         delete newResolving[id];
       });
       return Object.assign({}, state, {
         ...state,
-        isResolvingCollectionById: newResolving,
+        resolvingById: newResolving,
         error: action.data.message,
       });
     },

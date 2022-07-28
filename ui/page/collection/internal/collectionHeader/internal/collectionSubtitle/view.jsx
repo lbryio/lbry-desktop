@@ -19,7 +19,7 @@ const CollectionTitle = (props: Props) => {
 
   return (
     <div>
-      {collectionCount ? (
+      {collectionCount || collectionCount === 0 ? (
         <span className="collection__subtitle">
           {collectionHasEdits
             ? __('Published count: %published_count%, edited count: %edited_count%', {

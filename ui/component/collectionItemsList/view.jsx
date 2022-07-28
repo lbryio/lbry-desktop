@@ -59,13 +59,11 @@ const CollectionItemsList = (props: Props) => {
 
   return (
     <React.Suspense fallback={null}>
-      {isResolvingCollection && (
+      {isResolvingCollection ? (
         <div className="main--empty">
           <Spinner />
         </div>
-      )}
-
-      {!isResolvingCollection && (
+      ) : (
         <Lazy.DragDropContext onDragEnd={handleOnDragEnd}>
           <Lazy.Droppable droppableId="list__ordering">
             {(DroppableProvided) => (

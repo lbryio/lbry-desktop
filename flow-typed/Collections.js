@@ -24,7 +24,7 @@ declare type CollectionState = {
   updated: CollectionGroup,
   builtin: CollectionGroup,
   savedIds: Array<string>,
-  isResolvingCollectionById: { [string]: boolean },
+  resolvingById: { [id: string]: boolean },
   error?: string | null,
   queue: Collection,
 };
@@ -73,5 +73,3 @@ declare type CollectionItemFetchResult = {
   claimId: string,
   items: ?Array<GenericClaim>,
 };
-
-declare type CollectionItemsFetchResult = Array<CollectionItemFetchResult>;

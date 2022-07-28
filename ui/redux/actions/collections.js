@@ -216,6 +216,7 @@ export const doFetchItemsInCollections = (resolveItemsOptions: {
 
   const invalidCollectionIds = [];
   const promisedCollectionItemFetches = [];
+  let collectionItemsById: Array<CollectionItemFetchResult> = [];
 
   // -- Collect requests for resolving items in each collection:
   collectionIds.forEach((collectionId) => {
@@ -232,6 +233,9 @@ export const doFetchItemsInCollections = (resolveItemsOptions: {
             pageSize
           )
         );
+      } else {
+        const collectionItem: CollectionItemFetchResult = { claimId: collectionId, items: [] };
+        collectionItemsById.push(collectionItem);
       }
     } else {
       const claim = selectClaimForClaimId(state, collectionId);
@@ -251,7 +255,7 @@ export const doFetchItemsInCollections = (resolveItemsOptions: {
   });
 
   // -- Await results:
-  const collectionItemsById: CollectionItemsFetchResult = await Promise.all(promisedCollectionItemFetches);
+  if (promisedCollectionItemFetches.length > 0) collectionItemsById = await Promise.all(promisedCollectionItemFetches);
 
   const newCollectionObjectsById = {};
   const resolvedItemsByUrl = {};
