@@ -1180,7 +1180,7 @@ export function doCheckIfPurchasedClaimId(claimId: string) {
         'list',
         {
           environment: stripeEnvironment,
-          target_claim_id_filter: claimId,
+          claim_id_filter: claimId,
         },
         'post'
       );
