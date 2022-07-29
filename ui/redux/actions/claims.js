@@ -1184,10 +1184,10 @@ export function doCheckIfPurchasedClaimId(claimId: string) {
         },
         'post'
       );
-      
+
       let matchingReferenceClaimId = response && response.length && response[0].reference_claim_id;
       let matchingClaimId = response && response.length && response[0].target_claim_id;
-      
+
       if (matchingReferenceClaimId && matchingReferenceClaimId !== '') {
         matchingClaimId = matchingReferenceClaimId;
       };
