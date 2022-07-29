@@ -2,6 +2,7 @@
 import React from 'react';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
+import Comment from 'component/comment';
 import Card from 'component/common/card';
 
 type Props = {
@@ -12,6 +13,7 @@ type Props = {
   supportAmount?: any,
   setQuickReply: (any) => void,
   // --- redux ---
+  comment?: Comment,
   doHideModal: () => void,
   doCommentAbandon: (string, Claim, ?boolean, ?Claim) => void,
 };
@@ -24,9 +26,18 @@ function ModalRemoveComment(props: Props) {
     creatorClaim,
     supportAmount,
     setQuickReply,
+    comment,
     doHideModal,
     doCommentAbandon,
   } = props;
+
+  function getCommentPreviews(comment: ?Comment) {
+    return comment ? (
+      <div className="section non-clickable">
+        <Comment comment={comment} isTopLevel hideActions hideContextMenu />
+      </div>
+    ) : null;
+  }
 
   return (
     <Modal isOpen contentLabel={__('Confirm Comment Deletion')} type="card" onAborted={doHideModal}>
@@ -40,6 +51,7 @@ function ModalRemoveComment(props: Props) {
                 {__('This comment has a tip associated with it which cannot be reverted.')}
               </p>
             )}
+            <div className="section--padded">{getCommentPreviews(comment)}</div>
           </React.Fragment>
         }
         actions={
