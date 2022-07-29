@@ -1,6 +1,13 @@
 import { connect } from 'react-redux';
 import { selectClaimForUri } from 'redux/selectors/claims';
-import { selectCollectionIsMine, selectCollectionIsEmptyForId } from 'redux/selectors/collections';
+import {
+  selectCollectionIsMine,
+  selectCollectionIsEmptyForId,
+  selectCollectionSavedForId,
+} from 'redux/selectors/collections';
+import { doOpenModal } from 'redux/actions/app';
+import { doToggleCollectionSavedForId } from 'redux/actions/collections';
+
 import CollectionActions from './view';
 
 const select = (state, props) => {
@@ -12,7 +19,13 @@ const select = (state, props) => {
     claimId,
     isMyCollection: selectCollectionIsMine(state, collectionId),
     collectionEmpty: selectCollectionIsEmptyForId(state, collectionId),
+    collectionSavedForId: selectCollectionSavedForId(state, collectionId),
   };
 };
 
-export default connect(select)(CollectionActions);
+const perform = {
+  doOpenModal,
+  doToggleCollectionSavedForId,
+};
+
+export default connect(select, perform)(CollectionActions);

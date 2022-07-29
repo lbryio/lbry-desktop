@@ -419,8 +419,9 @@ type SharedData = {
     sharing_3P?: boolean,
     unpublishedCollections: CollectionGroup,
     editedCollections: CollectionGroup,
+    updatedCollections: UpdatedCollectionGroup,
     builtinCollections: CollectionGroup,
-    savedCollections: Array<string>,
+    savedCollectionIds: Array<string>,
     lastViewedAnnouncement: string,
   },
 };
@@ -438,8 +439,9 @@ function extractUserState(rawObj: SharedData) {
       sharing_3P,
       unpublishedCollections,
       editedCollections,
+      updatedCollections,
       builtinCollections,
-      savedCollections,
+      savedCollectionIds,
       lastViewedAnnouncement,
     } = rawObj.value;
 
@@ -454,8 +456,9 @@ function extractUserState(rawObj: SharedData) {
       ...(sharing_3P ? { sharing_3P } : {}),
       ...(unpublishedCollections ? { unpublishedCollections } : {}),
       ...(editedCollections ? { editedCollections } : {}),
+      ...(updatedCollections ? { updatedCollections } : {}),
       ...(builtinCollections ? { builtinCollections } : {}),
-      ...(savedCollections ? { savedCollections } : {}),
+      ...(savedCollectionIds ? { savedCollectionIds } : {}),
       ...(lastViewedAnnouncement ? { lastViewedAnnouncement } : {}),
     };
   }
@@ -476,8 +479,9 @@ export function doPopulateSharedUserState(sharedSettings: any) {
       sharing_3P,
       unpublishedCollections,
       editedCollections,
+      updatedCollections,
       builtinCollections,
-      savedCollections,
+      savedCollectionIds,
       lastViewedAnnouncement,
     } = extractUserState(sharedSettings);
     dispatch({
@@ -493,8 +497,9 @@ export function doPopulateSharedUserState(sharedSettings: any) {
         allowAnalytics: sharing_3P,
         unpublishedCollections,
         editedCollections,
+        updatedCollections,
         builtinCollections,
-        savedCollections,
+        savedCollectionIds,
         lastViewedAnnouncement,
       },
     });

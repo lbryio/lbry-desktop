@@ -3427,7 +3427,8 @@ export const icons = {
         viewBox="0 0 48 48"
         width={size}
         height={size}
-        fill={color}
+        fill="none"
+        stroke={color}
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -3435,8 +3436,8 @@ export const icons = {
         {...otherProps}
       >
         <g transform="matrix(3.4285714285714284,0,0,3.4285714285714284,0,0)">
-          <rect x="0.5" y="0.5" width="10.5" height="10.5" rx="1" style={{ fill: 'none' }} />
-          <path d="M13.5,3.5v9a1,1,0,0,1-1,1h-9" style={{ fill: 'none' }} />
+          <rect x="0.5" y="0.5" width="10.5" height="10.5" rx="1" />
+          <path d="M13.5,3.5v9a1,1,0,0,1-1,1h-9" />
           <line x1="5.75" y1="3" x2="5.75" y2="8.5" />
           <line x1="3" y1="5.75" x2="8.5" y2="5.75" />
         </g>
@@ -3453,6 +3454,7 @@ export const icons = {
         width={size}
         height={size}
         fill={color}
+        stroke={color}
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"

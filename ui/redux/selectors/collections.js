@@ -21,13 +21,14 @@ type State = { collections: CollectionState };
 
 const selectState = (state: State) => state.collections || {};
 
-export const selectSavedCollectionIds = (state: State) => selectState(state).saved;
+export const selectSavedCollectionIds = (state: State) => selectState(state).savedIds;
 export const selectBuiltinCollections = (state: State) => selectState(state).builtin;
 export const selectResolvedCollections = (state: State) => selectState(state).resolved;
 export const selectMyUnpublishedCollections = (state: State) => selectState(state).unpublished;
 export const selectMyEditedCollections = (state: State) => selectState(state).edited;
+export const selectMyUpdatedCollections = (state: State) => selectState(state).updated;
 export const selectPendingCollections = (state: State) => selectState(state).pending;
-export const selectIsResolvingCollectionById = (state: State) => selectState(state).isResolvingCollectionById;
+export const selectIsResolvingCollectionById = (state: State) => selectState(state).resolvingById;
 export const selectQueueCollection = (state: State) => selectState(state).queue;
 
 export const selectCurrentQueueList = createSelector(selectQueueCollection, (queue) => ({ queue }));
@@ -38,6 +39,17 @@ export const selectLastUsedCollection = createSelector(selectState, (state) => s
 export const selectUnpublishedCollectionsList = createSelector(
   selectMyUnpublishedCollections,
   (unpublishedCollections) => Object.keys(unpublishedCollections || {})
+);
+
+export const selectCollectionSavedForId = (state: State, id: string) => {
+  const savedIds = selectSavedCollectionIds(state);
+  return savedIds.includes(id);
+};
+
+export const selectSavedCollections = createSelector(
+  selectResolvedCollections,
+  selectSavedCollectionIds,
+  (resolved, savedIds) => fromEntries(Object.entries(resolved).filter(([key, val]) => savedIds.includes(key)))
 );
 
 export const selectHasCollections = createSelector(
@@ -51,9 +63,27 @@ export const selectEditedCollectionForId = (state: State, id: string) => {
   return editedCollections[id];
 };
 
+export const selectUpdatedCollectionForId = (state: State, id: string) => {
+  const editedCollections = selectMyEditedCollections(state);
+  if (editedCollections[id]) return editedCollections[id];
+
+  const updatedCollections = selectMyUpdatedCollections(state);
+  return updatedCollections[id];
+};
+
+export const selectCollectionNameForId = (state: State, id: string) => {
+  const collection = selectCollectionForId(state, id);
+  return collection?.name;
+};
+
+export const selectCollectionDescriptionForId = (state: State, id: string) => {
+  const collection = selectCollectionForId(state, id);
+  return collection?.description;
+};
+
 export const selectCollectionHasEditsForId = (state: State, id: string) => {
-  const editedCollection = selectEditedCollectionForId(state, id);
-  return Boolean(editedCollection && !editedCollection.editsCleared);
+  const editedCollections = selectMyEditedCollections(state);
+  return Boolean(editedCollections[id]);
 };
 
 export const selectPendingCollectionForId = (state: State, id: string) => {
@@ -107,8 +137,9 @@ export const selectMyPublishedCollections = createSelector(
   selectResolvedCollections,
   selectPendingCollections,
   selectMyEditedCollections,
+  selectMyUpdatedCollections,
   selectMyCollectionIds,
-  (resolved, pending, edited, myIds) => {
+  (resolved, pending, edited, updated, myIds) => {
     // all resolved in myIds, plus those in pending and edited
     const myPublishedCollections = fromEntries(
       Object.entries(pending).concat(
@@ -123,7 +154,7 @@ export const selectMyPublishedCollections = createSelector(
     // now add in edited:
     Object.entries(edited).forEach(([id, item]) => {
       // $FlowFixMe
-      if (!item.editsCleared) {
+      if (!updated[id]) {
         myPublishedCollections[id] = item;
       } else {
         // $FlowFixMe
@@ -170,13 +201,13 @@ export const selectCollectionValuesListForKey = createSelector(
   }
 );
 
-export const selectIsMyCollectioPublishedForId = (state: State, id: string) => {
+export const selectIsMyCollectionPublishedForId = (state: State, id: string) => {
   const publishedCollection = selectMyPublishedCollections(state);
   return Boolean(publishedCollection[id]);
 };
 
 export const selectPublishedCollectionNotEditedForId = createSelector(
-  selectIsMyCollectioPublishedForId,
+  selectIsMyCollectionPublishedForId,
   selectCollectionHasEditsForId,
   (isPublished, hasEdits) => isPublished && !hasEdits
 );
@@ -187,17 +218,6 @@ export const selectMyPublishedMixedCollections = createSelector(selectMyPublishe
     Object.entries(published).filter(([key, collection]) => {
       // $FlowFixMe
       return collection.type === COLLECTIONS_CONSTS.COL_TYPES.COLLECTION;
-    })
-  );
-  return myCollections;
-});
-
-export const selectMyPublishedPlaylistCollections = createSelector(selectMyPublishedCollections, (published) => {
-  const myCollections = fromEntries(
-    // $FlowFixMe
-    Object.entries(published).filter(([key, collection]) => {
-      // $FlowFixMe
-      return collection.type === COLLECTIONS_CONSTS.COL_TYPES.PLAYLIST;
     })
   );
   return myCollections;
@@ -233,8 +253,7 @@ export const selectCollectionForId = createSelector(
   selectPendingCollections,
   selectCurrentQueueList,
   (id, bLists, rLists, uLists, eLists, pLists, queue) => {
-    const edited = eLists[id] && !eLists[id].editsCleared ? eLists[id] : undefined;
-    const collection = bLists[id] || uLists[id] || edited || pLists[id] || rLists[id] || queue[id];
+    const collection = bLists[id] || uLists[id] || eLists[id] || pLists[id] || rLists[id] || queue[id];
     return collection;
   }
 );
@@ -407,15 +426,15 @@ export const selectNameForCollectionId = createSelector(
 
 export const selectThumbnailForCollectionId = (state: State, id: string) => {
   const collection = selectCollectionForId(state, id);
-  return collection.thumbnail?.url;
+  return collection && collection.thumbnail?.url;
 };
 
 export const selectUpdatedAtForCollectionId = createSelector(
   selectCollectionForId,
   selectUserCreationDate,
-  selectEditedCollectionForId,
-  (collection, userCreatedAt, edited) => {
-    const collectionUpdatedAt = (edited?.updatedAt || collection.updatedAt) * 1000;
+  selectUpdatedCollectionForId,
+  (collection, userCreatedAt, updated) => {
+    const collectionUpdatedAt = (updated?.updatedAt || collection?.updatedAt || 0) * 1000;
 
     const userCreationDate = moment(userCreatedAt).format('MMMM DD YYYY');
     const collectionUpdatedDate = moment(collectionUpdatedAt).format('MMMM DD YYYY');
@@ -438,7 +457,7 @@ export const selectCreatedAtForCollectionId = (state: State, id: string) => {
     return userCreatedAt;
   }
 
-  if (collection.createdAt) return collection.createdAt * 1000;
+  if (collection?.createdAt) return collection.createdAt * 1000;
 
   const publishedClaim = selectPublishedCollectionClaimForId(state, id);
   if (publishedClaim) return publishedClaim.meta?.creation_timestamp * 1000;

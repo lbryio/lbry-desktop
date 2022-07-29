@@ -29,9 +29,11 @@ export const BUILTIN_PLAYLISTS = [WATCH_LATER_ID, FAVORITES_ID, QUEUE_ID];
 
 export const COL_KEY_BUILTIN = 'builtin';
 export const COL_KEY_EDITED = 'edited';
+export const COL_KEY_UPDATED = 'updated';
 export const COL_KEY_UNPUBLISHED = 'unpublished';
 export const COL_KEY_PUBLISHED = 'published';
 export const COL_KEY_PENDING = 'pending';
+export const COL_KEY_SAVED = 'savedIds';
 
 export const PLAYLIST_ICONS = {
   [FAVORITES_ID]: ICONS.STAR,
@@ -39,7 +41,13 @@ export const PLAYLIST_ICONS = {
   [QUEUE_ID]: ICONS.PLAYLIST,
 };
 
-export const LIST_TYPE = Object.freeze({ ALL: 'All', PRIVATE: 'Private', PUBLIC: 'Public' });
+export const LIST_TYPE = Object.freeze({
+  ALL: 'All',
+  PRIVATE: 'Private',
+  PUBLIC: 'Public',
+  EDITED: 'Edited',
+  SAVED: 'Saved',
+});
 export const PLAYLIST_SHOW_COUNT = Object.freeze({ DEFAULT: 12, MOBILE: 6 });
 
 export const SORT_ORDER = Object.freeze({

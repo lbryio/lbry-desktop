@@ -27,9 +27,10 @@ const defaultState: CollectionState = {
   unpublished: {}, // sync
   lastUsedCollection: undefined,
   edited: {},
+  updated: {},
   pending: {},
-  saved: [],
-  isResolvingCollectionById: {},
+  savedIds: [],
+  resolvingById: {},
   error: null,
   queue: {
     items: [],
@@ -65,6 +66,17 @@ const collectionsReducer = handleActions(
         unpublished: newLists,
         lastUsedCollection: params.id,
       };
+    },
+
+    [ACTIONS.COLLECTION_TOGGLE_SAVE]: (state, action) => {
+      const { savedIds } = state;
+      const { collectionId } = action.data;
+
+      if (savedIds.includes(collectionId)) {
+        return { ...state, savedIds: savedIds.filter((savedId) => savedId !== collectionId) };
+      } else {
+        return { ...state, savedIds: [...savedIds, collectionId] };
+      }
     },
 
     [ACTIONS.COLLECTION_DELETE]: (state, action) => {
@@ -146,24 +158,17 @@ const collectionsReducer = handleActions(
     },
 
     [ACTIONS.COLLECTION_EDIT]: (state, action) => {
-      const { collectionKey, collection, collectionId } = action.data;
-      const id = collection?.id || collectionId;
+      const { collectionKey, collection } = action.data;
+      const id = collection.id;
 
-      const { [collectionKey]: lists } = state;
-      const currentCollectionState = lists[id];
+      const { [collectionKey]: currentCollections } = state;
 
-      const newCollection = Object.assign({}, currentCollectionState);
-      if (collection) {
-        Object.assign(newCollection, collection);
-        if (collectionKey === COLS.COL_KEY_EDITED) delete newCollection.editsCleared;
-      } else if (collectionKey === COLS.COL_KEY_EDITED) {
-        newCollection.editsCleared = true;
-      }
+      const newCollection = Object.assign({}, collection);
       newCollection.updatedAt = getCurrentTimeInSec();
 
       return {
         ...state,
-        [collectionKey]: { ...lists, [id]: newCollection },
+        [collectionKey]: { ...currentCollections, [id]: newCollection },
         lastUsedCollection: id,
       };
     },
@@ -176,41 +181,59 @@ const collectionsReducer = handleActions(
 
     [ACTIONS.COLLECTION_ITEMS_RESOLVE_STARTED]: (state, action) => {
       const { ids } = action.data;
-      const { isResolvingCollectionById } = state;
-      const newResolving = Object.assign({}, isResolvingCollectionById);
+      const { resolvingById } = state;
+
+      const newResolving = Object.assign({}, resolvingById);
       ids.forEach((id) => {
         newResolving[id] = true;
       });
-      return Object.assign({}, state, {
-        ...state,
-        error: '',
-        isResolvingCollectionById: newResolving,
-      });
+
+      return { ...state, error: '', resolvingById: newResolving };
     },
     [ACTIONS.USER_STATE_POPULATE]: (state, action) => {
-      const { builtinCollections, savedCollections, unpublishedCollections, editedCollections } = action.data;
+      const {
+        builtinCollections,
+        savedCollectionIds,
+        unpublishedCollections,
+        editedCollections,
+        updatedCollections,
+      } = action.data;
+
       return {
         ...state,
         edited: editedCollections || state.edited,
+        updated: updatedCollections || state.updated,
         unpublished: unpublishedCollections || state.unpublished,
         builtin: builtinCollections || state.builtin,
-        saved: savedCollections || state.saved,
+        savedIds: savedCollectionIds || state.savedIds,
       };
     },
     [ACTIONS.COLLECTION_ITEMS_RESOLVE_COMPLETED]: (state, action) => {
       const { resolvedPrivateCollectionIds, resolvedCollections, failedCollectionIds } = action.data;
-      const { pending, edited, isResolvingCollectionById, resolved } = state;
+      const { pending, edited, resolvingById, resolved, updated } = state;
+
+      const resolvedFiltered = {};
+      const editedResolved = {};
+      Object.entries(resolvedCollections).forEach(([key, val]) => {
+        // $FlowFixMe
+        if (val.key !== 'edited') {
+          resolvedFiltered[key] = val;
+        } else {
+          editedResolved[key] = val;
+        }
+      });
+
       const newPending = Object.assign({}, pending);
-      const newEdited = Object.assign({}, edited);
-      const newResolved = Object.assign({}, resolved, resolvedCollections);
+      const newResolved = Object.assign({}, resolved, resolvedFiltered);
+      const newEdited = Object.assign({}, edited, editedResolved);
 
       const resolvedIds = Object.keys(resolvedCollections);
-      const newResolving = Object.assign({}, isResolvingCollectionById);
+      const newResolving = Object.assign({}, resolvingById);
       if (resolvedCollections && Object.keys(resolvedCollections).length) {
         resolvedIds.forEach((resolvedId) => {
-          if (newEdited[resolvedId]) {
-            if (newEdited[resolvedId]['updatedAt'] < resolvedCollections[resolvedId]['updatedAt']) {
-              delete newEdited[resolvedId];
+          if (updated[resolvedId]) {
+            if (updated[resolvedId]['updatedAt'] < resolvedCollections[resolvedId]['updatedAt']) {
+              delete updated[resolvedId];
             }
           }
           delete newResolving[resolvedId];
@@ -237,19 +260,19 @@ const collectionsReducer = handleActions(
         pending: newPending,
         resolved: newResolved,
         edited: newEdited,
-        isResolvingCollectionById: newResolving,
+        resolvingById: newResolving,
       });
     },
     [ACTIONS.COLLECTION_ITEMS_RESOLVE_FAILED]: (state, action) => {
       const { ids } = action.data;
-      const { isResolvingCollectionById } = state;
-      const newResolving = Object.assign({}, isResolvingCollectionById);
+      const { resolvingById } = state;
+      const newResolving = Object.assign({}, resolvingById);
       ids.forEach((id) => {
         delete newResolving[id];
       });
       return Object.assign({}, state, {
         ...state,
-        isResolvingCollectionById: newResolving,
+        resolvingById: newResolving,
         error: action.data.message,
       });
     },

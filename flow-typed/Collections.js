@@ -11,7 +11,6 @@ declare type Collection = {
   updatedAt: number,
   totalItems?: number,
   itemCount?: number,
-  editsCleared?: boolean,
   sourceId?: string, // if copied, claimId of original collection
 };
 
@@ -22,15 +21,25 @@ declare type CollectionState = {
   resolved: CollectionGroup,
   pending: CollectionGroup,
   edited: CollectionGroup,
+  updated: UpdatedCollectionGroup,
   builtin: CollectionGroup,
-  saved: Array<string>,
-  isResolvingCollectionById: { [string]: boolean },
+  savedIds: Array<string>,
+  resolvingById: { [id: string]: boolean },
   error?: string | null,
   queue: Collection,
 };
 
 declare type CollectionGroup = {
-  [string]: Collection,
+  [id: string]: Collection,
+};
+
+declare type UpdatedCollectionGroup = {
+  [id: string]: UpdatedCollection,
+};
+
+declare type UpdatedCollection = {
+  id: string,
+  updatedAt: number,
 };
 
 declare type CollectionList = Array<Collection>;
@@ -62,4 +71,9 @@ declare type CollectionEditParams = {
 declare type CollectionFetchParams = {
   collectionId: string,
   pageSize?: number,
+};
+
+declare type CollectionItemFetchResult = {
+  claimId: string,
+  items: ?Array<GenericClaim>,
 };

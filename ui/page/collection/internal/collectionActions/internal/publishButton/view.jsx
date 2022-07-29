@@ -6,7 +6,6 @@ import React from 'react';
 import FileActionButton from 'component/common/file-action-button';
 
 type Props = {
-  uri: string,
   // redux
   collectionHasEdits: boolean,
   claimIsPending: boolean,
@@ -14,7 +13,7 @@ type Props = {
 };
 
 function CollectionPublishButton(props: Props) {
-  const { uri, collectionHasEdits, claimIsPending, collectionLength } = props;
+  const { collectionHasEdits, claimIsPending, collectionLength } = props;
 
   const { push } = useHistory();
 
@@ -22,8 +21,8 @@ function CollectionPublishButton(props: Props) {
 
   return (
     <FileActionButton
-      title={uri ? __('Publish Updates') : __('Publish')}
-      label={uri ? __('Publish Updates') : __('Publish')}
+      title={collectionHasEdits ? __('Publish Updates') : __('Publish')}
+      label={collectionHasEdits ? __('Publish Updates') : __('Publish')}
       onClick={() => push(`?${PAGE_VIEW_QUERY}=${PUBLISH_PAGE}`)}
       icon={ICONS.PUBLISH}
       iconColor={collectionHasEdits ? 'red' : undefined}

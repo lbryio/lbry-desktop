@@ -20,6 +20,7 @@ type Props = {
   isBuiltin: boolean,
   publishedNotEdited: boolean,
   collectionEmpty: boolean,
+  isMyCollection: boolean,
 };
 
 function CollectionMenuList(props: Props) {
@@ -33,7 +34,9 @@ function CollectionMenuList(props: Props) {
     isBuiltin,
     publishedNotEdited,
     collectionEmpty,
+    isMyCollection,
   } = props;
+
   const [doShuffle, setDoShuffle] = React.useState(false);
 
   const { push } = useHistory();
@@ -86,7 +89,7 @@ function CollectionMenuList(props: Props) {
               </MenuItem>
             )}
 
-            {!isBuiltin && (
+            {!isBuiltin && isMyCollection && (
               <>
                 {!collectionEmpty && (
                   <MenuItem

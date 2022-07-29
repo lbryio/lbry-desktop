@@ -39,7 +39,6 @@ export default function CollectionPage(props: Props) {
   } = useHistory();
   const { showEdit: pageShowEdit } = state || {};
 
-  const [didTryResolve, setDidTryResolve] = React.useState(false);
   const [showEdit, setShowEdit] = React.useState(pageShowEdit);
   const [unavailableUris, setUnavailable] = React.useState(brokenUrls || []);
 
@@ -53,20 +52,12 @@ export default function CollectionPage(props: Props) {
     collectionUrls && (totalItems === undefined || (totalItems && totalItems === collectionUrls.length));
 
   React.useEffect(() => {
-    if (collectionId && !urlsReady && !didTryResolve && !collection) {
-      doFetchItemsInCollection({ collectionId }, () => setDidTryResolve(true));
+    if (collectionId && !urlsReady && !collection) {
+      doFetchItemsInCollection({ collectionId });
     }
-  }, [collectionId, urlsReady, didTryResolve, setDidTryResolve, doFetchItemsInCollection, collection]);
+  }, [collectionId, urlsReady, doFetchItemsInCollection, collection]);
 
-  if (!collection && (isResolvingCollection || !didTryResolve)) {
-    return (
-      <Page>
-        <h2 className="main--empty empty">{__('Loading...')}</h2>
-      </Page>
-    );
-  }
-
-  if (!collection && !isResolvingCollection && didTryResolve) {
+  if (!collection && !isResolvingCollection) {
     return (
       <Page>
         <h2 className="main--empty empty">{__('Nothing here')}</h2>
@@ -99,26 +90,24 @@ export default function CollectionPage(props: Props) {
     );
   }
 
-  if (urlsReady) {
-    return (
-      <Page className="playlists-page-wrapper">
-        <div className="section card-stack">
-          <CollectionHeader
-            collectionId={collectionId}
-            showEdit={showEdit}
-            setShowEdit={setShowEdit}
-            unavailableUris={unavailableUris}
-            setUnavailable={setUnavailable}
-          />
+  return (
+    <Page className="playlists-page-wrapper">
+      <div className="section card-stack">
+        <CollectionHeader
+          collectionId={collectionId}
+          showEdit={showEdit}
+          setShowEdit={setShowEdit}
+          unavailableUris={unavailableUris}
+          setUnavailable={setUnavailable}
+        />
 
-          <CollectionItemsList
-            collectionId={collectionId}
-            showEdit={showEdit}
-            unavailableUris={unavailableUris}
-            showNullPlaceholder
-          />
-        </div>
-      </Page>
-    );
-  }
+        <CollectionItemsList
+          collectionId={collectionId}
+          showEdit={showEdit}
+          unavailableUris={unavailableUris}
+          showNullPlaceholder
+        />
+      </div>
+    </Page>
+  );
 }

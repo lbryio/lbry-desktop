@@ -138,7 +138,7 @@ export function doResolveUris(
       });
 
       if (collectionIds.length) {
-        dispatch(doFetchItemsInCollections({ collectionIds: collectionIds, pageSize: 50 }));
+        dispatch(doFetchItemsInCollections({ collectionIds, pageSize: 50 }));
       }
 
       return result;
@@ -628,36 +628,21 @@ export function doFetchChannelListMine(page: number = 1, pageSize: number = 9999
   };
 }
 
-export function doFetchCollectionListMine(page: number = 1, pageSize: number = 99999) {
-  return (dispatch: Dispatch) => {
-    dispatch({
-      type: ACTIONS.FETCH_COLLECTION_LIST_STARTED,
-    });
+export const doFetchCollectionListMine = (page: number = 1, pageSize: number = 99999) => (dispatch: Dispatch) => {
+  dispatch({ type: ACTIONS.FETCH_COLLECTION_LIST_STARTED });
 
-    const callback = (response: CollectionListResponse) => {
-      const { items } = response;
-      dispatch({
-        type: ACTIONS.FETCH_COLLECTION_LIST_COMPLETED,
-        data: { claims: items },
-      });
-      dispatch(
-        doFetchItemsInCollections({
-          collectionIds: items.map((claim) => claim.claim_id),
-          page_size: 5,
-        })
-      );
-    };
+  const callback = (response: CollectionListResponse) => {
+    const { items } = response;
+    const collectionIds = items.map(({ claim_id }) => claim_id);
 
-    const failure = (error) => {
-      dispatch({
-        type: ACTIONS.FETCH_COLLECTION_LIST_FAILED,
-        data: error,
-      });
-    };
-
-    Lbry.collection_list({ page, page_size: pageSize, resolve_claims: 1, resolve: true }).then(callback, failure);
+    dispatch({ type: ACTIONS.FETCH_COLLECTION_LIST_COMPLETED, data: { claims: items } });
+    dispatch(doFetchItemsInCollections({ collectionIds, page_size: 5 }));
   };
-}
+
+  const failure = (error) => dispatch({ type: ACTIONS.FETCH_COLLECTION_LIST_FAILED, data: error });
+
+  return Lbry.collection_list({ page, page_size: pageSize, resolve_claims: 1, resolve: true }).then(callback, failure);
+};
 
 export function doClearClaimSearch() {
   return (dispatch: Dispatch) => {
@@ -1115,11 +1100,7 @@ export const doCheckPendingClaims = (onChannelConfirmed: Function) => (dispatch:
                 },
               });
               if (collectionIds.length) {
-                dispatch(
-                  doFetchItemsInCollections({
-                    collectionIds,
-                  })
-                );
+                dispatch(doFetchItemsInCollections({ collectionIds }));
               }
               const channelClaims = claims.filter((claim) => claim.value_type === 'channel');
               if (channelClaims.length && onChannelConfirmCallback) {

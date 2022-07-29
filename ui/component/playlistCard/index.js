@@ -11,9 +11,10 @@ import {
   selectCollectionLengthForId,
   selectCollectionIsEmptyForId,
   selectCollectionForId,
+  selectCollectionSavedForId,
 } from 'redux/selectors/collections';
 import { selectPlayingUri } from 'redux/selectors/content';
-import { doCollectionEdit, doClearQueueList } from 'redux/actions/collections';
+import { doCollectionEdit, doClearQueueList, doToggleCollectionSavedForId } from 'redux/actions/collections';
 import { doClearPlayingCollection } from 'redux/actions/content';
 import { doOpenModal } from 'redux/actions/app';
 
@@ -42,6 +43,7 @@ const select = (state, props) => {
     collectionEmpty: selectCollectionIsEmptyForId(state, collectionId),
     hasCollectionById: collectionId && Boolean(selectCollectionForId(state, collectionId)),
     playingCollectionId,
+    collectionSavedForId: selectCollectionSavedForId(state, collectionId),
   };
 };
 
@@ -50,6 +52,7 @@ const perform = {
   doClearPlayingCollection,
   doClearQueueList,
   doOpenModal,
+  doToggleCollectionSavedForId,
 };
 
 export default connect(select, perform)(PlaylistCard);

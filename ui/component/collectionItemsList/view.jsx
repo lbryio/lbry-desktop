@@ -20,7 +20,7 @@ type Props = {
   isResolvingCollection: boolean,
   collectionUrls: Array<string>,
   doCollectionEdit: (id: string, params: CollectionEditParams) => void,
-  doFetchItemsInCollection: ({}, ?() => void) => void,
+  doFetchItemsInCollection: (options: { collectionId: string, pageSize?: number }) => void,
 };
 
 const CollectionItemsList = (props: Props) => {
@@ -36,13 +36,11 @@ const CollectionItemsList = (props: Props) => {
     ...claimListProps
   } = props;
 
-  const [didTryResolve, setDidTryResolve] = React.useState();
-
   const { totalItems } = collection || {};
 
   const urlsReady = collectionUrls && (totalItems === undefined || totalItems === collectionUrls.length);
-  const shouldFetchItems =
-    isPrivateCollection || isEditedCollection || (!urlsReady && collectionId && !didTryResolve && !collection);
+  const shouldFetchItems = isPrivateCollection || isEditedCollection || (!urlsReady && collectionId && !collection);
+  const didInitialFetch = React.useRef(!shouldFetchItems);
 
   function handleOnDragEnd(result: any) {
     const { source, destination } = result;
@@ -55,20 +53,19 @@ const CollectionItemsList = (props: Props) => {
     doCollectionEdit(collectionId, { order: { from, to } });
   }
   React.useEffect(() => {
-    if (shouldFetchItems) {
-      doFetchItemsInCollection({ collectionId }, () => setDidTryResolve(true));
+    if (shouldFetchItems && !didInitialFetch.current) {
+      doFetchItemsInCollection({ collectionId });
+      didInitialFetch.current = true;
     }
   }, [collectionId, doFetchItemsInCollection, shouldFetchItems]);
 
   return (
     <React.Suspense fallback={null}>
-      {isResolvingCollection && (
+      {isResolvingCollection ? (
         <div className="main--empty">
           <Spinner />
         </div>
-      )}
-
-      {!isResolvingCollection && (
+      ) : (
         <Lazy.DragDropContext onDragEnd={handleOnDragEnd}>
           <Lazy.Droppable droppableId="list__ordering">
             {(DroppableProvided) => (

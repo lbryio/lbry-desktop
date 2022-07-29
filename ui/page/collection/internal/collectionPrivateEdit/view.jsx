@@ -19,7 +19,7 @@ type Props = {
   collectionUrls: Array<string>,
   collectionHasEdits: boolean,
   doCollectionEdit: (id: string, params: CollectionEditParams) => void,
-  doClearEditsForCollectionid: (id: string) => void,
+  doClearEditsForCollectionId: (id: string) => void,
   doOpenModal: (id: string, params: {}) => void,
 };
 
@@ -31,7 +31,7 @@ function CollectionForm(props: Props) {
     collectionUrls,
     collectionHasEdits,
     doCollectionEdit,
-    doClearEditsForCollectionid,
+    doClearEditsForCollectionId,
     doOpenModal,
   } = props;
 
@@ -63,12 +63,15 @@ function CollectionForm(props: Props) {
 
   React.useEffect(() => {
     if (collection && collectionResetPending.current) {
-      setParams({
+      const resetParams = {
         uris: collectionUrls,
         name,
         description,
         thumbnail,
-      });
+      };
+
+      setParams(resetParams);
+      initialParams.current = resetParams;
       collectionResetPending.current = false;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -125,7 +128,7 @@ function CollectionForm(props: Props) {
                         "Are you sure you want to delete all edits from this published playlist? (You won't be able to undo this action later)"
                       ),
                       onConfirm: (closeModal) => {
-                        doClearEditsForCollectionid(collectionId);
+                        doClearEditsForCollectionId(collectionId);
                         collectionResetPending.current = true;
                         closeModal();
                       },

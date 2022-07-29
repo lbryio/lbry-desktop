@@ -166,10 +166,10 @@ export const selectCollectionClaimParamsForUri = (state: State, uri: string, col
   const collectionClaimIds = selectClaimIdsForCollectionId(state, collectionId).filter(Boolean);
 
   const collectionParams: CollectionPublishParams = {
-    thumbnail_url: getThumbnailFromClaim(claim),
+    thumbnail_url: collection ? collection.thumbnail?.url : getThumbnailFromClaim(claim),
     name: collectionName ? parseName(collectionName) : undefined,
-    description: makeSelectMetadataItemForUri(uri, 'description')(state),
-    title: claim ? title : collectionName,
+    description: collection ? collection.description : makeSelectMetadataItemForUri(uri, 'description')(state),
+    title: collection ? collectionName : title,
     bid: String(amount || 0.001),
     languages: languages ? dedupeLanguages(languages) : [],
     locations: makeSelectMetadataItemForUri(uri, 'locations')(state) || [],
