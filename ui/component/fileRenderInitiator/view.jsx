@@ -52,6 +52,7 @@ type Props = {
   purchaseMadeForClaimId: boolean,
   doUriInitiatePlay: (playingOptions: PlayingUri, isPlayable: boolean) => void,
   doFetchChannelLiveStatus: (string) => void,
+  claimIsMine: boolean,
 };
 
 export default function FileRenderInitiator(props: Props) {
@@ -82,6 +83,7 @@ export default function FileRenderInitiator(props: Props) {
     doFetchChannelLiveStatus,
     purchaseContentTag,
     purchaseMadeForClaimId,
+    claimIsMine,
   } = props;
 
   const { isLiveComment } = React.useContext(ChatCommentContext) || {};
@@ -100,7 +102,7 @@ export default function FileRenderInitiator(props: Props) {
   // check if there is a time or autoplay parameter, if so force autoplay
   const urlTimeParam = href && href.indexOf('t=') > -1;
 
-  const didntPurchasePaidContent = purchaseContentTag && !purchaseMadeForClaimId;
+  const didntPurchasePaidContent = purchaseContentTag && !purchaseMadeForClaimId && !claimIsMine;
   const shouldAutoplay =
     !didntPurchasePaidContent && !forceDisableAutoplay && !embedded && (forceAutoplayParam || urlTimeParam || autoplay);
 

@@ -5,6 +5,7 @@ import {
   selectClaimForUri,
   selectPurchaseTagForUri,
   selectPurchaseMadeForClaimId,
+  selectClaimIsMine,
 } from 'redux/selectors/claims';
 import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import * as SETTINGS from 'constants/settings';
@@ -47,6 +48,7 @@ const select = (state, props) => {
     isLivestreamClaim: isStreamPlaceholderClaim(claim),
     purchaseContentTag: selectPurchaseTagForUri(state, props.uri),
     purchaseMadeForClaimId: selectPurchaseMadeForClaimId(state, claimId),
+    claimIsMine: selectClaimIsMine(state, claim),
   };
 };
 
