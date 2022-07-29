@@ -522,7 +522,7 @@ function App(props: Props) {
   useEffect(() => {
     window.clearLastViewedAnnouncement = () => {
       console.log('Clearing history. Please wait ...');
-      doSetLastViewedAnnouncement('');
+      doSetLastViewedAnnouncement('clear');
     };
   }, []);
 

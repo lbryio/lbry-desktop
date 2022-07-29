@@ -422,7 +422,7 @@ type SharedData = {
     updatedCollections: UpdatedCollectionGroup,
     builtinCollections: CollectionGroup,
     savedCollectionIds: Array<string>,
-    lastViewedAnnouncement: string,
+    lastViewedAnnouncement?: LastViewedAnnouncement,
   },
 };
 

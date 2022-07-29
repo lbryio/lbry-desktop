@@ -12,7 +12,7 @@ type Props = {
   // --- redux ---
   authenticated?: boolean,
   announcement: string,
-  lastViewedHash: ?string,
+  lastViewedHash: LastViewedAnnouncement,
   doHideModal: () => void,
   doSetLastViewedAnnouncement: (hash: string) => void,
 };
@@ -41,7 +41,7 @@ export default function ModalAnnouncements(props: Props) {
 
     const hash = getSimpleStrHash(announcement);
 
-    if (lastViewedHash === hash) {
+    if (lastViewedHash.includes(hash)) {
       if (isAutoInvoked) {
         doHideModal();
       } else {

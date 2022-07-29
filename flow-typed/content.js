@@ -9,9 +9,11 @@ declare type ContentState = {
   recommendationParentId: { [string]: string }, // claimId: referrerId
   recommendationUrls: { [string]: Array<string> }, // claimId: [lbryUrls...]
   recommendationClicks: { [string]: Array<number> }, // "claimId": [clicked indices...]
-  lastViewedAnnouncement: ?string, // undefined = not seen in wallet.
+  lastViewedAnnouncement: LastViewedAnnouncement, // undefined = not seen in wallet.
   recsysEntries: { [ClaimId]: RecsysEntry }, // Persistent shadow copy. The main one resides in RecSys.
 };
+
+declare type LastViewedAnnouncement = Array<string>;
 
 declare type WatchHistory = {
   uri: string,
