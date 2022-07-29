@@ -15,7 +15,6 @@ type Props = {
   doResolveClaimIds: (Array<string>) => Promise<any>,
   preorderContentClaim: Claim,
   purchaseTag: string,
-  preorderedTag: string,
   purchaseMadeForClaimId: ?boolean,
   doCheckIfPurchasedClaimId: (string) => void,
 };
@@ -33,7 +32,6 @@ export default function PreorderButton(props: Props) {
     preorderContentClaimId, // full content that will be purchased
     preorderTag, // the price of the preorder
     purchaseTag, // the price of the purchase
-    // preorderedTag, // the claim id of the preorder claim
     purchaseMadeForClaimId,
   } = props;
 

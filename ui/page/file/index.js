@@ -8,6 +8,7 @@ import {
   selectClaimForUri,
   selectClaimWasPurchasedForUri,
   selectPurchaseTagForUri,
+  selectPreorderTagForUri,
 } from 'redux/selectors/claims';
 import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import { LINKED_COMMENT_QUERY_PARAM, THREAD_COMMENT_QUERY_PARAM } from 'constants/comment';
@@ -57,6 +58,7 @@ const select = (state, props) => {
     claimWasPurchased: selectClaimWasPurchasedForUri(state, uri),
     isUriPlaying: selectIsUriCurrentlyPlaying(state, uri),
     purchaseTag: selectPurchaseTagForUri(state, props.uri),
+    preorderTag: selectPreorderTagForUri(state, props.uri),
     claimId: claim.claim_id,
   };
 };

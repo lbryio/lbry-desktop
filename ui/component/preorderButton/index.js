@@ -6,7 +6,6 @@ import {
   selectPreorderContentClaimIdForUri,
   selectClaimForId,
   selectPurchaseTagForUri,
-  selectPreorderedTagForUri,
   selectPurchaseMadeForClaimId,
 } from 'redux/selectors/claims';
 import PreorderButton from './view';
@@ -21,7 +20,6 @@ const select = (state, props) => {
   const preorderContentClaimId = selectPreorderContentClaimIdForUri(state, props.uri);
 
   return {
-    preorderedTag: selectPreorderedTagForUri(state, props.uri),
     preorderTag: selectPreorderTagForUri(state, props.uri),
     purchaseTag: selectPurchaseTagForUri(state, props.uri),
     claimIsMine: selectClaimIsMine(state, claim),

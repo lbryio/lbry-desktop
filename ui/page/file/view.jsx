@@ -52,6 +52,7 @@ type Props = {
   location: { search: string },
   isUriPlaying: boolean,
   purchaseTag: number,
+  preorderTag: number,
   claimId: string,
   doCheckIfPurchasedClaimId: (claimId: string) => void,
   doFetchCostInfoForUri: (uri: string) => void,
@@ -97,6 +98,7 @@ export default function FilePage(props: Props) {
     doSetMainPlayerDimension,
     doCheckIfPurchasedClaimId,
     purchaseTag,
+    preorderTag,
     claimId,
   } = props;
 
@@ -144,8 +146,9 @@ export default function FilePage(props: Props) {
   }, []);
 
   React.useEffect(() => {
-    if (purchaseTag && claimId) doCheckIfPurchasedClaimId(claimId);
-  }, [purchaseTag, claimId]);
+    const aPurchaseOrPreorder = purchaseTag || preorderTag;
+    if (aPurchaseOrPreorder && claimId) doCheckIfPurchasedClaimId(claimId);
+  }, [purchaseTag, preorderTag, claimId]);
 
   React.useEffect(() => {
     // always refresh file info when entering file page to see if we have the file

@@ -443,8 +443,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
       vjsPlayer.el().childNodes[0].setAttribute('playsinline', '');
 
-      console.log(source);
-
       let contentUrl;
       // TODO: pull this function into videojs-functions
       // determine which source to use and load it

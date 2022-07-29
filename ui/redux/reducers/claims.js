@@ -1058,10 +1058,10 @@ reducers[ACTIONS.CHECK_IF_PURCHASED_FAILED] = (state: State, action: any): State
 };
 
 reducers[ACTIONS.CHECK_IF_PURCHASED_COMPLETED] = (state: State, action: any): State => {
-  let oldPurchasedClaims = state.myPurchasedClaims || [];
+  const oldPurchasedClaims = state.myPurchasedClaims || [];
 
   return Object.assign({}, state, {
-    myPurchasedClaims: [...oldPurchasedClaims, action.data],
+    myPurchasedClaims: [...new Set([...oldPurchasedClaims, ...action.data])],
     fetchingMyPurchasedClaims: false,
   });
 };
