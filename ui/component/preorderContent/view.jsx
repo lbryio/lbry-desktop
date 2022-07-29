@@ -61,7 +61,6 @@ export default function PreorderContent(props: Props) {
   } = props;
 
   function capitalizeFirstLetter(string) {
-    console.log(string);
     if (string) return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
@@ -83,7 +82,7 @@ export default function PreorderContent(props: Props) {
 
   const [tipAmount, setTipAmount] = React.useState(0);
   const [waitingForBackend, setWaitingForBackend] = React.useState(false);
-  const [hasCardSaved, setHasSavedCard] = React.useState(true);
+  const [hasCardSaved, setHasSavedCard] = React.useState(false);
 
   // check if user has a payment method saved
   React.useEffect(() => {
