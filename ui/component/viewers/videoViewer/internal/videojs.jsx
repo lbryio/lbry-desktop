@@ -456,12 +456,18 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         vjsPlayer.isLivestream = false;
         vjsPlayer.removeClass('livestreamPlayer');
 
-        // change to m3u8 if applicable
         const response = await fetch(source, { method: 'HEAD', cache: 'no-store' });
         playerServerRef.current = response.headers.get('x-powered-by');
         vjsPlayer.claimSrcOriginal = { type: sourceType, src: source };
 
-        if (response && response.redirected && response.url && response.url.endsWith('m3u8')) {
+        // remove query params for secured endpoints (which have query params on end of m3u8 path)
+        let trimmedUrl = new URL(response.url);
+        trimmedUrl.hash = '';
+        trimmedUrl.search = '';
+        trimmedUrl = trimmedUrl.toString();
+
+        // change to m3u8 if applicable
+        if (response && response.redirected && response.url && trimmedUrl.endsWith('m3u8')) {
           vjsPlayer.claimSrcVhs = { type: 'application/x-mpegURL', src: response.url };
           vjsPlayer.src(vjsPlayer.claimSrcVhs);
 

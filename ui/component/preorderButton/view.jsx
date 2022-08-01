@@ -95,7 +95,7 @@ export default function PreorderButton(props: Props) {
             className={'preorder-button'}
             icon={fiatIconToUse}
             button="primary"
-            label={__(`Thanks for ${pastTense}, enjoy your content! (No expiry date)`, {
+            label={__(`Thanks for ${pastTense}, enjoy your content!`, {
               fiatSymbolToUse,
               preorderTag,
             })}
