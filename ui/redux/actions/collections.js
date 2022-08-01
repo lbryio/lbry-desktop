@@ -20,7 +20,7 @@ import {
   selectCollectionSavedForId,
 } from 'redux/selectors/collections';
 import * as COLS from 'constants/collections';
-import { resolveCollectionType } from 'util/collections';
+import { resolveAuxParams, resolveCollectionType } from 'util/collections';
 import { isPermanentUrl, getThumbnailFromClaim } from 'util/claim';
 import { parseClaimIdFromPermanentUrl } from 'util/url';
 import { doToast } from 'redux/actions/notifications';
@@ -291,7 +291,7 @@ export const doFetchItemsInCollections = (resolveItemsOptions: {
           resolvedItemsByUrl[collectionItem.canonical_url] = collectionItem;
         });
 
-        collectionType = resolveCollectionType(valueTypes, streamTypes);
+        collectionType = resolveCollectionType(value.tags, valueTypes, streamTypes);
       }
 
       newCollectionObjectsById[collectionId] = {
@@ -305,6 +305,7 @@ export const doFetchItemsInCollections = (resolveItemsOptions: {
         description,
         thumbnail,
         key: editedCollectionItems === collectionItems ? 'edited' : undefined,
+        ...resolveAuxParams(collectionType, claim),
       };
     } else {
       invalidCollectionIds.push(collectionId);
@@ -402,7 +403,7 @@ export const doCollectionEdit = (collectionId: string, params: CollectionEditPar
   const unpublishedCollection: Collection = selectUnpublishedCollectionForId(state, collectionId);
   const publishedCollection: Collection = selectPublishedCollectionForId(state, collectionId); // needs to be published only
 
-  const { uris: anyUris, remove, order, type } = params;
+  const { uris: anyUris, remove, replace, order, type } = params;
 
   // -- sanitization --
   // only permanent urls can be added to collections
@@ -426,13 +427,14 @@ export const doCollectionEdit = (collectionId: string, params: CollectionEditPar
 
   // -------------------
 
-  const collectionType = type || collection.type;
   const currentUrls = collection.items ? collection.items.concat() : [];
   let newItems = currentUrls;
 
   // Passed uris to add/remove:
   if (uris) {
-    if (remove) {
+    if (replace) {
+      newItems = uris;
+    } else if (remove) {
       // Filters (removes) the passed uris from the current list items
       // $FlowFixMe
       newItems = currentUrls.filter((url) => url && !uris?.includes(url));
@@ -465,12 +467,12 @@ export const doCollectionEdit = (collectionId: string, params: CollectionEditPar
     data: {
       collectionKey,
       collection: {
+        ...collection,
         items: newItems,
-        id: collectionId,
-        type: collectionType,
-        name: params.name || collection.name,
-        description: params.description || collection.description,
-        thumbnail: params.thumbnail || collection.thumbnail,
+        ...(type ? { type } : {}),
+        ...(params.name ? { name: params.name } : {}),
+        ...(params.description ? { description: params.description } : {}),
+        ...(params.thumbnail ? { description: params.thumbnail } : {}),
       },
     },
   });
