@@ -13,6 +13,7 @@ import {
   selectCollectionHasEditsForId,
   selectThumbnailForCollectionId,
   selectCollectionIsEmptyForId,
+  selectCollectionTypeForId,
 } from 'redux/selectors/collections';
 import { getChannelFromClaim } from 'util/claim';
 import CollectionPreview from './view';
@@ -39,6 +40,7 @@ const select = (state, props) => {
     collectionCount: selectCountForCollectionId(state, collectionId),
     collectionName: selectNameForCollectionId(state, collectionId),
     collectionItemUrls: selectUrlsForCollectionId(state, collectionId), // ForId || ForUri
+    collectionType: selectCollectionTypeForId(state, collectionId),
     isResolvingCollectionClaims: selectIsResolvingCollectionForId(state, collectionId),
     isResolvingUri: collectionUri && selectIsUriResolving(state, collectionUri),
     title: collectionUri && selectTitleForUri(state, collectionUri),

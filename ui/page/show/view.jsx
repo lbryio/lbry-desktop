@@ -13,7 +13,9 @@ import Yrbl from 'component/yrbl';
 import { formatLbryUrlForWeb } from 'util/url';
 import { parseURI } from 'util/lbryURI';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
+import { COL_TYPES } from 'constants/collections';
 import * as MODALS from 'constants/modal_types';
+import PAGES from 'constants/pages';
 
 const AbandonedChannelPreview = lazyImport(() =>
   import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */)
@@ -206,11 +208,20 @@ export default function ShowPage(props: Props) {
 
   let urlForCollectionZero;
   if (claim && isCollection && collectionUrls && collectionUrls.length) {
-    urlForCollectionZero = collectionUrls && collectionUrls[0];
-    const claimId = claim.claim_id;
-    urlParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, claimId);
-    const newUrl = formatLbryUrlForWeb(`${urlForCollectionZero}?${urlParams.toString()}`);
-    return <Redirect to={newUrl} />;
+    switch (collection?.type) {
+      case COL_TYPES.PLAYLIST:
+        urlForCollectionZero = collectionUrls && collectionUrls[0];
+        urlParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, claim.claim_id);
+        const newUrl = formatLbryUrlForWeb(`${urlForCollectionZero}?${urlParams.toString()}`);
+        return <Redirect to={newUrl} />;
+
+      case COL_TYPES.FEATURED_CHANNELS:
+        return <Redirect to={`/$/${PAGES.PLAYLIST}/${claim.claim_id}`} />;
+
+      default:
+        // Do nothing
+        break;
+    }
   }
 
   if (!claim || !claim.name) {

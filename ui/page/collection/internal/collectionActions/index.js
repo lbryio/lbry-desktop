@@ -4,6 +4,7 @@ import {
   selectCollectionIsMine,
   selectCollectionIsEmptyForId,
   selectCollectionSavedForId,
+  selectCollectionTypeForId,
 } from 'redux/selectors/collections';
 import { doOpenModal } from 'redux/actions/app';
 import { doToggleCollectionSavedForId } from 'redux/actions/collections';
@@ -20,6 +21,7 @@ const select = (state, props) => {
     isMyCollection: selectCollectionIsMine(state, collectionId),
     collectionEmpty: selectCollectionIsEmptyForId(state, collectionId),
     collectionSavedForId: selectCollectionSavedForId(state, collectionId),
+    collectionType: selectCollectionTypeForId(state, collectionId),
   };
 };
 

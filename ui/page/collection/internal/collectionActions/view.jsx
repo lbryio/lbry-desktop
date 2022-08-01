@@ -1,6 +1,7 @@
 // @flow
 import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
+import { COL_TYPES } from 'constants/collections';
 import React from 'react';
 import Button from 'component/button';
 import { useIsMobile } from 'effects/use-screensize';
@@ -26,6 +27,7 @@ type Props = {
   isBuiltin: boolean,
   collectionEmpty: boolean,
   collectionSavedForId: boolean,
+  collectionType: string,
   doOpenModal: (id: string, props: {}) => void,
   doToggleCollectionSavedForId: (id: string) => void,
 };
@@ -41,17 +43,19 @@ function CollectionActions(props: Props) {
     setShowEdit,
     collectionSavedForId,
     collectionEmpty,
+    collectionType,
     doOpenModal,
     doToggleCollectionSavedForId,
   } = props;
 
   const isMobile = useIsMobile();
+  const showPlaybackButtons = !collectionEmpty && collectionType === COL_TYPES.PLAYLIST;
 
   return (
     <div className={classnames('media__actions justify-space-between', { stretch: isMobile })}>
       <SectionElement>
-        {!collectionEmpty && <PlayButton collectionId={collectionId} />}
-        {!collectionEmpty && <ShuffleButton collectionId={collectionId} />}
+        {showPlaybackButtons && <PlayButton collectionId={collectionId} />}
+        {showPlaybackButtons && <ShuffleButton collectionId={collectionId} />}
 
         {!isBuiltin && (
           <>

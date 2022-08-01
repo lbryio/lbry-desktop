@@ -476,3 +476,8 @@ export const selectIsCollectionPrivateForId = createSelector(
   selectCurrentQueueList,
   (id, builtinById, unpublishedById, queue) => Boolean(builtinById[id] || unpublishedById[id] || queue[id])
 );
+
+export const selectCollectionTypeForId = (state: State, id: string) => {
+  const collection = selectCollectionForId(state, id);
+  return collection?.type;
+};

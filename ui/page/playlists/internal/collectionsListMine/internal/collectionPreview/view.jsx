@@ -6,6 +6,7 @@ import CollectionItemCount from './internal/collection-item-count';
 import CollectionPrivateIcon from 'component/common/collection-private-icon';
 import CollectionPublicIcon from './internal/collection-public-icon';
 import CollectionMenuList from 'component/collectionMenuList';
+import { COL_TYPES } from 'constants/collections';
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
@@ -27,6 +28,7 @@ type Props = {
   collectionCount: number,
   collectionName: string,
   collectionItemUrls: Array<string>,
+  collectionType: ?string,
   isResolvingCollectionClaims: boolean,
   isResolvingUri: boolean,
   title?: string,
@@ -51,6 +53,7 @@ function CollectionPreview(props: Props) {
     isResolvingUri,
     isResolvingCollectionClaims,
     collectionItemUrls,
+    collectionType,
     hasClaim,
     firstCollectionItemUrl,
     channel,
@@ -71,6 +74,7 @@ function CollectionPreview(props: Props) {
 
   const navigateUrl = `/$/${PAGES.PLAYLIST}/${collectionId}`;
   const firstItemPath = formatLbryUrlForWeb(collectionItemUrls[0] || '/');
+  const hidePlayAll = collectionType === COL_TYPES.FEATURED_CHANNELS || collectionType === COL_TYPES.CHANNELS;
 
   function handleClick(e) {
     if (navigateUrl) {
@@ -138,7 +142,7 @@ function CollectionPreview(props: Props) {
       </div>
 
       <div className="table-column__action">
-        {collectionCount > 0 && (
+        {collectionCount > 0 && !hidePlayAll && (
           <Button
             button="alt"
             label={__('Play All')}
