@@ -44,6 +44,7 @@ export default function CollectionPage(props: Props) {
   const urlParams = new URLSearchParams(search);
   const publishing = urlParams.get(CP.QUERIES.VIEW) === CP.VIEWS.PUBLISH;
   const editing = urlParams.get(CP.QUERIES.VIEW) === CP.VIEWS.EDIT;
+  const returnPath = urlParams.get('redirect');
 
   const editPage = editing || publishing;
   const urlsReady =
@@ -64,7 +65,8 @@ export default function CollectionPage(props: Props) {
   }
 
   if (editPage) {
-    const onDone = (id) => replace(`/$/${PAGES.PLAYLIST}/${id || collectionId}`);
+    const getReturnPath = (id) => returnPath || `/$/${PAGES.PLAYLIST}/${id || collectionId}`;
+    const onDone = (id) => replace(getReturnPath(id));
 
     return (
       <Page
@@ -76,7 +78,7 @@ export default function CollectionPage(props: Props) {
             action: uri || editing ? __('Editing') : __('Publishing'),
           }),
           simpleTitle: uri || editing ? __('Editing') : __('Publishing'),
-          backNavDefault: onDone,
+          backNavDefault: getReturnPath(collectionId),
         }}
       >
         {editing ? (
