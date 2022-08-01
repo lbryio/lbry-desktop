@@ -2,10 +2,12 @@
 import React from 'react';
 
 type Props = {
-  claim: ?ChannelClaim,
-  title: ?string,
+  uri: ?string,
   isComment?: Boolean,
   fallback?: any,
+  // --- redux ---
+  claim: ?ChannelClaim,
+  title: ?string,
 };
 
 function ChannelTitle(props: Props) {
