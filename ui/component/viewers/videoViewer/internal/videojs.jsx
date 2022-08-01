@@ -449,8 +449,16 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       if (isLivestream) {
         vjsPlayer.isLivestream = true;
         vjsPlayer.addClass('livestreamPlayer');
+
+        const newUrl = new URL(livestreamVideoUrl);
+
+        // bugfix some streams using old url
+        if (newUrl.hostname === 'cdn.odysee.live') {
+          newUrl.hostname = 'cloud.odysee.live';
+        }
+
         // temp workaround for CDN issue, remove in a few weeks.
-        const templivestreamVideoUrl = livestreamVideoUrl + '?cachebust=1';
+        const templivestreamVideoUrl = newUrl.toString() + '?cachebust=1';
         vjsPlayer.src({ type: 'application/x-mpegURL', src: templivestreamVideoUrl });
       } else {
         vjsPlayer.isLivestream = false;
