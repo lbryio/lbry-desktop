@@ -2,6 +2,7 @@
 import fromEntries from '@ungap/from-entries';
 import { createSelector } from 'reselect';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
+import { COL_TYPES } from 'constants/collections';
 import moment from 'moment';
 import {
   selectMyCollectionIds,
@@ -9,13 +10,14 @@ import {
   selectClaimForClaimId,
   selectChannelNameForId,
   selectPermanentUrlForUri,
+  selectClaimsById,
 } from 'redux/selectors/claims';
 import { parseURI } from 'util/lbryURI';
 import { createCachedSelector } from 're-reselect';
 import { selectUserCreationDate } from 'redux/selectors/user';
 import { selectPlayingCollection } from 'redux/selectors/content';
 import { selectCountForCollection } from 'util/collections';
-import { isPermanentUrl } from 'util/claim';
+import { getChannelIdFromClaim, isPermanentUrl } from 'util/claim';
 
 type State = { collections: CollectionState };
 
@@ -475,6 +477,48 @@ export const selectIsCollectionPrivateForId = createSelector(
   selectMyUnpublishedCollections,
   selectCurrentQueueList,
   (id, builtinById, unpublishedById, queue) => Boolean(builtinById[id] || unpublishedById[id] || queue[id])
+);
+
+export const selectFeaturedChannelsByChannelId = createSelector(
+  selectMyUnpublishedCollections,
+  selectResolvedCollections,
+  selectClaimsById,
+  (privateLists, publicLists, claimsById) => {
+    let featuredChannels = {};
+
+    function addCollectionToChannel(channelId, collection) {
+      if (featuredChannels[channelId]) {
+        const cols = featuredChannels[channelId];
+        // $FlowIgnore
+        if (!cols.some((c) => c.id === collection.id)) {
+          cols.push(collection);
+        }
+      } else {
+        featuredChannels[channelId] = [collection];
+      }
+    }
+
+    Object.values(privateLists).forEach((col) => {
+      // $FlowIgnore
+      const { type, featuredChannelsParams } = col;
+      if (type === COL_TYPES.FEATURED_CHANNELS && featuredChannelsParams?.channelId) {
+        addCollectionToChannel(featuredChannelsParams.channelId, col);
+      }
+    });
+
+    Object.values(publicLists).forEach((col) => {
+      // $FlowIgnore
+      const { type, id } = col;
+      if (type === COL_TYPES.FEATURED_CHANNELS) {
+        const channelId = getChannelIdFromClaim(claimsById[id]);
+        if (channelId) {
+          addCollectionToChannel(channelId, col);
+        }
+      }
+    });
+
+    return featuredChannels;
+  }
 );
 
 export const selectCollectionTypeForId = (state: State, id: string) => {

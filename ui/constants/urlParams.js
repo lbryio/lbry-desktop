@@ -9,4 +9,7 @@ export const COLLECTION_PAGE = Object.freeze({
     EDIT: 'edit',
     PUBLISH: 'publish',
   },
+  TYPES: {
+    FEATURED: 'featuredChannels',
+  },
 });

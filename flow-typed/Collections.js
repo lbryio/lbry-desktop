@@ -1,6 +1,6 @@
 declare type Collection = {
   id: string,
-  items: Array<?string>,
+  items: Array<string>,
   name: string,
   description?: string,
   thumbnail?: {
@@ -12,9 +12,12 @@ declare type Collection = {
   totalItems?: number,
   itemCount?: number,
   sourceId?: string, // if copied, claimId of original collection
+  featuredChannelsParams?: {
+    channelId: string,
+  },
 };
 
-declare type CollectionType = 'playlist' | 'channelList' | 'collection'; // Must match COL_TYPES
+declare type CollectionType = 'playlist' | 'channelList' | 'featuredChannels' | 'collection'; // Must match COL_TYPES
 
 declare type CollectionState = {
   unpublished: CollectionGroup,
@@ -53,6 +56,9 @@ declare type CollectionCreateParams = {
   items: ?Array<string>,
   type: CollectionType,
   sourceId?: string, // if copied, claimId of original collection
+  featuredChannelsParams?: {
+    channelId: string,
+  },
 };
 
 declare type CollectionEditParams = {

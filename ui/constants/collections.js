@@ -11,6 +11,7 @@ export const COLLECTION_INDEX = 'linx';
 export const COL_TYPES = Object.freeze({
   PLAYLIST: 'playlist',
   CHANNELS: 'channelList',
+  FEATURED_CHANNELS: 'featuredChannels', // Specifically for Channel-sections, different from generic 'channelList'.
   COLLECTION: 'collection', // temp placeholder for mixed content
 });
 
@@ -34,6 +35,10 @@ export const COL_KEY_UNPUBLISHED = 'unpublished';
 export const COL_KEY_PUBLISHED = 'published';
 export const COL_KEY_PENDING = 'pending';
 export const COL_KEY_SAVED = 'savedIds';
+
+export const SECTION_TAGS = Object.freeze({
+  FEATURED_CHANNELS: '__section__featured__',
+});
 
 export const PLAYLIST_ICONS = {
   [FAVORITES_ID]: ICONS.STAR,
