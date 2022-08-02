@@ -2,6 +2,7 @@ export const FILE = 'file';
 export const CHANNEL = 'channel';
 export const SEARCH = 'search';
 export const DEBOUNCE_WAIT_DURATION_MS = 250;
+export const LIGHTHOUSE_MIN_CHARACTERS = 3;
 
 export const SEARCH_TYPES = {
   FILE: 'file',

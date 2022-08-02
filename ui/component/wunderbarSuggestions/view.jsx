@@ -17,7 +17,7 @@ import WunderbarSuggestion from 'component/wunderbarSuggestion';
 import { useHistory } from 'react-router';
 import { formatLbryUrlForWeb } from 'util/url';
 import Yrbl from 'component/yrbl';
-import { SEARCH_OPTIONS } from 'constants/search';
+import { LIGHTHOUSE_MIN_CHARACTERS, SEARCH_OPTIONS } from 'constants/search';
 import Spinner from 'component/spinner';
 
 const LBRY_PROTOCOL = 'lbry://';
@@ -33,7 +33,6 @@ const L_KEY_CODE = 76;
 const ESC_KEY_CODE = 27;
 
 const WUNDERBAR_INPUT_DEBOUNCE_MS = 1000;
-const LIGHTHOUSE_MIN_CHARACTERS = 3;
 
 type Props = {
   onSearch: (string) => void,

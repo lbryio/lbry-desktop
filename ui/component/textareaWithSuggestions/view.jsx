@@ -1,7 +1,7 @@
 // @flow
 import { EMOTES_48px as EMOTES } from 'constants/emotes';
 import { matchSorter } from 'match-sorter';
-import { SEARCH_OPTIONS } from 'constants/search';
+import { LIGHTHOUSE_MIN_CHARACTERS, SEARCH_OPTIONS } from 'constants/search';
 import * as KEYCODES from 'constants/keycodes';
 import Autocomplete from '@mui/material/Autocomplete';
 import BusyIndicator from 'component/common/busy-indicator';
@@ -32,7 +32,6 @@ const SUGGESTION_REGEX = new RegExp(
  */
 
 const SEARCH_SIZE = 10;
-const LIGHTHOUSE_MIN_CHARACTERS = 3;
 const INPUT_DEBOUNCE_MS = 1000;
 
 const EMOJI_MIN_CHARACTERS = 2;
