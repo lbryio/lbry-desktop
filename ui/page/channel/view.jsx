@@ -2,6 +2,7 @@
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import React from 'react';
+import { getChannelSubCountStr } from 'util/formatMediaDuration';
 import { parseURI } from 'util/lbryURI';
 import { YOUTUBE_STATUSES } from 'lbryinc';
 import Page from 'component/page';
@@ -253,8 +254,12 @@ function ChannelPage(props: Props) {
           <div className="channel__meta">
             <Tooltip title={formattedSubCount} followCursor placement="top">
               <span>
-                {compactSubCount} {subCount !== 1 ? __('Followers') : __('Follower')}
-                <HelpLink href="https://odysee.com/@OdyseeHelp:b/OdyseeBasics:c" />
+                {getChannelSubCountStr(subCount, compactSubCount)}
+                {Number.isInteger(subCount) ? (
+                  <HelpLink href="https://odysee.com/@OdyseeHelp:b/OdyseeBasics:c" />
+                ) : (
+                  '\u00A0'
+                )}
               </span>
             </Tooltip>
             {channelIsMine && (

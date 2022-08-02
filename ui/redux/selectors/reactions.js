@@ -33,7 +33,7 @@ export const makeSelectMyReactionForUri = (uri) =>
 export const makeSelectLikeCountForUri = (uri) =>
   createSelector(makeSelectClaimForUri(uri), makeSelectReactionsForUri(uri), (claim, reactions) => {
     if (!claim || !reactions || reactions.my_reactions === null || reactions.others_reactions === null) {
-      return 0;
+      return undefined;
     }
     const claimId = claim.claim_id;
 
@@ -54,7 +54,7 @@ export const makeSelectLikeCountForUri = (uri) =>
 export const makeSelectDislikeCountForUri = (uri) =>
   createSelector(makeSelectClaimForUri(uri), makeSelectReactionsForUri(uri), (claim, reactions) => {
     if (!claim || !reactions || reactions.my_reactions === null || reactions.others_reactions === null) {
-      return 0;
+      return undefined;
     }
     const claimId = claim.claim_id;
 

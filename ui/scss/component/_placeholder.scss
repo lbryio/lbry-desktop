@@ -141,3 +141,13 @@
   @include placeholder;
   height: 60vh;
 }
+
+.reaction-count-placeholder {
+  background-color: var(--color-header-button);
+  width: 2ch;
+}
+
+.file-view-count-placeholder {
+  background-color: var(--color-header-button);
+  width: 10ch;
+}

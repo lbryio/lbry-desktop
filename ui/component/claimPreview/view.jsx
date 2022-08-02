@@ -10,6 +10,7 @@ import * as COLLECTIONS_CONSTS from 'constants/collections';
 import { isChannelClaim } from 'util/claim';
 import { formatLbryUrlForWeb } from 'util/url';
 import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
+import { getChannelSubCountStr } from 'util/formatMediaDuration';
 import { toCompactNotation } from 'util/string';
 import ClaimPreviewProgress from 'component/claimPreviewProgress';
 import Icon from 'component/common/icon';
@@ -210,7 +211,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
       <div className="media__subtitle">
         <Tooltip title={formattedSubCountLocale} followCursor placement="top">
           <span className="claim-preview__channel-sub-count">
-            {channelSubCount === 1 ? __('1 Follower') : __('%formattedSubCount% Followers', { formattedSubCount })}
+            {getChannelSubCountStr(channelSubCount, formattedSubCount)}
           </span>
         </Tooltip>
       </div>

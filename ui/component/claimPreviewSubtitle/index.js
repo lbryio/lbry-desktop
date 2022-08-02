@@ -17,7 +17,7 @@ const select = (state, props) => {
     claim,
     pending: makeSelectClaimIsPending(props.uri)(state),
     isLivestream,
-    subCount: isChannel ? selectSubCountForUri(state, claim.repost_url ? claim.canonical_url : props.uri) : 0,
+    subCount: isChannel ? selectSubCountForUri(state, claim.repost_url ? claim.canonical_url : props.uri) : null,
     lang: selectLanguage(state),
   };
 };

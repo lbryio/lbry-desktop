@@ -6,8 +6,11 @@ import DateTime from 'component/dateTime';
 import LivestreamDateTime from 'component/livestreamDateTime';
 import Button from 'component/button';
 import FileViewCountInline from 'component/fileViewCountInline';
+import { getChannelSubCountStr, getChannelViewCountStr } from 'util/formatMediaDuration';
 import { toCompactNotation } from 'util/string';
 import { parseURI } from 'util/lbryURI';
+
+const SPACED_BULLET = '\u00A0\u2022\u00A0';
 
 type Props = {
   uri: string,
@@ -20,7 +23,7 @@ type Props = {
   isLivestream: boolean,
   lang: string,
   fetchSubCount: (string) => void,
-  subCount: number,
+  subCount: ?number,
   showMemberBadge?: boolean,
 };
 
@@ -43,7 +46,7 @@ function ClaimPreviewSubtitle(props: Props) {
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
 
   const claimId = (claim && claim.claim_id) || '0';
-  const formattedSubCount = toCompactNotation(subCount, lang, 10000);
+  const formattedSubCount = subCount ? toCompactNotation(subCount, lang, 10000) : null;
 
   React.useEffect(() => {
     if (isChannel) {
@@ -66,8 +69,9 @@ function ClaimPreviewSubtitle(props: Props) {
               {isChannel && type !== 'inline' && (
                 <>
                   <span className="claim-preview-metadata-sub-upload">
-                    {subCount === 1 ? __('1 Follower') : __('%formattedSubCount% Followers', { formattedSubCount })}
-                    &nbsp;&bull; {claimsInChannel} {claimsInChannel === 1 ? __('upload') : __('uploads')}
+                    {getChannelViewCountStr(claimsInChannel)}
+                    {Number.isInteger(subCount) ? SPACED_BULLET : ''}
+                    {getChannelSubCountStr(subCount, formattedSubCount)}
                   </span>
                 </>
               )}

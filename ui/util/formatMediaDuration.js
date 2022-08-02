@@ -22,3 +22,19 @@ export default function formatMediaDuration(duration = 0, config) {
 
   return timeString;
 }
+
+// TODO: need a better file location:
+
+// @flow
+export function getChannelSubCountStr(count: ?number, formattedCount?: ?string) {
+  if (count === null || count === undefined) {
+    return null;
+  } else {
+    return count === 1 ? __('1 follower') : __('%count% followers', { count: formattedCount || count });
+  }
+}
+
+// @flow
+export function getChannelViewCountStr(count: number) {
+  return count === 1 ? __('1 upload') : __('%count% uploads', { count });
+}

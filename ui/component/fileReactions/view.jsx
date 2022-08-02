@@ -1,8 +1,9 @@
 // @flow
+import React from 'react';
+import Skeleton from '@mui/material/Skeleton';
+import classnames from 'classnames';
 import * as REACTION_TYPES from 'constants/reactions';
 import * as ICONS from 'constants/icons';
-import React from 'react';
-import classnames from 'classnames';
 import RatioBar from 'component/ratioBar';
 import { formatNumberWithCommas } from 'util/number';
 import NudgeFloating from 'component/nudgeFloating';
@@ -79,6 +80,8 @@ export default function FileReactions(props: Props) {
   );
 }
 
+const Placeholder = <Skeleton variant="text" animation="wave" className="reaction-count-placeholder" />;
+
 type ButtonProps = {
   myReaction: ?string,
   reactionCount: number,
@@ -109,7 +112,7 @@ const LikeButton = (props: ButtonProps) => {
               <div className="button__fire-particle6" />
             </>
           )}
-          <span>{formatNumberWithCommas(reactionCount, 0)}</span>
+          {Number.isInteger(reactionCount) ? <span>{formatNumberWithCommas(reactionCount, 0)}</span> : Placeholder}
         </>
       }
       iconSize={18}
@@ -139,7 +142,7 @@ const DislikeButton = (props: ButtonProps) => {
               <div className="button__slime-drop2" />
             </>
           )}
-          <span>{formatNumberWithCommas(reactionCount, 0)}</span>
+          {Number.isInteger(reactionCount) ? <span>{formatNumberWithCommas(reactionCount, 0)}</span> : Placeholder}
         </>
       }
       iconSize={18}

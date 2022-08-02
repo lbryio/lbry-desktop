@@ -53,7 +53,7 @@ type Props = {
   collectionId?: string,
   fypId?: string,
   isLivestream: boolean,
-  viewCount: string,
+  viewCount: ?string,
   isLivestreamActive: boolean,
   livestreamViewerCount: ?number,
   swipeLayout: boolean,
