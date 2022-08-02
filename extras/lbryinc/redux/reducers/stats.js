@@ -1,7 +1,18 @@
+// @flow
 import { handleActions } from 'util/redux-utils';
 import * as ACTIONS from 'constants/action_types';
 
-const defaultState = {
+declare type StatsState = {
+  fetchingViewCount: boolean,
+  viewCountError?: Error,
+  viewCountById: { [ClaimId]: number },
+  fetchingSubCount: boolean,
+  subCountError?: Error,
+  subCountById: { [ClaimId]: number },
+  subCountLastFetchedById: { [ClaimId]: number },
+};
+
+const defaultState: StatsState = {
   fetchingViewCount: false,
   viewCountError: undefined,
   viewCountById: {},
@@ -63,17 +74,12 @@ export const statsReducer = handleActions(
         });
       }
 
-      const newState = {
+      return {
         ...state,
         fetchingSubCount: false,
         subCountLastFetchedById,
+        ...(dataChanged ? { subCountById } : {}),
       };
-
-      if (dataChanged) {
-        newState.subCountById = subCountById;
-      }
-
-      return newState;
     },
   },
   defaultState
