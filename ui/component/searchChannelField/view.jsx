@@ -89,7 +89,6 @@ export default function SearchChannelField(props: Props) {
       return (
         <Button
           ref={addTagRef}
-          requiresAuth
           button="primary"
           label={labelFoundAction}
           onClick={() => handleFoundChannelClick(claim)}

@@ -5,7 +5,6 @@ import Icon from 'component/common/icon';
 import classnames from 'classnames';
 import { NavLink } from 'react-router-dom';
 import { formatLbryUrlForWeb } from 'util/url';
-import * as PAGES from 'constants/pages';
 import useCombinedRefs from 'effects/use-combined-refs';
 
 type Props = {
@@ -34,7 +33,6 @@ type Props = {
   onMouseLeave: ?(any) => any,
   pathname: string,
   emailVerified: boolean,
-  requiresAuth: ?boolean,
   myref: any,
   dispatch: any,
   'aria-label'?: string,
@@ -66,7 +64,6 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     iconColor,
     activeClass,
     emailVerified,
-    requiresAuth,
     myref,
     dispatch, // <button> doesn't know what to do with dispatch
     pathname,
@@ -75,7 +72,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     ...otherProps
   } = props;
 
-  const disable = disabled || (user === null && requiresAuth);
+  const disable = disabled;
 
   const combinedClassName = classnames(
     'button',
@@ -181,31 +178,6 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     } else if (description) {
       defaultTooltip = description;
     }
-  }
-
-  if (requiresAuth && !emailVerified) {
-    let redirectUrl = `/$/${PAGES.AUTH}?redirect=${pathname}`;
-
-    if (authSrc) {
-      redirectUrl += `&src=${authSrc}`;
-    }
-
-    return (
-      <NavLink
-        exact
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-        to={redirectUrl}
-        title={title || defaultTooltip}
-        disabled={disable}
-        className={combinedClassName}
-        activeClassName={activeClass}
-        aria-label={ariaLabel}
-      >
-        {content}
-      </NavLink>
-    );
   }
 
   return path ? (
