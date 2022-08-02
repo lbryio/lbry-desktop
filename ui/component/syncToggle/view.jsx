@@ -41,7 +41,7 @@ function SyncToggle(props: Props) {
       {!verifiedEmail && (
         <div>
           <p className="help">{__('An email address is required to sync your account.')}</p>
-          <Button requiresAuth button="primary" label={__('Add Email')} />
+          <Button button="primary" label={__('Add Email')} />
         </div>
       )}
     </SettingsRow>

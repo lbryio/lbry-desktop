@@ -41,8 +41,6 @@ import ModalPasswordUnsave from 'modal/modalPasswordUnsave';
 import ModalPublish from 'modal/modalPublish';
 import ModalPublishPreview from 'modal/modalPublishPreview';
 
-import ModalRemoveBtcSwapAddress from 'modal/modalRemoveBtcSwapAddress';
-
 import ModalRemoveCard from 'modal/modalRemoveCard';
 import ModalRemoveComment from 'modal/modalRemoveComment';
 
@@ -137,8 +135,6 @@ function getModal(id) {
       return ModalViewImage;
     case MODALS.MASS_TIP_UNLOCK:
       return ModalMassTipsUnlock;
-    case MODALS.CONFIRM_REMOVE_BTC_SWAP_ADDRESS:
-      return ModalRemoveBtcSwapAddress;
     case MODALS.BLOCK_CHANNEL:
       return ModalBlockChannel;
     case MODALS.COLLECTION_ADD:

@@ -98,24 +98,22 @@ export function doSetSync(oldHash: string, newHash: string, data: any) {
   };
 }
 
-export const doGetSyncDesktop = (cb?: (any, any) => void, password?: string) => (
-  dispatch: Dispatch,
-  getState: GetState
-) => {
-  const state = getState();
-  const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
-  const getSyncPending = selectGetSyncIsPending(state);
-  const setSyncPending = selectSetSyncIsPending(state);
-  const syncLocked = selectSyncIsLocked(state);
+export const doGetSyncDesktop =
+  (cb?: (any, any) => void, password?: string) => (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
+    const getSyncPending = selectGetSyncIsPending(state);
+    const setSyncPending = selectSetSyncIsPending(state);
+    const syncLocked = selectSyncIsLocked(state);
 
-  return getSavedPassword().then((savedPassword) => {
-    const passwordArgument = password || password === '' ? password : savedPassword === null ? '' : savedPassword;
+    return getSavedPassword().then((savedPassword) => {
+      const passwordArgument = password || password === '' ? password : savedPassword === null ? '' : savedPassword;
 
-    if (syncEnabled && !getSyncPending && !setSyncPending && !syncLocked) {
-      return dispatch(doGetSync(passwordArgument, cb));
-    }
-  });
-};
+      if (syncEnabled && !getSyncPending && !setSyncPending && !syncLocked) {
+        return dispatch(doGetSync(passwordArgument, cb));
+      }
+    });
+  };
 
 export function doSyncLoop(noInterval?: boolean) {
   return (dispatch: Dispatch, getState: GetState) => {
@@ -385,7 +383,6 @@ type SharedData = {
     following?: Array<{ uri: string, notificationsDisabled: boolean }>,
     tags?: Array<string>,
     blocked?: Array<string>,
-    coin_swap_codes?: Array<string>,
     settings?: any,
     app_welcome_version?: number,
     sharing_3P?: boolean,
@@ -403,7 +400,6 @@ function extractUserState(rawObj: SharedData) {
       following,
       tags,
       blocked,
-      coin_swap_codes,
       settings,
       app_welcome_version,
       sharing_3P,
@@ -418,7 +414,6 @@ function extractUserState(rawObj: SharedData) {
       ...(following ? { following } : {}),
       ...(tags ? { tags } : {}),
       ...(blocked ? { blocked } : {}),
-      ...(coin_swap_codes ? { coin_swap_codes } : {}),
       ...(settings ? { settings } : {}),
       ...(app_welcome_version ? { app_welcome_version } : {}),
       ...(sharing_3P ? { sharing_3P } : {}),
@@ -445,7 +440,6 @@ export function doPopulateSharedUserState(sharedSettings: any) {
       following,
       tags,
       blocked,
-      coin_swap_codes,
       settings,
       app_welcome_version,
       sharing_3P,
@@ -470,7 +464,6 @@ export function doPopulateSharedUserState(sharedSettings: any) {
         following,
         tags,
         blocked,
-        coinSwapCodes: coin_swap_codes,
         walletPrefSettings: settings,
         mergedClientSettings,
         welcomeVersion: app_welcome_version,
