@@ -313,39 +313,6 @@ export default function SettingsCreatorPage(props: Props) {
                     />
                   </SettingsRow>
 
-                  <SettingsRow
-                    title={
-                      <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Minimum %lbc% tip amount for hyperchats</I18nMessage>
-                    }
-                    subtitle={
-                      <>
-                        {__(HELP.MIN_SUPER)}
-                        {minTip !== 0 && (
-                          <p className="help--inline">
-                            <em>{__(HELP.MIN_SUPER_OFF)}</em>
-                          </p>
-                        )}
-                      </>
-                    }
-                  >
-                    <FormField
-                      name="min_tip_amount_super_chat"
-                      className="form-field--price-amount"
-                      min={0}
-                      step="any"
-                      type="number"
-                      placeholder="1"
-                      value={minSuper}
-                      disabled={minTip !== 0}
-                      onChange={(e) => {
-                        const newMinSuper = parseFloat(e.target.value);
-                        setMinSuper(newMinSuper);
-                        pushMinSuperDebounced(newMinSuper, activeChannelClaim);
-                      }}
-                      onBlur={() => setLastUpdated(Date.now())}
-                    />
-                  </SettingsRow>
-
                   <SettingsRow title={__('Moderators')} subtitle={__(HELP.MODERATORS)} multirow>
                     <SearchChannelField
                       label={__('Moderators')}

@@ -25,12 +25,14 @@ function isNotFunction(object) {
 }
 
 function createBulkThunkMiddleware() {
-  return ({ dispatch, getState }) => (next) => (action) => {
-    if (action.type === 'BATCH_ACTIONS') {
-      action.actions.filter(isFunction).map((actionFn) => actionFn(dispatch, getState));
-    }
-    return next(action);
-  };
+  return ({ dispatch, getState }) =>
+    (next) =>
+    (action) => {
+      if (action.type === 'BATCH_ACTIONS') {
+        action.actions.filter(isFunction).map((actionFn) => actionFn(dispatch, getState));
+      }
+      return next(action);
+    };
 }
 
 function enableBatching(reducer) {
@@ -68,7 +70,6 @@ const searchFilter = createFilter('search', ['options']);
 const tagsFilter = createFilter('tags', ['followedTags']);
 const subscriptionsFilter = createFilter('subscriptions', ['subscriptions']);
 const blockedFilter = createFilter('blocked', ['blockedChannels']);
-const coinSwapsFilter = createFilter('coinSwap', ['coinSwaps']);
 const settingsFilter = createBlacklistFilter('settings', ['loadedLanguages', 'language']);
 const collectionsFilter = createFilter('collections', ['builtin', 'saved', 'unpublished', 'edited', 'pending']);
 const whiteListedReducers = [
@@ -81,7 +82,6 @@ const whiteListedReducers = [
   'app',
   'search',
   'blocked',
-  'coinSwap',
   'settings',
   'subscriptions',
   'collections',
@@ -92,7 +92,6 @@ const transforms = [
   fileInfoFilter,
   walletFilter,
   blockedFilter,
-  coinSwapsFilter,
   tagsFilter,
   appFilter,
   searchFilter,
@@ -129,8 +128,6 @@ const triggerSharedStateActions = [
   ACTIONS.CHANNEL_SUBSCRIBE,
   ACTIONS.CHANNEL_UNSUBSCRIBE,
   ACTIONS.TOGGLE_BLOCK_CHANNEL,
-  ACTIONS.ADD_COIN_SWAP,
-  ACTIONS.REMOVE_COIN_SWAP,
   ACTIONS.TOGGLE_TAG_FOLLOW,
   ACTIONS.CREATE_CHANNEL_COMPLETED,
   ACTIONS.SYNC_CLIENT_SETTINGS,
@@ -168,13 +165,6 @@ const sharedStateFilters = {
     property: 'following',
   },
   blocked: { source: 'blocked', property: 'blockedChannels' },
-  coin_swap_codes: {
-    source: 'coinSwap',
-    property: 'coinSwaps',
-    transform: (coinSwaps) => {
-      return coinSwaps.map((coinSwapInfo) => coinSwapInfo.chargeCode);
-    },
-  },
   settings: { source: 'settings', property: 'sharedPreferences' },
   app_welcome_version: { source: 'app', property: 'welcomeVersion' },
   sharing_3P: { source: 'app', property: 'allowAnalytics' },

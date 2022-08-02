@@ -82,12 +82,6 @@ export const doNotificationSocketConnect = (enableNotifications) => (dispatch) =
           dispatch(doNotificationList());
         }
         break;
-      case 'swap-status':
-        dispatch({
-          type: ACTIONS.COIN_SWAP_STATUS_RECEIVED,
-          data: data.data,
-        });
-        break;
     }
   });
 };

@@ -16,7 +16,6 @@ import rewardsReducer from 'redux/reducers/rewards';
 import userReducer from 'redux/reducers/user';
 import commentsReducer from 'redux/reducers/comments';
 import blockedReducer from 'redux/reducers/blocked';
-import coinSwapReducer from 'redux/reducers/coinSwap';
 import searchReducer from 'redux/reducers/search';
 import reactionsReducer from 'redux/reducers/reactions';
 import syncReducer from 'redux/reducers/sync';
@@ -44,7 +43,6 @@ export default (history) =>
     subscriptions: subscriptionsReducer,
     tags: tagsReducer,
     blocked: blockedReducer,
-    coinSwap: coinSwapReducer,
     user: userReducer,
     wallet: walletReducer,
     sync: syncReducer,
