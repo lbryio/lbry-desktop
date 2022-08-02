@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { createCachedSelector } from 're-reselect';
+import { COL_TYPES } from 'constants/collections';
 import { parseURI, buildURI, sanitizeName } from 'util/lbryURI';
 import { dedupeLanguages } from 'util/publish';
 import {
@@ -158,6 +159,11 @@ export const selectCollectionClaimParamsForUri = (state: State, uri: string, col
 
   const { claim_id: claimId, name: collectionName, amount } = claim || collection || {};
 
+  // Covers edited titles as well. It is separated out from collectionName as it
+  // seems like collectionName wants to favor the claim's value for cases
+  // outside of COL_TYPES.FEATURED_CHANNELS (not sure).
+  const featuredTitle = collection?.type === COL_TYPES.FEATURED_CHANNELS ? collection.name : '';
+
   const title = getClaimTitle(claim);
   const collectionChannelId = getChannelIdFromClaim(claim);
   const tags = makeSelectMetadataItemForUri(uri, 'tags')(state);
@@ -169,7 +175,7 @@ export const selectCollectionClaimParamsForUri = (state: State, uri: string, col
     thumbnail_url: collection ? collection.thumbnail?.url : getThumbnailFromClaim(claim),
     name: collectionName ? sanitizeName(collectionName) : undefined,
     description: collection ? collection.description : makeSelectMetadataItemForUri(uri, 'description')(state),
-    title: collection ? collectionName : title,
+    title: featuredTitle || (collection ? collectionName : title),
     bid: String(amount || 0.001),
     languages: languages ? dedupeLanguages(languages) : [],
     locations: makeSelectMetadataItemForUri(uri, 'locations')(state) || [],
