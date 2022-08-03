@@ -12,13 +12,7 @@ import * as ICONS from 'constants/icons';
 // prettier-ignore
 const AD_CONFIGS = Object.freeze({
   ADNIMATION: {
-    // url: 'https://tg1.aniview.com/api/adserver/spt?AV_TAGID=6252bb6f28951333ec10a7a6&AV_PUBLISHERID=601d9a7f2e688a79e17c1265',
-    // tag: 'AV6252bb6f28951333ec10a7a6',
-    url: 'https://tg1.aniview.com/api/adserver/spt?AV_TAGID=62558336037e0f3df07ff0a8&AV_PUBLISHERID=601d9a7f2e688a79e17c1265',
-    tag: 'AV6252bb6f28951333ec10a7a6',
-  },
-  ADNIMATION_FILEPAGE: {
-    url: 'https://tg1.aniview.com/api/adserver/spt?AV_TAGID=62558336037e0f3df07ff0a8&AV_PUBLISHERID=601d9a7f2e688a79e17c1265',
+    url: 'https://tg1.aniview.com/api/adserver/spt?AV_TAGID=6252bb6f28951333ec10a7a6&AV_PUBLISHERID=601d9a7f2e688a79e17c1265',
     tag: 'AV6252bb6f28951333ec10a7a6',
   },
 });
@@ -29,7 +23,6 @@ const AD_CONFIGS = Object.freeze({
 
 type Props = {
   type: string,
-  filePage?: boolean,
   tileLayout?: boolean,
   small?: boolean,
   className?: string,
@@ -44,7 +37,6 @@ type Props = {
 function Ads(props: Props) {
   const {
     type = 'video',
-    filePage = false,
     tileLayout,
     small,
     isAdBlockerFound,
@@ -56,7 +48,7 @@ function Ads(props: Props) {
   } = props;
 
   const shouldShowAds = useShouldShowAds(userHasPremiumPlus, userCountry, isAdBlockerFound, doSetAdBlockerFound);
-  const adConfig = filePage ? AD_CONFIGS.ADNIMATION_FILEPAGE : AD_CONFIGS.ADNIMATION;
+  const adConfig = AD_CONFIGS.ADNIMATION;
 
   React.useEffect(() => {
     if (shouldShowAds) {
@@ -96,9 +88,7 @@ function Ads(props: Props) {
           })}
         >
           <div className="ad__container">
-            {/* <div id={adConfig.tag} /> */}
-            <div id="AV6252bb6f28951333ec10a7a6" />
-            <div id="AV62558336037e0f3df07ff0a8" />
+            <div id={adConfig.tag} />
           </div>
           <div
             className={classnames('ads__claim-text', {
