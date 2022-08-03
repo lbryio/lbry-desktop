@@ -63,10 +63,10 @@ const WalletBalance = () => {
                 ${(accountStatusResponse && accountStatusResponse.total_received_unpaid / 100) || 0}{' '}
                 {__('Total Received Tips')}
               </h2>
-
+              {/* withdraw amount is usuallty incorrect due to chargebacks / currency conversion issues
               <h2 className="section__title--small">
                 ${(accountStatusResponse && accountStatusResponse.total_paid_out / 100) || 0} {__('Withdrawn')}
-              </h2>
+              </h2> */}
 
               <div className="section__actions">
                 <Button
