@@ -2316,5 +2316,13 @@
   "Installing, please wait...": "Installing, please wait...",
   "There was an error during installation. Please, try again.": "There was an error during installation. Please, try again.",
   "Odysee Connect --[Section in Help Page]--": "Odysee Connect",
+  "Export Wallet": "Export Wallet",
+  "Export encrypted sync data for import in another app.": "Export encrypted sync data for import in another app.",
+  "Export wallet sync data. Choose a secure password you will need for import.": "Export wallet sync data. Choose a secure password you will need for import.",
+  "Choose Password": "Choose Password",
+  "Sync data copied.": "Sync data copied.",
+  "Your Sync Data is prepared. You can now copy or save it.": "Your Sync Data is prepared. You can now copy or save it.",
+  "Export wallet": "Export wallet",
+  "Sync data saved.": "Sync data saved.",
   "--end--": "--end--"
 }

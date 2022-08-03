@@ -6,6 +6,7 @@ import {
   doNotifyDecryptWallet,
   doNotifyEncryptWallet,
   doNotifyForgetPassword,
+  doOpenModal,
   doToggle3PAnalytics,
 } from 'redux/actions/app';
 import { doSetDaemonSetting, doClearDaemonSetting, doFindFFmpeg } from 'redux/actions/settings';
@@ -25,6 +26,7 @@ const select = (state) => ({
 });
 
 const perform = (dispatch) => ({
+  openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   setDaemonSetting: (key, value) => dispatch(doSetDaemonSetting(key, value)),
   clearDaemonSetting: (key) => dispatch(doClearDaemonSetting(key)),
   clearCache: () => dispatch(doClearCache()),
