@@ -64,10 +64,6 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-if (process.env.SDK_API_URL) {
-  console.warn('SDK_API_URL env var is deprecated. Use SDK_API_HOST instead'); // @eslint-disable-line
-}
-
 Lbry.setDaemonConnectionString(PROXY_URL);
 
 Lbry.setOverride(
