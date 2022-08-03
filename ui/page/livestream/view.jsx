@@ -70,6 +70,8 @@ export default function LivestreamPage(props: Props) {
   const releaseTime: moment = moment.unix(claim?.value?.release_time || 0);
   const stringifiedClaim = JSON.stringify(claim);
 
+  const [hyperchatsHidden, setHyperchatsHidden] = React.useState(false);
+
   React.useEffect(() => {
     // TODO: This should not be needed once we unify the livestream player (?)
     analytics.playerLoadedEvent('livestream', false);
@@ -180,7 +182,12 @@ export default function LivestreamPage(props: Props) {
         !hideComments &&
         isInitialized && (
           <React.Suspense fallback={null}>
-            <ChatLayout uri={uri} setLayountRendered={setLayountRendered} />
+            <ChatLayout
+              uri={uri}
+              hyperchatsHidden={hyperchatsHidden}
+              toggleHyperchats={() => setHyperchatsHidden(!hyperchatsHidden)}
+              setLayountRendered={setLayountRendered}
+            />
           </React.Suspense>
         )
       }

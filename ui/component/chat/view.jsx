@@ -152,6 +152,7 @@ export default function ChatLayout(props: Props) {
       toggleHyperChat();
     } else {
       setViewMode(VIEW_MODES.CHAT);
+      if (setCustomViewMode) setCustomViewMode(VIEW_MODES.CHAT);
     }
 
     if (discussionElement) {
@@ -358,13 +359,6 @@ export default function ChatLayout(props: Props) {
               hyperchatsHidden={hyperchatsHidden || hideHyperchats}
               isMobile={isMobile}
             />
-          )}
-
-          {false && viewMode === VIEW_MODES.SUPERCHAT && hyperChatsByAmount && (
-            <div className="livestream-hyperchat-orderOptions">
-              <b>Order by: </b>
-              <label className="active">Date</label> | <label>amount</label>
-            </div>
           )}
 
           {pinnedComment &&
