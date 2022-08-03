@@ -4,10 +4,27 @@ import { Lbryio } from 'lbryinc';
 import * as PAGES from 'constants/pages';
 import Button from 'component/button';
 import Card from 'component/common/card';
+import I18nMessage from 'component/i18nMessage';
 import React from 'react';
 
 import { getStripeEnvironment } from 'util/stripe';
 const stripeEnvironment = getStripeEnvironment();
+
+// prettier-ignore
+const STRINGS = {
+  purchase: {
+    title: 'Purchase Your Content',
+    subtitle: "After completing the purchase you will have instant access to your content that doesn't expire.",
+    button: 'Purchase your content for %currency%%amount%',
+    add_card: '%add_a_card% to purchase content.',
+  },
+  preorder: {
+    title: 'Pre-order Your Content',
+    subtitle: 'This content is not available yet but you can pre-order it now so you can access it as soon as it goes live.',
+    button: 'Pre-order your content for %currency%%amount%',
+    add_card: '%add_a_card% to preorder content.',
+  },
+};
 
 type TipParams = { tipAmount: number, tipChannelName: string, channelClaimId: string };
 type UserParams = { activeChannelName: ?string, activeChannelId: ?string };
@@ -60,17 +77,6 @@ export default function PreorderContent(props: Props) {
     claimId,
   } = props;
 
-  function capitalizeFirstLetter(string) {
-    if (string) return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
-  let transactionName;
-  if (preorderOrPurchase === 'preorder') {
-    transactionName = 'pre-order';
-  } else {
-    transactionName = 'purchase';
-  }
-
   // set the purchase amount once the preorder tag is selected
   React.useEffect(() => {
     if (preorderOrPurchase === 'preorder') {
@@ -83,6 +89,25 @@ export default function PreorderContent(props: Props) {
   const [tipAmount, setTipAmount] = React.useState(0);
   const [waitingForBackend, setWaitingForBackend] = React.useState(false);
   const [hasCardSaved, setHasSavedCard] = React.useState(false);
+
+  const fiatSymbol = preferredCurrency === 'EUR' ? '€' : '$';
+  const STR = STRINGS[preorderOrPurchase || 'preorder'];
+
+  const AddCardButton = (
+    <I18nMessage
+      tokens={{
+        add_a_card: (
+          <Button
+            navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`}
+            label={__('Add a card --[replaces add_a_card]--')}
+            button="link"
+          />
+        ),
+      }}
+    >
+      {STR.add_card}
+    </I18nMessage>
+  );
 
   // check if user has a payment method saved
   React.useEffect(() => {
@@ -105,19 +130,6 @@ export default function PreorderContent(props: Props) {
       setHasSavedCard(Boolean(defaultPaymentMethodId));
     });
   }, [setHasSavedCard]);
-
-  const modalHeaderText = preorderOrPurchase
-    ? __(`%purchase_or_preorder% Your Content`, { purchase_or_preorder: capitalizeFirstLetter(preorderOrPurchase) })
-    : '';
-  let subtitleString;
-  if (preorderOrPurchase === 'purchase') {
-    subtitleString = "After completing the purchase you will have instant access to your content that doesn't expire";
-  } else {
-    subtitleString =
-      'This content is not available yet but you can pre-order it now so you can access it as soon as it goes live';
-  }
-
-  const subtitleText = __(subtitleString);
 
   function handleSubmit() {
     const tipParams: TipParams = {
@@ -148,25 +160,13 @@ export default function PreorderContent(props: Props) {
     );
   }
 
-  const fiatSymbolToUse = preferredCurrency === 'EUR' ? '€' : '$';
-
-  function buildButtonText() {
-    return transactionName
-      ? __('%transaction_name% your content for %tip_currency%%tip_amount%', {
-          transaction_name: capitalizeFirstLetter(transactionName),
-          tip_currency: fiatSymbolToUse,
-          tip_amount: tipAmount.toString(),
-        })
-      : '';
-  }
-
   return (
     <Form onSubmit={handleSubmit}>
       {!waitingForBackend && (
         <Card
-          title={modalHeaderText}
+          title={__(STR.title)}
           className={'preorder-content-modal'}
-          subtitle={<div className="section__subtitle">{subtitleText}</div>}
+          subtitle={<div className="section__subtitle">{__(STR.subtitle)}</div>}
           actions={
             // confirm purchase functionality
             <>
@@ -175,21 +175,11 @@ export default function PreorderContent(props: Props) {
                   autoFocus
                   onClick={handleSubmit}
                   button="primary"
-                  label={buildButtonText()}
+                  label={__(STR.button, { currency: fiatSymbol, amount: tipAmount.toString() })}
                   disabled={!hasCardSaved}
                 />
 
-                {!hasCardSaved && (
-                  <div className="add-card-prompt">
-                    <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" />
-                    {preorderOrPurchase
-                      ? ' ' +
-                        __(`To %purchase_or_preorder% Content`, {
-                          purchase_or_preorder: capitalizeFirstLetter(preorderOrPurchase),
-                        })
-                      : ''}
-                  </div>
-                )}
+                {!hasCardSaved && <div className="add-card-prompt">{AddCardButton}</div>}
               </div>
             </>
           }
@@ -198,7 +188,7 @@ export default function PreorderContent(props: Props) {
       {/* processing payment card */}
       {waitingForBackend && (
         <Card
-          title={modalHeaderText}
+          title={__(STR.title)}
           className={'preorder-content-modal-loading'}
           subtitle={<div className="section__subtitle">{__('Processing your purchase...')}</div>}
         />

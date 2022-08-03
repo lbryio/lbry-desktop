@@ -43,22 +43,9 @@ export default function PreorderButton(props: Props) {
     }
   }, [preorderContentClaimId]);
 
-  let fiatIconToUse = ICONS.FINANCE;
-  let fiatSymbolToUse = '$';
-  if (preferredCurrency === 'EUR') {
-    fiatIconToUse = ICONS.EURO;
-    fiatSymbolToUse = '€';
-  }
-
-  let preorderOrPurchase;
-  let pastTense;
-  if (purchaseTag) {
-    preorderOrPurchase = 'purchase';
-    pastTense = 'purchasing';
-  } else {
-    preorderOrPurchase = 'preorder';
-    pastTense = 'preordering';
-  }
+  const fiatIcon = preferredCurrency === 'EUR' ? ICONS.EURO : ICONS.FINANCE;
+  const fiatSymbol = preferredCurrency === 'EUR' ? '€' : '$';
+  const preorderOrPurchase = purchaseTag ? 'purchase' : 'preorder';
 
   return (
     <>
@@ -68,11 +55,11 @@ export default function PreorderButton(props: Props) {
           <Button
             iconColor="red"
             className={'preorder-button'}
-            icon={fiatIconToUse}
+            icon={fiatIcon}
             button="primary"
-            label={__('This content can be purchased for $' + purchaseTag, {
-              fiatSymbolToUse,
-              preorderTag,
+            label={__('This content can be purchased for %currency%%amount%', {
+              currency: '$', // fiatSymbol -- b5813fe1 hardcoded to dollar. But preorder below allows euro. ??
+              amount: purchaseTag,
             })}
             requiresAuth
             onClick={() =>
@@ -93,12 +80,9 @@ export default function PreorderButton(props: Props) {
           <Button
             iconColor="red"
             className={'preorder-button'}
-            icon={fiatIconToUse}
+            icon={fiatIcon}
             button="primary"
-            label={__(`Thanks for ${pastTense}, enjoy your content!`, {
-              fiatSymbolToUse,
-              preorderTag,
-            })}
+            label={__('Thanks for purchasing, enjoy your content!')}
             requiresAuth
           />
         </div>
@@ -133,12 +117,9 @@ export default function PreorderButton(props: Props) {
           <Button
             iconColor="red"
             className={'preorder-button'}
-            icon={fiatIconToUse}
+            icon={fiatIcon}
             button="primary"
-            label={__('Preorder now for %fiatSymbolToUse%%preorderTag%', {
-              fiatSymbolToUse,
-              preorderTag,
-            })}
+            label={__('Preorder now for %currency%%amount%', { currency: fiatSymbol, amount: preorderTag })}
             requiresAuth
             onClick={() =>
               doOpenModal(MODALS.PREORDER_CONTENT, {
