@@ -24,6 +24,7 @@ type Props = {
   notificationsDisabled: boolean,
   user: ?User,
   uri: string,
+  preferEmbed: boolean,
 };
 
 export default function SubscribeButton(props: Props) {
@@ -37,6 +38,7 @@ export default function SubscribeButton(props: Props) {
     notificationsDisabled,
     user,
     uri,
+    preferEmbed,
   } = props;
 
   const buttonRef = useRef();
@@ -71,7 +73,7 @@ export default function SubscribeButton(props: Props) {
   const label = isMobile && shrinkOnMobile ? '' : unfollowOverride || subscriptionLabel;
   const titlePrefix = isSubscribed ? __('Unfollow this channel') : __('Follow this channel');
 
-  if (isSubscribed && !permanentUrl && rawChannelName) {
+  if (!preferEmbed && isSubscribed && !permanentUrl && rawChannelName) {
     return (
       <div className="button-group button-group-subscribed">
         <Button
@@ -100,7 +102,7 @@ export default function SubscribeButton(props: Props) {
     );
   }
 
-  return permanentUrl && claimName ? (
+  return !preferEmbed && permanentUrl && claimName ? (
     <div className="button-group">
       <Button
         ref={buttonRef}
