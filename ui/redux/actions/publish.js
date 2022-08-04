@@ -1,4 +1,5 @@
 // @flow
+import * as ERRORS from 'constants/errors';
 import * as MODALS from 'constants/modal_types';
 import * as ACTIONS from 'constants/action_types';
 import * as PAGES from 'constants/pages';
@@ -289,7 +290,13 @@ export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispat
       type: ACTIONS.PUBLISH_FAIL,
     });
 
-    actions.push(doError({ message: error.message, cause: error.cause }));
+    let message = typeof error === 'string' ? error : error.message;
+
+    if (message.endsWith(ERRORS.SDK_FETCH_TIMEOUT)) {
+      message = ERRORS.PUBLISH_TIMEOUT_BUT_LIKELY_SUCCESSFUL;
+    }
+
+    actions.push(doError({ message, cause: error.cause }));
     dispatch(batchActions(...actions));
   };
 
