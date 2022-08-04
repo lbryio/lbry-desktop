@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { createCachedSelector } from 're-reselect';
-import { parseURI, buildURI, parseName } from 'util/lbryURI';
+import { parseURI, buildURI, sanitizeName } from 'util/lbryURI';
 import { dedupeLanguages } from 'util/publish';
 import {
   selectClaimsById,
@@ -167,7 +167,7 @@ export const selectCollectionClaimParamsForUri = (state: State, uri: string, col
 
   const collectionParams: CollectionPublishParams = {
     thumbnail_url: collection ? collection.thumbnail?.url : getThumbnailFromClaim(claim),
-    name: collectionName ? parseName(collectionName) : undefined,
+    name: collectionName ? sanitizeName(collectionName) : undefined,
     description: collection ? collection.description : makeSelectMetadataItemForUri(uri, 'description')(state),
     title: collection ? collectionName : title,
     bid: String(amount || 0.001),

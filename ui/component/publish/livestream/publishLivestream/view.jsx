@@ -4,7 +4,7 @@ import { SOURCE_NONE, SOURCE_SELECT, SOURCE_UPLOAD } from 'constants/publish_sou
 import React, { useState, useEffect } from 'react';
 import Card from 'component/common/card';
 import { FormField } from 'component/common/form';
-import { regexInvalidURI } from 'util/lbryURI';
+import { sanitizeName } from 'util/lbryURI';
 import Spinner from 'component/spinner';
 import * as PUBLISH_MODES from 'constants/publish_types';
 import PublishName from '../../shared/publishName';
@@ -190,11 +190,6 @@ function PublishLivestream(props: Props) {
     updatePublishForm({ fileDur: duration, fileSize: size, fileVid: isvid });
   }
 
-  function parseName(newName) {
-    let INVALID_URI_CHARS = new RegExp(regexInvalidURI, 'gu');
-    return newName.replace(INVALID_URI_CHARS, '-');
-  }
-
   /*
   function autofillTitle(file) {
     const newTitle = (file && file.name && file.name.substr(0, file.name.lastIndexOf('.'))) || name || '';
@@ -261,7 +256,7 @@ function PublishLivestream(props: Props) {
     };
 
     if (!isStillEditing) {
-      publishFormParams.name = parseName(fileName);
+      publishFormParams.name = sanitizeName(fileName);
     }
 
     // File path is not supported on web for security reasons so we use the name instead.

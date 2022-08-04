@@ -3,7 +3,7 @@ import { SITE_NAME, WEB_PUBLISH_SIZE_LIMIT_GB, SIMPLE_SITE } from 'config';
 import React, { useState, useEffect } from 'react';
 import Lbry from 'lbry';
 import { toHex } from 'util/hex';
-import { regexInvalidURI } from 'util/lbryURI';
+import { sanitizeName } from 'util/lbryURI';
 import FileSelector from 'component/common/file-selector';
 import Button from 'component/button';
 import Card from 'component/common/card';
@@ -306,11 +306,6 @@ function PublishFile(props: Props) {
     // @endif
   }
 
-  function parseName(newName) {
-    let INVALID_URI_CHARS = new RegExp(regexInvalidURI, 'gu');
-    return newName.replace(INVALID_URI_CHARS, '-');
-  }
-
   function handleTitleChange(event) {
     updatePublishForm({ title: event.target.value });
   }
@@ -411,7 +406,7 @@ function PublishFile(props: Props) {
     };
 
     if (!isStillEditing) {
-      publishFormParams.name = parseName(fileName);
+      publishFormParams.name = sanitizeName(fileName);
     }
 
     // File path is not supported on web for security reasons so we use the name instead.
