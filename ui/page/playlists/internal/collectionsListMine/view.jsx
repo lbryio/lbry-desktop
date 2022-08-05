@@ -23,6 +23,7 @@ type Props = {
   updatedCollections: CollectionGroup,
   savedCollections: CollectionGroup,
   savedCollectionIds: ClaimIds,
+  featuredChannelsIds: Array<CollectionId>,
   isFetchingCollections: boolean,
   areBuiltinCollectionsEmpty: boolean,
   hasCollections: boolean,
@@ -41,6 +42,7 @@ export default function CollectionsListMine(props: Props) {
     updatedCollections,
     savedCollections,
     savedCollectionIds,
+    featuredChannelsIds,
     isFetchingCollections,
     areBuiltinCollectionsEmpty,
     hasCollections,
@@ -72,21 +74,29 @@ export default function CollectionsListMine(props: Props) {
   const playlistShowCount = isMobile ? COLS.PLAYLIST_SHOW_COUNT.MOBILE : COLS.PLAYLIST_SHOW_COUNT.DEFAULT;
 
   const collectionsToShow = React.useMemo(() => {
+    let collections;
     switch (filterType) {
       case COLS.LIST_TYPE.ALL:
-        return unpublishedCollectionsList.concat(publishedList).concat(savedList);
+        collections = unpublishedCollectionsList.concat(publishedList).concat(savedList);
+        break;
       case COLS.LIST_TYPE.PRIVATE:
-        return unpublishedCollectionsList;
+        collections = unpublishedCollectionsList;
+        break;
       case COLS.LIST_TYPE.PUBLIC:
-        return publishedList;
+        collections = publishedList;
+        break;
       case COLS.LIST_TYPE.EDITED:
-        return editedList;
+        collections = editedList;
+        break;
       case COLS.LIST_TYPE.SAVED:
-        return savedList;
+        collections = savedList;
+        break;
       default:
-        return [];
+        collections = [];
+        break;
     }
-  }, [editedList, filterType, publishedList, savedList, unpublishedCollectionsList]);
+    return collections.filter((id) => !featuredChannelsIds.includes(id));
+  }, [editedList, filterType, publishedList, savedList, unpublishedCollectionsList, featuredChannelsIds]);
 
   const page = (collectionsToShow.length > playlistShowCount && Number(urlParams.get('page'))) || 1;
   const firstItemIndexForPage = playlistShowCount * (page - 1);

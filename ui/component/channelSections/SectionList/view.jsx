@@ -18,7 +18,7 @@ type Props = {
   editMode?: boolean,
   // --- redux ---
   claimId: ?string,
-  featuredChannelsByChannelId: any,
+  featuredChannelsByChannelId: { [ChannelId]: Array<CollectionId> },
   claimSearchByQuery: { [string]: Array<string> },
   myUnpublishedCollections: CollectionGroup,
   myEditedCollections: CollectionGroup,
@@ -59,11 +59,7 @@ export default function SectionList(props: Props) {
 
   const searchKey = createNormalizedClaimSearchKey(options);
   const claimSearchResult = claimSearchByQuery[searchKey]; // undefined = not fetched
-
-  const sectionIds = React.useMemo(() => {
-    const featuredChannels = featuredChannelsByChannelId[claimId] || [];
-    return featuredChannels.map((fc) => fc.id);
-  }, [featuredChannelsByChannelId, claimId]);
+  const sectionIds = featuredChannelsByChannelId[claimId || ''] || []; // only featured channels for now
 
   const hasPendingChanges = React.useMemo(() => {
     // TODO: Memoization is poor because 'featuredChannelsByChannelId' is dependent on the volatile selectClaimsById.

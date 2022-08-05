@@ -60,6 +60,12 @@ declare type GenericClaim = {
 
 declare type ClaimId = string;
 
+declare type ClaimIds = Array<ClaimId>;
+
+declare type CollectionId = ClaimId | string; // uuid
+
+declare type ChannelId = ClaimId;
+
 declare type GenericMetadata = {
   title?: string,
   description?: string,
@@ -214,5 +220,3 @@ declare type CollectionPublishParams = {
   tags?: Array<string>,
   languages?: Array<string>,
 };
-
-declare type ClaimIds = Array<string>;

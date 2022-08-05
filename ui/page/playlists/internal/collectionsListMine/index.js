@@ -8,6 +8,7 @@ import {
   selectSavedCollections,
   selectAreBuiltinCollectionsEmpty,
   selectHasCollections,
+  selectFeaturedChannelsIds,
 } from 'redux/selectors/collections';
 import { selectIsFetchingMyCollections } from 'redux/selectors/claims';
 import { doOpenModal } from 'redux/actions/app';
@@ -21,6 +22,7 @@ const select = (state) => ({
   updatedCollections: selectMyUpdatedCollections(state),
   savedCollectionIds: selectSavedCollectionIds(state),
   savedCollections: selectSavedCollections(state),
+  featuredChannelsIds: selectFeaturedChannelsIds(state),
   isFetchingCollections: selectIsFetchingMyCollections(state),
   areBuiltinCollectionsEmpty: selectAreBuiltinCollectionsEmpty(state),
   hasCollections: selectHasCollections(state),

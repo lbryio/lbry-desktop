@@ -485,25 +485,25 @@ export const selectFeaturedChannelsByChannelId = createSelector(
   selectResolvedCollections,
   selectClaimsById,
   (privateLists, publicLists, claimsById) => {
-    let featuredChannels = {};
+    let results: { [ChannelId]: Array<CollectionId> } = {};
 
-    function addCollectionToChannel(channelId, collection) {
-      if (featuredChannels[channelId]) {
-        const cols = featuredChannels[channelId];
+    function addToResults(channelId, collectionId) {
+      if (results[channelId]) {
+        const ids = results[channelId];
         // $FlowIgnore
-        if (!cols.some((c) => c.id === collection.id)) {
-          cols.push(collection);
+        if (!ids.some((id) => id === collectionId)) {
+          ids.push(collectionId);
         }
       } else {
-        featuredChannels[channelId] = [collection];
+        results[channelId] = [collectionId];
       }
     }
 
     Object.values(privateLists).forEach((col) => {
       // $FlowIgnore
-      const { type, featuredChannelsParams } = col;
+      const { type, featuredChannelsParams, id } = col;
       if (type === COL_TYPES.FEATURED_CHANNELS && featuredChannelsParams?.channelId) {
-        addCollectionToChannel(featuredChannelsParams.channelId, col);
+        addToResults(featuredChannelsParams.channelId, id);
       }
     });
 
@@ -513,14 +513,32 @@ export const selectFeaturedChannelsByChannelId = createSelector(
       if (type === COL_TYPES.FEATURED_CHANNELS) {
         const channelId = getChannelIdFromClaim(claimsById[id]);
         if (channelId) {
-          addCollectionToChannel(channelId, col);
+          addToResults(channelId, id);
         }
       }
     });
 
-    return featuredChannels;
+    return results;
   }
 );
+
+function flatten(ary, ret = []) {
+  // Array.flat() support not available in obscure browsers.
+  for (const entry of ary) {
+    if (Array.isArray(entry)) {
+      flatten(entry, ret);
+    } else {
+      ret.push(entry);
+    }
+  }
+  return ret;
+}
+
+export const selectFeaturedChannelsIds = createSelector(selectFeaturedChannelsByChannelId, (byChannelId) => {
+  // $FlowIgnore mixed
+  const values: Array<Array<CollectionId>> = Object.values(byChannelId);
+  return flatten(values);
+});
 
 export const selectCollectionTypeForId = (state: State, id: string) => {
   const collection = selectCollectionForId(state, id);
