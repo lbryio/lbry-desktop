@@ -55,7 +55,6 @@ class UriIndicator extends React.PureComponent<Props> {
         channelTitle: channelInfo.title,
       };
     } else if (claim) {
-      const signingChannel = claim.signing_channel && claim.signing_channel.amount;
       const isChannelClaim = claim.value_type === 'channel';
       const isChannelSignatureValid = claim.is_channel_signature_valid;
       const channelClaim = isChannelClaim ? claim : claim.signing_channel;
