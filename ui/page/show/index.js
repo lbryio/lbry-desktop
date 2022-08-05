@@ -10,6 +10,7 @@ import {
   selectTitleForUri,
   selectClaimIsMine,
   makeSelectClaimIsPending,
+  makeSelectIsBlacklisted,
 } from 'redux/selectors/claims';
 import {
   makeSelectCollectionForId,
@@ -23,7 +24,6 @@ import { normalizeURI } from 'util/lbryURI';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
 import { push } from 'connected-react-router';
 import { makeSelectChannelInSubscriptions } from 'redux/selectors/subscriptions';
-import { selectBlackListedOutpoints } from 'lbryinc';
 import ShowPage from './view';
 
 const select = (state, props) => {
@@ -72,7 +72,6 @@ const select = (state, props) => {
     uri,
     claim,
     isResolvingUri: selectIsUriResolving(state, uri),
-    blackListedOutpoints: selectBlackListedOutpoints(state),
     totalPages: makeSelectTotalPagesForChannel(uri, PAGE_SIZE)(state),
     isSubscribed: makeSelectChannelInSubscriptions(uri)(state),
     title: selectTitleForUri(state, uri),
@@ -82,6 +81,7 @@ const select = (state, props) => {
     collectionId: collectionId,
     collectionUrls: makeSelectUrlsForCollectionId(collectionId)(state),
     isResolvingCollection: makeSelectIsResolvingCollectionForId(collectionId)(state),
+    isBlacklisted: makeSelectIsBlacklisted(uri)(state),
   };
 };
 

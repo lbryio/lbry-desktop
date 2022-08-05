@@ -145,12 +145,49 @@ declare type PurchaseReceipt = {
   type: 'purchase',
 };
 
+declare type ClaimErrorCensor = {
+  address: string,
+  amount: string,
+  canonical_url: string,
+  claim_id: string,
+  claim_op: string,
+  confirmations: number,
+  has_signing_key: boolean,
+  height: number,
+  meta: {
+    activation_height: number,
+    claims_in_channel: number,
+    creation_height: number,
+    creation_timestamp: number,
+    effective_amount: string,
+    expiration_height: number,
+    is_controlling: boolean,
+    reposted: number,
+    support_amount: string,
+    take_over_height: number,
+  },
+  name: string,
+  normalized_name: string,
+  nout: number,
+  permanent_url: string,
+  short_url: string,
+  timestamp: number,
+  txid: string,
+  type: string,
+  value: {
+    public_key: string,
+    public_key_id: string,
+  },
+  value_type: string,
+}
+
 declare type ClaimActionResolveInfo = {
   [string]: {
     stream: ?StreamClaim,
     channel: ?ChannelClaim,
     claimsInChannel: ?number,
     collection: ?CollectionClaim,
+    errorCensor: ?ClaimErrorCensor,
   },
 }
 

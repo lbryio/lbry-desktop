@@ -4,6 +4,7 @@ import { selectSupportsByOutpoint } from 'redux/selectors/wallet';
 import { createSelector } from 'reselect';
 import { createCachedSelector } from 're-reselect';
 import { isClaimNsfw, filterClaims } from 'util/claim';
+import { selectBlackListedOutpoints } from 'lbryinc';
 import * as CLAIM from 'constants/claim';
 
 type State = { claims: any };
@@ -82,6 +83,38 @@ export const makeSelectClaimIdIsPending = (claimId: string) =>
 export const selectClaimIdForUri = (state: State, uri: string) => selectClaimIdsByUri(state)[uri];
 
 export const selectReflectingById = (state: State) => selectState(state).reflectingById;
+
+export const makeSelectClaimErrorCensor = (claimUri: string) =>
+  createSelector(selectState, (state) => state.blacklistedByUri[claimUri]);
+
+export const makeSelectIsBlacklisted = (claimUri: string) =>
+  createSelector(
+    makeSelectClaimErrorCensor(claimUri),
+    selectBlackListedOutpoints,
+    makeSelectClaimForUri(claimUri),
+    (errorCensor, legacyBlacklistedList, claim) => {
+      if (errorCensor) {
+        return true;
+      }
+      // Fallback to legacy just in case.
+      if (!claim) {
+        return false;
+      }
+      if (!legacyBlacklistedList) {
+        return false;
+      }
+      const signingChannel = claim.signing_channel;
+      if (!signingChannel) {
+        return false;
+      }
+      const isInLegacyBlacklist = legacyBlacklistedList.some(
+        (outpoint) =>
+          (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
+          (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
+      );
+      return isInLegacyBlacklist;
+    }
+  );
 
 export const makeSelectClaimForClaimId = (claimId: string) => createSelector(selectClaimsById, (byId) => byId[claimId]);
 

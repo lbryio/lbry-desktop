@@ -22,10 +22,6 @@ type Props = {
   uri: string,
   claim: StreamClaim,
   location: UrlLocation,
-  blackListedOutpoints: Array<{
-    txid: string,
-    nout: number,
-  }>,
   title: string,
   claimIsMine: boolean,
   claimIsPending: boolean,
@@ -35,6 +31,7 @@ type Props = {
   collectionUrls: Array<string>,
   isResolvingCollection: boolean,
   fetchCollectionItems: (string) => void,
+  isBlacklisted: boolean,
 };
 
 function ShowPage(props: Props) {
@@ -43,7 +40,6 @@ function ShowPage(props: Props) {
     resolveUri,
     uri,
     claim,
-    blackListedOutpoints,
     location,
     claimIsMine,
     isSubscribed,
@@ -54,11 +50,11 @@ function ShowPage(props: Props) {
     collection,
     collectionUrls,
     isResolvingCollection,
+    isBlacklisted,
   } = props;
 
   const { search } = location;
 
-  const signingChannel = claim && claim.signing_channel;
   const canonicalUrl = claim && claim.canonical_url;
   const claimExists = claim !== null && claim !== undefined;
   const haventFetchedYet = claim === undefined;
@@ -103,7 +99,7 @@ function ShowPage(props: Props) {
   }
 
   let innerContent = '';
-  if (!claim || (claim && !claim.name)) {
+  if ((!claim || (claim && !claim.name)) && !isBlacklisted) {
     innerContent = (
       <Page>
         {(claim === undefined ||
@@ -142,38 +138,26 @@ function ShowPage(props: Props) {
         {!isResolvingUri && isSubscribed && claim === null && <AbandonedChannelPreview uri={uri} type={'large'} />}
       </Page>
     );
-  } else if (claim.name.length && claim.name[0] === '@') {
+  } else if (claim && claim.name.length && claim.name[0] === '@') {
     innerContent = <ChannelPage uri={uri} location={location} />;
+  } else if (isBlacklisted && !claimIsMine) {
+    innerContent = (
+      <Page>
+        <Card
+          title={uri}
+          subtitle={__(
+            'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.'
+          )}
+          actions={
+            <div className="section__actions">
+              <Button button="link" href="https://lbry.com/faq/dmca" label={__('Read More')} />
+            </div>
+          }
+        />
+      </Page>
+    );
   } else if (claim) {
-    let isClaimBlackListed = false;
-
-    isClaimBlackListed =
-      blackListedOutpoints &&
-      blackListedOutpoints.some(
-        (outpoint) =>
-          (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
-          (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
-      );
-
-    if (isClaimBlackListed && !claimIsMine) {
-      innerContent = (
-        <Page>
-          <Card
-            title={uri}
-            subtitle={__(
-              'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.'
-            )}
-            actions={
-              <div className="section__actions">
-                <Button button="link" href="https://lbry.com/faq/dmca" label={__('Read More')} />
-              </div>
-            }
-          />
-        </Page>
-      );
-    } else {
-      innerContent = <FilePage uri={uri} location={location} />;
-    }
+    innerContent = <FilePage uri={uri} location={location} />;
   }
 
   return <React.Fragment>{innerContent}</React.Fragment>;
