@@ -6,7 +6,6 @@ import Card from 'component/common/card';
 import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
 import Button from 'component/button';
 import classnames from 'classnames';
-import RecSys from 'recsys';
 
 const VIEW_ALL_RELATED = 'view_all_related';
 const VIEW_MORE_FROM = 'view_more_from';
@@ -18,47 +17,19 @@ type Props = {
   isSearching: boolean,
   doFetchRecommendedContent: (string) => void,
   claim: ?StreamClaim,
-  claimId: string,
 };
 
 export default React.memo<Props>(function RecommendedContent(props: Props) {
-  const {
-    uri,
-    doFetchRecommendedContent,
-    recommendedContentUris,
-    nextRecommendedUri,
-    isSearching,
-    claim,
-    claimId,
-  } = props;
+  const { uri, doFetchRecommendedContent, recommendedContentUris, isSearching, claim } = props;
   const [viewMode, setViewMode] = React.useState(VIEW_ALL_RELATED);
   const signingChannel = claim && claim.signing_channel;
   const channelName = signingChannel ? signingChannel.name : null;
   const isMobile = useIsMobile();
   const isMedium = useIsMediumScreen();
-  const { onRecsLoaded: onRecommendationsLoaded, onClickedRecommended: onRecommendationClicked } = RecSys;
 
   React.useEffect(() => {
     doFetchRecommendedContent(uri);
   }, [uri, doFetchRecommendedContent]);
-
-  React.useEffect(() => {
-    // Right now we only want to record the recs if they actually saw them.
-    if (
-      recommendedContentUris &&
-      recommendedContentUris.length &&
-      nextRecommendedUri &&
-      viewMode === VIEW_ALL_RELATED
-    ) {
-      onRecommendationsLoaded(claimId, recommendedContentUris);
-    }
-  }, [recommendedContentUris, onRecommendationsLoaded, claimId, nextRecommendedUri, viewMode]);
-
-  function handleRecommendationClicked(e, clickedClaim) {
-    if (claim) {
-      onRecommendationClicked(claim.claim_id, clickedClaim.claim_id);
-    }
-  }
 
   return (
     <Card
@@ -96,7 +67,6 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
               uris={recommendedContentUris}
               hideMenu={isMobile}
               empty={__('No related content found')}
-              onClick={handleRecommendationClicked}
             />
           )}
           {viewMode === VIEW_MORE_FROM && signingChannel && (

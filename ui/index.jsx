@@ -8,7 +8,6 @@ import { changeZoomFactor } from 'util/zoomWindow';
 import { ipcRenderer, shell } from 'electron';
 import * as remote from '@electron/remote';
 import moment from 'moment';
-import * as MODALS from 'constants/modal_types';
 import React, { Fragment, useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -16,8 +15,6 @@ import * as SETTINGS from 'constants/settings';
 import {
   doDaemonReady,
   doAutoUpdate,
-  doOpenModal,
-  doHideModal,
   doToggle3PAnalytics,
   doUpdateDownloadProgress,
   doNotifyUpdateAvailable,
@@ -30,7 +27,6 @@ import { isURIValid } from 'util/lbryURI';
 import { setSearchApi } from 'redux/actions/search';
 import { doSetLanguage, doFetchLanguage, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { Lbryio, doBlackListedOutpointsSubscribe, doFilteredOutpointsSubscribe } from 'lbryinc';
-import rewards from 'rewards';
 import { store, persistor, history } from 'store';
 import app from './app';
 import doLogWarningConsoleMessage from './logWarningConsoleMessage';
@@ -85,16 +81,6 @@ Lbryio.setOverride(
       resolve(authTokenToReturn);
     })
 );
-
-rewards.setCallback('claimFirstRewardSuccess', () => {
-  app.store.dispatch(doOpenModal(MODALS.FIRST_REWARD));
-});
-
-rewards.setCallback('claimRewardSuccess', (reward) => {
-  if (reward && reward.type === rewards.TYPE_REWARD_CODE) {
-    app.store.dispatch(doHideModal());
-  }
-});
 
 ipcRenderer.on('send-disk-space', (event, result) => {
   if (result.error) {

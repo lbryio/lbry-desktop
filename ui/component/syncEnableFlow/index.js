@@ -1,6 +1,5 @@
 import * as SETTINGS from 'constants/settings';
 import { connect } from 'react-redux';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import {
   selectGetSyncErrorMessage,
   selectHasSyncedWallet,
@@ -17,7 +16,6 @@ const select = (state) => ({
   syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),
   hasSyncedWallet: selectHasSyncedWallet(state),
   hasSyncChanged: selectHashChanged(state),
-  verifiedEmail: selectUserVerifiedEmail(state),
   getSyncError: selectGetSyncErrorMessage(state),
   getSyncPending: selectGetSyncIsPending(state),
 });

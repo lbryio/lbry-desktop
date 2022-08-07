@@ -1,6 +1,6 @@
 // @flow
 
-import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
+import { Menu, MenuList, MenuButton } from '@reach/menu-button';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import ChannelThumbnail from 'component/channelThumbnail';
@@ -11,13 +11,10 @@ import React from 'react';
 
 type HeaderMenuButtonProps = {
   activeChannelClaim: ?ChannelClaim,
-  email: ?string,
-  authenticated: boolean,
-  openSignOutModal: () => void,
 };
 
 export default function HeaderProfileMenuButton(props: HeaderMenuButtonProps) {
-  const { activeChannelClaim, email, openSignOutModal, authenticated } = props;
+  const { activeChannelClaim } = props;
 
   const activeChannelUrl = activeChannelClaim && activeChannelClaim.permanent_url;
 
@@ -43,8 +40,8 @@ export default function HeaderProfileMenuButton(props: HeaderMenuButtonProps) {
           <HeaderMenuLink page={PAGES.UPLOADS} icon={ICONS.PUBLISH} name={__('Uploads')} />
           <HeaderMenuLink page={PAGES.CHANNELS} icon={ICONS.CHANNEL} name={__('Channels')} />
           <HeaderMenuLink page={PAGES.CREATOR_DASHBOARD} icon={ICONS.ANALYTICS} name={__('Creator Analytics')} />
-
-          {authenticated ? (
+          {/* No sync button for now
+            {authenticated ? (
             <MenuItem onSelect={openSignOutModal}>
               <div className="menu__link">
                 <Icon aria-hidden icon={ICONS.SIGN_OUT} />
@@ -53,8 +50,9 @@ export default function HeaderProfileMenuButton(props: HeaderMenuButtonProps) {
               <span className="menu__link-help">{email}</span>
             </MenuItem>
           ) : (
-            <HeaderMenuLink page={PAGES.AUTH_SIGNIN} icon={ICONS.SIGN_IN} name={__('Cloud Connect')} />
+            <HeaderMenuLink page={PAGES.AUTH_SIGNIN} icon={ICONS.SIGN_IN} name={__('Maybe Sync')} />
           )}
+          */}
         </MenuList>
       </Menu>
     </div>

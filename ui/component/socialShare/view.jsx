@@ -63,8 +63,6 @@ function SocialShare(props: Props) {
   const shareUrl: string = generateShareUrl(
     shareDomain,
     lbryUrl,
-    null,
-    null,
     includeStartTime,
     startTimeSeconds,
     includedCollectionId

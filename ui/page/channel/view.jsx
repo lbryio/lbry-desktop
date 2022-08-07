@@ -4,7 +4,6 @@ import * as PAGES from 'constants/pages';
 import React from 'react';
 import { parseURI } from 'util/lbryURI';
 import { formatNumber } from 'util/number';
-import { YOUTUBE_STATUSES } from 'lbryinc';
 import Page from 'component/page';
 import SubscribeButton from 'component/subscribeButton';
 import ShareButton from 'component/shareButton';
@@ -57,7 +56,6 @@ type Props = {
   fetchSubCount: (string) => void,
   subCount: number,
   pending: boolean,
-  youtubeChannels: ?Array<{ channel_claim_id: string, sync_status: string, transfer_state: string }>,
   blockedChannels: Array<string>,
   mutedChannels: Array<string>,
   unpublishedCollections: CollectionGroup,
@@ -76,7 +74,6 @@ function ChannelPage(props: Props) {
     fetchSubCount,
     subCount,
     pending,
-    youtubeChannels,
     blockedChannels,
     mutedChannels,
     unpublishedCollections,
@@ -97,18 +94,6 @@ function ChannelPage(props: Props) {
   const formattedSubCount = formatNumber(subCount, 2, true);
   const isBlocked = claim && blockedChannels.includes(claim.permanent_url);
   const isMuted = claim && mutedChannels.includes(claim.permanent_url);
-  const isMyYouTubeChannel =
-    claim &&
-    youtubeChannels &&
-    youtubeChannels.some(({ channel_claim_id, sync_status, transfer_state }) => {
-      if (
-        channel_claim_id === claim.claim_id &&
-        sync_status !== YOUTUBE_STATUSES.YOUTUBE_SYNC_ABANDONDED &&
-        transfer_state !== YOUTUBE_STATUSES.YOUTUBE_SYNC_COMPLETED_TRANSFER
-      ) {
-        return true;
-      }
-    });
 
   const hasUnpublishedCollections = unpublishedCollections && Object.keys(unpublishedCollections).length;
 
@@ -211,14 +196,6 @@ function ChannelPage(props: Props) {
     <Page className="channelPage-wrapper" noFooter>
       <header className="channel-cover">
         <div className="channel__quick-actions">
-          {isMyYouTubeChannel && (
-            <Button
-              button="alt"
-              label={__('Claim Your Channel')}
-              icon={ICONS.YOUTUBE}
-              navigate={`/$/${PAGES.CHANNELS}`}
-            />
-          )}
           {!channelIsBlackListed && <ShareButton uri={uri} />}
           {!(isBlocked || isMuted) && <ClaimSupportButton uri={uri} />}
           {!(isBlocked || isMuted) && (!channelIsBlackListed || isSubscribed) && <SubscribeButton uri={permanentUrl} />}

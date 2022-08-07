@@ -17,12 +17,6 @@ import {
 } from 'redux/selectors/publish';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import * as SETTINGS from 'constants/settings';
-import { doClaimInitialRewards } from 'redux/actions/rewards';
-import {
-  selectUnclaimedRewardValue,
-  selectIsClaimingInitialRewards,
-  selectHasClaimedInitialRewards,
-} from 'redux/selectors/rewards';
 import {
   selectModal,
   selectActiveChannelClaim,
@@ -31,7 +25,6 @@ import {
 } from 'redux/selectors/app';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { makeSelectFileRenderModeForUri } from 'redux/selectors/content';
-import { selectUser } from 'redux/selectors/user';
 import PublishForm from './view';
 
 const select = (state) => {
@@ -41,7 +34,6 @@ const select = (state) => {
 
   return {
     ...selectPublishFormValues(state),
-    user: selectUser(state),
     // The winning claim for a short lbry uri
     amountNeededForTakeover: selectTakeOverAmount(state),
     isPostClaim,
@@ -55,14 +47,11 @@ const select = (state) => {
     remoteUrl: makeSelectPublishFormValue('remoteFileUrl')(state),
     publishSuccess: makeSelectPublishFormValue('publishSuccess')(state),
     isResolvingUri: selectIsResolvingPublishUris(state),
-    totalRewardValue: selectUnclaimedRewardValue(state),
     modal: selectModal(state),
     enablePublishPreview: makeSelectClientSetting(SETTINGS.ENABLE_PUBLISH_PREVIEW)(state),
     activeChannelClaim: selectActiveChannelClaim(state),
     incognito: selectIncognito(state),
     activeChannelStakedLevel: selectActiveChannelStakedLevel(state),
-    isClaimingInitialRewards: selectIsClaimingInitialRewards(state),
-    hasClaimedInitialRewards: selectHasClaimedInitialRewards(state),
   };
 };
 
@@ -74,7 +63,6 @@ const perform = (dispatch) => ({
   prepareEdit: (claim, uri) => dispatch(doPrepareEdit(claim, uri)),
   resetThumbnailStatus: () => dispatch(doResetThumbnailStatus()),
   checkAvailability: (name) => dispatch(doCheckPublishNameAvailability(name)),
-  claimInitialRewards: () => dispatch(doClaimInitialRewards()),
 });
 
 export default connect(select, perform)(PublishForm);

@@ -11,7 +11,6 @@ import {
 import { doSetDaemonSetting, doClearDaemonSetting, doFindFFmpeg } from 'redux/actions/settings';
 import { selectAllowAnalytics } from 'redux/selectors/app';
 import { selectDaemonSettings, selectFfmpegStatus, selectFindingFFmpeg } from 'redux/selectors/settings';
-import { selectUserVerifiedEmail } from 'redux/selectors/user'; // here
 
 import SettingSystem from './view';
 
@@ -20,7 +19,6 @@ const select = (state) => ({
   ffmpegStatus: selectFfmpegStatus(state),
   findingFFmpeg: selectFindingFFmpeg(state),
   walletEncrypted: selectWalletIsEncrypted(state),
-  isAuthenticated: selectUserVerifiedEmail(state),
   allowAnalytics: selectAllowAnalytics(state),
 });
 

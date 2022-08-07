@@ -13,15 +13,14 @@ import Tooltip from 'component/common/tooltip';
 
 type Props = {
   unseenCount: number,
-  user: ?User,
   doSeeAllNotifications: () => void,
 };
 
 export default function NotificationHeaderButton(props: Props) {
-  const { unseenCount, user, doSeeAllNotifications } = props;
+  const { unseenCount, doSeeAllNotifications } = props;
 
   const { push } = useHistory();
-  const notificationsEnabled = ENABLE_UI_NOTIFICATIONS || (user && user.experimental_ui);
+  const notificationsEnabled = ENABLE_UI_NOTIFICATIONS;
 
   function handleMenuClick() {
     if (unseenCount > 0) doSeeAllNotifications();

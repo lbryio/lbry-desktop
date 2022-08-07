@@ -7,16 +7,14 @@ import * as MODALS from 'constants/modal_types';
 import * as SETTINGS from 'constants/settings';
 import * as DAEMON_SETTINGS from 'constants/daemon_settings';
 import * as SHARED_PREFERENCES from 'constants/shared_preferences';
-import { DOMAIN } from 'config';
 import Lbry from 'lbry';
 import { doFetchChannelListMine, doFetchCollectionListMine, doCheckPendingClaims } from 'redux/actions/claims';
 import { selectClaimForUri, selectClaimIsMineForUri, selectMyChannelClaims } from 'redux/selectors/claims';
 import { doFetchFileInfos } from 'redux/actions/file_info';
 import { doClearSupport, doBalanceSubscribe } from 'redux/actions/wallet';
 import { doClearPublish } from 'redux/actions/publish';
-import { Lbryio } from 'lbryinc';
 import { selectFollowedTagsList } from 'redux/selectors/tags';
-import { doToast, doError, doNotificationList } from 'redux/actions/notifications';
+import { doToast, doError } from 'redux/actions/notifications';
 
 import {
   doFetchDaemonSettings,
@@ -36,13 +34,10 @@ import {
   selectAllowAnalytics,
 } from 'redux/selectors/app';
 import { selectDaemonSettings, makeSelectClientSetting, selectDisableAutoUpdates } from 'redux/selectors/settings';
-import { selectUser } from 'redux/selectors/user';
 import { doSyncLoop, doSetPrefsReady, doPreferenceGet, doPopulateSharedUserState } from 'redux/actions/sync';
-import { doAuthenticate } from 'redux/actions/user';
-import { lbrySettings as config, version as appVersion } from 'package.json';
-import analytics, { SHARE_INTERNAL } from 'analytics';
+import { lbrySettings as config } from 'package.json';
+import analytics from 'analytics';
 import { doSignOutCleanup } from 'util/saved-passwords';
-import { doNotificationSocketConnect } from 'redux/actions/websocket';
 import { stringifyServerParam, shouldSetSetting } from 'util/sync-settings';
 
 const CHECK_UPGRADE_INTERVAL = 10 * 60 * 1000;
@@ -253,7 +248,6 @@ export function doCheckUpgradeSubscribe() {
 
 export function doCheckDaemonVersion() {
   return (dispatch) => {
-    // @if TARGET='app'
     Lbry.version().then(({ lbrynet_version: lbrynetVersion }) => {
       // Avoid the incompatible daemon modal if running in dev mode
       // Lets you  run a different daemon than the one specified in package.json
@@ -270,12 +264,6 @@ export function doCheckDaemonVersion() {
         return dispatch(doOpenModal(MODALS.INCOMPATIBLE_DAEMON));
       }
     });
-    // @endif
-    // @if TARGET='web'
-    dispatch({
-      type: ACTIONS.DAEMON_VERSION_MATCH,
-    });
-    // @endif
   };
 }
 
@@ -325,29 +313,6 @@ export function doDaemonReady() {
     const state = getState();
 
     // TODO: call doFetchDaemonSettings, then get usage data, and call doAuthenticate once they are loaded into the store
-    const shareUsageData = window.localStorage.getItem(SHARE_INTERNAL) === 'true';
-
-    dispatch(
-      doAuthenticate(
-        appVersion,
-        undefined,
-        undefined,
-        shareUsageData,
-        (status) => {
-          const trendingAlgorithm =
-            status &&
-            status.wallet &&
-            status.wallet.connected_features &&
-            status.wallet.connected_features.trending_algorithm;
-
-          if (trendingAlgorithm) {
-            analytics.trendingAlgorithmEvent(trendingAlgorithm);
-          }
-        },
-        undefined,
-        DOMAIN
-      )
-    );
     dispatch({ type: ACTIONS.DAEMON_READY });
 
     dispatch(doBalanceSubscribe());
@@ -379,15 +344,12 @@ export function doClearCache() {
 
 export function doQuit() {
   return () => {
-    // @if TARGET='app'
     remote.app.quit();
-    // @endif
   };
 }
 
 export function doQuitAnyDaemon() {
   return (dispatch) => {
-    // @if TARGET='app'
     Lbry.stop()
       .catch(() => {
         try {
@@ -403,7 +365,6 @@ export function doQuitAnyDaemon() {
       .finally(() => {
         dispatch(doQuit());
       });
-    // @endif
   };
 }
 
@@ -429,12 +390,6 @@ export function doChangeMute(muted) {
   };
 }
 
-export function doClickCommentButton() {
-  return {
-    type: ACTIONS.ADD_COMMENT,
-  };
-}
-
 export function doToggleSearchExpanded() {
   return {
     type: ACTIONS.TOGGLE_SEARCH_EXPANDED,
@@ -454,36 +409,6 @@ export function doAnalyticsView(uri, timeToStart) {
     }
 
     return analytics.apiLogView(uri, outpoint, claimId, timeToStart);
-  };
-}
-
-export function doAnalyticsBuffer(uri, bufferData) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const claim = selectClaimForUri(state, uri);
-    const user = selectUser(state);
-    const {
-      value: { video, audio, source },
-    } = claim;
-    const timeAtBuffer = parseInt(bufferData.currentTime ? bufferData.currentTime * 1000 : 0);
-    const bufferDuration = parseInt(bufferData.secondsToLoad ? bufferData.secondsToLoad * 1000 : 0);
-    const fileDurationInSeconds = (video && video.duration) || (audio && audio.duration);
-    const fileSize = source.size; // size in bytes
-    const fileSizeInBits = fileSize * 8;
-    const bitRate = parseInt(fileSizeInBits / fileDurationInSeconds);
-    const userId = user && user.id.toString();
-    // if there's a logged in user, send buffer event data to watchman
-    if (userId) {
-      analytics.videoBufferEvent(claim, {
-        timeAtBuffer,
-        bufferDuration,
-        bitRate,
-        userId,
-        duration: fileDurationInSeconds,
-        playerPoweredBy: bufferData.playerPoweredBy,
-        readyState: bufferData.readyState,
-      });
-    }
   };
 }
 
@@ -508,42 +433,20 @@ export function doAnaltyicsPurchaseEvent(fileInfo) {
   };
 }
 
+// rename to doUiReady?
 export function doSignIn() {
-  return (dispatch, getState) => {
-    const state = getState();
-    const user = selectUser(state);
-    const notificationsEnabled = user.experimental_ui;
-
-    dispatch(doNotificationSocketConnect(notificationsEnabled));
-
-    if (notificationsEnabled) {
-      dispatch(doNotificationList());
-    }
+  return (dispatch) => {
     dispatch(doCheckPendingClaims());
-
-    // @if TARGET='web'
-    dispatch(doBalanceSubscribe());
-    dispatch(doFetchChannelListMine());
-    dispatch(doFetchCollectionListMine());
-    // @endif
   };
 }
 
 export function doSignOut() {
   return () => {
-    Lbryio.call('user', 'signout')
-      .then(doSignOutCleanup)
-      .then(() => {
-        // @if TARGET='web'
-        window.persistor.purge();
-        // @endif
-      })
-      .then(() => {
-        setTimeout(() => {
-          location.reload();
-        });
-      })
-      .catch(() => location.reload());
+    doSignOutCleanup().then(() => {
+      setTimeout(() => {
+        location.reload();
+      });
+    });
   };
 }
 
@@ -641,6 +544,7 @@ export function doHandleSyncComplete(error, hasNewData) {
         dispatch(doGetAndPopulatePreferences());
         // we just got sync data, better update our channels
         dispatch(doFetchChannelListMine());
+        dispatch(doFetchCollectionListMine());
       }
     } else {
       console.error('Error in doHandleSyncComplete', error);

@@ -5,7 +5,7 @@ import { Route, Redirect, Switch, withRouter } from 'react-router-dom';
 import * as PAGES from 'constants/pages';
 import { PAGE_TITLE } from 'constants/pageTitles';
 import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
-import { parseURI, isURIValid } from 'util/lbryURI';
+import { parseURI } from 'util/lbryURI';
 import { WELCOME_VERSION } from 'config';
 import { GetLinksData } from 'util/buildHomepage';
 import { useIsLargeScreen } from 'effects/use-screensize';
@@ -14,14 +14,9 @@ import HomePage from 'page/home';
 import BackupPage from 'page/backup';
 
 // Chunk: "secondary"
-import SignInPage from 'page/signIn';
 import SignInWalletPasswordPage from 'page/signInWalletPassword';
 
-import SignUpPage from 'page/signUp';
-import SignInVerifyPage from 'page/signInVerify';
-
 // Chunk: "wallet/secondary"
-import BuyPage from 'page/buy';
 import ReceivePage from 'page/receive';
 import SendPage from 'page/send';
 import WalletPage from 'page/wallet';
@@ -43,8 +38,6 @@ import ListBlockedPage from 'page/listBlocked';
 import ListsPage from 'page/lists';
 import PlaylistsPage from 'page/playlists';
 import OwnComments from 'page/ownComments';
-import PasswordResetPage from 'page/passwordReset';
-import PasswordSetPage from 'page/passwordSet';
 import PublishPage from 'page/publish';
 import ReportContentPage from 'page/reportContent';
 import ReportPage from 'page/report';
@@ -70,7 +63,6 @@ if ('scrollRestoration' in history) {
 
 type Props = {
   currentScroll: number,
-  isAuthenticated: boolean,
   location: { pathname: string, search: string, hash: string },
   history: {
     action: string,
@@ -90,14 +82,12 @@ type Props = {
   welcomeVersion: number,
   hasNavigated: boolean,
   setHasNavigated: () => void,
-  setReferrer: (?string) => void,
-  hasUnclaimedRefereeReward: boolean,
   homepageData: any,
 };
 
 type PrivateRouteProps = Props & {
   component: any,
-  isAuthenticated: boolean,
+  isAuthenticated?: boolean,
 };
 
 function PrivateRoute(props: PrivateRouteProps) {
@@ -109,15 +99,12 @@ function AppRouter(props: Props) {
   const {
     currentScroll,
     location: { pathname, search, hash },
-    isAuthenticated,
     history,
     uri,
     title,
     welcomeVersion,
     hasNavigated,
     setHasNavigated,
-    hasUnclaimedRefereeReward,
-    setReferrer,
     homepageData,
   } = props;
   const { entries, listen, action: historyAction } = history;
@@ -139,16 +126,6 @@ function AppRouter(props: Props) {
     });
     return unlisten;
   }, [listen, hasNavigated, setHasNavigated]);
-
-  useEffect(() => {
-    if (!hasNavigated && hasUnclaimedRefereeReward && !isAuthenticated) {
-      const valid = isURIValid(uri);
-      if (valid) {
-        const { path } = parseURI(uri);
-        if (path !== 'undefined') setReferrer(path);
-      }
-    }
-  }, [hasNavigated, uri, hasUnclaimedRefereeReward, setReferrer, isAuthenticated]);
 
   useEffect(() => {
     const getDefaultTitle = (pathname: string) => {
@@ -175,9 +152,7 @@ function AppRouter(props: Props) {
       document.title = getDefaultTitle(pathname);
     }
 
-    // @if TARGET='app'
     entries[entryIndex].title = document.title;
-    // @endif
   }, [pathname, entries, entryIndex, title, uri]);
 
   useEffect(() => {
@@ -227,19 +202,10 @@ function AppRouter(props: Props) {
       ))}
 
       {/* Odysee signin */}
-      <Route path={`/$/${PAGES.AUTH_SIGNIN}`} exact component={SignInPage} />
-      <Route path={`/$/${PAGES.AUTH_PASSWORD_RESET}`} exact component={PasswordResetPage} />
-      <Route path={`/$/${PAGES.AUTH_PASSWORD_SET}`} exact component={PasswordSetPage} />
-      <Route path={`/$/${PAGES.AUTH}`} exact component={SignUpPage} />
-      <Route path={`/$/${PAGES.AUTH}/*`} exact component={SignUpPage} />
-      <Route path={`/$/${PAGES.AUTH_VERIFY}`} exact component={SignInVerifyPage} />
-
       <Route path={`/$/${PAGES.WELCOME}`} exact component={Welcome} />
 
       <Route path={`/$/${PAGES.HELP}`} exact component={HelpPage} />
-      {/* @if TARGET='app' */}
       <Route path={`/$/${PAGES.BACKUP}`} exact component={BackupPage} />
-      {/* @endif */}
       <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />
       <Route path={`/$/${PAGES.TOP}`} exact component={TopPage} />
       <Route path={`/$/${PAGES.SETTINGS}`} exact component={SettingsPage} />
@@ -270,7 +236,6 @@ function AppRouter(props: Props) {
       <PrivateRoute {...props} path={`/$/${PAGES.SETTINGS_CREATOR}`} component={SettingsCreatorPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.WALLET}`} exact component={WalletPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.CHANNELS}`} component={ChannelsPage} />
-      <PrivateRoute {...props} path={`/$/${PAGES.BUY}`} component={BuyPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.RECEIVE}`} component={ReceivePage} />
       <PrivateRoute {...props} path={`/$/${PAGES.SEND}`} component={SendPage} />
       <PrivateRoute {...props} path={`/$/${PAGES.NOTIFICATIONS}`} component={NotificationsPage} />

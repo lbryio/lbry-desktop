@@ -14,14 +14,13 @@ import Tooltip from 'component/common/tooltip';
 type HeaderMenuButtonProps = {
   automaticDarkModeEnabled: boolean,
   currentTheme: string,
-  user: ?User,
   handleThemeToggle: (boolean, string) => void,
 };
 
 export default function HeaderMenuButtons(props: HeaderMenuButtonProps) {
-  const { automaticDarkModeEnabled, currentTheme, user, handleThemeToggle } = props;
+  const { automaticDarkModeEnabled, currentTheme, handleThemeToggle } = props;
 
-  const notificationsEnabled = ENABLE_UI_NOTIFICATIONS || (user && user.experimental_ui);
+  const notificationsEnabled = ENABLE_UI_NOTIFICATIONS;
 
   return (
     <div className="header__buttons">

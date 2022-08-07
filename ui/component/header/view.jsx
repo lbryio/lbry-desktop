@@ -28,7 +28,6 @@ type Props = {
     simpleTitle: string, // Just use the same value as `title` if `title` is already short (~< 10 chars), unless you have a better idea for title overlfow on mobile
   },
   balance: number,
-  emailToVerify?: string,
   hasNavigated: boolean,
   hideBalance: boolean,
   hideCancel: boolean,
@@ -43,8 +42,6 @@ type Props = {
   roundedSpendableBalance: string,
   sidebarOpen: boolean,
   syncError: ?string,
-  clearEmailEntry: () => void,
-  clearPasswordEntry: () => void,
   setSidebarOpen: (boolean) => void,
   signOut: () => void,
 };
@@ -54,7 +51,6 @@ const Header = (props: Props) => {
     authHeader,
     backout,
     balance,
-    emailToVerify,
     hideBalance,
     hideCancel,
     history,
@@ -63,8 +59,6 @@ const Header = (props: Props) => {
     roundedSpendableBalance,
     sidebarOpen,
     syncError,
-    clearEmailEntry,
-    clearPasswordEntry,
     setSidebarOpen,
     signOut,
   } = props;
@@ -80,7 +74,6 @@ const Header = (props: Props) => {
   // on the verify page don't let anyone escape other than by closing the tab to keep session data consistent
   const isVerifyPage = pathname.includes(PAGES.AUTH_VERIFY);
   const isSignUpPage = pathname.includes(PAGES.AUTH);
-  const isSignInPage = pathname.includes(PAGES.AUTH_SIGNIN);
   const isPwdResetPage = pathname.includes(PAGES.AUTH_PASSWORD_RESET);
 
   // For pages that allow for "backing out", shows a backout option instead of the Home logo
@@ -236,12 +229,9 @@ const Header = (props: Props) => {
                         // className="button--header-close"
                         icon={ICONS.REMOVE}
                         onClick={() => {
-                          clearEmailEntry();
-                          clearPasswordEntry();
-
                           if (syncError) signOut();
 
-                          if ((isSignInPage && !emailToVerify) || isSignUpPage || isPwdResetPage) {
+                          if (isSignUpPage || isPwdResetPage) {
                             goBack();
                           } else {
                             push('/');

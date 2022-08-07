@@ -32,11 +32,9 @@ type Props = {
   onMouseEnter: ?(any) => any,
   onMouseLeave: ?(any) => any,
   pathname: string,
-  emailVerified: boolean,
   myref: any,
   dispatch: any,
   'aria-label'?: string,
-  user: ?User,
 };
 
 // use forwardRef to allow consumers to pass refs to the button content if they want to
@@ -63,11 +61,9 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     iconSize,
     iconColor,
     activeClass,
-    emailVerified,
     myref,
     dispatch, // <button> doesn't know what to do with dispatch
     pathname,
-    user,
     authSrc,
     ...otherProps
   } = props;

@@ -26,7 +26,6 @@ type Props = {
   defaultPageSize?: number,
   defaultInfiniteScroll?: Boolean,
   claim: Claim,
-  isAuthenticated: boolean,
   showMature: boolean,
   tileLayout: boolean,
   viewHiddenChannels: boolean,

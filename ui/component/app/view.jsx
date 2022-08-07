@@ -1,16 +1,12 @@
 // @flow
-import * as PAGES from 'constants/pages';
 import React, { useEffect, useRef, useState, useLayoutEffect } from 'react';
 import classnames from 'classnames';
-import analytics from 'analytics';
 import Router from 'component/router/index';
 import ReactModal from 'react-modal';
 import { openContextMenu } from 'util/context-menu';
 import useKonamiListener from 'util/enhanced-layout';
 import FileRenderFloating from 'component/fileRenderFloating';
 import { withRouter } from 'react-router';
-import usePrevious from 'effects/use-previous';
-import REWARDS from 'rewards';
 import usePersistedState from 'effects/use-persisted-state';
 import LANGUAGES from 'constants/languages';
 import useZoom from 'effects/use-zoom';
@@ -46,7 +42,6 @@ type Props = {
     length: number,
     push: (string) => void,
   },
-  fetchAccessToken: () => void,
   fetchChannelListMine: () => void,
   fetchCollectionListMine: () => void,
   signIn: () => void,
@@ -82,27 +77,18 @@ type Props = {
 function App(props: Props) {
   const {
     theme,
-    user,
-    fetchAccessToken,
     fetchChannelListMine,
     fetchCollectionListMine,
-    signIn,
     autoUpdateDownloaded,
     isUpgradeAvailable,
     requestDownloadUpgrade,
     uploadCount,
     history,
-    syncError,
     language,
     languages,
     setLanguage,
     updatePreferences,
     getWalletSyncPref,
-    rewards,
-    setReferrer,
-    isAuthenticated,
-    syncLoop,
-    currentModal,
     syncFatalError,
     myChannelClaimIds,
     activeChannelId,
@@ -117,38 +103,16 @@ function App(props: Props) {
 
   const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
-  const [hasSignedIn, setHasSignedIn] = useState(false);
-  const [readyForSync, setReadyForSync] = useState(false);
-  const [readyForPrefs, setReadyForPrefs] = useState(false);
-  const hasVerifiedEmail = user && Boolean(user.has_verified_email);
-  const isRewardApproved = user && user.is_reward_approved;
-  const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
-  const previousRewardApproved = usePrevious(isRewardApproved);
-  const { pathname, search } = props.location;
   const [upgradeNagClosed, setUpgradeNagClosed] = useState(false);
   const [resolvedSubscriptions, setResolvedSubscriptions] = useState(false);
-  // const [retryingSync, setRetryingSync] = useState(false);
   const [langRenderKey, setLangRenderKey] = useState(0);
   const [sidebarOpen] = usePersistedState('sidebar', true);
   const showUpgradeButton = (autoUpdateDownloaded || isUpgradeAvailable) && !upgradeNagClosed;
-  // referral claiming
-  const referredRewardAvailable = rewards && rewards.some((reward) => reward.reward_type === REWARDS.TYPE_REFEREE);
-  const urlParams = new URLSearchParams(search);
-  const rawReferrerParam = urlParams.get('r');
-  const sanitizedReferrerParam = rawReferrerParam && rawReferrerParam.replace(':', '#');
-  const userId = user && user.id;
   const useCustomScrollbar = !IS_MAC;
   const hasMyChannels = myChannelClaimIds && myChannelClaimIds.length > 0;
   const hasNoChannels = myChannelClaimIds && myChannelClaimIds.length === 0;
   const shouldMigrateLanguage = LANGUAGE_MIGRATIONS[language];
   const hasActiveChannelClaim = activeChannelId !== undefined;
-  const isPersonalized = hasVerifiedEmail;
-
-  useEffect(() => {
-    if (userId) {
-      analytics.setUser(userId);
-    }
-  }, [userId]);
 
   useEffect(() => {
     if (!uploadCount) return;
@@ -188,23 +152,10 @@ function App(props: Props) {
   }, []);
 
   // Enable ctrl +/- zooming on Desktop.
-  // @if TARGET='app'
   useZoom();
-  // @endif
 
   // Enable 'Alt + Left/Right' for history navigation on Desktop.
-  // @if TARGET='app'
   useHistoryNav(history);
-  // @endif
-
-  useEffect(() => {
-    if (referredRewardAvailable && sanitizedReferrerParam && isRewardApproved) {
-      setReferrer(sanitizedReferrerParam, true);
-    } else if (referredRewardAvailable && sanitizedReferrerParam) {
-      setReferrer(sanitizedReferrerParam, false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sanitizedReferrerParam, isRewardApproved, referredRewardAvailable]);
 
   useEffect(() => {
     const { current: wrapperElement } = appRef;
@@ -212,13 +163,9 @@ function App(props: Props) {
       ReactModal.setAppElement(wrapperElement);
     }
 
-    fetchAccessToken();
-
-    // @if TARGET='app'
     fetchChannelListMine(); // This is fetched after a user is signed in on web
     fetchCollectionListMine();
-    // @endif
-  }, [appRef, fetchAccessToken, fetchChannelListMine, fetchCollectionListMine]);
+  }, [appRef, fetchChannelListMine, fetchCollectionListMine]);
 
   useEffect(() => {
     // $FlowFixMe
@@ -261,71 +208,20 @@ function App(props: Props) {
   }, [shouldMigrateLanguage, setLanguage]);
 
   useEffect(() => {
-    // Check that previousHasVerifiedEmail was not undefined instead of just not truthy
-    // This ensures we don't fire the emailVerified event on the initial user fetch
-    if (previousHasVerifiedEmail === false && hasVerifiedEmail) {
-      analytics.emailVerifiedEvent();
+    if (updatePreferences && getWalletSyncPref) {
+      getWalletSyncPref().then(() => updatePreferences());
     }
-  }, [previousHasVerifiedEmail, hasVerifiedEmail, signIn]);
-
-  useEffect(() => {
-    if (previousRewardApproved === false && isRewardApproved) {
-      analytics.rewardEligibleEvent();
-    }
-  }, [previousRewardApproved, isRewardApproved]);
-
-  useEffect(() => {
-    if (updatePreferences && getWalletSyncPref && readyForPrefs) {
-      getWalletSyncPref()
-        .then(() => updatePreferences())
-        .then(() => {
-          setReadyForSync(true);
-        });
-    }
-  }, [updatePreferences, getWalletSyncPref, setReadyForSync, readyForPrefs, hasVerifiedEmail]);
-
-  // ready for sync syncs, however after signin when hasVerifiedEmail, that syncs too.
-  useEffect(() => {
-    // signInSyncPref is cleared after sharedState loop.
-    if (readyForSync && hasVerifiedEmail) {
-      // In case we are syncing.
-      syncLoop();
-    }
-  }, [readyForSync, hasVerifiedEmail, syncLoop]);
-
-  // We know someone is logging in or not when we get their user object
-  // We'll use this to determine when it's time to pull preferences
-  // This will no longer work if desktop users no longer get a user object from lbryinc
-  useEffect(() => {
-    if (user) {
-      setReadyForPrefs(true);
-    }
-  }, [user, setReadyForPrefs]);
-
-  useEffect(() => {
-    if (syncError && isAuthenticated && !pathname.includes(PAGES.AUTH_WALLET_PASSWORD) && !currentModal) {
-      history.push(`/$/${PAGES.AUTH_WALLET_PASSWORD}?redirect=${pathname}`);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [syncError, pathname, isAuthenticated]);
-
-  // Keep this at the end to ensure initial setup effects are run first
-  useEffect(() => {
-    if (!hasSignedIn && hasVerifiedEmail) {
-      signIn();
-      setHasSignedIn(true);
-    }
-  }, [hasVerifiedEmail, signIn, hasSignedIn]);
+  }, [updatePreferences, getWalletSyncPref]);
 
   // batch resolve subscriptions to be used by the sideNavigation component.
   // add it here so that it only resolves the first time, despite route changes.
   // useLayoutEffect because it has to be executed before the sideNavigation component requests them
   useLayoutEffect(() => {
-    if (sidebarOpen && isPersonalized && subscriptions && !resolvedSubscriptions) {
+    if (sidebarOpen && subscriptions && !resolvedSubscriptions) {
       setResolvedSubscriptions(true);
       resolveUris(subscriptions.map((sub) => sub.uri));
     }
-  }, [sidebarOpen, isPersonalized, resolvedSubscriptions, subscriptions, resolveUris, setResolvedSubscriptions]);
+  }, [sidebarOpen, resolvedSubscriptions, subscriptions, resolveUris, setResolvedSubscriptions]);
 
   useEffect(() => {
     // When language is changed or translations are fetched, we render.

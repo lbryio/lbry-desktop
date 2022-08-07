@@ -14,7 +14,6 @@ import {
 import { doFetchUtxoCounts, doUtxoConsolidate } from 'redux/actions/wallet';
 import { doOpenModal } from 'redux/actions/app';
 import { selectSyncHash } from 'redux/selectors/sync';
-import { selectClaimedRewards } from 'redux/selectors/rewards';
 import WalletBalance from './view';
 
 const select = (state) => ({
@@ -22,7 +21,6 @@ const select = (state) => ({
   claimsBalance: selectClaimsBalance(state) || 0,
   supportsBalance: selectSupportsBalance(state) || 0,
   tipsBalance: selectTipsBalance(state) || 0,
-  rewards: selectClaimedRewards(state),
   hasSynced: Boolean(selectSyncHash(state)),
   fetchingUtxoCounts: selectIsFetchingUtxoCounts(state),
   consolidatingUtxos: selectIsConsolidatingUtxos(state),

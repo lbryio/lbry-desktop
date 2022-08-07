@@ -36,16 +36,12 @@ type Props = {
   autoplayNext: boolean,
   desktopPlayStartTime?: number,
   doAnalyticsView: (string, number) => Promise<any>,
-  doAnalyticsBuffer: (string, any) => void,
-  claimRewards: () => void,
   savePosition: (string, number) => void,
   clearPosition: (string) => void,
   toggleVideoTheaterMode: () => void,
   toggleAutoplayNext: () => void,
   setVideoPlaybackRate: (number) => void,
-  userId: number,
   homepageData?: { [string]: HomepageCat },
-  shareTelemetry: boolean,
   isFloating: boolean,
   doPlayUri: (string, string) => void,
   collectionId: string,
@@ -75,16 +71,12 @@ function VideoViewer(props: Props) {
     volume,
     autoplayNext,
     doAnalyticsView,
-    doAnalyticsBuffer,
-    claimRewards,
     savePosition,
     clearPosition,
     desktopPlayStartTime,
     toggleVideoTheaterMode,
     toggleAutoplayNext,
     setVideoPlaybackRate,
-    userId,
-    shareTelemetry,
     isFloating,
     doPlayUri,
     collectionId,
@@ -94,7 +86,6 @@ function VideoViewer(props: Props) {
     isMarkdownOrComment,
   } = props;
   const permanentUrl = claim && claim.permanent_url;
-  const claimId = claim && claim.claim_id;
   const isAudio = contentType.includes('audio');
   const forcePlayer = FORCE_CONTENT_TYPE_PLAYER.includes(contentType);
   const { push } = useHistory();
@@ -134,13 +125,6 @@ function VideoViewer(props: Props) {
     };
   }, [videoPlaybackRate]);
 
-  function doTrackingBuffered(e: Event, data: any) {
-    fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
-      data.playerPoweredBy = response.headers.get('x-powered-by');
-      doAnalyticsBuffer(uri, data);
-    });
-  }
-
   function doTrackingFirstPlay(e: Event, data: any) {
     let timeToStart = data.secondsToLoad;
 
@@ -150,30 +134,7 @@ function VideoViewer(props: Props) {
     }
     analytics.playerStartedEvent();
 
-    // convert bytes to bits, and then divide by seconds
-    const contentInBits = Number(claim.value.source.size) * 8;
-    const durationInSeconds = claim.value.video && claim.value.video.duration;
-    let bitrateAsBitsPerSecond;
-    if (durationInSeconds) {
-      bitrateAsBitsPerSecond = Math.round(contentInBits / durationInSeconds);
-    }
-
-    fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
-      let playerPoweredBy = response.headers.get('x-powered-by') || '';
-      analytics.videoStartEvent(
-        claimId,
-        timeToStart,
-        playerPoweredBy,
-        userId,
-        claim.canonical_url,
-        this,
-        bitrateAsBitsPerSecond
-      );
-    });
-
-    doAnalyticsView(uri, timeToStart).then(() => {
-      claimRewards();
-    });
+    doAnalyticsView(uri, timeToStart);
   }
 
   const doPlay = useCallback(
@@ -335,9 +296,6 @@ function VideoViewer(props: Props) {
     // re-factoring.
     player.on('loadedmetadata', () => restorePlaybackRate(player));
 
-    // used for tracking buffering for watchman
-    player.on('tracking:buffered', doTrackingBuffered);
-
     // first play tracking, used for initializing the watchman api
     player.on('tracking:firstplay', doTrackingFirstPlay);
     player.on('ended', () => setEnded(true));
@@ -397,9 +355,6 @@ function VideoViewer(props: Props) {
         toggleVideoTheaterMode={toggleVideoTheaterMode}
         autoplay
         autoplaySetting={autoplayNext}
-        claimId={claimId}
-        userId={userId}
-        shareTelemetry={shareTelemetry}
         replay={replay}
         videoTheaterMode={videoTheaterMode}
         playNext={doPlayNext}

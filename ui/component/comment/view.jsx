@@ -49,7 +49,6 @@ type Props = {
   linkedCommentId?: string,
   linkedCommentAncestors: { [string]: Array<string> },
   hasChannels: boolean,
-  commentingEnabled: boolean,
   doToast: ({ message: string }) => void,
   isTopLevel?: boolean,
   threadDepth: number,
@@ -82,7 +81,6 @@ function CommentView(props: Props) {
     totalReplyPages,
     linkedCommentId,
     linkedCommentAncestors,
-    commentingEnabled,
     hasChannels,
     doToast,
     isTopLevel,
@@ -368,7 +366,7 @@ function CommentView(props: Props) {
                   <div className="comment__actions">
                     {threadDepth !== 0 && (
                       <Button
-                        label={commentingEnabled ? __('Reply') : __('Log in to reply')}
+                        label={__('Reply')}
                         className="comment__action"
                         onClick={handleCommentReply}
                         icon={ICONS.REPLY}

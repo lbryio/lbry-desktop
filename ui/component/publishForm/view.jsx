@@ -62,7 +62,6 @@ type Props = {
   licenseType: string,
   otherLicenseDescription: ?string,
   licenseUrl: ?string,
-  useLBRYUploader: ?boolean,
   publishing: boolean,
   publishSuccess: boolean,
   balance: number,
@@ -76,19 +75,14 @@ type Props = {
   // Add back type
   updatePublishForm: (any) => void,
   checkAvailability: (string) => void,
-  ytSignupPending: boolean,
   modal: { id: string, modalProps: {} },
   enablePublishPreview: boolean,
   activeChannelClaim: ?ChannelClaim,
   incognito: boolean,
-  user: ?User,
   activeChannelStakedLevel: number,
   isPostClaim: boolean,
   permanentUrl: ?string,
   remoteUrl: ?string,
-  isClaimingInitialRewards: boolean,
-  claimInitialRewards: () => void,
-  hasClaimedInitialRewards: boolean,
 };
 
 function PublishForm(props: Props) {
@@ -116,7 +110,6 @@ function PublishForm(props: Props) {
     publish,
     disabled = false,
     checkAvailability,
-    ytSignupPending,
     modal,
     enablePublishPreview,
     activeChannelClaim,
@@ -124,9 +117,6 @@ function PublishForm(props: Props) {
     isPostClaim,
     permanentUrl,
     remoteUrl,
-    isClaimingInitialRewards,
-    claimInitialRewards,
-    hasClaimedInitialRewards,
   } = props;
 
   const inEditMode = Boolean(editingURI);
@@ -225,12 +215,6 @@ function PublishForm(props: Props) {
   const [previewing, setPreviewing] = React.useState(false);
 
   useEffect(() => {
-    if (!hasClaimedInitialRewards) {
-      claimInitialRewards();
-    }
-  }, [hasClaimedInitialRewards, claimInitialRewards]);
-
-  useEffect(() => {
     if (!modal) {
       setTimeout(() => {
         setPreviewing(false);
@@ -240,9 +224,7 @@ function PublishForm(props: Props) {
 
   let submitLabel;
 
-  if (isClaimingInitialRewards) {
-    submitLabel = __('Claiming credits...');
-  } else if (publishing) {
+  if (publishing) {
     if (isStillEditing) {
       submitLabel = __('Saving...');
     } else {
@@ -536,12 +518,7 @@ function PublishForm(props: Props) {
             onClick={handlePublish}
             label={submitLabel}
             disabled={
-              isClaimingInitialRewards ||
-              formDisabled ||
-              !formValid ||
-              uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS ||
-              ytSignupPending ||
-              previewing
+              formDisabled || !formValid || uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS || previewing
             }
           />
           <Button button="link" onClick={clearPublish} label={__('New --[clears Publish Form]--')} />

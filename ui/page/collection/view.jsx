@@ -42,7 +42,6 @@ type Props = {
   editCollection: (string, CollectionEditParams) => void,
   fetchCollectionItems: (string, () => void) => void,
   resolveUris: (string) => void,
-  user: ?User,
   renameCollection: (string, string) => void,
 };
 

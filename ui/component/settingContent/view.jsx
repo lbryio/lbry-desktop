@@ -3,7 +3,6 @@ import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import React from 'react';
 import * as SETTINGS from 'constants/settings';
-import { Lbryio } from 'lbryinc';
 import { SETTINGS_GRP } from 'constants/settings';
 import Button from 'component/button';
 import Card from 'component/common/card';
@@ -18,7 +17,6 @@ type Price = {
 
 type Props = {
   // --- select ---
-  isAuthenticated: boolean,
   floatingPlayer: boolean,
   autoplayMedia: boolean,
   autoplayNext: boolean,
@@ -37,7 +35,6 @@ type Props = {
 
 export default function SettingContent(props: Props) {
   const {
-    isAuthenticated,
     floatingPlayer,
     autoplayMedia,
     autoplayNext,
@@ -110,10 +107,6 @@ export default function SettingContent(props: Props) {
                 type="checkbox"
                 name="hide_reposts"
                 onChange={(e) => {
-                  if (isAuthenticated) {
-                    let param = e.target.checked ? { add: 'noreposts' } : { remove: 'noreposts' };
-                    Lbryio.call('user_tag', 'edit', param);
-                  }
                   setClientSetting(SETTINGS.HIDE_REPOSTS, !hideReposts);
                 }}
                 checked={hideReposts}
@@ -172,7 +165,7 @@ export default function SettingContent(props: Props) {
             </SettingsRow>
 
             {myChannelUrls && myChannelUrls.length > 0 && (
-              <SettingsRow title={__('Creator settings')}>
+              <SettingsRow title={__('Creator Comment settings')}>
                 <Button
                   button="inverse"
                   label={__('Manage')}

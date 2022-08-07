@@ -26,7 +26,6 @@ type Props = {
   disabled?: boolean,
   limitSelect?: number,
   limitShow?: number,
-  user: User,
   disableControlTags?: boolean,
 };
 
@@ -60,7 +59,6 @@ export default function TagsSearch(props: Props) {
     disabled,
     limitSelect = TAG_FOLLOW_MAX,
     limitShow = 5,
-    user,
     disableControlTags,
   } = props;
   const [newTag, setNewTag] = useState('');
@@ -71,7 +69,7 @@ export default function TagsSearch(props: Props) {
 
   // Make sure there are no duplicates, then trim
   // suggestedTags = (followedTags - tagsPassedIn) + unfollowedTags
-  const experimentalFeature = user && user.experimental_ui;
+  const experimentalFeature = false;
   const followedTagsSet = new Set(followedTags.map((tag) => tag.name));
   const selectedTagsSet = new Set(tagsPassedIn.map((tag) => tag.name));
   const unfollowedTagsSet = new Set(unfollowedTags.map((tag) => tag.name));
@@ -88,7 +86,6 @@ export default function TagsSearch(props: Props) {
     }
   });
 
-  // const countWithoutLbryFirst = selectedTagsSet.has('lbry-first') ? selectedTagsSet.size - 1 : selectedTagsSet.size;
   const maxed = Boolean(limitSelect && countWithoutSpecialTags >= limitSelect);
   const suggestedTags = Array.from(suggestedTagsSet).filter(doesTagMatch).slice(0, limitShow);
 

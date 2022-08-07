@@ -1,102 +1,55 @@
 // @flow
-import * as PAGES from 'constants/pages';
-import { DOMAIN } from 'config';
-import React, { useState } from 'react';
+/*
+  Saving this component for sign in/up
+ */
+import React from 'react';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
-import analytics from 'analytics';
-import { EMAIL_REGEX } from 'constants/email';
 import I18nMessage from 'component/i18nMessage';
-import { useHistory } from 'react-router-dom';
 import Card from 'component/common/card';
 import ErrorText from 'component/common/error-text';
 import Nag from 'component/common/nag';
 import classnames from 'classnames';
 
 type Props = {
-  errorMessage: ?string,
-  emailExists: boolean,
-  isPending: boolean,
+  // new sync stuff
   syncEnabled: boolean,
   setSync: (boolean) => void,
   balance: number,
   daemonSettings: { share_usage_data: boolean },
   setShareDiagnosticData: (boolean) => void,
-  doSignUp: (string, ?string) => Promise<any>,
-  clearEmailEntry: () => void,
-  interestedInYoutubSync: boolean,
-  doToggleInterestedInYoutubeSync: () => void,
 };
 
+const SIGN_UP_MODE = 'signUp';
+const SIGN_IN_MODE = 'signIn';
+
 function UserEmailNew(props: Props) {
-  const {
-    errorMessage,
-    isPending,
-    doSignUp,
-    setSync,
-    daemonSettings,
-    setShareDiagnosticData,
-    clearEmailEntry,
-    emailExists,
-  } = props;
-  const { share_usage_data: shareUsageData } = daemonSettings;
-  const { push, location } = useHistory();
-  const urlParams = new URLSearchParams(location.search);
-  const emailFromUrl = urlParams.get('email');
-  const defaultEmail = emailFromUrl ? decodeURIComponent(emailFromUrl) : '';
-  const [email, setEmail] = useState(defaultEmail);
-  const [password, setPassword] = useState('');
-  const [localShareUsageData, setLocalShareUsageData] = React.useState(false);
-  const [formSyncEnabled, setFormSyncEnabled] = useState(true);
-  const valid = email.match(EMAIL_REGEX);
+  const [email, setEmail] = React.useState();
+  const [password, setPassword] = React.useState();
+  // const [server, setServer] = React.useState();
+  // const [errormessage, setErrorMessage] = React.useState();
+  const [mode, setMode] = React.useState(SIGN_UP_MODE);
 
-  function handleUsageDataChange() {
-    setLocalShareUsageData(!localShareUsageData);
-  }
+  // const shareUsageData = false;
 
-  function handleSubmit() {
-    // @if TARGET='app'
-    setSync(formSyncEnabled);
-    setShareDiagnosticData(true);
-    // @endif
-    doSignUp(email, password === '' ? undefined : password).then(() => {
-      analytics.emailProvidedEvent();
-    });
-  }
-
-  function handleChangeToSignIn(additionalParams) {
-    clearEmailEntry();
-
-    let url = `/$/${PAGES.AUTH_SIGNIN}`;
-    const urlParams = new URLSearchParams(location.search);
-
-    urlParams.delete('email');
-    if (email) {
-      urlParams.set('email', encodeURIComponent(email));
-    }
-
-    urlParams.delete('email_exists');
-    if (emailExists) {
-      urlParams.set('email_exists', '1');
-    }
-
-    push(`${url}?${urlParams.toString()}`);
-  }
-
-  React.useEffect(() => {
-    if (emailExists) {
-      handleChangeToSignIn();
-    }
-  }, [emailExists]);
-
+  const handleSubmit = () => {};
   return (
     <div className={classnames('main__sign-up')}>
       <Card
         title={__('Cloud Connect')}
         subtitle={__('Connect your wallet to Odysee')}
         actions={
-          <div className={classnames({ 'card--disabled': DOMAIN === 'lbry.tv' && IS_WEB })}>
+          <div>
             <Form onSubmit={handleSubmit} className="section">
+              <FormField
+                autoFocus
+                placeholder={__('yourstruly@example.com')}
+                type="email"
+                name="sign_up_email"
+                label={__('Email')}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
               <FormField
                 autoFocus
                 placeholder={__('yourstruly@example.com')}
@@ -113,45 +66,13 @@ function UserEmailNew(props: Props) {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-
-              <FormField
-                type="checkbox"
-                name="sync_checkbox"
-                label={
-                  <React.Fragment>
-                    {__('Backup your account and wallet data.')}{' '}
-                    <Button button="link" href="https://lbry.com/faq/account-sync" label={__('Learn More')} />
-                  </React.Fragment>
-                }
-                checked={formSyncEnabled}
-                onChange={() => setFormSyncEnabled(!formSyncEnabled)}
-              />
-
-              {!shareUsageData && !IS_WEB && (
-                <FormField
-                  type="checkbox"
-                  name="share_data_checkbox"
-                  checked={localShareUsageData}
-                  onChange={handleUsageDataChange}
-                  label={
-                    <React.Fragment>
-                      {__('Share usage data with LBRY inc.')}{' '}
-                      <Button button="link" href="https://lbry.com/faq/privacy-and-data" label={__('Learn More')} />
-                      {!localShareUsageData && <span className="error__text"> ({__('Required')})</span>}
-                    </React.Fragment>
-                  }
-                />
-              )}
               <div className="section__actions">
+                <Button button="primary" type="submit" label={__('Sign Up')} disabled={!email || !password} />
                 <Button
-                  button="primary"
-                  type="submit"
-                  label={__('Sign Up')}
-                  disabled={
-                    !email || !password || !valid || (!IS_WEB && !localShareUsageData && !shareUsageData) || isPending
-                  }
+                  button="link"
+                  onClick={setMode(mode === SIGN_UP_MODE ? SIGN_IN_MODE : SIGN_UP_MODE)}
+                  label={__('Log In')}
                 />
-                <Button button="link" onClick={handleChangeToSignIn} label={__('Log In')} />
               </div>
               <p className="help--card-actions">
                 <I18nMessage
@@ -165,7 +86,7 @@ function UserEmailNew(props: Props) {
             </Form>
           </div>
         }
-        nag={<>{errorMessage && <Nag type="error" relative message={<ErrorText>{errorMessage}</ErrorText>} />}</>}
+        nag={<>{'someMessage' && <Nag type="error" relative message={<ErrorText>{'someMessage'}</ErrorText>} />}</>}
       />
     </div>
   );

@@ -10,7 +10,6 @@ import {
 } from 'redux/selectors/claims';
 import { selectMyUnpublishedCollections } from 'redux/selectors/collections';
 import { selectBlackListedOutpoints, doFetchSubCount, selectSubCountForUri } from 'lbryinc'; // ban state
-import { selectYoutubeChannels } from 'redux/selectors/user';
 import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
 import { selectModerationBlockList } from 'redux/selectors/comments';
 import { selectMutedChannels } from 'redux/selectors/blocked';
@@ -31,7 +30,6 @@ const select = (state, props) => {
     blackListedOutpoints: selectBlackListedOutpoints(state),
     subCount: selectSubCountForUri(state, props.uri),
     pending: makeSelectClaimIsPending(props.uri)(state),
-    youtubeChannels: selectYoutubeChannels(state),
     blockedChannels: selectModerationBlockList(state), // banlist
     mutedChannels: selectMutedChannels(state),
     unpublishedCollections: selectMyUnpublishedCollections(state),

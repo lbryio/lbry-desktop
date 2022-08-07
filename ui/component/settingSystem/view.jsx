@@ -44,7 +44,6 @@ type Props = {
   ffmpegStatus: { available: boolean, which: string },
   findingFFmpeg: boolean,
   walletEncrypted: boolean,
-  isAuthenticated: boolean,
   allowAnalytics: boolean,
   // --- perform ---
   setDaemonSetting: (string, ?SetDaemonSettingArg) => void,
@@ -64,7 +63,6 @@ export default function SettingSystem(props: Props) {
     ffmpegStatus,
     findingFFmpeg,
     walletEncrypted,
-    isAuthenticated,
     allowAnalytics,
     setDaemonSetting,
     clearDaemonSetting,
@@ -168,12 +166,7 @@ export default function SettingSystem(props: Props) {
                 onChange={() => setDaemonSetting('share_usage_data', !daemonSettings.share_usage_data)}
                 checked={daemonSettings.share_usage_data}
                 label={<React.Fragment>{__('Allow the app to share data to LBRY.inc')}</React.Fragment>}
-                helper={
-                  isAuthenticated
-                    ? __('Internal sharing is required while signed in.')
-                    : __('Internal sharing is required to participate in rewards programs.')
-                }
-                disabled={isAuthenticated && daemonSettings.share_usage_data}
+                helper={__('Internal sharing is required to participate in rewards programs.')}
               />
               <FormField
                 type="checkbox"

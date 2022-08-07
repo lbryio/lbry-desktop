@@ -12,14 +12,14 @@ import { SITE_HELP_EMAIL } from 'config';
 type Props = {
   getSync: ((any, boolean) => void, ?string) => void,
   getSyncIsPending: boolean,
-  email: string,
   passwordError: boolean,
   signOut: () => void,
   handleSyncComplete: (any, boolean) => void,
+  email: string,
 };
 
 function SyncPassword(props: Props) {
-  const { getSync, getSyncIsPending, email, signOut, passwordError, handleSyncComplete } = props;
+  const { getSync, getSyncIsPending, signOut, passwordError, handleSyncComplete, email = 'dummy' } = props;
   const {
     push,
     location: { search },

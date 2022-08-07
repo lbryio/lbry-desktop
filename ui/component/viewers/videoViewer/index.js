@@ -6,23 +6,15 @@ import {
 } from 'redux/selectors/collections';
 import * as SETTINGS from 'constants/settings';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
-import {
-  doChangeVolume,
-  doChangeMute,
-  doAnalyticsView,
-  doAnalyticsBuffer,
-  doAnaltyicsPurchaseEvent,
-} from 'redux/actions/app';
+import { doChangeVolume, doChangeMute, doAnalyticsView, doAnaltyicsPurchaseEvent } from 'redux/actions/app';
 import { selectVolume, selectMute } from 'redux/selectors/app';
 import { savePosition, clearPosition, doPlayUri, doSetPlayingUri } from 'redux/actions/content';
 import { makeSelectContentPositionForUri, makeSelectIsPlayerFloating, selectPlayingUri } from 'redux/selectors/content';
 import { selectRecommendedContentForUri } from 'redux/selectors/search';
 import VideoViewer from './view';
 import { withRouter } from 'react-router';
-import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { selectDaemonSettings, makeSelectClientSetting, selectHomepageData } from 'redux/selectors/settings';
 import { toggleVideoTheaterMode, toggleAutoplayNext, doSetClientSetting } from 'redux/actions/settings';
-import { selectUser } from 'redux/selectors/user';
 
 const select = (state, props) => {
   const { search } = props.location;
@@ -30,7 +22,6 @@ const select = (state, props) => {
   const uri = props.uri;
   // TODO: eventually this should be received from DB and not local state (https://github.com/lbryio/lbry-desktop/issues/6796)
   const position = urlParams.get('t') !== null ? urlParams.get('t') : makeSelectContentPositionForUri(uri)(state);
-  const userId = selectUser(state) && selectUser(state).id;
   const playingUri = selectPlayingUri(state);
   const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID) || (playingUri && playingUri.collectionId);
   const isMarkdownOrComment = playingUri && (playingUri.source === 'markdown' || playingUri.source === 'comment');
@@ -47,7 +38,6 @@ const select = (state, props) => {
 
   return {
     position,
-    userId,
     collectionId,
     nextRecommendedUri,
     previousListUri,
@@ -71,8 +61,6 @@ const perform = (dispatch) => ({
   clearPosition: (uri) => dispatch(clearPosition(uri)),
   changeMute: (muted) => dispatch(doChangeMute(muted)),
   doAnalyticsView: (uri, timeToStart) => dispatch(doAnalyticsView(uri, timeToStart)),
-  doAnalyticsBuffer: (uri, bufferData) => dispatch(doAnalyticsBuffer(uri, bufferData)),
-  claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
   toggleVideoTheaterMode: () => dispatch(toggleVideoTheaterMode()),
   toggleAutoplayNext: () => dispatch(toggleAutoplayNext()),
   setVideoPlaybackRate: (rate) => dispatch(doSetClientSetting(SETTINGS.VIDEO_PLAYBACK_RATE, rate)),

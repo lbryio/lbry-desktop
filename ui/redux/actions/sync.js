@@ -14,7 +14,6 @@ import {
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { getSavedPassword } from 'util/saved-passwords';
 import { doAnalyticsTagSync, doHandleSyncComplete } from 'redux/actions/app';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import Comments from 'comments';
 import { getSubsetFromKeysArray } from 'util/sync-settings';
 
@@ -119,10 +118,12 @@ export function doSyncLoop(noInterval?: boolean) {
   return (dispatch: Dispatch, getState: GetState) => {
     if (!noInterval && syncTimer) clearInterval(syncTimer);
     const state = getState();
-    const hasVerifiedEmail = selectUserVerifiedEmail(state);
+    // SHOULD SYNC
+    // syncSignedIn = selectLbrySyncSignedIn(state);
+    const syncSignedIn = false;
     const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
     const syncLocked = selectSyncIsLocked(state);
-    if (hasVerifiedEmail && syncEnabled && !syncLocked) {
+    if (syncSignedIn && syncEnabled && !syncLocked) {
       dispatch(doGetSyncDesktop((error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
       dispatch(doAnalyticsTagSync());
       if (!noInterval) {

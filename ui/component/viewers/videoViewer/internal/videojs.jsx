@@ -9,7 +9,7 @@ import eventTracking from 'videojs-event-tracking';
 import * as OVERLAY from './overlays';
 import './plugins/videojs-mobile-ui/plugin';
 import hlsQualitySelector from './plugins/videojs-hls-quality-selector/plugin';
-import recsys from './plugins/videojs-recsys/plugin';
+// import recsys from './plugins/videojs-recsys/plugin';
 import qualityLevels from 'videojs-contrib-quality-levels';
 import LbryVolumeBarClass from './lbry-volume-bar';
 import keyboardShorcuts from './videojs-keyboard-shortcuts';
@@ -51,10 +51,6 @@ type Props = {
   autoplay: boolean,
   autoplaySetting: boolean,
   toggleVideoTheaterMode: () => void,
-  claimId: ?string,
-  userId: ?number,
-  // allowPreRoll: ?boolean,
-  shareTelemetry: boolean,
   replay: boolean,
   videoTheaterMode: boolean,
   playNext: () => void,
@@ -92,9 +88,9 @@ if (!Object.keys(videojs.getPlugins()).includes('qualityLevels')) {
   videojs.registerPlugin('qualityLevels', qualityLevels);
 }
 
-if (!Object.keys(videojs.getPlugins()).includes('recsys')) {
-  videojs.registerPlugin('recsys', recsys);
-}
+// if (!Object.keys(videojs.getPlugins()).includes('recsys')) {
+//   videojs.registerPlugin('recsys', recsys);
+// }
 
 // ****************************************************************************
 // VideoJs
@@ -113,9 +109,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     isAudio,
     onPlayerReady,
     toggleVideoTheaterMode,
-    claimId,
-    userId,
-    shareTelemetry,
     replay,
     videoTheaterMode,
     playNext,
@@ -192,14 +185,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       player.hlsQualitySelector({
         displayCurrentQuality: true,
       });
-
-      // Add recsys plugin
-      if (shareTelemetry) {
-        player.recsys({
-          videoId: claimId,
-          userId: userId,
-        });
-      }
 
       // set playsinline for mobile
       player.children_[0].setAttribute('playsinline', '');

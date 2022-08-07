@@ -6,13 +6,11 @@ import * as KEYCODES from 'constants/keycodes';
 import React from 'react';
 import Button from 'component/button';
 import classnames from 'classnames';
-import NotificationBubble from 'component/notificationBubble';
 import DebouncedInput from 'component/common/debounced-input';
 import ChannelThumbnail from 'component/channelThumbnail';
 import { useIsMobile, isTouch } from 'effects/use-screensize';
 import { IS_MAC } from 'component/app/view';
 import { useHistory } from 'react-router';
-import { ENABLE_UI_NOTIFICATIONS } from 'config';
 
 const FOLLOWED_ITEM_INITIAL_LIMIT = 10;
 const touch = isTouch();
@@ -32,7 +30,6 @@ type SideNavLink = {
 type Props = {
   subscriptions: Array<Subscription>,
   followedTags: Array<Tag>,
-  email: ?string,
   uploadCount: number,
   doSignOut: () => void,
   sidebarOpen: boolean,
@@ -42,7 +39,6 @@ type Props = {
   unseenCount: number,
   purchaseSuccess: boolean,
   doClearPurchasedUriSuccess: () => void,
-  user: ?User,
   homepageData: any,
   activeChannelStakedLevel: number,
 };
@@ -51,7 +47,6 @@ function SideNavigation(props: Props) {
   const {
     subscriptions,
     doSignOut,
-    email,
     purchaseSuccess,
     doClearPurchasedUriSuccess,
     sidebarOpen,
@@ -59,7 +54,6 @@ function SideNavigation(props: Props) {
     isMediumScreen,
     isOnFilePage,
     unseenCount,
-    user,
     followedTags,
   } = props;
 
@@ -97,13 +91,6 @@ function SideNavigation(props: Props) {
     title: 'Library',
     link: `/$/${PAGES.LIBRARY}`,
     icon: ICONS.PURCHASED,
-  };
-
-  const NOTIFICATIONS = {
-    title: 'Notifications',
-    link: `/$/${PAGES.NOTIFICATIONS}`,
-    icon: ICONS.NOTIFICATION,
-    extra: <NotificationBubble inline />,
   };
 
   const PLAYLISTS = {
@@ -181,8 +168,6 @@ function SideNavigation(props: Props) {
     },
   ];
 
-  const notificationsEnabled = ENABLE_UI_NOTIFICATIONS || (user && user.experimental_ui);
-
   const [pulseLibrary, setPulseLibrary] = React.useState(false);
   const [expandSubscriptions, setExpandSubscriptions] = React.useState(false);
   const [expandTags, setExpandTags] = React.useState(false);
@@ -240,10 +225,6 @@ function SideNavigation(props: Props) {
   function getLink(props: SideNavLink) {
     const { hideForUnauth, route, link, ...passedProps } = props;
     const { title, icon, extra } = passedProps;
-
-    if (hideForUnauth && !email) {
-      return null;
-    }
 
     return (
       <li key={route || link || title}>
@@ -388,15 +369,11 @@ function SideNavigation(props: Props) {
           'navigation--push': showPushMenu,
           'navigation-file-page-and-mobile': hideMenuFromView,
           'navigation-touch': touch,
-          // @if TARGET='app'
           'navigation--mac': IS_MAC,
-          // @endif
         })}
       >
         {(!canDisposeMenu || sidebarOpen) && (
           <div className="navigation-inner-container">
-            <ul className="navigation-links--absolute mobile-only">{notificationsEnabled && getLink(NOTIFICATIONS)}</ul>
-
             <ul
               className={classnames('navigation-links', {
                 'navigation-links--micro': showMicroMenu,
@@ -412,7 +389,7 @@ function SideNavigation(props: Props) {
               {getLink(PLAYLISTS)}
             </ul>
             <ul className="navigation-links--absolute mobile-only">
-              {email && MOBILE_LINKS.map((linkProps) => getLink(linkProps))}
+              {MOBILE_LINKS.map((linkProps) => getLink(linkProps))}
             </ul>
 
             {getSubscriptionSection()}

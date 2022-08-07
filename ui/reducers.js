@@ -12,8 +12,6 @@ import contentReducer from 'redux/reducers/content';
 import settingsReducer from 'redux/reducers/settings';
 import subscriptionsReducer from 'redux/reducers/subscriptions';
 import notificationsReducer from 'redux/reducers/notifications';
-import rewardsReducer from 'redux/reducers/rewards';
-import userReducer from 'redux/reducers/user';
 import commentsReducer from 'redux/reducers/comments';
 import blockedReducer from 'redux/reducers/blocked';
 import searchReducer from 'redux/reducers/search';
@@ -36,14 +34,12 @@ export default (history) =>
     publish: publishReducer,
     reactions: reactionsReducer,
     reportContent: reportContentReducer,
-    rewards: rewardsReducer,
     search: searchReducer,
     settings: settingsReducer,
     stats: statsReducer,
     subscriptions: subscriptionsReducer,
     tags: tagsReducer,
     blocked: blockedReducer,
-    user: userReducer,
     wallet: walletReducer,
     sync: syncReducer,
     collections: collectionsReducer,

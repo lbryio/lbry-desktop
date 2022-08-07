@@ -26,8 +26,6 @@ import ModalError from 'modal/modalError';
 import ModalFileSelection from 'modal/modalFileSelection';
 
 import ModalFileTimeout from 'modal/modalFileTimeout';
-import ModalFirstReward from 'modal/modalFirstReward';
-import ModalFirstSubscription from 'modal/modalFirstSubscription';
 
 import ModalImageUpload from 'modal/modalImageUpload';
 import ModalMassTipsUnlock from 'modal/modalMassTipUnlock';
@@ -46,7 +44,6 @@ import ModalRemoveComment from 'modal/modalRemoveComment';
 
 import ModalRemoveFile from 'modal/modalRemoveFile';
 import ModalRevokeClaim from 'modal/modalRevokeClaim';
-import ModalRewardCode from 'modal/modalRewardCode';
 import ModalSendTip from 'modal/modalSendTip';
 import ModalRepost from 'modal/modalRepost';
 import ModalSignOut from 'modal/modalSignOut';
@@ -78,8 +75,6 @@ function getModal(id) {
       return ModalError;
     case MODALS.FILE_TIMEOUT:
       return ModalFileTimeout;
-    case MODALS.FIRST_REWARD:
-      return ModalFirstReward;
     case MODALS.TRANSACTION_FAILED:
       return ModalTransactionFailed;
     case MODALS.CONFIRM_FILE_REMOVE:
@@ -89,8 +84,6 @@ function getModal(id) {
     case MODALS.CONFIRM_CLAIM_REVOKE:
       return ModalRevokeClaim;
 
-    case MODALS.FIRST_SUBSCRIPTION:
-      return ModalFirstSubscription;
     case MODALS.SEND_TIP:
       return ModalSendTip;
     case MODALS.REPOST:
@@ -115,8 +108,6 @@ function getModal(id) {
       return ModalWalletUnlock;
     case MODALS.WALLET_PASSWORD_UNSAVE:
       return ModalPasswordUnsave;
-    case MODALS.REWARD_GENERATED_CODE:
-      return ModalRewardCode;
     case MODALS.COMMENT_ACKNOWEDGEMENT:
       return ModalCommentAcknowledgement;
     case MODALS.SIGN_OUT:

@@ -21,7 +21,6 @@ import {
 } from 'redux/selectors/collections';
 
 import { doFetchItemsInCollection, doCollectionDelete, doCollectionEdit } from 'redux/actions/collections';
-import { selectUser } from 'redux/selectors/user';
 
 const select = (state, props) => {
   const { match } = props;
@@ -45,7 +44,6 @@ const select = (state, props) => {
     claimIsPending: makeSelectClaimIsPending(uri)(state),
     collectionHasEdits: Boolean(makeSelectEditedCollectionForId(collectionId)(state)),
     uri,
-    user: selectUser(state),
     channel: uri && makeSelectChannelForClaimUri(uri)(state),
   };
 };

@@ -4,12 +4,10 @@ import * as SETTINGS from 'constants/settings';
 import { doSetPlayingUri, clearContentCache } from 'redux/actions/content';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { selectShowMatureContent, makeSelectClientSetting } from 'redux/selectors/settings';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
 
 import SettingContent from './view';
 
 const select = (state) => ({
-  isAuthenticated: selectUserVerifiedEmail(state),
   floatingPlayer: makeSelectClientSetting(SETTINGS.FLOATING_PLAYER)(state),
   autoplayMedia: makeSelectClientSetting(SETTINGS.AUTOPLAY_MEDIA)(state),
   autoplayNext: makeSelectClientSetting(SETTINGS.AUTOPLAY_NEXT)(state),

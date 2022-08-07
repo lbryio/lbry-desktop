@@ -27,7 +27,7 @@ export const doPublishDesktop = (filePath: ?File, preview?: boolean) => (dispatc
     );
   };
 
-  const publishSuccess = (successResponse, lbryFirstError) => {
+  const publishSuccess = (successResponse) => {
     const state = getState();
     const myClaims = selectMyClaims(state);
     const pendingClaim = successResponse.outputs[0];
@@ -35,10 +35,7 @@ export const doPublishDesktop = (filePath: ?File, preview?: boolean) => (dispatc
     const { permanent_url: url } = pendingClaim;
     const actions = [];
 
-    // @if TARGET='app'
     actions.push(push(`/$/${PAGES.UPLOADS}`));
-    // @endif
-
     actions.push({
       type: ACTIONS.PUBLISH_SUCCESS,
     });
@@ -68,7 +65,6 @@ export const doPublishDesktop = (filePath: ?File, preview?: boolean) => (dispatc
         uri: url,
         isEdit,
         filePath,
-        lbryFirstError,
       })
     );
     dispatch(doCheckPendingClaims());
@@ -334,7 +330,6 @@ export const doPublish =
       releaseTimeEdited,
       // license,
       licenseUrl,
-      useLBRYUploader,
       licenseType,
       otherLicenseDescription,
       thumbnail,
@@ -408,10 +403,6 @@ export const doPublish =
 
     if (thumbnail) {
       publishPayload.thumbnail_url = thumbnail;
-    }
-
-    if (useLBRYUploader) {
-      publishPayload.tags.push('lbry-first');
     }
 
     // Set release time to curret date. On edits, keep original release/transaction time as release_time

@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import { makeSelectFileInfoForUri, makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
 import { makeSelectClaimWasPurchased } from 'redux/selectors/claims';
-import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { makeSelectFileRenderModeForUri, selectPrimaryUri } from 'redux/selectors/content';
 import { withRouter } from 'react-router';
 import { doAnalyticsView } from 'redux/actions/app';
@@ -19,7 +18,6 @@ const select = (state, props) => ({
 
 const perform = (dispatch) => ({
   triggerAnalyticsView: (uri, timeToStart) => dispatch(doAnalyticsView(uri, timeToStart)),
-  claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
 });
 
 export default withRouter(connect(select, perform)(FileRenderInline));

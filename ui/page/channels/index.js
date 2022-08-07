@@ -1,25 +1,13 @@
 import { connect } from 'react-redux';
-import { selectMyChannelUrls, selectFetchingMyChannels, makeSelectClaimIsPending } from 'redux/selectors/claims';
+import { selectMyChannelUrls, selectFetchingMyChannels } from 'redux/selectors/claims';
 import { doFetchChannelListMine } from 'redux/actions/claims';
 import { doSetActiveChannel } from 'redux/actions/app';
-import { selectYoutubeChannels } from 'redux/selectors/user';
 import ChannelsPage from './view';
 
 const select = (state) => {
-  const channelUrls = selectMyChannelUrls(state);
-  let pendingChannels = [];
-  if (channelUrls) {
-    channelUrls.map((channelUrl) => {
-      const isPendingUrl = makeSelectClaimIsPending(channelUrl)(state);
-      if (isPendingUrl) pendingChannels.push(channelUrl);
-    });
-  }
-
   return {
-    channelUrls,
+    channelUrls: selectMyChannelUrls(state),
     fetchingChannels: selectFetchingMyChannels(state),
-    youtubeChannels: selectYoutubeChannels(state),
-    pendingChannels,
   };
 };
 

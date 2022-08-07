@@ -6,15 +6,12 @@ import { createFilter, createBlacklistFilter } from 'redux-persist-transform-fil
 import localForage from 'localforage';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
-import { createMemoryHistory, createBrowserHistory } from 'history';
+import { createMemoryHistory } from 'history';
 import { routerMiddleware } from 'connected-react-router';
 import createRootReducer from './reducers';
-import Lbry from 'lbry';
 import { buildSharedStateMiddleware } from 'redux/middleware/shared-state';
 import { doSyncLoop } from 'redux/actions/sync';
-import { getAuthToken } from 'util/saved-passwords';
 import { generateInitialUrl } from 'util/url';
-import { X_LBRY_AUTH_TOKEN } from 'constants/token';
 
 function isFunction(object) {
   return typeof object === 'function';
@@ -114,15 +111,10 @@ const persistOptions = {
 };
 
 let history;
-// @if TARGET='app'
 history = createMemoryHistory({
   initialEntries: [generateInitialUrl(window.location.hash)],
   initialIndex: 0,
 });
-// @endif
-// @if TARGET='web'
-history = createBrowserHistory();
-// @endif
 
 const triggerSharedStateActions = [
   ACTIONS.CHANNEL_SUBSCRIBE,
@@ -137,7 +129,6 @@ const triggerSharedStateActions = [
   ACTIONS.COLLECTION_DELETE,
   ACTIONS.COLLECTION_NEW,
   ACTIONS.COLLECTION_PENDING,
-  // MAYBE COLLECTOIN SAVE
   // ACTIONS.SET_WELCOME_VERSION,
   // ACTIONS.SET_ALLOW_ANALYTICS,
 ];
@@ -178,33 +169,11 @@ const sharedStateCb = ({ dispatch, getState }) => {
   dispatch(doSyncLoop());
 };
 
-const populateAuthTokenHeader = () => {
-  return (next) => (action) => {
-    if (
-      (action.type === ACTIONS.USER_FETCH_SUCCESS || action.type === ACTIONS.AUTHENTICATION_SUCCESS) &&
-      action.data.user.has_verified_email === true
-    ) {
-      const authToken = getAuthToken();
-      Lbry.setApiHeader(X_LBRY_AUTH_TOKEN, authToken);
-    }
-
-    return next(action);
-  };
-};
-
 const sharedStateMiddleware = buildSharedStateMiddleware(triggerSharedStateActions, sharedStateFilters, sharedStateCb);
 const rootReducer = createRootReducer(history);
 const persistedReducer = persistReducer(persistOptions, rootReducer);
 const bulkThunk = createBulkThunkMiddleware();
-const middleware = [
-  sharedStateMiddleware,
-  // @if TARGET='web'
-  populateAuthTokenHeader,
-  // @endif
-  routerMiddleware(history),
-  thunk,
-  bulkThunk,
-];
+const middleware = [sharedStateMiddleware, routerMiddleware(history), thunk, bulkThunk];
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   enableBatching(persistedReducer),

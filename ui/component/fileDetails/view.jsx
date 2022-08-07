@@ -10,7 +10,6 @@ type Props = {
   metadata: StreamMetadata,
   openFolder: (string) => void,
   contentType: string,
-  user: ?any,
 };
 
 class FileDetails extends PureComponent<Props> {

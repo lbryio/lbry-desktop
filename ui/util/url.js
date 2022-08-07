@@ -109,19 +109,8 @@ export const generateEncodedLbryURL = (domain, lbryWebUrl, includeStartTime, sta
   return `${domain}/${encodedPart}`;
 };
 
-export const generateShareUrl = (
-  domain,
-  lbryUrl,
-  referralCode,
-  rewardsApproved,
-  includeStartTime,
-  startTime,
-  listId
-) => {
+export const generateShareUrl = (domain, lbryUrl, includeStartTime, startTime, listId) => {
   let urlParams = new URLSearchParams();
-  if (referralCode && rewardsApproved) {
-    urlParams.append('r', referralCode);
-  }
 
   if (listId) {
     urlParams.append(COLLECTIONS_CONSTS.COLLECTION_ID, listId);

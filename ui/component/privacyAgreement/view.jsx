@@ -1,7 +1,6 @@
 // @flow
 import React, { useState } from 'react';
 import Button from 'component/button';
-import I18nMessage from 'component/i18nMessage';
 import { FormField } from 'component/common/form-components/form-field';
 import { Form } from 'component/common/form-components/form';
 import { withRouter } from 'react-router-dom';
@@ -14,13 +13,11 @@ const NONE = 'none';
 type Props = {
   signOut: () => void,
   setShareDataInternal: (boolean) => void,
-  authenticated: boolean,
-  authenticateIfSharingData: () => void,
   handleNextPage: () => void,
 };
 
 function PrivacyAgreement(props: Props) {
-  const { setShareDataInternal, authenticated, signOut, authenticateIfSharingData, handleNextPage } = props;
+  const { setShareDataInternal, handleNextPage } = props;
   const [share, setShare] = useState(undefined); // preload
 
   function handleSubmit() {
@@ -28,10 +25,6 @@ function PrivacyAgreement(props: Props) {
       setShareDataInternal(true);
     } else {
       setShareDataInternal(false);
-    }
-
-    if (share === LIMITED) {
-      authenticateIfSharingData();
     }
 
     handleNextPage();
@@ -63,7 +56,6 @@ function PrivacyAgreement(props: Props) {
                 onChange={(e) => setShare(LIMITED)}
               />
               <FormField
-                disabled={authenticated}
                 name={'shareNot'}
                 type="radio"
                 checked={share === NONE}
@@ -77,19 +69,6 @@ function PrivacyAgreement(props: Props) {
                 )}
                 onChange={(e) => setShare(NONE)}
               />
-              {authenticated && (
-                <div className="card--inline section--padded">
-                  <p className="help--inline">
-                    <I18nMessage
-                      tokens={{
-                        signout_button: <Button button="link" label={__('Sign Out')} onClick={signOut} />,
-                      }}
-                    >
-                      You are signed in and sharing data with your cloud service provider. %signout_button%.
-                    </I18nMessage>
-                  </p>
-                </div>
-              )}
             </fieldset>
             <div className={'card__actions'}>
               <Button button="primary" label={__(`Next`)} disabled={!share} type="submit" />

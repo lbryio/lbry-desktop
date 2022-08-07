@@ -14,7 +14,7 @@ import { parseURI } from 'util/lbryURI';
 import { isClaimNsfw } from 'util/claim';
 import { createSelector } from 'reselect';
 import { createCachedSelector } from 're-reselect';
-import { createNormalizedSearchKey, getRecommendationSearchOptions } from 'util/search';
+import { createNormalizedSearchKey } from 'util/search';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectHistory } from 'redux/selectors/content';
 import { selectAllCostInfoByUri } from 'lbryinc';
@@ -140,36 +140,6 @@ export const selectRecommendedContentForUri = createCachedSelector(
     return recommendedContent;
   }
 )((state, uri) => String(uri));
-
-export const makeSelectRecommendedRecsysIdForClaimId = (claimId: string) =>
-  createSelector(
-    makeSelectClaimForClaimId(claimId),
-    selectShowMatureContent,
-    selectSearchResultByQuery,
-    (claim, matureEnabled, searchUrisByQuery) => {
-      // TODO: DRY this out.
-      let poweredBy;
-      if (claim && claimId) {
-        const isMature = isClaimNsfw(claim);
-        const { title } = claim.value;
-        if (!title) {
-          return;
-        }
-
-        const options = getRecommendationSearchOptions(matureEnabled, isMature, claimId);
-        const searchQuery = getSearchQueryString(title.replace(/\//, ' '), options);
-        const normalizedSearchQuery = createNormalizedSearchKey(searchQuery);
-
-        const searchResult = searchUrisByQuery[normalizedSearchQuery];
-        if (searchResult) {
-          poweredBy = searchResult.recsys;
-        } else {
-          return normalizedSearchQuery;
-        }
-      }
-      return poweredBy;
-    }
-  );
 
 export const makeSelectWinningUriForQuery = (query: string) => {
   const uriFromQuery = `lbry://${query}`;

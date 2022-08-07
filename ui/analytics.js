@@ -51,7 +51,6 @@ type Analytics = {
   ) => Promise<any>,
   emailProvidedEvent: () => void,
   emailVerifiedEvent: () => void,
-  rewardEligibleEvent: () => void,
   startupEvent: () => void,
   purchaseEvent: (number) => void,
   readyEvent: (number) => void,
@@ -354,9 +353,6 @@ const analytics: Analytics = {
   },
   emailVerifiedEvent: () => {
     sendMatomoEvent('Engagement', 'Email-Verified');
-  },
-  rewardEligibleEvent: () => {
-    sendMatomoEvent('Engagement', 'Reward-Eligible');
   },
   openUrlEvent: (url: string) => {
     sendMatomoEvent('Engagement', 'Open-Url', url);

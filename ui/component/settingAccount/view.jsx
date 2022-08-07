@@ -6,27 +6,26 @@ import React from 'react';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import SettingsRow from 'component/settingsRow';
-import SyncToggle from 'component/syncToggle';
+// maybe bring this back
+// import SyncToggle from 'component/syncToggle';
 import { getPasswordFromCookie } from 'util/saved-passwords';
 
 type Props = {
-  isAuthenticated: boolean,
   walletEncrypted: boolean,
-  user: User,
   hasChannels: boolean,
   doWalletStatus: () => void,
 };
 
 export default function SettingAccount(props: Props) {
-  const { isAuthenticated, walletEncrypted, hasChannels, doWalletStatus } = props;
-  const [storedPassword, setStoredPassword] = React.useState(false);
+  const { hasChannels, doWalletStatus } = props;
+  // const [storedPassword, setStoredPassword] = React.useState(false);
 
   // Determine if password is stored.
   React.useEffect(() => {
     doWalletStatus();
     getPasswordFromCookie().then((p) => {
       if (typeof p === 'string') {
-        setStoredPassword(true);
+        // get password
       }
     });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -42,18 +41,8 @@ export default function SettingAccount(props: Props) {
         isBodyList
         body={
           <>
-            {isAuthenticated && (
-              <SettingsRow title={__('Password')}>
-                <Button
-                  button="inverse"
-                  label={__('Manage')}
-                  icon={ICONS.ARROW_RIGHT}
-                  navigate={`/$/${PAGES.SETTINGS_UPDATE_PWD}`}
-                />
-              </SettingsRow>
-            )}
-
-            <SyncToggle disabled={walletEncrypted && !storedPassword && storedPassword !== ''} />
+            {/* This will probably start the new sync flow when checked (-> openModal(SYNC_ENABLE) )  */}
+            {/* <SyncToggle disabled={true} /> */}
 
             {hasChannels && (
               <SettingsRow title={__('Comments')} subtitle={__('View your past comments.')}>

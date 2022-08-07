@@ -114,8 +114,7 @@ function deleteAuthToken() {
 
 function doSignOutCleanup() {
   return new Promise((resolve) => {
-    deleteAuthToken();
-    deleteSavedPassword();
+    // delete passwords, tokens
     resolve();
   });
 }

@@ -1,12 +1,9 @@
 // @flow
 import { SITE_HELP_EMAIL } from 'config';
 import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
 import * as React from 'react';
-// @if TARGET='app'
 import { shell } from 'electron';
 import WalletBackup from 'component/walletBackup';
-// @endif
 import Lbry from 'lbry';
 import Native from 'native';
 import Button from 'component/button';
@@ -20,10 +17,6 @@ type DeamonSettings = {
 
 type Props = {
   deamonSettings: DeamonSettings,
-  accessToken: string,
-  fetchAccessToken: () => void,
-  doAuth: () => void,
-  user: any,
 };
 
 type VersionInfo = {
@@ -38,7 +31,6 @@ type State = {
   lbryId: String | any,
   uiVersion: ?string,
   upgradeAvailable: ?boolean,
-  accessTokenHidden: ?boolean,
 };
 
 class HelpPage extends React.PureComponent<Props, State> {
@@ -50,10 +42,8 @@ class HelpPage extends React.PureComponent<Props, State> {
       lbryId: null,
       uiVersion: null,
       upgradeAvailable: null,
-      accessTokenHidden: true,
     };
 
-    (this: any).showAccessToken = this.showAccessToken.bind(this);
     (this: any).openLogFile = this.openLogFile.bind(this);
   }
 
@@ -65,7 +55,6 @@ class HelpPage extends React.PureComponent<Props, State> {
         upgradeAvailable,
       });
     });
-    if (!this.props.accessToken) this.props.fetchAccessToken();
     // @endif
 
     Lbry.version().then((info) => {
@@ -77,12 +66,6 @@ class HelpPage extends React.PureComponent<Props, State> {
       this.setState({
         lbryId: info.installation_id,
       });
-    });
-  }
-
-  showAccessToken() {
-    this.setState({
-      accessTokenHidden: false,
     });
   }
 
@@ -102,7 +85,7 @@ class HelpPage extends React.PureComponent<Props, State> {
     let platform;
     let newVerLink;
 
-    const { accessToken, doAuth, user, deamonSettings } = this.props;
+    const { deamonSettings } = this.props;
     const { data_dir: dataDirectory } = deamonSettings;
 
     if (this.state.versionInfo) {
@@ -213,58 +196,6 @@ class HelpPage extends React.PureComponent<Props, State> {
         />
 
         <WalletBackup />
-        <Card
-          title={__('Odysee Connect --[Section in Help Page]--')}
-          isBodyList
-          body={
-            <div className="table__wrapper">
-              <table className="table table--stretch">
-                <tbody>
-                  <tr>
-                    <td>{__('Connected Email')}</td>
-                    <td>
-                      {user && user.primary_email ? (
-                        <React.Fragment>
-                          {user.primary_email}{' '}
-                          <Button
-                            button="link"
-                            navigate={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`}
-                            label={__('Update mailing preferences')}
-                          />
-                        </React.Fragment>
-                      ) : (
-                        <React.Fragment>
-                          <span className="empty">{__('none')} </span>
-                          <Button button="link" onClick={() => doAuth()} label={__('set email')} />
-                        </React.Fragment>
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>{__('Reward Eligible')}</td>
-                    <td>{user && user.is_reward_approved ? __('Yes') : __('No')}</td>
-                  </tr>
-                  <tr>
-                    <td>{__('Access Token')}</td>
-                    <td>
-                      {this.state.accessTokenHidden && (
-                        <Button button="link" label={__('View')} onClick={this.showAccessToken} />
-                      )}
-                      {!this.state.accessTokenHidden && accessToken && (
-                        <div>
-                          <p>{accessToken}</p>
-                          <div className="help--warning">
-                            {__('This is equivalent to a password. Do not post or share this.')}
-                          </div>
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          }
-        />
         <Card
           title={__('About --[About section in Help Page]--')}
           subtitle={

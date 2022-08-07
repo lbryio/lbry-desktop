@@ -1,9 +1,6 @@
 import * as ACTIONS from 'constants/action_types';
-import { getAuthToken } from 'util/saved-passwords';
-import { doNotificationList } from 'redux/actions/notifications';
 import { SOCKETY_SERVER_API } from 'config';
 
-const NOTIFICATION_WS_URL = `${SOCKETY_SERVER_API}/internal?id=`;
 const COMMENT_WS_URL = `${SOCKETY_SERVER_API}/commentron?id=`;
 
 let sockets = {};
@@ -64,26 +61,6 @@ export const doSocketDisconnect = (url) => (dispatch) => {
       type: ACTIONS.WS_DISCONNECT,
     });
   }
-};
-
-export const doNotificationSocketConnect = (enableNotifications) => (dispatch) => {
-  const authToken = getAuthToken();
-  if (!authToken) {
-    console.error('Unable to connect to web socket because auth token is missing'); // eslint-disable-line
-    return;
-  }
-
-  const url = `${NOTIFICATION_WS_URL}${authToken}`;
-
-  doSocketConnect(url, (data) => {
-    switch (data.type) {
-      case 'pending_notification':
-        if (enableNotifications) {
-          dispatch(doNotificationList());
-        }
-        break;
-    }
-  });
 };
 
 export const doCommentSocketConnect = (uri, claimId) => (dispatch) => {
