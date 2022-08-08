@@ -2,7 +2,7 @@
 import * as ACTIONS from 'constants/action_types';
 import { v4 as uuid } from 'uuid';
 import Lbry from 'lbry';
-import { doClaimSearch, doAbandonClaim } from 'redux/actions/claims';
+import { doClaimSearch, doAbandonClaim, doCollectionPublishUpdate, doCollectionPublish } from 'redux/actions/claims';
 import {
   selectClaimForClaimId,
   selectPermanentUrlForUri,
@@ -18,12 +18,16 @@ import {
   selectCollectionHasEditsForId,
   selectUrlsForCollectionId,
   selectCollectionSavedForId,
+  selectFeaturedChannelsByChannelId,
+  selectMyUnpublishedCollections,
+  selectMyEditedCollections,
+  selectClaimIdsForCollectionId,
 } from 'redux/selectors/collections';
 import * as COLS from 'constants/collections';
 import { resolveAuxParams, resolveCollectionType } from 'util/collections';
 import { isPermanentUrl, getThumbnailFromClaim } from 'util/claim';
 import { parseClaimIdFromPermanentUrl } from 'util/url';
-import { doToast } from 'redux/actions/notifications';
+import { doError, doToast } from 'redux/actions/notifications';
 
 const FETCH_BATCH_SIZE = 50;
 
@@ -498,3 +502,61 @@ export const doClearQueueList = () => (dispatch: Dispatch, getState: GetState) =
 
 export const doClearCollectionErrors = () => (dispatch: Dispatch) =>
   dispatch({ type: ACTIONS.CLEAR_COLLECTION_ERRORS });
+
+export const doPublishFeaturedChannels = (channelId: ChannelId) => async (dispatch: Dispatch, getState: GetState) => {
+  const state = getState();
+  const featuredChannelsIds = selectFeaturedChannelsByChannelId(state)[channelId];
+  const eList = selectMyEditedCollections(state);
+  const uList = selectMyUnpublishedCollections(state);
+
+  const errors: Array<Error> = [];
+
+  if (featuredChannelsIds) {
+    dispatch({ type: ACTIONS.COLLECTION_FC_PUBLISH_STARTED });
+    let useDelay = false;
+
+    for (let i = 0; i < featuredChannelsIds.length; ++i) {
+      const fcId = featuredChannelsIds[i];
+      const fcCollection = selectCollectionForId(state, fcId);
+
+      const common = {
+        channel_id: channelId,
+        tags: [{ name: COLS.SECTION_TAGS.FEATURED_CHANNELS }],
+        bid: '0.0001',
+        claims: selectClaimIdsForCollectionId(state, fcId).filter(Boolean), // remove falseys.
+        title: fcCollection.name,
+        blocking: true,
+      };
+
+      if (eList[fcId]) {
+        const fcClaim = selectClaimForClaimId(state, fcId);
+        const options = { name: fcClaim.name, claim_id: fcClaim.claim_id, ...common };
+        await dispatch(doCollectionPublishUpdate(options)).catch((err) => errors.push(err));
+      } else if (uList[fcId]) {
+        const options = { name: `${channelId.slice(0, 8)}--${fcId}`, ...common };
+        await dispatch(doCollectionPublish(options, fcId)).catch((err) => errors.push(err));
+        useDelay = true;
+      }
+    }
+
+    if (errors.length) {
+      dispatch(
+        doError({
+          message: 'Failed to create/update Featured Channels list.',
+          cause: {
+            list: errors.map((x) => x.message).join(','),
+          },
+        })
+      );
+    }
+
+    if (useDelay) {
+      // TODO: batch-action problem?
+      setTimeout(() => dispatch({ type: ACTIONS.COLLECTION_FC_PUBLISH_COMPLETED }), 5000);
+    } else {
+      dispatch({ type: ACTIONS.COLLECTION_FC_PUBLISH_COMPLETED });
+    }
+
+    return errors;
+  }
+};

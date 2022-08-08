@@ -39,6 +39,7 @@ const defaultState: CollectionState = {
     updatedAt: getCurrentTimeInSec(),
     type: COLS.COL_TYPES.PLAYLIST,
   },
+  featuredChannelsPublishing: false,
 };
 
 const collectionsReducer = handleActions(
@@ -177,6 +178,14 @@ const collectionsReducer = handleActions(
       return Object.assign({}, state, {
         error: action.data.message,
       });
+    },
+
+    [ACTIONS.COLLECTION_FC_PUBLISH_STARTED]: (state, action) => {
+      return { ...state, featuredChannelsPublishing: true };
+    },
+
+    [ACTIONS.COLLECTION_FC_PUBLISH_COMPLETED]: (state, action) => {
+      return { ...state, featuredChannelsPublishing: false };
     },
 
     [ACTIONS.COLLECTION_ITEMS_RESOLVE_STARTED]: (state, action) => {
