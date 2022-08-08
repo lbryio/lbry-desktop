@@ -9,8 +9,10 @@ import { FormField } from 'component/common/form';
 import { COL_TYPES } from 'constants/collections';
 
 type Props = {
-  claim: Claim,
   collectionId: string,
+  simplify?: boolean,
+  // --- redux ---
+  claim: Claim,
   collectionName: string,
   uri: ?string,
   redirect: ?string,
@@ -23,6 +25,7 @@ type Props = {
 
 function ModalRemoveCollection(props: Props) {
   const {
+    simplify,
     claim,
     collectionId,
     collectionName,
@@ -42,37 +45,48 @@ function ModalRemoveCollection(props: Props) {
 
   const title = claim && claim.value && claim.value.title;
 
+  function getBody() {
+    if (simplify) {
+      return (
+        <>
+          <p>{__('This will permanently delete the list.')}</p>
+          <p>{`"${collectionName}"`}</p>
+        </>
+      );
+    } else {
+      return uri ? (
+        <>
+          <p>{__('This will permanently delete the list.')}</p>
+          <p>{__('Type "%list_name%" to confirm.', { list_name: collectionName })}</p>
+          <FormField value={confirmName} type={'text'} onChange={(e) => setConfirmName(e.target.value)} />
+          <FormField
+            name="keep-private"
+            type="checkbox"
+            label={__('Delete publish but keep private playlist')}
+            checked={keepPrivate}
+            onChange={() => setKeepPrivate(!keepPrivate)}
+          />
+        </>
+      ) : (
+        <I18nMessage tokens={{ title: <cite>{uri && title ? `"${title}"` : `"${collectionName}"`}</cite> }}>
+          Are you sure you'd like to remove %title%?
+        </I18nMessage>
+      );
+    }
+  }
+
   return (
     <Modal isOpen contentLabel={__('Confirm Playlist Unpublish')} type="card" onAborted={doHideModal}>
       <Card
         title={__('Delete Playlist')}
-        body={
-          uri ? (
-            <React.Fragment>
-              <p>{__('This will permanently delete the list.')}</p>
-              <p>{__('Type "%list_name%" to confirm.', { list_name: collectionName })}</p>
-              <FormField value={confirmName} type={'text'} onChange={(e) => setConfirmName(e.target.value)} />
-              <FormField
-                name="keep-private"
-                type="checkbox"
-                label={__('Delete publish but keep private playlist')}
-                checked={keepPrivate}
-                onChange={() => setKeepPrivate(!keepPrivate)}
-              />
-            </React.Fragment>
-          ) : (
-            <I18nMessage tokens={{ title: <cite>{uri && title ? `"${title}"` : `"${collectionName}"`}</cite> }}>
-              Are you sure you'd like to remove %title%?
-            </I18nMessage>
-          )
-        }
+        body={getBody()}
         actions={
           <>
             <div className="section__actions">
               <Button
                 button="primary"
                 label={__('Delete')}
-                disabled={uri && collectionName !== confirmName}
+                disabled={!simplify && uri && collectionName !== confirmName}
                 onClick={() => {
                   if (redirect) replace(redirect);
                   doCollectionDelete(collectionId, uri ? (keepPrivate ? 'resolved' : 'all') : undefined);

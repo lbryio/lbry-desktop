@@ -1,6 +1,7 @@
 // @flow
 import { DOMAIN } from 'config';
 import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
+import { COL_TYPES } from 'constants/collections';
 import React from 'react';
 import ChannelSelector from 'component/channelSelector';
 import Card from 'component/common/card';
@@ -18,6 +19,7 @@ type Props = {
   setThumbnailError: (error: ?string) => void,
   updateParams: (obj: any) => void,
   setLoading: (loading: boolean) => void,
+  collectionType: string,
   // -- redux --
   collectionChannel: ?ChannelClaim,
   activeChannelClaim: ?ChannelClaim,
@@ -33,6 +35,7 @@ function CollectionGeneralTab(props: Props) {
     setThumbnailError,
     updateParams,
     setLoading,
+    collectionType,
     // -- redux --
     collectionChannel,
     activeChannelClaim,
@@ -90,7 +93,8 @@ function CollectionGeneralTab(props: Props) {
 
   return (
     <div className="card-stack">
-      {!isPrivateEdit && (
+      {/* For FEATURED_CHANNELS, the channel will be locked by onPreSubmit */}
+      {!isPrivateEdit && collectionType !== COL_TYPES.FEATURED_CHANNELS && (
         <ChannelSelector
           autoSet
           channelToSet={collectionChannel}

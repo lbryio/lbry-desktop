@@ -97,6 +97,10 @@ export const selectPendingIds = createSelector(selectState, (state) => Object.ke
 
 export const selectPendingClaims = createSelector(selectPendingClaimsById, (pendingById) => Object.values(pendingById));
 
+export const selectClaimIsPendingForId = (state: State, claimId: string) => {
+  return Boolean(selectPendingClaimsById(state)[claimId]);
+};
+
 export const makeSelectClaimIsPending = (uri: string) =>
   createSelector(selectClaimIdsByUri, selectPendingClaimsById, (idsByUri, pendingById) => {
     const claimId = idsByUri[normalizeURI(uri)];

@@ -8,7 +8,7 @@ import {
   selectCreatingCollection,
 } from 'redux/selectors/claims';
 import { doClearCollectionErrors } from 'redux/actions/collections';
-import { selectClaimIdsForCollectionId } from 'redux/selectors/collections';
+import { selectClaimIdsForCollectionId, selectCollectionForId } from 'redux/selectors/collections';
 import { doCollectionPublish, doCollectionPublishUpdate } from 'redux/actions/claims';
 import { selectBalance } from 'redux/selectors/wallet';
 import { selectCollectionClaimParamsForUri } from 'redux/selectors/publish';
@@ -26,6 +26,7 @@ const select = (state, props) => {
     createError: selectCreateCollectionError(state),
     creatingCollection: selectCreatingCollection(state),
     balance: selectBalance(state),
+    collection: selectCollectionForId(state, collectionId),
     collectionClaimIds: selectClaimIdsForCollectionId(state, collectionId),
     collectionParams: selectCollectionClaimParamsForUri(state, uri, collectionId),
   };

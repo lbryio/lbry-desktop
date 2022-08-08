@@ -39,6 +39,7 @@ type Props = {
   hasClaim: boolean,
   balance: number,
   amount: number,
+  collection: Collection,
   collectionParams: CollectionPublishParams,
   collectionClaimIds: Array<string>,
   updatingCollection: boolean,
@@ -48,6 +49,8 @@ type Props = {
   doCollectionPublishUpdate: (CollectionUpdateParams) => Promise<any>,
   doCollectionPublish: (CollectionPublishParams, string) => Promise<any>,
   doClearCollectionErrors: () => void,
+  // onPreSubmit: Hook to allow clients to change/finalize the params before the form is submitted.
+  onPreSubmit: (params: {}) => {},
   onDone: (string) => void,
 };
 
@@ -59,6 +62,7 @@ function CollectionForm(props: Props) {
     hasClaim,
     balance,
     amount,
+    collection,
     collectionParams,
     collectionClaimIds,
     updatingCollection,
@@ -68,6 +72,7 @@ function CollectionForm(props: Props) {
     doCollectionPublishUpdate,
     doCollectionPublish,
     doClearCollectionErrors,
+    onPreSubmit,
     onDone,
   } = props;
 
@@ -99,8 +104,11 @@ function CollectionForm(props: Props) {
   }
 
   function handleSubmit() {
+    const finalParams = onPreSubmit ? onPreSubmit(params) : params;
+
     if (uri) {
-      doCollectionPublishUpdate(params).then((pendingClaim) => {
+      // $FlowFixMe
+      doCollectionPublishUpdate(finalParams).then((pendingClaim) => {
         if (pendingClaim) {
           const claimId = pendingClaim.claim_id;
           analytics.apiLogPublish(pendingClaim);
@@ -109,7 +117,7 @@ function CollectionForm(props: Props) {
       });
     } else {
       // $FlowFixMe
-      doCollectionPublish(params, collectionId).then((pendingClaim) => {
+      doCollectionPublish(finalParams, collectionId).then((pendingClaim) => {
         if (pendingClaim) {
           const claimId = pendingClaim.claim_id;
           analytics.apiLogPublish(pendingClaim);
@@ -188,6 +196,7 @@ function CollectionForm(props: Props) {
                 setThumbnailError={setThumbnailError}
                 updateParams={updateParams}
                 setLoading={setLoading}
+                collectionType={collection?.type}
               />
             )}
           </TabPanel>

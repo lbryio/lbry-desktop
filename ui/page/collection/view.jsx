@@ -2,6 +2,7 @@
 import React from 'react';
 import CollectionItemsList from 'component/collectionItemsList';
 import Page from 'component/page';
+import { SECTION_TAGS } from 'constants/collections';
 import * as PAGES from 'constants/pages';
 import { COLLECTION_PAGE as CP } from 'constants/urlParams';
 import { useHistory } from 'react-router-dom';
@@ -50,6 +51,22 @@ export default function CollectionPage(props: Props) {
   const urlsReady =
     collectionUrls && (totalItems === undefined || (totalItems && totalItems === collectionUrls.length));
 
+  function handlePreSubmit(params) {
+    if (urlParams.get(CP.QUERIES.TYPE) === CP.TYPES.FEATURED) {
+      const channelId = collection.featuredChannelsParams?.channelId;
+      console.assert(channelId, 'Featured-channels without a parent channel ID'); // eslint-disable-line no-console
+
+      return {
+        ...params,
+        // Inject SECTION_TAGS.FEATURED_CHANNELS as the first tag:
+        tags: [{ name: SECTION_TAGS.FEATURED_CHANNELS }, ...params.tags],
+        // The channel must not be changed:
+        channel_id: channelId,
+      };
+    }
+    return params;
+  }
+
   React.useEffect(() => {
     if (collectionId && !urlsReady && !collection) {
       doFetchItemsInCollection({ collectionId });
@@ -84,7 +101,7 @@ export default function CollectionPage(props: Props) {
         {editing ? (
           <CollectionPrivateEdit collectionId={collectionId} />
         ) : (
-          <CollectionPublish uri={uri} collectionId={collectionId} onDone={onDone} />
+          <CollectionPublish uri={uri} collectionId={collectionId} onPreSubmit={handlePreSubmit} onDone={onDone} />
         )}
       </Page>
     );

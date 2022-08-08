@@ -1,0 +1,120 @@
+@import '~ui/scss/init/breakpoints';
+
+.channel-section-card {
+  width: 100%;
+  margin-top: var(--spacing-l);
+  padding: var(--spacing-s);
+  border-radius: var(--border-radius);
+  background: var(--color-header-background);
+
+  &:hover {
+    .menu__button {
+      opacity: 1;
+    }
+  }
+
+  @media (max-width: $breakpoint-small) {
+    .menu__button {
+      opacity: 1;
+    }
+  }
+}
+
+.channel-section-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-s);
+  font-size: var(--font-large);
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--spacing-xs);
+}
+
+.channel-section-card__title {
+  display: flex;
+
+  //text-overflow: ellipsis;
+  //overflow: hidden;
+  //white-space: nowrap;
+}
+
+.channel-section-card__menu {
+  line-height: 1;
+  padding: 0 var(--spacing-s);
+}
+
+.channel-section-card__status {
+  color: var(--color-text-error);
+  margin: 0 var(--spacing-s);
+  width: fit-content;
+  align-self: center;
+}
+
+.channel-section-card__item-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+$ITEM_W: 150px;
+$ITEM_H: 120px;
+$ITEM_W_MOBILE: 120px;
+$ITEM_H_MOBILE: 120px;
+
+.channel-section-card__item-list {
+  display: flex;
+  flex-wrap: wrap;
+
+  height: $ITEM_H;
+  overflow: hidden;
+
+  @media (max-width: $breakpoint-small) {
+    height: $ITEM_H_MOBILE;
+  }
+}
+
+.channel-section-card__item-list--full {
+  height: unset;
+  overflow: unset;
+}
+
+.channel-section-card__item {
+  width: $ITEM_W;
+  height: $ITEM_H;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: var(--spacing-xxs);
+  padding: var(--spacing-xxs);
+  border-radius: var(--border-radius);
+  cursor: pointer;
+
+  .channel-thumbnail {
+    margin-right: unset;
+  }
+
+  .claim-preview__title {
+    font-size: var(--font-small);
+    margin-right: unset;
+
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    width: $ITEM_W_MOBILE;
+    height: $ITEM_H_MOBILE;
+  }
+}
+
+.channel-section-card__item-overflow {
+  margin: 0 var(--spacing-s);
+  align-self: flex-start;
+  text-align: center;
+  height: $ITEM_H;
+  cursor: pointer;
+
+  @media (max-width: $breakpoint-small) {
+    height: $ITEM_H_MOBILE;
+  }
+}

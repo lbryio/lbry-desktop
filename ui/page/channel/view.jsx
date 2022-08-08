@@ -17,6 +17,7 @@ import ChannelAbout from 'component/channelAbout';
 import ChannelDiscussion from 'component/channelDiscussion';
 import ChannelThumbnail from 'component/channelThumbnail';
 import ChannelEdit from 'component/channelEdit';
+import SectionList from 'component/channelSections/SectionList';
 import classnames from 'classnames';
 import HelpLink from 'component/common/help-link';
 import ClaimSupportButton from 'component/claimSupportButton';
@@ -39,6 +40,7 @@ const PAGE = {
   LISTS: 'lists',
   ABOUT: 'about',
   DISCUSSION: DISCUSSION_PAGE,
+  CHANNELS: 'channels',
   EDIT: 'edit',
 };
 
@@ -170,23 +172,35 @@ function ChannelPage(props: Props) {
     case PAGE.DISCUSSION:
       tabIndex = 3;
       break;
+    case PAGE.CHANNELS:
+      tabIndex = 4;
+      break;
     default:
       tabIndex = 0;
       break;
   }
 
   function onTabChange(newTabIndex) {
-    let url = formatLbryUrlForWeb(uri);
+    const url = formatLbryUrlForWeb(uri);
     let search = '?';
 
-    if (newTabIndex === 0) {
-      search += `${PAGE_VIEW_QUERY}=${PAGE.CONTENT}`;
-    } else if (newTabIndex === 1) {
-      search += `${PAGE_VIEW_QUERY}=${PAGE.LISTS}`;
-    } else if (newTabIndex === 2) {
-      search += `${PAGE_VIEW_QUERY}=${PAGE.ABOUT}`;
-    } else {
-      search += `${PAGE_VIEW_QUERY}=${PAGE.DISCUSSION}`;
+    switch (newTabIndex) {
+      case 0:
+        search += `${PAGE_VIEW_QUERY}=${PAGE.CONTENT}`;
+        break;
+      case 1:
+        search += `${PAGE_VIEW_QUERY}=${PAGE.LISTS}`;
+        break;
+      case 2:
+        search += `${PAGE_VIEW_QUERY}=${PAGE.ABOUT}`;
+        break;
+      default:
+      case 3:
+        search += `${PAGE_VIEW_QUERY}=${PAGE.DISCUSSION}`;
+        break;
+      case 4:
+        search += `${PAGE_VIEW_QUERY}=${PAGE.CHANNELS}`;
+        break;
     }
 
     push(`${url}${search}`);
@@ -310,6 +324,7 @@ function ChannelPage(props: Props) {
             <Tab disabled={editing}>{__('Playlists')}</Tab>
             <Tab>{editing ? __('Editing Your Channel') : __('About --[tab title in Channel Page]--')}</Tab>
             <Tab disabled={editing}>{__('Community')}</Tab>
+            <Tab disabled={editing}>{__('Channels')}</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -340,6 +355,7 @@ function ChannelPage(props: Props) {
             <TabPanel>
               {(showDiscussion || currentView === PAGE.DISCUSSION) && <ChannelDiscussion uri={uri} />}
             </TabPanel>
+            <TabPanel>{currentView === PAGE.CHANNELS && <SectionList uri={uri} editMode={channelIsMine} />}</TabPanel>
           </TabPanels>
         </Tabs>
       )}

@@ -1,0 +1,22 @@
+.channel_sections {
+}
+
+.channel_sections--disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.channel_sections__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+
+  .button {
+    margin-top: var(--spacing-xs);
+    margin-left: var(--spacing-s);
+  }
+}
+
+.channel_sections__list {
+}

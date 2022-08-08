@@ -1,5 +1,6 @@
 // @flow
 import { SIMPLE_SITE } from 'config';
+import { SECTION_TAGS } from 'constants/collections';
 import * as CS from 'constants/claim_search';
 import * as ICONS from 'constants/icons';
 import React, { Fragment } from 'react';
@@ -214,6 +215,7 @@ function ChannelContent(props: Props) {
             isChannel
             channelIsMine={channelIsMine}
             empty={isSearching ? ' ' : empty}
+            notTags={claimType === 'collection' ? SECTION_TAGS.FEATURED_CHANNELS : undefined}
           />
         </ClaimSearchFilterContext.Provider>
       )}

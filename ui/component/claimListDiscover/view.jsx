@@ -54,6 +54,7 @@ type Props = {
   defaultFreshness?: string,
 
   tags: string, // these are just going to be string. pass a CSV if you want multi
+  notTags?: Array<string>,
   defaultTags: string,
 
   claimType?: string | Array<string>,
@@ -124,6 +125,7 @@ function ClaimListDiscover(props: Props) {
     type,
     claimSearchByQueryLastPageReached,
     tags,
+    notTags,
     defaultTags,
     loading,
     meta,
@@ -364,6 +366,10 @@ function ClaimListDiscover(props: Props) {
         options.any_tags = tagsParam.split(',');
       }
     }
+  }
+
+  if (notTags) {
+    options.not_tags = options.not_tags.concat(notTags);
   }
 
   if (repostedClaimId) {

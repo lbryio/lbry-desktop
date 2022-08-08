@@ -92,6 +92,7 @@ function CollectionForm(props: Props) {
               setThumbnailError={setThumbnailError}
               updateParams={updateParams}
               isPrivateEdit
+              collectionType={collection?.type}
             />
           </TabPanel>
 
