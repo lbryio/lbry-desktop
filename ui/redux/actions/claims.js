@@ -839,7 +839,7 @@ export function doCollectionPublish(
       params['channel_id'] = options.channel_id;
     }
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       dispatch({
         type: ACTIONS.COLLECTION_PUBLISH_STARTED,
       });
@@ -878,6 +878,7 @@ export function doCollectionPublish(
             error: error.message,
           },
         });
+        return reject(error);
       }
 
       return Lbry.collection_create(params).then(success, failure);
@@ -951,7 +952,7 @@ export function doCollectionPublishUpdate(
       updateParams['channel_id'] = options.channel_id;
     }
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       dispatch({
         type: ACTIONS.COLLECTION_PUBLISH_UPDATE_STARTED,
       });
@@ -985,6 +986,7 @@ export function doCollectionPublishUpdate(
             error: error.message,
           },
         });
+        return reject(error);
       }
 
       return Lbry.collection_update(updateParams).then(success, failure);
