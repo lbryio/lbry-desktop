@@ -7,19 +7,22 @@ import Skeleton from '@mui/material/Skeleton';
 
 type Props = {
   collectionId: string,
+  noIcon?: boolean,
   // -- redux --
   collectionName?: string,
   collectionHasEdits: boolean,
 };
 
 const CollectionTitle = (props: Props) => {
-  const { collectionId, collectionName, collectionHasEdits } = props;
+  const { collectionId, noIcon, collectionName, collectionHasEdits } = props;
 
   const isBuiltin = COLLECTIONS_CONSTS.BUILTIN_PLAYLISTS.includes(collectionId);
 
   return (
     <span>
-      <Icon icon={COLLECTIONS_CONSTS.PLAYLIST_ICONS[collectionId] || ICONS.PLAYLIST} className="icon--margin-right" />
+      {!noIcon && (
+        <Icon icon={COLLECTIONS_CONSTS.PLAYLIST_ICONS[collectionId] || ICONS.PLAYLIST} className="icon--margin-right" />
+      )}
 
       {collectionName ? (
         isBuiltin ? (

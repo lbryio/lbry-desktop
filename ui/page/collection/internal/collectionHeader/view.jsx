@@ -6,6 +6,7 @@ import Card from 'component/common/card';
 import CollectionActions from '../collectionActions';
 import Button from 'component/button';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
+import { COL_TYPES } from 'constants/collections';
 import * as ICONS from 'constants/icons';
 import Spinner from 'component/spinner';
 import CollectionTitle from './internal/collectionTitle';
@@ -19,6 +20,7 @@ type Props = {
   setUnavailable: (uris: Array<string>) => void,
   // -- redux --
   uri: string,
+  collection: Collection,
   claimIsPending: boolean,
   isMyCollection: boolean,
   doCollectionEdit: (collectionId: string, params: CollectionEditParams) => void,
@@ -33,6 +35,7 @@ const CollectionHeader = (props: Props) => {
     setUnavailable,
     // -- redux --
     uri,
+    collection,
     claimIsPending,
     isMyCollection,
     doCollectionEdit,
@@ -40,6 +43,15 @@ const CollectionHeader = (props: Props) => {
 
   const { push } = useHistory();
   const isBuiltin = COLLECTIONS_CONSTS.BUILTIN_PLAYLISTS.includes(collectionId);
+
+  if (collection?.type === COL_TYPES.FEATURED_CHANNELS) {
+    return (
+      <Card
+        title={<CollectionTitle collectionId={collectionId} noIcon />}
+        subtitle={<CollectionSubtitle collectionId={collectionId} />}
+      />
+    );
+  }
 
   return (
     <Card
