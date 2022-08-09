@@ -150,7 +150,7 @@ function ShowPage(props: Props) {
         <Card
           title={uri}
           subtitle={__(
-            'In response to a complaint we received under the US Digital Millennium Copyright Act, hub have blocked access to this content from our applications.'
+            'Your hub has blocked access to this content do to a complaint received under the US Digital Millennium Copyright Act.'
           )}
           actions={
             <div className="section__actions">
@@ -165,10 +165,10 @@ function ShowPage(props: Props) {
           title={uri}
           subtitle={
             <>
-              {__('Your hub has blocked this content because it has subscribed to the following channel:')}{' '}
+              {__('Your hub has blocked this content because it subscribes to the following blocking channel:')}{' '}
               <Button
                 button="link"
-                href={errorCensor && errorCensor.canonical_url}
+                navigate={errorCensor && errorCensor.canonical_url}
                 label={errorCensor && errorCensor.name}
               />
             </>
