@@ -19,7 +19,7 @@ Lbryio.setLocalApi = (endpoint) => {
   Lbryio.CONNECTION_STRING = endpoint.replace(/\/*$/, '/'); // exactly one slash at the end;
 };
 
-Lbryio.call = (resource, action, params = {}, method = 'post') => {
+Lbryio.call = (resource, action, params = {}, method = 'get') => {
   if (!Lbryio.enabled) {
     return Promise.reject(new Error(__('LBRY internal API is disabled')));
   }
