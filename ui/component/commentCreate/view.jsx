@@ -28,8 +28,9 @@ import type { ElementRef } from 'react';
 import UriIndicator from 'component/uriIndicator';
 import usePersistedState from 'effects/use-persisted-state';
 import WalletTipAmountSelector from 'component/walletTipAmountSelector';
-
+import { COMMENT_SERVER_API, COMMENT_SERVER_NAME } from 'config';
 import { getStripeEnvironment } from 'util/stripe';
+import Comments from 'comments';
 const stripeEnvironment = getStripeEnvironment();
 
 const TAB_FIAT = 'TabFiat';
@@ -63,6 +64,7 @@ type Props = {
   sendTip: ({}, (any) => void, (any) => void) => void,
   setQuickReply: (any) => void,
   toast: (string) => void,
+  customCommentServers: Array<CommentServerDetails>,
 };
 
 export function CommentCreate(props: Props) {
@@ -87,8 +89,11 @@ export function CommentCreate(props: Props) {
     onDoneReplying,
     sendTip,
     setQuickReply,
+    customCommentServers,
   } = props;
 
+  const defaultServer = { name: COMMENT_SERVER_NAME, url: COMMENT_SERVER_API };
+  const allServers = [defaultServer, ...customCommentServers];
   const formFieldRef: ElementRef<any> = React.useRef();
   const buttonRef: ElementRef<any> = React.useRef();
 
@@ -97,6 +102,7 @@ export function CommentCreate(props: Props) {
     location: { pathname },
   } = useHistory();
 
+  const [commentServer, setCommentServer] = React.useState(defaultServer.url);
   const [isSubmitting, setSubmitting] = React.useState(false);
   const [commentFailure, setCommentFailure] = React.useState(false);
   const [successTip, setSuccessTip] = React.useState({ txid: undefined, tipAmount: undefined });
@@ -495,15 +501,29 @@ export function CommentCreate(props: Props) {
             type={advancedEditor ? 'markdown' : 'textarea'}
             textAreaMaxLength={FF_MAX_CHARS_IN_COMMENT}
           />
+
           <FormField
-            label={
-              <div className="commentCreate__labelWrapper">
-                <span className="commentCreate__label">{(isReply ? __('Replying as') : __('Comment as')) + ' '}</span>
-                <SelectChannel tiny />
-              </div>
-            }
-            type={advancedEditor ? 'markdown' : 'textarea'}
-          />
+            label="server"
+            type="select-tiny"
+            onChange={function (x) {
+              const selectedServer = x.target.value;
+              setCommentServer(selectedServer);
+              if (selectedServer === defaultServer.url) {
+                Comments.setServerUrl(undefined);
+              } else {
+                Comments.setServerUrl(selectedServer);
+              }
+            }}
+            value={commentServer}
+          >
+            {allServers.map(function (server) {
+              return (
+                <option key={server.url} value={server.url}>
+                  {server.name}
+                </option>
+              );
+            })}
+          </FormField>
         </>
       )}
 

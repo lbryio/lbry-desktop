@@ -13,6 +13,8 @@ import { doSendTip } from 'redux/actions/wallet';
 import { doToast } from 'redux/actions/notifications';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { selectSettingsByChannelId } from 'redux/selectors/comments';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
+import * as SETTINGS from 'constants/settings';
 
 const select = (state, props) => {
   const claim = selectClaimForUri(state, props.uri);
@@ -24,6 +26,7 @@ const select = (state, props) => {
     isFetchingChannels: selectFetchingMyChannels(state),
     settingsByChannelId: selectSettingsByChannelId(state),
     supportDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_SUPPORT_TAG)(state),
+    customCommentServers: makeSelectClientSetting(SETTINGS.CUSTOM_COMMENTS_SERVERS)(state),
   };
 };
 
