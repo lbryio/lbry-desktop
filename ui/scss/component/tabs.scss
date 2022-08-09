@@ -135,10 +135,26 @@
   border-bottom-right-radius: var(--border-radius);
   border-top: none;
 
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+
   @media (max-width: $breakpoint-small) {
     padding-left: var(--spacing-m);
+    padding-right: var(--spacing-m);
     .tab {
       flex: auto;
+      white-space: nowrap;
+      margin-right: var(--spacing-m);
+    }
+
+    + .tab__divider {
+      display: none;
+    }
+
+    [data-selected] {
+      color: var(--color-primary);
     }
   }
 }
