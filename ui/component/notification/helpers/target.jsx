@@ -1,4 +1,5 @@
 // @flow
+import * as CONFIGS from 'config';
 import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
 import { RULE } from 'constants/notifications';
 import * as PAGES from 'constants/pages';
@@ -56,4 +57,15 @@ export function getNotificationLink(notification: WebNotification, target: ?stri
   const notificationTarget = target || getNotificationTarget(notification);
   const urlParams = getUrlParams(notification, notificationTarget);
   return `${formatLbryUrlForWeb(notificationTarget)}?${urlParams.toString()}`;
+}
+
+export function getNotificationLocation(notification: WebNotification, target: ?string) {
+  const link = getNotificationLink(notification, target);
+  // Not all params come from 'notificationTarget',
+  // so generate the link first then only parse it.
+  const url = new URL(link, CONFIGS.URL);
+  return {
+    pathname: url.pathname,
+    ...(url.search ? { search: url.search } : {}),
+  };
 }

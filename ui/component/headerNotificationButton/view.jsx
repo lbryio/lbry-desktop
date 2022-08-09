@@ -17,7 +17,7 @@ import Button from 'component/button';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import { RULE } from 'constants/notifications';
 import UriIndicator from 'component/uriIndicator';
-import { getNotificationLink } from '../notification/helpers/target';
+import { getNotificationLocation } from '../notification/helpers/target';
 import { generateNotificationTitle } from '../notification/helpers/title';
 import { generateNotificationText } from '../notification/helpers/text';
 import { parseURI } from 'util/lbryURI';
@@ -112,15 +112,6 @@ export default function NotificationHeaderButton(props: Props) {
       seeNotification([id]);
       readNotification([id]);
     }
-
-    push({
-      pathname: getNotificationLink(notification),
-      state: !disableAutoplay ? undefined : { forceDisableAutoplay: true },
-    });
-  }
-
-  function getWebUri(notification) {
-    return getNotificationLink(notification);
   }
 
   function menuEntry(notification) {
@@ -177,7 +168,10 @@ export default function NotificationHeaderButton(props: Props) {
       <NavLink
         onClick={() => handleNotificationClick(notification, disableAutoplay)}
         key={id}
-        to={{ pathname: getWebUri(notification), state: !disableAutoplay ? undefined : { forceDisableAutoplay: true } }}
+        to={{
+          ...getNotificationLocation(notification),
+          state: !disableAutoplay ? undefined : { forceDisableAutoplay: true },
+        }}
       >
         <div
           className={is_read ? 'menu__list--notification' : 'menu__list--notification menu__list--notification-unread'}
