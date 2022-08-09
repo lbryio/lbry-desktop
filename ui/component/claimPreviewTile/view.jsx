@@ -59,7 +59,6 @@ type Props = {
   swipeLayout: boolean,
   onHidden?: (string) => void,
   pulse?: boolean,
-  collectionFirstUrl: ?string,
 };
 
 // preview image cards used in related video functionality, channel overview page and homepage
@@ -95,7 +94,6 @@ function ClaimPreviewTile(props: Props) {
     swipeLayout = false,
     onHidden,
     pulse,
-    // collectionFirstUrl, -- still useful?
   } = props;
   const isRepost = claim && claim.repost_channel_url;
   const isCollection = claim && claim.value_type === 'collection';
