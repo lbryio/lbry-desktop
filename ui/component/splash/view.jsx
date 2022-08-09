@@ -31,6 +31,7 @@ type Props = {
   toggleSplashAnimation: () => void,
   clearWalletServers: () => void,
   doShowSnackBar: (string) => void,
+  fetchModBlockedList: () => Promise<any>,
 };
 
 type State = {
@@ -197,9 +198,13 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     this.setState({ launchWithIncompatibleDaemon: true }, () => this.continueAppLaunch());
   }
 
-  continueAppLaunch() {
+  continueAppLaunch = async () => {
     const { daemonVersionMatched, onReadyToLaunch } = this.props;
     const { isRunning, launchWithIncompatibleDaemon } = this.state;
+
+    try {
+      await this.props.fetchModBlockedList();
+    } catch (e) {}
 
     if (daemonVersionMatched) {
       onReadyToLaunch();
@@ -209,7 +214,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
       // If it isn't running, this function will be called after the daemon is started
       onReadyToLaunch();
     }
-  }
+  };
 
   timeout: ?TimeoutID;
 

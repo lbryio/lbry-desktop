@@ -1186,64 +1186,60 @@ export function doFetchModBlockedList() {
             const moderatorTimeoutMap = {};
 
             const blockListsPerChannel = res.map((r) => r.value);
-            blockListsPerChannel
-              .sort((a, b) => {
-                return 1;
-              })
-              .forEach((channelBlockLists) => {
-                const storeList = (fetchedList, blockedList, timeoutMap, blockedByMap) => {
-                  if (fetchedList) {
-                    fetchedList.forEach((blockedChannel) => {
-                      if (blockedChannel.blocked_channel_name) {
-                        const channelUri = buildURI({
-                          channelName: blockedChannel.blocked_channel_name,
-                          channelClaimId: blockedChannel.blocked_channel_id,
-                        });
+            blockListsPerChannel.forEach((channelBlockLists) => {
+              const storeList = (fetchedList, blockedList, timeoutMap, blockedByMap) => {
+                if (fetchedList) {
+                  fetchedList.forEach((blockedChannel) => {
+                    if (blockedChannel.blocked_channel_name) {
+                      const channelUri = buildURI({
+                        channelName: blockedChannel.blocked_channel_name,
+                        channelClaimId: blockedChannel.blocked_channel_id,
+                      });
 
-                        if (!blockedList.find((blockedChannel) => isURIEqual(blockedChannel.channelUri, channelUri))) {
-                          blockedList.push({ channelUri, blockedAt: blockedChannel.blocked_at });
+                      if (!blockedList.find((blockedChannel) => isURIEqual(blockedChannel.channelUri, channelUri))) {
+                        blockedList.push({ channelUri, blockedAt: blockedChannel.blocked_at });
 
-                          if (blockedChannel.banned_for) {
-                            timeoutMap[channelUri] = {
-                              blockedAt: blockedChannel.blocked_at,
-                              bannedFor: blockedChannel.banned_for,
-                              banRemaining: blockedChannel.ban_remaining,
-                            };
-                          }
-                        }
-
-                        if (blockedByMap !== undefined) {
-                          const blockedByChannelUri = buildURI({
-                            channelName: blockedChannel.blocked_by_channel_name,
-                            channelClaimId: blockedChannel.blocked_by_channel_id,
-                          });
-
-                          if (blockedByMap[channelUri]) {
-                            if (!blockedByMap[channelUri].includes(blockedByChannelUri)) {
-                              blockedByMap[channelUri].push(blockedByChannelUri);
-                            }
-                          } else {
-                            blockedByMap[channelUri] = [blockedByChannelUri];
-                          }
+                        if (blockedChannel.banned_for) {
+                          timeoutMap[channelUri] = {
+                            blockedAt: blockedChannel.blocked_at,
+                            bannedFor: blockedChannel.banned_for,
+                            banRemaining: blockedChannel.ban_remaining,
+                          };
                         }
                       }
-                    });
-                  }
-                };
 
-                const blocked_channels = channelBlockLists && channelBlockLists.blocked_channels;
-                const globally_blocked_channels = channelBlockLists && channelBlockLists.globally_blocked_channels;
-                const delegated_blocked_channels = channelBlockLists && channelBlockLists.delegated_blocked_channels;
+                      if (blockedByMap !== undefined) {
+                        const blockedByChannelUri = buildURI({
+                          channelName: blockedChannel.blocked_by_channel_name,
+                          channelClaimId: blockedChannel.blocked_by_channel_id,
+                        });
 
-                storeList(blocked_channels, personalBlockList, personalTimeoutMap);
-                storeList(globally_blocked_channels, adminBlockList, adminTimeoutMap);
-                storeList(
-                  delegated_blocked_channels,
-                  moderatorBlockList,
-                  moderatorTimeoutMap,
-                  moderatorBlockListDelegatorsMap
-                );
-              });
+                        if (blockedByMap[channelUri]) {
+                          if (!blockedByMap[channelUri].includes(blockedByChannelUri)) {
+                            blockedByMap[channelUri].push(blockedByChannelUri);
+                          }
+                        } else {
+                          blockedByMap[channelUri] = [blockedByChannelUri];
+                        }
+                      }
+                    }
+                  });
+                }
+              };
+
+              const blocked_channels = channelBlockLists && channelBlockLists.blocked_channels;
+              const globally_blocked_channels = channelBlockLists && channelBlockLists.globally_blocked_channels;
+              const delegated_blocked_channels = channelBlockLists && channelBlockLists.delegated_blocked_channels;
+
+              storeList(blocked_channels, personalBlockList, personalTimeoutMap);
+              storeList(globally_blocked_channels, adminBlockList, adminTimeoutMap);
+              storeList(
+                delegated_blocked_channels,
+                moderatorBlockList,
+                moderatorTimeoutMap,
+                moderatorBlockListDelegatorsMap
+              );
+            });
 
             dispatch({
               type: ACTIONS.COMMENT_MODERATION_BLOCK_LIST_COMPLETED,

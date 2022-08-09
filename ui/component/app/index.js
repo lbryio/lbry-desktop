@@ -30,7 +30,7 @@ import {
   doSetActiveChannel,
   doSetIncognito,
 } from 'redux/actions/app';
-import { doFetchModBlockedList, doFetchCommentModAmIList } from 'redux/actions/comments';
+import { doFetchCommentModAmIList } from 'redux/actions/comments';
 import App from './view';
 
 const select = (state) => ({
@@ -67,7 +67,6 @@ const perform = (dispatch) => ({
   setReferrer: (referrer, doClaim) => dispatch(doUserSetReferrer(referrer, doClaim)),
   setActiveChannelIfNotSet: () => dispatch(doSetActiveChannel()),
   setIncognito: () => dispatch(doSetIncognito()),
-  fetchModBlockedList: () => dispatch(doFetchModBlockedList()),
   resolveUris: (uris) => dispatch(doResolveUris(uris)),
   fetchModAmIList: () => dispatch(doFetchCommentModAmIList()),
 });

@@ -73,7 +73,6 @@ type Props = {
   subscriptions: Array<Subscription>,
   setActiveChannelIfNotSet: () => void,
   setIncognito: (boolean) => void,
-  fetchModBlockedList: () => void,
   resolveUris: (Array<string>) => void,
   fetchModAmIList: () => void,
   isUpdateModalDisplayed: boolean,
@@ -108,7 +107,6 @@ function App(props: Props) {
     activeChannelId,
     setActiveChannelIfNotSet,
     setIncognito,
-    fetchModBlockedList,
     resolveUris,
     subscriptions,
     fetchModAmIList,
@@ -233,7 +231,6 @@ function App(props: Props) {
     }
 
     if (hasMyChannels) {
-      fetchModBlockedList();
       fetchModAmIList();
     }
   }, [hasMyChannels, hasNoChannels, hasActiveChannelClaim, setActiveChannelIfNotSet, setIncognito]);
