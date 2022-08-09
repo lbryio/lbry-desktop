@@ -16,6 +16,7 @@ type State = {
   createCollectionError: ?string,
   channelClaimCounts: { [string]: number },
   claimsByUri: { [string]: string },
+  blacklistedByUri: { [string]: ClaimErrorCensor },
   byId: { [string]: Claim },
   pendingById: { [string]: Claim }, // keep pending claims
   resolvingUris: Array<string>,
@@ -67,6 +68,7 @@ type State = {
 
 const reducers = {};
 const defaultState = {
+  blacklistedByUri: {},
   byId: {},
   claimsByUri: {},
   paginatedClaimsByChannel: {},
@@ -118,6 +120,7 @@ const defaultState = {
 function handleClaimAction(state: State, action: any): State {
   const { resolveInfo }: ClaimActionResolveInfo = action.data;
 
+  const blacklistedByUri = Object.assign({}, state.blacklistedByUri);
   const byUri = Object.assign({}, state.claimsByUri);
   const byId = Object.assign({}, state.byId);
   const channelClaimCounts = Object.assign({}, state.channelClaimCounts);
@@ -127,8 +130,10 @@ function handleClaimAction(state: State, action: any): State {
 
   Object.entries(resolveInfo).forEach(([url, resolveResponse]) => {
     // $FlowFixMe
-    const { claimsInChannel, stream, channel: channelFromResolve, collection } = resolveResponse;
+    const { claimsInChannel, stream, channel: channelFromResolve, collection, errorCensor } = resolveResponse;
     const channel = channelFromResolve || (stream && stream.signing_channel);
+
+    blacklistedByUri[url] = errorCensor;
 
     if (stream) {
       if (pendingById[stream.claim_id]) {
@@ -197,6 +202,7 @@ function handleClaimAction(state: State, action: any): State {
   });
 
   return Object.assign({}, state, {
+    blacklistedByUri,
     byId,
     claimsByUri: byUri,
     channelClaimCounts,
@@ -518,10 +524,8 @@ reducers[ACTIONS.UPDATE_PENDING_CLAIMS] = (state: State, action: any): State => 
 };
 
 reducers[ACTIONS.UPDATE_CONFIRMED_CLAIMS] = (state: State, action: any): State => {
-  const {
-    claims: confirmedClaims,
-    pending: pendingClaims,
-  }: { claims: Array<Claim>, pending: { [string]: Claim } } = action.data;
+  const { claims: confirmedClaims, pending: pendingClaims }: { claims: Array<Claim>, pending: { [string]: Claim } } =
+    action.data;
   const byId = Object.assign({}, state.byId);
   const byUri = Object.assign({}, state.claimsByUri);
   //
