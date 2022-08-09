@@ -84,6 +84,14 @@ export const selectClaimIdForUri = (state: State, uri: string) => selectClaimIds
 
 export const selectReflectingById = (state: State) => selectState(state).reflectingById;
 
+export const makeSelectBlacklistedDueToDMCA = (claimUri: string) =>
+  createSelector(makeSelectClaimErrorCensor(claimUri), (claimError) => {
+    if (!claimError) {
+      return false;
+    }
+    return claimError.name === '@LBRY-DMCA';
+  });
+
 export const makeSelectClaimErrorCensor = (claimUri: string) =>
   createSelector(selectState, (state) => state.blacklistedByUri[claimUri]);
 

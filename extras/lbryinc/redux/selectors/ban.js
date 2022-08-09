@@ -5,7 +5,7 @@
 // involve moving it from 'extras' to 'ui' (big change).
 
 import { createCachedSelector } from 're-reselect';
-import { selectClaimForUri } from 'redux/selectors/claims';
+import { selectClaimForUri, makeSelectIsBlacklisted } from 'redux/selectors/claims';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectModerationBlockList } from 'redux/selectors/comments';
 import { selectBlacklistedOutpointMap, selectFilteredOutpointMap } from 'lbryinc';
@@ -18,7 +18,8 @@ export const selectBanStateForUri = createCachedSelector(
   selectFilteredOutpointMap,
   selectMutedChannels,
   selectModerationBlockList,
-  (claim, blackListedOutpointMap, filteredOutpointMap, mutedChannelUris, personalBlocklist) => {
+  (state, uri) => makeSelectIsBlacklisted(uri)(state),
+  (claim, blackListedOutpointMap, filteredOutpointMap, mutedChannelUris, personalBlocklist, isBlacklisted) => {
     const banState = {};
 
     if (!claim) {
@@ -26,6 +27,10 @@ export const selectBanStateForUri = createCachedSelector(
     }
 
     const channelClaim = getChannelFromClaim(claim);
+
+    if (isBlacklisted) {
+      banState['blacklisted'] = true;
+    }
 
     // This will be replaced once blocking is done at the wallet server level.
     if (blackListedOutpointMap) {

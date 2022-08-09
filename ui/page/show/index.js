@@ -11,6 +11,8 @@ import {
   selectClaimIsMine,
   makeSelectClaimIsPending,
   makeSelectIsBlacklisted,
+  makeSelectBlacklistedDueToDMCA,
+  makeSelectClaimErrorCensor,
 } from 'redux/selectors/claims';
 import {
   makeSelectCollectionForId,
@@ -82,6 +84,8 @@ const select = (state, props) => {
     collectionUrls: makeSelectUrlsForCollectionId(collectionId)(state),
     isResolvingCollection: makeSelectIsResolvingCollectionForId(collectionId)(state),
     isBlacklisted: makeSelectIsBlacklisted(uri)(state),
+    isBlacklistedDueToDMCA: makeSelectBlacklistedDueToDMCA(uri)(state),
+    errorCensor: makeSelectClaimErrorCensor(uri)(state),
   };
 };
 

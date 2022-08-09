@@ -32,6 +32,8 @@ type Props = {
   isResolvingCollection: boolean,
   fetchCollectionItems: (string) => void,
   isBlacklisted: boolean,
+  isBlacklistedDueToDMCA: boolean,
+  errorCensor: ?ClaimErrorCensor,
 };
 
 function ShowPage(props: Props) {
@@ -51,6 +53,8 @@ function ShowPage(props: Props) {
     collectionUrls,
     isResolvingCollection,
     isBlacklisted,
+    isBlacklistedDueToDMCA,
+    errorCensor,
   } = props;
 
   const { search } = location;
@@ -141,17 +145,33 @@ function ShowPage(props: Props) {
   } else if (claim && claim.name.length && claim.name[0] === '@') {
     innerContent = <ChannelPage uri={uri} location={location} />;
   } else if (isBlacklisted && !claimIsMine) {
-    innerContent = (
+    innerContent = isBlacklistedDueToDMCA ? (
       <Page>
         <Card
           title={uri}
           subtitle={__(
-            'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.'
+            'In response to a complaint we received under the US Digital Millennium Copyright Act, hub have blocked access to this content from our applications.'
           )}
           actions={
             <div className="section__actions">
               <Button button="link" href="https://lbry.com/faq/dmca" label={__('Read More')} />
             </div>
+          }
+        />
+      </Page>
+    ) : (
+      <Page>
+        <Card
+          title={uri}
+          subtitle={
+            <>
+              {__('Your hub has blocked this content because it has subscribed to the following channel:')}{' '}
+              <Button
+                button="link"
+                href={errorCensor && errorCensor.canonical_url}
+                label={errorCensor && errorCensor.name}
+              />
+            </>
           }
         />
       </Page>
