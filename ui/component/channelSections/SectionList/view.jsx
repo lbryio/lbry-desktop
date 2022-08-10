@@ -60,6 +60,7 @@ export default function SectionList(props: Props) {
   const searchKey = createNormalizedClaimSearchKey(options);
   const claimSearchResult = claimSearchByQuery[searchKey]; // undefined = not fetched
   const sectionIds = featuredChannelsByChannelId[claimId || ''] || []; // only featured channels for now
+  const sectionCount = sectionIds.length;
 
   const hasPendingChanges = React.useMemo(() => {
     // TODO: Memoization is poor because 'featuredChannelsByChannelId' is dependent on the volatile selectClaimsById.
@@ -106,12 +107,15 @@ export default function SectionList(props: Props) {
     >
       {editMode && (
         <div className="channel_sections__actions">
-          <Button
-            label={__('Add featured channels')}
-            button="secondary"
-            icon={ICONS.ADD}
-            onClick={() => doOpenModal(MODALS.FEATURED_CHANNELS_EDIT, { create: { ownerChannelId: claimId } })}
-          />
+          {sectionCount === 0 && (
+            <Button
+              label={__('Add featured channels')}
+              button="secondary"
+              icon={ICONS.ADD}
+              disabled={sectionCount > 0}
+              onClick={() => doOpenModal(MODALS.FEATURED_CHANNELS_EDIT, { create: { ownerChannelId: claimId } })}
+            />
+          )}
           <Button
             label={isPublishing ? <Spinner type="small" /> : __('Publish changes')}
             button="primary"
