@@ -4,7 +4,7 @@ import * as ACTIONS from 'constants/action_types';
 const CHECK_BLACK_LISTED_CONTENT_INTERVAL = 60 * 60 * 1000;
 
 export function doFetchBlackListedOutpoints() {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.FETCH_BLACK_LISTED_CONTENT_STARTED,
     });
@@ -38,14 +38,12 @@ export function doFetchBlackListedOutpoints() {
       });
     };
 
-    Lbryio.call('file', 'list_blocked', {
-      auth_token: '',
-    }).then(success, failure);
+    Lbryio.call('file', 'list_blocked', { auth_token: '' }, 'get').then(success, failure);
   };
 }
 
 export function doBlackListedOutpointsSubscribe() {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(doFetchBlackListedOutpoints());
     setInterval(() => dispatch(doFetchBlackListedOutpoints()), CHECK_BLACK_LISTED_CONTENT_INTERVAL);
   };

@@ -4,7 +4,7 @@ import * as ACTIONS from 'constants/action_types';
 const CHECK_FILTERED_CONTENT_INTERVAL = 60 * 60 * 1000;
 
 export function doFetchFilteredOutpoints() {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: ACTIONS.FETCH_FILTERED_CONTENT_STARTED,
     });
@@ -12,7 +12,7 @@ export function doFetchFilteredOutpoints() {
     const success = ({ outpoints }) => {
       let formattedOutpoints = [];
       if (outpoints) {
-        formattedOutpoints = outpoints.map(outpoint => {
+        formattedOutpoints = outpoints.map((outpoint) => {
           const [txid, nout] = outpoint.split(':');
           return { txid, nout: Number.parseInt(nout, 10) };
         });
@@ -35,12 +35,12 @@ export function doFetchFilteredOutpoints() {
       });
     };
 
-    Lbryio.call('file', 'list_filtered', { auth_token: '' }).then(success, failure);
+    Lbryio.call('file', 'list_filtered', { auth_token: '' }, 'get').then(success, failure);
   };
 }
 
 export function doFilteredOutpointsSubscribe() {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(doFetchFilteredOutpoints());
     setInterval(() => dispatch(doFetchFilteredOutpoints()), CHECK_FILTERED_CONTENT_INTERVAL);
   };
