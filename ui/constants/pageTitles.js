@@ -11,6 +11,8 @@ export const PAGE_TITLE = {
 
   // --- Everything else in alphabetical order ---
   [PAGES.BUY]: 'Buy or Swap',
+  [PAGES.CAREERS]: 'Careers',
+  [PAGES.CAREERS_IT_PROJECT_MANAGER]: 'Careers - IT Manager',
   [PAGES.CHANNELS]: 'Your channels',
   [PAGES.CHANNELS_FOLLOWING]: 'Following',
   [PAGES.CHANNELS_FOLLOWING_DISCOVER]: 'Discover Channels',

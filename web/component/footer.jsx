@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Button from 'component/button';
 import { SIMPLE_SITE } from 'config';
+import * as PAGES from 'constants/pages';
 
 export default function Footer() {
   useEffect(() => {
@@ -40,6 +41,9 @@ export default function Footer() {
             label={__('Support --[used in footer; general help/support]--')}
             href="https://odysee.com/@OdyseeHelp:b"
           />
+        </li>
+        <li className="footer__link">
+          <Button label={__('Careers')} href={`/$/${PAGES.CAREERS}`} />
         </li>
         <li className="footer__link">
           <Button label={__('Terms')} href="https://odysee.com/$/tos" />

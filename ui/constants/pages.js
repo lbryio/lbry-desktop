@@ -97,3 +97,5 @@ exports.ODYSEE_MEMBERSHIP = 'membership';
 exports.POPOUT = 'popout';
 exports.LATEST = 'latest';
 exports.LIVE_NOW = 'livenow';
+exports.CAREERS = 'careers';
+exports.CAREERS_IT_PROJECT_MANAGER = 'careers/it_project_manager';

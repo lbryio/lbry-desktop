@@ -492,6 +492,9 @@ function SideNavigation(props: Props) {
         <Button label={__('Community Guidelines')} href="https://odysee.com/@OdyseeHelp:b/Community-Guidelines:c" />
       </li>
       <li className="navigation-link">
+        <Button label={__('Careers')} href={`/$/${PAGES.CAREERS}`} />
+      </li>
+      <li className="navigation-link">
         <Button label={__('Terms')} href="https://odysee.com/$/tos" />
       </li>
       <li className="navigation-link">
