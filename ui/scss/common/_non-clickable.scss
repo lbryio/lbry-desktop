@@ -1,3 +1,9 @@
 .non-clickable {
   pointer-events: none;
 }
+
+// TODO: temp parking space until we have a util file
+.border-std {
+  border: 1px solid var(--color-border);
+  border-radius: var(--card-radius);
+}
