@@ -36,7 +36,6 @@ const CHE_GUEVARA = 'MISC/PNG/che_guevara.png';
 const BILL_COSBY = 'MISC/PNG/bill_cosby.png';
 const KURT_COBAIN = 'MISC/PNG/kurt_cobain.png';
 const BILL_CLINTON = 'MISC/PNG/bill_clinton.png';
-const CHRIS_CHAN = 'MISC/PNG/chris_chan.png';
 const TAYLOR_SWIFT = 'MISC/PNG/taylor_swift.png';
 const EPSTEIN_ISLAND = 'MISC/PNG/epstein_island.png';
 const DONALD_TRUMP = 'MISC/PNG/donald_trump.png';
@@ -64,6 +63,8 @@ const TIP_HAND_FLIP_COIN = 'TIPS/png/tip_hand_flip_coin_with_border.png';
 const TIP_HAND_FLIP_LBC = 'TIPS/png/tip_hand_flip_lbc_with_border.png';
 const DOGE = 'MISC/PNG/doge.png';
 const TWITCH = 'MISC/PNG/twitch.png';
+const LIKE = 'MISC/PNG/like.png';
+const WAITING = 'MISC/PNG/waiting.png';
 
 export const FREE_GLOBAL_STICKERS = [
   buildSticker('CAT', CAT_BORDER),
@@ -72,10 +73,12 @@ export const FREE_GLOBAL_STICKERS = [
   buildSticker('PANTS_1', PANTS_1_WITH_FRAME),
   buildSticker('DOGE', DOGE),
   // buildSticker('XMAS', XMAS),
+  buildSticker('LIKE', LIKE),
   buildSticker('FIRE', FIRE_WITH_FRAME),
   buildSticker('SLIME', SLIME_WITH_FRAME),
   buildSticker('PISS', PISS),
   buildSticker('TWITCH', TWITCH),
+  buildSticker('WAITING', WAITING),
   buildSticker('BULL_RIDE', BULL_RIDE),
   buildSticker('ELIMINATED', ELIMINATED),
   buildSticker('EGG_CARTON', EGG_CARTON),
@@ -91,7 +94,6 @@ export const FREE_GLOBAL_STICKERS = [
   buildSticker('KURT_COBAIN', KURT_COBAIN),
   buildSticker('BILL_COSBY', BILL_COSBY),
   buildSticker('CHE_GUEVARA', CHE_GUEVARA),
-  buildSticker('CHRIS_CHAN', CHRIS_CHAN),
   buildSticker('PREGNANT_MAN_BLONDE', PREGNANT_MAN_BLONDE_WHITE_BORDER),
   buildSticker('PREGNANT_WOMAN_BROWN_HAIR', PREGNANT_WOMAN_BROWN_HAIR_WHITE_BORDER),
   buildSticker('ROCKET_SPACEMAN', ROCKET_SPACEMAN_WITH_BORDER),
