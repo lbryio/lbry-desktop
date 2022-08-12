@@ -50,6 +50,8 @@
   top: 0;
   z-index: var(--floating-player-z-index);
   border: 2px solid #000;
+  background-color: #000;
+  border-radius: var(--border-radius);
 
   .file-render--video {
     border-top-right-radius: var(--border-radius);
