@@ -301,6 +301,10 @@ img {
   overflow: hidden;
   -webkit-box-orient: vertical;
   word-break: break-word;
+
+  img.emoji {
+    height: var(--font-small);
+  }
 }
 
 .busy-indicator__loader {

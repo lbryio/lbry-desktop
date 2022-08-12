@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import Icon from 'component/common/icon';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
+import twemoji from 'twemoji';
 
 type Props = {
   title?: string | Node,
@@ -169,13 +170,34 @@ type TitleProps = {
   isPageTitle?: boolean,
   smallTitle?: boolean,
   children?: any,
+  emoji?: any,
 };
 
 const TitleWrapper = (props: TitleProps) => {
   const { isPageTitle, smallTitle, children } = props;
 
+  const Twemoji = ({ emoji }) => (
+    <span
+      dangerouslySetInnerHTML={{
+        __html: twemoji.parse(emoji, {
+          folder: 'svg',
+          ext: '.svg',
+        }),
+      }}
+    />
+  );
+
+  function transformer(children) {
+    for (let child in children?.props?.children) {
+      if (typeof children?.props?.children[child] === 'string') {
+        return <Twemoji emoji={children?.props?.children[child]} />;
+      }
+    }
+    return children;
+  }
+
   return isPageTitle ? (
-    <h1 className="card__title">{children}</h1>
+    <h1 className="card__title">{transformer(children)}</h1>
   ) : (
     <h2 className={classnames('card__title', { 'card__title--small': smallTitle })}>{children}</h2>
   );

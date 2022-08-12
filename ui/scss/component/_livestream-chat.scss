@@ -239,6 +239,7 @@ $recent-msg-button__height: 2rem;
 
 .livestreamDiscussion__header {
   background-color: var(--color-header-background);
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
 
   .recommended-content__toggles {
     margin: var(--spacing-xs);
@@ -466,6 +467,7 @@ $recent-msg-button__height: 2rem;
   background-color: var(--color-header-background);
   padding: var(--spacing-xs);
   margin-top: auto;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
 
   .commentCreate {
     select,
@@ -516,32 +518,20 @@ $recent-msg-button__height: 2rem;
       }
     }
 
-    /*
-    .emoteSelector__list {
-      background-color: rgba(var(--color-primary-dynamic), 0.02);
-      .emoteSelector__listRowItems {
-        .button--file-action {
-          background-color: unset !important;
-          .button__label {
-            color: var(--color-text);
-          }
-          &:hover {
-            background-color: rgba(var(--color-primary-dynamic), 0.2) !important;
-          }
-        }
-      }
-    }
-    */
-
     .tabs {
       overflow: hidden;
       border: unset;
-      // transition: height 0.4s;
-      // animation: emojiPickerAnimation 0.2s ease-in;
       margin-bottom: var(--spacing-xs);
+      height: 0;
+      padding: 0;
+      background-color: unset;
+
+      &.tabs--open {
+        height: 240px;
+      }
 
       .tabs__list {
-        background-color: unset;
+        margin: 0;
         padding: 0 !important;
         .tab {
           background-color: rgba(var(--color-header-button-base), 0.3);
@@ -563,16 +553,15 @@ $recent-msg-button__height: 2rem;
           }
         }
       }
+
       .selector-menu {
-        background-color: var(--color-header-button);
-        border-radius: 0 var(--border-radius) var(--border-radius) var(--border-radius);
+        margin: 0;
+        #emoji-code-preview {
+          left: var(--spacing-xs);
+          width: calc(100% - 260px);
+        }
         .button--close {
           margin-right: calc(var(--spacing-xxs) * -1);
-          margin-top: 4px;
-          background-color: var(--color-header-button);
-          &:hover {
-            background-color: var(--color-primary);
-          }
         }
       }
     }
@@ -1089,29 +1078,131 @@ $recent-msg-button__height: 2rem;
   min-width: 2.5rem;
 }
 
+.livestream__comment--minimal {
+  padding: 3px 0;
+
+  .livestreamComment__menu {
+    top: 1.5px;
+  }
+
+  &.livestream__comment--hyperchat {
+    padding-top: 0;
+    .livestreamComment__body {
+      margin-top: 5px;
+      margin-left: 6px;
+    }
+    .sticker__comment {
+      min-height: 80px;
+      margin-right: var(--spacing-xxs);
+    }
+  }
+  &.livestream__comment--mobile {
+    display: unset;
+    .comment__author {
+      // margin-top:-2px !important;
+      line-height: 18px;
+    }
+    .channel-thumbnail {
+      margin-top: 1px;
+    }
+    .comment__badge {
+      margin-top: -2px !important;
+    }
+  }
+}
+
 .livestreamComment--minimal {
+  width: 100%;
   .date_time {
-    // width:60px;
+    // width: 64px;
+    float: left;
     margin-right: var(--spacing-xxxs);
+    font-family: 'Courier New', Courier, monospace;
+    font-size: var(--font-xsmall) !important;
+    margin-top: 1px;
+
+    @media (opacity > 0) {
+      background: red !important;
+    }
   }
   .channel-thumbnail {
+    float: left;
     width: var(--font-small) !important;
     height: var(--font-small) !important;
-    display: inline-block;
-    margin-right: var(--spacing-xxs);
+    margin-right: 4px;
+    margin-top: 2px;
   }
   .comment__author {
-    display: inline-block;
-    margin-right: 0;
-    margin-top: 0 !important;
+    float: left;
+    margin-right: 0px;
+    margin-top: 0px !important;
+    margin-bottom: 0;
+  }
+  .colon {
+    float: left;
+    margin-right: 4px;
   }
   .livestreamComment__text {
-    display: inline-block;
-    max-width: 100%;
+    width: 100%;
+    padding-bottom: 0;
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-size: var(--font-base);
+      margin: 0;
+    }
+
+    .markdown-preview img:not(.channel-thumbnail__custom):not(.emote) {
+      height: 80px;
+      padding-top: 0;
+      margin-left: var(--spacing-s);
+      margin-right: var(--spacing-s);
+      float: left;
+    }
+
+    .markdown-preview {
+      code,
+      blockquote,
+      table,
+      thead,
+      tbody,
+      tr,
+      th,
+      td,
+      li,
+      ul {
+        display: inline-block;
+        background: unset;
+        border: unset;
+        padding: unset;
+        margin: unset;
+        color: var(--color-text);
+        font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+          'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+      }
+
+      .button--external-link {
+        margin-right: var(--spacing-xxxs);
+      }
+    }
+  }
+  .button {
+    float: left;
   }
   .comment__badge {
+    float: left;
+    margin-top: -1px !important;
     .icon {
       margin-bottom: -3px;
     }
+  }
+
+  .sticker__comment {
+    float: left;
+    max-height: 22px;
   }
 }

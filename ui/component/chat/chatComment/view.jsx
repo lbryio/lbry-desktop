@@ -17,6 +17,7 @@ import MarkdownPreview from 'component/common/markdown-preview';
 import OptimizedImage from 'component/optimizedImage';
 import React from 'react';
 import PremiumBadge from 'component/premiumBadge';
+import usePersistedState from 'effects/use-persisted-state';
 import { Lbryio } from 'lbryinc';
 
 type Props = {
@@ -24,7 +25,7 @@ type Props = {
   forceUpdate?: any,
   uri: string,
   isMobile?: boolean,
-  chatMode?: string,
+  isCompact?: boolean,
   restoreScrollPos?: () => void,
   handleCommentClick: (any) => void,
   handleDismissPin?: () => void,
@@ -56,7 +57,7 @@ export default function ChatComment(props: Props) {
     authorTitle,
     activeChannelClaim,
     channelAge,
-    chatMode,
+    isCompact,
   } = props;
 
   const {
@@ -89,6 +90,7 @@ export default function ChatComment(props: Props) {
   const isSticker = Boolean(stickerUrlFromMessage);
   const timePosted = timestamp * 1000;
   const commentIsMine = comment.channel_id && isMyComment(comment.channel_id);
+  const [showTimestamps] = usePersistedState('live-timestamps', false);
 
   // todo: implement comment_list --mine in SDK so redux can grab with selectCommentIsMine
   function isMyComment(channelId: string) {
@@ -120,6 +122,7 @@ export default function ChatComment(props: Props) {
         'livestream__comment--sticker': isSticker,
         'livestream__comment--mentioned': hasUserMention,
         'livestream__comment--mobile': isMobile,
+        'livestream__comment--minimal': isCompact,
       })}
     >
       {supportAmount > 0 && (
@@ -130,7 +133,7 @@ export default function ChatComment(props: Props) {
 
       <div className="livestreamComment__body">
         {false && supportAmount > 0 && <ChannelThumbnail uri={authorUri} xsmall />}
-        {chatMode === 'slow' || isPinned ? (
+        {!isCompact || isPinned ? (
           <>
             <ChannelThumbnail uri={authorUri} xsmall />
 
@@ -206,7 +209,7 @@ export default function ChatComment(props: Props) {
           </>
         ) : (
           <div className="livestreamComment--minimal">
-            <DateTime date={timePosted} key={forceUpdate} genericSeconds />
+            {showTimestamps && <DateTime date={timePosted} key={forceUpdate} />}
             {(isStreamer || isModerator || isGlobalMod || odyseeMembership) && (
               <ChannelThumbnail uri={authorUri} xxxsmall />
             )}
@@ -242,7 +245,7 @@ export default function ChatComment(props: Props) {
                 setQuickReply={handleCommentClick}
               />
             </Menu>
-            :&nbsp;
+            <p className="colon">:</p>
             {isSticker ? (
               <div className="sticker__comment">
                 <OptimizedImage src={stickerUrlFromMessage} waitLoad loading="lazy" />
@@ -260,6 +263,7 @@ export default function ChatComment(props: Props) {
                     setUserMention={setUserMention}
                     hasMembership={Boolean(odyseeMembership)}
                     isComment
+                    isMinimal={isCompact}
                   />
                 )}
               </div>

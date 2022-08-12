@@ -312,6 +312,10 @@
     margin-top: 8px; // should be flex'd, but don't blame me! I just moved it down 3px
   }
 
+  img {
+    height: var(--font-large);
+  }
+
   @media (max-width: $breakpoint-small) {
     font-size: var(--font-large);
   }

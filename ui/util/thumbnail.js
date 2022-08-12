@@ -19,6 +19,10 @@ export function getThumbnailCdnUrl(props: Props) {
     return thumbnail;
   }
 
+  if (thumbnail.includes('static.odycdn.com/emoticons/')) {
+    return thumbnail;
+  }
+
   if (thumbnail) {
     return `${THUMBNAIL_CDN_URL}s:${width}:${height}/quality:${quality}/plain/${thumbnail}`;
   }

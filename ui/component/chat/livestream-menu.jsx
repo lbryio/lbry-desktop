@@ -12,24 +12,26 @@ import React from 'react';
 type Props = {
   isPopoutWindow?: boolean,
   hyperchatsHidden?: boolean,
-  noSuperchats?: boolean,
+  noHyperchats?: boolean,
   isMobile?: boolean,
+  isCompact?: boolean,
   hideChat?: () => void,
   setPopoutWindow?: (any) => void,
   toggleHyperchats?: () => void,
-  toggleFastMode?: () => void,
+  toggleIsCompact?: () => void,
 };
 
 export default function LivestreamMenu(props: Props) {
   const {
     isPopoutWindow,
     hyperchatsHidden,
-    noSuperchats,
+    noHyperchats,
     isMobile,
+    isCompact,
     hideChat,
     setPopoutWindow,
     toggleHyperchats,
-    toggleFastMode,
+    toggleIsCompact,
   } = props;
 
   const {
@@ -65,8 +67,6 @@ export default function LivestreamMenu(props: Props) {
     }
   }
 
-  const DEV = false;
-  const fastModeEnabled = true;
   return (
     <>
       <MenuGlobalStyles showTimestamps={showTimestamps} />
@@ -83,22 +83,20 @@ export default function LivestreamMenu(props: Props) {
               {__('Toggle Timestamps')}
             </span>
           </MenuItem>
+          <MenuItem className="comment__menu-option" onSelect={toggleIsCompact}>
+            <span className="menu__link">
+              <Icon aria-hidden icon={!isCompact ? ICONS.COMPACT : ICONS.EXPAND} size={18} />
+              {!isCompact ? __('Enable Compact Mode') : __('Disable Compact Mode')}
+            </span>
+          </MenuItem>
 
           {!isMobile ? (
             <>
-              {!noSuperchats && (
+              {!noHyperchats && (
                 <MenuItem className="comment__menu-option" onSelect={toggleHyperchats}>
                   <span className="menu__link">
                     <Icon aria-hidden icon={hyperchatsHidden ? ICONS.EYE : ICONS.DISMISS_ALL} size={18} />
                     {hyperchatsHidden ? __('Display HyperChats') : __('Dismiss HyperChats')}
-                  </span>
-                </MenuItem>
-              )}
-              {DEV && (
-                <MenuItem className="comment__menu-option" onSelect={toggleFastMode}>
-                  <span className="menu__link">
-                    <Icon aria-hidden icon={fastModeEnabled ? ICONS.EYE : ICONS.DISMISS_ALL} size={18} />
-                    {!fastModeEnabled ? __('Enable Fast Mode') : __('Disable Fast Mode')}
                   </span>
                 </MenuItem>
               )}
@@ -120,7 +118,7 @@ export default function LivestreamMenu(props: Props) {
               )}
             </>
           ) : (
-            !noSuperchats && (
+            !noHyperchats && (
               <MenuItem className="comment__menu-option" onSelect={toggleHyperchats}>
                 <span className="menu__link">
                   <Icon aria-hidden icon={hyperchatsHidden ? ICONS.EYE : ICONS.DISMISS_ALL} size={18} />

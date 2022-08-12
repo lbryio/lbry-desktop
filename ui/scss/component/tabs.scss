@@ -17,6 +17,16 @@
     &:hover {
       color: var(--color-link);
     }
+    @media (max-width: $breakpoint-small) {
+      &[aria-selected='true'] {
+        color: var(--color-primary);
+        &::after {
+          background: var(--color-primary);
+          height: 4px !important;
+          bottom: calc(var(--tab-indicator-size) * -2 + 13px);
+        }
+      }
+    }
   }
 }
 
@@ -32,15 +42,62 @@
 
 .commentCreate {
   .tabs {
-    border: 1px solid var(--color-border);
+    overflow: hidden;
     border-radius: var(--border-radius);
-    margin-bottom: var(--spacing-m);
+    background-color: var(--color-header-background);
+    height: 0;
+    margin-top: 0;
+    transition: height 0.3s, marginTop 0.3s;
+
+    &.tabs--open {
+      height: 250px;
+      margin-top: var(--spacing-xs);
+    }
+
+    .tabs__list {
+      background-color: unset;
+      padding: 0;
+      padding-left: 0 !important;
+      margin: 10px;
+
+      .tab {
+        background-color: rgba(var(--color-header-button-base), 0.3);
+        border-radius: var(--border-radius) var(--border-radius) 0 0;
+        padding: var(--spacing-xxxs) var(--spacing-s) 0 var(--spacing-s);
+        margin: 0;
+        opacity: 0.8;
+
+        &[data-selected] {
+          background-color: var(--color-header-button);
+          opacity: 1;
+        }
+
+        &::after {
+          display: none;
+        }
+        &:hover {
+          color: var(--color-text);
+        }
+      }
+    }
 
     .selector-menu {
-      border: 0 !important;
-
-      button {
-        margin: var(--spacing-xxs);
+      border: unset;
+      background-color: var(--color-header-button);
+      border-radius: 0 var(--border-radius) var(--border-radius) var(--border-radius);
+      padding-bottom: 20px;
+      margin: 10px;
+      margin-top: 0;
+      .button--close {
+        margin-right: 4px;
+        margin-top: 4px;
+        background-color: var(--color-header-button);
+        &:hover {
+          background-color: var(--color-primary);
+        }
+      }
+      &::-webkit-scrollbar {
+        background-color: rgba(var(--color-header-background-base), 0.4) !important;
       }
     }
   }

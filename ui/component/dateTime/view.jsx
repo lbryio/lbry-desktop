@@ -63,7 +63,6 @@ class DateTime extends React.Component<Props, State> {
     const { clock24h, date, genericSeconds, showFutureDate, timeAgo, type } = this.props;
 
     const clockFormat = clock24h ? 'HH:mm' : 'hh:mm A';
-
     return (
       <span className="date_time" title={timeAgo && moment(date).format(`MMMM Do, YYYY ${clockFormat}`)}>
         {date

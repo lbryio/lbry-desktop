@@ -17,6 +17,7 @@ import DrawerExpandButton from 'component/swipeableDrawerExpand';
 import LivestreamMenu from 'component/chat/livestream-menu';
 import Icon from 'component/common/icon';
 import CreditAmount from 'component/common/credit-amount';
+import usePersistedState from 'effects/use-persisted-state';
 import { getTipValues } from 'util/livestream';
 
 const ChatLayout = lazyImport(() => import('component/chat' /* webpackChunkName: "chat" */));
@@ -60,6 +61,7 @@ export default function LivestreamLayout(props: Props) {
 
   const [hyperchatsHidden, setHyperchatsHidden] = React.useState(false);
   const [chatViewMode, setChatViewMode] = React.useState(VIEW_MODES.CHAT);
+  const [isCompact, setIsCompact] = usePersistedState('isCompact', false);
 
   if (!claim || !claim.signing_channel) return null;
 
@@ -118,9 +120,11 @@ export default function LivestreamLayout(props: Props) {
                   hasSubtitle={activeViewers}
                   actions={
                     <LivestreamMenu
-                      noSuperchats={!superChats || superChats.length === 0}
+                      noHyperchats={!superChats || superChats.length === 0}
                       hyperchatsHidden={hyperchatsHidden}
                       toggleHyperchats={() => setHyperchatsHidden(!hyperchatsHidden)}
+                      toggleIsCompact={() => setIsCompact(!isCompact)}
+                      isCompact={isCompact}
                       isMobile
                     />
                   }

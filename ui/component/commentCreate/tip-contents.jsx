@@ -60,12 +60,7 @@ export const TipActionButton = (tipButtonProps: TipButtonProps) => {
 
   return (
     (!tipSelectorOpen || activeTab !== tab) && (
-      <Button
-        {...buttonProps}
-        title={name}
-        label={tipSelectorOpen ? __('Switch to %tip_method%', { tip_method: name }) : undefined}
-        onClick={() => onClick(tab)}
-      />
+      <Button {...buttonProps} title={name} label={tipSelectorOpen ? name : undefined} onClick={() => onClick(tab)} />
     )
   );
 };

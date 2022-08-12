@@ -355,6 +355,7 @@ $thumbnailWidthSmall: 2rem;
   padding: 0 3px;
   height: 18px;
   margin-top: var(--spacing-s);
+  margin-bottom: var(--spacing-xxxs);
   background-color: var(--color-primary);
   border-radius: var(--border-radius);
   color: var(--color-primary-contrast) !important;
@@ -758,10 +759,14 @@ $thumbnailWidthSmall: 2rem;
 }
 
 .emote {
+  width: 1.5rem;
+  height: 1.5rem;
   max-width: 1.5rem;
   max-height: 1.5rem;
 
   @media (max-width: $breakpoint-small) {
+    width: 1.25rem;
+    height: 1.25rem;
     max-width: 1.25rem;
     max-height: 1.25rem;
   }

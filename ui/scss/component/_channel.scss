@@ -3,6 +3,12 @@ $metadata-z-index: 1;
 $actions-z-index: 2;
 
 .channelPage-wrapper {
+  .emoji-categories {
+    margin-bottom: -47.5px;
+  }
+  #emoji-code-preview {
+    left: 18px;
+  }
   .button-group {
     .button__content {
       .icon {

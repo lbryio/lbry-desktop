@@ -557,6 +557,30 @@ export const icons = {
   [ICONS.CHAT]: buildIcon(
     <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z" />
   ),
+  [ICONS.COMPACT]: buildIcon(
+    <g clipPath="url(#clip0_1_166)">
+      <path d="M1 12H17" stroke="#D9D9D9" strokeWidth="1.3" strokeLinecap="round" />
+      <path d="M1 9H17" stroke="#D9D9D9" strokeWidth="1.3" strokeLinecap="round" />
+      <path d="M1 6H17" stroke="#D9D9D9" strokeWidth="1.3" strokeLinecap="round" />
+      <path d="M8.75007 3.77817L8.75007 -4" stroke="#D9D9D9" strokeWidth="1.3" strokeLinecap="round" />
+      <path
+        d="M10.8714 1.65685L8.75008 3.77817L6.62876 1.65685"
+        stroke="#D9D9D9"
+        strokeWidth="1.3"
+        strokeLinecap="round"
+      />
+      <path d="M8.75017 14L8.75017 21.7782" stroke="#D9D9D9" strokeWidth="1.3" strokeLinecap="round" />
+      <path d="M6.62885 16.1213L8.75017 14L10.8715 16.1213" stroke="#D9D9D9" strokeWidth="1.3" strokeLinecap="round" />
+    </g>
+  ),
+  [ICONS.EXPAND]: buildIcon(
+    <path
+      d="M0.999878 17H15.9999M0.999878 15H15.9999M0.999878 1.00002H15.9999M0.999878 3.00002H15.9999M8.50728 12.2501L8.50725 5.75006M10.6285 11.3714L9.21426 12.7856C8.82374 13.1761 8.19057 13.1761 7.80005 12.7856L6.38584 11.3714M6.38592 6.62874L7.80013 5.21453C8.19065 4.824 8.82382 4.824 9.21434 5.21453L10.6286 6.62874"
+      stroke="#D9D9D9"
+      strokeWidth="1.3"
+      strokeLinecap="round"
+    />
+  ),
   [ICONS.YES]: buildIcon(
     <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
   ),

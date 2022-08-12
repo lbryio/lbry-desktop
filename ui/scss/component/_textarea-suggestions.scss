@@ -129,7 +129,13 @@
 
 .MuiAutocomplete-paper {
   @extend .card;
-  background-color: var(--color-card-background);
+  // background-color: var(--color-card-background);
+  // background-color: var(--color-header-button);
+  background-color: rgba(var(--color-header-button-base), 1) !important;
+  border-left: var(--spacing-xs) solid var(--color-header-background);
+  margin-left: calc(var(--spacing-xs) * -1);
+  border-top: var(--spacing-xs) solid var(--color-header-background);
+  border-right: 2px solid var(--color-header-background);
   box-shadow: var(--card-box-shadow);
   color: var(--color-text) !important;
 
@@ -140,10 +146,20 @@
 
     .textarea-suggestions__group-label {
       @extend .wunderbar__label;
+      font-size: var(--font-body);
     }
 
     .Mui-focused {
-      background-color: var(--color-menu-background--active);
+      background-color: var(--color-primary);
+      .textarea-suggestion__label {
+        .textarea-suggestion__value {
+          color: var(--color-primary-contrast) !important;
+        }
+      }
+    }
+
+    .emoji {
+      margin-bottom: 3px;
     }
   }
 

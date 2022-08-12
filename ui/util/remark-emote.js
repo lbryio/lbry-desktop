@@ -1,4 +1,4 @@
-import { EMOTES_48px as EMOTES } from 'constants/emotes';
+import { EMOTES_48px as EMOTES, TWEMOTEARRAY } from 'constants/emotes';
 import visit from 'unist-util-visit';
 
 const EMOTE_NODE_TYPE = 'emote';
@@ -38,7 +38,7 @@ function findNextEmote(value, fromIndex, strictlyFromIndex) {
 
     const str = match[0];
 
-    if (EMOTES.some(({ name }) => str === name)) {
+    if (EMOTES.some(({ name }) => str === name) || TWEMOTEARRAY.some(({ name }) => str === name)) {
       // Profit!
       return { text: str, index: match.index };
     }
@@ -99,8 +99,7 @@ export function inlineEmote() {
 const transformer = (node, index, parent) => {
   if (node.type === EMOTE_NODE_TYPE && parent && parent.type === 'paragraph') {
     const emoteStr = node.value;
-    const emote = EMOTES.find(({ name }) => emoteStr === name);
-
+    const emote = EMOTES.find(({ name }) => emoteStr === name) || TWEMOTEARRAY.find(({ name }) => emoteStr === name);
     node.type = 'image';
     node.url = emote.url;
     node.title = emoteStr;

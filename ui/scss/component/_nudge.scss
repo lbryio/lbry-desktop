@@ -8,9 +8,10 @@
   padding: var(--spacing-m);
   border-radius: var(--border-radius);
   box-shadow: var(--card-box-shadow);
-  background-color: var(--color-secondary);
-  color: var(--color-secondary-contrast);
+  background-color: rgba(var(--color-header-background-base), 1);
+  color: var(--color-text);
   font-weight: bold;
+  border: 2px solid var(--color-text);
 
   .button--close {
     .icon {
@@ -33,12 +34,13 @@
   &::after {
     content: '';
     position: absolute;
-    height: 1rem;
-    width: 1rem;
     top: -0.5rem;
     left: 1rem;
-    transform: rotate(45deg);
-    background-color: var(--color-secondary);
+    width: 0;
+    height: 0;
+    border: 10px solid transparent;
+    border-top: 0;
+    border-bottom: 8px solid var(--color-text);
   }
 }
 

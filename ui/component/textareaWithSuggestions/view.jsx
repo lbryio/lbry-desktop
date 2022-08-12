@@ -1,11 +1,11 @@
 // @flow
-import { EMOTES_48px as EMOTES } from 'constants/emotes';
+import { EMOTES_48px as EMOTES, TWEMOTENAMES } from 'constants/emotes';
 import { matchSorter } from 'match-sorter';
 import { LIGHTHOUSE_MIN_CHARACTERS, SEARCH_OPTIONS } from 'constants/search';
 import * as KEYCODES from 'constants/keycodes';
 import Autocomplete from '@mui/material/Autocomplete';
 import BusyIndicator from 'component/common/busy-indicator';
-import EMOJIS from 'emoji-dictionary';
+// import EMOJIS from 'emoji-dictionary';
 import Popper from '@mui/material/Popper';
 import React from 'react';
 import useLighthouse from 'effects/use-lighthouse';
@@ -33,8 +33,6 @@ const SUGGESTION_REGEX = new RegExp(
 
 const SEARCH_SIZE = 10;
 const INPUT_DEBOUNCE_MS = 1000;
-
-const EMOJI_MIN_CHARACTERS = 2;
 
 type Props = {
   canonicalCommentors?: Array<string>,
@@ -150,14 +148,11 @@ export default function TextareaWithSuggestions(props: Props) {
     );
 
   let emoteNames;
-  let emojiNames;
+  // let emojiNames;
   const allOptions = [];
   if (isEmote) {
     emoteNames = EMOTES.map(({ name }) => name);
-    const hasMinEmojiLength = suggestionTerm && suggestionTerm.length > EMOJI_MIN_CHARACTERS;
-    // Filter because our emotes are priority from default emojis, like :eggplant:
-    emojiNames = hasMinEmojiLength ? EMOJIS.names.filter((name) => !emoteNames.includes(`:${name}:`)) : [];
-    const emotesAndEmojis = [...emoteNames, ...emojiNames];
+    const emotesAndEmojis = [...emoteNames, ...TWEMOTENAMES];
 
     allOptions.push(...emotesAndEmojis);
   } else {
@@ -172,7 +167,7 @@ export default function TextareaWithSuggestions(props: Props) {
     allOptions.length > 0
       ? allOptions.map((option) => {
           const groupName = isEmote
-            ? (emoteNames.includes(option) && __('Emotes')) || (emojiNames.includes(option) && __('Emojis'))
+            ? (emoteNames.includes(option) && __('Emotes')) || (TWEMOTENAMES.includes(option) && __('Emojis'))
             : (canonicalCreatorUri === option && __('Creator')) ||
               (filteredSubs && filteredSubs.includes(option) && __('Following')) ||
               (filteredCommentors && filteredCommentors.includes(option) && __('From Comments')) ||
@@ -271,11 +266,18 @@ export default function TextareaWithSuggestions(props: Props) {
   const handleSelect = React.useCallback(
     (selectedValue: string, key?: number) => {
       if (!suggestionValue) return;
+      if (!selectedValue) {
+        setSuggestionValue(undefined);
+        setClose(true);
+        return;
+      }
 
       const elem = inputRef && inputRef.current;
       // $FlowFixMe
-      const newCursorPos = suggestionValue.beforeTerm.length + suggestionValue.index + selectedValue.length + 1;
-
+      const newCursorPos =
+        suggestionValue &&
+        suggestionValue.beforeTerm &&
+        suggestionValue.beforeTerm.length + suggestionValue.index + selectedValue.length + 1;
       // $FlowFixMe
       const contentBegin = messageValue.substring(0, suggestionValue.index);
       // $FlowFixMe

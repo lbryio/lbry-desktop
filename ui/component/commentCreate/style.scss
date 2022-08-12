@@ -8,11 +8,13 @@ $sticker-item-size: 5rem;
 .selector-menu {
   overflow-y: scroll;
   overflow-x: hidden;
+  // padding-left: 46px !important;
 
   @media (min-width: $breakpoint-small) {
     border: 1px solid var(--color-border);
     border-radius: var(--border-radius);
-    max-height: 25vh;
+    // max-height: 25vh;
+    height: 200px;
     padding: var(--spacing-xs);
   }
 
@@ -26,6 +28,7 @@ $sticker-item-size: 5rem;
   }
 }
 
+/*
 // -- STICKERS --
 .sticker-categories {
   position: absolute;
@@ -45,36 +48,81 @@ $sticker-item-size: 5rem;
     }
   }
 }
+*/
 
-.emote-categories {
+#emoji-code-preview {
   position: absolute;
-  top: 49px;
-  left: 2px;
-  background: var(--color-header-background);
+  display: none;
+  top: 52px;
+  left: calc(var(--spacing-xs) + var(--spacing-s));
+  height: 33px;
+  width: calc(100% - 280px);
+  background: rgba(var(--color-header-background-base), 1);
+  text-align: left;
+  padding: var(--spacing-xxs);
+  padding-right: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  z-index: 3;
   border-radius: var(--border-radius);
-  padding: var(--spacing-xs);
+  font-weight: bold;
+
+  &.visible {
+    display: inline;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    top: 45.5px;
+    left: 8px;
+    font-size: var(--font-xsmall);
+  }
+}
+
+.emoji-categories {
+  position: sticky;
+  top: 0;
+  left: 2px;
+  background: rgba(var(--color-header-background-base), 1);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-xxxs);
+  text-align: right;
+  z-index: 1;
+  margin-bottom: -69px;
 
   img,
   svg {
-    display: block;
-    width: 1.3rem;
-    height: 1.3rem;
-    margin-bottom: var(--spacing-xs);
-    &:last-of-type {
-      margin-bottom: 0;
+    width: 1.8rem;
+    height: 1.8rem;
+    // margin-left: var(--spacing-xs);
+    padding: 4px;
+    border-radius: var(--border-radius);
+    &:hover {
+      cursor: pointer;
+      background: var(--color-header-button);
     }
   }
-  // tmp fix
   svg {
     margin-bottom: var(--spacing-xs) !important;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    margin-left: var(--spacing-xxxs);
+    margin-right: var(--spacing-xxxs);
+    margin-bottom: -62px;
   }
 }
 
 .chatImage-category-title {
+  position: relative;
   font-size: var(--font-small);
   padding-left: var(--spacing-xxs);
   width: 100%;
   font-weight: var(--font-weight-bold);
+  z-index: 2;
+  margin-top: var(--spacing-l);
+  margin-bottom: var(--spacing-m);
+  max-width: 202px;
 
   @media (min-width: $breakpoint-small) {
     padding-top: var(--spacing-xs);
@@ -82,6 +130,8 @@ $sticker-item-size: 5rem;
 
   @media (max-width: $breakpoint-small) {
     font-size: var(--font-xsmall);
+    max-width: 150px;
+    margin-left: 9px;
   }
 }
 
@@ -90,11 +140,13 @@ $sticker-item-size: 5rem;
   grid-template-columns: repeat(auto-fit, $emote-item-size--small);
   justify-items: center;
   justify-content: space-evenly;
+  margin-bottom: var(--spacing-xxxs);
 
   button {
     margin: 0px !important;
     padding: var(--spacing-xxxs) !important;
     height: unset;
+    min-height: 40px;
 
     &:hover {
       background-color: var(--color-header-background);
@@ -126,6 +178,11 @@ $sticker-item-size: 5rem;
 .sticker-selector__items {
   @extend .emote-selector__items;
   grid-template-columns: repeat(auto-fit, $sticker-item-size);
+
+  button {
+    // min-height: 125px;
+    max-height: 100px;
+  }
 
   .button--file-action {
     overflow: hidden;
