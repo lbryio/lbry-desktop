@@ -146,7 +146,7 @@ export default function LivestreamLayout(props: Props) {
           </div>
         </div>
 
-        {theaterMode && (
+        {theaterMode && isCurrentClaimLive && (
           <React.Suspense fallback={null}>
             <ChatLayout
               uri={uri}
