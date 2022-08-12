@@ -5,6 +5,8 @@ import classnames from 'classnames';
 import './style.scss';
 import Button from 'component/button';
 import Section from 'component/channelSections/Section';
+import Icon from 'component/common/icon';
+import MembershipSplash from 'component/membershipSplash';
 import Spinner from 'component/spinner';
 import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
@@ -24,6 +26,7 @@ type Props = {
   myEditedCollections: CollectionGroup,
   isPublishing: boolean,
   isFetchingMyCollections: boolean,
+  hasMembership: ?boolean,
   doClaimSearch: ({}, {}) => Promise<any>,
   doFetchItemsInCollections: (params: { collectionIds: ClaimIds }) => Promise<any>,
   doPublishFeaturedChannels: (channelId: ChannelId) => Promise<any>,
@@ -40,6 +43,7 @@ export default function SectionList(props: Props) {
     myEditedCollections,
     isPublishing,
     isFetchingMyCollections,
+    hasMembership,
     doClaimSearch,
     doFetchItemsInCollections,
     doPublishFeaturedChannels,
@@ -73,9 +77,41 @@ export default function SectionList(props: Props) {
     );
   }, [editMode, myUnpublishedCollections, myEditedCollections, sectionIds]);
 
+  function openPromoModal() {
+    doOpenModal(MODALS.CONFIRM, {
+      title: __('Featured Channels'),
+      subtitle: (
+        <>
+          <p className="section__subtitle">
+            {__('Setting up Featured Channels is currently an early-access feature available with Odysee Premium.')}
+          </p>
+          <p className="section__subtitle">{__('Sign up now to configure on your own channel!')}</p>
+        </>
+      ),
+      body: (
+        <div className="card__main-actions">
+          <MembershipSplash pageLocation={'confirmPage'} currencyToUse={'usd'} />
+        </div>
+      ),
+      labelOk: __('Close'),
+      onConfirm: (closeModal) => {
+        closeModal();
+      },
+      hideCancel: true,
+    });
+  }
+
   function handlePublishChanges() {
     if (claimId) {
       doPublishFeaturedChannels(claimId);
+    }
+  }
+
+  function handleAddFeaturedChannels() {
+    if (hasMembership) {
+      doOpenModal(MODALS.FEATURED_CHANNELS_EDIT, { create: { ownerChannelId: claimId } });
+    } else {
+      openPromoModal();
     }
   }
 
@@ -105,7 +141,7 @@ export default function SectionList(props: Props) {
         'channel_sections--disabled': isPublishing || isFetchingMyCollections,
       })}
     >
-      {editMode && (
+      {editMode ? (
         <div className="channel_sections__actions">
           {sectionCount === 0 && (
             <Button
@@ -113,7 +149,7 @@ export default function SectionList(props: Props) {
               button="secondary"
               icon={ICONS.ADD}
               disabled={sectionCount > 0}
-              onClick={() => doOpenModal(MODALS.FEATURED_CHANNELS_EDIT, { create: { ownerChannelId: claimId } })}
+              onClick={handleAddFeaturedChannels}
             />
           )}
           <Button
@@ -123,12 +159,21 @@ export default function SectionList(props: Props) {
             onClick={handlePublishChanges}
           />
         </div>
-      )}
+      ) : sectionIds.length > 0 ? (
+        <div className="channel_sections__actions">
+          <Icon icon={ICONS.HELP} size={20} onClick={openPromoModal} />
+        </div>
+      ) : null}
       <div className="channel_sections__list">
         {sectionIds.length === 0 ? (
           <div className="empty main--empty">
             {isClaimSearching && <Spinner />}
-            {!isClaimSearching && !isPublishing && !isFetchingMyCollections && __('No featured channels.')}
+            {!isClaimSearching && !isPublishing && !isFetchingMyCollections && (
+              <>
+                {__('No featured channels.')}
+                {!hasMembership && <Button button="link" label={__('Learn more')} onClick={openPromoModal} />}
+              </>
+            )}
           </div>
         ) : (
           sectionIds.map((colId) => <Section key={colId} collectionId={colId} showAllItems={sectionIds.length === 1} />)

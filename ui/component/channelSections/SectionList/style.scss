@@ -16,6 +16,10 @@
     margin-top: var(--spacing-xs);
     margin-left: var(--spacing-s);
   }
+
+  svg {
+    cursor: pointer;
+  }
 }
 
 .channel_sections__list {
