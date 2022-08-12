@@ -726,10 +726,7 @@ const PlayerGlobalStyles = (props: GlobalStylesProps) => {
 
         '.vjs-tech': {
           opacity: '1',
-          height:
-            isMobilePlayer && ((appDrawerOpen && videoGreaterThanLandscape) || videoGreaterThanLandscape)
-              ? 'unset !important'
-              : '100%',
+          height: '100%',
           position: 'absolute',
           top: isFloating ? '0px !important' : undefined,
         },

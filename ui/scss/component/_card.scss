@@ -467,6 +467,9 @@
       font-size: 1.2rem;
       font-weight: var(--font-weight-bold);
       line-height: 1.25;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      overflow: hidden;
     }
 
     h2 {

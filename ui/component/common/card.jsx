@@ -17,7 +17,6 @@ type Props = {
   icon?: string,
   className?: string,
   isPageTitle?: boolean,
-  noTitleWrap?: boolean,
   isBodyList?: boolean,
   defaultExpand?: boolean,
   nag?: Node,
@@ -25,8 +24,6 @@ type Props = {
   onClick?: () => void,
   children?: Node,
   secondPane?: Node,
-  slimHeader?: boolean,
-  colorHeader?: boolean,
   singlePane?: boolean,
   headerActions?: Node,
   gridHeader?: boolean,
@@ -44,18 +41,14 @@ function Card(props: Props) {
     className,
     isPageTitle = false,
     isBodyList = false,
-    noTitleWrap = false,
     smallTitle = false,
     defaultExpand,
     nag,
     onClick,
     children,
     secondPane,
-    slimHeader,
-    colorHeader,
     singlePane,
     headerActions,
-    gridHeader,
   } = props;
 
   const [expanded, setExpanded] = useState(defaultExpand);
@@ -79,10 +72,7 @@ function Card(props: Props) {
         {(title || subtitle) && (
           <div
             className={classnames('card__header--between', {
-              'card__header--nowrap': noTitleWrap,
-              'card__header--slim': slimHeader,
-              'card__header--bg-color': colorHeader,
-              'card__header--grid': gridHeader,
+              // 'card__header--nowrap': noTitleWrap,
             })}
           >
             <div className={classnames('card__title-section', { 'card__title-section--body-list': isBodyList })}>
