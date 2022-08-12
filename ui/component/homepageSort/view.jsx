@@ -121,7 +121,7 @@ export default function HomepageSort(props: Props) {
             // $FlowFixMe
             draggableProvided.draggableProps.style.left = draggedItemRef.offsetLeft;
             // $FlowFixMe
-            if (navigator.userAgent.toLowerCase().indexOf('firefox') === -1) {
+            if (navigator.userAgent.toLowerCase().includes('firefox')) {
               draggableProvided.draggableProps.style.top =
                 draggableProvided.draggableProps.style.top - document.getElementsByClassName('modal')[0].offsetTop;
             }
