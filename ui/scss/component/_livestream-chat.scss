@@ -1131,6 +1131,11 @@ $recent-msg-button__height: 2rem;
     height: var(--font-small) !important;
     margin-right: 4px;
     margin-top: 2px;
+    .ff-canvas,
+    .freezeframe-img {
+      width: var(--font-small) !important;
+      height: var(--font-small) !important;
+    }
   }
   .comment__author {
     float: left;
