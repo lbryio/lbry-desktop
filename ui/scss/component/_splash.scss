@@ -363,6 +363,16 @@
             margin-left: var(--spacing-xs);
             .button {
               padding: 4px 6px 4px 6px;
+              @media (min-width: $breakpoint-xlarge) {
+                padding: 4px 6px 4px 6px;
+                height: var(--height-button);
+                border-radius: 2.4rem;
+                margin-bottom: 3%;
+                .button__label {
+                  line-height: 2rem;
+                  font-size: 0.74rem;
+                }
+              }
               .button__content {
                 .button__label {
                   font-size: 0.74rem;
