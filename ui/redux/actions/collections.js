@@ -26,6 +26,7 @@ import {
 import * as COLS from 'constants/collections';
 import { resolveAuxParams, resolveCollectionType } from 'util/collections';
 import { isPermanentUrl, getThumbnailFromClaim } from 'util/claim';
+import { sanitizeName } from 'util/lbryURI';
 import { parseClaimIdFromPermanentUrl } from 'util/url';
 import { doError, doToast } from 'redux/actions/notifications';
 
@@ -389,10 +390,11 @@ export const doFetchItemsInCollection = (options: { collectionId: string, pageSi
   return doFetchItemsInCollections(newOptions);
 };
 
-export const doCollectionEdit = (collectionId: string, params: CollectionEditParams) => (
-  dispatch: Dispatch,
-  getState: GetState
-) => {
+export const doCollectionEdit = (
+  collectionId: string,
+  params: CollectionEditParams,
+  skipSanitization: boolean = false
+) => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
   const collection: Collection = selectCollectionForId(state, collectionId);
 
@@ -414,19 +416,22 @@ export const doCollectionEdit = (collectionId: string, params: CollectionEditPar
   let uris;
 
   if (anyUris) {
-    uris = [];
+    if (skipSanitization) {
+      uris = anyUris;
+    } else {
+      uris = [];
+      anyUris.forEach(async (uri) => {
+        // related to selectBrokenUrlsForCollectionId
+        const isDeletingBrokenUris = typeof uri !== 'string';
 
-    anyUris.forEach(async (uri) => {
-      // related to selectBrokenUrlsForCollectionId
-      const isDeletingBrokenUris = typeof uri !== 'string';
+        // $FlowFixMe
+        if (isPermanentUrl(uri) || isDeletingBrokenUris) return uris.push(uri);
 
-      // $FlowFixMe
-      if (isPermanentUrl(uri) || isDeletingBrokenUris) return uris.push(uri);
-
-      const url = selectPermanentUrlForUri(state, uri);
-      // $FlowFixMe
-      return uris.push(url);
-    });
+        const url = selectPermanentUrlForUri(state, uri);
+        // $FlowFixMe
+        return uris.push(url);
+      });
+    }
   }
 
   // -------------------
@@ -533,7 +538,7 @@ export const doPublishFeaturedChannels = (channelId: ChannelId) => async (dispat
         const options = { name: fcClaim.name, claim_id: fcClaim.claim_id, ...common };
         await dispatch(doCollectionPublishUpdate(options)).catch((err) => errors.push(err));
       } else if (uList[fcId]) {
-        const options = { name: `${channelId.slice(0, 8)}--${fcId}`, ...common };
+        const options = { name: `${sanitizeName(fcCollection.name)}--${fcId}`, ...common };
         await dispatch(doCollectionPublish(options, fcId)).catch((err) => errors.push(err));
         useDelay = true;
       }

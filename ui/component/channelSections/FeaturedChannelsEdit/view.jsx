@@ -18,7 +18,7 @@ type Props = {
   // --- redux ---
   collection: Collection, // Corresponding collection for 'collectionId'.
   doLocalCollectionCreate: (params: CollectionCreateParams) => void,
-  doCollectionEdit: (id: string, CollectionEditParams) => void,
+  doCollectionEdit: (id: string, CollectionEditParams, skipSanitization?: boolean) => void,
 };
 
 export default function FeaturedChannelsEdit(props: Props) {
@@ -31,14 +31,25 @@ export default function FeaturedChannelsEdit(props: Props) {
   // **************************************************************************
 
   function handleSave() {
+    // Since we don't go through the usual publish form, there is a chance that
+    // the list isn't resolved, so we ended up with a null list after edited.
+    // Our uris are always kosher to begin with, so no need to sanitize.
+    // NOTE: I believe the same problem can happen outside Featured Channels,
+    // just haven't found the recipe.
+    const skipSanitization = true;
+
     if (collectionId && collection) {
-      doCollectionEdit(collectionId, {
-        name,
-        uris,
-        replace: true,
-        type: COL_TYPES.FEATURED_CHANNELS,
-        featuredChannelsParams: { channelId: channelId || '0' },
-      });
+      doCollectionEdit(
+        collectionId,
+        {
+          name,
+          uris,
+          replace: true,
+          type: COL_TYPES.FEATURED_CHANNELS,
+          featuredChannelsParams: { channelId: channelId || '0' },
+        },
+        skipSanitization
+      );
     } else {
       doLocalCollectionCreate({
         name,
