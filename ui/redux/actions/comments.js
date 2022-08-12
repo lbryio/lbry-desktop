@@ -1188,13 +1188,21 @@ export function doFetchModBlockedList() {
             const adminTimeoutMap = {};
             const moderatorTimeoutMap = {};
 
-            const blockListsPerChannel = res.map((r) => r.value);
-            blockListsPerChannel.sort((a, b) => 1);
-
+            const blockListsPerChannel = [];
+            for (let i = 0; i < res.length; ++i) {
+              blockListsPerChannel.push(res[i].value);
+              if (i % 2 === 0) {
+                await yieldThread();
+              }
+            }
             for (let i = 0; i < blockListsPerChannel.length; ++i) {
-              const storeList = (fetchedList, blockedList, timeoutMap, blockedByMap) => {
+              const storeList = async (fetchedList, blockedList, timeoutMap, blockedByMap) => {
                 if (fetchedList) {
-                  fetchedList.forEach((blockedChannel) => {
+                  for (let j = 0; j < fetchedList.length; ++j) {
+                    const blockedChannel = fetchedList[j];
+                    if (j > 0 && i % LOOP_CHUNK_SIZE === 0) {
+                      await yieldThread();
+                    }
                     if (blockedChannel.blocked_channel_name) {
                       const channelUri = buildURI({
                         channelName: blockedChannel.blocked_channel_name,
@@ -1228,7 +1236,7 @@ export function doFetchModBlockedList() {
                         }
                       }
                     }
-                  });
+                  }
                 }
               };
 
@@ -1241,16 +1249,15 @@ export function doFetchModBlockedList() {
                 await yieldThread();
               }
 
-              storeList(blocked_channels, personalBlockList, personalTimeoutMap);
-              storeList(globally_blocked_channels, adminBlockList, adminTimeoutMap);
-              storeList(
+              await storeList(blocked_channels, personalBlockList, personalTimeoutMap);
+              await storeList(globally_blocked_channels, adminBlockList, adminTimeoutMap);
+              await storeList(
                 delegated_blocked_channels,
                 moderatorBlockList,
                 moderatorTimeoutMap,
                 moderatorBlockListDelegatorsMap
               );
             }
-
             dispatch({
               type: ACTIONS.COMMENT_MODERATION_BLOCK_LIST_COMPLETED,
               data: {
