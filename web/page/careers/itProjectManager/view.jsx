@@ -10,7 +10,7 @@ const ITManagersPage = () => {
         body={
           <>
             <section className="section card--section">
-              <h1 className="card__title" style={{ marginBottom: '10px' }}>
+              <h1 className="card__title" style={{ fontSize: '28px', marginBottom: '10px' }}>
                 IT Project Manager @ Odysee
               </h1>
               <p>

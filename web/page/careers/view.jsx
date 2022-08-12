@@ -12,18 +12,22 @@ const CareersPage = () => {
         className="careers-overview-page"
         body={
           <>
-            <h1 style={{ fontSize: '28px', marginBottom: '16px' }}>Work at Odysee</h1>
+            <h1>Work at Odysee</h1>
 
             <section className="section card--section">
-              <h1 className="card__title">We're redefining online media because the current paradigm sucks.</h1>
+              <h2 className="card__title">We're redefining online media because the current paradigm sucks.</h2>
 
-              <h1 className="career-page__subtitle">Join our team and help shape the future of online video</h1>
+              <h2 className="career-page__subtitle">
+                If you share our passion and want to help we'd love to hear from you.
+              </h2>
 
-              <Button
-                label={__('IT Project Manager')}
-                navigate={`/$/${PAGES.CAREERS_IT_PROJECT_MANAGER}`}
-                className="job-listings"
-              />
+              <div className="job-listings">
+                <Button
+                  label={__('IT Project Manager')}
+                  navigate={`/$/${PAGES.CAREERS_IT_PROJECT_MANAGER}`}
+                  className="job-listing"
+                />
+              </div>
             </section>
           </>
         }

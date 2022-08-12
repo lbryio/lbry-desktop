@@ -1,15 +1,40 @@
 .careers-overview-page {
   text-align: center;
+
+  h1 {
+    font-size: 28px;
+    margin-bottom: 16px;
+  }
 }
 
 .job-listings {
-  color: rgba(var(--color-text-base), 0.8);
-  margin-top: 29px;
-  font-size: 18px;
+  //text-align:center;
+  padding-top: var(--spacing-l);
+  .job-listing {
+    // display:block;
+    text-align: center;
+    color: rgba(var(--color-text-base), 0.8);
+    font-size: var(--font-large);
+    background: var(--color-header-background);
+    padding: var(--spacing-s);
+    margin-bottom: var(--spacing-m);
+    border-radius: var(--border-radius);
+    width: 300px;
+    align-items: center;
+    &:hover {
+      color: var(--color-primary);
+    }
+    .button__content {
+      justify-content: center;
+    }
+  }
 }
 
 .careers-mail-link {
   color: rgba(var(--color-text-base), 0.8);
+  &:hover {
+    color: rgba(var(--color-text-base), 1);
+  }
 }
 
 .career-page__subtitle {
