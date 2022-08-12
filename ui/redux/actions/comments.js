@@ -1143,6 +1143,9 @@ export function doCommentModUnBlockAsModerator(commenterUri: string, creatorUri:
 
 export function doFetchModBlockedList() {
   return async (dispatch: Dispatch, getState: GetState) => {
+    const LOOP_CHUNK_SIZE = 1;
+    const yieldThread = () => new Promise((resolve) => setTimeout(resolve));
+
     const state = getState();
     const myChannels = selectMyChannelClaims(state);
     if (!myChannels) {
@@ -1172,7 +1175,7 @@ export function doFetchModBlockedList() {
               })
             )
         )
-          .then((res) => {
+          .then(async (res) => {
             let personalBlockList = [];
             let adminBlockList = [];
             let moderatorBlockList = [];
@@ -1185,66 +1188,76 @@ export function doFetchModBlockedList() {
             const adminTimeoutMap = {};
             const moderatorTimeoutMap = {};
 
-            const blockListsPerChannel = res.map((r) => r.value);
-            blockListsPerChannel
-              .sort((a, b) => {
-                return 1;
-              })
-              .forEach((channelBlockLists) => {
-                const storeList = (fetchedList, blockedList, timeoutMap, blockedByMap) => {
-                  if (fetchedList) {
-                    fetchedList.forEach((blockedChannel) => {
-                      if (blockedChannel.blocked_channel_name) {
-                        const channelUri = buildURI({
-                          channelName: blockedChannel.blocked_channel_name,
-                          channelClaimId: blockedChannel.blocked_channel_id,
-                        });
+            const blockListsPerChannel = [];
+            for (let i = 0; i < res.length; ++i) {
+              blockListsPerChannel.push(res[i].value);
+              if (i % 2 === 0) {
+                await yieldThread();
+              }
+            }
+            for (let i = 0; i < blockListsPerChannel.length; ++i) {
+              const storeList = async (fetchedList, blockedList, timeoutMap, blockedByMap) => {
+                if (fetchedList) {
+                  for (let j = 0; j < fetchedList.length; ++j) {
+                    const blockedChannel = fetchedList[j];
+                    if (j > 0 && i % LOOP_CHUNK_SIZE === 0) {
+                      await yieldThread();
+                    }
+                    if (blockedChannel.blocked_channel_name) {
+                      const channelUri = buildURI({
+                        channelName: blockedChannel.blocked_channel_name,
+                        channelClaimId: blockedChannel.blocked_channel_id,
+                      });
 
-                        if (!blockedList.find((blockedChannel) => isURIEqual(blockedChannel.channelUri, channelUri))) {
-                          blockedList.push({ channelUri, blockedAt: blockedChannel.blocked_at });
+                      if (!blockedList.find((blockedChannel) => isURIEqual(blockedChannel.channelUri, channelUri))) {
+                        blockedList.push({ channelUri, blockedAt: blockedChannel.blocked_at });
 
-                          if (blockedChannel.banned_for) {
-                            timeoutMap[channelUri] = {
-                              blockedAt: blockedChannel.blocked_at,
-                              bannedFor: blockedChannel.banned_for,
-                              banRemaining: blockedChannel.ban_remaining,
-                            };
-                          }
-                        }
-
-                        if (blockedByMap !== undefined) {
-                          const blockedByChannelUri = buildURI({
-                            channelName: blockedChannel.blocked_by_channel_name,
-                            channelClaimId: blockedChannel.blocked_by_channel_id,
-                          });
-
-                          if (blockedByMap[channelUri]) {
-                            if (!blockedByMap[channelUri].includes(blockedByChannelUri)) {
-                              blockedByMap[channelUri].push(blockedByChannelUri);
-                            }
-                          } else {
-                            blockedByMap[channelUri] = [blockedByChannelUri];
-                          }
+                        if (blockedChannel.banned_for) {
+                          timeoutMap[channelUri] = {
+                            blockedAt: blockedChannel.blocked_at,
+                            bannedFor: blockedChannel.banned_for,
+                            banRemaining: blockedChannel.ban_remaining,
+                          };
                         }
                       }
-                    });
+
+                      if (blockedByMap !== undefined) {
+                        const blockedByChannelUri = buildURI({
+                          channelName: blockedChannel.blocked_by_channel_name,
+                          channelClaimId: blockedChannel.blocked_by_channel_id,
+                        });
+
+                        if (blockedByMap[channelUri]) {
+                          if (!blockedByMap[channelUri].includes(blockedByChannelUri)) {
+                            blockedByMap[channelUri].push(blockedByChannelUri);
+                          }
+                        } else {
+                          blockedByMap[channelUri] = [blockedByChannelUri];
+                        }
+                      }
+                    }
                   }
-                };
+                }
+              };
 
-                const blocked_channels = channelBlockLists && channelBlockLists.blocked_channels;
-                const globally_blocked_channels = channelBlockLists && channelBlockLists.globally_blocked_channels;
-                const delegated_blocked_channels = channelBlockLists && channelBlockLists.delegated_blocked_channels;
+              const channelBlockLists = blockListsPerChannel[i];
+              const blocked_channels = channelBlockLists && channelBlockLists.blocked_channels;
+              const globally_blocked_channels = channelBlockLists && channelBlockLists.globally_blocked_channels;
+              const delegated_blocked_channels = channelBlockLists && channelBlockLists.delegated_blocked_channels;
 
-                storeList(blocked_channels, personalBlockList, personalTimeoutMap);
-                storeList(globally_blocked_channels, adminBlockList, adminTimeoutMap);
-                storeList(
-                  delegated_blocked_channels,
-                  moderatorBlockList,
-                  moderatorTimeoutMap,
-                  moderatorBlockListDelegatorsMap
-                );
-              });
+              if (i > 0 && i % LOOP_CHUNK_SIZE === 0) {
+                await yieldThread();
+              }
 
+              await storeList(blocked_channels, personalBlockList, personalTimeoutMap);
+              await storeList(globally_blocked_channels, adminBlockList, adminTimeoutMap);
+              await storeList(
+                delegated_blocked_channels,
+                moderatorBlockList,
+                moderatorTimeoutMap,
+                moderatorBlockListDelegatorsMap
+              );
+            }
             dispatch({
               type: ACTIONS.COMMENT_MODERATION_BLOCK_LIST_COMPLETED,
               data: {
