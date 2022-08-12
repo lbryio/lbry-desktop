@@ -38,9 +38,9 @@ export const DISCUSSION_PAGE = `discussion`;
 const PAGE = {
   CONTENT: 'content',
   LISTS: 'lists',
-  ABOUT: 'about',
-  DISCUSSION: DISCUSSION_PAGE,
   CHANNELS: 'channels',
+  DISCUSSION: DISCUSSION_PAGE,
+  ABOUT: 'about',
   EDIT: 'edit',
 };
 
@@ -166,13 +166,13 @@ function ChannelPage(props: Props) {
     case PAGE.LISTS:
       tabIndex = 1;
       break;
-    case PAGE.ABOUT:
+    case PAGE.CHANNELS:
       tabIndex = 2;
       break;
     case PAGE.DISCUSSION:
       tabIndex = 3;
       break;
-    case PAGE.CHANNELS:
+    case PAGE.ABOUT:
       tabIndex = 4;
       break;
     default:
@@ -192,14 +192,13 @@ function ChannelPage(props: Props) {
         search += `${PAGE_VIEW_QUERY}=${PAGE.LISTS}`;
         break;
       case 2:
-        search += `${PAGE_VIEW_QUERY}=${PAGE.ABOUT}`;
+        search += `${PAGE_VIEW_QUERY}=${PAGE.CHANNELS}`;
         break;
-      default:
       case 3:
         search += `${PAGE_VIEW_QUERY}=${PAGE.DISCUSSION}`;
         break;
       case 4:
-        search += `${PAGE_VIEW_QUERY}=${PAGE.CHANNELS}`;
+        search += `${PAGE_VIEW_QUERY}=${PAGE.ABOUT}`;
         break;
     }
 
@@ -322,9 +321,9 @@ function ChannelPage(props: Props) {
           <TabList className="tabs__list--channel-page">
             <Tab disabled={editing}>{__('Content')}</Tab>
             <Tab disabled={editing}>{__('Playlists')}</Tab>
-            <Tab>{editing ? __('Editing Your Channel') : __('About --[tab title in Channel Page]--')}</Tab>
-            <Tab disabled={editing}>{__('Community')}</Tab>
             <Tab disabled={editing}>{__('Channels')}</Tab>
+            <Tab disabled={editing}>{__('Community')}</Tab>
+            <Tab>{editing ? __('Editing Your Channel') : __('About --[tab title in Channel Page]--')}</Tab>
           </TabList>
           <TabPanels>
             <TabPanel>
@@ -349,13 +348,13 @@ function ChannelPage(props: Props) {
                 />
               )}
             </TabPanel>
-            <TabPanel>
-              <ChannelAbout uri={uri} />
-            </TabPanel>
+            <TabPanel>{currentView === PAGE.CHANNELS && <SectionList uri={uri} editMode={channelIsMine} />}</TabPanel>
             <TabPanel>
               {(showDiscussion || currentView === PAGE.DISCUSSION) && <ChannelDiscussion uri={uri} />}
             </TabPanel>
-            <TabPanel>{currentView === PAGE.CHANNELS && <SectionList uri={uri} editMode={channelIsMine} />}</TabPanel>
+            <TabPanel>
+              <ChannelAbout uri={uri} />
+            </TabPanel>
           </TabPanels>
         </Tabs>
       )}
