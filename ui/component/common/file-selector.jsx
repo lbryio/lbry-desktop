@@ -83,7 +83,16 @@ class FileSelector extends React.PureComponent<Props> {
         if (!result) {
           return;
         }
-        const file = new File([result.buffer], result.name);
+        const file = new File([result.buffer], result.name, {
+          type: result.mime,
+        });
+        // "path" is a read only property so we have to use this
+        // hack to overcome the limitation.
+        // $FlowFixMe
+        Object.defineProperty(file, 'path', {
+          value: result.path,
+          writable: false,
+        });
         this.props.onFileChosen(file);
       });
   };

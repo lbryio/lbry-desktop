@@ -233,7 +233,7 @@ function PublishFile(props: Props) {
       isTextPost = contentType[1] === 'plain' || contentType[1] === 'markdown';
       setCurrentFileType(contentType);
     } else if (file.name) {
-      // If user's machine is missign a valid content type registration
+      // If user's machine is missing a valid content type registration
       // for markdown content: text/markdown, file extension will be used instead
       const extension = file.name.split('.').pop();
       isTextPost = MARKDOWN_FILE_EXTENSIONS.includes(extension);

@@ -20,6 +20,7 @@ import path from 'path';
 import { diskSpaceLinux, diskSpaceWindows, diskSpaceMac } from '../ui/util/diskspace';
 
 const { download } = require('electron-dl');
+const mime = require('mime');
 const remote = require('@electron/remote/main');
 const os = require('os');
 const sudo = require('sudo-prompt');
@@ -318,6 +319,7 @@ ipcMain.handle('get-file-from-path', (event, path) => {
       const fileName = folders[folders.length - 1];
       resolve({
         name: fileName,
+        mime: mime.getType(fileName) || undefined,
         path: path,
         buffer: data,
       });
