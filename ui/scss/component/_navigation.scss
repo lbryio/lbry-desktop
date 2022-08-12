@@ -305,6 +305,10 @@
   flex-direction: column;
   align-items: flex-start;
   list-style: none;
+
+  .claim-preview__title {
+    height: 13px;
+  }
 }
 
 .navigation-inner-container {
