@@ -99,3 +99,7 @@ exports.LATEST = 'latest';
 exports.LIVE_NOW = 'livenow';
 exports.CAREERS = 'careers';
 exports.CAREERS_IT_PROJECT_MANAGER = 'careers/it_project_manager';
+exports.CAREERS_SENIOR_BACKEND_ENGINEER = 'careers/senior_backend_engineer';
+exports.CAREERS_SENIOR_SYSADMIN = 'careers/senior_sysadmin';
+exports.CAREERS_SENIOR_ANDROID_DEVELOPER = 'careers/senior_android_developer';
+exports.CAREERS_SENIOR_IOS_DEVELOPER = 'careers/senior_ios_developer';
