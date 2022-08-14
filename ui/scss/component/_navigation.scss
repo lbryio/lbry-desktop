@@ -307,7 +307,11 @@
   list-style: none;
 
   .claim-preview__title {
-    height: 13px;
+    height: 16px;
+    .truncated-text {
+      height: 16px;
+      margin-bottom: unset;
+    }
   }
 }
 
