@@ -88,7 +88,6 @@ const ITManagersPage = () => {
                 <li>The opportunity to build something truly great with great people</li>
                 <li>Competitive salary</li>
                 <li>Flexible work hours</li>
-                <li>Work from home</li>
               </ul>
             </section>
 
