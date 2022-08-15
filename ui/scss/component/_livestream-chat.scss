@@ -703,8 +703,10 @@ $recent-msg-button__height: 2rem;
   position: relative;
 
   font-size: var(--font-small);
-  border-radius: var(--border-radius);
-  background: linear-gradient(180deg, var(--color-primary) 0%, transparent 100%);
+  // border-radius: var(--border-radius);
+  // background: linear-gradient(180deg, var(--color-header-background) 0%, transparent 100%);
+  background: var(--color-header-background);
+  // border:2px solid var(--color-border);
   padding-bottom: var(--spacing-s) !important;
 
   .livestream__comment {
@@ -714,15 +716,11 @@ $recent-msg-button__height: 2rem;
     .livestreamComment__body {
       margin-left: 0;
 
-      .comment__author {
-        color: var(--color-primary-contrast);
-      }
       .comment__author--creator {
-        background-color: var(--color-background);
-        color: var(--color-text) !important;
+        background-color: var(--color-primary);
+        color: var(--color-primary-contrast) !important;
       }
       .comment__pin {
-        color: var(--color-primary-contrast);
         font-weight: var(--font-weight-bold);
         margin: var(--spacing-xs);
         margin-left: 0;
@@ -734,7 +732,6 @@ $recent-msg-button__height: 2rem;
         }
       }
       .date_time {
-        color: var(--color-primary-contrast);
         opacity: 0.8;
       }
     }
@@ -742,22 +739,9 @@ $recent-msg-button__height: 2rem;
       .menu__button {
         &[aria-expanded='true'] {
           .icon {
-            stroke: var(--color-primary-contrast);
+            stroke: var(--color-text);
           }
         }
-      }
-    }
-    &.livestream__comment--mentioned {
-      background-color: unset;
-    }
-    &:hover {
-      background-color: unset;
-      .comment__author {
-        color: var(--color-primary-contrast) !important;
-      }
-      .comment__author--creator {
-        background-color: var(--color-background);
-        color: var(--color-text) !important;
       }
     }
   }
@@ -765,7 +749,7 @@ $recent-msg-button__height: 2rem;
   .close-button {
     border-left: 1px solid var(--color-background);
     padding: 0 calc(var(--spacing-m) - var(--spacing-xs)) 0 var(--spacing-m);
-    color: var(--color-primary-contrast);
+    color: var(--color-text);
   }
 
   .comment__pin {
