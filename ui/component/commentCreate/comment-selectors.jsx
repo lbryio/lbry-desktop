@@ -91,7 +91,7 @@ const EmojisPanel = (emojisProps: EmojisProps) => {
         {/* <Icon icon={ICONS.TIME} /> */}
         <img
           onClick={() => scrollToCategory('odysee', emojiSelectorRef, isMobile)}
-          onMouseEnter={() => handleHover(__('Odysee'))}
+          onMouseEnter={() => handleHover('Odysee')}
           onMouseLeave={() => handleHover('')}
           src="https://static.odycdn.com/emoticons/48%20px/smile%402x.png"
         />
@@ -140,7 +140,7 @@ const EmojisPanel = (emojisProps: EmojisProps) => {
       </div>
 
       {/* <EmoteCategory title={__('Recently used')} {...defaultRowProps} /> */}
-      <EmoteCategory title={__('Odysee')} images={ODYSEE_EMOTES} {...defaultRowProps} handleHover={handleHover} />
+      <EmoteCategory title={'Odysee'} images={ODYSEE_EMOTES} {...defaultRowProps} handleHover={handleHover} />
       <EmoteCategory title={__('Smilies')} images={TWEMOTES.SMILIES} {...defaultRowProps} handleHover={handleHover} />
       <EmoteCategory
         title={__('Hand signals')}
