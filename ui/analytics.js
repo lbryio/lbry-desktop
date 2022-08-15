@@ -44,18 +44,19 @@ export const GA_DIMENSIONS = {
 // setInterval(getUserBandwidth, 1000 * 60);
 
 const isProduction = process.env.NODE_ENV === 'production';
+let gAnalyticsEnabled = false;
 const devInternalApis = process.env.LBRY_API_URL && process.env.LBRY_API_URL.includes('dev');
 
 const WATCHMAN_BACKEND_ENDPOINT = 'https://watchman.na-backend.odysee.com/reports/playback';
 const SEND_DATA_TO_WATCHMAN_INTERVAL = 10; // in seconds
 
 type Analytics = {
+  setState: (enable: boolean) => void,
   appStartTime: number,
   eventStartTime: any,
   error: (string) => Promise<any>,
   sentryError: ({} | string, {}) => Promise<any>,
   setUser: (Object) => void,
-  toggleInternal: (boolean, ?boolean) => void,
   apiLogView: (string, string, string, ?number, ?() => void) => Promise<any>,
   apiLogPublish: (ChannelClaim | StreamClaim) => void,
   tagFollowEvent: (string, boolean, ?string) => void,
@@ -96,10 +97,7 @@ type LogPublishParams = {
   channel_claim_id?: string,
 };
 
-let internalAnalyticsEnabled: boolean = IS_WEB || false;
-// let thirdPartyAnalyticsEnabled: boolean = IS_WEB || false;
-
-const isGaAllowed = internalAnalyticsEnabled && isProduction;
+const isGaAllowed = false; // internalAnalyticsEnabled && isProduction; -- TODO: will be moved in upcoming commit
 
 /**
  * Determine the mobile device type viewing the data
@@ -232,6 +230,9 @@ async function sendWatchmanData(body) {
 }
 
 const analytics: Analytics = {
+  setState: (enable: boolean) => {
+    gAnalyticsEnabled = enable;
+  },
   appStartTime: 0,
   eventStartTime: {},
 
@@ -296,7 +297,7 @@ const analytics: Analytics = {
   },
   error: (message) => {
     return new Promise((resolve) => {
-      if (internalAnalyticsEnabled && isProduction) {
+      if (gAnalyticsEnabled && isProduction) {
         return Lbryio.call('event', 'desktop_error', { error_message: message }).then(() => {
           resolve(true);
         });
@@ -307,7 +308,7 @@ const analytics: Analytics = {
   },
   sentryError: (error, errorInfo) => {
     return new Promise((resolve) => {
-      if (internalAnalyticsEnabled && isProduction) {
+      if (gAnalyticsEnabled && isProduction) {
         Sentry.withScope((scope) => {
           scope.setExtras(errorInfo);
           const eventId = Sentry.captureException(error);
@@ -323,17 +324,13 @@ const analytics: Analytics = {
       window.gtag('set', { user_id: userId });
     }
   },
-  toggleInternal: (enabled: boolean): void => {
-    // Always collect analytics on Odysee for now.
-  },
-
   toggleThirdParty: (enabled: boolean): void => {
-    // Always collect analytics on Odysee for now.
+    // Retained to keep things compiling. We don't do third-party analytics,
+    // so this can be removed, but together with the redux state.
   },
-
   apiLogView: (uri, outpoint, claimId, timeToStart) => {
     return new Promise((resolve, reject) => {
-      if (internalAnalyticsEnabled && (isProduction || devInternalApis)) {
+      if (gAnalyticsEnabled && (isProduction || devInternalApis)) {
         const params: {
           uri: string,
           outpoint: string,
@@ -356,13 +353,13 @@ const analytics: Analytics = {
     });
   },
   apiLogSearch: () => {
-    if (internalAnalyticsEnabled && isProduction) {
+    if (gAnalyticsEnabled && isProduction) {
       Lbryio.call('event', 'search');
     }
   },
   apiLogPublish: (claimResult: ChannelClaim | StreamClaim) => {
     // Don't check if this is production so channels created on localhost are still linked to user
-    if (internalAnalyticsEnabled) {
+    if (gAnalyticsEnabled) {
       const { permanent_url: uri, claim_id: claimId, txid, nout, signing_channel: signingChannel } = claimResult;
       let channelClaimId;
       if (signingChannel) {
@@ -502,4 +499,5 @@ if (isGaAllowed && window.gtag) {
   });
 }
 
+analytics.setState(IS_WEB);
 export default analytics;

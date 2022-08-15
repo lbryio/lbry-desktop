@@ -25,7 +25,7 @@ const UPDATE_IS_NIGHT_INTERVAL = 5 * 60 * 1000;
 export function doFetchDaemonSettings() {
   return (dispatch) => {
     Lbry.settings_get().then((settings) => {
-      analytics.toggleInternal(settings.share_usage_data);
+      analytics.setState(settings.share_usage_data);
       dispatch({
         type: ACTIONS.DAEMON_SETTINGS_RECEIVED,
         data: {
@@ -89,7 +89,7 @@ export function doClearDaemonSetting(key) {
       }
     });
     Lbry.settings_get().then((settings) => {
-      analytics.toggleInternal(settings.share_usage_data);
+      analytics.setState(settings.share_usage_data);
       dispatch({
         type: ACTIONS.DAEMON_SETTINGS_RECEIVED,
         data: {
@@ -127,7 +127,7 @@ export function doSetDaemonSetting(key, value, doNotDispatch = false) {
       }
     });
     Lbry.settings_get().then((settings) => {
-      analytics.toggleInternal(settings.share_usage_data);
+      analytics.setState(settings.share_usage_data);
       dispatch({
         type: ACTIONS.DAEMON_SETTINGS_RECEIVED,
         data: {
