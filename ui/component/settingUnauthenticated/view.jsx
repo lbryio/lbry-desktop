@@ -49,4 +49,4 @@ export default function SettingUnauthenticated(props: Props) {
 }
 
 // prettier-ignore
-const HELP_LANGUAGE = 'Multi-language support is brand new and incomplete. Switching your language may have unintended consequences, like glossolalia.';
+const HELP_LANGUAGE = 'Multi-language support is community-driven and may be incomplete for some languages. Switching your language may have unintended consequences, like glossolalia.';
