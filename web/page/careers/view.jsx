@@ -23,31 +23,31 @@ const CareersPage = () => {
 
               <div className="job-listings">
                 <Button
-                  label={__('IT Project Manager')}
+                  label={'IT Project Manager'}
                   navigate={`/$/${PAGES.CAREERS_IT_PROJECT_MANAGER}`}
                   className="job-listing"
                 />
                 <br />
                 <Button
-                  label={__('Senior Backend Engineer')}
+                  label={'Senior Backend Engineer'}
                   navigate={`/$/${PAGES.CAREERS_SENIOR_BACKEND_ENGINEER}`}
                   className="job-listing"
                 />
                 <br />
                 <Button
-                  label={__('Senior Sysadmin')}
+                  label={'Senior Sysadmin'}
                   navigate={`/$/${PAGES.CAREERS_SENIOR_SYSADMIN}`}
                   className="job-listing"
                 />
                 <br />
                 <Button
-                  label={__('Senior Android Developer')}
+                  label={'Senior Android Developer'}
                   navigate={`/$/${PAGES.CAREERS_SENIOR_ANDROID_DEVELOPER}`}
                   className="job-listing"
                 />
                 <br />
                 <Button
-                  label={__('Senior iOS Developer')}
+                  label={'Senior iOS Developer'}
                   navigate={`/$/${PAGES.CAREERS_SENIOR_IOS_DEVELOPER}`}
                   className="job-listing"
                 />
