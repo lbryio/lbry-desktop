@@ -1,5 +1,6 @@
 // @flow
-import analytics, { GA_DIMENSIONS } from 'analytics';
+import analytics from 'analytics';
+import { GA_DIMENSIONS } from 'analytics/events';
 import * as ACTIONS from 'constants/action_types';
 
 export function createAnalyticsMiddleware() {
@@ -23,7 +24,7 @@ function handleAnalyticsForAction(action: { type: string, data: any }) {
     case ACTIONS.SUPPORT_TRANSACTION_COMPLETED:
       {
         const { amount, type } = action.data;
-        analytics.reportEvent('spend_virtual_currency', {
+        analytics.event.report('spend_virtual_currency', {
           // https://developers.google.com/analytics/devguides/collection/ga4/reference/events#spend_virtual_currency
           value: amount,
           virtual_currency_name: 'lbc',
@@ -33,13 +34,13 @@ function handleAnalyticsForAction(action: { type: string, data: any }) {
       break;
 
     case ACTIONS.COMMENT_CREATE_COMPLETED:
-      analytics.reportEvent('comments', {
+      analytics.event.report('comments', {
         [GA_DIMENSIONS.ACTION]: 'create',
       });
       break;
 
     case ACTIONS.COMMENT_CREATE_FAILED:
-      analytics.reportEvent('comments', {
+      analytics.event.report('comments', {
         [GA_DIMENSIONS.ACTION]: 'create_fail',
       });
       break;
@@ -47,7 +48,7 @@ function handleAnalyticsForAction(action: { type: string, data: any }) {
     case ACTIONS.PUBLISH_SUCCESS:
       {
         const { type } = action.data;
-        analytics.reportEvent('publish', {
+        analytics.event.report('publish', {
           [GA_DIMENSIONS.ACTION]: 'publish_success',
           [GA_DIMENSIONS.TYPE]: type,
         });
@@ -55,17 +56,17 @@ function handleAnalyticsForAction(action: { type: string, data: any }) {
       break;
 
     case ACTIONS.PUBLISH_FAIL:
-      analytics.reportEvent('publish', {
+      analytics.event.report('publish', {
         [GA_DIMENSIONS.ACTION]: 'publish_fail',
       });
       break;
 
     case ACTIONS.AUTHENTICATION_STARTED:
-      analytics.eventStarted('diag_authentication', Date.now());
+      analytics.event.eventStarted('diag_authentication', Date.now());
       break;
 
     case ACTIONS.AUTHENTICATION_SUCCESS:
-      analytics.eventCompleted('diag_authentication', Date.now());
+      analytics.event.eventCompleted('diag_authentication', Date.now());
       break;
 
     default:

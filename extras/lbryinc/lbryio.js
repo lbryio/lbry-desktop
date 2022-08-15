@@ -241,7 +241,7 @@ function sendCallAnalytics(resource, action, params) {
   switch (resource) {
     case 'customer':
       if (action === 'tip') {
-        analytics.reportEvent('spend_virtual_currency', {
+        analytics.event.report('spend_virtual_currency', {
           // https://developers.google.com/analytics/devguides/collection/ga4/reference/events#spend_virtual_currency
           value: params.amount,
           virtual_currency_name: params.currency.toLowerCase(),

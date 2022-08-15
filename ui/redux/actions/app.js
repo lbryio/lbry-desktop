@@ -394,7 +394,7 @@ export function doDaemonReady() {
             status.wallet.connected_features.trending_algorithm;
 
           if (trendingAlgorithm) {
-            analytics.trendingAlgorithmEvent(trendingAlgorithm);
+            analytics.event.trendingAlgorithm(trendingAlgorithm);
           }
         },
         undefined
@@ -547,7 +547,7 @@ export function doAnaltyicsPurchaseEvent(fileInfo) {
     let purchasePrice = fileInfo.purchase_receipt && fileInfo.purchase_receipt.amount;
     if (purchasePrice) {
       const purchaseInt = Number(Number(purchasePrice).toFixed(0));
-      analytics.purchaseEvent(purchaseInt);
+      analytics.event.purchase(purchaseInt);
     }
   };
 }

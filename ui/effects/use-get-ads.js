@@ -21,7 +21,7 @@ export function useGetAds(approvedVideo: boolean, adsEnabled: boolean): [?string
       return;
     }
 
-    analytics.adsFetchedEvent();
+    analytics.event.adsFetched();
     const encodedHref = encodeURI(window.location.href);
     const url = `${PRE_ROLL_ADS_PROVIDER}${encodedHref}`;
     // Used for testing on local dev

@@ -220,7 +220,7 @@ function DiscoverPage(props: Props) {
     if (tag) {
       doToggleTagFollowDesktop(tag);
       const nowFollowing = !isFollowing;
-      analytics.tagFollowEvent(tag, nowFollowing, 'tag-page');
+      analytics.event.tagFollow(tag, nowFollowing, 'tag-page');
     }
   }
 

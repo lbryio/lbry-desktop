@@ -62,7 +62,7 @@ const VideoJsEvents = ({
     // how long until the video starts
     let timeToStartVideo = data.secondsToLoad;
 
-    analytics.playerVideoStartedEvent(embedded);
+    analytics.event.playerVideoStarted(embedded);
 
     // don't send this data on livestream
     if (!isLivestreamClaim) {

@@ -49,7 +49,7 @@ class FileRender extends React.PureComponent<Props> {
   componentDidMount() {
     const { renderMode, embedded } = this.props;
     window.addEventListener('keydown', this.escapeListener, true);
-    analytics.playerLoadedEvent(renderMode, embedded);
+    analytics.event.playerLoaded(renderMode, embedded);
   }
 
   componentWillUnmount() {

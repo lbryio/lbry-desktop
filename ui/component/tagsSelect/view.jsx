@@ -66,7 +66,7 @@ export default function TagsSelect(props: Props) {
 
       const wasFollowing = followedTags.map((tag) => tag.name).includes(tag.name);
       const nowFollowing = !wasFollowing;
-      analytics.tagFollowEvent(tag.name, nowFollowing, 'tag-select');
+      analytics.event.tagFollow(tag.name, nowFollowing, 'tag-select');
     }
   }
 

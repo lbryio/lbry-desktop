@@ -148,7 +148,7 @@ export default function TagsSearch(props: Props) {
     } else {
       const wasFollowing = followedTags.map((t) => t.name).includes(tag);
       doToggleTagFollowDesktop(tag);
-      analytics.tagFollowEvent(tag, !wasFollowing);
+      analytics.event.tagFollow(tag, !wasFollowing);
     }
   }
   function handleUtilityTagCheckbox(tag: string) {

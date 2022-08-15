@@ -6,7 +6,8 @@ import { BrowserNotificationErrorModal } from '$web/component/browserNotificatio
 // @todo: Once we are on Redux 7 we should have proper hooks we can use here for store access.
 import { store } from '$ui/store';
 import { selectUser } from 'redux/selectors/user';
-import analytics, { GA_DIMENSIONS } from 'analytics';
+import analytics from 'analytics';
+import { GA_DIMENSIONS } from 'analytics/events';
 
 export default () => {
   const [pushPermission, setPushPermission] = useState(window.Notification?.permission);
@@ -48,16 +49,16 @@ export default () => {
       }
     } catch {
       setEncounteredError(true);
-      analytics.reportEvent('browser_notification', { [GA_DIMENSIONS.ACTION]: 'subscribe_failed' });
+      analytics.event.report('browser_notification', { [GA_DIMENSIONS.ACTION]: 'subscribe_failed' });
     }
-    analytics.reportEvent('browser_notification', { [GA_DIMENSIONS.ACTION]: 'subscribed' });
+    analytics.event.report('browser_notification', { [GA_DIMENSIONS.ACTION]: 'subscribed' });
   };
 
   const unsubscribe = async () => {
     if (!user) return;
     if (await pushNotifications.unsubscribe(user.id)) {
       setSubscribed(false);
-      analytics.reportEvent('browser_notification', { [GA_DIMENSIONS.ACTION]: 'unsubscribed' });
+      analytics.event.report('browser_notification', { [GA_DIMENSIONS.ACTION]: 'unsubscribed' });
     }
   };
 

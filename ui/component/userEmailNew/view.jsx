@@ -63,7 +63,7 @@ function UserEmailNew(props: Props) {
     setShareDiagnosticData(true);
     // @endif
     doSignUp(email, password === '' ? undefined : password).then(() => {
-      analytics.emailProvidedEvent();
+      analytics.event.emailProvided();
     });
   }
 

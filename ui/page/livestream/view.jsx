@@ -74,7 +74,7 @@ export default function LivestreamPage(props: Props) {
 
   React.useEffect(() => {
     // TODO: This should not be needed once we unify the livestream player (?)
-    analytics.playerLoadedEvent('livestream', false);
+    analytics.event.playerLoaded('livestream', false);
   }, []);
 
   const { signing_channel: channelClaim } = claim || {};

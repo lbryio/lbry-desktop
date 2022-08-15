@@ -84,7 +84,7 @@ Lbry.setOverride(
 );
 // @endif
 
-analytics.initAppStartTime(Date.now());
+analytics.event.initAppStartTime(Date.now());
 
 // @if TARGET='app'
 const { autoUpdater } = remote.require('electron-updater');
@@ -148,7 +148,7 @@ ipcRenderer.on('open-uri-requested', (event, url, newSession) => {
 
   if (isURIValid(url)) {
     const formattedUrl = formatLbryUrlForWeb(url);
-    analytics.openUrlEvent(formattedUrl);
+    analytics.event.openUrl(formattedUrl);
     return app.store.dispatch(push(formattedUrl));
   }
 
@@ -259,7 +259,7 @@ function AppWrapper() {
         app.store.dispatch(doMinVersionSubscribe());
       }, 5000);
 
-      analytics.startupEvent(Date.now());
+      analytics.event.startup(Date.now());
 
       return () => {
         clearTimeout(timer);
