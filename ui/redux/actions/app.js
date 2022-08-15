@@ -528,7 +528,7 @@ export function doAnalyticsBuffer(uri, bufferData) {
     const userId = user && user.id.toString();
     // if there's a logged in user, send buffer event data to watchman
     if (userId) {
-      analytics.videoBufferEvent(claim, {
+      analytics.video.videoBufferEvent(claim, {
         isLivestream,
         timeAtBuffer,
         bufferDuration,

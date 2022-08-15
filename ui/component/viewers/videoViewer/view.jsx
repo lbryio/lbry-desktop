@@ -330,7 +330,7 @@ function VideoViewer(props: Props) {
   React.useEffect(() => {
     if (!ended) return;
 
-    analytics.videoIsPlaying(false);
+    analytics.video.videoIsPlaying(false);
 
     if (adUrl) {
       setAdUrl(null);
@@ -375,18 +375,18 @@ function VideoViewer(props: Props) {
     setShowAutoplayCountdown(false);
     setIsEndedEmbed(false);
     setDoNavigate(false);
-    analytics.videoIsPlaying(true, player);
+    analytics.video.videoIsPlaying(true, player);
   }
 
   function onPause(event, player) {
     setIsPlaying(false);
     handlePosition(player);
-    analytics.videoIsPlaying(false, player);
+    analytics.video.videoIsPlaying(false, player);
   }
 
   function onPlayerClosed(event, player) {
     handlePosition(player);
-    analytics.videoIsPlaying(false, player);
+    analytics.video.videoIsPlaying(false, player);
   }
 
   function handlePosition(player) {

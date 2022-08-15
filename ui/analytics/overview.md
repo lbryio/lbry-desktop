@@ -1,0 +1,3 @@
+- Submodules for the global `ui/analytics.js` object.
+- Ensure submodules do not import the primary interface directly to avoid circular-dependencies.
+  - Pass states and values through the interface (e.g. `setState`). 

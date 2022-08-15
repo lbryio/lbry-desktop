@@ -75,7 +75,7 @@ const VideoJsEvents = ({
       }
 
       // populates data for watchman, sends prom and matomo event
-      analytics.videoStartEvent(
+      analytics.video.videoStartEvent(
         claimId,
         timeToStartVideo,
         playerPoweredBy,
@@ -87,7 +87,7 @@ const VideoJsEvents = ({
       );
     } else {
       // populates data for watchman, sends prom and matomo event
-      analytics.videoStartEvent(
+      analytics.video.videoStartEvent(
         claimId,
         0,
         playerPoweredBy,
