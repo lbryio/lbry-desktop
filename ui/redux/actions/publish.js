@@ -230,7 +230,7 @@ export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispat
     const state = getState();
     const myClaims = selectMyClaims(state);
     const pendingClaim = successResponse.outputs[0];
-    analytics.apiLogPublish(pendingClaim);
+    analytics.apiLog.publish(pendingClaim);
     const { permanent_url: url } = pendingClaim;
     const actions = [];
 
@@ -325,7 +325,7 @@ export const doPublishResume = (publishPayload: any) => (dispatch: Dispatch, get
     const pendingClaim = successResponse.outputs[0];
     const { permanent_url: url } = pendingClaim;
 
-    analytics.apiLogPublish(pendingClaim);
+    analytics.apiLog.publish(pendingClaim);
 
     // We have to fake a temp claim until the new pending one is returned by claim_list_mine
     // We can't rely on claim_list_mine because there might be some delay before the new claims are returned

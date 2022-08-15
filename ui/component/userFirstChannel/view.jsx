@@ -107,7 +107,7 @@ function UserFirstChannel(props: Props) {
       languages: primaryLanguage,
     }).then((channelClaim) => {
       if (channelClaim) {
-        analytics.apiLogPublish(channelClaim);
+        analytics.apiLog.publish(channelClaim);
       }
     });
   }

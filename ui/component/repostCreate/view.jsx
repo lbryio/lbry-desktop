@@ -265,7 +265,7 @@ function RepostCreate(props: Props) {
         claim_id: repostClaimId,
       }).then((repostClaim: StreamClaim) => {
         doCheckPendingClaims();
-        analytics.apiLogPublish(repostClaim);
+        analytics.apiLog.publish(repostClaim);
         doToast({
           message: __('Woohoo! Successfully reposted this claim.'),
           linkText: __('Uploads'),

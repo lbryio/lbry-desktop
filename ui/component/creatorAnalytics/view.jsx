@@ -49,7 +49,7 @@ export default function CreatorAnalytics(props: Props) {
           if (error.response.status === 401) {
             setError(UNAUTHENTICATED_ERROR);
             const channelToSend = JSON.parse(channelForEffect);
-            analytics.apiLogPublish(channelToSend);
+            analytics.apiLog.publish(channelToSend);
           } else {
             setError(GENERIC_ERROR);
           }

@@ -39,7 +39,7 @@ function InviteNew(props: Props) {
       // TODO: keep track of this in an array?
       const matchingChannel = channels && channels.find((ch) => ch.name === code);
       if (matchingChannel) {
-        analytics.apiLogPublish(matchingChannel);
+        analytics.apiLog.publish(matchingChannel);
       }
     },
     [setReferralSource]

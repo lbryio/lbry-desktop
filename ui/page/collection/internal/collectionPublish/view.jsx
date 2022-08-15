@@ -111,7 +111,7 @@ function CollectionForm(props: Props) {
       doCollectionPublishUpdate(finalParams).then((pendingClaim) => {
         if (pendingClaim) {
           const claimId = pendingClaim.claim_id;
-          analytics.apiLogPublish(pendingClaim);
+          analytics.apiLog.publish(pendingClaim);
           onDone(claimId);
         }
       });
@@ -120,7 +120,7 @@ function CollectionForm(props: Props) {
       doCollectionPublish(finalParams, collectionId).then((pendingClaim) => {
         if (pendingClaim) {
           const claimId = pendingClaim.claim_id;
-          analytics.apiLogPublish(pendingClaim);
+          analytics.apiLog.publish(pendingClaim);
           onDone(claimId);
         }
       });

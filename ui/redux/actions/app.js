@@ -506,7 +506,7 @@ export function doAnalyticsView(uri, timeToStart) {
       return Promise.resolve();
     }
 
-    return analytics.apiLogView(uri, outpoint, claimId, timeToStart);
+    return analytics.apiLog.view(uri, outpoint, claimId, timeToStart);
   };
 }
 

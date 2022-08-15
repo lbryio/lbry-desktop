@@ -19,7 +19,7 @@ const perform = (dispatch, ownProps) => ({
   navigateToSearchPage: (query) => {
     let encodedQuery = encodeURIComponent(query);
     ownProps.history.push({ pathname: `/$/search`, search: `?q=${encodedQuery}` });
-    analytics.apiLogSearch();
+    analytics.apiLog.search();
   },
   doShowSnackBar: (message) => dispatch(doToast({ isError: true, message })),
   doCloseMobileSearch: () => dispatch(doHideModal()),

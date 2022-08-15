@@ -232,7 +232,7 @@ function ChannelForm(props: Props) {
     } else {
       createChannel(params).then((success) => {
         if (success) {
-          analytics.apiLogPublish(success);
+          analytics.apiLog.publish(success);
           onDone();
         }
       });
