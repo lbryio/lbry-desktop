@@ -65,6 +65,8 @@ type Props = {
   setQuickReply: (any) => void,
   toast: (string) => void,
   customCommentServers: Array<CommentServerDetails>,
+  setCommentServer: (string) => void,
+  commentServer: string,
 };
 
 export function CommentCreate(props: Props) {
@@ -90,6 +92,8 @@ export function CommentCreate(props: Props) {
     sendTip,
     setQuickReply,
     customCommentServers,
+    setCommentServer,
+    commentServer,
   } = props;
 
   const defaultServer = { name: COMMENT_SERVER_NAME, url: COMMENT_SERVER_API };
@@ -102,7 +106,6 @@ export function CommentCreate(props: Props) {
     location: { pathname },
   } = useHistory();
 
-  const [commentServer, setCommentServer] = React.useState(defaultServer.url);
   const [isSubmitting, setSubmitting] = React.useState(false);
   const [commentFailure, setCommentFailure] = React.useState(false);
   const [successTip, setSuccessTip] = React.useState({ txid: undefined, tipAmount: undefined });
