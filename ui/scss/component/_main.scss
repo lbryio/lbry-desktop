@@ -573,16 +573,6 @@ body {
 
   @media (max-width: $breakpoint-medium) {
     padding: 0 var(--spacing-s);
-
-    .card__main-actions {
-      .claim-preview__wrapper {
-        a {
-          .button__content {
-            // align-items: unset;
-          }
-        }
-      }
-    }
   }
 
   @media (max-width: $breakpoint-small) {

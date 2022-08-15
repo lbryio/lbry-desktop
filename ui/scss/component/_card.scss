@@ -249,9 +249,7 @@
 
 .main--theater-mode {
   .card-stack--spacing-m {
-    section {
-      padding-right: var(--spacing-m);
-    }
+    padding-right: var(--spacing-m);
   }
 }
 
@@ -787,6 +785,7 @@
     }
   }
   .card__header--between {
+    padding-bottom: var(--spacing-s);
     .card__title {
       overflow: hidden;
       text-overflow: ellipsis;
@@ -795,6 +794,7 @@
 
     .card__title-section {
       display: unset !important;
+      padding: unset;
       max-width: 80%;
     }
 
@@ -809,8 +809,11 @@
     max-height: 100%;
     overflow-y: hidden;
     display: flex;
+    border-radius: var(--border-radius);
+    /*
     border-bottom-left-radius: var(--border-radius);
     border-bottom-right-radius: var(--border-radius);
+    */
 
     .claim-list {
       max-height: 100%;
@@ -820,12 +823,16 @@
       .ul--no-style {
         max-height: 100%;
         overflow-y: scroll !important;
+        &::-webkit-scrollbar {
+          background-color: var(--color-border) !important;
+        }
       }
     }
   }
 
   .claim-preview__wrapper {
     padding: var(--spacing-xxs) var(--spacing-s) !important;
+    border-radius: unset;
 
     .claim-preview--small {
       margin-left: 15px;
@@ -845,6 +852,7 @@
     grid-column-end: end;
     display: flex;
     justify-content: space-between;
+    width: 100%;
 
     @media (max-width: $breakpoint-small) {
       width: 100%;
