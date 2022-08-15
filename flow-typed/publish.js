@@ -1,7 +1,8 @@
 // @flow
 
 declare type UpdatePublishFormData = {
-  filePath?: string,
+  claim_id?: string,
+  filePath?: string,  
   contentIsFree?: boolean,
   fee?: {
     amount: string,

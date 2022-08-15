@@ -537,7 +537,10 @@ export const doUploadThumbnail = (
   }
 };
 
-export const doPrepareEdit = (claim: StreamClaim, uri: string, claimType: string) => (dispatch: Dispatch) => {
+export const doPrepareEdit = (claim: StreamClaim, uri: string, claimType: string) => (
+  dispatch: Dispatch,
+  getState: () => {}
+) => {
   const { name, amount, value = {} } = claim;
   const channelName = (claim && claim.signing_channel && claim.signing_channel.name) || null;
   const {
@@ -558,7 +561,10 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string, claimType: string
     tags,
   } = value;
 
+  const state = getState();
+  const myClaimForUri = selectMyClaimForUri(state);
   const publishData: UpdatePublishFormData = {
+    claim_id: myClaimForUri || {},
     name,
     bid: Number(amount),
     contentIsFree: fee.amount === '0',
