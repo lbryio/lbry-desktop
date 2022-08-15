@@ -563,8 +563,9 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string, claimType: string
 
   const state = getState();
   const myClaimForUri = selectMyClaimForUri(state);
+  const { claim_id } = myClaimForUri || {};
   const publishData: UpdatePublishFormData = {
-    claim_id: myClaimForUri || {},
+    claim_id: claim_id,
     name,
     bid: Number(amount),
     contentIsFree: fee.amount === '0',
