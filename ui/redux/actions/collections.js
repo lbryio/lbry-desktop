@@ -481,7 +481,7 @@ export const doCollectionEdit = (
         ...(type ? { type } : {}),
         ...(params.name ? { name: params.name } : {}),
         ...(params.description ? { description: params.description } : {}),
-        ...(params.thumbnail ? { description: params.thumbnail } : {}),
+        ...(params.thumbnail ? { thumbnail: params.thumbnail } : {}),
       },
     },
   });
