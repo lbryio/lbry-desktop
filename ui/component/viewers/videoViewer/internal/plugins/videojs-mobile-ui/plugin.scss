@@ -16,7 +16,7 @@
   .vjs-touch-overlay {
     max-height: 100% !important;
   }
-  div {
+  div:not(.vjs-loading-spinner) {
     border-radius: unset;
   }
 }
