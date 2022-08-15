@@ -82,6 +82,10 @@
       opacity: 0;
     }
 
+    .file-viewer__overlay {
+      padding: unset;
+    }
+
     .content__wrapper--floating {
       width: 100%;
       height: 100%;
