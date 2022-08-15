@@ -6,7 +6,6 @@ import * as REACTION_TYPES from 'constants/reactions';
 import * as ICONS from 'constants/icons';
 import RatioBar from 'component/ratioBar';
 import { formatNumberWithCommas } from 'util/number';
-import NudgeFloating from 'component/nudgeFloating';
 import FileActionButton from 'component/common/file-action-button';
 
 const LIVE_REACTION_FETCH_MS = 1000 * 45;
@@ -15,8 +14,6 @@ type Props = {
   uri: string,
   // redux
   claimId?: string,
-  channelTitle?: string,
-  isCollection?: boolean,
   likeCount: number,
   dislikeCount: number,
   myReaction: ?string,
@@ -30,8 +27,6 @@ export default function FileReactions(props: Props) {
   const {
     uri,
     claimId,
-    channelTitle,
-    isCollection,
     myReaction,
     likeCount,
     dislikeCount,
@@ -63,20 +58,11 @@ export default function FileReactions(props: Props) {
   }, [claimId, doFetchReactions, isLivestreamClaim]);
 
   return (
-    <>
-      {channelTitle && !isCollection && (
-        <NudgeFloating
-          name="nudge:support-acknowledge"
-          text={__('Let %channel% know you enjoyed this!', { channel: channelTitle })}
-        />
-      )}
-
-      <div className="ratio-wrapper">
-        <LikeButton myReaction={myReaction} reactionCount={likeCount} onClick={() => doReactionLike(uri)} />
-        <DislikeButton myReaction={myReaction} reactionCount={dislikeCount} onClick={() => doReactionDislike(uri)} />
-        <RatioBar likeCount={likeCount} dislikeCount={dislikeCount} />
-      </div>
-    </>
+    <div className="ratio-wrapper">
+      <LikeButton myReaction={myReaction} reactionCount={likeCount} onClick={() => doReactionLike(uri)} />
+      <DislikeButton myReaction={myReaction} reactionCount={dislikeCount} onClick={() => doReactionDislike(uri)} />
+      <RatioBar likeCount={likeCount} dislikeCount={dislikeCount} />
+    </div>
   );
 }
 
