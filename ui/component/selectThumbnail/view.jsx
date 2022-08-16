@@ -160,9 +160,9 @@ function SelectThumbnail(props: Props) {
                     label={__('Thumbnail')}
                     placeholder={__('Choose an enticing thumbnail')}
                     accept={accept}
-                    onFileChosen={(file) =>
+                    onFileChosen={(fileWithPath) =>
                       openModal(MODALS.CONFIRM_THUMBNAIL_UPLOAD, {
-                        file,
+                        file: fileWithPath,
                         cb: (url) => updateThumbnailParams && updateThumbnailParams({ thumbnail_url: url }),
                       })
                     }

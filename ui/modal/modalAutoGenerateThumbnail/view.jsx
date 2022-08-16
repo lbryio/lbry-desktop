@@ -4,7 +4,7 @@ import { Modal } from 'modal/modal';
 import { formatFileSystemPath } from 'util/url';
 
 type Props = {
-  upload: WebFile => void,
+  upload: (File) => void,
   filePath: string,
   closeModal: () => void,
   showToast: ({}) => void,

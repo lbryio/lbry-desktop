@@ -11,10 +11,10 @@ import Icon from 'component/common/icon';
 
 type Props = {
   modal: { id: string, modalProps: {} },
-  filePath: string | WebFile,
+  filePath: string | File,
   clearPublish: () => void,
   updatePublishForm: ({}) => void,
-  openModal: (id: string, { files: Array<WebFile> }) => void,
+  openModal: (id: string, { files: Array<File> }) => void,
   // React router
   history: {
     entities: {}[],
@@ -37,7 +37,7 @@ function FileDrop(props: Props) {
   const { drag, dropData } = useDragDrop();
   const [files, setFiles] = React.useState([]);
   const [error, setError] = React.useState(false);
-  const [target, setTarget] = React.useState<?WebFile>(null);
+  const [target, setTarget] = React.useState<?File>(null);
   const hideTimer = React.useRef(null);
   const targetTimer = React.useRef(null);
   const navigationTimer = React.useRef(null);

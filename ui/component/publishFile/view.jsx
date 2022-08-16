@@ -19,7 +19,7 @@ type Props = {
   mode: ?string,
   name: ?string,
   title: ?string,
-  filePath: string | WebFile,
+  filePath: string | File,
   fileMimeType: ?string,
   isStillEditing: boolean,
   balance: number,
@@ -97,8 +97,8 @@ function PublishFile(props: Props) {
       updateFileInfo(0, 0, false);
     } else if (typeof filePath !== 'string') {
       // Update currentFile file
-      if (filePath.name !== currentFile && filePath.path !== currentFile) {
-        handleFileChange(filePath);
+      if (filePath.name !== currentFile) {
+        handleFileChange({ file: filePath, path: filePath.name });
       }
     }
   }, [filePath, currentFile, handleFileChange, updateFileInfo]);
@@ -209,11 +209,11 @@ function PublishFile(props: Props) {
     }
   }
 
-  function handleFileChange(file: WebFile, clearName = true) {
+  function handleFileChange(fileWithPath: FileWithPath, clearName = true) {
     window.URL = window.URL || window.webkitURL;
 
     // select file, start to select a new one, then cancel
-    if (!file) {
+    if (!fileWithPath) {
       if (isStillEditing || !clearName) {
         updatePublishForm({ filePath: '' });
       } else {
@@ -223,6 +223,7 @@ function PublishFile(props: Props) {
     }
 
     // if video, extract duration so we can warn about bitrateif (typeof file !== 'string') {
+    const file = fileWithPath.file;
     const contentType = file.type && file.type.split('/');
     const isVideo = contentType && contentType[0] === 'video';
     const isMp4 = contentType && contentType[1] === 'mp4';
@@ -270,10 +271,10 @@ function PublishFile(props: Props) {
       setPublishMode(PUBLISH_MODES.FILE);
     }
 
-    const publishFormParams: { filePath: string | WebFile, name?: string, optimize?: boolean } = {
+    const publishFormParams: { filePath: string | File, name?: string, optimize?: boolean } = {
       // if electron, we'll set filePath to the path string because SDK is handling publishing.
       // File.path will be undefined from web due to browser security, so it will default to the File Object.
-      filePath: file.path || file,
+      filePath: fileWithPath.path || file,
     };
     // Strip off extention and replace invalid characters
     let fileName = name || (file.name && file.name.substring(0, file.name.lastIndexOf('.'))) || '';
@@ -282,8 +283,7 @@ function PublishFile(props: Props) {
       publishFormParams.name = parseName(fileName);
     }
 
-    // File path is not supported on web for security reasons so we use the name instead.
-    setCurrentFile(file.path || file.name);
+    setCurrentFile(fileWithPath.path);
     updatePublishForm(publishFormParams);
   }
 

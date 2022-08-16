@@ -8,7 +8,7 @@ import { FormField } from 'component/common/form';
 type Props = {
   type: string,
   currentPath?: ?string,
-  onFileChosen: (WebFile) => void,
+  onFileChosen: (FileWithPath) => void,
   label?: string,
   placeholder?: string,
   accept?: string,
@@ -43,7 +43,7 @@ class FileSelector extends React.PureComponent<Props> {
     const file = files[0];
 
     if (this.props.onFileChosen) {
-      this.props.onFileChosen(file);
+      this.props.onFileChosen({ file, path: file.path || file.name });
     }
     this.fileInput.current.value = null; // clear the file input
   };
@@ -86,14 +86,7 @@ class FileSelector extends React.PureComponent<Props> {
         const file = new File([result.buffer], result.name, {
           type: result.mime,
         });
-        // "path" is a read only property so we have to use this
-        // hack to overcome the limitation.
-        // $FlowFixMe
-        Object.defineProperty(file, 'path', {
-          value: result.path,
-          writable: false,
-        });
-        this.props.onFileChosen(file);
+        this.props.onFileChosen({ file, path: result.path });
       });
   };
 

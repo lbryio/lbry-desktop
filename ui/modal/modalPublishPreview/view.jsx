@@ -15,7 +15,7 @@ import Icon from 'component/common/icon';
 import { NO_FILE } from 'redux/actions/publish';
 
 type Props = {
-  filePath: string | WebFile,
+  filePath: string | File,
   isMarkdownPost: boolean,
   optimize: boolean,
   title: ?string,
@@ -104,7 +104,7 @@ const ModalPublishPreview = (props: Props) => {
     // @endif
   }
 
-  function getFilePathName(filePath: string | WebFile) {
+  function getFilePathName(filePath: string | File) {
     if (!filePath) {
       return NO_FILE;
     }

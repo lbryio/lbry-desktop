@@ -9,12 +9,12 @@ import Button from 'component/button';
 import FileList from 'component/common/file-list';
 
 type Props = {
-  files: Array<WebFile>,
+  files: Array<File>,
   hideModal: () => void,
   updatePublishForm: ({}) => void,
   history: {
     location: { pathname: string },
-    push: string => void,
+    push: (string) => void,
   },
 };
 
@@ -43,7 +43,7 @@ const ModalFileSelection = (props: Props) => {
     navigateToPublish();
   }
 
-  const handleFileChange = (file?: WebFile) => {
+  const handleFileChange = (file?: File) => {
     // $FlowFixMe
     setSelectedFile(file);
   };
