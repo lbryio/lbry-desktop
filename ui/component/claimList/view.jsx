@@ -400,7 +400,9 @@ export default function ClaimList(props: Props) {
                         Number(
                           playerTransform.substring(playerTransform.indexOf(', ') + 2, playerTransform.indexOf('px)'))
                         );
-                      playerTop -= playerElem.offsetHeight;
+                      if (playerElem && navigator.userAgent.toLowerCase().includes('firefox')) {
+                        playerTop -= playerElem.offsetHeight;
+                      }
 
                       const style = {
                         ...draggableProvided.draggableProps.style,
