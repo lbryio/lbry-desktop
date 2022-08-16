@@ -5,6 +5,7 @@ import { Lbryio } from 'lbryinc';
 import { parseURI } from 'util/lbryURI';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
+import * as STRIPE from 'constants/stripe';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import ChannelSelector from 'component/channelSelector';
@@ -106,6 +107,8 @@ export default function WalletSendTip(props: Props) {
   /** CONSTS **/
   const claimTypeText = getClaimTypeText();
   const isSupport = claimIsMine || activeTab === TAB_BOOST;
+
+  const { icon: fiatIconToUse, symbol: fiatSymbolToUse } = STRIPE.CURRENCY[preferredCurrency];
 
   // text for modal header
   const titleText = isSupport
@@ -236,9 +239,9 @@ export default function WalletSendTip(props: Props) {
       case TAB_BOOST:
         return titleText;
       case TAB_FIAT:
-        return __('Send a %amount% tip', { amount: `${fiatSymbolToUse}${displayAmount}` });
+        return __('Send a %amount% Tip', { amount: `${fiatSymbolToUse}${displayAmount}` });
       case TAB_LBC:
-        return __('Send a %amount% tip', { amount: `${displayAmount} LBC` });
+        return __('Send a %amount% Tip', { amount: `${displayAmount} LBC` });
       default:
         return titleText;
     }
@@ -260,13 +263,6 @@ export default function WalletSendTip(props: Props) {
   /** RENDER **/
 
   const tabButtonProps = { isOnConfirmationPage, activeTab, setActiveTab };
-
-  let fiatIconToUse = ICONS.FINANCE;
-  let fiatSymbolToUse = '$';
-  if (preferredCurrency === 'EUR') {
-    fiatIconToUse = ICONS.EURO;
-    fiatSymbolToUse = '€';
-  }
 
   return (
     <Form onSubmit={handleSubmit}>

@@ -4,9 +4,8 @@ import OdyseeMembership from './view';
 import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
 import { selectMyChannelClaims, selectClaimsByUri } from 'redux/selectors/claims';
 import { doFetchUserMemberships, doCheckUserOdyseeMemberships } from 'redux/actions/user';
-import { selectClientSetting } from 'redux/selectors/settings';
+import { selectPreferredCurrency } from 'redux/selectors/settings';
 import { selectUser, selectUserLocale } from 'redux/selectors/user';
-import * as SETTINGS from 'constants/settings';
 
 const select = (state) => {
   const activeChannelClaim = selectActiveChannelClaim(state);
@@ -18,7 +17,7 @@ const select = (state) => {
     incognito: selectIncognito(state),
     user: selectUser(state),
     locale: selectUserLocale(state),
-    preferredCurrency: selectClientSetting(state, SETTINGS.PREFERRED_CURRENCY),
+    preferredCurrency: selectPreferredCurrency(state),
   };
 };
 

@@ -1,62 +1,23 @@
 // @flow
 import React from 'react';
 import Button from 'component/button';
-import { Lbryio } from 'lbryinc';
 import moment from 'moment';
-import { getStripeEnvironment } from 'util/stripe';
-let stripeEnvironment = getStripeEnvironment();
+import * as STRIPE from 'constants/stripe';
 
 type Props = {
   accountDetails: any,
-  transactions: any,
+  transactions: StripeTransactions,
+  lastFour: ?any,
+  doGetCustomerStatus: () => void,
 };
 
 const WalletFiatPaymentHistory = (props: Props) => {
   // receive transactions from parent component
-  const { transactions: accountTransactions } = props;
+  const { transactions: accountTransactions, lastFour, doGetCustomerStatus } = props;
 
-  const [lastFour, setLastFour] = React.useState();
-
-  function getSymbol(transaction) {
-    if (transaction.currency === 'eur') {
-      return '€';
-    } else {
-      return '$';
-    }
-  }
-
-  function getCurrencyIso(transaction) {
-    if (transaction.currency === 'eur') {
-      return 'EUR';
-    } else {
-      return 'USD';
-    }
-  }
-
-  function getCustomerStatus() {
-    return Lbryio.call(
-      'customer',
-      'status',
-      {
-        environment: stripeEnvironment,
-      },
-      'post'
-    );
-  }
-
-  // TODO: this is actually incorrect, last4 should be populated based on the transaction not the current customer details
   React.useEffect(() => {
-    (async function () {
-      const customerStatusResponse = await getCustomerStatus();
-
-      const lastFour =
-        customerStatusResponse.PaymentMethods &&
-        customerStatusResponse.PaymentMethods.length &&
-        customerStatusResponse.PaymentMethods[0].card.last4;
-
-      setLastFour(lastFour);
-    })();
-  }, []);
+    doGetCustomerStatus();
+  }, [doGetCustomerStatus]);
 
   return (
     <>
@@ -105,8 +66,8 @@ const WalletFiatPaymentHistory = (props: Props) => {
                     </td>
                     {/* how much tipped */}
                     <td>
-                      {getSymbol(transaction)}
-                      {transaction.tipped_amount / 100} {getCurrencyIso(transaction)}
+                      {STRIPE.CURRENCY[transaction.currency.toUpperCase()].symbol}
+                      {transaction.tipped_amount / 100} {STRIPE.CURRENCIES[transaction.currency.toUpperCase()]}
                     </td>
                     {/* TODO: this is incorrect need it per transactions not per user */}
                     {/* last four of credit card  */}

@@ -14,9 +14,6 @@ import HelpLink from 'component/common/help-link';
 import FileExporter from 'component/common/file-exporter';
 import WalletFiatPaymentHistory from 'component/walletFiatPaymentHistory';
 import WalletFiatAccountHistory from 'component/walletFiatAccountHistory';
-import { Lbryio } from 'lbryinc';
-import { getStripeEnvironment } from 'util/stripe';
-let stripeEnvironment = getStripeEnvironment();
 
 // constants to be used in query params
 const QUERY_NAME_CURRENCY = 'currency';
@@ -39,6 +36,10 @@ type Props = {
   transactionsFile: string,
   updateTxoPageParams: (any) => void,
   toast: (string, boolean) => void,
+  accountPaymentHistory: ?any,
+  accountTransactions: ?any,
+  doCustomerListPaymentHistory: () => void,
+  doListAccountTransactions: () => void,
 };
 
 type Delta = {
@@ -57,89 +58,21 @@ function TxoList(props: Props) {
     history,
     isFetchingTransactions,
     transactionsFile,
+    accountPaymentHistory,
+    accountTransactions,
+    doCustomerListPaymentHistory,
+    doListAccountTransactions,
   } = props;
-
-  const [accountTransactionResponse, setAccountTransactionResponse] = React.useState([]);
-  const [customerTransactions, setCustomerTransactions] = React.useState([]);
-
-  function getPaymentHistory() {
-    return Lbryio.call(
-      'customer',
-      'list',
-      {
-        environment: stripeEnvironment,
-      },
-      'post'
-    );
-  }
-
-  function getAccountTransactions() {
-    return Lbryio.call(
-      'account',
-      'list',
-      {
-        environment: stripeEnvironment,
-      },
-      'post'
-    );
-  }
 
   // calculate account transactions section
   React.useEffect(() => {
-    (async function () {
-      try {
-        const accountTransactionResponse = await getAccountTransactions();
-
-        // reverse so order is from most recent to latest
-        if (accountTransactionResponse && accountTransactionResponse.length) {
-          accountTransactionResponse.reverse();
-        }
-
-        // TODO: remove this once pagination is implemented
-        if (
-          accountTransactionResponse &&
-          accountTransactionResponse.length &&
-          accountTransactionResponse.length > 100
-        ) {
-          accountTransactionResponse.length = 100;
-        }
-
-        setAccountTransactionResponse(accountTransactionResponse);
-      } catch (err) {
-        console.log(err);
-      }
-    })();
-  }, []);
+    doCustomerListPaymentHistory();
+  }, [doCustomerListPaymentHistory]);
 
   // populate customer payment data
   React.useEffect(() => {
-    (async function () {
-      try {
-        // get card payments customer has made
-        let customerTransactionResponse = await getPaymentHistory();
-        // console.log('amount of transactions');
-        // console.log(customerTransactionResponse.length);
-
-        // reverse so order is from most recent to latest
-        if (customerTransactionResponse && customerTransactionResponse.length) {
-          customerTransactionResponse.reverse();
-        }
-
-        // TODO: remove this once pagination is implemented
-        if (
-          customerTransactionResponse &&
-          customerTransactionResponse.length &&
-          customerTransactionResponse.length > 100
-        ) {
-          customerTransactionResponse.length = 100;
-        }
-
-        setCustomerTransactions(customerTransactionResponse);
-      } catch (err) {
-        console.log(err);
-      }
-    })();
-  }, []);
+    doListAccountTransactions();
+  }, [doListAccountTransactions]);
 
   const urlParams = new URLSearchParams(search);
   const page = urlParams.get(TXO.PAGE) || String(1);
@@ -501,8 +434,8 @@ function TxoList(props: Props) {
                 </div>
               </div>
               {/* listing of the transactions */}
-              {fiatType === 'incoming' && <WalletFiatAccountHistory transactions={accountTransactionResponse} />}
-              {fiatType === 'outgoing' && <WalletFiatPaymentHistory transactions={customerTransactions} />}
+              {fiatType === 'incoming' && <WalletFiatAccountHistory transactions={accountTransactions} />}
+              {fiatType === 'outgoing' && <WalletFiatPaymentHistory transactions={accountPaymentHistory} />}
               {/* TODO: have to finish pagination */}
               {/* <Paginate totalPages={Math.ceil(txoItemCount / Number(pageSize))} /> */}
             </div>

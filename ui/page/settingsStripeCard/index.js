@@ -1,26 +1,37 @@
 import { connect } from 'react-redux';
-import { doSetClientSetting } from 'redux/actions/settings';
-import { selectClientSetting } from 'redux/selectors/settings';
-import { selectUserVerifiedEmail, selectUserEmail, selectUserLocale } from 'redux/selectors/user';
+import { doSetPreferredCurrency } from 'redux/actions/settings';
+import { selectPreferredCurrency } from 'redux/selectors/settings';
+import {
+  selectCustomerStatusFetching,
+  selectCustomerStatus,
+  selectHasSavedCard,
+  selectCardDetails,
+  selectCustomerSetupResponse,
+} from 'redux/selectors/stripe';
+import { selectUserEmail } from 'redux/selectors/user';
 import { doOpenModal } from 'redux/actions/app';
+import { doGetCustomerStatus, doRemoveCardForPaymentMethodId, doCustomerSetup } from 'redux/actions/stripe';
 import { doToast } from 'redux/actions/notifications';
-import * as SETTINGS from 'constants/settings';
 
 import SettingsStripeCard from './view';
 
 const select = (state) => ({
-  isAuthenticated: Boolean(selectUserVerifiedEmail(state)),
   email: selectUserEmail(state),
-  preferredCurrency: selectClientSetting(state, SETTINGS.PREFERRED_CURRENCY),
-  locale: selectUserLocale(state),
+  preferredCurrency: selectPreferredCurrency(state),
+  customerStatusFetching: selectCustomerStatusFetching(state),
+  customerStatus: selectCustomerStatus(state),
+  hasSavedCard: selectHasSavedCard(state),
+  cardDetails: selectCardDetails(state),
+  customerSetupResponse: selectCustomerSetupResponse(state),
 });
 
-const perform = (dispatch) => ({
-  openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
-  doToast: (options) => dispatch(doToast(options)),
-  setPreferredCurrency: (value) => {
-    dispatch(doSetClientSetting(SETTINGS.PREFERRED_CURRENCY, value, true));
-  },
-});
+const perform = {
+  doGetCustomerStatus,
+  doOpenModal,
+  doToast,
+  doSetPreferredCurrency,
+  doRemoveCardForPaymentMethodId,
+  doCustomerSetup,
+};
 
 export default connect(select, perform)(SettingsStripeCard);

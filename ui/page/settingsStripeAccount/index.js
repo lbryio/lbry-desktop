@@ -1,12 +1,27 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
+import { doTipAccountStatus, doGetAndSetAccountLink } from 'redux/actions/stripe';
+import {
+  selectAccountStatus,
+  selectAccountUnpaidBalance,
+  selectAccountChargesEnabled,
+  selectAccountRequiresVerification,
+  selectAccountLinkResponse,
+} from 'redux/selectors/stripe';
+
 import StripeAccountConnection from './view';
-import { doToast } from 'redux/actions/notifications';
 
-const select = (state) => ({});
-
-const perform = (dispatch) => ({
-  doToast: (options) => dispatch(doToast(options)),
+const select = (state) => ({
+  accountStatus: selectAccountStatus(state),
+  unpaidBalance: selectAccountUnpaidBalance(state),
+  chargesEnabled: selectAccountChargesEnabled(state),
+  accountRequiresVerification: selectAccountRequiresVerification(state),
+  accountLinkResponse: selectAccountLinkResponse(state),
 });
+
+const perform = {
+  doTipAccountStatus,
+  doGetAndSetAccountLink,
+};
 
 export default withRouter(connect(select, perform)(StripeAccountConnection));

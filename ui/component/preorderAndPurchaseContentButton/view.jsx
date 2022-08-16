@@ -2,7 +2,7 @@
 import * as React from 'react';
 import * as MODALS from 'constants/modal_types';
 import * as PAGES from 'constants/pages';
-import * as ICONS from 'constants/icons';
+import * as STRIPE from 'constants/stripe';
 import Button from 'component/button';
 import { Lbryio } from 'lbryinc';
 import { getStripeEnvironment } from 'util/stripe';
@@ -133,12 +133,7 @@ export default function PreorderAndPurchaseButton(props: Props) {
       .catch(function (err) {});
   }, [setHasSavedCard]);
 
-  let fiatIconToUse = ICONS.FINANCE;
-  let fiatSymbol = '$';
-  if (preferredCurrency === 'EUR') {
-    fiatIconToUse = ICONS.EURO;
-    fiatSymbol = '€';
-  }
+  const { icon: fiatIconToUse, symbol: fiatSymbol } = STRIPE.CURRENCY[preferredCurrency];
 
   let tags = {
     rentalTag,

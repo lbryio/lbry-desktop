@@ -1,6 +1,7 @@
 // @flow
 import { Form } from 'component/common/form';
 import * as PAGES from 'constants/pages';
+import * as STRIPE from 'constants/stripe';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
@@ -123,7 +124,7 @@ export default function PreorderAndPurchaseContentCard(props: Props) {
   const STR = STRINGS[transactionType];
   const RENT_STRINGS = STRINGS['rental'];
 
-  const fiatSymbol = preferredCurrency === 'EUR' ? '€' : '$';
+  const fiatSymbol = STRIPE.CURRENCY[preferredCurrency].symbol;
 
   const AddCardButton = (
     <I18nMessage

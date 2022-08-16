@@ -2,10 +2,9 @@ import { connect } from 'react-redux';
 import { selectClaimForUri, selectPreorderTagForUri } from 'redux/selectors/claims';
 import { doHideModal } from 'redux/actions/app';
 import { preOrderPurchase } from 'redux/actions/wallet';
-import { selectClientSetting } from 'redux/selectors/settings';
+import { selectPreferredCurrency } from 'redux/selectors/settings';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { withRouter } from 'react-router';
-import * as SETTINGS from 'constants/settings';
 import { getChannelIdFromClaim, getChannelNameFromClaim } from 'util/claim';
 import PreorderAndPurchaseContent from './view';
 
@@ -29,7 +28,7 @@ const select = (state, props) => {
     claimType,
     channelClaimId,
     tipChannelName,
-    preferredCurrency: selectClientSetting(state, SETTINGS.PREFERRED_CURRENCY),
+    preferredCurrency: selectPreferredCurrency(state),
     preorderTag: selectPreorderTagForUri(state, props.uri),
   };
 };

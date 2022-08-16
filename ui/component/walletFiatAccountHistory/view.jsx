@@ -2,10 +2,11 @@
 import React from 'react';
 import Button from 'component/button';
 import moment from 'moment';
+import * as STRIPE from 'constants/stripe';
 
 type Props = {
   accountDetails: any,
-  transactions: any,
+  transactions: StripeTransactions,
 };
 
 const WalletFiatAccountHistory = (props: Props) => {
@@ -19,22 +20,6 @@ const WalletFiatAccountHistory = (props: Props) => {
   // if (accountTransactions && accountTransactions.length > 10) {
   //   accountTransactions.length = 10;
   // }
-
-  function getSymbol(transaction) {
-    if (transaction.currency === 'eur') {
-      return '€';
-    } else {
-      return '$';
-    }
-  }
-
-  function getCurrencyIso(transaction) {
-    if (transaction.currency === 'eur') {
-      return 'EUR';
-    } else {
-      return 'USD';
-    }
-  }
 
   return (
     <div className="table__wrapper">
@@ -76,19 +61,19 @@ const WalletFiatAccountHistory = (props: Props) => {
                   />
                 </td>
                 <td>
-                  {getSymbol(transaction)}
-                  {transaction.tipped_amount / 100} {getCurrencyIso(transaction)}
+                  {STRIPE.CURRENCY[transaction.currency.toUpperCase()].symbol}
+                  {transaction.tipped_amount / 100} {STRIPE.CURRENCIES[transaction.currency.toUpperCase()]}
                 </td>
                 <td>
-                  {getSymbol(transaction)}
+                  {STRIPE.CURRENCY[transaction.currency.toUpperCase()].symbol}
                   {transaction.transaction_fee / 100}
                 </td>
                 <td>
-                  {getSymbol(transaction)}
+                  {STRIPE.CURRENCY[transaction.currency.toUpperCase()].symbol}
                   {transaction.application_fee / 100}
                 </td>
                 <td>
-                  {getSymbol(transaction)}
+                  {STRIPE.CURRENCY[transaction.currency.toUpperCase()].symbol}
                   {transaction.received_amount / 100}
                 </td>
               </tr>

@@ -12,6 +12,7 @@ import * as ICONS from 'constants/icons';
 import * as KEYCODES from 'constants/keycodes';
 import * as PAGES from 'constants/pages';
 import * as MODALS from 'constants/modal_types';
+import * as STRIPE from 'constants/stripe';
 import Button from 'component/button';
 import classnames from 'classnames';
 import CommentSelectors, { SELECTOR_TABS } from './comment-selectors';
@@ -54,6 +55,7 @@ type Props = {
   supportDisabled: boolean,
   uri: string,
   disableInput?: boolean,
+  canReceiveFiatTips: ?boolean,
   onSlimInputClose?: () => void,
   setQuickReply: (any) => void,
   onCancelReplying?: () => void,
@@ -85,6 +87,7 @@ type Props = {
   myChannelClaimIds: ?Array<string>,
   myCommentedChannelIds: ?Array<string>,
   doFetchMyCommentedChannels: (claimId: ?string) => void,
+  doTipAccountCheckForUri: (uri: string) => void,
   textInjection?: string,
 };
 
@@ -110,6 +113,7 @@ export function CommentCreate(props: Props) {
     supportDisabled,
     uri,
     disableInput,
+    canReceiveFiatTips,
     onSlimInputClose,
     doCommentCreate,
     doFetchCreatorSettings,
@@ -125,6 +129,7 @@ export function CommentCreate(props: Props) {
     myChannelClaimIds,
     myCommentedChannelIds,
     doFetchMyCommentedChannels,
+    doTipAccountCheckForUri,
     textInjection,
   } = props;
 
@@ -156,7 +161,6 @@ export function CommentCreate(props: Props) {
   const [showSelectors, setShowSelectors] = React.useState({ tab: undefined, open: false });
   const [disableReviewButton, setDisableReviewButton] = React.useState();
   const [exchangeRate, setExchangeRate] = React.useState();
-  const [canReceiveFiatTip, setCanReceiveFiatTip] = React.useState(undefined);
   const [tipModalOpen, setTipModalOpen] = React.useState(undefined);
 
   const charCount = commentValue ? commentValue.length : 0;
@@ -169,7 +173,7 @@ export function CommentCreate(props: Props) {
   const minAmountMet = activeTab !== TAB_LBC || minAmount === 0 || tipAmount >= minAmount;
   const stickerPrice = selectedSticker && selectedSticker.price;
   const tipSelectorError = tipError || disableReviewButton;
-  const fiatIcon = preferredCurrency === 'EUR' ? ICONS.EURO : ICONS.FINANCE;
+  const fiatIcon = STRIPE.CURRENCY[preferredCurrency].icon;
 
   const minAmountRef = React.useRef(minAmount);
   minAmountRef.current = minAmount;
@@ -190,11 +194,11 @@ export function CommentCreate(props: Props) {
       if (onSlimInputClose) onSlimInputClose();
 
       if (sticker.price && sticker.price > 0) {
-        setActiveTab(canReceiveFiatTip ? TAB_FIAT : TAB_LBC);
+        setActiveTab(canReceiveFiatTips ? TAB_FIAT : TAB_LBC);
         setTipSelector(true);
       }
     },
-    [canReceiveFiatTip, onSlimInputClose]
+    [canReceiveFiatTips, onSlimInputClose]
   );
 
   const commentSelectorsProps = React.useMemo(() => {
@@ -487,30 +491,11 @@ export function CommentCreate(props: Props) {
     if (stickerPrice && !exchangeRate) Lbryio.getExchangeRates().then(({ LBC_USD }) => setExchangeRate(LBC_USD));
   }, [exchangeRate, stickerPrice]);
 
-  // Stickers: Check if creator has a tip account saved (on selector so that if a paid sticker is selected,
-  // it defaults to LBC tip instead of USD)
   React.useEffect(() => {
-    if (!stripeEnvironment || canReceiveFiatTip !== undefined || !tipChannelName) return;
-
-    Lbryio.call(
-      'account',
-      'check',
-      {
-        channel_claim_id: channelClaimId,
-        channel_name: tipChannelName,
-        environment: stripeEnvironment,
-      },
-      'post'
-    )
-      .then((accountCheckResponse) => {
-        if (accountCheckResponse === true && canReceiveFiatTip !== true) {
-          setCanReceiveFiatTip(true);
-        } else {
-          setCanReceiveFiatTip(false);
-        }
-      })
-      .catch(() => {});
-  }, [canReceiveFiatTip, channelClaimId, tipChannelName]);
+    if (canReceiveFiatTips === undefined) {
+      doTipAccountCheckForUri(uri);
+    }
+  }, [canReceiveFiatTips, doTipAccountCheckForUri, uri]);
 
   // Handle keyboard shortcut comment creation
   React.useEffect(() => {

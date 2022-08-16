@@ -16,6 +16,7 @@ import {
   getNameFromClaim,
   getChannelFromClaim,
   getChannelTitleFromClaim,
+  getChannelNameFromClaim,
 } from 'util/claim';
 import * as CLAIM from 'constants/claim';
 import { INTERNAL_TAGS } from 'constants/tags';
@@ -162,6 +163,11 @@ export const selectClaimForUri = createCachedSelector(
     }
   }
 )((state, uri, returnRepost = true) => `${String(uri)}:${returnRepost ? '1' : '0'}`);
+
+export const selectChannelClaimIdForUri = (state: State, uri: string) =>
+  getChannelIdFromClaim(selectClaimForUri(state, uri));
+export const selectChannelNameForUri = (state: State, uri: string) =>
+  getChannelNameFromClaim(selectClaimForUri(state, uri));
 
 export const selectHasClaimForUri = (state: State, uri: string) => {
   const claim = selectClaimForUri(state, uri);

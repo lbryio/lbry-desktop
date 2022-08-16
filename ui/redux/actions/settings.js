@@ -169,6 +169,9 @@ export function doSetClientSetting(key, value, pushPrefs) {
   };
 }
 
+export const doSetPreferredCurrency = (value) => (dispatch) =>
+  dispatch(doSetClientSetting(SETTINGS.PREFERRED_CURRENCY, value, true));
+
 export function doUpdateIsNight() {
   return {
     type: ACTIONS.UPDATE_IS_NIGHT,
