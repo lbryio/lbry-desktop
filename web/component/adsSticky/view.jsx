@@ -22,7 +22,6 @@ type Props = {
   homepageData: any,
   locale: ?LocaleInfo,
   nagsShown: boolean,
-  doSetAdBlockerFound: (boolean) => void,
 };
 
 export default function AdsSticky(props: Props) {
@@ -36,14 +35,13 @@ export default function AdsSticky(props: Props) {
     homepageData,
     locale,
     nagsShown,
-    doSetAdBlockerFound,
   } = props;
 
   const { location } = useHistory();
   const [refresh, setRefresh] = React.useState(0);
 
   // Global condition on whether ads should be activated:
-  const shouldShowAds = useShouldShowAds(userHasPremiumPlus, userCountry, isAdBlockerFound, doSetAdBlockerFound);
+  const shouldShowAds = useShouldShowAds(userHasPremiumPlus, userCountry, isAdBlockerFound);
   // Global conditions aside, should the Sticky be shown for this path:
   const inAllowedPath = shouldShowAdsForPath(location.pathname, isContentClaim, isChannelClaim, authenticated);
   // Final answer:

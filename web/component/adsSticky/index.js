@@ -1,6 +1,5 @@
 import AdsSticky from './view';
 import { connect } from 'react-redux';
-import { doSetAdBlockerFound } from 'redux/actions/app';
 import { selectAdBlockerFound } from 'redux/selectors/app';
 import { selectClaimForUri } from 'redux/selectors/claims';
 import { selectAnyNagsShown } from 'redux/selectors/notifications';
@@ -29,8 +28,4 @@ const select = (state, props) => {
   };
 };
 
-const perform = {
-  doSetAdBlockerFound,
-};
-
-export default connect(select, perform)(AdsSticky);
+export default connect(select)(AdsSticky);

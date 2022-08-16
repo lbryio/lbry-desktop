@@ -41,14 +41,13 @@ type Props = {
   userHasPremiumPlus: boolean,
   userCountry: string,
   currentTheme: string,
-  doSetAdBlockerFound: (boolean) => void,
 };
 
 export default function AdsBanner(props: Props) {
-  const { isAdBlockerFound, userHasPremiumPlus, userCountry, currentTheme, doSetAdBlockerFound } = props;
+  const { isAdBlockerFound, userHasPremiumPlus, userCountry, currentTheme } = props;
   const { location } = useHistory();
 
-  const shouldShowAds = useShouldShowAds(userHasPremiumPlus, userCountry, isAdBlockerFound, doSetAdBlockerFound);
+  const shouldShowAds = useShouldShowAds(userHasPremiumPlus, userCountry, isAdBlockerFound);
   const shouldLoadScript = shouldShowAds && !gScript;
   const isMobile = useIsMobile();
 

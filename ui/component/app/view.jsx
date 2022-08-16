@@ -21,6 +21,7 @@ import usePersistedState from 'effects/use-persisted-state';
 import useConnectionStatus from 'effects/use-connection-status';
 import Spinner from 'component/spinner';
 import LANGUAGES from 'constants/languages';
+import AdBlockTester from 'web/component/adBlockTester';
 import AdsSticky from 'web/component/adsSticky';
 import YoutubeWelcome from 'web/component/youtubeReferralWelcome';
 import {
@@ -571,6 +572,7 @@ function App(props: Props) {
         />
       ) : (
         <React.Fragment>
+          <AdBlockTester />
           <AdsSticky uri={uri} />
           <Router uri={uri} embedLatestPath={embedLatestPath} />
           <ModalRouter />

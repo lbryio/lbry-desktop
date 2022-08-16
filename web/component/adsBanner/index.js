@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import * as SETTINGS from 'constants/settings';
-import { doSetAdBlockerFound } from 'redux/actions/app';
 import { selectAdBlockerFound } from 'redux/selectors/app';
 import { selectClientSetting } from 'redux/selectors/settings';
 import { selectOdyseeMembershipIsPremiumPlus, selectUserCountry } from 'redux/selectors/user';
@@ -13,8 +12,4 @@ const select = (state, props) => ({
   currentTheme: selectClientSetting(state, SETTINGS.THEME),
 });
 
-const perform = {
-  doSetAdBlockerFound,
-};
-
-export default connect(select, perform)(AdsBanner);
+export default connect(select)(AdsBanner);

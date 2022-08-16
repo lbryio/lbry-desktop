@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { doSetAdBlockerFound } from 'redux/actions/app';
 import { selectAdBlockerFound } from 'redux/selectors/app';
 import { makeSelectClaimForUri, selectClaimIsNsfwForUri } from 'redux/selectors/claims';
 import { selectOdyseeMembershipIsPremiumPlus, selectUserCountry } from 'redux/selectors/user';
@@ -13,8 +12,4 @@ const select = (state, props) => ({
   userCountry: selectUserCountry(state),
 });
 
-const perform = {
-  doSetAdBlockerFound,
-};
-
-export default connect(select, perform)(Ads);
+export default connect(select)(Ads);

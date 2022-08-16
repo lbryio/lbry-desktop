@@ -31,7 +31,6 @@ type Props = {
   isAdBlockerFound: ?boolean,
   userHasPremiumPlus: boolean,
   userCountry: string,
-  doSetAdBlockerFound: (boolean) => void,
 };
 
 function Ads(props: Props) {
@@ -44,10 +43,9 @@ function Ads(props: Props) {
     userCountry,
     className,
     noFallback,
-    doSetAdBlockerFound,
   } = props;
 
-  const shouldShowAds = useShouldShowAds(userHasPremiumPlus, userCountry, isAdBlockerFound, doSetAdBlockerFound);
+  const shouldShowAds = useShouldShowAds(userHasPremiumPlus, userCountry, isAdBlockerFound);
   const adConfig = AD_CONFIGS.ADNIMATION;
 
   React.useEffect(() => {
