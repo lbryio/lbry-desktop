@@ -1,9 +1,10 @@
 // @flow
 import React from 'react';
 
-const GOOGLE_AD_URL = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js';
+const TRIGGER_CLASS = 'pub_300x250 pub_300x250m pub_728x90 text-ad textAd text_ad text_ads text-ads adamazon';
 
-let gExecutedOnce = false;
+// ****************************************************************************
+// ****************************************************************************
 
 type Props = {
   doSetAdBlockerFound: (boolean) => void,
@@ -11,24 +12,22 @@ type Props = {
 
 function AdBlockTester(props: Props) {
   const { doSetAdBlockerFound } = props;
+  const ref = React.useRef();
 
   React.useEffect(() => {
-    if (!gExecutedOnce) {
-      fetch(GOOGLE_AD_URL)
-        .then((response) => {
-          doSetAdBlockerFound(response.redirected === true);
-        })
-        .catch(() => {
-          doSetAdBlockerFound(true);
-        })
-        .finally(() => {
-          gExecutedOnce = true;
-        });
+    if (ref.current) {
+      const mountedStyle = getComputedStyle(ref.current);
+      doSetAdBlockerFound(mountedStyle.display === 'none');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- on mount only
-  }, []);
+  }, [doSetAdBlockerFound]);
 
-  return null;
+  return (
+    <div
+      ref={ref}
+      className={TRIGGER_CLASS}
+      style={{ height: '1px', width: '1px', position: 'absolute', left: '-1px', top: '-1px' }}
+    />
+  );
 }
 
 export default AdBlockTester;
