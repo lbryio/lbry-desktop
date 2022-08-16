@@ -1,6 +1,6 @@
 // @flow
 import { Form } from 'component/common/form';
-import * as PAGES from 'constants/pages';
+import * as MODALS from 'constants/modal_types';
 import * as STRIPE from 'constants/stripe';
 import Button from 'component/button';
 import Card from 'component/common/card';
@@ -74,6 +74,7 @@ type Props = {
   preferredCurrency: string,
   tags: any,
   humanReadableTime: ?string,
+  doOpenModal: (modalId: string) => void,
 };
 
 export default function PreorderAndPurchaseContentCard(props: Props) {
@@ -90,6 +91,7 @@ export default function PreorderAndPurchaseContentCard(props: Props) {
     hasCardSaved,
     tags,
     humanReadableTime,
+    doOpenModal,
   } = props;
 
   const [tipAmount, setTipAmount] = React.useState(0);
@@ -131,7 +133,7 @@ export default function PreorderAndPurchaseContentCard(props: Props) {
       tokens={{
         add_a_card: (
           <Button
-            navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`}
+            onClick={() => doOpenModal(MODALS.ADD_CARD)}
             label={__('Add a card --[replaces add_a_card]--')}
             button="link"
           />

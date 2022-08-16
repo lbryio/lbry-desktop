@@ -60,6 +60,7 @@ type Props = {
   doSendTip: (SupportParams, boolean) => void, // function that comes from lbry-redux
   setAmount?: (number) => void,
   preferredCurrency: string,
+  modalProps?: any,
 };
 
 export default function WalletSendTip(props: Props) {
@@ -87,6 +88,7 @@ export default function WalletSendTip(props: Props) {
     doSendTip,
     setAmount,
     preferredCurrency,
+    modalProps,
   } = props;
 
   /** WHAT TAB TO SHOW **/
@@ -293,7 +295,6 @@ export default function WalletSendTip(props: Props) {
             {/* short explainer under the button */}
             <div className="section__subtitle">
               {explainerText}{' '}
-              {/* {activeTab === TAB_FIAT && !hasCardSaved && <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add A Card')} button="link" />} */}
               <Button
                 label={__('Learn more')}
                 button="link"
@@ -340,6 +341,7 @@ export default function WalletSendTip(props: Props) {
                 amount={tipAmount}
                 onChange={(amount) => setTipAmount(amount)}
                 setDisableSubmitButton={setDisableSubmitButton}
+                modalProps={modalProps}
               />
 
               {/* send tip/boost button */}

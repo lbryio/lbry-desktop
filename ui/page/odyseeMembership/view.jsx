@@ -8,7 +8,6 @@ import { Lbryio } from 'lbryinc';
 import { getStripeEnvironment } from 'util/stripe';
 import { ODYSEE_CHANNEL } from 'constants/channels';
 import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
 import * as MODALS from 'constants/modal_types';
 import Card from 'component/common/card';
 import MembershipSplash from 'component/membershipSplash';
@@ -32,7 +31,7 @@ type Props = {
   history: { action: string, push: (string) => void, replace: (string) => void },
   location: { search: string, pathname: string },
   totalBalance: ?number,
-  openModal: (string, {}) => void,
+  openModal: (string, ?{}) => void,
   activeChannelClaim: ?ChannelClaim,
   channels: ?Array<ChannelClaim>,
   claimsByUri: { [string]: any },
@@ -671,7 +670,7 @@ const OdyseeMembershipPage = (props: Props) => {
                   button="primary"
                   label={__('Add a Card')}
                   icon={ICONS.SETTINGS}
-                  navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}?returnTo=premium`}
+                  onClick={() => openModal(MODALS.ADD_CARD)}
                   className="membership_button"
                   style={{ maxWidth: '151px' }}
                 />

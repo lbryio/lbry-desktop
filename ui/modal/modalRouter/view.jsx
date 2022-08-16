@@ -57,6 +57,7 @@ const MAP = Object.freeze({
   [MODALS.WALLET_PASSWORD_UNSAVE]: lazyImport(() => import('modal/modalPasswordUnsave' /* webpackChunkName: "modalPasswordUnsave" */)),
   [MODALS.WALLET_UNLOCK]: lazyImport(() => import('modal/modalWalletUnlock' /* webpackChunkName: "modalWalletUnlock" */)),
   [MODALS.YOUTUBE_WELCOME]: lazyImport(() => import('modal/modalYoutubeWelcome' /* webpackChunkName: "modalYoutubeWelcome" */)),
+  [MODALS.ADD_CARD]: lazyImport(() => import('modal/modalStripeCard' /* webpackChunkName: "modalStripeCard" */)),
 });
 
 type Props = {

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { selectClaimForUri, selectPreorderTagForUri } from 'redux/selectors/claims';
-import { doHideModal } from 'redux/actions/app';
+import { doHideModal, doOpenModal } from 'redux/actions/app';
 import { preOrderPurchase } from 'redux/actions/wallet';
 import { selectPreferredCurrency } from 'redux/selectors/settings';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
@@ -36,6 +36,7 @@ const select = (state, props) => {
 const perform = {
   doHideModal,
   preOrderPurchase,
+  doOpenModal,
 };
 
 export default withRouter(connect(select, perform)(PreorderAndPurchaseContent));

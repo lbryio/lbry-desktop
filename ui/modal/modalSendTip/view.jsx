@@ -28,6 +28,7 @@ class ModalSendTip extends React.PureComponent<Props> {
           hasSelectedTab={hasSelectedTab}
           customText={customText}
           setAmount={setAmount}
+          modalProps={this.props}
         />
       </Modal>
     );
