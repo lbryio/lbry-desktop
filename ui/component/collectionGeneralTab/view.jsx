@@ -160,7 +160,7 @@ function CollectionGeneralTab(props: Props) {
               type="markdown"
               name="collection_description"
               label={__('Description')}
-              value={description || ''}
+              value={(typeof description === 'string' && description) || ''}
               onChange={(text) => updateParams({ description: text || '' })}
               textAreaMaxLength={FF_MAX_CHARS_IN_DESCRIPTION}
             />

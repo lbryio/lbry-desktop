@@ -209,7 +209,13 @@ export default React.memo<MarkdownProps>(function MarkdownPreview(props: Markdow
     isComment,
     isMinimal,
   } = props;
-  let { content } = props;
+  const { content } = props;
+
+  if (typeof content === 'object') {
+    // Due to an unfortunate typo that corrupted the collection field, we need
+    // to do this so affected users don't keep crashing.
+    return '';
+  }
 
   const strippedContent = content
     ? content.replace(REPLACE_REGEX, (iframeHtml, iframeUrl) => {
