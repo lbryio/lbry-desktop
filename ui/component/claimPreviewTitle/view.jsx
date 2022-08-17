@@ -2,7 +2,6 @@
 import React from 'react';
 import TruncatedText from 'component/common/truncated-text';
 import { stripLeadingAtSign } from 'util/string';
-const { escapeHtmlProperty } = require('util/web');
 
 type Props = {
   uri: string,
@@ -16,7 +15,7 @@ function ClaimPreviewTitle(props: Props) {
   return (
     <div className="claim-preview__title">
       {claim ? (
-        <TruncatedText text={escapeHtmlProperty(title) || stripLeadingAtSign(claim.name)} lines={2} />
+        <TruncatedText text={title || stripLeadingAtSign(claim.name)} lines={2} />
       ) : (
         <span>{__('Nothing here')}</span>
       )}
