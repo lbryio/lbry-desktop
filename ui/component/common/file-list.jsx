@@ -31,11 +31,11 @@ function FileList(props: Props) {
   };
 
   React.useEffect(() => {
-    if (radio.stops.length) {
+    if (radio.items.length) {
       if (!radio.currentId) {
         radio.first();
       } else {
-        const first = radio.stops[0].ref.current;
+        const first = radio.items[0].ref.current;
         // First auto-selection
         if (first && first.id === radio.currentId && !radio.state) {
           const file = getFile(first.value);
@@ -46,7 +46,7 @@ function FileList(props: Props) {
 
         if (radio.state) {
           // Find selected element
-          const stop = radio.stops.find((item) => item.id === radio.currentId);
+          const stop = radio.items.find((item) => item.id === radio.currentId);
           const element = stop && stop.ref.current;
           // Only update state if new item is selected
           if (element && element.value !== radio.state) {

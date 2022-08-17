@@ -77,7 +77,6 @@ class FileSelector extends React.PureComponent<Props> {
         if (path) {
           return ipcRenderer.invoke('get-file-from-path', path);
         }
-        return undefined;
       })
       .then((result) => {
         if (!result) {

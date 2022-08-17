@@ -305,23 +305,40 @@ app.on('before-quit', () => {
 // Example:
 // const result = await ipcMain.invoke('get-file-from-path', 'path/to/file');
 // const file = new File([result.buffer], result.name);
+// NOTE: if path points to a folder, an empty
+// file will be given.
 ipcMain.handle('get-file-from-path', (event, path) => {
   return new Promise((resolve, reject) => {
-    // Encoding null ensures data results in a Buffer.
-    fs.readFile(path, { encoding: null }, (err, data) => {
-      if (err) {
-        reject(err);
+    fs.stat(path, (error, stats) => {
+      if (error) {
+        reject(error);
         return;
       }
       // Separate folders considering "\" and "/"
       // as separators (cross platform)
       const folders = path.split(/[\\/]/);
-      const fileName = folders[folders.length - 1];
-      resolve({
-        name: fileName,
-        mime: mime.getType(fileName) || undefined,
-        path: path,
-        buffer: data,
+      const name = folders[folders.length - 1];
+      if (stats.isDirectory()) {
+        resolve({
+          name,
+          mime: undefined,
+          path,
+          buffer: new ArrayBuffer(0),
+        });
+        return;
+      }
+      // Encoding null ensures data results in a Buffer.
+      fs.readFile(path, { encoding: null }, (err, data) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve({
+          name,
+          mime: mime.getType(name) || undefined,
+          path,
+          buffer: data,
+        });
       });
     });
   });
