@@ -259,9 +259,7 @@ function ChannelPage(props: Props) {
             hideStakedIndicator
           />
           <h1 className="channel__title">
-            <TruncatedText lines={2} showTooltip>
-              {title || (channelName && '@' + channelName)}
-            </TruncatedText>
+            <TruncatedText text={title || (channelName && '@' + channelName)} lines={2} showTooltip />
             <PremiumBadge uri={uri} />
           </h1>
           <div className="channel__meta">

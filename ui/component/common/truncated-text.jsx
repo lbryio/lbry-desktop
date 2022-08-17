@@ -4,27 +4,25 @@ import twemoji from 'twemoji';
 const emojiList = require('node-emoji');
 
 type Props = {
-  text?: ?string,
+  text: ?string,
   lines: number,
   showTooltip?: boolean,
-  children?: React.Node,
   style?: any,
   emoji?: any,
 };
 
 const TruncatedText = (props: Props) => {
-  const { text, children, lines, showTooltip, style } = props;
-  const tooltip = showTooltip ? children || text : '';
+  const { text, lines, showTooltip, style } = props;
+  const tooltip = showTooltip ? text : '';
 
   const RE_EMOJI = /:\+1:|:-1:|:[\w-]+:/g;
 
-  const Twemoji = ({ emoji }) => {
-    // $FlowIgnore
-    emoji = emoji.replace(RE_EMOJI, getEmoji);
+  const Twemoji = ({ text }) => {
+    const html = text.replace(RE_EMOJI, getEmoji);
     return (
       <span
         dangerouslySetInnerHTML={{
-          __html: twemoji.parse(emoji),
+          __html: twemoji.parse(html),
         }}
       />
     );
@@ -41,7 +39,7 @@ const TruncatedText = (props: Props) => {
 
   return (
     <span title={tooltip} className="truncated-text" style={{ WebkitLineClamp: lines, ...style }}>
-      <Twemoji emoji={children || text} />
+      <Twemoji text={text || ''} />
     </span>
   );
 };
