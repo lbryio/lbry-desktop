@@ -80,7 +80,8 @@ type Props = {
   doSetContentHistoryItem: (uri: string) => void,
   doClearContentHistoryUri: (uri: string) => void,
   currentPlaylistItemIndex: ?number,
-  isPurchasedContent: boolean,
+  isPurchasableContent: boolean,
+  isRentableContent: boolean,
   purchaseMadeForClaimId: boolean,
 };
 
@@ -131,7 +132,8 @@ function VideoViewer(props: Props) {
     doToast,
     doSetContentHistoryItem,
     currentPlaylistItemIndex,
-    isPurchasedContent,
+    isPurchasableContent,
+    isRentableContent,
     // purchaseMadeForClaimId,
   } = props;
 
@@ -628,7 +630,8 @@ function VideoViewer(props: Props) {
         activeLivestreamForChannel={activeLivestreamForChannel}
         defaultQuality={defaultQuality}
         doToast={doToast}
-        isPurchasedContent={isPurchasedContent}
+        isPurchasableContent={isPurchasableContent}
+        isRentableContent={isRentableContent}
       />
     </div>
   );

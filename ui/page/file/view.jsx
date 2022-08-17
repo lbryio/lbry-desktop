@@ -19,7 +19,7 @@ import Button from 'component/button';
 import Empty from 'component/common/empty';
 import SwipeableDrawer from 'component/swipeableDrawer';
 import DrawerExpandButton from 'component/swipeableDrawerExpand';
-import PreorderButton from 'component/preorderButton';
+import PreorderAndPurchaseContentButton from 'component/preorderAndPurchaseContentButton';
 import { useIsMobile, useIsMobileLandscape, useIsMediumScreen } from 'effects/use-screensize';
 
 const CommentsList = lazyImport(() => import('component/commentsList' /* webpackChunkName: "comments" */));
@@ -29,40 +29,41 @@ export const PRIMARY_PLAYER_WRAPPER_CLASS = 'file-page__video-container';
 export const PRIMARY_IMAGE_WRAPPER_CLASS = 'file-render__img-container';
 
 type Props = {
-  playingCollectionId: ?string,
-  costInfo: ?{ includesData: boolean, cost: number },
-  fileInfo: FileListItem,
-  uri: string,
-  channelId?: string,
-  renderMode: string,
-  obscureNsfw: boolean,
-  isMature: boolean,
-  linkedCommentId?: string,
-  threadCommentId?: string,
-  videoTheaterMode: boolean,
-  claimIsMine: boolean,
-  contentCommentsDisabled: boolean,
-  isLivestream: boolean,
-  position: number,
   audioVideoDuration: ?number,
-  commentsListTitle: string,
-  settingsByChannelId: { [channelId: string]: PerChannelSettings },
-  isPlaying?: boolean,
-  claimWasPurchased: boolean,
-  location: { search: string },
-  isUriPlaying: boolean,
-  purchaseTag: number,
-  preorderTag: number,
+  channelId?: string,
   claimId: string,
-  doCheckIfPurchasedClaimId: (claimId: string) => void,
-  doFetchCostInfoForUri: (uri: string) => void,
-  doSetContentHistoryItem: (uri: string) => void,
-  doSetPrimaryUri: (uri: ?string) => void,
+  claimIsMine: boolean,
+  claimWasPurchased: boolean,
   clearPosition: (uri: string) => void,
+  commentsListTitle: string,
+  contentCommentsDisabled: boolean,
+  costInfo: ?{ includesData: boolean, cost: number },
+  doCheckIfPurchasedClaimId: (claimId: string) => void,
   doClearPlayingUri: () => void,
-  doToggleAppDrawer: (type: string) => void,
+  doFetchCostInfoForUri: (uri: string) => void,
   doFileGet: (uri: string) => void,
+  doSetContentHistoryItem: (uri: string) => void,
   doSetMainPlayerDimension: (dimensions: { height: number, width: number }) => void,
+  doSetPrimaryUri: (uri: ?string) => void,
+  doToggleAppDrawer: (type: string) => void,
+  fileInfo: FileListItem,
+  isLivestream: boolean,
+  isMature: boolean,
+  isPlaying?: boolean,
+  isUriPlaying: boolean,
+  linkedCommentId?: string,
+  location: { search: string },
+  obscureNsfw: boolean,
+  playingCollectionId: ?string,
+  position: number,
+  preorderTag: number,
+  purchaseTag: number,
+  renderMode: string,
+  rentalTag: string,
+  settingsByChannelId: { [channelId: string]: PerChannelSettings },
+  threadCommentId?: string,
+  uri: string,
+  videoTheaterMode: boolean,
 };
 
 export default function FilePage(props: Props) {
@@ -99,6 +100,7 @@ export default function FilePage(props: Props) {
     doCheckIfPurchasedClaimId,
     purchaseTag,
     preorderTag,
+    rentalTag,
     claimId,
   } = props;
 
@@ -146,9 +148,9 @@ export default function FilePage(props: Props) {
   }, []);
 
   React.useEffect(() => {
-    const aPurchaseOrPreorder = purchaseTag || preorderTag;
+    const aPurchaseOrPreorder = purchaseTag || preorderTag || rentalTag;
     if (aPurchaseOrPreorder && claimId) doCheckIfPurchasedClaimId(claimId);
-  }, [purchaseTag, preorderTag, claimId]);
+  }, [purchaseTag, preorderTag, rentalTag, claimId]);
 
   React.useEffect(() => {
     // always refresh file info when entering file page to see if we have the file
@@ -270,7 +272,7 @@ export default function FilePage(props: Props) {
         {!isMarkdown && (
           <div className="file-page__secondary-content">
             <section className="file-page__media-actions">
-              <PreorderButton uri={uri} />
+              <PreorderAndPurchaseContentButton uri={uri} />
               {claimIsMine && isLivestream && (
                 <div className="livestream__creator-message">
                   <h4>{__('Only visible to you')}</h4>

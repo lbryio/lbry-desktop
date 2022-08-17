@@ -1,6 +1,5 @@
 // @flow
 import { Form } from 'component/common/form';
-import { Lbryio } from 'lbryinc';
 import * as PAGES from 'constants/pages';
 import Button from 'component/button';
 import Card from 'component/common/card';
@@ -16,13 +15,26 @@ const STRINGS = {
     title: 'Purchase Your Content',
     subtitle: "After completing the purchase you will have instant access to your content that doesn't expire.",
     button: 'Purchase your content for %currency%%amount%',
-    add_card: '%add_a_card% to purchase content.',
+    add_card: '%add_a_card% to purchase content',
   },
   preorder: {
     title: 'Pre-order Your Content',
     subtitle: 'This content is not available yet but you can pre-order it now so you can access it as soon as it goes live.',
     button: 'Pre-order your content for %currency%%amount%',
-    add_card: '%add_a_card% to preorder content.',
+    add_card: '%add_a_card% to preorder content',
+  },
+  rental: {
+    title: 'Rent Your Content',
+    subtitle: 'You can rent this content and it will be available for %humanReadableTime%',
+    button: 'Rent your content for %currency%%amount%',
+    add_card: '%add_a_card% to preorder content',
+  },
+  purchaseOrRent: {
+    title: 'Purchase Or Rent Your Content',
+    subtitle: 'You can purchase this content for access that doesn\'t ' +
+      'expire for %currency%%purchasePrice%, or rent for %humanReadableTime% for %currency%%rentPrice%.',
+    button: 'Purchase your content for %currency%%amount%',
+    add_card: '%add_a_card% to purchase or rent your content',
   },
 };
 
@@ -42,7 +54,7 @@ type Props = {
   customText?: string,
   doHideModal: () => void,
   setAmount?: (number) => void,
-  preferredCurrency: string,
+  // preferredCurrency: string,
   preOrderPurchase: (
     TipParams,
     anonymous: boolean,
@@ -51,17 +63,19 @@ type Props = {
     stripe: ?string,
     preferredCurrency: string,
     type: string,
+    expiredTime: ?string,
     ?(any) => Promise<void>,
     ?(any) => void
   ) => void,
-  preorderTag: number,
-  preorderOrPurchase: string,
-  purchaseTag: number,
   purchaseMadeForClaimId: ?boolean,
+  hasCardSaved: boolean,
   doCheckIfPurchasedClaimId: (string) => void,
+  preferredCurrency: string,
+  tags: any,
+  humanReadableTime: ?string,
 };
 
-export default function PreorderContent(props: Props) {
+export default function PreorderAndPurchaseContentCard(props: Props) {
   const {
     activeChannelId,
     activeChannelName,
@@ -70,28 +84,46 @@ export default function PreorderContent(props: Props) {
     doHideModal,
     preOrderPurchase,
     preferredCurrency,
-    preorderTag,
-    preorderOrPurchase,
-    purchaseTag,
     doCheckIfPurchasedClaimId,
     claimId,
+    hasCardSaved,
+    tags,
+    humanReadableTime,
   } = props;
+
+  const [tipAmount, setTipAmount] = React.useState(0);
+  const [rentTipAmount, setRentTipAmount] = React.useState(0);
+  const [waitingForBackend, setWaitingForBackend] = React.useState(false);
 
   // set the purchase amount once the preorder tag is selected
   React.useEffect(() => {
-    if (preorderOrPurchase === 'preorder') {
-      setTipAmount(preorderTag);
-    } else {
-      setTipAmount(purchaseTag);
+    if (tags.purchaseTag && tags.rentalTag) {
+      setTipAmount(tags.purchaseTag);
+      setRentTipAmount(tags.rentalTag.price);
+    } else if (tags.purchaseTag) {
+      setTipAmount(tags.purchaseTag);
+    } else if (tags.rentalTag) {
+      setTipAmount(tags.rentalTag.price);
+    } else if (tags.preorderTag) {
+      setTipAmount(tags.preorderTag);
     }
-  }, [preorderTag, purchaseTag]);
+  }, [tags]);
 
-  const [tipAmount, setTipAmount] = React.useState(0);
-  const [waitingForBackend, setWaitingForBackend] = React.useState(false);
-  const [hasCardSaved, setHasSavedCard] = React.useState(false);
+  let transactionType;
+  if (tags.purchaseTag && tags.rentalTag) {
+    transactionType = 'purchaseOrRent';
+  } else if (tags.purchaseTag) {
+    transactionType = 'purchase';
+  } else if (tags.rentalTag) {
+    transactionType = 'rental';
+  } else {
+    transactionType = 'preorder';
+  }
+
+  const STR = STRINGS[transactionType];
+  const RENT_STRINGS = STRINGS['rental'];
 
   const fiatSymbol = preferredCurrency === 'EUR' ? '€' : '$';
-  const STR = STRINGS[preorderOrPurchase || 'preorder'];
 
   const AddCardButton = (
     <I18nMessage
@@ -109,31 +141,17 @@ export default function PreorderContent(props: Props) {
     </I18nMessage>
   );
 
-  // check if user has a payment method saved
-  React.useEffect(() => {
-    if (!stripeEnvironment) return;
+  function handleSubmit(forceRental) {
+    // if it's both purchase/rent, use purchase, for rent we will force it
+    if (transactionType === 'purchaseOrRent') {
+      transactionType = 'purchase';
+    }
+    if (forceRental) transactionType = 'rental';
 
-    Lbryio.call(
-      'customer',
-      'status',
-      {
-        environment: stripeEnvironment,
-      },
-      'post'
-    ).then((customerStatusResponse) => {
-      const defaultPaymentMethodId =
-        customerStatusResponse.Customer &&
-        customerStatusResponse.Customer.invoice_settings &&
-        customerStatusResponse.Customer.invoice_settings.default_payment_method &&
-        customerStatusResponse.Customer.invoice_settings.default_payment_method.id;
+    const itsARental = transactionType === 'rental';
 
-      setHasSavedCard(Boolean(defaultPaymentMethodId));
-    });
-  }, [setHasSavedCard]);
-
-  function handleSubmit() {
     const tipParams: TipParams = {
-      tipAmount,
+      tipAmount: itsARental ? tags.rentalTag.price : tipAmount,
       tipChannelName: tipChannelName || '',
       channelClaimId: channelClaimId || '',
     };
@@ -146,6 +164,8 @@ export default function PreorderContent(props: Props) {
 
     setWaitingForBackend(true);
 
+    let expirationTime = itsARental ? tags.rentalTag.expirationTimeInSeconds : undefined;
+
     // hit backend to send tip
     preOrderPurchase(
       tipParams,
@@ -154,7 +174,8 @@ export default function PreorderContent(props: Props) {
       claimId,
       stripeEnvironment,
       preferredCurrency,
-      preorderOrPurchase,
+      transactionType,
+      expirationTime,
       checkIfFinished,
       doHideModal
     );
@@ -166,18 +187,37 @@ export default function PreorderContent(props: Props) {
         <Card
           title={__(STR.title)}
           className={'preorder-content-modal'}
-          subtitle={<div className="section__subtitle">{__(STR.subtitle)}</div>}
+          subtitle={
+            <div className="section__subtitle">
+              {__(STR.subtitle, {
+                humanReadableTime,
+                currency: fiatSymbol,
+                purchasePrice: tipAmount.toString(),
+                rentPrice: tags.rentalTag.price,
+              })}
+            </div>
+          }
           actions={
             // confirm purchase functionality
             <>
               <div className="handle-submit-area">
                 <Button
                   autoFocus
-                  onClick={handleSubmit}
+                  onClick={() => handleSubmit()}
                   button="primary"
                   label={__(STR.button, { currency: fiatSymbol, amount: tipAmount.toString() })}
                   disabled={!hasCardSaved}
                 />
+                {tags.purchaseTag && tags.rentalTag && (
+                  <Button
+                    autoFocus
+                    onClick={() => handleSubmit('rent')}
+                    button="primary"
+                    label={__(RENT_STRINGS.button, { currency: fiatSymbol, amount: rentTipAmount.toString() })}
+                    disabled={!hasCardSaved}
+                    style={{ marginTop: '16px' }}
+                  />
+                )}
 
                 {!hasCardSaved && <div className="add-card-prompt">{AddCardButton}</div>}
               </div>

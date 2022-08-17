@@ -806,6 +806,7 @@ export const preOrderPurchase = (
   stripeEnvironment,
   preferredCurrency,
   type,
+  expirationTime,
   successCallback,
   failureCallback
 ) => (dispatch) => {
@@ -819,23 +820,37 @@ export const preOrderPurchase = (
       creator_channel_claim_id: tipParams.channelClaimId,
       tipper_channel_name: userParams.activeChannelName,
       tipper_channel_claim_id: userParams.activeChannelId,
-      // currency: preferredCurrency || 'USD',
-      currency: 'USD', // hardcode to USD at the moment
+      currency: preferredCurrency || 'USD',
       anonymous: anonymous,
       source_claim_id: claimId,
       environment: stripeEnvironment,
       target_claim_id: claimId,
       type,
+      validity_seconds: expirationTime,
     },
     'post'
   )
     .then((customerTipResponse) => {
+      const STRINGS = {
+        purchase: {
+          title: 'Purchase completed successfully',
+        },
+        preorder: {
+          title: 'Preorder completed successfully',
+          subtitle: "You will be able to see the content as soon as it's available!",
+        },
+        rental: {
+          title: 'Renting content completed successfully',
+          subtitle: 'Enjoy your content!',
+        },
+      };
+
+      const stringsToUse = STRINGS[type];
+
       dispatch(
         doToast({
-          message: __('Preorder completed successfully'),
-          subMessage: __("You will be able to see the content as soon as it's available!"),
-          // linkText: `${fiatSymbol}${tipParams.tipAmount} ⇒ ${tipParams.tipChannelName}`,
-          // linkTarget: '/wallet',
+          message: __(stringsToUse.title),
+          subMessage: __(stringsToUse.subtitle),
         })
       );
 

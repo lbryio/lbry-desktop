@@ -7,6 +7,7 @@ import {
   selectClaimIsNsfwForUri,
   selectPreorderTagForUri,
   selectPurchaseTagForUri,
+  selectRentalTagForUri,
 } from 'redux/selectors/claims';
 import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
 import { doPrepareEdit } from 'redux/actions/publish';
@@ -39,7 +40,8 @@ const select = (state, props) => {
     disableDownloadButton: makeSelectTagInClaimOrChannelForUri(uri, DISABLE_DOWNLOAD_BUTTON_TAG)(state),
     isMature: selectClaimIsNsfwForUri(state, uri),
     isAPreorder: Boolean(selectPreorderTagForUri(state, props.uri)),
-    isPurchasedContent: Boolean(selectPurchaseTagForUri(state, props.uri)),
+    isPurchasableContent: Boolean(selectPurchaseTagForUri(state, props.uri)),
+    isRentableContent: Boolean(selectRentalTagForUri(state, props.uri)),
   };
 };
 

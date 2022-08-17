@@ -1151,6 +1151,32 @@
   margin-top: -3px;
 }
 
+// used for purchase/preorder/rental claim preview overlay
+.claim-preview__file-purchase-overlay {
+  position: absolute;
+  background-color: #679a28;
+  padding: 0.3rem;
+  border-radius: var(--border-radius);
+  bottom: var(--spacing-xxs);
+  left: var(--spacing-xxs);
+
+  span {
+    color: #faf6f6;
+  }
+}
+
+.claim-grid {
+  .claim-preview__file-purchase-overlay {
+    @media (min-width: $breakpoint-large) {
+      span {
+        font-size: 11px;
+      }
+
+      left: 2px;
+    }
+  }
+}
+
 .claim-preview__file-property-overlay {
   position: absolute;
   bottom: var(--spacing-xxs);

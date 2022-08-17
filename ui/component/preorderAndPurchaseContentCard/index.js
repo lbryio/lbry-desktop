@@ -7,7 +7,7 @@ import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { withRouter } from 'react-router';
 import * as SETTINGS from 'constants/settings';
 import { getChannelIdFromClaim, getChannelNameFromClaim } from 'util/claim';
-import PreorderContent from './view';
+import PreorderAndPurchaseContent from './view';
 
 const select = (state, props) => {
   const { uri } = props;
@@ -39,4 +39,4 @@ const perform = {
   preOrderPurchase,
 };
 
-export default withRouter(connect(select, perform)(PreorderContent));
+export default withRouter(connect(select, perform)(PreorderAndPurchaseContent));

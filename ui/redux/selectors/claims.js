@@ -741,6 +741,22 @@ export const selectPreorderTagForUri = createCachedSelector(selectMetadataForUri
   if (matchingTag) return matchingTag.slice(9);
 })((state, uri) => String(uri));
 
+export const selectRentalTagForUri = createCachedSelector(selectMetadataForUri, (metadata: ?GenericMetadata) => {
+  const matchingTag = metadata && metadata.tags && metadata.tags.find((tag) => tag.includes('rental:'));
+  if (matchingTag) {
+    const trimmedTag = matchingTag.slice(7);
+
+    const tags = trimmedTag.split(':');
+
+    if (tags && tags.length === 2) {
+      return {
+        price: tags[0],
+        expirationTimeInSeconds: tags[1],
+      };
+    }
+  }
+})((state, uri) => String(uri));
+
 export const selectPreorderContentClaimIdForUri = createCachedSelector(
   selectMetadataForUri,
   (metadata: ?GenericMetadata) => {
@@ -936,7 +952,23 @@ export const selectTakeOverAmountForName = (state: State, name: string) => {
 export const selectMyPurchasedClaims = createSelector(selectState, (state) => state.myPurchasedClaims || []);
 
 export const selectPurchaseMadeForClaimId = (state: State, claimId: string) => {
-  const purchasedClaimIds = selectMyPurchasedClaims(state);
+  const purchasedClaims = selectMyPurchasedClaims(state);
 
-  return purchasedClaimIds && purchasedClaimIds.includes(claimId);
+  return purchasedClaims.some(
+    p => p.reference_claim_id === claimId || p.target_claim_id === claimId
+  );
+};
+
+export const selectValidRentalPurchaseForClaimId = (state: State, claimId: string) => {
+  const purchasedClaims = selectMyPurchasedClaims(state);
+
+  const validRentalClaimForClaimId = purchasedClaims.find((purchase) => {
+    return (
+      purchase.target_claim_id === claimId &&
+      purchase.type === 'rental' &&
+      new Date(purchase.valid_through) > new Date() // expiry date is sometime in the future
+    );
+  });
+
+  return validRentalClaimForClaimId;
 };

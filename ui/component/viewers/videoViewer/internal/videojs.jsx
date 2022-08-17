@@ -106,7 +106,8 @@ type Props = {
   userClaimId: ?string,
   activeLivestreamForChannel: any,
   doToast: ({ message: string, linkText: string, linkTarget: string }) => void,
-  isPurchasedContent: boolean,
+  isPurchasableContent: boolean,
+  isRentableContent: boolean,
 };
 
 const VIDEOJS_VOLUME_PANEL_CLASS = 'VolumePanel';
@@ -167,7 +168,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     isLivestreamClaim,
     activeLivestreamForChannel,
     doToast,
-    isPurchasedContent,
+    isPurchasableContent,
+    isRentableContent,
   } = props;
 
   // used to notify about default quality setting
@@ -510,7 +512,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       }
 
       // disable right-click (context-menu) for purchased content
-      if (isPurchasedContent) {
+      if (isPurchasableContent || isRentableContent) {
         const player = document.querySelector('video.vjs-tech');
         if (player) player.setAttribute('oncontextmenu', 'return false;');
       }

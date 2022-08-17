@@ -49,6 +49,8 @@ type Props = {
   isMarkdownPost?: boolean,
   claimLinkId?: string,
   purchaseContentTag: boolean,
+  rentalTag: { price: number, expirationTimeInSeconds: number },
+  validRentalPurchase: boolean,
   purchaseMadeForClaimId: boolean,
   doUriInitiatePlay: (playingOptions: PlayingUri, isPlayable: boolean) => void,
   doFetchChannelLiveStatus: (string) => void,
@@ -84,6 +86,8 @@ export default function FileRenderInitiator(props: Props) {
     purchaseContentTag,
     purchaseMadeForClaimId,
     claimIsMine,
+    rentalTag,
+    validRentalPurchase,
   } = props;
 
   const { isLiveComment } = React.useContext(ChatCommentContext) || {};
@@ -102,9 +106,13 @@ export default function FileRenderInitiator(props: Props) {
   // check if there is a time or autoplay parameter, if so force autoplay
   const urlTimeParam = href && href.indexOf('t=') > -1;
 
-  const didntPurchasePaidContent = purchaseContentTag && !purchaseMadeForClaimId && !claimIsMine;
+  // purchased and rental content
+  const stillNeedsToBePurchased = purchaseContentTag && !purchaseMadeForClaimId;
+  const stillNeedsToBeRented = rentalTag && !validRentalPurchase;
+  const notAuthedToView = (stillNeedsToBePurchased || stillNeedsToBeRented) && !claimIsMine;
+
   const shouldAutoplay =
-    !didntPurchasePaidContent && !forceDisableAutoplay && !embedded && (forceAutoplayParam || urlTimeParam || autoplay);
+    !notAuthedToView && !forceDisableAutoplay && !embedded && (forceAutoplayParam || urlTimeParam || autoplay);
 
   const isFree = costInfo && costInfo.cost === 0;
   const canViewFile = isLivestreamClaim
@@ -209,7 +217,7 @@ export default function FileRenderInitiator(props: Props) {
               'content__cover--theater-mode': theaterMode && !isMobile,
               'content__cover--text': isText,
               'card__media--nsfw': obscurePreview,
-              'content__cover--purchasable': purchaseContentTag && !purchaseMadeForClaimId,
+              'content__cover--purchasable': notAuthedToView,
             })
       }
     >

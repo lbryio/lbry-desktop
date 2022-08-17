@@ -17,6 +17,7 @@ import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
 import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
 import { parseURI } from 'util/lbryURI';
 import PreviewOverlayProperties from 'component/previewOverlayProperties';
+import PreviewTilePurchaseOverlay from 'component/previewTilePurchaseOverlay';
 import FileHideRecommendation from 'component/fileHideRecommendation';
 import FileWatchLaterLink from 'component/fileWatchLaterLink';
 import ButtonAddToQueue from 'component/buttonAddToQueue';
@@ -254,6 +255,8 @@ function ClaimPreviewTile(props: Props) {
         <FileThumbnail thumbnail={thumbnailUrl} allowGifs tileLayout>
           {!isChannel && (
             <React.Fragment>
+              <PreviewTilePurchaseOverlay uri={uri} />
+
               {((fypId && isStream) || isPlayable) && (
                 <div className="claim-preview__hover-actions-grid">
                   {fypId && isStream && (

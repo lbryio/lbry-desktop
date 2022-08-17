@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import { doHideModal } from 'redux/actions/app';
-import ModalPreorderContent from './view';
+import ModalPreorderAndPurchaseContent from './view';
 
 const perform = {
   doHideModal,
 };
 
-export default connect(null, perform)(ModalPreorderContent);
+export default connect(null, perform)(ModalPreorderAndPurchaseContent);

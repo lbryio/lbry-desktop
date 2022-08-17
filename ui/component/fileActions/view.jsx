@@ -39,7 +39,8 @@ type Props = {
   doDownloadUri: (uri: string) => void,
   isMature: boolean,
   isAPreorder: boolean,
-  isPurchasedContent: boolean,
+  isPurchasableContent: boolean,
+  isRentableContent: boolean,
 };
 
 export default function FileActions(props: Props) {
@@ -61,7 +62,8 @@ export default function FileActions(props: Props) {
     doDownloadUri,
     isMature,
     isAPreorder,
-    isPurchasedContent,
+    isPurchasableContent,
+    isRentableContent,
   } = props;
 
   const {
@@ -123,7 +125,7 @@ export default function FileActions(props: Props) {
     <div className="media__actions">
       {ENABLE_FILE_REACTIONS && <FileReactions uri={uri} />}
 
-      {!isAPreorder && !isPurchasedContent && <ClaimSupportButton uri={uri} fileAction />}
+      {!isAPreorder && !isPurchasableContent && !isRentableContent && <ClaimSupportButton uri={uri} fileAction />}
 
       <ClaimCollectionAddButton uri={uri} />
 
@@ -193,7 +195,7 @@ export default function FileActions(props: Props) {
               </>
             )}
 
-            {!isLivestreamClaim && !disableDownloadButton && !isMature && !isPurchasedContent && (
+            {!isLivestreamClaim && !disableDownloadButton && !isMature && !isPurchasableContent && !isRentableContent && (
               <MenuItem className="comment__menu-option" onSelect={handleWebDownload}>
                 <div className="menu__link">
                   <Icon aria-hidden icon={ICONS.DOWNLOAD} />

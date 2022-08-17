@@ -1163,21 +1163,14 @@ export function doCheckIfPurchasedClaimId(claimId: string) {
         'list',
         {
           environment: stripeEnvironment,
-          claim_id_filter: claimId,
+          claim_id_filter: claimId, // checks by target_claim_id or reference_claim_id
         },
         'post'
       );
 
-      let matchedClaimIds = [];
-      const matchingTargetClaimId = response && response.length && response[0].target_claim_id;
-      const matchingReferenceClaimId = response && response.length && response[0].reference_claim_id;
-
-      if (matchingTargetClaimId) matchedClaimIds.push(matchingTargetClaimId);
-      if (matchingReferenceClaimId) matchedClaimIds.push(matchingReferenceClaimId);
-
       return dispatch({
         type: ACTIONS.CHECK_IF_PURCHASED_COMPLETED,
-        data: matchedClaimIds,
+        data: response,
       });
     } catch (err) {
       return dispatch({
