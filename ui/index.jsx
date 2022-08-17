@@ -1,5 +1,4 @@
 import 'babel-polyfill';
-import * as Sentry from '@sentry/browser';
 import ErrorBoundary from 'component/errorBoundary';
 import App from 'component/app';
 import SnackBar from 'component/snackBar';
@@ -53,16 +52,7 @@ import 'scss/all.scss';
 import apiPublishCallViaWeb from 'web/setup/publish';
 import { doSendPastRecsysEntries } from 'redux/actions/content';
 
-// Sentry error logging setup
-// Will only work if you have a SENTRY_AUTH_TOKEN env
-// We still add code in analytics.js to send the error to sentry manually
-// If it's caught by componentDidCatch in component/errorBoundary, it will not bubble up to this error reporter
-if (process.env.NODE_ENV === 'production') {
-  Sentry.init({
-    dsn: 'https://1f3c88e2e4b341328a638e138a60fb73@sentry.odysee.tv/2',
-    whitelistUrls: [/\/public\/ui.js/],
-  });
-}
+analytics.init();
 
 Lbry.setDaemonConnectionString(PROXY_URL);
 

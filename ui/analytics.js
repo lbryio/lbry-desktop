@@ -3,6 +3,7 @@ import { Lbryio } from 'lbryinc';
 import * as Sentry from '@sentry/browser';
 import { apiLog } from 'analytics/apiLog';
 import { events } from 'analytics/events';
+import { sentryWrapper } from 'analytics/sentryWrapper';
 import { watchman } from 'analytics/watchman';
 import type { ApiLog } from 'analytics/apiLog';
 import type { Events } from 'analytics/events';
@@ -12,21 +13,30 @@ const isProduction = process.env.NODE_ENV === 'production';
 let gAnalyticsEnabled = false;
 
 type Analytics = {
+  init: () => void,
   setState: (enable: boolean) => void,
+  setUser: (Object) => void,
+  // --------------------------------
   apiLog: ApiLog,
   event: Events,
   video: Watchman,
   error: (string) => Promise<any>,
   sentryError: ({} | string, {}) => Promise<any>,
-  setUser: (Object) => void,
+  // log: will replace `sentryError` (and maybe also `error`) when done. Now in beta stage.
+  // error::string does not include the stacktrace while error::Error does.
+  log: (error: Error | string, options?: LogOptions, label?: string) => Promise<?LogId>,
 };
 
 const analytics: Analytics = {
+  init: () => {
+    sentryWrapper.init();
+  },
   setState: (enable: boolean) => {
     gAnalyticsEnabled = enable;
     analytics.apiLog.setState(gAnalyticsEnabled);
     analytics.event.setState(gAnalyticsEnabled);
     analytics.video.setState(gAnalyticsEnabled);
+    sentryWrapper.setState(gAnalyticsEnabled);
   },
   apiLog: apiLog,
   event: events,
@@ -41,6 +51,9 @@ const analytics: Analytics = {
         resolve(false);
       }
     });
+  },
+  log: (error: Error | string, options?: LogOptions, label?: string) => {
+    return sentryWrapper.log(error, { ...options }, label);
   },
   sentryError: (error, errorInfo) => {
     return new Promise((resolve) => {
