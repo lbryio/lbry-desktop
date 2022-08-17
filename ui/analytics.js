@@ -29,14 +29,14 @@ type Analytics = {
 
 const analytics: Analytics = {
   init: () => {
-    sentryWrapper.init();
+    // sentryWrapper.init();
   },
   setState: (enable: boolean) => {
     gAnalyticsEnabled = enable;
     analytics.apiLog.setState(gAnalyticsEnabled);
     analytics.event.setState(gAnalyticsEnabled);
     analytics.video.setState(gAnalyticsEnabled);
-    sentryWrapper.setState(gAnalyticsEnabled);
+    sentryWrapper.setState(false);
   },
   apiLog: apiLog,
   event: events,
