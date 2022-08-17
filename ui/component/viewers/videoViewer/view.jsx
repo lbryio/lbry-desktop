@@ -1,5 +1,6 @@
 // @flow
 import { ENABLE_PREROLL_ADS } from 'config';
+import { ERR_GRP } from 'constants/errors';
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
 import React, { useEffect, useState, useContext, useCallback } from 'react';
@@ -476,7 +477,7 @@ function VideoViewer(props: Props) {
     const onError = () => {
       const error = player.error();
       if (error) {
-        analytics.sentryError('Video.js error', error);
+        analytics.log(error, {}, ERR_GRP.VIDEOJS);
       }
     };
     const onRateChange = () => {

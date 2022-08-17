@@ -2,6 +2,7 @@
 import * as tus from 'tus-js-client';
 import NoopUrlStorage from 'tus-js-client/lib/noopUrlStorage';
 import analytics from '../../ui/analytics';
+import { ERR_GRP } from '../../ui/constants/errors';
 import { X_LBRY_AUTH_TOKEN } from '../../ui/constants/token';
 import { doUpdateUploadAdd, doUpdateUploadProgress, doUpdateUploadRemove } from '../../ui/redux/actions/publish';
 import { generateError } from './publish-error';
@@ -23,15 +24,6 @@ const STATUS_LOCKED = 423;
  */
 function inStatusCategory(status, category) {
   return status >= category && status < category + 100;
-}
-
-function getTusErrorType(errMsg: string) {
-  if (errMsg.startsWith('tus: failed to upload chunk at offset')) {
-    // This is the only message that contains dynamic value prior to the first comma.
-    return 'tus: failed to upload chunk at offset';
-  } else {
-    return errMsg.startsWith('tus:') ? errMsg.substring(0, errMsg.indexOf(',')) : errMsg;
-  }
 }
 
 export function makeResumableUploadRequest(
@@ -98,7 +90,7 @@ export function makeResumableUploadRequest(
         }
 
         window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
-        analytics.sentryError(getTusErrorType(errMsg), { onError: err, tusUpload: uploader });
+        analytics.log(err, {}, ERR_GRP.TUS);
 
         reject(generateError(customErr || err, params, null, uploader, customErr ? err : null));
       },
