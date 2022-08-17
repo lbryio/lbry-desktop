@@ -106,9 +106,13 @@ export default function FileRenderInitiator(props: Props) {
   // check if there is a time or autoplay parameter, if so force autoplay
   const urlTimeParam = href && href.indexOf('t=') > -1;
 
+  const hasBeenPurchased = purchaseContentTag && purchaseMadeForClaimId;
+  const hasBeenRented = rentalTag && validRentalPurchase;
+
   // purchased and rental content
-  const stillNeedsToBePurchased = purchaseContentTag && !purchaseMadeForClaimId;
-  const stillNeedsToBeRented = rentalTag && !validRentalPurchase;
+  const stillNeedsToBePurchased = purchaseContentTag && !purchaseMadeForClaimId && !hasBeenRented;
+  const stillNeedsToBeRented = rentalTag && !validRentalPurchase && !hasBeenPurchased;
+
   const notAuthedToView = (stillNeedsToBePurchased || stillNeedsToBeRented) && !claimIsMine;
 
   const shouldAutoplay =

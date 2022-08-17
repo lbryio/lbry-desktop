@@ -52,7 +52,7 @@ const select = (state, props) => {
     purchaseMadeForClaimId: selectPurchaseMadeForClaimId(state, claimId),
     renderMode: makeSelectFileRenderModeForUri(uri)(state),
     rentalTag: selectRentalTagForUri(state, uri),
-    validRentalPurchase: Boolean(selectValidRentalPurchaseForClaimId(state, claimId)),
+    validRentalPurchase: selectValidRentalPurchaseForClaimId(state, claimId),
   };
 };
 

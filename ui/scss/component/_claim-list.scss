@@ -1168,11 +1168,11 @@
 .claim-grid {
   .claim-preview__file-purchase-overlay {
     @media (min-width: $breakpoint-large) {
-      span {
-        font-size: 11px;
-      }
-
       left: 2px;
+    }
+
+    span {
+      font-size: 11px;
     }
   }
 }
