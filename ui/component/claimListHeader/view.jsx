@@ -126,13 +126,6 @@ function ClaimListHeader(props: Props) {
   }
 
   React.useEffect(() => {
-    if (action !== 'POP' && isFiltered()) {
-      setExpanded(true);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  React.useEffect(() => {
     if (hideAdvancedFilter) {
       setExpanded(false);
     }
