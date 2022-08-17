@@ -177,21 +177,9 @@ const ModalPublishPreview = (props: Props) => {
   }
 
   if (!publishing) {
-    if (isMarkdownPost) {
-      confirmBtnText = __('Post');
-    } else if (livestream || isLivestreamClaim) {
-      confirmBtnText = __('Create');
-    } else {
-      confirmBtnText = __('Upload');
-    }
+    confirmBtnText = __('Confirm');
   } else {
-    if (isMarkdownPost) {
-      confirmBtnText = __('Saving');
-    } else if (livestream || isLivestreamClaim) {
-      confirmBtnText = __('Creating');
-    } else {
-      confirmBtnText = __('Uploading');
-    }
+    confirmBtnText = __('Confirming...');
   }
 
   const releaseDateText = releasesInFuture ? __('Scheduled for') : __('Release date');
