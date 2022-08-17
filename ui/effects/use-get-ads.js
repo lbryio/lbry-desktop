@@ -16,7 +16,7 @@ export function useGetAds(approvedVideo: boolean, adsEnabled: boolean): [?string
   // Fetch ads for all approved videos, even if we won't show ads to the user
   // Unruly needs more fetches before they will start returning ads ¯\_(ツ)_/¯
   React.useEffect(() => {
-    if (!approvedVideo) {
+    if (!approvedVideo || !adsEnabled) {
       setIsFetching(false);
       return;
     }
