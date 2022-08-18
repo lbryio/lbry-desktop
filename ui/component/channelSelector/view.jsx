@@ -121,12 +121,7 @@ export default function ChannelSelector(props: Props) {
           </MenuButton>
         )}
 
-        <MenuList
-          className={classnames('menu__list channel__list', {
-            'channel__list--publish': isPublishMenu,
-            'channel__list--tabHeader': isTabHeader,
-          })}
-        >
+        <MenuList className="menu__list channel__list">
           {channels &&
             channels.map((channel) => (
               <MenuItem key={channel.permanent_url} onSelect={() => handleChannelSelect(channel)}>
