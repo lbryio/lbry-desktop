@@ -1550,7 +1550,7 @@
     "@sentry/utils" "7.10.0"
     tslib "^1.9.3"
 
-"@sentry/cli@^1.49.0":
+"@sentry/cli@^1.74.4":
   version "1.74.5"
   resolved "https://registry.yarnpkg.com/@sentry/cli/-/cli-1.74.5.tgz#4a5c622913087c9ab6f82994da9a7526423779b8"
   integrity sha512-Ze1ec306ZWHtrxKypOJ8nhtFqkrx2f/6bRH+DcJzEQ3bBePQ0ZnqJTTe4BBHADYBtxFIaUWzCZ6DquLz2Zv/sw==
@@ -1617,10 +1617,11 @@
     tslib "^1.9.3"
 
 "@sentry/webpack-plugin@^1.10.0":
-  version "1.10.0"
-  resolved "https://registry.yarnpkg.com/@sentry/webpack-plugin/-/webpack-plugin-1.10.0.tgz#7f7727b18dbdd3eaeb0998102be89d8733ddbca5"
+  version "1.19.0"
+  resolved "https://registry.yarnpkg.com/@sentry/webpack-plugin/-/webpack-plugin-1.19.0.tgz#2b134318f1552ba7f3e3f9c83c71a202095f7a44"
+  integrity sha512-qSpdgdGMtdzagGveSWgo2b+t8PdPUscuOjbOyWCsJme9jlTFnNk0rX7JEA55OUozikKHM/+vVh08USLBnPboZw==
   dependencies:
-    "@sentry/cli" "^1.49.0"
+    "@sentry/cli" "^1.74.4"
 
 "@silvermine/videojs-airplay@^1.1.0":
   version "1.1.0"
