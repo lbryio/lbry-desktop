@@ -346,6 +346,12 @@ reach-portal {
       &:hover {
         cursor: pointer;
         background-color: rgba(var(--color-header-background-base), 1);
+        .notification__icon {
+          .icon__wrapper {
+            background-color: var(--color-header-button);
+          }
+        }
+
         .menu__list--notification-info {
           .menu__list--notification-title {
             .notification__text {
