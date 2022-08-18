@@ -1,4 +1,5 @@
 .snack-bar {
+  position: absolute;
   bottom: 2rem;
   right: 2rem;
   max-width: 20rem;
@@ -17,6 +18,22 @@
 
   .button__label {
     color: var(--color-primary-contrast);
+  }
+
+  .button__content {
+    padding: var(--spacing-xxxs);
+    .icon {
+      transform: rotate(0deg);
+      transition: transform 0.4s;
+    }
+    &:hover {
+      border-radius: var(--border-radius);
+      background: var(--color-background);
+      .icon {
+        stroke: var(--color-primary);
+        transform: rotate(90deg);
+      }
+    }
   }
 
   @media (max-width: $breakpoint-small) {
@@ -40,32 +57,21 @@
   background-color: var(--color-snack-bg-error);
 }
 
-.snack-bar--stacked-non-error {
-  /*
-  box-shadow: // The top layer shadow
-    0 1px 1px var(--color-border),
-    // The second layer
-    0 10px 0 -5px var(--color-primary),
-    // The second layer shadow
-    0 10px 1px -4px var(--color-border);
-  //// The third layer
-  //0 20px 0 -10px var(--color-primary),
-  //// The third layer shadow
-  //0 20px 1px -9px var(--color-border);
-  */
-}
-
-.snack-bar--stacked-error {
-  box-shadow: // The top layer shadow
-    0 1px 1px var(--color-border),
-    // The second layer
-    0 10px 0 -5px var(--color-snack-bg-error),
-    // The second layer shadow
-    0 10px 1px -4px var(--color-border);
-  //// The third layer
-  //0 20px 0 -10px var(--color-snack-bg-error),
-  //// The third layer shadow
-  //0 20px 1px -9px var(--color-border);
+.snack-bar-counter-bubble {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  width: 1.2rem;
+  height: 1.2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background: var(--color-background);
+  border: 2px solid var(--color-primary);
+  .notification__count {
+    font-size: var(--font-xsmall);
+  }
 }
 
 .snack-bar--notification {

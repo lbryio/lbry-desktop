@@ -83,12 +83,15 @@ class SnackBar extends React.PureComponent<Props, State> {
       <div
         className={classnames('snack-bar', {
           'snack-bar--error': isError,
-          'snack-bar--stacked-error': snackCount > 1 && isError,
-          'snack-bar--stacked-non-error': snackCount > 1 && !isError,
         })}
         onMouseEnter={this.handleMouseEnter}
         onMouseLeave={this.handleMouseLeave}
       >
+        {snackCount > 1 && (
+          <div className="snack-bar-counter-bubble">
+            <span className="notification__count">{snackCount}</span>
+          </div>
+        )}
         <div className="snack-bar__message">
           <Icon icon={isError ? ICONS.ALERT : ICONS.COMPLETED} size={18} />
           <p className="snack-bar__messageText">
