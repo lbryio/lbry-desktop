@@ -193,7 +193,7 @@ export default function PreorderAndPurchaseContentCard(props: Props) {
                 humanReadableTime,
                 currency: fiatSymbol,
                 purchasePrice: tipAmount.toString(),
-                rentPrice: tags.rentalTag.price,
+                rentPrice: tags.rentalTag?.price,
               })}
             </div>
           }
