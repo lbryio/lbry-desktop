@@ -839,6 +839,10 @@ export function doCollectionPublish(
       params['channel_id'] = options.channel_id;
     }
 
+    if (params.description && typeof params.description !== 'string') {
+      delete params.description;
+    }
+
     return new Promise((resolve, reject) => {
       dispatch({
         type: ACTIONS.COLLECTION_PUBLISH_STARTED,
@@ -950,6 +954,10 @@ export function doCollectionPublishUpdate(
 
     if (options.channel_id) {
       updateParams['channel_id'] = options.channel_id;
+    }
+
+    if (updateParams.description && typeof updateParams.description !== 'string') {
+      delete updateParams.description;
     }
 
     return new Promise((resolve, reject) => {
