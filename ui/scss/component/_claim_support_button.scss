@@ -6,3 +6,12 @@
     // margin-top: 4px;
   }
 }
+
+.approved-bank-account__button {
+  span,
+  svg {
+    color: var(--color-support-button);
+    stroke: var(--color-support-button) !important;
+    filter: brightness(0.85);
+  }
+}
