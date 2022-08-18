@@ -19,7 +19,7 @@ type Props = {
   mode: ?string,
   name: ?string,
   title: ?string,
-  filePath: string | File,
+  filePath: ?File,
   fileMimeType: ?string,
   isStillEditing: boolean,
   balance: number,
@@ -86,16 +86,16 @@ function PublishFile(props: Props) {
   useEffect(() => {
     if (mode === PUBLISH_MODES.POST) {
       if (currentFileType !== 'text/markdown' && !isStillEditing) {
-        updatePublishForm({ filePath: '' });
+        updatePublishForm({ filePath: undefined });
       }
     }
   }, [currentFileType, mode, isStillEditing, updatePublishForm]);
 
   useEffect(() => {
-    if (!filePath || filePath === '') {
+    if (!filePath) {
       setCurrentFile('');
       updateFileInfo(0, 0, false);
-    } else if (typeof filePath !== 'string') {
+    } else {
       // Update currentFile file
       if (filePath.name !== currentFile) {
         handleFileChange({ file: filePath, path: filePath.name });
@@ -215,9 +215,9 @@ function PublishFile(props: Props) {
     // select file, start to select a new one, then cancel
     if (!fileWithPath) {
       if (isStillEditing || !clearName) {
-        updatePublishForm({ filePath: '' });
+        updatePublishForm({ filePath: undefined });
       } else {
-        updatePublishForm({ filePath: '', name: '' });
+        updatePublishForm({ filePath: undefined, name: '' });
       }
       return;
     }
@@ -271,10 +271,8 @@ function PublishFile(props: Props) {
       setPublishMode(PUBLISH_MODES.FILE);
     }
 
-    const publishFormParams: { filePath: string | File, name?: string, optimize?: boolean } = {
-      // if electron, we'll set filePath to the path string because SDK is handling publishing.
-      // File.path will be undefined from web due to browser security, so it will default to the File Object.
-      filePath: fileWithPath.path || file,
+    const publishFormParams: { filePath: File, name?: string, optimize?: boolean } = {
+      filePath: file,
     };
     // Strip off extention and replace invalid characters
     let fileName = name || (file.name && file.name.substring(0, file.name.lastIndexOf('.'))) || '';

@@ -35,8 +35,8 @@ import tempy from 'tempy';
 type Props = {
   disabled: boolean,
   tags: Array<Tag>,
-  publish: (source?: string | File, ?boolean) => void,
-  filePath: string | File,
+  publish: (source: ?File, ?boolean) => void,
+  filePath: ?File,
   fileText: string,
   bid: ?number,
   bidError: ?string,
@@ -373,9 +373,6 @@ function PublishForm(props: Props) {
     if (!output || output === '') {
       // Generate a temporary file:
       output = tempy.file({ name: 'post.md' });
-    } else if (typeof filePath === 'string') {
-      // Use current file
-      output = filePath;
     }
     // Create a temporary file and save file changes
     if (output && output !== '') {
@@ -447,7 +444,7 @@ function PublishForm(props: Props) {
   // with other properties such as name, title, etc.) for security reasons.
   useEffect(() => {
     if (mode === PUBLISH_MODES.FILE) {
-      updatePublishForm({ filePath: '', fileDur: 0, fileSize: 0 });
+      updatePublishForm({ filePath: undefined, fileDur: 0, fileSize: 0 });
     }
   }, [mode, updatePublishForm]);
 

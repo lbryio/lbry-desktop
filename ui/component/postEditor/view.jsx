@@ -6,7 +6,7 @@ type Props = {
   uri: ?string,
   label: ?string,
   disabled: ?boolean,
-  filePath: string | File,
+  filePath: File,
   fileText: ?string,
   fileMimeType: ?string,
   streamingUrl: ?string,

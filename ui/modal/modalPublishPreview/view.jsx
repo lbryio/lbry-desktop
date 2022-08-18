@@ -15,7 +15,7 @@ import Icon from 'component/common/icon';
 import { NO_FILE } from 'redux/actions/publish';
 
 type Props = {
-  filePath: string | File,
+  filePath: ?File,
   isMarkdownPost: boolean,
   optimize: boolean,
   title: ?string,
@@ -104,16 +104,11 @@ const ModalPublishPreview = (props: Props) => {
     // @endif
   }
 
-  function getFilePathName(filePath: string | File) {
+  function getFilePathName(filePath: ?File) {
     if (!filePath) {
       return NO_FILE;
     }
-
-    if (typeof filePath === 'string') {
-      return filePath;
-    } else {
-      return filePath.name;
-    }
+    return filePath.name;
   }
 
   function createRow(label: string, value: any) {
@@ -127,7 +122,7 @@ const ModalPublishPreview = (props: Props) => {
 
   const txFee = previewResponse ? previewResponse['total_fee'] : null;
   //   $FlowFixMe add outputs[0] etc to PublishResponse type
-  const isOptimizeAvail = filePath && filePath !== '' && isVid && ffmpegStatus.available;
+  const isOptimizeAvail = filePath && isVid && ffmpegStatus.available;
   let modalTitle;
   if (isStillEditing) {
     modalTitle = __('Confirm Edit');

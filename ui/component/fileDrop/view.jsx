@@ -11,7 +11,7 @@ import Icon from 'component/common/icon';
 
 type Props = {
   modal: { id: string, modalProps: {} },
-  filePath: string | File,
+  filePath: File,
   clearPublish: () => void,
   updatePublishForm: ({}) => void,
   openModal: (id: string, { files: Array<File> }) => void,
