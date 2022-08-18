@@ -44,7 +44,7 @@ export const sentryWrapper: SentryWrapper = {
         integrations: [new BrowserTracing()],
         maxBreadcrumbs: 50,
         tracesSampleRate: IS_PRODUCTION ? 0.1 : 1.0,
-        whitelistUrls: [/\/public\/ui.js/],
+        whitelistUrls: [/https:\/\/((.*)\.)?odysee\.(com|tv)/, 'http://localhost:9090'],
       });
 
       gSentryInitialized = true;
