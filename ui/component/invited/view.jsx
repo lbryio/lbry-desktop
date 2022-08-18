@@ -182,6 +182,17 @@ function Invited(props: Props) {
               <div className="section">
                 <ClaimPreview key={refUri} uri={refUri} actions={''} type={'small'} />
               </div>
+
+              <div className="section__actions" style={{ marginTop: 'var(--spacing-m)' }}>
+                <Button
+                  button="primary"
+                  label={hasVerifiedEmail ? __('Finish Account') : __('Create Account')}
+                  navigate={`/$/${PAGES.AUTH}?redirect=/$/${PAGES.INVITE}/${referrer}`}
+                />
+                <Button button="link" label={__('Skip')} onClick={handleDone} />
+              </div>
+              <hr style={{ marginTop: 'var(--spacing-m)' }} />
+
               <div className="section">
                 <ChannelContent uri={fullUri} defaultPageSize={3} defaultInfiniteScroll={false} />
               </div>
