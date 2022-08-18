@@ -650,7 +650,7 @@ $actions-z-index: 2;
       height: 1.4rem;
     }
     .ff-container {
-      margin-right: var(--spacing-xs) !important;
+      margin-right: unset !important;
       canvas {
         width: 1.4rem !important;
         height: 1.4rem !important;
@@ -709,6 +709,10 @@ $actions-z-index: 2;
 
 .channel__list-item--selected {
   border-radius: var(--border-radius);
+
+  .ff-container {
+    position: unset;
+  }
 
   .icon--ChevronDown {
     margin-left: var(--spacing-l);
