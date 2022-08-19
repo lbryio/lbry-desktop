@@ -71,7 +71,7 @@ const SeniorIosDeveloperPage = () => {
               <ul>
                 <li>Led a team of developers in the past</li>
                 <li>Implemented at the enterprise scale (50 million users)</li>
-                <li>Familiarity with Play Store procedures and policies.</li>
+                <li>Familiarity with App Store procedures and policies.</li>
               </ul>
             </section>
 
