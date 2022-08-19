@@ -14,6 +14,10 @@
     color: var(--color-primary-contrast);
   }
 
+  .icon--Key {
+    margin-right: var(--spacing-m);
+  }
+
   &::before {
     position: absolute;
     content: '';
