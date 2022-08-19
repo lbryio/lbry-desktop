@@ -123,7 +123,6 @@ export default function FileRenderInitiator(props: Props) {
     ? (layountRendered || isMobile) && isCurrentClaimLive
     : isFree || claimWasPurchased;
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode) || isCurrentClaimLive;
-  const isText = RENDER_MODES.TEXT_MODES.includes(renderMode);
 
   const renderUnsupported = RENDER_MODES.UNSUPPORTED_IN_THIS_APP.includes(renderMode);
   const disabled =
@@ -219,7 +218,6 @@ export default function FileRenderInitiator(props: Props) {
           : classnames('content__cover', {
               'content__cover--disabled': disabled,
               'content__cover--theater-mode': theaterMode && !isMobile,
-              'content__cover--text': isText,
               'card__media--nsfw': obscurePreview,
               'content__cover--purchasable': notAuthedToView,
             })
