@@ -220,9 +220,9 @@ export default function FilePage(props: Props) {
     if (RENDER_MODES.TEXT_MODES.includes(renderMode)) {
       return (
         <>
-          <FileTitleSection uri={uri} />
-          <FileRenderInitiator uri={uri} />
           <FileRenderInline uri={uri} />
+          <FileRenderInitiator uri={uri} />
+          <FileTitleSection uri={uri} />
         </>
       );
     }
