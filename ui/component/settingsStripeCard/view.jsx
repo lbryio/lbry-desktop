@@ -46,6 +46,8 @@ const SettingsStripeCard = (props: Props) => {
     doCustomerSetup,
   } = props;
 
+  const didStripeConfirm = React.useRef(false);
+
   const [cardNameValue, setCardNameValue] = React.useState('');
   const [cardElement, setCardElement] = React.useState(undefined);
 
@@ -64,7 +66,7 @@ const SettingsStripeCard = (props: Props) => {
   }, [cardDetails, doCustomerSetup]);
 
   React.useEffect(() => {
-    if (clientSecret && cardElement) {
+    if (clientSecret && cardElement && !didStripeConfirm.current) {
       const stripeElements = (setupIntent) => {
         const stripe = window.Stripe(STRIPE_PUBLIC_KEY);
         const elements = stripe.elements();
@@ -88,53 +90,53 @@ const SettingsStripeCard = (props: Props) => {
 
         // Element focus ring
         card.on('focus', () => {
-          cardElement.classList.add('focused');
+          const elem = document.getElementById('card-element');
+          if (elem) elem.classList.add('focused');
         });
 
         card.on('blur', () => {
-          cardElement.classList.remove('focused');
+          const elem = document.getElementById('card-element');
+          if (elem) elem.classList.remove('focused');
         });
 
         card.on('ready', () => {
-          // focus on the name input
-          // $FlowFixMe
-          document.querySelector('#card-name').focus();
+          const elem = document.getElementById('card-element');
+          if (elem) elem.focus();
         });
 
         function submitForm(event) {
           event.preventDefault();
 
+          const cardNameElem = document.querySelector('#card-name');
           // $FlowFixMe
-          const cardUserName = document.querySelector('#card-name').value;
+          const cardUserName = cardNameElem && cardNameElem.value;
           if (!cardUserName) {
-            // $FlowFixMe
-            return (document.querySelector('.sr-field-error').innerHTML = __('Please enter the name on the card'));
+            const errorFieldElem = document.querySelector('.sr-field-error');
+            if (errorFieldElem) errorFieldElem.innerHTML = __('Please enter the name on the card');
+            return;
           }
 
           // if client secret wasn't loaded properly
           if (!clientSecret) {
             const displayErrorText = 'There was an error in generating your payment method. Please contact a developer';
-            // $FlowFixMe
             const displayError = document.getElementById('card-errors');
-            // $FlowFixMe
-            displayError.textContent = displayErrorText;
+            if (displayError) displayError.textContent = displayErrorText;
 
             return;
           }
 
           changeLoadingState(true);
 
-          // $FlowFixMe
-          const name = document.querySelector('#card-name').value;
-
           stripe
-            .confirmCardSetup(clientSecret, { payment_method: { card: card, billing_details: { email, name } } })
+            .confirmCardSetup(clientSecret, {
+              payment_method: { card, billing_details: { email, name: cardUserName } },
+            })
             .then((result) => {
               if (result.error) {
                 changeLoadingState(false);
                 const displayError = document.getElementById('card-errors');
-                // $FlowFixMe
-                displayError.textContent = result.error.message;
+                if (displayError) displayError.textContent = result.error.message;
+                didStripeConfirm.current = true;
               } else {
                 // The PaymentMethod was successfully set up
                 // hide and show the proper divs
@@ -146,7 +148,7 @@ const SettingsStripeCard = (props: Props) => {
         // Handle payment submission when user clicks the pay button.
         const button = document.getElementById('submit');
         // $FlowFixMe
-        button.addEventListener('click', submitForm);
+        if (button) button.addEventListener('click', submitForm);
 
         // currently doesn't work because the iframe javascript context is different
         // would be nice though if it's even technically possible
@@ -161,20 +163,20 @@ const SettingsStripeCard = (props: Props) => {
 
       // Show a spinner on payment submission
       const changeLoadingState = (isLoading) => {
+        const button = document.getElementById('submit');
+        const stripeSpinner = document.getElementById('stripe-spinner');
+        const buttonText = document.getElementById('button-text');
+
         if (isLoading) {
           // $FlowFixMe
-          document.querySelector('button').disabled = true;
-          // $FlowFixMe
-          document.querySelector('#stripe-spinner').classList.remove('hidden');
-          // $FlowFixMe
-          document.querySelector('#button-text').classList.add('hidden');
+          if (button) button.disabled = true;
+          if (stripeSpinner) stripeSpinner.classList.remove('hidden');
+          if (buttonText) buttonText.classList.add('hidden');
         } else {
           // $FlowFixMe
-          document.querySelector('button').disabled = false;
-          // $FlowFixMe
-          document.querySelector('#stripe-spinner').classList.add('hidden');
-          // $FlowFixMe
-          document.querySelector('#button-text').classList.remove('hidden');
+          if (button) button.disabled = false;
+          if (stripeSpinner) stripeSpinner.classList.add('hidden');
+          if (buttonText) buttonText.classList.remove('hidden');
         }
       };
     }
@@ -182,7 +184,8 @@ const SettingsStripeCard = (props: Props) => {
 
   React.useEffect(() => {
     // only add script if it doesn't already exist
-    const stripeScriptExists = document.querySelectorAll(`script[src="${STRIPE_PLUGIN_SRC}"]`).length > 0;
+    const stripeScript = document.querySelectorAll(`script[src="${STRIPE_PLUGIN_SRC}"]`);
+    const stripeScriptExists = stripeScript && stripeScript.length > 0;
 
     if (!stripeScriptExists) {
       const script = document.createElement('script');
@@ -202,7 +205,7 @@ const SettingsStripeCard = (props: Props) => {
     const errorElement = document.querySelector('.sr-field-error');
 
     // $FlowFixMe
-    errorElement.innerHTML = '';
+    if (errorElement) errorElement.innerHTML = '';
   }
 
   function onChangeCardName(event) {
@@ -211,6 +214,8 @@ const SettingsStripeCard = (props: Props) => {
     const numberOrSpecialCharacter = /[0-9!@#$%^&*()_+=[\]{};:"\\|,<>?~]/;
 
     const errorElement = document.querySelector('.sr-field-error');
+
+    if (!errorElement) return;
 
     if (numberOrSpecialCharacter.test(value)) {
       // $FlowFixMe
@@ -322,6 +327,7 @@ const SettingsStripeCard = (props: Props) => {
                 onChange={onChangeCardName}
                 value={cardNameValue}
                 onBlur={clearErrorMessage}
+                autoFocus
               />
             </div>
             <div className="sr-form-row">
