@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
-import { selectAccountTotals } from 'redux/selectors/stripe';
+import { selectAccountStatus } from 'redux/selectors/stripe';
 import { doTipAccountStatus } from 'redux/actions/stripe';
 import WalletFiatBalance from './view';
 
 const select = (state) => ({
-  accountTotals: selectAccountTotals(state),
+  accountStatus: selectAccountStatus(state),
 });
 
 const perform = {

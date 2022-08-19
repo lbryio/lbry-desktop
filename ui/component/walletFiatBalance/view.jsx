@@ -7,13 +7,13 @@ import Card from 'component/common/card';
 import Icon from 'component/common/icon';
 
 type Props = {
-  accountTotals: { total_received_unpaid: number, total_paid_out: number },
+  accountStatus: ?StripeAccountStatus,
   doTipAccountStatus: (any) => void,
 };
 
 export default function WalletFiatBalance(props: Props) {
-  const { accountTotals, doTipAccountStatus } = props;
-  const { total_received_unpaid: unpaidBalance, total_paid_out: paidOutBalance } = accountTotals || {};
+  const { accountStatus, doTipAccountStatus } = props;
+  const { total_received_unpaid: unpaidBalance, total_paid_out: paidOutBalance } = accountStatus || {};
 
   React.useEffect(() => {
     doTipAccountStatus();

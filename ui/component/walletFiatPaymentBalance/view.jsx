@@ -7,7 +7,6 @@ import Card from 'component/common/card';
 
 type Props = {
   totalTippedAmount: number,
-  accountDetails: any,
   transactions: StripeTransactions,
 };
 

@@ -267,7 +267,7 @@ const SettingsStripeCard = (props: Props) => {
                       setIsBusy(true);
                       doRemoveCardForPaymentMethodId(cardDetails.paymentMethodId).then(() => {
                         setIsBusy(false);
-                        doToast({ message: __('Succesfully removed Card.') });
+                        doToast({ message: __('Successfully removed card.') });
                         closeModal();
                       });
                     },

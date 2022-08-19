@@ -8,7 +8,7 @@ type Props = {
   cardDetails: StripeCardDetails,
 };
 
-const SettingsStripeCard = (props: Props) => {
+const SettingsStripeCardPage = (props: Props) => {
   const { cardDetails } = props;
 
   return (
@@ -24,4 +24,4 @@ const SettingsStripeCard = (props: Props) => {
   );
 };
 
-export default SettingsStripeCard;
+export default SettingsStripeCardPage;

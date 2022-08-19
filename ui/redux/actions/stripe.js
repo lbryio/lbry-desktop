@@ -136,10 +136,10 @@ export const doCustomerSetup = () => async (dispatch: Dispatch) =>
         );
         // 500 error from the backend being down
       } else if (error === 'internal_apis_down') {
-        doToast({ message: STRIPE.APIS_DOWN_ERROR_RESPONSE, isError: true });
+        doToast({ message: __(STRIPE.APIS_DOWN_ERROR_RESPONSE), isError: true });
       } else {
         // probably an error from stripe
-        doToast({ message: STRIPE.CARD_SETUP_ERROR_RESPONSE, isError: true });
+        doToast({ message: __(STRIPE.CARD_SETUP_ERROR_RESPONSE), isError: true });
       }
     });
 

@@ -13,8 +13,8 @@ const stripeRedirectPath = isDev ? 'http://localhost:' + WEBPACK_WEB_PORT : URL;
 export const SUCCESS_REDIRECT_URL = stripeRedirectPath + SUCCESS_ENDPOINT;
 export const FAILURE_REDIRECT_URL = stripeRedirectPath + FAILURE_ENDPOINT;
 
-export const APIS_DOWN_ERROR_RESPONSE = __('There was an error from the server, please try again later');
-export const CARD_SETUP_ERROR_RESPONSE = __('There was an error getting your card setup, please try again later');
+export const APIS_DOWN_ERROR_RESPONSE = 'There was an error from the server, please try again later';
+export const CARD_SETUP_ERROR_RESPONSE = 'There was an error getting your card setup, please try again later';
 
 export const CURRENCIES = Object.freeze({ EUR: 'EUR', USD: 'USD' });
 export const CURRENCY = Object.freeze({

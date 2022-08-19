@@ -1,7 +1,7 @@
 // @flow
 import { selectChannelClaimIdForUri } from 'redux/selectors/claims';
 
-type State = { stripe: StripeState };
+type State = { claims: any, user: UserState, stripe: StripeState };
 
 const selectState = (state: State) => state.stripe || {};
 
@@ -31,14 +31,6 @@ export const selectAccountRequiresVerification = (state: State) => {
   }
 
   return false;
-};
-
-export const selectAccountTotals = (state: State) => {
-  const accountStatus = selectAccountStatus(state);
-  if (!accountStatus) return accountStatus;
-
-  const { total_received_unpaid, total_paid_out } = accountStatus;
-  return { total_received_unpaid, total_paid_out };
 };
 
 export const selectPaymentMethods = (state: State) => {

@@ -64,7 +64,9 @@ const StripeAccountConnection = (props: Props) => {
             {/* show while waiting for account status */}
             {!chargesEnabled && !accountPendingConfirmation && !accountNotConfirmedButReceivedTips && (
               <div className="card__body-actions">
-                <BusyIndicator message={__('Getting your bank account connection status...')} />
+                <h3>
+                  <BusyIndicator message={__('Getting your bank account connection status...')} />
+                </h3>
               </div>
             )}
 

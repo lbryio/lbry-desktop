@@ -5,7 +5,6 @@ import moment from 'moment';
 import * as STRIPE from 'constants/stripe';
 
 type Props = {
-  accountDetails: any,
   transactions: StripeTransactions,
   lastFour: ?any,
   doGetCustomerStatus: () => void,
@@ -66,7 +65,7 @@ const WalletFiatPaymentHistory = (props: Props) => {
                     </td>
                     {/* how much tipped */}
                     <td>
-                      {STRIPE.CURRENCY[transaction.currency.toUpperCase()].symbol}
+                      {STRIPE.CURRENCY[transaction.currency.toUpperCase()]?.symbol}
                       {transaction.tipped_amount / 100} {STRIPE.CURRENCIES[transaction.currency.toUpperCase()]}
                     </td>
                     {/* TODO: this is incorrect need it per transactions not per user */}

@@ -14,8 +14,6 @@ type Props = {
   preferredCurrency: string,
   doTipAccountCheckForUri: (uri: string) => void,
   canReceiveFiatTips: ?boolean,
-  doTipAccountCheckForUri: (uri: string) => void,
-  canReceiveFiatTips: ?boolean,
 };
 
 export default function ClaimSupportButton(props: Props) {
