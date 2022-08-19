@@ -1,6 +1,7 @@
 // @flow
 import { Lbryio } from 'lbryinc';
 import { selectChannelClaimIdForUri, selectChannelNameForUri } from 'redux/selectors/claims';
+import { selectAccountCheckIsFetchingForId } from 'redux/selectors/stripe';
 import { doToast } from 'redux/actions/notifications';
 
 import * as ACTIONS from 'constants/action_types';
@@ -11,9 +12,14 @@ const stripeEnvironment = getStripeEnvironment();
 
 export const doTipAccountCheckForUri = (uri: string) => async (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
-  // $FlowFixMe
   const channelClaimId = selectChannelClaimIdForUri(state, uri);
   const channelName = selectChannelNameForUri(state, uri);
+
+  const isFetching = channelClaimId && selectAccountCheckIsFetchingForId(state, channelClaimId);
+
+  if (isFetching) return;
+
+  dispatch({ type: ACTIONS.CHECK_CAN_RECEIVE_FIAT_TIPS_STARTED, data: channelClaimId });
 
   return await Lbryio.call(
     'account',

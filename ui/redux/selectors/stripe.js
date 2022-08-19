@@ -6,6 +6,7 @@ type State = { claims: any, user: UserState, stripe: StripeState };
 const selectState = (state: State) => state.stripe || {};
 
 export const selectCanReceiveFiatTipsById = (state: State) => selectState(state).canReceiveFiatTipsById || {};
+export const selectAccountCheckFetchingIds = (state: State) => selectState(state).accountCheckFetchingIds;
 export const selectAccountLinkResponse = (state: State) => selectState(state).accountLinkResponse;
 export const selectPaymentHistory = (state: State) => selectState(state).accountPaymentHistory;
 export const selectAccountTransactions = (state: State) => selectState(state).accountTransactions;
@@ -16,6 +17,9 @@ export const selectCustomerSetupResponse = (state: State) => selectState(state).
 export const selectAccountStatus = (state: State) => selectState(state).accountStatus;
 export const selectAccountUnpaidBalance = (state: State) => selectAccountStatus(state)?.total_received_unpaid || 0;
 export const selectAccountChargesEnabled = (state: State) => Boolean(selectAccountStatus(state)?.charges_enabled);
+
+export const selectAccountCheckIsFetchingForId = (state: State, id: string) =>
+  selectAccountCheckFetchingIds(state).includes(id);
 
 export const selectAccountRequiresVerification = (state: State) => {
   const chargesEnabled = selectAccountChargesEnabled(state);

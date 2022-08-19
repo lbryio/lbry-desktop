@@ -1,6 +1,7 @@
 import * as STRIPE from 'constants/stripe';
 
 declare type StripeState = {
+  accountCheckFetchingIds: ClaimIds,
   canReceiveFiatTipsById: { [id: string]: boolean },
   accountStatus: ?StripeAccountStatus,
   accountLinkResponse: ?StripeAccountLink,
