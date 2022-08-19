@@ -10,7 +10,6 @@
   .icon--Key {
     position: relative;
     margin-left: var(--spacing-m);
-    margin-right: var(--spacing-m);
     white-space: nowrap;
     color: var(--color-primary-contrast);
   }
@@ -30,7 +29,6 @@
   font-size: var(--font-body);
   top: calc(var(--spacing-xxs) * -1);
   margin-left: var(--spacing-m);
-  margin-right: var(--spacing-m);
   height: 2.4rem;
 
   .credit-amount {
@@ -39,8 +37,8 @@
   }
 
   &::before {
-    height: 250%;
-    left: calc(var(--spacing-m) * -1);
+    // height: 250%;
+    // left: calc(var(--spacing-m) * -1);
     border-radius: 0;
     border-bottom-left-radius: var(--border-radius);
     border-width: 5px;
