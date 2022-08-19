@@ -104,6 +104,16 @@
     }
   }
 
+  .purchase-stuff {
+    div:first-of-type {
+      width: unset;
+    }
+    div:last-of-type {
+      margin-left: auto;
+      margin-right: var(--spacing-xs);
+    }
+  }
+
   @media (max-width: $breakpoint-small) {
     width: 100%;
     height: 100%;

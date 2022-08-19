@@ -39,23 +39,23 @@
 }
 
 .purchase-stuff__text--purchased {
+  display: block;
   font-weight: bold;
-  font-size: var(--font-title);
-  color: var(--color-black);
-  position: absolute;
-  top: calc(var(--spacing-xl) * 1.6);
-  left: var(--spacing-l);
-  bottom: 0;
-  right: 0;
+  color: var(--color-text);
   z-index: 9999999999;
   animation: display 1s 1 ease-in;
   opacity: 1;
+  background-color: rgba(0, 145, 33, 0.1);
+  padding: var(--spacing-s);
+  border: 2px solid #009121;
+  margin-top: var(--spacing-s);
+  border-radius: var(--border-radius);
 }
 
 .purchase_stuff__subtext--purchased {
-  color: var(--color-black);
-  font-size: var(--font-body);
-  margin-top: var(--spacing-m);
+  color: var(--color-text);
+  margin-top: var(--spacing-s);
+  font-weight: 100;
 }
 
 @keyframes display {

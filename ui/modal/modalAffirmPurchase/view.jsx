@@ -81,29 +81,31 @@ function ModalAffirmPurchase(props: Props) {
       <Card
         title={modalTitle}
         subtitle={
-          <div className={classnames('purchase-stuff', { 'purchase-stuff--purchased': success })}>
-            <div>
-              {success && (
-                <div className="purchase-stuff__text--purchased">
-                  {__('Purchased!')}
-                  <div className="purchase_stuff__subtext--purchased">
-                    {__('This content will now be in your Library.')}
-                  </div>
+          <>
+            <div className={classnames('purchase-stuff', { 'purchase-stuff--purchased': success })}>
+              <div>
+                {/* Keep this message rendered but hidden so the width doesn't change */}
+                <I18nMessage
+                  tokens={{
+                    claim_title: <strong>{title ? `"${title}"` : uri}</strong>,
+                  }}
+                >
+                  Are you sure you want to purchase %claim_title%?
+                </I18nMessage>
+              </div>
+              <div>
+                <FilePrice uri={uri} showFullPrice type="modal" />
+              </div>
+            </div>
+            {success && (
+              <div className="purchase-stuff__text--purchased">
+                {__('Purchased!')}
+                <div className="purchase_stuff__subtext--purchased">
+                  {__('This content will now be in your Library.')}
                 </div>
-              )}
-              {/* Keep this message rendered but hidden so the width doesn't change */}
-              <I18nMessage
-                tokens={{
-                  claim_title: <strong>{title ? `"${title}"` : uri}</strong>,
-                }}
-              >
-                Are you sure you want to purchase %claim_title%?
-              </I18nMessage>
-            </div>
-            <div>
-              <FilePrice uri={uri} showFullPrice type="modal" />
-            </div>
-          </div>
+              </div>
+            )}
+          </>
         }
         actions={
           <div className="section__actions" style={success ? { visibility: 'hidden' } : undefined}>
