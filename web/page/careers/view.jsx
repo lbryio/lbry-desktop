@@ -41,6 +41,12 @@ const CareersPage = () => {
                 />
                 <br />
                 <Button
+                  label={'Software Security Engineer'}
+                  navigate={`/$/${PAGES.CAREERS_SOFTWARE_SECURITY_ENGINEER}`}
+                  className="job-listing"
+                />
+                <br />
+                <Button
                   label={'Senior Android Developer'}
                   navigate={`/$/${PAGES.CAREERS_SENIOR_ANDROID_DEVELOPER}`}
                   className="job-listing"

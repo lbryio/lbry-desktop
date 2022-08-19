@@ -61,7 +61,7 @@ const SeniorSysadminPage = () => {
                 <li>Experience with managing domain names (Cloudflare)</li>
                 <li>Experience with either Nginx, Caddy or Apache</li>
                 <li>Knowledge of Git</li>
-                <li>BA in Computer Science or similar relevant field (or additional 2 years experience)</li>
+                <li>Degree in Computer Science or similar relevant field (or additional 2 years experience)</li>
               </ul>
             </section>
 

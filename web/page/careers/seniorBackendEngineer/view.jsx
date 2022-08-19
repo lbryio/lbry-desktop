@@ -51,7 +51,7 @@ const SeniorBackendEngineerPage = () => {
                 <li>Excellent experience in integrating with MySQL databases</li>
                 <li>Excellent experience with scripting and automation tools</li>
                 <li>Experience with CI/CD technologies (especially working with GH Actions and Docker)</li>
-                <li>BA in Computer Science or similar relevant field (or additional 2 years experience)</li>
+                <li>Degree in Computer Science or similar relevant field (or additional 2 years experience)</li>
               </ul>
             </section>
 
