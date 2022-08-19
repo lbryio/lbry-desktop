@@ -727,6 +727,10 @@ img {
   column-count: 2;
   column-gap: var(--spacing-m);
 
+  .claim-preview__title {
+    height: 20px;
+  }
+
   @media (min-width: $breakpoint-small) {
     .navigation-link {
       &.navigation-link--with-thumbnail .button__content {
