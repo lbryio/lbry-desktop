@@ -994,10 +994,14 @@ svg + .button__label {
 
 .button-following {
   color: var(--color-primary-contrast) !important;
-  //background-color: rgba(var(--color-primary-dynamic),0.5) !important;
   background-color: rgba(125, 125, 125, 0.5) !important;
   .icon {
     stroke: var(--color-primary-contrast) !important;
+  }
+  .button__label {
+    div:first-of-type {
+      min-width: 84px;
+    }
   }
 }
 
