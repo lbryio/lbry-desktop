@@ -54,7 +54,16 @@
 }
 
 .snack-bar--error {
+  border: 2px solid red;
   background-color: var(--color-snack-bg-error);
+
+  .button__content {
+    &:hover {
+      .icon {
+        stroke: var(--color-snack-bg-error);
+      }
+    }
+  }
 }
 
 .snack-bar-counter-bubble {
