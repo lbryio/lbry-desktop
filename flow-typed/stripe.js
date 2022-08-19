@@ -1,5 +1,3 @@
-import * as STRIPE from 'constants/stripe';
-
 declare type StripeState = {
   accountCheckFetchingIds: ClaimIds,
   canReceiveFiatTipsById: { [id: string]: boolean },
@@ -85,4 +83,4 @@ declare type StripeCardDetails = {
   email: string,
 };
 
-declare type CurrencyOption = STRIPE.CURRENCIES.USD | STRIPE.CURRENCIES.EUR;
+declare type CurrencyOption = 'USD' | 'EUR';
