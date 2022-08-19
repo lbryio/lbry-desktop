@@ -37,7 +37,6 @@ export default function NotificationContentChannelMenu(props: Props) {
         <Icon aria-hidden icon={notificationsDisabled ? ICONS.BELL : ICONS.BELL_ON} />
         {notificationsDisabled ? __('Turn Back On') : __('Turn Off')}
       </div>
-      <span className="menu__link-help">{claimName}</span>
     </MenuItem>
   );
 }
