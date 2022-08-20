@@ -60,7 +60,7 @@ const SoftwareSecurityEngineerPage = () => {
                   Architectures) and of network/web related protocols.
                 </li>
                 <li>Interest in all aspects of security research and development.</li>
-                <li>Degree degree in Computer Science or related fiel.d</li>
+                <li>Degree in Computer Science or related field.</li>
               </ul>
             </section>
 
