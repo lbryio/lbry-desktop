@@ -143,7 +143,7 @@ export default function CollectionsListMine(props: Props) {
 
       if (sortOption.key === COLS.SORT_KEYS.NAME) {
         // $FlowFixMe
-        return comparisonObj.a.localeCompare(comparisonObj.b);
+        return comparisonObj.a ? comparisonObj.a.localeCompare(comparisonObj.b) : 0;
       }
 
       if ((comparisonObj.a || 0) > (comparisonObj.b || 0)) {
