@@ -12,6 +12,24 @@
         }
       }
     }
+
+    @media (max-width: $breakpoint-small) {
+      .card {
+        .card__first-pane {
+          .card__header--between {
+            flex-wrap: unset;
+            .credit-amount {
+              margin-left: unset;
+              margin-right: var(--spacing-s);
+              min-width: 60px;
+              .icon {
+                margin-bottom: 0;
+              }
+            }
+          }
+        }
+      }
+    }
   }
 
   .file-page__recommended {
