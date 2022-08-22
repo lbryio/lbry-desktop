@@ -560,7 +560,7 @@ export const selectIsChannelMineForClaimId = (state: State, channelId: string) =
 
 export const selectMyChannelClaimUrls = createSelector(
   selectMyChannelClaims,
-  (myChannelClaims) => myChannelClaims && myChannelClaims.map(({ canonical_url }) => canonical_url)
+  (myChannelClaims) => myChannelClaims && myChannelClaims.map(({ permanent_url }) => permanent_url)
 );
 
 export const selectHasChannels = (state: State) => {
