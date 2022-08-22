@@ -168,8 +168,10 @@
   border-bottom: unset;
 
   .ad__container {
-    // width:100%;
     width: var(--file-list-thumbnail-width);
+    @media (max-width: $breakpoint-small) {
+      width: calc(var(--file-list-thumbnail-width) * 0.8);
+    }
   }
 
   .ads__claim-text {
@@ -180,6 +182,9 @@
       color: var(--color-text);
       font-size: var(--font-small);
       font-weight: var(--font-weight-bold);
+      @media (max-width: $breakpoint-small) {
+        margin-bottom: 0;
+      }
     }
   }
 
