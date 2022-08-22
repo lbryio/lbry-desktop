@@ -6,6 +6,8 @@ const selectState = (state) => state.rewards || {};
 
 export const selectUnclaimedRewardsByType = (state) => selectState(state).unclaimedRewardsByType;
 export const selectClaimedRewardsById = (state) => selectState(state).claimedRewardsById;
+export const selectViewRateById = (state) => selectState(state).viewRateById;
+export const selectViewRateForChannelId = (state, channelId) => selectViewRateById(state)[channelId];
 
 export const selectClaimedRewards = createSelector(selectClaimedRewardsById, (byId) => Object.values(byId) || []);
 

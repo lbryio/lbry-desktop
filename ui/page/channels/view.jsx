@@ -1,7 +1,6 @@
 // @flow
 import * as ICONS from 'constants/icons';
-import React, { useEffect } from 'react';
-import { Lbryio } from 'lbryinc';
+import React from 'react';
 import ClaimList from 'component/claimList';
 import Page from 'component/page';
 import Button from 'component/button';
@@ -16,42 +15,71 @@ import { useHistory } from 'react-router';
 import useGetUserMemberships from 'effects/use-get-user-memberships';
 
 type Props = {
-  channelUrls: Array<string>,
-  fetchChannelListMine: () => void,
+  // -- redux --
+  channelUrls: ?Array<string>,
+  channelIds: ?ClaimIds,
   fetchingChannels: boolean,
-  youtubeChannels: ?Array<any>,
+  hasYoutubeChannels: boolean,
+  pendingIds: Array<string>,
+  viewRateById: {},
+  doFetchChannelListMine: () => void,
+  doUserViewRateList: () => void,
   doSetActiveChannel: (string) => void,
-  pendingChannels: Array<string>,
   claimsByUri: { [string]: any },
   doFetchUserMemberships: (claimIdCsv: string) => void,
 };
 
 export default function ChannelsPage(props: Props) {
   const {
+    // -- redux --
     channelUrls,
-    fetchChannelListMine,
+    channelIds,
     fetchingChannels,
-    youtubeChannels,
+    hasYoutubeChannels,
+    pendingIds,
+    viewRateById,
+    doFetchChannelListMine,
+    doUserViewRateList,
     doSetActiveChannel,
-    pendingChannels,
     claimsByUri,
     doFetchUserMemberships,
   } = props;
-  const [rewardData, setRewardData] = React.useState();
-  const hasYoutubeChannels = youtubeChannels && Boolean(youtubeChannels.length);
-
   const shouldFetchUserMemberships = true;
   useGetUserMemberships(shouldFetchUserMemberships, channelUrls, claimsByUri, doFetchUserMemberships);
 
+  const hasChannels = Number.isInteger(channelIds?.length);
+
+  React.useEffect(() => {
+    if (channelIds) {
+      doUserViewRateList();
+    } else {
+      doFetchChannelListMine();
+    }
+  }, [channelIds, doFetchChannelListMine, doUserViewRateList]);
+
   const { push } = useHistory();
 
-  useEffect(() => {
-    fetchChannelListMine();
-  }, [fetchChannelListMine]);
-
-  useEffect(() => {
-    Lbryio.call('user_rewards', 'view_rate').then((data) => setRewardData(data));
-  }, [setRewardData]);
+  if (!hasChannels) {
+    return (
+      <Page className="channelsPage-wrapper">
+        {fetchingChannels ? (
+          <div className="main--empty">
+            <Spinner delayed />
+          </div>
+        ) : (
+          <Yrbl
+            title={__('No channels')}
+            subtitle={__("You haven't created a channel yet. All of your beautiful channels will be listed here!")}
+            actions={
+              <div className="section__actions">
+                <Button button="primary" label={__('Create Channel')} navigate={`/$/${PAGES.CHANNEL_NEW}`} />
+              </div>
+            }
+          />
+        )}
+      </Page>
+    );
+  }
 
   return (
     <Page className="channelsPage-wrapper">
@@ -69,91 +97,64 @@ export default function ChannelsPage(props: Props) {
           navigate={`/$/${PAGES.YOUTUBE_SYNC}`}
         />
 
-        {channelUrls && Boolean(channelUrls.length) && (
-          <ClaimList
-            showMemberBadge
-            header={<h1 className="section__title">{__('Your channels')}</h1>}
-            headerAltControls={
-              <Button
-                button="secondary"
-                icon={ICONS.CHANNEL}
-                label={__('New Channel')}
-                navigate={`/$/${PAGES.CHANNEL_NEW}`}
-              />
-            }
-            loading={fetchingChannels}
-            uris={channelUrls}
-            renderActions={(claim) => {
-              const claimsInChannel = claim.meta.claims_in_channel;
-              return claimsInChannel === 0 ? (
-                <span />
-              ) : (
-                <div className="section__actions">
-                  <Button
-                    button="alt"
-                    icon={ICONS.ANALYTICS}
-                    label={__('Analytics')}
-                    onClick={() => {
-                      doSetActiveChannel(claim.claim_id);
-                      push(`/$/${PAGES.CREATOR_DASHBOARD}`);
-                    }}
-                  />
-                </div>
-              );
-            }}
-            renderProperties={(claim) => {
-              const claimsInChannel = claim.meta.claims_in_channel;
-              if (!claim || claimsInChannel === 0) {
-                return null;
-              }
-
-              const channelRewardData =
-                rewardData &&
-                rewardData.rates &&
-                rewardData.rates.find((data) => {
-                  return data.channel_claim_id === claim.claim_id;
-                });
-
-              if (channelRewardData && !pendingChannels.includes(claim.permanent_url)) {
-                return (
-                  <span className="claim-preview__custom-properties">
-                    <span className="help--inline">
-                      {__('Earnings per view')}{' '}
-                      <HelpLink href="https://odysee.com/@OdyseeHelp:b/Monetization-of-Content:3" />
-                    </span>
-
-                    <span>
-                      <LbcSymbol postfix={channelRewardData.view_rate.toFixed(2)} />
-                    </span>
-                  </span>
-                );
-              } else {
-                return null;
-              }
-            }}
-          />
-        )}
-      </div>
-
-      {!(channelUrls && channelUrls.length) && (
-        <React.Fragment>
-          {!fetchingChannels ? (
-            <Yrbl
-              title={__('No channels')}
-              subtitle={__("You haven't created a channel yet. All of your beautiful channels will be listed here!")}
-              actions={
-                <div className="section__actions">
-                  <Button button="primary" label={__('Create Channel')} navigate={`/$/${PAGES.CHANNEL_NEW}`} />
-                </div>
-              }
+        <ClaimList
+          showMemberBadge
+          header={<h1 className="section__title">{__('Your channels')}</h1>}
+          headerAltControls={
+            <Button
+              button="secondary"
+              icon={ICONS.CHANNEL}
+              label={__('New Channel')}
+              navigate={`/$/${PAGES.CHANNEL_NEW}`}
             />
-          ) : (
-            <section className="main--empty">
-              <Spinner delayed />
-            </section>
-          )}
-        </React.Fragment>
-      )}
+          }
+          loading={fetchingChannels}
+          uris={channelUrls}
+          renderActions={(claim) => {
+            const claimsInChannel = claim.meta.claims_in_channel;
+            return claimsInChannel === 0 ? (
+              <span />
+            ) : (
+              <div className="section__actions">
+                <Button
+                  button="alt"
+                  icon={ICONS.ANALYTICS}
+                  label={__('Analytics')}
+                  onClick={() => {
+                    doSetActiveChannel(claim.claim_id);
+                    push(`/$/${PAGES.CREATOR_DASHBOARD}`);
+                  }}
+                />
+              </div>
+            );
+          }}
+          renderProperties={(claim) => {
+            const claimsInChannel = claim.meta.claims_in_channel;
+            if (!claim || claimsInChannel === 0) {
+              return null;
+            }
+
+            const channelRewardData = viewRateById[claim.claim_id];
+
+            if (channelRewardData && !pendingIds.includes(claim.claim_id)) {
+              return (
+                <span className="claim-preview__custom-properties">
+                  <span className="help--inline">
+                    {__('Earnings per view')}{' '}
+                    <HelpLink href="https://odysee.com/@OdyseeHelp:b/Monetization-of-Content:3" />
+                  </span>
+
+                  <span>
+                    <LbcSymbol postfix={channelRewardData.view_rate.toFixed(2)} />
+                  </span>
+                </span>
+              );
+            } else {
+              return null;
+            }
+          }}
+        />
+      </div>
     </Page>
   );
 }

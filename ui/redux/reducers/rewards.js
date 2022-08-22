@@ -7,6 +7,7 @@ const defaultState = {
   claimPendingByType: {},
   claimErrorsByType: {},
   rewardedContentClaimIds: [],
+  viewRateById: {},
 };
 
 reducers[ACTIONS.FETCH_REWARDS_STARTED] = (state) =>
@@ -102,6 +103,19 @@ reducers[ACTIONS.FETCH_REWARD_CONTENT_COMPLETED] = (state, action) => {
   return Object.assign({}, state, {
     rewardedContentClaimIds: claimIds,
   });
+};
+
+reducers[ACTIONS.USER_VIEW_RATE_COMPLETED] = (state, action) => {
+  const viewRateData = action.data;
+  const newViewRateById = Object.assign({}, state.viewRateById);
+
+  if (viewRateData?.rates?.length > 0) {
+    viewRateData.rates.forEach((data) => {
+      if (data.channel_claim_id) newViewRateById[data.channel_claim_id] = data;
+    });
+  }
+
+  return { ...state, viewRateById: newViewRateById };
 };
 
 export default function rewardsReducer(state = defaultState, action) {

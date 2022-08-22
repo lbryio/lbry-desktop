@@ -185,3 +185,9 @@ export function doFetchRewardedContent() {
     Lbryio.call('reward', 'list_featured').then(success, failure);
   };
 }
+
+// @flow
+export const doUserViewRateList = () => async (dispatch: Dispatch) =>
+  await Lbryio.call('user_rewards', 'view_rate').then((data) =>
+    dispatch({ type: ACTIONS.USER_VIEW_RATE_COMPLETED, data })
+  );

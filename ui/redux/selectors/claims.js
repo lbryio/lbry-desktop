@@ -544,39 +544,23 @@ export const selectMyClaimsOutpoints = createSelector(selectMyClaims, (myClaims)
 export const selectFetchingMyChannels = (state: State) => selectState(state).fetchingMyChannels;
 export const selectIsFetchingMyCollections = (state: State) => selectState(state).isFetchingMyCollections;
 
-export const selectMyChannelClaimIds = (state: State) => selectState(state).myChannelClaims;
+export const selectMyChannelClaimsById = (state: State) => selectState(state).myChannelClaimsById;
+export const selectMyChannelClaims = createSelector(
+  selectMyChannelClaimsById,
+  (myChannelClaimsById) => myChannelClaimsById && Object.values(myChannelClaimsById)
+);
+export const selectMyChannelClaimIds = createSelector(
+  selectMyChannelClaimsById,
+  (myChannelClaimsById) => myChannelClaimsById && Object.keys(myChannelClaimsById)
+);
+export const selectIsChannelMineForClaimId = (state: State, channelId: string) => {
+  const myChannelClaimIds = selectMyChannelClaimIds(state);
+  return Boolean(myChannelClaimIds && myChannelClaimIds.includes(channelId));
+};
 
-export const selectMyChannelClaims = createSelector(selectMyChannelClaimIds, (myChannelClaimIds) => {
-  if (!myChannelClaimIds) {
-    return myChannelClaimIds;
-  }
-
-  if (!window || !window.store) {
-    return undefined;
-  }
-
-  // Note: Grabbing the store and running the selector this way is anti-pattern,
-  // but it is _needed_ and works only because we know for sure that 'byId[]'
-  // will be populated with the same claims as when 'myChannelClaimIds' is populated.
-  // If we put 'state' or 'byId' as the input selector, it essentially
-  // recalculates every time. Putting 'state' as input to createSelector() is
-  // always wrong from a memoization standpoint.
-  const state = window.store.getState();
-  const byId = selectClaimsById(state);
-
-  const claims = [];
-  myChannelClaimIds.forEach((id) => {
-    if (byId[id]) {
-      // I'm not sure why this check is necessary, but it ought to be a quick fix for https://github.com/lbryio/lbry-desktop/issues/544
-      claims.push(byId[id]);
-    }
-  });
-
-  return claims;
-});
-
-export const selectMyChannelUrls = createSelector(selectMyChannelClaims, (claims) =>
-  claims ? claims.map((claim) => claim.canonical_url || claim.permanent_url) : undefined
+export const selectMyChannelClaimUrls = createSelector(
+  selectMyChannelClaims,
+  (myChannelClaims) => myChannelClaims && myChannelClaims.map(({ canonical_url }) => canonical_url)
 );
 
 export const selectHasChannels = (state: State) => {
