@@ -2036,11 +2036,21 @@ a {
 *:focus-visible:not(.modal):not(.card):not(.wunderbar__input):not(.menu__list):not(.menu__list--header):not(.button--secondary):not(.button-like):not(.button-dislike):not(select):not(input):not(textarea):not(video):not([data-reach-tab-panels]):not([data-reach-tabs]):not([data-reach-tab-panel]):not(.CodeMirror-code):not(.MuiModal-root):not(.MuiPaper-root):not(.card):not(#onetrust-banner-sdk):not(.vjs-touch-overlay) {
   background-color: rgba(var(--color-primary-dynamic), 0.2) !important;
   color: var(--color-text) !important;
-  // outline: 2px solid var(--color-primary);
   box-shadow: 0px 0px 0px 2px var(--color-primary) inset;
 
   .icon {
     stroke: var(--color-text) !important;
+  }
+}
+
+.channel__selector {
+  button:focus-visible {
+    background-color: unset !important;
+    box-shadow: unset !important;
+    .channel__list-item {
+      background-color: rgba(var(--color-primary-dynamic), 0.2) !important;
+      box-shadow: 0px 0px 0px 2px var(--color-primary) inset;
+    }
   }
 }
 
