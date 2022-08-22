@@ -94,11 +94,13 @@
   margin: var(--spacing-s) 0;
   margin-left: auto;
   min-width: min-content;
-  color: var(--color-white);
+  color: var(--color-primary-contrast);
   font-size: var(--font-small);
 
-  span:hover {
-    text-decoration: underline;
+  &:hover {
+    .button__label {
+      color: var(--color-primary);
+    }
   }
 }
 
