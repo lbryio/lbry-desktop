@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import HeaderMenuButtons from './view';
 import { selectUserVerifiedEmail, selectUser } from 'redux/selectors/user';
-import { doOpenModal } from 'redux/actions/app';
+import { doClearPublish } from 'redux/actions/publish';
 
 const select = (state) => ({
   authenticated: selectUserVerifiedEmail(state),
@@ -9,7 +9,7 @@ const select = (state) => ({
 });
 
 const perform = (dispatch) => ({
-  doOpenModal: (id, params) => dispatch(doOpenModal(id, params)),
+  clearPublish: () => dispatch(doClearPublish()),
 });
 
 export default connect(select, perform)(HeaderMenuButtons);

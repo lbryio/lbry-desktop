@@ -674,9 +674,9 @@ $actions-z-index: 2;
 
   .icon__wrapper {
     padding: 0;
-    height: 2rem;
-    width: 2rem;
-    margin-right: var(--spacing-m);
+    height: 1.4rem;
+    width: 1.4rem;
+    margin-right: var(--spacing-xs);
     border-radius: var(--border-radius);
   }
 
@@ -728,7 +728,7 @@ $actions-z-index: 2;
 
   &:hover {
     .claim-preview__title {
-      color: var(--primary-contrast);
+      color: var(--color-primary-contrast);
     }
   }
 }

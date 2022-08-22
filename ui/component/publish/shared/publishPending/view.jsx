@@ -15,6 +15,7 @@ const PublishPending = (props: Props) => {
   const { fileListItem, progress, stalled } = reflectingInfo;
   const sdHash = fileListItem && fileListItem.sd_hash;
   const reflecting = Object.keys(reflectingInfo).length;
+
   if (stalled) {
     return (
       <Button

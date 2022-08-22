@@ -75,6 +75,23 @@
         box-shadow: unset;
       }
     }
+
+    .card__title-section {
+      padding-top: 0;
+    }
+    .card--inline {
+      .claim-preview__wrapper {
+        border: 2px solid var(--color-border);
+        background: var(--color-header-background) !important;
+        padding: var(--spacing-s) !important;
+        .claim-preview-info {
+          padding-top: 0;
+          span {
+            font-size: var(--font-body);
+          }
+        }
+      }
+    }
   }
 
   &:focus,

@@ -15,11 +15,11 @@ type HeaderMenuButtonProps = {
   authenticated: boolean,
   user: ?User,
   authRedirect?: string,
-  doOpenModal: (string, {}) => void,
+  clearPublish: () => void,
 };
 
 export default function HeaderMenuButtons(props: HeaderMenuButtonProps) {
-  const { authenticated, user, authRedirect } = props;
+  const { authenticated, user, authRedirect, clearPublish } = props;
 
   const livestreamEnabled = Boolean(ENABLE_NO_SOURCE_CLAIMS && user && !user.odysee_live_disabled);
   const authRedirectParam = authRedirect ? `?redirect=${authRedirect}` : '';
@@ -30,19 +30,24 @@ export default function HeaderMenuButtons(props: HeaderMenuButtonProps) {
   return authenticated ? (
     <div className="header__buttons">
       <Tooltip title={__('Upload')}>
-        <Button className="header__navigationItem--icon" navigate={`/$/${PAGES.UPLOAD}`}>
+        <Button className="header__navigationItem--icon" onClick={() => clearPublish()} navigate={`/$/${PAGES.UPLOAD}`}>
           <Icon size={18} icon={ICONS.PUBLISH} aria-hidden />
         </Button>
       </Tooltip>
       {livestreamEnabled && (
         <Tooltip title={__('Go live')}>
-          <Button className="header__navigationItem--icon" {...uploadProps} navigate={`/$/${PAGES.LIVESTREAM}`}>
+          <Button
+            className="header__navigationItem--icon"
+            {...uploadProps}
+            onClick={() => clearPublish()}
+            navigate={`/$/${PAGES.LIVESTREAM}`}
+          >
             <Icon size={18} icon={ICONS.VIDEO} aria-hidden />
           </Button>
         </Tooltip>
       )}
       <Tooltip title={__('Post an article')}>
-        <Button className="header__navigationItem--icon" navigate={`/$/${PAGES.POST}`}>
+        <Button className="header__navigationItem--icon" onClick={() => clearPublish()} navigate={`/$/${PAGES.POST}`}>
           <Icon size={18} icon={ICONS.POST} aria-hidden />
         </Button>
       </Tooltip>

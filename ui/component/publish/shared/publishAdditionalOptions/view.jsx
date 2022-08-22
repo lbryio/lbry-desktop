@@ -44,78 +44,20 @@ function PublishAdditionalOptions(props: Props) {
     showSchedulingOptions,
     disabled,
     isLivestream,
-    // user,
-    // useLBRYUploader,
-    // needsYTAuth,
-    // accessToken,
-    // fetchAccessToken,
   } = props;
-  // const [hideSection, setHideSection] = usePersistedState('publish-advanced-options', true);
   const [hideSection, setHideSection] = useState(disabled);
-  //   const [hasLaunchedLbryFirst, setHasLaunchedLbryFirst] = React.useState(false);
-  //   const [ytError, setYtError] = React.useState(false);
-  //   const isLBRYFirstUser = user && user.lbry_first_approved;
-  //   const showLbryFirstCheckbox = !IS_WEB && isLBRYFirstUser && hasLaunchedLbryFirst;
 
   function toggleHideSection() {
     setHideSection(!hideSection);
   }
 
-  //   @if TARGET='app'
-  //   function signup() {
-  //     updatePublishForm({ ytSignupPending: true });
-  //     LbryFirst.ytSignup()
-  //       .then(response => {
-  //         updatePublishForm({ needsYTAuth: false, ytSignupPending: false });
-  //       })
-  //       .catch(error => {
-  //         updatePublishForm({ ytSignupPending: false });
-  //         setYtError(true);
-  //         console.error(error); // eslint-disable-line
-  //       });
-  //   }
-
-  //   function unlink() {
-  //     setYtError(false);
-
-  //     LbryFirst.remove()
-  //       .then(response => {
-  //         updatePublishForm({ needsYTAuth: true });
-  //       })
-  //       .catch(error => {
-  //         setYtError(true);
-  //         console.error(error); // eslint-disable-line
-  //       });
-  //   }
-
-  //   React.useEffect(() => {
-  //     if (!accessToken) {
-  //       fetchAccessToken();
-  //     }
-  //   }, [accessToken, fetchAccessToken]);
-
-  //   React.useEffect(() => {
-  //     if (isLBRYFirstUser && !hasLaunchedLbryFirst) {
-  //       ipcRenderer.send('launch-lbry-first');
-  //       ipcRenderer.on('lbry-first-launched', () => {
-  //         setHasLaunchedLbryFirst(true);
-  //       });
-  //     }
-  //   }, [isLBRYFirstUser, hasLaunchedLbryFirst, setHasLaunchedLbryFirst]);
-
-  //   React.useEffect(() => {
-  //     if (useLBRYUploader && isLBRYFirstUser && hasLaunchedLbryFirst && accessToken) {
-  //       LbryFirst.hasYTAuth(accessToken)
-  //         .then(response => {
-  //           updatePublishForm({ needsYTAuth: !response.HasAuth });
-  //         })
-  //         .catch(error => {
-  //           setYtError(true);
-  //           console.error(error); // eslint-disable-line
-  //         });
-  //     }
-  //   }, [updatePublishForm, useLBRYUploader, isLBRYFirstUser, hasLaunchedLbryFirst, accessToken]);
-  // @endif
+  React.useEffect(() => {
+    if (licenseType === 'copyright') {
+      updatePublishForm({
+        otherLicenseDescription: 'All rights reserved',
+      });
+    }
+  }, [licenseType]);
 
   return (
     <>
