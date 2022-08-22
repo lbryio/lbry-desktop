@@ -1266,7 +1266,7 @@ img {
       margin-top: 0;
     }
 
-    fieldset-group {
+    fieldset-group:not(.fieldset-group--smushed) {
       fieldset-section {
         width: 50%;
         &:last-of-type {
@@ -1391,12 +1391,6 @@ img {
     .button--link {
       margin-left: 0;
     }
-  }
-}
-
-.input--currency-select {
-  label {
-    margin-top: 2.5px !important;
   }
 }
 
