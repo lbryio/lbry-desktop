@@ -18,7 +18,6 @@ const {
   unscapeHtmlProperty,
 } = require('../../ui/util/web');
 const { fetchStreamUrl } = require('./fetchStreamUrl');
-const { getJsBundleId } = require('../bundle-id.js');
 const { lbryProxy: Lbry } = require('../lbry');
 const { getHomepageJsonV1 } = require('./getHomepageJSON');
 const { buildURI, parseURI, normalizeClaimUrl } = require('./lbryURI');
@@ -28,24 +27,30 @@ const path = require('path');
 const removeMd = require('remove-markdown');
 const { buildGoogleVideoMetadata } = require('./metadata/googleVideo');
 
-const jsBundleId = getJsBundleId();
 Lbry.setDaemonConnectionString(PROXY_URL);
 
 const BEGIN_STR = '<!-- VARIABLE_HEAD_BEGIN -->';
 const FINAL_STR = '<!-- VARIABLE_HEAD_END -->';
+const DOUBLE_TAB = '    ';
 
 // ****************************************************************************
 // Helpers
 // ****************************************************************************
 
-function insertToHead(fullHtml, htmlToInsert) {
+function insertToHead(fullHtml, htmlToInsert, buildRev = '') {
   const beginIndex = fullHtml.indexOf(BEGIN_STR);
   const finalIndex = fullHtml.indexOf(FINAL_STR);
 
   if (beginIndex > -1 && finalIndex > -1 && finalIndex > beginIndex) {
-    return `${fullHtml.slice(0, beginIndex)}${
-      htmlToInsert || buildOgMetadata()
-    }<script src="/public/ui-${jsBundleId}.js" async></script>${fullHtml.slice(finalIndex + FINAL_STR.length)}`;
+    const uiScript = buildRev ? `<script src="/public/ui-${buildRev}.js" async></script>` : '';
+
+    return (
+      `${fullHtml.slice(0, beginIndex)}` +
+      `${htmlToInsert || buildOgMetadata()}\n` +
+      `${DOUBLE_TAB}` +
+      `${uiScript}` +
+      `${fullHtml.slice(finalIndex + FINAL_STR.length)}`
+    );
   }
 }
 
@@ -136,8 +141,14 @@ function addFavicon() {
 }
 
 function buildHead() {
-  const head = BEGIN_STR + addFavicon() + addPWA() + buildOgMetadata() + FINAL_STR;
-  return head;
+  return (
+    `${BEGIN_STR}\n` +
+    `${addFavicon()}\n` +
+    `${addPWA()}\n` +
+    `${buildOgMetadata()}\n` +
+    `${DOUBLE_TAB}` +
+    `${FINAL_STR}\n`
+  );
 }
 
 function buildBasicOgMetadata() {
