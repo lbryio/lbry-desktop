@@ -67,6 +67,17 @@ export const doCustomerListPaymentHistory = () => async (dispatch: Dispatch) =>
     })
     .catch((e) => e);
 
+export const doCheckIfPurchasedClaimId = (claimId: string) => async (dispatch: Dispatch) => {
+  dispatch({ type: ACTIONS.CHECK_IF_PURCHASED_STARTED });
+
+  // we'll check if there's anything for the targeted id
+  // if we're on a preorder and there is, build the purchase url with the reference (if exists)
+  // if we're on a purchase and there is, show the video
+  return await Lbryio.call('customer', 'list', { environment: stripeEnvironment, claim_id_filter: claimId }, 'post')
+    .then((response) => dispatch({ type: ACTIONS.CHECK_IF_PURCHASED_COMPLETED, data: response }))
+    .catch((e) => dispatch({ type: ACTIONS.CHECK_IF_PURCHASED_FAILED, data: { error: e.message } }));
+};
+
 export const doListAccountTransactions = () => async (dispatch: Dispatch) =>
   await Lbryio.call('account', 'list', { environment: stripeEnvironment }, 'post').then(
     (accountListResponse: StripeTransactions) => {

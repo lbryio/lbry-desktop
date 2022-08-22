@@ -27,7 +27,7 @@ import { DISABLE_COMMENTS_TAG } from 'constants/tags';
 import { doToggleAppDrawer, doSetMainPlayerDimension } from 'redux/actions/app';
 import { getChannelIdFromClaim } from 'util/claim';
 import { doFileGet } from 'redux/actions/file';
-import { doCheckIfPurchasedClaimId } from 'redux/actions/claims';
+import { doCheckIfPurchasedClaimId } from 'redux/actions/stripe';
 
 import FilePage from './view';
 

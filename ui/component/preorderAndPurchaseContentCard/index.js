@@ -4,6 +4,7 @@ import { doHideModal, doOpenModal } from 'redux/actions/app';
 import { preOrderPurchase } from 'redux/actions/wallet';
 import { selectPreferredCurrency } from 'redux/selectors/settings';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
+import { selectHasSavedCard } from 'redux/selectors/stripe';
 import { withRouter } from 'react-router';
 import { getChannelIdFromClaim, getChannelNameFromClaim } from 'util/claim';
 import PreorderAndPurchaseContent from './view';
@@ -30,6 +31,7 @@ const select = (state, props) => {
     tipChannelName,
     preferredCurrency: selectPreferredCurrency(state),
     preorderTag: selectPreorderTagForUri(state, props.uri),
+    hasSavedCard: selectHasSavedCard(state),
   };
 };
 

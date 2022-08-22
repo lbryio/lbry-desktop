@@ -13,31 +13,30 @@ import {
 import PreorderAndPurchaseButton from './view';
 import { doOpenModal } from 'redux/actions/app';
 import { selectPreferredCurrency } from 'redux/selectors/settings';
-import { doResolveClaimIds, doCheckIfPurchasedClaimId } from 'redux/actions/claims';
-import { getChannelIdFromClaim, getChannelNameFromClaim } from 'util/claim';
+import { doResolveClaimIds } from 'redux/actions/claims';
+import { selectHasSavedCard, selectCanReceiveFiatTipsForUri } from 'redux/selectors/stripe';
+import { doGetCustomerStatus, doTipAccountCheckForUri, doCheckIfPurchasedClaimId } from 'redux/actions/stripe';
 
 const select = (state, props) => {
-  const claim = selectClaimForUri(state, props.uri);
+  const { uri } = props;
+  const claim = selectClaimForUri(state, uri);
 
-  const preorderContentClaimId = selectPreorderContentClaimIdForUri(state, props.uri);
-  const channelClaimId = getChannelIdFromClaim(claim);
-
-  const channelName = getChannelNameFromClaim(claim);
+  const preorderContentClaimId = selectPreorderContentClaimIdForUri(state, uri);
 
   return {
-    channelClaimId,
-    channelName,
     claim,
     claimIsMine: selectClaimIsMine(state, claim),
     preferredCurrency: selectPreferredCurrency(state),
     preorderContentClaim: selectClaimForId(state, preorderContentClaimId),
-    preorderContentClaimId: selectPreorderContentClaimIdForUri(state, props.uri),
-    preorderTag: selectPreorderTagForUri(state, props.uri),
-    purchaseContentTag: selectPurchaseTagForUri(state, props.uri),
+    preorderContentClaimId: selectPreorderContentClaimIdForUri(state, uri),
+    preorderTag: selectPreorderTagForUri(state, uri),
+    purchaseContentTag: selectPurchaseTagForUri(state, uri),
     purchaseMadeForClaimId: selectPurchaseMadeForClaimId(state, claim.claim_id),
-    purchaseTag: selectPurchaseTagForUri(state, props.uri),
-    rentalTag: selectRentalTagForUri(state, props.uri),
+    purchaseTag: selectPurchaseTagForUri(state, uri),
+    rentalTag: selectRentalTagForUri(state, uri),
     validRentalPurchase: selectValidRentalPurchaseForClaimId(state, claim.claim_id),
+    hasSavedCard: selectHasSavedCard(state),
+    canReceiveFiatTips: selectCanReceiveFiatTipsForUri(state, uri),
   };
 };
 
@@ -45,6 +44,8 @@ const perform = {
   doOpenModal,
   doResolveClaimIds,
   doCheckIfPurchasedClaimId,
+  doGetCustomerStatus,
+  doTipAccountCheckForUri,
 };
 
 export default connect(select, perform)(PreorderAndPurchaseButton);

@@ -4,18 +4,12 @@ import * as MODALS from 'constants/modal_types';
 import * as PAGES from 'constants/pages';
 import * as STRIPE from 'constants/stripe';
 import Button from 'component/button';
-import { Lbryio } from 'lbryinc';
-import { getStripeEnvironment } from 'util/stripe';
 import { secondsToDhms } from 'util/time';
 const moment = require('moment');
-
-let stripeEnvironment = getStripeEnvironment();
 
 type RentalTagParams = { price: number, expirationTimeInSeconds: number };
 
 type Props = {
-  channelClaimId: string,
-  channelName: string,
   claim: StreamClaim,
   claimIsMine: boolean,
   doCheckIfPurchasedClaimId: (string) => void,
@@ -30,12 +24,14 @@ type Props = {
   rentalTag: RentalTagParams,
   uri: string,
   validRentalPurchase: any,
+  hasSavedCard: ?boolean,
+  canReceiveFiatTips: ?boolean,
+  doGetCustomerStatus: () => void,
+  doTipAccountCheckForUri: (uri: string) => void,
 };
 
 export default function PreorderAndPurchaseButton(props: Props) {
   const {
-    channelClaimId,
-    channelName,
     claim,
     claimIsMine,
     doCheckIfPurchasedClaimId,
@@ -50,11 +46,12 @@ export default function PreorderAndPurchaseButton(props: Props) {
     rentalTag,
     uri,
     validRentalPurchase,
+    hasSavedCard,
+    canReceiveFiatTips,
+    doGetCustomerStatus,
+    doTipAccountCheckForUri,
   } = props;
 
-  const [hasChargesEnabled, setHasChargesEnabled] = React.useState(false);
-  const [hasCardSaved, setHasSavedCard] = React.useState(false);
-  const [waitingForBackend, setWaitingForBackend] = React.useState(true);
   const [rentExpiresTime, setRentExpiresTime] = React.useState(false);
 
   const myUpload = claimIsMine;
@@ -82,56 +79,16 @@ export default function PreorderAndPurchaseButton(props: Props) {
     }
   }, [validRentalPurchase]);
 
-  async function checkStripeAccountStatus() {
-    try {
-      const response = await Lbryio.call(
-        'account',
-        'check',
-        {
-          environment: stripeEnvironment,
-          channel_claim_id: channelClaimId,
-          channel_name: channelName,
-        },
-        'post'
-      );
-
-      if (response === true) {
-        setHasChargesEnabled(true);
-      }
-
-      setWaitingForBackend(false);
-
-      return response;
-    } catch (err) {}
-  }
-
   React.useEffect(() => {
     if (preorderTag || purchaseTag || rentalTag) {
-      checkStripeAccountStatus();
+      doTipAccountCheckForUri(uri);
     }
-  }, [preorderTag, purchaseTag, rentalTag]);
+  }, [doTipAccountCheckForUri, preorderTag, purchaseTag, rentalTag, uri]);
 
   // check if user has a payment method saved
   React.useEffect(() => {
-    Lbryio.call(
-      'customer',
-      'status',
-      {
-        environment: stripeEnvironment,
-      },
-      'post'
-    )
-      .then((customerStatusResponse) => {
-        const defaultPaymentMethodId =
-          customerStatusResponse.Customer &&
-          customerStatusResponse.Customer.invoice_settings &&
-          customerStatusResponse.Customer.invoice_settings.default_payment_method &&
-          customerStatusResponse.Customer.invoice_settings.default_payment_method.id;
-
-        setHasSavedCard(Boolean(defaultPaymentMethodId));
-      })
-      .catch(function (err) {});
-  }, [setHasSavedCard]);
+    if (hasSavedCard === undefined) doGetCustomerStatus();
+  }, [doGetCustomerStatus, hasSavedCard]);
 
   const { icon: fiatIconToUse, symbol: fiatSymbol } = STRIPE.CURRENCY[preferredCurrency];
 
@@ -145,7 +102,7 @@ export default function PreorderAndPurchaseButton(props: Props) {
 
   return (
     <>
-      {!waitingForBackend && !hasChargesEnabled && !myUpload && canBePurchased && (
+      {canReceiveFiatTips === false && !myUpload && canBePurchased && (
         <div>
           <Button
             iconColor="red"
@@ -156,7 +113,7 @@ export default function PreorderAndPurchaseButton(props: Props) {
           />
         </div>
       )}
-      {!waitingForBackend && !hasChargesEnabled && myUpload && canBePurchased && (
+      {canReceiveFiatTips === false && myUpload && canBePurchased && (
         <div>
           <Button
             iconColor="red"
@@ -167,7 +124,7 @@ export default function PreorderAndPurchaseButton(props: Props) {
           />
         </div>
       )}
-      {!waitingForBackend && hasChargesEnabled && (
+      {canReceiveFiatTips && (
         <>
           {/* viewer can rent or purchase */}
           {rentalTag &&
@@ -194,7 +151,7 @@ export default function PreorderAndPurchaseButton(props: Props) {
                       purchaseTag,
                       doCheckIfPurchasedClaimId,
                       claimId: claim.claim_id,
-                      hasCardSaved,
+                      hasSavedCard,
                       tags,
                       humanReadableTime: secondsToDhms(rentalExpirationTimeInSeconds),
                     })
@@ -222,7 +179,7 @@ export default function PreorderAndPurchaseButton(props: Props) {
                     purchaseTag,
                     doCheckIfPurchasedClaimId,
                     claimId: claim.claim_id,
-                    hasCardSaved,
+                    hasSavedCard,
                     tags,
                     humanReadableTime: secondsToDhms(rentalExpirationTimeInSeconds),
                   })
@@ -249,7 +206,7 @@ export default function PreorderAndPurchaseButton(props: Props) {
                     purchaseTag,
                     doCheckIfPurchasedClaimId,
                     claimId: claim.claim_id,
-                    hasCardSaved,
+                    hasSavedCard,
                     tags,
                   })
                 }
@@ -312,7 +269,7 @@ export default function PreorderAndPurchaseButton(props: Props) {
                     preorderTag,
                     doCheckIfPurchasedClaimId,
                     claimId: claim.claim_id,
-                    hasCardSaved,
+                    hasSavedCard,
                     tags,
                   })
                 }
