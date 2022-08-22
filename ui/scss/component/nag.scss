@@ -41,7 +41,6 @@ $nag-error-z-index: 99999999999;
   background-color: var(--color-primary);
   color: var(--color-white);
   z-index: $nag-helpful-z-index;
-  // border-radius: var(--border-radius);
   margin-top: var(--spacing-s);
 }
 
@@ -109,12 +108,18 @@ $nag-error-z-index: 99999999999;
 
 .nag__close {
   margin-left: auto;
+  top: var(--spacing-xs);
   right: var(--spacing-m);
   position: absolute;
   border: none;
 
   svg {
     stroke-width: 4px;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    top: 0;
+    right: 0;
   }
 }
 
