@@ -998,9 +998,11 @@ svg + .button__label {
   .icon {
     stroke: var(--color-primary-contrast) !important;
   }
-  .button__label {
-    div:first-of-type {
-      min-width: 84px;
+  @media (min-width: $breakpoint-small) {
+    .button__label {
+      div:first-of-type {
+        min-width: 84px;
+      }
     }
   }
 }
