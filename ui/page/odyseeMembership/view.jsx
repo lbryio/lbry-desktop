@@ -194,7 +194,6 @@ const OdyseeMembershipPage = (props: Props) => {
   // we are still waiting from the backend if any of these are undefined
   const stillWaitingFromBackend =
     purchasedMemberships === undefined ||
-    hasSavedCard === undefined ||
     membershipOptions === undefined ||
     userMemberships === undefined ||
     currencyToUse === undefined;
@@ -449,7 +448,7 @@ const OdyseeMembershipPage = (props: Props) => {
         ) : (
           /** odysee membership page **/
           <div className={'card-stack'}>
-            {!stillWaitingFromBackend && hasSavedCard !== false && (
+            {!stillWaitingFromBackend && (
               <>
                 <h1 style={{ fontSize: '23px' }}>{__('Odysee Premium')}</h1>
                 {/* let user switch channel */}
@@ -474,84 +473,100 @@ const OdyseeMembershipPage = (props: Props) => {
               </>
             )}
 
+            {/** send user to add card if they don't have one yet */}
+            {!stillWaitingFromBackend && !hasSavedCard && (
+              <div>
+                <br />
+                <h2 className={'getPaymentCard'}>
+                  {__('Please save a card as a payment method so you can join Odysee Premium')}
+                </h2>
+
+                <Button
+                  button="primary"
+                  label={__('Add a Card')}
+                  icon={ICONS.SETTINGS}
+                  onClick={() => openModal(MODALS.ADD_CARD)}
+                  className="membership_button"
+                  style={{ maxWidth: '151px' }}
+                />
+              </div>
+            )}
+
             {/** available memberships **/}
             {/* if they have a card and don't have a membership yet */}
-            {!stillWaitingFromBackend &&
-              membershipOptions &&
-              purchasedMemberships.length < 1 &&
-              hasSavedCard !== false && (
-                <>
-                  <div className="card__title-section">
-                    <h2 className="card__title">{__('Available Memberships')}</h2>
-                  </div>
+            {!stillWaitingFromBackend && membershipOptions && purchasedMemberships.length < 1 && (
+              <>
+                <div className="card__title-section">
+                  <h2 className="card__title">{__('Available Memberships')}</h2>
+                </div>
 
-                  <Card>
-                    {membershipOptions.map((membershipOption, i) => (
-                      <>
-                        <div key={i}>
-                          {purchasedMemberships && !purchasedMemberships.includes(membershipOption.Membership.id) && (
-                            <>
-                              <div className="premium-option">
-                                {/* plan title */}
-                                <h4 className="membership_title">
-                                  {membershipOption.Membership.name}
-                                  <PremiumBadge membership={membershipOption.Membership.name} />
-                                </h4>
+                <Card>
+                  {membershipOptions.map((membershipOption, i) => (
+                    <>
+                      <div key={i}>
+                        {purchasedMemberships && !purchasedMemberships.includes(membershipOption.Membership.id) && (
+                          <>
+                            <div className="premium-option">
+                              {/* plan title */}
+                              <h4 className="membership_title">
+                                {membershipOption.Membership.name}
+                                <PremiumBadge membership={membershipOption.Membership.name} />
+                              </h4>
 
-                                {/* plan description */}
-                                <h4 className="membership_subtitle">
-                                  {__(getPlanDescription(membershipOption.Membership.name))}
-                                </h4>
-                                <>
-                                  {/* display different plans */}
-                                  {membershipOption.Prices.map((price) => (
-                                    <>
-                                      {/* dont show a monthly Premium membership option (yearly only) */}
-                                      {!(
-                                        price.recurring.interval === 'month' &&
-                                        membershipOption.Membership.name === 'Premium'
-                                      ) && (
-                                        <>
-                                          {price.currency === currencyToUse && (
-                                            <div>
-                                              <h4 className="membership_info">
-                                                <b>{__('Interval')}:</b> {convertIntervalVariableToString(price)}
-                                              </h4>
-                                              <h4 className="membership_info">
-                                                <b>{__('Price')}:</b> {buildCurrencyDisplay(price)}
-                                                {price.unit_amount / 100}/
-                                                {capitalizedInterval(price.recurring.interval)}
-                                              </h4>
-                                              <Button
-                                                button="primary"
-                                                onClick={(e) => purchaseMembership(e, membershipOption, price)}
-                                                membership-id={membershipOption.Membership.id}
-                                                membership-subscription-period={membershipOption.Membership.type}
-                                                price-id={price.id}
-                                                className="membership_button"
-                                                label={__('Join via %interval% membership', {
-                                                  interval: price.recurring.interval,
-                                                })}
-                                                icon={ICONS.FINANCE}
-                                                interval={price.recurring.interval}
-                                                plan={membershipOption.Membership.name}
-                                              />
-                                            </div>
-                                          )}
-                                        </>
-                                      )}
-                                    </>
-                                  ))}
-                                </>
-                              </div>
-                            </>
-                          )}
-                        </div>
-                      </>
-                    ))}
-                  </Card>
-                </>
-              )}
+                              {/* plan description */}
+                              <h4 className="membership_subtitle">
+                                {__(getPlanDescription(membershipOption.Membership.name))}
+                              </h4>
+                              <>
+                                {/* display different plans */}
+                                {membershipOption.Prices.map((price) => (
+                                  <>
+                                    {/* dont show a monthly Premium membership option (yearly only) */}
+                                    {!(
+                                      price.recurring.interval === 'month' &&
+                                      membershipOption.Membership.name === 'Premium'
+                                    ) && (
+                                      <>
+                                        {price.currency === currencyToUse && (
+                                          <div>
+                                            <h4 className="membership_info">
+                                              <b>{__('Interval')}:</b> {convertIntervalVariableToString(price)}
+                                            </h4>
+                                            <h4 className="membership_info">
+                                              <b>{__('Price')}:</b> {buildCurrencyDisplay(price)}
+                                              {price.unit_amount / 100}/{capitalizedInterval(price.recurring.interval)}
+                                            </h4>
+                                            <Button
+                                              button="primary"
+                                              onClick={(e) => purchaseMembership(e, membershipOption, price)}
+                                              membership-id={membershipOption.Membership.id}
+                                              membership-subscription-period={membershipOption.Membership.type}
+                                              price-id={price.id}
+                                              className="membership_button"
+                                              label={__('Join via %interval% membership', {
+                                                interval: price.recurring.interval,
+                                              })}
+                                              icon={ICONS.FINANCE}
+                                              interval={price.recurring.interval}
+                                              plan={membershipOption.Membership.name}
+                                              disabled={!hasSavedCard}
+                                            />
+                                          </div>
+                                        )}
+                                      </>
+                                    )}
+                                  </>
+                                ))}
+                              </>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </>
+                  ))}
+                </Card>
+              </>
+            )}
             {!stillWaitingFromBackend && hasSavedCard === true && (
               <>
                 <div className="card__title-section">
@@ -640,25 +655,6 @@ const OdyseeMembershipPage = (props: Props) => {
                   </Card>
                 </>
               </>
-            )}
-
-            {/** send user to add card if they don't have one yet */}
-            {!stillWaitingFromBackend && !hasSavedCard && (
-              <div>
-                <br />
-                <h2 className={'getPaymentCard'}>
-                  {__('Please save a card as a payment method so you can join Odysee Premium')}
-                </h2>
-
-                <Button
-                  button="primary"
-                  label={__('Add a Card')}
-                  icon={ICONS.SETTINGS}
-                  onClick={() => openModal(MODALS.ADD_CARD)}
-                  className="membership_button"
-                  style={{ maxWidth: '151px' }}
-                />
-              </div>
             )}
 
             {/** loading section **/}
