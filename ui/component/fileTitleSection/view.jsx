@@ -15,6 +15,7 @@ import Button from 'component/button';
 import FileDescription from 'component/fileDescription';
 import { ENABLE_MATURE } from 'config';
 import { useIsMobile } from 'effects/use-screensize';
+const { escapeHtmlProperty } = require('util/web');
 
 type Props = {
   uri: string,
@@ -54,7 +55,7 @@ export default function FileTitleSection(props: Props) {
       noTitleWrap
       title={
         <>
-          {title}
+          {escapeHtmlProperty(title)}
           {nsfw && (
             <span className="media__title-badge">
               <span className="badge badge--tag-mature">{__('Mature')}</span>
