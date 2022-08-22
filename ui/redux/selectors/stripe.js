@@ -52,7 +52,12 @@ export const selectLastFour = (state: State) => {
 
 export const selectHasSavedCard = (state: State) => {
   const customerStatus = selectCustomerStatus(state);
-  const defaultPaymentMethod = customerStatus?.Customer?.invoice_settings?.default_payment_method;
+  const defaultPaymentMethod =
+    customerStatus &&
+    customerStatus.Customer &&
+    customerStatus.Customer.invoice_settings &&
+    customerStatus.Customer.invoice_settings.default_payment_method;
+
   return [null, undefined].includes(defaultPaymentMethod) ? defaultPaymentMethod : Boolean(defaultPaymentMethod);
 };
 
