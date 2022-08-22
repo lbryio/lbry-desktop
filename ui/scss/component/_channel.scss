@@ -600,6 +600,10 @@ $actions-z-index: 2;
       .claim-preview__title {
         margin-right: var(--spacing-xs);
       }
+      .claim-preview__title,
+      .channel__list-text {
+        margin-bottom: -3px;
+      }
       .comment__badge {
         svg {
           width: 1.4rem;
@@ -718,9 +722,13 @@ $actions-z-index: 2;
     margin-left: var(--spacing-l);
   }
 
+  .claim-preview__title {
+    margin-bottom: -3px;
+  }
+
   &:hover {
     .claim-preview__title {
-      color: white;
+      color: var(--primary-contrast);
     }
   }
 }

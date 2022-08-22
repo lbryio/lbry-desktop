@@ -194,19 +194,18 @@
     }
 
     button.button-toggle {
-      // background-color: rgba(var(--color-header-button-base), 0.4) !important;
       background-color: var(--color-header-background) !important;
       border: 2px solid var(--color-border);
-      border-right: 0px;
+      border-left: 0px;
       &:hover {
         background-color: var(--color-border) !important;
         border: 2px solid transparent;
-        border-right: 0px;
+        border-left: 0px;
       }
-      &:last-of-type {
-        border-right: 2px solid var(--color-border);
+      &:first-of-type {
+        border-left: 2px solid var(--color-border);
         &:hover {
-          border-right: 2px solid transparent;
+          border-left: 2px solid transparent;
         }
       }
       .button__label {
@@ -217,9 +216,9 @@
     button.button-toggle--active {
       background-color: var(--color-border) !important;
       border: 2px solid transparent;
-      border-right: 0px;
-      &:last-child {
-        border-right: 2px solid transparent;
+      border-left: 0px;
+      &:first-child {
+        border-left: 2px solid transparent;
       }
     }
 
