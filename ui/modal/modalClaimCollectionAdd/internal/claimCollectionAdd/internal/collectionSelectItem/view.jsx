@@ -4,6 +4,7 @@ import { FormField } from 'component/common/form';
 import { useHistory } from 'react-router';
 import { formatLbryUrlForWeb } from 'util/url';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
+import { COL_TYPES } from 'constants/collections';
 import Icon from 'component/common/icon';
 
 type Props = {
@@ -46,6 +47,10 @@ function CollectionSelectItem(props: Props) {
           state: { collectionId: COLLECTIONS_CONSTS.WATCH_LATER_ID, forceAutoplay: true },
         }),
     });
+  }
+
+  if (collection?.type === COL_TYPES.FEATURED_CHANNELS) {
+    return null;
   }
 
   return (
