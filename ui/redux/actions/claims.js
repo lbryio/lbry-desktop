@@ -14,6 +14,7 @@ import {
   selectIsMyChannelCountOverLimit,
   selectById,
   selectMyChannelClaimIds,
+  selectFetchingMyChannels,
 } from 'redux/selectors/claims';
 
 import { doFetchTxoPage } from 'redux/actions/wallet';
@@ -604,29 +605,27 @@ export function doImportChannel(certificate: string) {
   };
 }
 
-export function doFetchChannelListMine(page: number = 1, pageSize: number = 99999, resolve: boolean = true) {
-  return (dispatch: Dispatch) => {
-    dispatch({
-      type: ACTIONS.FETCH_CHANNEL_LIST_STARTED,
-    });
+export const doFetchChannelListMine = (page: number = 1, pageSize: number = 99999, resolve: boolean = true) => (
+  dispatch: Dispatch,
+  getState: GetState
+) => {
+  const state = getState();
+  const isFetching = selectFetchingMyChannels(state);
 
-    const callback = (response: ChannelListResponse) => {
-      dispatch({
-        type: ACTIONS.FETCH_CHANNEL_LIST_COMPLETED,
-        data: { claims: response.items },
-      });
-    };
+  if (isFetching) return;
 
-    const failure = (error) => {
-      dispatch({
-        type: ACTIONS.FETCH_CHANNEL_LIST_FAILED,
-        data: error,
-      });
-    };
+  dispatch({ type: ACTIONS.FETCH_CHANNEL_LIST_STARTED });
 
-    Lbry.channel_list({ page, page_size: pageSize, resolve }).then(callback, failure);
+  const callback = (response: ChannelListResponse) => {
+    dispatch({ type: ACTIONS.FETCH_CHANNEL_LIST_COMPLETED, data: { claims: response.items } });
   };
-}
+
+  const failure = (error) => {
+    dispatch({ type: ACTIONS.FETCH_CHANNEL_LIST_FAILED, data: error });
+  };
+
+  Lbry.channel_list({ page, page_size: pageSize, resolve }).then(callback, failure);
+};
 
 export const doFetchCollectionListMine = (page: number = 1, pageSize: number = 50) => async (dispatch: Dispatch) => {
   dispatch({ type: ACTIONS.FETCH_COLLECTION_LIST_STARTED });
