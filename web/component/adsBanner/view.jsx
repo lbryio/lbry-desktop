@@ -4,7 +4,6 @@ import { useHistory } from 'react-router-dom';
 import Button from 'component/button';
 import I18nMessage from 'component/i18nMessage';
 import * as PAGES from 'constants/pages';
-import useShouldShowAds from 'effects/use-should-show-ads';
 import { useIsMobile } from 'effects/use-screensize';
 
 const AD_SCRIPT_URL = 'https://widgets.outbrain.com/outbrain.js';
@@ -37,17 +36,14 @@ const adsSignInDriver = (
 let gScript;
 
 type Props = {
-  isAdBlockerFound: ?boolean,
-  userHasPremiumPlus: boolean,
-  userCountry: string,
   currentTheme: string,
+  shouldShowAds: boolean,
 };
 
 export default function AdsBanner(props: Props) {
-  const { isAdBlockerFound, userHasPremiumPlus, userCountry, currentTheme } = props;
+  const { currentTheme, shouldShowAds } = props;
   const { location } = useHistory();
 
-  const shouldShowAds = useShouldShowAds(userHasPremiumPlus, userCountry, isAdBlockerFound);
   const shouldLoadScript = shouldShowAds && !gScript;
   const isMobile = useIsMobile();
 

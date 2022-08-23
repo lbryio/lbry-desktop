@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import useShouldShowAds from 'effects/use-should-show-ads';
 
 // ****************************************************************************
 // AdsSticky
@@ -16,9 +15,7 @@ type Props = {
   isContentClaim: boolean,
   isChannelClaim: boolean,
   authenticated: ?boolean,
-  isAdBlockerFound: ?boolean,
-  userHasPremiumPlus: boolean,
-  userCountry: string,
+  shouldShowAds: boolean,
   homepageData: any,
   locale: ?LocaleInfo,
   nagsShown: boolean,
@@ -29,9 +26,7 @@ export default function AdsSticky(props: Props) {
     isContentClaim,
     isChannelClaim,
     authenticated,
-    isAdBlockerFound,
-    userHasPremiumPlus,
-    userCountry,
+    shouldShowAds, // Global condition on whether ads should be activated
     homepageData,
     locale,
     nagsShown,
@@ -40,8 +35,6 @@ export default function AdsSticky(props: Props) {
   const { location } = useHistory();
   const [refresh, setRefresh] = React.useState(0);
 
-  // Global condition on whether ads should be activated:
-  const shouldShowAds = useShouldShowAds(userHasPremiumPlus, userCountry, isAdBlockerFound);
   // Global conditions aside, should the Sticky be shown for this path:
   const inAllowedPath = shouldShowAdsForPath(location.pathname, isContentClaim, isChannelClaim, authenticated);
   // Final answer:

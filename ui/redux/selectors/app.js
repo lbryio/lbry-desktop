@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
+import { SHOW_ADS } from 'config';
 import { selectClaimForId, selectMyChannelClaims, selectStakedLevelForChannelUri } from 'redux/selectors/claims';
-import { selectUserEmail } from 'redux/selectors/user';
+import { selectOdyseeMembershipIsPremiumPlus, selectUserEmail } from 'redux/selectors/user';
 import { selectDefaultChannelClaim } from 'redux/selectors/settings';
 
 export const selectState = (state) => state.app || {};
@@ -117,6 +118,11 @@ export const selectActiveChannelStakedLevel = (state) => {
 export const selectIncognito = (state) => selectState(state).incognito;
 
 export const selectAdBlockerFound = (state) => selectState(state).adBlockerFound;
+
+export const selectShouldShowAds = (state) => {
+  return SHOW_ADS && selectAdBlockerFound(state) === false && selectOdyseeMembershipIsPremiumPlus(state) === false;
+};
+
 export const selectAppDrawerOpen = (state) => selectState(state).appDrawerOpen;
 export const selectMainPlayerDimensions = (state) => selectState(state).mainPlayerDimensions;
 export const selectHasAppDrawerOpen = (state) => Boolean(selectAppDrawerOpen(state));
