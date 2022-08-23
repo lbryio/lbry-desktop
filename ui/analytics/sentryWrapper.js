@@ -43,6 +43,7 @@ export const sentryWrapper: SentryWrapper = {
         debug: LocalStorage.getItem('sentry_debug') === 'true' || !IS_PRODUCTION,
         integrations: [new BrowserTracing()],
         maxBreadcrumbs: 50,
+        release: process.env.BUILD_REV,
         tracesSampleRate: IS_PRODUCTION ? 0.1 : 1.0,
         whitelistUrls: [/https:\/\/((.*)\.)?odysee\.(com|tv)/, 'http://localhost:9090'],
       });

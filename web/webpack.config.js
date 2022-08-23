@@ -138,6 +138,7 @@ if (isProduction && hasSentryToken) {
       ignoreFile: '.sentrycliignore',
       ignore: ['node_modules', 'webpack.config.js'],
       configFile: 'sentry.properties',
+      release: BUILD_REV,
     })
   );
 }
