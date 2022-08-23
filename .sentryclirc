@@ -1,4 +1,4 @@
 [defaults]
 url = https://sentry.odysee.tv/
 org = odysee
-project = odysee-web
+project = lbry-desktop-web
