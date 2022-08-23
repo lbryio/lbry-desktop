@@ -8248,6 +8248,11 @@ homedir-polyfill@^1.0.1:
   dependencies:
     parse-passwd "^1.0.0"
 
+hook-shell-script-webpack-plugin@^0.1.4:
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/hook-shell-script-webpack-plugin/-/hook-shell-script-webpack-plugin-0.1.4.tgz#a6b16b7aa15e70f66511367b78a9ab23a1fec84f"
+  integrity sha512-LDv0JiHW9GqYpMJuvn9DuNkGbuzOegEo/M2IJTDsJWZjHF+XlJyeXHq2lVf75m6GkSFKQKFMCk7nbqNUSio4mQ==
+
 hoopy@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/hoopy/-/hoopy-0.1.4.tgz#609207d661100033a9a9402ad3dea677381c1b1d"

@@ -5,6 +5,7 @@
 .LSOverride
 node_modules
 dist
+dist_stage
 /static/lbrynet*
 /static/daemon
 /static/locales
