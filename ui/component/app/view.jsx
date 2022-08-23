@@ -90,6 +90,7 @@ type Props = {
   homepageFetched: boolean,
   defaultChannelClaim: ?any,
   nagsShown: boolean,
+  announcement: string,
   doOpenAnnouncements: () => void,
   doSetLastViewedAnnouncement: (hash: string) => void,
   doSetDefaultChannel: (claimId: string) => void,
@@ -127,6 +128,7 @@ function App(props: Props) {
     homepageFetched,
     defaultChannelClaim,
     nagsShown,
+    announcement,
     doOpenAnnouncements,
     doSetLastViewedAnnouncement,
     doSetDefaultChannel,
@@ -515,10 +517,10 @@ function App(props: Props) {
   }, [syncError, pathname, isAuthenticated]);
 
   useEffect(() => {
-    if (prefsReady) {
+    if (prefsReady && isAuthenticated && (pathname === '/' || pathname === `/$/${PAGES.HELP}`) && announcement !== '') {
       doOpenAnnouncements();
     }
-  }, [prefsReady]);
+  }, [announcement, isAuthenticated, pathname, prefsReady]);
 
   useEffect(() => {
     window.clearLastViewedAnnouncement = () => {

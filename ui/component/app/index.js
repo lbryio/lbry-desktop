@@ -17,6 +17,7 @@ import {
   selectLoadedLanguages,
   selectThemePath,
   selectDefaultChannelClaim,
+  selectHomepageAnnouncement,
 } from 'redux/selectors/settings';
 import { selectAnyNagsShown } from 'redux/selectors/notifications';
 import { selectModal, selectActiveChannelClaim, selectIsReloadRequired } from 'redux/selectors/app';
@@ -47,6 +48,7 @@ const select = (state) => ({
   homepageFetched: selectHomepageFetched(state),
   defaultChannelClaim: selectDefaultChannelClaim(state),
   nagsShown: selectAnyNagsShown(state),
+  announcement: selectHomepageAnnouncement(state),
 });
 
 const perform = {
