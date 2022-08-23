@@ -24,7 +24,7 @@ import { selectModal, selectActiveChannelClaim, selectIsReloadRequired } from 'r
 import { selectUploadCount } from 'redux/selectors/publish';
 import { doOpenAnnouncements, doSetLanguage, doSetDefaultChannel } from 'redux/actions/settings';
 import { doSyncLoop } from 'redux/actions/sync';
-import { doSignIn, doSetIncognito } from 'redux/actions/app';
+import { doSignIn, doSetIncognito, doSetGdprConsentList } from 'redux/actions/app';
 import { doFetchModBlockedList, doFetchCommentModAmIList } from 'redux/actions/comments';
 import App from './view';
 
@@ -64,6 +64,7 @@ const perform = {
   doOpenAnnouncements,
   doSetLastViewedAnnouncement,
   doSetDefaultChannel,
+  doSetGdprConsentList,
 };
 
 export default hot(connect(select, perform)(App));

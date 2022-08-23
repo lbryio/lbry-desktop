@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { SHOW_ADS } from 'config';
 import { selectClaimForId, selectMyChannelClaims, selectStakedLevelForChannelUri } from 'redux/selectors/claims';
-import { selectOdyseeMembershipIsPremiumPlus, selectUserEmail } from 'redux/selectors/user';
+import { selectOdyseeMembershipIsPremiumPlus, selectUserEmail, selectUserLocale } from 'redux/selectors/user';
 import { selectDefaultChannelClaim } from 'redux/selectors/settings';
 
 export const selectState = (state) => state.app || {};
@@ -117,10 +117,35 @@ export const selectActiveChannelStakedLevel = (state) => {
 
 export const selectIncognito = (state) => selectState(state).incognito;
 
+export const selectGdprConsentList = (state) => selectState(state).gdprConsentList;
+
+// @flow
+export const selectIsAdAllowedPerGdpr = (state) => {
+  const locale: ?LocaleInfo = selectUserLocale(state);
+  const list: Array<string> = selectGdprConsentList(state) || [];
+
+  // --------------------------------------------------------------------------
+  // C0001: Strictly necessary cookies -- the website needs these cookies in order to function properly (example: identify items placed into a shopping cart).
+  // C0002: Performance cookies -- get information about how site visitors are using the website (example: Google analytics).
+  // C0003: Functional cookies -- provide additional enhancement of the experience of site visitors (example: language selector for localization).
+  // C0004: Targeting cookies -- cookies that attempt to gather more information about a user in order to personalize marketing (example: remarketing).
+  // C0005: Social media cookies -- social media services added to the site that enable users to share content with their friends and networks easily.
+  // STACK42: empirically determined ... not sure what it is, but seems to be tied to ads.
+  // --------------------------------------------------------------------------
+
+  // Don't allow ads until `locale` and gdpr is fetched/available.
+  return locale && (!locale.gdpr_required || list.includes('STACK42') || list.includes('C0004'));
+};
+
 export const selectAdBlockerFound = (state) => selectState(state).adBlockerFound;
 
 export const selectShouldShowAds = (state) => {
-  return SHOW_ADS && selectAdBlockerFound(state) === false && selectOdyseeMembershipIsPremiumPlus(state) === false;
+  return (
+    SHOW_ADS &&
+    selectAdBlockerFound(state) === false &&
+    selectOdyseeMembershipIsPremiumPlus(state) === false &&
+    selectIsAdAllowedPerGdpr(state)
+  );
 };
 
 export const selectAppDrawerOpen = (state) => selectState(state).appDrawerOpen;

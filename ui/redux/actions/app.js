@@ -750,6 +750,16 @@ export function doSetAdBlockerFound(found) {
   };
 }
 
+export function doSetGdprConsentList(rawList = '') {
+  // https://community.cookiepro.com/s/article/UUID-66bcaaf1-c7ca-5f32-6760-c75a1337c226?language=en_US
+  const list = rawList.split(',').filter(Boolean);
+
+  return {
+    type: ACTIONS.SET_GDPR_CONSENT_LIST,
+    data: list,
+  };
+}
+
 export function doToggleAppDrawer(type) {
   return (dispatch, getState) => {
     const state = getState();

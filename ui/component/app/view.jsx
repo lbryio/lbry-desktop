@@ -94,6 +94,7 @@ type Props = {
   doOpenAnnouncements: () => void,
   doSetLastViewedAnnouncement: (hash: string) => void,
   doSetDefaultChannel: (claimId: string) => void,
+  doSetGdprConsentList: (csv: string) => void,
 };
 
 function App(props: Props) {
@@ -132,6 +133,7 @@ function App(props: Props) {
     doOpenAnnouncements,
     doSetLastViewedAnnouncement,
     doSetDefaultChannel,
+    doSetGdprConsentList,
   } = props;
 
   const isMobile = useIsMobile();
@@ -448,11 +450,13 @@ function App(props: Props) {
     secondScript.innerHTML = 'function OptanonWrapper() { window.gdprCallback() }';
 
     window.gdprCallback = () => {
-      if (window.OnetrustActiveGroups.indexOf('C0002') !== -1 || window.OnetrustActiveGroups.indexOf('C0002') !== -1) {
+      doSetGdprConsentList(window.OnetrustActiveGroups);
+      if (window.OnetrustActiveGroups.indexOf('C0002') !== -1) {
         const ad = document.getElementsByClassName('OUTBRAIN')[0];
         if (ad && !window.nagsShown) ad.classList.add('VISIBLE');
       }
     };
+
     // $FlowFixMe
     document.head.appendChild(script);
     // $FlowFixMe
