@@ -355,7 +355,7 @@ export function CommentCreate(props: Props) {
             message: __('Tip successfully sent.'),
             subMessage: __("I'm sure they appreciate it!"),
             linkText: `${tipAmount} LBC ⇒ ${tipChannelName}`, // force show decimal places
-            linkTarget: '/wallet',
+            linkTarget: `/${PAGES.WALLET}?tab=fiat-payment-history`,
           });
 
           setSuccessTip({ txid, tipAmount });

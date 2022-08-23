@@ -1,6 +1,7 @@
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import * as ERRORS from 'constants/errors';
+import * as PAGES from 'constants/pages';
 import Lbry from 'lbry';
 import { Lbryio } from 'lbryinc';
 import { doOpenModal } from 'redux/actions/app';
@@ -387,7 +388,7 @@ export function doSendTip(params, isSupport, successCallback, errorCallback, sho
             message: shouldSupport ? __('Boost transaction successful.') : __('Tip successfully sent.'),
             subMessage: __("I'm sure they appreciate it!"),
             linkText: `${params.amount} LBC`,
-            linkTarget: '/wallet',
+            linkTarget: `/${PAGES.WALLET}?tab=fiat-payment-history`,
           })
         );
       }
