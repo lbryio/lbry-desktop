@@ -15,6 +15,7 @@ import { doAlertWaitingForSync, doGetAndPopulatePreferences, doOpenModal } from 
 import { selectPrefsReady } from 'redux/selectors/sync';
 import { Lbryio } from 'lbryinc';
 import { getDefaultLanguage } from 'util/default-languages';
+import { LocalStorage } from 'util/storage';
 
 const { DEFAULT_LANGUAGE, URL_DEV } = require('config');
 const { SDK_SYNC_KEYS } = SHARED_PREFERENCES;
@@ -408,7 +409,7 @@ export function doSetLanguage(language) {
         })
         .then(() => {
           // set on localStorage so it can be read outside of redux
-          window.localStorage.setItem(SETTINGS.LANGUAGE, language);
+          LocalStorage.setItem(SETTINGS.LANGUAGE, language);
           dispatch(doSetClientSetting(SETTINGS.LANGUAGE, languageSetting));
           if (isSharingData) {
             Lbryio.call('user', 'language', {
@@ -417,7 +418,7 @@ export function doSetLanguage(language) {
           }
         })
         .catch((e) => {
-          window.localStorage.setItem(SETTINGS.LANGUAGE, DEFAULT_LANGUAGE);
+          LocalStorage.setItem(SETTINGS.LANGUAGE, DEFAULT_LANGUAGE);
           dispatch(doSetClientSetting(SETTINGS.LANGUAGE, DEFAULT_LANGUAGE));
           const languageName = SUPPORTED_LANGUAGES[language] ? SUPPORTED_LANGUAGES[language] : language;
           dispatch(
@@ -483,7 +484,7 @@ export function doSetAutoLaunch(value) {
 
 export function doSetAppToTrayWhenClosed(value) {
   return (dispatch) => {
-    window.localStorage.setItem(SETTINGS.TO_TRAY_WHEN_CLOSED, value);
+    LocalStorage.setItem(SETTINGS.TO_TRAY_WHEN_CLOSED, value);
     dispatch(doSetClientSetting(SETTINGS.TO_TRAY_WHEN_CLOSED, value));
   };
 }
