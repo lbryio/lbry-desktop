@@ -138,6 +138,7 @@ const SettingsStripeCard = (props: Props) => {
               if (result.error) {
                 const displayError = document.getElementById('card-errors');
                 if (displayError) displayError.textContent = result.error.message;
+                removeLoadingState();
               } else {
                 // The PaymentMethod was successfully set up
                 // hide and show the proper divs
@@ -164,17 +165,27 @@ const SettingsStripeCard = (props: Props) => {
       stripeElements(STRIPE_PUBLIC_KEY);
 
       // Show a spinner on payment submission
-      const addLoadingState = () => {
-        if (setIsBusy) setIsBusy(true);
+      const changeLoadingState = (isLoading) => {
+        if (setIsBusy) setIsBusy(isLoading);
         const button = document.getElementById('submit');
         const stripeSpinner = document.getElementById('stripe-spinner');
         const buttonText = document.getElementById('button-text');
 
-        // $FlowFixMe
-        if (button) button.disabled = true;
-        if (stripeSpinner) stripeSpinner.classList.remove('hidden');
-        if (buttonText) buttonText.classList.add('hidden');
+        if (isLoading) {
+          // $FlowFixMe
+          if (button) button.disabled = true;
+          if (stripeSpinner) stripeSpinner.classList.remove('hidden');
+          if (buttonText) buttonText.classList.add('hidden');
+        } else {
+          // $FlowFixMe
+          if (button) button.disabled = false;
+          if (stripeSpinner) stripeSpinner.classList.add('hidden');
+          if (buttonText) buttonText.classList.remove('hidden');
+        }
       };
+
+      const addLoadingState = () => changeLoadingState(true);
+      const removeLoadingState = () => changeLoadingState(false);
     }
   }, [cardElement, clientSecret, doGetCustomerStatus, email, setIsBusy]);
 
