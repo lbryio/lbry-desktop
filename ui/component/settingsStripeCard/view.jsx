@@ -18,6 +18,9 @@ import Spinner from 'component/spinner';
 const STRIPE_PLUGIN_SRC = 'https://js.stripe.com/v3/';
 
 type Props = {
+  isModal: boolean,
+  setIsBusy: (isBusy: boolean) => void,
+  // -- redux --
   email: ?string,
   preferredCurrency: string,
   customerStatusFetching: ?boolean,
@@ -33,6 +36,9 @@ type Props = {
 
 const SettingsStripeCard = (props: Props) => {
   const {
+    isModal,
+    setIsBusy,
+    // -- redux --
     email,
     preferredCurrency,
     customerStatusFetching,
@@ -45,8 +51,6 @@ const SettingsStripeCard = (props: Props) => {
     doRemoveCardForPaymentMethodId,
     doCustomerSetup,
   } = props;
-
-  const didStripeConfirm = React.useRef(false);
 
   const [cardNameValue, setCardNameValue] = React.useState('');
   const [cardElement, setCardElement] = React.useState(undefined);
@@ -66,7 +70,7 @@ const SettingsStripeCard = (props: Props) => {
   }, [cardDetails, doCustomerSetup]);
 
   React.useEffect(() => {
-    if (clientSecret && cardElement && !didStripeConfirm.current) {
+    if (clientSecret && cardElement) {
       const stripeElements = (setupIntent) => {
         const stripe = window.Stripe(STRIPE_PUBLIC_KEY);
         const elements = stripe.elements();
@@ -106,6 +110,7 @@ const SettingsStripeCard = (props: Props) => {
 
         function submitForm(event) {
           event.preventDefault();
+          addLoadingState();
 
           const cardNameElem = document.querySelector('#card-name');
           // $FlowFixMe
@@ -125,24 +130,21 @@ const SettingsStripeCard = (props: Props) => {
             return;
           }
 
-          changeLoadingState(true);
-
           stripe
             .confirmCardSetup(clientSecret, {
               payment_method: { card, billing_details: { email, name: cardUserName } },
             })
             .then((result) => {
               if (result.error) {
-                changeLoadingState(false);
                 const displayError = document.getElementById('card-errors');
                 if (displayError) displayError.textContent = result.error.message;
-                didStripeConfirm.current = true;
               } else {
                 // The PaymentMethod was successfully set up
                 // hide and show the proper divs
                 stripe.retrieveSetupIntent(clientSecret).then(doGetCustomerStatus);
               }
-            });
+            })
+            .catch(() => {});
         }
 
         // Handle payment submission when user clicks the pay button.
@@ -162,25 +164,19 @@ const SettingsStripeCard = (props: Props) => {
       stripeElements(STRIPE_PUBLIC_KEY);
 
       // Show a spinner on payment submission
-      const changeLoadingState = (isLoading) => {
+      const addLoadingState = () => {
+        if (setIsBusy) setIsBusy(true);
         const button = document.getElementById('submit');
         const stripeSpinner = document.getElementById('stripe-spinner');
         const buttonText = document.getElementById('button-text');
 
-        if (isLoading) {
-          // $FlowFixMe
-          if (button) button.disabled = true;
-          if (stripeSpinner) stripeSpinner.classList.remove('hidden');
-          if (buttonText) buttonText.classList.add('hidden');
-        } else {
-          // $FlowFixMe
-          if (button) button.disabled = false;
-          if (stripeSpinner) stripeSpinner.classList.add('hidden');
-          if (buttonText) buttonText.classList.remove('hidden');
-        }
+        // $FlowFixMe
+        if (button) button.disabled = true;
+        if (stripeSpinner) stripeSpinner.classList.remove('hidden');
+        if (buttonText) buttonText.classList.add('hidden');
       };
     }
-  }, [cardElement, clientSecret, doGetCustomerStatus, email]);
+  }, [cardElement, clientSecret, doGetCustomerStatus, email, setIsBusy]);
 
   React.useEffect(() => {
     // only add script if it doesn't already exist
@@ -196,6 +192,10 @@ const SettingsStripeCard = (props: Props) => {
       document.body.appendChild(script);
     }
   }, []);
+
+  React.useEffect(() => {
+    if (cardDetails && setIsBusy) setIsBusy(false);
+  }, [cardDetails, setIsBusy]);
 
   // $FlowFixMe
   const returnToValue = new URLSearchParams(location.search).get('returnTo');
@@ -249,7 +249,7 @@ const SettingsStripeCard = (props: Props) => {
           />
         )}
         <Card
-          title={__('Card Details')}
+          title={isModal ? undefined : __('Card Details')}
           className="add-payment-card-div"
           body={
             <>

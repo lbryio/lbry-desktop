@@ -19,6 +19,8 @@ type Props = {
 const ModalStripeCard = (props: Props) => {
   const { previousModal, previousProps, hasSavedCard, doHideModal, doOpenModal } = props;
 
+  const [isBusy, setIsBusy] = React.useState();
+
   function handleConfirm() {
     doHideModal();
     // makes sense to open previous and continue only on confirm,
@@ -27,14 +29,14 @@ const ModalStripeCard = (props: Props) => {
   }
 
   return (
-    <Modal onAborted={doHideModal} isOpen type="card">
+    <Modal onAborted={isBusy ? undefined : doHideModal} isOpen type="card" className="modal--add-card">
       <Card
-        title={__('Add your Card')}
-        body={<StripeCard />}
+        title={hasSavedCard ? __('Card Details') : __('Add your Card')}
+        body={<StripeCard setIsBusy={setIsBusy} isModal />}
         actions={
           <div className="section__actions">
-            <Button button="primary" label={__('OK')} onClick={handleConfirm} disabled={!hasSavedCard} />
-            <Button button="link" label={__('Cancel')} onClick={doHideModal} />
+            <Button button="primary" label={__('OK')} onClick={handleConfirm} disabled={isBusy || !hasSavedCard} />
+            <Button button="link" label={__('Cancel')} onClick={doHideModal} disabled={isBusy} />
           </div>
         }
       />

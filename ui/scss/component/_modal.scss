@@ -344,3 +344,9 @@
     margin-bottom: 0;
   }
 }
+
+.modal--add-card {
+  .card {
+    border: 0 !important;
+  }
+}
