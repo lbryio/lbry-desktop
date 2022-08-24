@@ -97,7 +97,7 @@
   color: var(--color-primary-contrast);
   font-size: var(--font-small);
 
-  &:hover {
+  button:hover {
     .button__label {
       color: var(--color-primary);
     }
