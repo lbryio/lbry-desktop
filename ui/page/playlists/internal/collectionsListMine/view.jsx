@@ -2,6 +2,7 @@
 import React from 'react';
 import CollectionPreview from './internal/collectionPreview';
 import Button from 'component/button';
+import Spinner from 'component/spinner';
 import * as MODALS from 'constants/modal_types';
 import * as COLS from 'constants/collections';
 import Yrbl from 'component/yrbl';
@@ -213,65 +214,73 @@ export default function CollectionsListMine(props: Props) {
 
         <SectionLabel label={__('Your Playlists')} />
 
-        <CollectionsListContext.Provider
-          value={{
-            searchText,
-            setSearchText,
-            totalLength,
-            filteredCollectionsLength,
-          }}
-        >
-          <CollectionListHeader
-            filterType={filterType}
-            isTruncated={totalLength > filteredCollectionsLength}
-            setFilterType={setFilterType}
-            // $FlowFixMe
-            sortOption={sortOption}
-            setSortOption={setSortOption}
-            persistedOption={persistedOption}
-            setPersistedOption={setPersistedOption}
-          />
-        </CollectionsListContext.Provider>
-
-        {/* Playlists: previews */}
-        {hasCollections && !collectionsUnresolved ? (
-          filteredCollectionsLength > 0 ? (
-            <ul className={classnames('ul--no-style claim-list', { playlists: !isMobile })}>
-              {!isMobile && <TableHeader />}
-
-              {paginatedCollections.map((key) => (
-                <CollectionPreview collectionId={key} key={key} />
-              ))}
-
-              {totalPages > 1 && (
-                <PageItemsLabel
-                  totalLength={filteredCollectionsLength}
-                  firstItemIndexForPage={firstItemIndexForPage}
-                  paginatedCollectionsLength={paginatedCollections.length}
-                />
-              )}
-
-              <Paginate totalPages={totalPages} />
-            </ul>
-          ) : (
-            <div className="empty main--empty">{__('No matching playlists')}</div>
-          )
-        ) : (
-          <div className="main--empty">
-            {!isFetchingCollections && !collectionsUnresolved ? (
-              <Yrbl
-                type="sad"
-                title={__('You have no Playlists yet. Better start hoarding!')}
-                actions={
-                  <div className="section__actions">
-                    <Button button="primary" label={__('Create a Playlist')} onClick={handleCreatePlaylist} />
-                  </div>
-                }
-              />
-            ) : (
-              <h2 className="main--empty empty">{__('Loading...')}</h2>
-            )}
+        {isFetchingCollections ? (
+          <div className="main--empty empty">
+            <Spinner text={__('Fetching playlists. This may take a while...')} delayed />
           </div>
+        ) : (
+          <>
+            <CollectionsListContext.Provider
+              value={{
+                searchText,
+                setSearchText,
+                totalLength,
+                filteredCollectionsLength,
+              }}
+            >
+              <CollectionListHeader
+                filterType={filterType}
+                isTruncated={totalLength > filteredCollectionsLength}
+                setFilterType={setFilterType}
+                // $FlowFixMe
+                sortOption={sortOption}
+                setSortOption={setSortOption}
+                persistedOption={persistedOption}
+                setPersistedOption={setPersistedOption}
+              />
+            </CollectionsListContext.Provider>
+
+            {/* Playlists: previews */}
+            {hasCollections && !collectionsUnresolved ? (
+              filteredCollectionsLength > 0 ? (
+                <ul className={classnames('ul--no-style claim-list', { playlists: !isMobile })}>
+                  {!isMobile && <TableHeader />}
+
+                  {paginatedCollections.map((key) => (
+                    <CollectionPreview collectionId={key} key={key} />
+                  ))}
+
+                  {totalPages > 1 && (
+                    <PageItemsLabel
+                      totalLength={filteredCollectionsLength}
+                      firstItemIndexForPage={firstItemIndexForPage}
+                      paginatedCollectionsLength={paginatedCollections.length}
+                    />
+                  )}
+
+                  <Paginate totalPages={totalPages} />
+                </ul>
+              ) : (
+                <div className="empty main--empty">{__('No matching playlists')}</div>
+              )
+            ) : (
+              <div className="main--empty">
+                {!isFetchingCollections && !collectionsUnresolved ? (
+                  <Yrbl
+                    type="sad"
+                    title={__('You have no Playlists yet. Better start hoarding!')}
+                    actions={
+                      <div className="section__actions">
+                        <Button button="primary" label={__('Create a Playlist')} onClick={handleCreatePlaylist} />
+                      </div>
+                    }
+                  />
+                ) : (
+                  <h2 className="main--empty empty">{__('Loading...')}</h2>
+                )}
+              </div>
+            )}
+          </>
         )}
       </div>
     </>

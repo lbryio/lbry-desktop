@@ -628,10 +628,17 @@ export function doFetchChannelListMine(page: number = 1, pageSize: number = 9999
   };
 }
 
-export const doFetchCollectionListMine = (page: number = 1, pageSize: number = 99999) => (dispatch: Dispatch) => {
+export const doFetchCollectionListMine = (page: number = 1, pageSize: number = 50) => async (dispatch: Dispatch) => {
   dispatch({ type: ACTIONS.FETCH_COLLECTION_LIST_STARTED });
 
-  const callback = (response: CollectionListResponse) => {
+  let options = {
+    page: page,
+    page_size: pageSize,
+    resolve_claims: 1,
+    resolve: true,
+  };
+
+  const success = (response: CollectionListResponse) => {
     const { items } = response;
     const collectionIds = items.map(({ claim_id }) => claim_id);
 
@@ -641,7 +648,31 @@ export const doFetchCollectionListMine = (page: number = 1, pageSize: number = 9
 
   const failure = (error) => dispatch({ type: ACTIONS.FETCH_COLLECTION_LIST_FAILED, data: error });
 
-  return Lbry.collection_list({ page, page_size: pageSize, resolve_claims: 1, resolve: true }).then(callback, failure);
+  const autoPaginate = () => {
+    let allClaims = [];
+
+    const next = async (response: CollectionListResponse) => {
+      const moreData = response.items.length === options.page_size;
+      allClaims = allClaims.concat(response.items);
+      options.page++;
+
+      if (!moreData) {
+        // $FlowIgnore: the callback doesn't need all data anyway.
+        return success({ items: allClaims });
+      }
+
+      try {
+        const data = await Lbry.collection_list(options);
+        return next(data);
+      } catch (err) {
+        failure(err);
+      }
+    };
+
+    return next;
+  };
+
+  return await Lbry.collection_list(options).then(autoPaginate(), failure);
 };
 
 export function doClearClaimSearch() {
