@@ -37,6 +37,7 @@ type Props = {
   moderationDelegatorsById: { [string]: { global: boolean, delegators: { name: string, claimId: string } } },
   authorTitle: string,
   authorCanonicalUri: ?string,
+  authorId: string,
   // --- perform ---
   doToast: ({ message: string }) => void,
   handleEditComment: () => void,
@@ -57,6 +58,7 @@ function CommentMenuList(props: Props) {
     claimIsMine,
     authorUri,
     authorName,
+    authorId,
     commentIsMine,
     channelIsMine,
     commentId,
@@ -83,9 +85,6 @@ function CommentMenuList(props: Props) {
     setQuickReply,
     handleDismissPin,
   } = props;
-
-  const authorId =
-    (claim && claim.signing_channel && claim.signing_channel.claim_id) || (claim && claim.claim_id) || '';
 
   const isMobile = useIsMobile();
 
@@ -212,15 +211,6 @@ function CommentMenuList(props: Props) {
           </NavLink>
         </div>
       )}
-      {activeChannelIsCreator &&
-        (!commentIsMine ? (
-          <div className="comment__menu-title">{__('Creator tools')}</div>
-        ) : (
-          <div className="comment__menu-title no-border">{__("That's you...")}</div>
-        ))}
-      {!activeChannelIsCreator && !commentIsMine && channelIsMine && (
-        <div className="comment__menu-title">{__("That's one of your channels...")}</div>
-      )}
       {isAuthenticated && isLiveComment && setQuickReply && !commentIsMine && !channelIsMine && (
         <>
           <MenuItem
@@ -232,8 +222,22 @@ function CommentMenuList(props: Props) {
               {__('Reply --[verb, reply to a comment]--')}
             </span>
           </MenuItem>
-          <hr className="menu__separator" />
+          {!activeChannelIsCreator && <hr className="menu__separator" />}
         </>
+      )}
+
+      {/* Administration & moderation */}
+      {activeChannelIsCreator &&
+        (!commentIsMine ? (
+          <div className="comment__menu-title">
+            <Icon aria-hidden icon={ICONS.BADGE_STREAMER} className={'icon'} />
+            {__('Creator tools')}
+          </div>
+        ) : (
+          <div className="comment__menu-title no-border">{__("That's you...")}</div>
+        ))}
+      {!activeChannelIsCreator && !commentIsMine && channelIsMine && (
+        <div className="comment__menu-title">{__("That's one of your channels...")}</div>
       )}
       {activeChannelIsCreator && isTopLevel && (
         <MenuItem

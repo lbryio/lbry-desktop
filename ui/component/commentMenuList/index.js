@@ -15,6 +15,8 @@ const select = (state, props) => {
   const claim = selectClaimForUri(state, props.uri);
   const authorClaim = selectClaimForUri(state, props.authorUri);
   const authorCanonicalUri = (authorClaim && authorClaim.canonical_url) || '';
+  const authorId = (authorClaim && authorClaim.claim_id) || '';
+
   return {
     claim,
     claimIsMine: selectClaimIsMine(state, claim),
@@ -25,6 +27,7 @@ const select = (state, props) => {
     moderationDelegatorsById: selectModerationDelegatorsById(state),
     authorTitle: selectTitleForUri(state, props.authorUri),
     authorCanonicalUri,
+    authorId,
   };
 };
 
@@ -36,7 +39,7 @@ const perform = (dispatch) => ({
   pinComment: (commentId, claimId, remove) => dispatch(doCommentPin(commentId, claimId, remove)),
   commentModAddDelegate: (modChanId, modChanName, creatorChannelClaim) =>
     dispatch(doCommentModAddDelegate(modChanId, modChanName, creatorChannelClaim, true)),
-  doSetActiveChannel: (channelUri) => dispatch(doSetActiveChannel(channelUri)),
+  doSetActiveChannel: (authorId) => dispatch(doSetActiveChannel(authorId)),
 });
 
 export default connect(select, perform)(CommentMenuList);

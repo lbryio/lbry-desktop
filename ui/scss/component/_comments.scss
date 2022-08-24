@@ -450,10 +450,17 @@ $thumbnailWidthSmall: 2rem;
   margin-top: 0;
   padding-left: var(--spacing-xs);
   padding-right: var(--spacing-xl);
+  padding-top: var(--spacing-xs);
   padding-bottom: var(--spacing-xs);
   font-size: var(--font-small);
   border-bottom: 1px solid var(--color-border);
   color: var(--color-text);
+  background-color: var(--color-header-background);
+
+  .icon {
+    margin-right: var(--spacing-xs);
+    margin-bottom: -8px;
+  }
 
   &.no-border {
     border-bottom: unset;
