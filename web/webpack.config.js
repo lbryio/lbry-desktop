@@ -124,7 +124,7 @@ let plugins = [
   new DefinePlugin({
     IS_WEB: JSON.stringify(true),
     'process.env.SDK_API_URL': JSON.stringify(process.env.SDK_API_URL || LBRY_WEB_API),
-    'process.env.BUILD_REV': BUILD_REV,
+    'process.env.BUILD_REV': JSON.stringify(BUILD_REV),
   }),
   new ProvidePlugin({
     __: ['i18n.js', '__'],
