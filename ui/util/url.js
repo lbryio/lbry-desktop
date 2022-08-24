@@ -192,9 +192,13 @@ export function parseClaimIdFromPermanentUrl(url, failureId = '0') {
   // where parsing failure is not fatal (e.g. if parsing for ist of IDs to
   // resolve, missing a few wouldn't matter since components can resolve
   // individually).
-  const parts = url.split('#');
-  const id = parts[parts.length - 1];
-  return id && id.length === CLAIM_ID_LENGTH ? id : failureId;
+  if (url) {
+    const parts = url.split('#');
+    const id = parts[parts.length - 1];
+    return id && id.length === CLAIM_ID_LENGTH ? id : failureId;
+  }
+
+  return failureId;
 }
 
 export const getPathForPage = (page) => `/$/${page}/`;
