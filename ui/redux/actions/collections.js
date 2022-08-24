@@ -142,11 +142,12 @@ export const doFetchItemsInCollections = (resolveItemsOptions: {
 
   // -- Resolve collections:
   if (collectionIdsToSearch.length) {
-    // TODO: this might fail if there are >50 collections due to the claim_search
-    // limitation. The `useAutoPagination` parameter might slow things down
-    // because it is not parallel, so maybe a `Promise.all` is needed here.
-    // But leaving as-is for now.
-    await dispatch(doClaimSearch({ claim_ids: collectionIdsToSearch, page: 1, page_size: 9999 }));
+    await dispatch(
+      doClaimSearch(
+        { claim_ids: collectionIdsToSearch, page: 1, page_size: 50, no_totals: true },
+        { useAutoPagination: true }
+      )
+    );
     state = getState();
   }
 
