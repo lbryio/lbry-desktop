@@ -289,11 +289,9 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     onAuxClick: handleNavLinkClick,
   };
 
-  // do not block abandoned and nsfw claims if showUserBlocked is passed
   let shouldHide =
     placeholder !== 'loading' &&
-    !showUserBlocked &&
-    ((abandoned && !showUnresolvedClaim) || (!claimIsMine && obscureNsfw && nsfw));
+    ((abandoned && !showUnresolvedClaim) || (!claimIsMine && obscureNsfw && nsfw && !showUserBlocked));
 
   // This will be replaced once blocking is done at the wallet server level
   if (!shouldHide && !claimIsMine && (banState.blacklisted || banState.filtered)) {
