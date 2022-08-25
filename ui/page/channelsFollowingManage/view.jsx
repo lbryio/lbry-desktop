@@ -74,7 +74,7 @@ export default function ChannelsFollowingManage(props: Props) {
           <Spinner delayed />
         </div>
       ) : uris && uris.length === 0 ? (
-        <Empty padded text="No followed channels." />
+        <Empty padded text={__('No followed channels.')} />
       ) : (
         <>
           <DebouncedInput icon={ICONS.SEARCH} placeholder={__('Filter')} onChange={setFilterQuery} inline />
@@ -122,6 +122,7 @@ export default function ChannelsFollowingManage(props: Props) {
                 pageSize={FOLLOW_PAGE_SIZE}
                 loading={isLoadingPage}
                 useLoadingSpinner
+                showHiddenByUser
               />
             </>
           )}

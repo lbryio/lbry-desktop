@@ -727,6 +727,7 @@
   "Autocomplete": "Autocomplete",
   "Followed Tags": "Followed Tags",
   "Followed Channels": "Followed Channels",
+  "No followed channels.": "No followed channels.",
   "Manage Tags": "Manage Tags",
   "%selectTagsLabel% (%number% left)": "%selectTagsLabel% (%number% left)",
   "Matching": "Matching",
