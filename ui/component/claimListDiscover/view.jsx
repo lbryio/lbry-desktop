@@ -3,7 +3,6 @@ import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import type { Node } from 'react';
 import * as CS from 'constants/claim_search';
 import React from 'react';
-import usePersistedState from 'effects/use-persisted-state';
 import { withRouter } from 'react-router';
 import { MATURE_TAGS } from 'constants/tags';
 import { resolveLangForClaimSearch } from 'util/default-languages';
@@ -21,6 +20,7 @@ import useFetchViewCount from 'effects/use-fetch-view-count';
 import useResolvePins from 'effects/use-resolve-pins';
 import { useIsLargeScreen } from 'effects/use-screensize';
 import useGetUserMemberships from 'effects/use-get-user-memberships';
+import usePersistentUserParam from 'effects/use-persistent-user-param';
 
 type Props = {
   uris: Array<string>,
@@ -202,8 +202,6 @@ function ClaimListDiscover(props: Props) {
   const [page, setPage] = React.useState(1);
   const [forceRefresh, setForceRefresh] = React.useState();
   const isLargeScreen = useIsLargeScreen();
-  const [orderParamEntry, setOrderParamEntry] = usePersistedState(`entry-${location.pathname}`, CS.ORDER_BY_TRENDING);
-  const [orderParamUser, setOrderParamUser] = usePersistedState(`orderUser-${location.pathname}`, CS.ORDER_BY_TRENDING);
   const followed = (followedTags && followedTags.map((t) => t.name)) || [];
   const urlParams = new URLSearchParams(search);
   const tagsParam = // can be 'x,y,z' or 'x' or ['x','y'] or CS.CONSTANT
@@ -268,31 +266,11 @@ function ClaimListDiscover(props: Props) {
   const feeAmountParam = urlParams.get('fee_amount') || feeAmount;
   const originalPageSize = 12;
   const dynamicPageSize = isLargeScreen ? Math.ceil((originalPageSize / 2) * 6) : Math.ceil((originalPageSize / 2) * 4);
-  const historyAction = history.action;
-
-  let orderParam = orderBy || urlParams.get(CS.ORDER_BY_KEY) || defaultOrderBy;
-
-  if (!orderParam) {
-    if (historyAction === 'POP') {
-      // Reaching here means user have popped back to the page's entry point (e.g. '/$/tags' without any '?order=').
-      orderParam = orderParamEntry;
-    } else {
-      // This is the direct entry into the page, so we load the user's previous value.
-      orderParam = orderParamUser;
-    }
-  }
-
-  React.useEffect(() => {
-    setOrderParamUser(orderParam);
-  }, [orderParam, setOrderParamUser]);
-
-  React.useEffect(() => {
-    // One-time update to stash the finalized 'orderParam' at entry.
-    if (historyAction !== 'POP') {
-      setOrderParamEntry(orderParam);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  const orderParam = usePersistentUserParam(
+    [orderBy, urlParams.get(CS.ORDER_BY_KEY), defaultOrderBy],
+    'orderUser',
+    CS.ORDER_BY_TRENDING
+  );
 
   let options: {
     page_size: number,

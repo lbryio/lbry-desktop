@@ -6,6 +6,7 @@ import type { Node } from 'react';
 import classnames from 'classnames';
 import React from 'react';
 import usePersistedState from 'effects/use-persisted-state';
+import usePersistentUserParam from 'effects/use-persistent-user-param';
 import { useHistory } from 'react-router';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
@@ -64,11 +65,9 @@ function ClaimListHeader(props: Props) {
     scrollAnchor,
   } = props;
   const filterCtx = React.useContext(ClaimSearchFilterContext);
-  const { action, push, location } = useHistory();
+  const { push, location } = useHistory();
   const { search } = location;
   const [expanded, setExpanded] = usePersistedState(`expanded-${location.pathname}`, false);
-  const [orderParamEntry, setOrderParamEntry] = usePersistedState(`entry-${location.pathname}`, CS.ORDER_BY_TRENDING);
-  const [orderParamUser, setOrderParamUser] = usePersistedState(`orderUser-${location.pathname}`, CS.ORDER_BY_TRENDING);
   const urlParams = new URLSearchParams(search);
   const freshnessParam = freshness || urlParams.get(CS.FRESH_KEY) || defaultFreshness;
   const contentTypeParam = urlParams.get(CS.CONTENT_KEY);
@@ -104,6 +103,12 @@ function ClaimListHeader(props: Props) {
     ? languageParam !== languageSetting && languageParam !== null
     : languageParam !== CS.LANGUAGES_ALL && languageParam !== null;
 
+  const orderParam = usePersistentUserParam(
+    [orderBy, urlParams.get(CS.ORDER_BY_KEY), defaultOrderBy],
+    'orderUser',
+    CS.ORDER_BY_TRENDING
+  );
+
   function getHideRepostsElem(filterCtx, contentType) {
     if (filterCtx?.repost) {
       return (
@@ -128,29 +133,6 @@ function ClaimListHeader(props: Props) {
   React.useEffect(() => {
     if (hideAdvancedFilter) {
       setExpanded(false);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  let orderParam = orderBy || urlParams.get(CS.ORDER_BY_KEY) || defaultOrderBy;
-  if (!orderParam) {
-    if (action === 'POP') {
-      // Reaching here means user have popped back to the page's entry point (e.g. '/$/tags' without any '?order=').
-      orderParam = orderParamEntry;
-    } else {
-      // This is the direct entry into the page, so we load the user's previous value.
-      orderParam = orderParamUser;
-    }
-  }
-
-  React.useEffect(() => {
-    setOrderParamUser(orderParam);
-  }, [orderParam, setOrderParamUser]);
-
-  React.useEffect(() => {
-    // One-time update to stash the finalized 'orderParam' at entry.
-    if (action !== 'POP') {
-      setOrderParamEntry(orderParam);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
