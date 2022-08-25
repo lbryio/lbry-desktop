@@ -13,6 +13,7 @@ import Button from 'component/button';
 import { toCapitalCase } from 'util/string';
 import SEARCHABLE_LANGUAGES from 'constants/searchable_languages';
 import { ClaimSearchFilterContext } from 'contexts/claimSearchFilterContext';
+import debounce from 'util/debounce';
 
 type Props = {
   defaultTags: string,
@@ -73,13 +74,21 @@ function ClaimListHeader(props: Props) {
   const contentTypeParam = urlParams.get(CS.CONTENT_KEY);
   const streamTypeParam =
     streamType || (CS.FILE_TYPES.includes(contentTypeParam) && contentTypeParam) || defaultStreamType || null;
-  const durationParam = urlParams.get(CS.DURATION_KEY) || null;
   const languageParam = urlParams.get(CS.LANGUAGE_KEY) || null;
   const sortByParam = sortBy || urlParams.get(CS.SORT_BY_KEY) || null;
   const channelIdsInUrl = urlParams.get(CS.CHANNEL_IDS_KEY);
   const channelIdsParam = channelIdsInUrl ? channelIdsInUrl.split(',') : channelIds;
   const feeAmountParam = urlParams.get('fee_amount') || feeAmount || CS.FEE_AMOUNT_ANY;
   const showDuration = !(claimType && claimType === CS.CLAIM_CHANNEL && claimType === CS.CLAIM_COLLECTION);
+
+  const durationParam = usePersistentUserParam([urlParams.get(CS.DURATION_KEY) || CS.DURATION_ALL], 'durUser', null);
+  const [durationMinutes, setDurationMinutes] = usePersistedState(`durUserMinutes-${location.pathname}`, 5);
+  const [minutes, setMinutes] = React.useState(durationMinutes);
+  const setDurationMinutesDebounced = React.useCallback(
+    debounce((m) => setDurationMinutes(m), 750),
+    []
+  );
+
   const isFiltered = () =>
     Boolean(
       urlParams.get(CS.FRESH_KEY) ||
@@ -500,10 +509,26 @@ function ClaimListHeader(props: Props) {
                         {dur === CS.DURATION_SHORT && __('Short (< 4 minutes)')}
                         {dur === CS.DURATION_LONG && __('Long (> 20 min)')}
                         {dur === CS.DURATION_ALL && __('Any')}
+                        {dur === CS.DURATION_GT_EQ && __('Longer than')}
+                        {dur === CS.DURATION_LT_EQ && __('Shorter than')}
                       </option>
                     ))}
                   </FormField>
                 </div>
+                {(durationParam === CS.DURATION_GT_EQ || durationParam === CS.DURATION_LT_EQ) && (
+                  <div className={'claim-search__input-container'}>
+                    <FormField
+                      label={__('Minutes')}
+                      type="number"
+                      name="duration__minutes"
+                      value={minutes}
+                      onChange={(e) => {
+                        setMinutes(e.target.value);
+                        setDurationMinutesDebounced(e.target.value);
+                      }}
+                    />
+                  </div>
+                )}
               </div>
             )}
 
