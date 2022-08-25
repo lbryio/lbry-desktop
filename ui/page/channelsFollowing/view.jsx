@@ -56,7 +56,6 @@ function ChannelsFollowingPage(props: Props) {
           )}
 
           <ClaimListDiscover
-            hideAdvancedFilter={SIMPLE_SITE}
             streamType={SIMPLE_SITE ? CS.CONTENT_ALL : undefined}
             tileLayout={tileLayout}
             headerLabel={
