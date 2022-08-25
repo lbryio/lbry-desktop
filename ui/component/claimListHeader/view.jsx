@@ -404,43 +404,6 @@ function ClaimListHeader(props: Props) {
                 </div>
               )}
 
-              {/* DURATIONS FIELD */}
-              {showDuration && (
-                <div className={'claim-search__input-container'}>
-                  <FormField
-                    className={classnames('claim-search__dropdown', {
-                      'claim-search__dropdown--selected': durationParam,
-                    })}
-                    label={__('Duration --[length of audio or video]--')}
-                    type="select"
-                    name="duration"
-                    disabled={
-                      !(
-                        contentTypeParam === null ||
-                        streamTypeParam === CS.FILE_AUDIO ||
-                        streamTypeParam === CS.FILE_VIDEO
-                      )
-                    }
-                    value={durationParam || CS.DURATION_ALL}
-                    onChange={(e) =>
-                      handleChange({
-                        key: CS.DURATION_KEY,
-                        value: e.target.value,
-                      })
-                    }
-                  >
-                    {CS.DURATION_TYPES.map((dur) => (
-                      <option key={dur} value={dur}>
-                        {/* i18fixme */}
-                        {dur === CS.DURATION_SHORT && __('Short (< 4 minutes)')}
-                        {dur === CS.DURATION_LONG && __('Long (> 20 min)')}
-                        {dur === CS.DURATION_ALL && __('Any')}
-                      </option>
-                    ))}
-                  </FormField>
-                </div>
-              )}
-
               {/* PAID FIELD */}
               <div className={'claim-search__input-container'}>
                 <FormField
@@ -504,6 +467,46 @@ function ClaimListHeader(props: Props) {
                 </div>
               )}
             </div>
+
+            {/* DURATIONS FIELD */}
+            {showDuration && (
+              <div className={classnames(`card claim-search__menus`)}>
+                <div className={'claim-search__input-container'}>
+                  <FormField
+                    className={classnames('claim-search__dropdown', {
+                      'claim-search__dropdown--selected': durationParam,
+                    })}
+                    label={__('Duration --[length of audio or video]--')}
+                    type="select"
+                    name="duration"
+                    disabled={
+                      !(
+                        contentTypeParam === null ||
+                        streamTypeParam === CS.FILE_AUDIO ||
+                        streamTypeParam === CS.FILE_VIDEO
+                      )
+                    }
+                    value={durationParam || CS.DURATION_ALL}
+                    onChange={(e) =>
+                      handleChange({
+                        key: CS.DURATION_KEY,
+                        value: e.target.value,
+                      })
+                    }
+                  >
+                    {CS.DURATION_TYPES.map((dur) => (
+                      <option key={dur} value={dur}>
+                        {/* i18fixme */}
+                        {dur === CS.DURATION_SHORT && __('Short (< 4 minutes)')}
+                        {dur === CS.DURATION_LONG && __('Long (> 20 min)')}
+                        {dur === CS.DURATION_ALL && __('Any')}
+                      </option>
+                    ))}
+                  </FormField>
+                </div>
+              </div>
+            )}
+
             {getHideRepostsElem(filterCtx, contentTypeParam)}
           </>
         )}
