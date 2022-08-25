@@ -270,7 +270,7 @@ function ClaimListDiscover(props: Props) {
   const dynamicPageSize = isLargeScreen ? Math.ceil((originalPageSize / 2) * 6) : Math.ceil((originalPageSize / 2) * 4);
   const historyAction = history.action;
 
-  let orderParam = orderBy || urlParams.get(CS.ORDER_BY_KEY) || defaultOrderBy || orderParamEntry;
+  let orderParam = orderBy || urlParams.get(CS.ORDER_BY_KEY) || defaultOrderBy;
 
   if (!orderParam) {
     if (historyAction === 'POP') {
@@ -292,7 +292,7 @@ function ClaimListDiscover(props: Props) {
       setOrderParamEntry(orderParam);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [historyAction, setOrderParamEntry]);
+  }, []);
 
   let options: {
     page_size: number,
