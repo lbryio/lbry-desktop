@@ -1,7 +1,9 @@
 // @flow
 import React from 'react';
 
-import { FormField } from 'component/common/form';
+import { Elements, useStripe, CardElement } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
+import { Form, FormField, Submit } from 'component/common/form';
 import { STRIPE_PUBLIC_KEY } from 'config';
 
 import * as ICONS from 'constants/icons';
@@ -14,8 +16,10 @@ import Card from 'component/common/card';
 import Plastic from 'react-plastic';
 import Button from 'component/button';
 import Spinner from 'component/spinner';
+import ErrorText from 'component/common/error-text';
 
-const STRIPE_PLUGIN_SRC = 'https://js.stripe.com/v3/';
+const stripePromise = loadStripe(STRIPE_PUBLIC_KEY);
+const CARD_NAME_REGEX = /[0-9!@#$%^&*()_+=[\]{};:"\\|,<>?~]/;
 
 type Props = {
   isModal: boolean,
@@ -52,10 +56,42 @@ const SettingsStripeCard = (props: Props) => {
     doCustomerSetup,
   } = props;
 
+  const cardElement = React.useRef();
+  const bodyElem = React.useRef();
+
+  const stripe = useStripe();
+
   const [cardNameValue, setCardNameValue] = React.useState('');
-  const [cardElement, setCardElement] = React.useState(undefined);
+  const [isLoading, setLoading] = React.useState(false);
+  const [formError, setFormError] = React.useState();
 
   const clientSecret = customerSetupResponse?.client_secret;
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    setLoading(true);
+
+    // if client secret wasn't loaded properly
+    if (!clientSecret) {
+      setFormError(__('There was an error in generating your payment method. Please contact a developer'));
+      return;
+    }
+
+    stripe
+      .confirmCardSetup(clientSecret, {
+        payment_method: { card: cardElement.current, billing_details: { email, name: cardNameValue } },
+      })
+      .then((result) => {
+        if (result.error) {
+          setLoading(false);
+          setFormError(result.error.message);
+        } else {
+          // The PaymentMethod was successfully set up
+          // hide and show the proper divs
+          stripe.retrieveSetupIntent(clientSecret).then(doGetCustomerStatus);
+        }
+      });
+  }
 
   React.useEffect(() => {
     if (cardDetails === undefined) {
@@ -70,142 +106,11 @@ const SettingsStripeCard = (props: Props) => {
   }, [cardDetails, doCustomerSetup]);
 
   React.useEffect(() => {
-    if (clientSecret && cardElement) {
-      const stripeElements = (setupIntent) => {
-        const stripe = window.Stripe(STRIPE_PUBLIC_KEY);
-        const elements = stripe.elements();
-
-        // Element styles
-        const style = {
-          base: {
-            fontSize: '16px',
-            color: '#32325d',
-            fontFamily: '-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif',
-            fontSmoothing: 'antialiased',
-            '::placeholder': {
-              color: 'rgba(0,0,0,0.4)',
-            },
-          },
-        };
-
-        const card = elements.create('card', { style: style });
-
-        card.mount('#card-element');
-
-        // Element focus ring
-        card.on('focus', () => {
-          const elem = document.getElementById('card-element');
-          if (elem) elem.classList.add('focused');
-        });
-
-        card.on('blur', () => {
-          const elem = document.getElementById('card-element');
-          if (elem) elem.classList.remove('focused');
-        });
-
-        card.on('ready', () => {
-          const elem = document.getElementById('card-element');
-          if (elem) elem.focus();
-        });
-
-        function submitForm(event) {
-          event.preventDefault();
-          addLoadingState();
-
-          const cardNameElem = document.querySelector('#card-name');
-          // $FlowFixMe
-          const cardUserName = cardNameElem && cardNameElem.value;
-          if (!cardUserName) {
-            const errorFieldElem = document.querySelector('.sr-field-error');
-            if (errorFieldElem) errorFieldElem.innerHTML = __('Please enter the name on the card');
-            return;
-          }
-
-          // if client secret wasn't loaded properly
-          if (!clientSecret) {
-            const displayErrorText = 'There was an error in generating your payment method. Please contact a developer';
-            const displayError = document.getElementById('card-errors');
-            if (displayError) displayError.textContent = displayErrorText;
-
-            return;
-          }
-
-          stripe
-            .confirmCardSetup(clientSecret, {
-              payment_method: { card, billing_details: { email, name: cardUserName } },
-            })
-            .then((result) => {
-              if (result.error) {
-                const displayError = document.getElementById('card-errors');
-                if (displayError) displayError.textContent = result.error.message;
-                removeLoadingState();
-              } else {
-                // The PaymentMethod was successfully set up
-                // hide and show the proper divs
-                stripe.retrieveSetupIntent(clientSecret).then(doGetCustomerStatus);
-              }
-            })
-            .catch(() => {});
-        }
-
-        // Handle payment submission when user clicks the pay button.
-        const button = document.getElementById('submit');
-        // $FlowFixMe
-        if (button) button.addEventListener('click', submitForm);
-
-        // currently doesn't work because the iframe javascript context is different
-        // would be nice though if it's even technically possible
-        // window.addEventListener('keyup', function(event) {
-        //   if (event.keyCode === 13) {
-        //     submitForm(event);
-        //   }
-        // }, false);
-      };
-
-      stripeElements(STRIPE_PUBLIC_KEY);
-
-      // Show a spinner on payment submission
-      const changeLoadingState = (isLoading) => {
-        if (setIsBusy) setIsBusy(isLoading);
-        const button = document.getElementById('submit');
-        const stripeSpinner = document.getElementById('stripe-spinner');
-        const buttonText = document.getElementById('button-text');
-
-        if (isLoading) {
-          // $FlowFixMe
-          if (button) button.disabled = true;
-          if (stripeSpinner) stripeSpinner.classList.remove('hidden');
-          if (buttonText) buttonText.classList.add('hidden');
-        } else {
-          // $FlowFixMe
-          if (button) button.disabled = false;
-          if (stripeSpinner) stripeSpinner.classList.add('hidden');
-          if (buttonText) buttonText.classList.remove('hidden');
-        }
-      };
-
-      const addLoadingState = () => changeLoadingState(true);
-      const removeLoadingState = () => changeLoadingState(false);
+    if (cardDetails) {
+      setLoading(false);
+      if (setIsBusy) setIsBusy(false);
+      setCardNameValue('');
     }
-  }, [cardElement, clientSecret, doGetCustomerStatus, email, setIsBusy]);
-
-  React.useEffect(() => {
-    // only add script if it doesn't already exist
-    const stripeScript = document.querySelectorAll(`script[src="${STRIPE_PLUGIN_SRC}"]`);
-    const stripeScriptExists = stripeScript && stripeScript.length > 0;
-
-    if (!stripeScriptExists) {
-      const script = document.createElement('script');
-      script.src = STRIPE_PLUGIN_SRC;
-      script.async = true;
-
-      // $FlowFixMe
-      document.body.appendChild(script);
-    }
-  }, []);
-
-  React.useEffect(() => {
-    if (cardDetails && setIsBusy) setIsBusy(false);
   }, [cardDetails, setIsBusy]);
 
   // $FlowFixMe
@@ -213,38 +118,21 @@ const SettingsStripeCard = (props: Props) => {
   let shouldShowBackToMembershipButton = returnToValue === 'premium';
 
   function clearErrorMessage() {
-    const errorElement = document.querySelector('.sr-field-error');
-
-    // $FlowFixMe
-    if (errorElement) errorElement.innerHTML = '';
+    setFormError(undefined);
   }
 
   function onChangeCardName(event) {
     const { value } = event.target;
 
-    const numberOrSpecialCharacter = /[0-9!@#$%^&*()_+=[\]{};:"\\|,<>?~]/;
-
-    const errorElement = document.querySelector('.sr-field-error');
-
-    if (!errorElement) return;
-
-    if (numberOrSpecialCharacter.test(value)) {
-      // $FlowFixMe
-      errorElement.innerHTML = __('Special characters and numbers are not allowed');
+    if (CARD_NAME_REGEX.test(value)) {
+      setFormError(__('Special characters and numbers are not allowed'));
     } else if (value.length > 48) {
-      // $FlowFixMe
-      errorElement.innerHTML = __('Name must be less than 48 characters long');
+      setFormError(__('Name must be less than 48 characters long'));
     } else {
-      // $FlowFixMe
-      errorElement.innerHTML = '';
-
+      clearErrorMessage();
       setCardNameValue(value);
     }
   }
-
-  const cardElementRef = React.useCallback((node) => {
-    if (node) setCardElement(node);
-  }, []);
 
   if (cardDetails) {
     return (
@@ -327,32 +215,45 @@ const SettingsStripeCard = (props: Props) => {
 
   if (cardDetails === null) {
     return (
-      <div className="sr-root">
-        <div className="sr-main">
-          <div className="">
-            <div className="sr-form-row">
-              <label className="payment-details">{__('Name on card')}</label>
-              <input
-                type="text"
-                id="card-name"
-                onChange={onChangeCardName}
-                value={cardNameValue}
-                onBlur={clearErrorMessage}
-                autoFocus
+      <Form className="sr-root" onSubmit={handleSubmit}>
+        <div className="sr-main" ref={bodyElem} style={{ maxWidth: bodyElem.current?.offsetWidth }}>
+          <FormField
+            className="payment-details"
+            name="name-on-card"
+            type="input"
+            label={__('Name on card')}
+            onChange={onChangeCardName}
+            value={cardNameValue}
+            onBlur={clearErrorMessage}
+            autoFocus
+          />
+
+          <FormField
+            className="payment-details"
+            name="card-details"
+            type="input"
+            label={__('Card details')}
+            inputElem={
+              <CardElement
+                ref={cardElement}
+                className="sr-input"
+                onReady={(element) => {
+                  cardElement.current = element;
+                }}
+                onChange={(event) => setFormError(event.error?.message)}
               />
-            </div>
-            <div className="sr-form-row">
-              <label className="payment-details">{__('Card details')}</label>
-              <div ref={cardElementRef} className="sr-input sr-element sr-card-element" id="card-element" />
-            </div>
-            <div className="sr-field-error" id="card-errors" role="alert" />
-            <button className="linkButton" id="submit">
-              <div className="stripe__spinner hidden" id="stripe-spinner" />
-              <span id="button-text">{__('Add Card')}</span>
-            </button>
-          </div>
+            }
+          />
+
+          <Submit
+            className="button--card-link"
+            disabled={isLoading || formError || !cardNameValue}
+            label={isLoading ? <div className="stripe__spinner" /> : __('Add Card')}
+          />
+
+          {formError && <ErrorText>{formError}</ErrorText>}
         </div>
-      </div>
+      </Form>
     );
   }
 
@@ -363,4 +264,10 @@ const SettingsStripeCard = (props: Props) => {
   );
 };
 
-export default SettingsStripeCard;
+export default function Wrapper(props: Props) {
+  return (
+    <Elements stripe={stripePromise}>
+      <SettingsStripeCard {...props} />
+    </Elements>
+  );
+}

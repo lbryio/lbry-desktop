@@ -56,6 +56,7 @@ type Props = {
   submitButtonRef?: any,
   tipModalOpen?: boolean,
   noticeLabel?: any,
+  inputElem?: any,
   onSlimInputClose?: () => void,
   onChange?: (any) => any,
   setShowSelectors?: ({ tab?: string, open: boolean }) => void,
@@ -120,6 +121,7 @@ export class FormField extends React.PureComponent<Props, State> {
       submitButtonRef,
       tipModalOpen,
       noticeLabel,
+      inputElem,
       onSlimInputClose,
       quickActionHandler,
       setShowSelectors,
@@ -399,9 +401,7 @@ export class FormField extends React.PureComponent<Props, State> {
                   {inputButton}
                 </input-submit>
               ) : (
-                <>
-                  <input {...inputElementProps} />
-                </>
+                inputElem || <input {...inputElementProps} />
               )}
             </fieldset-section>
           </FormFieldWrapper>

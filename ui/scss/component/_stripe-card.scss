@@ -97,20 +97,12 @@
 .sr-picker button.selected {
   border-bottom: 2px solid var(--accent-color);
 }
-.sr-field-error {
-  color: var(--font-color);
-  text-align: left;
-  font-size: 13px;
-  line-height: 17px;
-  margin-top: 12px;
-  max-width: 269px;
-}
 
 /* Inputs */
 .sr-input {
   border: 1px solid var(--gray-border);
   border-radius: var(--radius);
-  padding: 5px 12px;
+  padding: var(--spacing-s);
   height: 44px;
   width: 100%;
   transition: box-shadow 0.2s ease;
@@ -151,19 +143,8 @@
   border-radius: 7px;
 }
 
-/* Form */
-.sr-form-row {
-  margin: 16px 0;
-}
-//label {
-//  font-size: 13px;
-//  font-weight: 500;
-//  margin-bottom: 8px;
-//  display: inline-block;
-//}
-
 /* Buttons and links */
-button.linkButton {
+.button--card-link {
   background-color: rgb(30, 166, 114);
   border-radius: 6px;
   color: white;
@@ -177,43 +158,31 @@ button.linkButton {
   box-shadow: 0px 4px 5.5px 0px rgba(0, 0, 0, 0.07);
   width: 100%;
   max-width: 280px;
-}
-button.linkButton:hover {
-  filter: contrast(115%);
-}
-button.linkButton:active {
-  transform: translateY(0px) scale(0.98);
-  filter: brightness(0.9);
-}
-button.linkButton:disabled {
-  opacity: 0.5;
-  cursor: none;
-}
 
-//a {
-//  color: var(--link-color);
-//  text-decoration: none;
-//  transition: all 0.2s ease;
-//}
-//
-//a:hover {
-//  filter: brightness(0.8);
-//}
-//
-//a:active {
-//  filter: brightness(0.5);
-//}
+  .button__content {
+    justify-content: center;
+  }
+
+  &:hover {
+    filter: contrast(115%);
+  }
+
+  &:active {
+    transform: translateY(0px) scale(0.98);
+    filter: brightness(0.9);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: none;
+  }
+}
 
 /* Code block */
 code,
 pre {
   font-family: 'SF Mono', 'IBM Plex Mono', 'Menlo', monospace;
   font-size: 12px;
-}
-
-/* Stripe Element placeholder */
-.sr-card-element {
-  padding-top: 12px;
 }
 
 /* Responsiveness */
@@ -365,7 +334,7 @@ pre {
       .sr-input {
         width: 100%;
       }
-      .linkButton {
+      .button--card-link {
         max-width: unset;
       }
     }
@@ -380,10 +349,6 @@ pre {
 .payment-details {
   font-size: 16px;
   margin-bottom: 4px;
-}
-
-.sr-field-error {
-  font-size: 15px;
 }
 
 //.successCard, .toConfirmCard {
@@ -438,8 +403,4 @@ pre {
 
 .payment-details {
   display: block;
-}
-
-.sr-field-error {
-  color: var(--color-text-error);
 }

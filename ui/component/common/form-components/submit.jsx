@@ -3,7 +3,7 @@ import * as React from 'react';
 import Button from 'component/button';
 
 type Props = {
-  label: string,
+  label: any,
   disabled: boolean,
 };
 
