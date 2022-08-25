@@ -38,7 +38,9 @@ function FileActionButton(props: Props) {
       <Button
         button={noStyle ? 'alt' : undefined}
         className={
-          noStyle ? undefined : classnames('button--file-action', { ...(className ? { [className]: true } : {}) })
+          noStyle
+            ? className || undefined
+            : classnames('button--file-action', { ...(className ? { [className]: true } : {}) })
         }
         iconSize={iconSize || 16}
         {...buttonProps}
