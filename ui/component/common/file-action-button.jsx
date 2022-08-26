@@ -24,7 +24,11 @@ function FileActionButton(props: Props) {
         <div className="button--file-action--tooltip-wrapper">
           <Button
             button={noStyle ? 'alt' : undefined}
-            className={noStyle ? undefined : 'button--file-action button--file-action--tooltip'}
+            className={
+              noStyle
+                ? className || undefined
+                : classnames('button--file-action', { ...(className ? { [className]: true } : {}) })
+            }
             iconSize={iconSize || 16}
             {...buttonProps}
           />
