@@ -57,7 +57,6 @@ const SettingsStripeCard = (props: Props) => {
   } = props;
 
   const cardElement = React.useRef();
-  const bodyElem = React.useRef();
 
   const stripe = useStripe();
 
@@ -215,44 +214,40 @@ const SettingsStripeCard = (props: Props) => {
 
   if (cardDetails === null) {
     return (
-      <Form className="sr-root" onSubmit={handleSubmit}>
-        <div className="sr-main" ref={bodyElem} style={{ maxWidth: bodyElem.current?.offsetWidth }}>
-          <FormField
-            className="payment-details"
-            name="name-on-card"
-            type="input"
-            label={__('Name on card')}
-            onChange={onChangeCardName}
-            value={cardNameValue}
-            onBlur={clearErrorMessage}
-            autoFocus
-          />
+      <Form className="stripe-card__form" onSubmit={handleSubmit}>
+        <FormField
+          className="stripe-card__form-input"
+          name="name-on-card"
+          type="input"
+          label={__('Name on card')}
+          onChange={onChangeCardName}
+          value={cardNameValue}
+          onBlur={clearErrorMessage}
+          autoFocus
+        />
 
-          <FormField
-            className="payment-details"
-            name="card-details"
-            type="input"
-            label={__('Card details')}
-            inputElem={
-              <CardElement
-                ref={cardElement}
-                className="sr-input"
-                onReady={(element) => {
-                  cardElement.current = element;
-                }}
-                onChange={(event) => setFormError(event.error?.message)}
-              />
-            }
-          />
+        <FormField
+          name="card-details"
+          type="input"
+          label={__('Card details')}
+          inputElem={
+            <CardElement
+              className="stripe-card__form-input"
+              onReady={(element) => {
+                cardElement.current = element;
+              }}
+              onChange={(event) => setFormError(event.error?.message)}
+            />
+          }
+        />
 
-          <Submit
-            className="button--card-link"
-            disabled={isLoading || formError || !cardNameValue}
-            label={isLoading ? <div className="stripe__spinner" /> : __('Add Card')}
-          />
+        <Submit
+          className="button--card-link"
+          disabled={isLoading || formError || !cardNameValue}
+          label={isLoading ? <div className="stripe__spinner" /> : __('Add Card')}
+        />
 
-          {formError && <ErrorText>{formError}</ErrorText>}
-        </div>
+        {formError && <ErrorText>{formError}</ErrorText>}
       </Form>
     );
   }

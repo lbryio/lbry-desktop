@@ -53,16 +53,15 @@
 }
 
 /* Layout */
-.sr-root {
+.stripe-card__form {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   width: 100%;
-  max-width: 980px;
-  padding: 48px;
-  align-content: center;
-  justify-content: center;
-  height: 319px;
-  margin: 0 auto;
+  align-items: center;
+
+  animation: 0.4s form-in;
+  animation-fill-mode: both;
+  animation-timing-function: ease;
 }
 
 .sr-picker {
@@ -99,28 +98,29 @@
 }
 
 /* Inputs */
-.sr-input {
-  border: 1px solid var(--gray-border);
-  border-radius: var(--radius);
-  padding: var(--spacing-s);
-  height: 44px;
-  width: 100%;
+.stripe-card__form-input {
+  border: 1px solid var(--gray-border) !important;
+  border-radius: var(--border-radius);
+  padding: var(--spacing-m) var(--spacing-s);
   transition: box-shadow 0.2s ease;
-  background: white;
+  background: white !important;
   -moz-appearance: none;
   -webkit-appearance: none;
   appearance: none;
   width: 284px;
-  border-radius: var(--border-radius);
+  color: var(--color-black) !important;
+
+  &:focus {
+    box-shadow: 0 0 0 1px rgba(50, 151, 211, 0.3), 0 1px 1px 0 rgba(0, 0, 0, 0.07), 0 0 0 4px rgba(50, 151, 211, 0.3) !important;
+    outline: none;
+    z-index: 9;
+  }
+
+  &::placeholder {
+    color: var(--gray-light);
+  }
 }
-.sr-input:focus {
-  box-shadow: 0 0 0 1px rgba(50, 151, 211, 0.3), 0 1px 1px 0 rgba(0, 0, 0, 0.07), 0 0 0 4px rgba(50, 151, 211, 0.3);
-  outline: none;
-  z-index: 9;
-}
-.sr-input::placeholder {
-  color: var(--gray-light);
-}
+
 .sr-result {
   height: 44px;
   -webkit-transition: height 1s ease;
@@ -187,13 +187,6 @@ pre {
 
 /* Responsiveness */
 @media (max-width: 720px) {
-  .sr-root {
-    flex-direction: column;
-    justify-content: flex-start;
-    padding: 48px 20px;
-    min-width: 320px;
-  }
-
   .sr-header__logo {
     background-position: center;
   }
@@ -208,15 +201,6 @@ pre {
 
   .sr-content {
     display: none;
-  }
-
-  .sr-main {
-    width: 100%;
-    height: 305px;
-    box-shadow: 0px 0px 0px 0.5px rgba(50, 50, 93, 0.1), 0px 2px 5px 0px rgba(50, 50, 93, 0.1),
-      0px 1px 1.5px 0px rgba(0, 0, 0, 0.07);
-    border-radius: 6px;
-    padding: 10px 20px !important;
   }
 }
 
@@ -293,12 +277,6 @@ pre {
 
 /* Animated form */
 
-.sr-root {
-  animation: 0.4s form-in;
-  animation-fill-mode: both;
-  animation-timing-function: ease;
-}
-
 .hidden {
   display: none;
 }
@@ -325,35 +303,10 @@ pre {
   }
 }
 
-.sr-main {
-  @media (max-width: $breakpoint-small) {
-    padding: 0 !important;
-
-    .sr-payment-form {
-      padding: 0;
-      .sr-input {
-        width: 100%;
-      }
-      .button--card-link {
-        max-width: unset;
-      }
-    }
-  }
-}
-
 .sr-payment-form {
   padding: 10px 35px;
   padding-bottom: 28px;
 }
-
-.payment-details {
-  font-size: 16px;
-  margin-bottom: 4px;
-}
-
-//.successCard, .toConfirmCard {
-//  max-width: 94%
-//}
 
 .stripe__complete-verification-button {
   margin-right: 10px !important;
@@ -399,8 +352,4 @@ pre {
   box-shadow: unset;
   color: #32325d;
   background-color: white !important;
-}
-
-.payment-details {
-  display: block;
 }

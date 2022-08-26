@@ -69,7 +69,7 @@
     }
 
     input {
-      background: var(--color-header-button) !important;
+      background: var(--color-header-button);
       &:focus {
         border: 1px solid var(--color-primary);
         box-shadow: unset;
@@ -254,14 +254,14 @@
 
     input,
     select {
-      background-color: var(--color-header-background) !important;
+      background-color: var(--color-header-background);
       box-shadow: 0 0 0 2px var(--color-border) inset;
       &:hover {
-        background-color: var(--color-input-toggle-bg-hover) !important;
+        background-color: var(--color-input-toggle-bg-hover);
       }
       &:focus-visible {
         border: unset;
-        background-color: var(--color-input-toggle-bg-hover) !important;
+        background-color: var(--color-input-toggle-bg-hover);
         box-shadow: 0 0 0 2px var(--color-primary) inset;
       }
     }
