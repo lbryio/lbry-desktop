@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
-## [Unreleased for desktop]
+## [0.53.5] - [2022-08-26]
 
 ### Added
  - Checkbox to disable background wallpaper ([#7630](https://github.com/lbryio/lbry-desktop/pull/7630))
@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
  
 ### Changed
 - Upgraded Electron to v15.5.5 ([#7614](https://github.com/lbryio/lbry-desktop/pull/7614))
+- Upgraded to lbrynet v0.110.0 ([#7680](https://github.com/lbryio/lbry-desktop/pull/7680))
 
 
 ## [0.53.4] - [2022-06-10]
