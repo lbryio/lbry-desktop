@@ -230,7 +230,6 @@ const SettingsStripeCard = (props: Props) => {
           label={__('Name on card')}
           onChange={onChangeCardName}
           value={cardNameValue}
-          onBlur={clearErrorMessage}
           autoFocus
         />
 
