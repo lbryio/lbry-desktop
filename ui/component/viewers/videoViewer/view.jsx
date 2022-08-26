@@ -477,9 +477,9 @@ function VideoViewer(props: Props) {
       playerEndedDuration.current = true;
     };
     const onError = () => {
-      const error = player.error();
-      if (error) {
-        analytics.log(error, {}, ERR_GRP.VIDEOJS);
+      const mediaError = player.error();
+      if (mediaError) {
+        analytics.log(`[${mediaError.code}] ${mediaError.message}`, {}, ERR_GRP.VIDEOJS);
       }
     };
     const onRateChange = () => {
