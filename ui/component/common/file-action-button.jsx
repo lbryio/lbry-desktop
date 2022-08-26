@@ -27,7 +27,10 @@ function FileActionButton(props: Props) {
             className={
               noStyle
                 ? className || undefined
-                : classnames('button--file-action', { ...(className ? { [className]: true } : {}) })
+                : classnames('button--file-action', {
+                    'button--file-action--tooltip': !className,
+                    [className]: Boolean(className),
+                  })
             }
             iconSize={iconSize || 16}
             {...buttonProps}
@@ -42,9 +45,7 @@ function FileActionButton(props: Props) {
       <Button
         button={noStyle ? 'alt' : undefined}
         className={
-          noStyle
-            ? className || undefined
-            : classnames('button--file-action', { ...(className ? { [className]: true } : {}) })
+          noStyle ? className || undefined : classnames('button--file-action', { [className]: Boolean(className) })
         }
         iconSize={iconSize || 16}
         {...buttonProps}
