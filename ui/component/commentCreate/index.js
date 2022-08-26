@@ -13,9 +13,6 @@ import { doSendTip } from 'redux/actions/wallet';
 import { doToast } from 'redux/actions/notifications';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { selectSettingsByChannelId } from 'redux/selectors/comments';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
-import * as SETTINGS from 'constants/settings';
-import { doSetClientSetting } from 'redux/actions/settings';
 
 const select = (state, props) => {
   const claim = selectClaimForUri(state, props.uri);
@@ -27,8 +24,6 @@ const select = (state, props) => {
     isFetchingChannels: selectFetchingMyChannels(state),
     settingsByChannelId: selectSettingsByChannelId(state),
     supportDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_SUPPORT_TAG)(state),
-    customCommentServers: makeSelectClientSetting(SETTINGS.CUSTOM_COMMENTS_SERVERS)(state),
-    commentServer: makeSelectClientSetting(SETTINGS.CUSTOM_COMMENTS_SERVER_URL)(state),
   };
 };
 
@@ -39,7 +34,6 @@ const perform = (dispatch, ownProps) => ({
   doToast: (options) => dispatch(doToast(options)),
   fetchComment: (commentId) => dispatch(doCommentById(commentId, false)),
   sendTip: (params, callback, errorCallback) => dispatch(doSendTip(params, false, callback, errorCallback, false)),
-  setCommentServer: (url) => dispatch(doSetClientSetting(SETTINGS.CUSTOM_COMMENTS_SERVER_URL, url, true)),
 });
 
 export default connect(select, perform)(CommentCreate);

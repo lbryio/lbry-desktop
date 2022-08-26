@@ -23,6 +23,9 @@ import { doCommentReset, doCommentList, doCommentById, doCommentReactList } from
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { getChannelIdFromClaim } from 'util/claim';
 import CommentsList from './view';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
+import * as SETTINGS from 'constants/settings';
+import { doSetClientSetting } from 'redux/actions/settings';
 
 const select = (state, props) => {
   const { uri } = props;
@@ -56,15 +59,18 @@ const select = (state, props) => {
     myReactsByCommentId: selectMyReacts(state),
     othersReactsById: selectOthersReacts(state),
     activeChannelId: activeChannelClaim && activeChannelClaim.claim_id,
+    customCommentServers: makeSelectClientSetting(SETTINGS.CUSTOM_COMMENTS_SERVERS)(state),
+    commentServer: makeSelectClientSetting(SETTINGS.CUSTOM_COMMENTS_SERVER_URL)(state),
   };
 };
 
-const perform = {
+const perform = (dispatch, ownProps) => ({
   fetchTopLevelComments: doCommentList,
   fetchComment: doCommentById,
   fetchReacts: doCommentReactList,
   resetComments: doCommentReset,
   doResolveUris,
-};
+  setCommentServer: (url) => dispatch(doSetClientSetting(SETTINGS.CUSTOM_COMMENTS_SERVER_URL, url, true)),
+});
 
 export default connect(select, perform)(CommentsList);

@@ -1,6 +1,6 @@
 // @flow
 import { COMMENT_PAGE_SIZE_TOP_LEVEL, SORT_BY } from 'constants/comment';
-import { ENABLE_COMMENT_REACTIONS } from 'config';
+import { ENABLE_COMMENT_REACTIONS, COMMENT_SERVER_API, COMMENT_SERVER_NAME } from 'config';
 import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
 import { getCommentsListTitle } from 'util/comments';
 import * as ICONS from 'constants/icons';
@@ -15,6 +15,8 @@ import Empty from 'component/common/empty';
 import React, { useEffect } from 'react';
 import Spinner from 'component/spinner';
 import usePersistedState from 'effects/use-persisted-state';
+import { FormField } from 'component/common/form';
+import Comments from 'comments';
 
 const DEBOUNCE_SCROLL_HANDLER_MS = 200;
 
@@ -52,6 +54,9 @@ type Props = {
   fetchReacts: (commentIds: Array<string>) => Promise<any>,
   resetComments: (claimId: string) => void,
   doResolveUris: (uris: Array<string>, returnCachedClaims: boolean) => void,
+  customCommentServers: Array<CommentServerDetails>,
+  setCommentServer: (string) => void,
+  commentServer: string,
 };
 
 export default function CommentList(props: Props) {
@@ -80,10 +85,16 @@ export default function CommentList(props: Props) {
     fetchReacts,
     resetComments,
     doResolveUris,
+    customCommentServers,
+    setCommentServer,
+    commentServer,
   } = props;
 
   const isMobile = useIsMobile();
   const isMediumScreen = useIsMediumScreen();
+
+  const defaultServer = { name: COMMENT_SERVER_NAME, url: COMMENT_SERVER_API };
+  const allServers = [defaultServer, ...(customCommentServers || [])];
 
   const spinnerRef = React.useRef();
   const DEFAULT_SORT = ENABLE_COMMENT_REACTIONS ? SORT_BY.POPULARITY : SORT_BY.NEWEST;
@@ -255,7 +266,16 @@ export default function CommentList(props: Props) {
   }, [alreadyResolved, doResolveUris, topLevelComments]);
 
   const commentProps = { isTopLevel: true, threadDepth: 3, uri, claimIsMine, linkedCommentId };
-  const actionButtonsProps = { totalComments, sort, changeSort, setPage };
+  const actionButtonsProps = {
+    totalComments,
+    sort,
+    changeSort,
+    setPage,
+    allServers,
+    commentServer,
+    defaultServer,
+    setCommentServer,
+  };
 
   return (
     <Card
@@ -334,11 +354,15 @@ type ActionButtonsProps = {
   sort: string,
   changeSort: (string) => void,
   setPage: (number) => void,
+  allServers: Array<CommentServerDetails>,
+  commentServer: string,
+  setCommentServer: (string) => void,
+  defaultServer: CommentServerDetails,
 };
 
 const CommentActionButtons = (actionButtonsProps: ActionButtonsProps) => {
-  const { totalComments, sort, changeSort, setPage } = actionButtonsProps;
-
+  const { totalComments, sort, changeSort, setPage, allServers, commentServer, setCommentServer, defaultServer } =
+    actionButtonsProps;
   const sortButtonProps = { activeSort: sort, changeSort };
 
   return (
@@ -357,6 +381,33 @@ const CommentActionButtons = (actionButtonsProps: ActionButtonsProps) => {
       )}
 
       <Button button="alt" icon={ICONS.REFRESH} title={__('Refresh')} onClick={() => setPage(0)} />
+      {allServers.length >= 2 && (
+        <div className="button">
+          <div className="button__content">
+            <FormField
+              type="select-tiny"
+              onChange={function (x) {
+                const selectedServer = x.target.value;
+                setCommentServer(selectedServer);
+                if (selectedServer === defaultServer.url) {
+                  Comments.setServerUrl(undefined);
+                } else {
+                  Comments.setServerUrl(selectedServer);
+                }
+              }}
+              value={commentServer}
+            >
+              {allServers.map(function (server) {
+                return (
+                  <option key={server.url} value={server.url}>
+                    {server.name}
+                  </option>
+                );
+              })}
+            </FormField>
+          </div>
+        </div>
+      )}
     </>
   );
 };

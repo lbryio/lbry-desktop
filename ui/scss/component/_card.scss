@@ -274,6 +274,23 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+
+  .select--slim {
+    //margin-bottom: var(--spacing-xxs);
+    display: flex;
+    //justify-content: center;
+    margin: 0px 0px 10px 10px;
+
+    @media (min-width: $breakpoint-small) {
+      max-width: none;
+
+      select {
+        //max-height: 1.5rem !important;
+        //padding: 0 var(--spacing-xs);
+        //padding-right: var(--spacing-l);
+      }
+    }
+  }
 }
 
 .card--enable-overflow {
