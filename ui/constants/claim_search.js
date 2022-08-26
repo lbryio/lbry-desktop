@@ -48,8 +48,8 @@ export const ORDER_BY_TYPES = [ORDER_BY_NEW, ORDER_BY_TRENDING, ORDER_BY_TOP];
 export const DURATION_SHORT = 'short';
 export const DURATION_LONG = 'long';
 export const DURATION_ALL = 'all';
-export const DURATION_GT_EQ = '>=';
-export const DURATION_LT_EQ = '<=';
+export const DURATION_GT_EQ = 'longer_than';
+export const DURATION_LT_EQ = 'shorter_than';
 export const DURATION_TYPES = [DURATION_ALL, DURATION_SHORT, DURATION_LONG, DURATION_GT_EQ, DURATION_LT_EQ];
 
 export const SORT_BY = {
