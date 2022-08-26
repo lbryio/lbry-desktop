@@ -52,11 +52,17 @@ export const selectLastFour = (state: State) => {
 
 export const selectHasSavedCard = (state: State) => {
   const customerStatus = selectCustomerStatus(state);
-  const defaultPaymentMethod =
-    customerStatus &&
-    customerStatus.Customer &&
-    customerStatus.Customer.invoice_settings &&
-    customerStatus.Customer.invoice_settings.default_payment_method;
+
+  // const defaultPaymentMethod =
+  //   customerStatus &&
+  //   customerStatus.Customer &&
+  //   customerStatus.Customer.invoice_settings &&
+  //   customerStatus.Customer.invoice_settings.default_payment_method;
+
+  // Currently it is not possible to have multiple cards, so should be safe to use the first index
+  // of PaymentMethods as default. This is a fix for the above default_payment_method not returning
+  // correctly in some cases right after a new card setup (maybe timing issue)
+  const defaultPaymentMethod = customerStatus && customerStatus.PaymentMethods && customerStatus.PaymentMethods[0].id;
 
   return [null, undefined].includes(defaultPaymentMethod) ? defaultPaymentMethod : Boolean(defaultPaymentMethod);
 };

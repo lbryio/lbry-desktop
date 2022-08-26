@@ -63,7 +63,6 @@ const SettingsStripeCard = (props: Props) => {
   const [cardNameValue, setCardNameValue] = React.useState('');
   const [isLoading, setLoading] = React.useState(false);
   const [formError, setFormError] = React.useState();
-  const [setupSuccess, setSetupSuccess] = React.useState(false);
 
   const clientSecret = customerSetupResponse?.client_secret;
 
@@ -88,17 +87,10 @@ const SettingsStripeCard = (props: Props) => {
         } else {
           // The PaymentMethod was successfully set up
           // hide and show the proper divs
-          stripe.retrieveSetupIntent(clientSecret).then(() => setSetupSuccess(true));
+          stripe.retrieveSetupIntent(clientSecret).then(doGetCustomerStatus);
         }
       });
   }
-
-  React.useEffect(() => {
-    if (setupSuccess) {
-      doGetCustomerStatus();
-      setSetupSuccess(false);
-    }
-  }, [setupSuccess, doGetCustomerStatus]);
 
   React.useEffect(() => {
     if (cardDetails === undefined) {
