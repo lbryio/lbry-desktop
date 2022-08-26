@@ -85,6 +85,25 @@ export const sentryWrapper: SentryWrapper = {
 // ****************************************************************************
 
 function handleBeforeSend(event) {
+  if (event.message === 'ResizeObserver loop limit exceeded') {
+    // This is coming from the ads, but unfortunately there's no data linking
+    // to ads for us to filter exactly. It's apparently an ignorable browser
+    // message, and usually there should be an accompanying exception (we'll
+    // capture that instead).
+    return null;
+  }
+
+  try {
+    const ev = event.exception?.values;
+    if (ev) {
+      const fr = ev[0]?.stacktrace?.frames;
+      const filename = fr && fr[0]?.filename;
+      if (filename && filename.startsWith('https://tg1.aniview.com/')) {
+        return null;
+      }
+    }
+  } catch {}
+
   return event;
 }
 
