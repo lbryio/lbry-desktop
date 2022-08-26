@@ -412,9 +412,12 @@ export function doSetLanguage(language) {
           LocalStorage.setItem(SETTINGS.LANGUAGE, language);
           dispatch(doSetClientSetting(SETTINGS.LANGUAGE, languageSetting));
           if (isSharingData) {
-            Lbryio.call('user', 'language', {
-              language: language,
-            });
+            const USER_INIT_DELAY_MS = 1000;
+            setTimeout(() => {
+              Lbryio.call('user', 'language', { language: language }).catch((e) =>
+                analytics.log(e, { tags: { language } })
+              );
+            }, USER_INIT_DELAY_MS);
           }
         })
         .catch((e) => {
