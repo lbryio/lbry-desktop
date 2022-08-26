@@ -248,6 +248,11 @@
     .button--file-action--tooltip {
       padding: 0px var(--spacing-xxs);
     }
+    @media (max-width: $breakpoint-small) {
+      button.button:not(.button-like):not(.button-dislike) {
+        width: 100%;
+      }
+    }
   }
 
   @media (max-width: $breakpoint-small) {
