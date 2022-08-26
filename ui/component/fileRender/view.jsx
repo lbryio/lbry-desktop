@@ -65,7 +65,9 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   exitFullscreen() {
+    // @if TARGET='app'
     remote.getCurrentWindow().setFullScreen(false);
+    // @endif
   }
 
   renderViewer() {
