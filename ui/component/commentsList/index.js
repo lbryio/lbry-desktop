@@ -65,11 +65,12 @@ const select = (state, props) => {
 };
 
 const perform = (dispatch, ownProps) => ({
-  fetchTopLevelComments: doCommentList,
-  fetchComment: doCommentById,
-  fetchReacts: doCommentReactList,
-  resetComments: doCommentReset,
-  doResolveUris,
+  fetchTopLevelComments: (uri, parentId, page, pageSize, sortBy) =>
+    dispatch(doCommentList(uri, parentId, page, pageSize, sortBy)),
+  fetchComment: (commentId) => dispatch(doCommentById(commentId)),
+  fetchReacts: (commentIds) => dispatch(doCommentReactList(commentIds)),
+  resetComments: (claimId) => dispatch(doCommentReset(claimId)),
+  doResolveUris: (uris, returnCachedClaims) => dispatch(doResolveUris(uris, returnCachedClaims)),
   setCommentServer: (url) => dispatch(doSetClientSetting(SETTINGS.CUSTOM_COMMENTS_SERVER_URL, url, true)),
 });
 
