@@ -94,13 +94,10 @@ function handleBeforeSend(event) {
   }
 
   try {
-    const ev = event.exception?.values;
-    if (ev) {
-      const fr = ev[0]?.stacktrace?.frames;
-      const filename = fr && fr[0]?.filename;
-      if (filename && filename.startsWith('https://tg1.aniview.com/')) {
-        return null;
-      }
+    const ev = event.exception?.values || [];
+    const frames = ev[0]?.stacktrace?.frames || [];
+    if (frames.some((fr) => fr.filename && fr.filename.includes('/api/adserver/spt'))) {
+      return null;
     }
   } catch {}
 
