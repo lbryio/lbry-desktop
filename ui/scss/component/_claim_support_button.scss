@@ -8,10 +8,18 @@
 }
 
 .approved-bank-account__button {
-  span,
-  svg {
+  .button__label,
+  .icon {
     color: var(--color-support-button);
     stroke: var(--color-support-button) !important;
     filter: brightness(0.85);
+  }
+  &:hover {
+    .button__label,
+    .icon {
+      color: var(--color-support-button);
+      stroke: var(--color-support-button) !important;
+      filter: brightness(1);
+    }
   }
 }
