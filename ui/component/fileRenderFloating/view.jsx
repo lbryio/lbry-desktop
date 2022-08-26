@@ -21,7 +21,6 @@ import AutoplayCountdown from 'component/autoplayCountdown';
 // scss/init/vars.scss
 // --header-height
 const HEADER_HEIGHT = 60;
-const HEADER_HEIGHT_MOBILE = 60;
 
 const IS_DESKTOP_MAC = typeof process === 'object' ? process.platform === 'darwin' : false;
 const DEBOUNCE_WINDOW_RESIZE_HANDLER_MS = 100;
@@ -356,7 +355,7 @@ export default function FileRenderFloating(props: Props) {
                 top:
                   fileViewerRect.windowOffset +
                   fileViewerRect.top -
-                  (isMobile ? HEADER_HEIGHT_MOBILE : HEADER_HEIGHT) -
+                  (isMobile ? 0 : HEADER_HEIGHT) -
                   (IS_DESKTOP_MAC ? 24 : 0),
               }
             : {}

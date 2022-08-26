@@ -3,6 +3,10 @@
   position: absolute;
   top: var(--spacing-s);
   border-radius: var(--border-radius);
+
+  @media (max-width: $breakpoint-small) {
+    border-radius: 0;
+  }
 }
 
 .content__viewer--disable-click {
@@ -174,6 +178,10 @@
   &:-webkit-full-screen {
     width: 100%;
     height: 100%;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    border-radius: 0;
   }
 }
 
