@@ -6,14 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ### Added
  - Checkbox to disable background wallpaper ([#7630](https://github.com/lbryio/lbry-desktop/pull/7630))
+ - Handle content blocking from hub ([#7665](https://github.com/lbryio/lbry-desktop/pull/7665))
  
 ### Fixed
+ - Better handle decimals liquidating supports ([#7648](https://github.com/lbryio/lbry-desktop/pull/7648))
  - Better handle cover uploads ([#7647](https://github.com/lbryio/lbry-desktop/pull/7647))
  - Use default path when first choosing file on windows ([#7625](https://github.com/lbryio/lbry-desktop/pull/7625))
  - Emoji button hover ([#7620](https://github.com/lbryio/lbry-desktop/pull/7620))
  - Prevent infinite retries on thumbs ([#7618](https://github.com/lbryio/lbry-desktop/pull/7618))
  - Double splash/error on app startup ([#7615](https://github.com/lbryio/lbry-desktop/pull/7615))
  - App updates are now more coherent, also debs work. ([#7502](https://github.com/lbryio/lbry-desktop/pull/7502))
+ - Better handle many channels moderation calls at startup ([#7674](https://github.com/lbryio/lbry-desktop/pull/7674))
+ - Fix mobile floating viewer position ([#7677](https://github.com/lbryio/lbry-desktop/pull/7677))
  
 ### Changed
 - Upgraded Electron to v15.5.5 ([#7614](https://github.com/lbryio/lbry-desktop/pull/7614))
