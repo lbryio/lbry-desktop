@@ -29,10 +29,6 @@ const StripeAccountConnection = (props: Props) => {
     doGetAndSetAccountLink,
   } = props;
 
-  const accountNotConfirmedButReceivedTips = !chargesEnabled && unpaidBalance > 0;
-  const stripeConnectionUrl = accountLinkResponse?.url;
-  const accountPendingConfirmation = Boolean(accountLinkResponse);
-
   React.useEffect(() => {
     if (accountStatus === undefined) {
       doTipAccountStatus();
@@ -40,10 +36,14 @@ const StripeAccountConnection = (props: Props) => {
   }, [accountStatus, doTipAccountStatus]);
 
   React.useEffect(() => {
-    if (accountRequiresVerification) {
+    if (accountRequiresVerification || accountStatus === undefined) {
       doGetAndSetAccountLink();
     }
-  }, [accountRequiresVerification, doGetAndSetAccountLink]);
+  }, [accountStatus, accountRequiresVerification, doGetAndSetAccountLink]);
+
+  const accountNotConfirmedButReceivedTips = !chargesEnabled && unpaidBalance > 0;
+  const stripeConnectionUrl = accountLinkResponse?.url;
+  const accountPendingConfirmation = Boolean(doGetAndSetAccountLink);
 
   return (
     <Page
