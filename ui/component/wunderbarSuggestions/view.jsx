@@ -85,7 +85,7 @@ export default function WunderBarSuggestions(props: Props) {
   const additionalOptions = getAdditionalOptions(channelsOnly, searchInLanguage ? languageSetting : null);
   const { results, loading } = useLighthouse(debouncedTerm, showMature, searchSize, additionalOptions, 0);
   const noResults = debouncedTerm && !loading && results && results.length === 0;
-  const nameFromQuery = debouncedTerm.trim().replace(/\s+/g, '').replace(/:/g, '#');
+  const nameFromQuery = debouncedTerm && debouncedTerm.trim().replace(/\s+/g, '').replace(/:/g, '#');
   const uriFromQuery = `lbry://${nameFromQuery}`;
   let uriFromQueryIsValid = false;
   let channelUrlForTopTest;

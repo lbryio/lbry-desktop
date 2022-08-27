@@ -28,7 +28,7 @@ export default function SearchPage(props: Props) {
   const { push } = useHistory();
   const [from, setFrom] = React.useState(0);
 
-  const modifiedUrlQuery = urlQuery.trim().replace(/\s+/g, '').replace(/:/g, '#');
+  const modifiedUrlQuery = urlQuery && urlQuery.trim().replace(/\s+/g, '').replace(/:/g, '#');
   const uriFromQuery = `lbry://${modifiedUrlQuery}`;
 
   let streamName;
