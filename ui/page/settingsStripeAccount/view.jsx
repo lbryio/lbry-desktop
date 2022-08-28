@@ -36,10 +36,10 @@ const StripeAccountConnection = (props: Props) => {
   }, [accountStatus, doTipAccountStatus]);
 
   React.useEffect(() => {
-    if (accountRequiresVerification || accountStatus === undefined) {
+    if (accountRequiresVerification || accountStatus === undefined || !chargesEnabled) {
       doGetAndSetAccountLink();
     }
-  }, [accountStatus, accountRequiresVerification, doGetAndSetAccountLink]);
+  }, [accountStatus, chargesEnabled, accountRequiresVerification, doGetAndSetAccountLink]);
 
   const accountNotConfirmedButReceivedTips = !chargesEnabled && unpaidBalance > 0;
   const stripeConnectionUrl = accountLinkResponse?.url;
