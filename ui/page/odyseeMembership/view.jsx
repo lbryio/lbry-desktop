@@ -484,6 +484,7 @@ const OdyseeMembershipPage = (props: Props) => {
                 </h2>
 
                 <Button
+                  requiresAuth
                   button="primary"
                   label={__('Add a Card')}
                   icon={ICONS.SETTINGS}

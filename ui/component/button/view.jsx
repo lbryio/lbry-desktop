@@ -35,13 +35,14 @@ type Props = {
   onMouseLeave: ?(any) => any,
   pathname: string,
   emailVerified: boolean,
-  requiresAuth: ?boolean,
-  requiresChannel: ?boolean,
+  requiresAuth?: boolean,
+  requiresChannel?: boolean,
   hasChannels: boolean,
   myref: any,
   dispatch: any,
   'aria-label'?: string,
   user: ?User,
+  doHideModal: () => void,
 };
 
 // use forwardRef to allow consumers to pass refs to the button content if they want to
@@ -78,6 +79,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
     pathname,
     user,
     authSrc,
+    doHideModal,
     ...otherProps
   } = props;
 
@@ -215,6 +217,9 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
         exact
         onClick={(e) => {
           e.stopPropagation();
+          // in case the redirect came from a modal, it will stay open on the
+          // sign up page, so close it to make the sign up form seen
+          doHideModal();
         }}
         to={redirectUrl}
         title={title || defaultTooltip}

@@ -290,6 +290,7 @@ function WalletTipAmountSelector(props: Props) {
           ? getHelpMessage(
               <>
                 <Button
+                  requiresAuth
                   onClick={() =>
                     doOpenModal(MODALS.ADD_CARD, {
                       previousModal: modalProps ? MODALS.SEND_TIP : undefined,

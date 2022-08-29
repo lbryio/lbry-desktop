@@ -133,6 +133,7 @@ export default function PreorderAndPurchaseContentCard(props: Props) {
       tokens={{
         add_a_card: (
           <Button
+            requiresAuth
             onClick={() =>
               doOpenModal(MODALS.ADD_CARD, {
                 previousModal: MODALS.PREORDER_AND_PURCHASE_CONTENT,
