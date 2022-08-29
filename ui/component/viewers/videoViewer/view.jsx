@@ -479,7 +479,13 @@ function VideoViewer(props: Props) {
     const onError = () => {
       const mediaError = player.error();
       if (mediaError) {
-        analytics.log(`[${mediaError.code}] ${mediaError.message}`, {}, ERR_GRP.VIDEOJS);
+        let fingerprint;
+        if (mediaError.message.match(/^(.*) video append of (.*) failed for segment (.*) in playlist (.*).m3u8$/)) {
+          fingerprint = ['videojs-media-segment-append'];
+        }
+
+        const options = { ...(fingerprint ? { fingerprint } : {}) };
+        analytics.log(`[${mediaError.code}] ${mediaError.message}`, options, ERR_GRP.VIDEOJS);
       }
     };
     const onRateChange = () => {
