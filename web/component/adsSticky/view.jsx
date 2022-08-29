@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import analytics from 'analytics';
 
 // ****************************************************************************
 // AdsSticky
@@ -54,8 +55,13 @@ export default function AdsSticky(props: Props) {
       gScript.src = 'https://adncdnend.azureedge.net/adtags/odyseeKp.js';
       gScript.async = true;
       gScript.addEventListener('load', () => setRefresh(Date.now()));
-      // $FlowFixMe
-      document.getElementsByTagName('head')[0].append(gScript); // Vendor's desired location, although I don't think location matters.
+
+      try {
+        const head = document.head || document.getElementsByTagName('head')[0];
+        head.append(gScript); // Vendor's desired location, although I don't think location matters.
+      } catch (e) {
+        analytics.log(e, {}, 'adsSticky-missing-head');
+      }
     }
   }, [shouldLoadSticky]);
 
