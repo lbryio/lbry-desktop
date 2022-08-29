@@ -382,30 +382,28 @@ const CommentActionButtons = (actionButtonsProps: ActionButtonsProps) => {
 
       <Button button="alt" icon={ICONS.REFRESH} title={__('Refresh')} onClick={() => setPage(0)} />
       {allServers.length >= 2 && (
-        <div className="button">
-          <div className="button__content">
-            <FormField
-              type="select-tiny"
-              onChange={function (x) {
-                const selectedServer = x.target.value;
-                setCommentServer(selectedServer);
-                if (selectedServer === defaultServer.url) {
-                  Comments.setServerUrl(undefined);
-                } else {
-                  Comments.setServerUrl(selectedServer);
-                }
-              }}
-              value={commentServer}
-            >
-              {allServers.map(function (server) {
-                return (
-                  <option key={server.url} value={server.url}>
-                    {server.name}
-                  </option>
-                );
-              })}
-            </FormField>
-          </div>
+        <div className="button_selectedServer">
+          <FormField
+            type="select-tiny"
+            onChange={function (x) {
+              const selectedServer = x.target.value;
+              setCommentServer(selectedServer);
+              if (selectedServer === defaultServer.url) {
+                Comments.setServerUrl(undefined);
+              } else {
+                Comments.setServerUrl(selectedServer);
+              }
+            }}
+            value={commentServer}
+          >
+            {allServers.map(function (server) {
+              return (
+                <option key={server.url} value={server.url}>
+                  {server.name}
+                </option>
+              );
+            })}
+          </FormField>
         </div>
       )}
     </>
