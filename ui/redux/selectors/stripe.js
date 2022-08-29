@@ -16,7 +16,10 @@ export const selectCustomerSetupResponse = (state: State) => selectState(state).
 
 export const selectAccountStatus = (state: State) => selectState(state).accountStatus;
 export const selectAccountUnpaidBalance = (state: State) => selectAccountStatus(state)?.total_received_unpaid || 0;
-export const selectAccountChargesEnabled = (state: State) => Boolean(selectAccountStatus(state)?.charges_enabled);
+export const selectAccountChargesEnabled = (state: State) => {
+  const accountStatus = selectAccountStatus(state);
+  return accountStatus && accountStatus.charges_enabled;
+};
 
 export const selectAccountCheckIsFetchingForId = (state: State, id: string) =>
   selectAccountCheckFetchingIds(state).includes(id);
@@ -24,7 +27,7 @@ export const selectAccountCheckIsFetchingForId = (state: State, id: string) =>
 export const selectAccountRequiresVerification = (state: State) => {
   const chargesEnabled = selectAccountChargesEnabled(state);
 
-  if (!chargesEnabled) return false;
+  if (!chargesEnabled) return chargesEnabled;
 
   const accountStatus = selectAccountStatus(state);
   const eventuallyDueInformation = accountStatus?.account_info.requirements.eventually_due;

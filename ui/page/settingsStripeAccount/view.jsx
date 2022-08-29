@@ -9,10 +9,9 @@ import BusyIndicator from 'component/common/busy-indicator';
 
 type Props = {
   // -- redux --
-  accountStatus: StripeAccountStatus,
   unpaidBalance: number,
-  chargesEnabled: boolean,
-  accountRequiresVerification: boolean,
+  chargesEnabled: ?boolean,
+  accountRequiresVerification: ?boolean,
   accountLinkResponse: StripeAccountLink,
   doTipAccountStatus: () => Promise<StripeAccountStatus>,
   doGetAndSetAccountLink: () => Promise<StripeAccountLink>,
@@ -20,7 +19,6 @@ type Props = {
 
 const StripeAccountConnection = (props: Props) => {
   const {
-    accountStatus,
     unpaidBalance,
     chargesEnabled,
     accountRequiresVerification,
@@ -29,21 +27,37 @@ const StripeAccountConnection = (props: Props) => {
     doGetAndSetAccountLink,
   } = props;
 
+  const bankAccountNotFetched = chargesEnabled === undefined;
+  const noBankAccount = !chargesEnabled && !bankAccountNotFetched;
+  const stripeConnectionUrl = accountLinkResponse?.url;
+  const shouldFetchLink = noBankAccount || accountRequiresVerification;
+  const linkNotFetched = shouldFetchLink && accountLinkResponse === undefined;
+
   React.useEffect(() => {
-    if (accountStatus === undefined) {
+    if (bankAccountNotFetched) {
       doTipAccountStatus();
     }
-  }, [accountStatus, doTipAccountStatus]);
+  }, [bankAccountNotFetched, doTipAccountStatus]);
 
   React.useEffect(() => {
-    if (accountRequiresVerification || accountStatus === undefined || !chargesEnabled) {
+    if (linkNotFetched) {
       doGetAndSetAccountLink();
     }
-  }, [accountStatus, chargesEnabled, accountRequiresVerification, doGetAndSetAccountLink]);
+  }, [doGetAndSetAccountLink, linkNotFetched]);
 
-  const accountNotConfirmedButReceivedTips = !chargesEnabled && unpaidBalance > 0;
-  const stripeConnectionUrl = accountLinkResponse?.url;
-  const accountPendingConfirmation = Boolean(doGetAndSetAccountLink);
+  if (bankAccountNotFetched || linkNotFetched) {
+    return (
+      <Page
+        noFooter
+        noSideNavigation
+        settingsPage
+        className="card-stack"
+        backout={{ title: __('Your Payout Method'), backLabel: __('Back') }}
+      >
+        <BusyIndicator message={__('Getting your bank account connection status...')} />
+      </Page>
+    );
+  }
 
   return (
     <Page
@@ -52,7 +66,7 @@ const StripeAccountConnection = (props: Props) => {
       settingsPage
       className="card-stack"
       backout={{
-        title: !accountStatus ? __('Add Payout Method') : __('Your Payout Method'),
+        title: !chargesEnabled ? __('Add Payout Method') : __('Your Payout Method'),
         backLabel: __('Back'),
       }}
     >
@@ -60,71 +74,42 @@ const StripeAccountConnection = (props: Props) => {
         title={<div className="table__header-text">{__('Connect a bank account')}</div>}
         isBodyList
         body={
-          <>
-            {/* show while waiting for account status */}
-            {!chargesEnabled && !accountPendingConfirmation && !accountNotConfirmedButReceivedTips && (
-              <div className="card__body-actions">
-                <h3>
-                  <BusyIndicator message={__('Getting your bank account connection status...')} />
-                </h3>
-              </div>
-            )}
+          chargesEnabled ? (
+            <div className="card__body-actions">
+              <h3>{__('Congratulations! Your account has been connected with Odysee.')}</h3>
 
-            {/* user has yet to complete their integration */}
-            {!chargesEnabled && accountPendingConfirmation && (
-              <div className="card__body-actions">
-                <h3>{__('Connect your bank account to Odysee to receive donations directly from users')}</h3>
-
-                <div className="section__actions">
-                  <a href={stripeConnectionUrl}>
-                    <Button button="primary" label={__('Connect your bank account')} icon={ICONS.FINANCE} />
-                  </a>
-                </div>
-              </div>
-            )}
-
-            {/* user has completed their integration */}
-            {chargesEnabled && (
-              <div className="card__body-actions">
-                <h3>{__('Congratulations! Your account has been connected with Odysee.')}</h3>
-                {accountRequiresVerification && (
-                  <>
-                    <h3 style={{ marginTop: '10px' }}>
-                      {__('Although your account is connected it still requires verification to begin receiving tips.')}
-                    </h3>
-                    <h3 style={{ marginTop: '10px' }}>
-                      {__(
-                        'Please use the button below to complete your verification process and enable tipping for ' +
-                          'your account.'
-                      )}
-                    </h3>
-                  </>
-                )}
-              </div>
-            )}
-
-            {/* TODO: hopefully we won't be using this anymore and can remove it */}
-            {accountNotConfirmedButReceivedTips && (
-              <div className="card__body-actions">
-                <h3>{__('Congratulations, you have already begun receiving tips on Odysee!')}</h3>
-                <div>
-                  <br />
-                  <h3>{__('Your pending account balance is $%balance% USD.', { balance: unpaidBalance / 100 })}</h3>
-                </div>
-                <br />
-                <div>
-                  <h3>
-                    {__('Connect your bank account to be able to cash your pending balance out to your account.')}
+              {accountRequiresVerification && (
+                <>
+                  <h3 style={{ marginTop: '10px' }}>
+                    {__('Although your account is connected it still requires verification to begin receiving tips.')}
                   </h3>
-                </div>
-                <div className="section__actions">
-                  <a href={stripeConnectionUrl}>
-                    <Button button="primary" label={__('Connect your bank account')} icon={ICONS.FINANCE} />
-                  </a>
-                </div>
+                  <h3 style={{ marginTop: '10px' }}>
+                    {__(
+                      'Please use the button below to complete your verification process and enable tipping for ' +
+                        'your account.'
+                    )}
+                  </h3>
+                </>
+              )}
+            </div>
+          ) : unpaidBalance > 0 ? (
+            // TODO: hopefully we won't be using this anymore and can remove it
+            <div className="card__body-actions">
+              <h3>{__('Congratulations, you have already begun receiving tips on Odysee!')}</h3>
+              <div>
+                <br />
+                <h3>{__('Your pending account balance is $%balance% USD.', { balance: unpaidBalance / 100 })}</h3>
               </div>
-            )}
-          </>
+              <br />
+              <div>
+                <h3>{__('Connect your bank account to be able to cash your pending balance out to your account.')}</h3>
+              </div>
+            </div>
+          ) : (
+            <div className="card__body-actions">
+              <h3>{__('Connect your bank account to Odysee to receive donations directly from users')}</h3>
+            </div>
+          )
         }
         actions={
           accountRequiresVerification ? (
@@ -142,7 +127,14 @@ const StripeAccountConnection = (props: Props) => {
               icon={ICONS.SETTINGS}
               navigate={`/$/${PAGES.WALLET}?fiatType=incoming&tab=fiat-payment-history&currency=fiat`}
             />
-          ) : undefined
+          ) : (
+            <Button
+              button="primary"
+              label={__('Connect your bank account')}
+              icon={ICONS.FINANCE}
+              navigate={stripeConnectionUrl}
+            />
+          )
         }
       />
     </Page>

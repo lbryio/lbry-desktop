@@ -2,7 +2,6 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { doTipAccountStatus, doGetAndSetAccountLink } from 'redux/actions/stripe';
 import {
-  selectAccountStatus,
   selectAccountUnpaidBalance,
   selectAccountChargesEnabled,
   selectAccountRequiresVerification,
@@ -12,7 +11,6 @@ import {
 import StripeAccountConnection from './view';
 
 const select = (state) => ({
-  accountStatus: selectAccountStatus(state),
   unpaidBalance: selectAccountUnpaidBalance(state),
   chargesEnabled: selectAccountChargesEnabled(state),
   accountRequiresVerification: selectAccountRequiresVerification(state),
