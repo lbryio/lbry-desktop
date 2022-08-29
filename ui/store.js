@@ -1,9 +1,5 @@
 import * as ACTIONS from 'constants/action_types';
 import { persistStore, persistReducer } from 'redux-persist';
-import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
-import createCompressor from 'redux-persist-transform-compress';
-import { createFilter, createBlacklistFilter } from 'redux-persist-transform-filter';
-import localForage from 'localforage';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import { createBrowserHistory } from 'history';
@@ -11,6 +7,7 @@ import { routerMiddleware } from 'connected-react-router';
 import createRootReducer from './reducers';
 import Lbry from 'lbry';
 import { createAnalyticsMiddleware } from 'redux/middleware/analytics';
+import { persistOptions } from 'redux/setup/persistedState';
 import { sharedStateMiddleware } from 'redux/setup/sharedState';
 import { getAuthToken } from 'util/saved-passwords';
 import { X_LBRY_AUTH_TOKEN } from 'constants/token';
@@ -42,83 +39,6 @@ function enableBatching(reducer) {
     }
   };
 }
-
-const contentFilter = createFilter('content', ['positions', 'history', 'lastViewedAnnouncement', 'recsysEntries']);
-const fileInfoFilter = createFilter('fileInfo', [
-  'fileListPublishedSort',
-  'fileListDownloadedSort',
-  'fileListSubscriptionSort',
-]);
-const appFilter = createFilter('app', [
-  'hasClickedComment',
-  'searchOptionsExpanded',
-  'volume',
-  'muted',
-  'allowAnalytics',
-  'welcomeVersion',
-  'interestedInYoutubeSync',
-  'splashAnimationEnabled',
-  'activeChannel',
-]);
-const claimsFilter = createFilter('claims', ['pendingById']);
-// We only need to persist the receiveAddress for the wallet
-const walletFilter = createFilter('wallet', ['receiveAddress']);
-const searchFilter = createFilter('search', ['options']);
-const tagsFilter = createFilter('tags', ['followedTags']);
-const subscriptionsFilter = createFilter('subscriptions', ['subscriptions']);
-const blockedFilter = createFilter('blocked', ['blockedChannels']);
-const coinSwapsFilter = createFilter('coinSwap', ['coinSwaps']);
-const settingsFilter = createBlacklistFilter('settings', ['loadedLanguages', 'language']);
-const collectionsFilter = createFilter('collections', [
-  'builtin',
-  'savedIds',
-  'unpublished',
-  'edited',
-  'updated',
-  'pending',
-]);
-const whiteListedReducers = [
-  'claims',
-  'fileInfo',
-  'publish',
-  'wallet',
-  'tags',
-  'content',
-  'app',
-  'search',
-  'blocked',
-  'coinSwap',
-  'settings',
-  'subscriptions',
-  'collections',
-];
-
-const transforms = [
-  claimsFilter,
-  fileInfoFilter,
-  walletFilter,
-  blockedFilter,
-  coinSwapsFilter,
-  tagsFilter,
-  appFilter,
-  searchFilter,
-  tagsFilter,
-  contentFilter,
-  subscriptionsFilter,
-  settingsFilter,
-  collectionsFilter,
-  createCompressor(),
-];
-
-const persistOptions = {
-  key: 'v0',
-  storage: localForage,
-  stateReconciler: autoMergeLevel2,
-  whitelist: whiteListedReducers,
-  // Order is important. Needs to be compressed last or other transforms can't
-  // read the data
-  transforms,
-};
 
 let history;
 history = createBrowserHistory();
@@ -172,4 +92,4 @@ window.addEventListener('storage', (e) => {
   }
 });
 
-export { store, persistor, history, whiteListedReducers };
+export { store, persistor, history };
