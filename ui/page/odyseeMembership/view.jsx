@@ -61,6 +61,8 @@ const OdyseeMembershipPage = (props: Props) => {
     doGetCustomerStatus,
   } = props;
 
+  const initialCardState = React.useRef(hasSavedCard);
+
   const userChannelName = activeChannelClaim ? activeChannelClaim.name : '';
   const userChannelClaimId = activeChannelClaim && activeChannelClaim.claim_id;
 
@@ -387,7 +389,7 @@ const OdyseeMembershipPage = (props: Props) => {
 
   // if user already selected plan, wait a bit (so it's not jarring) and open modal
   React.useEffect(() => {
-    if (!stillWaitingFromBackend && planValue && hasSavedCard) {
+    if (!stillWaitingFromBackend && planValue && initialCardState.current) {
       const delayTimeout = setTimeout(function () {
         // clear query params
         window.history.replaceState(null, null, window.location.pathname);
@@ -401,7 +403,7 @@ const OdyseeMembershipPage = (props: Props) => {
 
       return () => clearTimeout(delayTimeout);
     }
-  }, [stillWaitingFromBackend, planValue, hasSavedCard]);
+  }, [stillWaitingFromBackend, planValue]);
 
   const helpText = (
     <div className="section__subtitle">
