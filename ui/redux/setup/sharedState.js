@@ -6,7 +6,7 @@ import * as ACTIONS from 'constants/action_types';
 import { doSyncLoop } from 'redux/actions/sync';
 import { buildSharedStateMiddleware } from 'redux/middleware/shared-state';
 
-const triggerSharedStateActions = [
+export const triggerSharedStateActions = [
   ACTIONS.CHANNEL_SUBSCRIBE,
   ACTIONS.CHANNEL_UNSUBSCRIBE,
   ACTIONS.TOGGLE_BLOCK_CHANNEL,
