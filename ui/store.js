@@ -1,4 +1,3 @@
-import * as ACTIONS from 'constants/action_types';
 import { persistStore, persistReducer } from 'redux-persist';
 import { createStore, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
@@ -40,14 +39,5 @@ initTabStateSync(store);
 
 const persistor = persistStore(store);
 window.persistor = persistor;
-
-window.addEventListener('storage', (e) => {
-  if (e.key === ACTIONS.SET_CONTENT_POSITION) {
-    store.dispatch({
-      type: ACTIONS.SET_CONTENT_POSITION,
-      data: JSON.parse(e.newValue),
-    });
-  }
-});
 
 export { store, persistor, history };
