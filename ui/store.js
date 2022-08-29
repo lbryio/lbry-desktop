@@ -11,12 +11,10 @@ import { createBulkThunkMiddleware, enableBatching } from 'redux/middleware/batc
 import { persistOptions } from 'redux/setup/persistedState';
 import { sharedStateMiddleware } from 'redux/setup/sharedState';
 
-let history;
-history = createBrowserHistory();
-
+const history = createBrowserHistory();
 const rootReducer = createRootReducer(history);
 const persistedReducer = persistReducer(persistOptions, rootReducer);
-const analyticsMiddleware = createAnalyticsMiddleware();
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const middleware = [
   sharedStateMiddleware,
@@ -24,10 +22,9 @@ const middleware = [
   routerMiddleware(history),
   thunk,
   createBulkThunkMiddleware(), // BATCH_ACTIONS support
-  analyticsMiddleware,
+  createAnalyticsMiddleware(),
 ];
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(
   enableBatching(persistedReducer),
   {}, // initial state
