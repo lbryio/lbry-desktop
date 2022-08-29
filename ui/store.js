@@ -7,43 +7,15 @@ import { routerMiddleware } from 'connected-react-router';
 import createRootReducer from './reducers';
 import { createAnalyticsMiddleware } from 'redux/middleware/analytics';
 import { populateAuthTokenHeader } from 'redux/middleware/auth-token';
+import { createBulkThunkMiddleware, enableBatching } from 'redux/middleware/batch-actions';
 import { persistOptions } from 'redux/setup/persistedState';
 import { sharedStateMiddleware } from 'redux/setup/sharedState';
-
-function isFunction(object) {
-  return typeof object === 'function';
-}
-
-function isNotFunction(object) {
-  return !isFunction(object);
-}
-
-function createBulkThunkMiddleware() {
-  return ({ dispatch, getState }) => (next) => (action) => {
-    if (action.type === 'BATCH_ACTIONS') {
-      action.actions.filter(isFunction).map((actionFn) => actionFn(dispatch, getState));
-    }
-    return next(action);
-  };
-}
-
-function enableBatching(reducer) {
-  return function batchingReducer(state, action) {
-    switch (action.type) {
-      case 'BATCH_ACTIONS':
-        return action.actions.filter(isNotFunction).reduce(batchingReducer, state);
-      default:
-        return reducer(state, action);
-    }
-  };
-}
 
 let history;
 history = createBrowserHistory();
 
 const rootReducer = createRootReducer(history);
 const persistedReducer = persistReducer(persistOptions, rootReducer);
-const bulkThunk = createBulkThunkMiddleware();
 const analyticsMiddleware = createAnalyticsMiddleware();
 
 const middleware = [
@@ -51,7 +23,7 @@ const middleware = [
   populateAuthTokenHeader,
   routerMiddleware(history),
   thunk,
-  bulkThunk,
+  createBulkThunkMiddleware(), // BATCH_ACTIONS support
   analyticsMiddleware,
 ];
 
