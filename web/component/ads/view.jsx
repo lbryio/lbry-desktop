@@ -74,7 +74,6 @@ function Ads(props: Props) {
         >
           <div className="ad__container">
             <div id={adConfig.tag} />
-            <div id="Aniview2" />
           </div>
           <div
             className={classnames('ads__claim-text', {
