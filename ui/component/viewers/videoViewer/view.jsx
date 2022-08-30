@@ -482,6 +482,8 @@ function VideoViewer(props: Props) {
         let fingerprint;
         if (mediaError.message.match(/^video append of (.*) failed for segment (.*) in playlist (.*).m3u8$/)) {
           fingerprint = ['videojs-media-segment-append'];
+        } else if (mediaError.message.match(/^audio append of (.*) failed for segment (.*) in playlist (.*).m3u8$/)) {
+          fingerprint = ['videojs-media-segment-append--audio'];
         }
 
         const options = { ...(fingerprint ? { fingerprint } : {}) };
