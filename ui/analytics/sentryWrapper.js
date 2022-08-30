@@ -41,6 +41,7 @@ export const sentryWrapper: SentryWrapper = {
         beforeBreadcrumb: handleBeforeBreadcrumb,
         beforeSend: handleBeforeSend,
         debug: LocalStorage.getItem('sentry_debug') === 'true' || !IS_PRODUCTION,
+        denyUrls: [/extensions\//i, /^chrome:\/\//i],
         integrations: [new BrowserTracing()],
         maxBreadcrumbs: 50,
         release: process.env.BUILD_REV,
