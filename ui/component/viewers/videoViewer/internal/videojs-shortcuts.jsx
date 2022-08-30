@@ -46,6 +46,11 @@ function seekVideo(stepSize: number, playerRef, containerRef, jumpTo?: boolean) 
 
   const duration = videoNode.duration;
   const currentTime = videoNode.currentTime;
+
+  if (isNaN(duration) || isNaN(currentTime)) {
+    return;
+  }
+
   const newDuration = jumpTo ? duration * stepSize : currentTime + stepSize;
   if (newDuration < 0) {
     videoNode.currentTime = 0;
