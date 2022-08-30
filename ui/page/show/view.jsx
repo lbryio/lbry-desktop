@@ -165,7 +165,9 @@ function ShowPage(props: Props) {
           title={uri}
           subtitle={
             <>
-              {__('Your hub has blocked this content because it subscribes to the following blocking channel:')}{' '}
+              {(!errorCensor || !errorCensor.text) &&
+                __('Your hub has blocked this content because it subscribes to the following blocking channel:')}
+              {errorCensor && errorCensor.text}{' '}
               <Button
                 button="link"
                 navigate={errorCensor && errorCensor.canonical_url}
