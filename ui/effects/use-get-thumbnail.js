@@ -17,6 +17,7 @@ export default function useGetThumbnail(
   const isFree = claim && claim.value && (!claim.value.fee || Number(claim.value.fee.amount) <= 0);
   const isCollection = claim && claim.value_type === 'collection';
   const thumbnailInClaim = claim && claim.value && claim.value.thumbnail && claim.value.thumbnail.url;
+  const repostSrcUri = claim && claim.repost_url && claim.canonical_url;
   let shouldFetchFileInfo = false;
 
   if (thumbnailInClaim) {
@@ -35,9 +36,9 @@ export default function useGetThumbnail(
 
   React.useEffect(() => {
     if (shouldFetchFileInfo) {
-      getFile(uri);
+      getFile(repostSrcUri || uri);
     }
-  }, [shouldFetchFileInfo, uri]);
+  }, [shouldFetchFileInfo, repostSrcUri, uri]);
 
   React.useEffect(() => {
     setThumbnail(thumbnailToUse);

@@ -29,6 +29,7 @@ const select = (state, props) => {
   const media = claim && claim.value && (claim.value.video || claim.value.audio);
   const mediaDuration = media && media.duration && formatMediaDuration(media.duration, { screenReader: true });
   const isLivestream = isStreamPlaceholderClaim(claim);
+  const repostSrcUri = claim && claim.repost_url && claim.canonical_url;
 
   return {
     claim,
@@ -46,7 +47,7 @@ const select = (state, props) => {
     geoRestriction: selectGeoRestrictionForUri(state, props.uri),
     hasVisitedUri: props.uri && makeSelectHasVisitedUri(props.uri)(state),
     isSubscribed: props.uri && selectIsSubscribedForUri(state, props.uri),
-    streamingUrl: props.uri && makeSelectStreamingUrlForUri(props.uri)(state),
+    streamingUrl: (repostSrcUri || props.uri) && makeSelectStreamingUrlForUri(repostSrcUri || props.uri)(state),
     isLivestream,
     isLivestreamActive: isLivestream && selectIsActiveLivestreamForUri(state, props.uri),
     livestreamViewerCount: isLivestream && claim ? selectViewersForId(state, claim.claim_id) : undefined,

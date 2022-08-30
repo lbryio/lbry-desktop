@@ -10,6 +10,7 @@ import {
 import { doFileGet } from 'redux/actions/file';
 import { doResolveUri } from 'redux/actions/claims';
 import { selectViewCountForUri, selectBanStateForUri } from 'lbryinc';
+import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
 import { selectIsActiveLivestreamForUri, selectViewersForId } from 'redux/selectors/livestream';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { isClaimNsfw, isStreamPlaceholderClaim, getThumbnailFromClaim } from 'util/claim';
@@ -21,6 +22,7 @@ const select = (state, props) => {
   const media = claim && claim.value && (claim.value.video || claim.value.audio);
   const mediaDuration = media && media.duration && formatMediaDuration(media.duration, { screenReader: true });
   const isLivestream = isStreamPlaceholderClaim(claim);
+  const repostSrcUri = claim && claim.repost_url && claim.canonical_url;
 
   return {
     claim,
@@ -32,6 +34,7 @@ const select = (state, props) => {
     title: props.uri && selectTitleForUri(state, props.uri),
     banState: selectBanStateForUri(state, props.uri),
     geoRestriction: selectGeoRestrictionForUri(state, props.uri),
+    streamingUrl: (repostSrcUri || props.uri) && makeSelectStreamingUrlForUri(repostSrcUri || props.uri)(state),
     showMature: selectShowMatureContent(state),
     isMature: claim ? isClaimNsfw(claim) : false,
     isLivestream,
