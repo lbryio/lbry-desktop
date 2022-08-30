@@ -19,7 +19,7 @@ type Props = {
   mode: ?string,
   name: ?string,
   title: ?string,
-  filePath: ?File,
+  filePath: ?string,
   fileMimeType: ?string,
   isStillEditing: boolean,
   balance: number,
@@ -77,7 +77,7 @@ function PublishFile(props: Props) {
   const sizeInMB = Number(size) / 1000000;
   const secondsToProcess = sizeInMB / PROCESSING_MB_PER_SECOND;
   const ffmpegAvail = ffmpegStatus.available;
-  const [currentFile, setCurrentFile] = useState(null);
+  const currentFile = filePath;
   const [currentFileType, setCurrentFileType] = useState(null);
   const [optimizeAvail, setOptimizeAvail] = useState(false);
   const [userOptimize, setUserOptimize] = usePersistedState('publish-file-user-optimize', false);
@@ -86,22 +86,10 @@ function PublishFile(props: Props) {
   useEffect(() => {
     if (mode === PUBLISH_MODES.POST) {
       if (currentFileType !== 'text/markdown' && !isStillEditing) {
-        updatePublishForm({ filePath: undefined });
+        updatePublishForm({ filePath: '' });
       }
     }
   }, [currentFileType, mode, isStillEditing, updatePublishForm]);
-
-  useEffect(() => {
-    if (!filePath) {
-      setCurrentFile('');
-      updateFileInfo(0, 0, false);
-    } else {
-      // Update currentFile file
-      if (filePath.name !== currentFile) {
-        handleFileChange({ file: filePath, path: filePath.name });
-      }
-    }
-  }, [filePath, currentFile, handleFileChange, updateFileInfo]);
 
   useEffect(() => {
     const isOptimizeAvail = currentFile && currentFile !== '' && isVid && ffmpegAvail;
@@ -215,14 +203,14 @@ function PublishFile(props: Props) {
     // select file, start to select a new one, then cancel
     if (!fileWithPath) {
       if (isStillEditing || !clearName) {
-        updatePublishForm({ filePath: undefined });
+        updatePublishForm({ filePath: '' });
       } else {
-        updatePublishForm({ filePath: undefined, name: '' });
+        updatePublishForm({ filePath: '', name: '' });
       }
       return;
     }
 
-    // if video, extract duration so we can warn about bitrateif (typeof file !== 'string') {
+    // if video, extract duration so we can warn about bitrate if (typeof file !== 'string')
     const file = fileWithPath.file;
     const contentType = file.type && file.type.split('/');
     const isVideo = contentType && contentType[0] === 'video';
@@ -271,8 +259,8 @@ function PublishFile(props: Props) {
       setPublishMode(PUBLISH_MODES.FILE);
     }
 
-    const publishFormParams: { filePath: File, name?: string, optimize?: boolean } = {
-      filePath: file,
+    const publishFormParams: { filePath: string, name?: string, optimize?: boolean } = {
+      filePath: fileWithPath.path,
     };
     // Strip off extention and replace invalid characters
     let fileName = name || (file.name && file.name.substring(0, file.name.lastIndexOf('.'))) || '';
@@ -281,7 +269,6 @@ function PublishFile(props: Props) {
       publishFormParams.name = parseName(fileName);
     }
 
-    setCurrentFile(fileWithPath.path);
     updatePublishForm(publishFormParams);
   }
 
