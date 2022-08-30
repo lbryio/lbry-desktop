@@ -281,7 +281,6 @@ const VideoJsEvents = ({
 
   function liveEdgeRestoreSpeed() {
     const player = playerRef.current;
-    player.liveTracker.handleVisibilityChange_();
 
     if (player.playbackRate() !== 1) {
       player.liveTracker.handleSeeked_();
