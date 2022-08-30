@@ -9,11 +9,10 @@ import {
   makeSelectClaimIsPending,
 } from 'redux/selectors/claims';
 import { selectMyUnpublishedCollections } from 'redux/selectors/collections';
-import { selectBlackListedOutpoints, doFetchSubCount, selectSubCountForUri } from 'lbryinc'; // ban state
+import { doFetchSubCount, selectSubCountForUri } from 'lbryinc'; // ban state
 import { selectYoutubeChannels } from 'redux/selectors/user';
 import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
 import { selectModerationBlockList } from 'redux/selectors/comments';
-import { selectMutedChannels } from 'redux/selectors/blocked';
 import { doOpenModal } from 'redux/actions/app';
 import ChannelPage from './view';
 
@@ -28,12 +27,12 @@ const select = (state, props) => {
     page: selectCurrentChannelPage(state),
     claim,
     isSubscribed: selectIsSubscribedForUri(state, props.uri),
-    blackListedOutpoints: selectBlackListedOutpoints(state),
+    blackListedOutpoints: [],
     subCount: selectSubCountForUri(state, props.uri),
     pending: makeSelectClaimIsPending(props.uri)(state),
     youtubeChannels: selectYoutubeChannels(state),
     blockedChannels: selectModerationBlockList(state), // banlist
-    mutedChannels: selectMutedChannels(state),
+    mutedChannels: [],
     unpublishedCollections: selectMyUnpublishedCollections(state),
   };
 };

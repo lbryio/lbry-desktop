@@ -82,10 +82,6 @@ declare module 'lbryinc/src/redux/reducers/auth' {
   declare module.exports: any;
 }
 
-declare module 'lbryinc/src/redux/reducers/blacklist' {
-  declare module.exports: any;
-}
-
 declare module 'lbryinc/src/redux/reducers/cost_info' {
   declare module.exports: any;
 }
@@ -211,9 +207,6 @@ declare module 'lbryinc/src/redux/actions/user.js' {
 }
 declare module 'lbryinc/src/redux/reducers/auth.js' {
   declare module.exports: $Exports<'lbryinc/src/redux/reducers/auth'>;
-}
-declare module 'lbryinc/src/redux/reducers/blacklist.js' {
-  declare module.exports: $Exports<'lbryinc/src/redux/reducers/blacklist'>;
 }
 declare module 'lbryinc/src/redux/reducers/cost_info.js' {
   declare module.exports: $Exports<'lbryinc/src/redux/reducers/cost_info'>;

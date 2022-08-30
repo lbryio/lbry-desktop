@@ -29,7 +29,7 @@ import {
 import { isURIValid } from 'util/lbryURI';
 import { setSearchApi } from 'redux/actions/search';
 import { doSetLanguage, doFetchLanguage, doUpdateIsNightAsync } from 'redux/actions/settings';
-import { Lbryio, doBlackListedOutpointsSubscribe, doFilteredOutpointsSubscribe } from 'lbryinc';
+import { Lbryio } from 'lbryinc';
 import rewards from 'rewards';
 import { store, persistor, history } from 'store';
 import app from './app';
@@ -274,8 +274,6 @@ function AppWrapper() {
       }
       app.store.dispatch(doUpdateIsNightAsync());
       app.store.dispatch(doDaemonReady());
-      app.store.dispatch(doBlackListedOutpointsSubscribe());
-      app.store.dispatch(doFilteredOutpointsSubscribe());
 
       const appReadyTime = Date.now();
       const timeToStart = appReadyTime - startTime;

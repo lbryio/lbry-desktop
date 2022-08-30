@@ -1,10 +1,8 @@
 // @flow
 import { createSelector } from 'reselect';
 import { createCachedSelector } from 're-reselect';
-import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { selectMentionSearchResults, selectMentionQuery } from 'redux/selectors/search';
-import { selectBlacklistedOutpointMap, selectFilteredOutpointMap } from 'lbryinc';
 import {
   selectClaimsById,
   selectMyClaimIdsRaw,
@@ -198,10 +196,7 @@ const filterCommentsDepOnList = {
   claimsById: selectClaimsById,
   myClaimIds: selectMyClaimIdsRaw,
   myChannelClaimIds: selectMyChannelClaimIds,
-  mutedChannels: selectMutedChannels,
   personalBlockList: selectModerationBlockList,
-  blacklistedMap: selectBlacklistedOutpointMap,
-  filteredMap: selectFilteredOutpointMap,
   showMatureContent: selectShowMatureContent,
 };
 
@@ -284,16 +279,7 @@ const filterComments = (comments: Array<Comment>, claimId?: string, filterInputs
     return acc;
   }, {});
 
-  const {
-    claimsById,
-    myClaimIds,
-    myChannelClaimIds,
-    mutedChannels,
-    personalBlockList,
-    blacklistedMap,
-    filteredMap,
-    showMatureContent,
-  } = filterProps;
+  const { claimsById, myClaimIds, myChannelClaimIds, personalBlockList, showMatureContent } = filterProps;
 
   return comments
     ? comments.filter((comment) => {
@@ -317,11 +303,6 @@ const filterComments = (comments: Array<Comment>, claimId?: string, filterInputs
             }
           }
 
-          const outpoint = `${channelClaim.txid}:${channelClaim.nout}`;
-          if (blacklistedMap[outpoint] || filteredMap[outpoint]) {
-            return false;
-          }
-
           if (!showMatureContent) {
             const claimIsMature = isClaimNsfw(channelClaim);
             if (claimIsMature) {
@@ -339,7 +320,7 @@ const filterComments = (comments: Array<Comment>, claimId?: string, filterInputs
           }
         }
 
-        return !mutedChannels.includes(comment.channel_url);
+        return true;
       })
     : [];
 };

@@ -9,7 +9,6 @@ import {
 } from 'redux/selectors/claims';
 import { doResolveUris } from 'redux/actions/claims';
 import * as SETTINGS from 'constants/settings';
-import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { withRouter } from 'react-router';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { makeSelectClientSetting, selectShowMatureContent } from 'redux/selectors/settings';
@@ -27,7 +26,7 @@ const select = (state, props) => {
     fetching: makeSelectFetchingChannelClaims(props.uri)(state),
     totalPages: makeSelectTotalPagesInChannelSearch(props.uri, PAGE_SIZE)(state),
     channelIsMine: selectClaimIsMine(state, claim),
-    channelIsBlocked: makeSelectChannelIsMuted(props.uri)(state),
+    channelIsBlocked: false,
     claim,
     isAuthenticated: selectUserVerifiedEmail(state),
     showMature: selectShowMatureContent(state),

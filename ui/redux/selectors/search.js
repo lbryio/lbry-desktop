@@ -15,7 +15,6 @@ import { isClaimNsfw } from 'util/claim';
 import { createSelector } from 'reselect';
 import { createCachedSelector } from 're-reselect';
 import { createNormalizedSearchKey, getRecommendationSearchOptions } from 'util/search';
-import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectHistory } from 'redux/selectors/content';
 import { selectAllCostInfoByUri } from 'lbryinc';
 
@@ -58,11 +57,10 @@ export const selectRecommendedContentForUri = createCachedSelector(
   selectHistory,
   selectClaimsByUri,
   selectShowMatureContent,
-  selectMutedChannels,
   selectAllCostInfoByUri,
   selectSearchResultByQuery,
   selectClaimIsNsfwForUri, // (state, uri)
-  (uri, history, claimsByUri, matureEnabled, blockedChannels, costInfoByUri, searchUrisByQuery, isMature) => {
+  (uri, history, claimsByUri, matureEnabled, costInfoByUri, searchUrisByQuery, isMature) => {
     const claim = claimsByUri[uri];
 
     if (!claim) return;
@@ -97,17 +95,13 @@ export const selectRecommendedContentForUri = createCachedSelector(
 
         if (!searchClaim) return;
 
-        const signingChannel = searchClaim && searchClaim.signing_channel;
-        const channelUri = signingChannel && signingChannel.canonical_url;
-        const blockedMatch = blockedChannels.some((blockedUri) => blockedUri.includes(channelUri));
-
         let isEqualUri;
         try {
           const { claimId: searchId } = parseURI(searchUri);
           isEqualUri = searchId === currentClaimId;
         } catch (e) {}
 
-        return !isEqualUri && !blockedMatch;
+        return !isEqualUri;
       });
 
       // Claim to play next: playable and free claims not played before in history
