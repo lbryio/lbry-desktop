@@ -40,10 +40,6 @@ export {
   selectFetchingCostInfo,
 } from './redux/selectors/cost_info';
 export {
-  selectBlackListedOutpoints,
-  selectBlacklistedOutpointMap,
-} from './redux/selectors/blacklist';
-export {
   selectViewCount,
   selectViewCountForUri,
   selectSubCountForUri,
