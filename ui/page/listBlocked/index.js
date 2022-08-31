@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { doFetchModBlockedList, doFetchCommentModAmIList } from 'redux/actions/comments';
+import { selectMutedChannels } from 'redux/selectors/blocked';
 import {
   selectModerationBlockList,
   selectAdminBlockList,
@@ -15,7 +16,7 @@ import { selectMyChannelClaimIds } from 'redux/selectors/claims';
 import ListBlocked from './view';
 
 const select = (state) => ({
-  mutedUris: [],
+  mutedUris: selectMutedChannels(state),
   personalBlockList: selectModerationBlockList(state),
   adminBlockList: selectAdminBlockList(state),
   moderatorBlockList: selectModeratorBlockList(state),

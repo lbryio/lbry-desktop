@@ -18,6 +18,7 @@ import {
 } from 'redux/selectors/collections';
 import { doFetchItemsInCollection, doCollectionDelete } from 'redux/actions/collections';
 import { doResolveUri } from 'redux/actions/claims';
+import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import CollectionPreviewTile from './view';
 
@@ -42,7 +43,7 @@ const select = (state, props) => {
     title: collectionUri && selectTitleForUri(state, collectionUri),
     blackListedOutpoints: [],
     filteredOutpoints: [],
-    blockedChannelUris: [],
+    blockedChannelUris: selectMutedChannels(state),
     showMature: selectShowMatureContent(state),
     isMature: makeSelectClaimIsNsfw(collectionUri)(state),
   };

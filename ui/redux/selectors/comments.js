@@ -1,6 +1,7 @@
 // @flow
 import { createSelector } from 'reselect';
 import { createCachedSelector } from 're-reselect';
+import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { selectMentionSearchResults, selectMentionQuery } from 'redux/selectors/search';
 import {
@@ -197,6 +198,7 @@ const filterCommentsDepOnList = {
   myClaimIds: selectMyClaimIdsRaw,
   myChannelClaimIds: selectMyChannelClaimIds,
   personalBlockList: selectModerationBlockList,
+  mutedChannels: selectMutedChannels,
   showMatureContent: selectShowMatureContent,
 };
 
@@ -279,7 +281,8 @@ const filterComments = (comments: Array<Comment>, claimId?: string, filterInputs
     return acc;
   }, {});
 
-  const { claimsById, myClaimIds, myChannelClaimIds, personalBlockList, showMatureContent } = filterProps;
+  const { claimsById, myClaimIds, myChannelClaimIds, personalBlockList, mutedChannels, showMatureContent } =
+    filterProps;
 
   return comments
     ? comments.filter((comment) => {
@@ -320,7 +323,7 @@ const filterComments = (comments: Array<Comment>, claimId?: string, filterInputs
           }
         }
 
-        return true;
+        return !mutedChannels.includes(comment.channel_url);
       })
     : [];
 };

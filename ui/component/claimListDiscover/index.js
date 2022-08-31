@@ -8,6 +8,7 @@ import {
 import { doClaimSearch } from 'redux/actions/claims';
 import * as SETTINGS from 'constants/settings';
 import { selectFollowedTags } from 'redux/selectors/tags';
+import { selectMutedChannels } from 'redux/selectors/blocked';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import { makeSelectClientSetting, selectShowMatureContent, selectLanguage } from 'redux/selectors/settings';
 import { selectModerationBlockList } from 'redux/selectors/comments';
@@ -23,7 +24,7 @@ const select = (state) => ({
   showNsfw: selectShowMatureContent(state),
   hideReposts: makeSelectClientSetting(SETTINGS.HIDE_REPOSTS)(state),
   languageSetting: selectLanguage(state),
-  mutedUris: [],
+  mutedUris: selectMutedChannels(state),
   blockedUris: selectModerationBlockList(state),
   searchInLanguage: makeSelectClientSetting(SETTINGS.SEARCH_IN_LANGUAGE)(state),
 });

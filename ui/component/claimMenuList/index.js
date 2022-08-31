@@ -12,6 +12,7 @@ import {
 } from 'redux/selectors/collections';
 import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
+import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { doChannelMute, doChannelUnmute } from 'redux/actions/blocked';
 import { doSetActiveChannel, doSetIncognito, doOpenModal } from 'redux/actions/app';
 import {
@@ -62,7 +63,7 @@ const select = (state, props) => {
       COLLECTIONS_CONSTS.FAVORITES_ID,
       contentPermanentUri
     )(state),
-    channelIsMuted: false,
+    channelIsMuted: makeSelectChannelIsMuted(contentChannelUri)(state),
     channelIsBlocked: makeSelectChannelIsBlocked(contentChannelUri)(state),
     fileInfo: makeSelectFileInfoForUri(contentPermanentUri)(state),
     isSubscribed: selectIsSubscribedForUri(state, contentChannelUri),

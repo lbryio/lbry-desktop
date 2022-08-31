@@ -7,6 +7,7 @@ import { MATURE_TAGS } from 'constants/tags';
 import { doFetchViewCount } from 'lbryinc';
 import { doToggleTagFollowDesktop } from 'redux/actions/tags';
 import { makeSelectClientSetting, selectShowMatureContent } from 'redux/selectors/settings';
+import { selectMutedAndBlockedChannelIds } from 'redux/selectors/blocked';
 import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
 import { createNormalizedClaimSearchKey } from 'util/claim';
 
@@ -15,7 +16,7 @@ import ClaimListDiscover from './view';
 const select = (state, props) => {
   const showNsfw = selectShowMatureContent(state);
   const hideReposts = makeSelectClientSetting(SETTINGS.HIDE_REPOSTS)(state);
-  const mutedAndBlockedChannelIds = [];
+  const mutedAndBlockedChannelIds = selectMutedAndBlockedChannelIds(state);
 
   const options = resolveSearchOptions({
     showNsfw,

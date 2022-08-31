@@ -13,6 +13,7 @@ import { doFetchSubCount, selectSubCountForUri } from 'lbryinc'; // ban state
 import { selectYoutubeChannels } from 'redux/selectors/user';
 import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
 import { selectModerationBlockList } from 'redux/selectors/comments';
+import { selectMutedChannels } from 'redux/selectors/blocked';
 import { doOpenModal } from 'redux/actions/app';
 import ChannelPage from './view';
 
@@ -32,7 +33,7 @@ const select = (state, props) => {
     pending: makeSelectClaimIsPending(props.uri)(state),
     youtubeChannels: selectYoutubeChannels(state),
     blockedChannels: selectModerationBlockList(state), // banlist
-    mutedChannels: [],
+    mutedChannels: selectMutedChannels(state),
     unpublishedCollections: selectMyUnpublishedCollections(state),
   };
 };
