@@ -40,7 +40,7 @@ export const sentryWrapper: SentryWrapper = {
         dsn: TEST_DSN || SENTRY_DSN,
         beforeBreadcrumb: handleBeforeBreadcrumb,
         beforeSend: handleBeforeSend,
-        debug: LocalStorage.getItem('sentry_debug') === 'true' || !IS_PRODUCTION,
+        debug: LocalStorage.getItem('sentry_debug') === 'true',
         denyUrls: [/extensions\//i, /^chrome:\/\//i],
         integrations: [new BrowserTracing()],
         maxBreadcrumbs: 50,
@@ -97,7 +97,9 @@ function handleBeforeSend(event) {
   try {
     const ev = event.exception?.values || [];
     const frames = ev[0]?.stacktrace?.frames || [];
-    if (frames.some((fr) => fr.filename && fr.filename.includes('/api/adserver/spt'))) {
+    const lastFrame = frames[frames.length - 1];
+
+    if (lastFrame?.filename && lastFrame.filename.match(/([a-z]*)-extension:\/\//)) {
       return null;
     }
   } catch {}
