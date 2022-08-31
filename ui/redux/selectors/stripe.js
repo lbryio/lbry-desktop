@@ -30,10 +30,14 @@ export const selectAccountRequiresVerification = (state: State) => {
   if (!chargesEnabled) return chargesEnabled;
 
   const accountStatus = selectAccountStatus(state);
-  const eventuallyDueInformation = accountStatus?.account_info.requirements.eventually_due;
+  // const eventuallyDueInformation = accountStatus?.account_info.requirements.eventually_due;
   const currentlyDueInformation = accountStatus?.account_info.requirements.currently_due;
 
-  if (Number.isInteger(eventuallyDueInformation?.length) || Number.isInteger(currentlyDueInformation?.length)) {
+  if (
+    // (eventuallyDueInformation && eventuallyDueInformation.length > 0) ||
+    currentlyDueInformation &&
+    currentlyDueInformation.length > 0
+  ) {
     return true;
   }
 
