@@ -58,9 +58,9 @@ export default function AdsSticky(props: Props) {
 
       try {
         const head = document.head || document.getElementsByTagName('head')[0];
-        head.append(gScript); // Vendor's desired location, although I don't think location matters.
+        head.appendChild(gScript); // Vendor's desired location, although I don't think location matters.
       } catch (e) {
-        analytics.log(e, {}, 'adsSticky-missing-head');
+        analytics.log(e, { fingerprint: ['adsSticky::scriptAppendFailed'] }, 'adsSticky::scriptAppendFailed');
       }
     }
   }, [shouldLoadSticky]);
