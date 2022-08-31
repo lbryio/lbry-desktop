@@ -99,10 +99,6 @@ function handleBeforeSend(event) {
     const frames = ev[0]?.stacktrace?.frames || [];
     const lastFrame = frames[frames.length - 1];
 
-    if (frames.some((fr) => fr.filename && fr.filename.includes('/api/adserver/spt'))) {
-      return null;
-    }
-
     if (lastFrame?.filename && lastFrame.filename.match(/([a-z]*)-extension:\/\//)) {
       return null;
     }
