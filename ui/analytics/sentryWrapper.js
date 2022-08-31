@@ -40,7 +40,7 @@ export const sentryWrapper: SentryWrapper = {
         dsn: TEST_DSN || SENTRY_DSN,
         beforeBreadcrumb: handleBeforeBreadcrumb,
         beforeSend: handleBeforeSend,
-        debug: LocalStorage.getItem('sentry_debug') === 'true' || !IS_PRODUCTION,
+        debug: LocalStorage.getItem('sentry_debug') === 'true',
         denyUrls: [/extensions\//i, /^chrome:\/\//i],
         integrations: [new BrowserTracing()],
         maxBreadcrumbs: 50,
