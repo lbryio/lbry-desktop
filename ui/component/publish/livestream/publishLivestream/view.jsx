@@ -438,7 +438,7 @@ function PublishLivestream(props: Props) {
                                         {item.data.fileDuration && isNaN(item.data.fileDuration)
                                           ? item.data.fileDuration
                                           : `${Math.floor(item.data.fileDuration / 60)} ${
-                                              Math.floor(item.data.fileDuration / 60) > 1 ? __('minutes') : __('minute')
+                                              Math.floor(item.data.fileDuration / 60) === 1 ? __('minute') : __('minutes')
                                             }`}
                                         <div className="table__item-label">
                                           {`${moment(item.data.uploadedAt).from(moment())}`}
