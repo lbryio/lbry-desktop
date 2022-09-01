@@ -48,13 +48,7 @@ function getCookie(name) {
 }
 
 function deleteCookie(name) {
-  document.cookie = name + `=; Max-Age=-99999999; domain=${domain}; path=/;`;
-
-  // Legacy
-  // Adding this here to delete any old cookies before we removed the "." in front of the domain
-  // Remove this if you see it after March 11th, 2021
-  // https://github.com/lbryio/lbry-desktop/pull/3830
-  document.cookie = name + `=; Max-Age=-99999999; domain=.${domain}; path=/;`;
+  document.cookie = name + `=; Max-Age=-99999999; domain=${domain}; path=/; Secure; SameSite=None;`;
 }
 
 function setSavedPassword(value, saveToDisk) {
