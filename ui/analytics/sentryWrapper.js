@@ -46,7 +46,7 @@ export const sentryWrapper: SentryWrapper = {
         maxBreadcrumbs: 50,
         release: process.env.BUILD_REV,
         tracesSampleRate: 0.0,
-        whitelistUrls: [/https:\/\/((.*)\.)?odysee\.(com|tv)/, 'http://localhost:9090'],
+        allowUrls: [/https:\/\/((.*)\.)?odysee\.(com|tv)/],
       });
 
       gSentryInitialized = true;
@@ -85,15 +85,7 @@ export const sentryWrapper: SentryWrapper = {
 // Private
 // ****************************************************************************
 
-function handleBeforeSend(event) {
-  if (event.message === 'ResizeObserver loop limit exceeded') {
-    // This is coming from the ads, but unfortunately there's no data linking
-    // to ads for us to filter exactly. It's apparently an ignorable browser
-    // message, and usually there should be an accompanying exception (we'll
-    // capture that instead).
-    return null;
-  }
-
+function handleBeforeSend(event, hints) {
   try {
     const ev = event.exception?.values || [];
     const frames = ev[0]?.stacktrace?.frames || [];
