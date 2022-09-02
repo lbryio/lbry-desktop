@@ -41,8 +41,6 @@ const select = (state, props) => {
     isResolvingUri: collectionUri && selectIsUriResolving(state, collectionUri),
     thumbnail: getThumbnailFromClaim(claim),
     title: collectionUri && selectTitleForUri(state, collectionUri),
-    blackListedOutpoints: [],
-    filteredOutpoints: [],
     blockedChannelUris: selectMutedChannels(state),
     showMature: selectShowMatureContent(state),
     isMature: makeSelectClaimIsNsfw(collectionUri)(state),

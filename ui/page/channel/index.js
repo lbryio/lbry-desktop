@@ -28,7 +28,6 @@ const select = (state, props) => {
     page: selectCurrentChannelPage(state),
     claim,
     isSubscribed: selectIsSubscribedForUri(state, props.uri),
-    blackListedOutpoints: [],
     subCount: selectSubCountForUri(state, props.uri),
     pending: makeSelectClaimIsPending(props.uri)(state),
     youtubeChannels: selectYoutubeChannels(state),
