@@ -333,6 +333,7 @@
   align-self: flex-start;
   .button--alt {
     padding-top: 2px;
+    padding: 0 var(--spacing-s);
   }
   .comment__sort {
     .button--alt {
@@ -660,6 +661,14 @@
 
 .button_selectedServer {
   display: inline;
-  width: var(--floating-viewer-height);
   float: right;
+  min-width: var(--side-nav-width--micro);
+  max-width: var(--side-nav-width);
+  margin-left: -10px;
+}
+
+.button_refresh {
+  display: inline;
+  float: right;
+  margin-left: var(--spacing-s);
 }

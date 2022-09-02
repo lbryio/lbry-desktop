@@ -379,8 +379,9 @@ const CommentActionButtons = (actionButtonsProps: ActionButtonsProps) => {
           <SortButton {...sortButtonProps} label={__('New')} icon={ICONS.NEW} sortOption={SORT_BY.NEWEST} />
         </span>
       )}
-
-      <Button button="alt" icon={ICONS.REFRESH} title={__('Refresh')} onClick={() => setPage(0)} />
+      <div className="button_refresh">
+        <Button button="alt" icon={ICONS.REFRESH} title={__('Refresh')} onClick={() => setPage(0)} />
+      </div>
       {allServers.length >= 2 && (
         <div className="button_selectedServer">
           <FormField
