@@ -7,6 +7,20 @@ const isProduction = process.env.NODE_ENV === 'production';
 const maxExpiration = 2147483647;
 let sessionPassword;
 
+function areCookiesEnabled() {
+  // `navigator.cookieEnabled` doesn't get populated until a certain stage after
+  // startup, so https://stackoverflow.com/a/48521179/977819 remains the best
+  // solution so far.
+  try {
+    document.cookie = 'cookietest=1';
+    const cookiesEnabled = document.cookie.indexOf('cookietest=') !== -1;
+    document.cookie = 'cookietest=1; expires=Thu, 01-Jan-1970 00:00:01 GMT';
+    return cookiesEnabled;
+  } catch (e) {
+    return false;
+  }
+}
+
 function setCookie(name, value, expirationDaysOnWeb) {
   let expires = '';
   if (expirationDaysOnWeb) {
@@ -123,6 +137,7 @@ function doAuthTokenRefresh() {
 }
 
 module.exports = {
+  areCookiesEnabled,
   setCookie,
   getCookie,
   deleteCookie,
