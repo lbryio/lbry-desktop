@@ -1,3 +1,4 @@
+import analytics from 'analytics';
 import Lbry from 'lbry';
 import { selectClaimForUri } from 'redux/selectors/claims';
 import { doFetchChannelListMine } from 'redux/actions/claims';
@@ -62,16 +63,20 @@ export function doInstallNew(appVersion, callbackForUsersWhoAreSharingData, doma
         ? (domain.replace(/[.]/gi, '') + status.installation_id).slice(0, 66)
         : status.installation_id;
     payload.node_id = status.lbry_id;
-    Lbry.version().then((version) => {
-      payload.daemon_version = version.lbrynet_version;
-      payload.operating_system = version.os_system;
-      payload.platform = version.platform;
-      Lbryio.call('install', 'new', payload);
+    Lbry.version()
+      .then((version) => {
+        payload.daemon_version = version.lbrynet_version;
+        payload.operating_system = version.os_system;
+        payload.platform = version.platform;
+        Lbryio.call('install', 'new', payload);
 
-      if (callbackForUsersWhoAreSharingData) {
-        callbackForUsersWhoAreSharingData(status);
-      }
-    });
+        if (callbackForUsersWhoAreSharingData) {
+          callbackForUsersWhoAreSharingData(status);
+        }
+      })
+      .catch((e) => {
+        analytics.log(`'install/new' skipped due to: (${e.message})`, { fingerprint: ['doInstallNew'] });
+      });
   });
 }
 
