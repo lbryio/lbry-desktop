@@ -10,6 +10,7 @@ const whitelist = [
   ACTIONS.CLIENT_SETTING_CHANGED,
   ACTIONS.NOTIFICATION_DELETE_COMPLETED,
   ACTIONS.SET_CONTENT_POSITION,
+  ACTIONS.USER_LOGGED_IN_BROADCAST,
 ];
 
 const tabStateSyncMiddleware = buildTabStateSyncMiddleware(whitelist);
