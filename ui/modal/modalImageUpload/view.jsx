@@ -14,10 +14,13 @@ type Props = {
 
 function ModalImageUpload(props: Props) {
   const { closeModal, currentValue, title, assetName, helpText, onUpdate } = props;
+  const filters = React.useMemo(() => [{ name: 'Images', extensions: ['jpg', 'jpeg', 'png', 'gif', 'svg'] }]);
 
   return (
     <Modal isOpen type="card" onAborted={closeModal} contentLabel={title}>
       <SelectAsset
+        filters={filters}
+        type="openFile"
         onUpdate={onUpdate}
         currentValue={currentValue}
         assetName={assetName}

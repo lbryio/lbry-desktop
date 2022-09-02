@@ -20,6 +20,7 @@ import path from 'path';
 import { diskSpaceLinux, diskSpaceWindows, diskSpaceMac } from '../ui/util/diskspace';
 
 const { download } = require('electron-dl');
+const mime = require('mime');
 const remote = require('@electron/remote/main');
 const os = require('os');
 const sudo = require('sudo-prompt');
@@ -297,6 +298,50 @@ app.on('will-finish-launching', () => {
 
 app.on('before-quit', () => {
   appState.isQuitting = true;
+});
+
+// Get the content of a file as a raw buffer of bytes.
+// Useful to convert a file path to a File instance.
+// Example:
+// const result = await ipcMain.invoke('get-file-from-path', 'path/to/file');
+// const file = new File([result.buffer], result.name);
+// NOTE: if path points to a folder, an empty
+// file will be given.
+ipcMain.handle('get-file-from-path', (event, path) => {
+  return new Promise((resolve, reject) => {
+    fs.stat(path, (error, stats) => {
+      if (error) {
+        reject(error);
+        return;
+      }
+      // Separate folders considering "\" and "/"
+      // as separators (cross platform)
+      const folders = path.split(/[\\/]/);
+      const name = folders[folders.length - 1];
+      if (stats.isDirectory()) {
+        resolve({
+          name,
+          mime: undefined,
+          path,
+          buffer: new ArrayBuffer(0),
+        });
+        return;
+      }
+      // Encoding null ensures data results in a Buffer.
+      fs.readFile(path, { encoding: null }, (err, data) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve({
+          name,
+          mime: mime.getType(name) || undefined,
+          path,
+          buffer: data,
+        });
+      });
+    });
+  });
 });
 
 ipcMain.on('get-disk-space', async (event) => {

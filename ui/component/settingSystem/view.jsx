@@ -130,7 +130,7 @@ export default function SettingSystem(props: Props) {
               <FileSelector
                 type="openDirectory"
                 currentPath={daemonSettings.download_dir}
-                onFileChosen={(newDirectory: WebFile) => {
+                onFileChosen={(newDirectory: FileWithPath) => {
                   setDaemonSetting('download_dir', newDirectory.path);
                 }}
               />
@@ -224,7 +224,7 @@ export default function SettingSystem(props: Props) {
                 type="openDirectory"
                 placeholder={__('A Folder containing FFmpeg')}
                 currentPath={ffmpegPath || daemonSettings.ffmpeg_path}
-                onFileChosen={(newDirectory: WebFile) => {
+                onFileChosen={(newDirectory: FileWithPath) => {
                   // $FlowFixMe
                   setDaemonSetting('ffmpeg_path', newDirectory.path);
                   findFFmpeg();

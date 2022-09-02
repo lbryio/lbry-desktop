@@ -1,19 +1,21 @@
 // @flow
 import * as React from 'react';
 import * as remote from '@electron/remote';
+import { ipcRenderer } from 'electron';
 import Button from 'component/button';
 import { FormField } from 'component/common/form';
 
 type Props = {
   type: string,
   currentPath?: ?string,
-  onFileChosen: (WebFile) => void,
+  onFileChosen: (FileWithPath) => void,
   label?: string,
   placeholder?: string,
   accept?: string,
   error?: string,
   disabled?: boolean,
   autoFocus?: boolean,
+  filters?: Array<{ name: string, extension: string[] }>,
 };
 
 class FileSelector extends React.PureComponent<Props> {
@@ -41,7 +43,7 @@ class FileSelector extends React.PureComponent<Props> {
     const file = files[0];
 
     if (this.props.onFileChosen) {
-      this.props.onFileChosen(file);
+      this.props.onFileChosen({ file, path: file.path || file.name });
     }
     this.fileInput.current.value = null; // clear the file input
   };
@@ -64,13 +66,27 @@ class FileSelector extends React.PureComponent<Props> {
       properties = ['openDirectory'];
     }
 
-    remote.dialog.showOpenDialog({ properties, defaultPath }).then((result) => {
-      const path = result && result.filePaths[0];
-      if (path) {
-        // $FlowFixMe
-        this.props.onFileChosen({ path });
-      }
-    });
+    remote.dialog
+      .showOpenDialog({
+        properties,
+        defaultPath,
+        filters: this.props.filters,
+      })
+      .then((result) => {
+        const path = result && result.filePaths[0];
+        if (path) {
+          return ipcRenderer.invoke('get-file-from-path', path);
+        }
+      })
+      .then((result) => {
+        if (!result) {
+          return;
+        }
+        const file = new File([result.buffer], result.name, {
+          type: result.mime,
+        });
+        this.props.onFileChosen({ file, path: result.path });
+      });
   };
 
   fileInputButton = () => {

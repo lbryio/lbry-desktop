@@ -19,7 +19,7 @@ type Props = {
   mode: ?string,
   name: ?string,
   title: ?string,
-  filePath: string | WebFile,
+  filePath: ?string,
   fileMimeType: ?string,
   isStillEditing: boolean,
   balance: number,
@@ -77,7 +77,7 @@ function PublishFile(props: Props) {
   const sizeInMB = Number(size) / 1000000;
   const secondsToProcess = sizeInMB / PROCESSING_MB_PER_SECOND;
   const ffmpegAvail = ffmpegStatus.available;
-  const [currentFile, setCurrentFile] = useState(null);
+  const currentFile = filePath;
   const [currentFileType, setCurrentFileType] = useState(null);
   const [optimizeAvail, setOptimizeAvail] = useState(false);
   const [userOptimize, setUserOptimize] = usePersistedState('publish-file-user-optimize', false);
@@ -90,18 +90,6 @@ function PublishFile(props: Props) {
       }
     }
   }, [currentFileType, mode, isStillEditing, updatePublishForm]);
-
-  useEffect(() => {
-    if (!filePath || filePath === '') {
-      setCurrentFile('');
-      updateFileInfo(0, 0, false);
-    } else if (typeof filePath !== 'string') {
-      // Update currentFile file
-      if (filePath.name !== currentFile && filePath.path !== currentFile) {
-        handleFileChange(filePath);
-      }
-    }
-  }, [filePath, currentFile, handleFileChange, updateFileInfo]);
 
   useEffect(() => {
     const isOptimizeAvail = currentFile && currentFile !== '' && isVid && ffmpegAvail;
@@ -209,11 +197,11 @@ function PublishFile(props: Props) {
     }
   }
 
-  function handleFileChange(file: WebFile, clearName = true) {
+  function handleFileChange(fileWithPath: FileWithPath, clearName = true) {
     window.URL = window.URL || window.webkitURL;
 
     // select file, start to select a new one, then cancel
-    if (!file) {
+    if (!fileWithPath) {
       if (isStillEditing || !clearName) {
         updatePublishForm({ filePath: '' });
       } else {
@@ -222,7 +210,8 @@ function PublishFile(props: Props) {
       return;
     }
 
-    // if video, extract duration so we can warn about bitrateif (typeof file !== 'string') {
+    // if video, extract duration so we can warn about bitrate if (typeof file !== 'string')
+    const file = fileWithPath.file;
     const contentType = file.type && file.type.split('/');
     const isVideo = contentType && contentType[0] === 'video';
     const isMp4 = contentType && contentType[1] === 'mp4';
@@ -233,7 +222,7 @@ function PublishFile(props: Props) {
       isTextPost = contentType[1] === 'plain' || contentType[1] === 'markdown';
       setCurrentFileType(contentType);
     } else if (file.name) {
-      // If user's machine is missign a valid content type registration
+      // If user's machine is missing a valid content type registration
       // for markdown content: text/markdown, file extension will be used instead
       const extension = file.name.split('.').pop();
       isTextPost = MARKDOWN_FILE_EXTENSIONS.includes(extension);
@@ -270,10 +259,8 @@ function PublishFile(props: Props) {
       setPublishMode(PUBLISH_MODES.FILE);
     }
 
-    const publishFormParams: { filePath: string | WebFile, name?: string, optimize?: boolean } = {
-      // if electron, we'll set filePath to the path string because SDK is handling publishing.
-      // File.path will be undefined from web due to browser security, so it will default to the File Object.
-      filePath: file.path || file,
+    const publishFormParams: { filePath: string, name?: string, optimize?: boolean } = {
+      filePath: fileWithPath.path,
     };
     // Strip off extention and replace invalid characters
     let fileName = name || (file.name && file.name.substring(0, file.name.lastIndexOf('.'))) || '';
@@ -282,8 +269,6 @@ function PublishFile(props: Props) {
       publishFormParams.name = parseName(fileName);
     }
 
-    // File path is not supported on web for security reasons so we use the name instead.
-    setCurrentFile(file.path || file.name);
     updatePublishForm(publishFormParams);
   }
 

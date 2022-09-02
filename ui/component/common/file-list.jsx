@@ -3,8 +3,8 @@ import React from 'react';
 import { useRadioState, Radio, RadioGroup } from 'reakit/Radio';
 
 type Props = {
-  files: Array<WebFile>,
-  onChange: (WebFile | void) => void,
+  files: Array<File>,
+  onChange: (File | void) => void,
 };
 
 type RadioProps = {
@@ -26,16 +26,16 @@ function FileList(props: Props) {
 
   const getFile = (value?: string) => {
     if (files && files.length) {
-      return files.find((file: WebFile) => file.name === value);
+      return files.find((file: File) => file.name === value);
     }
   };
 
   React.useEffect(() => {
-    if (radio.stops.length) {
+    if (radio.items.length) {
       if (!radio.currentId) {
         radio.first();
       } else {
-        const first = radio.stops[0].ref.current;
+        const first = radio.items[0].ref.current;
         // First auto-selection
         if (first && first.id === radio.currentId && !radio.state) {
           const file = getFile(first.value);
@@ -46,12 +46,12 @@ function FileList(props: Props) {
 
         if (radio.state) {
           // Find selected element
-          const stop = radio.stops.find(item => item.id === radio.currentId);
+          const stop = radio.items.find((item) => item.id === radio.currentId);
           const element = stop && stop.ref.current;
           // Only update state if new item is selected
           if (element && element.value !== radio.state) {
             const file = getFile(element.value);
-            // Sselect new file and update state
+            // Select new file and update state
             onChange(file);
             radio.setState(element.value);
           }

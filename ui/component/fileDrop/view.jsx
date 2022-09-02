@@ -11,10 +11,10 @@ import Icon from 'component/common/icon';
 
 type Props = {
   modal: { id: string, modalProps: {} },
-  filePath: string | WebFile,
+  filePath: ?string,
   clearPublish: () => void,
   updatePublishForm: ({}) => void,
-  openModal: (id: string, { files: Array<WebFile> }) => void,
+  openModal: (id: string, { files: Array<File> }) => void,
   // React router
   history: {
     entities: {}[],
@@ -37,7 +37,7 @@ function FileDrop(props: Props) {
   const { drag, dropData } = useDragDrop();
   const [files, setFiles] = React.useState([]);
   const [error, setError] = React.useState(false);
-  const [target, setTarget] = React.useState<?WebFile>(null);
+  const [target, setTarget] = React.useState<?File>(null);
   const hideTimer = React.useRef(null);
   const targetTimer = React.useRef(null);
   const navigationTimer = React.useRef(null);
@@ -65,24 +65,29 @@ function FileDrop(props: Props) {
     }
   }, [history]);
 
-  // Delay hide and navigation for a smooth transition
-  const hideDropArea = React.useCallback(() => {
-    hideTimer.current = setTimeout(() => {
-      setFiles([]);
-      // Navigate to publish area
-      navigationTimer.current = setTimeout(() => {
-        navigateToPublish();
-      }, NAVIGATE_TIME_OUT);
-    }, HIDE_TIME_OUT);
-  }, [navigateToPublish]);
-
   // Handle file selection
   const handleFileSelected = React.useCallback(
     (selectedFile) => {
-      updatePublishForm({ filePath: selectedFile });
-      hideDropArea();
+      // Delay hide and navigation for a smooth transition
+      hideTimer.current = setTimeout(() => {
+        setFiles([]);
+        // Navigate to publish area
+        navigationTimer.current = setTimeout(() => {
+          // Navigate first, THEN assign filePath, otherwise
+          // the file selected will get reset (that's how the
+          // publish file view works, when the user switches to
+          // publish a file, the pathFile value gets reset to undefined)
+          navigateToPublish();
+          updatePublishForm({
+            filePath: selectedFile.path || selectedFile.name,
+            fileDur: 0,
+            fileSize: 0,
+            fileVid: false,
+          });
+        }, NAVIGATE_TIME_OUT);
+      }, HIDE_TIME_OUT);
     },
-    [updatePublishForm, hideDropArea]
+    [setFiles, navigateToPublish, updatePublishForm]
   );
 
   // Clear timers when unmounted

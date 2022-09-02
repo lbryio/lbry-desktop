@@ -27,6 +27,14 @@ type Props = {
   // passed to the onUpdate function after the
   // upload service returns success.
   buildImagePreview?: boolean,
+  // File extension filtering. Files can be filtered
+  // but the "All Files" options always shows up. To
+  // avoid that, you can use the filters property.
+  // For example, to only accept images pass the
+  // following filter:
+  // { name: 'Images', extensions: ['jpg', 'png', 'gif'] },
+  filters?: Array<{ name: string, extension: string[] }>,
+  type?: string,
 };
 
 function filePreview(file) {
@@ -43,7 +51,8 @@ function filePreview(file) {
 }
 
 function SelectAsset(props: Props) {
-  const { onUpdate, onDone, assetName, currentValue, recommended, title, inline, buildImagePreview } = props;
+  const { onUpdate, onDone, assetName, currentValue, recommended, title, inline, buildImagePreview, filters, type } =
+    props;
   const [pathSelected, setPathSelected] = React.useState('');
   const [fileSelected, setFileSelected] = React.useState<any>(null);
   const [uploadStatus, setUploadStatus] = React.useState(SPEECH_READY);
@@ -121,17 +130,17 @@ function SelectAsset(props: Props) {
           />
         ) : (
           <FileSelector
+            filters={filters}
+            type={type}
             autoFocus
             disabled={uploadStatus === SPEECH_UPLOADING}
             label={fileSelectorLabel}
             name="assetSelector"
             currentPath={pathSelected}
-            onFileChosen={(file) => {
-              if (file.name) {
-                setFileSelected(file);
-                // what why? why not target=WEB this?
-                // file.path is undefined in web but available in electron
-                setPathSelected(file.name || file.path);
+            onFileChosen={(fileWithPath) => {
+              if (fileWithPath.file.name) {
+                setFileSelected(fileWithPath.file);
+                setPathSelected(fileWithPath.path);
               }
             }}
             accept={accept}
