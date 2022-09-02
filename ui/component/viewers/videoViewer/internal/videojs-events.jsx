@@ -48,7 +48,7 @@ const VideoJsEvents = ({
     data.playPoweredBy = playerPoweredBy;
     data.isLivestream = isLivestreamClaim;
     // $FlowFixMe
-    data.bitrateAsBitsPerSecond = this.tech(true).vhs?.playlists?.media?.().attributes?.BANDWIDTH;
+    data.bitrateAsBitsPerSecond = this.tech(true).vhs?.playlists?.media?.()?.attributes?.BANDWIDTH;
     doAnalyticsBuffer(uri, data);
   }
   /**
@@ -95,7 +95,7 @@ const VideoJsEvents = ({
         uri,
         this, // pass the player
         // $FlowFixMe
-        this.tech(true).vhs?.playlists?.media?.().attributes?.BANDWIDTH,
+        this.tech(true).vhs?.playlists?.media?.()?.attributes?.BANDWIDTH,
         isLivestreamClaim
       );
     }
