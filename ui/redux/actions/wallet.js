@@ -16,6 +16,7 @@ import {
 } from 'redux/selectors/wallet';
 import { resolveApiMessage } from 'util/api-message';
 import { creditsToString } from 'util/format-credits';
+import { dispatchToast } from 'util/toast-wrappers';
 import { selectMyClaimsRaw, selectClaimsById } from 'redux/selectors/claims';
 import { doFetchChannelListMine, doFetchClaimListMine, doClaimSearch } from 'redux/actions/claims';
 const FIFTEEN_SECONDS = 15000;
@@ -72,14 +73,19 @@ export function doFetchTransactions(page = 1, pageSize = 999999) {
       type: ACTIONS.FETCH_TRANSACTIONS_STARTED,
     });
 
-    Lbry.transaction_list({ page, page_size: pageSize }).then((result) => {
-      dispatch({
-        type: ACTIONS.FETCH_TRANSACTIONS_COMPLETED,
-        data: {
-          transactions: result.items,
-        },
+    Lbry.transaction_list({ page, page_size: pageSize })
+      .then((result) => {
+        dispatch({
+          type: ACTIONS.FETCH_TRANSACTIONS_COMPLETED,
+          data: {
+            transactions: result.items,
+          },
+        });
+      })
+      .catch((e) => {
+        dispatch({ type: ACTIONS.FETCH_TRANSACTIONS_FAILED });
+        dispatchToast(dispatch, __('Failed to get transactions. Try again later.'), e.message || e, 'long');
       });
-    });
   };
 }
 

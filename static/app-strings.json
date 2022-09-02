@@ -680,6 +680,7 @@
   "Reposting": "Reposting",
   "Woohoo! Successfully reposted this claim.": "Woohoo! Successfully reposted this claim.",
   "There was an error reposting this claim. Please try again later.": "There was an error reposting this claim. Please try again later.",
+  "Failed to get transactions. Try again later.": "Failed to get transactions. Try again later.",
   "Claim ID": "Claim ID",
   "Official YouTube Creator": "Official YouTube Creator",
   "YouTube Sync": "YouTube Sync",

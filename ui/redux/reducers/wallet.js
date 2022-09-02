@@ -131,6 +131,11 @@ export const walletReducer = handleActions(
       };
     },
 
+    [ACTIONS.FETCH_TRANSACTIONS_FAILED]: (state: WalletState) => ({
+      ...state,
+      fetchingTransactions: false,
+    }),
+
     [ACTIONS.FETCH_TXO_PAGE_STARTED]: (state: WalletState, action) => {
       return {
         ...state,
