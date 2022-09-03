@@ -14,7 +14,7 @@ type Props = {
 const LivestreamDateTime = (props: Props) => {
   const { uri, claim, activeLivestream } = props;
 
-  if (activeLivestream) {
+  if (activeLivestream && activeLivestream.startedStreaming) {
     return (
       <span>
         <I18nMessage tokens={{ time_date: <DateTime timeAgo date={activeLivestream.startedStreaming.toDate()} /> }}>
