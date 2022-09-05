@@ -421,10 +421,18 @@ export function doSetLanguage(language) {
         .catch((e) => {
           LocalStorage.setItem(SETTINGS.LANGUAGE, DEFAULT_LANGUAGE);
           dispatch(doSetClientSetting(SETTINGS.LANGUAGE, DEFAULT_LANGUAGE));
+
           const languageName = SUPPORTED_LANGUAGES[language] ? SUPPORTED_LANGUAGES[language] : language;
+          const fetched = Boolean(window.i18n_messages && window.i18n_messages[language]);
+
+          const log = `doSetLanguage-${fetched ? 'load' : 'fetch'}`;
+          analytics.log(e, { fingerprint: [log], tags: { language } }, log);
+
           dispatch(
             doToast({
-              message: __('Failed to load %language% translations.', { language: languageName }),
+              message: fetched
+                ? __('Failed to load %language% translations.', { language: languageName })
+                : __('Failed to fetch %language% translations.', { language: languageName }),
               isError: true,
             })
           );
