@@ -20,7 +20,16 @@ function TopPage(props: Props) {
   const { name, beginPublish, doOpenModal } = props;
   const [channelActive, setChannelActive] = React.useState(false);
   // if the query was actually '@name', still offer repost for 'name'
-  const queryName = name[0] === '@' ? name.slice(1) : name;
+  const queryName = name && name[0] === '@' ? name.slice(1) : name;
+
+  if (!name) {
+    return (
+      <Page className="topPage-wrapper">
+        <div className="empty empty--centered">{__('No results')}</div>
+      </Page>
+    );
+  }
+
   return (
     <Page className="topPage-wrapper">
       <SearchTopClaim query={name} hideLink setChannelActive={setChannelActive} />
