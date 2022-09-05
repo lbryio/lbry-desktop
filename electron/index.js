@@ -76,6 +76,7 @@ app.name = 'LBRY';
 app.setAppUserModelId('io.lbry.LBRY');
 app.commandLine.appendSwitch('force-color-profile', 'srgb');
 app.commandLine.appendSwitch('disable-features', 'OutOfBlinkCors');
+app.commandLine.appendSwitch('enable-features', 'PlatformHEVCDecoderSupport');
 
 if (isDev) {
   // Disable security warnings in dev mode:

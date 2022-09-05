@@ -1490,7 +1490,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron/get@npm:^1.13.0":
+"@electron/get@npm:^1.14.1":
   version: 1.14.1
   resolution: "@electron/get@npm:1.14.1"
   dependencies:
@@ -2802,10 +2802,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:^14.6.2":
-  version: 14.18.21
-  resolution: "@types/node@npm:14.18.21"
-  checksum: 4ed35b76609647a4e36a194702e31cdda9ed42174ddaf7937bc5498984e98a99e8a42ea895ea17dd9c5ec18080112c29ab670c34f90eb9f7a4703b85b31e34fa
+"@types/node@npm:^16.11.26":
+  version: 16.11.57
+  resolution: "@types/node@npm:16.11.57"
+  checksum: 7c34f5e50e38460fd0f18ae939ad62d5ecf992be7b9db7b1b86b9cc76a4d153b55bf3a94c6379da23df0803c11ad1a96be54c45d3ce612206cb8a18ce433028b
   languageName: node
   linkType: hard
 
@@ -3027,6 +3027,15 @@ __metadata:
   dependencies:
     "@types/yargs-parser": "*"
   checksum: f0673cbfc08e17239dc58952a88350d6c4db04a027a28a06fbad27d87b670e909f9cd9e66f9c64cebdd5071d1096261e33454a55868395f125297e5c50992ca8
+  languageName: node
+  linkType: hard
+
+"@types/yauzl@npm:^2.9.1":
+  version: 2.10.0
+  resolution: "@types/yauzl@npm:2.10.0"
+  dependencies:
+    "@types/node": "*"
+  checksum: 55d27ae5d346ea260e40121675c24e112ef0247649073848e5d4e03182713ae4ec8142b98f61a1c6cbe7d3b72fa99bbadb65d8b01873e5e605cdc30f1ff70ef2
   languageName: node
   linkType: hard
 
@@ -5583,7 +5592,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"concat-stream@npm:^1.5.0, concat-stream@npm:^1.6.2":
+"concat-stream@npm:^1.5.0":
   version: 1.6.2
   resolution: "concat-stream@npm:1.6.2"
   dependencies:
@@ -7299,16 +7308,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:15.5.5":
-  version: 15.5.5
-  resolution: "electron@npm:15.5.5"
+"electron@npm:20.0.0":
+  version: 20.0.0
+  resolution: "electron@npm:20.0.0"
   dependencies:
-    "@electron/get": ^1.13.0
-    "@types/node": ^14.6.2
-    extract-zip: ^1.0.3
+    "@electron/get": ^1.14.1
+    "@types/node": ^16.11.26
+    extract-zip: ^2.0.1
   bin:
     electron: cli.js
-  checksum: bbb661b4a14321be382bb9d5f89893089b82b04abfc51f8e77971b87fe9e7aa26cd0d33fbb20333e12bf853edd4059f506f15b008392bdbaee80023d328ebfec
+  checksum: d8dadab7c5a77d7eb430becd74368340ed077897662cf5d91de713dd5739db355bfdbd8e3af8a92185454a78d4ec5ad89b9d24b791a8bcdc27b1b03d9e682abc
   languageName: node
   linkType: hard
 
@@ -8000,6 +8009,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eventemitter3@npm:^3.1.0":
+  version: 3.1.2
+  resolution: "eventemitter3@npm:3.1.2"
+  checksum: 81e4e82b8418f5cfd986d2b4a2fa5397ac4eb8134e09bcb47005545e22fdf8e9e61d5c053d34651112245aae411bdfe6d0ad5511da0400743fef5fc38bfcfbe3
+  languageName: node
+  linkType: hard
+
 "eventemitter3@npm:^4.0.0":
   version: 4.0.7
   resolution: "eventemitter3@npm:4.0.7"
@@ -8234,17 +8250,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"extract-zip@npm:^1.0.3":
-  version: 1.7.0
-  resolution: "extract-zip@npm:1.7.0"
+"extract-zip@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "extract-zip@npm:2.0.1"
   dependencies:
-    concat-stream: ^1.6.2
-    debug: ^2.6.9
-    mkdirp: ^0.5.4
+    "@types/yauzl": ^2.9.1
+    debug: ^4.1.1
+    get-stream: ^5.1.0
     yauzl: ^2.10.0
+  dependenciesMeta:
+    "@types/yauzl":
+      optional: true
   bin:
     extract-zip: cli.js
-  checksum: 011bab660d738614555773d381a6ba4815d98c1cfcdcdf027e154ebcc9fc8c9ef637b3ea5c9b2144013100071ee41722ed041fc9aacc60f6198ef747cac0c073
+  checksum: 8cbda9debdd6d6980819cc69734d874ddd71051c9fe5bde1ef307ebcedfe949ba57b004894b585f758b7c9eeeea0e3d87f2dda89b7d25320459c2c9643ebb635
   languageName: node
   linkType: hard
 
@@ -11507,7 +11526,7 @@ __metadata:
     dom-scroll-into-view: ^1.2.1
     dotenv-defaults: ^2.0.1
     dotenv-webpack: ^1.8.0
-    electron: 15.5.5
+    electron: 20.0.0
     electron-builder: ^22.10.5
     electron-devtools-installer: ^3.1.1
     electron-dl: ^3.2.0
@@ -11620,6 +11639,7 @@ __metadata:
     video.js: ^7.14.3
     videojs-contrib-quality-levels: ^2.0.9
     videojs-event-tracking: ^1.0.1
+    videojs-flvh265: ^1.0.8
     videojs-logo: ^2.1.4
     villain-react: ^1.0.9
     wavesurfer.js: ^2.2.1
@@ -12805,7 +12825,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mkdirp@npm:^0.5.1, mkdirp@npm:^0.5.3, mkdirp@npm:^0.5.4, mkdirp@npm:^0.5.5, mkdirp@npm:~0.5.1":
+"mkdirp@npm:^0.5.1, mkdirp@npm:^0.5.3, mkdirp@npm:^0.5.5, mkdirp@npm:~0.5.1":
   version: 0.5.6
   resolution: "mkdirp@npm:0.5.6"
   dependencies:
@@ -12822,6 +12842,13 @@ __metadata:
   bin:
     mkdirp: bin/cmd.js
   checksum: a96865108c6c3b1b8e1d5e9f11843de1e077e57737602de1b82030815f311be11f96f09cce59bd5b903d0b29834733e5313f9301e3ed6d6f6fba2eae0df4298f
+  languageName: node
+  linkType: hard
+
+"mobile-detect@npm:^1.4.3":
+  version: 1.4.5
+  resolution: "mobile-detect@npm:1.4.5"
+  checksum: 317d170f3bc27c3e36c3f4ab7809c33d20e81914147cdc74a8551f0ecad2c5ec067bd59dd1a240caf66c1df7fd793021a36677c3a6ed8bdf027d4715dc3f0973
   languageName: node
   linkType: hard
 
@@ -14727,6 +14754,13 @@ __metadata:
   version: 1.0.1
   resolution: "promise-inflight@npm:1.0.1"
   checksum: 22749483091d2c594261517f4f80e05226d4d5ecc1fc917e1886929da56e22b5718b7f2a75f3807e7a7d471bc3be2907fe92e6e8f373ddf5c64bae35b5af3981
+  languageName: node
+  linkType: hard
+
+"promise-polyfill@npm:^8.1.3":
+  version: 8.2.3
+  resolution: "promise-polyfill@npm:8.2.3"
+  checksum: f320278bab8b8ce32f0e2f377d75aabe35c90a79f92b3e001db084d635da1fb8740ba8a26b5c1c2b4cdca5a4c988f9b6b3eb30f0b151d0362d3d9c1675024a8f
   languageName: node
   linkType: hard
 
@@ -19188,6 +19222,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"video.js@npm:^7":
+  version: 7.20.2
+  resolution: "video.js@npm:7.20.2"
+  dependencies:
+    "@babel/runtime": ^7.12.5
+    "@videojs/http-streaming": 2.14.2
+    "@videojs/vhs-utils": ^3.0.4
+    "@videojs/xhr": 2.6.0
+    aes-decrypter: 3.1.3
+    global: ^4.4.0
+    keycode: ^2.2.0
+    m3u8-parser: 4.7.1
+    mpd-parser: 0.21.1
+    mux.js: 6.0.1
+    safe-json-parse: 4.0.0
+    videojs-font: 3.2.0
+    videojs-vtt.js: ^0.15.3
+  checksum: 0542904a3d6523aeb2503465382c804adebbe4694b39005d3afe2538eb68e3fe2b58958af350bff68cba068a4b2d5fe2438bba643479ab1235f39a6dd08e2b31
+  languageName: node
+  linkType: hard
+
 "videojs-contrib-quality-levels@npm:^2.0.9":
   version: 2.1.0
   resolution: "videojs-contrib-quality-levels@npm:2.1.0"
@@ -19206,6 +19261,16 @@ __metadata:
   dependencies:
     video.js: ">=5.20.5"
   checksum: 2c1cf90d75a02a652ca03df0f30ec0cd1dbdb4c47ddc0fc98b0433f67e017e9c736d47d66b3fa6e96331c3aafc4ffcdc5e3dc2c9705e453bba0e63bd6826c86e
+  languageName: node
+  linkType: hard
+
+"videojs-flvh265@npm:^1.0.8":
+  version: 1.0.8
+  resolution: "videojs-flvh265@npm:1.0.8"
+  dependencies:
+    video.js: ^7
+    wx-inline-player-new: ^1.0.9
+  checksum: e79624b89d5bf4d5e8b2f185815e42f6c56b88da9e70c71b9f96dd2cfa7810e10f5087d668769ca140bcda3cb55c6be0ab0fc1e7635857aaad41b46763c1edfa
   languageName: node
   linkType: hard
 
@@ -19767,6 +19832,20 @@ __metadata:
   dependencies:
     async-limiter: ~1.0.0
   checksum: aec3154ec51477c094ac2cb5946a156e17561a581fa27005cbf22c53ac57f8d4e5f791dd4bbba6a488602cb28778c8ab7df06251d590507c3c550fd8ebeee949
+  languageName: node
+  linkType: hard
+
+"wx-inline-player-new@npm:^1.0.9":
+  version: 1.1.2
+  resolution: "wx-inline-player-new@npm:1.1.2"
+  dependencies:
+    buffer: ^5.2.1
+    eventemitter3: ^3.1.0
+    inherits: ^2.0.4
+    mobile-detect: ^1.4.3
+    object-assign: ^4.1.1
+    promise-polyfill: ^8.1.3
+  checksum: 8e660b9dff003ff26902eb339abefb7e6bf8265feb657433ab3230d9f3cb6fa4c17204c8444cf0e592fc3aaec2d0233848571757bb542d6d2ea6adce12e0fe69
   languageName: node
   linkType: hard
 

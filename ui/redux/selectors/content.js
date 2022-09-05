@@ -135,6 +135,7 @@ export const makeSelectFileRenderModeForUri = (uri: string) =>
     makeSelectMediaTypeForUri(uri),
     makeSelectFileExtensionForUri(uri),
     (contentType, mediaType, extension) => {
+      return RENDER_MODES.VIDEO;
       if (mediaType === 'video' || FORCE_CONTENT_TYPE_PLAYER.includes(contentType)) {
         return RENDER_MODES.VIDEO;
       }

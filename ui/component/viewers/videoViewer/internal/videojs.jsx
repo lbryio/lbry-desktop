@@ -5,6 +5,7 @@ import * as ICONS from 'constants/icons';
 import classnames from 'classnames';
 import videojs from 'video.js';
 import 'video.js/dist/alt/video-js-cdn.min.css';
+// import 'videojs-flvh265';
 import eventTracking from 'videojs-event-tracking';
 import * as OVERLAY from './overlays';
 import './plugins/videojs-mobile-ui/plugin';
@@ -153,6 +154,10 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     controlBar: {
       subsCapsButton: false,
     },
+    // techOrder: [
+    //   'html5',
+    //   'flvh265',
+    // ],
   };
 
   const { detectFileType, createVideoPlayerDOM } = functions({ source, sourceType, videoJsOptions, isAudio });
@@ -284,6 +289,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   return (
     // $FlowFixMe
     <div className={classnames('video-js-parent', { 'video-js-parent--ios': IS_IOS })} ref={containerRef}>
+      <video src={source} />
       <Button
         label={__('Tap to unmute')}
         button="link"
