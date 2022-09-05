@@ -1,6 +1,6 @@
 // @flow
 import * as PAGES from 'constants/pages';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { lazyImport } from 'util/lazyImport';
 import { tusUnlockAndNotify, tusHandleTabUpdates } from 'util/tus';
 import analytics from 'analytics';
@@ -137,7 +137,6 @@ function App(props: Props) {
   } = props;
 
   const isMobile = useIsMobile();
-  const appRef = useRef();
   const isEnhancedLayout = useKonamiListener();
   const [hasSignedIn, setHasSignedIn] = useState(false);
   const hasVerifiedEmail = user && Boolean(user.has_verified_email);
@@ -323,16 +322,11 @@ function App(props: Props) {
   }, [sanitizedReferrerParam, isRewardApproved, referredRewardAvailable]);
 
   useEffect(() => {
-    const { current: wrapperElement } = appRef;
-    if (wrapperElement) {
-      ReactModal.setAppElement(wrapperElement);
-    }
-
     // @if TARGET='app'
     fetchChannelListMine(); // This is fetched after a user is signed in on web
     fetchCollectionListMine();
     // @endif
-  }, [appRef, fetchChannelListMine, fetchCollectionListMine]);
+  }, [fetchChannelListMine, fetchCollectionListMine]);
 
   useEffect(() => {
     // $FlowFixMe
@@ -547,6 +541,12 @@ function App(props: Props) {
     // When language is changed or translations are fetched, we render.
     setLangRenderKey(Date.now());
   }, [language, languages]);
+
+  const appRef = React.useCallback((wrapperElement) => {
+    if (wrapperElement) {
+      ReactModal.setAppElement(wrapperElement);
+    }
+  }, []);
 
   // Require an internal-api user on lbry.tv
   // This also prevents the site from loading in the un-authed state while we wait for internal-apis to return for the first time
