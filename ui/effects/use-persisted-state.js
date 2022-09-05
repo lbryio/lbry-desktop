@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { LocalStorage } from 'util/storage';
 
 const listeners = {};
 
@@ -13,15 +14,9 @@ function getSetAllValues(key, setValue) {
 export default function usePersistedState(key, firstTimeDefault) {
   // If no key is passed in, act as a normal `useState`
   let defaultValue;
-  let localStorageAvailable;
 
-  try {
-    localStorageAvailable = Boolean(window.localStorage);
-  } catch (e) {
-    localStorageAvailable = false;
-  }
-  if (key && localStorageAvailable) {
-    let item = localStorage.getItem(key);
+  if (key) {
+    let item = LocalStorage.getItem(key);
 
     if (item) {
       let parsedItem;
@@ -48,8 +43,8 @@ export default function usePersistedState(key, firstTimeDefault) {
   }
 
   useEffect(() => {
-    if (key && localStorageAvailable) {
-      localStorage.setItem(key, typeof value === 'object' ? JSON.stringify(value) : value);
+    if (key) {
+      LocalStorage.setItem(key, typeof value === 'object' ? JSON.stringify(value) : value);
     }
     if (key) {
       // add hook on mount
@@ -61,7 +56,7 @@ export default function usePersistedState(key, firstTimeDefault) {
         listeners[key] = listeners[key].filter((listener) => listener !== setValue);
       }
     };
-  }, [key, value, localStorageAvailable]);
+  }, [key, value]);
 
   return [value, getSetAllValues(key, setValue)];
 }
