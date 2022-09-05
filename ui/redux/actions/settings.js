@@ -411,15 +411,12 @@ export function doSetLanguage(language) {
           });
         })
         .then(() => {
-          // set on localStorage so it can be read outside of redux
-          LocalStorage.setItem(SETTINGS.LANGUAGE, language);
           dispatch(doSetClientSetting(SETTINGS.LANGUAGE, languageSetting));
           if (isSharingData) {
             Lbryio.call('user', 'language', { language: language }).catch(() => {});
           }
         })
         .catch((e) => {
-          LocalStorage.setItem(SETTINGS.LANGUAGE, DEFAULT_LANGUAGE);
           dispatch(doSetClientSetting(SETTINGS.LANGUAGE, DEFAULT_LANGUAGE));
 
           const languageName = SUPPORTED_LANGUAGES[language] ? SUPPORTED_LANGUAGES[language] : language;
