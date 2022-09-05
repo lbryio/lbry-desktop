@@ -161,18 +161,24 @@ function filterFileInfos(fileInfos, query) {
 export const makeSelectSearchDownloadUrlsForPage = (query, page = 1) =>
   createSelector(selectFileInfosDownloaded, (fileInfos) => {
     const matchingFileInfos = filterFileInfos(fileInfos, query);
+    if (!matchingFileInfos || !matchingFileInfos.length) {
+      return [];
+    }
+
     const start = (Number(page) - 1) * Number(PAGE_SIZE);
     const end = Number(page) * Number(PAGE_SIZE);
+    // Recently downloaded elements first.
+    const sortedMatchedFileInfos = matchingFileInfos.sort((a, b) => {
+      return b.added_on - a.added_on;
+    });
 
-    return matchingFileInfos && matchingFileInfos.length
-      ? matchingFileInfos.slice(start, end).map((fileInfo) =>
-          buildURI({
-            streamName: fileInfo.claim_name,
-            channelName: fileInfo.channel_name,
-            channelClaimId: fileInfo.channel_claim_id,
-          })
-        )
-      : [];
+    return sortedMatchedFileInfos.slice(start, end).map((fileInfo) =>
+      buildURI({
+        streamName: fileInfo.claim_name,
+        channelName: fileInfo.channel_name,
+        channelClaimId: fileInfo.channel_claim_id,
+      })
+    );
   });
 
 export const makeSelectSearchDownloadUrlsCount = (query) =>
