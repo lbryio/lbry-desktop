@@ -209,6 +209,9 @@
 .tab__divider {
   position: absolute;
   margin-top: calc(var(--tab-indicator-size) * -1 - var(--spacing-l));
+  @media (max-width: $breakpoint-small) {
+    display: none !important;
+  }
 }
 
 .tab::after,

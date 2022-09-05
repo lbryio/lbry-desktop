@@ -1021,6 +1021,12 @@ body {
 
   @media (max-width: $breakpoint-small) {
     padding: var(--spacing-xxxs);
+
+    .claim-preview__wrapper {
+      .claim-tile__info {
+        margin-top: var(--spacing-xxxs) !important;
+      }
+    }
   }
 }
 

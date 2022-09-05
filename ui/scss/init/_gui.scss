@@ -1956,6 +1956,38 @@ img {
   }
 }
 
+.static-page {
+  .card__title-section {
+    padding-bottom: 0;
+    .card__title {
+      font-size: var(--font-title);
+    }
+  }
+  p {
+    margin-top: var(--spacing-m);
+    &:nth-of-type(1) {
+      margin-top: 0;
+      margin-bottom: var(--spacing-l);
+      opacity: 0.8;
+    }
+    &:nth-of-type(2) {
+      margin-bottom: var(--spacing-l);
+    }
+  }
+  h3 {
+    font-size: var(--font-large);
+    font-weight: var(--font-weight-bold);
+    margin-top: var(--spacing-xl);
+    margin-bottom: 0;
+  }
+  a {
+    color: var(--color-primary);
+    &:hover {
+      color: var(--color-secondary);
+    }
+  }
+}
+
 // Temporary master classes
 .date_time {
   font-size: var(--font-xsmall);

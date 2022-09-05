@@ -5,7 +5,7 @@ import Card from 'component/common/card';
 
 const YouTubeTOSPage = () => {
   return (
-    <Page>
+    <Page className="static-page">
       <Card
         title="YouTube Sync Terms of Service"
         body={

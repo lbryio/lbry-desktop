@@ -211,6 +211,7 @@ $control-bar-popup-font-size: 0.8rem;
     // overflow-y:scroll;
     .vjs-menu-content {
       max-height: 176px !important;
+      right: var(--spacing-s);
     }
   }
 }
@@ -251,7 +252,7 @@ $control-bar-popup-font-size: 0.8rem;
     }
 
     @media (max-width: $breakpoint-small) {
-      padding: 0.1em 0;
+      padding: 0.1em var(--spacing-xxs);
       margin-left: var(--spacing-xxs);
       margin-right: var(--spacing-xxs);
       &:first-child {

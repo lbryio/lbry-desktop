@@ -52,6 +52,10 @@
           display: none;
         }
       }
+      @media (max-width: $breakpoint-small) {
+        width: var(--height-button-mobile);
+        height: var(--height-button-mobile);
+      }
     }
 
     .channel-thumbnail {

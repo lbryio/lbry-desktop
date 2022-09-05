@@ -5,7 +5,7 @@ import Card from 'component/common/card';
 
 const TOSPage = () => {
   return (
-    <Page>
+    <Page className="static-page">
       <Card
         title="Terms of Service"
         body={
