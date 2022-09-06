@@ -55,6 +55,7 @@ const AUTO_EXPAND_ALL_REPLIES = false;
 type Props = {
   comment: Comment,
   myChannelIds: ?Array<string>,
+  forceDisplayDeadComment?: boolean,
   doClearPlayingUri: () => void,
   uri: string,
   claim: StreamClaim,
@@ -95,6 +96,7 @@ function CommentView(props: Props) {
   const {
     comment,
     myChannelIds,
+    forceDisplayDeadComment = false,
     doClearPlayingUri,
     claim,
     uri,
@@ -173,7 +175,7 @@ function CommentView(props: Props) {
   const [showReplies, setShowReplies] = useState(showRepliesOnMount);
   const [page, setPage] = useState(showRepliesOnMount ? 1 : 0);
   const [advancedEditor] = usePersistedState('comment-editor-mode', false);
-  const [displayDeadComment, setDisplayDeadComment] = React.useState(false);
+  const [displayDeadComment, setDisplayDeadComment] = React.useState(forceDisplayDeadComment);
   const likesCount = (othersReacts && othersReacts.like) || 0;
   const dislikesCount = (othersReacts && othersReacts.dislike) || 0;
   const totalLikesAndDislikes = likesCount + dislikesCount;
