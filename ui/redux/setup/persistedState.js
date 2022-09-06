@@ -24,7 +24,7 @@ const FILTERS = {
   search: createFilter('search', ['options']),
   content: createFilter('content', ['positions', 'history', 'lastViewedAnnouncement', 'recsysEntries']),
   subscriptions: createFilter('subscriptions', ['subscriptions']),
-  settings: createBlacklistFilter('settings', ['loadedLanguages']),
+  settings: createBlacklistFilter('settings', ['loadedLanguages', 'language']),
   collections: createFilter('collections', ['builtin', 'savedIds', 'unpublished', 'edited', 'updated', 'pending']),
 };
 

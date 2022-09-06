@@ -1,6 +1,5 @@
 import { webFrame } from 'electron';
 import * as SETTINGS from 'constants/settings';
-import { LocalStorage } from 'util/storage';
 const isDev = process.env.NODE_ENV !== 'production';
 
 export const ZOOM = {
@@ -40,7 +39,7 @@ export function changeZoomFactor(action) {
       newFactor = ZOOM_DFLT_FACTOR;
       break;
     case ZOOM.LOAD_FROM_LOCAL_STORAGE:
-      newFactor = parseFloat(LocalStorage.getItem(SETTINGS.DESKTOP_WINDOW_ZOOM));
+      newFactor = parseFloat(window.localStorage.getItem(SETTINGS.DESKTOP_WINDOW_ZOOM));
       if (isNaN(newFactor)) {
         newFactor = ZOOM_DFLT_FACTOR;
       }

@@ -1,8 +1,8 @@
 // @flow
-import * as SETTINGS from 'constants/settings';
-import { getDefaultLanguage } from 'util/default-languages';
+import { isLocalStorageAvailable } from 'util/storage';
 
 const isProduction = process.env.NODE_ENV === 'production';
+const localStorageAvailable = isLocalStorageAvailable();
 
 window.i18n_messages = window.i18n_messages || {};
 let reportTimer;
@@ -66,9 +66,9 @@ export function __(message: string, tokens: { [string]: string }) {
     return '';
   }
 
-  const state = window.store && window.store.getState();
-  const browserLanguage = getDefaultLanguage();
-  const language = state?.settings?.clientSettings[SETTINGS.LANGUAGE] || browserLanguage || 'en';
+  const language = localStorageAvailable
+    ? window.localStorage.getItem('language') || 'en'
+    : window.navigator.language.slice(0, 2) || 'en';
 
   if (!isProduction) {
     saveMessageWeb(message);
