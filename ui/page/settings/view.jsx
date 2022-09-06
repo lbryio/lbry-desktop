@@ -10,6 +10,7 @@ import SettingAppearance from 'component/settingAppearance';
 import SettingContent from 'component/settingContent';
 import SettingSystem from 'component/settingSystem';
 import SettingUnauthenticated from 'component/settingUnauthenticated';
+import Spinner from 'component/spinner';
 import Yrbl from 'component/yrbl';
 
 type DaemonSettings = {
@@ -20,6 +21,7 @@ type DaemonSettings = {
 type Props = {
   daemonSettings: DaemonSettings,
   isAuthenticated: boolean,
+  prefsReady: boolean,
   enterSettings: () => void,
   exitSettings: () => void,
 };
@@ -36,8 +38,24 @@ class SettingsPage extends React.PureComponent<Props> {
   }
 
   render() {
-    const { daemonSettings, isAuthenticated } = this.props;
+    const { daemonSettings, isAuthenticated, prefsReady } = this.props;
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
+
+    if (!prefsReady) {
+      return (
+        <Page
+          noFooter
+          settingsPage
+          noSideNavigation
+          backout={{ title: __('Settings'), backLabel: __('Save') }}
+          className="card-stack"
+        >
+          <div className="main--empty">
+            <Spinner text={__('Please wait a bit, we are still getting your account ready.')} />
+          </div>
+        </Page>
+      );
+    }
 
     return (
       <Page
