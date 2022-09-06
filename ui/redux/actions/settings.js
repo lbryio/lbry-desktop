@@ -387,12 +387,13 @@ export function doSetLanguage(language) {
     const { daemonSettings } = settings;
     const { share_usage_data: shareSetting } = daemonSettings;
     const isSharingData = shareSetting || IS_WEB;
-    let languageSetting;
+
+    let languageSetting = language;
+    // @if TARGET='DISABLED_FOR_NOW'
     if (language === getDefaultLanguage()) {
       languageSetting = null;
-    } else {
-      languageSetting = language;
     }
+    // @endif
 
     if (
       settings.language !== languageSetting ||
