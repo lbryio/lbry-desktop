@@ -46,7 +46,7 @@ export default function CreatorAnalytics(props: Props) {
           setStats(res);
         })
         .catch((error) => {
-          if (error.response.status === 401) {
+          if (error.response?.status === 401) {
             setError(UNAUTHENTICATED_ERROR);
             const channelToSend = JSON.parse(channelForEffect);
             analytics.apiLog.publish(channelToSend);
