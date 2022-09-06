@@ -1,9 +1,5 @@
 import { connect } from 'react-redux';
-import {
-  makeSelectMyReactionForUri,
-  makeSelectLikeCountForUri,
-  makeSelectDislikeCountForUri,
-} from 'redux/selectors/reactions';
+import { selectMyReactionForUri, selectLikeCountForUri, selectDislikeCountForUri } from 'redux/selectors/reactions';
 import { doFetchReactions, doReactionLike, doReactionDislike } from 'redux/actions/reactions';
 import FileReactions from './view';
 import { selectClaimForUri, selectIsStreamPlaceholderForUri } from 'redux/selectors/claims';
@@ -15,9 +11,9 @@ const select = (state, props) => {
   const { claim_id: claimId } = claim || {};
 
   return {
-    myReaction: makeSelectMyReactionForUri(uri)(state),
-    likeCount: makeSelectLikeCountForUri(uri)(state),
-    dislikeCount: makeSelectDislikeCountForUri(uri)(state),
+    myReaction: selectMyReactionForUri(state, uri),
+    likeCount: selectLikeCountForUri(state, uri),
+    dislikeCount: selectDislikeCountForUri(state, uri),
     isLivestreamClaim: selectIsStreamPlaceholderForUri(state, uri),
     claimId,
   };
