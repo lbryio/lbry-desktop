@@ -41,7 +41,7 @@ class SettingsPage extends React.PureComponent<Props> {
     const { daemonSettings, isAuthenticated, prefsReady } = this.props;
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
 
-    if (!prefsReady) {
+    if (isAuthenticated && !prefsReady) {
       return (
         <Page
           noFooter
