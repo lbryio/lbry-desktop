@@ -31,6 +31,7 @@ type Props = {
   claim: StreamClaim,
   location: UrlLocation,
   blackListedOutpointMap: { [string]: number },
+  filteredOutpointMap: { [string]: number },
   claimIsMine: boolean,
   claimIsPending: boolean,
   isLivestream: boolean,
@@ -58,6 +59,7 @@ export default function ShowPage(props: Props) {
     uri,
     claim,
     blackListedOutpointMap,
+    filteredOutpointMap,
     location,
     claimIsMine,
     isSubscribed,
@@ -98,13 +100,12 @@ export default function ShowPage(props: Props) {
   const isCollection = claim && claim.value_type === 'collection';
   const resolvedCollection = collection && collection.id; // not null
   const showLiveStream = isLivestream && ENABLE_NO_SOURCE_CLAIMS;
-  const isClaimBlackListed =
-    claim &&
-    blackListedOutpointMap &&
-    Boolean(
-      (signingChannel && blackListedOutpointMap[`${signingChannel.txid}:${signingChannel.nout}`]) ||
-        blackListedOutpointMap[`${claim.txid}:${claim.nout}`]
-    );
+
+  const channelOutpoint = signingChannel ? `${signingChannel.txid}:${signingChannel.nout}` : '';
+  const claimOutpoint = claim ? `${claim.txid}:${claim.nout}` : '';
+
+  const isClaimBlackListed = Boolean(blackListedOutpointMap[channelOutpoint] || blackListedOutpointMap[claimOutpoint]);
+  const isClaimFiltered = Boolean(filteredOutpointMap[channelOutpoint] || filteredOutpointMap[claimOutpoint]);
 
   const shouldResolveUri =
     (doResolveUri && !isResolvingUri && uri && haventFetchedYet) ||
@@ -305,6 +306,17 @@ export default function ShowPage(props: Props) {
               <Button button="link" href="https://odysee.com/@OdyseeHelp:b/copyright:f" label={__('Read More')} />
             </div>
           }
+        />
+      </Page>
+    );
+  }
+
+  if (isClaimFiltered) {
+    return (
+      <Page className="custom-wrapper">
+        <Card
+          title={uri}
+          subtitle={__('This content violates the terms and conditions of Odysee and has been filtered.')}
         />
       </Page>
     );

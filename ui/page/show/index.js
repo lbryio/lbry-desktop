@@ -21,7 +21,7 @@ import { doFetchItemsInCollection } from 'redux/actions/collections';
 import { isStreamPlaceholderClaim } from 'util/claim';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
 import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
-import { selectBlacklistedOutpointMap } from 'lbryinc';
+import { selectBlacklistedOutpointMap, selectFilteredOutpointMap } from 'lbryinc';
 import { selectActiveLiveClaimForChannel } from 'redux/selectors/livestream';
 import { doFetchChannelLiveStatus } from 'redux/actions/livestream';
 import ShowPage from './view';
@@ -50,6 +50,7 @@ const select = (state, props) => {
     latestClaimUrl,
     isResolvingUri: selectIsUriResolving(state, uri),
     blackListedOutpointMap: selectBlacklistedOutpointMap(state),
+    filteredOutpointMap: selectFilteredOutpointMap(state),
     isSubscribed: selectIsSubscribedForUri(state, uri),
     claimIsMine: selectClaimIsMine(state, claim),
     claimIsPending: makeSelectClaimIsPending(uri)(state),
