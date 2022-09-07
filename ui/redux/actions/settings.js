@@ -17,7 +17,7 @@ import { Lbryio } from 'lbryinc';
 import { getDefaultLanguage } from 'util/default-languages';
 import { LocalStorage } from 'util/storage';
 
-const { DEFAULT_LANGUAGE, URL_DEV } = require('config');
+const { URL_DEV } = require('config');
 const { SDK_SYNC_KEYS } = SHARED_PREFERENCES;
 
 export const IS_MAC = process.platform === 'darwin';
@@ -418,7 +418,7 @@ export function doSetLanguage(language) {
           }
         })
         .catch((e) => {
-          dispatch(doSetClientSetting(SETTINGS.LANGUAGE, DEFAULT_LANGUAGE));
+          dispatch(doSetClientSetting(SETTINGS.LANGUAGE, languageSetting));
 
           const languageName = SUPPORTED_LANGUAGES[language] ? SUPPORTED_LANGUAGES[language] : language;
           const fetched = Boolean(window.i18n_messages && window.i18n_messages[language]);
