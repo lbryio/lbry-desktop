@@ -311,7 +311,7 @@ export default function ShowPage(props: Props) {
     );
   }
 
-  if (isClaimFiltered) {
+  if (isClaimFiltered && !claimIsMine) {
     return (
       <Page className="custom-wrapper">
         <Card
