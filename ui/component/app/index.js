@@ -22,7 +22,7 @@ import {
 import { selectAnyNagsShown } from 'redux/selectors/notifications';
 import { selectModal, selectActiveChannelClaim, selectIsReloadRequired } from 'redux/selectors/app';
 import { selectUploadCount } from 'redux/selectors/publish';
-import { doOpenAnnouncements, doSetLanguage, doSetDefaultChannel } from 'redux/actions/settings';
+import { doOpenAnnouncements, doSetLanguage, doSetDefaultChannel, doFetchLanguage } from 'redux/actions/settings';
 import { doSyncLoop } from 'redux/actions/sync';
 import { doSignIn, doSetIncognito, doSetGdprConsentList } from 'redux/actions/app';
 import { doFetchModBlockedList, doFetchCommentModAmIList } from 'redux/actions/comments';
@@ -55,6 +55,7 @@ const perform = {
   fetchChannelListMine: doFetchChannelListMine,
   fetchCollectionListMine: doFetchCollectionListMine,
   setLanguage: doSetLanguage,
+  fetchLanguage: doFetchLanguage,
   signIn: doSignIn,
   syncLoop: doSyncLoop,
   setReferrer: doUserSetReferrer,

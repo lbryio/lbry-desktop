@@ -70,6 +70,7 @@ type Props = {
   fetchCollectionListMine: () => void,
   signIn: () => void,
   setLanguage: (string) => void,
+  fetchLanguage: (string) => void,
   isReloadRequired: boolean,
   uploadCount: number,
   balance: ?number,
@@ -115,6 +116,7 @@ function App(props: Props) {
     language,
     languages,
     setLanguage,
+    fetchLanguage,
     rewards,
     setReferrer,
     isAuthenticated,
@@ -363,7 +365,7 @@ function App(props: Props) {
 
   useEffect(() => {
     if (!languages.includes(language)) {
-      setLanguage(language);
+      fetchLanguage(language);
 
       if (document && document.documentElement && LANGUAGES[language].length >= 3) {
         document.documentElement.dir = LANGUAGES[language][2];
