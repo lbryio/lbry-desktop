@@ -8,6 +8,8 @@ import classnames from 'classnames';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 
+const DISABLE_VIDEO_AD = true;
+
 // prettier-ignore
 const AD_CONFIGS = Object.freeze({
   ADNIMATION: {
@@ -36,7 +38,7 @@ function Ads(props: Props) {
   const adConfig = AD_CONFIGS.ADNIMATION;
 
   React.useEffect(() => {
-    if (shouldShowAds) {
+    if (shouldShowAds && !DISABLE_VIDEO_AD) {
       let script;
       try {
         script = document.createElement('script');
