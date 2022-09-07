@@ -17,7 +17,7 @@ function AdBlockTester(props: Props) {
   React.useEffect(() => {
     if (ref.current) {
       const mountedStyle = getComputedStyle(ref.current);
-      doSetAdBlockerFound(mountedStyle.display === 'none');
+      doSetAdBlockerFound(mountedStyle?.display === 'none');
     }
   }, [doSetAdBlockerFound]);
 
