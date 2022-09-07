@@ -3,7 +3,6 @@ import * as SETTINGS from 'constants/settings';
 import * as SHARED_PREFERENCES from 'constants/shared_preferences';
 import moment from 'moment';
 import { getSubsetFromKeysArray } from 'util/sync-settings';
-import { getDefaultLanguage } from 'util/default-languages';
 import { UNSYNCED_SETTINGS } from 'config';
 
 const { CLIENT_SYNC_KEYS } = SHARED_PREFERENCES;
@@ -14,13 +13,6 @@ const clientSyncKeys = settingsToIgnore.length
   : CLIENT_SYNC_KEYS;
 
 const reducers = {};
-let settingLanguage = [];
-try {
-  let appLanguage = window.localStorage.getItem(SETTINGS.LANGUAGE);
-  settingLanguage.push(appLanguage);
-} catch (e) {}
-settingLanguage.push(getDefaultLanguage());
-settingLanguage.push('en');
 
 const defaultState = {
   isNight: false,

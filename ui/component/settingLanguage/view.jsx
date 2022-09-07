@@ -9,21 +9,17 @@ import { getDefaultLanguage, sortLanguageMap } from 'util/default-languages';
 
 type Props = {
   language: string,
-  setLanguage: (string) => void,
+  setLanguage: (string) => Promise<any>,
 };
 
 function SettingLanguage(props: Props) {
   const { language, setLanguage } = props;
-  const [previousLanguage, setPreviousLanguage] = useState(null);
-
-  if (previousLanguage && language !== previousLanguage) {
-    setPreviousLanguage(null);
-  }
+  const [changingLanguage, setChangingLanguage] = useState(false);
 
   function onLanguageChange(e) {
     const { value } = e.target;
-    setPreviousLanguage(language || getDefaultLanguage());
-    setLanguage(value);
+    setChangingLanguage(true);
+    setLanguage(value).finally(() => setChangingLanguage(false));
     if (document && document.documentElement) {
       if (LANGUAGES[value].length >= 3) {
         document.documentElement.dir = LANGUAGES[value][2];
@@ -35,7 +31,7 @@ function SettingLanguage(props: Props) {
 
   return (
     <React.Fragment>
-      {!previousLanguage && (
+      {!changingLanguage && (
         <FormField
           name="language_select"
           type="select"
@@ -50,7 +46,7 @@ function SettingLanguage(props: Props) {
         </FormField>
       )}
 
-      {previousLanguage && <Spinner type="small" />}
+      {changingLanguage && <Spinner type="small" />}
     </React.Fragment>
   );
 }
