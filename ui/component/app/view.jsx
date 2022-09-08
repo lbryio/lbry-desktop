@@ -33,12 +33,9 @@ import {
 } from 'web/effects/use-degraded-performance';
 import LANGUAGE_MIGRATIONS from 'constants/language-migrations';
 import { useIsMobile } from 'effects/use-screensize';
-import getLanguagesForCountry from 'constants/country_languages';
-import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 
 const FileDrop = lazyImport(() => import('component/fileDrop' /* webpackChunkName: "fileDrop" */));
 const NagContinueFirstRun = lazyImport(() => import('component/nagContinueFirstRun' /* webpackChunkName: "nagCFR" */));
-const NagLocaleSwitch = lazyImport(() => import('component/nagLocaleSwitch' /* webpackChunkName: "nagLocaleSwitch" */));
 const NagDegradedPerformance = lazyImport(() =>
   import('web/component/nag-degraded-performance' /* webpackChunkName: "NagDegradedPerformance" */)
 );
@@ -128,7 +125,6 @@ function App(props: Props) {
     setIncognito,
     fetchModBlockedList,
     fetchModAmIList,
-    homepageFetched,
     defaultChannelClaim,
     nagsShown,
     announcement,
@@ -146,8 +142,6 @@ function App(props: Props) {
   const previousHasVerifiedEmail = usePrevious(hasVerifiedEmail);
   const previousRewardApproved = usePrevious(isRewardApproved);
 
-  const [localeLangs, setLocaleLangs] = React.useState();
-  const [localeSwitchDismissed] = usePersistedState('locale-switch-dismissed', false);
   const [lbryTvApiStatus, setLbryTvApiStatus] = useState(STATUS_OK);
   const [sidebarOpen] = usePersistedState('sidebar', false);
 
@@ -249,12 +243,6 @@ function App(props: Props) {
           onClick={() => window.location.reload()}
         />
       );
-    }
-
-    if (localeLangs && !embedPath && !localeSwitchDismissed && homepageFetched) {
-      window.nag = true;
-      const noLanguageSet = language === 'en' && languages.length === 1;
-      return <NagLocaleSwitch localeLangs={localeLangs} noLanguageSet={noLanguageSet} onFrontPage={pathname === '/'} />;
     }
   }
 
@@ -473,18 +461,6 @@ function App(props: Props) {
   }, [locale]);
 
   useEffect(() => {
-    if (locale) {
-      const countryCode = locale.country;
-      const langs = getLanguagesForCountry(countryCode) || [];
-      const supportedLangs = langs.filter((lang) => lang !== 'en' && SUPPORTED_LANGUAGES[lang]);
-
-      if (supportedLangs.length > 0) {
-        setLocaleLangs(supportedLangs);
-      }
-    }
-  }, [locale]);
-
-  useEffect(() => {
     window.nagsShown = nagsShown;
     if (nagsShown) {
       const ad = document.getElementsByClassName('VISIBLE')[0];
@@ -524,7 +500,7 @@ function App(props: Props) {
 
   useEffect(() => {
     window.clearLastViewedAnnouncement = () => {
-      console.log('Clearing history. Please wait ...');
+      console.log('Clearing history. Please wait ...'); // eslint-disable-line no-console
       doSetLastViewedAnnouncement('clear');
     };
   }, []);
