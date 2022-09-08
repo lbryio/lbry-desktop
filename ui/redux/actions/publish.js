@@ -749,7 +749,7 @@ export function doUpdateUploadAdd(
   };
 }
 
-export const doUpdateUploadProgress = (props: { guid: string, progress?: string, status?: string }) => (
+export const doUpdateUploadProgress = (props: { guid: string, progress?: string, status?: UploadStatus }) => (
   dispatch: Dispatch
 ) =>
   dispatch({

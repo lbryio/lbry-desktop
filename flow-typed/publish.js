@@ -2,7 +2,7 @@
 
 declare type UpdatePublishFormData = {
   claim_id?: string,
-  filePath?: string,  
+  filePath?: string,
   contentIsFree?: boolean,
   fee?: {
     amount: string,
@@ -73,12 +73,14 @@ declare type FileUploadSdkParams = {
   isMarkdown: boolean,
 };
 
+declare type UploadStatus = 'error' | 'retry' | 'notify' | 'conflict';
+
 declare type FileUploadItem = {
   params: FileUploadSdkParams,
   file: File,
   fileFingerprint: string,
   progress: string,
-  status?: string,
+  status?: UploadStatus,
   uploader?: TusUploader | XMLHttpRequest,
   resumable: boolean,
 };
