@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { doEnterSettingsPage, doExitSettingsPage } from 'redux/actions/settings';
-import { selectDaemonSettings } from 'redux/selectors/settings';
+import { selectDaemonSettings, selectLanguage } from 'redux/selectors/settings';
 import { selectPrefsReady } from 'redux/selectors/sync';
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 
@@ -10,6 +10,7 @@ const select = (state) => ({
   daemonSettings: selectDaemonSettings(state),
   isAuthenticated: selectUserVerifiedEmail(state),
   prefsReady: selectPrefsReady(state),
+  language: selectLanguage(state),
 });
 
 const perform = (dispatch) => ({

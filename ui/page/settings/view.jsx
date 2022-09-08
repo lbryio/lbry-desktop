@@ -22,6 +22,7 @@ type Props = {
   daemonSettings: DaemonSettings,
   isAuthenticated: boolean,
   prefsReady: boolean,
+  language: string,
   enterSettings: () => void,
   exitSettings: () => void,
 };
@@ -38,7 +39,7 @@ class SettingsPage extends React.PureComponent<Props> {
   }
 
   render() {
-    const { daemonSettings, isAuthenticated, prefsReady } = this.props;
+    const { daemonSettings, isAuthenticated, prefsReady, language } = this.props;
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
 
     if (isAuthenticated && !prefsReady) {
@@ -64,6 +65,7 @@ class SettingsPage extends React.PureComponent<Props> {
         noSideNavigation
         backout={{ title: __('Settings'), backLabel: __('Save') }}
         className="card-stack"
+        key={language}
       >
         {!isAuthenticated && IS_WEB && (
           <>

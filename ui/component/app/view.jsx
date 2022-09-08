@@ -540,8 +540,11 @@ function App(props: Props) {
   useDegradedPerformance(setLbryTvApiStatus, user);
 
   useEffect(() => {
-    // When language is changed or translations are fetched, we render.
-    setLangRenderKey(Date.now());
+    if (!syncIsLocked) {
+      // When language is changed or translations are fetched, we render.
+      setLangRenderKey(Date.now());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- don't respond to syncIsLocked, but skip action when locked.
   }, [language, languages]);
 
   const appRef = React.useCallback((wrapperElement) => {
