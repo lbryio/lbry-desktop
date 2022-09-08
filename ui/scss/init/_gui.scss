@@ -2172,6 +2172,14 @@ input:not(input:-webkit-autofill)::-webkit-contacts-auto-fill-button {
   }
 }
 
+/* Safari Only */
+@supports selector(:nth-child(1 of x)) {
+  [data-reach-menu-list] {
+    -webkit-backdrop-filter: unset !important;
+    backdrop-filter: unset !important;
+  }
+}
+
 audio,
 video {
   background-color: black;
