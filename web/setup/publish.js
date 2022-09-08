@@ -16,11 +16,11 @@ export default function apiPublishCallViaWeb(
   resolve: Function,
   reject: Function
 ) {
-  const { file_path: filePath, preview, remote_url: remoteUrl } = params;
+  const { file_path: filePath, preview, remote_url: remoteUrl, sdkRan } = params;
   const isMarkdown = filePath ? typeof filePath === 'object' && filePath.type === 'text/markdown' : false;
   params.isMarkdown = isMarkdown;
 
-  if (!filePath && !remoteUrl) {
+  if (!filePath && !remoteUrl && !sdkRan) {
     const { claim_id: claimId, isMarkdown, ...otherParams } = params;
     return apiCall(method, otherParams, resolve, reject);
   }

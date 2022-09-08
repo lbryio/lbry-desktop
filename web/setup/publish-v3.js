@@ -6,11 +6,14 @@ import { ERR_GRP } from '../../ui/constants/errors';
 import { X_LBRY_AUTH_TOKEN } from '../../ui/constants/token';
 import { doUpdateUploadAdd, doUpdateUploadProgress, doUpdateUploadRemove } from '../../ui/redux/actions/publish';
 import { generateError } from './publish-error';
-import { LBRY_WEB_PUBLISH_API_V2 } from 'config';
+import { LBRY_WEB_PUBLISH_API_V3 } from 'config';
 
-const RESUMABLE_ENDPOINT = LBRY_WEB_PUBLISH_API_V2;
+const RESUMABLE_ENDPOINT = LBRY_WEB_PUBLISH_API_V3;
 const RESUMABLE_ENDPOINT_METHOD = 'publish';
 const UPLOAD_CHUNK_SIZE_BYTE = 25 * 1024 * 1024;
+
+const SDK_STATUS_RETRY_COUNT = 12;
+const SDK_STATUS_RETRY_INTERVAL = 10000;
 
 const STATUS_CONFLICT = 409;
 const STATUS_LOCKED = 423;
@@ -25,6 +28,72 @@ const STATUS_LOCKED = 423;
 function inStatusCategory(status, category) {
   return status >= category && status < category + 100;
 }
+
+function sendStatusRequest(url, guid, token, params, jsonPayload, retryCount, resolve, reject) {
+  const xhr = new XMLHttpRequest();
+
+  // $FlowIgnore
+  xhr.open('GET', `${url}/status`);
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.setRequestHeader('Tus-Resumable', '1.0.0');
+  xhr.setRequestHeader(X_LBRY_AUTH_TOKEN, token);
+  xhr.responseType = 'json';
+
+  xhr.onload = () => {
+    switch (xhr.status) {
+      case 200:
+        // Upload processed and available in network. SDK response in the body.
+        window.store.dispatch(doUpdateUploadRemove(guid));
+        resolve(xhr);
+        break;
+
+      case 202:
+        // Upload is currently being processed.
+        if (retryCount > 0) {
+          setTimeout(() => {
+            sendStatusRequest(url, guid, token, params, jsonPayload, retryCount - 1, resolve, reject);
+          }, SDK_STATUS_RETRY_INTERVAL);
+        } else {
+          window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
+          reject(
+            generateError('The file is still being processed. Check back later after a few minutes.', params, xhr)
+          );
+        }
+        break;
+
+      case 403:
+      case 404:
+        // Upload not found or does not belong to the user.
+        window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
+        reject(generateError('The upload does not exist.', params, xhr));
+        break;
+
+      case 409:
+        // SDK returned an error and upload cannot be processed. Error details in the body.
+        const sdkError = xhr.response?.error?.message || '';
+        const finalError = `Failed to process the uploaded file.\n\n${sdkError}`;
+        console.error(sdkError); // eslint-disable-line no-console
+        window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
+        reject(generateError(finalError, params, xhr));
+        break;
+
+      default:
+        analytics.log(`v3/publish/status - unexpected response (${xhr.status})`);
+        window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
+        reject(generateError(`Unexpected error: ${xhr.status}`, params, xhr));
+        break;
+    }
+  };
+
+  xhr.onerror = () => {
+    reject(generateError(`Encountered a network error while checking the status of the upload.`, params, xhr));
+  };
+
+  xhr.send();
+}
+
+// ****************************************************************************
+// ****************************************************************************
 
 export function makeResumableUploadRequest(
   token: string,
@@ -41,7 +110,7 @@ export function makeResumableUploadRequest(
       reject(new Error('Publish: v2 does not support remote_url'));
     }
 
-    const { uploadUrl, guid, isMarkdown, ...sdkParams } = params;
+    const { uploadUrl, guid, isMarkdown, sdkRan, ...sdkParams } = params;
 
     const jsonPayload = JSON.stringify({
       jsonrpc: '2.0',
@@ -58,6 +127,11 @@ export function makeResumableUploadRequest(
     } else {
       // New upload, so use `endpoint`.
       urlOptions.endpoint = RESUMABLE_ENDPOINT;
+    }
+
+    if (params.sdkRan) {
+      sendStatusRequest(params.uploadUrl, guid, token, params, jsonPayload, 0, resolve, reject);
+      return;
     }
 
     const uploader = new tus.Upload(file, {
@@ -99,8 +173,6 @@ export function makeResumableUploadRequest(
         window.store.dispatch(doUpdateUploadProgress({ guid, progress: percentage }));
       },
       onSuccess: () => {
-        let retries = 1;
-
         function makeNotifyRequest() {
           const xhr = new XMLHttpRequest();
           xhr.open('POST', `${uploader.url}/notify`);
@@ -108,33 +180,22 @@ export function makeResumableUploadRequest(
           xhr.setRequestHeader('Tus-Resumable', '1.0.0');
           xhr.setRequestHeader(X_LBRY_AUTH_TOKEN, token);
           xhr.responseType = 'json';
-          xhr.onloadstart = () => {
-            window.store.dispatch(doUpdateUploadProgress({ guid, status: 'notify' }));
-          };
           xhr.onload = () => {
-            window.store.dispatch(doUpdateUploadRemove(guid));
-            resolve(xhr);
+            window.store.dispatch(doUpdateUploadProgress({ guid, status: 'notify_ok' }));
+            sendStatusRequest(uploader.url, guid, token, params, jsonPayload, SDK_STATUS_RETRY_COUNT, resolve, reject);
           };
           xhr.onerror = () => {
-            if (retries > 0 && xhr.status === 0) {
-              --retries;
-              analytics.error('notify: first attempt failed (status=0). Retrying after 10s...');
-              setTimeout(() => makeNotifyRequest(), 10000); // Auto-retry after 10s delay.
-            } else {
-              window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
-              reject(generateError(`Failed to process the file. Please retry. (${xhr.status})`, params, xhr, uploader));
-            }
+            window.store.dispatch(doUpdateUploadProgress({ guid, status: 'notify_failed' }));
+            reject(generateError(`Failed to process the file. Please retry. (${xhr.status})`, params, xhr, uploader));
           };
           xhr.onabort = () => {
             window.store.dispatch(doUpdateUploadRemove(guid));
           };
-
-          xhr.send(jsonPayload);
+          return xhr;
         }
 
-        // Server needs time to process the upload before we can send `notify`.
-        // TODO: Is it file-size dependent?
-        setTimeout(() => makeNotifyRequest(), 15000);
+        const notify = makeNotifyRequest();
+        notify.send(jsonPayload);
       },
     });
 
