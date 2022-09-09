@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import classnames from 'classnames';
+import analytics from 'analytics';
 import FilePrice from 'component/filePrice';
 import { Modal } from 'modal/modal';
 import Card from 'component/common/card';
@@ -68,6 +69,16 @@ function ModalAffirmPurchase(props: Props) {
       }
     };
   }, [success, uri]);
+
+  React.useEffect(() => {
+    if (!metadata) {
+      analytics.log(new Error('ModalAffirmPurchase: null claim'), {
+        fingerprint: ['ModalAffirmPurchase-null-claim'],
+        tags: { uri, callbackExists: cancelCb ? 'yes' : 'no' },
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- on mount
+  }, []);
 
   return (
     <Modal type="card" isOpen contentLabel={modalTitle} onAborted={cancelPurchase}>
