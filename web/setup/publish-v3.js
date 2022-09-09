@@ -9,7 +9,7 @@ import { generateError } from './publish-error';
 import { LBRY_WEB_PUBLISH_API_V3 } from 'config';
 
 const RESUMABLE_ENDPOINT = LBRY_WEB_PUBLISH_API_V3;
-const RESUMABLE_ENDPOINT_METHOD = 'publish';
+const RESUMABLE_ENDPOINT_METHOD = 'stream_create';
 const UPLOAD_CHUNK_SIZE_BYTE = 25 * 1024 * 1024;
 
 const SDK_STATUS_RETRY_COUNT = 12;
