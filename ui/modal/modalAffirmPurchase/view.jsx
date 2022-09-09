@@ -24,19 +24,12 @@ type Props = {
 };
 
 function ModalAffirmPurchase(props: Props) {
-  const {
-    closeModal,
-    loadVideo,
-    metadata: { title },
-    uri,
-    analyticsPurchaseEvent,
-    playingUri,
-    setPlayingUri,
-    cancelCb,
-  } = props;
+  const { closeModal, loadVideo, metadata, uri, analyticsPurchaseEvent, playingUri, setPlayingUri, cancelCb } = props;
   const [success, setSuccess] = React.useState(false);
   const [purchasing, setPurchasing] = React.useState(false);
   const modalTitle = __('Confirm Purchase');
+  const title = metadata?.title;
+  const renderedTitle = title ? `"${title}"` : uri;
 
   function onAffirmPurchase() {
     setPurchasing(true);
@@ -87,7 +80,7 @@ function ModalAffirmPurchase(props: Props) {
                 {/* Keep this message rendered but hidden so the width doesn't change */}
                 <I18nMessage
                   tokens={{
-                    claim_title: <strong>{title ? `"${title}"` : uri}</strong>,
+                    claim_title: <strong>{renderedTitle}</strong>,
                   }}
                 >
                   Are you sure you want to purchase %claim_title%?
