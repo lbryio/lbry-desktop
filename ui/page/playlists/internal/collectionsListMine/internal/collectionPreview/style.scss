@@ -106,6 +106,14 @@
       .icon {
         display: none;
       }
+      .truncated-text {
+        span {
+          -webkit-line-clamp: 1;
+          margin-right: var(--spacing-s);
+          word-wrap: break-word;
+          -webkit-box-orient: vertical;
+        }
+      }
     }
   }
 
