@@ -82,10 +82,15 @@ Lbryio.call = (resource, action, params = {}, method = 'post') => {
       url = `${Lbryio.CONNECTION_STRING}${resource}/${action}`;
     }
 
-    return makeRequest(url, options).then((response) => {
-      sendCallAnalytics(resource, action, params);
-      return response.data;
-    });
+    return makeRequest(url, options)
+      .then((response) => {
+        sendCallAnalytics(resource, action, params);
+        return response.data;
+      })
+      .catch((error) => {
+        sendFailedCallAnalytics(resource, action, params, error);
+        throw error;
+      });
   });
 };
 
@@ -254,6 +259,16 @@ function sendCallAnalytics(resource, action, params) {
       // Do nothing
       break;
   }
+}
+
+function sendFailedCallAnalytics(resource, action, params, error) {
+  const options = {
+    fingerprint: 'internal-api-failures',
+    tags: { analytics: true, method: `${resource}/${action}` },
+    extra: { error, params },
+  };
+
+  analytics.log('Internal API failures', options, 'analytics');
 }
 
 export default Lbryio;
