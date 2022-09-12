@@ -62,9 +62,9 @@ function UserEmailNew(props: Props) {
     setSync(formSyncEnabled);
     setShareDiagnosticData(true);
     // @endif
-    doSignUp(email, password === '' ? undefined : password).then(() => {
-      analytics.event.emailProvided();
-    });
+    doSignUp(email, password === '' ? undefined : password)
+      .then(() => analytics.event.emailProvided())
+      .catch(() => {});
   }
 
   function handleChangeToSignIn(additionalParams) {
