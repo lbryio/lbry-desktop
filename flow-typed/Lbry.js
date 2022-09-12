@@ -75,7 +75,16 @@ declare type BalanceResponse = {
 
 declare type ResolveResponse = {
   // Keys are the url(s) passed to resolve
-  [string]: { error?: {}, stream?: StreamClaim, channel?: ChannelClaim, collection?: CollectionClaim, claimsInChannel?: number },
+  [string]: {
+    error?: {
+      censor?: string,
+      text?: string,
+    },
+    stream?: StreamClaim,
+    channel?: ChannelClaim,
+    collection?: CollectionClaim,
+    claimsInChannel?: number
+  },
 };
 
 declare type GetResponse = FileListItem & { error?: string };
