@@ -3,6 +3,7 @@ import React from 'react';
 import './style.scss';
 import Button from 'component/button';
 import Card from 'component/common/card';
+import { FormField } from 'component/common/form';
 import HomepageSort from 'component/homepageSort';
 import MembershipSplash from 'component/membershipSplash';
 import * as MODALS from 'constants/modal_types';
@@ -14,6 +15,7 @@ type HomepageOrder = { active: ?Array<string>, hidden: ?Array<string> };
 type Props = {
   hasMembership: ?boolean,
   homepageOrder: HomepageOrder,
+  alsoApplyToSidebar: boolean,
   doSetClientSetting: (key: string, value: any, push: boolean) => void,
   doToast: ({ message: string, isError?: boolean }) => void,
   doOpenModal: (id: string, {}) => void,
@@ -21,7 +23,17 @@ type Props = {
 };
 
 export default function ModalCustomizeHomepage(props: Props) {
-  const { hasMembership, homepageOrder, doSetClientSetting, doToast, doOpenModal, doHideModal } = props;
+  const {
+    hasMembership,
+    homepageOrder,
+    alsoApplyToSidebar,
+    doSetClientSetting,
+    doToast,
+    doOpenModal,
+    doHideModal,
+  } = props;
+
+  const [applyToSidebar, setApplyToSidebar] = React.useState(alsoApplyToSidebar);
   const order = React.useRef();
 
   function handleNewOrder(newOrder: HomepageOrder) {
@@ -62,6 +74,8 @@ export default function ModalCustomizeHomepage(props: Props) {
         console.error('Homepage: invalid orderToSave', orderToSave); // eslint-disable-line no-console
       }
     }
+
+    doSetClientSetting(SETTINGS.HOMEPAGE_ORDER_APPLY_TO_SIDEBAR, applyToSidebar, true);
     doHideModal();
   }
 
@@ -103,6 +117,13 @@ export default function ModalCustomizeHomepage(props: Props) {
             <div className="modal-customize-homepage__body">
               <HomepageSort onUpdate={handleNewOrder} />
               <Button button="link" label={__('Reset')} onClick={handleReset} />
+              <FormField
+                type="checkbox"
+                name="apply_to_sidebar"
+                label={__('Also apply to sidebar')}
+                checked={applyToSidebar}
+                onChange={() => setApplyToSidebar((prev) => !prev)}
+              />
             </div>
           }
           actions={

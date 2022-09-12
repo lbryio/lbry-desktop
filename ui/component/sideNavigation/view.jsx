@@ -147,6 +147,7 @@ type Props = {
   user: ?User,
   homepageData: any,
   homepageOrder: HomepageOrder,
+  homepageOrderApplyToSidebar: boolean,
   doClearClaimSearch: () => void,
   hasMembership: ?boolean,
   doFetchLastActiveSubs: (force?: boolean, count?: number) => void,
@@ -168,6 +169,7 @@ function SideNavigation(props: Props) {
     unseenCount,
     homepageData,
     homepageOrder,
+    homepageOrderApplyToSidebar,
     user,
     followedTags,
     doClearClaimSearch,
@@ -177,13 +179,7 @@ function SideNavigation(props: Props) {
   } = props;
 
   const isLargeScreen = useIsLargeScreen();
-
-  const rowData = GetLinksData(homepageData, isLargeScreen);
-  const sortedRowData: Array<RowDataItem> = getSortedRowData(Boolean(email), hasMembership, homepageOrder, rowData);
-
-  const EXTRA_SIDEBAR_LINKS = sortedRowData
-    .map(({ pinnedUrls, pinnedClaimIds, hideByDefault, ...theRest }) => theRest)
-    .filter((x) => x.id !== 'FYP');
+  const categories = getSidebarCategories(isLargeScreen);
 
   const MOBILE_PUBLISH: Array<SideNavLink> = [
     {
@@ -205,6 +201,7 @@ function SideNavigation(props: Props) {
       hideForUnauth: true,
     },
   ];
+
   const MOBILE_LINKS: Array<SideNavLink> = [
     {
       title: 'New Channel',
@@ -309,6 +306,18 @@ function SideNavigation(props: Props) {
 
   // **************************************************************************
   // **************************************************************************
+
+  function getSidebarCategories(isLargeScreen) {
+    const rowData = GetLinksData(homepageData, isLargeScreen);
+    let categories = rowData;
+
+    if (homepageOrderApplyToSidebar) {
+      const sortedRowData: Array<RowDataItem> = getSortedRowData(Boolean(email), hasMembership, homepageOrder, rowData);
+      categories = sortedRowData.filter((x) => x.id !== 'FYP');
+    }
+
+    return categories.map(({ pinnedUrls, pinnedClaimIds, hideByDefault, ...theRest }) => theRest);
+  }
 
   function getLink(props: SideNavLink) {
     const { hideForUnauth, route, link, noI18n, ...passedProps } = props;
@@ -601,7 +610,7 @@ function SideNavigation(props: Props) {
                 'navigation-links--absolute': shouldRenderLargeMenu,
               })}
             >
-              {EXTRA_SIDEBAR_LINKS && (
+              {categories && (
                 <>
                   {!showMicroMenu && (
                     <SectionHeader
@@ -611,7 +620,7 @@ function SideNavigation(props: Props) {
                     />
                   )}
                   {/* $FlowFixMe: GetLinksData type needs an update */}
-                  {EXTRA_SIDEBAR_LINKS.map((linkProps) => getLink(linkProps))}
+                  {categories.map((linkProps) => getLink(linkProps))}
                 </>
               )}
             </ul>

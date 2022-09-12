@@ -23,6 +23,7 @@ const select = (state) => ({
   user: selectUser(state),
   homepageData: selectHomepageData(state),
   homepageOrder: selectClientSetting(state, SETTINGS.HOMEPAGE_ORDER),
+  homepageOrderApplyToSidebar: selectClientSetting(state, SETTINGS.HOMEPAGE_ORDER_APPLY_TO_SIDEBAR),
   hasMembership: selectHasOdyseeMembership(state),
 });
 

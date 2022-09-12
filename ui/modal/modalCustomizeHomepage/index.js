@@ -10,6 +10,7 @@ import { selectHasOdyseeMembership } from 'redux/selectors/user';
 const select = (state) => ({
   hasMembership: selectHasOdyseeMembership(state),
   homepageOrder: selectClientSetting(state, SETTINGS.HOMEPAGE_ORDER),
+  alsoApplyToSidebar: selectClientSetting(state, SETTINGS.HOMEPAGE_ORDER_APPLY_TO_SIDEBAR),
 });
 
 const perform = {

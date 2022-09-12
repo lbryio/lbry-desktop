@@ -38,6 +38,7 @@ const defaultState = {
     [SETTINGS.THEMES]: [__('dark'), __('light')],
     [SETTINGS.HOMEPAGE]: null,
     [SETTINGS.HOMEPAGE_ORDER]: { active: null, hidden: null },
+    [SETTINGS.HOMEPAGE_ORDER_APPLY_TO_SIDEBAR]: false,
     [SETTINGS.HIDE_SPLASH_ANIMATION]: false,
     [SETTINGS.HIDE_BALANCE]: false,
     [SETTINGS.HIDE_TITLE_NOTIFICATION_COUNT]: false,
