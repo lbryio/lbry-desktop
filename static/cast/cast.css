@@ -16,4 +16,5 @@
 
 .watermark {
   background-image: url('https://odysee.com/public/cast/watermark.png');
+  background-size: 57px 57px;
 }
