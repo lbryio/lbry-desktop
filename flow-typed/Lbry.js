@@ -77,7 +77,7 @@ declare type ResolveResponse = {
   // Keys are the url(s) passed to resolve
   [string]: {
     error?: {
-      censor?: string,
+      censor?: {},
       text?: string,
     },
     stream?: StreamClaim,

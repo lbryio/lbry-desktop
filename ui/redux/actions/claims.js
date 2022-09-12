@@ -90,7 +90,9 @@ export function doResolveUris(
               resolveInfo[uri] = {
                 ...fallbackResolveInfo,
                 errorCensor: {
+                  // $FlowFixMe
                   ...uriResolveInfo.error.censor,
+                  // $FlowFixMe
                   text: uriResolveInfo.error.text,
                 },
               };
