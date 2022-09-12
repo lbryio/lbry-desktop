@@ -15,6 +15,7 @@ const UPLOAD_CHUNK_SIZE_BYTE = 25 * 1024 * 1024;
 const SDK_STATUS_RETRY_COUNT = 12;
 const SDK_STATUS_RETRY_INTERVAL = 10000;
 
+const STATUS_FILE_NOT_FOUND = 404;
 const STATUS_CONFLICT = 409;
 const STATUS_LOCKED = 423;
 
@@ -161,6 +162,10 @@ export function makeResumableUploadRequest(
           customErr = 'File is locked. Try resuming after waiting a few minutes';
         } else if (errMsg.startsWith('tus: failed to upload chunk at offset')) {
           customErr = 'Error uploading chunk. Click "retry" in the Uploads page to resume upload.';
+        } else if (status === STATUS_FILE_NOT_FOUND) {
+          window.store.dispatch(doUpdateUploadProgress({ guid, status: 'notify_ok' }));
+          sendStatusRequest(uploader.url, guid, token, params, jsonPayload, SDK_STATUS_RETRY_COUNT, resolve, reject);
+          return;
         }
 
         window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
