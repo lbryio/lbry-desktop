@@ -94,10 +94,6 @@ function handleBeforeSend(event, hints) {
     if (lastFrame?.filename && lastFrame.filename.match(/([a-z]*)-extension:\/\//)) {
       return null;
     }
-
-    if (frames.every((f) => f.filename === '<anonymous>')) {
-      event.fingerprint = ['all-anonymous-frames'];
-    }
   } catch {}
 
   return event;
