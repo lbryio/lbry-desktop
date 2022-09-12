@@ -1,0 +1,19 @@
+.background {
+  background: rgba(32, 32, 32, 1);
+}
+
+.logo {
+  background-image: url('https://odysee.com/public/cast/logo.png');
+}
+
+.progressBar {
+  background-color: rgba(222, 0, 80, 1);
+}
+
+.splash {
+  /* background-image: url('https://odysee.com/public/cast/splash.png'); */
+}
+
+.watermark {
+  background-image: url('https://odysee.com/public/cast/watermark.png');
+}
