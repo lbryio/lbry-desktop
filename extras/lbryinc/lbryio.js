@@ -262,6 +262,11 @@ function sendCallAnalytics(resource, action, params) {
 }
 
 function sendFailedCallAnalytics(resource, action, params, error) {
+  if ((resource === 'customer' && action === 'status') || (resource === 'user' && action === 'referral')) {
+    // Ignore commands that we use the error as a value, or don't care if it fails.
+    return;
+  }
+
   const options = {
     fingerprint: 'internal-api-failures',
     tags: { analytics: true, method: `${resource}/${action}` },
