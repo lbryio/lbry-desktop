@@ -53,6 +53,7 @@ export default class Chromecast {
       chromecast: {
         requestTitleFn: (src: ?string) => gTitle || '',
         requestSubtitleFn: (src: ?string) => gChannelTitle || '',
+        receiverAppID: 'FD107797',
       },
     };
   }
