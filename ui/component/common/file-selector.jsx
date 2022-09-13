@@ -16,12 +16,14 @@ type Props = {
   disabled?: boolean,
   autoFocus?: boolean,
   filters?: Array<{ name: string, extension: string[] }>,
+  readFile?: boolean,
 };
 
 class FileSelector extends React.PureComponent<Props> {
   static defaultProps = {
     autoFocus: false,
     type: 'file',
+    readFile: true,
   };
 
   fileInput: React.ElementRef<any>;
@@ -75,7 +77,7 @@ class FileSelector extends React.PureComponent<Props> {
       .then((result) => {
         const path = result && result.filePaths[0];
         if (path) {
-          return ipcRenderer.invoke('get-file-from-path', path);
+          return ipcRenderer.invoke('get-file-from-path', path, this.props.readFile);
         }
       })
       .then((result) => {
