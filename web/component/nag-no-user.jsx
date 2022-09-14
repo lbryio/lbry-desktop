@@ -6,7 +6,7 @@ export default function NagNoUser() {
   return (
     <Nag
       type="error"
-      message={__('Could not get a user ID. Account functions will be unavailable. Try again in a bit.')}
+      message={__(`Sorry, account functions unavailable currently, we're down for maintence. Please check back later.`)}
       actionText={__('Refresh')}
       onClick={() => window.location.reload()}
     />
