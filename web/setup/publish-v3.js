@@ -30,6 +30,14 @@ function inStatusCategory(status, category) {
   return status >= category && status < category + 100;
 }
 
+function isTusStillInProcess(xhr) {
+  return xhr?.response?.error?.message === 'upload is still in process'; // String needs to match backend (not good).
+}
+
+// ****************************************************************************
+// sendStatusRequest
+// ****************************************************************************
+
 function sendStatusRequest(url, guid, token, params, jsonPayload, retryCount, resolve, reject) {
   const xhr = new XMLHttpRequest();
 
@@ -94,6 +102,7 @@ function sendStatusRequest(url, guid, token, params, jsonPayload, retryCount, re
 }
 
 // ****************************************************************************
+// makeResumableUploadRequest
 // ****************************************************************************
 
 export function makeResumableUploadRequest(
@@ -186,6 +195,10 @@ export function makeResumableUploadRequest(
           xhr.setRequestHeader(X_LBRY_AUTH_TOKEN, token);
           xhr.responseType = 'json';
           xhr.onload = () => {
+            if (isTusStillInProcess(xhr)) {
+              setTimeout(() => makeNotifyRequest(), 5000);
+              return;
+            }
             window.store.dispatch(doUpdateUploadProgress({ guid, status: 'notify_ok' }));
             sendStatusRequest(uploader.url, guid, token, params, jsonPayload, SDK_STATUS_RETRY_COUNT, resolve, reject);
           };
@@ -196,11 +209,11 @@ export function makeResumableUploadRequest(
           xhr.onabort = () => {
             window.store.dispatch(doUpdateUploadRemove(guid));
           };
-          return xhr;
+
+          xhr.send(jsonPayload);
         }
 
-        const notify = makeNotifyRequest();
-        notify.send(jsonPayload);
+        makeNotifyRequest();
       },
     });
 
