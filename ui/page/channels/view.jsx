@@ -59,7 +59,7 @@ export default function ChannelsPage(props: Props) {
 
   const { push } = useHistory();
 
-  if (!hasChannels) {
+  if (!hasChannels && !hasYoutubeChannels) {
     return (
       <Page className="channelsPage-wrapper">
         {fetchingChannels ? (
