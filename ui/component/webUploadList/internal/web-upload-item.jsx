@@ -177,7 +177,6 @@ export default function WebUploadItem(props: Props) {
           label={__('File')}
           onFileChosen={handleFileChange}
           // https://stackoverflow.com/questions/19107685/safari-input-type-file-accept-video-ignores-mp4-files
-          accept={'video/mp4,video/x-m4v,video/*,audio/*'}
           placeholder={__('Select the file to resume upload...')}
         />
       </div>
