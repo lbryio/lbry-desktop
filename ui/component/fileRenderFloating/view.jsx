@@ -371,11 +371,12 @@ export default function FileRenderFloating(props: Props) {
   // ****************************************************************************
 
   function isDraggingVideojsComponent(e) {
-    const className = e?.target?.className || '';
+    const className = e?.target?.className;
     return (
-      className.includes('vjs-volume-control') ||
-      className.includes('vjs-volume-level') ||
-      className.includes('vjs-mouse-display')
+      typeof className === 'string' &&
+      (className.includes('vjs-volume-control') ||
+        className.includes('vjs-volume-level') ||
+        className.includes('vjs-mouse-display'))
     );
   }
 
