@@ -8,7 +8,7 @@ import classnames from 'classnames';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 
-const DISABLE_VIDEO_AD = true;
+const DISABLE_VIDEO_AD = false;
 
 // prettier-ignore
 const AD_CONFIGS = Object.freeze({
