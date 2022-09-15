@@ -159,7 +159,7 @@ function DiscoverPage(props: Props) {
     let headerLabel;
     if (repostedClaim) {
       headerLabel = __('Reposts of %uri%', { uri: repostedUri });
-    } else if (tag) {
+    } else if (tag && !isCategory) {
       headerLabel = (
         <span>
           <Icon icon={ICONS.TAG} size={10} />
