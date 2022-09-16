@@ -8,6 +8,7 @@ import classnames from 'classnames';
 import React from 'react';
 import usePersistedState from 'effects/use-persisted-state';
 import usePersistentUserParam from 'effects/use-persistent-user-param';
+import { useIsLargeScreen } from 'effects/use-screensize';
 import { useHistory } from 'react-router';
 import { FormField } from 'component/common/form';
 import Button from 'component/button';
@@ -69,6 +70,7 @@ function ClaimListHeader(props: Props) {
   } = props;
 
   const filterCtx = React.useContext(ClaimSearchFilterContext);
+  const isLargeScreen = useIsLargeScreen();
   const { push, location } = useHistory();
   const { search } = location;
   const [expanded, setExpanded] = usePersistedState(`expanded-${location.pathname}`, false);
@@ -92,7 +94,7 @@ function ClaimListHeader(props: Props) {
     []
   );
 
-  const [tagSearchExpanded, setTagSearchExpanded] = React.useState(false);
+  const [tagSearchExpanded, setTagSearchExpanded] = React.useState(isLargeScreen);
   const [tagSearchQuery, setTagSearchQuery] = React.useState(urlParams.get(CS.TAGS_KEY) || '');
   const handleChangeDebounced = React.useCallback(
     debounce((v) => handleChange({ key: CS.TAGS_KEY, value: v }), 500),
