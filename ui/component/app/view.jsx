@@ -21,6 +21,7 @@ import usePersistedState from 'effects/use-persisted-state';
 import useConnectionStatus from 'effects/use-connection-status';
 import Spinner from 'component/spinner';
 import LANGUAGES from 'constants/languages';
+import { BeforeUnload, Unload } from 'util/beforeUnload';
 import AdBlockTester from 'web/component/adBlockTester';
 import AdsSticky from 'web/component/adsSticky';
 import YoutubeWelcome from 'web/component/youtubeReferralWelcome';
@@ -255,30 +256,33 @@ function App(props: Props) {
 
   useEffect(() => {
     if (syncIsLocked) {
+      const msg = 'There are unsaved settings. Exit the Settings Page to finalize them.';
       const handleBeforeUnload = (event) => {
         event.preventDefault();
-        event.returnValue = __('There are unsaved settings. Exit the Settings Page to finalize them.');
+        event.returnValue = msg;
       };
-      window.addEventListener('beforeunload', handleBeforeUnload);
-      return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+
+      BeforeUnload.register(handleBeforeUnload, msg);
+      return () => BeforeUnload.unregister(handleBeforeUnload);
     }
   }, [syncIsLocked]);
 
   useEffect(() => {
     if (!uploadCount) return;
 
+    const msg = 'Unfinished uploads.';
     const handleUnload = (event) => tusUnlockAndNotify();
     const handleBeforeUnload = (event) => {
       event.preventDefault();
-      event.returnValue = __('There are pending uploads.'); // without setting this to something it doesn't work
+      event.returnValue = __(msg); // without setting this to something it doesn't work in some browsers.
     };
 
-    window.addEventListener('unload', handleUnload);
-    window.addEventListener('beforeunload', handleBeforeUnload);
+    Unload.register(handleUnload);
+    BeforeUnload.register(handleBeforeUnload, msg);
 
     return () => {
-      window.removeEventListener('unload', handleUnload);
-      window.removeEventListener('beforeunload', handleBeforeUnload);
+      Unload.unregister(handleUnload);
+      BeforeUnload.unregister(handleBeforeUnload);
     };
   }, [uploadCount]);
 
