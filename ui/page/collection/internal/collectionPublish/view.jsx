@@ -20,6 +20,7 @@ import analytics from 'analytics';
 import CollectionGeneralTab from 'component/collectionGeneralTab';
 import PublishBidTab from 'component/publishBidField';
 import Spinner from 'component/spinner';
+import BusyIndicator from 'component/common/busy-indicator';
 
 export const PAGE_TAB_QUERY = `tab`;
 const MAX_TAG_SELECT = 5;
@@ -310,7 +311,13 @@ function CollectionForm(props: Props) {
                 <Button
                   button="primary"
                   disabled={isBuiltin || creatingCollection || updatingCollection || Boolean(submitError) || !hasClaims}
-                  label={creatingCollection || updatingCollection ? __('Submitting') : __('Submit')}
+                  label={
+                    creatingCollection || updatingCollection ? (
+                      <BusyIndicator message={__('Submitting')} />
+                    ) : (
+                      __('Submit')
+                    )
+                  }
                   onClick={handleSubmit}
                 />
                 <Button button="link" label={__('Cancel')} onClick={() => onDone(collectionId)} />
