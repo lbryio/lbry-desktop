@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimIsPending } from 'redux/selectors/claims';
+import { selectClaimIsPendingForId } from 'redux/selectors/claims';
 import { selectCollectionHasEditsForId, selectCollectionLengthForId } from 'redux/selectors/collections';
 import CollectionPublishButton from './view';
 
 const select = (state, props) => {
-  const { uri, collectionId } = props;
+  const { collectionId } = props;
 
   return {
-    claimIsPending: makeSelectClaimIsPending(uri)(state),
+    claimIsPending: selectClaimIsPendingForId(state, collectionId),
     collectionHasEdits: selectCollectionHasEditsForId(state, collectionId),
     collectionLength: selectCollectionLengthForId(state, collectionId),
   };

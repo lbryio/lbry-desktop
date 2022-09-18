@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimIsPending } from 'redux/selectors/claims';
+import { selectClaimIsPendingForId } from 'redux/selectors/claims';
 import { doOpenModal } from 'redux/actions/app';
 import CollectionDeleteButton from './view';
 
 const select = (state, props) => {
-  const { uri } = props;
+  const { collectionId } = props;
 
   return {
-    claimIsPending: makeSelectClaimIsPending(uri)(state),
+    claimIsPending: selectClaimIsPendingForId(state, collectionId),
   };
 };
 
