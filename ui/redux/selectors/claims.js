@@ -906,9 +906,7 @@ export const selectStakedLevelForChannelUri = createCachedSelector(selectTotalSt
 })((state, uri) => String(uri));
 
 export const selectUpdatingCollection = (state: State) => selectState(state).updatingCollection;
-export const selectUpdateCollectionError = (state: State) => selectState(state).updateCollectionError;
 export const selectCreatingCollection = (state: State) => selectState(state).creatingCollection;
-export const selectCreateCollectionError = (state: State) => selectState(state).createCollectionError;
 
 export const selectIsMyChannelCountOverLimit = createSelector(
   selectMyChannelClaimIds,

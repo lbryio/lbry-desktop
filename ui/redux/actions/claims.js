@@ -958,12 +958,8 @@ export function doCollectionPublish(
       }
 
       function failure(error) {
-        dispatch({
-          type: ACTIONS.COLLECTION_PUBLISH_FAILED,
-          data: {
-            error: error.message,
-          },
-        });
+        dispatch({ type: ACTIONS.COLLECTION_PUBLISH_FAILED });
+        dispatch(doToast({ message: error.message, isError: true }));
         return reject(error);
       }
 
@@ -1070,12 +1066,8 @@ export function doCollectionPublishUpdate(
       }
 
       function failure(error) {
-        dispatch({
-          type: ACTIONS.COLLECTION_PUBLISH_UPDATE_FAILED,
-          data: {
-            error: error.message,
-          },
-        });
+        dispatch({ type: ACTIONS.COLLECTION_PUBLISH_UPDATE_FAILED });
+        dispatch(doToast({ message: error.message }));
         return reject(error);
       }
 

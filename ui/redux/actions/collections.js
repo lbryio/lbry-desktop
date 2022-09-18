@@ -506,9 +506,6 @@ export const doClearQueueList = () => (dispatch: Dispatch, getState: GetState) =
   }
 };
 
-export const doClearCollectionErrors = () => (dispatch: Dispatch) =>
-  dispatch({ type: ACTIONS.CLEAR_COLLECTION_ERRORS });
-
 export const doPublishFeaturedChannels = (channelId: ChannelId) => async (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
   const featuredChannelsIds = selectFeaturedChannelsByChannelId(state)[channelId];
