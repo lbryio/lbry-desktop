@@ -12,6 +12,7 @@ import { selectClaimIdsForCollectionId, selectCollectionForId } from 'redux/sele
 import { doCollectionPublish, doCollectionPublishUpdate } from 'redux/actions/claims';
 import { selectBalance } from 'redux/selectors/wallet';
 import { selectCollectionClaimParamsForUri } from 'redux/selectors/publish';
+import { selectActiveChannelClaim } from 'redux/selectors/app';
 
 import CollectionForm from './view';
 
@@ -29,6 +30,7 @@ const select = (state, props) => {
     collection: selectCollectionForId(state, collectionId),
     collectionClaimIds: selectClaimIdsForCollectionId(state, collectionId),
     collectionParams: selectCollectionClaimParamsForUri(state, uri, collectionId),
+    activeChannelClaim: selectActiveChannelClaim(state),
   };
 };
 

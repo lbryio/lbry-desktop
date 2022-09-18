@@ -18,7 +18,6 @@ type Props = {
   incognito: boolean,
   setThumbnailError: (error: ?string) => void,
   updateParams: (obj: any) => void,
-  setLoading: (loading: boolean) => void,
   collectionType: string,
   // -- redux --
   collectionChannel: ?ChannelClaim,
@@ -34,7 +33,6 @@ function CollectionGeneralTab(props: Props) {
     incognito,
     setThumbnailError,
     updateParams,
-    setLoading,
     collectionType,
     // -- redux --
     collectionChannel,
@@ -79,11 +77,7 @@ function CollectionGeneralTab(props: Props) {
     setThumbnailError(thumbnailError);
   }, [setThumbnailError, thumbError, thumbStatus]);
 
-  React.useEffect(() => {
-    if (setLoading) setLoading(!activeChannelClaim);
-  }, [activeChannelClaim, setLoading]);
-
-  if (!activeChannelClaim && !isPrivateEdit) {
+  if (activeChannelClaim === undefined && !isPrivateEdit) {
     return (
       <div className="main--empty">
         <Spinner />

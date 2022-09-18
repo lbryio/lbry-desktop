@@ -46,6 +46,7 @@ type Props = {
   updateError: string,
   createError: string,
   creatingCollection: boolean,
+  activeChannelClaim: ?ChannelClaim,
   doCollectionPublishUpdate: (CollectionUpdateParams) => Promise<any>,
   doCollectionPublish: (CollectionPublishParams, string) => Promise<any>,
   doClearCollectionErrors: () => void,
@@ -69,6 +70,7 @@ function CollectionForm(props: Props) {
     updateError,
     createError,
     creatingCollection,
+    activeChannelClaim,
     doCollectionPublishUpdate,
     doCollectionPublish,
     doClearCollectionErrors,
@@ -82,7 +84,6 @@ function CollectionForm(props: Props) {
   const [thumbailError, setThumbnailError] = React.useState('');
   const [bidError, setBidError] = React.useState('');
   const [params, setParams] = React.useState({});
-  const [loading, setLoading] = React.useState(false);
   const [tabIndex, setTabIndex] = React.useState(0);
   const [showItemsSpinner, setShowItemsSpinner] = React.useState(false);
 
@@ -195,7 +196,6 @@ function CollectionForm(props: Props) {
                 nameError={nameError}
                 setThumbnailError={setThumbnailError}
                 updateParams={updateParams}
-                setLoading={setLoading}
                 collectionType={collection?.type}
               />
             )}
@@ -308,7 +308,7 @@ function CollectionForm(props: Props) {
         </TabPanels>
       </Tabs>
 
-      {!loading && (
+      {activeChannelClaim !== undefined && (
         <Card
           className="card--after-tabs"
           actions={
