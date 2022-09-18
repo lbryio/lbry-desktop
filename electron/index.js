@@ -17,6 +17,7 @@ import installDevtools from './installDevtools';
 import fs from 'fs';
 import path from 'path';
 import { diskSpaceLinux, diskSpaceWindows, diskSpaceMac } from '../ui/util/diskspace';
+import { generateSalt, generateSaltSeed, deriveSecrets, walletHmac } from './sync/sync.js';
 
 const { download } = require('electron-dl');
 const mime = require('mime');
@@ -326,6 +327,42 @@ ipcMain.on('get-disk-space', async (event) => {
   }
 });
 
+// Sync cryptography
+ipcMain.on('get-salt-seed', () => {
+  const saltSeed = generateSaltSeed();
+  rendererWindow.webContents.send('got-salt-seed', saltSeed);
+});
+
+ipcMain.on('get-secrets', (event, password, email, saltseed) => {
+  console.log('password, salt', password, email, saltseed);
+  const callback = (result) => {
+    console.log('callback result', result);
+    rendererWindow.webContents.send('got-secrets', result);
+  };
+  deriveSecrets(password, email, saltseed, callback);
+});
+
+ipcMain.handle('invoke-get-secrets', (event, password, email, saltseed) => {
+  return new Promise((resolve, reject) => {
+    const callback = (err, result) => {
+      console.log('callback result', result);
+      if (err) {
+        return reject(err);
+      }
+      return resolve(result);
+    };
+    console.log('password, salt', password, email, saltseed);
+    deriveSecrets(password, email, saltseed, callback);
+  });
+});
+
+ipcMain.handle('invoke-get-salt-seed', (event) => {
+  return new Promise((resolve, reject) => {
+    const saltSeed = generateSaltSeed();
+    return resolve(saltSeed);
+  });
+});
+
 ipcMain.on('version-info-requested', () => {
   function formatRc(ver) {
     // Adds dash if needed to make RC suffix SemVer friendly
@@ -568,3 +605,5 @@ ipcMain.on('upgrade', (event, installerPath) => {
   });
   app.quit();
 });
+
+

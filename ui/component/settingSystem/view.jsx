@@ -18,6 +18,8 @@ import { getPasswordFromCookie } from 'util/saved-passwords';
 import * as DAEMON_SETTINGS from 'constants/daemon_settings';
 import SettingEnablePrereleases from 'component/settingEnablePrereleases';
 import SettingDisableAutoUpdates from 'component/settingDisableAutoUpdates';
+import * as ICONS from 'constants/icons';
+import * as PAGES from 'constants/pages';
 
 const IS_MAC = process.platform === 'darwin';
 
@@ -148,6 +150,14 @@ export default function SettingSystem(props: Props) {
                 checked={daemonSettings.save_files}
               />
             </SettingsRow>
+            <SettingsRow title={__('Remote Sync Settings')}>
+              <Button
+                button="inverse"
+                label={__('Manage')}
+                icon={ICONS.ARROW_RIGHT}
+                navigate={`/$/${PAGES.SETTINGS_SYNC}`}
+              />
+            </SettingsRow>
             <SettingsRow
               title={__('Share usage and diagnostic data')}
               subtitle={
@@ -269,24 +279,13 @@ export default function SettingSystem(props: Props) {
               title={__('Encrypt my wallet with a custom password')}
               subtitle={
                 <React.Fragment>
-                  <I18nMessage
-                    tokens={{
-                      learn_more: (
-                        <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/account-sync" />
-                      ),
-                    }}
-                  >
-                    Wallet encryption is currently unavailable until it's supported for synced accounts. It will be
-                    added back soon. %learn_more%.
-                  </I18nMessage>
-                  {/* {__('Secure your local wallet data with a custom password.')}{' '}
-                   <strong>{__('Lost passwords cannot be recovered.')} </strong>
-                   <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />. */}
+                  {__('Secure your local wallet data with a custom password.')}{' '}
+                  <strong>{__('Lost passwords cannot be recovered.')} </strong>
+                  <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />
                 </React.Fragment>
               }
             >
               <FormField
-                disabled
                 type="checkbox"
                 name="encrypt_wallet"
                 onChange={() => onChangeEncryptWallet()}

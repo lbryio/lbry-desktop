@@ -104,7 +104,7 @@ export const doGetSyncDesktop =
     const getSyncPending = selectGetSyncIsPending(state);
     const setSyncPending = selectSetSyncIsPending(state);
     const syncLocked = selectSyncIsLocked(state);
-
+    // here we instead do the new getsync with the derived password
     return getSavedPassword().then((savedPassword) => {
       const passwordArgument = password || password === '' ? password : savedPassword === null ? '' : savedPassword;
 

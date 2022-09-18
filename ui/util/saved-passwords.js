@@ -1,3 +1,5 @@
+const { safeStorage } = require('@electron/remote');
+
 const { DOMAIN } = require('../../config.js');
 const AUTH_TOKEN = 'auth_token';
 const SAVED_PASSWORD = 'saved_password';
@@ -127,6 +129,17 @@ function doAuthTokenRefresh() {
   }
 }
 
+function safeStoreEncrypt(ssVal) {
+  const buffer = safeStorage.encryptString(ssVal);
+  console.log('buffer', buffer.toString('base64'));
+  return buffer.toString('base64');
+}
+
+function safeStoreDecrypt(ssVal) {
+  const buffer = safeStorage.decryptString(Buffer.from(ssVal, 'base64'));
+  return buffer.toString();
+}
+
 module.exports = {
   setSavedPassword,
   getSavedPassword,
@@ -137,4 +150,6 @@ module.exports = {
   deleteAuthToken,
   doSignOutCleanup,
   doAuthTokenRefresh,
+  safeStoreEncrypt,
+  safeStoreDecrypt,
 };

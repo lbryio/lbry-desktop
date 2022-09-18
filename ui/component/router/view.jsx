@@ -46,6 +46,7 @@ import SearchPage from 'page/search';
 
 import SettingsCreatorPage from 'page/settingsCreator';
 import SettingsNotificationsPage from 'page/settingsNotifications';
+import SettingsSyncPage from 'page/settingsSync';
 
 import SettingsPage from 'page/settings';
 import ShowPage from 'page/show';
@@ -203,7 +204,7 @@ function AppRouter(props: Props) {
 
       {/* Odysee signin */}
       <Route path={`/$/${PAGES.WELCOME}`} exact component={Welcome} />
-
+      <Route path={`/$/${PAGES.SETTINGS_SYNC}`} exact component={SettingsSyncPage} />
       <Route path={`/$/${PAGES.HELP}`} exact component={HelpPage} />
       <Route path={`/$/${PAGES.BACKUP}`} exact component={BackupPage} />
       <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />

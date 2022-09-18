@@ -6,6 +6,7 @@ import {
   doNotifyDecryptWallet,
   doNotifyEncryptWallet,
   doNotifyForgetPassword,
+  doOpenModal,
   doToggle3PAnalytics,
 } from 'redux/actions/app';
 import { doSetDaemonSetting, doClearDaemonSetting, doFindFFmpeg } from 'redux/actions/settings';
@@ -32,6 +33,7 @@ const perform = (dispatch) => ({
   updateWalletStatus: () => dispatch(doWalletStatus()),
   confirmForgetPassword: (modalProps) => dispatch(doNotifyForgetPassword(modalProps)),
   toggle3PAnalytics: (allow) => dispatch(doToggle3PAnalytics(allow)),
+  openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
 });
 
 export default connect(select, perform)(SettingSystem);

@@ -46,6 +46,7 @@ export const PAGE_TITLE = {
   [PAGES.SETTINGS]: 'Settings',
   [PAGES.SETTINGS_BLOCKED_MUTED]: 'Block and muted channels',
   [PAGES.SETTINGS_CREATOR]: 'Creator settings',
+  [PAGES.SETTINGS_SYNC]: 'Sync settings',
   [PAGES.SETTINGS_NOTIFICATIONS]: 'Manage notifications',
   [PAGES.SETTINGS_STRIPE_ACCOUNT]: 'Bank Accounts',
   [PAGES.SETTINGS_STRIPE_CARD]: 'Payment Methods',

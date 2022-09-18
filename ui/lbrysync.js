@@ -1,46 +1,77 @@
-// @flow
-/*
-DeriveSecrets
-POST /
- */
-import { LBRYSYNC_API as BASE_URL } from 'config';
+import { ipcRenderer } from 'electron';
+const BASE_URL = process.env.LBRYSYNC_BASE_URL || 'https://dev.lbry.id';
 const SYNC_API_DOWN = 'sync_api_down';
 const DUPLICATE_EMAIL = 'duplicate_email';
 const UNKNOWN_ERROR = 'unknown_api_error';
-const API_VERSION = 2;
+const NOT_FOUND = 'not_found';
+console.log('process.env.', process.env.LBRYSYNC_BASE_URL);
+
+const API_VERSION = 3;
+const POST = 'POST';
+const GET = 'GET';
 // const API_URL = `${BASE_URL}/api/${API_VERSION}`;
 const AUTH_ENDPOINT = '/auth/full';
 const REGISTER_ENDPOINT = '/signup';
-// const WALLET_ENDPOINT = '/wallet';
+const WALLET_ENDPOINT = '/wallet';
+const CLIENT_SALT_SEED = '/client-salt-seed';
+
 const Lbrysync = {
   apiRequestHeaders: { 'Content-Type': 'application/json' },
   apiUrl: `${BASE_URL}/api/${API_VERSION}`,
-  setApiHeader: (key: string, value: string) => {
+  setApiHeader: (key, value) => {
     Lbrysync.apiRequestHeaders = Object.assign(Lbrysync.apiRequestHeaders, { [key]: value });
-  },
-  // store state "registered email: email"
-  register: async (email: string, password: string) => {
-    try {
-      const result = await callWithResult(REGISTER_ENDPOINT, { email, password });
-      return result;
-    } catch (e) {
-      return e.message;
-    }
-  },
-  // store state "lbrysynctoken: token"
-  getAuthToken: async (email: string, password: string, deviceId: string) => {
-    try {
-      const result = await callWithResult(AUTH_ENDPOINT, { email, password, deviceId });
-      return { token: result };
-    } catch (e) {
-      return { error: e.message };
-    }
   },
 };
 
-function callWithResult(endpoint: string, params: ?{} = {}) {
+export async function fetchSaltSeed(email) {
+  const buff = Buffer.from(email.toString('utf8'));
+  const emailParam = buff.toString('base64');
+  const result = await callWithResult(GET, CLIENT_SALT_SEED, { email: emailParam });
+  return result;
+}
+
+export async function getAuthToken(email, password, deviceId) {
+  try {
+    const result = await callWithResult(POST, AUTH_ENDPOINT, { email, password, deviceId });
+    return { token: result };
+  } catch (e) {
+    return { error: e.message };
+  }
+}
+
+export async function register(email, password, saltSeed) {
+  try {
+    await callWithResult(POST, REGISTER_ENDPOINT, { email, password, clientSaltSeed: saltSeed });
+    return;
+  } catch (e) {
+    return { error: e.message };
+  }
+}
+
+export async function pushWallet(walletState, hmac, token) {
+  // token?
+  const body = {
+    token: token,
+    encryptedWallet: walletState.encryptedWallet,
+    sequence: walletState.sequence,
+    hmac: hmac,
+  };
+  await callWithResult(POST, WALLET_ENDPOINT, { token, hmac, sequence });
+}
+
+export async function pullWallet(token) {
+  try {
+    await callWithResult(GET, REGISTER_ENDPOINT, { token });
+    return;
+  } catch (e) {
+    return { error: e.message };
+  }
+} // token
+
+function callWithResult(method, endpoint, params = {}) {
   return new Promise((resolve, reject) => {
     apiCall(
+      method,
       endpoint,
       params,
       (result) => {
@@ -51,31 +82,40 @@ function callWithResult(endpoint: string, params: ?{} = {}) {
   });
 }
 
-function apiCall(endpoint: string, params: ?{}, resolve: Function, reject: Function) {
+function apiCall(method, endpoint, params, resolve, reject) {
   const options = {
-    method: 'POST',
-    body: JSON.stringify(params),
+    method: method,
   };
-
-  return fetch(`${Lbrysync.apiUrl}${endpoint}`, options)
+  let searchString = '';
+  if (method === GET) {
+    const search = new URLSearchParams(params);
+    searchString = `?${search}`;
+  } else if (method === POST) {
+    options.body = JSON.stringify(params);
+  }
+  return fetch(`${Lbrysync.apiUrl}${endpoint}${searchString}`, options)
     .then(handleResponse)
     .then((response) => {
-      return resolve(response.result);
+      return response;
     })
     .catch(reject);
 }
 
 function handleResponse(response) {
   if (response.status >= 200 && response.status < 300) {
-    return Promise.resolve(response.json());
+    return response.json();
   }
 
   if (response.status === 500) {
-    return Promise.reject(SYNC_API_DOWN);
+    return Promise.reject(500);
   }
 
   if (response.status === 409) {
-    return Promise.reject(DUPLICATE_EMAIL);
+    return Promise.reject(409);
+  }
+
+  if (response.status === 404) {
+    return Promise.reject(404);
   }
   return Promise.reject(UNKNOWN_ERROR);
 }
