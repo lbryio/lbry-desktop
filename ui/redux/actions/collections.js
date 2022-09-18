@@ -3,12 +3,7 @@ import * as ACTIONS from 'constants/action_types';
 import { v4 as uuid } from 'uuid';
 import Lbry from 'lbry';
 import { doClaimSearch, doAbandonClaim, doCollectionPublishUpdate, doCollectionPublish } from 'redux/actions/claims';
-import {
-  selectClaimForClaimId,
-  selectPermanentUrlForUri,
-  selectClaimForId,
-  makeSelectMetadataItemForUri,
-} from 'redux/selectors/claims';
+import { selectClaimForClaimId, selectClaimForId, makeSelectMetadataItemForUri } from 'redux/selectors/claims';
 import {
   selectCollectionForId,
   selectPublishedCollectionForId,
@@ -25,7 +20,7 @@ import {
 } from 'redux/selectors/collections';
 import * as COLS from 'constants/collections';
 import { resolveAuxParams, resolveCollectionType } from 'util/collections';
-import { isPermanentUrl, getThumbnailFromClaim } from 'util/claim';
+import { getThumbnailFromClaim } from 'util/claim';
 import { sanitizeName } from 'util/lbryURI';
 import { parseClaimIdFromPermanentUrl } from 'util/url';
 import { doError, doToast } from 'redux/actions/notifications';
@@ -391,11 +386,10 @@ export const doFetchItemsInCollection = (options: { collectionId: string, pageSi
   return doFetchItemsInCollections(newOptions);
 };
 
-export const doCollectionEdit = (
-  collectionId: string,
-  params: CollectionEditParams,
-  skipSanitization: boolean = false
-) => (dispatch: Dispatch, getState: GetState) => {
+export const doCollectionEdit = (collectionId: string, params: CollectionEditParams) => (
+  dispatch: Dispatch,
+  getState: GetState
+) => {
   const state = getState();
   const collection: Collection = selectCollectionForId(state, collectionId);
 
@@ -410,32 +404,7 @@ export const doCollectionEdit = (
   const unpublishedCollection: Collection = selectUnpublishedCollectionForId(state, collectionId);
   const publishedCollection: Collection = selectPublishedCollectionForId(state, collectionId); // needs to be published only
 
-  const { uris: anyUris, remove, replace, order, type } = params;
-
-  // -- sanitization --
-  // only permanent urls can be added to collections
-  let uris;
-
-  if (anyUris) {
-    if (skipSanitization) {
-      uris = anyUris;
-    } else {
-      uris = [];
-      anyUris.forEach(async (uri) => {
-        // related to selectBrokenUrlsForCollectionId
-        const isDeletingBrokenUris = typeof uri !== 'string';
-
-        // $FlowFixMe
-        if (isPermanentUrl(uri) || isDeletingBrokenUris) return uris.push(uri);
-
-        const url = selectPermanentUrlForUri(state, uri);
-        // $FlowFixMe
-        return uris.push(url);
-      });
-    }
-  }
-
-  // -------------------
+  const { uris, remove, replace, order, type } = params;
 
   const currentUrls = collection.items ? collection.items.concat() : [];
   let newItems = currentUrls;

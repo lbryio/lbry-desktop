@@ -14,7 +14,6 @@ import {
   selectClaimIsMineForUri,
   selectClaimWasPurchasedForUri,
   selectPermanentUrlForUri,
-  selectCanonicalUrlForUri,
   selectClaimForUri,
   selectClaimIsNsfwForUri,
   selectPurchaseMadeForClaimId,
@@ -32,7 +31,6 @@ import { doCollectionEdit, doLocalCollectionCreate } from 'redux/actions/collect
 import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { doToast } from 'redux/actions/notifications';
 import { doPurchaseUri } from 'redux/actions/file';
-import { doGetClaimFromUriResolve } from 'redux/actions/claims';
 import Lbry from 'lbry';
 import RecSys from 'recsys';
 import * as SETTINGS from 'constants/settings';
@@ -48,7 +46,6 @@ import {
   selectIsUriCurrentlyPlaying,
   makeSelectIsPlayerFloating,
 } from 'redux/selectors/content';
-import { isCanonicalUrl } from 'util/claim';
 
 const DOWNLOAD_POLL_INTERVAL = 1000;
 
@@ -126,29 +123,8 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
   // @endif
 }
 
-export function doSetPrimaryUri(uri: ?string) {
-  return async (dispatch: Dispatch, getState: GetState) => {
-    let url = uri;
-
-    if (uri && !isCanonicalUrl(uri)) {
-      // -- sanitization --
-      // only set canonical urls
-      const state = getState();
-      url = selectCanonicalUrlForUri(state, uri);
-
-      if (!url) {
-        const claim = await dispatch(doGetClaimFromUriResolve(url));
-        if (claim) url = claim.canonical_url;
-      }
-      // -------------------
-    }
-
-    dispatch({
-      type: ACTIONS.SET_PRIMARY_URI,
-      data: { uri: url },
-    });
-  };
-}
+export const doSetPrimaryUri = (uri: ?string) => async (dispatch: Dispatch, getState: GetState) =>
+  dispatch({ type: ACTIONS.SET_PRIMARY_URI, data: { uri } });
 
 export const doClearPlayingUri = () => (dispatch: Dispatch) => dispatch(doSetPlayingUri({ uri: null, collection: {} }));
 export const doClearPlayingSource = () => (dispatch: Dispatch) => dispatch(doChangePlayingUriParam({ source: null }));
@@ -169,31 +145,10 @@ export const doPopOutInlinePlayer = ({ source }: { source: string }) => (dispatc
   }
 };
 
-export function doSetPlayingUri({ uri, source, sourceId, location, commentId, collection }: PlayingUri) {
-  return async (dispatch: Dispatch, getState: GetState) => {
-    const state = getState();
-    let url = uri;
-
-    if (uri && !isCanonicalUrl(uri)) {
-      // -- sanitization --
-      // only set canonical urls
-      if (uri) {
-        url = selectCanonicalUrlForUri(state, uri);
-
-        if (!url) {
-          const claim = await dispatch(doGetClaimFromUriResolve(url));
-          if (claim) url = claim.canonical_url;
-        }
-      }
-      // -------------------
-    }
-
-    dispatch({
-      type: ACTIONS.SET_PLAYING_URI,
-      data: { uri: url, source, sourceId, location, commentId, collection },
-    });
-  };
-}
+export const doSetPlayingUri = ({ uri, source, sourceId, location, commentId, collection }: PlayingUri) => async (
+  dispatch: Dispatch,
+  getState: GetState
+) => dispatch({ type: ACTIONS.SET_PLAYING_URI, data: { uri, source, sourceId, location, commentId, collection } });
 
 export function doChangePlayingUriParam(newParams: any) {
   return (dispatch: Dispatch, getState: GetState) => {
@@ -227,27 +182,14 @@ export function doUriInitiatePlay(
   cb?: (url: string) => void
 ) {
   return async (dispatch: Dispatch, getState: () => any) => {
-    const { uri: url, source, collection } = playingOptions;
-
-    const state = getState();
-    const isMature = selectClaimIsNsfwForUri(state, url);
-
-    if (isMature) return;
-
-    let uri = url;
-    if (url && !isCanonicalUrl(url)) {
-      // -- sanitization --
-      // only set canonical urls
-      uri = selectCanonicalUrlForUri(state, url);
-
-      if (!uri) {
-        const claim = await dispatch(doGetClaimFromUriResolve(url));
-        if (claim) uri = claim.canonical_url;
-      }
-      // -------------------
-    }
+    const { uri, source, collection } = playingOptions;
 
     if (!uri) return;
+
+    const state = getState();
+    const isMature = selectClaimIsNsfwForUri(state, uri);
+
+    if (isMature) return;
 
     if (!isFloating && (!source || source === COLLECTIONS_CONSTS.QUEUE_ID)) dispatch(doSetPrimaryUri(uri));
 
@@ -427,7 +369,7 @@ export function doPlaylistAddAndAllowPlaying({
 }
 
 export function doPlayUri(
-  url: string,
+  uri: string,
   skipCostCheck: boolean = false,
   saveFileOverride: boolean = false,
   cb?: () => void,
@@ -435,19 +377,6 @@ export function doPlayUri(
 ) {
   return async (dispatch: Dispatch, getState: () => any) => {
     const state = getState();
-
-    let uri = url;
-    if (url && !isCanonicalUrl(url)) {
-      // -- sanitization --
-      // only set canonical urls
-      uri = selectCanonicalUrlForUri(state, url);
-
-      if (!uri) {
-        const claim = await dispatch(doGetClaimFromUriResolve(url));
-        if (claim) url = claim.canonical_url;
-      }
-      // -------------------
-    }
 
     const isMine = selectClaimIsMineForUri(state, uri);
     const fileInfo = makeSelectFileInfoForUri(uri)(state);
