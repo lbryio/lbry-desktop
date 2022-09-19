@@ -52,6 +52,11 @@
     font-size: 3rem;
     line-height: 1;
   }
+  @media (max-width: $breakpoint-small) {
+    span {
+      word-break: break-all;
+    }
+  }
 }
 
 .post__info {
