@@ -300,6 +300,13 @@
   }
 }
 
+.navigation-link--icon-centered {
+  padding-left: 0;
+  .button__content {
+    justify-content: center;
+  }
+}
+
 .navigation-links {
   @extend .ul--no-style;
   flex-direction: column;

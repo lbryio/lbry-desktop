@@ -379,6 +379,17 @@ function SideNavigation(props: Props) {
           {displayedSubscriptions.map((subscription) => (
             <SubscriptionListItem key={subscription.uri} subscription={subscription} />
           ))}
+          {subscriptions.length > SIDEBAR_SUBS_DISPLAYED && (
+            <li className="navigation-item">
+              <Button
+                icon={ICONS.MORE}
+                title={__('Manage Following')}
+                navigate={`/$/${PAGES.CHANNELS_FOLLOWING_MANAGE}`}
+                className="navigation-link navigation-link--icon-centered"
+                activeClass="navigation-link--active"
+              />
+            </li>
+          )}
           {!!subscriptionFilter && !displayedSubscriptions.length && (
             <li>
               <div className="navigation-item">
