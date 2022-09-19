@@ -80,9 +80,6 @@ function FileDrop(props: Props) {
           navigateToPublish();
           updatePublishForm({
             filePath: selectedFile.path || selectedFile.name,
-            fileDur: 0,
-            fileSize: 0,
-            fileVid: false,
           });
         }, NAVIGATE_TIME_OUT);
       }, HIDE_TIME_OUT);

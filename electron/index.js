@@ -307,7 +307,7 @@ app.on('before-quit', () => {
 // const file = new File([result.buffer], result.name);
 // NOTE: if path points to a folder, an empty
 // file will be given.
-ipcMain.handle('get-file-from-path', (event, path) => {
+ipcMain.handle('get-file-from-path', (event, path, readContents = true) => {
   return new Promise((resolve, reject) => {
     fs.stat(path, (error, stats) => {
       if (error) {
@@ -322,6 +322,15 @@ ipcMain.handle('get-file-from-path', (event, path) => {
         resolve({
           name,
           mime: undefined,
+          path,
+          buffer: new ArrayBuffer(0),
+        });
+        return;
+      }
+      if (!readContents) {
+        resolve({
+          name,
+          mime: mime.getType(name) || undefined,
           path,
           buffer: new ArrayBuffer(0),
         });

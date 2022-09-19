@@ -2,6 +2,7 @@
 import type { Node } from 'react';
 import * as ICONS from 'constants/icons';
 import React, { useState, useEffect } from 'react';
+import { ipcRenderer } from 'electron';
 import { regexInvalidURI } from 'util/lbryURI';
 import PostEditor from 'component/postEditor';
 import FileSelector from 'component/common/file-selector';
@@ -90,6 +91,27 @@ function PublishFile(props: Props) {
       }
     }
   }, [currentFileType, mode, isStillEditing, updatePublishForm]);
+
+  // Since the filePath can be updated from outside this component
+  // (for instance, when the user drags & drops a file), we need
+  // to check for changes in the selected file using an effect.
+  useEffect(() => {
+    if (!filePath) {
+      return;
+    }
+    async function readSelectedFile() {
+      // Read the file to get the file's duration (if possible)
+      // and offer transcoding it.
+      const readFileContents = true;
+      const result = await ipcRenderer.invoke('get-file-from-path', filePath, readFileContents);
+      const file = new File([result.buffer], result.name, {
+        type: result.mime,
+      });
+      const fileWithPath = { file, path: result.path };
+      processSelectedFile(fileWithPath);
+    }
+    readSelectedFile();
+  }, [filePath]);
 
   useEffect(() => {
     const isOptimizeAvail = currentFile && currentFile !== '' && isVid && ffmpegAvail;
@@ -197,7 +219,7 @@ function PublishFile(props: Props) {
     }
   }
 
-  function handleFileChange(fileWithPath: FileWithPath, clearName = true) {
+  function processSelectedFile(fileWithPath: FileWithPath, clearName = true) {
     window.URL = window.URL || window.webkitURL;
 
     // select file, start to select a new one, then cancel
@@ -259,17 +281,17 @@ function PublishFile(props: Props) {
       setPublishMode(PUBLISH_MODES.FILE);
     }
 
-    const publishFormParams: { filePath: string, name?: string, optimize?: boolean } = {
-      filePath: fileWithPath.path,
-    };
-    // Strip off extention and replace invalid characters
-    let fileName = name || (file.name && file.name.substring(0, file.name.lastIndexOf('.'))) || '';
-
+    // Strip off extension and replace invalid characters
     if (!isStillEditing) {
-      publishFormParams.name = parseName(fileName);
+      const fileWithoutExtension = name || (file.name && file.name.substring(0, file.name.lastIndexOf('.'))) || '';
+      updatePublishForm({ name: parseName(fileWithoutExtension) });
     }
+  }
 
-    updatePublishForm(publishFormParams);
+  function handleFileChange(fileWithPath: FileWithPath) {
+    if (fileWithPath) {
+      updatePublishForm({ filePath: fileWithPath.path });
+    }
   }
 
   const showFileUpload = mode === PUBLISH_MODES.FILE;
@@ -317,6 +339,7 @@ function PublishFile(props: Props) {
                 onFileChosen={handleFileChange}
                 // https://stackoverflow.com/questions/19107685/safari-input-type-file-accept-video-ignores-mp4-files
                 placeholder={__('Select file to upload')}
+                readFile={false}
               />
               {getUploadMessage()}
             </>
