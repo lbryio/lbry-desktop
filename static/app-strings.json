@@ -2468,5 +2468,7 @@
   "Symbols": "Symbols",
   "There are pending actions.": "There are pending actions.",
   "Do you want to proceed with signing out?": "Do you want to proceed with signing out?",
+  "Multiple tags can be added by separating them with a comma.\nExample: sports,news,tv": "Multiple tags can be added by separating them with a comma.\nExample: sports,news,tv",
+  "Search tags": "Search tags",
   "--end--": "--end--"
 }

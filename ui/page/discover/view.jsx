@@ -1,5 +1,5 @@
 // @flow
-import React, { useRef } from 'react';
+import React from 'react';
 import classnames from 'classnames';
 import { DOMAIN, SIMPLE_SITE } from 'config';
 import * as ICONS from 'constants/icons';
@@ -9,9 +9,6 @@ import Page from 'component/page';
 import ClaimListDiscover from 'component/claimListDiscover';
 import Button from 'component/button';
 import { ClaimSearchFilterContext } from 'contexts/claimSearchFilterContext';
-import useHover from 'effects/use-hover';
-import { useIsMobile } from 'effects/use-screensize';
-import analytics from 'analytics';
 import HiddenNsfw from 'component/common/hidden-nsfw';
 import Icon from 'component/common/icon';
 import Ads from 'web/component/ads';
@@ -41,12 +38,10 @@ type Props = {
 function DiscoverPage(props: Props) {
   const {
     location: { search },
-    followedTags,
     repostedClaim,
     repostedUri,
     languageSetting,
     searchInLanguage,
-    doToggleTagFollowDesktop,
     doResolveUri,
     tileLayout,
     activeLivestreams,
@@ -55,9 +50,6 @@ function DiscoverPage(props: Props) {
     hasPremiumPlus,
   } = props;
 
-  const buttonRef = useRef();
-  const isHovering = useHover(buttonRef);
-  const isMobile = useIsMobile();
   const isWildWest = dynamicRouteProps && dynamicRouteProps.id === 'WILD_WEST';
   const isCategory = Boolean(dynamicRouteProps);
 
@@ -77,8 +69,6 @@ function DiscoverPage(props: Props) {
   const channelIds = dynamicRouteProps?.options?.channelIds || undefined;
   const excludedChannelIds = dynamicRouteProps?.options?.excludedChannelIds || undefined;
 
-  const isFollowing = React.useMemo(() => followedTags.some((t) => t.name === tag), [tag, followedTags]);
-
   const filters = { contentTypes: isCategory && !isWildWest ? CATEGORY_CONTENT_TYPES_FILTER : CS.CONTENT_TYPES };
 
   // **************************************************************************
@@ -94,31 +84,6 @@ function DiscoverPage(props: Props) {
         >
           <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Results boosted by %lbc%</I18nMessage>
         </a>
-      );
-    }
-
-    // NOTE: the if-block below will never run because a Tag page is also
-    // "!dynamicRouteProps". However, using the existing channel Follow button
-    // to follow a tag looks confusing, so I'll leave things as-is for now.
-
-    if (tag && !isMobile) {
-      let label = isFollowing
-        ? __('Following --[button label indicating a channel has been followed]--')
-        : __('Follow');
-      if (isHovering && isFollowing) {
-        label = __('Unfollow');
-      }
-
-      return (
-        <Button
-          ref={buttonRef}
-          button="alt"
-          icon={ICONS.SUBSCRIBE}
-          iconColor="red"
-          onClick={handleFollowClick}
-          requiresAuth={IS_WEB}
-          label={label}
-        />
       );
     }
 
@@ -159,7 +124,7 @@ function DiscoverPage(props: Props) {
     let headerLabel;
     if (repostedClaim) {
       headerLabel = __('Reposts of %uri%', { uri: repostedUri });
-    } else if (tag) {
+    } else if (tag && !isCategory) {
       headerLabel = (
         <span>
           <Icon icon={ICONS.TAG} size={10} />
@@ -214,14 +179,6 @@ function DiscoverPage(props: Props) {
     }
 
     return undefined;
-  }
-
-  function handleFollowClick() {
-    if (tag) {
-      doToggleTagFollowDesktop(tag);
-      const nowFollowing = !isFollowing;
-      analytics.event.tagFollow(tag, nowFollowing, 'tag-page');
-    }
   }
 
   // **************************************************************************
