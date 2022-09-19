@@ -100,7 +100,9 @@ function PublishFile(props: Props) {
       return;
     }
     async function readSelectedFile() {
-      const readFileContents = false;
+      // Read the file to get the file's duration (if possible)
+      // and offer transcoding it.
+      const readFileContents = true;
       const result = await ipcRenderer.invoke('get-file-from-path', filePath, readFileContents);
       const file = new File([result.buffer], result.name, {
         type: result.mime,
