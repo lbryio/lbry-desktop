@@ -50,13 +50,14 @@ function getUrlParams(notification, notificationTarget) {
 /**
  *
  * @param notification
- * @param target Optional (minor optimization if pre-calculated outside). Must be value from getNotificationTarget().
+ * @param target Optional (minor optimization if pre-calculated outside). Must
+ *   be value from getNotificationTarget().
  * @returns {string}
  */
 export function getNotificationLink(notification: WebNotification, target: ?string) {
   const notificationTarget = target || getNotificationTarget(notification);
-  const urlParams = getUrlParams(notification, notificationTarget);
-  return `${formatLbryUrlForWeb(notificationTarget)}?${urlParams.toString()}`;
+  const urlParams = getUrlParams(notification, notificationTarget).toString();
+  return `${formatLbryUrlForWeb(notificationTarget)}${urlParams ? `?${urlParams}` : ''}`;
 }
 
 export function getNotificationLocation(notification: WebNotification, target: ?string) {
