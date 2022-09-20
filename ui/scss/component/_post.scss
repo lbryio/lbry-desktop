@@ -41,7 +41,6 @@
   margin-top: 0;
   margin-bottom: var(--spacing-s);
   font-weight: var(--font-weight-bold);
-  word-break: break-all;
 
   :first-child {
     display: inline-block;
@@ -52,6 +51,9 @@
     margin-top: var(--spacing-xl);
     font-size: 3rem;
     line-height: 1;
+  }
+  @media (max-width: $breakpoint-small) {
+    word-break: break-all;
   }
 }
 
