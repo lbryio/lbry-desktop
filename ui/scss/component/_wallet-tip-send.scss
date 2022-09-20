@@ -17,4 +17,18 @@
   .add-a-card-help-message {
     font-size: 16px;
   }
+
+  .confirm__wrapper {
+    padding: 0;
+    padding-bottom: var(--spacing-s);
+
+    .confirm__label {
+      font-weight: var(--font-weight-bold);
+    }
+
+    .confirm__value {
+      font-size: var(--font-base) !important;
+      opacity: 0.8;
+    }
+  }
 }
