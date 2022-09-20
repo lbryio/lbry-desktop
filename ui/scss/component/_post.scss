@@ -41,6 +41,7 @@
   margin-top: 0;
   margin-bottom: var(--spacing-s);
   font-weight: var(--font-weight-bold);
+  word-break: break-word;
 
   :first-child {
     display: inline-block;
