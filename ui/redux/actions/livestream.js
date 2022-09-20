@@ -28,6 +28,7 @@ export const doFetchNoSourceClaims = (channelId: string) => async (dispatch: Dis
         page_size: 20,
         page: 1,
         include_is_my_output: true,
+        order_by: ['release_time'],
       })
     );
 
