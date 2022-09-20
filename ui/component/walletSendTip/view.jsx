@@ -307,7 +307,7 @@ export default function WalletSendTip(props: Props) {
           // confirmation modal, allow  user to confirm or cancel transaction
           isOnConfirmationPage ? (
             <>
-              <div className="section section--padded card--inline confirm__wrapper">
+              <div className="section card--inline confirm__wrapper">
                 <div className="section">
                   <div className="confirm__label">{__('To --[the tip recipient]--')}</div>
                   <div className="confirm__value">{channelName || title}</div>

@@ -97,9 +97,10 @@
   color: var(--color-primary-contrast);
   font-size: var(--font-small);
 
-  button:hover {
+  button:hover,
+  .button__content:hover {
     .button__label {
-      color: var(--color-primary);
+      color: var(--color-primary) !important;
     }
   }
 }

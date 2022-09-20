@@ -19,16 +19,13 @@
   }
 
   .confirm__wrapper {
-    padding: 0;
     padding-bottom: var(--spacing-s);
 
-    .confirm__label {
-      font-weight: var(--font-weight-bold);
-    }
-
     .confirm__value {
-      font-size: var(--font-base) !important;
-      opacity: 0.8;
+      width: 100%;
+    }
+    .claim-preview__wrapper--channel {
+      width: 100% !important;
     }
   }
 }
