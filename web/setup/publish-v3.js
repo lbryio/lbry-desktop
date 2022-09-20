@@ -9,7 +9,6 @@ import { generateError } from './publish-error';
 import { LBRY_WEB_PUBLISH_API_V3 } from 'config';
 
 const RESUMABLE_ENDPOINT = LBRY_WEB_PUBLISH_API_V3;
-const RESUMABLE_ENDPOINT_METHOD = 'stream_create';
 const UPLOAD_CHUNK_SIZE_BYTE = 25 * 1024 * 1024;
 
 const SDK_STATUS_RETRY_COUNT = 12;
@@ -121,10 +120,11 @@ export function makeResumableUploadRequest(
     }
 
     const { uploadUrl, guid, isMarkdown, sdkRan, ...sdkParams } = params;
+    const isEdit = Boolean(sdkParams.claim_id);
 
     const jsonPayload = JSON.stringify({
       jsonrpc: '2.0',
-      method: RESUMABLE_ENDPOINT_METHOD,
+      method: isEdit ? 'stream_update' : 'stream_create',
       params: sdkParams,
       id: new Date().getTime(),
     });
