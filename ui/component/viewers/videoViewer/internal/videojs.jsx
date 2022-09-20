@@ -545,7 +545,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       }
 
       // allow tap to unmute if no perms on iOS
-      if (autoplay && !embedded) {
+      if (autoplay) {
         const promise = vjsPlayer.play();
 
         window.player.userActive(true);
