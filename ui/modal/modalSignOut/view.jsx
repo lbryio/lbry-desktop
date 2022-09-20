@@ -1,5 +1,7 @@
 // @flow
 import React from 'react';
+
+import './style.scss';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import Spinner from 'component/spinner';
@@ -25,7 +27,7 @@ export default function ModalSignOut(props: Props) {
   }
 
   return (
-    <Modal isOpen type="custom">
+    <Modal isOpen type="custom" className="modal-sign-out">
       <Card
         title={__('Sign Out')}
         body={
