@@ -1,3 +1,15 @@
+@import '~ui/scss/init/breakpoints';
+
+.clh__wrapper {
+  // These changes should be done in the main file, but no time to test
+  // the collection's claim list header (which shares the same selector),
+  // hence the wrapper.
+
+  .claim-search__menus {
+    padding: 0;
+  }
+}
+
 .clh-tag-search {
   display: flex;
   margin-left: var(--spacing-s);

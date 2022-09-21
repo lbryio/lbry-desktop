@@ -254,7 +254,7 @@ function ClaimListHeader(props: Props) {
 
   return (
     <>
-      <div className="claim-search__wrapper">
+      <div className="claim-search__wrapper clh__wrapper">
         <div className="claim-search__top">
           {!hideFilters && (
             <div className="claim-search__menu-group">
@@ -350,7 +350,7 @@ function ClaimListHeader(props: Props) {
         </div>
         {expanded && (
           <>
-            <div className={classnames(`card claim-search__menus`)}>
+            <div className={classnames('claim-search__menus')}>
               {/* FRESHNESS FIELD */}
               {orderParam === CS.ORDER_BY_TOP && (
                 <div className="claim-search__input-container">
@@ -535,7 +535,7 @@ function ClaimListHeader(props: Props) {
 
             {/* DURATIONS FIELD */}
             {showDuration && (
-              <div className={classnames(`card claim-search__menus`)}>
+              <div className={classnames('claim-search__menus')}>
                 <div className={'claim-search__input-container'}>
                   <FormField
                     className={classnames('claim-search__dropdown', {
