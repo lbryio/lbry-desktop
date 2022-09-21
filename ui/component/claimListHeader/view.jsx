@@ -515,7 +515,7 @@ function ClaimListHeader(props: Props) {
 
             {/* DURATIONS FIELD */}
             {showDuration && (
-              <div className={classnames('claim-search__menus')}>
+              <div className={classnames('claim-search__menus duration')}>
                 <div className={'claim-search__input-container'}>
                   <FormField
                     className={classnames('claim-search__dropdown', {

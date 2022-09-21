@@ -1,5 +1,7 @@
 @import '~ui/scss/init/breakpoints';
 
+$OPTIONS_MIN_WIDTH: 250px;
+
 .additional-filters {
   // Additional 'fieldset' nesting is only needed to due to our current css
   // situation, and to avoid using !important. Can remove after we flatten things.
@@ -14,7 +16,7 @@
       margin-top: 1px;
 
       @media (min-width: $breakpoint-small) {
-        width: 50%;
+        width: $OPTIONS_MIN_WIDTH;
       }
 
       label {
