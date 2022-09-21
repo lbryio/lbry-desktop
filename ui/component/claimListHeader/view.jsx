@@ -1,5 +1,6 @@
 // @flow
 import './style.scss';
+import AdditionalFilters from './internal/additionalFilters';
 import * as CS from 'constants/claim_search';
 import * as ICONS from 'constants/icons';
 import * as SETTINGS from 'constants/settings';
@@ -131,27 +132,6 @@ function ClaimListHeader(props: Props) {
     'orderUser',
     CS.ORDER_BY_TRENDING
   );
-
-  function getHideRepostsElem(filterCtx, contentType) {
-    if (filterCtx?.repost) {
-      return (
-        <div className={classnames(`card claim-search__menus`)}>
-          <FormField
-            label={__('Hide reposts')}
-            name="hide_reposts"
-            type="checkbox"
-            checked={filterCtx.repost.hideReposts}
-            disabled={contentType === CS.CLAIM_REPOST}
-            onChange={() => {
-              filterCtx.repost.setHideReposts((prev) => !prev);
-            }}
-          />
-        </div>
-      );
-    } else {
-      return null;
-    }
-  }
 
   React.useEffect(() => {
     if (hideAdvancedFilter) {
@@ -588,7 +568,7 @@ function ClaimListHeader(props: Props) {
               </div>
             )}
 
-            {getHideRepostsElem(filterCtx, contentTypeParam)}
+            <AdditionalFilters filterCtx={filterCtx} contentType={contentTypeParam} />
           </>
         )}
       </div>
