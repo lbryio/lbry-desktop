@@ -1,3 +1,17 @@
+@import '~ui/scss/init/breakpoints';
+
+$OPTIONS_MIN_WIDTH: 250px;
+
+.clh__wrapper {
+  // These changes should be done in the main file, but no time to test
+  // the collection's claim list header (which shares the same selector),
+  // hence the wrapper.
+
+  .claim-search__menus {
+    padding: 0;
+  }
+}
+
 .clh-tag-search {
   display: flex;
   margin-left: var(--spacing-s);
@@ -33,4 +47,26 @@
 
 .clh-tag-search__input--hidden {
   display: none;
+}
+
+.claim-search__menus.duration {
+  // Customizations to make "Duration" the same length as "Additional Filters"
+  // for the typical case. Localization could still extend the width.
+
+  .claim-search__input-container {
+    @media (min-width: $breakpoint-small) {
+      min-width: $OPTIONS_MIN_WIDTH;
+    }
+
+    padding-right: 0;
+  }
+
+  .claim-search__input-container:nth-child(2) {
+    // In Mobile, this padding would also automatically serve as an indent.
+    padding-left: var(--spacing-s);
+  }
+
+  .claim-search__dropdown {
+    padding-right: 0;
+  }
 }

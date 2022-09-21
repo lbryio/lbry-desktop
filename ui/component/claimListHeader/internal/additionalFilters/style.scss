@@ -1,0 +1,39 @@
+@import '~ui/scss/init/breakpoints';
+
+$OPTIONS_MIN_WIDTH: 250px;
+
+.additional-filters {
+  // Additional 'fieldset' nesting is only needed to due to our current css
+  // situation, and to avoid using !important. Can remove after we flatten things.
+  fieldset {
+    .checkbox {
+      height: var(--height-input);
+      justify-content: center;
+      padding: 0 var(--spacing-s);
+      background-color: var(--color-input-bg);
+      border-radius: var(--border-radius);
+
+      margin-top: 1px;
+
+      @media (min-width: $breakpoint-small) {
+        width: $OPTIONS_MIN_WIDTH;
+      }
+
+      label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        padding-top: 2px; // todo: remove when checkbox-centering problem is solved.
+      }
+
+      label::before {
+        top: 0; // override the "-1" default, which was clipping the top edge.
+      }
+
+      label::after {
+        top: 7px; // compensation due to the override above.
+      }
+    }
+  }
+}

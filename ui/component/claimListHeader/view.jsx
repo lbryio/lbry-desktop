@@ -1,5 +1,6 @@
 // @flow
 import './style.scss';
+import AdditionalFilters from './internal/additionalFilters';
 import * as CS from 'constants/claim_search';
 import * as ICONS from 'constants/icons';
 import * as SETTINGS from 'constants/settings';
@@ -132,27 +133,6 @@ function ClaimListHeader(props: Props) {
     CS.ORDER_BY_TRENDING
   );
 
-  function getHideRepostsElem(filterCtx, contentType) {
-    if (filterCtx?.repost) {
-      return (
-        <div className={classnames(`card claim-search__menus`)}>
-          <FormField
-            label={__('Hide reposts')}
-            name="hide_reposts"
-            type="checkbox"
-            checked={filterCtx.repost.hideReposts}
-            disabled={contentType === CS.CLAIM_REPOST}
-            onChange={() => {
-              filterCtx.repost.setHideReposts((prev) => !prev);
-            }}
-          />
-        </div>
-      );
-    } else {
-      return null;
-    }
-  }
-
   React.useEffect(() => {
     if (hideAdvancedFilter) {
       setExpanded(false);
@@ -254,7 +234,7 @@ function ClaimListHeader(props: Props) {
 
   return (
     <>
-      <div className="claim-search__wrapper">
+      <div className="claim-search__wrapper clh__wrapper">
         <div className="claim-search__top">
           {!hideFilters && (
             <div className="claim-search__menu-group">
@@ -350,7 +330,7 @@ function ClaimListHeader(props: Props) {
         </div>
         {expanded && (
           <>
-            <div className={classnames(`card claim-search__menus`)}>
+            <div className={classnames('claim-search__menus')}>
               {/* FRESHNESS FIELD */}
               {orderParam === CS.ORDER_BY_TOP && (
                 <div className="claim-search__input-container">
@@ -535,7 +515,7 @@ function ClaimListHeader(props: Props) {
 
             {/* DURATIONS FIELD */}
             {showDuration && (
-              <div className={classnames(`card claim-search__menus`)}>
+              <div className={classnames('claim-search__menus duration')}>
                 <div className={'claim-search__input-container'}>
                   <FormField
                     className={classnames('claim-search__dropdown', {
@@ -588,7 +568,7 @@ function ClaimListHeader(props: Props) {
               </div>
             )}
 
-            {getHideRepostsElem(filterCtx, contentTypeParam)}
+            <AdditionalFilters filterCtx={filterCtx} contentType={contentTypeParam} />
           </>
         )}
       </div>
