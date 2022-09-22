@@ -5,7 +5,7 @@ const removeMd = require('remove-markdown');
 const { generateContentUrl } = require('../fetchStreamUrl');
 const { parseURI } = require('../lbryURI');
 const { OG_IMAGE_URL, SITE_NAME, URL } = require('../../../config.js');
-const { generateEmbedUrl, getThumbnailCardCdnUrl, escapeHtmlProperty } = require('../../../ui/util/web');
+const { generateEmbedUrlEncoded, getThumbnailCardCdnUrl, escapeHtmlProperty } = require('../../../ui/util/web');
 
 // ****************************************************************************
 // Utils
@@ -114,7 +114,7 @@ async function buildGoogleVideoMetadata(uri, claim) {
     duration: mediaDuration ? moment.duration(mediaDuration * 1000).toISOString() : undefined,
     url: lbryToOdyseeUrl(claim),
     contentUrl: claimStreamUrl,
-    embedUrl: generateEmbedUrl(claim.name, claim.claim_id),
+    embedUrl: generateEmbedUrlEncoded(claim.canonical_url),
     // --- Misc ---
     author: Generate.author(claim),
     thumbnail: Generate.thumbnail(claimThumbnail),

@@ -19,10 +19,10 @@ type Props = {
 
 export default function EmbedTextArea(props: Props) {
   const { doToast, snackMessage, label, claim, includeStartTime, startTime, referralCode, newestType } = props;
-  const { claim_id: claimId, name } = claim;
+  const { canonical_url: canonicalUri } = claim;
   const input = useRef();
 
-  const streamUrl = generateEmbedUrl(name, claimId, includeStartTime && startTime, referralCode, newestType);
+  const streamUrl = generateEmbedUrl(canonicalUri, includeStartTime && startTime, referralCode, newestType);
   const { html: embedText } = generateEmbedIframeData(streamUrl);
 
   function copyToClipboard() {

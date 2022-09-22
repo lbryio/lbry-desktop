@@ -11,7 +11,7 @@ const {
   URL,
 } = require('../../config.js');
 const {
-  generateEmbedUrl,
+  generateEmbedUrlEncoded,
   getParameterByName,
   getThumbnailCardCdnUrl,
   escapeHtmlProperty,
@@ -252,7 +252,7 @@ async function buildClaimOgMetadata(uri, claim, overrideOptions = {}, referrerQu
   )}&format=xml${referrerQuery ? `&r=${encodeURIComponent(referrerQuery)}` : ''}" title="${title}" />`;
 
   if ((mediaType && (mediaType.startsWith('video/') || mediaType.startsWith('audio/'))) || liveStream) {
-    const videoUrl = generateEmbedUrl(claim.name, claim.claim_id);
+    const videoUrl = generateEmbedUrlEncoded(claim.canonical_url);
     head += `<meta property="og:video" content="${videoUrl}" />`;
     head += `<meta property="og:video:secure_url" content="${videoUrl}" />`;
     // type text/html since we use embeds
