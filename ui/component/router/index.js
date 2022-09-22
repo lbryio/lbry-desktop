@@ -5,7 +5,7 @@ import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectHasNavigated, selectScrollStartingPosition } from 'redux/selectors/app';
 import { selectClientSetting, selectHomepageData, selectWildWestDisabled } from 'redux/selectors/settings';
 import Router from './view';
-import { selectTitleForUri, selectClaimUriForId } from 'redux/selectors/claims';
+import { selectTitleForUri, selectHasClaimForUri, selectClaimUriForId } from 'redux/selectors/claims';
 import { doSetHasNavigated, doSetActiveChannel } from 'redux/actions/app';
 import { doUserSetReferrer } from 'redux/actions/user';
 import { selectHasUnclaimedRefereeReward } from 'redux/selectors/rewards';
@@ -25,6 +25,7 @@ const select = (state, props) => {
 
   return {
     uri,
+    hasClaim: selectHasClaimForUri(state, uri),
     title: selectTitleForUri(state, uri),
     currentScroll: selectScrollStartingPosition(state),
     isAuthenticated: selectUserVerifiedEmail(state),

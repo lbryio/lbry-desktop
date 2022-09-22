@@ -146,6 +146,7 @@ type Props = {
     listen: (any) => () => void,
   },
   uri: string,
+  hasClaim: ?boolean,
   title: string,
   hasNavigated: boolean,
   setHasNavigated: () => void,
@@ -189,6 +190,7 @@ function AppRouter(props: Props) {
     isAuthenticated,
     history,
     uri,
+    hasClaim,
     title,
     hasNavigated,
     setHasNavigated,
@@ -237,14 +239,14 @@ function AppRouter(props: Props) {
   }, [listen, hasNavigated, setHasNavigated]);
 
   useEffect(() => {
-    if (!hasNavigated && hasUnclaimedRefereeReward && isAuthenticated === false) {
+    if (!hasNavigated && hasUnclaimedRefereeReward && isAuthenticated === false && hasClaim) {
       const valid = isURIValid(uri);
       if (valid) {
         const { path } = parseURI(uri);
         if (typeof path === 'string') doUserSetReferrer(path);
       }
     }
-  }, [hasNavigated, uri, hasUnclaimedRefereeReward, doUserSetReferrer, isAuthenticated]);
+  }, [hasNavigated, uri, hasUnclaimedRefereeReward, doUserSetReferrer, isAuthenticated, hasClaim]);
 
   useEffect(() => {
     const getDefaultTitle = (pathname: string) => {
