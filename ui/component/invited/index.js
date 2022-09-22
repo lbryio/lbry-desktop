@@ -23,7 +23,7 @@ const select = (state, props) => {
 
 const perform = (dispatch) => ({
   claimReward: () => dispatch(doClaimRewardType(REWARDS.TYPE_REFEREE)),
-  setReferrer: (referrer) => dispatch(doUserSetReferrer(referrer)),
+  doUserSetReferrer: (referrerUri) => dispatch(doUserSetReferrer(referrerUri)),
   channelSubscribe: (uri) => dispatch(doChannelSubscribe(uri)),
 });
 

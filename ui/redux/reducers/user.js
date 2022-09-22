@@ -30,6 +30,7 @@ const defaultState: UserState = {
   youtubeChannelImportErrorMessage: '',
   referrerSetIsPending: false,
   referrerSetError: '',
+  referrerSet: undefined,
   odyseeMembershipName: undefined,
   odyseeMembershipsPerClaimIds: undefined,
   locale: undefined,
@@ -302,19 +303,20 @@ reducers[ACTIONS.USER_EMAIL_VERIFY_RETRY_FAILURE] = (state) =>
     resendingVerificationEmail: false,
   });
 
-reducers[ACTIONS.USER_SET_REFERRER_STARTED] = (state) =>
+reducers[ACTIONS.USER_SET_REFERRER_START] = (state) =>
   Object.assign({}, state, {
     referrerSetIsPending: true,
     referrerSetError: defaultState.referrerSetError,
   });
 
-reducers[ACTIONS.USER_SET_REFERRER_SUCCESS] = (state) =>
+reducers[ACTIONS.USER_SET_REFERRER_SUCCESS] = (state, action) =>
   Object.assign({}, state, {
     referrerSetIsPending: false,
     referrerSetError: defaultState.referrerSetError,
+    referrerSet: action.data,
   });
 
-reducers[ACTIONS.USER_SET_REFERRER_FAILURE] = (state, action) =>
+reducers[ACTIONS.USER_SET_REFERRER_FAIL] = (state, action) =>
   Object.assign({}, state, {
     referrerSetIsPending: false,
     referrerSetError: action.data.error.message,

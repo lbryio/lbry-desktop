@@ -4,14 +4,14 @@ import { selectSetReferrerError, selectSetReferrerPending } from 'redux/selector
 import { doUserSetReferrer, doUserSetReferrerReset } from 'redux/actions/user';
 import ModalSetReferrer from './view';
 
-const select = state => ({
+const select = (state) => ({
   referrerSetPending: selectSetReferrerPending(state),
   referrerSetError: selectSetReferrerError(state),
 });
 
-const perform = dispatch => ({
+const perform = (dispatch) => ({
   closeModal: () => dispatch(doHideModal()),
-  setReferrer: (referrer, doClaim) => dispatch(doUserSetReferrer(referrer, doClaim)),
+  doUserSetReferrer: (referrerUri) => dispatch(doUserSetReferrer(referrerUri)),
   resetReferrerError: () => dispatch(doUserSetReferrerReset()),
 });
 

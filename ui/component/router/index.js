@@ -40,7 +40,7 @@ const select = (state, props) => {
 
 const perform = {
   setHasNavigated: doSetHasNavigated,
-  setReferrer: doUserSetReferrer,
+  doUserSetReferrer,
   doSetActiveChannel,
 };
 

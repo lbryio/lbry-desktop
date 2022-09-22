@@ -37,7 +37,7 @@ declare type User = {
   location: ?string,
 };
 
-declare type UserState ={
+declare type UserState = {
   authenticationIsPending: boolean,
   userIsPending: boolean,
   emailNewIsPending: boolean,
@@ -64,6 +64,7 @@ declare type UserState ={
   youtubeChannelImportErrorMessage: string,
   referrerSetIsPending: boolean,
   referrerSetError: string,
+  referrerSet: ?string,
   odyseeMembershipName: ?string, // undefined: not fetched, '': no membership
   odyseeMembershipsPerClaimIds: ?{ [string]: string },
   locale: ?LocaleInfo,

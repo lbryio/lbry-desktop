@@ -57,7 +57,7 @@ const perform = {
   fetchLanguage: doFetchLanguage,
   signIn: doSignIn,
   syncLoop: doSyncLoop,
-  setReferrer: doUserSetReferrer,
+  doUserSetReferrer,
   setIncognito: doSetIncognito,
   fetchModBlockedList: doFetchModBlockedList,
   fetchModAmIList: doFetchCommentModAmIList,

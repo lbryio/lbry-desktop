@@ -27,7 +27,7 @@ type Props = {
   doCommentSocketConnect: (uri: string, channelName: string, claimId: string) => void,
   doCommentSocketDisconnect: (claimId: string, channelName: string) => void,
   doFetchChannelLiveStatus: (string) => void,
-  doUserSetReferrer: (string) => void,
+  doUserSetReferrer: (referrerUri: string) => void,
   theaterMode?: Boolean,
 };
 

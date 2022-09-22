@@ -1,7 +1,7 @@
 import analytics from 'analytics';
 import Lbry from 'lbry';
 import { selectClaimForUri } from 'redux/selectors/claims';
-import { doFetchChannelListMine } from 'redux/actions/claims';
+import { doFetchChannelListMine, doResolveUri } from 'redux/actions/claims';
 import { isURIValid, normalizeURI } from 'util/lbryURI';
 import { batchActions } from 'util/batch-actions';
 import { getStripeEnvironment } from 'util/stripe';
@@ -9,7 +9,14 @@ import { ODYSEE_CHANNEL } from 'constants/channels';
 import * as ACTIONS from 'constants/action_types';
 import { doFetchGeoBlockedList } from 'redux/actions/blocked';
 import { doClaimRewardType, doRewardList } from 'redux/actions/rewards';
-import { selectEmailToVerify, selectPhoneToVerify, selectUserCountryCode, selectUser } from 'redux/selectors/user';
+import {
+  selectEmailToVerify,
+  selectPhoneToVerify,
+  selectUserCountryCode,
+  selectUser,
+  selectSetReferrerPending,
+  selectReferrer,
+} from 'redux/selectors/user';
 import { selectIsRewardApproved } from 'redux/selectors/rewards';
 import { doToast } from 'redux/actions/notifications';
 import rewards from 'rewards';
@@ -17,6 +24,7 @@ import { Lbryio } from 'lbryinc';
 import { DOMAIN, LOCALE_API } from 'config';
 import { getDefaultLanguage } from 'util/default-languages';
 import { LocalStorage, LS } from 'util/storage';
+import { getChannelFromClaim } from 'util/claim';
 
 export let sessionStorageAvailable = false;
 const CHECK_INTERVAL = 200;
@@ -731,82 +739,65 @@ export function doUserSetReferrerWithUri(uri) {
           } else {
             referrerCode = claim.permanent_url.replace('lbry://', '');
           }
-          const isRewardApproved = selectIsRewardApproved(state);
-          dispatch(doUserSetReferrer(referrerCode, isRewardApproved));
+          dispatch(doUserSetReferrer(referrerCode));
         }
       } catch (error) {
         dispatch({
-          type: ACTIONS.USER_SET_REFERRER_FAILURE,
+          type: ACTIONS.USER_SET_REFERRER_FAIL,
           data: { error },
         });
       }
     } else {
       referrerCode = claim.permanent_url.replace('lbry://', '');
+      dispatch(doUserSetReferrer(referrerCode));
+    }
+  };
+}
+
+export const doUserSetReferrer = (referrerUri) => async (dispatch, getState) => {
+  let state = getState();
+  const hasSetReferrerPending = selectSetReferrerPending(state);
+  const hasReferrer = Boolean(selectReferrer(state));
+
+  if (hasSetReferrerPending || hasReferrer) return;
+
+  dispatch({ type: ACTIONS.USER_SET_REFERRER_START });
+
+  let claim;
+  let referrerCode = referrerUri;
+
+  const isValid = isURIValid(referrerUri);
+
+  if (isValid) {
+    const uri = normalizeURI(referrerUri);
+    claim = selectClaimForUri(state, uri);
+
+    if (!claim) {
+      await dispatch(doResolveUri(uri))
+        .then(() => {
+          state = getState();
+          claim = selectClaimForUri(state, uri);
+        })
+        .catch((error) => dispatch({ type: ACTIONS.USER_SET_REFERRER_FAIL, data: { error } }));
+    }
+
+    referrerCode = getChannelFromClaim(claim).permanent_url.replace('lbry://', '');
+  }
+
+  return await Lbryio.call('user', 'referral', { referrer: referrerCode }, 'post')
+    .then((response) => {
+      dispatch({ type: ACTIONS.USER_SET_REFERRER_SUCCESS, data: referrerCode });
+
       const isRewardApproved = selectIsRewardApproved(state);
-      dispatch(doUserSetReferrer(referrerCode, isRewardApproved));
-    }
-  };
-}
 
-export function doUserSetReferrer(referrer, shouldClaim) {
-  return async (dispatch, getState) => {
-    dispatch({
-      type: ACTIONS.USER_SET_REFERRER_STARTED,
-    });
-
-    let claim, referrerCode;
-    const isValid = isURIValid(referrer);
-
-    if (isValid) {
-      const state = getState();
-      const uri = normalizeURI(referrer);
-      claim = selectClaimForUri(state, uri);
-
-      if (!claim) {
-        try {
-          const response = await Lbry.resolve({ urls: [uri] });
-          if (response && response[uri] && !response[uri].error) claim = response && response[uri];
-          if (claim) {
-            if (claim.signing_channel) {
-              referrerCode = claim.signing_channel.permanent_url.replace('lbry://', '');
-            } else {
-              referrerCode = claim.permanent_url.replace('lbry://', '');
-            }
-          }
-        } catch (error) {
-          dispatch({
-            type: ACTIONS.USER_SET_REFERRER_FAILURE,
-            data: { error },
-          });
-        }
-      } else {
-        referrerCode = claim.permanent_url.replace('lbry://', '');
-      }
-    }
-
-    if (!referrerCode) {
-      referrerCode = referrer;
-    }
-
-    try {
-      await Lbryio.call('user', 'referral', { referrer: referrerCode }, 'post');
-      dispatch({
-        type: ACTIONS.USER_SET_REFERRER_SUCCESS,
-      });
-      if (shouldClaim) {
+      if (isRewardApproved) {
         dispatch(doClaimRewardType(rewards.TYPE_REFEREE));
-        dispatch(doUserFetch());
-      } else {
-        dispatch(doUserFetch());
       }
-    } catch (error) {
-      dispatch({
-        type: ACTIONS.USER_SET_REFERRER_FAILURE,
-        data: { error },
-      });
-    }
-  };
-}
+
+      dispatch(doUserFetch());
+    })
+    .catch((error) => dispatch({ type: ACTIONS.USER_SET_REFERRER_FAIL, data: { error } }));
+};
 
 export function doUserSetCountry(country) {
   return (dispatch, getState) => {
