@@ -69,7 +69,10 @@ function DiscoverPage(props: Props) {
   const channelIds = dynamicRouteProps?.options?.channelIds || undefined;
   const excludedChannelIds = dynamicRouteProps?.options?.excludedChannelIds || undefined;
 
-  const filters = { contentTypes: isCategory && !isWildWest ? CATEGORY_CONTENT_TYPES_FILTER : CS.CONTENT_TYPES };
+  const claimSearchFilters = {
+    contentTypes: isCategory && !isWildWest ? CATEGORY_CONTENT_TYPES_FILTER : CS.CONTENT_TYPES,
+    liftUpTagSearch: true,
+  };
 
   // **************************************************************************
   // **************************************************************************
@@ -199,7 +202,7 @@ function DiscoverPage(props: Props) {
       fullWidthPage={tileLayout}
       className={classnames('main__discover', { 'hide-ribbon': hideRepostRibbon })}
     >
-      <ClaimSearchFilterContext.Provider value={filters}>
+      <ClaimSearchFilterContext.Provider value={claimSearchFilters}>
         <ClaimListDiscover
           pins={getPins(dynamicRouteProps)}
           hideFilters={isWildWest ? true : undefined}
