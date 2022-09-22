@@ -32,7 +32,7 @@ const select = (state, props) => {
     const { claimName, claimId } = match.params;
 
     uri = claimName
-      ? claimName.includes(':')
+      ? claimName.includes(':') && claimId
         ? normalizeURI(claimName + '/' + claimId)
         : buildURI({ claimName, claimId })
       : '';
