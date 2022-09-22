@@ -15,7 +15,7 @@ import {
   selectOthersReacts,
   selectMyReacts,
   selectCommentIdsForUri,
-  selectSettingsByChannelId,
+  selectCommentsEnabledSettingForChannelId,
   selectPinnedCommentsForUri,
   selectCommentForCommentId,
   selectCommentAncestorsForId,
@@ -31,6 +31,7 @@ const select = (state, props) => {
   const { uri, threadCommentId, linkedCommentId } = props;
 
   const claim = selectClaimForUri(state, uri);
+  const channelId = getChannelIdFromClaim(claim);
   const activeChannelClaim = selectActiveChannelClaim(state);
   const threadComment = selectCommentForCommentId(state, threadCommentId);
 
@@ -42,13 +43,12 @@ const select = (state, props) => {
     topLevelTotalPages: makeSelectTopLevelTotalPagesForUri(uri)(state),
     totalComments: selectTotalCommentsCountForUri(state, uri),
     claimId: claim && claim.claim_id,
-    channelId: getChannelIdFromClaim(claim),
     claimIsMine: selectClaimIsMine(state, claim),
     isFetchingComments: selectIsFetchingComments(state),
     isFetchingTopLevelComments: selectIsFetchingTopLevelComments(state),
     isFetchingReacts: selectIsFetchingReacts(state),
     fetchingChannels: selectFetchingMyChannels(state),
-    settingsByChannelId: selectSettingsByChannelId(state),
+    commentsEnabledSetting: selectCommentsEnabledSettingForChannelId(state, channelId),
     myReactsByCommentId: selectMyReacts(state),
     othersReactsById: selectOthersReacts(state),
     activeChannelId: activeChannelClaim && activeChannelClaim.claim_id,

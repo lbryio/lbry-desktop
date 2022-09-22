@@ -18,7 +18,11 @@ import {
 import { doSendTip, doSendCashTip } from 'redux/actions/wallet';
 import { doToast } from 'redux/actions/notifications';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
-import { selectMyCommentedChannelIdsForId, selectSettingsByChannelId } from 'redux/selectors/comments';
+import {
+  selectMyCommentedChannelIdsForId,
+  selectSettingsByChannelId,
+  selectCommentsDisabledSettingForChannelId,
+} from 'redux/selectors/comments';
 import { getChannelIdFromClaim } from 'util/claim';
 import { doOpenModal } from 'redux/actions/app';
 import { selectPreferredCurrency } from 'redux/selectors/settings';
@@ -55,6 +59,7 @@ const select = (state, props) => {
     myChannelClaimIds: selectMyChannelClaimIds(state),
     myCommentedChannelIds: selectMyCommentedChannelIdsForId(state, claim?.claim_id),
     canReceiveFiatTips: selectCanReceiveFiatTipsForUri(state, uri),
+    commentSettingDisabled: selectCommentsDisabledSettingForChannelId(state, channelClaimId),
   };
 };
 

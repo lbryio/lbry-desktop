@@ -40,7 +40,6 @@ type Props = {
   topLevelTotalPages: number,
   uri: string,
   claimId?: string,
-  channelId?: string,
   claimIsMine: boolean,
   isFetchingComments: boolean,
   isFetchingTopLevelComments: boolean,
@@ -51,7 +50,7 @@ type Props = {
   myReactsByCommentId: ?{ [string]: Array<string> }, // "CommentId:MyChannelId" -> reaction array (note the ID concatenation)
   othersReactsById: ?{ [string]: { [REACTION_TYPES.LIKE | REACTION_TYPES.DISLIKE]: number } },
   activeChannelId: ?string,
-  settingsByChannelId: { [channelId: string]: PerChannelSettings },
+  commentsEnabledSetting: ?boolean,
   commentsAreExpanded?: boolean,
   threadCommentId: ?string,
   threadComment: ?Comment,
@@ -75,7 +74,6 @@ export default function CommentList(props: Props) {
     topLevelComments,
     topLevelTotalPages,
     claimId,
-    channelId,
     claimIsMine,
     isFetchingComments,
     isFetchingTopLevelComments,
@@ -86,7 +84,7 @@ export default function CommentList(props: Props) {
     myReactsByCommentId,
     othersReactsById,
     activeChannelId,
-    settingsByChannelId,
+    commentsEnabledSetting,
     commentsAreExpanded,
     threadCommentId,
     threadComment,
@@ -124,7 +122,6 @@ export default function CommentList(props: Props) {
   const [debouncedUri, setDebouncedUri] = React.useState();
 
   const totalFetchedComments = allCommentIds ? allCommentIds.length : 0;
-  const channelSettings = channelId ? settingsByChannelId[channelId] : undefined;
   const moreBelow = page < topLevelTotalPages;
   const title = getCommentsListTitle(totalComments);
   const threadDepthLevel = isMobile ? 3 : 10;
@@ -403,11 +400,9 @@ export default function CommentList(props: Props) {
             </span>
           )}
 
-          {channelSettings &&
-            channelSettings.comments_enabled &&
-            !isFetchingComments &&
-            !totalComments &&
-            !threadCommentId && <Empty padded text={__('That was pretty deep. What do you think?')} />}
+          {commentsEnabledSetting && !isFetchingComments && !totalComments && !threadCommentId && (
+            <Empty padded text={__('That was pretty deep. What do you think?')} />
+          )}
 
           <ul
             ref={commentListRef}

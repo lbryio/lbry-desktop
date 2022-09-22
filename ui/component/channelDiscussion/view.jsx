@@ -9,19 +9,14 @@ type Props = {
   uri: string,
   linkedCommentId?: string,
   threadCommentId?: string,
-  commentsDisabled: boolean,
-  commentSettingDisabled?: boolean,
+  commentSettingDisabled: ?boolean,
 };
 
 function ChannelDiscussion(props: Props) {
-  const { uri, linkedCommentId, threadCommentId, commentsDisabled, commentSettingDisabled } = props;
-
-  if (commentsDisabled) {
-    return <Empty text={__('The creator of this content has disabled comments.')} />;
-  }
+  const { uri, linkedCommentId, threadCommentId, commentSettingDisabled } = props;
 
   if (commentSettingDisabled) {
-    return <Empty text={__('This channel has disabled comments on their page.')} />;
+    return <Empty text={__('The creator of this content has disabled comments.')} />;
   }
 
   return (

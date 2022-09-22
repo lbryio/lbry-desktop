@@ -29,6 +29,7 @@ type Props = {
   isSubscribed: boolean,
   uri: string,
   claim: StreamClaim,
+  channelClaimId: ?string,
   location: UrlLocation,
   blackListedOutpointMap: { [string]: number },
   filteredOutpointMap: { [string]: number },
@@ -45,6 +46,8 @@ type Props = {
   latestContentPath?: boolean,
   liveContentPath?: boolean,
   latestClaimUrl: ?string,
+  creatorSettings: { [string]: PerChannelSettings },
+  doFetchCreatorSettings: (channelId: string) => Promise<any>,
   fetchLatestClaimForChannel: (uri: string) => void,
   fetchChannelLiveStatus: (channelId: string) => void,
   doResolveUri: (uri: string, returnCached?: boolean, resolveReposts?: boolean, options?: any) => void,
@@ -58,6 +61,7 @@ export default function ShowPage(props: Props) {
     isResolvingUri,
     uri,
     claim,
+    channelClaimId,
     blackListedOutpointMap,
     filteredOutpointMap,
     location,
@@ -75,6 +79,8 @@ export default function ShowPage(props: Props) {
     latestContentPath,
     liveContentPath,
     latestClaimUrl,
+    creatorSettings,
+    doFetchCreatorSettings,
     fetchLatestClaimForChannel,
     fetchChannelLiveStatus,
     doResolveUri,
@@ -185,6 +191,12 @@ export default function ShowPage(props: Props) {
     }
   }, [shouldResolveUri, doResolveUri, uri, isMine, isAuthenticated]);
 
+  React.useEffect(() => {
+    if (creatorSettings === undefined && channelClaimId) {
+      doFetchCreatorSettings(channelClaimId);
+    }
+  }, [channelClaimId, creatorSettings, doFetchCreatorSettings]);
+
   // Wait for latest claim fetch
   if (isNewestPath && latestClaimUrl === undefined) {
     return (
@@ -235,7 +247,8 @@ export default function ShowPage(props: Props) {
           shouldResolveUri || // covers the initial mount case where we haven't run doResolveUri, so 'isResolvingUri' is not true yet.
           isResolvingUri ||
           isResolvingCollection || // added for collection
-          (isCollection && !urlForCollectionZero)) && ( // added for collection - make sure we accept urls = []
+          (isCollection && !urlForCollectionZero) || // added for collection - make sure we accept urls = []
+          creatorSettings === undefined) && (
           <div className="main--empty">
             <Spinner />
           </div>

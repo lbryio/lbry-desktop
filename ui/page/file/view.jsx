@@ -30,13 +30,11 @@ export const PRIMARY_IMAGE_WRAPPER_CLASS = 'file-render__img-container';
 
 type Props = {
   audioVideoDuration: ?number,
-  channelId?: string,
   claimId: string,
   claimIsMine: boolean,
   claimWasPurchased: boolean,
   clearPosition: (uri: string) => void,
   commentsListTitle: string,
-  contentCommentsDisabled: boolean,
   costInfo: ?{ includesData: boolean, cost: number },
   doCheckIfPurchasedClaimId: (claimId: string) => void,
   doClearPlayingUri: () => void,
@@ -60,7 +58,7 @@ type Props = {
   purchaseTag: number,
   renderMode: string,
   rentalTag: string,
-  settingsByChannelId: { [channelId: string]: PerChannelSettings },
+  commentSettingDisabled: ?boolean,
   threadCommentId?: string,
   uri: string,
   videoTheaterMode: boolean,
@@ -70,7 +68,6 @@ export default function FilePage(props: Props) {
   const {
     playingCollectionId,
     uri,
-    channelId,
     renderMode,
     fileInfo,
     obscureNsfw,
@@ -81,12 +78,10 @@ export default function FilePage(props: Props) {
     videoTheaterMode,
 
     claimIsMine,
-    contentCommentsDisabled,
     isLivestream,
     position,
     audioVideoDuration,
     commentsListTitle,
-    settingsByChannelId,
     claimWasPurchased,
     location,
     isUriPlaying,
@@ -98,6 +93,7 @@ export default function FilePage(props: Props) {
     doFileGet,
     doSetMainPlayerDimension,
     doCheckIfPurchasedClaimId,
+    commentSettingDisabled,
     purchaseTag,
     preorderTag,
     rentalTag,
@@ -122,8 +118,6 @@ export default function FilePage(props: Props) {
   const isMediumScreen = useIsMediumScreen() && !isMobile;
   const isLandscapeRotated = useIsMobileLandscape();
   const theaterMode = renderMode === 'video' || renderMode === 'audio' ? videoTheaterMode : false;
-  const channelSettings = channelId ? settingsByChannelId[channelId] : undefined;
-  const commentSettingDisabled = channelSettings && !channelSettings.comments_enabled;
   const cost = costInfo ? costInfo.cost : null;
   const hasFileInfo = fileInfo !== undefined;
   const isMarkdown = renderMode === RENDER_MODES.MARKDOWN;
@@ -290,18 +284,16 @@ export default function FilePage(props: Props) {
               {RENDER_MODES.FLOATING_MODES.includes(renderMode) && <FileTitleSection uri={uri} />}
 
               <React.Suspense fallback={null}>
-                {contentCommentsDisabled ? (
+                {commentSettingDisabled ? (
                   <Empty {...emptyMsgProps} text={__('The creator of this content has disabled comments.')} />
-                ) : commentSettingDisabled ? (
-                  <Empty {...emptyMsgProps} text={__('This channel has disabled comments on their page.')} />
                 ) : isMobile && !isLandscapeRotated ? (
-                  <>
+                  <React.Fragment>
                     <SwipeableDrawer type={DRAWERS.CHAT} title={commentsListTitle}>
                       <CommentsList {...commentsListProps} />
                     </SwipeableDrawer>
 
                     <DrawerExpandButton icon={ICONS.CHAT} label={commentsListTitle} type={DRAWERS.CHAT} />
-                  </>
+                  </React.Fragment>
                 ) : (
                   <CommentsList {...commentsListProps} notInDrawer />
                 )}
@@ -315,7 +307,7 @@ export default function FilePage(props: Props) {
 
       {!isMarkdown
         ? !theaterMode && <RightSideContent {...rightSideProps} />
-        : !contentCommentsDisabled && (
+        : !commentSettingDisabled && (
             <div className="file-page__post-comments">
               <React.Suspense fallback={null}>
                 <CommentsList {...commentsListProps} commentsAreExpanded notInDrawer />
