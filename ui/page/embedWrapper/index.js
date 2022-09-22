@@ -27,8 +27,7 @@ const select = (state, props) => {
   const { search } = state.router.location;
   const { match } = props || {};
 
-  let uri = props.uri;
-  let claimId;
+  let uri, claimId;
   if (match) {
     const { params } = match;
     const { claimName } = params;

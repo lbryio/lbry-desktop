@@ -563,7 +563,7 @@ function App(props: Props) {
         <React.Fragment>
           <AdBlockTester />
           <AdsSticky uri={uri} />
-          <Router uri={uri} embedLatestPath={embedLatestPath} />
+          <Router uri={uri} />
           <ModalRouter />
 
           <React.Suspense fallback={null}>{renderFiledrop && <FileDrop />}</React.Suspense>

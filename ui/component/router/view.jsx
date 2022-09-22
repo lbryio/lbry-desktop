@@ -157,7 +157,6 @@ type Props = {
   hideTitleNotificationCount: boolean,
   hasDefaultChannel: boolean,
   doSetActiveChannel: (claimId: ?string, override?: boolean) => void,
-  embedLatestPath: ?boolean,
 };
 
 type PrivateRouteProps = Props & {
@@ -201,7 +200,6 @@ function AppRouter(props: Props) {
     hideTitleNotificationCount,
     hasDefaultChannel,
     doSetActiveChannel,
-    embedLatestPath,
   } = props;
 
   const defaultChannelRef = React.useRef(hasDefaultChannel);
@@ -429,11 +427,7 @@ function AppRouter(props: Props) {
 
         <Route path={`/$/${PAGES.POPOUT}/:channelName/:streamName`} component={PopoutChatPage} />
 
-        <Route
-          path={`/$/${PAGES.EMBED}/:claimName`}
-          exact
-          component={embedLatestPath ? () => <EmbedWrapperPage uri={uri} /> : EmbedWrapperPage}
-        />
+        <Route path={`/$/${PAGES.EMBED}/:claimName`} exact component={EmbedWrapperPage} />
         <Route path={`/$/${PAGES.EMBED}/:claimName/:claimId`} exact component={EmbedWrapperPage} />
 
         {/* Below need to go at the end to make sure we don't match any of our pages first */}
