@@ -36,7 +36,7 @@ const select = (state, props) => {
   const urlParams = new URLSearchParams(search);
   const playingCollectionId = selectPlayingCollectionId(state);
   const claim = selectClaimForUri(state, uri);
-  const { duration } = claim.value ? claim.value.video || claim.value.audio : {};
+  const { duration } = claim.value ? claim.value?.video || claim.value?.audio : {};
   const channelId = getChannelIdFromClaim(claim);
 
   return {
