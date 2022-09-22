@@ -74,7 +74,7 @@ const select = (state, props) => {
     isResolvingUri: uri && selectIsUriResolving(state, uri),
     blackListedOutpoints: haveClaim && selectBlackListedOutpoints(state),
     isCurrentClaimLive: selectIsActiveLivestreamForUri(state, isNewestPath ? latestClaimUrl : canonicalUrl),
-    isLivestreamClaim: isStreamPlaceholderClaim(claim),
+    isLivestreamClaim: featureParam === PAGES.LIVE_NOW || isStreamPlaceholderClaim(claim),
     obscurePreview: selectShouldObscurePreviewForUri(state, uri),
     claimThumbnail: getThumbnailFromClaim(claim),
     activeLivestreamInitialized: selectActiveLivestreamInitialized(state),
