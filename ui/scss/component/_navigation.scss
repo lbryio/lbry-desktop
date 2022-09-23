@@ -529,6 +529,14 @@
 
   .navigation__subscription-title {
     max-width: 90%;
+    .channel-name {
+      margin-right: var(--spacing-m);
+      display: block;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 100%;
+    }
   }
 
   .claim-preview__title {
