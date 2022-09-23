@@ -20,7 +20,7 @@ import {
   selectActiveLivestreamInitialized,
   selectActiveLiveClaimForChannel,
 } from 'redux/selectors/livestream';
-import { getThumbnailFromClaim, isStreamPlaceholderClaim } from 'util/claim';
+import { getThumbnailFromClaim, isStreamPlaceholderClaim, getChannelFromClaim } from 'util/claim';
 
 const select = (state, props) => {
   const { search } = state.router.location;
@@ -42,9 +42,10 @@ const select = (state, props) => {
   const isNewestPath = featureParam === PAGES.LIVE_NOW || featureParam === PAGES.LATEST;
 
   const claim = selectClaimForUri(state, uri);
-  const { canonical_url: canonicalUrl, signing_channel: channelClaim, txid, nout } = claim || {};
-  if (isNewestPath) claimId = claim?.claim_id;
+  const { canonical_url: canonicalUrl, txid, nout } = claim || {};
+  if (!claimId) claimId = claim?.claim_id;
 
+  const channelClaim = getChannelFromClaim(claim);
   const { claim_id: channelClaimId, canonical_url: channelUri, txid: channelTxid, channelNout } = channelClaim || {};
   const haveClaim = Boolean(claim);
   const nullClaim = claim === null;
