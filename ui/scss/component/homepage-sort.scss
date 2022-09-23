@@ -13,6 +13,10 @@
   overflow-x: hidden;
   border-radius: var(--border-radius);
   outline: 1px solid var(--color-border);
+
+  &:last-of-type {
+    margin-right: 0;
+  }
 }
 
 .homepage-sort__bin--dashed {

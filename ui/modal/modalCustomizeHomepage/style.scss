@@ -1,6 +1,15 @@
+@import '~ui/scss/init/breakpoints';
+
+.modal-customize-homepage {
+  @media (max-width: $breakpoint-small) {
+    padding: 0;
+  }
+}
+
 .modal-customize-homepage__body {
   display: flex;
   flex-direction: column;
+  margin-top: var(--spacing-s);
 
   button {
     align-self: flex-end;
