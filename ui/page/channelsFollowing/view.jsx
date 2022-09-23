@@ -12,6 +12,7 @@ import Button from 'component/button';
 import Icon from 'component/common/icon';
 import { splitBySeparator } from 'util/lbryURI';
 import { getLivestreamUris } from 'util/livestream';
+import { tagSearchCsOptionsHook } from 'util/search';
 import ScheduledStreams from 'component/scheduledStreams';
 
 type Props = {
@@ -91,6 +92,7 @@ function ChannelsFollowingPage(props: Props) {
               />
             }
             hasSource
+            csOptionsHook={tagSearchCsOptionsHook}
           />
         </>
       )}

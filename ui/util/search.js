@@ -138,3 +138,12 @@ export function getRecommendationSearchKey(title: string, options: {}) {
   const searchQuery = getSearchQueryString(title.replace(/\//, ' '), options);
   return createNormalizedSearchKey(searchQuery);
 }
+
+export function tagSearchCsOptionsHook(options: any) {
+  if (options.any_tags && options.any_tags.length > 0) {
+    // -- When doing a specific tag search, these restrictions should be lifted to make sense.
+    delete options.limit_claims_per_channel;
+    delete options.release_time;
+  }
+  return options;
+}

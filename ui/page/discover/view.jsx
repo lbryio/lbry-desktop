@@ -16,6 +16,7 @@ import LbcSymbol from 'component/common/lbc-symbol';
 import I18nMessage from 'component/i18nMessage';
 import moment from 'moment';
 import LivestreamSection from './livestreamSection';
+import { tagSearchCsOptionsHook } from 'util/search';
 
 const CATEGORY_CONTENT_TYPES_FILTER = CS.CONTENT_TYPES.filter((x) => x !== CS.CLAIM_REPOST);
 
@@ -233,6 +234,7 @@ function DiscoverPage(props: Props) {
           hasSource
           hideRepostsOverride={dynamicRouteProps ? false : undefined}
           searchLanguages={dynamicRouteProps?.options?.searchLanguages}
+          csOptionsHook={tagSearchCsOptionsHook}
         />
       </ClaimSearchFilterContext.Provider>
     </Page>

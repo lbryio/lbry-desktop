@@ -19,6 +19,7 @@ import { SearchResults } from './internal/searchResults';
 import useFetchLiveStatus from 'effects/use-fetch-live';
 import { useIsLargeScreen } from 'effects/use-screensize';
 import usePersistedState from 'effects/use-persisted-state';
+import { tagSearchCsOptionsHook } from 'util/search';
 
 const TYPES_TO_ALLOW_FILTER = ['stream', 'repost'];
 
@@ -216,6 +217,7 @@ function ChannelContent(props: Props) {
             channelIsMine={channelIsMine}
             empty={isSearching ? ' ' : empty}
             notTags={claimType === 'collection' ? SECTION_TAGS.FEATURED_CHANNELS : undefined}
+            csOptionsHook={tagSearchCsOptionsHook}
           />
         </ClaimSearchFilterContext.Provider>
       )}
