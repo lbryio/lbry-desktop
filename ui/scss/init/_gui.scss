@@ -452,6 +452,11 @@ img {
   margin-left: 2px;
 }
 
+.error__text--stripe-card {
+  text-align: center;
+  margin-top: var(--spacing-s);
+}
+
 .help--error {
   @extend .help;
   color: var(--color-text-error);

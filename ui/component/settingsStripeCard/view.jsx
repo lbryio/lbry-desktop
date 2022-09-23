@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 
-import { Elements, useStripe, CardElement } from '@stripe/react-stripe-js';
+import { Elements, useStripe, useElements, CardElement } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { Form, FormField, Submit } from 'component/common/form';
 import { STRIPE_PUBLIC_KEY } from 'config';
@@ -16,12 +16,10 @@ import Card from 'component/common/card';
 import Plastic from 'react-plastic';
 import Button from 'component/button';
 import Spinner from 'component/spinner';
-import ErrorText from 'component/common/error-text';
 
-const stripePromise = loadStripe(STRIPE_PUBLIC_KEY);
 const CARD_NAME_REGEX = /[0-9!@#$%^&*()_+=[\]{};:"\\|,<>?~]/;
 
-type Props = {
+type WrapperProps = {
   isModal: boolean,
   setIsBusy: (isBusy: boolean) => void,
   // -- redux --
@@ -38,9 +36,18 @@ type Props = {
   doCustomerSetup: () => Promise<StripeCustomerSetupResponse>,
 };
 
+type Props = WrapperProps & {
+  promisePending: ?boolean,
+  stripeError: ?string,
+  reloadForm: () => void,
+};
+
 const SettingsStripeCard = (props: Props) => {
   const {
     isModal,
+    promisePending,
+    stripeError,
+    reloadForm,
     setIsBusy,
     // -- redux --
     email,
@@ -56,9 +63,8 @@ const SettingsStripeCard = (props: Props) => {
     doCustomerSetup,
   } = props;
 
-  const cardElement = React.useRef();
-
   const stripe = useStripe();
+  const elements = useElements();
 
   const [cardNameValue, setCardNameValue] = React.useState('');
   const [isLoading, setLoading] = React.useState(false);
@@ -67,6 +73,8 @@ const SettingsStripeCard = (props: Props) => {
   const clientSecret = customerSetupResponse?.client_secret;
 
   function handleSubmit(event) {
+    if (!stripe || !elements) return;
+
     event.preventDefault();
     setLoading(true);
 
@@ -76,9 +84,10 @@ const SettingsStripeCard = (props: Props) => {
       return;
     }
 
+    const cardElement = elements.getElement(CardElement);
     stripe
       .confirmCardSetup(clientSecret, {
-        payment_method: { card: cardElement.current, billing_details: { email, name: cardNameValue } },
+        payment_method: { card: cardElement, billing_details: { email, name: cardNameValue } },
       })
       .then((result) => {
         if (result.error) {
@@ -91,6 +100,12 @@ const SettingsStripeCard = (props: Props) => {
         }
       });
   }
+
+  React.useEffect(() => {
+    if (stripeError) {
+      setFormError(stripeError);
+    }
+  }, [stripeError]);
 
   React.useEffect(() => {
     if (cardDetails === undefined) {
@@ -230,23 +245,32 @@ const SettingsStripeCard = (props: Props) => {
           type="input"
           label={__('Card details')}
           inputElem={
-            <CardElement
-              className="stripe-card__form-input"
-              onReady={(element) => {
-                cardElement.current = element;
-              }}
-              onChange={(event) => setFormError(event.error?.message)}
-            />
+            <CardElement className="stripe-card__form-input" onChange={(event) => setFormError(event.error?.message)} />
           }
         />
 
-        <Submit
-          className="button--card-link"
-          disabled={isLoading || formError || !cardNameValue}
-          label={isLoading ? <div className="stripe__spinner" /> : __('Add Card')}
-        />
+        {stripeError ? (
+          <Button
+            className="button--card-link"
+            label={promisePending ? <div className="stripe__spinner" /> : __('Retry')}
+            onClick={reloadForm}
+          />
+        ) : (
+          <Submit
+            className="button--card-link"
+            disabled={isLoading || formError || !cardNameValue}
+            label={isLoading ? <div className="stripe__spinner" /> : __('Add Card')}
+          />
+        )}
 
-        {formError && <ErrorText>{formError}</ErrorText>}
+        {formError && (
+          <span className="error__text error__text--stripe-card">
+            <p>{formError}</p>
+            {stripeError ? (
+              <p>{__('You may have blockers turned on, try turning them off and reloading.')}</p>
+            ) : undefined}
+          </span>
+        )}
       </Form>
     );
   }
@@ -258,10 +282,28 @@ const SettingsStripeCard = (props: Props) => {
   );
 };
 
-export default function Wrapper(props: Props) {
+export default function Wrapper(props: WrapperProps) {
+  const [stripeError, setStripeError] = React.useState();
+  const [stripePromise, setStripePromise] = React.useState(loadStripe(STRIPE_PUBLIC_KEY));
+  const [promisePending, setPromisePending] = React.useState();
+
+  React.useEffect(() => {
+    stripePromise
+      .then(() => setPromisePending(false))
+      .catch((e) => {
+        setPromisePending(false);
+        setStripeError(e.message);
+      });
+  }, [stripePromise]);
+
   return (
     <Elements stripe={stripePromise}>
-      <SettingsStripeCard {...props} />
+      <SettingsStripeCard
+        {...props}
+        promisePending={promisePending}
+        stripeError={stripeError}
+        reloadForm={() => setStripePromise(loadStripe(STRIPE_PUBLIC_KEY))}
+      />
     </Elements>
   );
 }
