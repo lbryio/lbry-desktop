@@ -302,8 +302,13 @@
 
 .navigation-link--icon-centered {
   padding-left: 0;
+  border-radius: var(--border-radius);
   .button__content {
     justify-content: center;
+  }
+
+  &.navigation-link--active {
+    display: none;
   }
 }
 

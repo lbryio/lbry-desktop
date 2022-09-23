@@ -738,10 +738,6 @@ img {
   column-count: 2;
   column-gap: var(--spacing-m);
 
-  @media (max-width: $breakpoint-small) {
-    column-gap: var(--spacing-s);
-  }
-
   .navigation-link__wrapper {
     .button {
       padding-left: 0;
@@ -778,6 +774,11 @@ img {
         font-size: var(--font-small);
       }
     }
+  }
+
+  @media (max-width: $breakpoint-small) {
+    -webkit-column-gap: var(--spacing-s);
+    column-gap: var(--spacing-s);
   }
 }
 
