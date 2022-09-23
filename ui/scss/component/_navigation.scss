@@ -441,6 +441,18 @@
   .empty {
     padding: 0;
   }
+
+  .wunderbar {
+    fieldset-section {
+      width: 100%;
+    }
+    @media (max-width: $breakpoint-small) {
+      padding-left: 0;
+      .icon {
+        left: var(--spacing-s);
+      }
+    }
+  }
 }
 
 .navigation__overlay {
