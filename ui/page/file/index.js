@@ -36,7 +36,6 @@ const select = (state, props) => {
   const urlParams = new URLSearchParams(search);
   const playingCollectionId = selectPlayingCollectionId(state);
   const claim = selectClaimForUri(state, uri);
-  const { duration } = claim.value ? claim.value?.video || claim.value?.audio : {};
   const channelId = getChannelIdFromClaim(claim);
 
   return {
@@ -52,7 +51,7 @@ const select = (state, props) => {
     commentSettingDisabled: selectCommentsDisabledSettingForChannelId(state, channelId),
     isLivestream: selectIsStreamPlaceholderForUri(state, uri),
     position: selectContentPositionForUri(state, uri),
-    audioVideoDuration: duration,
+    audioVideoDuration: claim?.value?.video?.duration || claim?.value?.audio?.duration,
     commentsListTitle: selectCommentsListTitleForUri(state, uri),
     claimWasPurchased: selectClaimWasPurchasedForUri(state, uri),
     isUriPlaying: selectIsUriCurrentlyPlaying(state, uri),
