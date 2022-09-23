@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import type { ElementRef } from 'react';
 
 import './style.scss';
 import { FormField } from 'component/common/form';
@@ -19,6 +20,7 @@ type Props = {
 function TagSearch(props: Props) {
   const { urlParams, handleChange, standalone } = props;
 
+  const inputRef: ElementRef<any> = React.useRef();
   const isLargeScreen = useIsLargeScreen();
   const isTagFiltered = urlParams.get(CS.TAGS_KEY);
 
@@ -47,10 +49,18 @@ function TagSearch(props: Props) {
               'button-toggle--custom': isTagFiltered,
             })}
             aria-label={__('Search tags')}
-            onClick={() => setTagSearchExpanded((prev) => !prev)}
+            onClick={() => {
+              setTagSearchExpanded((prev) => !prev);
+              setTimeout(() => {
+                if (inputRef?.current?.input?.current?.focus) {
+                  inputRef.current.input.current.focus();
+                }
+              });
+            }}
           />
         )}
         <FormField
+          ref={inputRef}
           placeholder={__('Search tags')}
           type="text"
           className={classnames('clh-tag-search__input', {
