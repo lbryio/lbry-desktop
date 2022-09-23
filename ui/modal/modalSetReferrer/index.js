@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { doHideModal } from 'redux/actions/app';
 import { selectSetReferrerError, selectSetReferrerPending } from 'redux/selectors/user';
-import { doUserSetReferrer, doUserSetReferrerReset } from 'redux/actions/user';
+import { doUserSetReferrerForUri, doUserSetReferrerReset } from 'redux/actions/user';
 import ModalSetReferrer from './view';
 
 const select = (state) => ({
@@ -11,7 +11,7 @@ const select = (state) => ({
 
 const perform = (dispatch) => ({
   closeModal: () => dispatch(doHideModal()),
-  doUserSetReferrer: (referrerUri) => dispatch(doUserSetReferrer(referrerUri)),
+  doUserSetReferrerForUri: (referrerUri) => dispatch(doUserSetReferrerForUri(referrerUri)),
   resetReferrerError: () => dispatch(doUserSetReferrerReset()),
 });
 

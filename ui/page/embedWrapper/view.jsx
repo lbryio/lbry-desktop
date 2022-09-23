@@ -47,7 +47,6 @@ type Props = {
   doCommentSocketConnect: (string, string, string) => void,
   doCommentSocketDisconnect: (string, string) => void,
   doFetchActiveLivestreams: () => void,
-  setReferrer: (uri: string) => void,
 };
 
 export const EmbedContext = React.createContext<any>();
@@ -85,7 +84,6 @@ export default function EmbedWrapperPage(props: Props) {
     doCommentSocketConnect,
     doCommentSocketDisconnect,
     doFetchActiveLivestreams,
-    setReferrer,
   } = props;
 
   const {
@@ -99,8 +97,6 @@ export default function EmbedWrapperPage(props: Props) {
   const featureParam = urlParams.get('feature');
   const latestContentPath = featureParam === PAGES.LATEST;
   const liveContentPath = featureParam === PAGES.LIVE_NOW;
-  const rawReferrerParam = urlParams.get('r');
-  const sanitizedReferrerParam = rawReferrerParam && rawReferrerParam.replace(':', '#');
   const embedLightBackground = urlParams.get('embedBackgroundLight');
   const readyToDisplay = isCurrentClaimLive || (haveClaim && streamingUrl);
   const isLiveClaimFetching = isLivestreamClaim && !activeLivestreamInitialized;
@@ -131,10 +127,6 @@ export default function EmbedWrapperPage(props: Props) {
       fetchLatestClaimForChannel(canonicalUrl, true);
     }
   }, [canonicalUrl, fetchLatestClaimForChannel, latestClaimUrl, latestContentPath]);
-
-  React.useEffect(() => {
-    if (!sanitizedReferrerParam) setReferrer(uri);
-  }, [sanitizedReferrerParam, setReferrer, uri]);
 
   React.useEffect(() => {
     if (doFetchActiveLivestreams && isLivestreamClaim) {

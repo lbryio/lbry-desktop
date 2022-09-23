@@ -19,7 +19,6 @@ type Props = {
   channelClaimId: ?string,
   chatDisabled: boolean,
   claim: StreamClaim,
-  isAuthenticated: boolean,
   uri: string,
   socketConnection: { connected: ?boolean },
   isStreamPlaying: boolean,
@@ -27,7 +26,6 @@ type Props = {
   doCommentSocketConnect: (uri: string, channelName: string, claimId: string) => void,
   doCommentSocketDisconnect: (claimId: string, channelName: string) => void,
   doFetchChannelLiveStatus: (string) => void,
-  doUserSetReferrer: (referrerUri: string) => void,
   theaterMode?: Boolean,
 };
 
@@ -40,7 +38,6 @@ export default function LivestreamPage(props: Props) {
     channelClaimId,
     chatDisabled,
     claim,
-    isAuthenticated,
     uri,
     socketConnection,
     isStreamPlaying,
@@ -48,7 +45,6 @@ export default function LivestreamPage(props: Props) {
     doCommentSocketConnect,
     doCommentSocketDisconnect,
     doFetchChannelLiveStatus,
-    doUserSetReferrer,
     theaterMode,
   } = props;
 
@@ -69,7 +65,6 @@ export default function LivestreamPage(props: Props) {
   const livestreamChannelId = channelClaimId || '';
 
   const releaseTime: moment = moment.unix(claim?.value?.release_time || 0);
-  const stringifiedClaim = JSON.stringify(claim);
 
   const [hyperchatsHidden, setHyperchatsHidden] = React.useState(false);
 
@@ -156,16 +151,6 @@ export default function LivestreamPage(props: Props) {
 
     return () => clearInterval(intervalId);
   }, [chatDisabled, isChannelBroadcasting, releaseTime, isCurrentClaimLive, isInitialized]);
-
-  React.useEffect(() => {
-    if (uri && stringifiedClaim) {
-      const jsonClaim = JSON.parse(stringifiedClaim);
-      if (!isAuthenticated) {
-        const uri = jsonClaim.signing_channel && jsonClaim.signing_channel.permanent_url;
-        if (uri) doUserSetReferrer(uri.replace('lbry://', ''));
-      }
-    }
-  }, [uri, stringifiedClaim, isAuthenticated, doUserSetReferrer]);
 
   React.useEffect(() => {
     doSetPrimaryUri(uri);

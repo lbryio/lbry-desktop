@@ -1,8 +1,6 @@
 import { connect } from 'react-redux';
 import { selectClaimForUri } from 'redux/selectors/claims';
 import { doSetPrimaryUri } from 'redux/actions/content';
-import { doUserSetReferrer } from 'redux/actions/user';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { doCommentSocketConnect, doCommentSocketDisconnect } from 'redux/actions/websocket';
 import { getChannelIdFromClaim } from 'util/claim';
 import {
@@ -26,7 +24,6 @@ const select = (state, props) => {
 
   return {
     uri: canonical_url || '',
-    isAuthenticated: selectUserVerifiedEmail(state),
     channelClaimId,
     chatDisabled: selectCommentsDisabledSettingForChannelId(state, channelClaimId),
     activeLivestreamForChannel: selectActiveLivestreamForChannel(state, channelClaimId),
@@ -39,7 +36,6 @@ const select = (state, props) => {
 
 const perform = {
   doSetPrimaryUri,
-  doUserSetReferrer,
   doCommentSocketConnect,
   doCommentSocketDisconnect,
   doFetchChannelLiveStatus,

@@ -15,7 +15,7 @@ import I18nMessage from 'component/i18nMessage';
 type Props = {
   user: any,
   claimReward: () => void,
-  doUserSetReferrer: (referrerUri: string) => void,
+  doUserSetReferrerForUri: (referrerUri: string) => void,
   referrerSetPending: boolean,
   referrerSetError: string,
   channelSubscribe: (sub: Subscription) => void,
@@ -30,7 +30,7 @@ function Invited(props: Props) {
   const {
     user,
     claimReward,
-    doUserSetReferrer,
+    doUserSetReferrerForUri,
     referrerSetPending,
     referrerSetError,
     channelSubscribe,
@@ -80,9 +80,9 @@ function Invited(props: Props) {
 
   useEffect(() => {
     if (referrer) {
-      doUserSetReferrer(referrer.replace(':', '#'));
+      doUserSetReferrerForUri(referrer.replace(':', '#'));
     }
-  }, [referrer, doUserSetReferrer]);
+  }, [referrer, doUserSetReferrerForUri]);
 
   function handleDone() {
     history.push(redirect);

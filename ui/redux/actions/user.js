@@ -1,8 +1,6 @@
 import analytics from 'analytics';
 import Lbry from 'lbry';
-import { selectClaimForUri } from 'redux/selectors/claims';
-import { doFetchChannelListMine, doResolveUri } from 'redux/actions/claims';
-import { isURIValid, normalizeURI } from 'util/lbryURI';
+import { doFetchChannelListMine } from 'redux/actions/claims';
 import { batchActions } from 'util/batch-actions';
 import { getStripeEnvironment } from 'util/stripe';
 import { ODYSEE_CHANNEL } from 'constants/channels';
@@ -24,7 +22,6 @@ import { Lbryio } from 'lbryinc';
 import { DOMAIN, LOCALE_API } from 'config';
 import { getDefaultLanguage } from 'util/default-languages';
 import { LocalStorage, LS } from 'util/storage';
-import { getChannelFromClaim } from 'util/claim';
 
 export let sessionStorageAvailable = false;
 const CHECK_INTERVAL = 200;
@@ -723,39 +720,8 @@ export function doUserSetReferrerReset() {
   };
 }
 
-export function doUserSetReferrerWithUri(uri) {
-  return async (dispatch, getState) => {
-    const state = getState();
-    let claim = selectClaimForUri(state, uri);
-
-    let referrerCode;
-    if (!claim) {
-      try {
-        const response = await Lbry.resolve({ urls: [uri] });
-        if (response && response[uri] && !response[uri].error) claim = response && response[uri];
-        if (claim) {
-          if (claim.signing_channel) {
-            referrerCode = claim.signing_channel.permanent_url.replace('lbry://', '');
-          } else {
-            referrerCode = claim.permanent_url.replace('lbry://', '');
-          }
-          dispatch(doUserSetReferrer(referrerCode));
-        }
-      } catch (error) {
-        dispatch({
-          type: ACTIONS.USER_SET_REFERRER_FAIL,
-          data: { error },
-        });
-      }
-    } else {
-      referrerCode = claim.permanent_url.replace('lbry://', '');
-      dispatch(doUserSetReferrer(referrerCode));
-    }
-  };
-}
-
-export const doUserSetReferrer = (referrerUri) => async (dispatch, getState) => {
-  let state = getState();
+export const doUserSetReferrerForUri = (referrerPermanentUri) => async (dispatch, getState) => {
+  const state = getState();
   const hasSetReferrerPending = selectSetReferrerPending(state);
   const hasReferrer = Boolean(selectReferrer(state));
 
@@ -763,26 +729,7 @@ export const doUserSetReferrer = (referrerUri) => async (dispatch, getState) => 
 
   dispatch({ type: ACTIONS.USER_SET_REFERRER_START });
 
-  let claim;
-  let referrerCode = referrerUri;
-
-  const isValid = isURIValid(referrerUri);
-
-  if (isValid) {
-    const uri = normalizeURI(referrerUri);
-    claim = selectClaimForUri(state, uri);
-
-    if (!claim) {
-      await dispatch(doResolveUri(uri))
-        .then(() => {
-          state = getState();
-          claim = selectClaimForUri(state, uri);
-        })
-        .catch((error) => dispatch({ type: ACTIONS.USER_SET_REFERRER_FAIL, data: { error } }));
-    }
-
-    referrerCode = getChannelFromClaim(claim).permanent_url.replace('lbry://', '');
-  }
+  const referrerCode = referrerPermanentUri.replace('lbry://', '');
 
   return await Lbryio.call('user', 'referral', { referrer: referrerCode }, 'post')
     .then((response) => {

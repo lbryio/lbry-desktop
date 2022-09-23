@@ -7,7 +7,7 @@ import { PAGE_TITLE } from 'constants/pageTitles';
 import { useIsLargeScreen } from 'effects/use-screensize';
 import { lazyImport } from 'util/lazyImport';
 import { LINKED_COMMENT_QUERY_PARAM } from 'constants/comment';
-import { parseURI, isURIValid } from 'util/lbryURI';
+import { parseURI } from 'util/lbryURI';
 import { SITE_TITLE } from 'config';
 import LoadingBarOneOff from 'component/loadingBarOneOff';
 import { GetLinksData } from 'util/buildHomepage';
@@ -146,11 +146,11 @@ type Props = {
     listen: (any) => () => void,
   },
   uri: string,
-  hasClaim: ?boolean,
+  channelClaimPermanentUri: ?string,
   title: string,
   hasNavigated: boolean,
   setHasNavigated: () => void,
-  doUserSetReferrer: (referrerUri: string) => void,
+  doUserSetReferrerForUri: (referrerPermanentUri: string) => void,
   hasUnclaimedRefereeReward: boolean,
   homepageData: any,
   wildWestDisabled: boolean,
@@ -190,12 +190,12 @@ function AppRouter(props: Props) {
     isAuthenticated,
     history,
     uri,
-    hasClaim,
+    channelClaimPermanentUri,
     title,
     hasNavigated,
     setHasNavigated,
     hasUnclaimedRefereeReward,
-    doUserSetReferrer,
+    doUserSetReferrerForUri,
     homepageData,
     wildWestDisabled,
     unseenCount,
@@ -239,14 +239,10 @@ function AppRouter(props: Props) {
   }, [listen, hasNavigated, setHasNavigated]);
 
   useEffect(() => {
-    if (!hasNavigated && hasUnclaimedRefereeReward && isAuthenticated === false && hasClaim) {
-      const valid = isURIValid(uri);
-      if (valid) {
-        const { path } = parseURI(uri);
-        if (typeof path === 'string') doUserSetReferrer(path);
-      }
+    if (channelClaimPermanentUri && !hasNavigated && hasUnclaimedRefereeReward && !isAuthenticated) {
+      doUserSetReferrerForUri(channelClaimPermanentUri);
     }
-  }, [hasNavigated, uri, hasUnclaimedRefereeReward, doUserSetReferrer, isAuthenticated, hasClaim]);
+  }, [channelClaimPermanentUri, doUserSetReferrerForUri, hasNavigated, hasUnclaimedRefereeReward, isAuthenticated]);
 
   useEffect(() => {
     const getDefaultTitle = (pathname: string) => {

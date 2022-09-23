@@ -6,7 +6,7 @@ import {
   selectSyncFatalError,
   selectSyncIsLocked,
 } from 'redux/selectors/sync';
-import { doUserSetReferrer } from 'redux/actions/user';
+import { doUserSetReferrerForUri } from 'redux/actions/user';
 import { doSetLastViewedAnnouncement } from 'redux/actions/content';
 import { selectUser, selectUserLocale, selectUserVerifiedEmail } from 'redux/selectors/user';
 import { selectUnclaimedRewards } from 'redux/selectors/rewards';
@@ -57,7 +57,7 @@ const perform = {
   fetchLanguage: doFetchLanguage,
   signIn: doSignIn,
   syncLoop: doSyncLoop,
-  doUserSetReferrer,
+  doUserSetReferrerForUri,
   setIncognito: doSetIncognito,
   fetchModBlockedList: doFetchModBlockedList,
   fetchModAmIList: doFetchCommentModAmIList,

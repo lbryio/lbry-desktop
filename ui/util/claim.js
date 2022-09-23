@@ -140,6 +140,11 @@ export function getChannelFromClaim(claim: ?Claim) {
     : null;
 }
 
+export function getChannelPermanentUrlFromClaim(claim: ?Claim) {
+  const channelFromClaim = getChannelFromClaim(claim);
+  return channelFromClaim && channelFromClaim.permanent_url;
+}
+
 export function getClaimMetadata(claim: ?Claim) {
   const metadata = claim && claim.value;
   return metadata || (claim === undefined ? undefined : null);

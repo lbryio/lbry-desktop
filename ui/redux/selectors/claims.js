@@ -17,6 +17,7 @@ import {
   getChannelFromClaim,
   getChannelTitleFromClaim,
   getChannelNameFromClaim,
+  getChannelPermanentUrlFromClaim,
 } from 'util/claim';
 import * as CLAIM from 'constants/claim';
 import { INTERNAL_TAGS } from 'constants/tags';
@@ -91,6 +92,9 @@ export const selectClaimUriForId = (state: State, claimId: string) => {
   const claim = selectClaimForId(state, claimId);
   return claim && (claim.canonical_url || claim.permanent_url);
 };
+
+export const selectChannelPermanentUriForUri = (state: State, uri: string) =>
+  getChannelPermanentUrlFromClaim(selectClaimForUri(state, uri));
 
 export const selectAllClaimsByChannel = createSelector(selectState, (state) => state.paginatedClaimsByChannel || {});
 

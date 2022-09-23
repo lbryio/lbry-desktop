@@ -21,7 +21,6 @@ import {
   selectActiveLiveClaimForChannel,
 } from 'redux/selectors/livestream';
 import { getThumbnailFromClaim, isStreamPlaceholderClaim } from 'util/claim';
-import { doUserSetReferrerWithUri } from 'redux/actions/user';
 
 const select = (state, props) => {
   const { search } = state.router.location;
@@ -92,7 +91,6 @@ const perform = {
   doCommentSocketConnect,
   doCommentSocketDisconnect,
   doFetchActiveLivestreams,
-  setReferrer: doUserSetReferrerWithUri,
   fetchLatestClaimForChannel: doFetchLatestClaimForChannel,
 };
 

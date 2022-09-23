@@ -76,7 +76,7 @@ type Props = {
   syncError: ?string,
   prefsReady: boolean,
   rewards: Array<Reward>,
-  doUserSetReferrer: (referrerUri: string) => void,
+  doUserSetReferrerForUri: (referrerUri: string) => void,
   isAuthenticated: boolean,
   syncLoop: (?boolean) => void,
   currentModal: any,
@@ -116,7 +116,7 @@ function App(props: Props) {
     setLanguage,
     fetchLanguage,
     rewards,
-    doUserSetReferrer,
+    doUserSetReferrerForUri,
     isAuthenticated,
     syncLoop,
     currentModal,
@@ -200,6 +200,8 @@ function App(props: Props) {
 
     if (!path.startsWith('$/') && match && match.index) {
       uri = `lbry://${path.slice(0, match.index)}`;
+    } else if (path.startsWith(`$/${PAGES.EMBED}/`)) {
+      uri = `lbry://${path.replace(`$/${PAGES.EMBED}/`, '')}`;
     }
   }
 
@@ -308,7 +310,7 @@ function App(props: Props) {
 
   useEffect(() => {
     if (referredRewardAvailable && sanitizedReferrerParam) {
-      doUserSetReferrer(sanitizedReferrerParam);
+      doUserSetReferrerForUri(sanitizedReferrerParam);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sanitizedReferrerParam, referredRewardAvailable]);
