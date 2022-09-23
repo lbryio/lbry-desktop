@@ -278,25 +278,64 @@
   }
 
   @media (max-width: $breakpoint-small) {
-    // padding: var(--spacing-s) !important;
-
+    &:not(.claim-preview__wrapper--channel):not(.claim-preview__wrapper--inline) {
+      .claim-preview__actions {
+        display: none;
+      }
+      .claim-tile__info {
+        padding-bottom: 0;
+      }
+    }
+    &.claim-preview__wrapper--inline {
+      .claim-tile__info {
+        display: unset !important;
+        .media__subtitle {
+          margin-top: 1px !important;
+          .claim-preview__channel-sub-count {
+            margin-top: 2px !important;
+          }
+        }
+      }
+    }
     .claim-preview {
       .media__thumb {
         width: calc(var(--file-list-thumbnail-width) * 0.8) !important;
       }
       .claim-preview-metadata {
+        align-items: flex-start;
+        width: 100%;
         .claim-tile__info {
-          margin-top: var(--spacing-xxxs);
+          margin-top: 0;
+          display: flex;
+          width: 100%;
+          .channel-thumbnail--xsmall {
+            margin-right: var(--spacing-xs);
+          }
         }
         .claim-preview__title {
           margin-right: var(--spacing-m);
         }
         .media__subtitle {
+          min-width: 0;
           .button__content {
             height: auto;
+            span {
+              display: block;
+              width: 100%;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              overflow: hidden;
+            }
           }
           .view_count {
             font-size: var(--font-xsmall);
+          }
+          .claim-extra-info {
+            display: block;
+            width: 100%;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
           }
         }
       }

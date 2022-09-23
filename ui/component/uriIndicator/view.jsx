@@ -126,7 +126,7 @@ class UriIndicator extends React.PureComponent<Props> {
 
       const inner = (
         <span dir="auto" className={classnames('channel-name', { 'channel-name--inline': inline })}>
-          <p>{showAtSign ? channelName : stripLeadingAtSign(channelTitle)}</p>
+          {showAtSign ? channelName : stripLeadingAtSign(channelTitle)}
           {!comment && showMemberBadge && <PremiumBadge uri={uri} />}
         </span>
       );

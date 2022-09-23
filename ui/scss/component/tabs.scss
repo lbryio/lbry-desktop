@@ -26,6 +26,9 @@
           bottom: calc(var(--tab-indicator-size) * -2 + 13px);
         }
       }
+      &:last-of-type {
+        margin-right: 0;
+      }
     }
   }
 }
