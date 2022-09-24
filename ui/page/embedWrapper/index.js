@@ -52,10 +52,13 @@ const select = (state, props) => {
 
   const latestContentClaim =
     featureParam === PAGES.LIVE_NOW
-      ? selectActiveLiveClaimForChannel(state, claimId)
+      ? selectActiveLiveClaimForChannel(state, channelClaimId)
       : selectLatestClaimForUri(state, canonicalUrl);
   const latestClaimUrl = latestContentClaim && latestContentClaim.canonical_url;
+  const latestClaimId = latestContentClaim && latestContentClaim.claim_id;
+
   if (latestClaimUrl) uri = latestClaimUrl;
+  if (latestClaimId & (featureParam === PAGES.LIVE_NOW)) claimId = latestClaimId;
 
   return {
     uri,

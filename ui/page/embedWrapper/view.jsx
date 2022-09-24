@@ -117,10 +117,10 @@ export default function EmbedWrapperPage(props: Props) {
   const thumbnail = useGetPoster(claimThumbnail);
 
   React.useEffect(() => {
-    if (!latestClaimUrl && liveContentPath && claimId) {
-      doFetchChannelLiveStatus(claimId);
+    if (!latestClaimUrl && liveContentPath && channelClaimId) {
+      doFetchChannelLiveStatus(channelClaimId);
     }
-  }, [claimId, doFetchChannelLiveStatus, latestClaimUrl, liveContentPath]);
+  }, [channelClaimId, doFetchChannelLiveStatus, latestClaimUrl, liveContentPath]);
 
   React.useEffect(() => {
     if (!latestClaimUrl && latestContentPath && canonicalUrl) {
@@ -155,10 +155,10 @@ export default function EmbedWrapperPage(props: Props) {
       doResolveUri(uri);
     }
 
-    if (uri && (isNewestPath ? latestClaimUrl : haveClaim) && costInfo && costInfo.cost === 0) {
+    if (uri && !isLivestreamClaim && (isNewestPath ? latestClaimUrl : haveClaim) && costInfo && costInfo.cost === 0) {
       doPlayUri(uri);
     }
-  }, [doPlayUri, doResolveUri, haveClaim, costInfo, uri, isNewestPath, latestClaimUrl]);
+  }, [doPlayUri, isLivestreamClaim, doResolveUri, haveClaim, costInfo, uri, isNewestPath, latestClaimUrl]);
 
   React.useEffect(() => {
     if (haveClaim && uri && doFetchCostInfoForUri) {
