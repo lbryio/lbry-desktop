@@ -751,7 +751,9 @@ $thumbnailWidthSmall: 2rem;
 }
 
 .sticker__comment {
-  margin-left: var(--spacing-m);
+  // margin-left: var(--spacing-m);
+  margin-bottom: var(--spacing-xxs);
+  margin-left: 0;
   height: 6rem;
   overflow: hidden;
 

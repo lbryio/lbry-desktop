@@ -1020,37 +1020,45 @@ $recent-msg-button__height: 2rem;
   align-items: flex-start;
   justify-content: space-between;
   flex-direction: row;
-  width: 6.4rem;
-  max-width: 6.4rem !important;
-  max-height: 38px;
+  width: 7rem;
+  max-width: 7rem !important;
+  height: 38px;
 
   .livestreamHyperchat__info--user {
     .channel-name {
-      max-width: 5rem;
+      max-width: 7rem;
     }
   }
 
   .livestreamHyperchat__info--image {
-    width: 100%;
-    height: 100%;
+    max-height: 100%;
+    width: auto;
+    margin-left: 0;
+    img {
+      height: 38px;
+      max-height: 100%;
+      width: auto;
+      max-width: unset;
+    }
   }
 }
 
 .livestreamHyperchat__info--user {
+  min-width: 0;
+  width: 100%;
   .empty {
     color: var(--color-text);
     opacity: 0.9;
   }
 
   .channel-name {
-    max-width: unset;
-
-    p {
-      max-width: 5rem;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-    }
+    display: block;
+    width: 100%;
+    max-width: 7rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    flex-grow: 1;
   }
 }
 
