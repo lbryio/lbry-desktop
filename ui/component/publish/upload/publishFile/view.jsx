@@ -64,8 +64,8 @@ function PublishFile(props: Props) {
     // inEditMode,
   } = props;
 
-  const RECOMMENDED_BITRATE = 8500000;
-  const MAX_BITRATE = 16500000;
+  const RECOMMENDED_BITRATE = 9500000;
+  const MAX_BITRATE = 19500000;
   const TV_PUBLISH_SIZE_LIMIT_BYTES = WEB_PUBLISH_SIZE_LIMIT_GB * 1073741824;
   const TV_PUBLISH_SIZE_LIMIT_GB_STR = String(WEB_PUBLISH_SIZE_LIMIT_GB);
 
