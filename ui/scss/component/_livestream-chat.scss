@@ -1079,6 +1079,7 @@ $recent-msg-button__height: 2rem;
 
   &.livestream__comment--hyperchat {
     padding-top: 0;
+    margin-bottom: var(--spacing-xxs);
     .livestreamComment__body {
       margin-top: 5px;
       margin-left: 6px;
