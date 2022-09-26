@@ -24,7 +24,7 @@ import {
 import { selectCommentsListTitleForUri, selectCommentsDisabledSettingForChannelId } from 'redux/selectors/comments';
 import { doToggleAppDrawer, doSetMainPlayerDimension } from 'redux/actions/app';
 import { getChannelIdFromClaim } from 'util/claim';
-import { doFileGet } from 'redux/actions/file';
+import { doFileGetForUri } from 'redux/actions/file';
 import { doCheckIfPurchasedClaimId } from 'redux/actions/stripe';
 
 import FilePage from './view';
@@ -68,7 +68,7 @@ const perform = {
   doSetPrimaryUri,
   clearPosition,
   doToggleAppDrawer,
-  doFileGet,
+  doFileGetForUri,
   doSetMainPlayerDimension,
   doCheckIfPurchasedClaimId,
 };

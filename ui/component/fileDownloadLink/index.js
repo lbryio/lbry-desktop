@@ -4,7 +4,7 @@ import {
   makeSelectFileInfoForUri,
   makeSelectDownloadingForUri,
   makeSelectLoadingForUri,
-  makeSelectStreamingUrlForUri,
+  selectStreamingUrlForUri,
 } from 'redux/selectors/file_info';
 import { selectCostInfoForUri } from 'lbryinc';
 import { doOpenModal } from 'redux/actions/app';
@@ -21,7 +21,7 @@ const select = (state, props) => {
     claimIsMine: selectClaimIsMine(state, claim),
     claim,
     costInfo: selectCostInfoForUri(state, props.uri),
-    streamingUrl: makeSelectStreamingUrlForUri(props.uri)(state),
+    streamingUrl: selectStreamingUrlForUri(state, props.uri),
   };
 };
 

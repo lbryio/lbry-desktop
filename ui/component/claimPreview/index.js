@@ -9,11 +9,11 @@ import {
   selectDateForUri,
   selectGeoRestrictionForUri,
 } from 'redux/selectors/claims';
-import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
+import { selectStreamingUrlForUri } from 'redux/selectors/file_info';
 import { selectCollectionIsMine } from 'redux/selectors/collections';
 
 import { doResolveUri } from 'redux/actions/claims';
-import { doFileGet } from 'redux/actions/file';
+import { doFileGetForUri } from 'redux/actions/file';
 import { selectBanStateForUri } from 'lbryinc';
 import { selectIsActiveLivestreamForUri, selectViewersForId } from 'redux/selectors/livestream';
 import { selectLanguage, selectShowMatureContent } from 'redux/selectors/settings';
@@ -47,7 +47,7 @@ const select = (state, props) => {
     geoRestriction: selectGeoRestrictionForUri(state, props.uri),
     hasVisitedUri: props.uri && makeSelectHasVisitedUri(props.uri)(state),
     isSubscribed: props.uri && selectIsSubscribedForUri(state, props.uri),
-    streamingUrl: (repostSrcUri || props.uri) && makeSelectStreamingUrlForUri(repostSrcUri || props.uri)(state),
+    streamingUrl: (repostSrcUri || props.uri) && selectStreamingUrlForUri(state, repostSrcUri || props.uri),
     isLivestream,
     isLivestreamActive: isLivestream && selectIsActiveLivestreamForUri(state, props.uri),
     livestreamViewerCount: isLivestream && claim ? selectViewersForId(state, claim.claim_id) : undefined,
@@ -58,7 +58,7 @@ const select = (state, props) => {
 
 const perform = (dispatch) => ({
   resolveUri: (uri) => dispatch(doResolveUri(uri)),
-  getFile: (uri) => dispatch(doFileGet(uri, false)),
+  getFile: (uri) => dispatch(doFileGetForUri(uri)),
   doClearContentHistoryUri: (uri) => dispatch(doClearContentHistoryUri(uri)),
   doUriInitiatePlay: (playingOptions, isPlayable, isFloating) =>
     dispatch(doUriInitiatePlay(playingOptions, isPlayable, isFloating)),

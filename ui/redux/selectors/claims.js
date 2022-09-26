@@ -168,6 +168,14 @@ export const selectClaimForUri = createCachedSelector(
   }
 )((state, uri, returnRepost = true) => `${String(uri)}:${returnRepost ? '1' : '0'}`);
 
+export const selectClaimOutpointForUri = (state: State, uri: string) => {
+  const claim = selectClaimForUri(state, uri);
+  if (!claim) return claim;
+
+  const outpoint = `${claim.txid}:${claim.nout}`;
+  return outpoint;
+};
+
 export const selectChannelClaimIdForUri = (state: State, uri: string) =>
   getChannelIdFromClaim(selectClaimForUri(state, uri));
 export const selectChannelNameForUri = (state: State, uri: string) =>

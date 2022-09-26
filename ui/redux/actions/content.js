@@ -17,11 +17,7 @@ import {
   selectCanonicalUrlForUri,
   selectClaimForUri,
 } from 'redux/selectors/claims';
-import {
-  makeSelectFileInfoForUri,
-  selectFileInfosByOutpoint,
-  makeSelectUriIsStreamable,
-} from 'redux/selectors/file_info';
+import { makeSelectFileInfoForUri, selectFileInfosByOutpoint } from 'redux/selectors/file_info';
 import {
   selectUrlsForCollectionId,
   selectCollectionForIdHasClaimUrl,
@@ -36,7 +32,7 @@ import Lbry from 'lbry';
 import RecSys from 'recsys';
 import * as SETTINGS from 'constants/settings';
 import { selectCostInfoForUri, Lbryio, doFetchCostInfoForUri } from 'lbryinc';
-import { selectClientSetting, selectosNotificationsEnabled, selectDaemonSettings } from 'redux/selectors/settings';
+import { selectClientSetting, selectosNotificationsEnabled } from 'redux/selectors/settings';
 import { selectIsActiveLivestreamForUri } from 'redux/selectors/livestream';
 import {
   selectRecsysEntries,
@@ -203,19 +199,15 @@ export function doChangePlayingUriParam(newParams: any) {
   };
 }
 
-export function doPurchaseUriWrapper(uri: string, cost: number, saveFile: boolean, cb: ?(GetResponse) => void) {
+export function doPurchaseUriWrapper(uri: string, cost: number, cb: ?(GetResponse) => void) {
   return (dispatch: Dispatch, getState: () => any) => {
     function onSuccess(fileInfo) {
-      if (saveFile) {
-        dispatch(doUpdateLoadStatus(uri, fileInfo.outpoint));
-      }
-
       if (cb) {
         cb(fileInfo);
       }
     }
 
-    dispatch(doPurchaseUri(uri, { cost }, saveFile, onSuccess));
+    dispatch(doPurchaseUri(uri, { cost }, onSuccess));
   };
 }
 
@@ -451,21 +443,18 @@ export function doPlayUri(
 
     const isMine = selectClaimIsMineForUri(state, uri);
     const fileInfo = makeSelectFileInfoForUri(uri)(state);
-    const uriIsStreamable = makeSelectUriIsStreamable(uri)(state);
     const claimWasPurchased = selectClaimWasPurchasedForUri(state, uri);
 
-    const daemonSettings = selectDaemonSettings(state);
     let costInfo = selectCostInfoForUri(state, uri);
     if (!costInfo) {
       costInfo = await dispatch(doFetchCostInfoForUri(uri));
     }
     const cost = costInfo && Number(costInfo.cost);
-    const saveFile = !IS_WEB && (!uriIsStreamable ? true : daemonSettings.save_files || saveFileOverride || cost > 0);
     const instantPurchaseEnabled = selectClientSetting(state, SETTINGS.INSTANT_PURCHASE_ENABLED);
     const instantPurchaseMax = selectClientSetting(state, SETTINGS.INSTANT_PURCHASE_MAX);
 
     function beginGetFile() {
-      dispatch(doPurchaseUriWrapper(uri, cost, saveFile, cb));
+      dispatch(doPurchaseUriWrapper(uri, cost, cb));
     }
 
     function attemptPlay(instantPurchaseMax = null) {
@@ -480,11 +469,6 @@ export function doPlayUri(
       } else {
         beginGetFile();
       }
-    }
-
-    if (fileInfo && saveFile && (!fileInfo.download_path || !fileInfo.written_bytes)) {
-      beginGetFile();
-      return;
     }
 
     if (cost === 0 || skipCostCheck) {

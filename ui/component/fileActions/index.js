@@ -9,7 +9,7 @@ import {
   selectPurchaseTagForUri,
   selectRentalTagForUri,
 } from 'redux/selectors/claims';
-import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
+import { selectStreamingUrlForUri } from 'redux/selectors/file_info';
 import { doPrepareEdit } from 'redux/actions/publish';
 import { selectCostInfoForUri } from 'lbryinc';
 import { doDownloadUri } from 'redux/actions/content';
@@ -36,7 +36,7 @@ const select = (state, props) => {
     hasChannels: selectHasChannels(state),
     isLivestreamClaim: isStreamPlaceholderClaim(claim),
     isPostClaim,
-    streamingUrl: makeSelectStreamingUrlForUri(uri)(state),
+    streamingUrl: selectStreamingUrlForUri(state, uri),
     disableDownloadButton: makeSelectTagInClaimOrChannelForUri(uri, DISABLE_DOWNLOAD_BUTTON_TAG)(state),
     isMature: selectClaimIsNsfwForUri(state, uri),
     isAPreorder: Boolean(selectPreorderTagForUri(state, props.uri)),

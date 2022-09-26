@@ -111,86 +111,82 @@ export function doDeleteFileAndMaybeGoBack(
   };
 }
 
-export function doFileGet(uri: string, saveFile: boolean = true, onSuccess?: (GetResponse) => any) {
-  return async (dispatch: Dispatch, getState: () => any) => {
-    const state = getState();
-    let claim = selectClaimForUri(state, uri);
-    if (!claim) {
-      claim = await dispatch(doGetClaimFromUriResolve(uri));
-    }
-    const isLivestreamClaim = isStreamPlaceholderClaim(claim);
-    const { nout, txid } = claim;
-    const outpoint = `${txid}:${nout}`;
+export const doFileGetForUri = (uri: string, onSuccess?: (GetResponse) => any) => async (
+  dispatch: Dispatch,
+  getState: GetState
+) => {
+  const state = getState();
+  let claim = selectClaimForUri(state, uri);
+  if (!claim) {
+    claim = await dispatch(doGetClaimFromUriResolve(uri));
+  }
+  const isLivestreamClaim = isStreamPlaceholderClaim(claim);
+  const { nout, txid } = claim;
+  const outpoint = `${txid}:${nout}`;
 
-    dispatch({
-      type: ACTIONS.FETCH_FILE_INFO_STARTED,
-      data: {
-        outpoint,
-      },
-    });
+  dispatch({
+    type: ACTIONS.FETCH_FILE_INFO_STARTED,
+    data: {
+      outpoint,
+    },
+  });
 
-    // set save_file argument to True to save the file (old behaviour)
-    Lbry.get({ uri, save_file: saveFile })
-      .then((streamInfo: GetResponse) => {
-        const timeout = streamInfo === null || typeof streamInfo !== 'object' || streamInfo.error === 'Timeout';
-        if (timeout) {
-          dispatch({
-            type: ACTIONS.FETCH_FILE_INFO_FAILED,
-            data: { outpoint },
-          });
-
-          dispatch(doToast({ message: `File timeout for uri ${uri}`, isError: true }));
-        } else {
-          if (streamInfo.purchase_receipt || streamInfo.content_fee) {
-            dispatch({
-              type: ACTIONS.PURCHASE_URI_COMPLETED,
-              data: { uri, purchaseReceipt: streamInfo.purchase_receipt || streamInfo.content_fee },
-            });
-          }
-          dispatch({
-            type: ACTIONS.FETCH_FILE_INFO_COMPLETED,
-            data: {
-              fileInfo: streamInfo,
-              outpoint: outpoint,
-            },
-          });
-
-          if (onSuccess) {
-            onSuccess(streamInfo);
-          }
-        }
-      })
-      .catch((error) => {
-        dispatch({
-          type: ACTIONS.PURCHASE_URI_FAILED,
-          data: { uri, error },
-        });
-
+  Lbry.get({ uri })
+    .then((streamInfo: GetResponse) => {
+      const timeout = streamInfo === null || typeof streamInfo !== 'object' || streamInfo.error === 'Timeout';
+      if (timeout) {
         dispatch({
           type: ACTIONS.FETCH_FILE_INFO_FAILED,
           data: { outpoint },
         });
 
-        // TODO: probably a better way to address this
-        // supress no source error if it's a livestream
-        if (isLivestreamClaim && error.message === "stream doesn't have source data") return;
+        dispatch(doToast({ message: `File timeout for uri ${uri}`, isError: true }));
+      } else {
+        if (streamInfo.purchase_receipt || streamInfo.content_fee) {
+          dispatch({
+            type: ACTIONS.PURCHASE_URI_COMPLETED,
+            data: { uri, purchaseReceipt: streamInfo.purchase_receipt || streamInfo.content_fee },
+          });
+        }
 
-        dispatch(
-          doToast({
-            message: `Failed to view ${uri}, please try again. If this problem persists, visit https://odysee.com/@OdyseeHelp:b?view=about for support.`,
-            isError: true,
-          })
-        );
+        dispatch({
+          type: ACTIONS.FETCH_FILE_INFO_COMPLETED,
+          data: {
+            fileInfo: streamInfo,
+            outpoint: outpoint,
+          },
+        });
+
+        if (onSuccess) {
+          onSuccess(streamInfo);
+        }
+      }
+    })
+    .catch((error) => {
+      dispatch({
+        type: ACTIONS.PURCHASE_URI_FAILED,
+        data: { uri, error },
       });
-  };
-}
 
-export function doPurchaseUri(
-  uri: string,
-  costInfo: { cost: number },
-  saveFile: boolean = true,
-  onSuccess?: (GetResponse) => any
-) {
+      dispatch({
+        type: ACTIONS.FETCH_FILE_INFO_FAILED,
+        data: { outpoint },
+      });
+
+      // TODO: probably a better way to address this
+      // supress no source error if it's a livestream
+      if (isLivestreamClaim && error.message === "stream doesn't have source data") return;
+
+      dispatch(
+        doToast({
+          message: `Failed to view ${uri}, please try again. If this problem persists, visit https://odysee.com/@OdyseeHelp:b?view=about for support.`,
+          isError: true,
+        })
+      );
+    });
+};
+
+export function doPurchaseUri(uri: string, costInfo: { cost: number }, onSuccess?: (GetResponse) => any) {
   return (dispatch: Dispatch, getState: GetState) => {
     dispatch({
       type: ACTIONS.PURCHASE_URI_STARTED,
@@ -211,7 +207,7 @@ export function doPurchaseUri(
       return;
     }
 
-    dispatch(doFileGet(uri, saveFile, onSuccess));
+    dispatch(doFileGetForUri(uri, onSuccess));
   };
 }
 

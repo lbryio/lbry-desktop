@@ -6,7 +6,7 @@ import {
   selectGeoRestrictionForUri,
   selectClaimIsNsfwForUri,
 } from 'redux/selectors/claims';
-import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
+import { selectStreamingUrlForUri } from 'redux/selectors/file_info';
 import {
   selectCollectionForId,
   selectNextUrlForCollectionAndUrl,
@@ -63,7 +63,7 @@ const select = (state, props) => {
     primaryUri: selectPrimaryUri(state),
     title: selectTitleForUri(state, uri),
     isFloating,
-    streamingUrl: makeSelectStreamingUrlForUri(uri)(state),
+    streamingUrl: selectStreamingUrlForUri(state, uri),
     floatingPlayerEnabled: playingFromQueue || isInlinePlayer || selectClientSetting(state, SETTINGS.FLOATING_PLAYER),
     renderMode: makeSelectFileRenderModeForUri(uri)(state),
     videoTheaterMode: selectClientSetting(state, SETTINGS.VIDEO_THEATER_MODE),

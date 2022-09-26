@@ -7,10 +7,10 @@ import {
   selectGeoRestrictionForUri,
   selectClaimIsMine,
 } from 'redux/selectors/claims';
-import { doFileGet } from 'redux/actions/file';
+import { doFileGetForUri } from 'redux/actions/file';
 import { doResolveUri } from 'redux/actions/claims';
 import { selectViewCountForUri, selectBanStateForUri } from 'lbryinc';
-import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
+import { selectStreamingUrlForUri } from 'redux/selectors/file_info';
 import { selectIsActiveLivestreamForUri, selectViewersForId } from 'redux/selectors/livestream';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { isClaimNsfw, isStreamPlaceholderClaim, getThumbnailFromClaim } from 'util/claim';
@@ -34,7 +34,7 @@ const select = (state, props) => {
     title: props.uri && selectTitleForUri(state, props.uri),
     banState: selectBanStateForUri(state, props.uri),
     geoRestriction: selectGeoRestrictionForUri(state, props.uri),
-    streamingUrl: (repostSrcUri || props.uri) && makeSelectStreamingUrlForUri(repostSrcUri || props.uri)(state),
+    streamingUrl: (repostSrcUri || props.uri) && selectStreamingUrlForUri(state, repostSrcUri || props.uri),
     showMature: selectShowMatureContent(state),
     isMature: claim ? isClaimNsfw(claim) : false,
     isLivestream,
@@ -46,7 +46,7 @@ const select = (state, props) => {
 
 const perform = (dispatch) => ({
   resolveUri: (uri) => dispatch(doResolveUri(uri)),
-  getFile: (uri) => dispatch(doFileGet(uri, false)),
+  getFile: (uri) => dispatch(doFileGetForUri(uri)),
 });
 
 export default connect(select, perform)(ClaimPreviewTile);

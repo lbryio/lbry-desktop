@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectFileInfoForUri, makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
+import { makeSelectFileInfoForUri, selectStreamingUrlForUri } from 'redux/selectors/file_info';
 import { selectClaimWasPurchasedForUri } from 'redux/selectors/claims';
 import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { makeSelectFileRenderModeForUri, selectFileIsPlayingOnPage } from 'redux/selectors/content';
@@ -14,7 +14,7 @@ const select = (state, props) => {
   return {
     fileInfo: makeSelectFileInfoForUri(uri)(state),
     isPlaying: selectFileIsPlayingOnPage(state, uri),
-    streamingUrl: makeSelectStreamingUrlForUri(uri)(state),
+    streamingUrl: selectStreamingUrlForUri(state, uri),
     renderMode: makeSelectFileRenderModeForUri(uri)(state),
     costInfo: selectCostInfoForUri(state, uri),
     claimWasPurchased: selectClaimWasPurchasedForUri(state, uri),

@@ -39,7 +39,7 @@ type Props = {
   doCheckIfPurchasedClaimId: (claimId: string) => void,
   doClearPlayingUri: () => void,
   doFetchCostInfoForUri: (uri: string) => void,
-  doFileGet: (uri: string) => void,
+  doFileGetForUri: (uri: string) => void,
   doSetContentHistoryItem: (uri: string) => void,
   doSetMainPlayerDimension: (dimensions: { height: number, width: number }) => void,
   doSetPrimaryUri: (uri: ?string) => void,
@@ -90,7 +90,7 @@ export default function FilePage(props: Props) {
     doSetPrimaryUri,
     clearPosition,
     doToggleAppDrawer,
-    doFileGet,
+    doFileGetForUri,
     doSetMainPlayerDimension,
     doCheckIfPurchasedClaimId,
     commentSettingDisabled,
@@ -157,7 +157,7 @@ export default function FilePage(props: Props) {
     doFetchCostInfoForUri(uri);
     doSetContentHistoryItem(uri);
     doSetPrimaryUri(uri);
-    if (claimWasPurchased && !hasFileInfo) doFileGet(uri);
+    if (claimWasPurchased && !hasFileInfo) doFileGetForUri(uri);
 
     return () => doSetPrimaryUri(null);
   }, [
@@ -170,7 +170,7 @@ export default function FilePage(props: Props) {
     doFetchCostInfoForUri,
     doSetContentHistoryItem,
     doSetPrimaryUri,
-    doFileGet,
+    doFileGetForUri,
     claimWasPurchased,
   ]);
 

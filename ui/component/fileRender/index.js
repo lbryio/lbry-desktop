@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { makeSelectDownloadPathForUri, makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
+import { makeSelectDownloadPathForUri, selectStreamingUrlForUri } from 'redux/selectors/file_info';
 import { makeSelectClaimForUri, selectThumbnailForUri, makeSelectContentTypeForUri } from 'redux/selectors/claims';
 import * as SETTINGS from 'constants/settings';
 import { selectClientSetting } from 'redux/selectors/settings';
@@ -15,7 +15,7 @@ const select = (state, props) => {
     contentType: makeSelectContentTypeForUri(props.uri)(state),
     downloadPath: makeSelectDownloadPathForUri(props.uri)(state),
     fileExtension: makeSelectFileExtensionForUri(props.uri)(state),
-    streamingUrl: makeSelectStreamingUrlForUri(props.uri)(state),
+    streamingUrl: selectStreamingUrlForUri(state, props.uri),
     renderMode: makeSelectFileRenderModeForUri(props.uri)(state),
     autoplay: autoplay,
   };
