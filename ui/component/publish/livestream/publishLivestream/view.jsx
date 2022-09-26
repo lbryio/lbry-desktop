@@ -80,8 +80,8 @@ function PublishLivestream(props: Props) {
 
   const replayTitleLabel = !inEditMode ? __('Select Replay') : __('Use Replay');
 
-  const RECOMMENDED_BITRATE = 8500000;
-  const MAX_BITRATE = 16500000;
+  const RECOMMENDED_BITRATE = 9500000;
+  const MAX_BITRATE = 19500000;
   const TV_PUBLISH_SIZE_LIMIT_BYTES = WEB_PUBLISH_SIZE_LIMIT_GB * 1073741824;
   const TV_PUBLISH_SIZE_LIMIT_GB_STR = String(WEB_PUBLISH_SIZE_LIMIT_GB);
   const bitRate = getBitrate(size, duration);
@@ -438,7 +438,9 @@ function PublishLivestream(props: Props) {
                                         {item.data.fileDuration && isNaN(item.data.fileDuration)
                                           ? item.data.fileDuration
                                           : `${Math.floor(item.data.fileDuration / 60)} ${
-                                              Math.floor(item.data.fileDuration / 60) === 1 ? __('minute') : __('minutes')
+                                              Math.floor(item.data.fileDuration / 60) === 1
+                                                ? __('minute')
+                                                : __('minutes')
                                             }`}
                                         <div className="table__item-label">
                                           {`${moment(item.data.uploadedAt).from(moment())}`}
