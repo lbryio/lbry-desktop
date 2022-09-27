@@ -13,7 +13,6 @@ import { buildURI, normalizeURI } from 'util/lbryURI';
 import { doPlayUri } from 'redux/actions/content';
 import { selectShouldObscurePreviewForUri } from 'redux/selectors/content';
 import { selectCostInfoForUri, doFetchCostInfoForUri, selectBlackListedOutpoints } from 'lbryinc';
-import { doFileGetForUri } from 'redux/actions/file';
 import { doCommentSocketConnect, doCommentSocketDisconnect } from 'redux/actions/websocket';
 import { doFetchActiveLivestreams, doFetchChannelLiveStatus } from 'redux/actions/livestream';
 import {
@@ -92,7 +91,6 @@ const perform = {
   doResolveUri,
   doPlayUri,
   doFetchCostInfoForUri,
-  doFileGetForUri,
   doFetchChannelLiveStatus,
   doCommentSocketConnect,
   doCommentSocketDisconnect,

@@ -43,7 +43,6 @@ type Props = {
   doResolveUri: (uri: string) => void,
   doPlayUri: (uri: string) => void,
   doFetchCostInfoForUri: (uri: string) => void,
-  doFileGetForUri: (uri: string) => void,
   doFetchChannelLiveStatus: (string) => void,
   doCommentSocketConnect: (string, string, string) => void,
   doCommentSocketDisconnect: (string, string) => void,
@@ -81,7 +80,6 @@ export default function EmbedWrapperPage(props: Props) {
     doResolveUri,
     doPlayUri,
     doFetchCostInfoForUri,
-    doFileGetForUri,
     doFetchChannelLiveStatus,
     doCommentSocketConnect,
     doCommentSocketDisconnect,
@@ -165,9 +163,8 @@ export default function EmbedWrapperPage(props: Props) {
   React.useEffect(() => {
     if (haveClaim && uri) {
       doFetchCostInfoForUri(uri);
-      doFileGetForUri(uri);
     }
-  }, [uri, haveClaim, doFetchCostInfoForUri, doFileGetForUri]);
+  }, [uri, haveClaim, doFetchCostInfoForUri]);
 
   useFetchLiveStatus(livestreamsFetched ? channelClaimId : undefined, doFetchChannelLiveStatus);
 
