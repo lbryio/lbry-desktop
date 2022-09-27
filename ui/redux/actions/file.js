@@ -15,7 +15,7 @@ import { doClearPlayingUri } from 'redux/actions/content';
 import { selectPlayingUri } from 'redux/selectors/content';
 import { doToast } from 'redux/actions/notifications';
 import { selectBalance } from 'redux/selectors/wallet';
-import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
+import { makeSelectFileInfoForUri, selectOutpointFetchingForUri } from 'redux/selectors/file_info';
 import { isStreamPlaceholderClaim } from 'util/claim';
 
 type Dispatch = (action: any) => any;
@@ -116,20 +116,18 @@ export const doFileGetForUri = (uri: string, onSuccess?: (GetResponse) => any) =
   getState: GetState
 ) => {
   const state = getState();
+  const alreadyFetching = selectOutpointFetchingForUri(state, uri);
+
+  if (alreadyFetching) return;
+
   let claim = selectClaimForUri(state, uri);
   if (!claim) {
     claim = await dispatch(doGetClaimFromUriResolve(uri));
   }
-  const isLivestreamClaim = isStreamPlaceholderClaim(claim);
   const { nout, txid } = claim;
   const outpoint = `${txid}:${nout}`;
 
-  dispatch({
-    type: ACTIONS.FETCH_FILE_INFO_STARTED,
-    data: {
-      outpoint,
-    },
-  });
+  dispatch({ type: ACTIONS.FETCH_FILE_INFO_STARTED, data: { outpoint } });
 
   Lbry.get({ uri })
     .then((streamInfo: GetResponse) => {
@@ -175,6 +173,7 @@ export const doFileGetForUri = (uri: string, onSuccess?: (GetResponse) => any) =
 
       // TODO: probably a better way to address this
       // supress no source error if it's a livestream
+      const isLivestreamClaim = isStreamPlaceholderClaim(claim);
       if (isLivestreamClaim && error.message === "stream doesn't have source data") return;
 
       dispatch(

@@ -13,8 +13,8 @@ import { PAGE_SIZE } from 'constants/claim';
 export const selectState = (state) => state.fileInfo || {};
 
 export const selectFileInfosByOutpoint = createSelector(selectState, (state) => state.byOutpoint || {});
-
 export const selectIsFetchingFileList = (state) => selectState(state).isFetchingFileList;
+export const selectFetchingOutpoints = (state) => selectState(state).fetchingOutpoints;
 
 export const selectIsFetchingFileListDownloadedOrPublished = createSelector(
   selectIsFetchingFileList,
@@ -37,6 +37,13 @@ export const makeSelectDownloadingForUri = (uri) =>
     if (!fileInfo) return false;
     return byOutpoint[fileInfo.outpoint];
   });
+
+export const selectOutpointFetchingForUri = (state, uri) => {
+  const outpoint = selectClaimOutpointForUri(state, uri);
+  if (!outpoint) return false;
+
+  return selectFetchingOutpoints(state).includes(outpoint);
+};
 
 export const selectUrisLoading = createSelector(selectState, (state) => state.urisLoading || {});
 
