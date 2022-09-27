@@ -248,7 +248,7 @@ export default function ShowPage(props: Props) {
           isResolvingUri ||
           isResolvingCollection || // added for collection
           (isCollection && !urlForCollectionZero) || // added for collection - make sure we accept urls = []
-          creatorSettings === undefined) && (
+          (creatorSettings === undefined && channelClaimId)) && (
           <div className="main--empty">
             <Spinner />
           </div>
