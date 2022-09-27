@@ -22,6 +22,7 @@ import useConnectionStatus from 'effects/use-connection-status';
 import Spinner from 'component/spinner';
 import LANGUAGES from 'constants/languages';
 import { BeforeUnload, Unload } from 'util/beforeUnload';
+import { platform } from 'util/platform';
 import AdBlockTester from 'web/component/adBlockTester';
 import AdsSticky from 'web/component/adsSticky';
 import YoutubeWelcome from 'web/component/youtubeReferralWelcome';
@@ -162,7 +163,7 @@ function App(props: Props) {
   const hasMyChannels = myChannelClaimIds && myChannelClaimIds.length > 0;
   const hasNoChannels = myChannelClaimIds && myChannelClaimIds.length === 0;
   const shouldMigrateLanguage = LANGUAGE_MIGRATIONS[language];
-  const renderFiledrop = !isMobile && isAuthenticated;
+  const renderFiledrop = !isMobile && isAuthenticated && !platform.isFirefox();
   const connectionStatus = useConnectionStatus();
 
   const urlPath = pathname + hash;
