@@ -118,7 +118,7 @@ export const doFileGetForUri = (uri: string, onSuccess?: (GetResponse) => any) =
   const state = getState();
   const alreadyFetching = selectOutpointFetchingForUri(state, uri);
 
-  if (alreadyFetching) return;
+  if (alreadyFetching && !onSuccess) return;
 
   let claim = selectClaimForUri(state, uri);
   if (!claim) {
