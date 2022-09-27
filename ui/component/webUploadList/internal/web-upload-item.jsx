@@ -16,7 +16,7 @@ type Props = {
 
 export default function WebUploadItem(props: Props) {
   const { uploadItem, doPublishResume, doUpdateUploadRemove, doOpenModal } = props;
-  const { params, file, fileFingerprint, progress, status, resumable, uploader } = uploadItem;
+  const { params, file, fileFingerprint, progress, status, sdkRan, resumable, uploader } = uploadItem;
 
   const [showFileSelector, setShowFileSelector] = useState(false);
   const locked = tusIsSessionLocked(params.guid);
@@ -75,7 +75,7 @@ export default function WebUploadItem(props: Props) {
     }
 
     if (!uploader) {
-      if (status === 'notify') {
+      if (status === 'notify_ok') {
         return __('File uploaded to server.');
       } else {
         return __('Stopped.');
@@ -91,7 +91,7 @@ export default function WebUploadItem(props: Props) {
             return __('Failed.');
           case 'conflict':
             return __('Stopped. Duplicate session detected.');
-          case 'notify':
+          case 'notify_ok':
             return __('Processing file. Please wait...');
           default:
             return status;
@@ -116,10 +116,18 @@ export default function WebUploadItem(props: Props) {
     } else {
       // Refreshed or connection broken ...
 
-      if (status === 'notify') {
-        // ... but 'notify' sent, so we have to assume it is processed.
-        // Can't do much until the polling API is available.
-        return null;
+      if (sdkRan) {
+        // ... '/notify' was already sent and known to be successful. We just
+        // need to resume from the '/status' query stage.
+        return (
+          <Button
+            label={__('Check Status')}
+            button="link"
+            onClick={() => {
+              doPublishResume({ ...params, sdkRan });
+            }}
+          />
+        );
       }
 
       let isFileActive = file instanceof File;
@@ -149,41 +157,11 @@ export default function WebUploadItem(props: Props) {
   function getCancelButton() {
     if (!locked) {
       if (resumable) {
-        if (status === 'notify') {
-          return (
-            <Button
-              button="link"
-              label={__('Remove')}
-              onClick={() => {
-                doOpenModal(MODALS.CONFIRM, {
-                  title: __('Remove entry?'),
-                  body: (
-                    <>
-                      <p>
-                        {__('The file was successfully uploaded, but we could not retrieve the confirmation status.')}
-                      </p>
-                      <p>
-                        {__(
-                          'Wait 5-10 minutes, then refresh and check the Uploads list and Wallet transactions before attempting to re-upload.'
-                        )}
-                      </p>
-                      <p className="section__subtitle">
-                        {__('This entry can be safely removed if the transaction is visible in those pages.')}
-                      </p>
-                      <div className="help--warning">
-                        <p>{__('Press OK to clear this entry from the "Currently Uploading" list.')}</p>
-                      </div>
-                    </>
-                  ),
-                  onConfirm: (closeModal) => {
-                    doUpdateUploadRemove(params.guid);
-                    closeModal();
-                  },
-                });
-              }}
-            />
-          );
-        } else if (parseInt(progress) === 100) {
+        if (sdkRan && status === 'error') {
+          return <Button label={__('Remove')} button="link" onClick={handleCancel} />;
+        }
+
+        if (parseInt(progress) === 100) {
           return null;
         }
       }
@@ -199,7 +177,6 @@ export default function WebUploadItem(props: Props) {
           label={__('File')}
           onFileChosen={handleFileChange}
           // https://stackoverflow.com/questions/19107685/safari-input-type-file-accept-video-ignores-mp4-files
-          accept={'video/mp4,video/x-m4v,video/*,audio/*'}
           placeholder={__('Select the file to resume upload...')}
         />
       </div>

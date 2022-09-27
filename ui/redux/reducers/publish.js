@@ -210,8 +210,18 @@ export const publishReducer = handleActions(
         }
       } else if (status) {
         currentUploads[key].status = status;
-        if (status === 'error' || status === 'conflict') {
-          delete currentUploads[key].uploader;
+
+        switch (status) {
+          case 'error':
+          case 'conflict':
+            delete currentUploads[key].uploader;
+            break;
+          case 'notify_ok':
+            currentUploads[key].sdkRan = true;
+            break;
+          default:
+            // Nothing to do for the rest
+            break;
         }
       }
 

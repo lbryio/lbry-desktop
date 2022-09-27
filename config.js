@@ -11,6 +11,7 @@ const config = {
   LBRY_WEB_API: process.env.LBRY_WEB_API, // api.na-backend.odysee.com',
   LBRY_WEB_PUBLISH_API: process.env.LBRY_WEB_PUBLISH_API,
   LBRY_WEB_PUBLISH_API_V2: process.env.LBRY_WEB_PUBLISH_API_V2,
+  LBRY_WEB_PUBLISH_API_V3: process.env.LBRY_WEB_PUBLISH_API_V3,
   LBRY_API_URL: process.env.LBRY_API_URL, // api.odysee.com',
   LBRY_WEB_BUFFER_API: process.env.LBRY_WEB_BUFFER_API,
   SEARCH_SERVER_API: process.env.SEARCH_SERVER_API,
