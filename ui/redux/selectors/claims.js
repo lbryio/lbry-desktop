@@ -49,8 +49,13 @@ export const selectLatestClaimForUri = createSelector(
   selectLatestByUri,
   (uri, latestByUri) => {
     const latestClaim = latestByUri[uri];
+    if (!latestClaim) return latestClaim;
+
+    const latestClaims = Object.values(latestClaim);
+    if (!latestClaims.length) return null;
+
     // $FlowFixMe
-    return latestClaim && Object.values(latestClaim)[0].stream;
+    return latestClaims[0].stream;
   }
 );
 
