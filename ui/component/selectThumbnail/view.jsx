@@ -73,7 +73,10 @@ function SelectThumbnail(props: Props) {
     if (updateThumbnailParams) {
       updateThumbnailParams({ thumbnail_url: newThumbnail });
     } else {
-      updatePublishForm({ thumbnail: newThumbnail });
+      updatePublishForm({
+        thumbnail: newThumbnail,
+        thumbnailError: newThumbnail.startsWith('data:image'),
+      });
     }
   }
 
@@ -115,7 +118,7 @@ function SelectThumbnail(props: Props) {
         }
         onLoad={() =>
           publishForm
-            ? updatePublishForm({ thumbnailError: !isUrlInput })
+            ? updatePublishForm({ thumbnailError: !isUrlInput || (thumbnail && thumbnail.startsWith('data:image')) })
             : updateThumbnailParams({ thumbnail_error: !isUrlInput })
         }
       />
