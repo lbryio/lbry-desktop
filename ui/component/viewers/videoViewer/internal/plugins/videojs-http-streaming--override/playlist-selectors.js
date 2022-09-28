@@ -3,6 +3,8 @@ import window from 'global/window';
 import Config from './config';
 import Playlist from './playlist';
 
+const gFirstAutoBandwidth = { uri: '', bandwidth: null };
+
 // Utilities
 
 /**
@@ -74,8 +76,18 @@ export const simpleSelector = function(
   playerBandwidth,
   playerWidth,
   playerHeight,
-  limitRenditionByPlayerDimensions
+  limitRenditionByPlayerDimensions,
+  useFirstFoundRendition
 ) {
+  if (useFirstFoundRendition) {
+    if (gFirstAutoBandwidth.uri === master.uri) {
+      const p = master.playlists.find((playlist) => playlist.id === gFirstAutoBandwidth.selectedId);
+      if (p) {
+        return p;
+      }
+    }
+  }
+
   // convert the playlists to an intermediary representation to make comparisons easier
   let sortedPlaylistReps = master.playlists.map((playlist) => {
     let bandwidth;
@@ -192,19 +204,31 @@ export const simpleSelector = function(
  */
 export const lastBandwidthSelector = function() {
   const pixelRatio = this.useDevicePixelRatio ? window.devicePixelRatio || 1 : 1;
+  const player = this.player_;
+  const hlsQualitySelector = player.hlsQualitySelector;
+  const isAutoSelected = hlsQualitySelector?.getCurrentQuality() === 'auto';
+  const useFirstFoundRendition = player.isLivestream && isAutoSelected;
 
   const selectedBandwidth = simpleSelector(
     this.playlists.master,
     this.systemBandwidth,
     parseInt(safeGetComputedStyle(this.tech_.el(), 'width'), 10) * pixelRatio,
     parseInt(safeGetComputedStyle(this.tech_.el(), 'height'), 10) * pixelRatio,
-    this.limitRenditionByPlayerDimensions
+    this.limitRenditionByPlayerDimensions,
+    useFirstFoundRendition
   );
 
-  const player = this.player_;
-  const hlsQualitySelector = player.hlsQualitySelector;
+  // --- Update history
+  if (useFirstFoundRendition && selectedBandwidth) {
+    gFirstAutoBandwidth.uri = this.playlists.master.uri;
+    gFirstAutoBandwidth.selectedId = selectedBandwidth.id;
+  } else {
+    gFirstAutoBandwidth.uri = '';
+    gFirstAutoBandwidth.selectedId = null;
+  }
 
-  if (selectedBandwidth && hlsQualitySelector?.getCurrentQuality() === 'auto') {
+  // --- Update "Auto" label with quality value
+  if (selectedBandwidth && isAutoSelected) {
     const qualityLabel = selectedBandwidth.attributes.RESOLUTION.height + 'p';
     hlsQualitySelector._qualityButton.menuButton_.$('.vjs-icon-placeholder').innerHTML = `<span>${__('Auto --[Video quality. Short form]--')}<span>${qualityLabel}</span></span>`;
   }
