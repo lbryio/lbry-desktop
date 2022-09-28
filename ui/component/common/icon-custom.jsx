@@ -1239,9 +1239,9 @@ export const icons = {
     </svg>
   ),
   [ICONS.FINANCE]: buildIcon(
-    <g transform="scale(0.75),translate(4,4)">
-      <line x1="12" y1="1" x2="12" y2="23" strokeWidth="1.5" />
-      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" strokeWidth="1.5" />
+    <g>
+      <line x1="12" y1="1" x2="12" y2="23" />
+      <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
     </g>
   ),
   [ICONS.EURO]: (props: CustomProps) => (
@@ -3450,7 +3450,6 @@ export const icons = {
         width={size}
         height={size}
         fill={color}
-        // strokeWidth="5"
         strokeLinecap="round"
         strokeLinejoin="round"
         stroke={color}
@@ -3501,7 +3500,7 @@ export const icons = {
     return (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 48 48"
+        viewBox="0 0 64 64"
         width={size}
         height={size}
         fill={color}
@@ -3512,7 +3511,7 @@ export const icons = {
         style={{ overflow: 'visible' }}
         {...otherProps}
       >
-        <g transform="matrix(3.4285714285714284,0,0,3.4285714285714284,0,0)">
+        <g transform="translate(8, 8),matrix(3.4285714285714284,0,0,3.4285714285714284,0,0)">
           <rect x="0.5" y="0.5" width="10.5" height="10.5" rx="1" style={{ fill: color }} />
           <path d="M13.5,3.5v9a1,1,0,0,1-1,1h-9" style={{ fill: 'none' }} />
           <path
