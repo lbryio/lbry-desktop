@@ -169,6 +169,10 @@ const VideoJsEvents = ({
   }
 
   function showTapButton(tapButton) {
+    // Note: This is not a good design by me (inf.persistence) -- do not copy
+    // this style. I didn't know how to avoid renders back then.
+    // But the button should probably be implemented on the videojs side (as a
+    // plugin), and not one level up in React.
     const setButtonVisibility = (theRef, newState) => {
       // Use the DOM to control the state of the button to prevent re-renders.
       if (theRef.current) {

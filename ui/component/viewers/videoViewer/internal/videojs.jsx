@@ -23,6 +23,7 @@ import qualityLevels from 'videojs-contrib-quality-levels';
 import React, { useEffect, useRef, useState } from 'react';
 import i18n from './plugins/videojs-i18n/plugin';
 import recsys from './plugins/videojs-recsys/plugin';
+import watchdog from './plugins/videojs-watchdog/plugin';
 // import runAds from './ads';
 import videojs from 'video.js';
 import { useIsMobile } from 'effects/use-screensize';
@@ -52,6 +53,7 @@ export type Player = {
   loadingSpinner: any,
   autoplay: (any) => boolean,
   tech: (?boolean) => { vhs: ?any },
+  clearInterval: (id: number) => void,
   currentTime: (?number) => number,
   dispose: () => void,
   duration: () => number,
@@ -68,6 +70,7 @@ export type Player = {
   playbackRate: (?number) => number,
   readyState: () => number,
   requestFullscreen: () => boolean,
+  setInterval: (any, number) => number,
   src: ({ src: string, type: string }) => ?string,
   currentSrc: () => string,
   userActive: (?boolean) => boolean,
@@ -120,6 +123,7 @@ const PLUGIN_MAP = {
   qualityLevels: qualityLevels,
   recsys: recsys,
   i18n: i18n,
+  watchdog: watchdog,
 };
 
 Object.entries(PLUGIN_MAP).forEach(([pluginName, plugin]) => {
@@ -322,7 +326,14 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       adapter.ready();
 
       Chromecast.initialize(player);
+
       player.airPlay();
+
+      player.watchdog({
+        timeoutMs: 30000,
+        livestreamsOnly: true,
+        action: () => setReload(Date.now()),
+      });
     });
 
     // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
