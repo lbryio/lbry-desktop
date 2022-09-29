@@ -1175,6 +1175,7 @@
   "Please select the same file from the initial upload.": "Please select the same file from the initial upload.",
   "Cancel upload": "Cancel upload",
   "Cancel and remove the selected upload?": "Cancel and remove the selected upload?",
+  "If the file has been fully uploaded and already being processed, it might still appear in your Uploads list later.": "If the file has been fully uploaded and already being processed, it might still appear in your Uploads list later.",
   "Select the file to resume upload...": "Select the file to resume upload...",
   "Stopped.": "Stopped.",
   "Resume": "Resume",

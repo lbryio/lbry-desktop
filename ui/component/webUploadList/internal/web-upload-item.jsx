@@ -44,7 +44,20 @@ export default function WebUploadItem(props: Props) {
     doOpenModal(MODALS.CONFIRM, {
       title: __('Cancel upload'),
       subtitle: __('Cancel and remove the selected upload?'),
-      body: params.name ? <p className="empty">{`lbry://${params.name}`}</p> : undefined,
+      body: params.name ? (
+        <>
+          <div className="section section--padded border-std non-clickable">
+            <p className="empty">{`lbry://${params.name}`}</p>
+          </div>
+          <div className="section section__subtitle">
+            <p>
+              {__(
+                'If the file has been fully uploaded and already being processed, it might still appear in your Uploads list later.'
+              )}
+            </p>
+          </div>
+        </>
+      ) : undefined,
       onConfirm: (closeModal) => {
         if (tusIsSessionLocked(params.guid)) {
           // Corner-case: it's possible for the upload to resume in another tab
@@ -161,9 +174,12 @@ export default function WebUploadItem(props: Props) {
           return <Button label={__('Remove')} button="link" onClick={handleCancel} />;
         }
 
+        // @if TARGET='DISABLE_FOR_NOW'
+        // (Just let the user cancel if they want now)
         if (parseInt(progress) === 100) {
           return null;
         }
+        // @endif
       }
 
       return <Button label={__('Cancel')} button="link" onClick={handleCancel} />;
