@@ -11,7 +11,8 @@ import { LBRY_WEB_PUBLISH_API_V3 } from 'config';
 const RESUMABLE_ENDPOINT = LBRY_WEB_PUBLISH_API_V3;
 const UPLOAD_CHUNK_SIZE_BYTE = 25 * 1024 * 1024;
 
-const SDK_STATUS_RETRY_COUNT = 30;
+const RETRY_INDEFINITELY = -1;
+const SDK_STATUS_RETRY_COUNT = RETRY_INDEFINITELY;
 const SDK_STATUS_RETRY_INTERVAL = 10000;
 
 const STATUS_FILE_NOT_FOUND = 404;
@@ -57,7 +58,8 @@ function sendStatusRequest(url, guid, token, params, jsonPayload, retryCount, re
 
       case 202:
         // Upload is currently being processed.
-        if (retryCount > 0) {
+        if (retryCount) {
+          window.store.dispatch(doUpdateUploadProgress({ guid, status: 'notify_ok' }));
           setTimeout(() => {
             sendStatusRequest(url, guid, token, params, jsonPayload, retryCount - 1, resolve, reject);
           }, SDK_STATUS_RETRY_INTERVAL);
@@ -140,7 +142,7 @@ export function makeResumableUploadRequest(
     }
 
     if (params.sdkRan) {
-      sendStatusRequest(params.uploadUrl, guid, token, params, jsonPayload, 0, resolve, reject);
+      sendStatusRequest(params.uploadUrl, guid, token, params, jsonPayload, SDK_STATUS_RETRY_COUNT, resolve, reject);
       return;
     }
 

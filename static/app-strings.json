@@ -1186,6 +1186,7 @@
   "File being uploaded in another tab or window.": "File being uploaded in another tab or window.",
   "There are pending uploads.": "There are pending uploads.",
   "Processing file. Please wait...": "Processing file. Please wait...",
+  "Still processing, please be patient...": "Still processing, please be patient...",
   "File uploaded to server.": "File uploaded to server.",
   "Remove entry?": "Remove entry?",
   "The file was successfully uploaded, but we could not retrieve the confirmation status.": "The file was successfully uploaded, but we could not retrieve the confirmation status.",

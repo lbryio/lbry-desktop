@@ -1,5 +1,6 @@
 // @flow
 import React, { useState } from 'react';
+import BusyIndicator from 'component/common/busy-indicator';
 import FileSelector from 'component/common/file-selector';
 import Button from 'component/button';
 import FileThumbnail from 'component/fileThumbnail';
@@ -18,6 +19,7 @@ export default function WebUploadItem(props: Props) {
   const { uploadItem, doPublishResume, doUpdateUploadRemove, doOpenModal } = props;
   const { params, file, fileFingerprint, progress, status, sdkRan, resumable, uploader } = uploadItem;
 
+  const [isCheckingStatus, setIsCheckingStatus] = useState(false);
   const [showFileSelector, setShowFileSelector] = useState(false);
   const locked = tusIsSessionLocked(params.guid);
 
@@ -82,14 +84,18 @@ export default function WebUploadItem(props: Props) {
     });
   }
 
-  function resolveProgressStr() {
+  function getProgressElem() {
     if (locked) {
       return __('File being uploaded in another tab or window.');
     }
 
     if (!uploader) {
       if (status === 'notify_ok') {
-        return __('File uploaded to server.');
+        if (isCheckingStatus) {
+          return <BusyIndicator message={__('Still processing, please be patient...')} />;
+        } else {
+          return __('File uploaded to server.');
+        }
       } else {
         return __('Stopped.');
       }
@@ -105,7 +111,7 @@ export default function WebUploadItem(props: Props) {
           case 'conflict':
             return __('Stopped. Duplicate session detected.');
           case 'notify_ok':
-            return __('Processing file. Please wait...');
+            return <BusyIndicator message={__('Processing file. Please wait...')} />;
           default:
             return status;
         }
@@ -137,6 +143,7 @@ export default function WebUploadItem(props: Props) {
             label={__('Check Status')}
             button="link"
             onClick={() => {
+              setIsCheckingStatus(true);
               doPublishResume({ ...params, sdkRan });
             }}
           />
@@ -205,7 +212,7 @@ export default function WebUploadItem(props: Props) {
         <div className="claim-upload__progress--label">lbry://{params.name}</div>
         <div className={'claim-upload__progress--outer card--inline'}>
           <div className={'claim-upload__progress--inner'} style={{ width: `${progress}%` }}>
-            <span className="claim-upload__progress--inner-text">{resolveProgressStr()}</span>
+            <span className="claim-upload__progress--inner-text">{getProgressElem()}</span>
           </div>
         </div>
       </>
