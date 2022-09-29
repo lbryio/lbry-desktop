@@ -168,6 +168,7 @@ export function makeResumableUploadRequest(
       onError: (err) => {
         const status = err.originalResponse ? err.originalResponse.getStatus() : 0;
         const errMsg = typeof err === 'string' ? err : err.message;
+        analytics.log(err, { extra: { params } }, ERR_GRP.TUS);
 
         let customErr;
         if (status === STATUS_LOCKED || errMsg === 'file currently locked') {
@@ -181,8 +182,6 @@ export function makeResumableUploadRequest(
         }
 
         window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
-        analytics.log(err, {}, ERR_GRP.TUS);
-
         reject(generateError(customErr || err, params, null, uploader, customErr ? err : null));
       },
       onProgress: (bytesUploaded, bytesTotal) => {
