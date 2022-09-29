@@ -5,6 +5,7 @@ import analytics from '../../ui/analytics';
 import { ERR_GRP } from '../../ui/constants/errors';
 import { X_LBRY_AUTH_TOKEN } from '../../ui/constants/token';
 import { doUpdateUploadAdd, doUpdateUploadProgress, doUpdateUploadRemove } from '../../ui/redux/actions/publish';
+import { doToast } from '../../ui/redux/actions/notifications';
 import { generateError } from './publish-error';
 import { LBRY_WEB_PUBLISH_API_V3 } from 'config';
 
@@ -64,9 +65,13 @@ function sendStatusRequest(url, guid, token, params, jsonPayload, retryCount, re
             sendStatusRequest(url, guid, token, params, jsonPayload, retryCount - 1, resolve, reject);
           }, SDK_STATUS_RETRY_INTERVAL);
         } else {
-          window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
-          reject(
-            generateError('The file is still being processed. Check back later after a few minutes.', params, xhr)
+          window.store.dispatch(
+            doToast({
+              message: __('The file is still being processed. Check again later.'),
+              subMessage: __('Please be patient, the process may take a while.'),
+              duration: 'long',
+              isError: false,
+            })
           );
         }
         break;
