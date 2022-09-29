@@ -74,6 +74,7 @@ function sendStatusRequest(url, guid, token, params, jsonPayload, retryCount, re
       case 403:
       case 404:
         // Upload not found or does not belong to the user.
+        analytics.log(new Error('The upload does not exist.'), { extra: { params, xhr } });
         window.store.dispatch(doUpdateUploadProgress({ guid, status: 'error' }));
         reject(generateError('The upload does not exist.', params, xhr));
         break;
