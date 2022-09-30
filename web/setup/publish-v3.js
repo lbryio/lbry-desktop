@@ -226,8 +226,7 @@ export function makeResumableUploadRequest(
           xhr.send(jsonPayload);
         }
 
-        // Server needs time to process the upload before we can send `notify`.
-        setTimeout(() => makeNotifyRequest(), 15000);
+        makeNotifyRequest();
       },
     });
 
