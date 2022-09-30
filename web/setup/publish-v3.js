@@ -32,6 +32,12 @@ function inStatusCategory(status, category) {
 }
 
 function isTusStillInProcess(xhr) {
+  try {
+    if (xhr?.response?.error?.message) {
+      analytics.log(xhr.response.error.message, { extra: { xhr } }, 'notify-error-msg');
+    }
+  } catch {}
+
   return xhr?.response?.error?.message === 'upload is still in process'; // String needs to match backend (not good).
 }
 
@@ -220,7 +226,8 @@ export function makeResumableUploadRequest(
           xhr.send(jsonPayload);
         }
 
-        makeNotifyRequest();
+        // Server needs time to process the upload before we can send `notify`.
+        setTimeout(() => makeNotifyRequest(), 15000);
       },
     });
 
