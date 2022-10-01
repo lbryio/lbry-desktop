@@ -238,6 +238,7 @@ const SettingsStripeCard = (props: Props) => {
           label={__('Name on card')}
           onChange={onChangeCardName}
           value={cardNameValue}
+          disabled={stripeError}
           autoFocus
         />
 
@@ -246,7 +247,10 @@ const SettingsStripeCard = (props: Props) => {
           type="input"
           label={__('Card details')}
           inputElem={
-            <CardElement className="stripe-card__form-input" onChange={(event) => setFormError(event.error?.message)} />
+            <CardElement
+              className={'stripe-card__form-input' + (stripeError ? ' disabled' : '')}
+              onChange={(event) => setFormError(event.error?.message)}
+            />
           }
         />
 

@@ -119,6 +119,12 @@
   &::placeholder {
     color: var(--gray-light);
   }
+
+  &.disabled {
+    opacity: 0.4;
+    padding: 0;
+    height: var(--height-input);
+  }
 }
 
 .sr-result {
