@@ -17,6 +17,7 @@ import Plastic from 'react-plastic';
 import Button from 'component/button';
 import Spinner from 'component/spinner';
 
+const stripePromise = loadStripe(STRIPE_PUBLIC_KEY);
 const CARD_NAME_REGEX = /[0-9!@#$%^&*()_+=[\]{};:"\\|,<>?~]/;
 
 type WrapperProps = {
@@ -252,7 +253,7 @@ const SettingsStripeCard = (props: Props) => {
         {stripeError ? (
           <Button
             className="button--card-link"
-            label={promisePending ? <div className="stripe__spinner" /> : __('Retry')}
+            label={promisePending ? <div className="stripe__spinner" /> : __('Reload')}
             onClick={reloadForm}
           />
         ) : (
@@ -284,8 +285,7 @@ const SettingsStripeCard = (props: Props) => {
 
 export default function Wrapper(props: WrapperProps) {
   const [stripeError, setStripeError] = React.useState();
-  const [stripePromise, setStripePromise] = React.useState(loadStripe(STRIPE_PUBLIC_KEY));
-  const [promisePending, setPromisePending] = React.useState();
+  const [promisePending, setPromisePending] = React.useState(true);
 
   React.useEffect(() => {
     stripePromise
@@ -294,7 +294,7 @@ export default function Wrapper(props: WrapperProps) {
         setPromisePending(false);
         setStripeError(e.message);
       });
-  }, [stripePromise]);
+  }, []);
 
   return (
     <Elements stripe={stripePromise}>
@@ -302,7 +302,7 @@ export default function Wrapper(props: WrapperProps) {
         {...props}
         promisePending={promisePending}
         stripeError={stripeError}
-        reloadForm={() => setStripePromise(loadStripe(STRIPE_PUBLIC_KEY))}
+        reloadForm={() => window.location.reload()}
       />
     </Elements>
   );
