@@ -548,10 +548,10 @@ function SideNavigation(props: Props) {
   const helpLinks = (
     <ul className="navigation__tertiary navigation-links--small">
       <li className="navigation-link">
-        <Button label={__('FAQ and Support')} href="https://odysee.com/@OdyseeHelp:b" />
+        <Button label={__('FAQ and Support')} href="https://help.odysee.tv/" target="_blank" />
       </li>
       <li className="navigation-link">
-        <Button label={__('Community Guidelines')} href="https://odysee.com/@OdyseeHelp:b/Community-Guidelines:c" />
+        <Button label={__('Community Guidelines')} href="https://help.odysee.tv/communityguidelines" target="_blank" />
       </li>
       <li className="navigation-link">
         <Button label={__('Careers')} navigate={`/$/${PAGES.CAREERS}`} />
