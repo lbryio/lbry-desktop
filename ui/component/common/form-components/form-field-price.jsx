@@ -10,12 +10,21 @@ type FormPrice = {
 type Props = {
   price: FormPrice,
   onChange: (FormPrice) => void,
-  placeholder: number,
+  placeholder?: number,
   min: number,
-  disabled: boolean,
+  disabled?: boolean,
   name: string,
-  step: ?number,
+  step?: number,
+  currencies?: Array<'LBC' | CurrencyOption>,
 };
+
+const DEFAULT_CURRENCIES = Object.freeze(['LBC', 'USD']);
+
+const CURRENCY_LABELS = Object.freeze({
+  LBC: 'LBRY Credits',
+  USD: 'US Dollars',
+  EUR: 'Euros',
+});
 
 export class FormFieldPrice extends React.PureComponent<Props> {
   constructor(props: Props) {
@@ -43,7 +52,7 @@ export class FormFieldPrice extends React.PureComponent<Props> {
   }
 
   render() {
-    const { price, placeholder, min, disabled, name, step } = this.props;
+    const { price, placeholder, min, disabled, name, step, currencies } = this.props;
 
     return (
       <fieldset-group class="fieldset-group--smushed">
@@ -70,8 +79,11 @@ export class FormFieldPrice extends React.PureComponent<Props> {
           onChange={this.handleCurrencyChange}
           value={price.currency}
         >
-          <option value="LBC">{__('LBRY Credits')}</option>
-          <option value="USD">{__('US Dollars')}</option>
+          {(currencies || DEFAULT_CURRENCIES).map((c) => (
+            <option key={c} value={c}>
+              {__(CURRENCY_LABELS[c] || c)}
+            </option>
+          ))}
         </FormField>
       </fieldset-group>
     );
