@@ -531,7 +531,8 @@ function UploadForm(props: Props) {
                 odysee_community_guidelines: (
                   <Button
                     button="link"
-                    href="https://odysee.com/@OdyseeHelp:b/Community-Guidelines:c"
+                    href="https://help.odysee.tv/communityguidelines"
+                    target="_blank"
                     label={__('Community Guidelines')}
                   />
                 ),

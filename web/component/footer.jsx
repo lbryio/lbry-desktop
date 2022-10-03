@@ -31,10 +31,14 @@ export default function Footer() {
     <footer className="footer">
       <ul className="navigation__tertiary footer__links">
         <li className="footer__link">
-          <Button label={__('Community Guidelines')} href="https://odysee.com/@OdyseeHelp:b/Community-Guidelines:c" />
+          <Button
+            label={__('Community Guidelines')}
+            href="https://help.odysee.tv/communityguidelines"
+            target="_blank"
+          />
         </li>
         <li className="footer__link">
-          <Button label={__('FAQ')} href="https://odysee.com/@OdyseeHelp:b" />
+          <Button label={__('FAQ')} href="https://help.odysee.tv/" target="_blank" />
         </li>
         <li className="footer__link">
           <Button
