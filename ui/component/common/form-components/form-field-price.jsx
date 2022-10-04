@@ -10,6 +10,7 @@ type FormPrice = {
 type Props = {
   price: FormPrice,
   onChange: (FormPrice) => void,
+  onBlur?: (any) => void,
   placeholder?: number,
   min: number,
   disabled?: boolean,
@@ -32,6 +33,7 @@ export class FormFieldPrice extends React.PureComponent<Props> {
 
     (this: any).handleAmountChange = this.handleAmountChange.bind(this);
     (this: any).handleCurrencyChange = this.handleCurrencyChange.bind(this);
+    (this: any).handleBlur = this.handleBlur.bind(this);
   }
 
   handleAmountChange(event: SyntheticInputEvent<*>) {
@@ -51,6 +53,13 @@ export class FormFieldPrice extends React.PureComponent<Props> {
     });
   }
 
+  handleBlur(event: SyntheticInputEvent<*>) {
+    const { onBlur } = this.props;
+    if (onBlur) {
+      onBlur(event);
+    }
+  }
+
   render() {
     const { price, placeholder, min, disabled, name, step, currencies } = this.props;
 
@@ -65,6 +74,7 @@ export class FormFieldPrice extends React.PureComponent<Props> {
           value={price.amount}
           onWheel={(e) => e.preventDefault()}
           onChange={this.handleAmountChange}
+          onBlur={this.handleBlur}
           placeholder={placeholder || 5}
           disabled={disabled}
           step={step || 'any'}
