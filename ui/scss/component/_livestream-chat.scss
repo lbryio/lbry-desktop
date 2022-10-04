@@ -1092,8 +1092,8 @@ $recent-msg-button__height: 2rem;
   &.livestream__comment--mobile {
     display: unset;
     .comment__author {
-      // margin-top:-2px !important;
       line-height: 18px;
+      height: 18px;
     }
     .channel-thumbnail {
       margin-top: 1px;
