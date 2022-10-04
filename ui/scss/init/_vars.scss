@@ -62,6 +62,9 @@ $spacing-width: 36px;
   --floating-viewer-container-height: calc(var(--floating-viewer-height) + var(--floating-viewer-info-height));
   --option-select-width: 8rem;
 
+  --input-select-server-min-width: 100px;
+  --input-select-server-max-width: 250px;
+
   // Text
   --text-max-width: 660px;
   --text-link-padding: 4px;

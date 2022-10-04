@@ -37,15 +37,11 @@ $thumbnailWidthSmall: 1rem;
 }
 
 .comment__sort {
-  margin-right: var(--spacing-s);
   display: inline-block;
 
   @media (min-width: $breakpoint-small) {
     margin-top: 0;
     display: inline;
-  }
-  @media (max-width: $breakpoint-small) {
-    margin-right: 0;
   }
 }
 

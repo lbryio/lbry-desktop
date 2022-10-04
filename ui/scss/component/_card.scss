@@ -662,9 +662,8 @@
 .button_selectedServer {
   display: inline;
   float: right;
-  min-width: var(--side-nav-width--micro);
-  max-width: var(--side-nav-width);
-  margin-left: -10px;
+  min-width: var(--input-select-server-min-width);
+  max-width: var(--input-select-server-max-width);
 }
 
 .button_refresh {

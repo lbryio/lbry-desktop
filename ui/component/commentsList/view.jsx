@@ -398,9 +398,14 @@ const CommentActionButtons = (actionButtonsProps: ActionButtonsProps) => {
             value={commentServer}
           >
             {allServers.map(function (server) {
+              let name = server.name;
+              if (name.length > 10) {
+                name = name.substring(0, 10);
+                name = name + '...';
+              }
               return (
                 <option key={server.url} value={server.url}>
-                  {server.name}
+                  {name}
                 </option>
               );
             })}
