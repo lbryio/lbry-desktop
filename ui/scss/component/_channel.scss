@@ -833,6 +833,26 @@ $actions-z-index: 2;
     border-radius: var(--border-radius);
     display: flex !important;
     align-items: center;
+    max-width: 340px;
+
+    .claim-preview__title {
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .channel-thumbnail__custom {
+      max-width: unset;
+    }
+    @media (max-width: 1400px) {
+      max-width: 160px;
+    }
+    @media (max-width: 1150px) {
+      max-width: 280px;
+    }
+    @media (max-width: 1000px) {
+      max-width: 220px;
+    }
   }
 }
 

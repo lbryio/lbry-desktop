@@ -1012,7 +1012,6 @@ img {
       border: 2px solid var(--color-border);
       &:hover:not(.button-toggle--active) {
         background-color: rgba(var(--color-border-base), 0.1) !important;
-        //border: 2px solid transparent;
       }
     }
 
