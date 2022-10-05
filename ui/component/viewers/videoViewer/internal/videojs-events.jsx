@@ -1,5 +1,7 @@
 // @flow
 import analytics from 'analytics';
+import { THUMBNAIL_HEIGHT_POSTER, THUMBNAIL_WIDTH_POSTER } from 'config';
+import { getThumbnailCdnUrl } from 'util/thumbnail';
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -205,11 +207,17 @@ const VideoJsEvents = ({
   function updateMediaSession() {
     if ('mediaSession' in navigator) {
       const player = playerRef.current;
+      const thumbnail = getThumbnailCdnUrl({
+        thumbnail: claimValues?.thumbnail?.url,
+        width: THUMBNAIL_WIDTH_POSTER,
+        height: THUMBNAIL_HEIGHT_POSTER,
+      });
+
       // $FlowFixMe
       navigator.mediaSession.metadata = new window.MediaMetadata({
         title: claimValues.title,
         artist: channelTitle,
-        artwork: claimValues?.thumbnail?.url ? [{ src: claimValues.thumbnail.url }] : undefined,
+        artwork: thumbnail ? [{ src: thumbnail }] : undefined,
       });
 
       // $FlowFixMe
