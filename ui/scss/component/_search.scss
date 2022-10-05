@@ -194,8 +194,17 @@
   .search__header {
     .claim-preview__wrapper--channel {
       .claim-preview__repost-author {
-        top: calc(var(--spacing-m) * -1) !important;
-        left: calc(var(--spacing-m) * -1) !important;
+        margin-top: calc(var(--spacing-m) * -1) !important;
+        margin-left: calc(var(--spacing-m) * -1) !important;
+        .claim-preview__repost-ribbon {
+          span {
+            margin-left: 0;
+            color: white;
+            &:hover {
+              opacity: 0.8;
+            }
+          }
+        }
       }
       .claim__menu-button {
         right: calc(var(--spacing-m) - 8px) !important;
