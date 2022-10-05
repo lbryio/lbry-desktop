@@ -274,6 +274,28 @@
     }
   }
 
+  .ads__claim-item {
+    margin-top: 0;
+    margin-bottom: var(--spacing-xxs);
+
+    @media (max-width: $breakpoint-small) {
+      .ads__claim-text {
+        margin-top: 0;
+        margin-bottom: 0;
+        br {
+          display: inline;
+          content: '•';
+          padding: 0 3px;
+        }
+      }
+    }
+    @media (max-width: $breakpoint-xxsmall) {
+      .icon {
+        display: none;
+      }
+    }
+  }
+
   .help {
     color: var(--color-text);
   }
