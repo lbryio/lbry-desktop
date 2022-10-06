@@ -305,6 +305,12 @@
 .file-render--post-container {
   min-height: 30vh;
   margin: var(--spacing-s) 0;
+
+  .button--uri-indicator {
+    .channel-name {
+      display: unset;
+    }
+  }
 }
 
 .file-render__header {
