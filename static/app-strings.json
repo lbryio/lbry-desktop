@@ -1515,6 +1515,8 @@
   "Receive free Credits just for doing what you're already doing": "Receive free Credits just for doing what you're already doing",
   "You have a fan 🥇": "You have a fan 🥇",
   "%commenter% sent a %amount% hyperchat on %title%": "%commenter% sent a %amount% hyperchat on %title%",
+  "%creator_name%, you have a new member!": "%creator_name%, you have a new member!",
+  "%new_member_name% has joined: %membership_tier_name%": "%new_member_name% has joined: %membership_tier_name%",
   "%streamer% is live streaming!": "%streamer% is live streaming!",
   "New content from %creator%": "New content from %creator%",
   "%commenter% commented on %title%": "%commenter% commented on %title%",
@@ -2609,8 +2611,10 @@
   "Members-only comments are now enabled.": "Members-only comments are now enabled.",
   "This chat is in members-only mode": "This chat is in members-only mode",
   "This comment section is in members-only mode": "This comment section is in members-only mode",
-  "To participate, consider buying a membership with the members-only perk from this creator!": "To participate, consider buying a membership with the members-only perk from this creator!",
+  "To participate, consider buying a membership with the members-only chat perk from this creator!": "To participate, consider buying a membership with the members-only chat perk from this creator!",
   "Premium Beta": "Premium Beta",
   "Sorry, this functionality is only available for Odysee Premium users currently.": "Sorry, this functionality is only available for Odysee Premium users currently.",
+  "Only USD banking currently supported, please check back later!": "Only USD banking currently supported, please check back later!",
+  "Bank account connected": "Bank account connected",
   "--end--": "--end--"
 }
