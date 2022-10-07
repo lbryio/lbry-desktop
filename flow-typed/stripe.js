@@ -64,6 +64,7 @@ declare type StripeTransaction = {
   channel_name: string,
   channel_claim_id: string,
   source_claim_id: string,
+  target_claim_id?: string,
   tipped_amount: number,
   transaction_fee: number,
   application_fee: number,

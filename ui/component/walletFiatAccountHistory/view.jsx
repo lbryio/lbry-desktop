@@ -2,6 +2,7 @@
 import React from 'react';
 import Button from 'component/button';
 import moment from 'moment';
+import PAGES from 'constants/pages';
 import * as STRIPE from 'constants/stripe';
 
 type Props = {
@@ -38,6 +39,7 @@ const WalletFiatAccountHistory = (props: Props) => {
           {accountTransactions &&
             accountTransactions.map((transaction) => {
               const { symbol: currencySymbol } = STRIPE.CURRENCY[transaction.currency.toUpperCase()] || {};
+              const targetClaimId = transaction.target_claim_id;
 
               return (
                 <tr key={transaction.name + transaction.created_at}>
@@ -52,14 +54,14 @@ const WalletFiatAccountHistory = (props: Props) => {
                   </td>
                   <td>
                     <Button
-                      className=""
-                      navigate={'/' + transaction.channel_name + ':' + transaction.source_claim_id}
+                      navigate={targetClaimId ? `/$/${PAGES.SEARCH}?q=${targetClaimId}` : undefined}
                       label={
                         transaction.channel_claim_id === transaction.source_claim_id
                           ? __('Channel Page')
                           : __('Content Page')
                       }
                       button="link"
+                      target="_blank"
                     />
                   </td>
                   <td>
