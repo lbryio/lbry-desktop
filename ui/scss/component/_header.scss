@@ -499,6 +499,9 @@
   @media (min-width: $breakpoint-small) {
     font-size: var(--font-large);
   }
+  @media (max-width: $breakpoint-small) {
+    display: none;
+  }
 }
 
 .ReactModal__Overlay {
