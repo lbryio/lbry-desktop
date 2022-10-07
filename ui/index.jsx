@@ -1,4 +1,4 @@
-import 'babel-polyfill';
+import '@babel/polyfill';
 import ErrorBoundary from 'component/errorBoundary';
 import App from 'component/app';
 import SnackBar from 'component/snackBar';

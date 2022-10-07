@@ -77,7 +77,7 @@ Start the installed application to interact with the LBRY network.
 #### Prerequisites
 
 - [Git](https://git-scm.com/downloads)
-- [Node.js](https://nodejs.org/en/download/) (v14 required)
+- [Node.js](https://nodejs.org/en/download/) (v16 required)
 - [Corepack](https://nodejs.org/dist/latest-v17.x/docs/api/corepack.html) `npm i -g corepack` (Included in nodejs 14 LTS, 16 LTS and 17)
 - [Yarn](https://yarnpkg.com/en/docs/install)
 
