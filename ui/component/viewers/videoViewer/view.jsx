@@ -504,8 +504,8 @@ function VideoViewer(props: Props) {
     const moveToPosition = () => {
       // update current time based on previous position
       if (position && !isLivestreamClaim) {
-        // $FlowFixMe
-        player.currentTime(position >= claim.value.video.duration - 100 ? 0 : position);
+        const avDuration = claim?.value?.video?.duration || claim?.value?.audio?.duration;
+        player.currentTime(avDuration && position >= avDuration - 100 ? 0 : position);
       }
     };
 
