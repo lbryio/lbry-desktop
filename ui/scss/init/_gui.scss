@@ -2028,6 +2028,10 @@ img {
     border-radius: var(--border-radius);
     padding: var(--spacing-m);
     margin-bottom: var(--spacing-m);
+
+    .button {
+      max-width: 100%;
+    }
   }
 }
 
