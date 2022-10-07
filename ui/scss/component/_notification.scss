@@ -74,6 +74,7 @@ $contentMaxWidth: 60rem;
       .menu__button {
         opacity: 1;
       }
+      .notificationText__wrapper,
       .notification__text {
         color: var(--color-primary);
       }
@@ -233,6 +234,12 @@ $contentMaxWidth: 60rem;
 
 .notificationText__wrapper {
   max-width: calc(#{$contentMaxWidth} - (#{$thumbnailWidth} * 16 / 9) - var(--spacing-m));
+  font-size: var(--font-small);
+  color: var(--color-text);
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 
   .sticker__comment {
     width: 4.5rem;
@@ -240,11 +247,20 @@ $contentMaxWidth: 60rem;
   }
 }
 
+.notification_list {
+  .notification__title {
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+  .notificationText__wrapper {
+    font-size: var(--font-body);
+  }
+}
+
 .notification__title {
   position: relative;
   font-size: var(--font-xsmall);
   color: var(--color-text-subtitle);
-  // margin-bottom: var(--spacing-xxs);
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
