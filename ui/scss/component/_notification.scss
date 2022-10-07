@@ -252,7 +252,8 @@ $contentMaxWidth: 60rem;
     margin-top: 4px;
     margin-bottom: 4px;
   }
-  .notificationText__wrapper {
+  .notificationText__wrapper,
+  .notification__text {
     font-size: var(--font-body);
   }
 }
