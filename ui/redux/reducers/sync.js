@@ -16,6 +16,25 @@ const defaultState = {
   syncLocked: false,
   hashChanged: false,
   fatalError: false,
+  // lbrysync
+  syncProvider: null,
+  // reg
+  registering: false,
+  registeredEmail: null,
+  registerError: null,
+  // authtoken
+  isAuthenticating: false,
+  authError: null,
+  authToken: null, // store this elsewhere
+  // keys
+  derivingKeys: false,
+  encryptedHmacKey: null,
+  encryptedRoot: null,
+  encryptedProviderPass: null,
+  // salt
+  gettingSalt: false,
+  saltSeed: null,
+  saltError: null,
 };
 
 reducers[ACTIONS.SYNC_STATE_POPULATE] = (state) => {
@@ -107,6 +126,71 @@ reducers[ACTIONS.SYNC_FATAL_ERROR] = (state) => {
     fatalError: true,
   });
 };
+// lbrysync
+reducers[ACTIONS.LSYNC_REGISTER_STARTED] = (state) => ({
+  ...state,
+  registering: true,
+  registerError: null,
+});
+reducers[ACTIONS.LSYNC_REGISTER_COMPLETED] = (state, action) => ({
+  ...state,
+  registeredEmail: action.data.email,
+  encryptedHmacKey: action.data.hmacKey,
+  encryptedProviderPass: action.data.providerPass,
+  encryptedRoot: action.data.rootPass,
+  saltSeed: action.data.saltSeed,
+});
+reducers[ACTIONS.LSYNC_REGISTER_FAILED] = (state, action) => ({
+  ...state,
+  registeredEmail: null,
+  registering: false,
+  registerError: action.data.error,
+});
+  // Auth
+reducers[ACTIONS.LSYNC_AUTH_STARTED] = (state) => ({
+  ...state,
+  isAuthenticating: true,
+  authError: null,
+});
+reducers[ACTIONS.LSYNC_AUTH_COMPLETED] = (state, action) => ({
+  ...state,
+  authToken: action.data,
+});
+reducers[ACTIONS.LSYNC_AUTH_FAILED] = (state, action) => ({
+  ...state,
+  authError: action.data,
+  isAuthenticating: false,
+});
+  // derive
+reducers[ACTIONS.LSYNC_DERIVE_STARTED] = (state) => ({
+  ...state,
+  derivingKeys: true,
+  deriveError: null,
+});
+reducers[ACTIONS.LSYNC_DERIVE_COMPLETED] = (state, action) => ({
+  ...state,
+  derivingKeys: false,
+});
+reducers[ACTIONS.LSYNC_DERIVE_FAILED] = (state, action) => ({
+  ...state,
+  deriveError: action.data.error,
+  derivingKeys: false,
+});
+  // salt
+reducers[ACTIONS.LSYNC_GET_SALT_STARTED] = (state) => ({
+  ...state,
+  gettingSalt: true,
+  saltError: null,
+});
+reducers[ACTIONS.LSYNC_GET_SALT_COMPLETED] = (state, action) => ({
+  ...state,
+  gettingSalt: false,
+});
+reducers[ACTIONS.LSYNC_GET_SALT_FAILED] = (state, action) => ({
+  ...state,
+  saltError: action.data.error,
+  gettingSalt: false,
+});
 
 reducers[ACTIONS.SYNC_RESET] = () => defaultState;
 

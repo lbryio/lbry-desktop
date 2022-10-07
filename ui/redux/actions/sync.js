@@ -4,6 +4,10 @@ import * as SETTINGS from 'constants/settings';
 import * as SHARED_PREFERENCES from 'constants/shared_preferences';
 import { Lbryio } from 'lbryinc';
 import Lbry from 'lbry';
+import { ipcRenderer } from 'electron';
+import * as Lbrysync from 'lbrysync';
+import { safeStoreEncrypt, safeStoreDecrypt, getSavedPassword  } from 'util/saved-passwords';
+
 import { doWalletEncrypt, doWalletDecrypt } from 'redux/actions/wallet';
 import {
   selectSyncHash,
@@ -12,8 +16,7 @@ import {
   selectSyncIsLocked,
 } from 'redux/selectors/sync';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { getSavedPassword } from 'util/saved-passwords';
-import { doAnalyticsTagSync, doHandleSyncComplete } from 'redux/actions/app';
+import { doHandleSyncComplete } from 'redux/actions/app';
 import Comments from 'comments';
 import { getSubsetFromKeysArray } from 'util/sync-settings';
 
@@ -71,6 +74,124 @@ export function doSetDefaultAccount(success: () => void, failure: (string) => vo
   };
 }
 
+export const doLbrysyncGetSalt = (email: string) => async (dispatch: Dispatch) => {
+  const { fetchSaltSeed } = Lbrysync;
+  dispatch({
+    type: ACTIONS.LSYNC_GET_SALT_STARTED,
+  });
+  try {
+    const saltOrError = await fetchSaltSeed(email);
+    dispatch({
+      type: ACTIONS.LSYNC_GET_SALT_COMPLETED,
+      data: { email: email, saltSeed: saltOrError},
+    });
+    return saltOrError;
+  } catch (e) {
+    dispatch({
+      type: ACTIONS.LSYNC_GET_SALT_FAILED,
+      data: { email: email, saltError: 'Not Found'},
+    });
+    return 'not found';
+  }
+};
+
+// register an email (eventually username)
+export const doLbrysyncRegister = (email: string, secrets: any, saltSeed: string) => async (dispatch: Dispatch) => {
+  const { register } = Lbrysync;
+  // started
+  dispatch({
+    type: ACTIONS.LSYNC_REGISTER_STARTED,
+  });
+  const resultIfError = await register(email, secrets.providerPass, saltSeed);
+  const encProviderPass = safeStoreEncrypt(secrets.providerPass);
+  const encHmacKey = safeStoreEncrypt(secrets.hmacKey);
+  const enctyptedRoot = safeStoreEncrypt(secrets.rootPassword);
+  const registerData = {
+    email,
+    saltSeed,
+    providerPass: encProviderPass,
+    hmacKey: encHmacKey,
+    rootPass: enctyptedRoot,
+  };
+
+  if (!resultIfError) {
+    dispatch({
+      type: ACTIONS.LSYNC_REGISTER_COMPLETED,
+      data: registerData,
+    });
+  } else {
+    dispatch({
+      type: ACTIONS.LSYNC_REGISTER_FAILED,
+      data: resultIfError,
+    });
+  }
+};
+
+// get token given username/password
+export const doLbrysyncAuthenticate =
+  () => async (dispatch: Dispatch, getState: GetState) => {
+    dispatch({
+      type: ACTIONS.LSYNC_AUTH_STARTED,
+    });
+    const state = getState();
+    const { lbrysync } = state;
+    const { registeredEmail: email, encryptedProviderPass } = lbrysync;
+    const status = await Lbry.status();
+    const { installation_id: deviceId } = status;
+    const password = safeStoreDecrypt(encryptedProviderPass);
+
+    const { getAuthToken } = Lbrysync;
+
+    const result: { token?: string, error?: string } = await getAuthToken(email, password, deviceId);
+
+    if (result.token) {
+      dispatch({
+        type: ACTIONS.LSYNC_AUTH_COMPLETED,
+        data: result.token,
+      });
+    } else {
+      dispatch({
+        type: ACTIONS.LSYNC_AUTH_FAILED,
+        data: result.error,
+      });
+    }
+  };
+
+export const doGenerateSaltSeed = () => async (dispatch: Dispatch) => {
+  const result = await ipcRenderer.invoke('invoke-get-salt-seed');
+  return result;
+};
+
+export const doDeriveSecrets = (rootPassword: string, email: string, saltSeed: string) => async (dispatch: Dispatch) =>
+{
+  dispatch({
+    type: ACTIONS.LSYNC_DERIVE_STARTED,
+  });
+  try {
+    const result = await ipcRenderer.invoke('invoke-get-secrets', rootPassword, email, saltSeed);
+
+    const data = {
+      hmacKey: result.hmacKey,
+      rootPassword,
+      providerPass: result.lbryIdPassword,
+    };
+
+    dispatch({
+      type: ACTIONS.LSYNC_DERIVE_COMPLETED,
+      data,
+    });
+    return data;
+  } catch (e) {
+    dispatch({
+      type: ACTIONS.LSYNC_DERIVE_FAILED,
+      data: {
+        error: e,
+      },
+    });
+    return { error: e.message };
+  }
+};
+
 export function doSetSync(oldHash: string, newHash: string, data: any) {
   return (dispatch: Dispatch) => {
     dispatch({
@@ -97,10 +218,18 @@ export function doSetSync(oldHash: string, newHash: string, data: any) {
   };
 }
 
+/*
+  make sure
+   - enabled
+   - not pending
+   - wallet not locked
+   -
+  get password
+  doGetSync(password, cb)
+ */
 export const doGetSyncDesktop =
   (cb?: (any, any) => void, password?: string) => (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
-    const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
     const getSyncPending = selectGetSyncIsPending(state);
     const setSyncPending = selectSetSyncIsPending(state);
     const syncLocked = selectSyncIsLocked(state);
@@ -108,31 +237,36 @@ export const doGetSyncDesktop =
     return getSavedPassword().then((savedPassword) => {
       const passwordArgument = password || password === '' ? password : savedPassword === null ? '' : savedPassword;
 
-      if (syncEnabled && !getSyncPending && !setSyncPending && !syncLocked) {
+      if (!getSyncPending && !setSyncPending && !syncLocked) {
         return dispatch(doGetSync(passwordArgument, cb));
       }
     });
   };
 
+/*
+  start regularly polling sync
+   - start loop if should.
+ */
 export function doSyncLoop(noInterval?: boolean) {
   return (dispatch: Dispatch, getState: GetState) => {
     if (!noInterval && syncTimer) clearInterval(syncTimer);
     const state = getState();
-    // SHOULD SYNC
+    // SHOULD SYNC?
     // syncSignedIn = selectLbrySyncSignedIn(state);
     const syncSignedIn = false;
     const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
     const syncLocked = selectSyncIsLocked(state);
+    // if shouldSync
     if (syncSignedIn && syncEnabled && !syncLocked) {
+      // doSync
+      //
       dispatch(doGetSyncDesktop((error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
-      dispatch(doAnalyticsTagSync());
       if (!noInterval) {
         syncTimer = setInterval(() => {
           const state = getState();
           const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
           if (syncEnabled) {
             dispatch(doGetSyncDesktop((error, hasNewData) => dispatch(doHandleSyncComplete(error, hasNewData))));
-            dispatch(doAnalyticsTagSync());
           }
         }, SYNC_INTERVAL);
       }
@@ -140,6 +274,9 @@ export function doSyncLoop(noInterval?: boolean) {
   };
 }
 
+/*
+  stop regularly polling sync
+ */
 export function doSyncUnsubscribe() {
   return () => {
     if (syncTimer) {
@@ -148,6 +285,10 @@ export function doSyncUnsubscribe() {
   };
 }
 
+/*
+  make sure not locked
+
+ */
 export function doGetSync(passedPassword?: string, callback?: (any, ?boolean) => void) {
   const password = passedPassword === null || passedPassword === undefined ? '' : passedPassword;
 

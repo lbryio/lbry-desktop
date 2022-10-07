@@ -22,20 +22,21 @@ export function checkHmac(serverWalletState, hmacKey, hmac) {
 }
 
 export function deriveSecrets(rootPassword, email, saltSeed, callback) {
-  const encodedPassword = Buffer.from(rootPassword.normalize('NFKC'))
-  const encodedEmail = Buffer.from(email)
+  const encodedPassword = Buffer.from(rootPassword.normalize('NFKC'));
+  const encodedEmail = Buffer.from(email);
   const SCRYPT_N = 1 << 20;
   const SCRYPT_R = 8;
   const SCRYPT_P = 1;
   const KEY_LENGTH = 32;
-  const NUM_KEYS = 2;
+  const NUM_KEYS = 3;
   const MAXMEM_MULTIPLIER = 256;
   const DEFAULT_MAXMEM = MAXMEM_MULTIPLIER * SCRYPT_N * SCRYPT_R;
 
   function getKeyParts(key) {
     const lbryIdPassword = key.slice(0, KEY_LENGTH).toString('base64');
-    const hmacKey = key.slice(KEY_LENGTH).toString('base64');
-    return { lbryIdPassword, hmacKey }; // Buffer aa bb cc 6c
+    const hmacKey = key.slice(KEY_LENGTH, KEY_LENGTH * 2).toString('base64');
+    const dataKey = key.slice(KEY_LENGTH * 2).toString('base64');
+    return { lbryIdPassword, hmacKey, dataKey }; // Buffer aa bb cc 6c
   }
 
   const salt = generateSalt(encodedEmail, saltSeed);

@@ -5,7 +5,6 @@ import Card from 'component/common/card';
 import Button from 'component/button';
 import { Form, FormField } from 'component/common/form';
 import I18nMessage from 'component/i18nMessage';
-import Spinner from 'component/spinner';
 import * as ICONS from 'constants/icons';
 
 type Props = {
@@ -55,6 +54,9 @@ export default function NotificationSettingsPage(props: Props) {
     register,
   } = props;
 
+  /*
+    Register / auth
+   */
   const SIGN_IN_MODE = 'sign_in';
   const SIGN_UP_MODE = 'sign_up';
   const VERIFY_MODE = 'verify';
@@ -192,7 +194,7 @@ export default function NotificationSettingsPage(props: Props) {
                   />
                 </>
               }
-              label={__('Password Again')}
+              label={__('Password')}
               value={pass}
               onChange={(e) => setPass(e.target.value)}
             />
@@ -222,7 +224,7 @@ export default function NotificationSettingsPage(props: Props) {
           <p>
             <I18nMessage
               tokens={{
-                sign_in: <Button button="link" onClick={() => setMode(SIGN_UP_MODE)} label={__('Sign in')} />,
+                sign_in: <Button button="link" onClick={() => setMode(SIGN_IN_MODE)} label={__('Sign in')} />,
               }}
             >
               Sign up for a sync account. Or %sign_in%.
@@ -254,7 +256,7 @@ export default function NotificationSettingsPage(props: Props) {
                   />
                 </>
               }
-              label={__('Password Again')}
+              label={__('Password')}
               value={pass}
               onChange={(e) => setPass(e.target.value)}
             />

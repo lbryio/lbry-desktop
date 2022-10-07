@@ -1,7 +1,7 @@
 import test from 'tape';
 // import sync from '../sync.js';
 import { generateSalt, generateSaltSeed, deriveSecrets, walletHmac } from './sync.js';
-export default function doTest () {
+export default function doTest() {
 
   test('Generate sync seed', (assert) => {
     const seed = generateSaltSeed();
@@ -29,12 +29,11 @@ export default function doTest () {
 
     const expectedHmacKey = 'bCxUIryLK0Lf9nKg9yiZDlGleMuGJkadLzTje1PAI+8='; //base64
     const expectedLbryIdPassword = 'HKo/J+x4Hsy2NkMvj2JB9RI0yrvEiB4QSA/NHPaT/cA=';
-    let result;
 
     function cb(e, r) {
-      console.log('result', r)
-      assert.equal(r.keys.hmacKey, expectedHmacKey, 'hmac is expected value');
-      assert.equal(r.keys.lbryIdPassword, expectedLbryIdPassword, 'lbryid password is expected value');
+      console.log('result', r);
+      assert.equal(r.hmacKey, expectedHmacKey, 'hmac is expected value');
+      assert.equal(r.lbryIdPassword, expectedLbryIdPassword, 'lbryid password is expected value');
       assert.end();
     }
 
@@ -51,8 +50,7 @@ export default function doTest () {
     const hmacHex = walletHmac(input_str);
     assert.equal(hmacHex, expectedHmacHex);
     assert.end();
-
   });
 }
 
-doTest()
+doTest();

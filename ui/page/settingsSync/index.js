@@ -17,7 +17,7 @@ import {
   selectLbrySyncEncryptedHmacKey,
   selectLbrySyncEncryptedRoot,
   selectLbrySyncEncryptedProviderPass,
-} from 'redux/selectors/lbrysync';
+} from 'redux/selectors/sync';
 
 import {
   doLbrysyncGetSalt,
@@ -25,10 +25,10 @@ import {
   doGenerateSaltSeed,
   doDeriveSecrets,
   doLbrysyncAuthenticate,
-} from 'redux/actions/lbrysync';
+} from 'redux/actions/sync';
 
 const select = (state) => ({
-  walletEncrypted: selectWalletIsEncrypted(state),
+  isWalletEncrypted: selectWalletIsEncrypted(state),
   registering: selectLbrySyncRegistering(state),
   registeredEmail: selectLbrySyncEmail(state),
   registerError: selectLbrySyncRegisterError(state),

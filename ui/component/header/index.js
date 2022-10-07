@@ -6,7 +6,7 @@ import { selectGetSyncErrorMessage } from 'redux/selectors/sync';
 import { selectHasNavigated } from 'redux/selectors/app';
 import { selectTotalBalance, selectBalance } from 'redux/selectors/wallet';
 import * as SETTINGS from 'constants/settings';
-import { doLbrysyncRegister } from 'redux/actions/lbrysync';
+import { doLbrysyncRegister } from 'redux/actions/sync';
 import Header from './view';
 
 const select = (state) => ({
