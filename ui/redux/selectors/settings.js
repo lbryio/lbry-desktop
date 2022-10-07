@@ -121,8 +121,9 @@ export const selectWildWestDisabled = (state) => {
 
 export const selectosNotificationsEnabled = (state) => selectClientSetting(state, SETTINGS.OS_NOTIFICATIONS_ENABLED);
 
+export const selectDefaultChannelId = (state) => selectClientSetting(state, SETTINGS.ACTIVE_CHANNEL_CLAIM);
 export const selectDefaultChannelClaim = createSelector(
-  (state) => selectClaimForId(state, selectClientSetting(state, SETTINGS.ACTIVE_CHANNEL_CLAIM)),
+  (state) => selectClaimForId(state, selectDefaultChannelId(state)),
   (defaultChannelClaim) => defaultChannelClaim
 );
 

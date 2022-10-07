@@ -127,7 +127,7 @@ export function getChannelNameFromClaim(claim: ?Claim) {
 export function getChannelTitleFromClaim(claim: ?Claim) {
   const channelFromClaim = getChannelFromClaim(claim);
   const value = getClaimMetadata(channelFromClaim);
-  return value && value.title;
+  return (value && value.title) || getNameFromClaim(channelFromClaim);
 }
 
 export function getChannelFromClaim(claim: ?Claim) {

@@ -16,6 +16,7 @@ const select = (state, props) => ({
   floatingPlayer: selectClientSetting(state, SETTINGS.FLOATING_PLAYER),
   autoplayMedia: selectClientSetting(state, SETTINGS.AUTOPLAY_MEDIA),
   autoplayNext: selectClientSetting(state, SETTINGS.AUTOPLAY_NEXT),
+  hideMembersOnlyContent: selectClientSetting(state, SETTINGS.HIDE_MEMBERS_ONLY_CONTENT),
   hideReposts: selectClientSetting(state, SETTINGS.HIDE_REPOSTS),
   hideScheduledLivestreams: selectClientSetting(state, SETTINGS.HIDE_SCHEDULED_LIVESTREAMS),
   showNsfw: selectShowMatureContent(state),

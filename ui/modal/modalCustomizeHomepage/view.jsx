@@ -13,7 +13,7 @@ import { Modal } from 'modal/modal';
 type HomepageOrder = { active: ?Array<string>, hidden: ?Array<string> };
 
 type Props = {
-  hasMembership: ?boolean,
+  userHasOdyseeMembership: ?boolean,
   homepageOrder: HomepageOrder,
   alsoApplyToSidebar: boolean,
   doSetClientSetting: (key: string, value: any, push: boolean) => void,
@@ -24,7 +24,7 @@ type Props = {
 
 export default function ModalCustomizeHomepage(props: Props) {
   const {
-    hasMembership,
+    userHasOdyseeMembership,
     homepageOrder,
     alsoApplyToSidebar,
     doSetClientSetting,
@@ -95,10 +95,10 @@ export default function ModalCustomizeHomepage(props: Props) {
     <Modal
       className="modal-customize-homepage"
       isOpen
-      type={hasMembership ? 'custom' : 'card'}
-      onAborted={hasMembership ? undefined : doHideModal}
+      type={userHasOdyseeMembership ? 'custom' : 'card'}
+      onAborted={userHasOdyseeMembership ? undefined : doHideModal}
     >
-      {!hasMembership && (
+      {!userHasOdyseeMembership && (
         <Card
           title={__('Customize Homepage')}
           subtitle={__('This is currently an early-access feature for Premium members.')}
@@ -110,7 +110,7 @@ export default function ModalCustomizeHomepage(props: Props) {
         />
       )}
 
-      {hasMembership && (
+      {userHasOdyseeMembership && (
         <Card
           title={__('Customize Homepage')}
           body={

@@ -1060,3 +1060,53 @@ svg + .button__label {
 .file-reaction__tooltip-inner {
   margin: 0px !important;
 }
+
+.button--membership {
+  background-image: linear-gradient(147deg, var(--color-primary), rgb(247, 121, 55));
+
+  .button__content {
+    .icon {
+      color: white !important;
+      stroke: white !important;
+      fill: white !important;
+    }
+    .button__label {
+      color: white;
+    }
+  }
+
+  &:hover {
+    .button__content {
+      .icon {
+        color: white !important;
+        stroke: white !important;
+        fill: white !important;
+      }
+      .button__label {
+        color: white;
+      }
+    }
+  }
+}
+
+.button--membership-active {
+  .button__content {
+    .icon {
+      stroke: white !important;
+      fill: white !important;
+    }
+    .button__label {
+      color: white;
+    }
+  }
+  &:hover {
+    .button__label {
+      color: white;
+    }
+    .icon {
+      color: white !important;
+      stroke: white !important;
+      fill: white !important;
+    }
+  }
+}

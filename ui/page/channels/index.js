@@ -6,7 +6,7 @@ import {
   selectPendingIds,
   selectClaimsByUri,
 } from 'redux/selectors/claims';
-import { doFetchUserMemberships } from 'redux/actions/user';
+import { doFetchOdyseeMembershipForChannelIds } from 'redux/actions/memberships';
 import { doUserViewRateList } from 'redux/actions/rewards';
 import { doFetchChannelListMine } from 'redux/actions/claims';
 import { doSetActiveChannel } from 'redux/actions/app';
@@ -28,7 +28,7 @@ const select = (state) => ({
 const perform = {
   doFetchChannelListMine,
   doSetActiveChannel,
-  doFetchUserMemberships,
+  doFetchOdyseeMembershipForChannelIds,
   doUserViewRateList,
 };
 

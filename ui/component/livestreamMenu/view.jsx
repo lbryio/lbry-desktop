@@ -19,19 +19,33 @@ type Props = {
   setPopoutWindow?: (any) => void,
   toggleHyperchats?: () => void,
   toggleIsCompact?: () => void,
+  // -- redux --
+  claimId: ?string,
+  claimIsMine: boolean,
+  channelHasMembershipTiers: boolean,
+  isLivestreamChatMembersOnly?: boolean,
+  doToggleLiveChatMembersOnlySettingForClaimId: (claimId: ClaimId) => Promise<any>,
+  doToast: ({ message: string }) => void,
 };
 
-export default function LivestreamMenu(props: Props) {
+const LivestreamMenu = (props: Props) => {
   const {
-    isPopoutWindow,
-    hyperchatsHidden,
-    noHyperchats,
-    isMobile,
-    isCompact,
     hideChat,
+    hyperchatsHidden,
+    isCompact,
+    isMobile,
+    isPopoutWindow,
+    noHyperchats,
     setPopoutWindow,
     toggleHyperchats,
     toggleIsCompact,
+    // -- redux --
+    claimId,
+    claimIsMine,
+    channelHasMembershipTiers,
+    isLivestreamChatMembersOnly,
+    doToggleLiveChatMembersOnlySettingForClaimId,
+    doToast,
   } = props;
 
   const {
@@ -41,6 +55,18 @@ export default function LivestreamMenu(props: Props) {
   const initialPopoutUnload = React.useRef(false);
 
   const [showTimestamps, setShowTimestamps] = usePersistedState('live-timestamps', false);
+
+  function updateLivestreamMembersOnlyChat() {
+    if (claimId) {
+      doToggleLiveChatMembersOnlySettingForClaimId(claimId).then(() =>
+        doToast({
+          message: __(
+            isLivestreamChatMembersOnly ? 'Members-only chat is now disabled.' : 'Members-only chat is now enabled.'
+          ),
+        })
+      );
+    }
+  }
 
   function handlePopout() {
     if (setPopoutWindow) {
@@ -77,6 +103,14 @@ export default function LivestreamMenu(props: Props) {
         </MenuButton>
 
         <MenuList className="menu__list">
+          {channelHasMembershipTiers && claimIsMine && (
+            <MenuItem className="comment__menu-option" onSelect={() => updateLivestreamMembersOnlyChat()}>
+              <span className="menu__link">
+                <Icon aria-hidden icon={ICONS.MEMBERSHIP} />
+                {__(isLivestreamChatMembersOnly ? 'Disable Members-Only Chat' : 'Enable Members-Only Chat')}
+              </span>
+            </MenuItem>
+          )}
           <MenuItem className="comment__menu-option" onSelect={() => setShowTimestamps(!showTimestamps)}>
             <span className="menu__link">
               <Icon aria-hidden icon={ICONS.TIME} />
@@ -131,7 +165,9 @@ export default function LivestreamMenu(props: Props) {
       </Menu>
     </>
   );
-}
+};
+
+export default LivestreamMenu;
 
 type GlobalStylesProps = {
   showTimestamps?: boolean,

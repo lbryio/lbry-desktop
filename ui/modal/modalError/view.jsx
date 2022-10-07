@@ -62,7 +62,7 @@ class ModalError extends React.PureComponent<Props> {
       if (label !== 'skip') {
         const val = typeof errorObj[key] === 'string' ? errorObj[key] : JSON.stringify(errorObj[key]);
         errorInfoList.push(
-          <li key={key}>
+          <li>
             <strong>{label}</strong>: {val}
           </li>
         );

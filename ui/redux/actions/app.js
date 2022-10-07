@@ -45,6 +45,7 @@ import { selectDaemonSettings, selectClientSetting } from 'redux/selectors/setti
 import { selectUser, selectUserVerifiedEmail } from 'redux/selectors/user';
 import { doSetPrefsReady, doPreferenceGet, doPopulateSharedUserState, syncInvalidated } from 'redux/actions/sync';
 import { doAuthenticate } from 'redux/actions/user';
+import { doMembershipMine } from 'redux/actions/memberships';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 import analytics from 'analytics';
 import { doSignOutCleanup } from 'util/saved-passwords';
@@ -568,6 +569,7 @@ export function doSignIn() {
     dispatch(doBalanceSubscribe());
     dispatch(doFetchChannelListMine());
     dispatch(doFetchCollectionListMine());
+    dispatch(doMembershipMine());
   };
 }
 

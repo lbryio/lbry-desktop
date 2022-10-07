@@ -50,7 +50,7 @@ type Props = {
 const Button = forwardRef<any, {}>((props: Props, ref: any) => {
   const {
     type = 'button',
-    onClick,
+    onClick: onClickProp,
     href,
     title,
     label,
@@ -84,6 +84,7 @@ const Button = forwardRef<any, {}>((props: Props, ref: any) => {
   } = props;
 
   const disable = disabled || (user === null && requiresAuth);
+  const onClick = disabled ? undefined : onClickProp;
 
   const combinedClassName = classnames(
     'button',

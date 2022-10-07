@@ -5,7 +5,6 @@ import { MINIMUM_PUBLISH_BID } from 'constants/claim';
 import { useIsMobile } from 'effects/use-screensize';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
-import * as MODALS from 'constants/modal_types';
 import Button from 'component/button';
 import classnames from 'classnames';
 import React from 'react';
@@ -37,8 +36,6 @@ type Props = {
   preferredCurrency: string,
   doTipAccountCheckForUri: (uri: string) => void,
   doGetCustomerStatus: () => void,
-  doOpenModal: (modalId: string, modalProps?: any) => void,
-  modalProps?: any,
 };
 
 function WalletTipAmountSelector(props: Props) {
@@ -62,8 +59,6 @@ function WalletTipAmountSelector(props: Props) {
     preferredCurrency,
     doTipAccountCheckForUri,
     doGetCustomerStatus,
-    doOpenModal,
-    modalProps,
   } = props;
 
   const isMobile = useIsMobile();
@@ -80,7 +75,7 @@ function WalletTipAmountSelector(props: Props) {
       : DEFAULT_TIP_AMOUNTS;
 
   // if it's fiat but there's no card saved OR the creator can't receive fiat tips
-  const shouldDisableFiatSelectors = activeTab === TAB_FIAT && (!hasSavedCard || !canReceiveFiatTips);
+  const shouldDisableFiatSelectors = activeTab === TAB_FIAT && !canReceiveFiatTips;
 
   /**
    * whether tip amount selection/review functionality should be disabled
@@ -286,25 +281,7 @@ function WalletTipAmountSelector(props: Props) {
 
       {/* help message */}
       {activeTab === TAB_FIAT &&
-        (!hasSavedCard
-          ? getHelpMessage(
-              <>
-                <Button
-                  requiresAuth
-                  onClick={() =>
-                    doOpenModal(MODALS.ADD_CARD, {
-                      previousModal: modalProps ? MODALS.SEND_TIP : undefined,
-                      previousProps: modalProps,
-                    })
-                  }
-                  label={__('Add a Card')}
-                  button="link"
-                />
-                {' ' + __('To Tip Creators')}
-              </>,
-              'add-a-card-help-message'
-            )
-          : !canReceiveFiatTips
+        (!canReceiveFiatTips
           ? getHelpMessage(__('Only creators that verify cash accounts can receive tips'))
           : getHelpMessage(__('Send a tip directly from your attached card')))}
     </>

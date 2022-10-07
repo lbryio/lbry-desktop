@@ -1,11 +1,11 @@
 // @flow
 import { Form } from 'component/common/form';
-import * as MODALS from 'constants/modal_types';
 import * as STRIPE from 'constants/stripe';
 import Button from 'component/button';
 import Card from 'component/common/card';
-import I18nMessage from 'component/i18nMessage';
 import React from 'react';
+
+import withCreditCard from 'hocs/withCreditCard';
 
 import { getStripeEnvironment } from 'util/stripe';
 const stripeEnvironment = getStripeEnvironment();
@@ -69,12 +69,10 @@ type Props = {
     ?(any) => void
   ) => void,
   purchaseMadeForClaimId: ?boolean,
-  hasSavedCard: boolean,
   doCheckIfPurchasedClaimId: (string) => void,
   preferredCurrency: string,
   tags: any,
   humanReadableTime: ?string,
-  doOpenModal: (modalId: string, ?{}) => void,
 };
 
 export default function PreorderAndPurchaseContentCard(props: Props) {
@@ -88,10 +86,8 @@ export default function PreorderAndPurchaseContentCard(props: Props) {
     preferredCurrency,
     doCheckIfPurchasedClaimId,
     claimId,
-    hasSavedCard,
     tags,
     humanReadableTime,
-    doOpenModal,
   } = props;
 
   const [tipAmount, setTipAmount] = React.useState(0);
@@ -127,28 +123,6 @@ export default function PreorderAndPurchaseContentCard(props: Props) {
   const RENT_STRINGS = STRINGS['rental'];
 
   const fiatSymbol = STRIPE.CURRENCY[preferredCurrency].symbol;
-
-  const AddCardButton = (
-    <I18nMessage
-      tokens={{
-        add_a_card: (
-          <Button
-            requiresAuth
-            onClick={() =>
-              doOpenModal(MODALS.ADD_CARD, {
-                previousModal: MODALS.PREORDER_AND_PURCHASE_CONTENT,
-                previousProps: props,
-              })
-            }
-            label={__('Add a card --[replaces add_a_card]--')}
-            button="link"
-          />
-        ),
-      }}
-    >
-      {STR.add_card}
-    </I18nMessage>
-  );
 
   function handleSubmit(forceRental) {
     // if it's both purchase/rent, use purchase, for rent we will force it
@@ -207,30 +181,15 @@ export default function PreorderAndPurchaseContentCard(props: Props) {
             </div>
           }
           actions={
-            // confirm purchase functionality
-            <>
-              <div className="handle-submit-area">
-                <Button
-                  autoFocus
-                  onClick={() => handleSubmit()}
-                  button="primary"
-                  label={__(STR.button, { currency: fiatSymbol, amount: tipAmount.toString() })}
-                  disabled={!hasSavedCard}
-                />
-                {tags.purchaseTag && tags.rentalTag && (
-                  <Button
-                    autoFocus
-                    onClick={() => handleSubmit('rent')}
-                    button="primary"
-                    label={__(RENT_STRINGS.button, { currency: fiatSymbol, amount: rentTipAmount.toString() })}
-                    disabled={!hasSavedCard}
-                    style={{ marginTop: '16px' }}
-                  />
-                )}
-
-                {!hasSavedCard && <div className="add-card-prompt">{AddCardButton}</div>}
-              </div>
-            </>
+            <SubmitArea
+              handleSubmit={handleSubmit}
+              STR={STR}
+              fiatSymbol={fiatSymbol}
+              tipAmount={tipAmount}
+              tags={tags}
+              RENT_STRINGS={RENT_STRINGS}
+              rentTipAmount={rentTipAmount}
+            />
           }
         />
       )}
@@ -245,3 +204,22 @@ export default function PreorderAndPurchaseContentCard(props: Props) {
     </Form>
   );
 }
+
+const SubmitButton = (props: any) => <Button autoFocus button="primary" {...props} />;
+
+const SubmitArea = withCreditCard((props: any) => (
+  <>
+    <div className="handle-submit-area">
+      <SubmitButton
+        onClick={() => props.handleSubmit()}
+        label={__(props.STR.button, { currency: props.fiatSymbol, amount: props.tipAmount.toString() })}
+      />
+      {props.tags.purchaseTag && props.tags.rentalTag && (
+        <SubmitButton
+          onClick={() => props.handleSubmit('rent')}
+          label={__(props.RENT_STRINGS.button, { currency: props.fiatSymbol, amount: props.rentTipAmount.toString() })}
+        />
+      )}
+    </div>
+  </>
+));

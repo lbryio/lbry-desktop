@@ -21,6 +21,7 @@ import SwipeableDrawer from 'component/swipeableDrawer';
 import DrawerExpandButton from 'component/swipeableDrawerExpand';
 import PreorderAndPurchaseContentButton from 'component/preorderAndPurchaseContentButton';
 import { useIsMobile, useIsMobileLandscape, useIsMediumScreen } from 'effects/use-screensize';
+import ProtectedContentOverlay from 'component/protectedContentOverlay';
 
 const CommentsList = lazyImport(() => import('component/commentsList' /* webpackChunkName: "comments" */));
 const PostViewer = lazyImport(() => import('component/postViewer' /* webpackChunkName: "postViewer" */));
@@ -30,6 +31,7 @@ export const PRIMARY_IMAGE_WRAPPER_CLASS = 'file-render__img-container';
 
 type Props = {
   audioVideoDuration: ?number,
+  channelId?: string,
   claimId: string,
   claimIsMine: boolean,
   claimWasPurchased: boolean,
@@ -44,6 +46,7 @@ type Props = {
   doSetMainPlayerDimension: (dimensions: { height: number, width: number }) => void,
   doSetPrimaryUri: (uri: ?string) => void,
   doToggleAppDrawer: (type: string) => void,
+  doMembershipContentforStreamClaimId: (type: string) => void,
   fileInfo: FileListItem,
   isLivestream: boolean,
   isMature: boolean,
@@ -58,16 +61,25 @@ type Props = {
   purchaseTag: number,
   renderMode: string,
   rentalTag: string,
+  settingsByChannelId: { [channelId: string]: PerChannelSettings },
   commentSettingDisabled: ?boolean,
   threadCommentId?: string,
   uri: string,
   videoTheaterMode: boolean,
+  myActiveMemberships: ?MembershipMineDataByKey,
+  doMembershipMine: () => void,
+  protectedMembershipIds?: Array<number>,
+  validMembershipIds?: Array<number>,
+  protectedContentTag?: string,
+  isProtectedContent?: boolean,
+  contentUnlocked: boolean,
 };
 
 export default function FilePage(props: Props) {
   const {
     playingCollectionId,
     uri,
+    // channelId,
     renderMode,
     fileInfo,
     obscureNsfw,
@@ -76,28 +88,33 @@ export default function FilePage(props: Props) {
     linkedCommentId,
     threadCommentId,
     videoTheaterMode,
-
-    claimIsMine,
-    isLivestream,
-    position,
-    audioVideoDuration,
-    commentsListTitle,
-    claimWasPurchased,
-    location,
-    isUriPlaying,
-    doFetchCostInfoForUri,
-    doSetContentHistoryItem,
-    doSetPrimaryUri,
-    clearPosition,
-    doToggleAppDrawer,
-    doFileGetForUri,
-    doSetMainPlayerDimension,
-    doCheckIfPurchasedClaimId,
     commentSettingDisabled,
-    purchaseTag,
-    preorderTag,
-    rentalTag,
+    audioVideoDuration,
     claimId,
+    claimIsMine,
+    claimWasPurchased,
+    clearPosition,
+    commentsListTitle,
+    doCheckIfPurchasedClaimId,
+    doFetchCostInfoForUri,
+    doFileGetForUri,
+    doMembershipContentforStreamClaimId,
+    doMembershipMine,
+    doSetContentHistoryItem,
+    doSetMainPlayerDimension,
+    doSetPrimaryUri,
+    doToggleAppDrawer,
+    isLivestream,
+    isUriPlaying,
+    location,
+    myActiveMemberships,
+    position,
+    preorderTag,
+    purchaseTag,
+    rentalTag,
+    // settingsByChannelId,
+    isProtectedContent,
+    contentUnlocked,
   } = props;
 
   const { search } = location;
@@ -118,6 +135,7 @@ export default function FilePage(props: Props) {
   const isMediumScreen = useIsMediumScreen() && !isMobile;
   const isLandscapeRotated = useIsMobileLandscape();
   const theaterMode = renderMode === 'video' || renderMode === 'audio' ? videoTheaterMode : false;
+
   const cost = costInfo ? costInfo.cost : null;
   const hasFileInfo = fileInfo !== undefined;
   const isMarkdown = renderMode === RENDER_MODES.MARKDOWN;
@@ -131,6 +149,7 @@ export default function FilePage(props: Props) {
 
     return durationInSecs ? isVideoTooShort || almostFinishedPlaying : false;
   }, [audioVideoDuration, fileInfo, position]);
+  const accessStatus = !isProtectedContent ? undefined : contentUnlocked ? 'unlocked' : 'locked';
 
   React.useEffect(() => {
     if ((linkedCommentId || threadCommentId) && isMobile) {
@@ -142,9 +161,24 @@ export default function FilePage(props: Props) {
   }, []);
 
   React.useEffect(() => {
+    if (myActiveMemberships === undefined) {
+      doMembershipMine();
+    }
+  }, [doMembershipMine, myActiveMemberships]);
+
+  React.useEffect(() => {
     const aPurchaseOrPreorder = purchaseTag || preorderTag || rentalTag;
     if (aPurchaseOrPreorder && claimId) doCheckIfPurchasedClaimId(claimId);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [purchaseTag, preorderTag, rentalTag, claimId]);
+
+  React.useEffect(() => {
+    if (claimId) {
+      doMembershipContentforStreamClaimId(claimId);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [claimId]);
 
   React.useEffect(() => {
     // always refresh file info when entering file page to see if we have the file
@@ -188,6 +222,7 @@ export default function FilePage(props: Props) {
     if (RENDER_MODES.FLOATING_MODES.includes(renderMode)) {
       return (
         <div className={PRIMARY_PLAYER_WRAPPER_CLASS} ref={playerRef}>
+          <ProtectedContentOverlay uri={uri} />
           {/* playables will be rendered and injected by <FileRenderFloating> */}
           <FileRenderInitiator uri={uri} videoTheaterMode={theaterMode} />
         </div>
@@ -197,7 +232,7 @@ export default function FilePage(props: Props) {
     if (RENDER_MODES.UNRENDERABLE_MODES.includes(renderMode) && !isMature) {
       return (
         <>
-          <FileTitleSection uri={uri} />
+          <FileTitleSection uri={uri} accessStatus={accessStatus} />
           <FileRenderDownload uri={uri} isFree={cost === 0} />
         </>
       );
@@ -214,9 +249,12 @@ export default function FilePage(props: Props) {
     if (RENDER_MODES.TEXT_MODES.includes(renderMode)) {
       return (
         <>
-          <FileRenderInline uri={uri} />
-          <FileRenderInitiator uri={uri} />
-          <FileTitleSection uri={uri} />
+          <div className="file-page__pdf-wrapper">
+            <ProtectedContentOverlay uri={uri} />
+            <FileRenderInline uri={uri} />
+            <FileRenderInitiator uri={uri} />
+          </div>
+          <FileTitleSection uri={uri} accessStatus={accessStatus} />
         </>
       );
     }
@@ -225,10 +263,11 @@ export default function FilePage(props: Props) {
       return (
         <>
           <div className={PRIMARY_IMAGE_WRAPPER_CLASS}>
+            <ProtectedContentOverlay uri={uri} />
             <FileRenderInitiator uri={uri} />
             <FileRenderInline uri={uri} />
           </div>
-          <FileTitleSection uri={uri} />
+          <FileTitleSection uri={uri} accessStatus={accessStatus} />
         </>
       );
     }
@@ -237,7 +276,7 @@ export default function FilePage(props: Props) {
       <>
         <FileRenderInitiator uri={uri} videoTheaterMode={theaterMode} />
         <FileRenderInline uri={uri} />
-        <FileTitleSection uri={uri} />
+        <FileTitleSection uri={uri} accessStatus={accessStatus} />
       </>
     );
   }
@@ -248,7 +287,7 @@ export default function FilePage(props: Props) {
     return (
       <Page className="file-page" filePage isMarkdown={isMarkdown}>
         <div className={classnames('section card-stack', `file-page__${renderMode}`)}>
-          <FileTitleSection uri={uri} isNsfwBlocked />
+          <FileTitleSection uri={uri} accessStatus={accessStatus} isNsfwBlocked />
         </div>
         {!isMarkdown && !theaterMode && <RightSideContent {...rightSideProps} />}
       </Page>
@@ -281,23 +320,30 @@ export default function FilePage(props: Props) {
 
               {isMediumScreen && <PlaylistCard id={collectionId} uri={uri} colorHeader useDrawer={isMobile} />}
 
-              {RENDER_MODES.FLOATING_MODES.includes(renderMode) && <FileTitleSection uri={uri} />}
+              {RENDER_MODES.FLOATING_MODES.includes(renderMode) && (
+                <FileTitleSection uri={uri} accessStatus={accessStatus} />
+              )}
 
-              <React.Suspense fallback={null}>
-                {commentSettingDisabled ? (
-                  <Empty {...emptyMsgProps} text={__('The creator of this content has disabled comments.')} />
-                ) : isMobile && !isLandscapeRotated ? (
-                  <React.Fragment>
-                    <SwipeableDrawer type={DRAWERS.CHAT} title={commentsListTitle}>
-                      <CommentsList {...commentsListProps} />
-                    </SwipeableDrawer>
+              {contentUnlocked && (
+                <React.Suspense fallback={null}>
+                  {commentSettingDisabled ? (
+                    <Empty {...emptyMsgProps} text={__('The creator of this content has disabled comments.')} />
+                  ) : isMobile && !isLandscapeRotated ? (
+                    <React.Fragment>
+                      <SwipeableDrawer type={DRAWERS.CHAT} title={commentsListTitle}>
+                        <CommentsList {...commentsListProps} />
+                      </SwipeableDrawer>
 
-                    <DrawerExpandButton icon={ICONS.CHAT} label={commentsListTitle} type={DRAWERS.CHAT} />
-                  </React.Fragment>
-                ) : (
-                  <CommentsList {...commentsListProps} notInDrawer />
-                )}
-              </React.Suspense>
+                      <DrawerExpandButton icon={ICONS.CHAT} label={commentsListTitle} type={DRAWERS.CHAT} />
+                    </React.Fragment>
+                  ) : (
+                    <>
+                      {/* normal comments list */}
+                      {contentUnlocked && <CommentsList {...commentsListProps} notInDrawer />}
+                    </>
+                  )}
+                </React.Suspense>
+              )}
             </section>
 
             {theaterMode && <RightSideContent {...rightSideProps} />}
@@ -310,7 +356,7 @@ export default function FilePage(props: Props) {
         : !commentSettingDisabled && (
             <div className="file-page__post-comments">
               <React.Suspense fallback={null}>
-                <CommentsList {...commentsListProps} commentsAreExpanded notInDrawer />
+                <>{contentUnlocked && <CommentsList {...commentsListProps} commentsAreExpanded notInDrawer />}</>
               </React.Suspense>
             </div>
           )}

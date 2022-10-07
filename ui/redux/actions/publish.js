@@ -6,6 +6,8 @@ import * as PAGES from 'constants/pages';
 import { batchActions } from 'util/batch-actions';
 import { THUMBNAIL_CDN_SIZE_LIMIT_BYTES } from 'config';
 import { doCheckPendingClaims } from 'redux/actions/claims';
+import { selectProtectedContentMembershipsForClaimId } from 'redux/selectors/memberships';
+import { doSaveMembershipRestrictionsForContent, doMembershipContentforStreamClaimId } from 'redux/actions/memberships';
 import {
   makeSelectClaimForUri,
   selectMyActiveClaims,
@@ -25,8 +27,13 @@ import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
 import { creditsToString } from 'util/format-credits';
 import Lbry from 'lbry';
 // import LbryFirst from 'extras/lbry-first/lbry-first';
-import { isClaimNsfw } from 'util/claim';
-import { LBRY_FIRST_TAG, SCHEDULED_LIVESTREAM_TAG } from 'constants/tags';
+import { isClaimNsfw, getChannelIdFromClaim } from 'util/claim';
+import {
+  LBRY_FIRST_TAG,
+  SCHEDULED_LIVESTREAM_TAG,
+  MEMBERS_ONLY_CONTENT_TAG,
+  // RESTRICTED_CHAT_COMMENTS_TAG,
+} from 'constants/tags';
 
 function resolveClaimTypeForAnalytics(claim) {
   if (!claim) {
@@ -77,6 +84,8 @@ function resolvePublishPayload(publishData, myClaimForUri, myChannels, preview) 
     optimize,
     isLivestreamPublish,
     remoteFileUrl,
+    restrictedToMemberships,
+    // restrictCommentsAndChat,
   } = publishData;
 
   // Handle scenario where we have a claim that has the same name as a channel we are publishing with.
@@ -206,6 +215,22 @@ function resolvePublishPayload(publishData, myClaimForUri, myChannels, preview) 
     publishPayload.optimize_file = false;
   }
 
+  // ** Memberships **
+  const publishPayloadTags = new Set(publishPayload.tags);
+
+  const publishTagsHaveRestrictedMemberships = publishPayloadTags.has(MEMBERS_ONLY_CONTENT_TAG);
+
+  // add members only tag if it's restricted to memberships and tag doesn't exist
+  if (restrictedToMemberships && !publishTagsHaveRestrictedMemberships && publishPayload.channel_id) {
+    publishPayloadTags.add(MEMBERS_ONLY_CONTENT_TAG);
+  }
+
+  if (!publishPayload.channel_id || (!restrictedToMemberships && publishTagsHaveRestrictedMemberships)) {
+    publishPayloadTags.delete(MEMBERS_ONLY_CONTENT_TAG);
+  }
+
+  publishPayload.tags = Array.from(publishPayloadTags);
+
   return publishPayload;
 }
 
@@ -222,6 +247,8 @@ export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispat
   const state = getState();
   const editingUri = selectPublishFormValue(state, 'editingURI') || '';
   const remoteUrl = selectPublishFormValue(state, 'remoteFileUrl');
+  const restrictedToMemberships = selectPublishFormValue(state, 'restrictedToMemberships');
+
   const claim = makeSelectClaimForUri(editingUri)(state) || {};
   const hasSourceFile = claim.value && claim.value.source;
   const redirectToLivestream = noFileParam && !hasSourceFile && !remoteUrl;
@@ -230,7 +257,21 @@ export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispat
     const state = getState();
     const myClaims = selectMyClaims(state);
     const pendingClaim = successResponse.outputs[0];
-    analytics.apiLog.publish(pendingClaim);
+    const publishData = selectPublishFormValues(state);
+
+    const { restrictedToMemberships } = publishData;
+
+    const apiLogSuccessCb = (claimResult: ChannelClaim | StreamClaim) => {
+      const channelClaimId = getChannelIdFromClaim(claimResult);
+
+      // hit backend to save restricted memberships
+      if (channelClaimId && (restrictedToMemberships || restrictedToMemberships === '')) {
+        dispatch(doSaveMembershipRestrictionsForContent(channelClaimId, claimResult.claim_id, restrictedToMemberships));
+      }
+    };
+
+    analytics.apiLog.publish(pendingClaim, apiLogSuccessCb);
+
     const { permanent_url: url } = pendingClaim;
     const actions = [];
 
@@ -296,6 +337,10 @@ export const doPublishDesktop = (filePath: string, preview?: boolean) => (dispat
       message = ERRORS.PUBLISH_TIMEOUT_BUT_LIKELY_SUCCESSFUL;
     }
 
+    if (restrictedToMemberships && message === ERRORS.PUBLISH_TIMEOUT_BUT_LIKELY_SUCCESSFUL) {
+      message = ERRORS.RESTRICTED_CONTENT_PUBLISHING_FAILED;
+    }
+
     actions.push(doError({ message, cause: error.cause }));
     dispatch(batchActions(...actions));
   };
@@ -324,8 +369,20 @@ export const doPublishResume = (publishPayload: FileUploadSdkParams) => (dispatc
 
     const pendingClaim = successResponse.outputs[0];
     const { permanent_url: url } = pendingClaim;
+    const publishData = selectPublishFormValues(state);
 
-    analytics.apiLog.publish(pendingClaim);
+    const { restrictedToMemberships } = publishData;
+
+    const apiLogSuccessCb = (claimResult: ChannelClaim | StreamClaim) => {
+      const channelClaimId = getChannelIdFromClaim(claimResult);
+
+      // hit backend to save restricted memberships
+      if (channelClaimId && (restrictedToMemberships || restrictedToMemberships === '')) {
+        dispatch(doSaveMembershipRestrictionsForContent(channelClaimId, claimResult.claim_id, restrictedToMemberships));
+      }
+    };
+
+    analytics.apiLog.publish(pendingClaim, apiLogSuccessCb);
 
     // We have to fake a temp claim until the new pending one is returned by claim_list_mine
     // We can't rely on claim_list_mine because there might be some delay before the new claims are returned
@@ -537,12 +594,13 @@ export const doUploadThumbnail = (
   }
 };
 
-export const doPrepareEdit = (claim: StreamClaim, uri: string, claimType: string) => (
+export const doPrepareEdit = (claim: StreamClaim, uri: string, claimType: string) => async (
   dispatch: Dispatch,
-  getState: () => {}
+  getState: GetState
 ) => {
   const { name, amount, value = {} } = claim;
   const channelName = (claim && claim.signing_channel && claim.signing_channel.name) || null;
+  const channelId = (claim && claim.signing_channel && claim.signing_channel.claim_id) || null;
   const {
     author,
     description,
@@ -561,9 +619,10 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string, claimType: string
     tags,
   } = value;
 
-  const state = getState();
+  let state = getState();
   const myClaimForUri = selectMyClaimForUri(state);
   const { claim_id } = myClaimForUri || {};
+
   const publishData: UpdatePublishFormData = {
     claim_id: claim_id,
     name,
@@ -603,6 +662,39 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string, claimType: string
     publishData['channel'] = channelName;
   }
 
+  const publishDataTags = new Set(publishData.tags && publishData.tags.map((tag) => tag.name));
+
+  const publishTagsHaveRestrictedMemberships = publishDataTags.has(MEMBERS_ONLY_CONTENT_TAG);
+  // const publishTagsHaveRestrictedChatComments = publishDataTags.has(RESTRICTED_CHAT_COMMENTS_TAG);
+
+  if (publishTagsHaveRestrictedMemberships) {
+    if (channelId) {
+      let protectedMembershipIds = selectProtectedContentMembershipsForClaimId(state, channelId, claim.claim_id);
+
+      if (protectedMembershipIds === undefined) {
+        await dispatch(doMembershipContentforStreamClaimId(claim.claim_id));
+        state = getState();
+        protectedMembershipIds = selectProtectedContentMembershipsForClaimId(state, channelId, claim.claim_id);
+      }
+
+      publishData['restrictedToMemberships'] = protectedMembershipIds && protectedMembershipIds.join(',');
+    } else {
+      publishData.tags = publishData.tags
+        ? publishData.tags.filter((tag) => tag.name === MEMBERS_ONLY_CONTENT_TAG)
+        : [];
+    }
+  }
+
+  // if (publishTagsHaveRestrictedChatComments) {
+  //   if (channelId) {
+  //     publishData['restrictCommentsAndChat'] = true;
+  //   } else {
+  //     publishData.tags = publishData.tags
+  //       ? publishData.tags.filter((tag) => tag.name === RESTRICTED_CHAT_COMMENTS_TAG)
+  //       : [];
+  //   }
+  // }
+
   dispatch({ type: ACTIONS.DO_PREPARE_EDIT, data: publishData });
 
   switch (claimType) {
@@ -635,6 +727,8 @@ export const doPublish = (success: Function, fail: Function, previewFn?: Functio
 
   const publishPayload = payload || resolvePublishPayload(publishData, myClaimForUri, myChannels, previewFn);
 
+  // return
+
   if (previewFn) {
     return Lbry.publish(publishPayload).then((previewResponse: PublishResponse) => {
       // $FlowIgnore
@@ -643,6 +737,13 @@ export const doPublish = (success: Function, fail: Function, previewFn?: Functio
   }
 
   return Lbry.publish(publishPayload).then((response: PublishResponse) => {
+    // get the upload's claim id
+    // const claimId = response.outputs.find((obj) => {
+    //   // $FlowFixMe
+    //   return obj.claim_id;
+    //   // $FlowFixMe
+    // }).claim_id;
+
     // TODO: Restore LbryFirst
     // if (!useLBRYUploader) {
     return success(response);

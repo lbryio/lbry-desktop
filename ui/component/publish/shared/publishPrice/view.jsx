@@ -8,11 +8,15 @@ type Props = {
   // --- redux ---
   contentIsFree: boolean,
   fee: Fee,
+  restrictedToMemberships: ?string,
   updatePublishForm: ({}) => void,
 };
 
 function PublishPrice(props: Props) {
-  const { contentIsFree, fee, updatePublishForm, disabled } = props;
+  const { contentIsFree, fee, updatePublishForm, disabled, restrictedToMemberships } = props;
+
+  // If it's only restricted, the price can be added externally and they won't be able to change it
+  const restrictedWithoutPrice = contentIsFree && restrictedToMemberships;
 
   return (
     <>
@@ -24,7 +28,7 @@ function PublishPrice(props: Props) {
             name="content_free"
             label={__('Free')}
             checked={contentIsFree}
-            disabled={disabled}
+            disabled={disabled || restrictedWithoutPrice}
             onChange={() => updatePublishForm({ contentIsFree: true })}
           />
 
@@ -33,7 +37,7 @@ function PublishPrice(props: Props) {
             name="content_cost"
             label={__('Add a price to this file')}
             checked={!contentIsFree}
-            disabled={disabled}
+            disabled={disabled || restrictedWithoutPrice}
             onChange={() => updatePublishForm({ contentIsFree: false })}
           />
           {!contentIsFree && (
@@ -50,6 +54,11 @@ function PublishPrice(props: Props) {
                 'All content fees are charged in LBRY Credits. For alternative payment methods, the number of LBRY Credits charged will be adjusted based on the value of LBRY Credits at the time of purchase.'
               )}
             </p>
+          )}
+          {restrictedWithoutPrice && (
+            <div className="error__text">
+              {__('You already have content restrictions enabled, disable them first in order to set a price.')}
+            </div>
           )}
         </React.Fragment>
       </fieldset-section>

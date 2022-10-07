@@ -6,17 +6,18 @@ import FileThumbnail from 'component/fileThumbnail';
 import ChannelThumbnail from 'component/channelThumbnail';
 import FileProperties from 'component/previewOverlayProperties';
 import ClaimProperties from 'component/claimProperties';
-import PremiumBadge from 'component/premiumBadge';
+import MembershipBadge from 'component/membershipBadge';
 
 type Props = {
   claim: ?Claim,
   uri: string,
   isResolvingUri: boolean,
   geoRestriction: ?GeoRestriction,
+  odyseeMembership: ?string,
 };
 
 export default function WunderbarSuggestion(props: Props) {
-  const { claim, uri, isResolvingUri, geoRestriction } = props;
+  const { claim, uri, isResolvingUri, geoRestriction, odyseeMembership } = props;
 
   if (isResolvingUri) {
     return (
@@ -68,7 +69,7 @@ export default function WunderbarSuggestion(props: Props) {
           <div className="wunderbar__suggestion-title">{claim.value.title}</div>
           <div className="wunderbar__suggestion-name">
             {isChannel ? claim.name : (claim.signing_channel && claim.signing_channel.name) || __('Anonymous')}
-            <PremiumBadge uri={uri} />
+            {odyseeMembership && <MembershipBadge membershipName={odyseeMembership} />}
           </div>
         </span>
       </div>

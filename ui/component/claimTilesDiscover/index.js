@@ -8,19 +8,25 @@ import {
   selectById,
 } from 'redux/selectors/claims';
 import { doClaimSearch, doResolveClaimIds, doResolveUris } from 'redux/actions/claims';
-import { doFetchUserMemberships } from 'redux/actions/user';
+import { doFetchOdyseeMembershipForChannelIds } from 'redux/actions/memberships';
 import * as SETTINGS from 'constants/settings';
-import { MATURE_TAGS } from 'constants/tags';
 import { doFetchViewCount } from 'lbryinc';
 import { selectClientSetting, selectShowMatureContent } from 'redux/selectors/settings';
 import { selectMutedAndBlockedChannelIds } from 'redux/selectors/blocked';
 import { ENABLE_NO_SOURCE_CLAIMS, SIMPLE_SITE } from 'config';
 import { createNormalizedClaimSearchKey } from 'util/claim';
+import { CsOptions } from 'util/claim-search';
 
 import ClaimListDiscover from './view';
 
+function resolveHideMembersOnly(global, override) {
+  return override === undefined || override === null ? global : override;
+}
+
 const select = (state, props) => {
   const showNsfw = selectShowMatureContent(state);
+  const hmocSetting = selectClientSetting(state, SETTINGS.HIDE_MEMBERS_ONLY_CONTENT);
+  const hideMembersOnly = resolveHideMembersOnly(hmocSetting, props.hideMembersOnly);
   const hideReposts = selectClientSetting(state, SETTINGS.HIDE_REPOSTS);
   const forceShowReposts = props.forceShowReposts;
   const mutedAndBlockedChannelIds = selectMutedAndBlockedChannelIds(state);
@@ -28,6 +34,7 @@ const select = (state, props) => {
   // TODO: memoize these 2 function calls. Lots of params, though; might not be feasible.
   const options = resolveSearchOptions({
     showNsfw,
+    hideMembersOnly,
     hideReposts,
     forceShowReposts,
     mutedAndBlockedChannelIds,
@@ -51,7 +58,7 @@ const select = (state, props) => {
 const perform = {
   doClaimSearch,
   doFetchViewCount,
-  doFetchUserMemberships,
+  doFetchOdyseeMembershipForChannelIds,
   doResolveClaimIds,
   doResolveUris,
 };
@@ -87,11 +94,13 @@ function resolveSearchOptions(props) {
     showNsfw,
     hideReposts,
     forceShowReposts,
+    hideMembersOnly,
     mutedAndBlockedChannelIds,
     location,
     pageSize,
     claimType,
     tags,
+    notTags,
     languages,
     channelIds,
     orderBy,
@@ -124,7 +133,7 @@ function resolveSearchOptions(props) {
     // it's faster, but we will need to remove it if we start using total_pages
     no_totals: true,
     any_tags: tags || [],
-    not_tags: !showNsfw ? MATURE_TAGS : [],
+    not_tags: CsOptions.not_tags(notTags, showNsfw, hideMembersOnly),
     any_languages: languages,
     channel_ids: channelIds || [],
     not_channel_ids: mutedAndBlockedChannelIds,

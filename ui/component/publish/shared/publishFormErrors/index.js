@@ -9,6 +9,7 @@ const select = (state) => ({
   bidError: selectPublishFormValue(state, 'bidError'),
   editingURI: selectPublishFormValue(state, 'editingURI'),
   uploadThumbnailStatus: selectPublishFormValue(state, 'uploadThumbnailStatus'),
+  restrictedToMemberships: selectPublishFormValue(state, 'restrictedToMemberships'),
   thumbnail: selectPublishFormValue(state, 'thumbnail'),
   thumbnailError: selectPublishFormValue(state, 'thumbnailError'),
   isStillEditing: selectIsStillEditing(state),

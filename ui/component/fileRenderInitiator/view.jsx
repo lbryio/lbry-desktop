@@ -48,46 +48,55 @@ type Props = {
   parentCommentId?: string,
   isMarkdownPost?: boolean,
   claimLinkId?: string,
-  purchaseContentTag: boolean,
-  rentalTag: { price: number, expirationTimeInSeconds: number },
-  validRentalPurchase: boolean,
-  purchaseMadeForClaimId: boolean,
+  purchaseContentTag?: boolean,
+  rentalTag?: { price: number, expirationTimeInSeconds: number },
+  validRentalPurchase?: boolean,
+  purchaseMadeForClaimId?: boolean,
   doUriInitiatePlay: (playingOptions: PlayingUri, isPlayable: boolean) => void,
   doFetchChannelLiveStatus: (string) => void,
   claimIsMine: boolean,
+  protectedMembershipIds?: Array<number>,
+  validMembershipIds?: Array<number>,
+  protectedContentTag?: string,
+  contentRestrictedFromUser: boolean,
+  contentUnlocked: boolean,
+  myMembership: ?Membership,
 };
 
 export default function FileRenderInitiator(props: Props) {
   const {
-    channelClaimId,
-    isPlaying,
-    fileInfo,
-    uri,
-    obscurePreview,
-    insufficientCredits,
-    history,
-    location,
-    claimThumbnail,
-    autoplay,
-    renderMode,
-    costInfo,
-    claimWasPurchased,
     authenticated,
-    videoTheaterMode,
+    autoplay,
+    channelClaimId,
+    claimIsMine,
+    claimLinkId,
+    claimThumbnail,
+    claimWasPurchased,
+    costInfo,
+    customAction,
+    doFetchChannelLiveStatus,
+    doUriInitiatePlay,
+    embedded,
+    fileInfo,
+    history,
+    insufficientCredits,
     isCurrentClaimLive,
     isLivestreamClaim,
-    customAction,
-    embedded,
-    parentCommentId,
     isMarkdownPost,
-    claimLinkId,
-    doUriInitiatePlay,
-    doFetchChannelLiveStatus,
+    isPlaying,
+    location,
+    obscurePreview,
+    parentCommentId,
     purchaseContentTag,
     purchaseMadeForClaimId,
-    claimIsMine,
+    renderMode,
     rentalTag,
+    uri,
     validRentalPurchase,
+    videoTheaterMode,
+    contentRestrictedFromUser,
+    contentUnlocked,
+    myMembership,
   } = props;
 
   const { isLiveComment } = React.useContext(ChatCommentContext) || {};
@@ -113,19 +122,23 @@ export default function FileRenderInitiator(props: Props) {
   const stillNeedsToBePurchased = purchaseContentTag && !purchaseMadeForClaimId && !hasBeenRented;
   const stillNeedsToBeRented = rentalTag && !validRentalPurchase && !hasBeenPurchased;
 
-  const notAuthedToView = (stillNeedsToBePurchased || stillNeedsToBeRented) && !claimIsMine;
+  const notAuthedToView =
+    (stillNeedsToBePurchased || stillNeedsToBeRented || (contentRestrictedFromUser && myMembership !== undefined)) &&
+    !claimIsMine;
 
   const shouldAutoplay =
     !notAuthedToView && !forceDisableAutoplay && !embedded && (forceAutoplayParam || urlTimeParam || autoplay);
 
   const isFree = costInfo && costInfo.cost === 0;
-  const canViewFile = isLivestreamClaim
-    ? (layountRendered || isMobile) && isCurrentClaimLive
-    : isFree || claimWasPurchased;
+  const canViewFile =
+    contentUnlocked &&
+    myMembership !== undefined &&
+    (isLivestreamClaim ? (layountRendered || isMobile) && isCurrentClaimLive : isFree || claimWasPurchased);
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode) || isCurrentClaimLive;
 
   const renderUnsupported = RENDER_MODES.UNSUPPORTED_IN_THIS_APP.includes(renderMode);
   const disabled =
+    notAuthedToView ||
     (isLivestreamClaim && !isCurrentClaimLive) ||
     renderUnsupported ||
     (!fileInfo && insufficientCredits && !claimWasPurchased);
@@ -194,7 +207,7 @@ export default function FileRenderInitiator(props: Props) {
     if (
       (canViewFile || forceAutoplayParam) &&
       ((shouldAutoplay && (!videoOnPage || forceAutoplayParam) && isPlayable) ||
-        (!embedded && RENDER_MODES.AUTO_RENDER_MODES.includes(renderMode)))
+        (!notAuthedToView && !embedded && RENDER_MODES.AUTO_RENDER_MODES.includes(renderMode)))
     ) {
       viewFile();
     }
@@ -204,7 +217,7 @@ export default function FileRenderInitiator(props: Props) {
   once content is playing, let the appropriate <FileRender> take care of it...
   but for playables, always render so area can be used to fill with floating player
    */
-  if (isPlaying && !isPlayable && canViewFile && !collectionId) {
+  if (isPlaying && !isPlayable && canViewFile && !collectionId && !notAuthedToView) {
     return null;
   }
 
@@ -246,7 +259,7 @@ export default function FileRenderInitiator(props: Props) {
         )
       )}
 
-      {(!disabled || (embedded && isLivestreamClaim)) && (
+      {canViewFile && (!disabled || (embedded && isLivestreamClaim)) && (
         <Button
           requiresAuth={shouldRedirect}
           onClick={handleClick}

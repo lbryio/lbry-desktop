@@ -26,7 +26,7 @@ type Props = {
   myEditedCollections: CollectionGroup,
   isPublishing: boolean,
   isFetchingMyCollections: boolean,
-  hasMembership: ?boolean,
+  userHasOdyseeMembership: ?boolean,
   doClaimSearch: ({}, {}) => Promise<any>,
   doFetchItemsInCollections: (params: { collectionIds: ClaimIds }) => Promise<any>,
   doPublishFeaturedChannels: (channelId: ChannelId) => Promise<any>,
@@ -43,7 +43,7 @@ export default function SectionList(props: Props) {
     myEditedCollections,
     isPublishing,
     isFetchingMyCollections,
-    hasMembership,
+    userHasOdyseeMembership,
     doClaimSearch,
     doFetchItemsInCollections,
     doPublishFeaturedChannels,
@@ -108,7 +108,7 @@ export default function SectionList(props: Props) {
   }
 
   function handleAddFeaturedChannels() {
-    if (hasMembership) {
+    if (userHasOdyseeMembership) {
       doOpenModal(MODALS.FEATURED_CHANNELS_EDIT, { create: { ownerChannelId: claimId } });
     } else {
       openPromoModal();
@@ -171,7 +171,7 @@ export default function SectionList(props: Props) {
             {!isClaimSearching && !isPublishing && !isFetchingMyCollections && (
               <>
                 {__('No featured channels.')}
-                {!hasMembership && <Button button="link" label={__('Learn more')} onClick={openPromoModal} />}
+                {!userHasOdyseeMembership && <Button button="link" label={__('Learn more')} onClick={openPromoModal} />}
               </>
             )}
           </div>

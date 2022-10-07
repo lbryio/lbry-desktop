@@ -12,11 +12,10 @@ import * as PAGES from 'constants/pages';
 import HelpLink from 'component/common/help-link';
 import ChannelSelector from 'component/channelSelector';
 import { useHistory } from 'react-router';
-import useGetUserMemberships from 'effects/use-get-user-memberships';
 
 type Props = {
   // -- redux --
-  channelUrls: ?Array<string>,
+  channelUrls: Array<string>,
   channelIds: ?ClaimIds,
   fetchingChannels: boolean,
   hasYoutubeChannels: boolean,
@@ -25,8 +24,7 @@ type Props = {
   doFetchChannelListMine: () => void,
   doUserViewRateList: () => void,
   doSetActiveChannel: (string) => void,
-  claimsByUri: { [string]: any },
-  doFetchUserMemberships: (claimIdCsv: string) => void,
+  doFetchOdyseeMembershipForChannelIds: (claimIds: ClaimIds) => void,
 };
 
 export default function ChannelsPage(props: Props) {
@@ -41,21 +39,19 @@ export default function ChannelsPage(props: Props) {
     doFetchChannelListMine,
     doUserViewRateList,
     doSetActiveChannel,
-    claimsByUri,
-    doFetchUserMemberships,
+    doFetchOdyseeMembershipForChannelIds,
   } = props;
-  const shouldFetchUserMemberships = true;
-  useGetUserMemberships(shouldFetchUserMemberships, channelUrls, claimsByUri, doFetchUserMemberships);
 
   const hasChannels = Number.isInteger(channelIds?.length);
 
   React.useEffect(() => {
     if (channelIds) {
+      doFetchOdyseeMembershipForChannelIds(channelIds);
       doUserViewRateList();
     } else {
       doFetchChannelListMine();
     }
-  }, [channelIds, doFetchChannelListMine, doUserViewRateList]);
+  }, [channelIds, doFetchChannelListMine, doFetchOdyseeMembershipForChannelIds, doUserViewRateList]);
 
   const { push } = useHistory();
 

@@ -20,7 +20,7 @@ import { useIsMobile, useIsLargeScreen } from 'effects/use-screensize';
 import { GetLinksData } from 'util/buildHomepage';
 import { platform } from 'util/platform';
 import { DOMAIN, ENABLE_UI_NOTIFICATIONS } from 'config';
-import PremiumBadge from 'component/premiumBadge';
+import MembershipBadge from 'component/membershipBadge';
 
 // TODO: move to selector for memoization
 import { getSortedRowData } from 'page/home/helper';
@@ -685,7 +685,7 @@ function SubscriptionListItem(props: SubItemProps) {
           <ClaimPreviewTitle uri={uri} />
           <span dir="auto" className="channel-name">
             {channelName}
-            <PremiumBadge uri={uri} />
+            <MembershipBadge uri={uri} />
           </span>
         </div>
       </Button>

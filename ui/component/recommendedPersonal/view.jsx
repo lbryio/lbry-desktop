@@ -29,12 +29,19 @@ type Props = {
   // --- redux ---
   userId: ?string,
   personalRecommendations: { gid: string, uris: Array<string>, fetched: boolean },
-  hasMembership: ?boolean,
+  userHasOdyseeMembership: ?boolean,
   doFetchPersonalRecommendations: () => void,
 };
 
 export default function RecommendedPersonal(props: Props) {
-  const { header, onLoad, userId, personalRecommendations, hasMembership, doFetchPersonalRecommendations } = props;
+  const {
+    header,
+    onLoad,
+    userId,
+    personalRecommendations,
+    userHasOdyseeMembership,
+    doFetchPersonalRecommendations,
+  } = props;
 
   const ref = React.useRef();
   const [markedGid, setMarkedGid] = React.useState('');
@@ -99,15 +106,15 @@ export default function RecommendedPersonal(props: Props) {
 
   React.useEffect(() => {
     // -- Fetch FYP
-    if (hasMembership) {
+    if (userHasOdyseeMembership) {
       doFetchPersonalRecommendations();
     }
-  }, [hasMembership, doFetchPersonalRecommendations]);
+  }, [userHasOdyseeMembership, doFetchPersonalRecommendations]);
 
   // **************************************************************************
   // **************************************************************************
 
-  if (hasMembership === undefined || !personalRecommendations.fetched) {
+  if (userHasOdyseeMembership === undefined || !personalRecommendations.fetched) {
     return (
       <>
         {header}
@@ -127,7 +134,7 @@ export default function RecommendedPersonal(props: Props) {
     );
   }
 
-  if (!hasMembership) {
+  if (!userHasOdyseeMembership) {
     return (
       <div>
         {header}

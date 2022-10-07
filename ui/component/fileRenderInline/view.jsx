@@ -14,20 +14,23 @@ type Props = {
   claimRewards: () => void,
   costInfo: any,
   claimWasPurchased: boolean,
+  contentRestrictedFromUser: boolean,
 };
 
 export default function FileRenderInline(props: Props) {
   const {
-    isPlaying,
+    claimRewards,
+    claimWasPurchased,
+    costInfo,
     fileInfo,
-    uri,
+    isPlaying,
+    renderMode,
     streamingUrl,
     triggerAnalyticsView,
-    claimRewards,
-    renderMode,
-    costInfo,
-    claimWasPurchased,
+    uri,
+    contentRestrictedFromUser,
   } = props;
+
   const [playTime, setPlayTime] = useState();
   const isFree = !costInfo || (costInfo.cost !== undefined && costInfo.cost === 0);
   const isReadyToView = fileInfo && fileInfo.completed;
@@ -61,11 +64,7 @@ export default function FileRenderInline(props: Props) {
     }
   }, [setPlayTime, claimRewards, triggerAnalyticsView, isReadyToPlay, playTime, uri]);
 
-  if (!isPlaying) {
-    return null;
-  }
-
-  if (!isFree && !claimWasPurchased) {
+  if (!isPlaying || (!isFree && !claimWasPurchased) || contentRestrictedFromUser) {
     return null;
   }
 

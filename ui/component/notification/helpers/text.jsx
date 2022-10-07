@@ -2,8 +2,13 @@
 import React from 'react';
 import LbcMessage from 'component/common/lbc-message';
 import OptimizedImage from 'component/optimizedImage';
-import { RULE } from 'constants/notifications';
+import {
+  RULE,
+  CHANNEL_NAME_AT_SENTENCE_START_REGEX,
+  MEMBERSHIP_NAME_AT_SENTENCE_END_REGEX,
+} from 'constants/notifications';
 import { parseSticker } from 'util/comments';
+import I18nMessage from 'component/i18nMessage';
 
 function replaceLbcWithCredits(str: string) {
   return str.replace(/\sLBC/g, ' Credits');
@@ -29,6 +34,22 @@ export function generateNotificationText(rule: string, notificationParams: any) 
           <LbcMessage>{notificationParams.device.text}</LbcMessage>
         </div>
       );
+
+    case RULE.NEW_MEMBER: {
+      const memberNameMatch = notificationParams.device.text.match(CHANNEL_NAME_AT_SENTENCE_START_REGEX);
+      const memberName = memberNameMatch && memberNameMatch[0];
+
+      const membershipTierNameMatch = notificationParams.device.text.match(MEMBERSHIP_NAME_AT_SENTENCE_END_REGEX);
+      const membershipTierName = membershipTierNameMatch && membershipTierNameMatch[0].replace(': ', '');
+
+      return (
+        <I18nMessage
+          tokens={{ new_member_name: memberName || __('An anonymous user'), membership_tier_name: membershipTierName }}
+        >
+          %new_member_name% has joined: %membership_tier_name%
+        </I18nMessage>
+      );
+    }
 
     case RULE.COMMENT:
     case RULE.CREATOR_COMMENT:

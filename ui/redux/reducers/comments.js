@@ -284,6 +284,7 @@ export default handleActions(
         uri,
         disabled,
         creatorClaimId,
+        // restrictedToMembersOnly,
       } = action.data;
 
       const commentById = Object.assign({}, state.commentById);
@@ -299,9 +300,16 @@ export default handleActions(
       const isLoadingByParentId = Object.assign({}, state.isLoadingByParentId);
       const settingsByChannelId = Object.assign({}, state.settingsByChannelId);
 
+      // save an array of claim ids of members-only chats to check during list
+      let membersOnlyChats = settingsByChannelId[creatorClaimId]?.livestream_chat_members_only || false;
+      // if (restrictedToMembersOnly) {
+      //   membersOnlyChats.push(claimId);
+      // }
+
       settingsByChannelId[creatorClaimId] = {
         ...(settingsByChannelId[creatorClaimId] || {}),
-        comments_enabled: !disabled,
+        // comments_enabled: !disabled,
+        livestream_chat_members_only: membersOnlyChats,
       };
 
       if (parentId) {
@@ -723,6 +731,21 @@ export default handleActions(
         topLevelCommentsById,
         pinnedCommentsById,
       };
+    },
+
+    [ACTIONS.WEBSOCKET_MEMBERS_ONLY_TOGGLE_COMPLETE]: (state: CommentsState, action: any) => {
+      const { responseData, creatorId } = action.data;
+      const { LivestreamChatMembersOnly, CommentsMembersOnly }: WebsocketSettingDataResponse = responseData;
+
+      const newSettingsByChannelId = Object.assign({}, state.settingsByChannelId);
+      if (LivestreamChatMembersOnly !== undefined) {
+        Object.assign(newSettingsByChannelId[creatorId], { livestream_chat_members_only: LivestreamChatMembersOnly });
+      }
+      if (CommentsMembersOnly !== undefined) {
+        Object.assign(newSettingsByChannelId[creatorId], { comments_members_only: CommentsMembersOnly });
+      }
+
+      return { ...state, settingsByChannelId: newSettingsByChannelId };
     },
 
     [ACTIONS.COMMENT_MARK_AS_REMOVED]: (state: CommentsState, action: any) => {

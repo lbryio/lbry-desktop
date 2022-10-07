@@ -5,6 +5,7 @@
   th,
   td {
     overflow: hidden;
+    padding: 0.5rem;
   }
 
   thead {
@@ -26,24 +27,17 @@
     }
   }
 
-  th,
-  td {
-    padding: 0.5rem 0;
-  }
-
   th {
     font-size: var(--font-xsmall);
     color: var(--color-text-help);
     padding-bottom: var(--spacing-xxxs);
+    text-align: left;
+
     @media (max-width: $breakpoint-small) {
       // padding-left: var(--spacing-xs) !important;
       // padding-right: var(--spacing-xs) !important;
     }
   }
-}
-
-th {
-  text-align: left;
 }
 
 td {

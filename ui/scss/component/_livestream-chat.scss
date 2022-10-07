@@ -469,6 +469,10 @@ $recent-msg-button__height: 2rem;
   margin-top: auto;
   border-radius: 0 0 var(--border-radius) var(--border-radius);
 
+  .error-bubble {
+    margin-bottom: var(--spacing-s);
+  }
+
   .commentCreate {
     select,
     textarea,
@@ -1107,7 +1111,6 @@ $recent-msg-button__height: 2rem;
 .livestreamComment--minimal {
   width: 100%;
   .date_time {
-    // width: 64px;
     float: left;
     margin-right: var(--spacing-xxxs);
     font-family: 'Courier New', Courier, monospace;
@@ -1198,6 +1201,13 @@ $recent-msg-button__height: 2rem;
     margin-top: -1px !important;
     .icon {
       margin-bottom: -3px;
+    }
+    .icon--Membership {
+      color: var(--color-text);
+      height: calc(var(--font-body) - 3px);
+      width: calc(var(--font-body) - 3px);
+      margin-bottom: -2px;
+      margin-left: -4px;
     }
   }
 

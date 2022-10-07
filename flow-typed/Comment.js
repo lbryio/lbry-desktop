@@ -29,6 +29,7 @@ declare type CommentSubmitParams = {
   payment_intent_id?: ?string,
   environment?: ?string,
   sticker: boolean,
+  is_protected?: boolean,
 };
 
 declare type PerChannelSettings = {
@@ -38,6 +39,8 @@ declare type PerChannelSettings = {
   min_tip_amount_super_chat?: number,
   slow_mode_min_gap?: number,
   time_since_first_comment?: number,
+  livestream_chat_members_only?: boolean,
+  comments_members_only?: boolean,
 };
 
 // todo: relate individual comments to their commentId
@@ -309,6 +312,8 @@ declare type SettingsResponse = {
   slow_mode_min_gap: number,
   curse_jar_amount: number,
   filters_enabled?: boolean,
+  livestream_chat_members_only?: boolean,
+  comments_members_only?: boolean,
 };
 
 declare type UpdateSettingsParams = {
@@ -321,6 +326,8 @@ declare type UpdateSettingsParams = {
   min_tip_amount_super_chat?: number,
   slow_mode_min_gap?: number,
   time_since_first_comment?: number,
+  livestream_chat_members_only?: boolean,
+  comments_members_only?: boolean,
 };
 
 declare type BlockWordParams = {
@@ -329,4 +336,9 @@ declare type BlockWordParams = {
   signature: string,
   signing_ts: string,
   words: string, // CSV list of containing words to block comment on content
+};
+
+declare type WebsocketSettingDataResponse = {
+  LivestreamChatMembersOnly?: boolean,
+  CommentsMembersOnly?: boolean,
 };

@@ -7,6 +7,7 @@ import { withRouter } from 'react-router';
 import { MATURE_TAGS } from 'constants/tags';
 import { resolveLangForClaimSearch } from 'util/default-languages';
 import { createNormalizedClaimSearchKey } from 'util/claim';
+import { CsOptions } from 'util/claim-search';
 import { splitBySeparator } from 'util/lbryURI';
 import Button from 'component/button';
 import moment from 'moment';
@@ -19,7 +20,6 @@ import ClaimListHeader from 'component/claimListHeader';
 import useFetchViewCount from 'effects/use-fetch-view-count';
 import useResolvePins from 'effects/use-resolve-pins';
 import { useIsLargeScreen } from 'effects/use-screensize';
-import useGetUserMemberships from 'effects/use-get-user-memberships';
 import usePersistentUserParam from 'effects/use-persistent-user-param';
 import usePersistedState from 'effects/use-persisted-state';
 
@@ -32,7 +32,8 @@ type Props = {
   pageSize?: number,
 
   fetchViewCount?: boolean,
-  hideRepostsOverride?: boolean, // undefined = use SETTINGS.HIDE_REPOSTS; true/false: use this.
+  hideMembersOnly?: boolean, // undefined = use SETTING.HIDE_MEMBERS_ONLY_CONTENT; true/false: use this override.
+  hideRepostsOverride?: boolean, // undefined = use SETTINGS.HIDE_REPOSTS; true/false: use this override.
   hasNoSource?: boolean,
   hasSource?: boolean,
   hideAdvancedFilter?: boolean,
@@ -106,7 +107,7 @@ type Props = {
   // --- perform ---
   doClaimSearch: ({}) => void,
   doFetchViewCount: (claimIdCsv: string) => void,
-  doFetchUserMemberships: (claimIdCsv: string) => void,
+  doFetchOdyseeMembershipForChannelIds: (claimIds: ClaimIds) => void,
   doResolveClaimIds: (Array<string>) => Promise<any>,
   doResolveUris: (Array<string>, boolean) => Promise<any>,
 
@@ -159,6 +160,7 @@ function ClaimListDiscover(props: Props) {
     includeSupportAction,
     repostedClaimId,
     hideAdvancedFilter,
+    hideMembersOnly,
     infiniteScroll = true,
     followedTags,
     injectedItem,
@@ -192,7 +194,7 @@ function ClaimListDiscover(props: Props) {
     maxClaimRender,
     useSkeletonScreen = true,
     excludeUris = [],
-    doFetchUserMemberships,
+    doFetchOdyseeMembershipForChannelIds,
     swipeLayout = false,
     doResolveUris,
     doResolveClaimIds,
@@ -307,7 +309,7 @@ function ClaimListDiscover(props: Props) {
     // it's faster, but we will need to remove it if we start using total_pages
     no_totals: true,
     not_channel_ids: isChannel ? undefined : mutedAndBlockedChannelIds,
-    not_tags: !showNsfw ? MATURE_TAGS : [],
+    not_tags: CsOptions.not_tags(notTags, showNsfw, hideMembersOnly),
     order_by: resolveOrderByOption(orderParam, sortByParam),
     remove_duplicates: isChannel ? undefined : true,
   };
@@ -348,10 +350,6 @@ function ClaimListDiscover(props: Props) {
         options.any_tags = tagsParam.split(',');
       }
     }
-  }
-
-  if (notTags) {
-    options.not_tags = options.not_tags.concat(notTags);
   }
 
   if (repostedClaimId) {
@@ -683,7 +681,11 @@ function ClaimListDiscover(props: Props) {
 
   useFetchViewCount(fetchViewCount, finalUris, claimsByUri, doFetchViewCount);
 
-  useGetUserMemberships(true, finalUris, claimsByUri, doFetchUserMemberships);
+  React.useEffect(() => {
+    if (channelIds) {
+      doFetchOdyseeMembershipForChannelIds(channelIds);
+    }
+  }, [channelIds, doFetchOdyseeMembershipForChannelIds]);
 
   React.useEffect(() => {
     if (shouldPerformSearch) {

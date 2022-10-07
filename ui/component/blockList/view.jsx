@@ -7,9 +7,9 @@ import classnames from 'classnames';
 import Button from 'component/button';
 import ClaimList from 'component/claimList';
 import Icon from 'component/common/icon';
+import * as ICONS from 'constants/icons';
 import Paginate from 'component/common/paginate';
 import Yrbl from 'component/yrbl';
-import * as ICONS from 'constants/icons';
 import useThrottle from 'effects/use-throttle';
 
 const PAGE_SIZE = 10;

@@ -1,0 +1,14 @@
+.button--manage-memberships {
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.selected-membership {
+  margin-bottom: calc(var(--spacing-s) * -1);
+  max-width: 100%;
+  font-weight: var(--font-bold);
+  font-size: var(--font-large);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

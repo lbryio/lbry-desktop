@@ -14,6 +14,8 @@ import React from 'react';
 import FreezeframeWrapper from 'component/common/freezeframe-wrapper';
 import classnames from 'classnames';
 import Thumb from './internal/thumb';
+import PreviewTilePurchaseOverlay from 'component/previewTilePurchaseOverlay';
+import PreviewOverlayProtectedContent from '../previewOverlayProtectedContent';
 
 type Props = {
   uri?: string,
@@ -72,6 +74,8 @@ function FileThumbnail(props: Props) {
             'media__thumb--small': small,
           })}
         >
+          <PreviewOverlayProtectedContent uri={uri} />
+          <PreviewTilePurchaseOverlay uri={uri} />
           {children}
         </FreezeframeWrapper>
       )
@@ -100,6 +104,8 @@ function FileThumbnail(props: Props) {
   if (hasResolvedClaim || thumbnailUrl || (forcePlaceholder && !uri)) {
     return (
       <Thumb small={small} thumb={thumbnailUrl || MISSING_THUMB_DEFAULT} fallback={fallback} className={className}>
+        <PreviewOverlayProtectedContent uri={uri} />
+        <PreviewTilePurchaseOverlay uri={uri} />
         {children}
       </Thumb>
     );

@@ -1,165 +1,143 @@
 // @flow
 import React from 'react';
+
 import { Modal } from 'modal/modal';
+
+import * as ICONS from 'constants/icons';
+import * as MEMBERSHIP_CONSTS from 'constants/memberships';
+import * as STRIPE from 'constants/stripe';
+
+import I18nMessage from 'component/i18nMessage';
 import Card from 'component/common/card';
 import Button from 'component/button';
-import * as ICONS from 'constants/icons';
-import { Lbryio } from 'lbryinc';
-import { getStripeEnvironment } from 'util/stripe';
-let stripeEnvironment = getStripeEnvironment();
+import BusyIndicator from 'component/common/busy-indicator';
+
+import withCreditCard from 'hocs/withCreditCard';
 
 type Props = {
-  closeModal: () => void,
-  paymentMethodId: string,
-  setAsConfirmingCard: () => void, // ?
-  hasMembership: boolean, // user already has purchased --> invoke Cancel then
-  membershipId: string,
-  populateMembershipData: () => void,
-  userChannelClaimId: string,
-  userChannelName: string,
-  priceId: string,
-  purchaseString: string,
-  plan: string,
-  setMembershipOptions: (any) => void,
-  doToast: ({ message: string }) => void,
-  updateUserOdyseeMembershipStatus: ({}) => void,
-  user: ?User,
+  membership: CreatorMembership,
+  price: StripePriceDetails,
+  // -- redux --
+  activeChannelClaim: ?ChannelClaim,
+  channels: ?Array<ChannelClaim>,
+  incognito: boolean,
+  preferredCurrency: CurrencyOption,
+  purchasePending: boolean,
+  doMembershipBuy: (membershipParams: MembershipBuyParams) => Promise<Membership>,
+  doHideModal: () => void,
+  doToast: (params: { message: string }) => void,
 };
 
 export default function ConfirmOdyseeMembershipPurchase(props: Props) {
   const {
-    closeModal,
-    membershipId,
-    populateMembershipData,
-    userChannelClaimId,
-    userChannelName,
-    hasMembership,
-    priceId,
-    purchaseString,
-    plan,
-    setMembershipOptions,
+    membership,
+    price,
+    // -- redux --
+    activeChannelClaim,
+    channels,
+    incognito,
+    preferredCurrency,
+    purchasePending,
+    doMembershipBuy,
+    doHideModal,
     doToast,
-    updateUserOdyseeMembershipStatus,
-    user,
   } = props;
 
-  const [waitingForBackend, setWaitingForBackend] = React.useState();
-  const [statusText, setStatusText] = React.useState();
+  const isPurchasing = React.useRef(false);
 
-  async function purchaseMembership() {
-    try {
-      setWaitingForBackend(true);
-      setStatusText(__('Completing your purchase...'));
+  const { Membership } = membership;
 
-      // show the memberships the user is subscribed to
-      await Lbryio.call(
-        'membership',
-        'buy',
-        {
-          environment: stripeEnvironment,
-          membership_id: membershipId,
-          channel_id: userChannelClaimId,
-          channel_name: userChannelName,
-          price_id: priceId,
-        },
-        'post'
-      );
+  const { name: activeChannelName, claim_id: activeChannelId } = activeChannelClaim || {};
+  const noChannelsOrIncognitoMode = incognito || !channels;
+  const plan = Membership.name;
 
-      // cleary query params
-      // $FlowFixMe
-      let newURL = location.href.split('?')[0];
-      window.history.pushState('object', document.title, newURL);
+  function handlePurchase() {
+    if (isPurchasing.current) return;
 
-      setStatusText(__('Membership was successful'));
+    isPurchasing.current = true;
 
-      // populate the new data and update frontend
-      await populateMembershipData();
+    doMembershipBuy({
+      membership_id: Membership.id,
+      channel_id: activeChannelId,
+      channel_name: activeChannelName,
+      price_id: price.id,
+    })
+      .then((response) => {
+        isPurchasing.current = false;
 
-      // clear the other membership options after making a purchase
-      setMembershipOptions(false);
+        // this isn't the best pattern, should be passed as a callback
+        if (response?.created_at) {
+          doToast({ message: __('Purchase was successful. Enjoy the perks and special features!') });
+        }
 
-      if (user) updateUserOdyseeMembershipStatus(user);
-
-      closeModal();
-    } catch (err) {
-      const errorMessage = err.message;
-
-      const subscriptionFailedBackendError = 'failed to create subscription with default card';
-
-      // wait a bit to show the message so it's not jarring for the user
-      let errorMessageTimeout = 1150;
-
-      // don't do an error delay if there's already a network error
-      if (errorMessage === subscriptionFailedBackendError) {
-        errorMessageTimeout = 0;
-      }
-
-      setTimeout(function () {
-        const genericErrorMessage = __(
-          "Sorry, your purchase wasn't able to completed. Please contact support for possible next steps"
-        );
-
-        doToast({
-          message: genericErrorMessage,
-          isError: true,
-        });
-
-        closeModal();
-      }, errorMessageTimeout);
-
-      console.log(err);
-    }
-  }
-
-  // Cancel
-  async function cancelMembership() {
-    try {
-      setWaitingForBackend(true);
-      setStatusText(__('Canceling your membership...'));
-
-      // show the memberships the user is subscribed to
-      await Lbryio.call(
-        'membership',
-        'cancel',
-        {
-          environment: stripeEnvironment,
-          membership_id: membershipId,
-        },
-        'post'
-      );
-
-      setStatusText(__('Membership successfully canceled'));
-
-      // populate the new data and update frontend
-      await populateMembershipData();
-
-      closeModal();
-    } catch (err) {
-      console.log(err);
-    }
+        doHideModal();
+      })
+      .catch(() => {
+        isPurchasing.current = false;
+      });
   }
 
   return (
-    <Modal ariaHideApp={false} isOpen contentLabel={'Confirm Membership Purchase'} type="card" onAborted={closeModal}>
+    <Modal
+      className="confirm-odysee-premium__modal"
+      ariaHideApp={false}
+      isOpen
+      contentLabel={__('Confirm Membership Purchase')}
+      type="card"
+      onAborted={doHideModal}
+    >
       <Card
         className="stripe__confirm-remove-membership"
-        title={hasMembership ? __('Confirm Membership Cancellation') : __('Confirm %plan% Membership', { plan })}
-        subtitle={purchaseString}
+        title={__('Confirm %plan% Membership', { plan })}
+        subtitle={
+          <>
+            <I18nMessage
+              tokens={{
+                time_interval_bold: (
+                  <b className="membership-bolded">{__(MEMBERSHIP_CONSTS.INTERVALS[price.recurring.interval])}</b>
+                ),
+                time_interval: __(MEMBERSHIP_CONSTS.INTERVALS[price.recurring.interval]),
+                price_bold: (
+                  <b className="membership-bolded">{`${preferredCurrency.toUpperCase()} ${
+                    STRIPE.CURRENCY[price.currency.toUpperCase()].symbol
+                  }${price.unit_amount / 100}`}</b>
+                ),
+                plan,
+              }}
+            >
+              You are purchasing a %time_interval_bold% %plan% membership that is active immediately and will renew
+              %time_interval% at a price of %price_bold%.
+            </I18nMessage>{' '}
+            {plan === MEMBERSHIP_CONSTS.ODYSEE_TIER_NAMES.PREMIUM_PLUS &&
+              __('The no ads feature applies site-wide for all channels.')}
+            {!noChannelsOrIncognitoMode ? (
+              <I18nMessage tokens={{ channel_name: <b className="membership-bolded">{activeChannelName}</b> }}>
+                Your badge will be shown for your %channel_name% channel in all areas of the app, and can be added to
+                two additional channels in the future for free.
+              </I18nMessage>
+            ) : !channels ? (
+              __(
+                'You currently have no channels. To show your badge on a channel, please create a channel first. If you register a channel later you will be able to show a badge for up to three channels.'
+              )
+            ) : incognito ? (
+              __(
+                'You currently have no channel selected and will not have a badge be visible, if you want to show a badge you can select a channel now, or you can show a badge for up to three channels in the future for free.'
+              )
+            ) : undefined}{' '}
+            {__(
+              'You can cancel Premium at any time (no refunds) and you can also close this window and choose a different membership option.'
+            )}
+          </>
+        }
         actions={
           <div className="section__actions">
-            {!waitingForBackend ? (
+            {!purchasePending ? (
               <>
-                <Button
-                  className="stripe__confirm-remove-card"
-                  button="primary"
-                  icon={ICONS.FINANCE}
-                  label={hasMembership ? __('Confirm Cancellation') : __('Confirm Purchase')}
-                  onClick={() => (hasMembership ? cancelMembership() : purchaseMembership())}
-                />
-                <Button button="link" label={__('Cancel')} onClick={closeModal} />
+                <SubmitPurchaseButton handlePurchase={handlePurchase} />
+                <Button button="link" label={__('Cancel')} onClick={doHideModal} />
               </>
             ) : (
-              <h1 style={{ fontSize: '18px' }}>{statusText}</h1>
+              <BusyIndicator message={__('Completing your purchase...')} />
             )}
           </div>
         }
@@ -167,3 +145,13 @@ export default function ConfirmOdyseeMembershipPurchase(props: Props) {
     </Modal>
   );
 }
+
+const SubmitPurchaseButton = withCreditCard((props: any) => (
+  <Button
+    className="stripe__confirm-remove-card"
+    button="primary"
+    icon={ICONS.FINANCE}
+    label={__('Confirm Purchase')}
+    onClick={props.handlePurchase}
+  />
+));

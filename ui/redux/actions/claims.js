@@ -18,6 +18,7 @@ import {
 } from 'redux/selectors/claims';
 
 import { doFetchTxoPage } from 'redux/actions/wallet';
+import { doMembershipContentforStreamClaimIds } from 'redux/actions/memberships';
 import { selectSupportsByOutpoint } from 'redux/selectors/wallet';
 import { creditsToString } from 'util/format-credits';
 import { batchActions } from 'util/batch-actions';
@@ -39,10 +40,10 @@ export function doResolveUris(
     const normalizedUris = uris.map(normalizeURI);
     const state = getState();
 
-    const resolvingUris = selectResolvingUris(state);
+    const resolvingUrisSet = new Set(selectResolvingUris(state));
     const claimsByUri = selectClaimsByUri(state);
     const urisToResolve = normalizedUris.filter((uri) => {
-      if (resolvingUris.includes(uri)) {
+      if (resolvingUrisSet.has(uri)) {
         return false;
       }
 
@@ -53,94 +54,101 @@ export function doResolveUris(
       return Promise.resolve();
     }
 
-    dispatch({
-      type: ACTIONS.RESOLVE_URIS_STARTED,
-      data: { uris: normalizedUris },
-    });
+    dispatch({ type: ACTIONS.RESOLVE_URIS_START, data: { uris: normalizedUris } });
 
-    const resolveInfo: {
-      [string]: {
-        stream: ?StreamClaim,
-        channel: ?ChannelClaim,
-        claimsInChannel: ?number,
-        collection: ?CollectionClaim,
-      },
-    } = {};
+    return Lbry.resolve({ urls: urisToResolve, ...additionalOptions })
+      .then((response: ResolveResponse) => {
+        const collectionIds = new Set([]);
+        const repostsToResolve = new Set([]);
+        const streamClaimIds = new Set([]);
 
-    const collectionIds: Array<string> = [];
+        const resolveInfo: {
+          [uri: string]: {
+            stream: ?StreamClaim,
+            channel: ?ChannelClaim,
+            claimsInChannel: ?number,
+            collection: ?CollectionClaim,
+          },
+        } = {};
 
-    return Lbry.resolve({ urls: urisToResolve, ...additionalOptions }).then(async (result: ResolveResponse) => {
-      let repostedResults = {};
-      const repostsToResolve = [];
-      const fallbackResolveInfo = {
-        stream: null,
-        claimsInChannel: null,
-        channel: null,
-      };
+        for (const uri in response) {
+          const uriResolveInfo = Object.assign({}, response[uri]);
 
-      function processResult(result, resolveInfo = {}, checkReposts = false) {
-        Object.entries(result).forEach(([uri, uriResolveInfo]) => {
-          // Flow has terrible Object.entries support
-          // https://github.com/facebook/flow/issues/2221
-          if (uriResolveInfo) {
-            if (uriResolveInfo.error) {
-              // $FlowFixMe
-              resolveInfo[uri] = { ...fallbackResolveInfo };
-            } else {
-              if (checkReposts) {
-                if (uriResolveInfo.reposted_claim) {
-                  // $FlowFixMe
-                  const repostUrl = uriResolveInfo.reposted_claim.permanent_url;
-                  if (!resolvingUris.includes(repostUrl)) {
-                    repostsToResolve.push(repostUrl);
-                  }
+          if (uriResolveInfo.error) {
+            const fallbackResolveInfo = {
+              stream: null,
+              claimsInChannel: null,
+              channel: null,
+              collection: null,
+            };
+
+            resolveInfo[uri] = fallbackResolveInfo;
+          } else {
+            if (resolveReposts) {
+              const repostedClaim = uriResolveInfo.reposted_claim;
+
+              if (repostedClaim) {
+                const repostUrl = repostedClaim.permanent_url;
+                if (!resolvingUrisSet.has(repostUrl)) {
+                  repostsToResolve.add(repostUrl);
+                }
+
+                if (repostedClaim.value_type !== 'channel' && repostedClaim.value_type !== 'collection') {
+                  streamClaimIds.add(repostedClaim.claim_id);
                 }
               }
-              let result = {};
-              if (uriResolveInfo.value_type === 'channel') {
-                result.channel = uriResolveInfo;
-                // $FlowFixMe
-                result.claimsInChannel = uriResolveInfo.meta.claims_in_channel;
-              } else if (uriResolveInfo.value_type === 'collection') {
-                result.collection = uriResolveInfo;
-                // $FlowFixMe
-                collectionIds.push(uriResolveInfo.claim_id);
-              } else {
-                result.stream = uriResolveInfo;
-                if (uriResolveInfo.signing_channel) {
-                  result.channel = uriResolveInfo.signing_channel;
-                  result.claimsInChannel =
-                    (uriResolveInfo.signing_channel.meta && uriResolveInfo.signing_channel.meta.claims_in_channel) || 0;
-                }
-              }
-              // $FlowFixMe
-              resolveInfo[uri] = result;
             }
+
+            const resultResponse = {};
+            if (uriResolveInfo.value_type === 'channel') {
+              // $FlowFixMe
+              const channel: ChannelClaim = uriResolveInfo;
+
+              resultResponse.channel = channel;
+              resultResponse.claimsInChannel = (channel.meta && channel.meta.claims_in_channel) || 0;
+            } else if (uriResolveInfo.value_type === 'collection') {
+              // $FlowFixMe
+              const collection: CollectionClaim = uriResolveInfo;
+
+              resultResponse.collection = collection;
+              collectionIds.add(collection.claim_id);
+            } else {
+              // $FlowFixMe
+              const stream: StreamClaim = uriResolveInfo;
+
+              resultResponse.stream = stream;
+              streamClaimIds.add(stream.claim_id);
+
+              if (stream.signing_channel) {
+                // $FlowFixMe
+                const channel: ChannelClaim = stream.signing_channel;
+
+                resultResponse.channel = channel;
+                resultResponse.claimsInChannel = (channel.meta && channel.meta.claims_in_channel) || 0;
+              }
+            }
+
+            resolveInfo[uri] = resultResponse;
           }
-        });
-      }
-      processResult(result, resolveInfo, resolveReposts);
+        }
 
-      if (repostsToResolve.length) {
-        dispatch({
-          type: ACTIONS.RESOLVE_URIS_STARTED,
-          data: { uris: repostsToResolve, debug: 'reposts' },
-        });
-        repostedResults = await Lbry.resolve({ urls: repostsToResolve, ...additionalOptions });
-      }
-      processResult(repostedResults, resolveInfo);
+        dispatch({ type: ACTIONS.RESOLVE_URIS_SUCCESS, data: { resolveInfo } });
 
-      dispatch({
-        type: ACTIONS.RESOLVE_URIS_COMPLETED,
-        data: { resolveInfo },
-      });
+        if (collectionIds.size > 0) {
+          dispatch(doFetchItemsInCollections({ collectionIds: Array.from(collectionIds), pageSize: 50 }));
+        }
 
-      if (collectionIds.length) {
-        dispatch(doFetchItemsInCollections({ collectionIds, pageSize: 50 }));
-      }
+        if (streamClaimIds.size > 0) {
+          dispatch(doMembershipContentforStreamClaimIds(Array.from(streamClaimIds)));
+        }
 
-      return result;
-    });
+        if (repostsToResolve.size > 0) {
+          dispatch(doResolveUris(Array.from(repostsToResolve), true, false, additionalOptions));
+        }
+
+        return response;
+      })
+      .catch((error) => dispatch({ type: ACTIONS.RESOLVE_URIS_FAIL, data: normalizedUris }));
   };
 }
 
@@ -232,6 +240,18 @@ export function doFetchClaimListMine(
           resolve,
         },
       });
+
+      const streamClaimIds = new Set([]);
+
+      result.items.forEach((item) => {
+        if (item.value_type !== 'channel' && item.value_type !== 'collection') {
+          streamClaimIds.add(item.claim_id);
+        }
+      });
+
+      if (streamClaimIds.size > 0) {
+        dispatch(doMembershipContentforStreamClaimIds(Array.from(streamClaimIds)));
+      }
     });
   };
 }
@@ -712,9 +732,15 @@ export function doClaimSearch(
     const success = (data: ClaimSearchResponse) => {
       const resolveInfo = {};
       const urls = [];
+      const streamClaimIds = new Set([]);
+
       data.items.forEach((stream: Claim) => {
         resolveInfo[stream.canonical_url] = { stream };
         urls.push(stream.canonical_url);
+
+        if (stream.value_type !== 'channel' && stream.value_type !== 'collection') {
+          streamClaimIds.add(stream.claim_id);
+        }
       });
 
       dispatch({
@@ -727,6 +753,11 @@ export function doClaimSearch(
           pageSize: options.page_size,
         },
       });
+
+      if (streamClaimIds.size > 0) {
+        dispatch(doMembershipContentforStreamClaimIds(Array.from(streamClaimIds)));
+      }
+
       return resolveInfo;
     };
 

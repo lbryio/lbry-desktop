@@ -9,13 +9,15 @@ import {
 import SocialShare from './view';
 import { selectUserInviteReferralCode, selectUser, selectUserInviteStatusFetched } from 'redux/selectors/user';
 import { selectContentPositionForUri } from 'redux/selectors/content';
+import { selectContentHasProtectedMembershipIds } from 'redux/selectors/memberships';
 import { DISABLE_DOWNLOAD_BUTTON_TAG } from 'constants/tags';
 
 const select = (state, props) => {
   const { uri } = props;
+  const claim = selectClaimForUri(state, uri);
 
   return {
-    claim: selectClaimForUri(state, uri),
+    claim,
     inviteStatusFetched: selectUserInviteStatusFetched(state),
     referralCode: selectUserInviteReferralCode(state),
     user: selectUser(state),
@@ -23,6 +25,7 @@ const select = (state, props) => {
     position: selectContentPositionForUri(state, uri),
     disableDownloadButton: makeSelectTagInClaimOrChannelForUri(uri, DISABLE_DOWNLOAD_BUTTON_TAG)(state),
     isMature: selectClaimIsNsfwForUri(state, uri),
+    isMembershipProtected: claim && selectContentHasProtectedMembershipIds(state, claim.claim_id),
   };
 };
 

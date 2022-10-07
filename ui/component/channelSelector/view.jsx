@@ -9,6 +9,7 @@ import Icon from 'component/common/icon';
 import { useHistory } from 'react-router';
 import IncognitoSelector from './internal/incognito-selector';
 import ChannelListItem from './internal/channelListItem';
+import AllSelector from './internal/all-selector';
 
 type Props = {
   selectedChannelUrl: string, // currently selected channel
@@ -27,6 +28,8 @@ type Props = {
   autoSet?: boolean,
   channelToSet?: string,
   disabled?: boolean,
+  allOptionProps?: { onSelectAll: () => void, isSelected: boolean },
+  doFetchOdyseeMembershipForChannelIds: (channelIds: ClaimIds) => void,
 };
 
 function ChannelSelector(props: Props) {
@@ -45,9 +48,12 @@ function ChannelSelector(props: Props) {
     autoSet,
     channelToSet,
     disabled,
+    allOptionProps,
+    doFetchOdyseeMembershipForChannelIds,
   } = props;
 
   const hideAnon = Boolean(props.hideAnon || storeSelection);
+  const showAllOption = Boolean(allOptionProps && channelIds && channelIds.length > 1);
 
   const {
     push,
@@ -60,11 +66,20 @@ function ChannelSelector(props: Props) {
   function handleChannelSelect(channelId) {
     doSetIncognito(false);
     doSetActiveChannel(channelId);
-    if (onChannelSelect) onChannelSelect(channelId);
 
     if (storeSelection) {
       doSetDefaultChannel(channelId);
     }
+  }
+
+  function handleSelectOption(channelId) {
+    if (channelId) {
+      handleChannelSelect(channelId);
+    } else {
+      doSetIncognito(true);
+    }
+
+    if (onChannelSelect) onChannelSelect(channelId);
   }
 
   React.useEffect(() => {
@@ -79,6 +94,12 @@ function ChannelSelector(props: Props) {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps -- On mount if we get to autoSet a channel, set it.
   }, []);
+
+  React.useEffect(() => {
+    if (channelIds) {
+      doFetchOdyseeMembershipForChannelIds(channelIds);
+    }
+  }, [channelIds, doFetchOdyseeMembershipForChannelIds]);
 
   return (
     <div
@@ -97,7 +118,9 @@ function ChannelSelector(props: Props) {
           </MenuButton>
         ) : (
           <MenuButton>
-            {(incognito && !hideAnon) || !activeChannelUrl ? (
+            {showAllOption && allOptionProps?.isSelected ? (
+              <AllSelector isSelected />
+            ) : (incognito && !hideAnon) || !activeChannelUrl ? (
               <IncognitoSelector isSelected />
             ) : (
               <ChannelListItem channelId={activeChannelId} isSelected />
@@ -106,20 +129,21 @@ function ChannelSelector(props: Props) {
         )}
 
         <MenuList className="menu__list channel__list">
+          {showAllOption && (
+            <MenuItem onSelect={allOptionProps?.onSelectAll}>
+              <AllSelector />
+            </MenuItem>
+          )}
+
           {channelIds &&
             channelIds.map((channelId) => (
-              <MenuItem key={channelId} onSelect={() => handleChannelSelect(channelId)}>
+              <MenuItem key={channelId} onSelect={() => handleSelectOption(channelId)}>
                 <ChannelListItem channelId={channelId} />
               </MenuItem>
             ))}
 
           {!hideAnon && (
-            <MenuItem
-              onSelect={() => {
-                doSetIncognito(true);
-                if (onChannelSelect) onChannelSelect(undefined);
-              }}
-            >
+            <MenuItem onSelect={() => handleSelectOption(null)}>
               <IncognitoSelector />
             </MenuItem>
           )}

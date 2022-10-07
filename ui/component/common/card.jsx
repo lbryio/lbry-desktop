@@ -6,6 +6,7 @@ import Icon from 'component/common/icon';
 import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 import twemoji from 'twemoji';
+import Tooltip from 'component/common/tooltip';
 
 type Props = {
   title?: string | Node,
@@ -27,6 +28,7 @@ type Props = {
   singlePane?: boolean,
   headerActions?: Node,
   gridHeader?: boolean,
+  accessStatus?: string,
 };
 
 function Card(props: Props) {
@@ -49,6 +51,7 @@ function Card(props: Props) {
     secondPane,
     singlePane,
     headerActions,
+    accessStatus,
   } = props;
 
   const [expanded, setExpanded] = useState(defaultExpand);
@@ -79,7 +82,7 @@ function Card(props: Props) {
               {icon && <Icon sectionIcon icon={icon} />}
 
               <div className="card__title-text">
-                <TitleWrapper isPageTitle={isPageTitle} smallTitle={smallTitle}>
+                <TitleWrapper isPageTitle={isPageTitle} smallTitle={smallTitle} accessStatus={accessStatus}>
                   {title}
                 </TitleWrapper>
 
@@ -161,10 +164,11 @@ type TitleProps = {
   smallTitle?: boolean,
   children?: any,
   emoji?: any,
+  accessStatus?: string,
 };
 
 const TitleWrapper = (props: TitleProps) => {
-  const { isPageTitle, smallTitle, children } = props;
+  const { isPageTitle, smallTitle, children, accessStatus } = props;
 
   const Twemoji = ({ emoji }) => (
     <span
@@ -177,6 +181,22 @@ const TitleWrapper = (props: TitleProps) => {
     />
   );
 
+  const AccessIndicator = (par: any) => {
+    return (
+      <Tooltip title={__('This is a members-only content')}>
+        <div
+          className={classnames('content-access-indicator', {
+            locked: par.status === 'locked',
+            unlocked: par.status === 'unlocked',
+            purchased: par.status === 'purchased',
+          })}
+        >
+          <Icon icon={par.status === 'locked' ? ICONS.LOCK : ICONS.UNLOCK} />
+        </div>
+      </Tooltip>
+    );
+  };
+
   function transformer(children) {
     for (let child in children?.props?.children) {
       if (typeof children?.props?.children[child] === 'string') {
@@ -187,7 +207,10 @@ const TitleWrapper = (props: TitleProps) => {
   }
 
   return isPageTitle ? (
-    <h1 className="card__title">{transformer(children)}</h1>
+    <h1 className="card__title">
+      {accessStatus && <AccessIndicator status={accessStatus} />}
+      {transformer(children)}
+    </h1>
   ) : (
     <h2 className={classnames('card__title', { 'card__title--small': smallTitle })}>{children}</h2>
   );

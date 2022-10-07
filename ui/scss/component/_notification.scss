@@ -89,7 +89,6 @@ $contentMaxWidth: 60rem;
 
       .MuiAutocomplete-root {
         background-color: var(--color-background);
-        border-radius: var(--border-radius);
       }
     }
   }
@@ -144,12 +143,12 @@ $contentMaxWidth: 60rem;
   }
 
   .icon__wrapper {
-    background-color: rgba(var(--color-primary-dynamic), 0.1);
+    background-color: var(--color-background);
   }
 
   &:hover {
     .icon__wrapper {
-      background-color: rgba(var(--color-primary-dynamic), 0.2);
+      background-color: var(--color-background);
     }
   }
 

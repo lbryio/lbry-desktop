@@ -21,6 +21,7 @@ import PublishAdditionalOptions from 'component/publish/shared/publishAdditional
 import PublishFormErrors from 'component/publish/shared/publishFormErrors';
 import PublishStreamReleaseDate from 'component/publish/shared/publishStreamReleaseDate';
 import PublishFile from 'component/publish/upload/publishFile';
+import PublishProtectedContent from 'component/publishProtectedContent';
 
 import SelectThumbnail from 'component/selectThumbnail';
 import Card from 'component/common/card';
@@ -86,46 +87,48 @@ type Props = {
   isClaimingInitialRewards: boolean,
   claimInitialRewards: () => void,
   hasClaimedInitialRewards: boolean,
+  restrictedToMemberships: ?string,
 };
 
 function UploadForm(props: Props) {
   // Detect upload type from query in URL
   const {
-    thumbnail,
-    thumbnailError,
-    name,
-    editingURI,
-    myClaimForUri,
-    resolveUri,
-    title,
+    activeChannelClaim,
     bid,
     bidError,
+    checkAvailability,
+    claimInitialRewards,
+    clearPublish,
     description,
-    uploadThumbnailStatus,
-    resetThumbnailStatus,
-    updatePublishForm,
+    disabled = false,
+    editingURI,
+    enablePublishPreview,
     filePath,
     fileText,
-    publishing,
-    publishSuccess,
-    publishError,
-    clearPublish,
-    isStillEditing,
-    tags,
-    publish,
-    disabled = false,
-    checkAvailability,
-    ytSignupPending,
-    modal,
-    enablePublishPreview,
-    activeChannelClaim,
-    incognito,
-    user,
-    permanentUrl,
-    remoteUrl,
-    isClaimingInitialRewards,
-    claimInitialRewards,
     hasClaimedInitialRewards,
+    incognito,
+    isClaimingInitialRewards,
+    isStillEditing,
+    modal,
+    myClaimForUri,
+    name,
+    permanentUrl,
+    publish,
+    publishError,
+    publishSuccess,
+    publishing,
+    remoteUrl,
+    resetThumbnailStatus,
+    resolveUri,
+    tags,
+    thumbnail,
+    thumbnailError,
+    title,
+    updatePublishForm,
+    uploadThumbnailStatus,
+    user,
+    ytSignupPending,
+    restrictedToMemberships,
   } = props;
 
   const inEditMode = Boolean(editingURI);
@@ -199,11 +202,13 @@ function UploadForm(props: Props) {
 
   const isOverwritingExistingClaim = !editingURI && myClaimForUri;
 
-  const formValid = isOverwritingExistingClaim
-    ? false
-    : editingURI && !filePath // if we're editing we don't need a file
-    ? isStillEditing && formValidLessFile && !waitingForFile
-    : formValidLessFile;
+  const formValid =
+    restrictedToMemberships !== null &&
+    (isOverwritingExistingClaim
+      ? false
+      : editingURI && !filePath // if we're editing we don't need a file
+      ? isStillEditing && formValidLessFile && !waitingForFile
+      : formValidLessFile);
 
   const [previewing, setPreviewing] = React.useState(false);
 
@@ -477,6 +482,8 @@ function UploadForm(props: Props) {
 
           <Card actions={<SelectThumbnail />} />
 
+          <PublishProtectedContent claim={myClaimForUri} location={'upload'} />
+
           <h2 className="card__title" style={{ marginTop: 'var(--spacing-l)' }}>
             {__('Tags')}
           </h2>
@@ -515,7 +522,7 @@ function UploadForm(props: Props) {
           <Button button="primary" onClick={handlePublish} label={submitLabel} disabled={isFormIncomplete} />
           <ChannelSelect disabled={isFormIncomplete} autoSet channelToSet={claimChannelId} isPublishMenu />
         </div>
-        <p className="help">
+        <span className="help">
           {!formDisabled && !formValid ? (
             <PublishFormErrors title={title} mode={mode} waitForFile={waitingForFile} overMaxBitrate={overMaxBitrate} />
           ) : (
@@ -541,7 +548,7 @@ function UploadForm(props: Props) {
               By continuing, you accept the %odysee_terms_of_service% and %odysee_community_guidelines%.
             </I18nMessage>
           )}
-        </p>
+        </span>
       </section>
     </div>
   );

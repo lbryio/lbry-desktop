@@ -149,7 +149,8 @@
       color: #000;
       padding-bottom: 4.2rem;
       .membership-splash__info-content {
-        padding-left: var(--spacing-m);
+        align-items: center;
+        justify-content: center;
       }
     }
     @media (max-width: $breakpoint-small) {
@@ -168,15 +169,18 @@
     .membership-splash__info:nth-child(1) {
       // padding: var(--spacing-l);
       padding: 3%;
-      font-size: 1vw;
-      @media (min-width: $breakpoint-xlarge) {
+
+      h1 {
         font-size: 1vw;
-      }
-      @media (max-width: $breakpoint-medium) {
-        font-size: 1.3vw;
-      }
-      @media (max-width: $breakpoint-small) {
-        font-size: 0.9rem;
+        @media (min-width: $breakpoint-xlarge) {
+          font-size: 1vw;
+        }
+        @media (max-width: $breakpoint-medium) {
+          font-size: 1.3vw;
+        }
+        @media (max-width: $breakpoint-small) {
+          font-size: 0.9rem;
+        }
       }
     }
     .membership-splash__info:nth-child(2) {
@@ -204,6 +208,7 @@
     .membership-splash__info-price {
       display: flex;
       align-items: center;
+      justify-content: center;
       font-size: 2.6rem;
       font-size: 2.6vw;
       font-weight: 900;
@@ -211,7 +216,7 @@
         display: inline-block;
         width: 36%;
         //margin-left: 1rem;
-        margin-left: 7%;
+        //margin-left: 7%;
         //margin-right: 1.4rem;
         margin-right: 7%;
       }
@@ -250,21 +255,30 @@
   }
 
   .membership-splash__info-content {
+    h1 {
+      font-size: 1vw;
+      font-weight: 900;
+
+      @media (max-width: $breakpoint-medium) {
+        font-size: 1.3vw;
+      }
+      @media (max-width: $breakpoint-small) {
+        font-size: 0.9rem;
+      }
+
+      width: 156px;
+
+      @media (max-width: $breakpoint-small) {
+        width: 300px;
+      }
+    }
     display: flex;
     align-items: center;
-    font-size: 1vw;
-    font-weight: 900;
     margin-top: 8px;
     .icon {
       width: 2rem;
       margin-right: var(--spacing-xs);
       flex-shrink: 0;
-    }
-    @media (max-width: $breakpoint-medium) {
-      font-size: 1.3vw;
-    }
-    @media (max-width: $breakpoint-small) {
-      font-size: 0.9rem;
     }
   }
 
@@ -392,8 +406,10 @@
         }
 
         .membership-splash__info:nth-child(1) {
-          padding: var(--spacing-m);
-          font-size: 0.7rem;
+          h1 {
+            padding: var(--spacing-m);
+            font-size: 0.7rem;
+          }
         }
       }
     }
@@ -408,19 +424,5 @@
         }
       }
     }
-  }
-}
-
-.stripe__confirm-remove-membership {
-  padding: var(--spacing-m) var(--spacing-l) !important;
-
-  .card__subtitle {
-    line-height: 39px;
-    margin-top: 5px;
-    margin-bottom: -1px;
-  }
-
-  .card__main-actions {
-    padding-top: 2px;
   }
 }

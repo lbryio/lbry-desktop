@@ -30,6 +30,7 @@ export const PAGE_TITLE = {
   [PAGES.LIVESTREAM_CURRENT]: 'Live (Experimental)',
   [PAGES.NOTIFICATIONS]: 'Notifications',
   [PAGES.ODYSEE_MEMBERSHIP]: 'Odysee Premium',
+  [PAGES.CREATOR_MEMBERSHIPS]: 'Creator Memberships',
   [PAGES.POST]: 'Post an Article on Odysee',
   [PAGES.PRIVACY_POLICY]: 'Privacy Policy',
   [PAGES.RECEIVE]: 'Your address',

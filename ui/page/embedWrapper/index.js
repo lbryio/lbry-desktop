@@ -21,6 +21,7 @@ import {
   selectActiveLiveClaimForChannel,
 } from 'redux/selectors/livestream';
 import { getThumbnailFromClaim, isStreamPlaceholderClaim, getChannelFromClaim } from 'util/claim';
+import { selectNoRestrictionOrUserIsMemberForContentClaimId } from 'redux/selectors/memberships';
 
 const select = (state, props) => {
   const { search } = state.router.location;
@@ -84,6 +85,7 @@ const select = (state, props) => {
     claimThumbnail: getThumbnailFromClaim(claim),
     activeLivestreamInitialized: selectActiveLivestreamInitialized(state),
     geoRestriction: selectGeoRestrictionForUri(state, uri),
+    contentUnlocked: claim && selectNoRestrictionOrUserIsMemberForContentClaimId(state, claim.claim_id),
   };
 };
 

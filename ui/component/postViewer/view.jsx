@@ -17,6 +17,7 @@ import DateTime from 'component/dateTime';
 import Button from 'component/button';
 import LbcSymbol from 'component/common/lbc-symbol';
 import classnames from 'classnames';
+import ProtectedContentOverlay from 'component/protectedContentOverlay';
 
 const EXPAND = {
   NONE: 'none',
@@ -28,11 +29,12 @@ type Props = {
   uri: string,
   claim: ?StreamClaim,
   claimIsMine: boolean,
+  contentUnlocked: boolean,
   doOpenModal: (id: string, {}) => void,
 };
 
 function PostViewer(props: Props) {
-  const { uri, claim, claimIsMine, doOpenModal } = props;
+  const { uri, claim, claimIsMine, contentUnlocked, doOpenModal } = props;
   const [expand, setExpand] = React.useState(EXPAND.NONE);
 
   if (!claim) {
@@ -62,7 +64,7 @@ function PostViewer(props: Props) {
       >
         <span className="post__date">
           <DateTime uri={uri} type="date" />
-          <FileViewCount uri={uri} />
+          {contentUnlocked && <FileViewCount uri={uri} />}
         </span>
         <div className="post__info--grouped">
           <Button
@@ -105,6 +107,7 @@ function PostViewer(props: Props) {
       <ClaimAuthor uri={uri} />
 
       <div className="file-render--post-container">
+        <ProtectedContentOverlay uri={uri} />
         <FileRenderInitiator uri={uri} />
         <FileRenderInline uri={uri} />
       </div>

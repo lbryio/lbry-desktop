@@ -11,12 +11,11 @@ import CreditAmount from 'component/common/credit-amount';
 import ChatComment from 'component/chat/chatComment';
 import ChatComments from 'component/chat/chatComments';
 import LivestreamHyperchats from './livestream-hyperchats';
-import LivestreamMenu from './livestream-menu';
+import LivestreamMenu from 'component/livestreamMenu';
 import React from 'react';
 import Yrbl from 'component/yrbl';
 import { getTipValues } from 'util/livestream';
 import Slide from '@mui/material/Slide';
-import useGetUserMemberships from 'effects/use-get-user-memberships';
 import usePersistedState from 'effects/use-persisted-state';
 
 export const VIEW_MODES = {
@@ -26,18 +25,17 @@ export const VIEW_MODES = {
 const COMMENT_SCROLL_TIMEOUT = 25;
 
 type Props = {
+  customViewMode?: string,
   embed?: boolean,
-  isPopoutWindow?: boolean,
-  uri: string,
   hideHeader?: boolean,
   hyperchatsHidden?: boolean,
-  customViewMode?: string,
+  isPopoutWindow?: boolean,
   setCustomViewMode?: (any) => void,
+  uri: string,
   // redux
+  channelId: string,
   claimId?: string,
   comments: Array<Comment>,
-  pinnedComments: Array<Comment>,
-  superChats: Array<Comment>,
   doCommentList: (
     uri: string,
     parentId: ?string,
@@ -46,32 +44,42 @@ type Props = {
     sortBy: ?number,
     isLivestream: boolean
   ) => void,
-  doResolveUris: (uris: Array<string>, cache: boolean) => void,
+  doFetchChannelMembershipsForChannelIds: (channelId: string, claimIds: ClaimIds) => void,
+  doFetchOdyseeMembershipForChannelIds: (claimIds: ClaimIds) => void,
   doHyperChatList: (uri: string) => void,
-  claimsByUri: { [string]: any },
-  doFetchUserMemberships: (claimIdCsv: string) => void,
+  doResolveUris: (uris: Array<string>, cache: boolean) => void,
+  pinnedComments: Array<Comment>,
   setLayountRendered: (boolean) => void,
+  superChats: Array<Comment>,
+  doUpdateCreatorSettings: (ChannelClaim, PerChannelSettings) => void,
+  myChannelClaims: any,
+  doListAllMyMembershipTiers: any,
+  contentUnlocked: boolean,
 };
 
 export default function ChatLayout(props: Props) {
   const {
+    channelId,
     claimId,
     comments: commentsByChronologicalOrder,
+    customViewMode,
+    doCommentList,
+    doFetchChannelMembershipsForChannelIds,
+    doFetchOdyseeMembershipForChannelIds,
+    doHyperChatList,
+    doResolveUris,
     embed,
-    isPopoutWindow,
-    pinnedComments,
-    superChats: hyperChatsByAmount,
-    uri,
     hideHeader,
     hyperchatsHidden,
-    customViewMode,
+    isPopoutWindow,
+    pinnedComments,
     setCustomViewMode,
-    doCommentList,
-    doResolveUris,
-    doHyperChatList,
-    doFetchUserMemberships,
-    claimsByUri,
     setLayountRendered,
+    superChats: hyperChatsByAmount,
+    uri,
+    myChannelClaims,
+    doListAllMyMembershipTiers,
+    contentUnlocked,
   } = props;
 
   const isMobile = useIsMobile() && !isPopoutWindow;
@@ -105,20 +113,27 @@ export default function ChatLayout(props: Props) {
   }
 
   // get commenter claim ids for checking premium status
-  const commenterClaimIds = commentsByChronologicalOrder.map((comment) => {
-    return comment.channel_id;
-  });
+  const commenterClaimIds =
+    commentsByChronologicalOrder && commentsByChronologicalOrder.map(({ channel_id }) => channel_id);
 
-  // update premium status
-  const shouldFetchUserMemberships = true;
-  useGetUserMemberships(
-    shouldFetchUserMemberships,
-    commenterClaimIds,
-    claimsByUri,
-    doFetchUserMemberships,
-    [commentsByChronologicalOrder],
-    true
-  );
+  React.useEffect(() => {
+    if (commenterClaimIds?.length > 0 && channelId) {
+      doFetchOdyseeMembershipForChannelIds(commenterClaimIds);
+      doFetchChannelMembershipsForChannelIds(channelId, commenterClaimIds);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    channelId,
+    commenterClaimIds.length,
+    doFetchChannelMembershipsForChannelIds,
+    doFetchOdyseeMembershipForChannelIds,
+  ]);
+
+  React.useEffect(() => {
+    if (myChannelClaims !== undefined) {
+      doListAllMyMembershipTiers();
+    }
+  }, [doListAllMyMembershipTiers, myChannelClaims]);
 
   const commentsToDisplay =
     viewMode === VIEW_MODES.CHAT ? commentsByChronologicalOrder : superChatsByChronologicalOrder;
@@ -182,11 +197,11 @@ export default function ChatLayout(props: Props) {
   }, [customViewMode, viewMode]);
 
   React.useEffect(() => {
-    if (claimId) {
+    if (claimId && contentUnlocked) {
       doCommentList(uri, undefined, 1, 75, undefined, true);
       doHyperChatList(uri);
     }
-  }, [claimId, uri, doCommentList, doHyperChatList]);
+  }, [claimId, contentUnlocked, doCommentList, doHyperChatList, uri]);
 
   React.useEffect(() => {
     if (isMobile && !didInitialScroll) {
@@ -332,6 +347,7 @@ export default function ChatLayout(props: Props) {
           </div>
 
           <LivestreamMenu
+            uri={uri}
             isPopoutWindow={isPopoutWindow}
             hideChat={() => setChatHidden(true)}
             setPopoutWindow={(v) => setPopoutWindow(v)}

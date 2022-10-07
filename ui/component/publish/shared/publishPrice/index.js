@@ -6,6 +6,7 @@ import PublishPrice from './view';
 const select = (state) => ({
   contentIsFree: selectPublishFormValue(state, 'contentIsFree'),
   fee: selectPublishFormValue(state, 'fee'),
+  restrictedToMemberships: selectPublishFormValue(state, 'restrictedToMemberships'),
 });
 
 const perform = (dispatch) => ({

@@ -50,6 +50,7 @@ const select = (state) => {
     incognito: selectIncognito(state),
     isClaimingInitialRewards: selectIsClaimingInitialRewards(state),
     hasClaimedInitialRewards: selectHasClaimedInitialRewards(state),
+    restrictedToMemberships: selectPublishFormValue(state, 'restrictedToMemberships'),
     balance: selectBalance(state),
   };
 };

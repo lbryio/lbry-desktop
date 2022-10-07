@@ -169,6 +169,12 @@ export default function HeaderProfileMenuButton(props: HeaderMenuButtonProps) {
               <hr className="menu__separator" />
               <HeaderMenuLink useMui page={PAGES.REWARDS} icon={ICONS.REWARDS} name={__('Rewards')} />
               <HeaderMenuLink useMui page={PAGES.INVITE} icon={ICONS.INVITE} name={__('Invites')} />
+              <HeaderMenuLink
+                useMui
+                page={PAGES.MEMBERSHIPS_LANDING}
+                icon={ICONS.MEMBERSHIP}
+                name={__('Memberships')}
+              />
               <HeaderMenuLink useMui page={PAGES.ODYSEE_MEMBERSHIP} icon={ICONS.UPGRADE} name={__('Odysee Premium')} />
 
               <hr className="menu__separator" />

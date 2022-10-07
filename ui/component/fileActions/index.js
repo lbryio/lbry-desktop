@@ -8,6 +8,7 @@ import {
   selectPreorderTagForUri,
   selectPurchaseTagForUri,
   selectRentalTagForUri,
+  selectProtectedContentTagForUri,
 } from 'redux/selectors/claims';
 import { selectStreamingUrlForUri } from 'redux/selectors/file_info';
 import { doPrepareEdit } from 'redux/actions/publish';
@@ -17,6 +18,7 @@ import { doToast } from 'redux/actions/notifications';
 import { doOpenModal } from 'redux/actions/app';
 import FileActions from './view';
 import { makeSelectFileRenderModeForUri } from 'redux/selectors/content';
+import { selectNoRestrictionOrUserIsMemberForContentClaimId } from 'redux/selectors/memberships';
 import { DISABLE_DOWNLOAD_BUTTON_TAG } from 'constants/tags';
 import { isStreamPlaceholderClaim } from 'util/claim';
 import * as RENDER_MODES from 'constants/file_render_modes';
@@ -42,6 +44,8 @@ const select = (state, props) => {
     isAPreorder: Boolean(selectPreorderTagForUri(state, props.uri)),
     isPurchasableContent: Boolean(selectPurchaseTagForUri(state, props.uri)),
     isRentableContent: Boolean(selectRentalTagForUri(state, props.uri)),
+    isProtectedContent: Boolean(selectProtectedContentTagForUri(state, uri)),
+    contentUnlocked: claim && selectNoRestrictionOrUserIsMemberForContentClaimId(state, claim.claim_id),
   };
 };
 

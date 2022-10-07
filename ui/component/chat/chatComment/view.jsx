@@ -16,7 +16,7 @@ import Icon from 'component/common/icon';
 import MarkdownPreview from 'component/common/markdown-preview';
 import OptimizedImage from 'component/optimizedImage';
 import React from 'react';
-import PremiumBadge from 'component/premiumBadge';
+import MembershipBadge from 'component/membershipBadge';
 import usePersistedState from 'effects/use-persisted-state';
 import { Lbryio } from 'lbryinc';
 
@@ -33,7 +33,8 @@ type Props = {
   claim: StreamClaim,
   stakedLevel: number,
   claimsByUri: { [string]: any },
-  odyseeMembership: string,
+  odyseeMembership: ?string,
+  creatorMembership: ?string,
   activeChannelClaim?: any,
   authorTitle: string,
   channelAge?: any,
@@ -54,6 +55,7 @@ export default function ChatComment(props: Props) {
     restoreScrollPos,
     handleCommentClick,
     odyseeMembership,
+    creatorMembership,
     authorTitle,
     activeChannelClaim,
     channelAge,
@@ -177,7 +179,8 @@ export default function ChatComment(props: Props) {
               {!isStreamer && !isModerator && !isGlobalMod && !odyseeMembership && isSprout && (
                 <CommentBadge label={__('Sprout')} icon={ICONS.BADGE_SPROUT} size={16} />
               )}
-              <PremiumBadge membership={odyseeMembership} linkPage />
+              {odyseeMembership && <MembershipBadge membershipName={odyseeMembership} linkPage />}
+              {creatorMembership && <MembershipBadge membershipName={creatorMembership} linkPage uri={uri} />}
 
               {/* Use key to force timestamp update */}
               <DateTime date={timePosted} timeAgo key={forceUpdate} genericSeconds />
@@ -219,7 +222,8 @@ export default function ChatComment(props: Props) {
             {!isStreamer && !isModerator && !isGlobalMod && isSprout && (
               <CommentBadge label={__('Sprout')} icon={ICONS.BADGE_SPROUT} size={16} />
             )}
-            <PremiumBadge membership={odyseeMembership} linkPage />
+            {odyseeMembership && <MembershipBadge membershipName={odyseeMembership} linkPage />}
+            {creatorMembership && <MembershipBadge membershipName={creatorMembership} linkPage uri={uri} />}
             <Menu>
               <MenuButton
                 className={classnames('button--uri-indicator comment__author', {

@@ -1,7 +1,7 @@
 // @flow
 import ChannelThumbnail from 'component/channelThumbnail';
 import React from 'react';
-import PremiumBadge from 'component/premiumBadge';
+import MembershipBadge from 'component/membershipBadge';
 import twemoji from 'twemoji';
 
 type Props = {
@@ -10,10 +10,11 @@ type Props = {
   emote?: any,
   uri?: string,
   emoji?: string,
+  odyseeMembership: ?string,
 };
 
 export default function TextareaSuggestionsItem(props: Props) {
-  const { claimLabel, claimTitle, emote, uri, ...autocompleteProps } = props;
+  const { claimLabel, claimTitle, emote, uri, odyseeMembership, ...autocompleteProps } = props;
 
   const Twemoji = ({ emoji }) => (
     <span
@@ -59,7 +60,7 @@ export default function TextareaSuggestionsItem(props: Props) {
           <span className="textarea-suggestion__title">{claimTitle || value}</span>
           <span className="textarea-suggestion__value">
             {value}
-            <PremiumBadge uri={uri} />
+            {odyseeMembership && <MembershipBadge membershipName={odyseeMembership} />}
           </span>
         </div>
       </div>

@@ -44,9 +44,10 @@ type Props = {
   doPlayUri: (uri: string) => void,
   doFetchCostInfoForUri: (uri: string) => void,
   doFetchChannelLiveStatus: (string) => void,
-  doCommentSocketConnect: (string, string, string) => void,
+  doCommentSocketConnect: (string, string, string, ?string) => void,
   doCommentSocketDisconnect: (string, string) => void,
   doFetchActiveLivestreams: () => void,
+  contentUnlocked: boolean,
 };
 
 export const EmbedContext = React.createContext<any>();
@@ -84,6 +85,7 @@ export default function EmbedWrapperPage(props: Props) {
     doCommentSocketConnect,
     doCommentSocketDisconnect,
     doFetchActiveLivestreams,
+    contentUnlocked,
   } = props;
 
   const {
@@ -141,14 +143,24 @@ export default function EmbedWrapperPage(props: Props) {
 
     const channelName = formatLbryChannelName(channelUrl);
 
-    doCommentSocketConnect(canonicalUrl, channelName, claimId);
+    if (contentUnlocked) {
+      doCommentSocketConnect(canonicalUrl, channelName, claimId, undefined);
+    }
 
     return () => {
       if (claimId) {
         doCommentSocketDisconnect(claimId, channelName);
       }
     };
-  }, [canonicalUrl, channelUrl, claimId, doCommentSocketConnect, doCommentSocketDisconnect, isLivestreamClaim]);
+  }, [
+    canonicalUrl,
+    channelUrl,
+    claimId,
+    doCommentSocketConnect,
+    doCommentSocketDisconnect,
+    isLivestreamClaim,
+    contentUnlocked,
+  ]);
 
   React.useEffect(() => {
     if (doResolveUri && uri && !haveClaim) {

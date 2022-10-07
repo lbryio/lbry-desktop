@@ -1,0 +1,82 @@
+@import '~ui/scss/init/breakpoints';
+
+.bank-account-status {
+  margin-top: var(--spacing-s);
+  padding: var(--spacing-s);
+  border-radius: var(--border-radius);
+  border: 2px solid rgba(255, 0, 0, 0.8);
+  background-color: rgba(255, 0, 0, 0.1);
+
+  div {
+    label {
+      display: block;
+      font-size: var(--font-body);
+      font-weight: var(--font-weight-bold);
+    }
+
+    span {
+      display: block;
+      font-size: var(--font-small);
+      font-weight: var(--font-weight-bold);
+      opacity: 0.8;
+    }
+  }
+
+  .button {
+    width: auto;
+    max-width: 100%;
+    margin-top: var(--spacing-s);
+    margin-bottom: 0;
+  }
+}
+
+.ugly-alien-box {
+  margin-top: var(--spacing-l);
+  width: 100%;
+  background-color: #f3e3f6;
+  color: black;
+  border-radius: var(--border-radius);
+  text-align: center;
+  padding: var(--spacing-s);
+  font-weight: bold;
+
+  a {
+    color: var(--color-primary);
+  }
+
+  img {
+    width: 46px;
+    height: 46px;
+    background-color: #650f7c;
+    border-radius: 50%;
+    margin-left: var(--spacing-s);
+  }
+}
+
+.table-total {
+  margin-bottom: var(--spacing-l);
+  background-color: var(--color-header-background);
+  border-radius: var(--border-radius);
+
+  td {
+    font-weight: var(--font-weight-bold);
+    width: 50%;
+    &:nth-child(1) {
+      padding-right: 0.25rem;
+    }
+    &:nth-child(2) {
+      padding-left: 0.25rem;
+      text-align: right;
+    }
+  }
+  span {
+    display: block;
+    background-color: var(--color-header-background);
+    padding: var(--spacing-xxs);
+    padding-bottom: 4px;
+    width: auto;
+    color: var(--color-primary);
+    border: 2px solid var(--color-border);
+    border-radius: var(--border-radius);
+  }
+}

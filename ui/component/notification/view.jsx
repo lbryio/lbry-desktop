@@ -76,6 +76,9 @@ export default function Notification(props: Props) {
       channelUrl = notification_parameters.dynamic.channel_url;
       icon = creatorIcon(channelUrl, notification_parameters?.dynamic?.channel_thumbnail);
       break;
+    case RULE.NEW_MEMBER:
+      icon = <Icon icon={ICONS.MEMBERSHIP} sectionIcon />;
+      break;
     case RULE.WEEKLY_WATCH_REMINDER:
     case RULE.DAILY_WATCH_AVAILABLE:
     case RULE.DAILY_WATCH_REMIND:

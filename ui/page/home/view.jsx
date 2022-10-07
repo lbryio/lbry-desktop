@@ -41,7 +41,7 @@ type Props = {
   hideScheduledLivestreams: boolean,
   homepageOrder: HomepageOrder,
   doOpenModal: (id: string, ?{}) => void,
-  hasMembership: ?boolean,
+  userHasOdyseeMembership: ?boolean,
   hasPremiumPlus: boolean,
   currentTheme: string,
 };
@@ -61,7 +61,7 @@ function HomePage(props: Props) {
     hideScheduledLivestreams,
     homepageOrder,
     doOpenModal,
-    hasMembership,
+    userHasOdyseeMembership,
     hasPremiumPlus,
   } = props;
 
@@ -84,7 +84,12 @@ function HomePage(props: Props) {
     showNsfw
   );
 
-  const sortedRowData: Array<RowDataItem> = getSortedRowData(authenticated, hasMembership, homepageOrder, rowData);
+  const sortedRowData: Array<RowDataItem> = getSortedRowData(
+    authenticated,
+    userHasOdyseeMembership,
+    homepageOrder,
+    rowData
+  );
 
   type SectionHeaderProps = {
     title: string,
@@ -130,6 +135,7 @@ function HomePage(props: Props) {
       <ClaimTilesDiscover
         {...options}
         showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
+        hideMembersOnly={id !== 'FOLLOWING'}
         hasSource
         prefixUris={getLivestreamUris(activeLivestreams, options.channelIds).slice(
           0,

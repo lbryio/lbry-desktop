@@ -5,10 +5,10 @@ import { doHideModal, doOpenModal } from 'redux/actions/app';
 import { doToast } from 'redux/actions/notifications';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { selectClientSetting } from 'redux/selectors/settings';
-import { selectHasOdyseeMembership } from 'redux/selectors/user';
+import { selectUserHasActiveOdyseeMembership } from 'redux/selectors/memberships';
 
 const select = (state) => ({
-  hasMembership: selectHasOdyseeMembership(state),
+  userHasOdyseeMembership: selectUserHasActiveOdyseeMembership(state),
   homepageOrder: selectClientSetting(state, SETTINGS.HOMEPAGE_ORDER),
   alsoApplyToSidebar: selectClientSetting(state, SETTINGS.HOMEPAGE_ORDER_APPLY_TO_SIDEBAR),
 });

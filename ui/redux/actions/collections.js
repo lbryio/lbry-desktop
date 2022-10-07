@@ -331,7 +331,7 @@ export const doFetchItemsInCollections = (resolveItemsOptions: {
       });
   });
 
-  dispatch({ type: ACTIONS.RESOLVE_URIS_COMPLETED, data: { resolveInfo } });
+  dispatch({ type: ACTIONS.RESOLVE_URIS_SUCCESS, data: { resolveInfo } });
 
   dispatch({
     type: ACTIONS.COLLECTION_ITEMS_RESOLVE_COMPLETED,

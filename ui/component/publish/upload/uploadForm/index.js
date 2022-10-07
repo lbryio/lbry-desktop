@@ -42,6 +42,7 @@ const select = (state) => {
     filePath: selectPublishFormValue(state, 'filePath'),
     remoteUrl: selectPublishFormValue(state, 'remoteFileUrl'),
     publishSuccess: selectPublishFormValue(state, 'publishSuccess'),
+    restrictedToMemberships: selectPublishFormValue(state, 'restrictedToMemberships'),
     totalRewardValue: selectUnclaimedRewardValue(state),
     modal: selectModal(state),
     enablePublishPreview: selectClientSetting(state, SETTINGS.ENABLE_PUBLISH_PREVIEW),

@@ -1,0 +1,194 @@
+@import '~ui/scss/init/breakpoints';
+
+// H1 is temporary for test
+h1 {
+  font-size: var(--font-title);
+}
+
+.bank-account-status {
+  margin-top: var(--spacing-s);
+  padding: var(--spacing-s);
+  border-radius: var(--border-radius);
+  border: 2px solid rgba(255, 0, 0, 0.8);
+  background-color: rgba(255, 0, 0, 0.1);
+
+  div {
+    label {
+      display: block;
+      font-size: var(--font-body);
+      font-weight: var(--font-weight-bold);
+    }
+
+    span {
+      display: block;
+      font-size: var(--font-small);
+      font-weight: var(--font-weight-bold);
+      opacity: 0.8;
+    }
+  }
+
+  .button {
+    width: auto;
+    max-width: 100%;
+    margin-top: var(--spacing-s);
+    margin-bottom: 0;
+  }
+}
+
+.creator-memberships-header {
+  width: 100%;
+  font-size: var(--font-title);
+  font-weight: var(--font-bold);
+  text-align: center;
+}
+
+.membership-wrapper {
+  background-size: 120%;
+  margin-bottom: var(--spacing-l);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+
+  .membership-content {
+    text-align: center;
+    padding: 4% 26%;
+
+    div:first-of-type {
+      background: var(--color-header-background);
+      border-radius: 50px;
+      padding: var(--spacing-m);
+
+      h2 {
+        font-size: var(--font-title);
+        font-weight: var(--font-bold);
+        margin-bottom: var(--spacing-s);
+
+        &:after {
+          content: '';
+          display: block;
+          margin-left: 10%;
+          width: 80%;
+          height: 2px;
+          background: var(--color-primary);
+          color: var(--color-primary);
+          margin: 0 10px;
+          transition: width 0.2s, margin-left 0.2s;
+        }
+      }
+    }
+  }
+
+  .membership-content {
+    transition: background-color 0.4s;
+  }
+
+  &.supporter {
+    background-image: url('https://static.odycdn.com/images/banner_DonorPortal.jpg');
+    background-position: 20% -190px;
+    transition: background-position 0.4s;
+    .membership-content {
+      background-color: rgba(0, 208, 217, 0.3);
+    }
+  }
+
+  &.memberships {
+    background-image: url('https://static.odycdn.com/images/banner_creatorPortal.jpg');
+    background-position: 60% -170px;
+    transition: background-position 0.4s;
+    .membership-content {
+      background-color: rgba(230, 25, 112, 0.3);
+    }
+  }
+
+  &:hover {
+    // cursor:pointer;
+    h2 {
+      font-size: var(--font-title);
+      font-weight: var(--font-bold);
+      margin-bottom: var(--spacing-s);
+
+      &:after {
+        margin-left: 5% !important;
+        width: 90% !important;
+      }
+    }
+
+    &.supporter {
+      background-position: 18% -196px;
+      .membership-content {
+        background-color: rgba(0, 208, 217, 0.5);
+      }
+    }
+
+    &.memberships {
+      background-position: 58% -176px;
+      .membership-content {
+        background-color: rgba(230, 25, 112, 0.5);
+      }
+    }
+  }
+
+  @media (max-width: $breakpoint-small) {
+    background-size: cover !important;
+    background-position: unset !important;
+    .membership-content {
+      padding: var(--spacing-s);
+    }
+  }
+}
+
+.portal-tagline {
+  margin-bottom: 12px;
+  font-size: 17px;
+  margin-left: 4px;
+}
+
+.membership-wrapper-title {
+  display: flex;
+  margin-top: -3px;
+  margin-bottom: var(--spacing-l);
+  @media (max-width: $breakpoint-small) {
+    margin-top: var(--spacing-s);
+    margin-bottom: 18px;
+  }
+
+  svg {
+    width: 3rem;
+    height: 3rem;
+    background-color: var(--color-header-background);
+    border-radius: 50%;
+    padding: var(--spacing-s);
+    margin-right: 0;
+  }
+  label {
+    font-size: var(--font-large);
+    font-weight: var(--font-weight-bold);
+    padding-left: 10px;
+    // width:auto;
+    margin-top: var(--spacing-s);
+    flex: 1;
+    border-bottom: 1px solid var(--color-header-background);
+  }
+
+  button {
+    height: 36px;
+    margin-top: -6px;
+    float: right;
+    padding-left: var(--spacing-xs);
+    padding-right: var(--spacing-s);
+    .button__content {
+      .button__label {
+        font-size: var(--font-body);
+        margin-left: 0;
+      }
+    }
+    .icon {
+      background-color: unset;
+      width: 2rem;
+      height: 2rem;
+      padding: 8px;
+      padding-left: 0;
+      padding-right: 0;
+      margin: 0;
+    }
+  }
+}

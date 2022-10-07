@@ -1,0 +1,19 @@
+.access-status {
+  margin-bottom: var(--spacing-s);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-s);
+
+  label {
+    margin-bottom: 0 !important;
+  }
+
+  &.red {
+    background-color: rgba(255, 0, 0, 0.2);
+    border: 2px solid rgba(255, 0, 0, 0.6);
+  }
+
+  &.green {
+    background-color: rgba(0, 255, 21, 0.2);
+    border: 2px solid rgba(0, 255, 64, 0.6);
+  }
+}

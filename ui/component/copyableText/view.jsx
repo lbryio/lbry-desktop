@@ -6,6 +6,7 @@ import React, { useRef } from 'react';
 
 type Props = {
   copyable: string,
+  onlyCopy: boolean,
   snackMessage: ?string,
   doToast: ({ message: string }) => void,
   label?: string,
@@ -16,13 +17,23 @@ type Props = {
 };
 
 export default function CopyableText(props: Props) {
-  const { copyable, doToast, snackMessage, label, primaryButton = false, name, onCopy, enableInputMask } = props;
+  const {
+    copyable,
+    onlyCopy,
+    doToast,
+    snackMessage,
+    label,
+    primaryButton = false,
+    name,
+    onCopy,
+    enableInputMask,
+  } = props;
   const [maskInput, setMaskInput] = React.useState(enableInputMask);
 
   const input = useRef();
 
   function handleCopyText() {
-    if (enableInputMask) {
+    if (enableInputMask || onlyCopy) {
       navigator.clipboard
         .writeText(copyable)
         .then(() => {

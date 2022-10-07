@@ -23,10 +23,12 @@ type Props = {
   socketConnection: { connected: ?boolean },
   isStreamPlaying: boolean,
   doSetPrimaryUri: (uri: ?string) => void,
-  doCommentSocketConnect: (uri: string, channelName: string, claimId: string) => void,
+  doCommentSocketConnect: (uri: string, channelName: string, claimId: string, subCategory: ?string) => void,
   doCommentSocketDisconnect: (claimId: string, channelName: string) => void,
   doFetchChannelLiveStatus: (string) => void,
   theaterMode?: Boolean,
+  doMembershipContentforStreamClaimId: (type: string) => void,
+  contentUnlocked: boolean,
 };
 
 export const LivestreamContext = React.createContext<any>();
@@ -46,6 +48,8 @@ export default function LivestreamPage(props: Props) {
     doCommentSocketDisconnect,
     doFetchChannelLiveStatus,
     theaterMode,
+    doMembershipContentforStreamClaimId,
+    contentUnlocked,
   } = props;
 
   const isMobile = useIsMobile();
@@ -82,11 +86,10 @@ export default function LivestreamPage(props: Props) {
     const { claim_id: claimId, signing_channel: channelClaim } = claim;
     const channelName = channelClaim && formatLbryChannelName(channelUrl);
 
-    if (claimId && channelName && !socketConnection?.connected) {
-      doCommentSocketConnect(uri, channelName, claimId);
+    if (claimId && channelName && !socketConnection?.connected && contentUnlocked) {
+      doCommentSocketConnect(uri, channelName, claimId, undefined);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- willAutoplay mount only
-  }, [channelUrl, claim, doCommentSocketConnect, doCommentSocketDisconnect, socketConnection, uri]);
+  }, [channelUrl, claim, doCommentSocketConnect, doCommentSocketDisconnect, socketConnection, uri, contentUnlocked]);
 
   React.useEffect(() => {
     // use for unmount case without triggering render
@@ -94,12 +97,18 @@ export default function LivestreamPage(props: Props) {
   }, [isStreamPlaying]);
 
   React.useEffect(() => {
+    doMembershipContentforStreamClaimId(claimId);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [claimId]);
+
+  React.useEffect(() => {
     return () => {
       if (!streamPlayingRef.current) {
         const { claim_id: claimId, signing_channel: channelClaim } = claim;
         const channelName = channelClaim && formatLbryChannelName(channelUrl);
 
-        if (claimId && channelName) doCommentSocketDisconnect(claimId, channelName);
+        if (claimId && channelName && contentUnlocked) doCommentSocketDisconnect(claimId, channelName);
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps -- only on unmount -> leave page
@@ -166,7 +175,8 @@ export default function LivestreamPage(props: Props) {
       rightSide={
         !theaterMode &&
         !hideComments &&
-        isInitialized && (
+        isInitialized &&
+        contentUnlocked && (
           <React.Suspense fallback={null}>
             <ChatLayout
               uri={uri}

@@ -83,6 +83,7 @@ type Props = {
   isPurchasableContent: boolean,
   isRentableContent: boolean,
   purchaseMadeForClaimId: boolean,
+  isProtectedContent: boolean,
 };
 
 /*
@@ -134,6 +135,7 @@ function VideoViewer(props: Props) {
     currentPlaylistItemIndex,
     isPurchasableContent,
     isRentableContent,
+    isProtectedContent,
     // purchaseMadeForClaimId,
   } = props;
 
@@ -640,6 +642,7 @@ function VideoViewer(props: Props) {
         doToast={doToast}
         isPurchasableContent={isPurchasableContent}
         isRentableContent={isRentableContent}
+        isProtectedContent={isProtectedContent}
       />
     </div>
   );

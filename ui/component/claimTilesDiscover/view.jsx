@@ -7,7 +7,6 @@ import I18nMessage from 'component/i18nMessage';
 import useFetchViewCount from 'effects/use-fetch-view-count';
 import useGetLastVisibleSlot from 'effects/use-get-last-visible-slot';
 import useResolvePins from 'effects/use-resolve-pins';
-import useGetUserMemberships from 'effects/use-get-user-memberships';
 
 const SHOW_TIMEOUT_MSG = false;
 
@@ -38,6 +37,7 @@ type Props = {
   fetchViewCount?: boolean,
   // claim search options are below
   tags: Array<string>,
+  notTags?: Array<string>,
   claimIds?: Array<string>,
   channelIds?: Array<string>,
   pageSize: number,
@@ -52,6 +52,7 @@ type Props = {
   hasSource?: boolean,
   hasNoSource?: boolean,
   forceShowReposts?: boolean, // overrides SETTINGS.HIDE_REPOSTS
+  hideMembersOnly?: boolean, // undefined = use SETTING.HIDE_MEMBERS_ONLY_CONTENT; true/false: use this override.
   loading: boolean,
   // --- select ---
   location: { search: string },
@@ -65,7 +66,7 @@ type Props = {
   // --- perform ---
   doClaimSearch: ({}) => void,
   doFetchViewCount: (claimIdCsv: string) => void,
-  doFetchUserMemberships: (claimIdCsv: string) => void,
+  doFetchOdyseeMembershipForChannelIds: (claimIds: ClaimIds) => void,
   doResolveClaimIds: (Array<string>) => Promise<any>,
   doResolveUris: (Array<string>, boolean) => Promise<any>,
 };
@@ -88,7 +89,8 @@ function ClaimTilesDiscover(props: Props) {
     doFetchViewCount,
     pageSize = 8,
     optionsStringified,
-    doFetchUserMemberships,
+    channelIds,
+    doFetchOdyseeMembershipForChannelIds,
     doResolveClaimIds,
     doResolveUris,
     loading,
@@ -166,7 +168,11 @@ function ClaimTilesDiscover(props: Props) {
 
   useFetchViewCount(fetchViewCount, uris, claimsByUri, doFetchViewCount);
 
-  useGetUserMemberships(true, uris, claimsByUri, doFetchUserMemberships);
+  React.useEffect(() => {
+    if (channelIds) {
+      doFetchOdyseeMembershipForChannelIds(channelIds);
+    }
+  }, [channelIds, doFetchOdyseeMembershipForChannelIds]);
 
   React.useEffect(() => {
     if (shouldPerformSearch) {

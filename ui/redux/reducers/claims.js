@@ -307,27 +307,26 @@ function handleClaimAction(state: State, action: any): State {
 // Reducers
 // ****************************************************************************
 
-reducers[ACTIONS.RESOLVE_URIS_STARTED] = (state: State, action: any): State => {
+reducers[ACTIONS.RESOLVE_URIS_START] = (state: State, action: any): State => {
   const { uris }: { uris: Array<string> } = action.data;
 
-  const oldResolving = state.resolvingUris || [];
-  const newResolving = oldResolving.slice();
+  const newResolvingUris = new Set(state.resolvingUris);
+  uris.forEach((uri) => newResolvingUris.add(uri));
 
-  uris.forEach((uri) => {
-    if (!newResolving.includes(uri)) {
-      newResolving.push(uri);
-    }
-  });
-
-  return Object.assign({}, state, {
-    resolvingUris: newResolving,
-  });
+  return { ...state, resolvingUris: Array.from(newResolvingUris) };
 };
-
-reducers[ACTIONS.RESOLVE_URIS_COMPLETED] = (state: State, action: any): State => {
+reducers[ACTIONS.RESOLVE_URIS_SUCCESS] = (state: State, action: any): State => {
   return {
     ...handleClaimAction(state, action),
   };
+};
+reducers[ACTIONS.RESOLVE_URIS_FAIL] = (state: State, action: any): State => {
+  const uris: Array<string> = action.data;
+
+  const newResolvingUris = new Set(state.resolvingUris);
+  uris.forEach((uri) => newResolvingUris.delete(uri));
+
+  return { ...state, resolvingUris: Array.from(newResolvingUris) };
 };
 
 reducers[ACTIONS.FETCH_CLAIM_LIST_MINE_STARTED] = (state: State): State =>

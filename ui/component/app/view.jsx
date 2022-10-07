@@ -97,6 +97,8 @@ type Props = {
   doSetGdprConsentList: (csv: string) => void,
 };
 
+export const AppContext = React.createContext<any>();
+
 function App(props: Props) {
   const {
     theme,
@@ -563,7 +565,7 @@ function App(props: Props) {
           subtitle={__('My wheel broke, but the good news is that someone from LBRY is working on it.')}
         />
       ) : (
-        <React.Fragment>
+        <AppContext.Provider value={{ uri }}>
           <AdBlockTester />
           <AdsSticky uri={uri} />
           <Router uri={uri} />
@@ -583,7 +585,7 @@ function App(props: Props) {
             )}
             {getStatusNag()}
           </React.Suspense>
-        </React.Fragment>
+        </AppContext.Provider>
       )}
     </div>
   );

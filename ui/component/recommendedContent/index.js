@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 import { selectClaimForUri } from 'redux/selectors/claims';
 import { doFetchRecommendedContent } from 'redux/actions/search';
 import { selectRecommendedContentForUri, selectIsSearching } from 'redux/selectors/search';
-import { selectOdyseeMembershipIsPremiumPlus } from 'redux/selectors/user';
+import { selectOdyseeMembershipIsPremiumPlus } from 'redux/selectors/memberships';
 import RecommendedContent from './view';
 import { selectClientSetting } from 'redux/selectors/settings';
 import * as SETTINGS from 'constants/settings';

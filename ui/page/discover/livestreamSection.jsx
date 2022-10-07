@@ -30,6 +30,7 @@ type Props = {
   languageSetting?: string,
   searchInLanguage?: boolean,
   langParam?: string | null,
+  hideMembersOnlyContent?: boolean,
 };
 
 export default function LivestreamSection(props: Props) {
@@ -43,6 +44,7 @@ export default function LivestreamSection(props: Props) {
     languageSetting,
     searchInLanguage,
     langParam,
+    hideMembersOnlyContent,
   } = props;
 
   const [liveSectionStore, setLiveSectionStore] = usePersistedState('discover:lsSection', SECTION.COLLAPSED);
@@ -99,6 +101,7 @@ export default function LivestreamSection(props: Props) {
           useSkeletonScreen={false}
           showHeader={false}
           hideFilters
+          hideMembersOnlyContent={hideMembersOnlyContent}
           infiniteScroll={false}
           loading={false}
           showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
@@ -121,6 +124,7 @@ export default function LivestreamSection(props: Props) {
         infiniteScroll={false}
         loading={false}
         showNoSourceClaims={ENABLE_NO_SOURCE_CLAIMS}
+        hideMembersOnlyContent={hideMembersOnlyContent}
       />
 
       {liveTilesOverLimit && liveSection === SECTION.COLLAPSED && (

@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import { LocalStorage } from 'util/storage';
 
 export const selectState = (state) => state.user || {};
 
@@ -111,34 +110,6 @@ export const selectSetReferrerPending = (state) => selectState(state).referrerSe
 export const selectSetReferrerError = (state) => selectState(state).referrerSetError;
 export const selectReferrer = (state) => selectState(state).referrerSet;
 
-// undefined = not fetched
-// '' = no membership
-// '<name>' = membership name
-export const selectOdyseeMembershipName = (state) => selectState(state).odyseeMembershipName;
-
-/**
- * @param state
- * @returns {undefined|boolean} 'undefined' if not yet fetched; boolean otherwise.
- */
-export const selectOdyseeMembershipIsPremiumPlus = (state) => {
-  const name = selectOdyseeMembershipName(state);
-  return name === undefined ? undefined : name === 'Premium+';
-};
-
-/**
- * @param state
- * @returns {undefined|boolean} 'undefined' if not yet fetched; boolean otherwise.
- */
-export const selectHasOdyseeMembership = (state) => {
-  // @if process.env.NODE_ENV!='production'
-  const override = LocalStorage.getItem('hasMembershipOverride');
-  if (override) return override === 'true';
-  // @endif
-
-  const name = selectOdyseeMembershipName(state);
-  return name === undefined ? undefined : Boolean(name);
-};
-
 export const selectYouTubeImportVideosComplete = createSelector(selectState, (state) => {
   const total = state.youtubeChannelImportTotal;
   const complete = state.youtubeChannelImportComplete || 0;
@@ -153,3 +124,5 @@ export const makeSelectUserPropForProp = (prop) => createSelector(selectUser, (u
 export const selectUserLocale = (state) => selectState(state).locale;
 
 export const selectUserCountry = createSelector(selectUserLocale, (locale) => locale?.country);
+
+export const selectUserExperimentalUi = (state) => selectState(state).experimental_ui;

@@ -976,6 +976,48 @@ body {
         margin-top: -8px;
       }
     }
+    .claim-preview__actions {
+      .claim-preview__primary-actions {
+        margin: 0;
+      }
+      .membership-button-wrapper {
+        margin: 0;
+        margin-right: var(--spacing-s);
+      }
+    }
+
+    @media (max-width: $breakpoint-small) {
+      a.button {
+        align-self: start;
+      }
+      .claim-preview__text {
+        overflow: visible !important;
+        flex-direction: column;
+        .claim-preview__actions {
+          overflow: visible;
+          margin-left: calc((2rem + (2 * var(--spacing-s))) * -1);
+          margin-top: var(--spacing-s);
+          width: calc(100% + (2rem + (2 * var(--spacing-s))));
+          .membership-button-wrapper {
+            margin-right: var(--spacing-xxs);
+            margin-bottom: 0;
+            width: 50%;
+            .button {
+              width: 100%;
+            }
+          }
+          .claim-preview__primary-actions {
+            width: 50%;
+            .button-group {
+              width: 100%;
+              .button:first-of-type {
+                width: 100%;
+              }
+            }
+          }
+        }
+      }
+    }
   }
   .post__info--grouped {
     .button__content {
@@ -1021,7 +1063,6 @@ body {
 
   @media (max-width: $breakpoint-small) {
     padding: var(--spacing-xxxs);
-
     .claim-preview__wrapper {
       .claim-tile__info {
         margin-top: var(--spacing-xxxs) !important;
@@ -1116,29 +1157,6 @@ body {
     }
     .section__actions {
       margin-top: var(--spacing-m);
-    }
-    .MuiAutocomplete-root {
-      background-color: var(--color-input-bg);
-      border-radius: var(--border-radius);
-      .MuiOutlinedInput-input {
-        font-size: var(--font-body);
-        padding-left: var(--spacing-s);
-        padding-right: var(--spacing-s);
-        height: 22px !important;
-        &::placeholder {
-          color: #ffffff !important;
-          font-size: var(--font-body);
-        }
-        &:focus-visible {
-          box-shadow: unset;
-        }
-      }
-      .Mui-focused {
-        outline: 2px solid var(--color-primary);
-      }
-      .MuiOutlinedInput-notchedOutline {
-        border: none;
-      }
     }
   }
 }

@@ -10,7 +10,6 @@ import Icon from 'component/common/icon';
 type Props = {
   icon: string,
   uri: string,
-  key: string,
   // -- redux --
   collection: Collection,
   collectionHasClaim: boolean,
@@ -24,7 +23,7 @@ type Props = {
 };
 
 function CollectionSelectItem(props: Props) {
-  const { icon, uri, key, collection, collectionHasClaim, collectionPending, doPlaylistAddAndAllowPlaying } = props;
+  const { icon, uri, collection, collectionHasClaim, collectionPending, doPlaylistAddAndAllowPlaying } = props;
   const { name, id } = collection || {};
 
   const {
@@ -54,7 +53,7 @@ function CollectionSelectItem(props: Props) {
   }
 
   return (
-    <li key={key} className="collection-select__item">
+    <li className="collection-select__item">
       <FormField
         checked={collectionHasClaim}
         disabled={collectionPending}

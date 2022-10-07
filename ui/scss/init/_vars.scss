@@ -113,6 +113,17 @@
   --scrollbar-radius: 0.5rem;
 
   --floating-player-z-index: 9999;
+
+  // Colors
+  --color-membership-1: 0, 208, 217;
+  --color-membership-2: 247, 125, 53;
+  --color-membership-3: 100, 68, 154;
+  // --color-membership-4: 35, 190, 97;
+  --color-membership-4: 207, 164, 86;
+  // --color-membership-5: 212, 105, 77;
+  --color-membership-5: 184, 55, 105;
+  // --color-membership-6: 184, 55, 105;
+  --color-membership-6: 66, 143, 207;
 }
 
 @media (max-width: $breakpoint-small) {

@@ -7,8 +7,7 @@ import Gerbil from './gerbil.png';
 import FreezeframeWrapper from 'component/common/freezeframe-wrapper';
 import OptimizedImage from 'component/optimizedImage';
 import { AVATAR_DEFAULT } from 'config';
-import useGetUserMemberships from 'effects/use-get-user-memberships';
-import PremiumBadge from 'component/premiumBadge';
+import MembershipBadge from 'component/membershipBadge';
 
 type Props = {
   thumbnail: ?string,
@@ -28,11 +27,10 @@ type Props = {
   hideTooltip?: boolean,
   setThumbUploadError: (boolean) => void,
   ThumbUploadError: boolean,
-  claimsByUri: { [string]: any },
-  doFetchUserMemberships: (claimIdCsv: string) => void,
   showMemberBadge?: boolean,
   isChannel?: boolean,
-  checkMembership: boolean,
+  odyseeMembership: ?string,
+  tooltipTitle?: string,
 };
 
 function ChannelThumbnail(props: Props) {
@@ -53,11 +51,10 @@ function ChannelThumbnail(props: Props) {
     hideTooltip,
     setThumbUploadError,
     ThumbUploadError,
-    claimsByUri,
-    doFetchUserMemberships,
     showMemberBadge,
     isChannel,
-    checkMembership = true,
+    odyseeMembership,
+    tooltipTitle,
   } = props;
   const [thumbLoadError, setThumbLoadError] = React.useState(ThumbUploadError);
   const shouldResolve = !isResolving && claim === undefined;
@@ -68,15 +65,15 @@ function ChannelThumbnail(props: Props) {
   const isGif = channelThumbnail && channelThumbnail.endsWith('gif');
   const showThumb = (!obscure && !!thumbnail) || thumbnailPreview;
 
-  const badgeProps = {
-    uri,
-    linkPage: isChannel,
-    placement: isChannel ? 'bottom' : undefined,
-    hideTooltip,
-    className: isChannel ? 'profile-badge__tooltip' : undefined,
-  };
-
-  useGetUserMemberships(checkMembership, [uri], claimsByUri, doFetchUserMemberships, [uri]);
+  const badgeProps = React.useMemo(() => {
+    return {
+      membershipName: odyseeMembership,
+      linkPage: isChannel,
+      placement: isChannel ? 'bottom' : undefined,
+      hideTooltip,
+      className: isChannel ? 'profile-badge__tooltip' : undefined,
+    };
+  }, [hideTooltip, isChannel, odyseeMembership]);
 
   // Generate a random color class based on the first letter of the channel name
   const { channelName } = parseURI(uri);
@@ -108,7 +105,7 @@ function ChannelThumbnail(props: Props) {
             'channel-thumbnail--resolving': isResolving,
           })}
         >
-          {showMemberBadge ? <PremiumBadge {...badgeProps} /> : null}
+          {showMemberBadge ? <MembershipBadge {...badgeProps} /> : null}
         </FreezeframeWrapper>
       )
     );
@@ -123,6 +120,7 @@ function ChannelThumbnail(props: Props) {
         'channel-thumbnail--xxsmall': xxsmall,
         'channel-thumbnail--resolving': isResolving,
       })}
+      title={tooltipTitle}
     >
       {/* width: use the same size for all 'small' variants so that caching works better */}
       <OptimizedImage
@@ -139,7 +137,7 @@ function ChannelThumbnail(props: Props) {
           }
         }}
       />
-      {showMemberBadge && <PremiumBadge {...badgeProps} />}
+      {showMemberBadge && <MembershipBadge {...badgeProps} />}
     </div>
   );
 }

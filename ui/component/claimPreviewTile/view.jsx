@@ -2,6 +2,7 @@
 import React from 'react';
 import classnames from 'classnames';
 import { NavLink, withRouter } from 'react-router-dom';
+import { ChannelPageContext } from 'page/channel/view';
 import ClaimPreviewProgress from 'component/claimPreviewProgress';
 import FileThumbnail from 'component/fileThumbnail';
 import UriIndicator from 'component/uriIndicator';
@@ -17,7 +18,6 @@ import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
 import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
 import { parseURI } from 'util/lbryURI';
 import PreviewOverlayProperties from 'component/previewOverlayProperties';
-import PreviewTilePurchaseOverlay from 'component/previewTilePurchaseOverlay';
 import FileHideRecommendation from 'component/fileHideRecommendation';
 import FileWatchLaterLink from 'component/fileWatchLaterLink';
 import ButtonAddToQueue from 'component/buttonAddToQueue';
@@ -139,7 +139,7 @@ function ClaimPreviewTile(props: Props) {
   const channelUri = !isChannel ? signingChannel && signingChannel.permanent_url : claim && claim.permanent_url;
   const channelTitle = signingChannel && ((signingChannel.value && signingChannel.value.title) || signingChannel.name);
 
-  const isChannelPage = window.location.pathname.startsWith('/@');
+  const isChannelPage = React.useContext(ChannelPageContext);
   const shouldShowViewCount = !(!viewCount || (claim && claim.repost_url) || isLivestream || !isChannelPage);
 
   const ariaLabelData = isChannel ? title : formatClaimPreviewTitle(title, channelTitle, date, mediaDuration);
@@ -252,11 +252,9 @@ function ClaimPreviewTile(props: Props) {
       })}
     >
       <NavLink {...navLinkProps} role="none" tabIndex={-1} aria-hidden>
-        <FileThumbnail thumbnail={thumbnailUrl} allowGifs tileLayout>
+        <FileThumbnail thumbnail={thumbnailUrl} allowGifs tileLayout uri={uri}>
           {!isChannel && (
             <React.Fragment>
-              <PreviewTilePurchaseOverlay uri={uri} />
-
               {((fypId && isStream) || isPlayable) && (
                 <div className="claim-preview__hover-actions-grid">
                   {fypId && isStream && (

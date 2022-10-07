@@ -1,5 +1,6 @@
 // @flow
 import { URL, SHARE_DOMAIN_URL } from 'config';
+import { ChannelPageContext } from 'page/channel/view';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import * as MODALS from 'constants/modal_types';
@@ -63,7 +64,6 @@ type Props = {
   isSubscribed: boolean,
   doChannelSubscribe: (SubscriptionArgs) => void,
   doChannelUnsubscribe: (SubscriptionArgs) => void,
-  isChannelPage: boolean,
   hasEdits: Collection,
   isAuthenticated: boolean,
   playNextUri: string,
@@ -81,6 +81,7 @@ type Props = {
     collectionId: string,
     push: (uri: string) => void,
   }) => void,
+  isContentProtectedAndLocked: boolean,
 };
 
 function ClaimMenuList(props: Props) {
@@ -117,7 +118,6 @@ function ClaimMenuList(props: Props) {
     isSubscribed,
     doChannelSubscribe,
     doChannelUnsubscribe,
-    isChannelPage = false,
     hasEdits,
     isAuthenticated,
     playNextUri,
@@ -130,7 +130,10 @@ function ClaimMenuList(props: Props) {
     doRemovePersonalRecommendation,
     collectionEmpty,
     doPlaylistAddAndAllowPlaying,
+    isContentProtectedAndLocked,
   } = props;
+
+  const isChannelPage = React.useContext(ChannelPageContext);
 
   const {
     push,
@@ -452,6 +455,20 @@ function ClaimMenuList(props: Props) {
             )
           )}
         </>
+
+        {contentClaim && isContentProtectedAndLocked && !claimIsMine && (
+          <MenuItem
+            className="comment__menu-option"
+            onSelect={() =>
+              openModal(MODALS.JOIN_MEMBERSHIP, { uri, fileUri: contentClaim.permanent_url, shouldNavigate: true })
+            }
+          >
+            <div className="menu__link">
+              <Icon aria-hidden icon={ICONS.MEMBERSHIP} />
+              {__('Join')}
+            </div>
+          </MenuItem>
+        )}
 
         {isAuthenticated && (
           <>

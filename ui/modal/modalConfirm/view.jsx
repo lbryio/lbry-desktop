@@ -5,6 +5,7 @@ import Button from 'component/button';
 import Card from 'component/common/card';
 import Spinner from 'component/spinner';
 import { Modal } from 'modal/modal';
+import BusyIndicator from 'component/common/busy-indicator';
 
 type Props = {
   title: string,
@@ -13,13 +14,14 @@ type Props = {
   labelOk?: string,
   labelCancel?: string,
   hideCancel?: boolean,
+  busyMsg?: string,
   onConfirm: (closeModal: () => void, setIsBusy: (boolean) => void) => void,
   // --- perform ---
   doHideModal: () => void,
 };
 
 export default function ModalConfirm(props: Props) {
-  const { title, subtitle, body, labelOk, labelCancel, hideCancel, onConfirm, doHideModal } = props;
+  const { title, subtitle, body, labelOk, labelCancel, hideCancel, busyMsg, onConfirm, doHideModal } = props;
 
   const [isBusy, setIsBusy] = React.useState(false);
 
@@ -35,16 +37,21 @@ export default function ModalConfirm(props: Props) {
         title={title}
         subtitle={subtitle}
         body={body}
+        className="confirm__wrapper"
         actions={
           <div className="section__actions">
-            <Button
-              button="primary"
-              label={isBusy ? <Spinner type="small" /> : labelOk || __('OK')}
-              disabled={isBusy}
-              onClick={handleOnClick}
-            />
+            {isBusy && busyMsg ? (
+              <BusyIndicator message={busyMsg} />
+            ) : (
+              <Button
+                button="primary"
+                label={isBusy ? <Spinner type="small" /> : labelOk || __('OK')}
+                disabled={isBusy}
+                onClick={handleOnClick}
+              />
+            )}
 
-            {!hideCancel && (
+            {!hideCancel && !(isBusy && busyMsg) && (
               <Button button="link" label={labelCancel || __('Cancel')} disabled={isBusy} onClick={doHideModal} />
             )}
           </div>

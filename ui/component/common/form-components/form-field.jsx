@@ -296,6 +296,10 @@ export class FormField extends React.PureComponent<Props, State> {
             ? () => setShowSelectors({ tab: showSelectors.tab || undefined, open: false })
             : () => {};
 
+        const textAreaValue =
+          inputProps.value && typeof inputProps.value === 'string' && max && inputProps.value.length > max
+            ? inputProps.value.substring(0, max)
+            : inputProps.value;
         return (
           <FormFieldWrapper {...wrapperProps}>
             <fieldset-section>
@@ -314,6 +318,18 @@ export class FormField extends React.PureComponent<Props, State> {
                   <div className="form-field__two-column">
                     <Label {...labelProps} />
 
+                    {max && typeof textAreaValue === 'string' && (
+                      <label
+                        className={
+                          Number(max) - String(textAreaValue).length > 0
+                            ? 'input-max-counter'
+                            : 'input-max-counter-error'
+                        }
+                      >
+                        {Number(max) - String(textAreaValue).length}
+                      </label>
+                    )}
+
                     <QuickAction {...quickActionProps} />
 
                     <CountInfo {...countInfoProps} />
@@ -324,20 +340,23 @@ export class FormField extends React.PureComponent<Props, State> {
 
                 {hideSuggestions ? (
                   <textarea
+                    {...inputProps}
                     type={type}
                     id={name}
-                    maxLength={textAreaMaxLength || FF_MAX_CHARS_DEFAULT}
+                    maxLength={max || textAreaMaxLength || FF_MAX_CHARS_DEFAULT}
                     ref={this.input}
-                    {...inputProps}
+                    value={textAreaValue}
                   />
                 ) : (
                   <React.Suspense fallback={null}>
                     <TextareaWithSuggestions
+                      {...inputProps}
                       spellCheck
                       uri={uri}
                       type={type}
                       id={name}
-                      maxLength={textAreaMaxLength || FF_MAX_CHARS_DEFAULT}
+                      maxLength={max || textAreaMaxLength || FF_MAX_CHARS_DEFAULT}
+                      value={textAreaValue}
                       inputRef={this.input}
                       isLivestream={isLivestream}
                       toggleSelectors={
@@ -356,7 +375,6 @@ export class FormField extends React.PureComponent<Props, State> {
                         closeSelector();
                       }}
                       claimIsMine={commentSelectorsProps && commentSelectorsProps.claimIsMine}
-                      {...inputProps}
                       slimInput={slimInput}
                       handlePreventClick={
                         !this.state.drawerOpen ? () => this.setState({ drawerOpen: true }) : undefined
@@ -379,7 +397,7 @@ export class FormField extends React.PureComponent<Props, State> {
               {(label || errorMessage) && (
                 <div>
                   <Label {...labelProps} errorMessage={errorMessage} />
-                  {inputElementProps.maxLength && inputElementProps.value && (
+                  {inputElementProps.maxLength && typeof inputElementProps.value === 'string' && (
                     <label
                       className={
                         Number(inputElementProps.maxLength) - String(inputElementProps.value).length > 0

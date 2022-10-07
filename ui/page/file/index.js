@@ -6,9 +6,10 @@ import {
   selectIsStreamPlaceholderForUri,
   selectClaimForUri,
   selectClaimWasPurchasedForUri,
-  selectPurchaseTagForUri,
   selectPreorderTagForUri,
+  selectPurchaseTagForUri,
   selectRentalTagForUri,
+  selectProtectedContentTagForUri,
 } from 'redux/selectors/claims';
 import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import { LINKED_COMMENT_QUERY_PARAM, THREAD_COMMENT_QUERY_PARAM } from 'constants/comment';
@@ -21,13 +22,22 @@ import {
   selectPlayingCollectionId,
   selectIsUriCurrentlyPlaying,
 } from 'redux/selectors/content';
-import { selectCommentsListTitleForUri, selectCommentsDisabledSettingForChannelId } from 'redux/selectors/comments';
+import {
+  selectCommentsListTitleForUri,
+  selectCommentsDisabledSettingForChannelId,
+  selectSettingsByChannelId,
+} from 'redux/selectors/comments';
 import { doToggleAppDrawer, doSetMainPlayerDimension } from 'redux/actions/app';
 import { getChannelIdFromClaim } from 'util/claim';
 import { doFileGetForUri } from 'redux/actions/file';
 import { doCheckIfPurchasedClaimId } from 'redux/actions/stripe';
 
 import FilePage from './view';
+import { doMembershipContentforStreamClaimId, doMembershipMine } from 'redux/actions/memberships';
+import {
+  selectMembershipMineData,
+  selectNoRestrictionOrUserIsMemberForContentClaimId,
+} from 'redux/selectors/memberships';
 
 const select = (state, props) => {
   const { uri } = props;
@@ -38,27 +48,33 @@ const select = (state, props) => {
   const claim = selectClaimForUri(state, uri);
   const channelId = getChannelIdFromClaim(claim);
 
+  const claimId = claim.claim_id;
+
   return {
-    playingCollectionId,
-    linkedCommentId: urlParams.get(LINKED_COMMENT_QUERY_PARAM),
-    threadCommentId: urlParams.get(THREAD_COMMENT_QUERY_PARAM),
-    costInfo: selectCostInfoForUri(state, uri),
-    obscureNsfw: !selectShowMatureContent(state),
-    isMature: selectClaimIsNsfwForUri(state, uri),
-    fileInfo: makeSelectFileInfoForUri(uri)(state),
-    renderMode: makeSelectFileRenderModeForUri(uri)(state),
-    videoTheaterMode: selectClientSetting(state, SETTINGS.VIDEO_THEATER_MODE),
     commentSettingDisabled: selectCommentsDisabledSettingForChannelId(state, channelId),
-    isLivestream: selectIsStreamPlaceholderForUri(state, uri),
-    position: selectContentPositionForUri(state, uri),
-    audioVideoDuration: claim?.value?.video?.duration || claim?.value?.audio?.duration,
-    commentsListTitle: selectCommentsListTitleForUri(state, uri),
+    channelId,
+    claimId,
     claimWasPurchased: selectClaimWasPurchasedForUri(state, uri),
+    commentsListTitle: selectCommentsListTitleForUri(state, uri),
+    costInfo: selectCostInfoForUri(state, uri),
+    fileInfo: makeSelectFileInfoForUri(uri)(state),
+    isLivestream: selectIsStreamPlaceholderForUri(state, uri),
+    isMature: selectClaimIsNsfwForUri(state, uri),
     isUriPlaying: selectIsUriCurrentlyPlaying(state, uri),
-    purchaseTag: selectPurchaseTagForUri(state, props.uri),
+    linkedCommentId: urlParams.get(LINKED_COMMENT_QUERY_PARAM),
+    myActiveMemberships: selectMembershipMineData(state),
+    obscureNsfw: !selectShowMatureContent(state),
+    playingCollectionId,
+    position: selectContentPositionForUri(state, uri),
     preorderTag: selectPreorderTagForUri(state, props.uri),
+    purchaseTag: selectPurchaseTagForUri(state, props.uri),
+    renderMode: makeSelectFileRenderModeForUri(uri)(state),
     rentalTag: selectRentalTagForUri(state, props.uri),
-    claimId: claim.claim_id,
+    settingsByChannelId: selectSettingsByChannelId(state),
+    threadCommentId: urlParams.get(THREAD_COMMENT_QUERY_PARAM),
+    videoTheaterMode: selectClientSetting(state, SETTINGS.VIDEO_THEATER_MODE),
+    isProtectedContent: Boolean(selectProtectedContentTagForUri(state, uri)),
+    contentUnlocked: claimId && selectNoRestrictionOrUserIsMemberForContentClaimId(state, claimId),
   };
 };
 
@@ -71,6 +87,8 @@ const perform = {
   doFileGetForUri,
   doSetMainPlayerDimension,
   doCheckIfPurchasedClaimId,
+  doMembershipContentforStreamClaimId,
+  doMembershipMine,
 };
 
 export default withRouter(connect(select, perform)(FilePage));

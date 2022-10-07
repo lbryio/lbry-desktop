@@ -1,3 +1,30 @@
+/** CONFIRM / CANCEL PREMIUM MODAL **/
+.confirm-odysee-premium__modal {
+  max-width: 580px !important; // default modal width is too wide, looks weird
+}
+
+.stripe__confirm-remove-membership {
+  max-width: 600px;
+  padding: var(--spacing-m) var(--spacing-l) !important;
+
+  .section__actions {
+    display: block;
+  }
+
+  .card__main-actions {
+    padding-top: var(--spacing-xxs);
+  }
+}
+
+.show-tiers {
+  display: flex !important;
+}
+
+.button--membership-see-all-tiers {
+  color: var(--color-text);
+  margin: 0 auto;
+}
+
 .membership_title {
   margin-top: var(--spacing-l);
   font-size: 18px;
@@ -34,9 +61,12 @@
 }
 
 .cancel-membership-button {
-  display: block;
-  margin-bottom: 18px;
-  margin-top: 13px;
+  margin-top: var(--spacing-s);
+  display: inline;
+}
+
+.edit-membership-button {
+  display: inline;
 }
 
 .explanation-text {
@@ -78,4 +108,1372 @@
 
 .membership-bolded {
   color: var(--color-text);
+}
+
+/** CREATOR MEMBERSHIPS PAGE **/
+
+.my-membership__div {
+  .form-field--copyable {
+    max-width: 535px;
+    margin-top: 5px;
+  }
+
+  .channel__selector {
+    margin-bottom: 17px;
+  }
+
+  .membership_button {
+    max-width: 279px;
+  }
+}
+
+/** JOIN CARD **/
+
+.button--membership-tier__show-more {
+  color: var(--color-text);
+  margin-top: var(--spacing-xs);
+
+  .button__content {
+    justify-content: center;
+  }
+}
+
+/** MEMBERSHIP TAB SECTION **/
+.modal--card-internal {
+  .card--join-membership {
+    .button--link {
+      margin-left: 0 !important;
+    }
+
+    .join-membership__modal-tabs {
+      &:hover {
+        button.button-toggle {
+          opacity: 1;
+        }
+      }
+
+      button.button-toggle {
+        opacity: 0.6;
+        margin-right: var(--spacing-xxxs);
+        margin-bottom: var(--spacing-xxxs);
+        border-radius: var(--border-radius);
+        transition: opacity 0.2s;
+        .button__label {
+          color: rgba(var(--color-text-base), 0.7) !important;
+        }
+        .icon {
+          display: none;
+        }
+        &:hover {
+          .button__label {
+            color: white !important;
+          }
+        }
+
+        &.no-access-button {
+          .icon {
+            display: inline-block;
+            // border:2px solid red !important;
+            background-color: black !important;
+            border-radius: 50%;
+            padding: 4px;
+            stroke: red !important;
+            stroke-width: 4px;
+            transform: scale(1.4);
+            overflow: visible;
+          }
+          &:hover {
+            .icon {
+              stroke: red !important;
+            }
+          }
+        }
+        &.access-button {
+          .icon {
+            display: inline-block;
+            background-color: black !important;
+            border-radius: 50%;
+            padding: 4px;
+            stroke: #91f92d !important;
+            stroke-width: 4px;
+            transform: scale(1.4);
+            overflow: visible;
+          }
+          &:hover {
+            .icon {
+              stroke: #91f92d !important;
+            }
+          }
+        }
+
+        &:nth-of-type(1) {
+          background-color: rgba(var(--color-membership-1), 0.2) !important;
+          border: 2px solid rgba(var(--color-membership-1), 0.6) !important;
+          &:hover {
+            background-color: rgba(var(--color-membership-1), 1) !important;
+          }
+        }
+        &:nth-of-type(2) {
+          background-color: rgba(var(--color-membership-2), 0.2) !important;
+          border: 2px solid rgba(var(--color-membership-2), 0.6) !important;
+          &:hover {
+            background-color: rgba(var(--color-membership-2), 1) !important;
+          }
+        }
+        &:nth-of-type(3) {
+          background-color: rgba(var(--color-membership-3), 0.2) !important;
+          border: 2px solid rgba(var(--color-membership-3), 0.6) !important;
+          &:hover {
+            background-color: rgba(var(--color-membership-3), 1) !important;
+          }
+        }
+        &:nth-of-type(4) {
+          background-color: rgba(var(--color-membership-4), 0.2) !important;
+          border: 2px solid rgba(var(--color-membership-4), 0.6) !important;
+          &:hover {
+            background-color: rgba(var(--color-membership-4), 1) !important;
+          }
+        }
+        &:nth-of-type(5) {
+          background-color: rgba(var(--color-membership-5), 0.2) !important;
+          border: 2px solid rgba(var(--color-membership-5), 0.6) !important;
+          &:hover {
+            background-color: rgba(var(--color-membership-5), 1) !important;
+          }
+        }
+        &:nth-of-type(6) {
+          background-color: rgba(var(--color-membership-6), 0.2) !important;
+          border: 2px solid rgba(var(--color-membership-6), 0.6) !important;
+          &:hover {
+            background-color: rgba(var(--color-membership-6), 1) !important;
+          }
+        }
+      }
+      button.button-toggle--active {
+        opacity: 1;
+        .button__label {
+          color: white !important;
+        }
+        &:nth-of-type(1) {
+          background-color: rgba(var(--color-membership-1), 1) !important;
+        }
+        &:nth-of-type(2) {
+          background-color: rgba(var(--color-membership-2), 1) !important;
+        }
+        &:nth-of-type(3) {
+          background-color: rgba(var(--color-membership-3), 1) !important;
+        }
+        &:nth-of-type(4) {
+          background-color: rgba(var(--color-membership-4), 1) !important;
+        }
+        &:nth-of-type(5) {
+          background-color: rgba(var(--color-membership-5), 1) !important;
+        }
+        &:nth-of-type(6) {
+          background-color: rgba(var(--color-membership-6), 1) !important;
+        }
+      }
+    }
+
+    &.membership-tier1 {
+      .dot {
+        background-color: rgba(var(--color-membership-1), 1);
+      }
+      *::selection {
+        background: rgba(var(--color-membership-1), 1) !important;
+      }
+      .membership-tier__perks {
+        li {
+          &::before {
+            color: rgba(var(--color-membership-1), 1);
+          }
+        }
+      }
+      .button--primary {
+        background-color: rgba(var(--color-membership-1), 1) !important;
+      }
+      .button--link {
+        .button__content {
+          .button__label {
+            color: rgba(var(--color-membership-1), 1) !important;
+          }
+        }
+      }
+    }
+    &.membership-tier2 {
+      .dot {
+        background-color: rgba(var(--color-membership-2), 1);
+      }
+      *::selection {
+        background: rgba(var(--color-membership-2), 1) !important;
+      }
+      .membership-tier__perks {
+        li {
+          &::before {
+            color: rgba(var(--color-membership-2), 1);
+          }
+        }
+      }
+      .button--primary {
+        background-color: rgba(var(--color-membership-2), 1) !important;
+      }
+      .button--link {
+        .button__content {
+          .button__label {
+            color: rgba(var(--color-membership-2), 1) !important;
+          }
+        }
+      }
+    }
+    &.membership-tier3 {
+      .dot {
+        background-color: rgba(var(--color-membership-3), 1);
+      }
+      *::selection {
+        background: rgba(var(--color-membership-3), 1) !important;
+      }
+      .membership-tier__perks {
+        li {
+          &::before {
+            color: rgba(var(--color-membership-3), 1);
+          }
+        }
+      }
+      .button--primary {
+        background-color: rgba(var(--color-membership-3), 1) !important;
+      }
+      .button--link {
+        .button__content {
+          .button__label {
+            color: rgba(var(--color-membership-3), 1) !important;
+          }
+        }
+      }
+    }
+    &.membership-tier4 {
+      .dot {
+        background-color: rgba(var(--color-membership-4), 1);
+      }
+      *::selection {
+        background: rgba(var(--color-membership-4), 1) !important;
+      }
+      .membership-tier__perks {
+        li {
+          &::before {
+            color: rgba(var(--color-membership-4), 1);
+          }
+        }
+      }
+      .button--primary {
+        background-color: rgba(var(--color-membership-4), 1) !important;
+      }
+      .button--link {
+        .button__content {
+          .button__label {
+            color: rgba(var(--color-membership-4), 1) !important;
+          }
+        }
+      }
+    }
+    &.membership-tier5 {
+      .dot {
+        background-color: rgba(var(--color-membership-5), 1);
+      }
+      *::selection {
+        background: rgba(var(--color-membership-5), 1) !important;
+      }
+      .membership-tier__perks {
+        li {
+          &::before {
+            color: rgba(var(--color-membership-5), 1);
+          }
+        }
+      }
+      .button--primary {
+        background-color: rgba(var(--color-membership-5), 1) !important;
+      }
+      .button--link {
+        .button__content {
+          .button__label {
+            color: rgba(var(--color-membership-5), 1) !important;
+          }
+        }
+      }
+    }
+    &.membership-tier6 {
+      .dot {
+        background-color: rgba(var(--color-membership-6), 1);
+      }
+      *::selection {
+        background: rgba(var(--color-membership-6), 1) !important;
+      }
+      .membership-tier__perks {
+        li {
+          &::before {
+            color: rgba(var(--color-membership-6), 1);
+          }
+        }
+      }
+      .button--primary {
+        background-color: rgba(var(--color-membership-6), 1) !important;
+      }
+      .button--link {
+        .button__content {
+          .button__label {
+            color: rgba(var(--color-membership-6), 1) !important;
+          }
+        }
+      }
+    }
+
+    .join-membership__empty {
+      *::selection {
+        background: var(--color-primary) !important;
+      }
+      .button--primary {
+        background-color: var(--color-primary) !important;
+      }
+    }
+  }
+
+  .membership-tier__header {
+    display: none;
+  }
+  .membership-tier__infos {
+    margin-top: var(--spacing-m);
+    span {
+      opacity: 0.8;
+    }
+    .membership-tier__perks {
+      margin-bottom: 0 !important;
+    }
+  }
+  .join-membership__modal-action {
+    margin-top: var(--spacing-l);
+  }
+}
+
+.card--join-membership {
+  .join-membership__modal-header {
+    height: 108px;
+    margin-bottom: var(--spacing-l);
+
+    .channel-thumbnail {
+      width: 108px;
+      height: 108px;
+      margin-right: var(--spacing-m);
+      float: left;
+    }
+    h2 {
+      font-weight: bold;
+    }
+    h3 {
+      font-size: var(--font-title);
+    }
+    p {
+      font-size: var(--font-small);
+      opacity: 0.8;
+    }
+
+    @media (max-width: $breakpoint-small) {
+      height: 158px;
+      h2 {
+        padding-top: var(--spacing-l);
+      }
+      h3 {
+        padding-bottom: var(--spacing-l);
+      }
+    }
+
+    @media (max-width: $breakpoint-xsmall) {
+      .channel-thumbnail {
+        margin-top: var(--spacing-m);
+        margin-right: var(--spacing-s);
+        width: 74px;
+        height: 74px;
+      }
+
+      h3 {
+        padding-bottom: var(--spacing-s);
+      }
+    }
+
+    @media (max-width: $breakpoint-xxsmall) {
+      height: 138px;
+      margin-bottom: var(--spacing-s);
+      .channel-thumbnail {
+        margin-top: 0;
+        margin-right: var(--spacing-s);
+        width: 44px;
+        height: 44px;
+      }
+
+      h2 {
+        font-size: var(--font-base);
+        padding-top: 0;
+      }
+
+      h3 {
+        padding-bottom: var(--spacing-s);
+        font-size: var(--font-body);
+        font-weight: bold;
+      }
+    }
+  }
+
+  .join-membership__modal-tabs {
+    margin-bottom: var(--spacing-s);
+  }
+
+  .join-membership__modal-content {
+    h2 {
+      display: none;
+    }
+    .membership-tier__perks {
+      display: flex;
+      flex-flow: row;
+      width: 100%;
+      background: var(--color-header-background);
+      padding: var(--spacing-xs);
+      border: 2px solid var(--color-border);
+      margin-top: var(--spacing-m);
+      margin-bottom: var(--spacing-l);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+
+      .membership-tier__moon {
+        float: left;
+        width: 42%;
+        height: 260px;
+        background-image: url('https://thumbnails.odycdn.com/optimize/s:900:0/quality:95/plain/https://static.odycdn.com/images/moon.png');
+        background-size: cover;
+        background-position: -5px -10px;
+        border-radius: var(--border-radius) 0 0 var(--border-radius);
+        margin-left: -40px;
+        margin-top: -56px;
+        margin-bottom: -76px;
+        transform: rotate(-16deg);
+      }
+      .membership-tier__perks-content {
+        margin-left: var(--spacing-s);
+        ul {
+          li {
+            &:nth-of-type(1) {
+              margin-left: 27px !important;
+            }
+            &:nth-of-type(2) {
+              margin-left: 34px !important;
+            }
+            &:nth-of-type(3) {
+              margin-left: 41px !important;
+            }
+            &:nth-of-type(4) {
+              margin-left: 48px !important;
+            }
+            &:nth-of-type(5) {
+              margin-left: 55px !important;
+            }
+            &:nth-of-type(6) {
+              margin-left: 62px !important;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .join-membership__tab {
+    display: grid;
+    grid-gap: var(--spacing-l);
+    grid-template-columns: repeat(3, 1fr);
+    justify-content: left;
+
+    @media (max-width: $breakpoint-small) {
+      grid-template-columns: repeat(1, 1fr);
+    }
+
+    @media (min-width: $breakpoint-small) and (max-width: $breakpoint-medium) {
+      grid-template-columns: repeat(2, 1fr);
+
+      .item5-5 {
+        // justify-self: center;
+        grid-column-start: 1;
+        grid-column-end: 3;
+        width: 50%;
+      }
+    }
+  }
+
+  .join-membership__empty {
+    max-width: 539px;
+    margin: 0 auto;
+
+    .header--no-memberships {
+      font-size: 1.2rem;
+      line-height: 1.25;
+      margin-top: var(--spacing-s);
+      margin-bottom: 16px;
+    }
+
+    .button {
+      margin-top: var(--spacing-m);
+    }
+
+    h2 {
+      line-height: 29px;
+    }
+  }
+
+  .card__body {
+    margin: 0 auto;
+  }
+
+  .card__body--no-title {
+    padding-top: 0;
+  }
+}
+
+.membership-tier__perks {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  //height: 100%;
+  // align-items: center;
+
+  ul {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    list-style: none;
+
+    > div {
+      height: 100%;
+
+      .expandable__wrapper {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        .expandable--closed {
+          max-height: calc(180px * 3 / 4);
+        }
+      }
+    }
+  }
+
+  li {
+    margin-left: 1.3em !important;
+  }
+
+  li:before {
+    content: '\2605';
+    color: #ffc800;
+    display: inline-block;
+    margin-left: -1.3em;
+    width: 1.3em;
+  }
+
+  ul,
+  li {
+    list-style-position: inside !important;
+  }
+
+  p {
+    text-align: left;
+  }
+}
+
+/** JOIN CARD ON CHANNEL PAGE **/
+.card--join-membership,
+.membership {
+  h1 {
+    font-size: var(--font-title);
+    font-weight: var(--font-bold);
+    margin-bottom: var(--spacing-l);
+    display: none;
+    @media (max-width: $breakpoint-small) {
+      display: block;
+    }
+  }
+  .section__actions {
+    display: block;
+  }
+
+  .card__subtitle {
+    line-height: 1.5 !important;
+  }
+
+  .confirm__wrapper {
+    section {
+      display: flex;
+      flex-direction: column;
+
+      &:not(:first-of-type) {
+        margin-top: var(--spacing-m);
+      }
+
+      &:first-of-type {
+        .channel__selector {
+          margin-bottom: 0;
+        }
+      }
+
+      span {
+        font-size: unset;
+        display: unset;
+        margin-top: 0px;
+        font-size: var(--font-base);
+        opacity: 0.8;
+        .dot {
+          display: inline-block;
+          width: var(--font-base);
+          height: var(--font-base);
+          border-radius: 50%;
+          margin-bottom: -1.5px;
+          margin-right: var(--spacing-xxs);
+        }
+      }
+
+      .section__subtitle--join-membership__perk {
+        text-align: start;
+        list-style-position: inside !important;
+      }
+    }
+  }
+
+  label {
+    margin-bottom: var(--spacing-xxs);
+  }
+
+  .total-membership-price {
+    .total {
+      opacity: 1 !important;
+      font-weight: 1000;
+    }
+    @media (max-width: $breakpoint-small) {
+      span {
+        display: block !important;
+        margin-bottom: var(--spacing-xxs);
+        &:not(.total) {
+          opacity: 0.6 !important;
+        }
+      }
+      .hide-on-mobile {
+        display: none !important;
+      }
+    }
+  }
+
+  .section__actions {
+    margin-top: var(--spacing-m);
+  }
+
+  .help--no-card {
+    color: var(--color-danger) !important;
+    font-size: var(--font-base);
+  }
+}
+
+.confirm__wrapper {
+  .busy-indicator {
+    display: inline-block;
+    margin-top: var(--spacing-s);
+    border: 2px solid var(--color-border);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-xxs);
+    .busy-indicator__loader {
+      margin-left: var(--spacing-s);
+      margin-right: var(--spacing-s);
+    }
+  }
+}
+
+.membership-tier__perks {
+  // text-align: left;
+  li {
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-top: 0;
+  }
+  img {
+    display: none;
+  }
+}
+
+.membership-tier__wrapper {
+  position: relative;
+  // text-align: center;
+  padding-bottom: var(--spacing-xxl);
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  flex-basis: calc(33% - (var(--spacing-l)));
+
+  border-radius: var(--border-radius);
+
+  transition: max-height 0.3s;
+  background-color: rgba(var(--color-header-background-base), 0.6);
+
+  .button--primary {
+    margin: var(--spacing-m) 0 !important;
+  }
+
+  h2 {
+    font-size: var(--font-large);
+  }
+  h3 {
+    font-size: var(--font-body);
+    font-weight: var(--font-weight-bold);
+    margin-top: var(--spacing-l);
+  }
+
+  .membership-tier__header {
+    position: relative;
+    background-image: url('/public/img/spaceman_pattern.png');
+    background-size: 34px;
+    padding: var(--spacing-m);
+    width: 100%;
+    height: 4.5rem;
+
+    .membership-tier__name,
+    span {
+      background: var(--color-header-background);
+      border-radius: var(--border-radius);
+      padding: var(--spacing-xxs);
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      line-clamp: 1;
+      -webkit-line-clamp: 1;
+      display: inline-block;
+      max-width: 100%;
+      height: 2.6rem;
+
+      @media (max-width: $breakpoint-small) {
+        max-width: calc(100% - var(--spacing-xl));
+      }
+    }
+
+    .menu__button {
+      position: absolute;
+      background-color: var(--color-header-background);
+      border-radius: 50%;
+      padding: var(--spacing-s);
+      opacity: 1;
+      right: var(--spacing-m);
+      top: var(--spacing-m);
+
+      .icon {
+        transform: rotate(0deg);
+        transition: transform 0.4s;
+      }
+
+      &[aria-expanded='true'] {
+        .icon {
+          transform: rotate(90deg);
+        }
+      }
+    }
+  }
+
+  .membership-tier__infos {
+    overflow: hidden;
+    padding: var(--spacing-m);
+
+    label {
+      font-size: var(--font-body);
+      display: block;
+    }
+    span {
+      font-size: var(--font-base);
+      opacity: 0.8;
+
+      display: -webkit-box;
+      line-clamp: 10;
+      -webkit-line-clamp: 10;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .section__subtitle--join-membership__perk:last-child {
+      margin-bottom: 0;
+    }
+
+    .membership-tier__perks {
+      .membership-tier__perks-content {
+        ul {
+          li {
+            font-size: var(--font-base);
+            opacity: 0.8;
+          }
+        }
+      }
+    }
+  }
+  .membership-tier__actions {
+    position: absolute;
+    left: var(--spacing-m);
+    bottom: var(--spacing-m);
+    button.button {
+      margin: 0 !important;
+    }
+  }
+
+  @media (max-width: 1000px) {
+    flex-basis: 66%;
+  }
+
+  &:nth-child(1) {
+    *::selection {
+      background: rgba(var(--color-membership-1), 1) !important;
+    }
+    .membership-tier__header {
+      background-color: rgba(var(--color-membership-1), 1);
+      .menu__button {
+        &:hover {
+          .icon {
+            stroke: rgba(var(--color-membership-1), 1);
+          }
+        }
+        &[aria-expanded='true'] {
+          .icon {
+            stroke: rgba(var(--color-membership-1), 1);
+          }
+        }
+      }
+    }
+    .button--primary {
+      background-color: rgba(var(--color-membership-1), 1) !important;
+    }
+    .membership-tier__perks {
+      li:before {
+        color: rgba(var(--color-membership-1), 1);
+      }
+    }
+  }
+
+  &:nth-child(2) {
+    *::selection {
+      background: rgba(var(--color-membership-2), 1) !important;
+    }
+    .membership-tier__header {
+      background-color: rgba(var(--color-membership-2), 1);
+      .menu__button {
+        &:hover {
+          .icon {
+            stroke: rgba(var(--color-membership-2), 1);
+          }
+        }
+        &[aria-expanded='true'] {
+          .icon {
+            stroke: rgba(var(--color-membership-2), 1);
+          }
+        }
+      }
+    }
+    .button--primary {
+      background-color: rgba(var(--color-membership-2), 1) !important;
+    }
+    .membership-tier__perks {
+      li:before {
+        color: rgba(var(--color-membership-2), 1);
+      }
+    }
+  }
+
+  &:nth-child(3) {
+    *::selection {
+      background: rgba(var(--color-membership-3), 1) !important;
+    }
+    .membership-tier__header {
+      background-color: rgba(var(--color-membership-3), 1);
+      .menu__button {
+        &:hover {
+          .icon {
+            stroke: rgba(var(--color-membership-3), 1);
+          }
+        }
+        &[aria-expanded='true'] {
+          .icon {
+            stroke: rgba(var(--color-membership-3), 1);
+          }
+        }
+      }
+    }
+    .button--primary {
+      background-color: rgba(var(--color-membership-3), 1) !important;
+    }
+    .membership-tier__perks {
+      li:before {
+        color: rgba(var(--color-membership-3), 1);
+      }
+    }
+  }
+
+  &:nth-child(4) {
+    *::selection {
+      background: rgba(var(--color-membership-4), 1) !important;
+    }
+    .membership-tier__header {
+      background-color: rgba(var(--color-membership-4), 1);
+      .menu__button {
+        &:hover {
+          .icon {
+            stroke: rgba(var(--color-membership-4), 1);
+          }
+        }
+        &[aria-expanded='true'] {
+          .icon {
+            stroke: rgba(var(--color-membership-4), 1);
+          }
+        }
+      }
+    }
+    .button--primary {
+      background-color: rgba(var(--color-membership-4), 1) !important;
+    }
+    .membership-tier__perks {
+      li:before {
+        color: rgba(var(--color-membership-4), 1);
+      }
+    }
+  }
+
+  &:nth-child(5) {
+    *::selection {
+      background: rgba(var(--color-membership-5), 1) !important;
+    }
+    .membership-tier__header {
+      background-color: rgba(var(--color-membership-5), 1);
+      .menu__button {
+        &:hover {
+          .icon {
+            stroke: rgba(var(--color-membership-5), 1);
+          }
+        }
+        &[aria-expanded='true'] {
+          .icon {
+            stroke: rgba(var(--color-membership-5), 1);
+          }
+        }
+      }
+    }
+    .button--primary {
+      background-color: rgba(var(--color-membership-5), 1) !important;
+    }
+    .membership-tier__perks {
+      li:before {
+        color: rgba(var(--color-membership-5), 1);
+      }
+    }
+  }
+
+  &:nth-child(6) {
+    *::selection {
+      background: rgba(var(--color-membership-6), 1) !important;
+    }
+    .membership-tier__header {
+      background-color: rgba(var(--color-membership-6), 1);
+      .menu__button {
+        &:hover {
+          .icon {
+            stroke: rgba(var(--color-membership-6), 1);
+          }
+        }
+        &[aria-expanded='true'] {
+          .icon {
+            stroke: rgba(var(--color-membership-6), 1);
+          }
+        }
+      }
+    }
+    .button--primary {
+      background-color: rgba(var(--color-membership-6), 1) !important;
+    }
+    .membership-tier__perks {
+      li:before {
+        color: rgba(var(--color-membership-6), 1);
+      }
+    }
+  }
+}
+
+// membership card
+.card--join-membership {
+  .confirm__value {
+    display: block;
+    margin-top: 0px;
+  }
+
+  .confirm__label {
+    font-size: 17px;
+  }
+
+  .confirm__value {
+    font-size: 16px;
+  }
+
+  .section__actions {
+    display: block;
+  }
+}
+
+.membership-table__wrapper {
+  .channelThumbnail {
+    padding-right: 0 !important;
+    width: 50px;
+    .channel-thumbnail__custom {
+      height: 100%;
+    }
+    .channel-thumbnail--xxsmall {
+      margin-left: 10px;
+    }
+  }
+
+  .form-field--copyable {
+    display: none;
+  }
+  button.button {
+    border-radius: var(--border-radius);
+    float: right;
+  }
+
+  .membership-table__page {
+    width: 60px;
+  }
+
+  .membership-table__url {
+    width: 20px;
+    fieldset-section {
+      flex-direction: row-reverse;
+    }
+  }
+
+  .channel-thumbnail {
+    display: inline-block;
+    margin-right: 0;
+    padding-right: 0;
+
+    &.channel-thumbnail--xxsmall {
+      position: absolute;
+      transform: translate(-150%, 125%);
+    }
+  }
+  thead {
+    tr {
+      th {
+        @media (min-width: $breakpoint-small) {
+          padding: 0.8rem;
+          white-space: nowrap;
+        }
+      }
+    }
+  }
+  tbody {
+    tr {
+      &:hover {
+        background-color: rgba(var(--color-header-background-base), 0.2);
+      }
+    }
+  }
+}
+
+.membership-tab {
+  .membership__body {
+    border-radius: var(--border-radius);
+    background-color: var(--color-header-background);
+    overflow: hidden;
+    max-width: 100%;
+
+    .membership__plan-header {
+      .menu__button {
+        background-color: var(--color-header-background);
+        float: right;
+        border-radius: 50%;
+        padding: var(--spacing-s);
+        opacity: 1;
+        margin-top: calc(var(--spacing-xxs) * -1);
+
+        .icon {
+          transform: rotate(0deg);
+          transition: transform 0.4s;
+        }
+
+        &[aria-expanded='true'] {
+          .icon {
+            transform: rotate(90deg);
+          }
+        }
+      }
+    }
+
+    &.membership-tier1 {
+      .membership__plan-header {
+        background-color: rgba(var(--color-membership-1), 1);
+      }
+      .membership__perk-item::before {
+        color: rgba(var(--color-membership-1), 1);
+      }
+      .menu__button {
+        &:hover {
+          .icon {
+            stroke: rgba(var(--color-membership-1), 1);
+          }
+        }
+      }
+    }
+    &.membership-tier2 {
+      .membership__plan-header {
+        background-color: rgba(var(--color-membership-2), 1);
+      }
+      .membership__perk-item::before {
+        color: rgba(var(--color-membership-2), 1);
+      }
+      .menu__button {
+        &:hover {
+          .icon {
+            stroke: rgba(var(--color-membership-2), 1);
+          }
+        }
+      }
+    }
+    &.membership-tier3 {
+      .membership__plan-header {
+        background-color: rgba(var(--color-membership-3), 1);
+      }
+      .membership__perk-item::before {
+        color: rgba(var(--color-membership-3), 1);
+      }
+      .menu__button {
+        &:hover {
+          .icon {
+            stroke: rgba(var(--color-membership-3), 1);
+          }
+        }
+      }
+    }
+    &.membership-tier4 {
+      .membership__plan-header {
+        background-color: rgba(var(--color-membership-4), 1);
+      }
+      .membership__perk-item::before {
+        color: rgba(var(--color-membership-4), 1);
+      }
+      .menu__button {
+        &:hover {
+          .icon {
+            stroke: rgba(var(--color-membership-4), 1);
+          }
+        }
+      }
+    }
+    &.membership-tier5 {
+      .membership__plan-header {
+        background-color: rgba(var(--color-membership-5), 1);
+      }
+      .membership__perk-item::before {
+        color: rgba(var(--color-membership-5), 1);
+      }
+      .menu__button {
+        &:hover {
+          .icon {
+            stroke: rgba(var(--color-membership-5), 1);
+          }
+        }
+      }
+    }
+    &.membership-tier6 {
+      .membership__plan-header {
+        background-color: rgba(var(--color-membership-6), 1);
+      }
+      .membership__perk-item::before {
+        color: rgba(var(--color-membership-6), 1);
+      }
+      .menu__button {
+        &:hover {
+          .icon {
+            stroke: rgba(var(--color-membership-6), 1);
+          }
+        }
+      }
+    }
+  }
+
+  .membership__perk-item {
+    font-size: var(--font-base);
+    opacity: 0.8;
+  }
+
+  .membership__plan-header {
+    padding: var(--spacing-m);
+    background-image: url('/public/img/spaceman_pattern.png');
+    background-size: 34px;
+    span {
+      padding: var(--spacing-xxs);
+      border-radius: var(--border-radius);
+      font-size: var(--font-body);
+      background-color: var(--color-header-background);
+    }
+  }
+
+  .membership__plan-content {
+    padding: var(--spacing-m);
+    div {
+      margin-bottom: var(--spacing-s);
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+
+      span {
+        display: block;
+        font-size: var(--font-base);
+        opacity: 0.8;
+      }
+    }
+  }
+
+  .membership__plan-actions {
+    margin-top: var(--spacing-l);
+
+    label {
+      display: block;
+    }
+
+    .button {
+      background-color: var(--color-header-background) !important;
+      border: 2px solid var(--color-border);
+      margin-right: var(--spacing-s);
+    }
+  }
+}
+
+.membership-tier__wrapper-edit {
+  padding: var(--spacing-m);
+
+  label {
+    font-size: var(--font-body);
+  }
+  input,
+  textarea {
+    border: 2px solid var(--color-border);
+    overflow: auto !important;
+  }
+  fieldset-section {
+    margin-top: var(--spacing-m);
+    &:first-of-type {
+      margin-top: 0;
+    }
+  }
+  .checkbox {
+    margin-top: var(--spacing-xs);
+    label {
+      font-size: var(--font-base) !important;
+      opacity: 0.8;
+    }
+  }
+  .section__actions {
+    margin-top: var(--spacing-m);
+    margin-bottom: calc(var(--spacing-m) * -1) !important;
+    .button--primary {
+      background-color: var(--color-primary) !important;
+      @media (max-width: $breakpoint-small) {
+        margin-right: var(--spacing-s) !important;
+      }
+    }
+  }
+  .help {
+    margin-top: calc(var(--spacing-s) * -1);
+    margin-bottom: var(--spacing-s);
+  }
+}
+
+.tier-edit-functionality {
+  .membership-tier__wrapper {
+    padding-bottom: 0;
+    margin-bottom: var(--spacing-l);
+
+    .membership-tier__perks-content {
+      margin-top: var(--spacing-s);
+    }
+
+    label {
+      margin-top: var(--spacing-s);
+      &:first-of-type {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+// create tiers tab
+.create-tier__card {
+  background-color: rgba(var(--color-header-background-base), 0.4);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-m);
+  margin-bottom: var(--spacing-l);
+}
+
+.create-tiers__header {
+  margin-bottom: 22px;
+}
+
+.add-membership__button {
+  margin-top: 13px;
+  font-size: 18px;
+}
+
+svg.icon--Upgrade {
+  margin-top: 2px;
+}
+
+.edit-functionality-disabled {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.header--cant_change_price {
+  font-size: 13px;
+  color: grey;
+  margin-top: 10px;
+}
+
+.membership-tier__header {
+  font-size: var(--font-large);
+  font-weight: var(--font-weight-bold);
+}
+
+.join-membership__subtitle {
+  color: var(--color-text-subtitle);
+  font-size: var(--font-body);
+  margin-top: var(--spacing-s);
+  margin-bottom: var(--spacing-m);
+}
+
+.protected-membership-button {
+  span {
+    color: #68f368;
+  }
+}
+
+.table--pledges {
+  th {
+  }
+}
+
+.membership-tier__description {
+  word-break: break-word;
+}
+
+.membership-tier__infos-description {
+  display: block;
+  max-height: 140px;
+  overflow-y: scroll;
+}
+
+.button--view-memberships {
+  margin-top: var(--spacing-m);
+  text-align: center;
 }

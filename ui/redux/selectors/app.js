@@ -1,7 +1,8 @@
 import { createSelector } from 'reselect';
 import { SHOW_ADS } from 'config';
 import { selectClaimForId, selectMyChannelClaims, selectStakedLevelForChannelUri } from 'redux/selectors/claims';
-import { selectOdyseeMembershipIsPremiumPlus, selectUserEmail, selectUserLocale } from 'redux/selectors/user';
+import { selectUserEmail, selectUserLocale } from 'redux/selectors/user';
+import { selectOdyseeMembershipIsPremiumPlus } from 'redux/selectors/memberships';
 import { selectDefaultChannelClaim } from 'redux/selectors/settings';
 
 export const selectState = (state) => state.app || {};

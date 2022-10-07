@@ -2,8 +2,6 @@ import analytics from 'analytics';
 import Lbry from 'lbry';
 import { doFetchChannelListMine } from 'redux/actions/claims';
 import { batchActions } from 'util/batch-actions';
-import { getStripeEnvironment } from 'util/stripe';
-import { ODYSEE_CHANNEL } from 'constants/channels';
 import * as ACTIONS from 'constants/action_types';
 import { doFetchGeoBlockedList } from 'redux/actions/blocked';
 import { doClaimRewardType, doRewardList } from 'redux/actions/rewards';
@@ -23,10 +21,11 @@ import { DOMAIN, LOCALE_API } from 'config';
 import { getDefaultLanguage } from 'util/default-languages';
 import { LocalStorage, LS } from 'util/storage';
 
+import { doMembershipMine } from 'redux/actions/memberships';
+
 export let sessionStorageAvailable = false;
 const CHECK_INTERVAL = 200;
 const AUTH_WAIT_TIMEOUT = 10000;
-const stripeEnvironment = getStripeEnvironment();
 
 export function doFetchInviteStatus(shouldCallRewardList = true) {
   return (dispatch) => {
@@ -87,7 +86,7 @@ export function doInstallNew(appVersion, callbackForUsersWhoAreSharingData, doma
 
 function checkAuthBusy() {
   let time = Date.now();
-  return new Promise(function (resolve, reject) {
+  return new Promise((resolve, reject) => {
     (function waitForAuth() {
       try {
         sessionStorage.setItem('test', 'available');
@@ -116,62 +115,6 @@ function checkAuthBusy() {
   });
 }
 
-/***
- * Given a user, return their highest ranking Odysee membership (Premium or Premium Plus)
- * @param dispatch
- * @param user
- * @returns {Promise<void>}
- */
-export function doCheckUserOdyseeMemberships(user) {
-  return async (dispatch) => {
-    let highestMembershipRanking;
-
-    if (user.odysee_member) {
-      // get memberships for a given user
-      // TODO: in the future, can we specify this just to @odysee?
-
-      const response = await Lbryio.call(
-        'membership',
-        'mine',
-        {
-          environment: stripeEnvironment,
-        },
-        'post'
-      );
-
-      let savedMemberships = [];
-
-      // TODO: this will work for now, but it should be adjusted
-      // TODO: to check if it's active, or if it's cancelled if it's still valid past current date
-      // loop through all memberships and save the @odysee ones
-      // maybe in the future we can only hit @odysee in the API call
-      for (const membership of response) {
-        if (membership.MembershipDetails && membership.MembershipDetails.channel_name === '@odysee') {
-          savedMemberships.push(membership.MembershipDetails.name);
-        }
-      }
-
-      // determine highest ranking membership based on returned data
-      // note: this is from an odd state in the API where a user can be both premium/Premium + at the same time
-      // I expect this can change once upgrade/downgrade is implemented
-      if (savedMemberships.length > 0) {
-        // if premium plus is a membership, return that, otherwise it's only premium
-        const premiumPlusExists = savedMemberships.includes('Premium+');
-        if (premiumPlusExists) {
-          highestMembershipRanking = 'Premium+';
-        } else {
-          highestMembershipRanking = 'Premium';
-        }
-      }
-    }
-
-    dispatch({
-      type: ACTIONS.ADD_ODYSEE_MEMBERSHIP_DATA,
-      data: { user, odyseeMembershipName: highestMembershipRanking || '' }, // '' = none; `undefined` = not fetched
-    });
-  };
-}
-
 // TODO: Call doInstallNew separately so we don't have to pass appVersion and os_system params?
 export function doAuthenticate(
   appVersion,
@@ -195,7 +138,7 @@ export function doAuthenticate(
             data: { user, accessToken: token },
           });
 
-          dispatch(doCheckUserOdyseeMemberships(user));
+          dispatch(doMembershipMine());
 
           if (shareUsageData) {
             dispatch(doRewardList());
@@ -228,7 +171,6 @@ export function doUserFetch() {
 
       Lbryio.getCurrentUser()
         .then((user) => {
-          dispatch(doCheckUserOdyseeMemberships(user));
           dispatch({
             type: ACTIONS.USER_FETCH_SUCCESS,
             data: { user },
@@ -249,8 +191,6 @@ export function doUserCheckEmailVerified() {
   // This will happen in the background so we don't need loading booleans
   return (dispatch) => {
     Lbryio.getCurrentUser().then((user) => {
-      dispatch(doCheckUserOdyseeMemberships(user));
-
       if (user.has_verified_email) {
         dispatch(doRewardList());
         dispatch({
@@ -832,48 +772,6 @@ export function doCheckYoutubeTransfer() {
           data: String(error),
         });
       });
-  };
-}
-
-/***
- * Receives a csv of channel claim ids, hits the backend and returns nicely formatted object with relevant info
- * @param claimIdCsv
- * @returns {(function(*): Promise<void>)|*}
- */
-export function doFetchUserMemberships(claimIdCsv) {
-  return async (dispatch) => {
-    if (!claimIdCsv || (claimIdCsv.length && claimIdCsv.length < 1)) return;
-
-    // check if users have odysee memberships (premium/premium+)
-    const response = await Lbryio.call('membership', 'check', {
-      channel_id: ODYSEE_CHANNEL.ID,
-      claim_ids: claimIdCsv,
-      environment: stripeEnvironment,
-    });
-
-    let updatedResponse = {};
-
-    // loop through returned users
-    for (const user in response) {
-      // if array was returned for a user (indicating a membership exists), otherwise is null
-      if (response[user] && response[user].length) {
-        // get membership for user
-        // note: a for loop is kind of odd, indicates there may be multiple memberships?
-        // probably not needed depending on what we do with the frontend, should revisit
-        for (const membership of response[user]) {
-          if (membership.channel_name) {
-            updatedResponse[user] = membership.name;
-            window.checkedMemberships[user] = membership.name;
-          }
-        }
-      } else {
-        // note the user has been fetched but is null
-        updatedResponse[user] = null;
-        window.checkedMemberships[user] = null;
-      }
-    }
-
-    dispatch({ type: ACTIONS.ADD_CLAIMIDS_MEMBERSHIP_DATA, data: { response: updatedResponse } });
   };
 }
 

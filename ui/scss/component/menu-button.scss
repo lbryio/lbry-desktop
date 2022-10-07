@@ -139,6 +139,55 @@ reach-portal {
   [data-reach-menu-item] {
     margin: 0 var(--spacing-xxs);
   }
+
+  &.membership-tier1 {
+    [data-reach-menu-item][data-selected] {
+      background-color: rgba(var(--color-membership-1), 1) !important;
+      .menu__link {
+        background-color: unset;
+      }
+    }
+  }
+  &.membership-tier2 {
+    [data-reach-menu-item][data-selected] {
+      background-color: rgba(var(--color-membership-2), 1) !important;
+      .menu__link {
+        background-color: unset;
+      }
+    }
+  }
+  &.membership-tier3 {
+    [data-reach-menu-item][data-selected] {
+      background-color: rgba(var(--color-membership-3), 1) !important;
+      .menu__link {
+        background-color: unset;
+      }
+    }
+  }
+  &.membership-tier4 {
+    [data-reach-menu-item][data-selected] {
+      background-color: rgba(var(--color-membership-4), 1) !important;
+      .menu__link {
+        background-color: unset;
+      }
+    }
+  }
+  &.membership-tier5 {
+    [data-reach-menu-item][data-selected] {
+      background-color: rgba(var(--color-membership-5), 1) !important;
+      .menu__link {
+        background-color: unset;
+      }
+    }
+  }
+  &.membership-tier6 {
+    [data-reach-menu-item][data-selected] {
+      background-color: rgba(var(--color-membership-6), 1) !important;
+      .menu__link {
+        background-color: unset;
+      }
+    }
+  }
 }
 
 .menu__list--header {
@@ -234,6 +283,9 @@ reach-portal {
       .notification__icon {
         margin-top: 0;
         margin-left: 0;
+        .icon__wrapper {
+          color: var(--color-text);
+        }
         .channel-thumbnail {
           margin-right: var(--spacing-s);
           width: 3rem;
@@ -348,6 +400,7 @@ reach-portal {
         background-color: rgba(var(--color-header-background-base), 1);
         .notification__icon {
           .icon__wrapper {
+            color: var(--color-text);
             background-color: var(--color-header-button);
           }
         }
@@ -495,6 +548,7 @@ reach-portal {
   .icon__wrapper {
     height: 2.5rem;
     width: 2.5rem;
+    color: var(--color-text);
   }
 
   &:hover {

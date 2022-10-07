@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
-import { selectClaimUriForId, selectClaimsByUri } from 'redux/selectors/claims';
-import { doFetchUserMemberships } from 'redux/actions/user';
-
+import { selectClaimUriForId } from 'redux/selectors/claims';
+import { selectOdyseeMembershipForChannelId } from 'redux/selectors/memberships';
 import ChannelListItem from './view';
 
 const select = (state, props) => {
@@ -9,12 +8,8 @@ const select = (state, props) => {
 
   return {
     uri: selectClaimUriForId(state, channelId),
-    claimsByUri: selectClaimsByUri(state),
+    odyseeMembership: selectOdyseeMembershipForChannelId(state, channelId),
   };
 };
 
-const perform = {
-  doFetchUserMemberships,
-};
-
-export default connect(select, perform)(ChannelListItem);
+export default connect(select)(ChannelListItem);

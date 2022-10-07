@@ -38,6 +38,7 @@ type Props = {
   doFetchInviteStatus: (boolean) => void,
   disableDownloadButton: boolean,
   isMature: boolean,
+  isMembershipProtected: boolean,
 };
 
 function SocialShare(props: Props) {
@@ -53,6 +54,7 @@ function SocialShare(props: Props) {
     doFetchInviteStatus,
     disableDownloadButton,
     isMature,
+    isMembershipProtected,
   } = props;
   const [showEmbed, setShowEmbed] = React.useState(false);
   const [includeCollectionId, setIncludeCollectionId] = React.useState(Boolean(collectionId)); // unless it *is* a collection?
@@ -107,6 +109,8 @@ function SocialShare(props: Props) {
     includedCollectionId
   );
   const downloadUrl = `${generateDownloadUrl(name, claimId)}`;
+
+  const showDownloadLink = Boolean(isStream) && !disableDownloadButton && !isMature;
 
   // Tweet params
   let tweetIntentParams = {
@@ -233,16 +237,18 @@ function SocialShare(props: Props) {
             }}
           />
         )}
-        <Button
-          className="share"
-          iconSize={24}
-          icon={ICONS.SHARE_LINK}
-          title={__('Links')}
-          onClick={() => {
-            setShowClaimLinks(!showClaimLinks);
-            setShowEmbed(false);
-          }}
-        />
+        {!isMembershipProtected && (showDownloadLink || rssUrl || isChannel) && (
+          <Button
+            className="share"
+            iconSize={24}
+            icon={ICONS.SHARE_LINK}
+            title={__('Links')}
+            onClick={() => {
+              setShowClaimLinks(!showClaimLinks);
+              setShowEmbed(false);
+            }}
+          />
+        )}
       </div>
 
       {SUPPORTS_SHARE_API && isMobile && (

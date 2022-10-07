@@ -1,5 +1,5 @@
 {
-  "parser": "babel-eslint",
+  "parser": "@babel/eslint-parser",
   "extends": ["standard", "standard-jsx", "plugin:react/recommended", "plugin:flowtype/recommended"],
   "plugins": ["flowtype", "import", "react-hooks"],
   "parserOptions": {

@@ -29,6 +29,7 @@ import videojs from 'video.js';
 import { useIsMobile } from 'effects/use-screensize';
 import { platform } from 'util/platform';
 import usePersistedState from 'effects/use-persisted-state';
+import Lbry from 'lbry';
 
 require('@silvermine/videojs-chromecast')(videojs);
 require('@silvermine/videojs-airplay')(videojs);
@@ -110,12 +111,15 @@ type Props = {
   doToast: ({ message: string, linkText: string, linkTarget: string }) => void,
   isPurchasableContent: boolean,
   isRentableContent: boolean,
+  isProtectedContent: boolean,
 };
 
 const VIDEOJS_VOLUME_PANEL_CLASS = 'VolumePanel';
 
 const IS_IOS = platform.isIOS();
 const IS_MOBILE = platform.isMobile();
+
+const HLS_FILETYPE = 'application/x-mpegURL';
 
 const PLUGIN_MAP = {
   eventTracking: eventTracking,
@@ -173,6 +177,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     doToast,
     isPurchasableContent,
     isRentableContent,
+    isProtectedContent,
   } = props;
 
   // used to notify about default quality setting
@@ -460,7 +465,18 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       if (isLivestream) {
         vjsPlayer.isLivestream = true;
         vjsPlayer.addClass('livestreamPlayer');
-        vjsPlayer.src({ type: 'application/x-mpegURL', src: livestreamVideoUrl });
+
+        // get the protected url if needed
+        if (isProtectedContent) {
+          const protectedLivestreamResponse = await Lbry.get({
+            uri: activeLivestreamForChannel.claimUri,
+            base_streaming_url: activeLivestreamForChannel.url,
+          });
+
+          vjsPlayer.src({ HLS_FILETYPE, src: protectedLivestreamResponse.streaming_url });
+        } else {
+          vjsPlayer.src({ HLS_FILETYPE, src: livestreamVideoUrl });
+        }
       } else {
         vjsPlayer.isLivestream = false;
         vjsPlayer.removeClass('livestreamPlayer');
@@ -477,7 +493,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
         // change to m3u8 if applicable
         if (response && response.redirected && response.url && trimmedUrl.endsWith('m3u8')) {
-          vjsPlayer.claimSrcVhs = { type: 'application/x-mpegURL', src: response.url };
+          vjsPlayer.claimSrcVhs = { type: HLS_FILETYPE, src: response.url };
           vjsPlayer.src(vjsPlayer.claimSrcVhs);
 
           contentUrl = response.url;
@@ -519,7 +535,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       }
 
       // disable right-click (context-menu) for purchased content
-      if (isPurchasableContent || isRentableContent) {
+      if (isPurchasableContent || isRentableContent || isProtectedContent) {
         const player = document.querySelector('video.vjs-tech');
         if (player) player.setAttribute('oncontextmenu', 'return false;');
       }

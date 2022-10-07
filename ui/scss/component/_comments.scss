@@ -43,6 +43,10 @@ $thumbnailWidthSmall: 2rem;
       }
     }
   }
+  .error-bubble {
+    margin-top: 0;
+    margin-bottom: var(--spacing-s);
+  }
 }
 
 .comment__list .card__first-pane > .button {
@@ -60,6 +64,15 @@ $thumbnailWidthSmall: 2rem;
   }
   @media (max-width: $breakpoint-small) {
     margin-right: 0;
+  }
+}
+
+.comment__settings {
+  display: flex;
+  gap: var(--spacing-xs);
+
+  .menu__button {
+    opacity: 1;
   }
 }
 
@@ -283,6 +296,10 @@ $thumbnailWidthSmall: 2rem;
     }
   }
 
+  .icon {
+    color: var(--color-text);
+  }
+
   .comment__author--creator {
     margin-top: 0;
     &:hover {
@@ -295,6 +312,12 @@ $thumbnailWidthSmall: 2rem;
   .comment__badge svg {
     height: 1.4rem;
     width: 1.4rem;
+
+    &.icon--Membership {
+      height: 0.96rem;
+      width: 0.96rem;
+      margin-bottom: -1.5px;
+    }
   }
 }
 
@@ -486,6 +509,15 @@ $thumbnailWidthSmall: 2rem;
 
   .icon {
     vertical-align: top;
+  }
+}
+
+.comment__actions--disabled {
+  filter: brightness(50%);
+  pointer-events: none;
+
+  button {
+    color: white !important;
   }
 }
 

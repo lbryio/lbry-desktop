@@ -239,6 +239,16 @@ export const selectCommentsEnabledSettingForChannelId = (state: State, channelId
 export const selectCommentsDisabledSettingForChannelId = (state: State, channelId: ClaimId) =>
   selectCommentsEnabledSettingForChannelId(state, channelId) === false;
 
+export const selectLivestreamChatMembersOnlyForChannelId = (state: State, channelId: ClaimId) => {
+  const channelSettings = selectSettingsForChannelId(state, channelId);
+  return channelSettings && channelSettings.livestream_chat_members_only;
+};
+
+export const selectMembersOnlyCommentsForChannelId = (state: State, channelId: ClaimId) => {
+  const channelSettings = selectSettingsForChannelId(state, channelId);
+  return channelSettings && channelSettings.comments_members_only;
+};
+
 export const selectCommentsForUri = createCachedSelector(
   (state, uri) => uri,
   selectCommentsByClaimId,

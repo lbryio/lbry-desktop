@@ -28,8 +28,10 @@ declare type UpdatePublishFormData = {
   licenseUrl?: string,
   licenseType?: string,
   uri?: string,
-  nsfw: boolean,
+  nsfw?: boolean,
   isMarkdownPost?: boolean,
+  tags?: Array<Tag>,
+  restrictedToMemberships?: Array<string>,
 };
 
 declare type PublishParams = {

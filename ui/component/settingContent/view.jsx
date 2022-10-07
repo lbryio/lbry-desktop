@@ -25,6 +25,7 @@ type Props = {
   floatingPlayer: boolean,
   autoplayMedia: boolean,
   autoplayNext: boolean,
+  hideMembersOnlyContent: boolean,
   hideReposts: ?boolean,
   showNsfw: boolean,
   hideScheduledLivestreams: boolean,
@@ -45,6 +46,7 @@ export default function SettingContent(props: Props) {
     floatingPlayer,
     autoplayMedia,
     autoplayNext,
+    hideMembersOnlyContent,
     hideReposts,
     showNsfw,
     hideScheduledLivestreams,
@@ -95,6 +97,15 @@ export default function SettingContent(props: Props) {
                 name="autoplay next"
                 onChange={() => setClientSetting(SETTINGS.AUTOPLAY_NEXT, !autoplayNext)}
                 checked={autoplayNext}
+              />
+            </SettingsRow>
+
+            <SettingsRow title={__('Hide members-only content')} subtitle={__(HELP.HIDE_MEMBERS_ONLY_CONTENT)}>
+              <FormField
+                type="checkbox"
+                name="hide_members_only_content"
+                checked={hideMembersOnlyContent}
+                onChange={(e) => setClientSetting(SETTINGS.HIDE_MEMBERS_ONLY_CONTENT, !hideMembersOnlyContent)}
               />
             </SettingsRow>
 
@@ -240,6 +251,7 @@ const HELP = {
   FLOATING_PLAYER: 'Keep content playing in the corner when navigating to a different page.',
   AUTOPLAY_MEDIA: 'Autoplay video and audio files when navigating to a file.',
   AUTOPLAY_NEXT: 'Autoplay the next related item when a file (video or audio) finishes playing.',
+  HIDE_MEMBERS_ONLY_CONTENT: 'You will not see content that requires a membership subscription.',
   HIDE_REPOSTS: 'You will not see reposts by people you follow or receive email notifying about them.',
   HIDE_SCHEDULED_LIVESTREAMS: 'You will not see scheduled livestreams by people you follow on the home or following page.',
   HIDE_FYP: 'You will not see the personal recommendations in the homepage.',

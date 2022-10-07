@@ -3,7 +3,7 @@ import {
   selectClaimForUri,
   selectClaimIsMine,
   selectFetchingMyChannels,
-  selectClaimsByUri,
+  selectProtectedContentTagForUri,
 } from 'redux/selectors/claims';
 import {
   selectTopLevelCommentsForUri,
@@ -24,7 +24,11 @@ import { doCommentReset, doCommentList, doCommentById, doCommentReactList } from
 import { doPopOutInlinePlayer } from 'redux/actions/content';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
 import { getChannelIdFromClaim } from 'util/claim';
-import { doFetchUserMemberships } from 'redux/actions/user';
+import {
+  doFetchOdyseeMembershipForChannelIds,
+  doFetchChannelMembershipsForChannelIds,
+} from 'redux/actions/memberships';
+import { selectUserHasValidMembershipForCreatorId } from 'redux/selectors/memberships';
 import CommentsList from './view';
 
 const select = (state, props) => {
@@ -32,29 +36,33 @@ const select = (state, props) => {
 
   const claim = selectClaimForUri(state, uri);
   const channelId = getChannelIdFromClaim(claim);
+
   const activeChannelClaim = selectActiveChannelClaim(state);
   const threadComment = selectCommentForCommentId(state, threadCommentId);
+  const activeChannelId = activeChannelClaim && activeChannelClaim.claim_id;
 
   return {
-    topLevelComments: threadComment ? [threadComment] : selectTopLevelCommentsForUri(state, uri),
-    threadComment,
+    activeChannelId,
     allCommentIds: selectCommentIdsForUri(state, uri),
-    pinnedComments: selectPinnedCommentsForUri(state, uri),
-    topLevelTotalPages: makeSelectTopLevelTotalPagesForUri(uri)(state),
-    totalComments: selectTotalCommentsCountForUri(state, uri),
+    channelId,
+    chatCommentsRestrictedToChannelMembers: Boolean(selectProtectedContentTagForUri(state, uri)),
     claimId: claim && claim.claim_id,
     claimIsMine: selectClaimIsMine(state, claim),
-    isFetchingComments: selectIsFetchingComments(state),
-    isFetchingTopLevelComments: selectIsFetchingTopLevelComments(state),
-    isFetchingReacts: selectIsFetchingReacts(state),
     fetchingChannels: selectFetchingMyChannels(state),
+    isAChannelMember: selectUserHasValidMembershipForCreatorId(state, channelId),
+    isFetchingComments: selectIsFetchingComments(state),
+    isFetchingReacts: selectIsFetchingReacts(state),
+    isFetchingTopLevelComments: selectIsFetchingTopLevelComments(state),
+    linkedCommentAncestors: selectCommentAncestorsForId(state, linkedCommentId),
     commentsEnabledSetting: selectCommentsEnabledSettingForChannelId(state, channelId),
     myReactsByCommentId: selectMyReacts(state),
     othersReactsById: selectOthersReacts(state),
-    activeChannelId: activeChannelClaim && activeChannelClaim.claim_id,
-    claimsByUri: selectClaimsByUri(state),
+    pinnedComments: selectPinnedCommentsForUri(state, uri),
+    threadComment,
     threadCommentAncestors: selectCommentAncestorsForId(state, threadCommentId),
-    linkedCommentAncestors: selectCommentAncestorsForId(state, linkedCommentId),
+    topLevelComments: selectTopLevelCommentsForUri(state, uri),
+    topLevelTotalPages: makeSelectTopLevelTotalPagesForUri(uri)(state),
+    totalComments: selectTotalCommentsCountForUri(state, uri),
   };
 };
 
@@ -63,7 +71,8 @@ const perform = {
   fetchComment: doCommentById,
   fetchReacts: doCommentReactList,
   resetComments: doCommentReset,
-  doFetchUserMemberships,
+  doFetchOdyseeMembershipForChannelIds,
+  doFetchChannelMembershipsForChannelIds,
   doPopOutInlinePlayer,
 };
 

@@ -1,0 +1,166 @@
+@import '~ui/scss/init/breakpoints';
+
+.membershipPage-wrapper {
+  .tabs {
+    @media (max-width: $breakpoint-small) {
+      position: unset;
+    }
+  }
+  .tabs__list {
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+
+    .no-after {
+      button {
+        margin-right: var(--spacing-s);
+      }
+      .tab {
+        .button--secondary {
+          .button__label {
+            color: var(--color-text) !important;
+          }
+          .icon {
+            stroke: var(--color-text) !important;
+          }
+        }
+        &:hover {
+          .button--secondary {
+            background-color: unset !important;
+            .button__label {
+              color: var(--color-primary) !important;
+            }
+            .icon {
+              stroke: var(--color-primary) !important;
+            }
+          }
+
+          &::after {
+            display: none;
+          }
+        }
+      }
+    }
+
+    @media (max-width: $breakpoint-small) {
+      overflow-x: auto;
+      overflow-y: hidden;
+
+      .tab {
+        flex: auto;
+        white-space: nowrap;
+        margin-right: var(--spacing-m);
+        &:last-of-type {
+          margin-right: 0;
+        }
+      }
+
+      .no-after {
+        position: absolute;
+        top: var(--spacing-s);
+        right: 0;
+        .button {
+          margin-right: var(--spacing-m);
+          background-color: var(--color-header-background) !important;
+        }
+        .button__label {
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+.membership__mypledges-header {
+  position: relative;
+  width: 100%;
+  background-size: cover;
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  margin-bottom: 0;
+  overflow: hidden;
+  height: 210px;
+
+  label {
+    position: absolute;
+    background-color: var(--color-header-background);
+    padding: var(--spacing-m);
+    border-radius: var(--border-radius);
+    bottom: var(--spacing-m);
+    left: var(--spacing-m);
+    padding: var(--spacing-m);
+    font-size: var(--font-large);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+  }
+
+  @media (max-width: $breakpoint-small) {
+    background-image: url('https://thumbnails.odycdn.com/optimize/s:600:0/quality:95/plain/https://static.odycdn.com/images/banner_DonorPortal.jpg');
+  }
+
+  @media (min-width: $breakpoint-small) {
+    background-image: url('https://thumbnails.odycdn.com/optimize/s:900:0/quality:95/plain/https://static.odycdn.com/images/banner_DonorPortal.jpg');
+    background-position: top -80px left 0px;
+  }
+
+  @media (min-width: $breakpoint-medium) {
+    background-image: url('https://thumbnails.odycdn.com/optimize/s:1150:0/quality:95/plain/https://static.odycdn.com/images/banner_DonorPortal.jpg');
+    background-position: top -160px left 0px;
+  }
+
+  @media (min-width: $breakpoint-large) {
+    background-image: url('https://thumbnails.odycdn.com/optimize/s:1600:0/quality:95/plain/https://static.odycdn.com/images/banner_DonorPortal.jpg');
+    background-position: top -170px left 0px;
+  }
+
+  @media (min-width: $breakpoint-xlarge) {
+    background-image: url('https://static.odycdn.com/images/banner_creatorPortal.jpg');
+    background-position: top -170px left 0px;
+  }
+}
+
+.membership-table__wrapper {
+  .table {
+    thead {
+      th {
+        border-bottom: 2px solid rgba(var(--color-primary-static), 0.4);
+      }
+    }
+    tbody {
+      tr {
+        td {
+          padding: 0.8rem;
+          border-bottom: 2px solid rgba(var(--color-primary-static), 0.4) !important;
+        }
+      }
+    }
+  }
+  @media (max-width: $breakpoint-small) {
+    overflow-x: auto !important;
+
+    .table {
+      .channelName-header {
+        min-width: 180px;
+      }
+      thead {
+        tr {
+          th {
+            white-space: nowrap;
+          }
+        }
+      }
+      tbody {
+        tr {
+          td {
+            white-space: nowrap;
+            padding: 0.6rem !important;
+            padding-right: 0 !important;
+          }
+        }
+      }
+    }
+  }
+}
+
+.back-to-memberships-button {
+  transform: rotate(180deg);
+  margin-left: 6px;
+  margin-bottom: -3px;
+}

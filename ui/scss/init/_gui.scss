@@ -452,6 +452,37 @@ img {
   margin-left: 2px;
 }
 
+.error-bubble {
+  display: block;
+  margin-top: var(--spacing-s);
+  padding: var(--spacing-s);
+  border-radius: var(--border-radius);
+  border: 2px solid rgba(255, 0, 0, 0.8);
+  background-color: rgba(255, 0, 0, 0.1);
+
+  div {
+    label {
+      display: block;
+      font-size: var(--font-body);
+      font-weight: var(--font-weight-bold);
+    }
+
+    span {
+      display: block;
+      font-size: var(--font-small);
+      font-weight: var(--font-weight-bold);
+      opacity: 0.8;
+    }
+  }
+
+  .button {
+    width: auto;
+    max-width: 100%;
+    margin-top: var(--spacing-s);
+    margin-bottom: 0;
+  }
+}
+
 .error__text--stripe-card {
   text-align: center;
   margin-top: var(--spacing-s);
@@ -1158,8 +1189,8 @@ img {
 
     .MuiAutocomplete-root {
       background: rgba(var(--color-header-background-base), 0.4);
-      border-radius: var(--border-radius);
       padding: var(--spacing-s);
+      border: unset !important;
 
       textarea {
         box-shadow: 0 0 0 2px var(--color-border) inset;
@@ -1169,12 +1200,130 @@ img {
       }
 
       @media (max-width: $breakpoint-small) {
-        .MuiFormControl-root {
-          border-radius: var(--border-radius);
-          box-shadow: 0 0 0 2px var(--color-border) inset;
-        }
         textarea {
           box-shadow: unset;
+        }
+      }
+    }
+  }
+
+  .card--restrictions {
+    background: rgba(var(--color-header-background-base), 0.4);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-s);
+
+    .checkbox {
+      margin-top: var(--spacing-xs);
+      &:first-of-type {
+        margin-top: 0;
+      }
+    }
+
+    .tier-list {
+      padding: var(--spacing-s);
+      margin-top: var(--spacing-s);
+      margin-bottom: var(--spacing-m);
+      border-radius: var(--border-radius);
+      background-color: var(--color-input-bg);
+      box-shadow: 0 0 0 2px var(--color-border) inset;
+
+      .checkbox {
+        display: inline-block;
+        margin-top: 0;
+        margin-right: var(--spacing-s);
+
+        label {
+          padding: var(--spacing-xxxs) var(--spacing-s);
+          border-radius: var(--border-radius);
+
+          &::before,
+          &::after {
+            display: none;
+          }
+        }
+
+        input[type='checkbox'] + label {
+          opacity: 0.8;
+          &:hover {
+            opacity: 1;
+          }
+        }
+        input[type='checkbox']:checked + label {
+          opacity: 1;
+        }
+
+        &:nth-of-type(1) {
+          input[type='checkbox'] + label {
+            border: 2px solid rgba(var(--color-membership-1), 0.6);
+            background-color: rgba(var(--color-membership-1), 0.2);
+            &:hover {
+              background-color: rgba(var(--color-membership-1), 0.4);
+            }
+          }
+          input[type='checkbox']:checked + label {
+            background-color: rgba(var(--color-membership-1), 1);
+          }
+        }
+        &:nth-of-type(2) {
+          input[type='checkbox'] + label {
+            border: 2px solid rgba(var(--color-membership-2), 0.6);
+            background-color: rgba(var(--color-membership-2), 0.2);
+            &:hover {
+              background-color: rgba(var(--color-membership-2), 0.4);
+            }
+          }
+          input[type='checkbox']:checked + label {
+            background-color: rgba(var(--color-membership-2), 1);
+          }
+        }
+        &:nth-of-type(3) {
+          input[type='checkbox'] + label {
+            border: 2px solid rgba(var(--color-membership-3), 0.6);
+            background-color: rgba(var(--color-membership-3), 0.2);
+            &:hover {
+              background-color: rgba(var(--color-membership-3), 0.4);
+            }
+          }
+          input[type='checkbox']:checked + label {
+            background-color: rgba(var(--color-membership-3), 1);
+          }
+        }
+        &:nth-of-type(4) {
+          input[type='checkbox'] + label {
+            border: 2px solid rgba(var(--color-membership-4), 0.6);
+            background-color: rgba(var(--color-membership-4), 0.2);
+            &:hover {
+              background-color: rgba(var(--color-membership-4), 0.4);
+            }
+          }
+          input[type='checkbox']:checked + label {
+            background-color: rgba(var(--color-membership-4), 1);
+          }
+        }
+        &:nth-of-type(5) {
+          input[type='checkbox'] + label {
+            border: 2px solid rgba(var(--color-membership-5), 0.6);
+            background-color: rgba(var(--color-membership-5), 0.2);
+            &:hover {
+              background-color: rgba(var(--color-membership-5), 0.4);
+            }
+          }
+          input[type='checkbox']:checked + label {
+            background-color: rgba(var(--color-membership-5), 1);
+          }
+        }
+        &:nth-of-type(6) {
+          input[type='checkbox'] + label {
+            border: 2px solid rgba(var(--color-membership-6), 0.6);
+            background-color: rgba(var(--color-membership-5), 0.2);
+
+            &:hover {
+              background-color: rgba(var(--color-membership-6), 1);
+            }
+          }
+          input[type='checkbox']:checked + label {
+            background-color: rgba(var(--color-membership-6), 0.4);
+          }
         }
       }
     }
@@ -1388,13 +1537,6 @@ img {
   }
 
   @media (max-width: $breakpoint-small) {
-    .MuiTextField-root {
-      background-color: var(--color-header-background);
-    }
-    .css-3i94e7-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-      border: unset;
-      border: 2px solid var(--color-primary);
-    }
     textarea#content_description:focus-visible {
       box-shadow: unset;
     }
@@ -2262,4 +2404,77 @@ input:not(input:-webkit-autofill)::-webkit-contacts-auto-fill-button {
 audio,
 video {
   background-color: black;
+}
+
+.help-hub__wrapper {
+  margin-top: var(--spacing-l);
+  width: 100%;
+  // background-color: #f3e3f6;
+  background-color: rgba(255, 221, 162, 1);
+  // border: 2px solid rgba(255, 221, 162, 0.8);
+  color: black;
+  border-radius: var(--border-radius);
+  text-align: center;
+  padding: var(--spacing-s);
+  font-weight: bold;
+
+  span {
+    display: inline-block;
+  }
+
+  a {
+    color: var(--color-primary);
+    // color: rgba(255,221,162,1);
+  }
+
+  img {
+    width: 46px;
+    height: 46px;
+    background-color: rgba(148, 55, 105, 1);
+    border-radius: 50%;
+    margin-left: var(--spacing-s);
+
+    @media (max-width: $breakpoint-small) {
+      margin-top: var(--spacing-xxs);
+    }
+  }
+}
+
+.content-access-indicator {
+  display: inline-block;
+  margin-right: var(--spacing-s) !important;
+
+  .icon {
+    margin-bottom: -6px;
+    width: 26px;
+    height: 26px;
+    overflow: visible;
+
+    background-color: var(--color-text);
+    border-radius: 50%;
+    padding: 5px;
+    stroke-width: 4;
+  }
+
+  &.locked {
+    .icon {
+      color: var(--color-fire);
+    }
+  }
+
+  &.unlocked {
+    .icon {
+      color: var(--color-slime);
+    }
+  }
+
+  @media (max-width: $breakpoint-small) {
+    margin-right: var(--spacing-xxs) !important;
+
+    .icon {
+      margin-bottom: -4px;
+      width: 22px;
+      height: 22px;
+    }
+  }
 }

@@ -7,7 +7,7 @@ import {
   makeSelectTotalPagesInChannelSearch,
   selectClaimForUri,
 } from 'redux/selectors/claims';
-import { selectOdyseeMembershipIsPremiumPlus } from 'redux/selectors/user';
+import { selectOdyseeMembershipIsPremiumPlus } from 'redux/selectors/memberships';
 import { doResolveUris } from 'redux/actions/claims';
 import * as SETTINGS from 'constants/settings';
 import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';

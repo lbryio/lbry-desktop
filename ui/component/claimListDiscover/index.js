@@ -10,12 +10,17 @@ import { doClaimSearch, doResolveClaimIds, doResolveUris } from 'redux/actions/c
 import * as SETTINGS from 'constants/settings';
 import { selectFollowedTags } from 'redux/selectors/tags';
 import { selectMutedChannels } from 'redux/selectors/blocked';
-import { doFetchUserMemberships } from 'redux/actions/user';
+import { doFetchOdyseeMembershipForChannelIds } from 'redux/actions/memberships';
 import { selectClientSetting, selectShowMatureContent, selectLanguage } from 'redux/selectors/settings';
 import { selectModerationBlockList } from 'redux/selectors/comments';
 import ClaimListDiscover from './view';
 import { doFetchViewCount } from 'lbryinc';
 
+function resolveHideMembersOnly(global, override) {
+  return override === undefined || override === null ? global : override;
+}
+
+// prettier-ignore
 const select = (state, props) => ({
   followedTags: selectFollowedTags(state),
   claimSearchByQuery: selectClaimSearchByQuery(state),
@@ -24,6 +29,7 @@ const select = (state, props) => ({
   claimsById: selectById(state),
   loading: props.loading !== undefined ? props.loading : selectFetchingClaimSearch(state),
   showNsfw: selectShowMatureContent(state),
+  hideMembersOnly: resolveHideMembersOnly(selectClientSetting(state, SETTINGS.HIDE_MEMBERS_ONLY_CONTENT), props.hideMembersOnly),
   hideReposts: selectClientSetting(state, SETTINGS.HIDE_REPOSTS),
   languageSetting: selectLanguage(state),
   mutedUris: selectMutedChannels(state),
@@ -34,7 +40,7 @@ const select = (state, props) => ({
 const perform = {
   doClaimSearch,
   doFetchViewCount,
-  doFetchUserMemberships,
+  doFetchOdyseeMembershipForChannelIds,
   doResolveClaimIds,
   doResolveUris,
 };

@@ -10,6 +10,17 @@
       min-height: calc(var(--height-input) * 1.5) !important;
     }
   }
+
+  // override normal disabled opacity to make comment visible
+  .disabled_chat_comments {
+    opacity: 1;
+  }
+}
+
+.MuiAutocomplete-root {
+  background-color: var(--color-input-bg);
+  border-radius: var(--border-radius);
+  border: 2px solid var(--color-border) !important;
 }
 
 .comment-create__auth {
@@ -41,65 +52,40 @@
   }
 }
 
-.livestream__comment-create {
-  @media (max-width: $breakpoint-small) {
-    .MuiOutlinedInput-notchedOutline {
-      display: none;
-    }
-  }
+.MuiOutlinedInput-root.Mui-focused {
+  outline: 2px solid var(--color-primary);
 }
 
-@media (min-width: $breakpoint-small) {
-  .MuiOutlinedInput-notchedOutline {
+.MuiOutlinedInput-notchedOutline {
+  border: none !important;
+  border-radius: 0 !important;
+  border-radius: var(--border-radius) !important;
+
+  @media (max-width: $breakpoint-small) {
     display: none;
   }
 }
 
-.MuiDrawer-root {
-  .comment-create__min-amount-notice {
-    margin: 2px;
-    margin-left: var(--spacing-xxxs);
-    margin-right: var(--spacing-xxxs);
-    padding: var(--spacing-xxs);
-    text-align: center !important;
-    .credit-amount {
-      font-size: var(--font-xsmall);
+.MuiOutlinedInput-root {
+  background-color: var(--color-input-bg) !important;
+
+  textarea:focus-visible {
+    box-shadow: unset;
+  }
+
+  div {
+    .button--primary {
+      .icon {
+        margin-right: -2px;
+        margin-left: 2px;
+        stroke: var(--color-primary-contrast);
+      }
     }
-
-    @media (max-width: $breakpoint-small) {
-      padding-top: calc(var(--spacing-xs) + 3px);
-      font-size: var(--font-xsmall);
-    }
-  }
-}
-
-.card--enable-overflow {
-  .comment-create__min-amount-notice {
-    margin-bottom: var(--spacing-xxs);
-  }
-}
-
-.comment-create--drawer .MuiOutlinedInput-notchedOutline {
-  border: 0px !important;
-  // border-top: 1px solid var(--color-border) !important;
-  border-radius: 0 !important;
-}
-
-.card__main-actions .commentCreate .MuiOutlinedInput-notchedOutline {
-  // border: 1px solid var(--color-border) !important;
-  border-radius: var(--border-radius) !important;
-}
-
-@media (max-width: $breakpoint-small) {
-  .MuiOutlinedInput-input {
-    padding: 0px var(--spacing-xxs);
   }
 
-  .MuiOutlinedInput-root {
-    font-size: var(--font-xsmall) !important;
+  @media (max-width: $breakpoint-small) {
     flex-wrap: nowrap !important;
     color: var(--color-text) !important;
-    // padding: 0px !important;
     padding: 0px var(--spacing-xxs) 0px 0px !important;
 
     textarea {
@@ -127,6 +113,74 @@
   }
 }
 
+.MuiTextField-root {
+  background-color: var(--color-header-background);
+
+  .button--primary {
+    .button__content {
+      .icon {
+        stroke: var(--color-primary-contrast);
+        margin-left: 1px;
+        margin-right: -1px;
+      }
+    }
+  }
+
+  textarea#create__comment,
+  textarea#create__reply {
+    box-shadow: unset;
+  }
+}
+
+.MuiDrawer-root {
+  .comment-create__min-amount-notice {
+    margin: 2px;
+    margin-left: var(--spacing-xxxs);
+    margin-right: var(--spacing-xxxs);
+    padding: var(--spacing-xxs);
+    text-align: center !important;
+    .credit-amount {
+      font-size: var(--font-xsmall);
+    }
+
+    @media (max-width: $breakpoint-small) {
+      padding-top: calc(var(--spacing-xs) + 3px);
+      font-size: var(--font-xsmall);
+    }
+  }
+}
+
+.card--enable-overflow {
+  .comment-create__min-amount-notice {
+    margin-bottom: var(--spacing-xxs);
+  }
+}
+
+.MuiOutlinedInput-input {
+  border: 0 !important;
+  font-size: var(--font-body);
+  padding-left: var(--spacing-s);
+  padding-right: var(--spacing-s);
+  height: 22px !important;
+
+  &::placeholder {
+    color: var(--color-text) !important;
+    font-size: var(--font-body);
+  }
+  &:focus-visible {
+    box-shadow: unset;
+  }
+
+  @media (max-width: $breakpoint-small) {
+    padding: 0px var(--spacing-xxs);
+  }
+}
+
+.MuiFormControl-root {
+  border-radius: var(--border-radius);
+  box-shadow: 0 0 0 2px var(--color-border) inset;
+}
+
 .MuiAutocomplete-paper {
   @extend .card;
   // background-color: var(--color-card-background);
@@ -150,7 +204,6 @@
     }
 
     .Mui-focused {
-      background-color: var(--color-primary);
       .textarea-suggestion__label {
         .textarea-suggestion__value {
           color: var(--color-primary-contrast) !important;
@@ -272,23 +325,6 @@
 
   label {
     padding-left: var(--spacing-xxxs);
-  }
-
-  .MuiOutlinedInput-root {
-    textarea {
-      &:focus-visible {
-        box-shadow: unset;
-      }
-    }
-    div {
-      .button--primary {
-        .icon {
-          margin-right: -2px;
-          margin-left: 2px;
-          stroke: var(--color-primary-contrast);
-        }
-      }
-    }
   }
 
   .button--alt[aria-label='Refresh'] {

@@ -14,11 +14,12 @@ import * as ICONS from 'constants/icons';
 import * as DRAWERS from 'constants/drawer_types';
 import SwipeableDrawer from 'component/swipeableDrawer';
 import DrawerExpandButton from 'component/swipeableDrawerExpand';
-import LivestreamMenu from 'component/chat/livestream-menu';
+import LivestreamMenu from 'component/livestreamMenu';
 import Icon from 'component/common/icon';
 import CreditAmount from 'component/common/credit-amount';
 import usePersistedState from 'effects/use-persisted-state';
 import { getTipValues } from 'util/livestream';
+import ProtectedContentOverlay from 'component/protectedContentOverlay';
 
 const ChatLayout = lazyImport(() => import('component/chat' /* webpackChunkName: "chat" */));
 
@@ -39,6 +40,7 @@ type Props = {
   superChats: Array<Comment>,
   activeViewers?: number,
   theaterMode: boolean,
+  contentUnlocked: boolean,
 };
 
 export default function LivestreamLayout(props: Props) {
@@ -54,6 +56,7 @@ export default function LivestreamLayout(props: Props) {
     superChats,
     activeViewers,
     theaterMode,
+    contentUnlocked,
   } = props;
 
   const isMobile = useIsMobile();
@@ -70,6 +73,7 @@ export default function LivestreamLayout(props: Props) {
   return (
     <section className="card-stack file-page__video">
       <div className={PRIMARY_PLAYER_WRAPPER_CLASS}>
+        <ProtectedContentOverlay uri={uri} />
         <FileRenderInitiator
           videoTheaterMode={theaterMode}
           uri={claim.canonical_url}
@@ -104,7 +108,7 @@ export default function LivestreamLayout(props: Props) {
               />
             )}
 
-            {isMobile && !isLandscapeRotated && !hideComments && (
+            {isMobile && !isLandscapeRotated && !hideComments && contentUnlocked && (
               <React.Suspense fallback={null}>
                 <SwipeableDrawer
                   // startOpen
@@ -120,6 +124,7 @@ export default function LivestreamLayout(props: Props) {
                   hasSubtitle={activeViewers}
                   actions={
                     <LivestreamMenu
+                      uri={uri}
                       noHyperchats={!superChats || superChats.length === 0}
                       hyperchatsHidden={hyperchatsHidden}
                       toggleHyperchats={() => setHyperchatsHidden(!hyperchatsHidden)}

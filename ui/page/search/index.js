@@ -9,7 +9,7 @@ import {
 } from 'redux/selectors/search';
 import { selectClientSetting, selectLanguage, selectShowMatureContent } from 'redux/selectors/settings';
 import { getSearchQueryString } from 'util/query-params';
-import { selectOdyseeMembershipIsPremiumPlus } from 'redux/selectors/user';
+import { selectOdyseeMembershipIsPremiumPlus } from 'redux/selectors/memberships';
 import SearchPage from './view';
 import * as SETTINGS from 'constants/settings';
 

@@ -6,7 +6,7 @@ import * as SETTINGS from 'constants/settings';
 import { doFetchActiveLivestreams } from 'redux/actions/livestream';
 import { selectActiveLivestreams } from 'redux/selectors/livestream';
 import { selectClientSetting, selectLanguage } from 'redux/selectors/settings';
-import { selectOdyseeMembershipIsPremiumPlus } from 'redux/selectors/user';
+import { selectOdyseeMembershipIsPremiumPlus } from 'redux/selectors/memberships';
 import DiscoverPage from './view';
 
 const select = (state, props) => {

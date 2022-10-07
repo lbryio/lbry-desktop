@@ -28,6 +28,7 @@ type Props = {
   title?: string,
   subCount: number,
   doFetchSubCount: (claimId: string) => void,
+  accessStatus?: string,
 };
 
 export default function FileTitleSection(props: Props) {
@@ -41,6 +42,7 @@ export default function FileTitleSection(props: Props) {
     channelClaimId,
     title,
     doFetchSubCount,
+    accessStatus,
   } = props;
 
   const isMobile = useIsMobile();
@@ -110,6 +112,7 @@ export default function FileTitleSection(props: Props) {
           </>
         )
       }
+      accessStatus={accessStatus}
     />
   );
 }

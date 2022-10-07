@@ -6,6 +6,7 @@ import { selectUserLocale, selectYoutubeChannels } from 'redux/selectors/user';
 import { selectSupportsByOutpoint } from 'redux/selectors/wallet';
 import { createSelector } from 'reselect';
 import { createCachedSelector } from 're-reselect';
+import { ODYSEE_CHANNEL } from 'constants/channels';
 import {
   isClaimNsfw,
   filterClaims,
@@ -20,7 +21,7 @@ import {
   getChannelPermanentUrlFromClaim,
 } from 'util/claim';
 import * as CLAIM from 'constants/claim';
-import { INTERNAL_TAGS } from 'constants/tags';
+import { INTERNAL_TAGS, MEMBERS_ONLY_CONTENT_TAG, RESTRICTED_CHAT_COMMENTS_TAG } from 'constants/tags';
 import { getGeoRestrictionForClaim } from 'util/geoRestriction';
 
 type State = { claims: any, user: UserState };
@@ -313,6 +314,9 @@ export const selectClaimIsMine = (state: State, claim: ?Claim) => {
 
   return false;
 };
+
+export const selectClaimIsMineForId = (state: State, claimId: string) =>
+  selectClaimIsMine(state, selectClaimForClaimId(state, claimId));
 
 export const selectClaimIsMineForUri = (state: State, rawUri: string) => {
   // Not memoizing this selector because:
@@ -676,6 +680,9 @@ export const selectChannelNameForId = (state: State, claimId: string) => {
   return selectChannelForClaimUri(state, uri);
 };
 
+export const selectNameForClaimId = (state: State, claimId: ClaimId) =>
+  getNameFromClaim(selectClaimForClaimId(state, claimId));
+
 export const selectChannelForClaimUri = createCachedSelector(
   (state, uri, includePrefix) => includePrefix,
   selectClaimForUri,
@@ -734,6 +741,7 @@ export const makeSelectMyChannelPermUrlForName = (name: string) =>
     return matchingClaim ? matchingClaim.permanent_url : null;
   });
 
+// CAUTION: this is purely meant for the GUI now, as it filters out INTERNAL_TAGS.
 export const selectTagsForUri = createCachedSelector(selectMetadataForUri, (metadata: ?GenericMetadata) => {
   return metadata && metadata.tags ? metadata.tags.filter((tag) => !INTERNAL_TAGS.includes(tag)) : [];
 })((state, uri) => String(uri));
@@ -747,6 +755,16 @@ export const selectPreorderTagForUri = createCachedSelector(selectMetadataForUri
   const matchingTag = metadata && metadata.tags && metadata.tags.find((tag) => tag.includes('preorder:'));
   if (matchingTag) return matchingTag.slice(9);
 })((state, uri) => String(uri));
+
+export const selectProtectedContentTagForUri = createSelector(
+  selectMetadataForUri,
+  (metadata: ?GenericMetadata) => metadata && new Set(metadata.tags).has(MEMBERS_ONLY_CONTENT_TAG)
+);
+
+export const selectedRestrictedCommentsChatTagForUri = createSelector(
+  selectMetadataForUri,
+  (metadata: ?GenericMetadata) => metadata && new Set(metadata.tags).has(RESTRICTED_CHAT_COMMENTS_TAG)
+);
 
 export const selectRentalTagForUri = createCachedSelector(selectMetadataForUri, (metadata: ?GenericMetadata) => {
   const matchingTag = metadata && metadata.tags && metadata.tags.find((tag) => tag.includes('rental:'));
@@ -908,29 +926,6 @@ export const selectIsMyChannelCountOverLimit = createSelector(
   }
 );
 
-/**
- * Given a uri of a channel, check if there is an Odysee membership value.
- * @param state
- * @param uri
- * @returns {*}
- */
-export const selectOdyseeMembershipForUri = (state: State, uri: string) => {
-  const claim = selectClaimForUri(state, uri);
-  const channelId = getChannelIdFromClaim(claim);
-  return channelId ? selectOdyseeMembershipForChannelId(state, channelId) : undefined;
-};
-
-/**
- * Given a channel ID, check if there is an Odysee membership value.
- * @param state
- * @param channelId
- * @returns {*}
- */
-export const selectOdyseeMembershipForChannelId = (state: State, channelId: string) => {
-  // TODO: should access via selector, not from `state` directly.
-  return state.user && state.user.odyseeMembershipsPerClaimIds && state.user.odyseeMembershipsPerClaimIds[channelId];
-};
-
 export const selectGeoRestrictionForUri = createCachedSelector(
   selectClaimForUri,
   selectGeoBlockLists,
@@ -978,4 +973,10 @@ export const selectValidRentalPurchaseForClaimId = (state: State, claimId: strin
   });
 
   return validRentalClaimForClaimId;
+};
+
+export const selectIsClaimOdyseeChannelForUri = (state: State, uri: string) => {
+  const claim = selectClaimForUri(state, uri);
+  const claimId = getChannelIdFromClaim(claim);
+  return claimId === ODYSEE_CHANNEL.ID;
 };

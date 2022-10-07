@@ -238,6 +238,18 @@
           }
         }
       }
+      @media (max-width: $breakpoint-small) {
+        .claim-preview__text {
+          overflow: visible;
+          .claim-preview__actions {
+            overflow: visible;
+            .membership-button-wrapper {
+              margin-bottom: 0;
+              margin-left: calc((4rem + (2 * var(--spacing-xs))) * -1);
+            }
+          }
+        }
+      }
     }
   }
 

@@ -12,6 +12,8 @@ function encodeWithSpecialCharEncode(string) {
 }
 
 export const formatLbryUrlForWeb = (uri) => {
+  if (!uri) return uri;
+
   let newUrl = uri.replace('lbry://', '/').replace(/#/g, ':');
   if (newUrl.startsWith('/?')) {
     // This is a lbry link to an internal page ex: lbry://?rewards

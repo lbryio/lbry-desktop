@@ -28,6 +28,7 @@ import { useHistory } from 'react-router';
 import Spinner from 'component/spinner';
 import * as ICONS from 'constants/icons';
 import Icon from 'component/common/icon';
+import PublishProtectedContent from 'component/publishProtectedContent';
 
 type Props = {
   disabled: boolean,
@@ -82,6 +83,7 @@ type Props = {
   isClaimingInitialRewards: boolean,
   claimInitialRewards: () => void,
   hasClaimedInitialRewards: boolean,
+  restrictedToMemberships: ?string,
 };
 
 function PostForm(props: Props) {
@@ -122,6 +124,7 @@ function PostForm(props: Props) {
     isClaimingInitialRewards,
     claimInitialRewards,
     hasClaimedInitialRewards,
+    restrictedToMemberships,
   } = props;
 
   const inEditMode = Boolean(editingURI);
@@ -160,6 +163,7 @@ function PostForm(props: Props) {
   const thumbnailUploaded = uploadThumbnailStatus === THUMBNAIL_STATUSES.COMPLETE && thumbnail;
 
   const formValidLessFile =
+    restrictedToMemberships !== null &&
     name &&
     isNameValid(name) &&
     title &&
@@ -415,6 +419,8 @@ function PostForm(props: Props) {
       {!publishing && (
         <div className={classnames({ 'card--disabled': formDisabled })}>
           <Card actions={<SelectThumbnail />} />
+
+          <PublishProtectedContent claim={myClaimForUri} location={'post'} />
 
           <h2 className="card__title" style={{ marginTop: 'var(--spacing-l)' }}>
             {__('Tags')}

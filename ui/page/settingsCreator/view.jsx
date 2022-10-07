@@ -41,6 +41,10 @@ type Props = {
   updateCreatorSettings: (ChannelClaim, PerChannelSettings) => void,
   doToast: ({ message: string }) => void,
   doOpenModal: (id: string, {}) => void,
+  myChannelClaims: any,
+  listAllMyMembershipTiers: any,
+  channelHasMembershipTiers: any,
+  areCommentsMembersOnly: boolean,
 };
 
 export default function SettingsCreatorPage(props: Props) {
@@ -56,9 +60,15 @@ export default function SettingsCreatorPage(props: Props) {
     fetchCreatorSettings,
     updateCreatorSettings,
     doOpenModal,
+    channelHasMembershipTiers,
+    listAllMyMembershipTiers,
+    myChannelClaims,
+    areCommentsMembersOnly,
   } = props;
 
   const [commentsEnabled, setCommentsEnabled] = React.useState(true);
+  const [commentsMembersOnly, setCommentsMembersOnly] = React.useState(areCommentsMembersOnly);
+  const [livestreamChatMembersOnly, setLivestreamChatMembersOnly] = React.useState(false);
   const [mutedWordTags, setMutedWordTags] = React.useState([]);
   const [moderatorUris, setModeratorUris] = React.useState([]);
   const [minTip, setMinTip] = React.useState(0);
@@ -99,6 +109,8 @@ export default function SettingsCreatorPage(props: Props) {
       setMinSuper(settings.min_tip_amount_super_chat || 0);
       setSlowModeMin(settings.slow_mode_min_gap || 0);
       setMinChannelAgeMinutes(settings.time_since_first_comment || 0);
+      setCommentsMembersOnly(settings.comments_members_only);
+      setLivestreamChatMembersOnly(settings.livestream_chat_members_only || false);
       doSetMutedWordTags(settings.words || []);
     } else {
       if (settings.comments_enabled !== undefined) {
@@ -115,6 +127,12 @@ export default function SettingsCreatorPage(props: Props) {
       }
       if (settings.time_since_first_comment) {
         setMinChannelAgeMinutes(settings.time_since_first_comment);
+      }
+      if (settings.comments_members_only !== undefined) {
+        setCommentsMembersOnly(settings.comments_members_only);
+      }
+      if (settings.livestream_chat_members_only !== undefined) {
+        setLivestreamChatMembersOnly(settings.livestream_chat_members_only);
       }
       if (settings.words) {
         doSetMutedWordTags(settings.words);
@@ -199,6 +217,12 @@ export default function SettingsCreatorPage(props: Props) {
   }, [activeChannelClaim, commentModListDelegates]);
 
   React.useEffect(() => {
+    if (myChannelClaims !== undefined) {
+      listAllMyMembershipTiers();
+    }
+  }, [listAllMyMembershipTiers, myChannelClaims]);
+
+  React.useEffect(() => {
     if (activeChannelClaim) {
       const delegates = moderationDelegatesById[activeChannelClaim.claim_id];
       if (delegates) {
@@ -270,6 +294,30 @@ export default function SettingsCreatorPage(props: Props) {
               isBodyList
               body={
                 <>
+                  {channelHasMembershipTiers && (
+                    <>
+                      <SettingsRow title={__('Make comments members-only')} subtitle={__(HELP.MEMBERS_ONLY_COMMENTS)}>
+                        <FormField
+                          type="checkbox"
+                          name="members_only_comments"
+                          checked={commentsMembersOnly}
+                          onChange={() => setSettings({ comments_members_only: !commentsMembersOnly })}
+                        />
+                      </SettingsRow>
+
+                      <SettingsRow
+                        title={__('Make livestream chat members-only')}
+                        subtitle={__(HELP.MEMBERS_ONLY_CHAT)}
+                      >
+                        <FormField
+                          type="checkbox"
+                          name="livestream_chat_members_only"
+                          checked={livestreamChatMembersOnly}
+                          onChange={() => setSettings({ livestream_chat_members_only: !livestreamChatMembersOnly })}
+                        />
+                      </SettingsRow>
+                    </>
+                  )}
                   <SettingsRow title={__('Enable comments for channel.')}>
                     <FormField
                       type="checkbox"
@@ -439,4 +487,6 @@ const HELP = {
   BLOCKED_WORDS: 'Comments and livestream chat containing these words will be blocked.',
   MODERATORS: 'Moderators can block channels on your behalf. Blocked channels will appear in your "Blocked and Muted" list.',
   MODERATOR_SEARCH: 'Enter a channel name or URL to add as a moderator.\nExamples:\n - @channel\n - @channel#3\n - https://odysee.com/@Odysee:8\n - lbry://@Odysee#8',
+  MEMBERS_ONLY_COMMENTS: 'Only channel members with "Members-only chat" perk can participate in public comments sections.',
+  MEMBERS_ONLY_CHAT: 'Only channel members with "Members-only chat" perk can participate in public livestream chats.',
 };
