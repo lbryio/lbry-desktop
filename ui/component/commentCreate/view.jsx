@@ -753,19 +753,35 @@ export function CommentCreate(props: Props) {
           <div className="section__actions">
             {/* Submit Button */}
             {isReviewingSupportComment ? (
-              <SubmitTipButton
-                {...submitButtonProps}
-                autoFocus
-                disabled={disabled || !minAmountMet}
-                label={
-                  isSubmitting
-                    ? __('Sending...')
-                    : commentFailure && tipAmount === successTip.tipAmount
-                    ? __('Re-submit')
-                    : __('Send')
-                }
-                onClick={handleSupportComment}
-              />
+              activeTab === TAB_LBC ? (
+                <Button
+                  {...submitButtonProps}
+                  autoFocus
+                  disabled={disabled || !minAmountMet}
+                  label={
+                    isSubmitting
+                      ? __('Sending...')
+                      : commentFailure && tipAmount === successTip.tipAmount
+                      ? __('Re-submit')
+                      : __('Send')
+                  }
+                  onClick={handleSupportComment}
+                />
+              ) : (
+                <SubmitCashTipButton
+                  {...submitButtonProps}
+                  autoFocus
+                  disabled={disabled || !minAmountMet}
+                  label={
+                    isSubmitting
+                      ? __('Sending...')
+                      : commentFailure && tipAmount === successTip.tipAmount
+                      ? __('Re-submit')
+                      : __('Send')
+                  }
+                  onClick={handleSupportComment}
+                />
+              )
             ) : tipSelectorOpen ? (
               <Button
                 {...submitButtonProps}
@@ -848,4 +864,4 @@ export function CommentCreate(props: Props) {
   );
 }
 
-const SubmitTipButton = withCreditCard((props: any) => <Button {...props} />);
+const SubmitCashTipButton = withCreditCard((props: any) => <Button {...props} />);
