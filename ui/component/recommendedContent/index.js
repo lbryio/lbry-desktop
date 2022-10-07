@@ -3,7 +3,7 @@ import { withRouter } from 'react-router';
 import { selectClaimForUri } from 'redux/selectors/claims';
 import { doFetchRecommendedContent } from 'redux/actions/search';
 import { selectRecommendedContentForUri, selectIsSearching } from 'redux/selectors/search';
-import { selectOdyseeMembershipIsPremiumPlus } from 'redux/selectors/memberships';
+import { selectUserHasOdyseePremiumPlus } from 'redux/selectors/memberships';
 import RecommendedContent from './view';
 import { selectClientSetting } from 'redux/selectors/settings';
 import * as SETTINGS from 'constants/settings';
@@ -18,7 +18,7 @@ const select = (state, props) => {
     nextRecommendedUri,
     isSearching: selectIsSearching(state),
     searchInLanguage: selectClientSetting(state, SETTINGS.SEARCH_IN_LANGUAGE),
-    hasPremiumPlus: selectOdyseeMembershipIsPremiumPlus(state),
+    hasPremiumPlus: selectUserHasOdyseePremiumPlus(state),
   };
 };
 

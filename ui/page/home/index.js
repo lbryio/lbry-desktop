@@ -5,7 +5,7 @@ import { doFetchActiveLivestreams } from 'redux/actions/livestream';
 import { selectActiveLivestreams, selectFetchingActiveLivestreams } from 'redux/selectors/livestream';
 import { selectFollowedTags } from 'redux/selectors/tags';
 import { selectHomepageFetched, selectUserVerifiedEmail } from 'redux/selectors/user';
-import { selectUserHasActiveOdyseeMembership, selectOdyseeMembershipIsPremiumPlus } from 'redux/selectors/memberships';
+import { selectUserHasActiveOdyseeMembership, selectUserHasOdyseePremiumPlus } from 'redux/selectors/memberships';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import {
   selectShowMatureContent,
@@ -29,7 +29,7 @@ const select = (state) => ({
   hideScheduledLivestreams: selectClientSetting(state, SETTINGS.HIDE_SCHEDULED_LIVESTREAMS),
   homepageOrder: selectClientSetting(state, SETTINGS.HOMEPAGE_ORDER),
   userHasOdyseeMembership: selectUserHasActiveOdyseeMembership(state),
-  hasPremiumPlus: selectOdyseeMembershipIsPremiumPlus(state),
+  hasPremiumPlus: selectUserHasOdyseePremiumPlus(state),
 });
 
 const perform = (dispatch) => ({

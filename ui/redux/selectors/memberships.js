@@ -201,6 +201,20 @@ export const selectMembershipForCreatorIdAndChannelId = createCachedSelector(
   }
 )((state, creatorId, channelId) => `${String(creatorId)}:${String(channelId)}`);
 
+export const selectMyValidOdyseeMemberships = (state: State) =>
+  selectMyValidMembershipsForCreatorId(state, ODYSEE_CHANNEL.ID);
+
+export const selectUserHasOdyseePremiumPlus = createSelector(selectMyValidOdyseeMemberships, (myValidMemberships) => {
+  if (!myValidMemberships) return myValidMemberships;
+
+  // -- For checking my own memberships, it is better to use the result of the 'mine'
+  // call, which is cached and will be more up to date.
+  return myValidMemberships.some(
+    (membership: MembershipTier) =>
+      membership.MembershipDetails.name === MEMBERSHIP_CONSTS.ODYSEE_TIER_NAMES.PREMIUM_PLUS
+  );
+});
+
 export const selectOdyseeMembershipForChannelId = (state: State, channelId: string) =>
   selectMembershipForCreatorIdAndChannelId(state, ODYSEE_CHANNEL.ID, channelId);
 export const selectOdyseeMembershipIsPremiumPlus = (state: State, channelId: string) =>
