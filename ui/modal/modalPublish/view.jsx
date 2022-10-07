@@ -9,7 +9,6 @@ import Nag from 'component/nag';
 
 type Props = {
   closeModal: () => void,
-  clearPublish: () => void,
   navigate: (string) => void,
   uri: string,
   isEdit: boolean,
@@ -19,12 +18,8 @@ type Props = {
 };
 
 class ModalPublishSuccess extends React.PureComponent<Props> {
-  componentDidMount() {
-    const { clearPublish } = this.props;
-    clearPublish();
-  }
   render() {
-    const { closeModal, clearPublish, navigate, uri, isEdit, filePath, lbryFirstError, claim } = this.props;
+    const { closeModal, navigate, uri, isEdit, filePath, lbryFirstError, claim } = this.props;
     //   $FlowFixMe
     const livestream = claim && claim.value && claim.value_type === 'stream' && !claim.value.source;
     let contentLabel;
@@ -80,7 +75,6 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
                   button="primary"
                   label={__('View My Uploads')}
                   onClick={() => {
-                    clearPublish();
                     navigate(`/$/${PAGES.UPLOADS}`);
                     closeModal();
                   }}
@@ -91,7 +85,6 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
                   button="primary"
                   label={__('View Livestream Settings')}
                   onClick={() => {
-                    clearPublish();
                     navigate(`/$/${PAGES.LIVESTREAM}?t=Setup`);
                     closeModal();
                   }}
