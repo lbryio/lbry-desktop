@@ -133,7 +133,7 @@ function ListBlocked(props: Props) {
                   <label>{__('Blocked on behalf of:')}</label>
                   <ul className="section">
                     <div>
-                      <ClaimPreview uri={delegatorUri} hideMenu hideActions type="inline" properties={false} />
+                      <ClaimPreview uri={delegatorUri} hideMenu hideActions hideJoin type="inline" properties={false} />
                       {moderatorTimeoutMap[uri] && getBanInfoElem(moderatorTimeoutMap[uri])}
                     </div>
                     <ChannelBlockButton uri={uri} blockLevel={BLOCK_LEVEL.MODERATOR} creatorUri={delegatorUri} />

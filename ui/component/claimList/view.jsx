@@ -48,6 +48,7 @@ type Props = {
   tileLayout?: boolean,
   searchInLanguage: boolean,
   hideMenu?: boolean,
+  hideJoin?: boolean,
   claimSearchByQuery: { [string]: Array<string> },
   claimsByUri: { [string]: any },
   collectionId?: string,
@@ -101,6 +102,7 @@ export default function ClaimList(props: Props) {
     renderProperties,
     searchInLanguage,
     hideMenu,
+    hideJoin,
     collectionId,
     fypId,
     showNoSourceClaims,
@@ -211,6 +213,7 @@ export default function ClaimList(props: Props) {
       type={type}
       active={activeUri && uri === activeUri}
       hideMenu={hideMenu}
+      hideJoin={hideJoin}
       includeSupportAction={includeSupportAction}
       showUnresolvedClaim={showUnresolvedClaims}
       properties={renderProperties || (type !== 'small' ? undefined : false)}

@@ -80,6 +80,7 @@ type Props = {
   showNullPlaceholder?: boolean,
   includeSupportAction?: boolean,
   hideActions?: boolean,
+  hideJoin?: boolean,
   renderActions?: (Claim) => ?Node,
   wrapperElement?: string,
   hideRepostLabel?: boolean,
@@ -160,6 +161,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     includeSupportAction,
     renderActions,
     hideMenu = false,
+    hideJoin = false,
     // repostUrl,
     isLivestream,
     isLivestreamActive,
@@ -556,7 +558,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
             </div>
             {type !== 'small' && (
               <div className="claim-preview__actions">
-                {isChannelUri && !claimIsMine && (!banState.muted || showUserBlocked) && (
+                {isChannelUri && !claimIsMine && !hideJoin && (!banState.muted || showUserBlocked) && (
                   <div className="membership-button-wrapper">
                     <JoinMembershipButton uri={uri} />
                   </div>

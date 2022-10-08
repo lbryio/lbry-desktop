@@ -132,6 +132,7 @@ export default function BlockList(props: Props) {
           showUnresolvedClaims
           showHiddenByUser
           hideMenu
+          hideJoin
           renderActions={getRenderActions()}
         />
       </div>
