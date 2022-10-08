@@ -161,7 +161,7 @@
   font-size: var(--font-body);
   padding-left: var(--spacing-s);
   padding-right: var(--spacing-s);
-  height: 22px !important;
+  min-height: 22px !important;
 
   &::placeholder {
     color: var(--color-text) !important;

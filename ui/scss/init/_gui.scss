@@ -1194,6 +1194,8 @@ img {
 
       textarea {
         box-shadow: 0 0 0 2px var(--color-border) inset;
+        // overflow-y:scroll;
+        overflow: auto !important;
         &:focus-visible {
           box-shadow: 0 0 0 2px var(--color-primary) inset;
         }
