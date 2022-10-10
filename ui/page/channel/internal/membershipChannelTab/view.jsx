@@ -15,7 +15,7 @@ type Props = {
   uri: string,
   membershipIndex: number,
   // -- redux --
-  purchasedChannelMembership: MembershipTier,
+  purchasedChannelMembership: MembershipTier & CreatorMembership,
   doOpenCancelationModalForMembership: (membership: MembershipTier) => void,
   navigate: (string) => void,
 };
@@ -83,6 +83,12 @@ const MembershipChannelTab = (props: Props) => {
 
             <div className="membership__plan-content">
               <div>
+                <label>{__('Creator revenue')}</label>
+                <span>${(purchasedChannelMembership.NewPrices[0].creator_receives_amount / 100).toFixed(2)}</span>
+
+                <label>{__('Total Monthly Cost')}</label>
+                <span>{`$${(purchasedChannelMembership.NewPrices[0].client_pays / 100).toFixed(2)}`}</span>
+
                 <label>{__('Description')}</label>
                 <span>{membershipDescription}</span>
               </div>
