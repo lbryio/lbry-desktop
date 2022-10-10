@@ -3,6 +3,7 @@ import * as ERRORS from 'constants/errors';
 import * as MODALS from 'constants/modal_types';
 import * as ACTIONS from 'constants/action_types';
 import * as PAGES from 'constants/pages';
+import { PAYWALL } from 'constants/publish';
 import { batchActions } from 'util/batch-actions';
 import { THUMBNAIL_CDN_SIZE_LIMIT_BYTES } from 'config';
 import { doCheckPendingClaims } from 'redux/actions/claims';
@@ -25,6 +26,7 @@ import { CC_LICENSES, COPYRIGHT, OTHER, NONE, PUBLIC_DOMAIN } from 'constants/li
 import { IMG_CDN_PUBLISH_URL } from 'constants/cdn_urls';
 import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
 import { creditsToString } from 'util/format-credits';
+import { parsePurchaseTag, parseRentalTag, TO_SECONDS } from 'util/stripe';
 import Lbry from 'lbry';
 // import LbryFirst from 'extras/lbry-first/lbry-first';
 import { isClaimNsfw, getChannelIdFromClaim } from 'util/claim';
@@ -33,6 +35,10 @@ import {
   SCHEDULED_LIVESTREAM_TAG,
   MEMBERS_ONLY_CONTENT_TAG,
   // RESTRICTED_CHAT_COMMENTS_TAG,
+  PURCHASE_TAG,
+  PURCHASE_TAG_OLD,
+  RENTAL_TAG,
+  RENTAL_TAG_OLD,
 } from 'constants/tags';
 
 function resolveClaimTypeForAnalytics(claim) {
@@ -76,8 +82,13 @@ function resolvePublishPayload(publishData, myClaimForUri, myChannels, preview) 
     thumbnail,
     channel,
     title,
-    contentIsFree,
+    paywall,
     fee,
+    fiatPurchaseFee,
+    fiatPurchaseEnabled,
+    fiatRentalFee,
+    fiatRentalExpiration,
+    fiatRentalEnabled,
     // uri,
     tags,
     // locations,
@@ -122,7 +133,7 @@ function resolvePublishPayload(publishData, myClaimForUri, myChannels, preview) 
     fee_currency?: string,
     fee_amount?: string,
     languages?: Array<string>,
-    tags: Array<string>,
+    tags?: Array<string>,
     locations?: Array<any>,
     blocking: boolean,
     optimize_file?: boolean,
@@ -135,12 +146,32 @@ function resolvePublishPayload(publishData, myClaimForUri, myChannels, preview) 
     locations: [],
     bid: creditsToString(bid),
     languages: [language],
-    tags: tags && tags.map((tag) => tag.name),
     thumbnail_url: thumbnail,
     release_time: nowTimeStamp,
     blocking: true,
     preview: false,
   };
+
+  const tagNames = [];
+  if (tags) {
+    tags.forEach((t) => {
+      if (
+        t.name === RENTAL_TAG ||
+        t.name.startsWith(`${RENTAL_TAG}:`) ||
+        t.name.startsWith(RENTAL_TAG_OLD) ||
+        t.name === PURCHASE_TAG ||
+        t.name.startsWith(`${PURCHASE_TAG}:`) ||
+        t.name.startsWith(PURCHASE_TAG_OLD) ||
+        t.name === SCHEDULED_LIVESTREAM_TAG
+      ) {
+        // Clear these from beginning; repopulate if needed later.
+      } else {
+        tagNames.push(t.name);
+      }
+    });
+  }
+
+  const tagSet = new Set(tagNames);
 
   if (claimId) {
     publishPayload.claim_id = claimId;
@@ -166,7 +197,7 @@ function resolvePublishPayload(publishData, myClaimForUri, myChannels, preview) 
   }
 
   if (useLBRYUploader) {
-    publishPayload.tags.push(LBRY_FIRST_TAG);
+    tagSet.add(LBRY_FIRST_TAG);
   }
 
   // Set release time to the newly edited time.
@@ -179,12 +210,9 @@ function resolvePublishPayload(publishData, myClaimForUri, myChannels, preview) 
     publishPayload.release_time = Number(myClaimForUriEditing.timestamp);
   }
 
-  // Remove internal scheduled tag if it exists.
-  publishPayload.tags = publishPayload.tags.filter((tag) => tag !== SCHEDULED_LIVESTREAM_TAG);
-
   // Add internal scheduled tag if claim is a livestream and is being scheduled in the future.
   if (isLivestreamPublish && publishPayload.release_time > nowTimeStamp) {
-    publishPayload.tags.push(SCHEDULED_LIVESTREAM_TAG);
+    tagSet.add(SCHEDULED_LIVESTREAM_TAG);
   }
 
   if (channelId) {
@@ -195,9 +223,32 @@ function resolvePublishPayload(publishData, myClaimForUri, myChannels, preview) 
     publishPayload.locations = myClaimForUriEditing.value.locations;
   }
 
-  if (!contentIsFree && fee && fee.currency && Number(fee.amount) > 0) {
-    publishPayload.fee_currency = fee.currency;
-    publishPayload.fee_amount = creditsToString(fee.amount);
+  if (paywall === PAYWALL.SDK) {
+    if (fee && fee.currency && Number(fee.amount) > 0) {
+      publishPayload.fee_currency = fee.currency;
+      publishPayload.fee_amount = creditsToString(fee.amount);
+    }
+  }
+
+  if (paywall === PAYWALL.FIAT) {
+    // Purchase
+    if (fiatPurchaseEnabled && fiatPurchaseFee?.currency && Number(fiatPurchaseFee.amount) > 0) {
+      tagSet.add(PURCHASE_TAG);
+      tagSet.add(`${PURCHASE_TAG}:${fiatPurchaseFee.amount.toFixed(2)}`);
+    }
+
+    // Rental
+    if (
+      fiatRentalEnabled &&
+      fiatRentalFee?.currency &&
+      Number(fiatRentalFee.amount) > 0 &&
+      fiatRentalExpiration?.unit &&
+      Number(fiatRentalExpiration.value) > 0
+    ) {
+      const seconds = fiatRentalExpiration.value * (TO_SECONDS[fiatRentalExpiration.unit] || 3600);
+      tagSet.add(RENTAL_TAG);
+      tagSet.add(`${RENTAL_TAG}:${fiatRentalFee.amount.toFixed(2)}:${seconds}`);
+    }
   }
 
   if (optimize) {
@@ -215,22 +266,13 @@ function resolvePublishPayload(publishData, myClaimForUri, myChannels, preview) 
     publishPayload.optimize_file = false;
   }
 
-  // ** Memberships **
-  const publishPayloadTags = new Set(publishPayload.tags);
-
-  const publishTagsHaveRestrictedMemberships = publishPayloadTags.has(MEMBERS_ONLY_CONTENT_TAG);
-
-  // add members only tag if it's restricted to memberships and tag doesn't exist
-  if (restrictedToMemberships && !publishTagsHaveRestrictedMemberships && publishPayload.channel_id) {
-    publishPayloadTags.add(MEMBERS_ONLY_CONTENT_TAG);
+  // Membership restrictions
+  tagSet.delete(MEMBERS_ONLY_CONTENT_TAG);
+  if (restrictedToMemberships && publishPayload.channel_id) {
+    tagSet.add(MEMBERS_ONLY_CONTENT_TAG);
   }
 
-  if (!publishPayload.channel_id || (!restrictedToMemberships && publishTagsHaveRestrictedMemberships)) {
-    publishPayloadTags.delete(MEMBERS_ONLY_CONTENT_TAG);
-  }
-
-  publishPayload.tags = Array.from(publishPayloadTags);
-
+  publishPayload.tags = Array.from(tagSet);
   return publishPayload;
 }
 
@@ -627,7 +669,6 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string, claimType: string
     claim_id: claim_id,
     name,
     bid: Number(amount),
-    contentIsFree: fee.amount === '0',
     author,
     description,
     fee,
@@ -662,12 +703,43 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string, claimType: string
     publishData['channel'] = channelName;
   }
 
+  // Fill purchase/rental details from the claim
+  const rental = parseRentalTag(tags);
+  const purchasePrice = parsePurchaseTag(tags);
+
+  if (rental || purchasePrice) {
+    publishData['paywall'] = PAYWALL.FIAT;
+  } else if (fee.amount && Number(fee.amount) > 0) {
+    publishData['paywall'] = PAYWALL.SDK;
+  } else {
+    publishData['paywall'] = PAYWALL.FREE;
+  }
+
+  if (rental) {
+    publishData.fiatRentalEnabled = true;
+    publishData.fiatRentalFee = {
+      amount: rental.price,
+      currency: 'USD', // TODO: hardcode until we have a direction on currency
+    };
+    publishData.fiatRentalExpiration = {
+      // Don't know which unit the user picked since we store it as 'seconds'
+      // in the tag. Just convert back to days for now.
+      value: rental.expirationTimeInSeconds / TO_SECONDS['days'],
+      unit: 'days',
+    };
+  }
+
+  if (purchasePrice) {
+    publishData.fiatPurchaseEnabled = true;
+    publishData.fiatPurchaseFee = {
+      amount: purchasePrice,
+      currency: 'USD', // TODO: hardcode until we have a direction on currency
+    };
+  }
+
+  // Membership restrictions
   const publishDataTags = new Set(publishData.tags && publishData.tags.map((tag) => tag.name));
-
-  const publishTagsHaveRestrictedMemberships = publishDataTags.has(MEMBERS_ONLY_CONTENT_TAG);
-  // const publishTagsHaveRestrictedChatComments = publishDataTags.has(RESTRICTED_CHAT_COMMENTS_TAG);
-
-  if (publishTagsHaveRestrictedMemberships) {
+  if (publishDataTags.has(MEMBERS_ONLY_CONTENT_TAG)) {
     if (channelId) {
       let protectedMembershipIds = selectProtectedContentMembershipsForClaimId(state, channelId, claim.claim_id);
 
@@ -684,16 +756,6 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string, claimType: string
         : [];
     }
   }
-
-  // if (publishTagsHaveRestrictedChatComments) {
-  //   if (channelId) {
-  //     publishData['restrictCommentsAndChat'] = true;
-  //   } else {
-  //     publishData.tags = publishData.tags
-  //       ? publishData.tags.filter((tag) => tag.name === RESTRICTED_CHAT_COMMENTS_TAG)
-  //       : [];
-  //   }
-  // }
 
   dispatch({ type: ACTIONS.DO_PREPARE_EDIT, data: publishData });
 
@@ -727,8 +789,6 @@ export const doPublish = (success: Function, fail: Function, previewFn?: Functio
 
   const publishPayload = payload || resolvePublishPayload(publishData, myClaimForUri, myChannels, previewFn);
 
-  // return
-
   if (previewFn) {
     return Lbry.publish(publishPayload).then((previewResponse: PublishResponse) => {
       // $FlowIgnore
@@ -737,13 +797,6 @@ export const doPublish = (success: Function, fail: Function, previewFn?: Functio
   }
 
   return Lbry.publish(publishPayload).then((response: PublishResponse) => {
-    // get the upload's claim id
-    // const claimId = response.outputs.find((obj) => {
-    //   // $FlowFixMe
-    //   return obj.claim_id;
-    //   // $FlowFixMe
-    // }).claim_id;
-
     // TODO: Restore LbryFirst
     // if (!useLBRYUploader) {
     return success(response);

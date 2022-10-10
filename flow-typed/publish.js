@@ -1,13 +1,20 @@
 // @flow
 
+declare type Paywall = 'free' | 'fiat' | 'sdk';
+
 declare type UpdatePublishFormData = {
   claim_id?: string,
   filePath?: string,
-  contentIsFree?: boolean,
+  paywall?: Paywall,
   fee?: {
     amount: string,
     currency: string,
   },
+  fiatPurchaseFee?: Price,
+  fiatPurchaseEnabled?: boolean,
+  fiatRentalFee?: Price,
+  fiatRentalExpiration?: Duration,
+  fiatRentalEnabled?: boolean,
   title?: string,
   thumbnail_url?: string,
   uploadThumbnailStatus?: string,
@@ -46,7 +53,7 @@ declare type PublishParams = {
   channel: string,
   channelId?: string,
   title: string,
-  contentIsFree: boolean,
+  paywall: Paywall,
   uri?: string,
   license: ?string,
   licenseUrl: ?string,

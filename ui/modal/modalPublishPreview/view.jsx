@@ -15,6 +15,7 @@ import * as ICONS from 'constants/icons';
 import Icon from 'component/common/icon';
 import { NO_FILE } from 'redux/actions/publish';
 import { INTERNAL_TAGS } from 'constants/tags';
+import { PAYWALL } from 'constants/publish';
 
 type Props = {
   filePath: string | WebFile,
@@ -25,7 +26,7 @@ type Props = {
   channel: ?string,
   bid: ?number,
   uri: ?string,
-  contentIsFree: boolean,
+  paywall: Paywall,
   fee: {
     amount: string,
     currency: string,
@@ -63,7 +64,7 @@ const ModalPublishPreview = (props: Props) => {
     channel,
     bid,
     uri,
-    contentIsFree,
+    paywall,
     fee,
     language,
     releaseTimeEdited,
@@ -187,9 +188,9 @@ const ModalPublishPreview = (props: Props) => {
   }
 
   function getPrice() {
-    if (contentIsFree) {
+    if (paywall === PAYWALL.FREE) {
       return __('Free');
-    } else {
+    } else if (paywall === PAYWALL.SDK) {
       if (fee.currency === 'LBC') {
         return <LbcSymbol postfix={fee.amount} />;
       } else {
