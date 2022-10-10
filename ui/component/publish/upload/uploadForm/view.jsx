@@ -20,6 +20,7 @@ import PublishDescription from 'component/publish/shared/publishDescription';
 import PublishAdditionalOptions from 'component/publish/shared/publishAdditionalOptions';
 import PublishFormErrors from 'component/publish/shared/publishFormErrors';
 import PublishStreamReleaseDate from 'component/publish/shared/publishStreamReleaseDate';
+import PublishPrice from 'component/publish/shared/publishPrice';
 import PublishFile from 'component/publish/upload/publishFile';
 import PublishProtectedContent from 'component/publishProtectedContent';
 
@@ -52,7 +53,6 @@ type Props = {
   language: string,
   releaseTimeError: ?string,
   nsfw: boolean,
-  contentIsFree: boolean,
   fee: {
     amount: string,
     currency: string,
@@ -483,6 +483,8 @@ function UploadForm(props: Props) {
           <Card actions={<SelectThumbnail />} />
 
           <PublishProtectedContent claim={myClaimForUri} location={'upload'} />
+
+          <PublishPrice disabled={formDisabled} />
 
           <h2 className="card__title" style={{ marginTop: 'var(--spacing-l)' }}>
             {__('Tags')}

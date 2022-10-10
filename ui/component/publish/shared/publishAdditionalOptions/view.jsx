@@ -10,7 +10,6 @@ import Card from 'component/common/card';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import { sortLanguageMap } from 'util/default-languages';
 import PublishBid from '../publishBid';
-import PublishPrice from 'component/publish/shared/publishPrice';
 
 // @if TARGET='app'
 // import ErrorText from 'component/common/error-text';
@@ -43,7 +42,6 @@ function PublishAdditionalOptions(props: Props) {
     updatePublishForm,
     showSchedulingOptions,
     disabled,
-    isLivestream,
   } = props;
   const [hideSection, setHideSection] = useState(disabled);
 
@@ -109,11 +107,6 @@ function PublishAdditionalOptions(props: Props) {
                     </div>
                   </div>
                 </div>
-                {!isLivestream && (
-                  <div className="publish-row">
-                    <PublishPrice disabled={!name} />
-                  </div>
-                )}
                 <div className="publish-row">
                   <PublishBid />
                 </div>

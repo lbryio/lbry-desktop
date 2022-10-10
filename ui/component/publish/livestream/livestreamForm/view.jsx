@@ -19,7 +19,7 @@ import ChannelSelect from 'component/channelSelector';
 import classnames from 'classnames';
 import TagsSelect from 'component/tagsSelect';
 import PublishDescription from 'component/publish/shared/publishDescription';
-// import PublishPrice from 'component/publish/shared/publishPrice';
+import PublishPrice from 'component/publish/shared/publishPrice';
 import PublishAdditionalOptions from 'component/publish/shared/publishAdditionalOptions';
 import PublishFormErrors from 'component/publish/shared/publishFormErrors';
 import PublishStreamReleaseDate from 'component/publish/shared/publishStreamReleaseDate';
@@ -53,7 +53,6 @@ type Props = {
   description: ?string,
   language: string,
   nsfw: boolean,
-  contentIsFree: boolean,
   fee: {
     amount: string,
     currency: string,
@@ -539,6 +538,8 @@ function LivestreamForm(props: Props) {
             <Card actions={<SelectThumbnail livestreamData={livestreamData} />} />
 
             <PublishProtectedContent claim={myClaimForUri} location={'livestream'} />
+
+            {publishMode === 'Replay' && <PublishPrice disabled={disabled} />}
 
             <h2 className="card__title" style={{ marginTop: 'var(--spacing-l)' }}>
               {__('Tags')}
