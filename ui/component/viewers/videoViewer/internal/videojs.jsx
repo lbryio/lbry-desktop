@@ -31,6 +31,9 @@ import { platform } from 'util/platform';
 import usePersistedState from 'effects/use-persisted-state';
 import Lbry from 'lbry';
 
+import { getStripeEnvironment } from 'util/stripe';
+const stripeEnvironment = getStripeEnvironment();
+
 require('@silvermine/videojs-chromecast')(videojs);
 require('@silvermine/videojs-airplay')(videojs);
 
@@ -471,6 +474,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
           const protectedLivestreamResponse = await Lbry.get({
             uri: activeLivestreamForChannel.claimUri,
             base_streaming_url: activeLivestreamForChannel.url,
+            environment: stripeEnvironment,
           });
 
           vjsPlayer.src({ HLS_FILETYPE, src: protectedLivestreamResponse.streaming_url });

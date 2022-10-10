@@ -35,6 +35,9 @@ import Comments from 'comments';
 import { selectPrefsReady } from 'redux/selectors/sync';
 import { doAlertWaitingForSync } from 'redux/actions/app';
 
+import { getStripeEnvironment } from 'util/stripe';
+const stripeEnvironment = getStripeEnvironment();
+
 const FETCH_API_FAILED_TO_FETCH = 'Failed to fetch';
 const PROMISE_FULFILLED = 'fulfilled';
 
@@ -103,6 +106,7 @@ export function doCommentList(
             requestor_channel_name: myChannelClaim?.name,
             signature: channelSignature.signature,
             signing_ts: channelSignature.signing_ts,
+            environment: stripeEnvironment,
           }
         : {}),
     })
@@ -424,6 +428,7 @@ export function doHyperChatList(uri: string) {
             requestor_channel_name: myChannelClaim?.name,
             signature: channelSignature.signature,
             signing_ts: channelSignature.signing_ts,
+            environment: stripeEnvironment,
           }
         : {}),
     })
@@ -708,7 +713,7 @@ export function doCommentReact(commentId: string, type: string) {
 
 export function doCommentCreate(uri: string, livestream: boolean, params: CommentSubmitParams) {
   return async (dispatch: Dispatch, getState: GetState) => {
-    const { comment, claim_id, parent_id, txid, payment_intent_id, environment, sticker, is_protected } = params;
+    const { comment, claim_id, parent_id, txid, payment_intent_id, sticker, is_protected } = params;
 
     const state = getState();
     const activeChannelClaim = selectActiveChannelClaim(state);
@@ -804,10 +809,10 @@ export function doCommentCreate(uri: string, livestream: boolean, params: Commen
       signing_ts: signatureData.signing_ts,
       sticker: sticker,
       mentioned_channels: mentionedChannels,
+      environment: stripeEnvironment,
       is_protected: is_protected || undefined,
       ...(txid ? { support_tx_id: txid } : {}),
       ...(payment_intent_id ? { payment_intent_id } : {}),
-      ...(environment ? { environment } : {}),
     })
       .then((result: CommentCreateResponse) => {
         dispatch({
