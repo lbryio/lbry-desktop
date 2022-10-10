@@ -9,6 +9,7 @@ import {
   selectClaimForId,
   selectClaimIsMineForId,
 } from 'redux/selectors/claims';
+import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { getChannelIdFromClaim } from 'util/claim';
 import { ODYSEE_CHANNEL } from 'constants/channels';
 import * as MEMBERSHIP_CONSTS from 'constants/memberships';
@@ -204,16 +205,28 @@ export const selectMembershipForCreatorIdAndChannelId = createCachedSelector(
 export const selectMyValidOdyseeMemberships = (state: State) =>
   selectMyValidMembershipsForCreatorId(state, ODYSEE_CHANNEL.ID);
 
-export const selectUserHasOdyseePremiumPlus = createSelector(selectMyValidOdyseeMemberships, (myValidMemberships) => {
-  if (!myValidMemberships) return myValidMemberships;
+export const selectUserHasOdyseePremiumPlus = createSelector(
+  selectMyValidOdyseeMemberships,
+  selectUserVerifiedEmail,
+  (myValidMemberships, isAuthenticated) => {
+    if (!isAuthenticated) {
+      // TODO: band-aid to at least get ads loading in signed out case.
+      // - The "signed in + no premium" case is still not working. The selector
+      //   need to honor the client's expectation of getting "undefined" for "not
+      //   fetched", and "false" to "did not buy".
+      return false;
+    }
 
-  // -- For checking my own memberships, it is better to use the result of the 'mine'
-  // call, which is cached and will be more up to date.
-  return myValidMemberships.some(
-    (membership: MembershipTier) =>
-      membership.MembershipDetails.name === MEMBERSHIP_CONSTS.ODYSEE_TIER_NAMES.PREMIUM_PLUS
-  );
-});
+    if (!myValidMemberships) return myValidMemberships;
+
+    // -- For checking my own memberships, it is better to use the result of the 'mine'
+    // call, which is cached and will be more up to date.
+    return myValidMemberships.some(
+      (membership: MembershipTier) =>
+        membership.MembershipDetails.name === MEMBERSHIP_CONSTS.ODYSEE_TIER_NAMES.PREMIUM_PLUS
+    );
+  }
+);
 
 export const selectOdyseeMembershipForChannelId = (state: State, channelId: string) =>
   selectMembershipForCreatorIdAndChannelId(state, ODYSEE_CHANNEL.ID, channelId);
