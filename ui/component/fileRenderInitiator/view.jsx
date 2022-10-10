@@ -38,7 +38,9 @@ type Props = {
   costInfo: any,
   inline: boolean,
   renderMode: string,
-  claimWasPurchased: boolean,
+  sdkPaid: boolean,
+  fiatPaid: boolean,
+  fiatRequired: boolean,
   authenticated: boolean,
   videoTheaterMode: boolean,
   isCurrentClaimLive?: boolean,
@@ -48,13 +50,8 @@ type Props = {
   parentCommentId?: string,
   isMarkdownPost?: boolean,
   claimLinkId?: string,
-  purchaseContentTag?: boolean,
-  rentalTag?: { price: number, expirationTimeInSeconds: number },
-  validRentalPurchase?: boolean,
-  purchaseMadeForClaimId?: boolean,
   doUriInitiatePlay: (playingOptions: PlayingUri, isPlayable: boolean) => void,
   doFetchChannelLiveStatus: (string) => void,
-  claimIsMine: boolean,
   protectedMembershipIds?: Array<number>,
   validMembershipIds?: Array<number>,
   protectedContentTag?: string,
@@ -67,10 +64,11 @@ export default function FileRenderInitiator(props: Props) {
     authenticated,
     autoplay,
     channelClaimId,
-    claimIsMine,
     claimLinkId,
     claimThumbnail,
-    claimWasPurchased,
+    sdkPaid,
+    fiatPaid,
+    fiatRequired,
     costInfo,
     customAction,
     doFetchChannelLiveStatus,
@@ -86,15 +84,11 @@ export default function FileRenderInitiator(props: Props) {
     location,
     obscurePreview,
     parentCommentId,
-    purchaseContentTag,
-    purchaseMadeForClaimId,
     renderMode,
-    rentalTag,
     uri,
-    validRentalPurchase,
     videoTheaterMode,
     contentRestrictedFromUser,
-    contentUnlocked,
+    // contentUnlocked,
   } = props;
 
   const { isLiveComment } = React.useContext(ChatCommentContext) || {};
@@ -113,31 +107,28 @@ export default function FileRenderInitiator(props: Props) {
   // check if there is a time or autoplay parameter, if so force autoplay
   const urlTimeParam = href && href.indexOf('t=') > -1;
 
-  const hasBeenPurchased = purchaseContentTag && purchaseMadeForClaimId;
-  const hasBeenRented = rentalTag && validRentalPurchase;
+  const shouldAutoplay = !forceDisableAutoplay && !embedded && (forceAutoplayParam || urlTimeParam || autoplay);
+  const sdkFeeRequired = costInfo && costInfo.cost !== 0;
+  const isFree = costInfo && costInfo.cost === 0 && !fiatRequired;
+  const isRestrictedByMembership = contentRestrictedFromUser;
+  const isAnonymousFiatContent = fiatRequired && !channelClaimId;
 
-  // purchased and rental content
-  const stillNeedsToBePurchased = purchaseContentTag && !purchaseMadeForClaimId && !hasBeenRented;
-  const stillNeedsToBeRented = rentalTag && !validRentalPurchase && !hasBeenPurchased;
+  const cannotViewFile =
+    (!claimIsMine && ((fiatRequired && !fiatPaid) || (sdkFeeRequired && !sdkPaid) || isRestrictedByMembership)) ||
+    (isLivestreamClaim && isCurrentClaimLive && !layountRendered && !isMobile);
+  const canViewFile = !cannotViewFile;
 
-  const notAuthedToView =
-    (stillNeedsToBePurchased || stillNeedsToBeRented || contentRestrictedFromUser) && !claimIsMine;
-
-  const shouldAutoplay =
-    !notAuthedToView && !forceDisableAutoplay && !embedded && (forceAutoplayParam || urlTimeParam || autoplay);
-
-  const isFree = costInfo && costInfo.cost === 0;
-  const canViewFile =
-    contentUnlocked &&
-    (isLivestreamClaim ? (layountRendered || isMobile) && isCurrentClaimLive : isFree || claimWasPurchased);
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode) || isCurrentClaimLive;
 
   const renderUnsupported = RENDER_MODES.UNSUPPORTED_IN_THIS_APP.includes(renderMode);
+
   const disabled =
-    notAuthedToView ||
+    isRestrictedByMembership ||
+    isAnonymousFiatContent ||
     (isLivestreamClaim && !isCurrentClaimLive) ||
     renderUnsupported ||
-    (!fileInfo && insufficientCredits && !claimWasPurchased);
+    (!fileInfo && insufficientCredits && !sdkPaid);
+
   const shouldRedirect = !authenticated && !isFree;
 
   function doAuthRedirect() {
@@ -203,7 +194,7 @@ export default function FileRenderInitiator(props: Props) {
     if (
       (canViewFile || forceAutoplayParam) &&
       ((shouldAutoplay && (!videoOnPage || forceAutoplayParam) && isPlayable) ||
-        (!notAuthedToView && !embedded && RENDER_MODES.AUTO_RENDER_MODES.includes(renderMode)))
+        (!embedded && RENDER_MODES.AUTO_RENDER_MODES.includes(renderMode)))
     ) {
       viewFile();
     }
@@ -213,7 +204,7 @@ export default function FileRenderInitiator(props: Props) {
   once content is playing, let the appropriate <FileRender> take care of it...
   but for playables, always render so area can be used to fill with floating player
    */
-  if (isPlaying && !isPlayable && canViewFile && !collectionId && !notAuthedToView) {
+  if (isPlaying && !isPlayable && canViewFile && !collectionId) {
     return null;
   }
 
@@ -228,7 +219,6 @@ export default function FileRenderInitiator(props: Props) {
               'content__cover--disabled': disabled,
               'content__cover--theater-mode': theaterMode && !isMobile,
               'card__media--nsfw': obscurePreview,
-              'content__cover--purchasable': notAuthedToView,
             })
       }
     >
@@ -243,7 +233,7 @@ export default function FileRenderInitiator(props: Props) {
           href="https://lbry.com/get"
         />
       ) : (
-        !claimWasPurchased &&
+        !sdkPaid &&
         insufficientCredits && (
           <Nag
             type="helpful"
@@ -255,7 +245,7 @@ export default function FileRenderInitiator(props: Props) {
         )
       )}
 
-      {canViewFile && (!disabled || (embedded && isLivestreamClaim)) && (
+      {(!disabled || (embedded && isLivestreamClaim)) && (
         <Button
           requiresAuth={shouldRedirect}
           onClick={handleClick}

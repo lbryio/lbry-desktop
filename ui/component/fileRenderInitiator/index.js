@@ -3,11 +3,9 @@ import { doUriInitiatePlay } from 'redux/actions/content';
 import {
   selectClaimWasPurchasedForUri,
   selectClaimForUri,
-  selectPurchaseTagForUri,
-  selectPurchaseMadeForClaimId,
   selectClaimIsMine,
-  selectRentalTagForUri,
-  selectValidRentalPurchaseForClaimId,
+  selectIsFiatPaidForUri,
+  selectIsFiatRequiredForUri,
 } from 'redux/selectors/claims';
 import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import * as SETTINGS from 'constants/settings';
@@ -44,7 +42,9 @@ const select = (state, props) => {
     claimId,
     claimIsMine: selectClaimIsMine(state, claim),
     claimThumbnail: getThumbnailFromClaim(claim),
-    claimWasPurchased: selectClaimWasPurchasedForUri(state, uri),
+    sdkPaid: selectClaimWasPurchasedForUri(state, uri),
+    fiatPaid: selectIsFiatPaidForUri(state, uri),
+    fiatRequired: selectIsFiatRequiredForUri(state, uri),
     costInfo: selectCostInfoForUri(state, uri),
     fileInfo: makeSelectFileInfoForUri(uri)(state),
     insufficientCredits: selectInsufficientCreditsForUri(state, uri),
@@ -52,11 +52,7 @@ const select = (state, props) => {
     isLivestreamClaim: isStreamPlaceholderClaim(claim),
     isPlaying: selectFileIsPlayingOnPage(state, uri),
     obscurePreview: selectShouldObscurePreviewForUri(state, uri),
-    purchaseContentTag: selectPurchaseTagForUri(state, uri),
-    purchaseMadeForClaimId: selectPurchaseMadeForClaimId(state, claimId),
     renderMode: makeSelectFileRenderModeForUri(uri)(state),
-    rentalTag: selectRentalTagForUri(state, uri),
-    validRentalPurchase: selectValidRentalPurchaseForClaimId(state, claimId),
     contentRestrictedFromUser: claimId && selectIsProtectedContentLockedFromUserForId(state, claimId),
     contentUnlocked: claimId && selectNoRestrictionOrUserIsMemberForContentClaimId(state, claimId),
   };

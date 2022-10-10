@@ -1,41 +1,38 @@
 // @flow
+import React from 'react';
+
+import './style.scss';
+import BusyIndicator from 'component/common/busy-indicator';
 import { Form } from 'component/common/form';
 import * as STRIPE from 'constants/stripe';
 import Button from 'component/button';
 import Card from 'component/common/card';
-import React from 'react';
-
 import withCreditCard from 'hocs/withCreditCard';
-
 import { getStripeEnvironment } from 'util/stripe';
+import { secondsToDhms } from 'util/time';
+
 const stripeEnvironment = getStripeEnvironment();
+
+type RentalTagParams = { price: number, expirationTimeInSeconds: number };
 
 // prettier-ignore
 const STRINGS = {
   purchase: {
-    title: 'Purchase Your Content',
-    subtitle: "After completing the purchase you will have instant access to your content that doesn't expire.",
-    button: 'Purchase your content for %currency%%amount%',
-    add_card: '%add_a_card% to purchase content',
+    title: 'Confirm Purchase',
+    button: 'Purchase for %currency%%amount%',
   },
   preorder: {
-    title: 'Pre-order Your Content',
-    subtitle: 'This content is not available yet but you can pre-order it now so you can access it as soon as it goes live.',
-    button: 'Pre-order your content for %currency%%amount%',
-    add_card: '%add_a_card% to preorder content',
+    title: 'Confirm Pre-order',
+    // subtitle: 'This content is not available yet but you can pre-order it now so you can access it as soon as it goes live.',
+    button: 'Pre-order for %currency%%amount%',
   },
   rental: {
-    title: 'Rent Your Content',
-    subtitle: 'You can rent this content and it will be available for %humanReadableTime%',
-    button: 'Rent your content for %currency%%amount%',
-    add_card: '%add_a_card% to preorder content',
+    title: 'Confirm Rental',
+    button: 'Rent %rental_duration% for %currency%%amount%',
   },
   purchaseOrRent: {
-    title: 'Purchase Or Rent Your Content',
-    subtitle: 'You can purchase this content for access that doesn\'t ' +
-      'expire for %currency%%purchasePrice%, or rent for %humanReadableTime% for %currency%%rentPrice%.',
-    button: 'Purchase your content for %currency%%amount%',
-    add_card: '%add_a_card% to purchase or rent your content',
+    title: 'Confirm Purchase/Rental',
+    button: 'Purchase for %currency%%amount%',
   },
 };
 
@@ -64,15 +61,16 @@ type Props = {
     stripe: ?string,
     preferredCurrency: string,
     type: string,
-    expiredTime: ?string,
+    expiredTime: ?number,
     ?(any) => Promise<void>,
     ?(any) => void
   ) => void,
   purchaseMadeForClaimId: ?boolean,
   doCheckIfPurchasedClaimId: (string) => void,
   preferredCurrency: string,
-  tags: any,
-  humanReadableTime: ?string,
+  preorderTag: number,
+  purchaseTag: ?number,
+  rentalTag: RentalTagParams,
 };
 
 export default function PreorderAndPurchaseContentCard(props: Props) {
@@ -86,27 +84,27 @@ export default function PreorderAndPurchaseContentCard(props: Props) {
     preferredCurrency,
     doCheckIfPurchasedClaimId,
     claimId,
-    tags,
-    humanReadableTime,
+    rentalTag,
+    purchaseTag,
+    preorderTag,
   } = props;
 
-  const [tipAmount, setTipAmount] = React.useState(0);
-  const [rentTipAmount, setRentTipAmount] = React.useState(0);
   const [waitingForBackend, setWaitingForBackend] = React.useState(false);
+  const tags = { rentalTag, purchaseTag, preorderTag };
 
-  // set the purchase amount once the preorder tag is selected
-  React.useEffect(() => {
-    if (tags.purchaseTag && tags.rentalTag) {
-      setTipAmount(tags.purchaseTag);
-      setRentTipAmount(tags.rentalTag.price);
-    } else if (tags.purchaseTag) {
-      setTipAmount(tags.purchaseTag);
-    } else if (tags.rentalTag) {
-      setTipAmount(tags.rentalTag.price);
-    } else if (tags.preorderTag) {
-      setTipAmount(tags.preorderTag);
-    }
-  }, [tags]);
+  let tipAmount = 0;
+  let rentTipAmount = 0;
+
+  if (tags.purchaseTag && tags.rentalTag) {
+    tipAmount = tags.purchaseTag;
+    rentTipAmount = tags.rentalTag.price;
+  } else if (tags.purchaseTag) {
+    tipAmount = tags.purchaseTag;
+  } else if (tags.rentalTag) {
+    tipAmount = tags.rentalTag.price;
+  } else if (tags.preorderTag) {
+    tipAmount = tags.preorderTag;
+  }
 
   let transactionType;
   if (tags.purchaseTag && tags.rentalTag) {
@@ -119,8 +117,9 @@ export default function PreorderAndPurchaseContentCard(props: Props) {
     transactionType = 'preorder';
   }
 
-  const STR = STRINGS[transactionType];
-  const RENT_STRINGS = STRINGS['rental'];
+  const rentDuration = tags?.rentalTag?.expirationTimeInSeconds
+    ? secondsToDhms(tags.rentalTag.expirationTimeInSeconds)
+    : '';
 
   const fiatSymbol = STRIPE.CURRENCY[preferredCurrency].symbol;
 
@@ -149,7 +148,6 @@ export default function PreorderAndPurchaseContentCard(props: Props) {
 
     let expirationTime = itsARental ? tags.rentalTag.expirationTimeInSeconds : undefined;
 
-    // hit backend to send tip
     preOrderPurchase(
       tipParams,
       !activeChannelId,
@@ -166,58 +164,55 @@ export default function PreorderAndPurchaseContentCard(props: Props) {
 
   return (
     <Form onSubmit={handleSubmit}>
-      {!waitingForBackend && (
-        <Card
-          title={__(STR.title)}
-          className={'preorder-content-modal'}
-          subtitle={
-            <div className="section__subtitle">
-              {__(STR.subtitle, {
-                humanReadableTime,
-                currency: fiatSymbol,
-                purchasePrice: tipAmount.toString(),
-                rentPrice: tags.rentalTag?.price,
-              })}
+      <Card
+        title={__(STRINGS[transactionType].title)}
+        className={'fiat-order'}
+        actions={
+          <>
+            <div className="fiat-order__actions">
+              {waitingForBackend ? (
+                <BusyIndicator message={__('Processing order...')} />
+              ) : (
+                <SubmitArea
+                  handleSubmit={handleSubmit}
+                  label={STRINGS[transactionType].button}
+                  fiatSymbol={fiatSymbol}
+                  tipAmount={tipAmount}
+                  tags={tags}
+                  rentLabel={STRINGS['rental'].button}
+                  rentTipAmount={rentTipAmount}
+                  rentDuration={rentDuration}
+                />
+              )}
             </div>
-          }
-          actions={
-            <SubmitArea
-              handleSubmit={handleSubmit}
-              STR={STR}
-              fiatSymbol={fiatSymbol}
-              tipAmount={tipAmount}
-              tags={tags}
-              RENT_STRINGS={RENT_STRINGS}
-              rentTipAmount={rentTipAmount}
-            />
-          }
-        />
-      )}
-      {/* processing payment card */}
-      {waitingForBackend && (
-        <Card
-          title={__(STR.title)}
-          className={'preorder-content-modal-loading'}
-          subtitle={<div className="section__subtitle">{__('Processing your purchase...')}</div>}
-        />
-      )}
+          </>
+        }
+      />
     </Form>
   );
 }
 
-const SubmitButton = (props: any) => <Button autoFocus button="primary" {...props} />;
+const SubmitButton = (props: any) => <Button button="primary" {...props} />;
 
 const SubmitArea = withCreditCard((props: any) => (
   <>
     <div className="handle-submit-area">
       <SubmitButton
         onClick={() => props.handleSubmit()}
-        label={__(props.STR.button, { currency: props.fiatSymbol, amount: props.tipAmount.toString() })}
+        label={__(props.label, {
+          currency: props.fiatSymbol,
+          amount: props.tipAmount.toString(),
+          rental_duration: props.rentDuration,
+        })}
       />
       {props.tags.purchaseTag && props.tags.rentalTag && (
         <SubmitButton
           onClick={() => props.handleSubmit('rent')}
-          label={__(props.RENT_STRINGS.button, { currency: props.fiatSymbol, amount: props.rentTipAmount.toString() })}
+          label={__(props.rentLabel, {
+            currency: props.fiatSymbol,
+            amount: props.rentTipAmount.toString(),
+            rental_duration: props.rentDuration,
+          })}
         />
       )}
     </div>

@@ -17,6 +17,10 @@ import {
   selectCanonicalUrlForUri,
   selectClaimForUri,
   selectClaimIsNsfwForUri,
+  selectPurchaseMadeForClaimId,
+  selectValidRentalPurchaseForClaimId,
+  selectClaimIdForUri,
+  selectIsFiatRequiredForUri,
 } from 'redux/selectors/claims';
 import { makeSelectFileInfoForUri, selectFileInfosByOutpoint } from 'redux/selectors/file_info';
 import {
@@ -448,20 +452,41 @@ export function doPlayUri(
     const isMine = selectClaimIsMineForUri(state, uri);
     const fileInfo = makeSelectFileInfoForUri(uri)(state);
     const claimWasPurchased = selectClaimWasPurchasedForUri(state, uri);
+    const claimId = selectClaimIdForUri(state, uri);
 
     let costInfo = selectCostInfoForUri(state, uri);
     if (!costInfo) {
       costInfo = await dispatch(doFetchCostInfoForUri(uri));
     }
+
     const cost = costInfo && Number(costInfo.cost);
     const instantPurchaseEnabled = selectClientSetting(state, SETTINGS.INSTANT_PURCHASE_ENABLED);
     const instantPurchaseMax = selectClientSetting(state, SETTINGS.INSTANT_PURCHASE_MAX);
+    const fiatRequired = selectIsFiatRequiredForUri(state, uri);
+    const isFree = (!cost || cost === 0) && !fiatRequired;
+
+    const paid = {
+      sdk: selectClaimWasPurchasedForUri(state, uri),
+      fiat: selectPurchaseMadeForClaimId(state, claimId),
+      fiat_rent: selectValidRentalPurchaseForClaimId(state, claimId),
+    };
 
     function beginGetFile() {
       dispatch(doPurchaseUriWrapper(uri, cost, cb));
     }
 
     function attemptPlay(instantPurchaseMax = null) {
+      if (fiatRequired && !isMine) {
+        if (!paid.fiat && !paid.fiat_rent) {
+          if (!hideFailModal) {
+            dispatch(doOpenModal(MODALS.PREORDER_AND_PURCHASE_CONTENT, { uri }));
+          }
+        } else {
+          beginGetFile();
+        }
+        return;
+      }
+
       // If you have a file_list entry, you have already purchased the file
       if (
         !isMine &&
@@ -475,7 +500,7 @@ export function doPlayUri(
       }
     }
 
-    if (cost === 0 || skipCostCheck) {
+    if (isFree || skipCostCheck) {
       beginGetFile();
       return;
     }

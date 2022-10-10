@@ -1,6 +1,12 @@
 import { connect } from 'react-redux';
-import { selectClaimForUri, selectPreorderTagForUri } from 'redux/selectors/claims';
+import {
+  selectClaimForUri,
+  selectPreorderTagForUri,
+  selectPurchaseTagForUri,
+  selectRentalTagForUri,
+} from 'redux/selectors/claims';
 import { doHideModal } from 'redux/actions/app';
+import { doCheckIfPurchasedClaimId } from 'redux/actions/stripe';
 import { preOrderPurchase } from 'redux/actions/wallet';
 import { selectPreferredCurrency } from 'redux/selectors/settings';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
@@ -29,13 +35,16 @@ const select = (state, props) => {
     channelClaimId,
     tipChannelName,
     preferredCurrency: selectPreferredCurrency(state),
-    preorderTag: selectPreorderTagForUri(state, props.uri),
+    preorderTag: selectPreorderTagForUri(state, uri),
+    purchaseTag: selectPurchaseTagForUri(state, uri),
+    rentalTag: selectRentalTagForUri(state, uri),
   };
 };
 
 const perform = {
   doHideModal,
   preOrderPurchase,
+  doCheckIfPurchasedClaimId,
 };
 
 export default withRouter(connect(select, perform)(PreorderAndPurchaseContent));

@@ -12,15 +12,19 @@ type Props = {
   streamingUrl?: string,
   triggerAnalyticsView: (string, number) => Promise<any>,
   claimRewards: () => void,
+  claimIsMine: boolean,
   costInfo: any,
-  claimWasPurchased: boolean,
+  sdkPaid: boolean,
   contentRestrictedFromUser: boolean,
+  isFiatRequired: boolean,
+  isFiatPaid: ?boolean,
 };
 
 export default function FileRenderInline(props: Props) {
   const {
     claimRewards,
-    claimWasPurchased,
+    sdkPaid,
+    claimIsMine,
     costInfo,
     fileInfo,
     isPlaying,
@@ -29,10 +33,15 @@ export default function FileRenderInline(props: Props) {
     triggerAnalyticsView,
     uri,
     contentRestrictedFromUser,
+    isFiatRequired,
+    isFiatPaid,
   } = props;
 
   const [playTime, setPlayTime] = useState();
-  const isFree = !costInfo || (costInfo.cost !== undefined && costInfo.cost === 0);
+
+  const isSdkFree = !costInfo || (costInfo.cost !== undefined && costInfo.cost === 0);
+  const isPaymentCleared = claimIsMine || ((isSdkFree || sdkPaid) && (!isFiatRequired || isFiatPaid));
+
   const isReadyToView = fileInfo && fileInfo.completed;
   const isReadyToPlay = streamingUrl || isReadyToView;
 
@@ -64,7 +73,7 @@ export default function FileRenderInline(props: Props) {
     }
   }, [setPlayTime, claimRewards, triggerAnalyticsView, isReadyToPlay, playTime, uri]);
 
-  if (!isPlaying || (!isFree && !claimWasPurchased) || contentRestrictedFromUser) {
+  if (!isPlaying || !isPaymentCleared || contentRestrictedFromUser) {
     return null;
   }
 

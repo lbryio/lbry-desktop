@@ -1,0 +1,17 @@
+@import '~ui/scss/init/breakpoints';
+
+.fiat-order {
+  //max-width: 580px;  ??
+}
+
+.fiat-order__actions {
+  button {
+    margin-top: var(--spacing-s);
+    margin-right: var(--spacing-s);
+  }
+}
+
+.fiat-order__footer {
+  font-size: var(--font-small);
+  margin-top: var(--spacing-s);
+}

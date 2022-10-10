@@ -366,11 +366,6 @@
   }
 }
 
-.content__cover--purchasable {
-  opacity: 0.6;
-  pointer-events: none;
-}
-
 .content__cover {
   @include thumbnail;
   position: relative;
