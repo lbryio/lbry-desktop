@@ -9,9 +9,9 @@ import { buildURI } from 'util/lbryURI';
 
 import ChannelThumbnail from 'component/channelThumbnail';
 import * as ICONS from 'constants/icons';
-import TruncatedText from 'component/common/truncated-text';
 import Yrbl from 'component/yrbl';
 import Spinner from 'component/spinner';
+import UriIndicator from 'component/uriIndicator';
 
 type Props = {
   // -- redux --
@@ -104,11 +104,7 @@ function PledgesTab(props: Props) {
                       </td>
 
                       <td>
-                        <TruncatedText
-                          navigate={creatorChannelPath + '?view=membership'}
-                          text={membership.MembershipDetails.channel_name}
-                          lines={1}
-                        />
+                        <UriIndicator uri={creatorChannelUri} link />
                       </td>
 
                       <td>{membership.MembershipDetails.name}</td>
