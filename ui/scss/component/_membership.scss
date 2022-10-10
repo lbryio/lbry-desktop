@@ -606,18 +606,18 @@
 
   .join-membership__empty {
     .header--no-memberships {
-      font-size: 1.2rem;
-      line-height: 1.25;
-      margin-top: var(--spacing-s);
-      margin-bottom: 16px;
+      font-size: var(--font-large);
+      font-weight: var(--font-weight-bold);
+      padding-top: var(--spacing-s);
+      margin-bottom: var(--spacing-s);
     }
 
     .button {
       margin-top: var(--spacing-m);
     }
 
-    h2 {
-      line-height: 29px;
+    p {
+      margin-right: var(--spacing-s);
     }
   }
 
