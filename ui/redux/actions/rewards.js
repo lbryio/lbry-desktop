@@ -191,3 +191,6 @@ export const doUserViewRateList = () => async (dispatch: Dispatch) =>
   await Lbryio.call('user_rewards', 'view_rate').then((data) =>
     dispatch({ type: ACTIONS.USER_VIEW_RATE_COMPLETED, data })
   );
+
+export const doClaimRefereeReward = (referralCode: string) => (dispatch: Dispatch) =>
+  dispatch(doClaimRewardType(rewards.TYPE_REFEREE));

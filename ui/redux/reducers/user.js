@@ -320,6 +320,7 @@ reducers[ACTIONS.USER_SET_REFERRER_FAIL] = (state, action) =>
   Object.assign({}, state, {
     referrerSetIsPending: false,
     referrerSetError: action.data.error.message,
+    referrerSet: null,
   });
 
 reducers[ACTIONS.USER_SET_REFERRER_RESET] = (state) =>

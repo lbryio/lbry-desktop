@@ -1001,7 +1001,6 @@
   "Create Account": "Create Account",
   "Welcome!": "Welcome!",
   "We've followed your invitee for you. Check them out!": "We've followed your invitee for you. Check them out!",
-  "Congrats": "Congrats",
   "Transcoding this %size% MB file should take under %processTime% %units%.": "Transcoding this %size% MB file should take under %processTime% %units%.",
   "Your video may not be the best format. Use MP4s in H264/AAC format and a friendly bitrate (under 8 Mbps) for more reliable streaming.": "Your video may not be the best format. Use MP4s in H264/AAC format and a friendly bitrate (under 8 Mbps) for more reliable streaming.",
   "Your video has a bitrate over 8 Mbps. We suggest transcoding to provide viewers the best experience.": "Your video has a bitrate over 8 Mbps. We suggest transcoding to provide viewers the best experience.",
@@ -1624,7 +1623,7 @@
   "Confirm Your Age": "Confirm Your Age",
   "I confirm I am over 18 years old.": "I confirm I am over 18 years old.",
   "This is only for regulatory compliance and the data will not be stored.": "This is only for regulatory compliance and the data will not be stored.",
-  "Whoa": "Whoa",
+  "Whoa!": "Whoa!",
   "You've already claimed your referrer, but we've followed this channel for you.": "You've already claimed your referrer, but we've followed this channel for you.",
   "You've already claimed your referrer.": "You've already claimed your referrer.",
   "Something went wrong with your invite link. You can set and claim your invite reward after signing in.": "Something went wrong with your invite link. You can set and claim your invite reward after signing in.",
@@ -2625,5 +2624,10 @@
   "Only USD banking currently supported, please check back later!": "Only USD banking currently supported, please check back later!",
   "Bank account connected": "Bank account connected",
   "Only \"%channel_name%\" members are able to chat right now. Enjoy!": "Only \"%channel_name%\" members are able to chat right now. Enjoy!",
+  "You're invited!": "You're invited!",
+  "Finish verification": "Finish verification",
+  "Create an account": "Create an account",
+  "%channel_name% invites you to the party!": "%channel_name% invites you to the party!",
+
   "--end--": "--end--"
 }
