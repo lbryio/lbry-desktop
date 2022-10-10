@@ -7,6 +7,7 @@ import {
   doSeeAllNotifications,
 } from 'redux/actions/notifications';
 import { selectUser, selectUserVerifiedEmail } from 'redux/selectors/user';
+import { doGetMembershipSupportersList } from 'redux/actions/memberships';
 import NotificationHeaderButton from './view';
 
 const select = (state) => ({
@@ -21,6 +22,7 @@ const perform = (dispatch, ownProps) => ({
   seeNotification: ([id]) => dispatch(doSeeNotifications([id])),
   deleteNotification: (id) => dispatch(doDeleteNotification(id)),
   doSeeAllNotifications: () => dispatch(doSeeAllNotifications()),
+  doGetMembershipSupportersList: () => dispatch(doGetMembershipSupportersList()),
 });
 
 export default connect(select, perform)(NotificationHeaderButton);

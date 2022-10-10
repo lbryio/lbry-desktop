@@ -32,6 +32,7 @@ type Props = {
   seeNotification: (Array<number>) => void,
   deleteNotification: (number) => void,
   doSeeAllNotifications: () => void,
+  doGetMembershipSupportersList: () => void,
 };
 
 export default function NotificationHeaderButton(props: Props) {
@@ -44,6 +45,7 @@ export default function NotificationHeaderButton(props: Props) {
     seeNotification,
     deleteNotification,
     doSeeAllNotifications,
+    doGetMembershipSupportersList,
   } = props;
   const list = notifications.slice(0, 20);
   const { push } = useHistory();
@@ -105,21 +107,13 @@ export default function NotificationHeaderButton(props: Props) {
 
   if (!notificationsEnabled) return null;
 
-  function handleNotificationClick(notification, disableAutoplay) {
-    const { id, is_read } = notification;
-
-    if (!is_read) {
-      seeNotification([id]);
-      readNotification([id]);
-    }
-  }
-
   function menuEntry(notification) {
     const { id, active_at, notification_rule, notification_parameters, is_read, type } = notification;
 
-    let channelUrl;
-    let icon;
-    let disableAutoplay = false;
+    let channelUrl,
+      icon,
+      disableAutoplay = false,
+      notificationAction;
     switch (notification_rule) {
       case RULE.CREATOR_SUBSCRIBER:
         icon = <Icon icon={ICONS.SUBSCRIBE} sectionIcon />;
@@ -145,6 +139,7 @@ export default function NotificationHeaderButton(props: Props) {
         break;
       case RULE.NEW_MEMBER:
         icon = <Icon icon={ICONS.MEMBERSHIP} sectionIcon />;
+        notificationAction = doGetMembershipSupportersList;
         break;
       case RULE.WEEKLY_WATCH_REMINDER:
       case RULE.DAILY_WATCH_AVAILABLE:
@@ -160,6 +155,16 @@ export default function NotificationHeaderButton(props: Props) {
         icon = <Icon icon={ICONS.NOTIFICATION} sectionIcon />;
     }
 
+    function handleNotificationClick() {
+      const { id, is_read: isRead } = notification;
+
+      if (!isRead) {
+        seeNotification([id]);
+        readNotification([id]);
+        if (notificationAction) notificationAction();
+      }
+    }
+
     let channelName;
     if (channelUrl) {
       try {
@@ -169,7 +174,7 @@ export default function NotificationHeaderButton(props: Props) {
 
     return (
       <NavLink
-        onClick={() => handleNotificationClick(notification, disableAutoplay)}
+        onClick={handleNotificationClick}
         key={id}
         to={{
           ...getNotificationLocation(notification),

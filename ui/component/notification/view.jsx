@@ -26,12 +26,21 @@ const CommentsReplies = lazyImport(() => import('component/commentsReplies' /* w
 type Props = {
   menuButton: boolean,
   notification: WebNotification,
-  deleteNotification: () => void,
-  readNotification: () => void,
+  // -- redux --
+  doDeleteNotification: (id: number) => void,
+  doReadNotifications: (id: number) => void,
+  doGetMembershipSupportersList: () => void,
 };
 
 export default function Notification(props: Props) {
-  const { menuButton = false, notification, readNotification, deleteNotification } = props;
+  const {
+    menuButton = false,
+    notification,
+    // -- redux --
+    doReadNotifications,
+    doDeleteNotification,
+    doGetMembershipSupportersList,
+  } = props;
 
   const { notification_rule, notification_parameters, is_read } = notification;
 
@@ -53,8 +62,7 @@ export default function Notification(props: Props) {
     </UriIndicator>
   );
 
-  let channelUrl;
-  let icon;
+  let channelUrl, icon, notificationAction;
   switch (notification_rule) {
     case RULE.CREATOR_SUBSCRIBER:
       icon = <Icon icon={ICONS.SUBSCRIBE} sectionIcon />;
@@ -78,6 +86,7 @@ export default function Notification(props: Props) {
       break;
     case RULE.NEW_MEMBER:
       icon = <Icon icon={ICONS.MEMBERSHIP} sectionIcon />;
+      notificationAction = doGetMembershipSupportersList;
       break;
     case RULE.WEEKLY_WATCH_REMINDER:
     case RULE.DAILY_WATCH_AVAILABLE:
@@ -103,8 +112,9 @@ export default function Notification(props: Props) {
   const navLinkProps = { to: notificationLink, onClick: (e) => e.stopPropagation() };
 
   function handleNotificationClick() {
-    if (!is_read) readNotification();
+    if (!is_read) doReadNotifications(notification.id);
     if (menuButton && notificationLink) push(notificationLink);
+    if (notificationAction) notificationAction();
   }
 
   const Wrapper = menuButton
@@ -163,7 +173,7 @@ export default function Notification(props: Props) {
                 className="notification__markSeen"
                 onClick={(e) => {
                   e.stopPropagation();
-                  readNotification();
+                  doReadNotifications(notification.id);
                 }}
               />
             )}
@@ -185,7 +195,7 @@ export default function Notification(props: Props) {
               <Icon size={18} icon={ICONS.MORE_VERTICAL} />
             </MenuButton>
             <MenuList className="menu__list">
-              <MenuItem className="menu__link" onSelect={() => deleteNotification()}>
+              <MenuItem className="menu__link" onSelect={() => doDeleteNotification(notification.id)}>
                 <Icon aria-hidden icon={ICONS.DELETE} />
                 {__('Delete')}
               </MenuItem>
