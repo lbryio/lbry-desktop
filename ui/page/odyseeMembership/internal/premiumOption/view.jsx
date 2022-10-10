@@ -56,6 +56,8 @@ const PremiumOption = (props: Props) => {
     const membership = membershipView;
     const { Membership, MembershipDetails, Subscription } = membership;
 
+    const membershipStillValid = isCancelled && Subscription.current_period_end * 1000 > Date.now();
+
     return (
       <Wrapper name={MembershipDetails.name}>
         <h4 className="membership_info">
@@ -69,7 +71,7 @@ const PremiumOption = (props: Props) => {
           )}
         </h4>
 
-        {!isCancelled && (
+        {membershipStillValid && (
           <h4 className="membership_info">
             <b>{__('Still Valid Until')}:</b> {formatDateToMonthDayAndYear(Subscription.current_period_end * 1000)}
           </h4>

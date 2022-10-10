@@ -10,7 +10,7 @@ import {
   selectMyEditedCollections,
   selectMyUnpublishedCollections,
 } from 'redux/selectors/collections';
-import { selectUserHasActiveOdyseeMembership } from 'redux/selectors/memberships';
+import { selectUserHasValidOdyseeMembership } from 'redux/selectors/memberships';
 
 const select = (state, props) => {
   return {
@@ -21,7 +21,7 @@ const select = (state, props) => {
     myEditedCollections: selectMyEditedCollections(state),
     isPublishing: selectFeaturedChannelsPublishing(state),
     isFetchingMyCollections: selectIsFetchingMyCollections(state),
-    userHasOdyseeMembership: selectUserHasActiveOdyseeMembership(state),
+    userHasOdyseeMembership: selectUserHasValidOdyseeMembership(state),
   };
 };
 

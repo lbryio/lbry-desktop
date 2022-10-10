@@ -35,7 +35,7 @@ import { doCheckIfPurchasedClaimId } from 'redux/actions/stripe';
 import FilePage from './view';
 import { doMembershipContentforStreamClaimId, doMembershipMine } from 'redux/actions/memberships';
 import {
-  selectMembershipMineData,
+  selectMembershipMineFetched,
   selectNoRestrictionOrUserIsMemberForContentClaimId,
 } from 'redux/selectors/memberships';
 
@@ -62,7 +62,7 @@ const select = (state, props) => {
     isMature: selectClaimIsNsfwForUri(state, uri),
     isUriPlaying: selectIsUriCurrentlyPlaying(state, uri),
     linkedCommentId: urlParams.get(LINKED_COMMENT_QUERY_PARAM),
-    myActiveMemberships: selectMembershipMineData(state),
+    myMembershipsFetched: selectMembershipMineFetched(state),
     obscureNsfw: !selectShowMatureContent(state),
     playingCollectionId,
     position: selectContentPositionForUri(state, uri),

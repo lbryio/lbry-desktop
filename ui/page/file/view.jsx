@@ -66,7 +66,7 @@ type Props = {
   threadCommentId?: string,
   uri: string,
   videoTheaterMode: boolean,
-  myActiveMemberships: ?MembershipMineDataByKey,
+  myMembershipsFetched: boolean,
   doMembershipMine: () => void,
   protectedMembershipIds?: Array<number>,
   validMembershipIds?: Array<number>,
@@ -107,7 +107,7 @@ export default function FilePage(props: Props) {
     isLivestream,
     isUriPlaying,
     location,
-    myActiveMemberships,
+    myMembershipsFetched,
     position,
     preorderTag,
     purchaseTag,
@@ -161,10 +161,10 @@ export default function FilePage(props: Props) {
   }, []);
 
   React.useEffect(() => {
-    if (myActiveMemberships === undefined) {
+    if (!myMembershipsFetched) {
       doMembershipMine();
     }
-  }, [doMembershipMine, myActiveMemberships]);
+  }, [doMembershipMine, myMembershipsFetched]);
 
   React.useEffect(() => {
     const aPurchaseOrPreorder = purchaseTag || preorderTag || rentalTag;

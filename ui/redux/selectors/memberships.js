@@ -9,7 +9,6 @@ import {
   selectClaimForId,
   selectClaimIsMineForId,
 } from 'redux/selectors/claims';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
 import { getChannelIdFromClaim } from 'util/claim';
 import { ODYSEE_CHANNEL } from 'constants/channels';
 import * as MEMBERSHIP_CONSTS from 'constants/memberships';
@@ -18,11 +17,8 @@ type State = { claims: any, user: any, memberships: any };
 
 const selectState = (state: State) => state.memberships || {};
 
-export const selectMembershipMineData = (state: State) => selectState(state).membershipMineByKey;
+export const selectMembershipMineData = (state: State) => selectState(state).membershipMineByCreatorId;
 export const selectMembershipMineFetching = (state: State) => selectState(state).membershipMineFetching;
-export const selectMyActiveMembershipsById = (state: State) => selectMembershipMineData(state)?.activeById;
-export const selectMyCanceledMembershipsById = (state: State) => selectMembershipMineData(state)?.canceledById;
-export const selectMyPurchasedMembershipsById = (state: State) => selectMembershipMineData(state)?.purchasedById;
 export const selectMembershipFetchingIdsByChannel = (state: State) => selectState(state).fetchingIdsByCreatorId;
 export const selectPendingBuyMembershipIds = (state: State) => selectState(state).pendingBuyIds;
 export const selectPendingCancelMembershipIds = (state: State) => selectState(state).pendingCancelIds;
@@ -87,35 +83,30 @@ export const selectMonthlyIncomeForChannelId = createSelector(selectSupportersFo
 
 export const selectMembershipMineFetched = (state: State) => selectMembershipMineData(state) !== undefined;
 
-export const selectMyActiveMembershipsForChannelClaimId = (state: State, id: string) => {
-  const byId = selectMyActiveMembershipsById(state);
-  return byId && byId[id];
-};
+export const selectMyValidMembershipsById = createSelector(selectMembershipMineData, (myMembershipsByCreatorId) => {
+  if (!myMembershipsByCreatorId) return myMembershipsByCreatorId;
 
-export const selectMyValidMembershipsById = createSelector(
-  selectMyPurchasedMembershipsById,
-  (purchasedMembershipsById) => {
-    const validMembershipsById = {};
+  const validMembershipsById = {};
 
-    for (const creatorChannelId in purchasedMembershipsById) {
-      const purchasedCreatorMemberships = purchasedMembershipsById[creatorChannelId];
+  for (const creatorChannelId in myMembershipsByCreatorId) {
+    const purchasedCreatorMemberships = myMembershipsByCreatorId[creatorChannelId];
 
-      for (const membership of purchasedCreatorMemberships) {
-        if (membership.Subscription.current_period_end * 1000 > Date.now()) {
-          validMembershipsById[creatorChannelId] = new Set(validMembershipsById[creatorChannelId]);
-          validMembershipsById[creatorChannelId].add(membership);
-          // $FlowFixMe
-          validMembershipsById[creatorChannelId] = Array.from(validMembershipsById[creatorChannelId]);
-        }
+    for (const membership of purchasedCreatorMemberships) {
+      if (membership.Subscription.current_period_end * 1000 > Date.now()) {
+        validMembershipsById[creatorChannelId] = new Set(validMembershipsById[creatorChannelId]);
+        validMembershipsById[creatorChannelId].add(membership);
+        // $FlowFixMe
+        validMembershipsById[creatorChannelId] = Array.from(validMembershipsById[creatorChannelId]);
       }
     }
-
-    return validMembershipsById;
   }
-);
 
+  return validMembershipsById;
+});
+
+// -- From Creators = Removes Odysee memberships
 export const selectMyPurchasedMembershipsFromCreatorsById = (state: State) => {
-  const purchasedMembershipsById = selectMyPurchasedMembershipsById(state);
+  const purchasedMembershipsById = selectMembershipMineData(state);
   if (!purchasedMembershipsById) return purchasedMembershipsById;
 
   const purchasedMembershipsFromCreatorsById = Object.assign({}, purchasedMembershipsById);
@@ -128,8 +119,12 @@ export const selectMyPurchasedMembershipsFromCreators = createSelector(
   (myPurchasedCreatorMemberships) => myPurchasedCreatorMemberships && Object.values(myPurchasedCreatorMemberships)
 );
 
-export const selectMyValidMembershipsForCreatorId = (state: State, id: string) =>
-  selectMyValidMembershipsById(state)[id];
+export const selectMyValidMembershipsForCreatorId = (state: State, id: string) => {
+  const myValidMembershipsById = selectMyValidMembershipsById(state);
+  if (myValidMembershipsById === undefined) return undefined;
+
+  return myValidMembershipsById[id] || [];
+};
 
 export const selectUserHasValidMembershipForCreatorId = (state: State, id: string) => {
   const validMemberships = selectMyValidMembershipsForCreatorId(state, id);
@@ -139,10 +134,9 @@ export const selectUserHasValidMembershipForCreatorId = (state: State, id: strin
 export const selectUserHasValidOdyseeMembership = (state: State) =>
   selectUserHasValidMembershipForCreatorId(state, ODYSEE_CHANNEL.ID);
 
-export const selectMyValidMembershipIds = (state: State) => {
-  const validMembershipsById = selectMyValidMembershipsById(state);
-
+export const selectMyValidMembershipIds = createSelector(selectMyValidMembershipsById, (validMembershipsById) => {
   const validMembershipIds = new Set([]);
+
   for (const creatorId in validMembershipsById) {
     const memberships = validMembershipsById[creatorId];
 
@@ -153,19 +147,36 @@ export const selectMyValidMembershipIds = (state: State) => {
 
   // $FlowFixMe
   return validMembershipIds.size ? Array.from(validMembershipIds) : null;
-};
+});
 
-export const selectMyActiveOdyseeMembership = (state: State) =>
-  selectMyActiveMembershipsForChannelClaimId(state, ODYSEE_CHANNEL.ID);
-export const selectUserHasActiveOdyseeMembership = (state: State, id: string) =>
-  Boolean(selectMyActiveOdyseeMembership(state));
+export const selectMyCanceledMembershipsById = createSelector(selectMembershipMineData, (myMembershipsByCreatorId) => {
+  if (!myMembershipsByCreatorId) return myMembershipsByCreatorId;
+
+  const canceledMembershipsById = {};
+
+  for (const creatorChannelId in myMembershipsByCreatorId) {
+    const purchasedCreatorMemberships = myMembershipsByCreatorId[creatorChannelId];
+
+    for (const membership of purchasedCreatorMemberships) {
+      if (membership.Subscription.status === 'canceled') {
+        canceledMembershipsById[creatorChannelId] = new Set(canceledMembershipsById[creatorChannelId]);
+        canceledMembershipsById[creatorChannelId].add(membership);
+        // $FlowFixMe
+        canceledMembershipsById[creatorChannelId] = Array.from(canceledMembershipsById[creatorChannelId]);
+      }
+    }
+  }
+
+  return canceledMembershipsById;
+});
 
 export const selectMyCanceledMembershipsForChannelClaimId = (state: State, id: string) => {
   const byId = selectMyCanceledMembershipsById(state);
   return byId && byId[id];
 };
+
 export const selectMyPurchasedMembershipsForChannelClaimId = (state: State, id: string) => {
-  const byId = selectMyPurchasedMembershipsById(state);
+  const byId = selectMembershipMineData(state);
   return byId && byId[id];
 };
 
@@ -208,28 +219,22 @@ export const selectMembershipForCreatorOnlyIdAndChannelId = (state: State, creat
 export const selectMyValidOdyseeMemberships = (state: State) =>
   selectMyValidMembershipsForCreatorId(state, ODYSEE_CHANNEL.ID);
 
-export const selectUserHasOdyseePremiumPlus = createSelector(
+export const selectMyOdyseeMembershipsOnAutoRenew = createSelector(
   selectMyValidOdyseeMemberships,
-  selectUserVerifiedEmail,
-  (myValidMemberships, isAuthenticated) => {
-    if (!isAuthenticated) {
-      // TODO: band-aid to at least get ads loading in signed out case.
-      // - The "signed in + no premium" case is still not working. The selector
-      //   need to honor the client's expectation of getting "undefined" for "not
-      //   fetched", and "false" to "did not buy".
-      return false;
-    }
-
-    if (!myValidMemberships) return myValidMemberships;
-
-    // -- For checking my own memberships, it is better to use the result of the 'mine'
-    // call, which is cached and will be more up to date.
-    return myValidMemberships.some(
-      (membership: MembershipTier) =>
-        membership.MembershipDetails.name === MEMBERSHIP_CONSTS.ODYSEE_TIER_NAMES.PREMIUM_PLUS
-    );
-  }
+  (myValidMemberships) =>
+    myValidMemberships && myValidMemberships.filter((membership) => membership.Membership.auto_renew)
 );
+
+export const selectUserHasOdyseePremiumPlus = createSelector(selectMyValidOdyseeMemberships, (myValidMemberships) => {
+  if (!myValidMemberships) return myValidMemberships;
+
+  // -- For checking my own memberships, it is better to use the result of the 'mine'
+  // call, which is cached and will be more up to date.
+  return myValidMemberships.some(
+    (membership: MembershipTier) =>
+      membership.MembershipDetails.name === MEMBERSHIP_CONSTS.ODYSEE_TIER_NAMES.PREMIUM_PLUS
+  );
+});
 
 export const selectOdyseeMembershipForChannelId = (state: State, channelId: string) =>
   selectMembershipForCreatorIdAndChannelId(state, ODYSEE_CHANNEL.ID, channelId);

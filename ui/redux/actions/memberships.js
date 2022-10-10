@@ -102,29 +102,7 @@ export const doMembershipMine = () => async (dispatch: Dispatch, getState: GetSt
   dispatch({ type: ACTIONS.GET_MEMBERSHIP_MINE_START });
 
   return await Lbryio.call('v2/membership', 'mine', { environment: stripeEnvironment }, 'post')
-    .then((response) => {
-      const membershipMine: MembershipMineDataByKey = { activeById: {}, canceledById: {}, purchasedById: {} };
-
-      for (const membership of response) {
-        const creatorClaimId = membership.MembershipDetails.channel_id;
-
-        const isActive = membership.Membership.auto_renew;
-        const { activeById, canceledById, purchasedById } = membershipMine;
-
-        if (isActive) {
-          const currentActive = activeById[creatorClaimId];
-          activeById[creatorClaimId] = currentActive ? [...currentActive, membership] : [membership];
-        } else {
-          const currentCanceled = canceledById[creatorClaimId];
-          canceledById[creatorClaimId] = currentCanceled ? [...currentCanceled, membership] : [membership];
-        }
-
-        const currentPurchased = purchasedById[creatorClaimId];
-        purchasedById[creatorClaimId] = currentPurchased ? [...currentPurchased, membership] : [membership];
-      }
-
-      dispatch({ type: ACTIONS.GET_MEMBERSHIP_MINE_DATA_SUCCESS, data: membershipMine });
-    })
+    .then((response: MembershipTiers) => dispatch({ type: ACTIONS.GET_MEMBERSHIP_MINE_DATA_SUCCESS, data: response }))
     .catch((err) => dispatch({ type: ACTIONS.GET_MEMBERSHIP_MINE_DATA_FAIL, data: err }));
 };
 

@@ -20,6 +20,7 @@ import PremiumOption from './internal/premiumOption';
 type Props = {
   // -- redux --
   mineFetched: boolean,
+  autoRenewMemberships: ?MembershipTiers,
   activeMemberships: ?MembershipTiers,
   purchasedMemberships: ?MembershipTiers,
   canceledMemberships: ?MembershipTiers,
@@ -32,6 +33,7 @@ const OdyseeMembershipPage = (props: Props) => {
   const {
     // -- redux --
     mineFetched,
+    autoRenewMemberships,
     activeMemberships,
     purchasedMemberships,
     canceledMemberships,
@@ -119,32 +121,24 @@ const OdyseeMembershipPage = (props: Props) => {
             </Card>
           )}
 
-          {activeMemberships && (
+          {autoRenewMemberships && autoRenewMemberships.length > 0 && (
             <Card title={__('Your Active Memberships')}>
-              {activeMemberships.length === 0 ? (
-                <h4>{__('You currently have no active memberships')}</h4>
-              ) : (
-                activeMemberships.map((membership) => (
-                  <PremiumOption key={membership.MembershipDetails.name} membershipView={membership} />
-                ))
-              )}
+              {autoRenewMemberships.map((membership) => (
+                <PremiumOption key={membership.MembershipDetails.name} membershipView={membership} />
+              ))}
             </Card>
           )}
 
           {canceledMemberships && (
-            <Card
-              className="premium-explanation-text"
-              title={__('Canceled Memberships')}
-              body={
-                canceledMemberships.length === 0 ? (
-                  <h4>{__('You currently have no canceled memberships')}</h4>
-                ) : (
-                  canceledMemberships.map((membership) => (
-                    <PremiumOption key={membership.MembershipDetails.name} membershipView={membership} isCancelled />
-                  ))
-                )
-              }
-            />
+            <Card title={__('Canceled Memberships')}>
+              {canceledMemberships.length === 0 ? (
+                <h4>{__('You currently have no canceled memberships')}</h4>
+              ) : (
+                canceledMemberships.map((membership) => (
+                  <PremiumOption key={membership.MembershipDetails.name} membershipView={membership} isCancelled />
+                ))
+              )}
+            </Card>
           )}
         </div>
       </Card>

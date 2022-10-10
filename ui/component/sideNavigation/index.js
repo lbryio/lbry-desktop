@@ -10,7 +10,7 @@ import { selectClientSetting, selectHomepageData } from 'redux/selectors/setting
 import { doOpenModal, doSignOut } from 'redux/actions/app';
 import { selectUnseenNotificationCount } from 'redux/selectors/notifications';
 import { selectPurchaseUriSuccess } from 'redux/selectors/claims';
-import { selectUserHasActiveOdyseeMembership } from 'redux/selectors/memberships';
+import { selectUserHasValidOdyseeMembership } from 'redux/selectors/memberships';
 
 import SideNavigation from './view';
 
@@ -25,7 +25,7 @@ const select = (state) => ({
   homepageData: selectHomepageData(state),
   homepageOrder: selectClientSetting(state, SETTINGS.HOMEPAGE_ORDER),
   homepageOrderApplyToSidebar: selectClientSetting(state, SETTINGS.HOMEPAGE_ORDER_APPLY_TO_SIDEBAR),
-  hasMembership: selectUserHasActiveOdyseeMembership(state),
+  hasMembership: selectUserHasValidOdyseeMembership(state),
 });
 
 export default connect(select, {

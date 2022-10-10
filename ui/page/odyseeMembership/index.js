@@ -2,7 +2,8 @@ import { connect } from 'react-redux';
 import { doMembershipList } from 'redux/actions/memberships';
 import {
   selectMembershipMineFetched,
-  selectMyActiveMembershipsForChannelClaimId,
+  selectMyOdyseeMembershipsOnAutoRenew,
+  selectMyValidMembershipsForCreatorId,
   selectMyPurchasedMembershipsForChannelClaimId,
   selectMyCanceledMembershipsForChannelClaimId,
   selectOdyseeMembershipTiers,
@@ -14,7 +15,8 @@ import OdyseeMembership from './view';
 
 const select = (state) => ({
   mineFetched: selectMembershipMineFetched(state),
-  activeMemberships: selectMyActiveMembershipsForChannelClaimId(state, ODYSEE_CHANNEL.ID),
+  autoRenewMemberships: selectMyOdyseeMembershipsOnAutoRenew(state),
+  activeMemberships: selectMyValidMembershipsForCreatorId(state, ODYSEE_CHANNEL.ID),
   purchasedMemberships: selectMyPurchasedMembershipsForChannelClaimId(state, ODYSEE_CHANNEL.ID),
   canceledMemberships: selectMyCanceledMembershipsForChannelClaimId(state, ODYSEE_CHANNEL.ID),
   membershipOptions: selectOdyseeMembershipTiers(state),

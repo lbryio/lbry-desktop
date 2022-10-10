@@ -132,7 +132,7 @@ declare type MembershipNewStripePriceDetails = {
   fees: {
     stripe_fee: number,
     odysee_fee: number,
-  }
+  },
 };
 
 declare type MembershipPriceDetails = {
@@ -210,8 +210,7 @@ declare type MembershipAddTierParams = {
   membership_id?: ?number,
 };
 
-declare type MembershipMineKeys = 'activeById' | 'canceledById' | 'purchasedById';
-declare type MembershipMineDataByKey = { [key: MembershipMineKeys]: { [id: ClaimId]: MembershipTiers } };
+declare type MembershipMineDataByCreatorId = { [id: ClaimId]: MembershipTiers };
 
 declare type MembershipIdByChannelId = {
   [channelId: string]: string,
