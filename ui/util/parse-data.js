@@ -1,6 +1,6 @@
 // JSON parser
 const parseJson = (data, filters = []) => {
-  const list = data.map(item => {
+  const list = data.map((item) => {
     const temp = {};
     // Apply filters
     Object.entries(item).forEach(([key, value]) => {
@@ -17,7 +17,7 @@ const parseJson = (data, filters = []) => {
 // https://gist.github.com/btzr-io/55c3450ea3d709fc57540e762899fb85
 const parseCsv = (data, filters = []) => {
   // Get items for header
-  const getHeaders = item => {
+  const getHeaders = (item) => {
     const list = [];
     // Apply filters
     Object.entries(item).forEach(([key]) => {
@@ -28,13 +28,16 @@ const parseCsv = (data, filters = []) => {
   };
 
   // Get rows content
-  const getData = list =>
+  const getData = (list) =>
     list
-      .map(item => {
+      .map((item) => {
         const row = [];
         // Apply filters
         Object.entries(item).forEach(([key, value]) => {
-          if (!filters.includes(key)) row.push(value);
+          if (!filters.includes(key)) {
+            const sanitizedValue = '"' + String(value).replaceAll('"', '\\"') + '"';
+            row.push(sanitizedValue);
+          }
         });
         // return rows
         return row.join(',');
@@ -50,8 +53,8 @@ const parseData = (data, format, filters = []) => {
   const valid = data && data[0] && format;
   // Pick a format
   const formats = {
-    csv: list => parseCsv(list, filters),
-    json: list => parseJson(list, filters),
+    csv: (list) => parseCsv(list, filters),
+    json: (list) => parseJson(list, filters),
   };
 
   // Return parsed data: JSON || CSV
