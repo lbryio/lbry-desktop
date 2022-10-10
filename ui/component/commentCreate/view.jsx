@@ -281,7 +281,7 @@ export function CommentCreate(props: Props) {
   }
 
   function handleJoinMembersOnlyChat() {
-    return doOpenModal(MODALS.JOIN_MEMBERSHIP, { uri, fileUri, membersOnly: true });
+    return doOpenModal(MODALS.JOIN_MEMBERSHIP, { uri, fileUri });
   }
 
   function handleSelectTipComment(tab: string) {

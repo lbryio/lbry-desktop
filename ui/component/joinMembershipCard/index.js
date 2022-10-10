@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+
 import {
   selectMembershipTiersForChannelUri,
   selectProtectedContentMembershipsForContentClaimId,
@@ -8,11 +9,18 @@ import {
 } from 'redux/selectors/memberships';
 import { selectChannelNameForUri, selectChannelClaimIdForUri, selectClaimForUri } from 'redux/selectors/claims';
 import { selectHasSavedCard } from 'redux/selectors/stripe';
+import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
+import {
+  selectLivestreamChatMembersOnlyForChannelId,
+  selectMembersOnlyCommentsForChannelId,
+} from 'redux/selectors/comments';
+
 import { doMembershipList, doMembershipBuy } from 'redux/actions/memberships';
 import { doGetCustomerStatus } from 'redux/actions/stripe';
-import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
 import { doToast } from 'redux/actions/notifications';
+
 import { getChannelIdFromClaim, isStreamPlaceholderClaim } from 'util/claim';
+
 import PreviewPage from './view';
 
 const select = (state, props) => {
@@ -23,17 +31,16 @@ const select = (state, props) => {
   const channelId = getChannelIdFromClaim(claim);
   const isLivestream = isStreamPlaceholderClaim(claim);
 
-  const membersOnly =
-    props.membersOnly && claim && selectNoRestrictionOrUserIsMemberForContentClaimId(state, claim.claim_id);
+  const isLiveMembersOnly = channelId && selectLivestreamChatMembersOnlyForChannelId(state, channelId);
+  const areCommentsMembersOnly = channelId && selectMembersOnlyCommentsForChannelId(state, channelId);
 
-  let unlockableTierIds;
-  if (fileClaimId) {
-    if (membersOnly) {
-      unlockableTierIds = selectMembersOnlyChatMembershipIdsForCreatorId(state, channelId);
-    } else {
-      unlockableTierIds = selectProtectedContentMembershipsForContentClaimId(state, fileClaimId);
-    }
-  }
+  // -- If content is restricted, get the cheapest plan for the content instead
+  const contentUnlocked = fileClaimId && selectNoRestrictionOrUserIsMemberForContentClaimId(state, fileClaimId);
+  const membersOnly = contentUnlocked && (isLivestream ? isLiveMembersOnly : areCommentsMembersOnly);
+
+  const unlockableTierIds = membersOnly
+    ? channelId && selectMembersOnlyChatMembershipIdsForCreatorId(state, channelId)
+    : fileClaimId && selectProtectedContentMembershipsForContentClaimId(state, fileClaimId);
 
   return {
     activeChannelClaim: selectActiveChannelClaim(state),
