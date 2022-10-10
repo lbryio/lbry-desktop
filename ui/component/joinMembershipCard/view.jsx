@@ -13,7 +13,7 @@ type Props = {
   uri: string,
   doHideModal: () => void,
   membershipIndex: number,
-  passedTier?: CreatorMembership,
+  passedTierIndex?: number,
   shouldNavigate?: boolean,
   membersOnly?: boolean,
   // -- redux --
@@ -37,7 +37,7 @@ const JoinMembershipCard = (props: Props) => {
     uri,
     doHideModal,
     membershipIndex = 0,
-    passedTier,
+    passedTierIndex,
     shouldNavigate,
     membersOnly,
     // -- redux --
@@ -60,7 +60,7 @@ const JoinMembershipCard = (props: Props) => {
 
   const { push } = useHistory();
 
-  const skipToConfirmation = Boolean(passedTier);
+  const skipToConfirmation = Boolean(passedTierIndex);
 
   const cheapestPlanIndex = React.useMemo(() => {
     if (cheapestMembership) {
@@ -72,8 +72,10 @@ const JoinMembershipCard = (props: Props) => {
   }, [cheapestMembership, creatorMemberships]);
 
   const [isOnConfirmationPage, setConfirmationPage] = React.useState(skipToConfirmation);
-  const [selectedMembershipIndex, setMembershipIndex] = React.useState(cheapestPlanIndex || membershipIndex);
-  const selectedTier = passedTier || (creatorMemberships && creatorMemberships[selectedMembershipIndex]);
+  const [selectedMembershipIndex, setMembershipIndex] = React.useState(
+    passedTierIndex || cheapestPlanIndex || membershipIndex
+  );
+  const selectedTier = creatorMemberships && creatorMemberships[selectedMembershipIndex];
 
   function handleJoinMembership() {
     if (!selectedTier || isPurchasing.current) return;
@@ -137,8 +139,8 @@ const JoinMembershipCard = (props: Props) => {
   }, [doGetCustomerStatus, hasSavedCard]);
 
   const pageProps = React.useMemo(() => {
-    return { uri, selectedTier };
-  }, [selectedTier, uri]);
+    return { uri, selectedTier, selectedMembershipIndex };
+  }, [selectedMembershipIndex, selectedTier, uri]);
 
   if (window.pendingMembership || creatorMemberships === undefined || hasSavedCard === undefined) {
     return (
@@ -167,7 +169,6 @@ const JoinMembershipCard = (props: Props) => {
               <PreviewPage
                 {...pageProps}
                 handleSelect={() => setConfirmationPage(true)}
-                selectedMembershipIndex={selectedMembershipIndex}
                 setMembershipIndex={setMembershipIndex}
                 unlockableTierIds={unlockableTierIds}
                 membersOnly={membersOnly}

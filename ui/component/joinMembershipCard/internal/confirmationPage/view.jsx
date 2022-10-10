@@ -14,6 +14,7 @@ import withCreditCard from 'hocs/withCreditCard';
 
 type Props = {
   selectedTier: CreatorMembership,
+  selectedMembershipIndex: number,
   onCancel: () => void,
   // -- redux --
   channelName: string,
@@ -23,7 +24,15 @@ type Props = {
 };
 
 const ConfirmationPage = (props: Props) => {
-  const { selectedTier, onCancel, channelName, purchasePending, preferredCurrency, incognito } = props;
+  const {
+    selectedTier,
+    selectedMembershipIndex,
+    onCancel,
+    channelName,
+    purchasePending,
+    preferredCurrency,
+    incognito,
+  } = props;
 
   const total = (selectedTier.NewPrices[0].Price.amount / 100).toFixed(2);
   const creatorRevenue = (selectedTier.NewPrices[0].creator_receives_amount / 100).toFixed(2);
@@ -102,7 +111,7 @@ const ConfirmationPage = (props: Props) => {
               </p>
             )}
 
-            <SubmitButton modalState={{ passedTier: selectedTier }} />
+            <SubmitButton modalState={{ passedTierIndex: selectedMembershipIndex }} />
             <Button button="link" label={__('Cancel')} onClick={onCancel} />
           </div>
 
