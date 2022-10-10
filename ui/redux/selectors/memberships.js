@@ -202,6 +202,9 @@ export const selectMembershipForCreatorIdAndChannelId = createCachedSelector(
   }
 )((state, creatorId, channelId) => `${String(creatorId)}:${String(channelId)}`);
 
+export const selectMembershipForCreatorOnlyIdAndChannelId = (state: State, creatorId: string, channelId: string) =>
+  creatorId !== ODYSEE_CHANNEL.ID && selectMembershipForCreatorIdAndChannelId(state, creatorId, channelId);
+
 export const selectMyValidOdyseeMemberships = (state: State) =>
   selectMyValidMembershipsForCreatorId(state, ODYSEE_CHANNEL.ID);
 
