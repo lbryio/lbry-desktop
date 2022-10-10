@@ -23,6 +23,7 @@ import {
 import * as CLAIM from 'constants/claim';
 import { INTERNAL_TAGS, MEMBERS_ONLY_CONTENT_TAG, RESTRICTED_CHAT_COMMENTS_TAG } from 'constants/tags';
 import { getGeoRestrictionForClaim } from 'util/geoRestriction';
+import { parsePurchaseTag, parseRentalTag } from 'util/stripe';
 
 type State = { claims: any, user: UserState };
 
@@ -747,8 +748,7 @@ export const selectTagsForUri = createCachedSelector(selectMetadataForUri, (meta
 })((state, uri) => String(uri));
 
 export const selectPurchaseTagForUri = createCachedSelector(selectMetadataForUri, (metadata: ?GenericMetadata) => {
-  const matchingTag = metadata && metadata.tags && metadata.tags.find((tag) => tag.includes('purchase:'));
-  if (matchingTag) return matchingTag.slice(9);
+  return parsePurchaseTag(metadata?.tags);
 })((state, uri) => String(uri));
 
 export const selectPreorderTagForUri = createCachedSelector(selectMetadataForUri, (metadata: ?GenericMetadata) => {
@@ -767,19 +767,7 @@ export const selectedRestrictedCommentsChatTagForUri = createSelector(
 );
 
 export const selectRentalTagForUri = createCachedSelector(selectMetadataForUri, (metadata: ?GenericMetadata) => {
-  const matchingTag = metadata && metadata.tags && metadata.tags.find((tag) => tag.includes('rental:'));
-  if (matchingTag) {
-    const trimmedTag = matchingTag.slice(7);
-
-    const tags = trimmedTag.split(':');
-
-    if (tags && tags.length === 2) {
-      return {
-        price: tags[0],
-        expirationTimeInSeconds: tags[1],
-      };
-    }
-  }
+  return parseRentalTag(metadata?.tags);
 })((state, uri) => String(uri));
 
 export const selectPreorderContentClaimIdForUri = createCachedSelector(

@@ -21,6 +21,8 @@ export const PREFERENCE_EMBED = 'c:preference-embed';
 export const SCHEDULED_LIVESTREAM_TAG = 'c:scheduled-livestream';
 export const LBRY_FIRST_TAG = 'c:lbry-first';
 export const DISABLE_DOWNLOAD_BUTTON_TAG = 'c:disable-download';
+export const PURCHASE_TAG = 'c:purchase';
+export const RENTAL_TAG = 'c:rental';
 
 export const MEMBERS_ONLY_CONTENT_TAG = 'c:members-only';
 export const RESTRICTED_CHAT_COMMENTS_TAG = 'chat:members-only';
