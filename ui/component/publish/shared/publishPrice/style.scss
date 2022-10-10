@@ -1,0 +1,70 @@
+@import '~ui/scss/init/breakpoints';
+
+$DISABLED_OPACITY: 0.2;
+$INDENT: var(--spacing-xl);
+
+.publish-price {
+}
+
+.publish-price__title {
+  font-size: var(--font-large);
+  font-weight: var(--font-weight-bold);
+}
+
+.publish-price__row {
+  display: flex;
+  flex-direction: column;
+  padding: var(--spacing-s);
+
+  .checkbox {
+    label {
+      font-size: var(--font-body);
+    }
+  }
+
+  svg {
+    margin-bottom: 0; // Remove LBC icon offset
+  }
+}
+
+.publish-price__row:not(:first-child) {
+  border-top: 1px solid var(--color-border);
+}
+
+.publish-price__row--disabled {
+  pointer-events: none;
+
+  .publish-price__grp-1,
+  .publish-price__grp-2 {
+    opacity: $DISABLED_OPACITY; // Set at column level so the border won't be dimmed.
+  }
+}
+
+.publish-price__row--indented {
+  margin-left: $INDENT;
+}
+
+.publish-price__grp-1 {
+}
+
+.publish-price__grp-2 {
+  select {
+    width: 150px; // lock all dropdowns to same width
+  }
+}
+
+.publish-price__grp-2--disabled {
+  pointer-events: none;
+  opacity: $DISABLED_OPACITY;
+}
+
+.publish-price__subtitle {
+  font-size: var(--font-xsmall);
+  color: var(--color-text-subtitle);
+}
+
+.publish-price__bank-driver {
+  font-size: var(--font-xsmall);
+  color: var(--color-text-subtitle);
+  margin-left: calc(var(--height-checkbox) + var(--spacing-s));
+}

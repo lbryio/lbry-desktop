@@ -33,7 +33,7 @@ const select = (state, props) => {
       activeChannel?.claim_id
     ),
     isStillEditing: selectIsStillEditing(state),
-    contentIsFree: selectPublishFormValue(state, 'contentIsFree'),
+    paywall: selectPublishFormValue(state, 'paywall'),
   };
 };
 

@@ -5,6 +5,7 @@ import Card from 'component/common/card';
 import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
 import * as PAGES from 'constants/pages';
+import { PAYWALL } from 'constants/publish';
 
 type Props = {
   description: ?string,
@@ -21,7 +22,7 @@ type Props = {
   myMembershipTiersWithExclusiveLivestreamPerk: CreatorMemberships,
   location: string,
   isStillEditing: boolean,
-  contentIsFree: boolean,
+  paywall: Paywall,
 };
 
 function PublishProtectedContent(props: Props) {
@@ -38,7 +39,7 @@ function PublishProtectedContent(props: Props) {
     myMembershipTiersWithExclusiveLivestreamPerk,
     location,
     isStillEditing,
-    contentIsFree,
+    paywall,
   } = props;
 
   const [isRestrictingContent, setIsRestrictingContent] = React.useState(false);
@@ -163,7 +164,7 @@ function PublishProtectedContent(props: Props) {
             <>
               <FormField
                 type="checkbox"
-                disabled={!contentIsFree}
+                disabled={paywall !== PAYWALL.FREE}
                 defaultChecked={isRestrictingContent}
                 label={__('Restrict content to only allow subscribers to certain memberships to view it')}
                 name={'toggleRestrictedContent'}
@@ -175,7 +176,7 @@ function PublishProtectedContent(props: Props) {
                 <div className="tier-list">
                   {membershipsToUse.map((membership) => (
                     <FormField
-                      disabled={!contentIsFree}
+                      disabled={paywall !== PAYWALL.FREE}
                       key={membership.Membership.id}
                       type="checkbox"
                       // $FlowIssue
@@ -188,7 +189,7 @@ function PublishProtectedContent(props: Props) {
                 </div>
               )}
 
-              {!contentIsFree && (
+              {paywall !== PAYWALL.FREE && (
                 <div className="error__text">
                   {__('This file has an attached price, disabled it in order to add content restrictions.')}
                 </div>
