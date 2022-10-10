@@ -523,6 +523,16 @@ export const selectUserIsMemberOfMembersOnlyChatForCreatorId = (state: State, cr
   return !!myMembersOnlyChatMemberships && myMembersOnlyChatMemberships.length > 0;
 };
 
+export const selectNoRestrictionOrUserCanChatForCreatorId = (state: State, creatorId: ClaimId) => {
+  const membersOnlyMembershipIds = selectMembersOnlyChatMembershipIdsForCreatorId(state, creatorId);
+  if (membersOnlyMembershipIds === undefined) return false;
+
+  const userHasAccess = selectUserIsMemberOfMembersOnlyChatForCreatorId(state, creatorId);
+  const claimIsMine = selectClaimIsMineForId(state, creatorId);
+
+  return Boolean(claimIsMine || !membersOnlyMembershipIds || userHasAccess);
+};
+
 export const selectChannelHasMembershipTiersForId = (state: State, channelId: string) => {
   const memberships = selectMembershipTiersForChannelId(state, channelId);
   return memberships && memberships.length > 0;

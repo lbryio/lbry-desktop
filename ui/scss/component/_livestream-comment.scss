@@ -406,3 +406,14 @@
     }
   }
 }
+
+.livestream__members-only-message {
+  border-radius: var(--border-radius);
+  padding: var(--spacing-xxxs) var(--spacing-xs);
+  background-color: rgba(0, 255, 21, 0.2);
+  border: 2px solid rgba(0, 255, 64, 0.6);
+
+  .icon {
+    margin-right: var(--spacing-xs);
+  }
+}

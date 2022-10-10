@@ -8,6 +8,7 @@ import Button from 'component/button';
 import classnames from 'classnames';
 import CommentCreate from 'component/commentCreate';
 import CreditAmount from 'component/common/credit-amount';
+import Icon from 'component/common/icon';
 import ChatComment from 'component/chat/chatComment';
 import ChatComments from 'component/chat/chatComments';
 import LivestreamHyperchats from './livestream-hyperchats';
@@ -17,6 +18,7 @@ import Yrbl from 'component/yrbl';
 import { getTipValues } from 'util/livestream';
 import Slide from '@mui/material/Slide';
 import usePersistedState from 'effects/use-persisted-state';
+import Tooltip from 'component/common/tooltip';
 
 export const VIEW_MODES = {
   CHAT: 'chat',
@@ -34,6 +36,7 @@ type Props = {
   uri: string,
   // redux
   channelId: string,
+  channelTitle: string,
   claimId?: string,
   comments: Array<Comment>,
   doCommentList: (
@@ -55,11 +58,14 @@ type Props = {
   myChannelClaims: any,
   doListAllMyMembershipTiers: any,
   contentUnlocked: boolean,
+  isLivestreamChatMembersOnly: ?boolean,
+  chatUnlocked: boolean,
 };
 
 export default function ChatLayout(props: Props) {
   const {
     channelId,
+    channelTitle,
     claimId,
     comments: commentsByChronologicalOrder,
     customViewMode,
@@ -80,6 +86,8 @@ export default function ChatLayout(props: Props) {
     myChannelClaims,
     doListAllMyMembershipTiers,
     contentUnlocked,
+    isLivestreamChatMembersOnly,
+    chatUnlocked,
   } = props;
 
   const isMobile = useIsMobile() && !isPopoutWindow;
@@ -271,6 +279,26 @@ export default function ChatLayout(props: Props) {
     if (textInjection && textInjection.length) setTextInjection('');
   }, [textInjection]);
 
+  const membersOnlyMessage = React.useMemo(() => {
+    return (
+      isLivestreamChatMembersOnly &&
+      chatUnlocked && (
+        <div className="livestream__members-only-message">
+          <Tooltip
+            title={__('Only "%channel_name%" members are able to chat right now. Enjoy!', {
+              channel_name: channelTitle,
+            })}
+          >
+            <div style={{ display: 'inline' }}>
+              <Icon icon={ICONS.INFO} />
+            </div>
+          </Tooltip>
+          {__('Members Only')}
+        </div>
+      )
+    );
+  }, [channelTitle, chatUnlocked, isLivestreamChatMembersOnly]);
+
   if (!claimId) return null;
 
   if (openedPopoutWindow || chatHidden) {
@@ -433,7 +461,10 @@ export default function ChatLayout(props: Props) {
           />
         )}
 
+        {!isMobile && membersOnlyMessage}
         <div className="livestream__comment-create">
+          {isMobile && membersOnlyMessage}
+
           <CommentCreate
             isLivestream
             bottom

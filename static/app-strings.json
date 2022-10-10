@@ -2623,5 +2623,6 @@
   "Join Premium": "Join Premium",
   "Only USD banking currently supported, please check back later!": "Only USD banking currently supported, please check back later!",
   "Bank account connected": "Bank account connected",
+  "Only \"%channel_name%\" members are able to chat right now. Enjoy!": "Only \"%channel_name%\" members are able to chat right now. Enjoy!",
   "--end--": "--end--"
 }

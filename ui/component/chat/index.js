@@ -7,14 +7,18 @@ import {
   selectTopLevelCommentsForUri,
   selectHyperChatsForUri,
   selectPinnedCommentsForUri,
+  selectLivestreamChatMembersOnlyForChannelId,
 } from 'redux/selectors/comments';
 import {
   doFetchOdyseeMembershipForChannelIds,
   doFetchChannelMembershipsForChannelIds,
   doListAllMyMembershipTiers,
 } from 'redux/actions/memberships';
-import { selectNoRestrictionOrUserIsMemberForContentClaimId } from 'redux/selectors/memberships';
-import { getChannelIdFromClaim } from 'util/claim';
+import {
+  selectNoRestrictionOrUserIsMemberForContentClaimId,
+  selectNoRestrictionOrUserCanChatForCreatorId,
+} from 'redux/selectors/memberships';
+import { getChannelIdFromClaim, getChannelTitleFromClaim } from 'util/claim';
 
 import ChatLayout from './view';
 
@@ -30,8 +34,11 @@ const select = (state, props) => {
     pinnedComments: selectPinnedCommentsForUri(state, uri),
     superChats: selectHyperChatsForUri(state, uri),
     channelId,
+    channelTitle: getChannelTitleFromClaim(claim),
     myChannelClaims: selectMyChannelClaims(state),
     contentUnlocked: claimId && selectNoRestrictionOrUserIsMemberForContentClaimId(state, claimId),
+    isLivestreamChatMembersOnly: selectLivestreamChatMembersOnlyForChannelId(state, channelId),
+    chatUnlocked: channelId && selectNoRestrictionOrUserCanChatForCreatorId(state, channelId),
   };
 };
 
