@@ -662,8 +662,17 @@
 .button_selectedServer {
   display: inline;
   float: right;
-  min-width: var(--input-select-server-min-width);
-  max-width: var(--input-select-server-max-width);
+  select {
+    width: 12rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  @media (max-width: $breakpoint-small) {
+    select {
+      width: 8rem;
+    }
+  }
 }
 
 .button_refresh {
