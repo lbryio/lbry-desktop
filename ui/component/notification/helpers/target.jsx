@@ -43,7 +43,7 @@ function getUrlParams(notification, notificationTarget) {
 
   try {
     const { isChannel } = parseURI(notificationTarget);
-    if (isChannel) urlParams.append(CHANNEL_PAGE.QUERIES.VIEW, CHANNEL_PAGE.VIEWS.DISCUSSION_PAGE);
+    if (isChannel) urlParams.append(CHANNEL_PAGE.QUERIES.VIEW, CHANNEL_PAGE.VIEWS.DISCUSSION);
   } catch (e) {}
 
   return urlParams;
