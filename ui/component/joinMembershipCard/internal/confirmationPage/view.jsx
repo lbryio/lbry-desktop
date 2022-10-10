@@ -19,10 +19,11 @@ type Props = {
   channelName: string,
   purchasePending: boolean,
   preferredCurrency: ?string,
+  incognito: boolean,
 };
 
 const ConfirmationPage = (props: Props) => {
-  const { selectedTier, onCancel, channelName, purchasePending, preferredCurrency } = props;
+  const { selectedTier, onCancel, channelName, purchasePending, preferredCurrency, incognito } = props;
 
   const total = (selectedTier.NewPrices[0].Price.amount / 100).toFixed(2);
   const creatorRevenue = (selectedTier.NewPrices[0].creator_receives_amount / 100).toFixed(2);
@@ -93,6 +94,14 @@ const ConfirmationPage = (props: Props) => {
       ) : (
         <>
           <div className="section__actions">
+            {incognito && (
+              <p className="help">
+                <div className="error__text">
+                  {__("You are about to join as Anonymous, you won't have a channel to comment and view badges on")}
+                </div>
+              </p>
+            )}
+
             <SubmitButton modalState={{ passedTier: selectedTier }} />
             <Button button="link" label={__('Cancel')} onClick={onCancel} />
           </div>
