@@ -57,16 +57,7 @@ const TabWrapper = (props: Props) => {
     );
   }
 
-  if (!userHasExperimentalUi && !userHasOdyseeMembership) {
-    return (
-      <ErrorBubble
-        title={__('Premium Beta')}
-        subtitle={__('Sorry, this functionality is only available for Odysee Premium users currently.')}
-        action={<Button button="primary" navigate={`/$/${PAGES.ODYSEE_MEMBERSHIP}`} label={__('Join Premium')} />}
-      />
-    );
-  }
-
+  // FIRST: needs a channel
   if (!myChannelClaims || myChannelClaims.length === 0) {
     return (
       <ErrorBubble
@@ -77,6 +68,7 @@ const TabWrapper = (props: Props) => {
     );
   }
 
+  // SECOND: verify bank account
   if (!bankAccountConfirmed) {
     return (
       <ErrorBubble
@@ -94,10 +86,23 @@ const TabWrapper = (props: Props) => {
     );
   }
 
+  // THIRD: only USD supported. This will be the final message for some.
   if (accountDefaultCurrency !== 'usd') {
     return <ErrorBubble>{__('Only USD banking currently supported, please check back later!')}</ErrorBubble>;
   }
 
+  // FOURTH: Premium Beta currently, so this will be the final condition: they will be able to purchase and start using then.
+  if (!userHasExperimentalUi && !userHasOdyseeMembership) {
+    return (
+      <ErrorBubble
+        title={__('Premium Beta')}
+        subtitle={__('Sorry, this functionality is only available for Odysee Premium users currently.')}
+        action={<Button button="primary" navigate={`/$/${PAGES.ODYSEE_MEMBERSHIP}`} label={__('Join Premium')} />}
+      />
+    );
+  }
+
+  // FIFTH: all that's left for the tabs to be filled in, is some tiers to be created
   if (!hasTiers && !isOnTiersTab) {
     return (
       <ErrorBubble
