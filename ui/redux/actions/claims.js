@@ -18,11 +18,11 @@ import {
 } from 'redux/selectors/claims';
 
 import { doFetchTxoPage } from 'redux/actions/wallet';
-import { doMembershipContentforStreamClaimIds } from 'redux/actions/memberships';
+import { doMembershipContentForStreamClaimIds, doFetchOdyseeMembershipForChannelIds } from 'redux/actions/memberships';
 import { selectSupportsByOutpoint } from 'redux/selectors/wallet';
 import { creditsToString } from 'util/format-credits';
 import { batchActions } from 'util/batch-actions';
-import { createNormalizedClaimSearchKey } from 'util/claim';
+import { createNormalizedClaimSearchKey, getChannelIdFromClaim } from 'util/claim';
 import { PAGE_SIZE } from 'constants/claim';
 import { selectClaimIdsForCollectionId } from 'redux/selectors/collections';
 import { doFetchItemsInCollections } from 'redux/actions/collections';
@@ -61,6 +61,7 @@ export function doResolveUris(
         const collectionIds = new Set([]);
         const repostsToResolve = new Set([]);
         const streamClaimIds = new Set([]);
+        const channelClaimIds = new Set([]);
 
         const resolveInfo: {
           [uri: string]: {
@@ -128,6 +129,9 @@ export function doResolveUris(
               }
             }
 
+            const channelId = getChannelIdFromClaim(uriResolveInfo);
+            if (channelId) channelClaimIds.add(channelId);
+
             resolveInfo[uri] = resultResponse;
           }
         }
@@ -139,7 +143,11 @@ export function doResolveUris(
         }
 
         if (streamClaimIds.size > 0) {
-          dispatch(doMembershipContentforStreamClaimIds(Array.from(streamClaimIds)));
+          dispatch(doMembershipContentForStreamClaimIds(Array.from(streamClaimIds)));
+        }
+
+        if (channelClaimIds.size > 0) {
+          dispatch(doFetchOdyseeMembershipForChannelIds(Array.from(channelClaimIds)));
         }
 
         if (repostsToResolve.size > 0) {
@@ -242,15 +250,23 @@ export function doFetchClaimListMine(
       });
 
       const streamClaimIds = new Set([]);
+      const channelClaimIds = new Set([]);
 
       result.items.forEach((item) => {
         if (item.value_type !== 'channel' && item.value_type !== 'collection') {
           streamClaimIds.add(item.claim_id);
         }
+
+        const channelId = getChannelIdFromClaim(item);
+        if (channelId) channelClaimIds.add(channelId);
       });
 
       if (streamClaimIds.size > 0) {
-        dispatch(doMembershipContentforStreamClaimIds(Array.from(streamClaimIds)));
+        dispatch(doMembershipContentForStreamClaimIds(Array.from(streamClaimIds)));
+      }
+
+      if (channelClaimIds.size > 0) {
+        dispatch(doFetchOdyseeMembershipForChannelIds(Array.from(channelClaimIds)));
       }
     });
   };
@@ -733,6 +749,7 @@ export function doClaimSearch(
       const resolveInfo = {};
       const urls = [];
       const streamClaimIds = new Set([]);
+      const channelClaimIds = new Set([]);
 
       data.items.forEach((stream: Claim) => {
         resolveInfo[stream.canonical_url] = { stream };
@@ -741,6 +758,9 @@ export function doClaimSearch(
         if (stream.value_type !== 'channel' && stream.value_type !== 'collection') {
           streamClaimIds.add(stream.claim_id);
         }
+
+        const channelId = getChannelIdFromClaim(stream);
+        if (channelId) channelClaimIds.add(channelId);
       });
 
       dispatch({
@@ -755,7 +775,11 @@ export function doClaimSearch(
       });
 
       if (streamClaimIds.size > 0) {
-        dispatch(doMembershipContentforStreamClaimIds(Array.from(streamClaimIds)));
+        dispatch(doMembershipContentForStreamClaimIds(Array.from(streamClaimIds)));
+      }
+
+      if (channelClaimIds.size > 0) {
+        dispatch(doFetchOdyseeMembershipForChannelIds(Array.from(channelClaimIds)));
       }
 
       return resolveInfo;

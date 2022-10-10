@@ -24,24 +24,11 @@ type Props = {
   lang: string,
   fetchSubCount: (string) => void,
   subCount: ?number,
-  showMemberBadge?: boolean,
 };
 
 // previews used in channel overview and homepage (and other places?)
 function ClaimPreviewSubtitle(props: Props) {
-  const {
-    pending,
-    uri,
-    claim,
-    type,
-    beginPublish,
-    isLivestream,
-    fetchSubCount,
-    subCount,
-    showAtSign,
-    lang,
-    showMemberBadge,
-  } = props;
+  const { pending, uri, claim, type, beginPublish, isLivestream, fetchSubCount, subCount, showAtSign, lang } = props;
   const isChannel = claim && claim.value_type === 'channel';
   const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
 
@@ -63,7 +50,7 @@ function ClaimPreviewSubtitle(props: Props) {
     <div className="media__subtitle">
       {claim ? (
         <React.Fragment>
-          <UriIndicator uri={uri} showAtSign={showAtSign} showMemberBadge={showMemberBadge} link />{' '}
+          <UriIndicator uri={uri} showAtSign={showAtSign} link />{' '}
           {!pending && claim && (
             <>
               {isChannel && type !== 'inline' && (

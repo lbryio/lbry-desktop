@@ -62,7 +62,6 @@ type Props = {
   showEdit?: boolean,
   droppableProvided?: any,
   unavailableUris?: Array<string>,
-  showMemberBadge?: boolean,
   inWatchHistory?: boolean,
   smallThumbnail?: boolean,
   showIndexes?: boolean,
@@ -114,7 +113,6 @@ export default function ClaimList(props: Props) {
     showEdit,
     droppableProvided,
     unavailableUris,
-    showMemberBadge,
     inWatchHistory,
     smallThumbnail,
     showIndexes,
@@ -229,7 +227,6 @@ export default function ClaimList(props: Props) {
       dragHandleProps={draggableProvided && draggableProvided.dragHandleProps}
       wrapperElement={draggableProvided ? 'div' : undefined}
       unavailableUris={unavailableUris}
-      showMemberBadge={showMemberBadge}
       inWatchHistory={inWatchHistory}
       smallThumbnail={smallThumbnail}
       showIndexes={showIndexes}

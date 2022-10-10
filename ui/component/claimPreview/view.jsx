@@ -101,7 +101,6 @@ type Props = {
   showEdit?: boolean,
   dragHandleProps?: any,
   unavailableUris?: Array<string>,
-  showMemberBadge?: boolean,
   inWatchHistory?: boolean,
   smallThumbnail?: boolean,
   showIndexes?: boolean,
@@ -176,7 +175,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     showEdit,
     dragHandleProps,
     unavailableUris,
-    showMemberBadge,
     inWatchHistory,
     smallThumbnail,
     showIndexes,
@@ -483,12 +481,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
 
           {isChannelUri && claim ? (
             <UriIndicator focusable={false} uri={uri} link>
-              <ChannelThumbnail
-                uri={uri}
-                small={type === 'inline'}
-                showMemberBadge={showMemberBadge}
-                checkMembership={false}
-              />
+              <ChannelThumbnail uri={uri} small={type === 'inline'} checkMembership={false} />
             </UriIndicator>
           ) : (
             <>
@@ -537,21 +530,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                 {!isChannelUri && signingChannel && (
                   <div className="claim-preview__channel-staked">
                     <UriIndicator focusable={false} uri={uri} link hideAnonymous>
-                      <ChannelThumbnail
-                        uri={signingChannel.permanent_url}
-                        xsmall
-                        showMemberBadge={showMemberBadge}
-                        checkMembership={false}
-                      />
+                      <ChannelThumbnail uri={signingChannel.permanent_url} xsmall checkMembership={false} />
                     </UriIndicator>
                   </div>
                 )}
-                <ClaimPreviewSubtitle
-                  uri={uri}
-                  type={type}
-                  showAtSign={isChannelUri}
-                  showMemberBadge={!showMemberBadge}
-                />
+                <ClaimPreviewSubtitle uri={uri} type={type} showAtSign={isChannelUri} />
                 {(pending || !!reflectingProgress) && <PublishPending uri={uri} />}
                 {channelSubscribers}
               </div>
