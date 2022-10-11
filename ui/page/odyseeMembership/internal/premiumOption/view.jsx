@@ -69,35 +69,18 @@ const PremiumOption = (props: Props) => {
           {formatDateToMonthDayAndYear(Subscription.current_period_end * 1000)}
         </h4>
 
-        {isCancelled && !membershipStillValid && (
-          <Button
-            button="primary"
-            onClick={() =>
-              doOpenModal(MODALS.CONFIRM_ODYSEE_MEMBERSHIP, {
-                membership: { Membership: MembershipDetails },
-                price: {
-                  ...Subscription.plan,
-                  unit_amount: Subscription.plan.amount,
-                  recurring: { interval: Subscription.plan.interval },
-                },
-              })
-            }
-            className="membership_button"
-            label={__('Renew membership')}
-            icon={ICONS.FINANCE}
-          />
-        )}
-
-        {!isCancelled && Subscription.canceled_at === 0 && (
-          <Button
-            button="alt"
-            membership-id={Membership.membership_id}
-            onClick={() => doOpenCancelationModalForMembership(membership)}
-            className="cancel-membership-button"
-            label={__('Cancel membership')}
-            icon={ICONS.FINANCE}
-          />
-        )}
+        {!isCancelled
+          ? Subscription.canceled_at === 0
+          : !membershipStillValid && (
+              <Button
+                button="alt"
+                membership-id={Membership.membership_id}
+                onClick={() => doOpenCancelationModalForMembership(membership)}
+                className="cancel-membership-button"
+                label={__('Cancel membership')}
+                icon={ICONS.FINANCE}
+              />
+            )}
       </Wrapper>
     );
   }
