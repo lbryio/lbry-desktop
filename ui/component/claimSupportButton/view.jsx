@@ -47,6 +47,7 @@ export default function ClaimSupportButton(props: Props) {
       iconSize={iconSizes[preferredCurrency]}
       onClick={() => doOpenModal(MODALS.SEND_TIP, { uri, isSupport: true })}
       noStyle={!fileAction}
+      requiresAuth
     />
   );
 }
