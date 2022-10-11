@@ -57,7 +57,7 @@ export default function EmbedTextArea(props: Props) {
       <div className="section__actions">
         <Button
           icon={ICONS.COPY}
-          button="secondary"
+          button="primary"
           label={__('Copy')}
           onClick={() => {
             copyToClipboard();
