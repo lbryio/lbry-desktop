@@ -241,20 +241,6 @@
     }
   }
 
-  .button--file-action--tooltip-wrapper {
-    display: inline;
-    margin: 0;
-
-    .button--file-action--tooltip {
-      padding: 0px var(--spacing-xxs);
-    }
-    @media (max-width: $breakpoint-small) {
-      button.button:not(.button-like):not(.button-dislike) {
-        width: 100%;
-      }
-    }
-  }
-
   .icon--DollarSign {
     stroke-width: 1.5;
     transform: scale(0.8);
@@ -273,10 +259,6 @@
     }
 
     .button--file-action {
-      &:not(.button--file-action--tooltip) {
-        padding: 0 !important;
-      }
-
       .button__content {
         justify-content: space-between;
 
@@ -331,11 +313,7 @@
       flex-basis: 0;
       min-width: 0;
     }
-    .button--file-action--tooltip-wrapper {
-      flex-basis: 0 !important;
-      min-width: 0;
-      flex: unset;
-    }
+
     .button--file-action--menu {
       flex-grow: 0.4;
       flex-basis: 0;
@@ -357,26 +335,6 @@
         margin-left: var(--spacing-xxs);
         .button {
           margin-right: 0;
-        }
-      }
-    }
-
-    .button--file-action--tooltip-wrapper {
-      display: flex;
-      flex: auto;
-      padding: 0 !important;
-
-      .button--file-action--tooltip {
-        width: 100%;
-      }
-    }
-    .ratio-wrapper {
-      .button--file-action--tooltip-wrapper {
-        display: inline;
-        margin: 0;
-
-        .button--file-action--tooltip {
-          padding: 0px var(--spacing-xxs);
         }
       }
     }

@@ -513,8 +513,7 @@ $actions-z-index: 2;
   }
 
   > .button,
-  > .button-group,
-  > .button--file-action--tooltip-wrapper {
+  > .button-group {
     &:not(:last-child) {
       margin-right: var(--spacing-s);
     }
