@@ -155,7 +155,7 @@
     .icon--BadgeStreamer {
       height: calc(var(--font-body) + 2px);
       width: calc(var(--font-body) + 2px);
-      margin-bottom: -4px;
+      margin-bottom: -7px;
     }
     .icon--BadgeMod {
       height: calc(var(--font-body) - 3px);
@@ -410,10 +410,29 @@
 .livestream__members-only-message {
   border-radius: var(--border-radius);
   padding: var(--spacing-xxxs) var(--spacing-xs);
-  background-color: rgba(0, 255, 21, 0.2);
-  border: 2px solid rgba(0, 255, 64, 0.6);
+  background-image: linear-gradient(147deg, rgba(var(--color-primary-static), 0.2), rgba(242, 121, 55, 0.6));
+  border: 2px solid var(--color-primary);
+  border: width 2px;
 
-  .icon {
+  .icon--Membership {
     margin-right: var(--spacing-xs);
+    margin-bottom: -6px;
+    background-image: linear-gradient(147deg, rgba(var(--color-primary-static), 1), rgba(242, 121, 55, 1));
+    border-radius: 50%;
+    padding: 3px;
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  .icon--Unlock {
+    display: inline;
+    float: right;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--color-header-background);
+    color: #91f92d;
+    padding: 4px;
+    overflow: visible;
   }
 }

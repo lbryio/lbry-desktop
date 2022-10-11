@@ -59,6 +59,7 @@ type Props = {
   doListAllMyMembershipTiers: any,
   contentUnlocked: boolean,
   isLivestreamChatMembersOnly: ?boolean,
+  userHasMembersOnlyChatPerk: boolean,
   chatUnlocked: boolean,
 };
 
@@ -87,6 +88,7 @@ export default function ChatLayout(props: Props) {
     doListAllMyMembershipTiers,
     contentUnlocked,
     isLivestreamChatMembersOnly,
+    userHasMembersOnlyChatPerk,
     chatUnlocked,
   } = props;
 
@@ -168,6 +170,8 @@ export default function ChatLayout(props: Props) {
       }
     }
   }, [discussionElement, isMobile, lastCommentElem, minScrollHeight]);
+
+  const notAuthedToLiveChat = Boolean(isLivestreamChatMembersOnly && !userHasMembersOnlyChatPerk);
 
   function toggleClick(toggleMode: string) {
     if (toggleMode === VIEW_MODES.SUPERCHAT) {
@@ -281,6 +285,7 @@ export default function ChatLayout(props: Props) {
 
   const membersOnlyMessage = React.useMemo(() => {
     return (
+      !notAuthedToLiveChat &&
       isLivestreamChatMembersOnly &&
       chatUnlocked && (
         <div className="livestream__members-only-message">
@@ -290,10 +295,11 @@ export default function ChatLayout(props: Props) {
             })}
           >
             <div style={{ display: 'inline' }}>
-              <Icon icon={ICONS.INFO} />
+              <Icon icon={ICONS.MEMBERSHIP} />
             </div>
           </Tooltip>
           {__('Members Only')}
+          <Icon icon={ICONS.UNLOCK} />
         </div>
       )
     );

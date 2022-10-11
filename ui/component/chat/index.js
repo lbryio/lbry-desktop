@@ -17,6 +17,7 @@ import {
 import {
   selectNoRestrictionOrUserIsMemberForContentClaimId,
   selectNoRestrictionOrUserCanChatForCreatorId,
+  selectUserIsMemberOfMembersOnlyChatForCreatorId,
 } from 'redux/selectors/memberships';
 import { getChannelIdFromClaim, getChannelTitleFromClaim } from 'util/claim';
 
@@ -38,6 +39,7 @@ const select = (state, props) => {
     myChannelClaims: selectMyChannelClaims(state),
     contentUnlocked: claimId && selectNoRestrictionOrUserIsMemberForContentClaimId(state, claimId),
     isLivestreamChatMembersOnly: selectLivestreamChatMembersOnlyForChannelId(state, channelId),
+    userHasMembersOnlyChatPerk: selectUserIsMemberOfMembersOnlyChatForCreatorId(state, channelId),
     chatUnlocked: channelId && selectNoRestrictionOrUserCanChatForCreatorId(state, channelId),
   };
 };

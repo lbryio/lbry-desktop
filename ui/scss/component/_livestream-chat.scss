@@ -224,7 +224,6 @@ $recent-msg-button__height: 2rem;
     padding-bottom: 0;
   }
   .livestream__comment-create {
-    // padding-bottom: 13.5px;
     padding-bottom: 0 !important;
     textarea:focus-visible {
       box-shadow: unset;
@@ -470,7 +469,13 @@ $recent-msg-button__height: 2rem;
   border-radius: 0 0 var(--border-radius) var(--border-radius);
 
   .error-bubble {
+    margin-top: 0;
     margin-bottom: var(--spacing-s);
+    @media (max-width: $breakpoint-small) {
+      label {
+        padding-left: 0;
+      }
+    }
   }
 
   .commentCreate {
