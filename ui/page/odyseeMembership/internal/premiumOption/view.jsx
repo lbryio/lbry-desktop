@@ -69,18 +69,16 @@ const PremiumOption = (props: Props) => {
           {formatDateToMonthDayAndYear(Subscription.current_period_end * 1000)}
         </h4>
 
-        {!isCancelled
-          ? Subscription.canceled_at === 0
-          : !membershipStillValid && (
-              <Button
-                button="alt"
-                membership-id={Membership.membership_id}
-                onClick={() => doOpenCancelationModalForMembership(membership)}
-                className="cancel-membership-button"
-                label={__('Cancel membership')}
-                icon={ICONS.FINANCE}
-              />
-            )}
+        {(!isCancelled ? Subscription.canceled_at === 0 : !membershipStillValid) && (
+          <Button
+            button="alt"
+            membership-id={Membership.membership_id}
+            onClick={() => doOpenCancelationModalForMembership(membership)}
+            className="cancel-membership-button"
+            label={__('Cancel membership')}
+            icon={ICONS.FINANCE}
+          />
+        )}
       </Wrapper>
     );
   }
