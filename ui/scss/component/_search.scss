@@ -243,7 +243,8 @@
           overflow: visible;
           .claim-preview__actions {
             overflow: visible;
-            .membership-button-wrapper {
+
+            .claim-preview__primary-actions {
               margin-bottom: 0;
               margin-left: calc((4rem + (2 * var(--spacing-xs))) * -1);
             }

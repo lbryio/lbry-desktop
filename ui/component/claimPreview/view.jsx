@@ -361,6 +361,19 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     }
   }, [isValid, uri, isResolvingUri, shouldFetch, resolveUri]);
 
+  const JoinButton = React.useMemo(
+    () => () =>
+      isChannelUri &&
+      !claimIsMine &&
+      !hideJoin &&
+      (!banState.muted || showUserBlocked) && (
+        <div className={'membership-button-wrapper' + (type ? ' ' + type : '')}>
+          <JoinMembershipButton uri={uri} />
+        </div>
+      ),
+    [banState.muted, claimIsMine, hideJoin, isChannelUri, showUserBlocked, type, uri]
+  );
+
   // **************************************************************************
   // **************************************************************************
 
@@ -541,11 +554,8 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
             </div>
             {type !== 'small' && (
               <div className="claim-preview__actions">
-                {isChannelUri && !claimIsMine && !hideJoin && (!banState.muted || showUserBlocked) && (
-                  <div className="membership-button-wrapper">
-                    <JoinMembershipButton uri={uri} />
-                  </div>
-                )}
+                {type && <JoinButton />}
+
                 {!pending && (
                   <>
                     {renderActions && claim && renderActions(claim)}
@@ -568,6 +578,9 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                     )}
                   </>
                 )}
+
+                {!type && <JoinButton />}
+
                 {claim && (
                   <React.Fragment>
                     {typeof properties === 'function'

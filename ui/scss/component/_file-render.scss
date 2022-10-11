@@ -1,7 +1,8 @@
-.membership-button-wrapper {
+.membership-button-wrapper.inline {
   margin: var(--spacing-s);
   margin-bottom: 0;
   margin-left: 0;
+
   @media (max-width: $breakpoint-small) {
     margin-top: var(--spacing-xxs);
     margin-bottom: var(--spacing-s);
