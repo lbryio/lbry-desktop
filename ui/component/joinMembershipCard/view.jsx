@@ -60,7 +60,7 @@ const JoinMembershipCard = (props: Props) => {
 
   const { push } = useHistory();
 
-  const skipToConfirmation = Boolean(passedTierIndex);
+  const skipToConfirmation = Number.isInteger(passedTierIndex);
 
   const cheapestPlanIndex = React.useMemo(() => {
     if (cheapestMembership) {
