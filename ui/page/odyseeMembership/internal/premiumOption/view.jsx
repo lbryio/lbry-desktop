@@ -14,7 +14,6 @@ import MembershipBadge from 'component/membershipBadge';
 type Props = {
   membershipPurchase?: CreatorMembership,
   membershipView?: MembershipTier,
-  isCancelled: boolean,
   // -- redux --
   preferredCurrency: CurrencyOption,
   doOpenModal: (modalId: string, {}) => void,
@@ -25,7 +24,6 @@ const PremiumOption = (props: Props) => {
   const {
     membershipPurchase,
     membershipView,
-    isCancelled,
     preferredCurrency,
     doOpenModal,
     doOpenCancelationModalForMembership,
@@ -33,21 +31,15 @@ const PremiumOption = (props: Props) => {
 
   if (membershipPurchase) {
     const membership = membershipPurchase;
-    const { Membership, Prices, NewPrices } = membership;
+    const { Membership, NewPrices } = membership;
 
     const purchaseFieldsProps = { preferredCurrency, membership, doOpenModal };
 
     return (
       <Wrapper name={Membership.name}>
-        {NewPrices
-          ? NewPrices.map(({ Price, StripePrice }: MembershipNewStripePriceDetails) => (
-              <PurchaseFields key={Membership.id} {...purchaseFieldsProps} stripePrice={StripePrice} />
-            ))
-          : Prices
-          ? Prices.map((price: StripePriceDetails) => (
-              <PurchaseFields key={Membership.id} {...purchaseFieldsProps} stripePrice={price} />
-            ))
-          : undefined}
+        {NewPrices.map(({ Price, StripePrice }: MembershipNewStripePriceDetails) => (
+          <PurchaseFields key={Membership.id} {...purchaseFieldsProps} stripePrice={StripePrice} />
+        ))}
       </Wrapper>
     );
   }
@@ -56,6 +48,7 @@ const PremiumOption = (props: Props) => {
     const membership = membershipView;
     const { Membership, MembershipDetails, Subscription } = membership;
 
+    const isCancelled = Subscription.status === 'canceled';
     const membershipStillValid = isCancelled && Subscription.current_period_end * 1000 > Date.now();
 
     return (
@@ -71,10 +64,28 @@ const PremiumOption = (props: Props) => {
           )}
         </h4>
 
-        {membershipStillValid && (
-          <h4 className="membership_info">
-            <b>{__('Still Valid Until')}:</b> {formatDateToMonthDayAndYear(Subscription.current_period_end * 1000)}
-          </h4>
+        <h4 className="membership_info">
+          <b>{__(membershipStillValid ? 'Still Valid Until' : 'Ended on')}:</b>{' '}
+          {formatDateToMonthDayAndYear(Subscription.current_period_end * 1000)}
+        </h4>
+
+        {isCancelled && !membershipStillValid && (
+          <Button
+            button="primary"
+            onClick={() =>
+              doOpenModal(MODALS.CONFIRM_ODYSEE_MEMBERSHIP, {
+                membership: { Membership: MembershipDetails },
+                price: {
+                  ...Subscription.plan,
+                  unit_amount: Subscription.plan.amount,
+                  recurring: { interval: Subscription.plan.interval },
+                },
+              })
+            }
+            className="membership_button"
+            label={__('Renew membership')}
+            icon={ICONS.FINANCE}
+          />
         )}
 
         {!isCancelled && Subscription.canceled_at === 0 && (

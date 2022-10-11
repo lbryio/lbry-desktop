@@ -84,6 +84,28 @@ export const selectMonthlyIncomeForChannelId = createSelector(
   (channelSupporters) => channelSupporters && getTotalPriceFromSupportersList(channelSupporters)
 );
 
+// -- Active Membership = auto_renew is enabled
+export const selectMyActiveMembershipsById = createSelector(selectMembershipMineData, (myMembershipsByCreatorId) => {
+  if (!myMembershipsByCreatorId) return myMembershipsByCreatorId;
+
+  const activeMembershipsById = {};
+
+  for (const creatorChannelId in myMembershipsByCreatorId) {
+    const purchasedCreatorMemberships = myMembershipsByCreatorId[creatorChannelId];
+
+    for (const membership of purchasedCreatorMemberships) {
+      if (membership.Membership.auto_renew) {
+        activeMembershipsById[creatorChannelId] = new Set(activeMembershipsById[creatorChannelId]);
+        activeMembershipsById[creatorChannelId].add(membership);
+        // $FlowFixMe
+        activeMembershipsById[creatorChannelId] = Array.from(activeMembershipsById[creatorChannelId]);
+      }
+    }
+  }
+
+  return activeMembershipsById;
+});
+
 // -- Valid Membership = still in period_end date range
 export const selectMyValidMembershipsById = createSelector(selectMembershipMineData, (myMembershipsByCreatorId) => {
   if (!myMembershipsByCreatorId) return myMembershipsByCreatorId;
@@ -121,6 +143,13 @@ export const selectMyPurchasedMembershipsFromCreators = createSelector(
   (myPurchasedCreatorMemberships) => myPurchasedCreatorMemberships && Object.values(myPurchasedCreatorMemberships)
 );
 
+export const selectMyActiveMembershipsForCreatorId = (state: State, id: string) => {
+  const myActiveMembershipsById = selectMyActiveMembershipsById(state);
+  if (!myActiveMembershipsById) return myActiveMembershipsById;
+
+  return myActiveMembershipsById[id] || null;
+};
+
 export const selectMyValidMembershipsForCreatorId = (state: State, id: string) => {
   const myValidMembershipsById = selectMyValidMembershipsById(state);
   if (!myValidMembershipsById) return myValidMembershipsById;
@@ -151,6 +180,7 @@ export const selectMyValidMembershipIds = createSelector(selectMyValidMembership
   return validMembershipIds.size ? Array.from(validMembershipIds) : null;
 });
 
+// -- Canceled Membership = status is 'canceled'
 export const selectMyCanceledMembershipsById = createSelector(selectMembershipMineData, (myMembershipsByCreatorId) => {
   if (!myMembershipsByCreatorId) return myMembershipsByCreatorId;
 
