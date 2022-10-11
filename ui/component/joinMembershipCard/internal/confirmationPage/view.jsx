@@ -106,7 +106,7 @@ const ConfirmationPage = (props: Props) => {
             {incognito && (
               <p className="help">
                 <div className="error__text">
-                  {__("You are about to join as Anonymous, you won't have a channel to comment and view badges on")}
+                  {__("You are about to join as Anonymous, you won't be able to view or comment on chat at this time")}
                 </div>
               </p>
             )}

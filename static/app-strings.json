@@ -2554,7 +2554,7 @@
   "Processing payment...": "Processing payment...",
   "You currently have EUR selected as your preferred currency, currently only USD is supported.": "You currently have EUR selected as your preferred currency, currently only USD is supported.",
   "You are now a '%membership_tier_name%' member for %creator_channel_name%, enjoy the perks and special features!": "You are now a '%membership_tier_name%' member for %creator_channel_name%, enjoy the perks and special features!",
-  "You are about to join as Anonymous, you won't have a channel to comment and view badges on": "You are about to join as Anonymous, you won't have a channel to comment and view badges on",
+  "You are about to join as Anonymous, you won't be able to view or comment on chat at this time": "You are about to join as Anonymous, you won't be able to view or comment on chat at this time",
   "Change Settings": "Change Settings",
   "Membership options": "Membership options",
   "Join Membership": "Join Membership",
