@@ -584,10 +584,6 @@ $thumbnailWidthSmall: 2rem;
     margin-right: var(--spacing-m);
   }
 
-  .button__label {
-    margin-left: var(--spacing-xs);
-  }
-
   .comment__action:not(.comment__action--active):not(.comment__action--creator-like) {
     color: rgba(var(--color-text-base), 0.7);
     &:hover {
