@@ -868,6 +868,15 @@ $recent-msg-button__height: 2rem;
       }
       .comment__pin {
         margin-top: 0;
+        min-width: 22px;
+        max-width: 22px;
+        min-height: 22px;
+        max-height: 22px;
+        border-radius: 50%;
+        svg {
+          margin-bottom: unset;
+          margin-top: 1px;
+        }
       }
     }
   }
