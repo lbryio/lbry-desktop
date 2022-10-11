@@ -6,7 +6,7 @@ const reducers = {};
 type MembershipsState = {
   membershipMineByCreatorId: ?MembershipMineDataByCreatorId,
   membershipMineFetching: boolean,
-  membershipListById: { [channelId: string]: MembershipTiers },
+  membershipListByCreatorId: { [creatorId: string]: MembershipTiers },
   membershipListFetchingIds: ClaimIds,
   channelMembershipsByCreatorId: ChannelMembershipsByCreatorId,
   fetchingIdsByCreatorId: { [creatorId: string]: ClaimIds },
@@ -24,7 +24,7 @@ type MembershipsState = {
 const defaultState: MembershipsState = {
   membershipMineByCreatorId: undefined,
   membershipMineFetching: false,
-  membershipListById: {},
+  membershipListByCreatorId: {},
   membershipListFetchingIds: [],
   channelMembershipsByCreatorId: {},
   fetchingIdsByCreatorId: {},
@@ -155,13 +155,13 @@ reducers[ACTIONS.MEMBERSHIP_LIST_COMPLETE] = (state, action) => {
 
   const newMembershipListFetchingIds = new Set(state.membershipListFetchingIds);
   newMembershipListFetchingIds.delete(channelId);
-  const newMembershipListById = Object.assign({}, state.membershipListById);
+  const newMembershipListById = Object.assign({}, state.membershipListByCreatorId);
   newMembershipListById[channelId] = list;
 
   return {
     ...state,
     membershipListFetchingIds: Array.from(newMembershipListFetchingIds),
-    membershipListById: newMembershipListById,
+    membershipListByCreatorId: newMembershipListById,
   };
 };
 

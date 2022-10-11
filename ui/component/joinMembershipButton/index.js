@@ -5,7 +5,7 @@ import {
   selectUserValidMembershipForChannelUri,
   selectCreatorHasMembershipsByUri,
   selectCreatorMembershipsFetchedByUri,
-  selectMembershipTiersForChannelId,
+  selectMembershipTiersForCreatorId,
 } from 'redux/selectors/memberships';
 import { selectPermanentUrlForUri, selectIsClaimOdyseeChannelForUri } from 'redux/selectors/claims';
 import { parseURI } from 'util/lbryURI';
@@ -21,7 +21,7 @@ const select = (state, props) => {
     validUserMembershipForChannel: selectUserValidMembershipForChannelUri(state, uri),
     creatorHasMemberships: selectCreatorHasMembershipsByUri(state, uri),
     creatorMembershipsFetched: selectCreatorMembershipsFetchedByUri(state, uri),
-    creatorTiers: selectMembershipTiersForChannelId(state, channelClaimId),
+    creatorTiers: selectMembershipTiersForCreatorId(state, channelClaimId),
     isOdyseeChannel: selectIsClaimOdyseeChannelForUri(state, uri),
   };
 };

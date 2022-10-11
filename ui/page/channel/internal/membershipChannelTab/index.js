@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import {
   selectMyPurchasedMembershipTierForCreatorUri,
-  selectMembershipTiersForChannelId,
+  selectMembershipTiersForCreatorId,
 } from 'redux/selectors/memberships';
 import { selectChannelClaimIdForUri } from 'redux/selectors/claims';
 import { doOpenCancelationModalForMembership } from 'redux/actions/memberships';
@@ -12,7 +12,7 @@ const select = (state, props) => {
   const { uri } = props;
   const channelClaimId = selectChannelClaimIdForUri(state, uri);
   const purchasedChannelMembership = selectMyPurchasedMembershipTierForCreatorUri(state, channelClaimId);
-  const creatorMemberships = selectMembershipTiersForChannelId(state, channelClaimId);
+  const creatorMemberships = selectMembershipTiersForCreatorId(state, channelClaimId);
   const membershipIndex =
     (creatorMemberships &&
       creatorMemberships.findIndex(

@@ -3,7 +3,7 @@ import { doUpdatePublishForm } from 'redux/actions/publish';
 import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
 import {
   selectProtectedContentMembershipsForClaimId,
-  selectMembershipTiersForChannelId,
+  selectMembershipTiersForCreatorId,
   selectMyMembershipTiersWithExclusiveContentPerk,
   selectMyMembershipTiersWithExclusiveLivestreamPerk,
 } from 'redux/selectors/memberships';
@@ -23,7 +23,7 @@ const select = (state, props) => {
     activeChannel,
     incognito,
     protectedMembershipIds: selectProtectedContentMembershipsForClaimId(state, channelClaimId, claimId),
-    myMembershipTiers: selectMembershipTiersForChannelId(state, activeChannel?.claim_id),
+    myMembershipTiers: selectMembershipTiersForCreatorId(state, activeChannel?.claim_id),
     myMembershipTiersWithExclusiveContentPerk: selectMyMembershipTiersWithExclusiveContentPerk(
       state,
       activeChannel?.claim_id
