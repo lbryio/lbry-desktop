@@ -46,9 +46,11 @@ function Invited(props: Props) {
     claimName: referrerChannelName,
     channelClaimId: referrerChannelClaimId,
   } = referrerUri ? parseURI(referrerUri) : {};
+
   const channelUri =
     referrerIsChannel &&
     formatLbryUrlForWeb(buildURI({ channelName: referrerChannelName, channelClaimId: referrerChannelClaimId }));
+  const redirectPath = channelUri || `/`;
 
   function handleDone() {
     history.push(channelUri || '/');
@@ -56,7 +58,7 @@ function Invited(props: Props) {
 
   // always follow if it's a channel
   React.useEffect(() => {
-    if (!isSubscribed && userHasVerifiedEmail && referrerUri) {
+    if (referrerIsChannel && !isSubscribed && userHasVerifiedEmail && referrerUri) {
       let channelName;
       try {
         const { claimName } = parseURI(referrerUri);
@@ -69,7 +71,7 @@ function Invited(props: Props) {
         });
       }
     }
-  }, [referrerUri, isSubscribed, doChannelSubscribe, userHasVerifiedEmail]);
+  }, [referrerUri, isSubscribed, doChannelSubscribe, userHasVerifiedEmail, referrerIsChannel]);
 
   React.useEffect(() => {
     if (referrerSet === undefined && userHasVerifiedEmail) {
@@ -96,6 +98,7 @@ function Invited(props: Props) {
     [referrerIsChannel, referrerUri]
   );
 
+  // Case 1: Loading
   if (referrerSet === undefined && referrerUri) {
     return (
       <div className="main--empty">
@@ -104,6 +107,7 @@ function Invited(props: Props) {
     );
   }
 
+  // Case 2: Already claimed reward
   if (referrerSetError === ERRORS.ALREADY_CLAIMED) {
     return (
       <Card
@@ -121,6 +125,7 @@ function Invited(props: Props) {
     );
   }
 
+  // Case 3: No reward to claim (referrer claim is null/deleted, or invite is invalid)
   if (!referrerSet || (referrerSetError && hasUnclaimedRefereeReward)) {
     return (
       <Card
@@ -136,8 +141,10 @@ function Invited(props: Props) {
             <div className="section__actions">
               <Button
                 button="primary"
-                label={userHasVerifiedEmail ? __('Verify') : __('Create Account')}
-                navigate={`/$/${PAGES.AUTH}?redirect=/$/${PAGES.REWARDS}`}
+                label={userHasVerifiedEmail ? __('Verify') : __('Sign up')}
+                navigate={
+                  userHasVerifiedEmail ? `/$/${PAGES.REWARDS}` : `/$/${PAGES.AUTH}?redirect=/$/${PAGES.REWARDS}`
+                }
               />
               <Button button="link" label={__('Explore')} onClick={handleDone} />
             </div>
@@ -149,14 +156,18 @@ function Invited(props: Props) {
     );
   }
 
-  const signUpButton = (
+  const SignUpButton = (buttonProps: any) => (
     <Button
       button="link"
-      label={userHasVerifiedEmail ? __('Finish verification') : __('Create an account')}
-      navigate={`/$/${PAGES.AUTH}?redirect=/$/${PAGES.INVITE}/${referrerUri || ''}`}
+      label={userHasVerifiedEmail ? __('Finish verification') : __('Sign up')}
+      navigate={
+        userHasVerifiedEmail ? `/$/${PAGES.REWARDS}` : `/$/${PAGES.AUTH}?redirect=/$/${PAGES.INVITE}${redirectPath}`
+      }
+      {...buttonProps}
     />
   );
 
+  // Case 4: Reward can be claimed
   return (
     <Card
       {...cardProps}
@@ -167,22 +178,18 @@ function Invited(props: Props) {
       }
       subtitle={
         referrerIsChannel ? (
-          <I18nMessage tokens={{ channel_name: channelTitle, signup_link: signUpButton, SITE_NAME }}>
-            %channel_name% is waiting for you on %SITE_NAME%. Create your account now.
+          <I18nMessage tokens={{ channel_name: channelTitle, signup_link: <SignUpButton />, site_name: SITE_NAME }}>
+            %channel_name% is waiting for you on %site_name%. %signup_link% to claim it.
           </I18nMessage>
         ) : (
-          <I18nMessage tokens={{ signup_link: signUpButton }}>
+          <I18nMessage tokens={{ signup_link: <SignUpButton /> }}>
             Content freedom and a present are waiting for you. %signup_link% to claim it.
           </I18nMessage>
         )
       }
       actions={
         <div className="section__actions">
-          <Button
-            button="primary"
-            label={userHasVerifiedEmail ? __('Finish Account') : __('Create Account')}
-            navigate={`/$/${PAGES.AUTH}?redirect=/$/${PAGES.INVITE}/${referrerUri || ''}`}
-          />
+          <SignUpButton button="primary" />
           <Button button="link" label={__('Skip')} onClick={handleDone} />
         </div>
       }
