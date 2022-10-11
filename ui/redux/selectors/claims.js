@@ -24,6 +24,7 @@ import * as CLAIM from 'constants/claim';
 import { INTERNAL_TAGS, MEMBERS_ONLY_CONTENT_TAG, RESTRICTED_CHAT_COMMENTS_TAG } from 'constants/tags';
 import { getGeoRestrictionForClaim } from 'util/geoRestriction';
 import { parsePurchaseTag, parseRentalTag } from 'util/stripe';
+import { removeInternalStringTags } from 'util/tags';
 
 type State = { claims: any, user: UserState };
 
@@ -744,7 +745,7 @@ export const makeSelectMyChannelPermUrlForName = (name: string) =>
 
 // CAUTION: this is purely meant for the GUI now, as it filters out INTERNAL_TAGS.
 export const selectTagsForUri = createCachedSelector(selectMetadataForUri, (metadata: ?GenericMetadata) => {
-  return metadata && metadata.tags ? metadata.tags.filter((tag) => !INTERNAL_TAGS.includes(tag)) : [];
+  return metadata && metadata.tags ? removeInternalStringTags(metadata.tags) : [];
 })((state, uri) => String(uri));
 
 export const selectPurchaseTagForUri = createCachedSelector(selectMetadataForUri, (metadata: ?GenericMetadata) => {

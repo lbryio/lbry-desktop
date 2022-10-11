@@ -14,8 +14,8 @@ import ChannelThumbnail from 'component/channelThumbnail';
 import * as ICONS from 'constants/icons';
 import Icon from 'component/common/icon';
 import { NO_FILE } from 'redux/actions/publish';
-import { INTERNAL_TAGS } from 'constants/tags';
 import { PAYWALL } from 'constants/publish';
+import { removeInternalTags } from 'util/tags';
 
 type Props = {
   filePath: string | WebFile,
@@ -200,7 +200,7 @@ const ModalPublishPreview = (props: Props) => {
   }
 
   function getTagsValue(tags) {
-    const visibleTags = tags.filter((tag) => !INTERNAL_TAGS.includes(tag.name));
+    const visibleTags = removeInternalTags(tags);
     return visibleTags.map((tag) => (
       <Tag
         key={tag.name}

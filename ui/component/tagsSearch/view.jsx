@@ -5,7 +5,16 @@ import Tag from 'component/tag';
 import { setUnion, setDifference } from 'util/set-operations';
 import I18nMessage from 'component/i18nMessage';
 import analytics from 'analytics';
-import { CONTROL_TAGS, INTERNAL_TAGS, INTERNAL_TAG_PREFIX } from 'constants/tags';
+import {
+  CONTROL_TAGS,
+  INTERNAL_TAGS,
+  INTERNAL_TAG_PREFIX,
+  PURCHASE_TAG,
+  RENTAL_TAG,
+  RENTAL_TAG_OLD,
+  PURCHASE_TAG_OLD,
+} from 'constants/tags';
+import { removeInternalTags } from 'util/tags';
 
 type Props = {
   tagsPassedIn: Array<Tag>,
@@ -81,14 +90,23 @@ export default function TagsSearch(props: Props) {
   const remainingUnfollowedTagsSet = setDifference(unfollowedTagsSet, selectedTagsSet);
   const suggestedTagsSet = setUnion(remainingFollowedTagsSet, remainingUnfollowedTagsSet);
 
-  const SPECIAL_TAGS = [...INTERNAL_TAGS, 'mature'];
   let countWithoutSpecialTags = selectedTagsSet.size;
 
+  const SPECIAL_TAGS = [...INTERNAL_TAGS, 'mature'];
   SPECIAL_TAGS.forEach((t) => {
     if (selectedTagsSet.has(t)) {
       countWithoutSpecialTags--;
     }
   });
+
+  const INTERNAL_PREFIXES = [PURCHASE_TAG, PURCHASE_TAG_OLD, RENTAL_TAG, RENTAL_TAG_OLD];
+  for (const tag of selectedTagsSet) {
+    INTERNAL_PREFIXES.forEach((prefix) => {
+      if (tag.startsWith(prefix)) {
+        --countWithoutSpecialTags;
+      }
+    });
+  }
 
   // const countWithoutLbryFirst = selectedTagsSet.has('lbry-first') ? selectedTagsSet.size - 1 : selectedTagsSet.size;
   const maxed = Boolean(limitSelect && countWithoutSpecialTags >= limitSelect);
@@ -180,18 +198,16 @@ export default function TagsSearch(props: Props) {
           <ul className="tags--remove">
             {countWithoutSpecialTags === 0 && <Tag key={`placeholder-tag`} name={'example'} disabled type={'remove'} />}
             {Boolean(tagsPassedIn.length) &&
-              tagsPassedIn
-                .filter((t) => !INTERNAL_TAGS.includes(t.name))
-                .map((tag) => (
-                  <Tag
-                    key={`passed${tag.name}`}
-                    name={tag.name}
-                    type="remove"
-                    onClick={() => {
-                      onRemove(tag);
-                    }}
-                  />
-                ))}
+              removeInternalTags(tagsPassedIn).map((tag) => (
+                <Tag
+                  key={`passed${tag.name}`}
+                  name={tag.name}
+                  type="remove"
+                  onClick={() => {
+                    onRemove(tag);
+                  }}
+                />
+              ))}
           </ul>
           {!hideInputField && (
             <FormField
