@@ -373,7 +373,6 @@
   width: 100%;
   aspect-ratio: 16 / 9;
   background-color: var(--color-placeholder-background);
-  // background-color: rgba(25,25,25,0.4);
   border-radius: var(--border-radius);
   position: relative;
 }
@@ -387,6 +386,9 @@
   .button--uri-indicator {
     .channel-name {
       display: unset;
+      p {
+        display: unset;
+      }
     }
   }
 }

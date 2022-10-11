@@ -191,6 +191,7 @@ function CommentMenuList(props: Props) {
     try {
       return uri && uri.substring(uri.indexOf('@'), uri.length).replace('#', ':');
     } catch {
+      console.log('reduceUriToChannelName failed: ', uri);
       return uri;
     }
   }

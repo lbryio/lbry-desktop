@@ -5,6 +5,7 @@ import {
   selectThumbnailForUri,
   selectHasChannels,
   selectMyClaimIdsRaw,
+  selectDateForUri,
 } from 'redux/selectors/claims';
 import { doCommentUpdate, doCommentList } from 'redux/actions/comments';
 import { doToast } from 'redux/actions/notifications';
@@ -36,6 +37,8 @@ const select = (state, props) => {
 
   const claim = selectClaimForUri(state, uri);
   const creatorId = getChannelIdFromClaim(claim);
+  const channelAge = selectDateForUri(state, channel_url);
+  console.log('channel_url: ', channel_url);
 
   return {
     myChannelIds: selectMyClaimIdsRaw(state),
@@ -53,6 +56,7 @@ const select = (state, props) => {
     creatorMembership: selectMembershipForCreatorOnlyIdAndChannelId(state, creatorId, channel_id),
     repliesFetching: selectIsFetchingCommentsForParentId(state, comment_id),
     fetchedReplies: selectRepliesForParentId(state, comment_id),
+    channelAge,
   };
 };
 

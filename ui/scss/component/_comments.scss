@@ -287,6 +287,11 @@ $thumbnailWidthSmall: 2rem;
   align-items: center;
   height: 100%;
   width: calc(100% - var(--spacing-m) - var(--spacing-s));
+  padding-top: 1px;
+
+  @media (max-width: $breakpoint-small) {
+    width: calc(100% - 100px - var(--spacing-m) - var(--spacing-s));
+  }
 
   .channel-name {
     color: var(--color-link);
@@ -302,6 +307,7 @@ $thumbnailWidthSmall: 2rem;
 
   .comment__author--creator {
     margin-top: 0;
+    margin-bottom: 0;
     &:hover {
       .channel-name {
         color: var(--color-primary-contrast);
@@ -313,10 +319,56 @@ $thumbnailWidthSmall: 2rem;
     height: 1.4rem;
     width: 1.4rem;
 
-    &.icon--Membership {
+    &.icon--PremiumPlus {
+      height: 1.2rem;
+      width: 1.2rem;
+      margin-bottom: -1.5px;
+    }
+
+    &.icon--BadgeSprout {
       height: 0.96rem;
       width: 0.96rem;
+      margin-bottom: -2px;
+    }
+
+    &.icon--Membership {
+      height: 0.9rem;
+      width: 0.9rem;
+      margin-bottom: -2px;
+    }
+  }
+
+  .credit-amount-wrapper {
+    margin-right: var(--spacing-xxs);
+    margin-top: -2px;
+  }
+  .credit-amount {
+    background-color: var(--color-primary);
+    padding: 3px 4px 3px 4px;
+    border-radius: var(--border-radius);
+    font-size: var(--font-xsmall);
+    font-weight: var(--font-weight-bold);
+    color: white;
+    svg {
       margin-bottom: -1.5px;
+    }
+  }
+
+  .comment__pin {
+    background: var(--color-header-background);
+    padding: 0 3px 0 2px;
+    font-weight: var(--font-weight-bold);
+    border-radius: 10px var(--border-radius) var(--border-radius) 10px;
+    margin-left: 0;
+    border: 2px solid var(--color-border);
+    margin-top: -1px;
+    svg {
+      margin-bottom: -3px;
+      background: var(--color-border);
+      border-radius: 50%;
+      padding: 1px;
+      padding-left: 2px;
+      margin-right: var(--spacing-xxs);
     }
   }
 }
@@ -368,9 +420,12 @@ $thumbnailWidthSmall: 2rem;
   height: 100%;
 
   .button__content {
-    max-width: 10rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    p {
+      max-width: 16rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
   }
 }
 
@@ -810,5 +865,25 @@ $thumbnailWidthSmall: 2rem;
     height: 1.25rem;
     max-width: 1.25rem;
     max-height: 1.25rem;
+  }
+}
+
+.comment-preview {
+  margin-top: var(--spacing-s);
+  border: 2px solid var(--color-border);
+  border-radius: var(--border-radius);
+  padding: var(--spacing-s);
+  background-color: var(--color-header-background);
+
+  .comment__thumbnail-wrapper {
+    grid-gap: unset;
+  }
+
+  .comment__pin {
+    padding-top: 1px;
+    background-color: var(--color-background);
+    svg {
+      background-color: var(--color-header-background);
+    }
   }
 }

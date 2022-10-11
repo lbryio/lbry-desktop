@@ -74,6 +74,10 @@
       right: 0;
     }
   }
+  .livestreamComment__meta-information {
+    width: 100%;
+    min-width: 0;
+  }
   .livestreamComment__menu {
     position: relative;
     right: 0;
@@ -97,6 +101,41 @@
   background-color: rgba(var(--color-header-background-base), 0.6);
 }
 
+.livestreamComment__meta-information {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 100%;
+  width: calc(100% - var(--spacing-m) - var(--spacing-m));
+  padding-top: 1px;
+
+  .comment__pin {
+    background: var(--color-header-background);
+    padding: 0 3px 0 2px;
+    font-weight: var(--font-weight-bold);
+    border-radius: 10px var(--border-radius) var(--border-radius) 10px;
+    margin-left: 0;
+    border: 2px solid var(--color-border);
+    margin-top: -1px;
+    flex: 1;
+    white-space: nowrap;
+    svg {
+      margin-bottom: -1px;
+      background: var(--color-border);
+      border-radius: 50%;
+      padding: 1px;
+      padding-left: 2px;
+      margin-right: var(--spacing-xxs);
+    }
+  }
+
+  .date_time {
+    flex: 1;
+    white-space: nowrap;
+    margin-bottom: -5px;
+  }
+}
+
 .livestreamComment__info {
   overflow: hidden;
   width: 100%;
@@ -118,11 +157,25 @@
       width: calc(var(--font-body) + 2px);
       margin-bottom: -4px;
     }
+    .icon--BadgeMod {
+      height: calc(var(--font-body) - 3px);
+      width: calc(var(--font-body) - 3px);
+      margin-bottom: -4px;
+    }
+    .icon--Premium,
+    .icon--PremiumPlus {
+      margin-bottom: -5px;
+    }
     .icon--Membership {
       color: var(--color-text);
       height: calc(var(--font-body) - 3px);
       width: calc(var(--font-body) - 3px);
-      margin-bottom: -1.5px;
+      margin-bottom: -4.5px;
+    }
+    .icon--BadgeSprout {
+      height: 1rem;
+      width: 1rem;
+      margin-bottom: -4px;
     }
   }
 }
@@ -149,17 +202,6 @@
     .freezeframe-wrapper,
     .channel-thumbnail--xsmall {
       margin-left: var(--spacing-xs);
-    }
-  }
-
-  .livestreamComment__info {
-    margin-top: calc(var(--spacing-xxs) / 2);
-
-    .comment__badge {
-      .icon--Membership {
-        color: var(--color-text);
-        margin-bottom: -4px;
-      }
     }
   }
 

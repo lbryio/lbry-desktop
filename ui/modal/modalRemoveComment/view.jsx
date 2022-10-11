@@ -33,7 +33,7 @@ function ModalRemoveComment(props: Props) {
 
   function getCommentPreview(comment: ?Comment) {
     return comment ? (
-      <div className="section section--padded border-std non-clickable">
+      <div className="section comment-preview non-clickable">
         <Comment comment={comment} isTopLevel hideActions hideContextMenu forceDisplayDeadComment />
       </div>
     ) : null;
@@ -51,7 +51,7 @@ function ModalRemoveComment(props: Props) {
                 {__('This comment has a tip associated with it which cannot be reverted.')}
               </p>
             )}
-            <div className="section--padded">{getCommentPreview(comment)}</div>
+            <div>{getCommentPreview(comment)}</div>
           </React.Fragment>
         }
         actions={

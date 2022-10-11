@@ -103,7 +103,7 @@ class CreditAmount extends React.PureComponent<Props> {
     return (
       <span
         title={amount && !hideTitle ? formatFullPrice(amount, 2) : ''}
-        className={classnames(className, { hyperChat: hyperChat })}
+        className={classnames('credit-amount-wrapper', className, { hyperChat: hyperChat })}
       >
         {customAmounts
           ? Object.values(customAmounts).map((amount, index) => (
