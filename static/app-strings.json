@@ -1022,7 +1022,6 @@
   "Please enter the verification code sent to +${countryCode}${phone}. Didn't receive it?": "Please enter the verification code sent to +${countryCode}${phone}. Didn't receive it?",
   "Go back.": "Go back.",
   "Verification Code": "Verification Code",
-  "Verify": "Verify",
   "Email %help_link% or join our %chat_link% if you encounter any trouble with your code.": "Email %help_link% or join our %chat_link% if you encounter any trouble with your code.",
   "The wallet folder could not be added to the zip archive.": "The wallet folder could not be added to the zip archive.",
   "There was a problem writing the zip archive to disk.": "There was a problem writing the zip archive to disk.",

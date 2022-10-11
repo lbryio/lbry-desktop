@@ -43,17 +43,24 @@ function Invited(props: Props) {
 
   const {
     isChannel: referrerIsChannel,
-    claimName: referrerChannelName,
+    channelName: referrerChannelName,
     channelClaimId: referrerChannelClaimId,
+    streamName: referrerStreamName,
+    streamClaimId: referrerStreamClaimId,
   } = referrerUri ? parseURI(referrerUri) : {};
 
-  const channelUri =
-    referrerIsChannel &&
-    formatLbryUrlForWeb(buildURI({ channelName: referrerChannelName, channelClaimId: referrerChannelClaimId }));
-  const redirectPath = channelUri || `/`;
+  const redirectPath =
+    formatLbryUrlForWeb(
+      buildURI({
+        channelName: referrerChannelName,
+        channelClaimId: referrerChannelClaimId,
+        streamName: referrerStreamName,
+        streamClaimId: referrerStreamClaimId,
+      })
+    ) || '/';
 
   function handleDone() {
-    history.push(channelUri || '/');
+    history.push(redirectPath);
   }
 
   // always follow if it's a channel
@@ -143,7 +150,7 @@ function Invited(props: Props) {
                 button="primary"
                 label={userHasVerifiedEmail ? __('Verify') : __('Sign up')}
                 navigate={
-                  userHasVerifiedEmail ? `/$/${PAGES.REWARDS}` : `/$/${PAGES.AUTH}?redirect=/$/${PAGES.REWARDS}`
+                  userHasVerifiedEmail ? `/$/${PAGES.REWARDS_VERIFY}` : `/$/${PAGES.AUTH}?redirect=/$/${PAGES.REWARDS}`
                 }
               />
               <Button button="link" label={__('Explore')} onClick={handleDone} />
@@ -161,7 +168,9 @@ function Invited(props: Props) {
       button="link"
       label={userHasVerifiedEmail ? __('Finish verification') : __('Sign up')}
       navigate={
-        userHasVerifiedEmail ? `/$/${PAGES.REWARDS}` : `/$/${PAGES.AUTH}?redirect=/$/${PAGES.INVITE}${redirectPath}`
+        userHasVerifiedEmail
+          ? `/$/${PAGES.REWARDS_VERIFY}?redirect=/$/${PAGES.INVITE}${redirectPath}`
+          : `/$/${PAGES.AUTH}?redirect=/$/${PAGES.INVITE}${redirectPath}`
       }
       {...buttonProps}
     />
