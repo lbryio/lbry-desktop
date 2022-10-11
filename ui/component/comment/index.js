@@ -38,7 +38,6 @@ const select = (state, props) => {
   const claim = selectClaimForUri(state, uri);
   const creatorId = getChannelIdFromClaim(claim);
   const channelAge = selectDateForUri(state, channel_url);
-  console.log('channel_url: ', channel_url);
 
   return {
     myChannelIds: selectMyClaimIdsRaw(state),

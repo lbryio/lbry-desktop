@@ -76,10 +76,6 @@ export default function ChatComment(props: Props) {
   } = comment;
 
   const isSprout = !channelAge || (channelAge && Math.round((new Date() - channelAge) / (1000 * 60 * 60 * 24)) < 7);
-  console.log('@@@@@@@@@@@@@@@@@@@@@@@@@@');
-  console.log('authorTitle: ', authorTitle);
-  console.log('channelAge: ', channelAge);
-  console.log('isSprout: ', isSprout);
 
   const [exchangeRate, setExchangeRate] = React.useState(0);
   React.useEffect(() => {
