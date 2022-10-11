@@ -223,7 +223,9 @@ export const selectMembershipForCreatorIdAndChannelId = createCachedSelector(
   (channelId, creatorMemberships, myValidCreatorMemberships, myChannelClaimIds) => {
     const channelIsMine = new Set(myChannelClaimIds).has(channelId);
 
-    if (channelIsMine && myValidCreatorMemberships) {
+    if (channelIsMine) {
+      if (!myValidCreatorMemberships) return myValidCreatorMemberships;
+
       // -- For checking my own memberships, it is better to use the result of the 'mine'
       // call, which is cached and will be more up to date.
       const myMembership = myValidCreatorMemberships.find(
