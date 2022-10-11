@@ -2,8 +2,10 @@
 import React from 'react';
 
 import './style.scss';
+import ClaimPreview from 'component/claimPreview';
 import BusyIndicator from 'component/common/busy-indicator';
 import { Form } from 'component/common/form';
+import * as ICONS from 'constants/icons';
 import * as STRIPE from 'constants/stripe';
 import Button from 'component/button';
 import Card from 'component/common/card';
@@ -40,6 +42,7 @@ type TipParams = { tipAmount: number, tipChannelName: string, channelClaimId: st
 type UserParams = { activeChannelName: ?string, activeChannelId: ?string };
 
 type Props = {
+  uri: string,
   activeChannelId?: string,
   activeChannelName?: string,
   claimId: string,
@@ -75,6 +78,7 @@ type Props = {
 
 export default function PreorderAndPurchaseContentCard(props: Props) {
   const {
+    uri,
     activeChannelId,
     activeChannelName,
     channelClaimId,
@@ -170,6 +174,9 @@ export default function PreorderAndPurchaseContentCard(props: Props) {
         actions={
           <>
             <div className="fiat-order__actions">
+              <div className="fiat-order__claim-preview">
+                <ClaimPreview uri={uri} hideMenu hideActions nonClickable type="small" />
+              </div>
               {waitingForBackend ? (
                 <BusyIndicator message={__('Processing order...')} />
               ) : (
@@ -204,6 +211,7 @@ const SubmitArea = withCreditCard((props: any) => (
           amount: props.tipAmount.toString(),
           rental_duration: props.rentDuration,
         })}
+        icon={props.tags.rentalTag ? ICONS.BUY : ICONS.TIME}
       />
       {props.tags.purchaseTag && props.tags.rentalTag && (
         <SubmitButton
@@ -213,6 +221,7 @@ const SubmitArea = withCreditCard((props: any) => (
             amount: props.rentTipAmount.toString(),
             rental_duration: props.rentDuration,
           })}
+          icon={ICONS.TIME}
         />
       )}
     </div>
