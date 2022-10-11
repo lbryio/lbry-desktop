@@ -190,7 +190,7 @@ function CommentView(props: Props) {
   const commentByOwnerOfContent = contentChannelClaim && contentChannelClaim.permanent_url === authorUri;
   const stickerFromMessage = parseSticker(message);
 
-  const isSprout = !channelAge || (channelAge && Math.round((new Date() - channelAge) / (1000 * 60 * 60 * 24)) < 7);
+  const isSprout = channelAge && Math.round((new Date() - channelAge) / (1000 * 60 * 60 * 24)) < 7;
 
   let channelOwnerOfContent;
   try {
