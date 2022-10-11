@@ -71,7 +71,11 @@ const StripeAccountConnection = (props: Props) => {
       }}
     >
       <Card
-        title={<div className="table__header-text">{__('Bank account connected')}</div>}
+        title={
+          <div className="table__header-text">
+            {chargesEnabled ? __('Bank account connected') : __('Connect a bank account')}
+          </div>
+        }
         isBodyList
         body={
           chargesEnabled ? (
