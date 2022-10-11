@@ -10,6 +10,7 @@ import * as PAGES from 'constants/pages';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import Button from 'component/button';
 import Nag from 'component/nag';
+import PaidContentOverlay from 'component/paidContentOverlay';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
 import { LivestreamContext } from 'page/livestream/view';
 import { formatLbryUrlForWeb } from 'util/url';
@@ -18,6 +19,8 @@ import useFetchLiveStatus from 'effects/use-fetch-live';
 import useGetPoster from 'effects/use-get-poster';
 import { ChatCommentContext } from 'component/chat/chatComment/view';
 import { ExpandableContext } from 'component/common/expandable';
+
+type Action = 'default_button' | 'paid_overlay' | 'membership_overlay' | '';
 
 type Props = {
   channelClaimId: ?string,
@@ -41,6 +44,7 @@ type Props = {
   sdkPaid: boolean,
   fiatPaid: boolean,
   fiatRequired: boolean,
+  isFetchingPurchases: boolean,
   authenticated: boolean,
   videoTheaterMode: boolean,
   isCurrentClaimLive?: boolean,
@@ -52,6 +56,7 @@ type Props = {
   claimLinkId?: string,
   doUriInitiatePlay: (playingOptions: PlayingUri, isPlayable: boolean) => void,
   doFetchChannelLiveStatus: (string) => void,
+  claimIsMine: boolean,
   protectedMembershipIds?: Array<number>,
   validMembershipIds?: Array<number>,
   protectedContentTag?: string,
@@ -64,11 +69,13 @@ export default function FileRenderInitiator(props: Props) {
     authenticated,
     autoplay,
     channelClaimId,
+    claimIsMine,
     claimLinkId,
     claimThumbnail,
     sdkPaid,
     fiatPaid,
     fiatRequired,
+    isFetchingPurchases,
     costInfo,
     customAction,
     doFetchChannelLiveStatus,
@@ -114,7 +121,10 @@ export default function FileRenderInitiator(props: Props) {
   const isAnonymousFiatContent = fiatRequired && !channelClaimId;
 
   const cannotViewFile =
-    (!claimIsMine && ((fiatRequired && !fiatPaid) || (sdkFeeRequired && !sdkPaid) || isRestrictedByMembership)) ||
+    (!claimIsMine &&
+      ((fiatRequired && (!fiatPaid || isFetchingPurchases)) ||
+        (sdkFeeRequired && !sdkPaid) ||
+        isRestrictedByMembership)) ||
     (isLivestreamClaim && isCurrentClaimLive && !layountRendered && !isMobile);
   const canViewFile = !cannotViewFile;
 
@@ -129,6 +139,8 @@ export default function FileRenderInitiator(props: Props) {
     renderUnsupported ||
     (!fileInfo && insufficientCredits && !sdkPaid);
 
+  const action: Action = getActionType();
+
   const shouldRedirect = !authenticated && !isFree;
 
   function doAuthRedirect() {
@@ -139,6 +151,22 @@ export default function FileRenderInitiator(props: Props) {
   useFetchLiveStatus(isLivestreamClaim && !livestreamPage ? channelClaimId : undefined, doFetchChannelLiveStatus);
 
   const thumbnail = useGetPoster(claimThumbnail);
+
+  function getActionType() {
+    if (fiatRequired) {
+      if (isFetchingPurchases) {
+        return '';
+      } else if (!fiatPaid && !claimIsMine) {
+        return channelClaimId ? 'paid_overlay' : '';
+      } else {
+        return 'default_button';
+      }
+    } else if (isRestrictedByMembership) {
+      return 'membership_overlay';
+    } else {
+      return 'default_button';
+    }
+  }
 
   function handleClick() {
     if (isLiveComment || (embedded && !isPlayable)) {
@@ -245,18 +273,26 @@ export default function FileRenderInitiator(props: Props) {
         )
       )}
 
-      {(!disabled || (embedded && isLivestreamClaim)) && (
-        <Button
-          requiresAuth={shouldRedirect}
-          onClick={handleClick}
-          iconSize={30}
-          title={isPlayable ? __('Play') : __('View')}
-          className={classnames('button--icon', {
-            'button--play': isPlayable,
-            'button--view': !isPlayable,
-          })}
-        />
-      )}
+      {action === 'paid_overlay' ? (
+        <PaidContentOverlay uri={uri} />
+      ) : action === 'membership_overlay' ? (
+        <>{/* Should bring membership overlay here instead of as a peer */}</>
+      ) : action === 'default_button' ? (
+        <>
+          {(!disabled || (embedded && isLivestreamClaim)) && (
+            <Button
+              requiresAuth={shouldRedirect}
+              onClick={handleClick}
+              iconSize={30}
+              title={isPlayable ? __('Play') : __('View')}
+              className={classnames('button--icon', {
+                'button--play': isPlayable,
+                'button--view': !isPlayable,
+              })}
+            />
+          )}
+        </>
+      ) : null}
 
       {customAction}
     </div>

@@ -1,0 +1,42 @@
+@import '~ui/scss/init/breakpoints';
+@import '~ui/scss/init/mixins';
+
+$ICON_OFFSET: 2px; // depends on font used. boo.
+
+.paid-content-prompt {
+  @include font-sans;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  .paid-content-prompt__notice {
+    // TODO: this should extend [.help--notice]
+    border-radius: var(--border-radius);
+    border: 1px solid var(--color-fiat-payment);
+    background-color: rgba(var(--color-fiat-payment-decimal), 0.2);
+    color: var(--color-text);
+    padding: var(--spacing-xs) var(--spacing-s);
+    margin-bottom: var(--spacing-s);
+    font-size: var(--font-small);
+  }
+
+  .paid-content-prompt__price {
+    font-size: var(--font-body);
+
+    .icon {
+      margin-right: var(--spacing-xs);
+      margin-bottom: -$ICON_OFFSET;
+    }
+
+    margin-bottom: var(--spacing-s);
+  }
+}
+
+.paid-content-prompt--overlay {
+  align-items: center;
+
+  .paid-content-prompt__notice {
+    font-size: var(--font-base);
+  }
+}

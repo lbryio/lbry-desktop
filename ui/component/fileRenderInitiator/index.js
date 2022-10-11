@@ -6,6 +6,7 @@ import {
   selectClaimIsMine,
   selectIsFiatPaidForUri,
   selectIsFiatRequiredForUri,
+  selectIsFetchingPurchases,
 } from 'redux/selectors/claims';
 import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import * as SETTINGS from 'constants/settings';
@@ -45,6 +46,7 @@ const select = (state, props) => {
     sdkPaid: selectClaimWasPurchasedForUri(state, uri),
     fiatPaid: selectIsFiatPaidForUri(state, uri),
     fiatRequired: selectIsFiatRequiredForUri(state, uri),
+    isFetchingPurchases: selectIsFetchingPurchases(state),
     costInfo: selectCostInfoForUri(state, uri),
     fileInfo: makeSelectFileInfoForUri(uri)(state),
     insufficientCredits: selectInsufficientCreditsForUri(state, uri),
