@@ -113,15 +113,13 @@ const OdyseeMembershipPage = (props: Props) => {
             body={showHelp && <HelpText />}
           />
 
-          {membershipOptions &&
-            (!validMemberships || validMemberships.length === 0) &&
-            (!activeMemberships || activeMemberships.length === 0) && (
-              <Card title={__('Available Memberships')}>
-                {membershipOptions.map((membership) => (
-                  <PremiumOption key={membership.Membership.name} membershipPurchase={membership} />
-                ))}
-              </Card>
-            )}
+          {membershipOptions && (!validMemberships || validMemberships.length === 0) && (
+            <Card title={__('Available Memberships')}>
+              {membershipOptions.map((membership) => (
+                <PremiumOption key={membership.Membership.name} membershipPurchase={membership} />
+              ))}
+            </Card>
+          )}
 
           {activeMemberships && activeMemberships.length > 0 && (
             <Card title={__('Your Active Memberships')}>
