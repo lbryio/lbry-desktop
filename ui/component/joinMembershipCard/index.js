@@ -51,6 +51,7 @@ const select = (state, props) => {
     incognito: selectIncognito(state),
     unlockableTierIds,
     cheapestMembership: unlockableTierIds && selectCheapestPlanForRestrictedIds(state, unlockableTierIds),
+    membersOnly,
     isLivestream,
   };
 };
