@@ -87,28 +87,14 @@ const ModalPublishPreview = (props: Props) => {
     appLanguage,
   } = props;
 
-  const maxCharsBeforeOverflow = 128;
-
-  const formattedTitle = React.useMemo(() => {
-    if (title && title.length > maxCharsBeforeOverflow) {
-      return title.slice(0, maxCharsBeforeOverflow).trim() + '...';
-    }
-    return title;
-  }, [title]);
-
-  const formattedUri = React.useMemo(() => {
-    if (uri && uri.length > maxCharsBeforeOverflow) {
-      return uri.slice(0, maxCharsBeforeOverflow).trim() + '...';
-    }
-    return uri;
-  }, [uri]);
-
   const livestream =
     (uri && isLivestreamClaim) ||
     //   $FlowFixMe
     (previewResponse?.outputs[0] && previewResponse.outputs[0].value && !previewResponse.outputs[0].value.source);
   // leave the confirm modal up if we're not going straight to upload/reflecting
 
+  const formattedTitle = truncateWithEllipsis(title, 128);
+  const formattedUri = truncateWithEllipsis(uri, 128);
   const releasesInFuture = releaseTimeEdited && moment(releaseTimeEdited * 1000).isAfter();
   const txFee = previewResponse ? previewResponse['total_fee'] : null;
   const isOptimizeAvail = filePath && filePath !== '' && isVid && ffmpegStatus.available;
@@ -125,6 +111,13 @@ const ModalPublishPreview = (props: Props) => {
         <td>{value}</td>
       </tr>
     );
+  }
+
+  function truncateWithEllipsis(str, maxChars) {
+    if (str && str.length > maxChars) {
+      return str.slice(0, maxChars).trim() + '...';
+    }
+    return str;
   }
 
   function getFilePathName(filePath: string | WebFile) {
