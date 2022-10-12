@@ -50,7 +50,6 @@ type Props = {
   isLivestreamClaim: boolean,
   remoteFile: string,
   appLanguage: string,
-  // isLivestreamPublish?: boolean,
 };
 
 // class ModalPublishPreview extends React.PureComponent<Props> {
@@ -86,7 +85,6 @@ const ModalPublishPreview = (props: Props) => {
     isLivestreamClaim,
     remoteFile,
     appLanguage,
-    // isLivestreamPublish,
   } = props;
 
   const maxCharsBeforeOverflow = 128;
@@ -110,22 +108,23 @@ const ModalPublishPreview = (props: Props) => {
     //   $FlowFixMe
     (previewResponse?.outputs[0] && previewResponse.outputs[0].value && !previewResponse.outputs[0].value.source);
   // leave the confirm modal up if we're not going straight to upload/reflecting
-  // @if TARGET='web'
-  React.useEffect(() => {
-    if (publishing && !livestream) {
-      closeModal();
-    } else if (publishSuccess) {
-      closeModal();
-    }
-  }, [publishSuccess, publishing, livestream]);
-  // @endif
 
-  function onConfirmed() {
-    // Publish for real:
-    publish(getFilePathName(filePath), false);
-    // @if TARGET='app'
-    closeModal();
-    // @endif
+  const releasesInFuture = releaseTimeEdited && moment(releaseTimeEdited * 1000).isAfter();
+  const txFee = previewResponse ? previewResponse['total_fee'] : null;
+  const isOptimizeAvail = filePath && filePath !== '' && isVid && ffmpegStatus.available;
+  const modalTitle = getModalTitle();
+  const confirmBtnText = getConfirmButtonText();
+
+  // **************************************************************************
+  // **************************************************************************
+
+  function createRow(label: string, value: any) {
+    return (
+      <tr>
+        <td>{label}</td>
+        <td>{value}</td>
+      </tr>
+    );
   }
 
   function getFilePathName(filePath: string | WebFile) {
@@ -140,58 +139,44 @@ const ModalPublishPreview = (props: Props) => {
     }
   }
 
-  function createRow(label: string, value: any) {
-    return (
-      <tr>
-        <td>{label}</td>
-        <td>{value}</td>
-      </tr>
-    );
-  }
-
-  const releasesInFuture = releaseTimeEdited && moment(releaseTimeEdited * 1000).isAfter();
-
-  const txFee = previewResponse ? previewResponse['total_fee'] : null;
-  //   $FlowFixMe add outputs[0] etc to PublishResponse type
-  const isOptimizeAvail = filePath && filePath !== '' && isVid && ffmpegStatus.available;
-
-  let modalTitle = 'Upload';
-  let confirmBtnText = 'Save';
-
-  if (isStillEditing) {
-    if (livestream || isLivestreamClaim) {
-      modalTitle = __('Confirm Update');
+  function getModalTitle() {
+    if (isStillEditing) {
+      if (livestream || isLivestreamClaim) {
+        return __('Confirm Update');
+      } else {
+        return __('Confirm Edit');
+      }
+    } else if (livestream || isLivestreamClaim || remoteFile) {
+      return releasesInFuture
+        ? __('Schedule Livestream')
+        : (!livestream || !isLivestreamClaim) && remoteFile
+        ? __('Publish Replay')
+        : __('Create Livestream');
+    } else if (isMarkdownPost) {
+      return __('Confirm Post');
     } else {
-      modalTitle = __('Confirm Edit');
+      return __('Confirm Upload');
     }
-  } else if (livestream || isLivestreamClaim || remoteFile) {
-    modalTitle = releasesInFuture
-      ? __('Schedule Livestream')
-      : (!livestream || !isLivestreamClaim) && remoteFile
-      ? __('Publish Replay')
-      : __('Create Livestream');
-  } else if (isMarkdownPost) {
-    modalTitle = __('Confirm Post');
-  } else {
-    modalTitle = __('Confirm Upload');
   }
 
-  if (!publishing) {
-    confirmBtnText = __('Confirm');
-  } else {
-    confirmBtnText = __('Confirming...');
+  function getConfirmButtonText() {
+    if (!publishing) {
+      return __('Confirm');
+    } else {
+      return __('Confirming...');
+    }
   }
 
-  const releaseDateText = releasesInFuture ? __('Scheduled for') : __('Release date');
+  function getDescription() {
+    return description ? (
+      <div className="media__info-text-preview">
+        <MarkdownPreview content={description} simpleLinks />
+      </div>
+    ) : null;
+  }
 
-  const descriptionValue = description ? (
-    <div className="media__info-text-preview">
-      <MarkdownPreview content={description} simpleLinks />
-    </div>
-  ) : null;
-
-  const licenseValue =
-    licenseType === COPYRIGHT ? (
+  function getLicense() {
+    return licenseType === COPYRIGHT ? (
       <p>© {otherLicenseDescription}</p>
     ) : licenseType === OTHER ? (
       <p>
@@ -202,25 +187,38 @@ const ModalPublishPreview = (props: Props) => {
     ) : (
       <p>{__(licenseType)}</p>
     );
+  }
 
-  const visibleTags = tags.filter((tag) => !INTERNAL_TAGS.includes(tag.name));
+  function getDeposit() {
+    return bid ? <LbcSymbol postfix={`${bid}`} size={14} /> : <p>---</p>;
+  }
 
-  const tagsValue =
-    // Do nothing for onClick(). Setting to 'null' results in "View Tag" action -- we don't want to leave the modal.
-    visibleTags.map((tag) => <Tag key={tag.name} title={tag.name} name={tag.name} type={'flow'} onClick={() => {}} />);
-
-  const depositValue = bid ? <LbcSymbol postfix={`${bid}`} size={14} /> : <p>---</p>;
-
-  let priceValue = __('Free');
-  if (!contentIsFree) {
-    if (fee.currency === 'LBC') {
-      priceValue = <LbcSymbol postfix={fee.amount} />;
+  function getPrice() {
+    if (contentIsFree) {
+      return __('Free');
     } else {
-      priceValue = `${fee.amount} ${fee.currency}`;
+      if (fee.currency === 'LBC') {
+        return <LbcSymbol postfix={fee.amount} />;
+      } else {
+        return `${fee.amount} ${fee.currency}`;
+      }
     }
   }
 
-  const channelValue = (channel) => {
+  function getTagsValue(tags) {
+    const visibleTags = tags.filter((tag) => !INTERNAL_TAGS.includes(tag.name));
+    return visibleTags.map((tag) => (
+      <Tag
+        key={tag.name}
+        title={tag.name}
+        name={tag.name}
+        type="flow"
+        onClick={() => {}} // Do nothing. Don't set to null since that results in "View Tag" action.
+      />
+    ));
+  }
+
+  function getChannelValue(channel) {
     const channelClaim = myChannels && myChannels.find((x) => x.name === channel);
     return channel ? (
       <div className="channel-value">
@@ -233,9 +231,13 @@ const ModalPublishPreview = (props: Props) => {
         <i>{__('Anonymous')}</i>
       </div>
     );
-  };
+  }
 
-  const releaseTimeStr = (time) => {
+  function getReleaseTimeLabel() {
+    return releasesInFuture ? __('Scheduled for') : __('Release date');
+  }
+
+  function getReleaseTimeValue(time) {
     if (time) {
       try {
         return new Date(time * 1000).toLocaleString(appLanguage);
@@ -245,7 +247,31 @@ const ModalPublishPreview = (props: Props) => {
     } else {
       return '';
     }
-  };
+  }
+
+  function onConfirmed() {
+    // Publish for real:
+    publish(getFilePathName(filePath), false);
+    // @if TARGET='app'
+    closeModal();
+    // @endif
+  }
+
+  // **************************************************************************
+  // **************************************************************************
+
+  // @if TARGET='web'
+  React.useEffect(() => {
+    if (publishing && !livestream) {
+      closeModal();
+    } else if (publishSuccess) {
+      closeModal();
+    }
+  }, [publishSuccess, publishing, livestream, closeModal]);
+  // @endif
+
+  // **************************************************************************
+  // **************************************************************************
 
   return (
     <Modal isOpen contentLabel={modalTitle} type="card" onAborted={closeModal}>
@@ -262,15 +288,15 @@ const ModalPublishPreview = (props: Props) => {
                     {livestream && filePath && createRow(__('Replay'), __('Manual Upload'))}
                     {isOptimizeAvail && createRow(__('Transcode'), optimize ? __('Yes') : __('No'))}
                     {createRow(__('Title'), formattedTitle)}
-                    {createRow(__('Description'), descriptionValue)}
-                    {createRow(__('Channel'), channelValue(channel))}
+                    {createRow(__('Description'), getDescription())}
+                    {createRow(__('Channel'), getChannelValue(channel))}
                     {createRow(__('URL'), formattedUri)}
-                    {createRow(__('Deposit'), depositValue)}
-                    {createRow(__('Price'), priceValue)}
+                    {createRow(__('Deposit'), getDeposit())}
+                    {createRow(__('Price'), getPrice())}
                     {createRow(__('Language'), language ? getLanguageName(language) : '')}
-                    {releaseTimeEdited && createRow(releaseDateText, releaseTimeStr(releaseTimeEdited))}
-                    {createRow(__('License'), licenseValue)}
-                    {createRow(__('Tags'), tagsValue)}
+                    {releaseTimeEdited && createRow(getReleaseTimeLabel(), getReleaseTimeValue(releaseTimeEdited))}
+                    {createRow(__('License'), getLicense())}
+                    {createRow(__('Tags'), getTagsValue(tags))}
                   </tbody>
                 </table>
               </div>

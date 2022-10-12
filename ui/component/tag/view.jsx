@@ -11,7 +11,7 @@ type Props = {
   name: string,
   type?: string,
   onClick?: (any) => any,
-  disabled: boolean,
+  disabled?: boolean,
 };
 
 export default function Tag(props: Props) {
