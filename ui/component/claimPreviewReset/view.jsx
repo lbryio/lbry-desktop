@@ -5,6 +5,9 @@ import { SITE_HELP_EMAIL } from 'config';
 import Button from 'component/button';
 import { killStream } from 'util/livestream';
 import 'scss/component/claim-preview-reset.scss';
+// import { iconClasses } from '@mui/material';
+import * as ICONS from 'constants/icons';
+import Icon from 'component/common/icon';
 
 type Props = {
   channelId: string,
@@ -30,6 +33,7 @@ const ClaimPreviewReset = (props: Props) => {
   return (
     <p className={'claimPreviewReset'}>
       <span className={'claimPreviewReset__hint'}>
+        <Icon icon={ICONS.INFO} />
         {__(
           "If you're having trouble starting a stream or if your stream shows that you're live but aren't, try a reset. If the problem persists, please reach out at %SITE_HELP_EMAIL%.",
           { SITE_HELP_EMAIL }

@@ -54,7 +54,7 @@ export default function HeaderMenuButtons(props: HeaderMenuButtonProps) {
     </div>
   ) : (
     <>
-      <Tooltip title={__('Publish')}>
+      <Tooltip title={__('Upload')}>
         <Button className="header__navigationItem--icon" onClick={() => push(`/$/${PAGES.AUTH}${authRedirectParam}`)}>
           <Icon size={18} icon={ICONS.PUBLISH} aria-hidden />
         </Button>
