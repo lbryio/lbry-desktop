@@ -247,6 +247,7 @@ function DiscoverPage(props: Props) {
           hideRepostsOverride={dynamicRouteProps ? false : undefined}
           hideMembersOnlyContent={hideMembersOnlyContent}
           searchLanguages={dynamicRouteProps?.options?.searchLanguages}
+          duration={dynamicRouteProps?.options?.duration}
           csOptionsHook={tagSearchCsOptionsHook}
         />
       </ClaimSearchFilterContext.Provider>

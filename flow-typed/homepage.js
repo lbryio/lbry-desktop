@@ -28,6 +28,7 @@ declare type RowDataItem = {
     pageSize?: number,
     releaseTime?: string,
     searchLanguages?: Array<string>,
+    duration?: string,
   },
   route?: string,
   hideForUnauth?: boolean,

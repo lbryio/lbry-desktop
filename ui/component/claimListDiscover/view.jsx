@@ -30,6 +30,7 @@ type Props = {
   name?: string,
   type: string,
   pageSize?: number,
+  duration?: string,
 
   fetchViewCount?: boolean,
   hideMembersOnly?: boolean, // undefined = use SETTING.HIDE_MEMBERS_ONLY_CONTENT; true/false: use this override.
@@ -126,6 +127,7 @@ function ClaimListDiscover(props: Props) {
     claimSearchByQuery,
     showHeader = true,
     type,
+    duration,
     claimSearchByQueryLastPageReached,
     tags,
     notTags,
@@ -388,7 +390,7 @@ function ClaimListDiscover(props: Props) {
   if (durationParam) {
     switch (durationParam) {
       case CS.DURATION_ALL:
-        // Do nothing (no options needed)
+        options.duration = duration || undefined;
         break;
       case CS.DURATION_SHORT:
         options.duration = '<=240';

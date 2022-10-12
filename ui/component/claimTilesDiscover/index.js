@@ -87,6 +87,7 @@ type SearchOptions = {
   stream_types?: Array<string>,
   has_source?: boolean,
   has_no_source?: boolean,
+  duration?: string,
 };
 
 function resolveSearchOptions(props) {
@@ -112,6 +113,7 @@ function resolveSearchOptions(props) {
     limitClaimsPerChannel,
     timestamp,
     claimIds,
+    duration,
   } = props;
 
   const urlParams = new URLSearchParams(location.search);
@@ -179,6 +181,10 @@ function resolveSearchOptions(props) {
 
   if (claimIds) {
     options.claim_ids = claimIds;
+  }
+
+  if (duration) {
+    options.duration = duration;
   }
 
   return options;

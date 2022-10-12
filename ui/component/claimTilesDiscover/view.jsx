@@ -54,6 +54,7 @@ type Props = {
   forceShowReposts?: boolean, // overrides SETTINGS.HIDE_REPOSTS
   hideMembersOnly?: boolean, // undefined = use SETTING.HIDE_MEMBERS_ONLY_CONTENT; true/false: use this override.
   loading: boolean,
+  duration?: string,
   // --- select ---
   location: { search: string },
   claimSearchResults: Array<string>,
