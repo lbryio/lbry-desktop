@@ -187,10 +187,10 @@ function CommentMenuList(props: Props) {
       .then(() => doToast({ message: __('Link copied.') }));
   }
 
-  function reduceUriToChannelName(uri: ?string, fallbackUri: ?string) {
+  function reduceUriToChannelName(uri: ?string, fallback: ?string) {
     try {
-      if (!uri && fallbackUri) {
-        fallbackUri = fallbackUri.substring(fallbackUri.indexOf('lbry://') + 7);
+      if (!uri && fallback) {
+        let fallbackUri = fallback.substring('lbry://'.length);
         fallbackUri = fallbackUri.substring(0, fallbackUri.indexOf('#') + 4);
         uri = fallbackUri;
       }
