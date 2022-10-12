@@ -60,7 +60,7 @@ type State = {
   checkingPending: boolean,
   checkingReflecting: boolean,
   latestByUri: { [string]: any },
-  myPurchasedClaims: ?Array<string>,
+  myPurchasedClaims: Array<any>, // bad naming; not a claim but a stripe response.
   fetchingMyPurchasedClaims: ?boolean,
   fetchingMyPurchasedClaimsError: ?string,
 };
@@ -1047,10 +1047,22 @@ reducers[ACTIONS.CHECK_IF_PURCHASED_FAILED] = (state: State, action: any): State
 };
 
 reducers[ACTIONS.CHECK_IF_PURCHASED_COMPLETED] = (state: State, action: any): State => {
-  const oldPurchasedClaims = state.myPurchasedClaims || [];
+  const myPurchasedClaims = state.myPurchasedClaims.slice();
+  const purchases: Array<any> = action.data || [];
 
-  return Object.assign({}, state, {
-    myPurchasedClaims: [...new Set([...oldPurchasedClaims, ...action.data])],
-    fetchingMyPurchasedClaims: false,
+  purchases.forEach((p) => {
+    const index = myPurchasedClaims.findIndex((x) => x.id === p.id);
+    if (index > -1) {
+      // Replace existing, since it seems like the data could be updated (contains `updated_at` field).
+      myPurchasedClaims.splice(index, 1, p);
+    } else {
+      myPurchasedClaims.push(p);
+    }
   });
+
+  return {
+    ...state,
+    myPurchasedClaims,
+    fetchingMyPurchasedClaims: false,
+  };
 };
