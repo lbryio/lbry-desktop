@@ -736,6 +736,7 @@ $recent-msg-button__height: 2rem;
         flex: unset;
         font-weight: var(--font-weight-bold);
         margin: var(--spacing-xs);
+        margin-right: 0;
         margin-left: 0;
         margin-bottom: 2px;
         @media (max-width: $breakpoint-small) {
@@ -756,6 +757,9 @@ $recent-msg-button__height: 2rem;
             stroke: var(--color-text);
           }
         }
+      }
+      @media (min-width: $breakpoint-small) {
+        top: 9px;
       }
     }
   }
@@ -835,6 +839,11 @@ $recent-msg-button__height: 2rem;
     }
     .date_time {
       opacity: 0.9;
+    }
+    @media (min-width: $breakpoint-small) {
+      .livestreamComment__meta-information {
+        width: calc(100% - var(--spacing-m) - 20px);
+      }
     }
   }
 }

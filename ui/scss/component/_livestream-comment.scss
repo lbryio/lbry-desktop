@@ -106,8 +106,9 @@
   justify-content: flex-start;
   align-items: center;
   height: 100%;
-  width: calc(100% - var(--spacing-m) - var(--spacing-m));
+  width: 100%;
   padding-top: 1px;
+  transition: width 0.2s;
 
   .comment__pin {
     background: var(--color-header-background);
