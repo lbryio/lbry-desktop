@@ -953,9 +953,8 @@ export const selectMyPurchasedClaims = createSelector(selectState, (state) => st
 
 export const selectPurchaseMadeForClaimId = (state: State, claimId: string) => {
   const purchasedClaims = selectMyPurchasedClaims(state);
-
   return purchasedClaims.some(
-    (p) => (p.reference_claim_id === claimId || p.target_claim_id === claimId) && p.type !== 'rental'
+    (p) => (p.reference_claim_id === claimId || p.target_claim_id === claimId) && p.type === 'purchase'
   );
 };
 
