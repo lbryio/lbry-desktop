@@ -19,7 +19,7 @@ class ModalSendTip extends React.PureComponent<Props> {
     const { uri, claimIsMine, isTipOnly, hasSelectedTab, customText, doHideModal, setAmount } = this.props;
 
     return (
-      <Modal onAborted={doHideModal} isOpen type="card">
+      <Modal onAborted={doHideModal} isOpen type="card" width="wide">
         <SendTip
           uri={uri}
           claimIsMine={claimIsMine}

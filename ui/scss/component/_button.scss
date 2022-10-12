@@ -816,7 +816,7 @@ svg + .button__label {
 }
 
 .button-toggle-group-action {
-  position: absolute; // Centers the button along toggle buttons
+  display: inline-block;
   margin-left: var(--spacing-xs);
 
   @media (max-width: $breakpoint-small) {

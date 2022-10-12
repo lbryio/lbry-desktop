@@ -1,8 +1,6 @@
 @import '~ui/scss/init/breakpoints';
 
 .modal-featured-channels-edit {
-  width: var(--modal-width);
-
   @media (max-width: $breakpoint-small) {
     padding-left: var(--spacing-xs);
     padding-right: var(--spacing-xs);

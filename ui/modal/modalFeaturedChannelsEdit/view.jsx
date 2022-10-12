@@ -20,7 +20,7 @@ export default function ModalFeaturedChannelsEdit(props: Props) {
   }
 
   return (
-    <Modal isOpen type="custom" className="modal-featured-channels-edit">
+    <Modal isOpen type="custom" width="wide-fixed" className="modal-featured-channels-edit">
       <FeaturedChannelsEdit
         channelId={create ? create.ownerChannelId : undefined}
         collectionId={edit ? edit.collectionId : undefined}

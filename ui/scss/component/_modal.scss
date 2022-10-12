@@ -192,6 +192,22 @@
   }
 }
 
+.modal--wide {
+  max-width: var(--modal-width-wide);
+}
+
+.modal--wide-fixed {
+  width: var(--modal-width-wide);
+  min-width: var(--modal-width-wide);
+  max-width: var(--modal-width-wide);
+
+  @media (max-width: $breakpoint-small) {
+    width: 100%;
+    max-width: 100%;
+    min-width: auto;
+  }
+}
+
 .modal--card-internal {
   padding: 0;
   border: none;

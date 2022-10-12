@@ -8,7 +8,8 @@ import classnames from 'classnames';
 import { useIsMobile } from 'effects/use-screensize';
 
 type ModalProps = {
-  type?: string,
+  type?: 'alert' | 'card' | 'custom' | 'confirm',
+  width?: 'default' | 'wide' | 'wide-fixed',
   overlay?: boolean,
   confirmButtonLabel?: string,
   abortButtonLabel?: string,
@@ -28,6 +29,7 @@ export function Modal(props: ModalProps) {
   const {
     children,
     type = 'alert',
+    width = 'default',
     confirmButtonLabel = __('OK'),
     confirmButtonDisabled = false,
     onConfirmed,
@@ -47,6 +49,8 @@ export function Modal(props: ModalProps) {
       onRequestClose={onAborted || onConfirmed}
       className={classnames('modal', className, {
         'modal--card-internal': type === 'card',
+        'modal--wide': width === 'wide',
+        'modal--wide-fixed': width === 'wide-fixed',
       })}
       overlayClassName="modal-overlay"
     >
