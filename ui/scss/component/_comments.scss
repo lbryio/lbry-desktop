@@ -35,6 +35,13 @@ $thumbnailWidthSmall: 2rem;
 }
 
 .comment__list {
+  .card__header--between {
+    margin-bottom: var(--spacing-xxs);
+    .card__title-section {
+      margin-top: var(--spacing-m);
+      padding-bottom: 0;
+    }
+  }
   .comments {
     .comment {
       .comment__menu {

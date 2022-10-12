@@ -14,10 +14,13 @@
     overflow-y: scroll;
     height: 100%;
     border-top: 1px solid var(--color-border);
-    // background-color:var(--color-background);
 
     .card__main-actions {
       margin-top: 0px !important;
+
+      .comment__actions {
+        margin-bottom: var(--spacing-xxs);
+      }
 
       .comment__sort + button {
         margin: 0px var(--spacing-xxs);
@@ -25,6 +28,14 @@
 
       .button + .commentCreate {
         margin-top: var(--spacing-xxs);
+      }
+
+      .comment__settings {
+        flex: 1;
+        display: unset;
+        .button {
+          top: 0;
+        }
       }
     }
 
@@ -40,7 +51,7 @@
         padding: var(--spacing-xxs);
 
         span {
-          font-size: var(--font-xxsmall);
+          font-size: var(--font-xsmall);
         }
       }
     }
