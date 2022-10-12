@@ -52,7 +52,9 @@
 
 .file-page__media-actions {
   .claimPreviewReset {
-    margin-top: 0;
     margin-bottom: var(--spacing-s);
+    @media (max-width: $breakpoint-small) {
+      margin-top: 0;
+    }
   }
 }
