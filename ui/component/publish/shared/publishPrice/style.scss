@@ -68,3 +68,14 @@ $INDENT: var(--spacing-xl);
   color: var(--color-text-subtitle);
   margin-left: calc(var(--height-checkbox) + var(--spacing-s));
 }
+
+.publish-price__fees {
+  font-size: var(--font-xxsmall);
+  color: var(--color-text-subtitle);
+  font-style: italic;
+}
+
+.publish-price__tnc {
+  font-size: var(--font-xsmall);
+  color: var(--color-text-subtitle);
+}

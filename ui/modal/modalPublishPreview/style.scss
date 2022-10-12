@@ -22,3 +22,14 @@
 .publish-preview__fiat-price:not(:first-child) {
   margin-top: var(--spacing-xs);
 }
+
+.publish-preview__blockchain-fee {
+  font-size: var(--font-small);
+  margin-top: var(--spacing-m);
+}
+
+.publish-preview__fee-footnote {
+  font-size: var(--font-xsmall);
+  font-style: italic;
+  margin-top: var(--spacing-m);
+}

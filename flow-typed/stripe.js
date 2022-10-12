@@ -58,6 +58,11 @@ declare type StripeCustomerSetupResponse = {
   usage: string,
 };
 
+declare type StripeCustomerPurchaseCostResponse = {
+  stripe_cut: number,
+  odysee_cut: number,
+};
+
 declare type StripeTransaction = {
   name: string,
   currency: string,

@@ -201,7 +201,14 @@ const ModalPublishPreview = (props: Props) => {
     return bid ? <LbcSymbol postfix={`${bid}`} size={14} /> : <p>---</p>;
   }
 
-  function getPrice() {
+  function getPriceLabel() {
+    if (paywall === PAYWALL.FIAT) {
+      return `${__('Price')} *`;
+    }
+    return __('Price');
+  }
+
+  function getPriceValue() {
     switch (paywall) {
       case PAYWALL.FREE:
         return __('Free');
@@ -336,7 +343,7 @@ const ModalPublishPreview = (props: Props) => {
                     {createRow(__('Channel'), getChannelValue(channel))}
                     {createRow(__('URL'), formattedUri)}
                     {createRow(__('Deposit'), getDeposit())}
-                    {createRow(__('Price'), getPrice())}
+                    {createRow(getPriceLabel(), getPriceValue())}
                     {createRow(__('Language'), language ? getLanguageName(language) : '')}
                     {releaseTimeEdited && createRow(getReleaseTimeLabel(), getReleaseTimeValue(releaseTimeEdited))}
                     {createRow(__('License'), getLicense())}
@@ -344,8 +351,11 @@ const ModalPublishPreview = (props: Props) => {
                   </tbody>
                 </table>
               </div>
+              {paywall === PAYWALL.FIAT && (
+                <div className="publish-preview__fee-footnote">{`* ${__('processing and platform fees apply')}`}</div>
+              )}
               {txFee && (
-                <div className="section" aria-label={__('Estimated transaction fee:')}>
+                <div className="publish-preview__blockchain-fee" aria-label={__('Estimated transaction fee:')}>
                   <b>{__('Est. transaction fee:')}</b>&nbsp;&nbsp;
                   <em>
                     <LbcSymbol postfix={txFee} />

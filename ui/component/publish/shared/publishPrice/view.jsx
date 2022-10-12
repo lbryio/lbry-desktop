@@ -3,6 +3,7 @@ import React from 'react';
 import classnames from 'classnames';
 
 import './style.scss';
+import FeeBreakdown from './internal/feeBreakdown';
 import Button from 'component/button';
 import { FormField, FormFieldPrice } from 'component/common/form';
 import Card from 'component/common/card';
@@ -30,6 +31,7 @@ type Props = {
   chargesEnabled: ?boolean,
   updatePublishForm: ({}) => void,
   doTipAccountStatus: () => Promise<StripeAccountStatus>,
+  doCustomerPurchaseCost: (cost: number) => Promise<StripeCustomerPurchaseCostResponse>,
 };
 
 function PublishPrice(props: Props) {
@@ -48,6 +50,7 @@ function PublishPrice(props: Props) {
     chargesEnabled,
     updatePublishForm,
     doTipAccountStatus,
+    doCustomerPurchaseCost,
     disabled,
   } = props;
 
@@ -148,6 +151,32 @@ function PublishPrice(props: Props) {
     );
   }
 
+  function getTncRow() {
+    return (
+      <div
+        className={classnames('publish-price__row', {
+          'publish-price__row--indented': true,
+        })}
+      >
+        <div className="publish-price__grp-1 publish-price__tnc">
+          <I18nMessage
+            tokens={{
+              paid_content_terms_and_conditions: (
+                <Button
+                  button="link"
+                  href="https://help.odysee.tv/category-monetization/"
+                  label={__('paid-content terms and conditions')}
+                />
+              ),
+            }}
+          >
+            By continuing, you accept the %paid_content_terms_and_conditions%.
+          </I18nMessage>
+        </div>
+      </div>
+    );
+  }
+
   function getPurchaseRow() {
     return (
       <div
@@ -174,6 +203,13 @@ function PublishPrice(props: Props) {
             onBlur={() => sanitizeFee('fiatPurchaseFee')}
             currencies={CURRENCY_OPTIONS}
           />
+          <div className="publish-price__fees">
+            <FeeBreakdown
+              amount={fiatPurchaseFee.amount}
+              currency={fiatPurchaseFee.currency}
+              doCustomerPurchaseCost={doCustomerPurchaseCost}
+            />
+          </div>
         </div>
       </div>
     );
@@ -213,6 +249,13 @@ function PublishPrice(props: Props) {
             onChange={(duration) => updatePublishForm({ fiatRentalExpiration: duration })}
             units={['months', 'weeks', 'days', 'hours']}
           />
+          <div className="publish-price__fees">
+            <FeeBreakdown
+              amount={fiatRentalFee.amount}
+              currency={fiatRentalFee.currency}
+              doCustomerPurchaseCost={doCustomerPurchaseCost}
+            />
+          </div>
         </div>
       </div>
     );
@@ -264,8 +307,13 @@ function PublishPrice(props: Props) {
               <>
                 {restrictedWithoutPrice && getRestrictionWarningRow()}
                 {getPaywallOptionsRow()}
-                {paywall === PAYWALL.FIAT && getPurchaseRow()}
-                {paywall === PAYWALL.FIAT && getRentalRow()}
+                {paywall === PAYWALL.FIAT && (
+                  <>
+                    {getPurchaseRow()}
+                    {getRentalRow()}
+                    {getTncRow()}
+                  </>
+                )}
                 {paywall === PAYWALL.SDK && getLbcPurchaseRow()}
               </>
             )}

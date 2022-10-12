@@ -75,6 +75,12 @@ export const doCheckIfPurchasedClaimId = (claimId: string) => async (dispatch: D
     .catch((e) => dispatch({ type: ACTIONS.CHECK_IF_PURCHASED_FAILED, data: { error: e.message } }));
 };
 
+export const doCustomerPurchaseCost = (cost: number) => (
+  dispatch: Dispatch
+): Promise<StripeCustomerPurchaseCostResponse> => {
+  return Lbryio.call('customer', 'purchase_cost', { environment: stripeEnvironment, amount: cost });
+};
+
 export const doListAccountTransactions = () => async (dispatch: Dispatch) =>
   await Lbryio.call('account', 'list', { environment: stripeEnvironment }, 'post').then(
     (accountListResponse: StripeTransactions) => {

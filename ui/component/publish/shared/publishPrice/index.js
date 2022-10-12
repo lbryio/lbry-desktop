@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { selectPublishFormValue } from 'redux/selectors/publish';
 import { doUpdatePublishForm } from 'redux/actions/publish';
-import { doTipAccountStatus } from 'redux/actions/stripe';
+import { doCustomerPurchaseCost, doTipAccountStatus } from 'redux/actions/stripe';
 import { selectAccountChargesEnabled } from 'redux/selectors/stripe';
 import PublishPrice from './view';
 
@@ -20,6 +20,7 @@ const select = (state) => ({
 const perform = {
   updatePublishForm: doUpdatePublishForm,
   doTipAccountStatus,
+  doCustomerPurchaseCost,
 };
 
 export default connect(select, perform)(PublishPrice);
