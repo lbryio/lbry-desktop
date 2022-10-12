@@ -1,6 +1,8 @@
 // @flow
 import React from 'react';
 import moment from 'moment';
+
+import './style.scss';
 import Button from 'component/button';
 import { Form, FormField } from 'component/common/form';
 import { Modal } from 'modal/modal';
@@ -15,7 +17,10 @@ import * as ICONS from 'constants/icons';
 import Icon from 'component/common/icon';
 import { NO_FILE } from 'redux/actions/publish';
 import { PAYWALL } from 'constants/publish';
+import * as STRIPE from 'constants/stripe';
+import { TO_SECONDS } from 'util/stripe';
 import { removeInternalTags } from 'util/tags';
+import { secondsToDhms } from 'util/time';
 
 type Props = {
   filePath: string | WebFile,
@@ -27,10 +32,12 @@ type Props = {
   bid: ?number,
   uri: ?string,
   paywall: Paywall,
-  fee: {
-    amount: string,
-    currency: string,
-  },
+  fee: Price,
+  fiatPurchaseEnabled: boolean,
+  fiatPurchaseFee: Price,
+  fiatRentalEnabled: boolean,
+  fiatRentalFee: Price,
+  fiatRentalExpiration: Duration,
   language: string,
   releaseTimeEdited: ?number,
   licenseType: string,
@@ -66,6 +73,13 @@ const ModalPublishPreview = (props: Props) => {
     uri,
     paywall,
     fee,
+
+    fiatPurchaseEnabled,
+    fiatPurchaseFee,
+    fiatRentalEnabled,
+    fiatRentalFee,
+    fiatRentalExpiration,
+
     language,
     releaseTimeEdited,
     licenseType,
@@ -188,14 +202,50 @@ const ModalPublishPreview = (props: Props) => {
   }
 
   function getPrice() {
-    if (paywall === PAYWALL.FREE) {
-      return __('Free');
-    } else if (paywall === PAYWALL.SDK) {
-      if (fee.currency === 'LBC') {
-        return <LbcSymbol postfix={fee.amount} />;
-      } else {
-        return `${fee.amount} ${fee.currency}`;
-      }
+    switch (paywall) {
+      case PAYWALL.FREE:
+        return __('Free');
+
+      case PAYWALL.SDK:
+        if (fee.currency === 'LBC') {
+          return <LbcSymbol postfix={fee.amount} />;
+        } else {
+          return `${fee.amount} ${fee.currency}`;
+        }
+
+      case PAYWALL.FIAT:
+        const rentalSeconds = fiatRentalExpiration.value * (TO_SECONDS[fiatRentalExpiration.unit] || 3600);
+        return (
+          <>
+            {fiatPurchaseEnabled && fiatPurchaseFee && (
+              <div className="publish-preview__fiat-price">
+                <Icon icon={ICONS.BUY} />
+                <p>
+                  {__('Purchase for %currency%%amount%', {
+                    currency: STRIPE.CURRENCY[fiatPurchaseFee.currency].symbol,
+                    amount: fiatPurchaseFee.amount,
+                  })}
+                </p>
+              </div>
+            )}
+            {fiatRentalEnabled && fiatRentalFee && fiatRentalExpiration && (
+              <div className="publish-preview__fiat-price">
+                <Icon icon={ICONS.TIME} />
+                <p>
+                  {__('Rent %rental_duration% for %currency%%amount%', {
+                    rental_duration: secondsToDhms(rentalSeconds),
+                    currency: STRIPE.CURRENCY[fiatRentalFee.currency].symbol,
+                    amount: fiatRentalFee.amount,
+                  })}
+                </p>
+              </div>
+            )}
+          </>
+        );
+
+      default:
+        console.error(`Unhandled paywall type: ${paywall}`); // eslint-disable-line no-console
+        return '?';
     }
   }
 

@@ -1,0 +1,24 @@
+@import '~ui/scss/init/breakpoints';
+
+.publish-preview__fiat-price {
+  display: flex;
+  align-items: flex-end;
+
+  svg {
+    color: var(--color-text-subtitle);
+  }
+
+  p {
+    font-size: var(--font-small);
+    padding: 0 0 0 var(--spacing-xxs);
+
+    &::before {
+      content: ' | ';
+      color: var(--color-text-subtitle);
+    }
+  }
+}
+
+.publish-preview__fiat-price:not(:first-child) {
+  margin-top: var(--spacing-xs);
+}
