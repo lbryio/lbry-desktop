@@ -26,6 +26,12 @@
         margin: 0px var(--spacing-xxs);
       }
 
+      .comment__sort {
+        .button__label {
+          margin-right: var(--spacing-xxs);
+        }
+      }
+
       .button + .commentCreate {
         margin-top: var(--spacing-xxs);
       }
