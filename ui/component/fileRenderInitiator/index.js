@@ -26,7 +26,6 @@ import { selectIsActiveLivestreamForUri } from 'redux/selectors/livestream';
 import { getThumbnailFromClaim, isStreamPlaceholderClaim } from 'util/claim';
 import { doFetchChannelLiveStatus } from 'redux/actions/livestream';
 import {
-  selectMyProtectedContentMembershipForId,
   selectIsProtectedContentLockedFromUserForId,
   selectNoRestrictionOrUserIsMemberForContentClaimId,
 } from 'redux/selectors/memberships';
@@ -58,7 +57,6 @@ const select = (state, props) => {
     renderMode: makeSelectFileRenderModeForUri(uri)(state),
     rentalTag: selectRentalTagForUri(state, uri),
     validRentalPurchase: selectValidRentalPurchaseForClaimId(state, claimId),
-    myMembership: selectMyProtectedContentMembershipForId(state, claimId),
     contentRestrictedFromUser: claimId && selectIsProtectedContentLockedFromUserForId(state, claimId),
     contentUnlocked: claimId && selectNoRestrictionOrUserIsMemberForContentClaimId(state, claimId),
   };

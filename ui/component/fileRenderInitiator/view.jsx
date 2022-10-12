@@ -60,7 +60,6 @@ type Props = {
   protectedContentTag?: string,
   contentRestrictedFromUser: boolean,
   contentUnlocked: boolean,
-  myMembership: ?Membership,
 };
 
 export default function FileRenderInitiator(props: Props) {
@@ -96,7 +95,6 @@ export default function FileRenderInitiator(props: Props) {
     videoTheaterMode,
     contentRestrictedFromUser,
     contentUnlocked,
-    myMembership,
   } = props;
 
   const { isLiveComment } = React.useContext(ChatCommentContext) || {};
@@ -123,8 +121,7 @@ export default function FileRenderInitiator(props: Props) {
   const stillNeedsToBeRented = rentalTag && !validRentalPurchase && !hasBeenPurchased;
 
   const notAuthedToView =
-    (stillNeedsToBePurchased || stillNeedsToBeRented || (contentRestrictedFromUser && myMembership !== undefined)) &&
-    !claimIsMine;
+    (stillNeedsToBePurchased || stillNeedsToBeRented || contentRestrictedFromUser) && !claimIsMine;
 
   const shouldAutoplay =
     !notAuthedToView && !forceDisableAutoplay && !embedded && (forceAutoplayParam || urlTimeParam || autoplay);
@@ -132,7 +129,6 @@ export default function FileRenderInitiator(props: Props) {
   const isFree = costInfo && costInfo.cost === 0;
   const canViewFile =
     contentUnlocked &&
-    myMembership !== undefined &&
     (isLivestreamClaim ? (layountRendered || isMobile) && isCurrentClaimLive : isFree || claimWasPurchased);
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode) || isCurrentClaimLive;
 
