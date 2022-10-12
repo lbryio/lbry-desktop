@@ -14,6 +14,7 @@ exports.CREATIVE_ARTS = 'arts';
 exports.MOVIES = 'movies';
 exports.MUSIC = 'music';
 exports.COMMUNITY = 'community';
+exports.DOCS_AND_FILMS = 'docs';
 exports.EDUCATION = 'education';
 exports.ENLIGHTENMENT = 'enlightenment';
 exports.FEATURED = 'featured';
