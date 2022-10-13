@@ -87,10 +87,22 @@ class FilePrice extends React.PureComponent<Props> {
           })}
         >
           {purchaseInfo && (
-            <CreditAmount amount={purchaseInfo} className={className} isFiat showFullPrice={showFullPrice} />
+            <CreditAmount
+              amount={purchaseInfo}
+              className={className}
+              isFiat
+              showFullPrice={showFullPrice}
+              icon={ICONS.BUY}
+            />
           )}
           {rentalInfo && (
-            <CreditAmount amount={rentalInfo.price} className={className} isFiat showFullPrice={showFullPrice} />
+            <CreditAmount
+              amount={rentalInfo.price}
+              className={className}
+              isFiat
+              showFullPrice={showFullPrice}
+              icon={ICONS.TIME}
+            />
           )}
         </div>
       );

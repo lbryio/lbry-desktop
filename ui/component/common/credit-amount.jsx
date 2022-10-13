@@ -3,6 +3,7 @@ import 'scss/component/_superchat.scss';
 
 import { formatCredits, formatFullPrice } from 'util/format-credits';
 import classnames from 'classnames';
+import Icon from 'component/common/icon';
 import LbcSymbol from 'component/common/lbc-symbol';
 import React from 'react';
 
@@ -23,6 +24,7 @@ type Props = {
   size?: number,
   hyperChat?: boolean,
   superChatLight?: boolean,
+  icon?: string,
 };
 
 class CreditAmount extends React.PureComponent<Props> {
@@ -53,6 +55,7 @@ class CreditAmount extends React.PureComponent<Props> {
       size,
       hyperChat,
       // superChatLight,
+      icon,
     } = this.props;
     const minimumRenderableAmount = 10 ** (-1 * precision);
 
@@ -105,6 +108,8 @@ class CreditAmount extends React.PureComponent<Props> {
         title={amount && !hideTitle ? formatFullPrice(amount, 2) : ''}
         className={classnames('credit-amount-wrapper', className, { hyperChat: hyperChat })}
       >
+        {icon && <Icon className="credit-amount__prefix-icon" icon={icon} />}
+
         {customAmounts
           ? Object.values(customAmounts).map((amount, index) => (
               <span key={String(amount)} className="credit-amount">
