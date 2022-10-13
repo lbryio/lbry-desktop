@@ -1,13 +1,7 @@
 import { connect } from 'react-redux';
 import { doSetPreferredCurrency } from 'redux/actions/settings';
 import { selectPreferredCurrency } from 'redux/selectors/settings';
-import {
-  selectCustomerStatusFetching,
-  selectCustomerStatus,
-  selectCardDetails,
-  selectCustomerSetupResponse,
-  selectAccountInfo,
-} from 'redux/selectors/stripe';
+import { selectCustomerStatusFetching, selectCustomerStatus, selectCardDetails } from 'redux/selectors/stripe';
 import { selectUserEmail } from 'redux/selectors/user';
 import { doOpenModal } from 'redux/actions/app';
 import { doGetCustomerStatus, doRemoveCardForPaymentMethodId, doCustomerSetup } from 'redux/actions/stripe';
@@ -21,8 +15,6 @@ const select = (state) => ({
   customerStatusFetching: selectCustomerStatusFetching(state),
   customerStatus: selectCustomerStatus(state),
   cardDetails: selectCardDetails(state),
-  customerSetupResponse: selectCustomerSetupResponse(state),
-  accountInfo: selectAccountInfo(state),
 });
 
 const perform = {

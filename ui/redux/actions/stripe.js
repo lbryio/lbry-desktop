@@ -1,7 +1,7 @@
 // @flow
 import { Lbryio } from 'lbryinc';
 import { selectChannelClaimIdForUri, selectChannelNameForUri } from 'redux/selectors/claims';
-import { selectAccountCheckIsFetchingForId } from 'redux/selectors/stripe';
+import { selectAccountCheckIsFetchingForId, selectCustomerStatusFetching } from 'redux/selectors/stripe';
 import { doToast } from 'redux/actions/notifications';
 
 import * as ACTIONS from 'constants/action_types';
@@ -133,58 +133,41 @@ export const doGetAndSetAccountLink = () => async (dispatch: Dispatch) =>
     dispatch({ type: ACTIONS.SET_ACCOUNT_LINK, data: accountLinkResponse })
   );
 
-export const doGetCustomerStatus = () => async (dispatch: Dispatch) => {
+export const doGetCustomerStatus = () => async (dispatch: Dispatch, getState: GetState) => {
+  const state = getState();
+  const isFetching = selectCustomerStatusFetching(state);
+
+  if (isFetching) return;
+
   dispatch({ type: ACTIONS.SET_CUSTOMER_STATUS_STARTED });
 
   return await Lbryio.call('customer', 'status', { environment: stripeEnvironment }, 'post')
-    .then((customerStatusResponse) => {
+    .then((customerStatusResponse: StripeCustomerStatus) => {
       dispatch({ type: ACTIONS.SET_CUSTOMER_STATUS, data: customerStatusResponse });
 
       return customerStatusResponse;
     })
-    .catch((e) => {
-      dispatch({ type: ACTIONS.SET_CUSTOMER_STATUS, data: null });
-
-      return e;
-    });
-};
-
-export const doCustomerSetup = () => async (dispatch: Dispatch) =>
-  await dispatch(doGetCustomerStatus())
-    .then(() =>
-      Lbryio.call(
-        'customer',
-        'setup',
-        { environment: stripeEnvironment },
-        'post'
-      ).then((customerSetupResponse: StripeCustomerSetupResponse) =>
-        dispatch({ type: ACTIONS.SET_CUSTOMER_SETUP_RESPONSE, data: customerSetupResponse })
-      )
-    )
     .catch((error) => {
-      // errorString passed from the API (with a 403 error)
-      const errorString = 'user as customer is not setup yet';
-
-      // if it's beamer's error indicating the account is not linked yet
-      // $FlowFixMe
-      if (error.message && error.message.indexOf(errorString) > -1) {
-        // get a payment method secret for frontend
-        Lbryio.call(
-          'customer',
-          'setup',
-          { environment: stripeEnvironment },
-          'post'
-        ).then((customerSetupResponse: StripeCustomerSetupResponse) =>
-          dispatch({ type: ACTIONS.SET_CUSTOMER_SETUP_RESPONSE, data: customerSetupResponse })
-        );
-        // 500 error from the backend being down
-      } else if (error === 'internal_apis_down') {
+      if (error === 'internal_apis_down') {
         doToast({ message: __(STRIPE.APIS_DOWN_ERROR_RESPONSE), isError: true });
       } else {
         // probably an error from stripe
         doToast({ message: __(STRIPE.CARD_SETUP_ERROR_RESPONSE), isError: true });
       }
+
+      dispatch({ type: ACTIONS.SET_CUSTOMER_STATUS, data: null });
+
+      return error;
     });
+};
+
+export const doCustomerSetup = () => async (dispatch: Dispatch) =>
+  await Lbryio.call('customer', 'setup', { environment: stripeEnvironment }, 'post').then(
+    (customerSetupResponse: StripeCustomerSetupResponse) => {
+      dispatch({ type: ACTIONS.SET_CUSTOMER_SETUP_RESPONSE, data: customerSetupResponse });
+      return customerSetupResponse;
+    }
+  );
 
 export const doRemoveCardForPaymentMethodId = (paymentMethodId: string) => async (dispatch: Dispatch) =>
   await Lbryio.call(

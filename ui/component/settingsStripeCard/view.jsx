@@ -28,7 +28,6 @@ type WrapperProps = {
   preferredCurrency: string,
   customerStatusFetching: ?boolean,
   cardDetails: StripeCardDetails,
-  customerSetupResponse: StripeCustomerSetupResponse,
   doSetPreferredCurrency: (value: string) => void,
   doGetCustomerStatus: () => void,
   doToast: (params: { message: string }) => void,
@@ -55,7 +54,6 @@ const SettingsStripeCard = (props: Props) => {
     preferredCurrency,
     customerStatusFetching,
     cardDetails,
-    customerSetupResponse,
     doSetPreferredCurrency,
     doGetCustomerStatus,
     doToast,
@@ -71,21 +69,9 @@ const SettingsStripeCard = (props: Props) => {
   const [isLoading, setLoading] = React.useState(false);
   const [formError, setFormError] = React.useState();
 
-  const clientSecret = customerSetupResponse?.client_secret;
-
-  function handleSubmit(event) {
-    if (!stripe || !elements) return;
-
-    event.preventDefault();
-    setLoading(true);
-
-    // if client secret wasn't loaded properly
-    if (!clientSecret) {
-      setFormError(__('There was an error in generating your payment method. Please contact a developer'));
-      return;
-    }
-
+  function confirmCardSetup(clientSecret) {
     const cardElement = elements.getElement(CardElement);
+
     stripe
       .confirmCardSetup(clientSecret, {
         payment_method: { card: cardElement, billing_details: { email, name: cardNameValue } },
@@ -102,6 +88,17 @@ const SettingsStripeCard = (props: Props) => {
       });
   }
 
+  function handleSubmit(event) {
+    if (!stripe || !elements) return;
+
+    event.preventDefault();
+    setLoading(true);
+
+    doCustomerSetup().then((customerSetupResponse: StripeCustomerSetupResponse) => {
+      confirmCardSetup(customerSetupResponse.client_secret);
+    });
+  }
+
   React.useEffect(() => {
     if (stripeError) {
       setFormError(stripeError);
@@ -113,12 +110,6 @@ const SettingsStripeCard = (props: Props) => {
       doGetCustomerStatus();
     }
   }, [cardDetails, doGetCustomerStatus]);
-
-  React.useEffect(() => {
-    if (cardDetails === null) {
-      doCustomerSetup();
-    }
-  }, [cardDetails, doCustomerSetup]);
 
   React.useEffect(() => {
     if (cardDetails) {
