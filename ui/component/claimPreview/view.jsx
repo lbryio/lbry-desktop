@@ -40,7 +40,6 @@ import CollectionEditButtons from 'component/collectionEditButtons';
 import * as ICONS from 'constants/icons';
 import { useIsMobile } from 'effects/use-screensize';
 import CollectionPreviewOverlay from 'component/collectionPreviewOverlay';
-import PreviewTilePurchaseOverlay from 'component/previewTilePurchaseOverlay';
 
 const AbandonedChannelPreview = lazyImport(() =>
   import('component/abandonedChannelPreview' /* webpackChunkName: "abandonedChannelPreview" */)
@@ -501,7 +500,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
               {!pending ? (
                 <NavLink aria-hidden tabIndex={-1} {...navLinkProps}>
                   <FileThumbnail thumbnail={thumbnailUrl} small={smallThumbnail} uri={uri}>
-                    <PreviewTilePurchaseOverlay uri={uri} />
                     {isPlayable && !smallThumbnail && (
                       <div className="claim-preview__hover-actions-grid">
                         <FileWatchLaterLink focusable={false} uri={repostedContentUri} />
