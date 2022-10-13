@@ -10,16 +10,16 @@ type Props = {
   isSupport: boolean,
 };
 
-class ModalSendTip extends React.PureComponent<Props> {
+class ModalMembershipSplash extends React.PureComponent<Props> {
   render() {
     const { closeModal, uri, claimIsMine } = this.props;
 
     return (
-      <Modal onAborted={closeModal} isOpen type="card">
+      <Modal onAborted={closeModal} isOpen type="card" width="wide">
         <MembershipSplash uri={uri} claimIsMine={claimIsMine} onCancel={closeModal} />
       </Modal>
     );
   }
 }
 
-export default ModalSendTip;
+export default ModalMembershipSplash;

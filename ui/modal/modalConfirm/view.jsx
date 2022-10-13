@@ -32,7 +32,7 @@ export default function ModalConfirm(props: Props) {
   }
 
   return (
-    <Modal isOpen type="custom">
+    <Modal isOpen type="custom" width="wide">
       <Card
         title={title}
         subtitle={subtitle}

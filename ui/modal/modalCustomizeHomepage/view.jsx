@@ -96,6 +96,7 @@ export default function ModalCustomizeHomepage(props: Props) {
       className="modal-customize-homepage"
       isOpen
       type={userHasOdyseeMembership ? 'custom' : 'card'}
+      width={userHasOdyseeMembership ? 'wide-fixed' : 'wide'}
       onAborted={userHasOdyseeMembership ? undefined : doHideModal}
     >
       {!userHasOdyseeMembership && (
