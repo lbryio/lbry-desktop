@@ -97,6 +97,40 @@ declare type PublishResponse = GenericTxResponse & {
   outputs: Array<Claim>,
 };
 
+declare type ClaimSearchOptions = {
+  name?: string, // claim name (normalized)
+  text?: string, // full text search
+  claim_id?: string, // full or partial claim id
+  claim_ids?: Array<string>, // list of full claim ids
+  txid?: string, // transaction id
+  channel?: string, // claims signed by this channel (argument is a URL which automatically gets resolved)
+  channel_ids?: Array<string>, // claims signed by any of these channels (arguments must be claim ids of the channels)
+  not_channel_ids?: Array<string>, // exclude claims signed by any of these channels (arguments must be claim ids of the channels)
+  limit_claims_per_channel?: number, // only return up to the specified number of claims per channel
+  timestamp?: number | string, // last updated timestamp (supports equality constraints)
+  release_time?: string, // limit to claims self-described as having been released to the public on or after this UTC timestamp
+  reposted_claim_id?: string, // all reposts of the specified original claim id
+  reposted?: number | string, // claims reposted this many times (supports equality constraints)
+  claim_type?: string | Array<string>, // filter by 'channel', 'stream', 'repost' or 'collection'
+  stream_types?: Array<string>, // filter by 'video', 'image', 'document', etc
+  media_types?: Array<string>,  // filter by 'video/mp4', 'image/png', etc
+  fee_currency?: string, // specify fee currency: LBC, BTC, USD
+  fee_amount?: number | string, // content download fee (supports equality constraints)
+  duration?: number | string, // duration of video or audio in seconds (supports equality constraints)
+  any_tags?: Array<string>, // find claims containing any of the tags
+  all_tags?: Array<string>, // find claims containing every tag
+  not_tags?: Array<string>, // find claims not containing any of these tags
+  any_languages?: Array<string>, // find claims containing any of the languages
+  all_languages?: Array<string>, // find claims containing every language
+  not_languages?: Array<string>, // find claims not containing any of these languages,
+  page?: number, // page to return during paginating
+  page_size?: number, // number of items on page during pagination
+  order_by?: Array<string>, // field to order by, default is descending order, to do an ascending order prepend ^ to the field name,
+  no_totals?: boolean, // do not calculate the total number of pages and items in result set (significant performance boost)
+  has_source?: boolean, // find claims containing a source field
+  has_no_source?: boolean, // find claims not containing a source field
+};
+
 declare type ClaimSearchResponse = {
   items: Array<Claim>,
   page: number,

@@ -686,6 +686,8 @@ export const doFetchCollectionListMine = (page: number = 1, pageSize: number = 5
     const next = async (response: CollectionListResponse) => {
       const moreData = response.items.length === options.page_size;
       allClaims = allClaims.concat(response.items);
+
+      // $FlowIgnore
       options.page++;
 
       if (!moreData) {
@@ -714,27 +716,12 @@ export function doClearClaimSearch() {
 }
 
 export function doClaimSearch(
-  options: {
-    page_size?: number,
-    page: number,
-    no_totals?: boolean,
-    any_tags?: Array<string>,
-    claim_ids?: Array<string>,
-    channel_ids?: Array<string>,
-    not_channel_ids?: Array<string>,
-    not_tags?: Array<string>,
-    order_by?: Array<string>,
-    release_time?: string,
-    has_source?: boolean,
-    has_no_source?: boolean,
-  } = {
+  options: ClaimSearchOptions = {
     no_totals: true,
     page_size: 10,
     page: 1,
   },
-  settings: {
-    useAutoPagination?: boolean,
-  } = {
+  settings: DoClaimSearchSettings = {
     useAutoPagination: false,
   }
 ) {
@@ -802,8 +789,10 @@ export function doClaimSearch(
 
         const moreData = data.items.length === options.page_size;
 
+        // $FlowIgnore
         options.page++;
 
+        // $FlowIgnore
         if (options.page > 3 || !moreData) {
           // Flow doesn't understand that page_size is an optional property with a guaranteed default value.
           // $FlowFixMe

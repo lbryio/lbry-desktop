@@ -280,29 +280,7 @@ function ClaimListDiscover(props: Props) {
     CS.ORDER_BY_TRENDING
   );
 
-  let options: {
-    page_size: number,
-    page: number,
-    no_totals: boolean,
-    any_tags?: Array<string>,
-    any_languages?: Array<string>,
-    not_tags: Array<string>,
-    channel_ids?: Array<string>,
-    claim_ids?: Array<string>,
-    not_channel_ids?: Array<string>,
-    order_by: Array<string>,
-    release_time?: string,
-    claim_type?: string | Array<string>,
-    name?: string,
-    duration?: string,
-    reposted_claim_id?: string,
-    stream_types?: any,
-    fee_amount?: string,
-    has_source?: boolean,
-    has_no_source?: boolean,
-    limit_claims_per_channel?: number,
-    remove_duplicates?: boolean,
-  } = {
+  let options: ClaimSearchOptions = {
     page_size: dynamicPageSize,
     page,
     name,
@@ -506,6 +484,7 @@ function ClaimListDiscover(props: Props) {
         !claimSearchResultLastPageReached &&
         claimSearchResult &&
         claimSearchResult.length &&
+        // $FlowIgnore: page is always defined in this component
         claimSearchResult.length < dynamicPageSize * options.page &&
         claimSearchResult.length % dynamicPageSize === 0));
 

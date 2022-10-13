@@ -68,28 +68,6 @@ export default withRouter(connect(select, perform)(ClaimListDiscover));
 // ****************************************************************************
 // ****************************************************************************
 
-type SearchOptions = {
-  page_size: number,
-  page: number,
-  no_totals: boolean,
-  any_tags: Array<string>,
-  channel_ids: Array<string>,
-  claim_ids?: Array<string>,
-  not_channel_ids: Array<string>,
-  not_tags: Array<string>,
-  order_by: Array<string>,
-  languages?: Array<string>,
-  release_time?: string,
-  claim_type?: string | Array<string>,
-  timestamp?: string,
-  fee_amount?: string,
-  limit_claims_per_channel?: number,
-  stream_types?: Array<string>,
-  has_source?: boolean,
-  has_no_source?: boolean,
-  duration?: string,
-};
-
 function resolveSearchOptions(props) {
   const {
     showNsfw,
@@ -127,7 +105,7 @@ function resolveSearchOptions(props) {
     streamTypesParam = undefined;
   }
 
-  const options: SearchOptions = {
+  const options: ClaimSearchOptions = {
     page: 1,
     page_size: pageSize,
     claim_type: claimType || ['stream', 'repost', 'channel'],
