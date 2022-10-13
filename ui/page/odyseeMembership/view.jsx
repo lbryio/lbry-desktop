@@ -25,7 +25,6 @@ type Props = {
   purchasedMemberships: ?MembershipTiers,
   canceledMemberships: ?MembershipTiers,
   membershipOptions: ?CreatorMemberships,
-  doGetCustomerStatus: () => void,
   doMembershipList: (params: MembershipListParams) => Promise<CreatorMemberships>,
 };
 
@@ -38,7 +37,6 @@ const OdyseeMembershipPage = (props: Props) => {
     purchasedMemberships,
     canceledMemberships,
     membershipOptions,
-    doGetCustomerStatus,
     doMembershipList,
   } = props;
 
@@ -46,9 +44,8 @@ const OdyseeMembershipPage = (props: Props) => {
   const [showHelp, setShowHelp] = usePersistedState('premium-help-seen', true);
 
   React.useEffect(() => {
-    doGetCustomerStatus();
     doMembershipList({ channel_name: ODYSEE_CHANNEL.NAME, channel_id: ODYSEE_CHANNEL.ID });
-  }, [doGetCustomerStatus, doMembershipList]);
+  }, [doMembershipList]);
 
   // we are still waiting from the backend if any of these are undefined
   const stillWaitingFromBackend = membershipOptions === undefined || !mineFetched;

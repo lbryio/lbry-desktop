@@ -9,6 +9,8 @@ type Props = {
   doHideModal: () => void,
   checkIfAlreadyPurchased: () => void,
   hasCardSaved: boolean,
+  claimId: string,
+  doCheckIfPurchasedClaimId: (string) => void,
   tags: any,
   humanReadableTime: ?string,
   playingUri: PlayingUri,
@@ -25,13 +27,16 @@ class ModalPreorderContent extends React.PureComponent<Props> {
   }
 
   render() {
-    const { uri, doHideModal, hasCardSaved, tags, humanReadableTime } = this.props;
+    const { uri, doHideModal, hasCardSaved, doCheckIfPurchasedClaimId, claimId, tags, humanReadableTime } = this.props;
 
     return (
       <Modal onAborted={doHideModal} ariaHideApp={false} isOpen type="card" width="wide">
         <PreorderAndPurchaseContentCard
           uri={uri}
           hasCardSaved={hasCardSaved}
+          onCancel={doHideModal}
+          doCheckIfPurchasedClaimId={doCheckIfPurchasedClaimId}
+          claimId={claimId}
           tags={tags}
           humanReadableTime={humanReadableTime}
         />

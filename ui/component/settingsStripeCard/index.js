@@ -4,7 +4,6 @@ import { selectPreferredCurrency } from 'redux/selectors/settings';
 import {
   selectCustomerStatusFetching,
   selectCustomerStatus,
-  selectHasSavedCard,
   selectCardDetails,
   selectCustomerSetupResponse,
   selectAccountInfo,
@@ -21,7 +20,6 @@ const select = (state) => ({
   preferredCurrency: selectPreferredCurrency(state),
   customerStatusFetching: selectCustomerStatusFetching(state),
   customerStatus: selectCustomerStatus(state),
-  hasSavedCard: selectHasSavedCard(state),
   cardDetails: selectCardDetails(state),
   customerSetupResponse: selectCustomerSetupResponse(state),
   accountInfo: selectAccountInfo(state),

@@ -8,7 +8,6 @@ import {
   selectNoRestrictionOrUserIsMemberForContentClaimId,
 } from 'redux/selectors/memberships';
 import { selectChannelNameForUri, selectChannelClaimIdForUri, selectClaimForUri } from 'redux/selectors/claims';
-import { selectHasSavedCard } from 'redux/selectors/stripe';
 import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
 import {
   selectLivestreamChatMembersOnlyForChannelId,
@@ -16,7 +15,6 @@ import {
 } from 'redux/selectors/comments';
 
 import { doMembershipList, doMembershipBuy } from 'redux/actions/memberships';
-import { doGetCustomerStatus } from 'redux/actions/stripe';
 import { doToast } from 'redux/actions/notifications';
 
 import { getChannelIdFromClaim, isStreamPlaceholderClaim } from 'util/claim';
@@ -47,7 +45,6 @@ const select = (state, props) => {
     creatorMemberships: selectMembershipTiersForChannelUri(state, uri),
     channelName: selectChannelNameForUri(state, uri),
     channelClaimId: selectChannelClaimIdForUri(state, uri),
-    hasSavedCard: selectHasSavedCard(state),
     incognito: selectIncognito(state),
     unlockableTierIds,
     cheapestMembership: unlockableTierIds && selectCheapestPlanForRestrictedIds(state, unlockableTierIds),
@@ -58,7 +55,6 @@ const select = (state, props) => {
 
 const perform = {
   doMembershipList,
-  doGetCustomerStatus,
   doMembershipBuy,
   doToast,
 };

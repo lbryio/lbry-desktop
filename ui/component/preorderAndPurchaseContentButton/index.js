@@ -14,8 +14,8 @@ import PreorderAndPurchaseButton from './view';
 import { doOpenModal } from 'redux/actions/app';
 import { selectPreferredCurrency } from 'redux/selectors/settings';
 import { doResolveClaimIds } from 'redux/actions/claims';
-import { selectHasSavedCard, selectCanReceiveFiatTipsForUri } from 'redux/selectors/stripe';
-import { doGetCustomerStatus, doTipAccountCheckForUri, doCheckIfPurchasedClaimId } from 'redux/actions/stripe';
+import { selectCanReceiveFiatTipsForUri } from 'redux/selectors/stripe';
+import { doTipAccountCheckForUri, doCheckIfPurchasedClaimId } from 'redux/actions/stripe';
 
 const select = (state, props) => {
   const { uri } = props;
@@ -35,7 +35,6 @@ const select = (state, props) => {
     purchaseTag: selectPurchaseTagForUri(state, uri),
     rentalTag: selectRentalTagForUri(state, uri),
     validRentalPurchase: selectValidRentalPurchaseForClaimId(state, claim.claim_id),
-    hasSavedCard: selectHasSavedCard(state),
     canReceiveFiatTips: selectCanReceiveFiatTipsForUri(state, uri),
   };
 };
@@ -44,7 +43,6 @@ const perform = {
   doOpenModal,
   doResolveClaimIds,
   doCheckIfPurchasedClaimId,
-  doGetCustomerStatus,
   doTipAccountCheckForUri,
 };
 

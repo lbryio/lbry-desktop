@@ -21,13 +21,11 @@ type Props = {
   channelName: ?string,
   channelClaimId: ?string,
   creatorMemberships: ?CreatorMemberships,
-  hasSavedCard: ?boolean,
   incognito: boolean,
   unlockableTierIds: Array<number>,
   cheapestMembership: ?CreatorMembership,
   isLivestream: ?boolean,
   doMembershipList: (params: MembershipListParams) => Promise<CreatorMemberships>,
-  doGetCustomerStatus: () => void,
   doMembershipBuy: (membershipParams: MembershipBuyParams) => Promise<Membership>,
   doToast: (params: { message: string }) => void,
 };
@@ -45,13 +43,11 @@ const JoinMembershipCard = (props: Props) => {
     channelName,
     channelClaimId,
     creatorMemberships,
-    hasSavedCard,
     incognito,
     unlockableTierIds,
     cheapestMembership,
     isLivestream,
     doMembershipList,
-    doGetCustomerStatus,
     doMembershipBuy,
     doToast,
   } = props;
@@ -132,17 +128,11 @@ const JoinMembershipCard = (props: Props) => {
     }
   }, [channelClaimId, channelName, creatorMemberships, doMembershipList]);
 
-  React.useEffect(() => {
-    if (hasSavedCard === undefined) {
-      doGetCustomerStatus();
-    }
-  }, [doGetCustomerStatus, hasSavedCard]);
-
   const pageProps = React.useMemo(() => {
     return { uri, selectedTier, selectedMembershipIndex };
   }, [selectedMembershipIndex, selectedTier, uri]);
 
-  if (window.pendingMembership || creatorMemberships === undefined || hasSavedCard === undefined) {
+  if (window.pendingMembership || creatorMemberships === undefined) {
     return (
       <div className="main--empty">
         <Spinner />

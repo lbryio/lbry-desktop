@@ -16,6 +16,8 @@ import React from 'react';
 import usePersistedState from 'effects/use-persisted-state';
 import WalletTipAmountSelector from 'component/walletTipAmountSelector';
 
+import withCreditCard from 'hocs/withCreditCard';
+
 import { getStripeEnvironment } from 'util/stripe';
 const stripeEnvironment = getStripeEnvironment();
 
@@ -320,7 +322,17 @@ export default function WalletSendTip(props: Props) {
                 </div>
               </div>
               <div className="section__actions">
-                <Button autoFocus onClick={handleSubmit} button="primary" disabled={isPending} label={__('Confirm')} />
+                {activeTab === TAB_FIAT ? (
+                  <SubmitCashTipButton handleSubmit={handleSubmit} isPending={isPending} />
+                ) : (
+                  <Button
+                    autoFocus
+                    onClick={handleSubmit}
+                    button="primary"
+                    disabled={isPending}
+                    label={__('Confirm')}
+                  />
+                )}
                 <Button button="link" label={__('Cancel')} onClick={() => setConfirmationPage(false)} />
               </div>
             </>
@@ -415,3 +427,9 @@ const TabSwitchButton = (tabButtonProps: TabButtonProps) => {
     />
   );
 };
+
+const SubmitCashTipButton = withCreditCard(
+  ({ isPending, handleSubmit }: { isPending: boolean, handleSubmit: () => void }) => (
+    <Button autoFocus disabled={isPending} onClick={handleSubmit} button="primary" label={__('Confirm')} />
+  )
+);

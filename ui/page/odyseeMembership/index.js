@@ -8,7 +8,6 @@ import {
   selectMyCanceledMembershipsForChannelClaimId,
   selectOdyseeMembershipTiers,
 } from 'redux/selectors/memberships';
-import { doGetCustomerStatus } from 'redux/actions/stripe';
 import { ODYSEE_CHANNEL } from 'constants/channels';
 
 import OdyseeMembership from './view';
@@ -23,7 +22,6 @@ const select = (state) => ({
 });
 
 const perform = {
-  doGetCustomerStatus,
   doMembershipList,
 };
 

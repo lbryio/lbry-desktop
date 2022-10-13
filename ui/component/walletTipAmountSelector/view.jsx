@@ -28,14 +28,12 @@ type Props = {
   tipError: string,
   uri: string,
   canReceiveFiatTips: ?boolean,
-  hasSavedCard: ?boolean,
   onChange: (number) => void,
   setConvertedAmount?: (number) => void,
   setDisableSubmitButton: (boolean) => void,
   setTipError: (any) => void,
   preferredCurrency: string,
   doTipAccountCheckForUri: (uri: string) => void,
-  doGetCustomerStatus: () => void,
 };
 
 function WalletTipAmountSelector(props: Props) {
@@ -51,14 +49,12 @@ function WalletTipAmountSelector(props: Props) {
     fiatConversion,
     tipError,
     canReceiveFiatTips,
-    hasSavedCard,
     onChange,
     setConvertedAmount,
     setDisableSubmitButton,
     setTipError,
     preferredCurrency,
     doTipAccountCheckForUri,
-    doGetCustomerStatus,
   } = props;
 
   const isMobile = useIsMobile();
@@ -112,12 +108,6 @@ function WalletTipAmountSelector(props: Props) {
       setConvertedAmount(amount * exchangeRate);
     }
   }, [amount, convertedAmount, exchangeRate, setConvertedAmount]);
-
-  React.useEffect(() => {
-    if (hasSavedCard === undefined) {
-      doGetCustomerStatus();
-    }
-  }, [doGetCustomerStatus, hasSavedCard]);
 
   React.useEffect(() => {
     if (canReceiveFiatTips === undefined) {

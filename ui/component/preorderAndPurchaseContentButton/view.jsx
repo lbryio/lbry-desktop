@@ -32,9 +32,7 @@ type Props = {
   purchaseTag: string,
   rentalTag: RentalTagParams,
   validRentalPurchase: any,
-  hasSavedCard: ?boolean,
   canReceiveFiatTips: ?boolean,
-  doGetCustomerStatus: () => void,
   doTipAccountCheckForUri: (uri: string) => void,
 };
 
@@ -55,9 +53,7 @@ export default function PreorderAndPurchaseButton(props: Props) {
     rentalTag,
     uri,
     validRentalPurchase,
-    hasSavedCard,
     canReceiveFiatTips,
-    doGetCustomerStatus,
     doTipAccountCheckForUri,
   } = props;
 
@@ -94,11 +90,6 @@ export default function PreorderAndPurchaseButton(props: Props) {
       doTipAccountCheckForUri(uri);
     }
   }, [doTipAccountCheckForUri, preorderTag, purchaseTag, rentalTag, uri]);
-
-  // check if user has a payment method saved
-  React.useEffect(() => {
-    if (hasSavedCard === undefined) doGetCustomerStatus();
-  }, [doGetCustomerStatus, hasSavedCard]);
 
   const { icon: fiatIconToUse, symbol: fiatSymbol } = STRIPE.CURRENCY[preferredCurrency];
 
@@ -175,7 +166,6 @@ export default function PreorderAndPurchaseButton(props: Props) {
                       purchaseTag,
                       doCheckIfPurchasedClaimId,
                       claimId: claim.claim_id,
-                      hasSavedCard,
                       tags,
                       humanReadableTime: secondsToDhms(rentalExpirationTimeInSeconds),
                     })
@@ -207,7 +197,6 @@ export default function PreorderAndPurchaseButton(props: Props) {
                     purchaseTag,
                     doCheckIfPurchasedClaimId,
                     claimId: claim.claim_id,
-                    hasSavedCard,
                     tags,
                     humanReadableTime: secondsToDhms(rentalExpirationTimeInSeconds),
                   })
@@ -235,7 +224,6 @@ export default function PreorderAndPurchaseButton(props: Props) {
                     purchaseTag,
                     doCheckIfPurchasedClaimId,
                     claimId: claim.claim_id,
-                    hasSavedCard,
                     tags,
                   })
                 }
@@ -290,7 +278,6 @@ export default function PreorderAndPurchaseButton(props: Props) {
                     preorderTag,
                     doCheckIfPurchasedClaimId,
                     claimId: claim.claim_id,
-                    hasSavedCard,
                     tags,
                   })
                 }
