@@ -1,16 +1,19 @@
+// @flow
 import React from 'react';
 
 import * as MODALS from 'constants/modal_types';
 import Button from 'component/button';
 import Spinner from 'component/spinner';
 
-import { connect } from 'react-redux';
-import { doOpenModal } from 'redux/actions/app';
-import { selectHasSavedCard } from 'redux/selectors/stripe';
-
-import { doGetCustomerStatus } from 'redux/actions/stripe';
-
 import { ModalContext } from 'modal/modalRouter/view';
+
+type Props = {
+  modalState: any,
+  // -- redux --
+  hasSavedCard: ?boolean,
+  doOpenModal: (modalId: string, modalProps: {}) => void,
+  doGetCustomerStatus: () => void,
+};
 
 /**
  * HigherOrderComponent to condition a button to become a "add card" prompt every time it is needed for a purchase,
@@ -19,17 +22,8 @@ import { ModalContext } from 'modal/modalRouter/view';
  * @param Component: FunctionalComponentParam
  * @returns {FunctionalComponent}
  */
-const withCreditCard = (Component) => {
-  const select = (state) => ({
-    hasSavedCard: selectHasSavedCard(state),
-  });
-
-  const perform = {
-    doOpenModal,
-    doGetCustomerStatus,
-  };
-
-  const CreditCardPrompt = (props) => {
+const withCreditCard = (Component: FunctionalComponentParam) => {
+  const CreditCardPrompt = (props: Props) => {
     // eslint-disable-next-line react/prop-types
     const { hasSavedCard, doOpenModal, doGetCustomerStatus, modalState, ...componentProps } = props;
     const fetching = hasSavedCard === undefined;
@@ -62,7 +56,7 @@ const withCreditCard = (Component) => {
     return <Component {...componentProps} />;
   };
 
-  return connect(select, perform)(CreditCardPrompt);
+  return CreditCardPrompt;
 };
 
 export default withCreditCard;
