@@ -66,7 +66,7 @@ export default function FileTitleSection(props: Props) {
           <GeoRestrictionInfo uri={uri} />
         </>
       }
-      titleActions={<FilePrice uri={normalizeURI(uri)} type="filepage" />}
+      titleActions={<FilePrice uri={normalizeURI(uri)} type="filepage" hideFree />}
       body={
         <>
           <ClaimInsufficientCredits uri={uri} />

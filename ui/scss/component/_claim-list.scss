@@ -1663,7 +1663,7 @@ $claim-preview-progress-bar-height: 5px;
   }
 
   & > *:not(:last-child) {
-    margin-right: var(--spacing-xxs);
+    margin-right: calc(var(--spacing-xxs) / 2);
   }
 }
 

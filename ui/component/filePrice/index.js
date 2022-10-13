@@ -1,5 +1,12 @@
 import { connect } from 'react-redux';
-import { selectClaimForUri, selectClaimWasPurchasedForUri, selectClaimIsMine } from 'redux/selectors/claims';
+import {
+  selectClaimForUri,
+  selectClaimWasPurchasedForUri,
+  selectRentalTagForUri,
+  selectPurchaseTagForUri,
+  selectIsFiatPaidForUri,
+  selectIsFetchingPurchases,
+} from 'redux/selectors/claims';
 import { selectCostInfoForUri, doFetchCostInfoForUri, selectFetchingCostInfoForUri } from 'lbryinc';
 import FilePrice from './view';
 
@@ -8,10 +15,13 @@ const select = (state, props) => {
 
   return {
     claim,
-    claimIsMine: selectClaimIsMine(state, claim),
-    claimWasPurchased: selectClaimWasPurchasedForUri(state, props.uri),
+    sdkPaid: selectClaimWasPurchasedForUri(state, props.uri),
+    fiatPaid: selectIsFiatPaidForUri(state, props.uri),
     costInfo: selectCostInfoForUri(state, props.uri),
     fetching: selectFetchingCostInfoForUri(state, props.uri),
+    rentalInfo: selectRentalTagForUri(state, props.uri),
+    purchaseInfo: selectPurchaseTagForUri(state, props.uri),
+    isFetchingPurchases: selectIsFetchingPurchases(state),
   };
 };
 

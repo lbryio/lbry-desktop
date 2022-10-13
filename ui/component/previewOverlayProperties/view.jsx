@@ -42,7 +42,7 @@ export default function PreviewOverlayProperties(props: Props) {
       ) : xsmall ? (
         <>
           <VideoDuration uri={uri} />
-          <FilePrice hideFree uri={uri} />
+          <FilePrice hideFree uri={uri} type="thumbnail" />
         </>
       ) : (
         <>
@@ -60,7 +60,7 @@ export default function PreviewOverlayProperties(props: Props) {
           {!iconOnly && isStream && <VideoDuration uri={uri} />}
           {isStream && <FileType uri={uri} small={small} />}
           {!claimIsMine && downloaded && <Icon size={size} tooltip icon={ICONS.LIBRARY} />}
-          <FilePrice hideFree uri={uri} />
+          <FilePrice hideFree uri={uri} type="thumbnail" />
         </>
       )}
     </div>
