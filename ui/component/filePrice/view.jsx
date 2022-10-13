@@ -76,9 +76,12 @@ class FilePrice extends React.PureComponent<Props> {
     });
 
     if (fiatRequired) {
-      if (fiatPaid || isFetchingPurchases) {
+      if (isFetchingPurchases || (fiatPaid && type !== 'thumbnail')) {
         return null;
       }
+
+      const hasMultiOptions = Boolean(purchaseInfo) && Boolean(rentalInfo);
+      const showIconsOnly = hasMultiOptions && type === 'thumbnail';
 
       return (
         <div
@@ -86,23 +89,34 @@ class FilePrice extends React.PureComponent<Props> {
             'filePriceFiatDuo--filePage': type === 'filepage',
           })}
         >
-          {purchaseInfo && (
+          {fiatPaid ? (
             <CreditAmount
-              amount={purchaseInfo}
+              amount={''}
               className={className}
               isFiat
-              showFullPrice={showFullPrice}
-              icon={ICONS.BUY}
+              icon={ICONS.COMPLETED} // icon={ICONS.PURCHASED}
             />
-          )}
-          {rentalInfo && (
-            <CreditAmount
-              amount={rentalInfo.price}
-              className={className}
-              isFiat
-              showFullPrice={showFullPrice}
-              icon={ICONS.TIME}
-            />
+          ) : (
+            <>
+              {purchaseInfo && (
+                <CreditAmount
+                  amount={showIconsOnly ? '' : purchaseInfo}
+                  className={className}
+                  isFiat
+                  showFullPrice={showFullPrice}
+                  icon={ICONS.BUY}
+                />
+              )}
+              {rentalInfo && (
+                <CreditAmount
+                  amount={showIconsOnly ? '' : rentalInfo.price}
+                  className={className}
+                  isFiat
+                  showFullPrice={showFullPrice}
+                  icon={ICONS.TIME}
+                />
+              )}
+            </>
           )}
         </div>
       );

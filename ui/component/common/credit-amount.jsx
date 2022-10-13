@@ -8,7 +8,7 @@ import LbcSymbol from 'component/common/lbc-symbol';
 import React from 'react';
 
 type Props = {
-  amount?: number,
+  amount?: number | '',
   className?: string,
   customAmounts?: { amountFiat: number, amountLBC: number },
   fee?: boolean,

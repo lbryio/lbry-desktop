@@ -41,10 +41,15 @@ $SKEW_AMOUNT: 10deg;
 
 .filePrice--thumbnail {
   height: 1.2rem;
+
   .credit-amount__prefix-icon {
     margin-left: var(--spacing-xxxs);
     width: 12px;
     height: 12px;
+  }
+
+  .credit-amount__prefix-icon:only-child {
+    margin-right: var(--spacing-xxxs);
   }
 }
 
