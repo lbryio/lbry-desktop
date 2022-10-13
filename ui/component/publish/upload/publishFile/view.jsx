@@ -342,6 +342,8 @@ function PublishFile(props: Props) {
     const isVideo = contentType && contentType[0] === 'video';
     const isMp4 = contentType && contentType[1] === 'mp4';
 
+    updatePublishForm({ fileMime: file.type });
+
     let isTextPost = false;
 
     if (contentType && contentType[0] === 'text') {

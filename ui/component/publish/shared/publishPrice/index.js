@@ -6,6 +6,9 @@ import { selectAccountChargesEnabled } from 'redux/selectors/stripe';
 import PublishPrice from './view';
 
 const select = (state) => ({
+  fileMime: selectPublishFormValue(state, 'fileMime'),
+  streamType: selectPublishFormValue(state, 'streamType'),
+  isMarkdownPost: selectPublishFormValue(state, 'isMarkdownPost'),
   paywall: selectPublishFormValue(state, 'paywall'),
   fiatPurchaseEnabled: selectPublishFormValue(state, 'fiatPurchaseEnabled'),
   fiatPurchaseFee: selectPublishFormValue(state, 'fiatPurchaseFee'),

@@ -19,7 +19,10 @@ const CURRENCY_OPTIONS = ['USD', 'EUR'];
 
 type Props = {
   disabled: boolean,
+  isMarkdownPost: boolean,
   // --- redux ---
+  fileMime: ?string,
+  streamType: ?string,
   fiatPurchaseEnabled: boolean,
   fiatPurchaseFee: Price,
   fiatRentalEnabled: boolean,
@@ -36,6 +39,9 @@ type Props = {
 
 function PublishPrice(props: Props) {
   const {
+    fileMime,
+    streamType,
+    isMarkdownPost,
     // Purchase
     fiatPurchaseEnabled,
     fiatPurchaseFee,
@@ -55,6 +61,7 @@ function PublishPrice(props: Props) {
   } = props;
 
   const [expanded, setExpanded] = usePersistedState('publish:price:extended', true);
+  const [fiatAllowed, setFiatAllowed] = React.useState(true);
 
   const bankAccountNotFetched = chargesEnabled === undefined;
   const noBankAccount = !chargesEnabled && !bankAccountNotFetched;
@@ -132,7 +139,7 @@ function PublishPrice(props: Props) {
                 name="content_fiat"
                 label={`${__('Purchase / Rent')} \u{0024}`}
                 checked={paywall === PAYWALL.FIAT}
-                disabled={disabled || noBankAccount}
+                disabled={disabled || noBankAccount || !fiatAllowed}
                 onChange={() => updatePublishForm({ paywall: PAYWALL.FIAT })}
               />
               {noBankAccount && getBankAccountDriver()}
@@ -293,6 +300,26 @@ function PublishPrice(props: Props) {
       doTipAccountStatus();
     }
   }, [bankAccountNotFetched, doTipAccountStatus]);
+
+  React.useEffect(() => {
+    function isFiatWhitelistedFileType() {
+      if (fileMime) {
+        // fileMime: the current browsed/selected file (it's empty on edit, but can be changed)
+        return fileMime.startsWith('audio') || fileMime.startsWith('video');
+      } else if (streamType) {
+        // streamType: the original type that we are editing from.
+        return streamType === 'audio' || streamType === 'video' || streamType === 'document';
+      }
+      return false;
+    }
+
+    const isFiatAllowed = isMarkdownPost || isFiatWhitelistedFileType();
+    setFiatAllowed(isFiatAllowed);
+
+    if (paywall === PAYWALL.FIAT && !isFiatAllowed) {
+      updatePublishForm({ paywall: PAYWALL.FREE });
+    }
+  }, [fileMime, paywall, isMarkdownPost, updatePublishForm, streamType]);
 
   return (
     <div className="publish-price">

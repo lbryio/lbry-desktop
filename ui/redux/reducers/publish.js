@@ -27,6 +27,8 @@ type PublishState = {
   fileDur: number,
   fileSize: number,
   fileVid: boolean,
+  fileMime: string,
+  streamType: ?string,
   fee: {
     amount: number,
     currency: string,
@@ -70,6 +72,8 @@ const defaultState: PublishState = {
   fileDur: 0,
   fileSize: 0,
   fileVid: false,
+  fileMime: '',
+  streamType: '',
   remoteFileUrl: undefined,
   paywall: PAYWALL.FREE,
   fee: {

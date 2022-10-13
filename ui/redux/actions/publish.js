@@ -659,6 +659,7 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string, claimType: string
     thumbnail,
     title,
     tags,
+    stream_type,
   } = value;
 
   let state = getState();
@@ -682,6 +683,7 @@ export const doPrepareEdit = (claim: StreamClaim, uri: string, claimType: string
     licenseUrl,
     nsfw: isClaimNsfw(claim),
     tags: tags ? tags.map((tag) => ({ name: tag })) : [],
+    streamType: stream_type,
   };
 
   // Make sure custom licenses are mapped properly
