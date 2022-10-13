@@ -937,6 +937,8 @@ export const selectTakeOverAmountForName = (state: State, name: string) => {
   return winningClaim ? winningClaim.meta.effective_amount || winningClaim.amount : null;
 };
 
+export const selectIsFetchingPurchases = (state: State) => selectState(state).fetchingMyPurchasedClaims;
+
 export const selectMyPurchasedClaims = createSelector(selectState, (state) => state.myPurchasedClaims || []);
 
 export const selectPurchaseMadeForClaimId = (state: State, claimId: string) => {
@@ -958,6 +960,20 @@ export const selectValidRentalPurchaseForClaimId = (state: State, claimId: strin
   });
 
   return validRentalClaimForClaimId;
+};
+
+export const selectIsFiatRequiredForUri = (state: State, uri: string) => {
+  return Boolean(selectPurchaseTagForUri(state, uri)) || Boolean(selectRentalTagForUri(state, uri));
+};
+
+export const selectIsFiatPaidForUri = (state: State, uri: string) => {
+  const claimId = (selectClaimForUri(state, uri) || {}).claim_id;
+  if (claimId) {
+    return (
+      Boolean(selectPurchaseMadeForClaimId(state, claimId)) ||
+      Boolean(selectValidRentalPurchaseForClaimId(state, claimId))
+    );
+  }
 };
 
 export const selectIsClaimOdyseeChannelForUri = (state: State, uri: string) => {
