@@ -6,9 +6,9 @@ import {
   makeSelectTagInClaimOrChannelForUri,
   selectClaimIsNsfwForUri,
   selectPreorderTagForUri,
-  selectPurchaseTagForUri,
-  selectRentalTagForUri,
   selectProtectedContentTagForUri,
+  selectIsFiatRequiredForUri,
+  selectIsFiatPaidForUri,
 } from 'redux/selectors/claims';
 import { selectStreamingUrlForUri } from 'redux/selectors/file_info';
 import { doPrepareEdit } from 'redux/actions/publish';
@@ -42,10 +42,10 @@ const select = (state, props) => {
     disableDownloadButton: makeSelectTagInClaimOrChannelForUri(uri, DISABLE_DOWNLOAD_BUTTON_TAG)(state),
     isMature: selectClaimIsNsfwForUri(state, uri),
     isAPreorder: Boolean(selectPreorderTagForUri(state, props.uri)),
-    isPurchasableContent: Boolean(selectPurchaseTagForUri(state, props.uri)),
-    isRentableContent: Boolean(selectRentalTagForUri(state, props.uri)),
     isProtectedContent: Boolean(selectProtectedContentTagForUri(state, uri)),
-    contentUnlocked: claim && selectNoRestrictionOrUserIsMemberForContentClaimId(state, claim.claim_id),
+    isFiatRequired: selectIsFiatRequiredForUri(state, uri),
+    isFiatPaid: selectIsFiatPaidForUri(state, uri),
+    isTierUnlocked: claim && selectNoRestrictionOrUserIsMemberForContentClaimId(state, claim.claim_id),
   };
 };
 

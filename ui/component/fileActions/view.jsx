@@ -39,10 +39,10 @@ type Props = {
   doDownloadUri: (uri: string) => void,
   isMature: boolean,
   isAPreorder: boolean,
-  isPurchasableContent: boolean,
-  isRentableContent: boolean,
   isProtectedContent: boolean,
-  contentUnlocked: boolean,
+  isFiatRequired: boolean,
+  isFiatPaid: ?boolean,
+  isTierUnlocked: boolean,
 };
 
 export default function FileActions(props: Props) {
@@ -64,10 +64,10 @@ export default function FileActions(props: Props) {
     doDownloadUri,
     isMature,
     isAPreorder,
-    isPurchasableContent,
-    isRentableContent,
     isProtectedContent,
-    contentUnlocked,
+    isFiatRequired,
+    isFiatPaid,
+    isTierUnlocked,
   } = props;
 
   const {
@@ -87,7 +87,7 @@ export default function FileActions(props: Props) {
   const urlParams = new URLSearchParams(search);
   const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID);
 
-  const unauthorizedToDownload = isPurchasableContent || isRentableContent || isProtectedContent;
+  const unauthorizedToDownload = isFiatRequired || isProtectedContent;
   const showDownload = !isLivestreamClaim && !disableDownloadButton && !isMature && !unauthorizedToDownload;
   const showRepost = !hideRepost && !isLivestreamClaim;
 
@@ -105,6 +105,12 @@ export default function FileActions(props: Props) {
     }
 
     editUri = buildURI(uriObject);
+  }
+
+  function isAllowedToReact() {
+    // We can relax it a bit by doing OR instead, but for now,
+    // require all restrictions to be cleared in order to react.
+    return !claimIsMine && (!isFiatRequired || isFiatPaid) && isTierUnlocked;
   }
 
   function handleWebDownload() {
@@ -131,9 +137,9 @@ export default function FileActions(props: Props) {
 
   return (
     <div className="media__actions">
-      {ENABLE_FILE_REACTIONS && contentUnlocked && <FileReactions uri={uri} />}
+      {ENABLE_FILE_REACTIONS && isAllowedToReact() && <FileReactions uri={uri} />}
 
-      {!isAPreorder && !isPurchasableContent && !isRentableContent && <ClaimSupportButton uri={uri} fileAction />}
+      {!isAPreorder && !isFiatRequired && <ClaimSupportButton uri={uri} fileAction />}
 
       <ClaimCollectionAddButton uri={uri} />
 
