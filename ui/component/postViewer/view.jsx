@@ -18,6 +18,7 @@ import Button from 'component/button';
 import LbcSymbol from 'component/common/lbc-symbol';
 import classnames from 'classnames';
 import ProtectedContentOverlay from 'component/protectedContentOverlay';
+import PreorderAndPurchaseContentButton from 'component/preorderAndPurchaseContentButton';
 
 const EXPAND = {
   NONE: 'none',
@@ -90,6 +91,8 @@ function PostViewer(props: Props) {
           )}
         </div>
       </div>
+
+      <PreorderAndPurchaseContentButton uri={uri} />
 
       {expand === EXPAND.CREDIT_DETAILS && (
         <div className="section post__info--credit-details">
