@@ -5,6 +5,7 @@ import {
   selectTitleForUri,
   makeSelectTagInClaimOrChannelForUri,
   selectClaimIsNsfwForUri,
+  selectIsFiatRequiredForUri,
 } from 'redux/selectors/claims';
 import SocialShare from './view';
 import { selectUserInviteReferralCode, selectUser, selectUserInviteStatusFetched } from 'redux/selectors/user';
@@ -26,6 +27,7 @@ const select = (state, props) => {
     disableDownloadButton: makeSelectTagInClaimOrChannelForUri(uri, DISABLE_DOWNLOAD_BUTTON_TAG)(state),
     isMature: selectClaimIsNsfwForUri(state, uri),
     isMembershipProtected: claim && selectContentHasProtectedMembershipIds(state, claim.claim_id),
+    isFiatRequired: selectIsFiatRequiredForUri(state, uri),
   };
 };
 
