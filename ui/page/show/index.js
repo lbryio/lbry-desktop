@@ -7,6 +7,7 @@ import {
   makeSelectClaimIsPending,
   selectGeoRestrictionForUri,
   selectLatestClaimForUri,
+  makeSelectTagInClaimOrChannelForUri,
 } from 'redux/selectors/claims';
 import {
   selectCollectionForId,
@@ -26,6 +27,7 @@ import { selectActiveLiveClaimForChannel } from 'redux/selectors/livestream';
 import { doFetchChannelLiveStatus } from 'redux/actions/livestream';
 import { doFetchCreatorSettings } from 'redux/actions/comments';
 import { selectSettingsForChannelId } from 'redux/selectors/comments';
+import { PREFERENCE_EMBED } from 'constants/tags';
 import ShowPage from './view';
 
 const select = (state, props) => {
@@ -46,12 +48,14 @@ const select = (state, props) => {
     ? selectActiveLiveClaimForChannel(state, claimId)
     : selectLatestClaimForUri(state, canonicalUrl);
   const latestClaimUrl = latestContentClaim && latestContentClaim.canonical_url;
+  const preferEmbed = makeSelectTagInClaimOrChannelForUri(uri, PREFERENCE_EMBED)(state);
 
   return {
     uri,
     claim,
     channelClaimId,
     latestClaimUrl,
+    preferEmbed,
     isResolvingUri: selectIsUriResolving(state, uri),
     blackListedOutpointMap: selectBlacklistedOutpointMap(state),
     filteredOutpointMap: selectFilteredOutpointMap(state),
