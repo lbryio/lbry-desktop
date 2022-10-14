@@ -56,7 +56,7 @@ export default function NotificationSettingsPage(props: Props) {
           setError(true);
         });
     }
-  }, [lbryIoParams]);
+  }, []);
 
   function handleChangeTag(name, newIsEnabled) {
     const tagParams = newIsEnabled ? { add: name } : { remove: name };
