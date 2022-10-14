@@ -15,7 +15,7 @@ import { PAYWALL } from 'constants/publish';
 import usePersistedState from 'effects/use-persisted-state';
 
 const FEE = { MIN: 1, MAX: 999.99 };
-const CURRENCY_OPTIONS = ['USD', 'EUR'];
+const CURRENCY_OPTIONS = ['USD']; // ['USD', 'EUR']; // disable EUR until currency approach is determined.
 
 type Props = {
   disabled: boolean,
