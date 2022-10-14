@@ -221,3 +221,4 @@ export const ARRANGE = 'Arrange';
 export const COMEDY = 'Comedy';
 export const LIFESTYLE = 'Lifestyle';
 export const MEMBERSHIP = 'Membership';
+export const GOLIVE = 'GOLIVE';
