@@ -33,7 +33,7 @@ export default function NotificationSettingsPage(props: Props) {
   const lbryIoParams = verificationToken ? { auth_token: verificationToken } : undefined;
 
   React.useEffect(() => {
-    if (isAuthenticated) {
+    if (lbryIoParams) {
       Lbryio.call('tag', 'list', lbryIoParams)
         .then(setTags)
         .catch((e) => {
@@ -56,7 +56,7 @@ export default function NotificationSettingsPage(props: Props) {
           setError(true);
         });
     }
-  }, [isAuthenticated]);
+  }, [lbryIoParams]);
 
   function handleChangeTag(name, newIsEnabled) {
     const tagParams = newIsEnabled ? { add: name } : { remove: name };
@@ -93,7 +93,7 @@ export default function NotificationSettingsPage(props: Props) {
       });
   }
 
-  if (IS_WEB && !isAuthenticated && !verificationToken) {
+  if (!isAuthenticated && !verificationToken) {
     return <Redirect to={`/$/${PAGES.AUTH_SIGNIN}?redirect=${location.pathname}`} />;
   }
 
