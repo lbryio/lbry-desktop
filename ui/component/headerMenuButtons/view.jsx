@@ -42,7 +42,7 @@ export default function HeaderMenuButtons(props: HeaderMenuButtonProps) {
             onClick={() => clearPublish()}
             navigate={`/$/${PAGES.LIVESTREAM}`}
           >
-            <Icon size={18} icon={ICONS.VIDEO} aria-hidden />
+            <Icon size={18} icon={ICONS.GOLIVE} aria-hidden />
           </Button>
         </Tooltip>
       )}

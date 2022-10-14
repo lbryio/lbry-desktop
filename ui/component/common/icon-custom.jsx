@@ -2002,6 +2002,50 @@ export const icons = {
       </g>
     </svg>
   ),
+  [ICONS.GOLIVE]: (props: CustomProps) => (
+    <svg
+      {...props}
+      version="1.1"
+      id="Layer_1"
+      xmlns="http://www.w3.org/2000/svg"
+      xmlnsXlink="http://www.w3.org/1999/xlink"
+      x="0px"
+      y="0px"
+      viewBox="0 0 27 27"
+      stroke="currentColor"
+      width={props.size || '18'}
+      height={props.size || '16'}
+      className={props.className}
+    >
+      <g transform="translate(0,1.6)">
+        <path d="M2 25V18.4545H2.98757V24.1499H5.95348V25H2Z" />
+        <path d="M9.41765 18.4545V25H8.43008V18.4545H9.41765Z" />
+        <path d="M12.7779 18.4545L14.5997 23.7855H14.6732L16.4949 18.4545H17.5624L15.2069 25H14.0659L11.7105 18.4545H12.7779Z" />
+        <path d="M19.8576 25V18.4545H23.9613V19.3047H20.8452V21.299H23.7472V22.146H20.8452V24.1499H23.9997V25H19.8576Z" />
+      </g>
+      <g clip-path="url(#clip0_1_28)" transform="translate(-5,-3) scale(1.4)">
+        <path
+          d="M19.4167 4.08333L15.3333 6.99999L19.4167 9.91666V4.08333Z"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          fill="transparent"
+        />
+        <path
+          d="M14.1667 2.91666H7.75C7.10567 2.91666 6.58334 3.439 6.58334 4.08333V9.91666C6.58334 10.561 7.10567 11.0833 7.75 11.0833H14.1667C14.811 11.0833 15.3333 10.561 15.3333 9.91666V4.08333C15.3333 3.439 14.811 2.91666 14.1667 2.91666Z"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          fill="transparent"
+        />
+      </g>
+      <defs>
+        <clipPath id="clip0_1_28">
+          <rect width="14" height="14" transform="translate(6)" />
+        </clipPath>
+      </defs>
+    </svg>
+  ),
   [ICONS.LIVESTREAM]: (props: CustomProps) => (
     <svg
       version="1.1"
