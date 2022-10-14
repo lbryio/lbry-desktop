@@ -33,7 +33,7 @@ export default function NotificationSettingsPage(props: Props) {
   const lbryIoParams = verificationToken ? { auth_token: verificationToken } : undefined;
 
   React.useEffect(() => {
-    if (lbryIoParams) {
+    if (lbryIoParams || isAuthenticated) {
       Lbryio.call('tag', 'list', lbryIoParams)
         .then(setTags)
         .catch((e) => {
