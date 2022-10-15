@@ -173,7 +173,7 @@ export default function Notification(props: Props) {
                 className="notification__markSeen"
                 onClick={(e) => {
                   e.stopPropagation();
-                  doReadNotifications(notification.id);
+                  doReadNotifications([notification.id]);
                 }}
               />
             )}
