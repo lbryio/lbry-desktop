@@ -83,60 +83,33 @@ const EmojisPanel = (emojisProps: EmojisProps) => {
   const isMobile = useIsMobile();
   const emojiSelectorRef = React.useRef();
 
+  const CATEGORY_INFOS = [
+    { key: 'odysee', name: 'Odysee', file: '48%20px/smile%402x.png' },
+    { key: 'smilies', name: __('Smilies'), file: 'twemoji/smilies/grinning.png' },
+    { key: 'hand signals', name: __('Hand signals'), file: 'twemoji/handsignals/waving_hand.png' },
+    { key: 'activities', name: __('Activities'), file: 'twemoji/activities/tennis.png' },
+    { key: 'symbols', name: __('Symbols'), file: 'twemoji/symbols/sparkling_heart.png' },
+    { key: 'animals & nature', name: __('Animals & Nature'), file: 'twemoji/nature/dolphin.png' },
+    { key: 'food & drink', name: __('Food & Drink'), file: 'twemoji/food/sushi.png' },
+    { key: 'flags', name: __('Flags'), file: 'twemoji/flags/pirate_flag.png' },
+  ];
+
   return (
     <div className="selector-menu" ref={emojiSelectorRef}>
       <Button button="close" icon={ICONS.REMOVE} onClick={closeSelector} />
       <div id="emoji-code-preview" />
       <div className="emoji-categories">
         {/* <Icon icon={ICONS.TIME} /> */}
-        <img
-          onClick={() => scrollToCategory('odysee', emojiSelectorRef, isMobile)}
-          onMouseEnter={() => handleHover('Odysee')}
-          onMouseLeave={() => handleHover('')}
-          src="https://static.odycdn.com/emoticons/48%20px/smile%402x.png"
-        />
-        <img
-          onClick={() => scrollToCategory('smilies', emojiSelectorRef, isMobile)}
-          onMouseEnter={() => handleHover(__('Smilies'))}
-          onMouseLeave={() => handleHover('')}
-          src="https://static.odycdn.com/emoticons/twemoji/smilies/grinning.png"
-        />
-        <img
-          onClick={() => scrollToCategory('hand signals', emojiSelectorRef, isMobile)}
-          onMouseEnter={() => handleHover(__('Hand signals'))}
-          onMouseLeave={() => handleHover('')}
-          src="https://static.odycdn.com/emoticons/twemoji/handsignals/waving_hand.png"
-        />
-        <img
-          onClick={() => scrollToCategory('activities', emojiSelectorRef, isMobile)}
-          onMouseEnter={() => handleHover(__('Activities'))}
-          onMouseLeave={() => handleHover('')}
-          src="https://static.odycdn.com/emoticons/twemoji/activities/tennis.png"
-        />
-        <img
-          onClick={() => scrollToCategory('symbols', emojiSelectorRef, isMobile)}
-          onMouseEnter={() => handleHover(__('Symbols'))}
-          onMouseLeave={() => handleHover('')}
-          src="https://static.odycdn.com/emoticons/twemoji/symbols/sparkling_heart.png"
-        />
-        <img
-          onClick={() => scrollToCategory('animals & nature', emojiSelectorRef, isMobile)}
-          onMouseEnter={() => handleHover(__('Animals & Nature'))}
-          onMouseLeave={() => handleHover('')}
-          src="https://static.odycdn.com/emoticons/twemoji/nature/dolphin.png"
-        />
-        <img
-          onClick={() => scrollToCategory('food & drink', emojiSelectorRef, isMobile)}
-          onMouseEnter={() => handleHover(__('Food & Drink'))}
-          onMouseLeave={() => handleHover('')}
-          src="https://static.odycdn.com/emoticons/twemoji/food/sushi.png"
-        />
-        <img
-          onClick={() => scrollToCategory('flags', emojiSelectorRef, isMobile)}
-          onMouseEnter={() => handleHover(__('Flags'))}
-          onMouseLeave={() => handleHover('')}
-          src="https://static.odycdn.com/emoticons/twemoji/flags/pirate_flag.png"
-        />
+        {CATEGORY_INFOS.map((x) => (
+          <img
+            key={x.key}
+            onClick={() => scrollToCategory(x.key, emojiSelectorRef, isMobile)}
+            onMouseEnter={() => handleHover(x.name)}
+            onMouseLeave={() => handleHover('')}
+            loading="lazy"
+            src={`https://static.odycdn.com/emoticons/${x.file}`}
+          />
+        ))}
       </div>
 
       {/* <EmoteCategory title={__('Recently used')} {...defaultRowProps} /> */}
@@ -188,6 +161,7 @@ const StickersPanel = (stickersProps: StickersProps) => {
           onClick={() => scrollToCategory('free', stickerSelectorRef, isMobile)}
           onMouseEnter={() => handleHover(__('Free'))}
           onMouseLeave={() => handleHover('')}
+          loading="lazy"
           src="https://static.odycdn.com/stickers/HYPE/PNG/hype_with_border.png"
         />
         {!claimIsMine && (
@@ -195,6 +169,7 @@ const StickersPanel = (stickersProps: StickersProps) => {
             onClick={() => scrollToCategory('tips', stickerSelectorRef, isMobile)}
             onMouseEnter={() => handleHover(__('Tips'))}
             onMouseLeave={() => handleHover('')}
+            loading="lazy"
             src="https://static.odycdn.com/stickers/TIPS/png/with%20borderlarge$tip.png"
           />
         )}
