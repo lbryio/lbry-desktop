@@ -28,7 +28,7 @@ type Props = {
   notification: WebNotification,
   // -- redux --
   doDeleteNotification: (id: number) => void,
-  doReadNotifications: (id: number) => void,
+  doReadNotifications: (ids: Array<number>) => void,
   doGetMembershipSupportersList: () => void,
 };
 
@@ -112,7 +112,7 @@ export default function Notification(props: Props) {
   const navLinkProps = { to: notificationLink, onClick: (e) => e.stopPropagation() };
 
   function handleNotificationClick() {
-    if (!is_read) doReadNotifications(notification.id);
+    if (!is_read) doReadNotifications([notification.id]);
     if (menuButton && notificationLink) push(notificationLink);
     if (notificationAction) notificationAction();
   }
