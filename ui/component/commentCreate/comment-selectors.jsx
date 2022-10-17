@@ -83,15 +83,16 @@ const EmojisPanel = (emojisProps: EmojisProps) => {
   const isMobile = useIsMobile();
   const emojiSelectorRef = React.useRef();
 
+  // prettier-ignore
   const CATEGORY_INFOS = [
-    { key: 'odysee', name: 'Odysee', file: '48%20px/smile%402x.png' },
-    { key: 'smilies', name: __('Smilies'), file: 'twemoji/smilies/grinning.png' },
-    { key: 'hand signals', name: __('Hand signals'), file: 'twemoji/handsignals/waving_hand.png' },
-    { key: 'activities', name: __('Activities'), file: 'twemoji/activities/tennis.png' },
-    { key: 'symbols', name: __('Symbols'), file: 'twemoji/symbols/sparkling_heart.png' },
-    { key: 'animals & nature', name: __('Animals & Nature'), file: 'twemoji/nature/dolphin.png' },
-    { key: 'food & drink', name: __('Food & Drink'), file: 'twemoji/food/sushi.png' },
-    { key: 'flags', name: __('Flags'), file: 'twemoji/flags/pirate_flag.png' },
+    { key: 'odysee', name: 'Odysee', mainImg: '48%20px/smile%402x.png', images: ODYSEE_EMOTES },
+    { key: 'smilies', name: __('Smilies'), mainImg: 'twemoji/smilies/grinning.png', images: TWEMOTES.SMILIES },
+    { key: 'hand signals', name: __('Hand signals'), mainImg: 'twemoji/handsignals/waving_hand.png', images: TWEMOTES.HANDSIGNALS },
+    { key: 'activities', name: __('Activities'), mainImg: 'twemoji/activities/tennis.png', images: TWEMOTES.ACTIVITIES },
+    { key: 'symbols', name: __('Symbols'), mainImg: 'twemoji/symbols/sparkling_heart.png', images: TWEMOTES.SYMBOLS },
+    { key: 'animals & nature', name: __('Animals & Nature'), mainImg: 'twemoji/nature/dolphin.png', images: TWEMOTES.NATURE },
+    { key: 'food & drink', name: __('Food & Drink'), mainImg: 'twemoji/food/sushi.png', images: TWEMOTES.FOOD },
+    { key: 'flags', name: __('Flags'), mainImg: 'twemoji/flags/pirate_flag.png', images: TWEMOTES.FLAGS },
   ];
 
   return (
@@ -107,35 +108,15 @@ const EmojisPanel = (emojisProps: EmojisProps) => {
             onMouseEnter={() => handleHover(x.name)}
             onMouseLeave={() => handleHover('')}
             loading="lazy"
-            src={`https://static.odycdn.com/emoticons/${x.file}`}
+            src={`https://static.odycdn.com/emoticons/${x.mainImg}`}
           />
         ))}
       </div>
 
       {/* <EmoteCategory title={__('Recently used')} {...defaultRowProps} /> */}
-      <EmoteCategory title={'Odysee'} images={ODYSEE_EMOTES} {...defaultRowProps} handleHover={handleHover} />
-      <EmoteCategory title={__('Smilies')} images={TWEMOTES.SMILIES} {...defaultRowProps} handleHover={handleHover} />
-      <EmoteCategory
-        title={__('Hand signals')}
-        images={TWEMOTES.HANDSIGNALS}
-        {...defaultRowProps}
-        handleHover={handleHover}
-      />
-      <EmoteCategory
-        title={__('Activities')}
-        images={TWEMOTES.ACTIVITIES}
-        {...defaultRowProps}
-        handleHover={handleHover}
-      />
-      <EmoteCategory title={__('Symbols')} images={TWEMOTES.SYMBOLS} {...defaultRowProps} handleHover={handleHover} />
-      <EmoteCategory
-        title={__('Animals & Nature')}
-        images={TWEMOTES.NATURE}
-        {...defaultRowProps}
-        handleHover={handleHover}
-      />
-      <EmoteCategory title={__('Food & Drink')} images={TWEMOTES.FOOD} {...defaultRowProps} handleHover={handleHover} />
-      <EmoteCategory title={__('Flags')} images={TWEMOTES.FLAGS} {...defaultRowProps} handleHover={handleHover} />
+      {CATEGORY_INFOS.map((x) => (
+        <EmoteCategory key={x.key} title={x.name} images={x.images} {...defaultRowProps} handleHover={handleHover} />
+      ))}
     </div>
   );
 };
