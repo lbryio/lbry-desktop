@@ -30,6 +30,7 @@ declare type MembershipTier = {
 declare type MembershipTiers = Array<MembershipTier>;
 
 declare type Membership = {
+  name: ?string,
   auto_renew: boolean,
   badge: ?string,
   channel_id: string,

@@ -57,6 +57,9 @@ type Props = {
   publishing: boolean,
   isLivestreamClaim: boolean,
   remoteFile: string,
+  tiersWithExclusiveContent: MembershipTiers,
+  tiersWithExclusiveLivestream: MembershipTiers,
+  restrictingTiers: string,
   appLanguage: string,
 };
 
@@ -99,6 +102,9 @@ const ModalPublishPreview = (props: Props) => {
     closeModal,
     isLivestreamClaim,
     remoteFile,
+    tiersWithExclusiveContent,
+    tiersWithExclusiveLivestream,
+    restrictingTiers,
     appLanguage,
   } = props;
 
@@ -115,12 +121,13 @@ const ModalPublishPreview = (props: Props) => {
   const isOptimizeAvail = filePath && filePath !== '' && isVid && ffmpegStatus.available;
   const modalTitle = getModalTitle();
   const confirmBtnText = getConfirmButtonText();
+  const tiers = livestream || remoteFile ? tiersWithExclusiveLivestream : tiersWithExclusiveContent; // See #2285 & #2293
 
   // **************************************************************************
   // **************************************************************************
 
-  function createRow(label: string, value: any) {
-    return (
+  function createRow(label: string, value: any, hide?: boolean) {
+    return hide ? null : (
       <tr>
         <td>{label}</td>
         <td>{value}</td>
@@ -300,6 +307,34 @@ const ModalPublishPreview = (props: Props) => {
     }
   }
 
+  function getTierRestrictionValue() {
+    if (tiers && restrictingTiers) {
+      const rt = restrictingTiers.split(',');
+
+      return (
+        <div className="publish-preview__tier-restrictions">
+          {tiers.map((tier: MembershipTier) => {
+            const tierId = tier?.Membership?.id || '0';
+            const tierRestrictionOn = rt.includes(tierId.toString());
+
+            return tierRestrictionOn ? (
+              <FormField
+                key={tierId}
+                name={tierId}
+                type="checkbox"
+                defaultChecked
+                label={tier?.Membership?.name || tierId}
+              />
+            ) : (
+              <div className="dummy-tier" />
+            );
+          })}
+        </div>
+      );
+    }
+    return null;
+  }
+
   function onConfirmed() {
     // Publish for real:
     publish(getFilePathName(filePath), false);
@@ -347,6 +382,7 @@ const ModalPublishPreview = (props: Props) => {
                     {createRow(__('Language'), language ? getLanguageName(language) : '')}
                     {releaseTimeEdited && createRow(getReleaseTimeLabel(), getReleaseTimeValue(releaseTimeEdited))}
                     {createRow(__('License'), getLicense())}
+                    {createRow(__('Restricted to'), getTierRestrictionValue(), !tiers || !restrictingTiers)}
                     {createRow(__('Tags'), getTagsValue(tags))}
                   </tbody>
                 </table>

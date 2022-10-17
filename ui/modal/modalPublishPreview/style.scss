@@ -1,4 +1,4 @@
-@import '~ui/scss/init/breakpoints';
+@import '~ui/scss/init/mixins';
 
 .publish-preview__fiat-price {
   display: flex;
@@ -32,4 +32,28 @@
   font-size: var(--font-xsmall);
   font-style: italic;
   margin-top: var(--spacing-m);
+}
+
+.publish-preview__tier-restrictions {
+  font-size: var(--font-xsmall);
+  pointer-events: none;
+
+  .checkbox {
+    @include tier-restriction-checkbox;
+    margin-top: var(--spacing-xxxs); // handles wrapping
+    margin-right: var(--spacing-xxxs);
+
+    input {
+      display: none;
+    }
+
+    label {
+      padding: calc(var(--spacing-xxxs) / 2) var(--spacing-xxs);
+    }
+  }
+
+  .dummy-tier {
+    // Dummy element to maintain color index
+    display: inline-block;
+  }
 }
