@@ -16,6 +16,7 @@ import {
   selectPermanentUrlForUri,
   selectCanonicalUrlForUri,
   selectClaimForUri,
+  selectClaimIsNsfwForUri,
 } from 'redux/selectors/claims';
 import { makeSelectFileInfoForUri, selectFileInfosByOutpoint } from 'redux/selectors/file_info';
 import {
@@ -225,6 +226,9 @@ export function doUriInitiatePlay(
     const { uri: url, source, collection } = playingOptions;
 
     const state = getState();
+    const isMature = selectClaimIsNsfwForUri(state, url);
+
+    if (isMature) return;
 
     let uri = url;
     if (url && !isCanonicalUrl(url)) {
