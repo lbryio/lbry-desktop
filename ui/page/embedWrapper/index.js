@@ -6,6 +6,7 @@ import {
   selectIsUriResolving,
   selectGeoRestrictionForUri,
   selectLatestClaimForUri,
+  selectIsFiatRequiredForUri,
 } from 'redux/selectors/claims';
 import { selectStreamingUrlForUri } from 'redux/selectors/file_info';
 import { doResolveUri, doFetchLatestClaimForChannel } from 'redux/actions/claims';
@@ -75,6 +76,7 @@ const select = (state, props) => {
     channelNout,
     latestClaimUrl,
     isNewestPath,
+    isFiatRequired: selectIsFiatRequiredForUri(state, uri),
     costInfo: uri && selectCostInfoForUri(state, uri),
     streamingUrl: selectStreamingUrlForUri(state, uri),
     isResolvingUri: uri && selectIsUriResolving(state, uri),

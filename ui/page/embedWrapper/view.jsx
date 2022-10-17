@@ -27,6 +27,7 @@ type Props = {
   channelClaimId: ?string,
   channelTxid: ?string,
   channelNout: ?string,
+  isFiatRequired: boolean,
   costInfo: any,
   streamingUrl: string,
   isResolvingUri: boolean,
@@ -65,6 +66,7 @@ export default function EmbedWrapperPage(props: Props) {
     channelClaimId,
     channelTxid,
     channelNout,
+    isFiatRequired,
     costInfo,
     streamingUrl,
     isResolvingUri,
@@ -105,7 +107,7 @@ export default function EmbedWrapperPage(props: Props) {
   const isLiveClaimNotPlaying = isLivestreamClaim && !isLiveClaimFetching && !readyToDisplay;
   const loading = (!haveClaim && isResolvingUri) || isLiveClaimFetching;
   const noContentFound = nullClaim && !isResolvingUri;
-  const hasCost = costInfo && costInfo.cost > 0;
+  const hasCost = (costInfo && costInfo.cost > 0) || isFiatRequired;
   const contentLink = formatLbryUrlForWeb(uri);
   const isClaimBlackListed =
     haveClaim &&
@@ -167,10 +169,27 @@ export default function EmbedWrapperPage(props: Props) {
       doResolveUri(uri);
     }
 
-    if (uri && !isLivestreamClaim && (isNewestPath ? latestClaimUrl : haveClaim) && costInfo && costInfo.cost === 0) {
+    if (
+      uri &&
+      !isLivestreamClaim &&
+      (isNewestPath ? latestClaimUrl : haveClaim) &&
+      costInfo &&
+      costInfo.cost === 0 &&
+      !isFiatRequired
+    ) {
       doPlayUri(uri);
     }
-  }, [doPlayUri, isLivestreamClaim, doResolveUri, haveClaim, costInfo, uri, isNewestPath, latestClaimUrl]);
+  }, [
+    doPlayUri,
+    isLivestreamClaim,
+    doResolveUri,
+    haveClaim,
+    costInfo,
+    isFiatRequired,
+    uri,
+    isNewestPath,
+    latestClaimUrl,
+  ]);
 
   React.useEffect(() => {
     if (haveClaim && uri) {
