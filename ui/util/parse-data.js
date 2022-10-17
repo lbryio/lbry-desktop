@@ -35,7 +35,7 @@ const parseCsv = (data, filters = []) => {
         // Apply filters
         Object.entries(item).forEach(([key, value]) => {
           if (!filters.includes(key)) {
-            const sanitizedValue = '"' + String(value).replaceAll('"', '\\"') + '"';
+            const sanitizedValue = '"' + value + '"';
             row.push(sanitizedValue);
           }
         });
