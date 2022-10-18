@@ -157,6 +157,7 @@ export default function YoutubeTransferStatus(props: Props) {
                       uri={url}
                       actions={<span className="help">{transferState}</span>}
                       properties={false}
+                      hideJoin
                     />
                   ) : (
                     <div className="error">
