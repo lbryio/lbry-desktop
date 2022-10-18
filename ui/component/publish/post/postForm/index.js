@@ -41,6 +41,7 @@ const select = (state) => {
     isStillEditing: selectIsStillEditing(state),
     filePath: selectPublishFormValue(state, 'filePath'),
     remoteUrl: selectPublishFormValue(state, 'remoteFileUrl'),
+    isMarkdownPost: selectPublishFormValue(state, 'isMarkdownPost'),
     publishSuccess: selectPublishFormValue(state, 'publishSuccess'),
     totalRewardValue: selectUnclaimedRewardValue(state),
     modal: selectModal(state),

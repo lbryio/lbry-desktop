@@ -80,6 +80,7 @@ type Props = {
   user: ?User,
   permanentUrl: ?string,
   remoteUrl: ?string,
+  isMarkdownPost: boolean,
   isClaimingInitialRewards: boolean,
   claimInitialRewards: () => void,
   hasClaimedInitialRewards: boolean,
@@ -121,6 +122,7 @@ function PostForm(props: Props) {
     // user,
     permanentUrl,
     // remoteUrl,
+    isMarkdownPost,
     isClaimingInitialRewards,
     claimInitialRewards,
     hasClaimedInitialRewards,
@@ -300,7 +302,7 @@ function PostForm(props: Props) {
       isMarkdownPost: true,
       isLivestreamPublish: false,
     });
-  }, [mode, updatePublishForm]);
+  }, [mode, updatePublishForm, isMarkdownPost]);
 
   useEffect(() => {
     if (incognito) {
