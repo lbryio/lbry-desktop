@@ -307,7 +307,7 @@ export default function PreorderAndPurchaseButton(props: Props) {
             </div>
           )}
           {/* viewer owns this content */}
-          {/* Are these necessary? Seems obvious. */}
+          {/* @if TARGET='DISABLE_FOR_NOW' */}
           {preorderTag && myUpload && (
             <div className="paid-content-prompt__notice">{__('You cannot preorder your own content')}</div>
           )}
@@ -320,6 +320,7 @@ export default function PreorderAndPurchaseButton(props: Props) {
           {rentalTag && purchaseTag && myUpload && (
             <div className="paid-content-prompt__notice">{__('You cannot purchase or rent your own content')}</div>
           )}
+          {/* @endif */}
         </>
       )}
     </div>
