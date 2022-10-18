@@ -34,7 +34,11 @@ const DEFAULT_UNITS = Object.freeze({
 export default function FormFieldDurationCombo(props: Props) {
   const { duration, onChange, onBlur, min, disabled, step, label, placeholder, units } = props;
 
+  const [value, setValue] = React.useState(duration.value);
+
   function handleValueChange(event: SyntheticInputEvent<*>) {
+    setValue(parseFloat(event.target.value));
+
     onChange({
       value: event.target.value ? parseFloat(event.target.value) : 0,
       unit: duration.unit,
@@ -62,7 +66,7 @@ export default function FormFieldDurationCombo(props: Props) {
         type="number"
         className="form-field--price-amount"
         min={min}
-        value={duration.value}
+        value={duration.value || value}
         onWheel={(e) => e.preventDefault()}
         onChange={handleValueChange}
         onBlur={handleBlur}
