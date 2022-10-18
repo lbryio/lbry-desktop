@@ -69,6 +69,10 @@ function PublishPrice(props: Props) {
   // If it's only restricted, the price can be added externally and they won't be able to change it
   const restrictedWithoutPrice = paywall === PAYWALL.FREE && restrictedToMemberships;
 
+  function clamp(value, min, max) {
+    return Math.min(Math.max(Number(value), min), max);
+  }
+
   function sanitizeFee(name) {
     const feeLookup = {
       fiatPurchaseFee: fiatPurchaseFee,
@@ -80,7 +84,18 @@ function PublishPrice(props: Props) {
       updatePublishForm({
         [name]: {
           ...f,
-          amount: Math.min(Math.max(Number(f.amount.toFixed(2)), FEE.MIN), FEE.MAX),
+          amount: clamp(f.amount.toFixed(2), FEE.MIN, FEE.MAX),
+        },
+      });
+    }
+  }
+
+  function sanitizeDuration() {
+    if (Number.isFinite(fiatRentalExpiration.value)) {
+      updatePublishForm({
+        fiatRentalExpiration: {
+          ...fiatRentalExpiration,
+          value: clamp(fiatRentalExpiration.value.toFixed(2), 1, 99999),
         },
       });
     }
@@ -254,6 +269,7 @@ function PublishPrice(props: Props) {
             min={1}
             duration={fiatRentalExpiration}
             onChange={(duration) => updatePublishForm({ fiatRentalExpiration: duration })}
+            onBlur={() => sanitizeDuration()}
             units={['months', 'weeks', 'days', 'hours']}
           />
           <div className="publish-price__fees">
