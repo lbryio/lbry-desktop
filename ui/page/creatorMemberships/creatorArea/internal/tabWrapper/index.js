@@ -2,12 +2,7 @@ import { connect } from 'react-redux';
 
 import { selectAccountChargesEnabled, selectAccountDefaultCurrency } from 'redux/selectors/stripe';
 import { selectMyChannelClaims } from 'redux/selectors/claims';
-import {
-  userHasMembershipTiers,
-  selectMySupportersList,
-  selectUserHasValidOdyseeMembership,
-} from 'redux/selectors/memberships';
-import { selectUserExperimentalUi } from 'redux/selectors/user';
+import { userHasMembershipTiers, selectMySupportersList } from 'redux/selectors/memberships';
 
 import { doTipAccountStatus } from 'redux/actions/stripe';
 
@@ -19,8 +14,6 @@ const select = (state, props) => ({
   accountDefaultCurrency: selectAccountDefaultCurrency(state),
   hasTiers: userHasMembershipTiers(state),
   supportersList: selectMySupportersList(state),
-  userHasExperimentalUi: selectUserExperimentalUi(state),
-  userHasOdyseeMembership: selectUserHasValidOdyseeMembership(state),
 });
 
 const perform = {
