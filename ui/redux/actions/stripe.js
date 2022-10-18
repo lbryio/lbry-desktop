@@ -55,9 +55,6 @@ export const doTipAccountStatus = () => async (dispatch: Dispatch) =>
 export const doCustomerListPaymentHistory = () => async (dispatch: Dispatch) =>
   await Lbryio.call('customer', 'list', { environment: stripeEnvironment }, 'post')
     .then((customerTransactionResponse: StripeTransactions) => {
-      // reverse so order is from most recent to latest
-      if (Number.isInteger(customerTransactionResponse?.length)) customerTransactionResponse.reverse();
-
       // TODO: remove this once pagination is implemented
       if (customerTransactionResponse?.length && customerTransactionResponse.length > 100) {
         customerTransactionResponse.length = 100;
