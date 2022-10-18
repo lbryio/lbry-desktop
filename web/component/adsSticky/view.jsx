@@ -39,7 +39,7 @@ export default function AdsSticky(props: Props) {
   // Global conditions aside, should the Sticky be shown for this path:
   const inAllowedPath = shouldShowAdsForPath(location.pathname, isContentClaim, isChannelClaim, authenticated);
   // Final answer:
-  const shouldLoadSticky = shouldShowAds && !gScript && !inIFrame();
+  const shouldLoadSticky = shouldShowAds && !gScript && inAllowedPath && !inIFrame();
 
   function shouldShowAdsForPath(pathname, isContentClaim, isChannelClaim, authenticated) {
     // $FlowIssue: mixed type
