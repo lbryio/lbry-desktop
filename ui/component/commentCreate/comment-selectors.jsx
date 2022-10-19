@@ -10,6 +10,8 @@ import { FREE_GLOBAL_STICKERS, PAID_GLOBAL_STICKERS } from 'constants/stickers';
 import { useIsMobile } from 'effects/use-screensize';
 import './style.scss';
 
+let gMountedOnce = false;
+
 export const SELECTOR_TABS = {
   EMOJI: 0,
   STICKER: 1,
@@ -28,6 +30,20 @@ export default function CommentSelectors(props: Props) {
   const { claimIsMine, isOpen, openTab, addEmoteToComment, handleSelectSticker, closeSelector } = props;
   const tabProps = { closeSelector };
 
+  const [mount, setMount] = React.useState(gMountedOnce);
+
+  React.useEffect(() => {
+    // One-time mount prevention to avoid all emojis to be fetched on page load.
+    // This is just a band aide since it would still fetch all when the selector
+    // is opened. The panels need to be tweaked to support pagination.
+    if (!mount && isOpen) {
+      setTimeout(() => {
+        setMount(true);
+        gMountedOnce = true;
+      }, 75);
+    }
+  }, [mount, isOpen]);
+
   return (
     <Tabs index={openTab} className={isOpen ? 'tabs tabs--open' : 'tabs'} onChange={() => {}}>
       <TabList className="tabs__list--comment-selector">
@@ -36,16 +52,16 @@ export default function CommentSelectors(props: Props) {
       </TabList>
 
       <TabPanels>
-        <TabPanel>
-          <EmojisPanel handleSelect={(emote) => addEmoteToComment(emote)} {...tabProps} />
-        </TabPanel>
+        <TabPanel>{mount && <EmojisPanel handleSelect={(emote) => addEmoteToComment(emote)} {...tabProps} />}</TabPanel>
 
         <TabPanel>
-          <StickersPanel
-            handleSelect={(sticker) => handleSelectSticker(sticker)}
-            claimIsMine={claimIsMine}
-            {...tabProps}
-          />
+          {mount && (
+            <StickersPanel
+              handleSelect={(sticker) => handleSelectSticker(sticker)}
+              claimIsMine={claimIsMine}
+              {...tabProps}
+            />
+          )}
         </TabPanel>
       </TabPanels>
     </Tabs>
