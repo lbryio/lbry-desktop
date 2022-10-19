@@ -24,6 +24,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import i18n from './plugins/videojs-i18n/plugin';
 import recsys from './plugins/videojs-recsys/plugin';
 import watchdog from './plugins/videojs-watchdog/plugin';
+import snapshotButton from './plugins/videojs-snapshot-button/plugin';
+
 // import runAds from './ads';
 import videojs from 'video.js';
 import { useIsMobile } from 'effects/use-screensize';
@@ -131,6 +133,7 @@ const PLUGIN_MAP = {
   recsys: recsys,
   i18n: i18n,
   watchdog: watchdog,
+  snapshotButton: snapshotButton,
 };
 
 Object.entries(PLUGIN_MAP).forEach(([pluginName, plugin]) => {
@@ -537,6 +540,12 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         // $FlowIssue
         document.querySelector('.video-js-parent')?.append(window.oldSavedDiv);
       }
+
+      // need this for canvas to work
+      const player = document.querySelector('video.vjs-tech');
+      if (player) player.setAttribute('crossorigin', 'anonymous');
+
+      vjsPlayer.snapshotButton({ fileTitle: title });
 
       // disable right-click (context-menu) for purchased content
       if (isPurchasableContent || isRentableContent || isProtectedContent) {
