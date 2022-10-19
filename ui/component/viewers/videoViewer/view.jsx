@@ -616,7 +616,7 @@ function VideoViewer(props: Props) {
         isAudio={isAudio}
         poster={isAudio || (embedded && !autoplayIfEmbedded) ? thumbnail : ''}
         onPlayerReady={onPlayerReady}
-        startMuted={false}
+        startMuted={autoplayIfEmbedded}
         toggleVideoTheaterMode={toggleVideoTheaterMode}
         autoplay={!embedded || autoplayIfEmbedded}
         claimId={claimId}
