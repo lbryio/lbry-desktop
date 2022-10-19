@@ -63,6 +63,14 @@ declare type StripeCustomerPurchaseCostResponse = {
   odysee_cut: number,
 };
 
+declare type StripeCustomerListParams = {
+  environment?: ?string,
+  type_filter?: string,
+  target_claim_id_filter?: string,
+  reference_claim_id_filter?: string,
+  claim_id_filter?: string, // csv
+};
+
 declare type StripeTransaction = {
   name: string,
   currency: string,

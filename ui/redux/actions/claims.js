@@ -16,13 +16,14 @@ import {
   selectMyChannelClaimIds,
   selectFetchingMyChannels,
 } from 'redux/selectors/claims';
-
+import { doCheckIfPurchasedClaimIds } from 'redux/actions/stripe';
 import { doFetchTxoPage } from 'redux/actions/wallet';
 import { doMembershipContentForStreamClaimIds, doFetchOdyseeMembershipForChannelIds } from 'redux/actions/memberships';
 import { selectSupportsByOutpoint } from 'redux/selectors/wallet';
 import { creditsToString } from 'util/format-credits';
 import { batchActions } from 'util/batch-actions';
 import { createNormalizedClaimSearchKey, getChannelIdFromClaim } from 'util/claim';
+import { hasFiatTags } from 'util/tags';
 import { PAGE_SIZE } from 'constants/claim';
 import { selectClaimIdsForCollectionId } from 'redux/selectors/collections';
 import { doFetchItemsInCollections } from 'redux/actions/collections';
@@ -723,6 +724,7 @@ export function doClaimSearch(
   },
   settings: DoClaimSearchSettings = {
     useAutoPagination: false,
+    fetchStripeTransactions: true,
   }
 ) {
   const query = createNormalizedClaimSearchKey(options);
@@ -737,6 +739,8 @@ export function doClaimSearch(
       const urls = [];
       const streamClaimIds = new Set([]);
       const channelClaimIds = new Set([]);
+      const fiatClaimIds = [];
+      const shouldFetchPurchases = settings.fetchStripeTransactions && !options.has_no_source;
 
       data.items.forEach((stream: Claim) => {
         resolveInfo[stream.canonical_url] = { stream };
@@ -748,6 +752,10 @@ export function doClaimSearch(
 
         const channelId = getChannelIdFromClaim(stream);
         if (channelId) channelClaimIds.add(channelId);
+
+        if (shouldFetchPurchases && hasFiatTags(stream) && stream.claim_id) {
+          fiatClaimIds.push(stream.claim_id);
+        }
       });
 
       dispatch({
@@ -767,6 +775,10 @@ export function doClaimSearch(
 
       if (channelClaimIds.size > 0) {
         dispatch(doFetchOdyseeMembershipForChannelIds(Array.from(channelClaimIds)));
+      }
+
+      if (fiatClaimIds.length > 0) {
+        dispatch(doCheckIfPurchasedClaimIds(fiatClaimIds));
       }
 
       return resolveInfo;

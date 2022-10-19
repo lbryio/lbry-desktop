@@ -24,3 +24,17 @@ export function removeInternalTags(tags: Array<Tag>): Array<Tag> {
     );
   });
 }
+
+export function hasFiatTags(claim: Claim) {
+  const tags = claim.value?.tags;
+  if (tags) {
+    return tags.some(
+      (t) =>
+        t.includes(PURCHASE_TAG) ||
+        t.startsWith(PURCHASE_TAG_OLD) ||
+        t.includes(RENTAL_TAG) ||
+        t.startsWith(RENTAL_TAG_OLD)
+    );
+  }
+  return false;
+}

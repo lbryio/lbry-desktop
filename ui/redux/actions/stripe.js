@@ -75,6 +75,29 @@ export const doCheckIfPurchasedClaimId = (claimId: string) => async (dispatch: D
     .catch((e) => dispatch({ type: ACTIONS.CHECK_IF_PURCHASED_FAILED, data: { error: e.message } }));
 };
 
+export const doCheckIfPurchasedClaimIds = (claimIds: ClaimIds) => {
+  // TODO:
+  // - This is a separate function for now to reduce churn. There should just be
+  // a single doCustomerList(...) that can do different actions based on function
+  // parameters, so we'll update everything then.
+  // - 'myPurchasedClaims' is an unnecessary duplicate of 'customerTransactionResponse'.
+  // Just share the storage and do a fetch-all when viewing transaction history.
+  // - Move the reducer to the stripe slice.
+
+  return (dispatch: Dispatch) => {
+    const params: StripeCustomerListParams = {
+      environment: stripeEnvironment,
+      claim_id_filter: claimIds.join(','),
+    };
+
+    dispatch({ type: ACTIONS.CHECK_IF_PURCHASED_STARTED });
+
+    return Lbryio.call('customer', 'list', params, 'post')
+      .then((response) => dispatch({ type: ACTIONS.CHECK_IF_PURCHASED_COMPLETED, data: response }))
+      .catch((e) => dispatch({ type: ACTIONS.CHECK_IF_PURCHASED_FAILED, data: e.message }));
+  };
+};
+
 export const doCustomerPurchaseCost = (cost: number) => (
   dispatch: Dispatch
 ): Promise<StripeCustomerPurchaseCostResponse> => {
