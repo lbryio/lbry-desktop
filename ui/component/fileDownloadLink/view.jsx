@@ -4,6 +4,7 @@ import * as MODALS from 'constants/modal_types';
 import React, { useState } from 'react';
 import Button from 'component/button';
 import { webDownloadClaim } from 'util/downloadClaim';
+import './style.scss';
 
 type Props = {
   uri: string,
@@ -22,6 +23,8 @@ type Props = {
   hideOpenButton: boolean,
   hideDownloadStatus: boolean,
   streamingUrl: ?string,
+  contentRestrictedFromUser: boolean,
+  isProtectedContent: boolean,
 };
 
 function FileDownloadLink(props: Props) {
@@ -41,18 +44,21 @@ function FileDownloadLink(props: Props) {
     hideOpenButton = false,
     hideDownloadStatus = false,
     streamingUrl,
+    contentRestrictedFromUser,
+    isProtectedContent,
   } = props;
 
   const [didClickDownloadButton, setDidClickDownloadButton] = useState(false);
   const fileName = claim && claim.value && claim.value.source && claim.value.source.name;
 
   // @if TARGET='web'
+  // initiate download when streamingUrl is available
   React.useEffect(() => {
     if (didClickDownloadButton && streamingUrl) {
-      webDownloadClaim(streamingUrl, fileName);
+      webDownloadClaim(streamingUrl, fileName, isProtectedContent);
       setDidClickDownloadButton(false);
     }
-  }, [streamingUrl, didClickDownloadButton, fileName]);
+  }, [streamingUrl, didClickDownloadButton, fileName, isProtectedContent]);
   // @endif
 
   function handleDownload(e) {
@@ -102,16 +108,24 @@ function FileDownloadLink(props: Props) {
   const label = __('Download');
 
   return (
-    <Button
-      button={buttonType}
-      className={buttonType ? undefined : 'button--file-action'}
-      title={label}
-      icon={ICONS.DOWNLOAD}
-      label={showLabel ? label : null}
-      onClick={handleDownload}
-      aria-hidden={!focusable}
-      tabIndex={focusable ? 0 : -1}
-    />
+    <>
+      {contentRestrictedFromUser && (
+        <h2 className="protected-download-header">
+          {__('This download is protected content, join a membership to gain access')}
+        </h2>
+      )}
+      <Button
+        button={buttonType}
+        className={buttonType ? undefined : 'button--file-action'}
+        title={label}
+        icon={ICONS.DOWNLOAD}
+        label={showLabel ? label : null}
+        onClick={handleDownload}
+        aria-hidden={!focusable}
+        tabIndex={focusable ? 0 : -1}
+        disabled={contentRestrictedFromUser}
+      />
+    </>
   );
 }
 

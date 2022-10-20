@@ -1,13 +1,8 @@
-export function webDownloadClaim(streamingUrl, fileName) {
-  // @if TARGET='web'
+export function webDownloadClaim(streamingUrl, fileName, isSecure) {
   let element = document.createElement('a');
-  element.setAttribute('href', `${streamingUrl}?download=true`);
+  element.href = streamingUrl;
+  if (!isSecure) element.href += '?download=true';
   element.setAttribute('download', fileName);
-  element.style.display = 'none';
-  // $FlowFixMe
-  document.body.appendChild(element);
   element.click();
-  // $FlowFixMe
-  document.body.removeChild(element);
-  // @endif
+  element.remove();
 }
