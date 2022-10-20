@@ -10,9 +10,9 @@ import Card from 'component/common/card';
 import LbcSymbol from 'component/common/lbc-symbol';
 import FormFieldDurationCombo from 'component/formFieldDurationCombo';
 import I18nMessage from 'component/i18nMessage';
-import * as PAGES from 'constants/pages';
 import { PAYWALL } from 'constants/publish';
 import usePersistedState from 'effects/use-persisted-state';
+import ButtonStripeConnectAccount from 'component/buttonStripeConnectAccount';
 
 const FEE = { MIN: 1, MAX: 999.99 };
 const CURRENCY_OPTIONS = ['USD']; // ['USD', 'EUR']; // disable EUR until currency approach is determined.
@@ -106,13 +106,7 @@ function PublishPrice(props: Props) {
       <div className="publish-price__bank-driver">
         <I18nMessage
           tokens={{
-            connect_your_bank_account: (
-              <Button
-                label={__('Connect your bank account')}
-                navigate={`/$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`}
-                button="link"
-              />
-            ),
+            connect_your_bank_account: <ButtonStripeConnectAccount />,
           }}
         >
           %connect_your_bank_account% to enable purchasing and renting functionality.
