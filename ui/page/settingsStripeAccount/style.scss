@@ -1,0 +1,22 @@
+@import '~ui/scss/init/breakpoints';
+
+.connected-account-information {
+  h3:nth-of-type(1) {
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .bolded-email {
+    font-weight: var(--font-weight-bold);
+  }
+}
+
+.stripe__view-account-button {
+  max-width: 241px;
+  margin-left: var(--spacing-s);
+
+  @media (max-width: $breakpoint-small) {
+    margin-left: 0;
+    margin-top: var(--spacing-s);
+    display: block;
+  }
+}

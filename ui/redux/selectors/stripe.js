@@ -27,6 +27,7 @@ export const selectAccountDefaultCurrency = (state: State) => {
 };
 
 export const selectAccountUnpaidBalance = (state: State) => selectAccountStatus(state)?.total_received_unpaid || 0;
+
 export const selectAccountChargesEnabled = (state: State) => {
   const accountStatus = selectAccountStatus(state);
   return accountStatus && accountStatus.charges_enabled;

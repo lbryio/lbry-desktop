@@ -1,32 +1,40 @@
 // @flow
-import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
 import React from 'react';
 import Button from 'component/button';
 import Card from 'component/common/card';
 import Page from 'component/page';
+import I18nMessage from 'component/i18nMessage';
 import BusyIndicator from 'component/common/busy-indicator';
+
+import * as ICONS from 'constants/icons';
+import * as PAGES from 'constants/pages';
+import * as STRIPE from 'constants/stripe';
+
+import './style.scss';
 
 type Props = {
   // -- redux --
-  unpaidBalance: number,
-  chargesEnabled: ?boolean,
-  accountRequiresVerification: ?boolean,
+  accountInfo: ?StripeAccountInfo,
   accountLinkResponse: StripeAccountLink,
-  doTipAccountStatus: () => Promise<StripeAccountStatus>,
+  accountRequiresVerification: ?boolean,
+  chargesEnabled: ?boolean,
   doGetAndSetAccountLink: () => Promise<StripeAccountLink>,
+  doTipAccountStatus: () => Promise<StripeAccountStatus>,
+  unpaidBalance: number,
 };
 
 const StripeAccountConnection = (props: Props) => {
   const {
-    unpaidBalance,
-    chargesEnabled,
-    accountRequiresVerification,
+    accountInfo,
     accountLinkResponse,
-    doTipAccountStatus,
+    accountRequiresVerification,
+    chargesEnabled,
     doGetAndSetAccountLink,
+    doTipAccountStatus,
+    unpaidBalance,
   } = props;
 
+  const { email, id: accountId } = accountInfo || {};
   const bankAccountNotFetched = chargesEnabled === undefined;
   const noBankAccount = !chargesEnabled && !bankAccountNotFetched;
   const stripeConnectionUrl = accountLinkResponse?.url;
@@ -79,8 +87,13 @@ const StripeAccountConnection = (props: Props) => {
         isBodyList
         body={
           chargesEnabled ? (
-            <div className="card__body-actions">
+            <div className="card__body-actions connected-account-information">
               <h3>{__('Congratulations! Your account has been connected with Odysee.')}</h3>
+              <h3>
+                <I18nMessage tokens={{ email: <span className="bolded-email">{email}</span> }}>
+                  The email you registered with Stripe is %email%
+                </I18nMessage>
+              </h3>
 
               {accountRequiresVerification && (
                 <>
@@ -125,12 +138,23 @@ const StripeAccountConnection = (props: Props) => {
               className="stripe__complete-verification-button"
             />
           ) : chargesEnabled ? (
-            <Button
-              button="secondary"
-              label={__('View Transactions')}
-              icon={ICONS.SETTINGS}
-              navigate={`/$/${PAGES.WALLET}?fiatType=incoming&tab=fiat-payment-history&currency=fiat`}
-            />
+            <>
+              <Button
+                button="secondary"
+                label={__('View Transactions')}
+                icon={ICONS.SETTINGS}
+                navigate={`/$/${PAGES.WALLET}?fiatType=incoming&tab=fiat-payment-history&currency=fiat`}
+              />
+              {accountId && (
+                <Button
+                  button="secondary"
+                  icon={ICONS.SETTINGS}
+                  label={__('View Account On Stripe')}
+                  navigate={`${STRIPE.STRIPE_ACCOUNT_DASHBOARD_URL}/${accountId}`}
+                  className="stripe__view-account-button"
+                />
+              )}
+            </>
           ) : (
             <Button
               button="primary"

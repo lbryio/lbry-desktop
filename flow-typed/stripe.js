@@ -10,8 +10,34 @@ declare type StripeState = {
   customerSetupResponse: ?StripeCustomerSetupResponse,
 };
 
+declare type StripeAccountInfo = {
+  business_profile: any,
+  business_type: string,
+  capabilities: any,
+  charges_enabled: boolean,
+  company: any,
+  controller: any,
+  country: string,
+  created: number,
+  default_currency: string,
+  deleted: boolean,
+  details_submitted: boolean,
+  email: string,
+  external_accounts: any,
+  future_requirements: any,
+  id: string,
+  individual: any,
+  metadata: any,
+  object: string,
+  payouts_enabled: true,
+  requirements: any,
+  settings: any,
+  tos_acceptance: any,
+  type: string,
+}
+
 declare type StripeAccountStatus = {
-  account_info: any,
+  account_info: StripeAccountInfo,
   charges_enabled: boolean,
   details_submitted: boolean,
   payouts_enabled: boolean,

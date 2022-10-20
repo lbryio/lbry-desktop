@@ -7,6 +7,7 @@ import {
   selectHasSavedCard,
   selectCardDetails,
   selectCustomerSetupResponse,
+  selectAccountInfo,
 } from 'redux/selectors/stripe';
 import { selectUserEmail } from 'redux/selectors/user';
 import { doOpenModal } from 'redux/actions/app';
@@ -23,6 +24,7 @@ const select = (state) => ({
   hasSavedCard: selectHasSavedCard(state),
   cardDetails: selectCardDetails(state),
   customerSetupResponse: selectCustomerSetupResponse(state),
+  accountInfo: selectAccountInfo(state),
 });
 
 const perform = {

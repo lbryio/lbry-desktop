@@ -164,7 +164,7 @@ const SettingsStripeCard = (props: Props) => {
         )}
         <Card
           title={isModal ? undefined : __('Card Details')}
-          className="add-payment-card-div"
+          className="add-payment-card"
           body={
             <>
               <Plastic
@@ -175,7 +175,16 @@ const SettingsStripeCard = (props: Props) => {
               />
               <br />
               <Button
-                button="primary"
+                className="view-transactions__button"
+                button="secondary"
+                label={__('View Transactions')}
+                icon={ICONS.SETTINGS}
+                navigate={`/$/${PAGES.WALLET}?fiatType=outgoing&tab=fiat-payment-history&currency=fiat`}
+                style={{ marginLeft: '10px' }}
+              />
+              <Button
+                className="remove-card__button"
+                button="secondary"
                 label={__('Remove Card')}
                 icon={ICONS.DELETE}
                 onClick={(e) =>
@@ -193,18 +202,12 @@ const SettingsStripeCard = (props: Props) => {
                   })
                 }
               />
-              <Button
-                button="secondary"
-                label={__('View Transactions')}
-                icon={ICONS.SETTINGS}
-                navigate={`/$/${PAGES.WALLET}?fiatType=outgoing&tab=fiat-payment-history&currency=fiat`}
-                style={{ marginLeft: '10px' }}
-              />
             </>
           }
         />
         <br />
 
+        {/* currency to use toggler (USD/EUR) */}
         <div className="currency-to-use-div">
           <h1 className="currency-to-use-header">{__('Currency To Use')}:</h1>
 
@@ -223,6 +226,16 @@ const SettingsStripeCard = (props: Props) => {
               ))}
             </FormField>
           </fieldset-section>
+        </div>
+
+        <div className="stripe-billing-history">
+          <h2 className="stripe-billing-history__header">{__('View billing history on Stripe')}</h2>
+          <Button
+            className="stripe-billing-history__button"
+            button="secondary"
+            label={__('Visit Stripe')}
+            navigate={`${STRIPE.STRIPE_BILLING_URL}?prefilled_email=${encodeURIComponent(cardDetails?.email)}`}
+          />
         </div>
       </div>
     );

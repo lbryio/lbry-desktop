@@ -337,7 +337,7 @@ pre {
   display: block;
 }
 
-.add-payment-card-div {
+.add-payment-card {
   .card__header--between,
   .card__title-section {
     display: block;
@@ -358,4 +358,16 @@ pre {
   box-shadow: unset;
   color: #32325d;
   background-color: white !important;
+}
+
+.stripe-billing-history {
+  margin-top: var(--spacing-m);
+}
+
+.stripe-billing-history__header {
+  margin-bottom: var(--spacing-xxs);
+}
+
+.remove-card__button {
+  margin-left: var(--spacing-s);
 }
