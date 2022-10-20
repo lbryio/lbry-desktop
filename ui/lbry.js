@@ -36,7 +36,7 @@ const Lbry = {
 
   // Returns a human readable media type based on the content type or extension of a file that is returned by the sdk
   getMediaType: (contentType: ?string, fileName: ?string) => {
-    if (fileName) {
+    if (fileName && fileName.split('.').length > 1) {
       const formats = [
         [/\.(mp4|m4v|webm|flv|f4v|ogv)$/i, 'video'],
         [/\.(mp3|m4a|aac|wav|flac|ogg|opus)$/i, 'audio'],
