@@ -4,7 +4,8 @@ import Button from 'component/button';
 import Card from 'component/common/card';
 import Page from 'component/page';
 import I18nMessage from 'component/i18nMessage';
-import BusyIndicator from 'component/common/busy-indicator';
+import Spinner from 'component/spinner';
+import ButtonStripeConnectAccount from 'component/buttonStripeConnectAccount';
 
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
@@ -15,31 +16,17 @@ import './style.scss';
 type Props = {
   // -- redux --
   accountInfo: ?StripeAccountInfo,
-  accountLinkResponse: StripeAccountLink,
-  accountRequiresVerification: ?boolean,
-  chargesEnabled: ?boolean,
-  doGetAndSetAccountLink: () => Promise<StripeAccountLink>,
-  doTipAccountStatus: () => Promise<StripeAccountStatus>,
   unpaidBalance: number,
+  chargesEnabled: ?boolean,
+  accountRequiresVerification: ?boolean,
+  doTipAccountStatus: () => Promise<StripeAccountStatus>,
 };
 
 const StripeAccountConnection = (props: Props) => {
-  const {
-    accountInfo,
-    accountLinkResponse,
-    accountRequiresVerification,
-    chargesEnabled,
-    doGetAndSetAccountLink,
-    doTipAccountStatus,
-    unpaidBalance,
-  } = props;
+  const { accountInfo, unpaidBalance, chargesEnabled, accountRequiresVerification, doTipAccountStatus } = props;
 
   const { email, id: accountId } = accountInfo || {};
   const bankAccountNotFetched = chargesEnabled === undefined;
-  const noBankAccount = !chargesEnabled && !bankAccountNotFetched;
-  const stripeConnectionUrl = accountLinkResponse?.url;
-  const shouldFetchLink = noBankAccount || accountRequiresVerification;
-  const linkNotFetched = shouldFetchLink && accountLinkResponse === undefined;
 
   React.useEffect(() => {
     if (bankAccountNotFetched) {
@@ -47,13 +34,7 @@ const StripeAccountConnection = (props: Props) => {
     }
   }, [bankAccountNotFetched, doTipAccountStatus]);
 
-  React.useEffect(() => {
-    if (linkNotFetched) {
-      doGetAndSetAccountLink();
-    }
-  }, [doGetAndSetAccountLink, linkNotFetched]);
-
-  if (bankAccountNotFetched || linkNotFetched) {
+  if (bankAccountNotFetched) {
     return (
       <Page
         noFooter
@@ -62,7 +43,9 @@ const StripeAccountConnection = (props: Props) => {
         className="card-stack"
         backout={{ title: __('Your Payout Method'), backLabel: __('Back') }}
       >
-        <BusyIndicator message={__('Getting your bank account connection status...')} />
+        <div className="main--empty">
+          <Spinner />
+        </div>
       </Page>
     );
   }
@@ -129,15 +112,7 @@ const StripeAccountConnection = (props: Props) => {
           )
         }
         actions={
-          accountRequiresVerification ? (
-            <Button
-              button="primary"
-              label={__('Complete Verification')}
-              icon={ICONS.SETTINGS}
-              navigate={stripeConnectionUrl}
-              className="stripe__complete-verification-button"
-            />
-          ) : chargesEnabled ? (
+          chargesEnabled && !accountRequiresVerification ? (
             <>
               <Button
                 button="secondary"
@@ -156,12 +131,7 @@ const StripeAccountConnection = (props: Props) => {
               )}
             </>
           ) : (
-            <Button
-              button="primary"
-              label={__('Connect your bank account')}
-              icon={ICONS.FINANCE}
-              navigate={stripeConnectionUrl}
-            />
+            <ButtonStripeConnectAccount />
           )
         }
       />

@@ -7,6 +7,7 @@ const defaultState: StripeState = {
   accountCheckFetchingIds: [],
   canReceiveFiatTipsById: {},
   accountStatus: undefined,
+  accountStatusFetching: false,
   accountLinkResponse: undefined,
   accountTransactions: undefined,
   accountPaymentHistory: undefined,
@@ -15,7 +16,13 @@ const defaultState: StripeState = {
   customerSetupResponse: undefined,
 };
 
-reducers[ACTIONS.SET_ACCOUNT_STATUS] = (state, action) => ({ ...state, accountStatus: action.data });
+reducers[ACTIONS.STRIPE_ACCOUNT_STATUS_START] = (state, action) => ({ ...state, accountStatusFetching: true });
+reducers[ACTIONS.STRIPE_ACCOUNT_STATUS_COMPLETE] = (state, action) => ({
+  ...state,
+  accountStatusFetching: false,
+  accountStatus: action.data,
+});
+
 reducers[ACTIONS.SET_ACCOUNT_LINK] = (state, action) => ({ ...state, accountLinkResponse: action.data });
 reducers[ACTIONS.SET_ACCOUNT_TRANSACTIONS] = (state, action) => ({ ...state, accountTransactions: action.data });
 reducers[ACTIONS.SET_ACCOUNT_PAYMENT_HISTORY] = (state, action) => ({ ...state, accountPaymentHistory: action.data });

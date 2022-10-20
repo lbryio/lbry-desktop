@@ -2,11 +2,11 @@
 import React from 'react';
 
 import * as PAGES from 'constants/pages';
-import * as ICONS from 'constants/icons';
 
 import Spinner from 'component/spinner';
 import Button from 'component/button';
 import ErrorBubble from 'component/common/error-bubble';
+import ButtonStripeConnectAccount from 'component/buttonStripeConnectAccount';
 
 type Props = {
   component: any,
@@ -70,14 +70,7 @@ const TabWrapper = (props: Props) => {
       <ErrorBubble
         title={__('Bank Account Status')}
         subtitle={__('To be able to begin receiving payments you must connect a Bank Account first.')}
-        action={
-          <Button
-            button="primary"
-            label={__('Connect a bank account')}
-            icon={ICONS.FINANCE}
-            navigate={`$/${PAGES.SETTINGS_STRIPE_ACCOUNT}`}
-          />
-        }
+        action={<ButtonStripeConnectAccount />}
       />
     );
   }

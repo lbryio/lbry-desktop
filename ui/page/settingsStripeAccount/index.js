@@ -1,11 +1,10 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { doTipAccountStatus, doGetAndSetAccountLink } from 'redux/actions/stripe';
+import { doTipAccountStatus } from 'redux/actions/stripe';
 import {
   selectAccountUnpaidBalance,
   selectAccountChargesEnabled,
   selectAccountRequiresVerification,
-  selectAccountLinkResponse,
   selectAccountInfo,
 } from 'redux/selectors/stripe';
 
@@ -15,13 +14,11 @@ const select = (state) => ({
   unpaidBalance: selectAccountUnpaidBalance(state),
   chargesEnabled: selectAccountChargesEnabled(state),
   accountRequiresVerification: selectAccountRequiresVerification(state),
-  accountLinkResponse: selectAccountLinkResponse(state),
   accountInfo: selectAccountInfo(state),
 });
 
 const perform = {
   doTipAccountStatus,
-  doGetAndSetAccountLink,
 };
 
 export default withRouter(connect(select, perform)(StripeAccountConnection));

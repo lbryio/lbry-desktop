@@ -11,7 +11,6 @@ import * as ICONS from 'constants/icons';
 
 import Page from 'component/page';
 import ChannelSelector from 'component/channelSelector';
-import Spinner from 'component/spinner';
 import Button from 'component/button';
 import TabWrapper from './internal/tabWrapper';
 
@@ -32,21 +31,17 @@ const TABS = {
 type Props = {
   // -- redux --
   activeChannelClaim: ?ChannelClaim,
-  bankAccountConfirmed: ?boolean,
   myChannelClaims: ?Array<ChannelClaim>,
   supportersList: ?SupportersList,
-  doTipAccountStatus: (any) => void,
   doListAllMyMembershipTiers: () => Promise<CreatorMemberships>,
   doGetMembershipSupportersList: () => void,
 };
 
 const CreatorArea = (props: Props) => {
   const {
-    bankAccountConfirmed,
     activeChannelClaim,
     myChannelClaims,
     supportersList,
-    doTipAccountStatus,
     doListAllMyMembershipTiers,
     doGetMembershipSupportersList,
   } = props;
@@ -60,12 +55,6 @@ const CreatorArea = (props: Props) => {
     if (allSelected) return myChannelClaims;
     return [activeChannelClaim];
   }, [activeChannelClaim, allSelected, myChannelClaims]);
-
-  React.useEffect(() => {
-    if (bankAccountConfirmed === undefined) {
-      doTipAccountStatus({ getBank: true }); // todo: refactor this getBank
-    }
-  }, [bankAccountConfirmed, doTipAccountStatus]);
 
   React.useEffect(() => {
     if (myChannelClaims !== undefined) {
@@ -83,16 +72,6 @@ const CreatorArea = (props: Props) => {
     location: { search },
     push,
   } = useHistory();
-
-  if (activeChannelClaim === undefined || bankAccountConfirmed === undefined) {
-    return (
-      <Page className="premium-wrapper">
-        <div className="main--empty">
-          <Spinner />
-        </div>
-      </Page>
-    );
-  }
 
   const urlParams = new URLSearchParams(search);
   // if tiers are saved, then go to balance, otherwise go to tiers

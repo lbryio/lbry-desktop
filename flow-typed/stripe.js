@@ -2,6 +2,7 @@ declare type StripeState = {
   accountCheckFetchingIds: ClaimIds,
   canReceiveFiatTipsById: { [id: string]: boolean },
   accountStatus: ?StripeAccountStatus,
+  accountStatusFetching: boolean,
   accountLinkResponse: ?StripeAccountLink,
   accountTransactions: ?StripeTransactions,
   accountPaymentHistory: ?StripeTransactions,

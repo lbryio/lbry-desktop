@@ -1,7 +1,11 @@
 // @flow
 import { Lbryio } from 'lbryinc';
 import { selectChannelClaimIdForUri, selectChannelNameForUri } from 'redux/selectors/claims';
-import { selectAccountCheckIsFetchingForId, selectCustomerStatusFetching } from 'redux/selectors/stripe';
+import {
+  selectAccountCheckIsFetchingForId,
+  selectCustomerStatusFetching,
+  selectAccountStatusFetching,
+} from 'redux/selectors/stripe';
 import { doToast } from 'redux/actions/notifications';
 
 import * as ACTIONS from 'constants/action_types';
@@ -38,19 +42,39 @@ export const doTipAccountCheckForUri = (uri: string) => async (dispatch: Dispatc
     );
 };
 
-export const doTipAccountStatus = () => async (dispatch: Dispatch) =>
-  await Lbryio.call('account', 'status', { environment: stripeEnvironment }, 'post')
+export const doTipAccountStatus = () => async (dispatch: Dispatch, getState: GetState) => {
+  const state = getState();
+  const isFetching = selectAccountStatusFetching(state);
+
+  if (isFetching) return Promise.resolve();
+
+  dispatch({ type: ACTIONS.STRIPE_ACCOUNT_STATUS_START });
+
+  return await Lbryio.call('account', 'status', { environment: stripeEnvironment }, 'post')
     .then((accountStatusResponse: StripeAccountStatus) => {
-      dispatch({ type: ACTIONS.SET_ACCOUNT_STATUS, data: accountStatusResponse });
+      dispatch({ type: ACTIONS.STRIPE_ACCOUNT_STATUS_COMPLETE, data: accountStatusResponse });
 
       return accountStatusResponse;
     })
-    .catch((e) => {
+    .catch(() => {
       doToast({ message: __('There was an error getting your account setup, please try again later'), isError: true });
-      dispatch({ type: ACTIONS.SET_ACCOUNT_STATUS, data: null });
-
-      return e;
+      dispatch({ type: ACTIONS.STRIPE_ACCOUNT_STATUS_COMPLETE, data: null });
     });
+};
+
+export const doGetAndSetAccountLink = () => async (dispatch: Dispatch) => {
+  const currentUrl = window.location.href;
+
+  return await Lbryio.call(
+    'account',
+    'link',
+    { return_url: currentUrl, refresh_url: currentUrl, environment: stripeEnvironment },
+    'post'
+  ).then((accountLinkResponse: StripeAccountLink) => {
+    dispatch({ type: ACTIONS.SET_ACCOUNT_LINK, data: accountLinkResponse });
+    return accountLinkResponse;
+  });
+};
 
 export const doCustomerListPaymentHistory = () => async (dispatch: Dispatch) =>
   await Lbryio.call('customer', 'list', { environment: stripeEnvironment }, 'post')
@@ -117,20 +141,6 @@ export const doListAccountTransactions = () => async (dispatch: Dispatch) =>
 
       dispatch({ type: ACTIONS.SET_ACCOUNT_TRANSACTIONS, data: accountListResponse });
     }
-  );
-
-export const doGetAndSetAccountLink = () => async (dispatch: Dispatch) =>
-  await Lbryio.call(
-    'account',
-    'link',
-    {
-      return_url: STRIPE.SUCCESS_REDIRECT_URL,
-      refresh_url: STRIPE.FAILURE_REDIRECT_URL,
-      environment: stripeEnvironment,
-    },
-    'post'
-  ).then((accountLinkResponse: StripeAccountLink) =>
-    dispatch({ type: ACTIONS.SET_ACCOUNT_LINK, data: accountLinkResponse })
   );
 
 export const doGetCustomerStatus = () => async (dispatch: Dispatch, getState: GetState) => {

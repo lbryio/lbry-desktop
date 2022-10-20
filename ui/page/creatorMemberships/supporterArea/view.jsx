@@ -29,27 +29,17 @@ const TABS = {
 type Props = {
   // -- redux --
   activeChannelClaim: ?ChannelClaim,
-  bankAccountConfirmed: ?boolean,
   myChannelClaims: ?Array<ChannelClaim>,
-  doTipAccountStatus: (any) => void,
   doListAllMyMembershipTiers: () => Promise<CreatorMemberships>,
 };
 
 const SupporterArea = (props: Props) => {
   const {
     // -- redux --
-    bankAccountConfirmed,
     activeChannelClaim,
     myChannelClaims,
-    doTipAccountStatus,
     doListAllMyMembershipTiers,
   } = props;
-
-  React.useEffect(() => {
-    if (bankAccountConfirmed === undefined) {
-      doTipAccountStatus({ getBank: true }); // todo: refactor this getBank
-    }
-  }, [bankAccountConfirmed, doTipAccountStatus]);
 
   React.useEffect(() => {
     if (myChannelClaims !== undefined) {
@@ -62,7 +52,7 @@ const SupporterArea = (props: Props) => {
     push,
   } = useHistory();
 
-  if (activeChannelClaim === undefined || bankAccountConfirmed === undefined) {
+  if (activeChannelClaim === undefined) {
     return (
       <Page className="premium-wrapper">
         <div className="main--empty">

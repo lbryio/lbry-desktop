@@ -15,6 +15,7 @@ export const selectCustomerStatusFetching = (state: State) => selectState(state)
 export const selectCustomerSetupResponse = (state: State) => selectState(state).customerSetupResponse;
 
 export const selectAccountStatus = (state: State) => selectState(state).accountStatus;
+export const selectAccountStatusFetching = (state: State) => selectState(state).accountStatusFetching;
 
 export const selectAccountInfo = (state: State) => {
   const accountStatus = selectAccountStatus(state);
