@@ -94,8 +94,8 @@ export default function FileRenderInitiator(props: Props) {
     renderMode,
     uri,
     videoTheaterMode,
-    contentRestrictedFromUser,
-    // contentUnlocked,
+    // contentRestrictedFromUser,
+    contentUnlocked,
   } = props;
 
   const { isLiveComment } = React.useContext(ChatCommentContext) || {};
@@ -117,14 +117,11 @@ export default function FileRenderInitiator(props: Props) {
   const shouldAutoplay = !forceDisableAutoplay && !embedded && (forceAutoplayParam || urlTimeParam || autoplay);
   const sdkFeeRequired = costInfo && costInfo.cost !== 0;
   const isFree = costInfo && costInfo.cost === 0 && !fiatRequired;
-  const isRestrictedByMembership = contentRestrictedFromUser;
   const isAnonymousFiatContent = fiatRequired && !channelClaimId;
 
   const cannotViewFile =
     (!claimIsMine &&
-      ((fiatRequired && (!fiatPaid || isFetchingPurchases)) ||
-        (sdkFeeRequired && !sdkPaid) ||
-        isRestrictedByMembership)) ||
+      ((fiatRequired && (!fiatPaid || isFetchingPurchases)) || (sdkFeeRequired && !sdkPaid) || !contentUnlocked)) ||
     (isLivestreamClaim && isCurrentClaimLive && !layountRendered && !isMobile);
   const canViewFile = !cannotViewFile;
 
@@ -133,7 +130,7 @@ export default function FileRenderInitiator(props: Props) {
   const renderUnsupported = RENDER_MODES.UNSUPPORTED_IN_THIS_APP.includes(renderMode);
 
   const disabled =
-    isRestrictedByMembership ||
+    !contentUnlocked ||
     isAnonymousFiatContent ||
     (isLivestreamClaim && !isCurrentClaimLive) ||
     renderUnsupported ||
@@ -161,7 +158,7 @@ export default function FileRenderInitiator(props: Props) {
       } else {
         return 'default_button';
       }
-    } else if (isRestrictedByMembership) {
+    } else if (!contentUnlocked) {
       return 'membership_overlay';
     } else {
       return 'default_button';
