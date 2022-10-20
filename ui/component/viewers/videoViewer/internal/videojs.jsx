@@ -653,6 +653,8 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         window.player.trigger('timeupdate');
 
         window.player.claimSrcVhs = null;
+
+        delete window.videoFps;
       }
     };
   }, [isAudio, source, reload, userClaimId, isLivestreamClaim]);

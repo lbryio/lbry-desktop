@@ -2,6 +2,9 @@
 import analytics from 'analytics';
 import { THUMBNAIL_HEIGHT_POSTER, THUMBNAIL_WIDTH_POSTER } from 'config';
 import { getThumbnailCdnUrl } from 'util/thumbnail';
+import { platform } from 'util/platform';
+
+const IS_MOBILE = platform.isMobile();
 
 const isDev = process.env.NODE_ENV !== 'production';
 
@@ -238,6 +241,50 @@ const VideoJsEvents = ({
     }, 1000 * 2); // wait 2 seconds to hide control bar
   }
 
+  function determineVideoFps() {
+    const videoNode = document.querySelector('video');
+
+    if (!videoNode) return;
+
+    let last_media_time, last_frame_num, fps;
+    let fps_rounder = [];
+    let frame_not_seeked = true;
+
+    function get_fps_average() {
+      return fps_rounder.reduce((a, b) => a + b) / fps_rounder.length;
+    }
+
+    function ticker(useless, metadata) {
+      const media_time_diff = Math.abs(metadata.mediaTime - last_media_time);
+      const frame_num_diff = Math.abs(metadata.presentedFrames - last_frame_num);
+      const diff = media_time_diff / frame_num_diff;
+
+      if (diff && diff < 1 && frame_not_seeked && fps_rounder.length < 50 && videoNode.playbackRate === 1) {
+        fps_rounder.push(diff);
+        fps = Math.round(1 / get_fps_average());
+      }
+
+      frame_not_seeked = true;
+      last_media_time = metadata.mediaTime;
+      last_frame_num = metadata.presentedFrames;
+
+      // after collecting 10 pieces of data, declare the videofps and end the loop
+      if (fps_rounder.length < 10) {
+        window.videoFps = fps;
+        // $FlowIssue
+        videoNode.requestVideoFrameCallback(ticker);
+      }
+    }
+
+    // $FlowIssue
+    videoNode.requestVideoFrameCallback(ticker);
+
+    videoNode.addEventListener('seeked', function () {
+      fps_rounder.pop();
+      frame_not_seeked = false;
+    });
+  }
+
   function initializeEvents() {
     const player = playerRef.current;
 
@@ -248,6 +295,11 @@ const VideoJsEvents = ({
     player.on('tracking:firstplay', doTrackingFirstPlay);
     // used for tracking buffering for watchman
     player.on('tracking:buffered', doTrackingBuffered);
+
+    // need this method to calculate FPS client side
+    if ('requestVideoFrameCallback' in HTMLVideoElement.prototype && !IS_MOBILE) {
+      player.one('playing', determineVideoFps);
+    }
 
     player.on('loadstart', function () {
       if (embedded) {
@@ -266,6 +318,7 @@ const VideoJsEvents = ({
       // used for tracking buffering for watchman
       player.off('tracking:buffered', doTrackingBuffered);
       player.off('playing', removeControlBar);
+      player.off('playing', determineVideoFps);
     });
     // player.on('ended', onEnded);
 
