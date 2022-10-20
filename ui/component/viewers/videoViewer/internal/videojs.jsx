@@ -80,6 +80,8 @@ export type Player = {
   src: ({ src: string, type: string }) => ?string,
   currentSrc: () => string,
   userActive: (?boolean) => boolean,
+  videoWidth: () => number,
+  videoHeight: () => number,
   volume: (?number) => number,
 };
 
@@ -545,7 +547,9 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       const player = document.querySelector('video.vjs-tech');
       if (player) player.setAttribute('crossorigin', 'anonymous');
 
-      vjsPlayer.snapshotButton({ fileTitle: title });
+      if (!isAudio) {
+        vjsPlayer.snapshotButton({ fileTitle: title, poster });
+      }
 
       // disable right-click (context-menu) for purchased content
       if (isPurchasableContent || isRentableContent || isProtectedContent) {
