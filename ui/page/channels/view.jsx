@@ -135,8 +135,7 @@ export default function ChannelsPage(props: Props) {
               return (
                 <span className="claim-preview__custom-properties">
                   <span className="help--inline">
-                    {__('Earnings per view')}{' '}
-                    <HelpLink href="https://odysee.com/@OdyseeHelp:b/Monetization-of-Content:3" />
+                    {__('Earnings per view')} <HelpLink href="https://help.odysee.tv/category-monetization/" />
                   </span>
 
                   <span>

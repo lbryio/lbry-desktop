@@ -49,7 +49,7 @@ export default function HelpPage(props: Props) {
         actions={
           <div className="section__actions">
             <Button
-              href="https://odysee.com/@OdyseeHelp:b"
+              href="https://help.odysee.tv/"
               label={__('View %SITE_NAME% Help Hub', { SITE_NAME })}
               icon={ICONS.HELP}
               button="secondary"

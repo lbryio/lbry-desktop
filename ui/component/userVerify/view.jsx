@@ -56,7 +56,7 @@ class UserVerify extends React.PureComponent<Props> {
                   <Button
                     button="link"
                     label={__('other rewards')}
-                    href="https://odysee.com/@OdyseeHelp:b/rewards-verification:3"
+                    href="https://help.odysee.tv/category-monetization/category-rewards/"
                   />
                 ),
                 Refresh: <Button onClick={() => fetchUser()} button="link" label={__('Refresh')} />,
@@ -93,7 +93,7 @@ class UserVerify extends React.PureComponent<Props> {
                   {__('Standard messaging rates apply. Having trouble?')}{' '}
                   <Button
                     button="link"
-                    href="https://odysee.com/@OdyseeHelp:b/rewards-verification:3"
+                    href="https://help.odysee.tv/category-monetization/category-rewards/"
                     label={__('Read more')}
                   />
                   .
@@ -124,7 +124,7 @@ class UserVerify extends React.PureComponent<Props> {
                   {__('A $1 authorization may temporarily appear with your provider.')}{' '}
                   <Button
                     button="link"
-                    href="https://odysee.com/@OdyseeHelp:b/rewards-verification:3"
+                    href="https://help.odysee.tv/category-monetization/category-rewards/"
                     label={__('Read more')}
                   />
                   .

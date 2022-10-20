@@ -180,7 +180,7 @@ const WalletBalance = (props: Props) => {
                           }
                         />
                       ),
-                      help: <HelpLink href="https://odysee.com/@OdyseeHelp:b/Transactions-and-Wallet:7" />,
+                      help: <HelpLink href="https://help.odysee.tv/category-wallet/" />,
                     }}
                   >
                     Your wallet has a lot of change lying around. Consolidating will speed up your transactions. This

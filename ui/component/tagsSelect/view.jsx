@@ -110,7 +110,7 @@ export default function TagsSelect(props: Props) {
                     <Button
                       button="link"
                       label={__('Learn more')}
-                      href="https://odysee.com/@OdyseeHelp:b/OdyseeBasics:c"
+                      href="https://help.odysee.tv/category-contentdiscovery/search/"
                     />
                     .
                   </span>

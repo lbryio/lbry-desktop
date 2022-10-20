@@ -80,7 +80,7 @@ class RewardsPage extends PureComponent<Props> {
                       <Button
                         button="link"
                         label={__('Rewards FAQ')}
-                        href="https://odysee.com/@OdyseeHelp:b/rewards-verification:3"
+                        href="https://help.odysee.tv/category-monetization/category-rewards/"
                       />
                     ),
                     help_email: SITE_HELP_EMAIL,

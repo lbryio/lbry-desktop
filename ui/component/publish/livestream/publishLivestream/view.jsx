@@ -270,7 +270,7 @@ function PublishLivestream(props: Props) {
       return (
         <p className="help--error">
           {UPLOAD_SIZE_MESSAGE}{' '}
-          <Button button="link" label={__('Upload Guide')} href="https://odysee.com/@OdyseeHelp:b/uploadguide:1" />
+          <Button button="link" label={__('Upload Guide')} href="https://help.odysee.tv/category-uploading/" />
         </p>
       );
     }
@@ -286,11 +286,7 @@ function PublishLivestream(props: Props) {
             : __(
                 'Your video has a bitrate over 8 Mbps. We suggest transcoding to provide viewers the best experience.'
               )}{' '}
-          <Button
-            button="link"
-            label={__('Upload Guide')}
-            href="https://odysee.com/@OdyseeHelp:b/uploadguide:1?lc=e280f6e6fdec3f5fd4043954c71add50b3fd2d6a9f3ddba979b459da6ae4a1f4"
-          />
+          <Button button="link" label={__('Upload Guide')} href="https://help.odysee.tv/category-uploading/" />
         </p>
       );
     }
@@ -301,11 +297,7 @@ function PublishLivestream(props: Props) {
           {__(
             'Your video may not be the best format. Use MP4s in H264/AAC format and a friendly bitrate (under 8 Mbps) for more reliable streaming.'
           )}{' '}
-          <Button
-            button="link"
-            label={__('Upload Guide')}
-            href="https://odysee.com/@OdyseeHelp:b/uploadguide:1?lc=e280f6e6fdec3f5fd4043954c71add50b3fd2d6a9f3ddba979b459da6ae4a1f4"
-          />
+          <Button button="link" label={__('Upload Guide')} href="https://help.odysee.tv/category-uploading/" />
         </p>
       );
     }
@@ -318,11 +310,7 @@ function PublishLivestream(props: Props) {
             'For video content, use MP4s in H264/AAC format and a friendly bitrate (under 8 Mbps) for more reliable streaming. %SITE_NAME% uploads are restricted to %limit% GB.',
             { SITE_NAME, limit: TV_PUBLISH_SIZE_LIMIT_GB_STR }
           )}{' '}
-          <Button
-            button="link"
-            label={__('Upload Guide')}
-            href="https://odysee.com/@OdyseeHelp:b/uploadguide:1?lc=e280f6e6fdec3f5fd4043954c71add50b3fd2d6a9f3ddba979b459da6ae4a1f4"
-          />
+          <Button button="link" label={__('Upload Guide')} href="https://help.odysee.tv/category-uploading/" />
         </p>
       );
     }

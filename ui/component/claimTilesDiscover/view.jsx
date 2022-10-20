@@ -195,13 +195,7 @@ function ClaimTilesDiscover(props: Props) {
         <p>
           <I18nMessage
             tokens={{
-              contact_support: (
-                <Button
-                  button="link"
-                  label={__('contact support')}
-                  href="https://odysee.com/@OdyseeHelp:b?view=about"
-                />
-              ),
+              contact_support: <Button button="link" label={__('contact support')} href="https://help.odysee.tv/" />,
             }}
           >
             If you continue to have issues, please %contact_support%.

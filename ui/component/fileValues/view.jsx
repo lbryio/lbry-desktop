@@ -52,7 +52,7 @@ class FileValues extends PureComponent<Props> {
           <tr>
             <td>
               {__('Supports and Tips')}
-              <HelpLink href="https://odysee.com/@OdyseeHelp:b/Monetization-of-Content:3" />
+              <HelpLink href="https://help.odysee.tv/category-monetization/" />
             </td>
             <td>
               {claimIsMine && !pendingAmount && Boolean(supportsAmount) && (
@@ -80,7 +80,7 @@ class FileValues extends PureComponent<Props> {
             <td>
               <div>
                 {__('Total Staked Amount')}
-                <HelpLink href="https://odysee.com/@OdyseeHelp:b/trending:50" />
+                <HelpLink href="https://help.odysee.tv/category-blockchain/category-staking/increase/" />
               </div>
             </td>
             <td>
@@ -90,7 +90,7 @@ class FileValues extends PureComponent<Props> {
           <tr>
             <td>
               {__('Community Choice?')}
-              <HelpLink href="https://odysee.com/@OdyseeHelp:b/trending:50" />
+              <HelpLink href="https://help.odysee.tv/category-blockchain/category-staking/naming/" />
             </td>
             <td>
               <Button

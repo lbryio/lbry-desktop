@@ -83,7 +83,7 @@ function DiscoverPage(props: Props) {
       return (
         <a
           className="help"
-          href="https://odysee.com/@OdyseeHelp:b/trending:50"
+          href="https://help.odysee.tv/category-blockchain/category-staking/increase/"
           title={__('Learn more about Credits on %DOMAIN%', { DOMAIN })}
         >
           <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Results boosted by %lbc%</I18nMessage>

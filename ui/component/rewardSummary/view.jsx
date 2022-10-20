@@ -44,7 +44,7 @@ class RewardSummary extends React.Component<Props> {
             <Button
               button="link"
               label={__('Learn more')}
-              href="https://odysee.com/@OdyseeHelp:b/rewards-verification:3"
+              href="https://help.odysee.tv/category-monetization/category-rewards/verification/"
             />
           </React.Fragment>
         }

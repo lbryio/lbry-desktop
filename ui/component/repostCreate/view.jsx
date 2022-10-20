@@ -345,7 +345,7 @@ function RepostCreate(props: Props) {
                       ) : (
                         <span>
                           {__('Repost URL')}
-                          <HelpLink href="https://odysee.com/@OdyseeHelp:b/trending:50" />
+                          <HelpLink href="https://help.odysee.tv/category-blockchain/category-staking/naming/" />
                         </span>
                       )}
                     </label>

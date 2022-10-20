@@ -57,7 +57,7 @@ function FileViewCount(props: Props) {
       <span className="media__subtitle--centered">
         {livestream && getLivestreamViewCountElem()}
         {!livestream && activeViewers === undefined && getRegularViewCountElem()}
-        {!SIMPLE_SITE && <HelpLink href="https://odysee.com/@OdyseeHelp:b/OdyseeBasics:c" />}
+        {!SIMPLE_SITE && <HelpLink href="https://help.odysee.tv/category-basics/" />}
       </span>
     </Tooltip>
   );

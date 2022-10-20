@@ -79,7 +79,7 @@ function SyncPassword(props: Props) {
                     <Button
                       button="link"
                       label={__('help guide')}
-                      href="https://odysee.com/@OdyseeHelp:b/OdyseeBasics:c"
+                      href="https://help.odysee.tv/category-basics/category-loggingin/"
                     />
                   ),
                   email: <Button button="link" href={`mailto:${SITE_HELP_EMAIL}`} label={`${SITE_HELP_EMAIL}`} />,

@@ -298,7 +298,7 @@ function TxoList(props: Props) {
                       label={
                         <>
                           {__('Type')}
-                          <HelpLink href="https://odysee.com/@OdyseeHelp:b/Transactions-and-Wallet:7" />
+                          <HelpLink href="https://help.odysee.tv/category-wallet/transactionhistory/" />
                         </>
                       }
                       value={type || 'all'}

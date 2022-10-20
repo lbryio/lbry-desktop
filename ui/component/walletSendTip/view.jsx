@@ -295,11 +295,7 @@ export default function WalletSendTip(props: Props) {
             {/* short explainer under the button */}
             <div className="section__subtitle">
               {explainerText}{' '}
-              <Button
-                label={__('Learn more')}
-                button="link"
-                href="https://odysee.com/@OdyseeHelp:b/Monetization-of-Content:3"
-              />
+              <Button label={__('Learn more')} button="link" href="https://help.odysee.tv/category-monetization/" />
             </div>
           </>
         }

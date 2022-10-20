@@ -50,7 +50,7 @@ class ModalRewardCode extends React.PureComponent<Props, State> {
                 learn_more: (
                   <Button
                     button="link"
-                    href="https://odysee.com/@OdyseeHelp:b/rewards-verification:3#reward-code"
+                    href="https://help.odysee.tv/category-monetization/category-rewards/rewardtypes/"
                     label={__('Learn more')}
                   />
                 ),

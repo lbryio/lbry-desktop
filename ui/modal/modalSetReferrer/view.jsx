@@ -67,7 +67,7 @@ class ModalSetReferrer extends React.PureComponent<Props, State> {
           subtitle={
             <React.Fragment>
               {__('Did someone invite you to use Odysee? Tell us who and you both get a reward!')}
-              <HelpLink href="https://odysee.com/@OdyseeHelp:b/rewards-verification:3" />
+              <HelpLink href="https://help.odysee.tv/category-monetization/category-rewards/" />
             </React.Fragment>
           }
           actions={

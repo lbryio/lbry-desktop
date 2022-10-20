@@ -181,7 +181,7 @@ export const doFileGetForUri = (uri: string, onSuccess?: (GetResponse) => any) =
 
       dispatch(
         doToast({
-          message: `Failed to view ${uri}, please try again. If this problem persists, visit https://odysee.com/@OdyseeHelp:b?view=about for support.`,
+          message: `Failed to view ${uri}, please try again. If this problem persists, visit https://help.odysee.tv/ for support.`,
           isError: true,
         })
       );

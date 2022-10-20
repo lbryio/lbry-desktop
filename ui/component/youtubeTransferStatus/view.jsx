@@ -118,9 +118,7 @@ export default function YoutubeTransferStatus(props: Props) {
             {isNotElligible && (
               <I18nMessage
                 tokens={{
-                  here: (
-                    <Button button="link" href="https://odysee.com/@OdyseeHelp:b/youtube-sync:b" label={__('here')} />
-                  ),
+                  here: <Button button="link" href="https://help.odysee.tv/category-syncprogram/" label={__('here')} />,
                   email: SITE_HELP_EMAIL,
                 }}
               >
@@ -235,7 +233,7 @@ export default function YoutubeTransferStatus(props: Props) {
                 : __('You will be able to claim your channel once it has finished syncing.')}{' '}
               {youtubeImportPending &&
                 __('You will not be able to edit the channel or content until the transfer process completes.')}{' '}
-              <Button button="link" label={__('Learn More')} href="https://odysee.com/@OdyseeHelp:b/youtube-sync:b" />
+              <Button button="link" label={__('Learn More')} href="https://help.odysee.tv/category-syncprogram/" />
             </p>
           </>
         }

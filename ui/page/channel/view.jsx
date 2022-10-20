@@ -292,7 +292,7 @@ function ChannelPage(props: Props) {
                 <span>
                   {getChannelSubCountStr(subCount, compactSubCount)}
                   {Number.isInteger(subCount) ? (
-                    <HelpLink href="https://odysee.com/@OdyseeHelp:b/OdyseeBasics:c" />
+                    <HelpLink href="https://help.odysee.tv/category-interaction/following/" />
                   ) : (
                     '\u00A0'
                   )}
