@@ -246,8 +246,8 @@ const ModalPublishPreview = (props: Props) => {
               <div className="publish-preview__fiat-price">
                 <Icon icon={ICONS.TIME} />
                 <p>
-                  {__('Rent %rental_duration% for %currency%%amount%', {
-                    rental_duration: secondsToDhms(rentalSeconds),
+                  {__('Rent %duration% for %currency%%amount%', {
+                    duration: secondsToDhms(rentalSeconds),
                     currency: STRIPE.CURRENCY[fiatRentalFee.currency].symbol,
                     amount: fiatRentalFee.amount,
                   })}

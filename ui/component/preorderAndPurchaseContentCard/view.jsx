@@ -30,7 +30,7 @@ const STRINGS = {
   },
   rental: {
     title: 'Confirm Rental',
-    button: 'Rent %rental_duration% for %currency%%amount%',
+    button: 'Rent %duration% for %currency%%amount%',
   },
   purchaseOrRent: {
     title: 'Confirm Purchase/Rental',
@@ -209,7 +209,7 @@ const SubmitArea = withCreditCard((props: any) => (
         label={__(props.label, {
           currency: props.fiatSymbol,
           amount: props.tipAmount.toString(),
-          rental_duration: props.rentDuration,
+          duration: props.rentDuration,
         })}
         icon={props.tags.rentalTag ? ICONS.BUY : ICONS.TIME}
       />
@@ -219,7 +219,7 @@ const SubmitArea = withCreditCard((props: any) => (
           label={__(props.rentLabel, {
             currency: props.fiatSymbol,
             amount: props.rentTipAmount.toString(),
-            rental_duration: props.rentDuration,
+            duration: props.rentDuration,
           })}
           icon={ICONS.TIME}
         />

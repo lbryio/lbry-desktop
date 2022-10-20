@@ -149,17 +149,17 @@ export default function PreorderAndPurchaseButton(props: Props) {
               <>
                 <div className="paid-content-prompt__price">
                   <Icon icon={ICONS.BUY} />
-                  {__('Purchase for %purchase_currency%%purchase_amount%', {
-                    purchase_currency: fiatSymbol,
-                    purchase_amount: purchaseTag,
+                  {__('Purchase for %currency%%amount%', {
+                    currency: fiatSymbol,
+                    amount: purchaseTag,
                   })}
                 </div>
                 <div className="paid-content-prompt__price">
                   <Icon icon={ICONS.TIME} />
-                  {__('Rent %rent_duration% for %rent_currency%%rent_amount%', {
-                    rent_duration: secondsToDhms(rentalExpirationTimeInSeconds),
-                    rent_currency: fiatSymbol,
-                    rent_amount: rentalPrice,
+                  {__('Rent %duration% for %currency%%amount%', {
+                    duration: secondsToDhms(rentalExpirationTimeInSeconds),
+                    currency: fiatSymbol,
+                    amount: rentalPrice,
                   })}
                 </div>
                 <Button
@@ -188,10 +188,10 @@ export default function PreorderAndPurchaseButton(props: Props) {
             <>
               <div className="paid-content-prompt__price">
                 <Icon icon={ICONS.TIME} />
-                {__('Rent %rental_duration% for %currency%%amount%', {
+                {__('Rent %duration% for %currency%%amount%', {
                   currency: fiatSymbol,
                   amount: rentalPrice,
-                  rental_duration: secondsToDhms(rentalExpirationTimeInSeconds),
+                  duration: secondsToDhms(rentalExpirationTimeInSeconds),
                 })}
               </div>
               <Button

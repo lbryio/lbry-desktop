@@ -841,14 +841,15 @@ export const preOrderPurchase = (
       const STRINGS = {
         purchase: {
           title: 'Purchase completed successfully',
+          subtitle: 'Enjoy!',
         },
         preorder: {
           title: 'Preorder completed successfully',
           subtitle: "You will be able to see the content as soon as it's available!",
         },
         rental: {
-          title: 'Renting content completed successfully',
-          subtitle: 'Enjoy your content!',
+          title: 'Rental completed successfully',
+          subtitle: 'Enjoy!',
         },
       };
 
@@ -864,7 +865,6 @@ export const preOrderPurchase = (
       if (successCallback) successCallback(customerTipResponse);
     })
     .catch((error) => {
-      // show error message from Stripe if one exists (being passed from backend by Beamer's API currently)
       dispatch(
         doToast({
           message: error.message || __('Sorry, there was an error in processing your payment!'),
