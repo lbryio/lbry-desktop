@@ -110,7 +110,7 @@ export default function FileActions(props: Props) {
   function isAllowedToReact() {
     // We can relax it a bit by doing OR instead, but for now,
     // require all restrictions to be cleared in order to react.
-    return !claimIsMine && (!isFiatRequired || isFiatPaid) && isTierUnlocked;
+    return (!claimIsMine && (!isFiatRequired || isFiatPaid) && isTierUnlocked) || claimIsMine;
   }
 
   function handleWebDownload() {
@@ -135,6 +135,7 @@ export default function FileActions(props: Props) {
     doOpenModal(MODALS.REPOST, { uri });
   }
 
+  console.log('isAllowedToReact: ', isAllowedToReact());
   return (
     <div className="media__actions">
       {ENABLE_FILE_REACTIONS && isAllowedToReact() && <FileReactions uri={uri} />}
