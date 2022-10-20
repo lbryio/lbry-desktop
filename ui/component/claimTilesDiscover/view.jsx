@@ -58,6 +58,7 @@ type Props = {
   // --- select ---
   location: { search: string },
   claimSearchResults: Array<string>,
+  claimSearchLastPageReached: ?boolean,
   claimsByUri: { [string]: any },
   claimsById: { [string]: any },
   fetchingClaimSearch: boolean,
@@ -76,6 +77,7 @@ function ClaimTilesDiscover(props: Props) {
   const {
     doClaimSearch,
     claimSearchResults,
+    claimSearchLastPageReached,
     claimsByUri,
     claimsById,
     fetchViewCount,
@@ -108,7 +110,8 @@ function ClaimTilesDiscover(props: Props) {
   const uriBuffer = useRef([]);
 
   const timedOut = claimSearchResults === null;
-  const shouldPerformSearch = !fetchingClaimSearch && !timedOut && claimSearchUris.length === 0;
+  const shouldPerformSearch =
+    !fetchingClaimSearch && !timedOut && claimSearchUris.length === 0 && !claimSearchLastPageReached;
 
   const uris = (prefixUris || []).concat(claimSearchUris);
   if (prefixUris && prefixUris.length) uris.splice(prefixUris.length * -1, prefixUris.length);
@@ -206,6 +209,10 @@ function ClaimTilesDiscover(props: Props) {
         </p>
       </div>
     );
+  }
+
+  if (!timedOut && finalUris && finalUris.length === 0 && !loading && claimSearchLastPageReached) {
+    return <div className="empty empty--centered">{__('No results')}</div>;
   }
 
   return (

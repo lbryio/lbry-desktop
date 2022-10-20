@@ -6,6 +6,7 @@ import {
   selectFetchingClaimSearchByQuery,
   selectClaimsByUri,
   selectById,
+  selectClaimSearchByQueryLastPageReached,
 } from 'redux/selectors/claims';
 import { doClaimSearch, doResolveClaimIds, doResolveUris } from 'redux/actions/claims';
 import { doFetchOdyseeMembershipForChannelIds } from 'redux/actions/memberships';
@@ -45,6 +46,7 @@ const select = (state, props) => {
 
   return {
     claimSearchResults: selectClaimSearchByQuery(state)[searchKey],
+    claimSearchLastPageReached: selectClaimSearchByQueryLastPageReached(state)[searchKey],
     claimsByUri: selectClaimsByUri(state),
     claimsById: selectById(state),
     fetchingClaimSearch: selectFetchingClaimSearchByQuery(state)[searchKey],
