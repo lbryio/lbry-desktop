@@ -543,10 +543,6 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         document.querySelector('.video-js-parent')?.append(window.oldSavedDiv);
       }
 
-      // need this for canvas to work
-      const player = document.querySelector('video.vjs-tech');
-      if (player) player.setAttribute('crossorigin', 'anonymous');
-
       if (!isAudio) {
         vjsPlayer.snapshotButton({ fileTitle: title, poster });
       }

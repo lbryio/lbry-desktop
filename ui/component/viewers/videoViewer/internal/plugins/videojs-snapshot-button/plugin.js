@@ -12,7 +12,6 @@ type Options = {
 
 function onPlayerReady(player: Player, options: Options) {
   // this doesn't work, but it should
-  // player.children()[0].setAttribute('crossorigin', 'anonymous');
   const button = videojs.getComponent('Button');
   const snapshotButton = videojs.extend(button, {
     constructor: function () {
@@ -50,7 +49,12 @@ function onPlayerReady(player: Player, options: Options) {
   });
   videojs.registerComponent('snapshotButton', snapshotButton);
 
-  player.getChild('controlBar').addChild('snapshotButton', {});
+  player.one('canplay', function () {
+    // need this for canvas to work
+    // $FlowIssue
+    player.children()[0].setAttribute('crossorigin', 'anonymous');
+    player.getChild('controlBar').addChild('snapshotButton', {});
+  });
 
   // TODO: this is particular to Odysee, since we don't necessarily dispose, better to use something universal
   player.on('playerClosed', function () {
