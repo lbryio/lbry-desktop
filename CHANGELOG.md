@@ -1,7 +1,23 @@
 # Changelog
-
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
+
+## [0.53.6] - [unreleased]
+
+### Fixed
+ - Make thumbnails optional ([#7690](https://github.com/lbryio/lbry-desktop/pull/7690))
+ - Show downloads newest first ([#7684](https://github.com/lbryio/lbry-desktop/pull/7684))
+ - Only allow images in image uploader ([#7672](https://github.com/lbryio/lbry-desktop/pull/7672))
+ - Fixed bug with csv exports ([#7697](https://github.com/lbryio/lbry-desktop/pull/7697))
+ - Fixed small screen viewer position ([#7677](https://github.com/lbryio/lbry-desktop/pull/7677))
+ - Fixed various upload bugs including transcoding ([#7688](https://github.com/lbryio/lbry-desktop/pull/7688))
+ - Fallback for files with no extension ([#7704](https://github.com/lbryio/lbry-desktop/pull/7704))
+ 
+### Changed
+ - Upgraded Electron to v17.2.0 ([#7703](https://github.com/lbryio/lbry-desktop/pull/7703))
+ - Upgraded Electron to v17.0.0 ([#7691](https://github.com/lbryio/lbry-desktop/pull/7691))
+ - Updated lbrynet to [0.111.0](https://github.com/lbryio/lbry-sdk/releases/tag/v0.111.0)
+
 ## [0.53.5] - [2022-08-26]
 
 ### Added
