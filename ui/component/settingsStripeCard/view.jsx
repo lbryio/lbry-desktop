@@ -94,9 +94,11 @@ const SettingsStripeCard = (props: Props) => {
     event.preventDefault();
     setLoading(true);
 
-    doCustomerSetup().then((customerSetupResponse: StripeCustomerSetupResponse) => {
-      confirmCardSetup(customerSetupResponse.client_secret);
-    });
+    doCustomerSetup()
+      .then((customerSetupResponse: StripeCustomerSetupResponse) => {
+        confirmCardSetup(customerSetupResponse.client_secret);
+      })
+      .catch(() => setLoading(false));
   }
 
   React.useEffect(() => {

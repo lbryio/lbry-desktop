@@ -56,8 +56,15 @@ export const doTipAccountStatus = () => async (dispatch: Dispatch, getState: Get
 
       return accountStatusResponse;
     })
-    .catch(() => {
-      doToast({ message: __('There was an error getting your account setup, please try again later'), isError: true });
+    .catch((error) => {
+      if (error.message === 'account not linked to user, please link first') {
+        dispatch({ type: ACTIONS.STRIPE_ACCOUNT_STATUS_COMPLETE, data: false });
+        return error;
+      }
+
+      dispatch(
+        doToast({ message: __('There was an error getting your account setup, please try again later'), isError: true })
+      );
       dispatch({ type: ACTIONS.STRIPE_ACCOUNT_STATUS_COMPLETE, data: null });
     });
 };
@@ -159,10 +166,10 @@ export const doGetCustomerStatus = () => async (dispatch: Dispatch, getState: Ge
     })
     .catch((error) => {
       if (error === 'internal_apis_down') {
-        doToast({ message: __(STRIPE.APIS_DOWN_ERROR_RESPONSE), isError: true });
+        dispatch(doToast({ message: __(STRIPE.APIS_DOWN_ERROR_RESPONSE), isError: true }));
       } else {
         // probably an error from stripe
-        doToast({ message: __(STRIPE.CARD_SETUP_ERROR_RESPONSE), isError: true });
+        dispatch(doToast({ message: __(STRIPE.CARD_SETUP_ERROR_RESPONSE), isError: true }));
       }
 
       dispatch({ type: ACTIONS.SET_CUSTOMER_STATUS, data: null });

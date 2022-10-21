@@ -11,6 +11,7 @@ type Props = {
   chargesEnabled: ?boolean,
   accountRequiresVerification: ?boolean,
   accountLinkResponse: StripeAccountLink,
+  accountStatusFetching: boolean,
   doTipAccountStatus: () => Promise<StripeAccountStatus>,
   doGetAndSetAccountLink: () => Promise<StripeAccountLink>,
 };
@@ -21,20 +22,22 @@ const ButtonStripeConnectAccount = (props: Props) => {
     chargesEnabled,
     accountRequiresVerification,
     accountLinkResponse,
+    accountStatusFetching,
     doTipAccountStatus,
     doGetAndSetAccountLink,
   } = props;
 
-  const [fetching, setFetching] = React.useState(false);
+  const [accountLinkFetching, setAccountLinkFetching] = React.useState(false);
 
   const bankAccountNotFetched = chargesEnabled === undefined;
   const stripeConnectionUrl = accountLinkResponse?.url;
+  const accountStatusFailed = chargesEnabled === null;
 
   function confirmAddBankAccount() {
-    setFetching(true);
+    setAccountLinkFetching(true);
     doGetAndSetAccountLink()
-      .then(() => setFetching(false))
-      .catch(() => setFetching(false));
+      .then(() => setAccountLinkFetching(false))
+      .catch(() => setAccountLinkFetching(false));
   }
 
   React.useEffect(() => {
@@ -43,14 +46,14 @@ const ButtonStripeConnectAccount = (props: Props) => {
     }
   }, [bankAccountNotFetched, doTipAccountStatus]);
 
-  if (bankAccountNotFetched || fetching) {
+  if (bankAccountNotFetched || accountStatusFetching || accountLinkFetching) {
     return (
       <Button
         disabled
         button="primary"
         label={
           <BusyIndicator
-            message={fetching ? __('Confirming...') : __('Getting your bank account connection status...')}
+            message={accountLinkFetching ? __('Confirming...') : __('Getting your bank account connection status...')}
           />
         }
         icon={ICONS.FINANCE}
@@ -77,9 +80,9 @@ const ButtonStripeConnectAccount = (props: Props) => {
   return (
     <Button
       button="primary"
-      label={__('Connect a bank account')}
+      label={accountStatusFailed ? __('Retry') : __('Connect a bank account')}
       icon={ICONS.FINANCE}
-      onClick={confirmAddBankAccount}
+      onClick={accountStatusFailed ? doTipAccountStatus : confirmAddBankAccount}
     />
   );
 };
