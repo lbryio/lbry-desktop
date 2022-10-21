@@ -115,7 +115,7 @@ export default function FileRenderInitiator(props: Props) {
   const urlTimeParam = href && href.indexOf('t=') > -1;
 
   const shouldAutoplay = !forceDisableAutoplay && !embedded && (forceAutoplayParam || urlTimeParam || autoplay);
-  const sdkFeeRequired = costInfo && costInfo.cost !== 0;
+  const sdkFeeRequired = costInfo === undefined || (costInfo && costInfo.cost !== 0);
   const isFree = costInfo && costInfo.cost === 0 && !fiatRequired;
   const isAnonymousFiatContent = fiatRequired && !channelClaimId;
 
