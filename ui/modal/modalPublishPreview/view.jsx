@@ -326,7 +326,7 @@ const ModalPublishPreview = (props: Props) => {
                 label={tier?.Membership?.name || tierId}
               />
             ) : (
-              <div className="dummy-tier" />
+              <div key={tierId} className="dummy-tier" />
             );
           })}
         </div>
