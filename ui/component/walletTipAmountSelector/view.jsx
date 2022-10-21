@@ -254,6 +254,7 @@ function WalletTipAmountSelector(props: Props) {
           <FormField
             autoFocus={!isMobile}
             name="tip-input"
+            id="tip-input"
             disabled={!customTipAmount && shouldDisableAmountSelector(0)}
             error={tipError}
             min="0"
