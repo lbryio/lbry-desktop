@@ -30,6 +30,13 @@ const ButtonStripeConnectAccount = (props: Props) => {
   const bankAccountNotFetched = chargesEnabled === undefined;
   const stripeConnectionUrl = accountLinkResponse?.url;
 
+  function confirmAddBankAccount() {
+    setFetching(true);
+    doGetAndSetAccountLink()
+      .then(() => setFetching(false))
+      .catch(() => setFetching(false));
+  }
+
   React.useEffect(() => {
     if (bankAccountNotFetched) {
       doTipAccountStatus();
@@ -65,13 +72,6 @@ const ButtonStripeConnectAccount = (props: Props) => {
 
   if (stripeConnectionUrl) {
     return <Button button="link" label={__('Click here to connect a bank account')} navigate={stripeConnectionUrl} />;
-  }
-
-  function confirmAddBankAccount() {
-    setFetching(true);
-    doGetAndSetAccountLink()
-      .then(() => setFetching(false))
-      .catch(() => setFetching(false));
   }
 
   return (
