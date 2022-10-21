@@ -106,10 +106,10 @@ function PublishPrice(props: Props) {
       <div className="publish-price__bank-driver">
         <I18nMessage
           tokens={{
-            connect_your_bank_account: <ButtonStripeConnectAccount />,
+            click_here_to_connect_a_bank_account: <ButtonStripeConnectAccount />,
           }}
         >
-          %connect_your_bank_account% to enable purchasing and renting functionality.
+          %click_here_to_connect_a_bank_account% to enable purchasing and renting functionality.
         </I18nMessage>
       </div>
     );

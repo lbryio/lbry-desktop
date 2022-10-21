@@ -2642,7 +2642,7 @@
   "Free": "Free",
   "Purchase / Rent": "Purchase / Rent",
   "Purchase with Credits": "Purchase with Credits",
-  "%connect_your_bank_account% to enable purchasing and renting functionality.": "%connect_your_bank_account% to enable purchasing and renting functionality.",
+  "%click_here_to_connect_a_bank_account% to enable purchasing and renting functionality.": "%click_here_to_connect_a_bank_account% to enable purchasing and renting functionality.",
   "%set_up_your_bank_account% to receive payments.": "%set_up_your_bank_account% to receive payments.",
   "Set up your bank account": "Set up your bank account",
   "By continuing, you accept the %paid_content_terms_and_conditions%.": "By continuing, you accept the %paid_content_terms_and_conditions%.",
