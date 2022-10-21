@@ -7,11 +7,13 @@ const defaultOptions = {};
 
 type Options = {
   fileTitle: string,
-  poster: string,
 };
 
 function onPlayerReady(player: Player, options: Options) {
-  // this doesn't work, but it should
+  // needed for canvas to work with cors
+  // $FlowFixMe
+  player.el().childNodes[0].setAttribute('crossorigin', 'anonymous');
+
   const button = videojs.getComponent('Button');
   const snapshotButton = videojs.extend(button, {
     constructor: function () {
@@ -29,13 +31,14 @@ function onPlayerReady(player: Player, options: Options) {
     },
     handleClick: function () {
       const link = document.createElement('a');
-      const video = document.querySelector('video');
+      const video = document.querySelector('video.vjs-tech');
 
       const width = player.videoWidth();
       const height = player.videoHeight();
 
       const canvas = Object.assign(document.createElement('canvas'), { width, height });
-      // $FlowIssue
+      if (!video) return;
+      // $FlowIssue (when the class is added to the querySelector it errors)
       canvas.getContext('2d').drawImage(video, 0, 0, width, height);
 
       link.href = canvas.toDataURL();
@@ -50,9 +53,6 @@ function onPlayerReady(player: Player, options: Options) {
   videojs.registerComponent('snapshotButton', snapshotButton);
 
   player.one('canplay', function () {
-    // need this for canvas to work
-    // $FlowIssue
-    player.children()[0].setAttribute('crossorigin', 'anonymous');
     player.getChild('controlBar').addChild('snapshotButton', {});
   });
 
