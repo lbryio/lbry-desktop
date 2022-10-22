@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import classnames from 'classnames';
+import { useIsMediumScreen } from 'effects/use-screensize';
 import Page from 'component/page';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import FileTitleSection from 'component/fileTitleSection';
@@ -59,6 +60,7 @@ function FilePage(props: Props) {
   } = props;
   const cost = costInfo ? costInfo.cost : null;
   const hasFileInfo = fileInfo !== undefined;
+  const isMediumScreen = useIsMediumScreen();
   const isMarkdown = renderMode === RENDER_MODES.MARKDOWN;
   const videoPlayedEnoughToResetPosition = React.useMemo(() => {
     const durationInSecs =
@@ -169,8 +171,10 @@ function FilePage(props: Props) {
         <div className={classnames('section card-stack', `file-page__${renderMode}`)}>
           <FileTitleSection uri={uri} isNsfwBlocked />
         </div>
-        {collection && !isMarkdown && !videoTheaterMode && <CollectionContent id={collectionId} uri={uri} />}
-        {!collection && !isMarkdown && !videoTheaterMode && <RecommendedContent uri={uri} />}
+        {collection && !isMarkdown && !videoTheaterMode && !isMediumScreen && (
+          <CollectionContent id={collectionId} uri={uri} />
+        )}
+        {!collection && !isMarkdown && !videoTheaterMode && !isMediumScreen && <RecommendedContent uri={uri} />}
       </Page>
     );
   }
@@ -187,13 +191,17 @@ function FilePage(props: Props) {
               {commentsDisabled && <Empty text={__('The creator of this content has disabled comments.')} />}
               {!commentsDisabled && <CommentsList uri={uri} linkedCommentId={linkedCommentId} />}
             </div>
-            {!collection && !isMarkdown && videoTheaterMode && <RecommendedContent uri={uri} />}
-            {collection && !isMarkdown && videoTheaterMode && <CollectionContent id={collectionId} uri={uri} />}
+            {!collection && !isMarkdown && videoTheaterMode && !isMediumScreen && <RecommendedContent uri={uri} />}
+            {collection && !isMarkdown && videoTheaterMode && !isMediumScreen && (
+              <CollectionContent id={collectionId} uri={uri} />
+            )}
           </div>
         )}
       </div>
-      {collection && !isMarkdown && !videoTheaterMode && <CollectionContent id={collectionId} uri={uri} />}
-      {!collection && !isMarkdown && !videoTheaterMode && <RecommendedContent uri={uri} />}
+      {collection && !isMarkdown && !videoTheaterMode && !isMediumScreen && (
+        <CollectionContent id={collectionId} uri={uri} />
+      )}
+      {!collection && !isMarkdown && !videoTheaterMode && !isMediumScreen && <RecommendedContent uri={uri} />}
       {isMarkdown && (
         <div className="file-page__post-comments">
           {!commentsDisabled && <CommentsList uri={uri} linkedCommentId={linkedCommentId} commentsAreExpanded />}

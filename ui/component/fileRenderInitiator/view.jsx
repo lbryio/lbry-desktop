@@ -9,6 +9,7 @@ import * as PAGES from 'constants/pages';
 import * as RENDER_MODES from 'constants/file_render_modes';
 import * as KEYCODES from 'constants/keycodes';
 import Button from 'component/button';
+import { useIsMediumScreen } from 'effects/use-screensize';
 import isUserTyping from 'util/detect-typing';
 import { getThumbnailCdnUrl } from 'util/thumbnail';
 import Nag from 'component/common/nag';
@@ -63,6 +64,7 @@ export default function FileRenderInitiator(props: Props) {
   const fileStatus = fileInfo && fileInfo.status;
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode);
   const isText = RENDER_MODES.TEXT_MODES.includes(renderMode);
+  const isMediumScreen = useIsMediumScreen();
   const [thumbnail, setThumbnail] = React.useState(FileRenderPlaceholder);
   const containerRef = React.useRef<any>();
 
@@ -151,7 +153,7 @@ export default function FileRenderInitiator(props: Props) {
       style={thumbnail && !obscurePreview ? { backgroundImage: `url("${thumbnail}")` } : {}}
       className={classnames('content__cover', {
         'content__cover--disabled': disabled,
-        'content__cover--theater-mode': videoTheaterMode,
+        'content__cover--theater-mode': videoTheaterMode && !isMediumScreen,
         'content__cover--text': isText,
         'card__media--nsfw': obscurePreview,
       })}

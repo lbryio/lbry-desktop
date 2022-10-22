@@ -505,7 +505,7 @@ $thumbnailWidthSmall: 1rem;
     min-width: 100%;
     max-width: 100%;
 
-    @media (min-width: $breakpoint-medium) {
+    @media not all and (max-width: $breakpoint-medium) {
       min-width: 40%;
       max-width: 40%;
     }
@@ -547,7 +547,7 @@ $thumbnailWidthSmall: 1rem;
       }
     }
 
-    @media (min-width: $breakpoint-medium) {
+    @media not all and (max-width: $breakpoint-medium) {
       margin: 0 var(--spacing-xs);
     }
 
@@ -562,7 +562,7 @@ $thumbnailWidthSmall: 1rem;
     padding-left: var(--spacing-m);
     border-left: 4px solid var(--color-border);
 
-    @media (min-width: $breakpoint-medium) {
+    @media not all and (max-width: $breakpoint-medium) {
       margin-top: 0;
       margin-left: var(--spacing-s);
     }

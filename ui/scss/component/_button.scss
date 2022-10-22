@@ -167,7 +167,7 @@ a.button--alt {
 .vjs-button--theater-mode.vjs-button {
   display: none;
 
-  @media (min-width: $breakpoint-medium) {
+  @media not all and (max-width: $breakpoint-medium) {
     display: block;
     order: 1;
     background-repeat: no-repeat;
