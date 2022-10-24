@@ -59,7 +59,10 @@ function TiersTab(props: Props) {
       const newChannelMemberships = new Set(previousMemberships);
       newChannelMemberships.add(membership);
 
-      return Array.from(newChannelMemberships);
+      // sort by price lowest to highest
+      return Array.from(newChannelMemberships).sort(
+        (a, b) => a.NewPrices[0].creator_receives_amount - b.NewPrices[0].creator_receives_amount
+      );
     });
   }
 
