@@ -82,13 +82,18 @@ export const doFetchChannelMembershipsForChannelIds = (channelId: string, channe
 export const doFetchOdyseeMembershipForChannelIds = (channelIds: ClaimIds) => async (dispatch: Dispatch) =>
   dispatch(doFetchChannelMembershipsForChannelIds(ODYSEE_CHANNEL.ID, channelIds));
 
-export const doMembershipList = (params: MembershipListParams) => async (dispatch: Dispatch, getState: GetState) => {
+export const doMembershipList = (params: MembershipListParams, forceUpdate: ?boolean) => async (
+  dispatch: Dispatch,
+  getState: GetState
+) => {
   const { channel_id: channelId } = params;
   const state = getState();
   const isFetching = selectIsMembershipListFetchingForId(state, channelId);
   const alreadyFetched = selectMembershipTiersForCreatorId(state, channelId);
 
-  if (isFetching || alreadyFetched) return Promise.resolve();
+  if ((isFetching || alreadyFetched) && !forceUpdate) {
+    return Promise.resolve();
+  }
 
   dispatch({ type: ACTIONS.MEMBERSHIP_LIST_START, data: channelId });
 
