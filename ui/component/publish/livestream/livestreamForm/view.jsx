@@ -449,6 +449,9 @@ function LivestreamForm(props: Props) {
     ytSignupPending ||
     previewing;
 
+  // replays use 'exclusive content' perk, livestreams use 'exclusive livestreams'
+  const channelRestrictionToUse = publishMode === 'Replay' ? 'upload' : 'livestream';
+
   // Editing claim uri
   return (
     <div className={balance < 0.01 ? 'disabled' : ''}>
@@ -537,7 +540,7 @@ function LivestreamForm(props: Props) {
 
             <Card actions={<SelectThumbnail livestreamData={livestreamData} />} />
 
-            <PublishProtectedContent claim={myClaimForUri} location={'livestream'} />
+            <PublishProtectedContent claim={myClaimForUri} location={channelRestrictionToUse} />
 
             {publishMode === 'Replay' && <PublishPrice disabled={disabled} />}
 
