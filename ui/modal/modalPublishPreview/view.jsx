@@ -121,7 +121,7 @@ const ModalPublishPreview = (props: Props) => {
   const isOptimizeAvail = filePath && filePath !== '' && isVid && ffmpegStatus.available;
   const modalTitle = getModalTitle();
   const confirmBtnText = getConfirmButtonText();
-  const tiers = livestream || remoteFile ? tiersWithExclusiveLivestream : tiersWithExclusiveContent; // See #2285 & #2293
+  const tiers = livestream ? tiersWithExclusiveLivestream : tiersWithExclusiveContent; // See #2285
 
   // **************************************************************************
   // **************************************************************************
