@@ -36,7 +36,7 @@ const Lbry = {
 
   // Returns a human readable media type based on the content type or extension of a file that is returned by the sdk
   getMediaType: (contentType: ?string, fileName: ?string) => {
-    if (fileName) {
+    if (fileName && fileName.split('.').length > 1) {
       const formats = [
         [/\.(mp4|m4v|webm|flv|f4v|ogv)$/i, 'video'],
         [/\.(mp3|m4a|aac|wav|flac|ogg|opus)$/i, 'audio'],
@@ -111,6 +111,8 @@ const Lbry = {
   wallet_list: (params = {}) => daemonCallWithResult('wallet_list', params),
   wallet_send: (params = {}) => daemonCallWithResult('wallet_send', params),
   wallet_status: (params = {}) => daemonCallWithResult('wallet_status', params),
+  wallet_export: (params = {}) => daemonCallWithResult('wallet_export', params),
+  wallet_import: (params = {}) => daemonCallWithResult('wallet_import', params),
   address_is_mine: (params = {}) => daemonCallWithResult('address_is_mine', params),
   address_unused: (params = {}) => daemonCallWithResult('address_unused', params),
   address_list: (params = {}) => daemonCallWithResult('address_list', params),

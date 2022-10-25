@@ -4,7 +4,7 @@ const SYNC_API_DOWN = 'sync_api_down';
 const DUPLICATE_EMAIL = 'duplicate_email';
 const UNKNOWN_ERROR = 'unknown_api_error';
 const NOT_FOUND = 'not_found';
-console.log('process.env.', process.env.LBRYSYNC_BASE_URL);
+// console.log('process.env.', process.env.LBRYSYNC_BASE_URL);
 
 const API_VERSION = 3;
 const POST = 'POST';
@@ -41,43 +41,47 @@ export async function getAuthToken(email, password, deviceId) {
 
 export async function register(email, password, saltSeed) {
   try {
-    await callWithResult(POST, REGISTER_ENDPOINT, { email, password, clientSaltSeed: saltSeed });
-    return;
+    const result = await callWithResult(POST, REGISTER_ENDPOINT, { email, password, clientSaltSeed: saltSeed });
+    return result;
   } catch (e) {
     return { error: e.message };
   }
-}
-
-export async function pushWallet(walletState, hmac, token) {
-  // token?
-  const body = {
-    token: token,
-    encryptedWallet: walletState.encryptedWallet,
-    sequence: walletState.sequence,
-    hmac: hmac,
-  };
-  await callWithResult(POST, WALLET_ENDPOINT, { token, hmac, sequence });
 }
 
 export async function pullWallet(token) {
   try {
-    await callWithResult(GET, REGISTER_ENDPOINT, { token });
-    return;
+    const result = await callWithResult(GET, WALLET_ENDPOINT, { token });
+    return result;
   } catch (e) {
     return { error: e.message };
   }
-} // token
+}
+
+// export async function pushWallet(walletState, hmac, token) {
+//   // token?
+//   const body = {
+//     token: token,
+//     encryptedWallet: walletState.encryptedWallet,
+//     sequence: walletState.sequence,
+//     hmac: hmac,
+//   };
+//   await callWithResult(POST, WALLET_ENDPOINT, { token, hmac, sequence });
+// }
 
 function callWithResult(method, endpoint, params = {}) {
   return new Promise((resolve, reject) => {
-    apiCall(
+    return apiCall(
       method,
       endpoint,
       params,
       (result) => {
+        console.log('cwr result', result);
         resolve(result);
       },
-      reject
+      (er) => {
+        console.log('er', er);
+        reject(er);
+      }
     );
   });
 }
@@ -96,13 +100,18 @@ function apiCall(method, endpoint, params, resolve, reject) {
   return fetch(`${Lbrysync.apiUrl}${endpoint}${searchString}`, options)
     .then(handleResponse)
     .then((response) => {
-      return response;
+      console.log('response 200', response);
+      return resolve(response);
     })
-    .catch(reject);
+    .catch((r) => {
+      console.log('r', r);
+      return reject(r);
+    });
 }
 
 function handleResponse(response) {
   if (response.status >= 200 && response.status < 300) {
+    console.log('200+');
     return response.json();
   }
 

@@ -17,7 +17,14 @@ const defaultState = {
   hashChanged: false,
   fatalError: false,
   // lbrysync
-  syncProvider: null,
+  // --email
+  checkingEmail: false,
+  candidateEmail: null,
+  emailError: null,
+  //syncProvider: null,
+  gettingSalt: false,
+  saltSeed: null,
+  saltError: null,
   // reg
   registering: false,
   registeredEmail: null,
@@ -31,10 +38,7 @@ const defaultState = {
   encryptedHmacKey: null,
   encryptedRoot: null,
   encryptedProviderPass: null,
-  // salt
-  gettingSalt: false,
-  saltSeed: null,
-  saltError: null,
+  encryptedDataKey: null,
 };
 
 reducers[ACTIONS.SYNC_STATE_POPULATE] = (state) => {
@@ -136,17 +140,21 @@ reducers[ACTIONS.LSYNC_REGISTER_COMPLETED] = (state, action) => ({
   ...state,
   registeredEmail: action.data.email,
   encryptedHmacKey: action.data.hmacKey,
-  encryptedProviderPass: action.data.providerPass,
+  encryptedDataKey: action.data.dataKey,
+  encryptedProviderKey: action.data.providerKey,
   encryptedRoot: action.data.rootPass,
   saltSeed: action.data.saltSeed,
+  syncProvider: action.data.syncProvider,
+  registering: false,
 });
+// clear attempt
 reducers[ACTIONS.LSYNC_REGISTER_FAILED] = (state, action) => ({
   ...state,
   registeredEmail: null,
   registering: false,
   registerError: action.data.error,
 });
-  // Auth
+// Auth
 reducers[ACTIONS.LSYNC_AUTH_STARTED] = (state) => ({
   ...state,
   isAuthenticating: true,
@@ -161,12 +169,13 @@ reducers[ACTIONS.LSYNC_AUTH_FAILED] = (state, action) => ({
   authError: action.data,
   isAuthenticating: false,
 });
-  // derive
+// derive
 reducers[ACTIONS.LSYNC_DERIVE_STARTED] = (state) => ({
   ...state,
   derivingKeys: true,
   deriveError: null,
 });
+// add more keys
 reducers[ACTIONS.LSYNC_DERIVE_COMPLETED] = (state, action) => ({
   ...state,
   derivingKeys: false,
@@ -176,7 +185,7 @@ reducers[ACTIONS.LSYNC_DERIVE_FAILED] = (state, action) => ({
   deriveError: action.data.error,
   derivingKeys: false,
 });
-  // salt
+// salt util
 reducers[ACTIONS.LSYNC_GET_SALT_STARTED] = (state) => ({
   ...state,
   gettingSalt: true,
@@ -190,6 +199,27 @@ reducers[ACTIONS.LSYNC_GET_SALT_FAILED] = (state, action) => ({
   ...state,
   saltError: action.data.error,
   gettingSalt: false,
+});
+// email
+reducers[ACTIONS.LSYNC_CHECK_EMAIL_STARTED] = (state) => ({
+  ...state,
+  checkingEmail: true,
+  emailError: null,
+  candidateEmail: null,
+  saltSeed: null,
+});
+reducers[ACTIONS.LSYNC_CHECK_EMAIL_COMPLETED] = (state, action) => ({
+  ...state,
+  checkingEmail: false,
+  candidateEmail: action.data.candidateEmail,
+  saltSeed: action.data.saltSeed,
+});
+reducers[ACTIONS.LSYNC_CHECK_EMAIL_FAILED] = (state, action) => ({
+  ...state,
+  checkingEmail: false,
+  emailError: action.data.emailError,
+  candidateEmail: null,
+  saltSeed: null,
 });
 
 reducers[ACTIONS.SYNC_RESET] = () => defaultState;

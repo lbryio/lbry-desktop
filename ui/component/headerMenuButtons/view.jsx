@@ -34,6 +34,7 @@ export default function HeaderMenuButtons(props: HeaderMenuButtonProps) {
         <MenuList className="menu__list--header">
           <HeaderMenuLink page={PAGES.UPLOAD} icon={ICONS.PUBLISH} name={__('Upload')} />
           <HeaderMenuLink page={PAGES.CHANNEL_NEW} icon={ICONS.CHANNEL} name={__('New Channel')} />
+          <HeaderMenuLink page={PAGES.SETTINGS_SYNC} icon={ICONS.GAMING} name={__('Sign In')} />
         </MenuList>
       </Menu>
 

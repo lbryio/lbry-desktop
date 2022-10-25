@@ -19,7 +19,7 @@ export const buildSharedStateMiddleware =
     const actionResult = next(action);
     // Call `getState` after calling `next` to ensure the state has updated in response to the action
     function runPreferences() {
-      const nextState: { settings: any } = getState(); // bring in lbrysync
+      const nextState: { settings: any } = getState(); // bring in lbrysync?
       const syncEnabled =
         nextState.settings && nextState.settings.clientSettings && nextState.settings.clientSettings.enable_sync;
       const signedIn = false; // get from new sync system newsync

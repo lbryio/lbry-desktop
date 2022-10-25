@@ -6,9 +6,9 @@ import { Lbryio } from 'lbryinc';
 import Lbry from 'lbry';
 import { ipcRenderer } from 'electron';
 import * as Lbrysync from 'lbrysync';
-import { safeStoreEncrypt, safeStoreDecrypt, getSavedPassword  } from 'util/saved-passwords';
+import { safeStoreEncrypt, safeStoreDecrypt, getSavedPassword } from 'util/saved-passwords';
 
-import { doWalletEncrypt, doWalletDecrypt } from 'redux/actions/wallet';
+import { doWalletEncrypt, doWalletDecrypt, doUpdateBalance } from 'redux/actions/wallet';
 import {
   selectSyncHash,
   selectGetSyncIsPending,
@@ -21,6 +21,7 @@ import Comments from 'comments';
 import { getSubsetFromKeysArray } from 'util/sync-settings';
 
 let syncTimer = null;
+let verifyInterval = null;
 const SYNC_INTERVAL = 1000 * 60 * 5; // 5 minutes
 const NO_WALLET_ERROR = 'no wallet found for this user';
 const BAD_PASSWORD_ERROR_NAME = 'InvalidPasswordError';
@@ -74,124 +75,188 @@ export function doSetDefaultAccount(success: () => void, failure: (string) => vo
   };
 }
 
-export const doLbrysyncGetSalt = (email: string) => async (dispatch: Dispatch) => {
-  const { fetchSaltSeed } = Lbrysync;
+// "signupCheck=true" - if signupCheck and salt, return fail. else if salt return salt.
+// export const doLbrysyncGetSalt = (email: string) => async (dispatch: Dispatch) => {
+//   const { fetchSaltSeed } = Lbrysync;
+//   dispatch({
+//     type: ACTIONS.LSYNC_GET_SALT_STARTED,
+//   });
+//   try {
+//     const saltOrError = await fetchSaltSeed(email);
+//     console.log('REDUX Salt', saltOrError)
+//     dispatch({
+//       type: ACTIONS.LSYNC_GET_SALT_COMPLETED,
+//       data: { email: email, saltSeed: saltOrError},
+//     });
+//     return saltOrError;
+//   } catch (e) {
+//     dispatch({
+//       type: ACTIONS.LSYNC_GET_SALT_FAILED,
+//       data: { email: email, saltError: 'Not Found'},
+//     });
+//     return 'not found';
+//   }
+// };
+
+export const doHandleEmail = (email, isSignUp) => async (dispatch: Dispatch) => {
   dispatch({
-    type: ACTIONS.LSYNC_GET_SALT_STARTED,
+    type: ACTIONS.LSYNC_CHECK_EMAIL_STARTED,
+    // CLEAR STUFF
   });
-  try {
-    const saltOrError = await fetchSaltSeed(email);
-    dispatch({
-      type: ACTIONS.LSYNC_GET_SALT_COMPLETED,
-      data: { email: email, saltSeed: saltOrError},
-    });
-    return saltOrError;
-  } catch (e) {
-    dispatch({
-      type: ACTIONS.LSYNC_GET_SALT_FAILED,
-      data: { email: email, saltError: 'Not Found'},
-    });
-    return 'not found';
+  const { fetchSaltSeed } = Lbrysync;
+  if (isSignUp) {
+    try {
+      await fetchSaltSeed(email);
+      // !!got salt seed
+      dispatch({
+        type: ACTIONS.LSYNC_CHECK_EMAIL_FAILED,
+        data: { emailError: 'Email Already Found' },
+      });
+    } catch (e) {
+      // no salt, we're good.
+      const seed = await ipcRenderer.invoke('invoke-get-salt-seed');
+      dispatch({
+        type: ACTIONS.LSYNC_CHECK_EMAIL_COMPLETED,
+        data: { candidateEmail: email, saltSeed: seed },
+      });
+    }
+  } else {
+    // Sign In
+    try {
+      const saltResponse = await fetchSaltSeed(email);
+      // !!got salt seed
+      dispatch({
+        type: ACTIONS.LSYNC_CHECK_EMAIL_COMPLETED,
+        data: { candidateEmail: email, saltSeed: saltResponse.seed },
+      });
+    } catch (e) {
+      console.log('e', e.message);
+      dispatch({
+        type: ACTIONS.LSYNC_CHECK_EMAIL_FAILED,
+        data: { emailError: 'Email Not Found' },
+      });
+    }
   }
 };
 
-// register an email (eventually username)
-export const doLbrysyncRegister = (email: string, secrets: any, saltSeed: string) => async (dispatch: Dispatch) => {
-  const { register } = Lbrysync;
-  // started
+export const doLbrysyncSync = () => async (dispatch: Dispatch, getState: GetState) => {
+  dispatch({
+    type: ACTIONS.LSYNC_SYNC_STARTED,
+  });
+  // Wallet status
+  const status = await Lbry.wallet_status();
+  // if (status.isLocked) {
+  //   // error
+  // }
+  // return Lbry.wallet_unlock({ password });
+  //   .then((status) => {
+  //
+  //
+  // }
+
+  // See if we should pull
+  const { pullWallet } = Lbrysync;
+
+  // Pull from sync
+  const walletInfo = await pullWallet();
+  if (walletInfo) {
+    console.log('walletInfo', walletInfo);
+    /*
+        wallet_state = WalletState(
+        encrypted_wallet=response.json()['encryptedWallet'],
+        sequence=response.json()['sequence'],
+        )
+        hmac = response.json()['hmac']
+        return wallet_state, hmac
+       */
+    // Lbry.wallet_import();
+    // update sequence, others
+  }
+  const exported = await Lbry.wallet_export();
+  // const encWallet = encrypt(exported, password)
+};
+
+//register an email (eventually username)
+export const doLbrysyncRegister = (password: string) => async (dispatch: Dispatch, getState: GetState) => {
   dispatch({
     type: ACTIONS.LSYNC_REGISTER_STARTED,
   });
-  const resultIfError = await register(email, secrets.providerPass, saltSeed);
-  const encProviderPass = safeStoreEncrypt(secrets.providerPass);
-  const encHmacKey = safeStoreEncrypt(secrets.hmacKey);
-  const enctyptedRoot = safeStoreEncrypt(secrets.rootPassword);
-  const registerData = {
-    email,
-    saltSeed,
-    providerPass: encProviderPass,
-    hmacKey: encHmacKey,
-    rootPass: enctyptedRoot,
-  };
-
-  if (!resultIfError) {
+  const state = getState();
+  const { sync } = state;
+  const { candidateEmail: email, saltSeed } = sync;
+  // started
+  try {
+    const secrets = await ipcRenderer.invoke('invoke-get-secrets', password, email, saltSeed);
+    const encProviderKey = safeStoreEncrypt(secrets.providerKey);
+    const encHmacKey = safeStoreEncrypt(secrets.hmacKey);
+    const encDataKey = safeStoreEncrypt(secrets.dataKey);
+    const enctyptedRoot = safeStoreEncrypt(password);
+    const registerData = {
+      email, // email
+      saltSeed,
+      providerKey: encProviderKey,
+      hmacKey: encHmacKey,
+      dataKey: encDataKey,
+      rootPass: enctyptedRoot,
+    };
     dispatch({
       type: ACTIONS.LSYNC_REGISTER_COMPLETED,
       data: registerData,
     });
-  } else {
+
+    return registerData;
+  } catch (e) {
+    console.log('e', e.message);
     dispatch({
       type: ACTIONS.LSYNC_REGISTER_FAILED,
-      data: resultIfError,
+      data: 'ohno',
     });
+    return;
   }
 };
 
-// get token given username/password
-export const doLbrysyncAuthenticate =
-  () => async (dispatch: Dispatch, getState: GetState) => {
-    dispatch({
-      type: ACTIONS.LSYNC_AUTH_STARTED,
-    });
-    const state = getState();
-    const { lbrysync } = state;
-    const { registeredEmail: email, encryptedProviderPass } = lbrysync;
-    const status = await Lbry.status();
-    const { installation_id: deviceId } = status;
-    const password = safeStoreDecrypt(encryptedProviderPass);
-
-    const { getAuthToken } = Lbrysync;
-
-    const result: { token?: string, error?: string } = await getAuthToken(email, password, deviceId);
-
-    if (result.token) {
-      dispatch({
-        type: ACTIONS.LSYNC_AUTH_COMPLETED,
-        data: result.token,
-      });
+export function doEmailVerifySubscribe(stop) {
+  return (dispatch) => {
+    if (stop) {
+      clearInterval(verifyInterval);
     } else {
-      dispatch({
-        type: ACTIONS.LSYNC_AUTH_FAILED,
-        data: result.error,
-      });
+      dispatch(doLbrysyncAuthenticate());
+      verifyInterval = setInterval(() => dispatch(doLbrysyncAuthenticate()), 5000);
     }
   };
+}
 
-export const doGenerateSaltSeed = () => async (dispatch: Dispatch) => {
-  const result = await ipcRenderer.invoke('invoke-get-salt-seed');
-  return result;
-};
-
-export const doDeriveSecrets = (rootPassword: string, email: string, saltSeed: string) => async (dispatch: Dispatch) =>
-{
+// get token given username/password
+export const doLbrysyncAuthenticate = () => async (dispatch: Dispatch, getState: GetState) => {
   dispatch({
-    type: ACTIONS.LSYNC_DERIVE_STARTED,
+    type: ACTIONS.LSYNC_AUTH_STARTED,
   });
-  try {
-    const result = await ipcRenderer.invoke('invoke-get-secrets', rootPassword, email, saltSeed);
+  const state = getState();
+  const { sync } = state;
+  const { registeredEmail: email, encryptedProviderKey } = sync;
+  const status = await Lbry.status();
+  const { installation_id: deviceId } = status;
+  const password = safeStoreDecrypt(encryptedProviderKey);
 
-    const data = {
-      hmacKey: result.hmacKey,
-      rootPassword,
-      providerPass: result.lbryIdPassword,
-    };
+  const { getAuthToken } = Lbrysync;
 
+  const result: { token?: string, error?: string } = await getAuthToken(email, password, deviceId);
+
+  if (result.token) {
     dispatch({
-      type: ACTIONS.LSYNC_DERIVE_COMPLETED,
-      data,
+      type: ACTIONS.LSYNC_AUTH_COMPLETED,
+      data: result.token,
     });
-    return data;
-  } catch (e) {
+    clearInterval(verifyInterval);
+  } else {
     dispatch({
-      type: ACTIONS.LSYNC_DERIVE_FAILED,
-      data: {
-        error: e,
-      },
+      type: ACTIONS.LSYNC_AUTH_FAILED,
+      data: result.error,
     });
-    return { error: e.message };
   }
 };
 
+// replaced with
 export function doSetSync(oldHash: string, newHash: string, data: any) {
   return (dispatch: Dispatch) => {
     dispatch({
@@ -435,6 +500,54 @@ export function doSyncApply(syncHash: string, syncData: any, password: string) {
           type: ACTIONS.SYNC_APPLY_FAILED,
           data: {
             error: 'Invalid password specified. Please enter the password for your previously synchronised wallet.',
+          },
+        });
+      });
+  };
+}
+
+export function doWalletExport(password?: string) {
+  return (dispatch: Dispatch) => {
+    dispatch({
+      type: ACTIONS.WALLET_EXPORT_STARTED,
+    });
+    Lbry.wallet_export({ password })
+      .then((walletData) => {
+        // if password, etc etc
+        // return data
+        dispatch({
+          type: ACTIONS.WALLET_EXPORT_COMPLETED,
+        });
+      })
+      .catch((e) => {
+        dispatch({
+          type: ACTIONS.WALLET_EXPORT_FAILED,
+          data: {
+            error: 'Wallet Export Failed',
+          },
+        });
+      });
+  };
+}
+
+export function doWalletImport(data: string, password?: string) {
+  return (dispatch: Dispatch) => {
+    dispatch({
+      type: ACTIONS.WALLET_IMPORT_STARTED,
+    });
+    Lbry.wallet_import({ data, password })
+      .then((walletData) => {
+        // if password, etc etc
+        // return data
+        dispatch({
+          type: ACTIONS.WALLET_IMPORT_COMPLETED,
+        });
+      })
+      .catch((e) => {
+        dispatch({
+          type: ACTIONS.WALLET_IMPORT_FAILED,
+          data: {
+            error: 'Wallet Import Failed',
           },
         });
       });

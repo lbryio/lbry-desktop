@@ -12,7 +12,6 @@ type Props = {
   encryptWallet: (string) => void,
   decryptWallet: (string) => void,
   registering: boolean,
-  email: string,
   registerError: string,
   token: string,
   authenticating: boolean,
@@ -22,108 +21,117 @@ type Props = {
   encRootPass: string,
   encProviderPass: string,
   getSalt: (string) => void,
-  gettingSalt: boolean,
-  saltError: string,
-  saltSeed: string,
   deriveSecrets: (string, string, string) => void, // something
+
+  // begin
+  // email
+  handleEmail: (string, string) => void, // return something?
+  checkingEmail: boolean,
+  candidateEmail?: string,
+  registeredEmail?: string,
+  saltSeed: string,
+  emailError: string,
+  // password/register
+  register: (string) => void,
+  waitForVerify: () => void,
 };
 
-export default function NotificationSettingsPage(props: Props) {
+export default function SettingsSyncPage(props: Props) {
   // const {  } = props;
   const {
-    walletEncrypted,
-    encryptWallet,
-    decryptWallet,
     registering,
-    registeredEmail,
     registerError,
     token,
     authenticating,
     authError,
     authenticate,
-    derivingKeys,
-    encHmacKey, // ?
     encRootPass,
-    encProviderPass,
-    getSalt,
-    generateSaltSeed,
-    deriveSecrets,
-    gettingSalt,
-    saltError,
-    saltSeed,
     register,
+    // begin
+    // .. email
+    registeredEmail,
+    handleEmail,
+    checkingEmail,
+    candidateEmail,
+    saltSeed,
+    emailError,
+    // password
+    // verify
+    waitForVerify,
   } = props;
 
   /*
     Register / auth
    */
-  const SIGN_IN_MODE = 'sign_in';
-  const SIGN_UP_MODE = 'sign_up';
-  const VERIFY_MODE = 'verify';
-  const MATH_MODE = 'math';
-  const DONE_MODE = 'done';
 
-  const [mode, setMode] = React.useState(registeredEmail ? VERIFY_MODE : SIGN_IN_MODE);
+  // modes
+  const SIGN_IN_MODE = 'sign_in_mode';
+  const SIGN_UP_MODE = 'sign_up_mode';
+  const [mode, setMode] = React.useState(SIGN_IN_MODE);
+  // steps
+  const EMAIL_SCREEN = 'sign_in'; // show email input
+  // checking email
+  const PASSWORD_SCREEN = 'password'; // show password input
+  // registering
+  const REGISTERING_SCREEN = 'register'; // show working page for deriving passwords, registering
+  const VERIFY_SCREEN = 'verify'; // show waiting for email verification
+  // waiting for email verification
+  const SYNC_SCREEN = 'sync';
+  // syncing wallet with server
+  const DONE_SCREEN = 'done';
 
   const [email, setEmail] = React.useState();
   const [pass, setPass] = React.useState();
   const [showPass, setShowPass] = React.useState(false);
-  const [error, setError] = React.useState('');
+
+  let STEP;
+  if (!candidateEmail) {
+    STEP = EMAIL_SCREEN; // present email form, on submit check email salt
+  } else if (!encRootPass && !registering) {
+    // make this "hasPasswords"
+    STEP = PASSWORD_SCREEN; // present password form, on submit derive keys and register
+  } else if (registering) {
+    STEP = REGISTERING_SCREEN;
+  } else if (encRootPass && !token) {
+    STEP = VERIFY_SCREEN; // until token
+  } else if (token) {
+    STEP = SYNC_SCREEN;
+  }
+
+  // error comes from store
+  // const [error, setError] = React.useState('');
 
   React.useEffect(() => {
-    let interval;
-    if (!token && registeredEmail) {
-      interval = setInterval(() => {
-        console.log('doauthint');
-        authenticate();
-      }, 5000);
+    if (registeredEmail && !token) {
+      waitForVerify();
     }
+
     return () => {
-      clearInterval(interval);
+      waitForVerify(true);
     };
-  }, [registeredEmail, token, authenticate]);
+  }, [registeredEmail, token]);
 
   React.useEffect(() => {
-    if (token && registeredEmail) {
-      setMode(DONE_MODE);
+    if (token) {
+      // sign up
+      // what
+      // pushAndStart();
+      // what
+      //
     }
-  }, [registeredEmail, token, setMode]);
+  }, [token]);
 
-  const handleSignUp = async () => {
-    // get salt for email to make sure
-    const saltSeedOrError = await getSalt(email);
-    if (saltSeedOrError.seed) {
-      setError('Email already registered');
-      return;
-    }
-    // -- if found, report email already exists - sign in?
-    const saltSeed = await generateSaltSeed();
-    // saltSeed = generateSaltSeed()
-    setMode(MATH_MODE);
-    const secrets = await deriveSecrets(pass, email, saltSeed);
-    setMode(VERIFY_MODE);
-    // passwords = driveKeys(root, email, saltSeed);
-    try {
-      const registerSuccess = await register(email, secrets, saltSeed);
-    } catch (e) {
-      console.log(e);
-    }
-    // registerSuccess = register(email, servicePassword, saltSeed)
-
-    // poll auth until success
-    // store [token, rootPassword, providerPass, HmacKey, saltSeed, salt, registeredEmail]
+  const handleRegister = (e) => {
+    register(pass);
   };
 
-  const handleSignIn = async () => {
-    // get saltseed for email
-    // saltSeed = getSaltSeed()
-    // -- if error, report email not registered - sign up?
-    // salt = generateSalt(seed)
-    // passwords = deriveKeys(root, email, saltSeed);
-    // token = authenticate(email, servicePassword, deviceId)
-    // store [token, rootPassword, servicePassword, HmacKey, saltSeed, salt, registeredEmail]
-    // kick off sync pull
-    // -- possibly merge conflicts
+  const handleSignUpEmail = async () => {
+    // get salt for email to make sure email doesn't exist
+    handleEmail(email, true);
+  };
+
+  const handleSignInEmail = () => {
+    handleEmail(email, false);
   };
 
   const doneCard = (
@@ -150,11 +158,19 @@ export default function NotificationSettingsPage(props: Props) {
     />
   );
 
-  const deriveCard = (
-    <Card title={__('Doing Math')} subtitle={__('Hold on, doing some math.')} actions={<div>Math...</div>} />
+  const registerCard = (
+    <Card title={__('Registering')} subtitle={__('Hold on a moment, signing you up.')} actions={<div>Math...</div>} />
   );
 
-  const signInCard = (
+  const syncCard = (
+    <Card
+      title={__('Syncing With Server')}
+      subtitle={__(`Great. Now we're syncing your wallet.`)}
+      actions={<div>Math...</div>}
+    />
+  );
+
+  const signInEmailCard = (
     <Card
       title={__('Sign In')}
       subtitle={
@@ -172,7 +188,7 @@ export default function NotificationSettingsPage(props: Props) {
       }
       actions={
         <div>
-          <Form onSubmit={handleSignIn} className="section">
+          <Form onSubmit={handleSignInEmail} className="section">
             <FormField
               autoFocus
               placeholder={__('yourstruly@example.com')}
@@ -181,25 +197,18 @@ export default function NotificationSettingsPage(props: Props) {
               label={__('Email')}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              helper={emailError && emailError}
             />
             <FormField
-              type={showPass ? 'text' : 'password'}
-              name="root_password"
-              inputButton={
-                <>
-                  <Button
-                    icon={showPass ? ICONS.EYE : ICONS.EYE_OFF}
-                    onClick={() => setShowPass(!showPass)}
-                    className={'editable-text__input-button'}
-                  />
-                </>
-              }
-              label={__('Password')}
-              value={pass}
+              type={'text'}
+              name="sync_provider"
+              disabled
+              label={__('Sync Provider Url')}
+              value={'https://dev.lbry.id'}
               onChange={(e) => setPass(e.target.value)}
             />
             <div className="section__actions">
-              <Button button="primary" type="submit" label={__('Submit')} disabled={!email} />
+              <Button button="primary" type="submit" label={__('Submit')} disabled={checkingEmail} />
             </div>
             <p className="help--card-actions">
               <I18nMessage
@@ -207,7 +216,7 @@ export default function NotificationSettingsPage(props: Props) {
                   terms: <Button button="link" href="https://www.lbry.com/termsofservice" label={__('terms')} />,
                 }}
               >
-                By creating an account, you agree to our %terms% and confirm you're over the age of 13.
+                Some sign-in relevant message.
               </I18nMessage>
             </p>
           </Form>
@@ -216,7 +225,7 @@ export default function NotificationSettingsPage(props: Props) {
     />
   );
 
-  const signUpCard = (
+  const signUpEmailCard = (
     <Card
       title={__('Sign Up')}
       subtitle={
@@ -234,7 +243,7 @@ export default function NotificationSettingsPage(props: Props) {
       }
       actions={
         <div>
-          <Form onSubmit={handleSignUp} className="section">
+          <Form onSubmit={handleSignUpEmail} className="section">
             <FormField
               autoFocus
               placeholder={__('yourstruly@example.com')}
@@ -243,9 +252,46 @@ export default function NotificationSettingsPage(props: Props) {
               label={__('Email')}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              helper={emailError && emailError}
             />
             <FormField
-              type="password"
+              type={'text'}
+              name="sync_provider"
+              disabled
+              label={__('Sync Provider Url')}
+              value={'https://dev.lbry.id'}
+              onChange={(e) => setPass(e.target.value)}
+            />
+            <div className="section__actions">
+              <Button button="primary" type="submit" label={__('Submit')} disabled={checkingEmail} />
+            </div>
+          </Form>
+        </div>
+      }
+    />
+  );
+
+  const passwordCard = (
+    <Card
+      title={__('Enter Password')}
+      subtitle={
+        <>
+          <p>
+            <I18nMessage
+              tokens={{
+                sign_in: <Button button="link" onClick={() => setMode(EMAIL_SCREEN)} label={__('Sign in')} />,
+              }}
+            >
+              Enter a password.
+            </I18nMessage>
+          </p>
+        </>
+      }
+      actions={
+        <div>
+          <fieldset-section className="section">
+            <FormField
+              type={showPass ? 'text' : 'password'}
               name="root_password"
               inputButton={
                 <>
@@ -261,7 +307,8 @@ export default function NotificationSettingsPage(props: Props) {
               onChange={(e) => setPass(e.target.value)}
             />
             <div className="section__actions">
-              <Button button="primary" type="submit" label={__('Submit')} disabled={!email} />
+              <Button button="primary" label={__('Submit')} onClick={handleRegister} />{' '}
+              {/* password input validation */}
             </div>
             <p className="help--card-actions">
               <I18nMessage
@@ -272,7 +319,7 @@ export default function NotificationSettingsPage(props: Props) {
                 By creating an account, you agree to our %terms% and confirm you're over the age of 13.
               </I18nMessage>
             </p>
-          </Form>
+          </fieldset-section>
         </div>
       }
     />
@@ -287,11 +334,12 @@ export default function NotificationSettingsPage(props: Props) {
       backout={{ title: __('Wallet Sync'), backLabel: __('Back') }}
     >
       <div className="card-stack">
-        {mode === DONE_MODE && <>{doneCard}</>}
-        {mode === SIGN_IN_MODE && <>{signInCard}</>}
-        {mode === SIGN_UP_MODE && <>{signUpCard}</>}
-        {mode === MATH_MODE && <>{deriveCard}</>}
-        {mode === VERIFY_MODE && <>{verifyCard}</>}
+        {STEP === EMAIL_SCREEN && mode === SIGN_IN_MODE && <>{signInEmailCard}</>}
+        {STEP === EMAIL_SCREEN && mode === SIGN_UP_MODE && <>{signUpEmailCard}</>}
+        {STEP === PASSWORD_SCREEN && <>{passwordCard}</>}
+        {STEP === REGISTERING_SCREEN && <>{registerCard}</>}
+        {STEP === VERIFY_SCREEN && <>{verifyCard}</>}
+        {STEP === SYNC_SCREEN && <>{syncCard}</>}
       </div>
     </Page>
   );

@@ -2334,5 +2334,13 @@
   "Doing Math": "Doing Math",
   "Hold on, doing some math.": "Hold on, doing some math.",
   "You are signed in as %email%.": "You are signed in as %email%.",
+  "Sync Provider Url": "Sync Provider Url",
+  "Enter Password": "Enter Password",
+  "Enter a password.": "Enter a password.",
+  "Some sign-in relevant message.": "Some sign-in relevant message.",
+  "Hold on, doing some math. (Registering you)": "Hold on, doing some math. (Registering you)",
+  "Failed to view lbry://@rossmanngroup#a/Day-39-Gotham-City-Solutions#e, please try again. If this problem persists, visit https://lbry.com/faq/support for support.": "Failed to view lbry://@rossmanngroup#a/Day-39-Gotham-City-Solutions#e, please try again. If this problem persists, visit https://lbry.com/faq/support for support.",
+  "Anon --[used in <%anonymous% Reposted>]--": "Anon",
+  "%anonymous%": "%anonymous%",
   "--end--": "--end--"
 }

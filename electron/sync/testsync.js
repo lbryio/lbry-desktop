@@ -1,8 +1,9 @@
 import test from 'tape';
 // import sync from '../sync.js';
-import { generateSalt, generateSaltSeed, deriveSecrets, walletHmac } from './sync.js';
+import { generateSalt, generateSaltSeed, deriveSecrets, walletHmac, aesEncrypt, aesDecrypt } from './sync.js';
+import crypto from 'crypto';
+import fs from 'fs';
 export default function doTest() {
-
   test('Generate sync seed', (assert) => {
     const seed = generateSaltSeed();
     console.log('seed', seed);
@@ -28,12 +29,13 @@ export default function doTest() {
     const email = 'example@example.com';
 
     const expectedHmacKey = 'bCxUIryLK0Lf9nKg9yiZDlGleMuGJkadLzTje1PAI+8='; //base64
-    const expectedLbryIdPassword = 'HKo/J+x4Hsy2NkMvj2JB9RI0yrvEiB4QSA/NHPaT/cA=';
+    const expectedProviderKey = 'HKo/J+x4Hsy2NkMvj2JB9RI0yrvEiB4QSA/NHPaT/cA=';
+    // add expectedDataKey to test
 
     function cb(e, r) {
-      console.log('result', r);
+      console.log('derive keys result:', r);
       assert.equal(r.hmacKey, expectedHmacKey, 'hmac is expected value');
-      assert.equal(r.lbryIdPassword, expectedLbryIdPassword, 'lbryid password is expected value');
+      assert.equal(r.providerKey, expectedProviderKey, 'lbryid password is expected value');
       assert.end();
     }
 
@@ -44,11 +46,23 @@ export default function doTest() {
     const hmacKey = 'bCxUIryLK0Lf9nKg9yiZDlGleMuGJkadLzTje1PAI+8=';
     const sequence = 1;
     const walletState = `zo4MTkyOjE2OjE68QlIU76+W91/v/F1tu8h+kGB0Ee`;
-    const expectedHmacHex = '52edbad5b0f9d8cf6189795702790cc2cb92060be24672913ab3e4b69c03698b';
+    const expectedHmacHex = '9fe70ebdeaf85b3afe5ae42e52f946acc54ded0350acacdded821845217839d4';
 
     const input_str = `${sequence}:${walletState}`;
-    const hmacHex = walletHmac(input_str);
+    const hmacHex = walletHmac(input_str, hmacKey);
     assert.equal(hmacHex, expectedHmacHex);
+    assert.end();
+  });
+
+  test('Encrypt/Decrypt', (assert) => {
+    const key = crypto.randomBytes(32);
+    // const wrongKey = crypto.randomBytes(32); // todo: what tests should fail; how much error handling needed?
+    // test a handy json file
+    const input = fs.readFileSync('../../package.json', 'utf8');
+    const cipher = aesEncrypt(input, key);
+    console.log('cipher', cipher);
+    const output = aesDecrypt(cipher, key);
+    assert.equal(input, output.result);
     assert.end();
   });
 }

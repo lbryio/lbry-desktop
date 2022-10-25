@@ -17,25 +17,18 @@ import {
   selectLbrySyncEncryptedHmacKey,
   selectLbrySyncEncryptedRoot,
   selectLbrySyncEncryptedProviderPass,
+  selectLbrySyncCheckingEmail,
+  selectLbrySyncEmailError,
+  selectLbrySyncEmailCandidate,
 } from 'redux/selectors/sync';
 
-import {
-  doLbrysyncGetSalt,
-  doLbrysyncRegister,
-  doGenerateSaltSeed,
-  doDeriveSecrets,
-  doLbrysyncAuthenticate,
-} from 'redux/actions/sync';
+import { doHandleEmail, doLbrysyncRegister, doLbrysyncAuthenticate, doEmailVerifySubscribe } from 'redux/actions/sync';
 
 const select = (state) => ({
   isWalletEncrypted: selectWalletIsEncrypted(state),
   registering: selectLbrySyncRegistering(state),
-  registeredEmail: selectLbrySyncEmail(state),
   registerError: selectLbrySyncRegisterError(state),
 
-  gettingSalt: selectLbrySyncGettingSalt(state),
-  saltError: selectLbrySyncSaltError(state),
-  saltSeed: selectLbrySyncSaltSeed(state),
   token: selectLbrySyncToken(state),
 
   authenticating: selectLbrySyncIsAuthenticating(state),
@@ -46,16 +39,25 @@ const select = (state) => ({
   encHmacKey: selectLbrySyncEncryptedHmacKey(state), // ?
   encRootPass: selectLbrySyncEncryptedRoot(state),
   encProviderPass: selectLbrySyncEncryptedProviderPass(state),
+  // begin
+  // --email
+  isCheckingEmail: selectLbrySyncCheckingEmail(state),
+  candidateEmail: selectLbrySyncEmailCandidate(state),
+  emailError: selectLbrySyncEmailError(state),
+  registeredEmail: selectLbrySyncEmail(state),
+  saltSeed: selectLbrySyncSaltSeed(state),
+  // --password
+  // registerError
 });
 
 const perform = (dispatch) => ({
   encryptWallet: () => dispatch(doNotifyEncryptWallet()),
   decryptWallet: () => dispatch(doNotifyDecryptWallet()),
-  getSalt: (email) => dispatch(doLbrysyncGetSalt(email)),
-  generateSaltSeed: () => dispatch(doGenerateSaltSeed()),
+  handleEmail: (email, signUp) => dispatch(doHandleEmail(email, signUp)),
   authenticate: () => dispatch(doLbrysyncAuthenticate()),
-  deriveSecrets: (p, e, s) => dispatch(doDeriveSecrets(p, e, s)),
-  register: (email, secrets, saltseed) => dispatch(doLbrysyncRegister(email, secrets, saltseed)),
+  waitForVerify: (stop) => dispatch(doEmailVerifySubscribe(stop)),
+  // deriveSecrets: (p, e, s) => dispatch(doDeriveSecrets(p, e, s)),
+  register: (password) => dispatch(doLbrysyncRegister(password)),
 });
 
 export default connect(select, perform)(SettingsSync);
