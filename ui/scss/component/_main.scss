@@ -73,7 +73,7 @@ body {
 }
 
 .sidebar--pusher--open {
-  @media (min-width: $breakpoint-medium) {
+  @media not all and (max-width: $breakpoint-medium) {
     transform: scaleX(0.9) translateX(calc(5.4 * var(--spacing-l))) scaleY(0.9);
   }
 }
@@ -155,7 +155,7 @@ body {
       }
     }
 
-    @media (min-width: $breakpoint-medium) {
+    @media not all and (max-width: $breakpoint-medium) {
       flex-direction: row;
     }
     @media (max-width: $breakpoint-medium) {
@@ -461,7 +461,6 @@ body {
   margin-left: 0;
   margin-right: 0;
   margin-top: 0;
-  width: 100vw;
   max-width: none;
 
   > :first-child {
@@ -804,7 +803,7 @@ body {
     }
   }
 
-  @media (min-width: $breakpoint-medium) {
+  @media not all and (max-width: $breakpoint-medium) {
     > :first-child {
       width: calc(30% - var(--spacing-l));
       max-width: 25rem;

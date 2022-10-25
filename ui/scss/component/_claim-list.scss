@@ -621,7 +621,7 @@
     @media (max-width: $breakpoint-xsmall) {
       -webkit-line-clamp: 2 !important;
     }
-    @media (min-width: $breakpoint-medium) {
+    @media not all and (max-width: $breakpoint-medium) {
       -webkit-line-clamp: 1 !important;
     }
   }

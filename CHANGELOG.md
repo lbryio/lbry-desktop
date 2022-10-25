@@ -9,7 +9,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
  - Show downloads newest first ([#7684](https://github.com/lbryio/lbry-desktop/pull/7684))
  - Only allow images in image uploader ([#7672](https://github.com/lbryio/lbry-desktop/pull/7672))
  - Fixed bug with csv exports ([#7697](https://github.com/lbryio/lbry-desktop/pull/7697))
- - Fixed small screen viewer position ([#7677](https://github.com/lbryio/lbry-desktop/pull/7677))
  - Fixed various upload bugs including transcoding ([#7688](https://github.com/lbryio/lbry-desktop/pull/7688))
  - Fallback for files with no extension ([#7704](https://github.com/lbryio/lbry-desktop/pull/7704))
  

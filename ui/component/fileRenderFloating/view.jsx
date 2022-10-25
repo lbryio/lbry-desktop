@@ -12,7 +12,7 @@ import { PRIMARY_PLAYER_WRAPPER_CLASS } from 'page/file/view';
 import Draggable from 'react-draggable';
 import { onFullscreenChange } from 'util/full-screen';
 import { generateListSearchUrlParams, formatLbryUrlForWeb } from 'util/url';
-import { useIsMobile } from 'effects/use-screensize';
+import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
 import debounce from 'util/debounce';
 import { useHistory } from 'react-router';
 import { isURIEqual } from 'util/lbryURI';
@@ -132,6 +132,7 @@ export default function FileRenderFloating(props: Props) {
   const playingUriSource = playingUri && playingUri.source;
   const isComment = playingUriSource === 'comment';
   const isMobile = useIsMobile();
+  const isMediumScreen = useIsMediumScreen();
   const mainFilePlaying = !isFloating && primaryUri && isURIEqual(uri, primaryUri);
 
   const [fileViewerRect, setFileViewerRect] = useState();
@@ -343,7 +344,8 @@ export default function FileRenderFloating(props: Props) {
           'content__viewer--floating': isFloating,
           'content__viewer--inline': !isFloating,
           'content__viewer--secondary': isComment,
-          'content__viewer--theater-mode': !isFloating && videoTheaterMode && playingUri?.uri === primaryUri,
+          'content__viewer--theater-mode':
+            !isFloating && videoTheaterMode && !isMediumScreen && playingUri?.uri === primaryUri,
           'content__viewer--disable-click': wasDragging,
         })}
         style={

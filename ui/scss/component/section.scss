@@ -358,7 +358,7 @@
     max-width: unset;
   }
 
-  @media (min-width: $breakpoint-medium) {
+  @media not all and (max-width: $breakpoint-medium) {
     width: 40%;
 
     .button,
@@ -375,7 +375,7 @@
 }
 
 .settings__row--value--multirow {
-  @media (min-width: $breakpoint-medium) {
+  @media not all and (max-width: $breakpoint-medium) {
     width: 80%;
     margin-top: var(--spacing-l);
 
@@ -389,7 +389,7 @@
 }
 
 .settings__row--value--vertical-separator {
-  @media (min-width: $breakpoint-medium) {
+  @media not all and (max-width: $breakpoint-medium) {
     border-left: 1px solid var(--color-border);
   }
 }

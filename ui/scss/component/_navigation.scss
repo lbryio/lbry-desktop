@@ -70,7 +70,7 @@
     color: var(--color-brand-contrast) !important;
   }
 
-  @media (min-width: $breakpoint-medium) {
+  @media not all and (max-width: $breakpoint-medium) {
     overflow-y: hidden;
     justify-content: space-between;
 
@@ -235,7 +235,7 @@
     @extend .navigation-link--highlighted;
   }
 
-  @media (min-width: $breakpoint-medium) {
+  @media not all and (max-width: $breakpoint-medium) {
     text-align: left;
     margin-bottom: 0;
 
