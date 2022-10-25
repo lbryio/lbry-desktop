@@ -479,6 +479,7 @@ function VideoViewer(props: Props) {
       playerEndedDuration.current = true;
     };
     const onError = () => {
+      // @if TARGET='DISABLE_FOR_NOW'
       const mediaError = player.error();
       if (mediaError) {
         let fingerprint;
@@ -491,6 +492,7 @@ function VideoViewer(props: Props) {
         const options = { ...(fingerprint ? { fingerprint } : {}) };
         analytics.log(`[${mediaError.code}] ${mediaError.message}`, options, ERR_GRP.VIDEOJS);
       }
+      // @endif
     };
     const onRateChange = () => {
       const HAVE_NOTHING = 0; // https://docs.videojs.com/player#readyState
