@@ -6,6 +6,7 @@ import I18nMessage from 'component/i18nMessage';
 import Button from 'component/button';
 import * as PAGES from 'constants/pages';
 import { PAYWALL } from 'constants/publish';
+import classnames from 'classnames';
 
 type Props = {
   description: ?string,
@@ -48,6 +49,9 @@ function PublishProtectedContent(props: Props) {
 
   let membershipsToUse = myMembershipTiersWithExclusiveContentPerk;
   if (location === 'livestream') membershipsToUse = myMembershipTiersWithExclusiveLivestreamPerk;
+
+  const membershipsToUseIds =
+    membershipsToUse && membershipsToUse.map((membershipTier) => membershipTier?.Membership?.id);
 
   // run the redux action
   React.useEffect(() => {
@@ -115,6 +119,19 @@ function PublishProtectedContent(props: Props) {
     setIsRestrictingContent(!isRestrictingContent);
   }
 
+  React.useEffect(() => {
+    if (isRestrictingContent) {
+      const elementsToHide = document.getElementsByClassName('hide-tier');
+
+      if (elementsToHide) {
+        for (const element of elementsToHide) {
+          // $FlowFixMe
+          element.parentElement.style.display = 'none';
+        }
+      }
+    }
+  }, [isRestrictingContent]);
+
   useEffect(() => {
     if (activeChannel) {
       getExistingTiers({
@@ -174,7 +191,7 @@ function PublishProtectedContent(props: Props) {
 
               {isRestrictingContent && (
                 <div className="tier-list">
-                  {membershipsToUse.map((membership) => (
+                  {myMembershipTiers.map((membership) => (
                     <FormField
                       disabled={paywall !== PAYWALL.FREE}
                       key={membership.Membership.id}
@@ -184,6 +201,9 @@ function PublishProtectedContent(props: Props) {
                       label={membership.Membership.name}
                       name={'restrictToMembership:' + membership.Membership.id}
                       onChange={handleRestrictedMembershipChange}
+                      className={classnames({
+                        'hide-tier': !membershipsToUseIds.includes(membership.Membership.id),
+                      })}
                     />
                   ))}
                 </div>
