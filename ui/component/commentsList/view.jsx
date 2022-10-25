@@ -383,7 +383,7 @@ const CommentActionButtons = (actionButtonsProps: ActionButtonsProps) => {
         <Button button="alt" icon={ICONS.REFRESH} title={__('Refresh')} onClick={() => setPage(0)} />
       </div>
       {allServers.length >= 2 && (
-        <div className="button_selectedServer">
+        <div className="button__selected-server">
           <FormField
             type="select-tiny"
             onChange={function (x) {
