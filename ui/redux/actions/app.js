@@ -458,32 +458,34 @@ export function doAnalyticsView(uri, timeToStart) {
 }
 
 export function doAnalyticsBuffer(uri, bufferData) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const claim = selectClaimForUri(state, uri);
-    const user = selectUser(state);
-    const {
-      value: { video, audio, source },
-    } = claim;
-    const timeAtBuffer = parseInt(bufferData.currentTime ? bufferData.currentTime * 1000 : 0);
-    const bufferDuration = parseInt(bufferData.secondsToLoad ? bufferData.secondsToLoad * 1000 : 0);
-    const fileDurationInSeconds = (video && video.duration) || (audio && audio.duration);
-    const fileSize = source.size; // size in bytes
-    const fileSizeInBits = fileSize * 8;
-    const bitRate = parseInt(fileSizeInBits / fileDurationInSeconds);
-    const userId = user && user.id.toString();
+  return () => {
+    // return (dispatch, getState) => {
+    // const state = getState();
+    // const claim = selectClaimForUri(state, uri);
+    // const user = selectUser(state);
+    // const {
+    //   value: { video, audio, source },
+    // } = claim;
+    // const timeAtBuffer = parseInt(bufferData.currentTime ? bufferData.currentTime * 1000 : 0);
+    // const bufferDuration = parseInt(bufferData.secondsToLoad ? bufferData.secondsToLoad * 1000 : 0);
+    // const fileDurationInSeconds = (video && video.duration) || (audio && audio.duration);
+    // const fileSize = source.size; // size in bytes
+    // const fileSizeInBits = fileSize * 8;
+    // const bitRate = parseInt(fileSizeInBits / fileDurationInSeconds);
+    // const userId = user && user.id.toString();
     // if there's a logged in user, send buffer event data to watchman
-    if (userId) {
-      analytics.videoBufferEvent(claim, {
-        timeAtBuffer,
-        bufferDuration,
-        bitRate,
-        userId,
-        duration: fileDurationInSeconds,
-        playerPoweredBy: bufferData.playerPoweredBy,
-        readyState: bufferData.readyState,
-      });
-    }
+    // if (<condition>) {
+    // STUB: any buffer events here
+    // analytics.videoBufferEvent(claim, {
+    //   timeAtBuffer,
+    //   bufferDuration,
+    //   bitRate,
+    //   userId,
+    //   duration: fileDurationInSeconds,
+    //   playerPoweredBy: bufferData.playerPoweredBy,
+    //   readyState: bufferData.readyState,
+    // });
+    // }
   };
 }
 

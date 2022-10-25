@@ -1,4 +1,11 @@
 // @flow
+/*
+  Removed Watchman (internal view tracking) code.
+  This file may eventually implement cantina
+  Refer to 0cc0e213a5c5bf9e2a76316df5d9da4b250a13c3 for initial integration commit
+  refer to ___ for removal commit.
+ */
+
 import { Lbryio } from 'lbryinc';
 import * as Sentry from '@sentry/browser';
 import MatomoTracker from '@datapunt/matomo-tracker-js';
@@ -13,9 +20,6 @@ const devInternalApis = process.env.LBRY_API_URL && process.env.LBRY_API_URL.inc
 
 export const SHARE_INTERNAL = 'shareInternal';
 const SHARE_THIRD_PARTY = 'shareThirdParty';
-
-const WATCHMAN_BACKEND_ENDPOINT = 'https://watchman.na-backend.odysee.com/reports/playback';
-// const SEND_DATA_TO_WATCHMAN_INTERVAL = 10; // in seconds
 
 if (isProduction) {
   ElectronCookies.enable({
@@ -68,114 +72,10 @@ type LogPublishParams = {
 let internalAnalyticsEnabled: boolean = false;
 if (window.localStorage.getItem(SHARE_INTERNAL) === 'true') internalAnalyticsEnabled = true;
 
-/**
- * Determine the mobile device type viewing the data
- * This function returns one of 'and' (Android), 'ios', or 'web'.
- *
- * @returns {String}
- */
-function getDeviceType() {
-  return 'dsk';
-}
-// variables initialized for watchman
-let amountOfBufferEvents = 0;
-let amountOfBufferTimeInMS = 0;
-let videoType, userId, claimUrl, playerPoweredBy, videoPlayer, bitrateAsBitsPerSecond;
-let lastSentTime;
-
-// calculate data for backend, send them, and reset buffer data for next interval
-async function sendAndResetWatchmanData() {
-  if (!userId) {
-    return 'Can only be used with a user id';
-  }
-
-  if (!videoPlayer) {
-    return 'Video player not initialized';
-  }
-
-  let timeSinceLastIntervalSend = new Date() - lastSentTime;
-  lastSentTime = new Date();
-
-  let protocol;
-  if (videoType === 'application/x-mpegURL') {
-    protocol = 'hls';
-    // get bandwidth if it exists from the texttrack (so it's accurate if user changes quality)
-    // $FlowFixMe
-    bitrateAsBitsPerSecond = videoPlayer.textTracks?.().tracks_[0]?.activeCues[0]?.value?.bandwidth;
-  } else {
-    protocol = 'stb';
-  }
-
-  // current position in video in MS
-  const positionInVideo = Math.round(videoPlayer.currentTime()) * 1000;
-
-  // get the duration marking the time in the video for relative position calculation
-  const totalDurationInSeconds = Math.round(videoPlayer.duration());
-
-  // build object for watchman backend
-  const objectToSend = {
-    rebuf_count: amountOfBufferEvents,
-    rebuf_duration: amountOfBufferTimeInMS,
-    url: claimUrl.replace('lbry://', ''),
-    device: getDeviceType(),
-    duration: timeSinceLastIntervalSend,
-    protocol,
-    player: playerPoweredBy,
-    user_id: userId.toString(),
-    position: Math.round(positionInVideo),
-    rel_position: Math.round((positionInVideo / (totalDurationInSeconds * 1000)) * 100),
-    bitrate: bitrateAsBitsPerSecond,
-    bandwidth: undefined,
-    // ...(userDownloadBandwidthInBitsPerSecond && {bandwidth: userDownloadBandwidthInBitsPerSecond}), // add bandwidth if populated
-  };
-
-  // post to watchman
-  await sendWatchmanData(objectToSend);
-
-  // reset buffer data
-  amountOfBufferEvents = 0;
-  amountOfBufferTimeInMS = 0;
-}
-
-let watchmanInterval;
-// clear watchman interval and mark it as null (when video paused)
-function stopWatchmanInterval() {
-  clearInterval(watchmanInterval);
-  watchmanInterval = null;
-}
-
-// creates the setInterval that will run send to watchman on recurring basis
-function startWatchmanIntervalIfNotRunning() {
-  if (!watchmanInterval) {
-    // instantiate the first time to calculate duration from
-    lastSentTime = new Date();
-  }
-}
-
-// post data to the backend
-async function sendWatchmanData(body) {
-  try {
-    const response = await fetch(WATCHMAN_BACKEND_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(body),
-    });
-
-    return response;
-  } catch (err) {}
-}
-
 const analytics: Analytics = {
   // receive buffer events from tracking plugin and save buffer amounts and times for backend call
   videoBufferEvent: async (claim, data) => {
-    amountOfBufferEvents = amountOfBufferEvents + 1;
-    amountOfBufferTimeInMS = amountOfBufferTimeInMS + data.bufferDuration;
-  },
-  onDispose: () => {
-    stopWatchmanInterval();
+    // stub
   },
   /**
    * Is told whether video is being started or paused, and adjusts interval accordingly
@@ -183,40 +83,9 @@ const analytics: Analytics = {
    * @param {object} passedPlayer - VideoJS Player object
    */
   videoIsPlaying: (isPlaying, passedPlayer) => {
-    let playerIsSeeking = false;
-    // have to use this because videojs pauses/unpauses during seek
-    // sometimes the seeking function isn't populated yet so check for it as well
-    if (passedPlayer && passedPlayer.seeking) {
-      playerIsSeeking = passedPlayer.seeking();
-    }
-
-    // if being paused, and not seeking, send existing data and stop interval
-    if (!isPlaying && !playerIsSeeking) {
-      sendAndResetWatchmanData();
-      stopWatchmanInterval();
-      // if being told to pause, and seeking, send and restart interval
-    } else if (!isPlaying && playerIsSeeking) {
-      sendAndResetWatchmanData();
-      stopWatchmanInterval();
-      startWatchmanIntervalIfNotRunning();
-      // is being told to play, and seeking, don't do anything,
-      // assume it's been started already from pause
-    } else if (isPlaying && playerIsSeeking) {
-      // start but not a seek, assuming a start from paused content
-    } else if (isPlaying && !playerIsSeeking) {
-      startWatchmanIntervalIfNotRunning();
-    }
+    // stub
   },
   videoStartEvent: (claimId, timeToStartVideo, poweredBy, passedUserId, canonicalUrl, passedPlayer, videoBitrate) => {
-    // populate values for watchman when video starts
-    userId = passedUserId;
-    claimUrl = canonicalUrl;
-    playerPoweredBy = poweredBy;
-
-    videoType = passedPlayer.currentSource().type;
-    videoPlayer = passedPlayer;
-    bitrateAsBitsPerSecond = videoBitrate;
-
     // sendPromMetric('time_to_start', duration);
     sendMatomoEvent('Media', 'TimeToStart', claimId, timeToStartVideo);
   },
@@ -382,24 +251,9 @@ function sendMatomoEvent(category, action, name, value) {
   }
 }
 
-// Prometheus
-// function sendPromMetric(name: string, value?: number) {
-//   if (IS_WEB) {
-//     let url = new URL(SDK_API_PATH + '/metric/ui');
-//     const params = { name: name, value: value ? value.toString() : '' };
-//     url.search = new URLSearchParams(params).toString();
-//     return fetch(url, { method: 'post' });
-//   }
-// }
-
 const MatomoInstance = new MatomoTracker({
   urlBase: MATOMO_URL,
   siteId: MATOMO_ID, // optional, default value: `1`
-  // heartBeat: { // optional, enabled by default
-  //   active: true, // optional, default value: true
-  //   seconds: 10 // optional, default value: `15
-  // },
-  // linkTracking: false // optional, default value: true
 });
 
 analytics.pageView(generateInitialUrl(window.location.hash));
