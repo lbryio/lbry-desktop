@@ -189,7 +189,10 @@ const PlaylistCardComponent = (props: PlaylistCardProps) => {
           topToScroll = bodyRef.scrollHeight;
         }
 
-        bodyRef.scrollTo({ top: topToScroll, behavior: isMediumScreen ? 'instant' : 'smooth' });
+        try {
+          bodyRef.scrollTo({ top: topToScroll, behavior: isMediumScreen ? 'instant' : 'smooth' });
+        } catch (error) {}
+
         setScrolledPast(false);
         scrollRestorePending.current = true;
       }
