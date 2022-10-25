@@ -1,0 +1,95 @@
+import * as ACTIONS from 'constants/action_types';
+import { SOCKETY_SERVER_API } from 'config';
+
+const COMMENT_WS_URL = `${SOCKETY_SERVER_API}/commentron?id=`;
+
+let sockets = {};
+let closingSockets = {};
+let retryCount = 0;
+
+const getCommentSocketUrl = (claimId) => {
+  return `${COMMENT_WS_URL}${claimId}&category=${claimId}`;
+};
+
+export const doSocketConnect = (url, cb) => {
+  function connectToSocket() {
+    if (sockets[url] !== undefined && sockets[url] !== null) {
+      sockets[url].close();
+      sockets[url] = null;
+    }
+
+    const timeToWait = retryCount ** 2 * 1000;
+    setTimeout(() => {
+      sockets[url] = new WebSocket(url);
+      sockets[url].onopen = (e) => {
+        retryCount = 0;
+        console.log('\nConnected to WS \n\n'); // eslint-disable-line
+      };
+
+      sockets[url].onmessage = (e) => {
+        const data = JSON.parse(e.data);
+        cb(data);
+      };
+
+      sockets[url].onerror = (e) => {
+        console.error('websocket onerror', e); // eslint-disable-line
+        // onerror and onclose will both fire, so nothing is needed here
+      };
+
+      sockets[url].onclose = () => {
+        console.log('\n Disconnected from WS\n\n'); // eslint-disable-line
+        if (!closingSockets[url]) {
+          retryCount += 1;
+          connectToSocket();
+        } else {
+          closingSockets[url] = null;
+        }
+      };
+    }, timeToWait);
+  }
+
+  connectToSocket();
+};
+
+export const doSocketDisconnect = (url) => (dispatch) => {
+  if (sockets[url] !== undefined && sockets[url] !== null) {
+    closingSockets[url] = true;
+    sockets[url].close();
+    sockets[url] = null;
+
+    dispatch({
+      type: ACTIONS.WS_DISCONNECT,
+    });
+  }
+};
+
+export const doCommentSocketConnect = (uri, claimId) => (dispatch) => {
+  const url = getCommentSocketUrl(claimId);
+
+  doSocketConnect(url, (response) => {
+    if (response.type === 'delta') {
+      const newComment = response.data.comment;
+      dispatch({
+        type: ACTIONS.COMMENT_RECEIVED,
+        data: { comment: newComment, claimId, uri },
+      });
+    }
+    if (response.type === 'pinned') {
+      const pinnedComment = response.data.comment;
+      dispatch({
+        type: ACTIONS.COMMENT_PIN_COMPLETED,
+        data: {
+          pinnedComment: pinnedComment,
+          claimId,
+          unpin: !pinnedComment.is_pinned,
+        },
+      });
+    }
+  });
+};
+
+export const doCommentSocketDisconnect = (claimId) => (dispatch) => {
+  const url = getCommentSocketUrl(claimId);
+
+  dispatch(doSocketDisconnect(url));
+};
