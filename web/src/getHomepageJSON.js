@@ -62,6 +62,7 @@ const getHomepageJsonV2 = (format) => {
   homepageKeys.forEach((hp) => {
     v2[hp] = {
       categories: reformatV2Categories(memo.homepageData[hp].categories, format),
+      portals: memo.homepageData[hp].portals,
       meme: memo.homepageData[hp].meme,
       discover: memo.homepageData[hp].discover,
       announcement: memo.announcements[hp],
