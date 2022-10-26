@@ -53,12 +53,8 @@ function onPlayerReady(player: Player, options: Options) {
   videojs.registerComponent('snapshotButton', snapshotButton);
 
   player.one('canplay', function () {
-    player.getChild('controlBar').addChild('snapshotButton', {});
-  });
-
-  // TODO: this is particular to Odysee, since we don't necessarily dispose, better to use something universal
-  player.on('playerClosed', function () {
     player.getChild('controlBar').removeChild('snapshotButton');
+    player.getChild('controlBar').addChild('snapshotButton', {});
   });
 }
 
