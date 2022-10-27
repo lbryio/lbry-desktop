@@ -42,7 +42,9 @@ function onPlayerReady(player: Player, options: Options) {
       canvas.getContext('2d').drawImage(video, 0, 0, width, height);
 
       link.href = canvas.toDataURL();
-      link.download = options.fileTitle;
+      // strip emojis
+      // explanation: https://stackoverflow.com/a/63464318/3973137
+      link.download = options.fileTitle.replace(/[^\p{L}\p{N}\p{P}\p{Z}^$\n]/gu, '');
 
       link.click();
 
