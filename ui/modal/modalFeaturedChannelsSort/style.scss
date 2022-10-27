@@ -1,0 +1,23 @@
+@import '~ui/scss/init/breakpoints';
+@import '~ui/scss/init/mixins';
+
+.modalFCSort {
+  @media (max-width: $breakpoint-small) {
+    padding-left: var(--spacing-xs);
+    padding-right: var(--spacing-xs);
+
+    .card__title {
+      margin-bottom: var(--spacing-l);
+    }
+  }
+}
+
+.modalFCSort__item {
+  @include border-std;
+  padding: var(--spacing-xs);
+  margin-bottom: var(--spacing-xs);
+}
+
+.modalFcSort__item--hidden {
+  display: none;
+}

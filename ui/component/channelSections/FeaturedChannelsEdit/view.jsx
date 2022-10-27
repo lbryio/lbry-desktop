@@ -4,49 +4,96 @@
 
 // @flow
 import React from 'react';
+import { v4 as Uuidv4 } from 'uuid';
+
 import Button from 'component/button';
 import ChannelFinder from 'component/channelFinder';
 import Card from 'component/common/card';
 import { FormField } from 'component/common/form';
-import { COL_TYPES } from 'constants/collections';
 
 type Props = {
-  collectionId?: string, // null = create new list; edit otherwise.
-  channelId?: string, // The collection's owner ID (for the case of editing).
+  channelId: string, // The section's owner ID.
+  sectionId?: string, // null = create new list; edit otherwise
   onSave?: () => void, // Notifies parent that the list was saved.
   onCancel?: () => void, // Notifies parent that changes were canceled.
   // --- redux ---
-  collection: Collection, // Corresponding collection for 'collectionId'.
-  doLocalCollectionCreate: (params: CollectionCreateParams) => void,
-  doCollectionEdit: (id: string, CollectionEditParams, skipSanitization?: boolean) => void,
+  sections: ?Sections, // All sections for the given 'channelId'.
+  featuredChannels: ?Array<FeaturedChannelsSection>, // Sorted featured channels for 'channelId'.
+  channelClaim: ?ChannelClaim, // Dumb thing just to feed doUpdateCreatorSettings().
+  doUpdateCreatorSettings: (channelClaim: ChannelClaim, settings: PerChannelSettings) => void,
+  doToast: ({ message: string, isError?: boolean, linkText?: string, linkTarget?: string }) => void,
 };
 
 export default function FeaturedChannelsEdit(props: Props) {
-  const { channelId, collectionId, onSave, onCancel, collection, doLocalCollectionCreate, doCollectionEdit } = props;
+  const {
+    sectionId,
+    onSave,
+    onCancel,
+    sections,
+    featuredChannels,
+    channelClaim,
+    doUpdateCreatorSettings,
+    doToast,
+  } = props;
 
-  const [name, setName] = React.useState(() => (collection ? collection.name : ''));
-  const [uris, setUris] = React.useState(() => (collection ? collection.items : []));
+  const isEditing = Boolean(sectionId);
+
+  const fc: ?FeaturedChannelsSection = React.useMemo(() => {
+    return featuredChannels && featuredChannels.find((x) => x.id === sectionId);
+  }, [featuredChannels, sectionId]);
+
+  const [name, setName] = React.useState(fc ? fc.value.title : '');
+  const [uris, setUris] = React.useState(fc ? fc.value.uris : []);
+
+  const missingData = !sections || (isEditing && !fc) || !channelClaim;
 
   // **************************************************************************
   // **************************************************************************
+
+  function showFailureToast() {
+    doToast({
+      message: __('Failed to update the list.'),
+      subMessage: __('Try refreshing the page and edit again. Sorry :('),
+      isError: true,
+      duration: 'long',
+    });
+  }
 
   function handleSave() {
-    if (collectionId && collection) {
-      doCollectionEdit(collectionId, {
-        name,
-        uris,
-        replace: true,
-        type: COL_TYPES.FEATURED_CHANNELS,
-        featuredChannelsParams: { channelId: channelId || '0' },
-      });
+    if (missingData) {
+      showFailureToast();
+      return;
+    }
+
+    // ² - 'missingData' covered the null cases
+
+    // $FlowIgnore ²
+    const entries = sections.entries.slice();
+
+    if (isEditing) {
+      // --- EDIT ---
+      // $FlowIgnore²
+      const index = fc ? entries.findIndex((x) => x.id === fc.id) : -1;
+      if (index > -1) {
+        // $FlowIgnore²
+        const newFc: FeaturedChannelsSection = { ...fc, value: { ...fc.value, title: name, uris: uris } };
+        entries.splice(index, 1, newFc);
+      } else {
+        showFailureToast();
+        return;
+      }
     } else {
-      doLocalCollectionCreate({
-        name,
-        items: uris,
-        type: COL_TYPES.FEATURED_CHANNELS,
-        featuredChannelsParams: { channelId: channelId || '0' },
+      // --- CREATE ---
+      entries.push({
+        id: Uuidv4(),
+        value_type: 'featured_channels',
+        value: { title: name, uris: uris },
       });
     }
+
+    const newSections = { ...sections, entries };
+    // $FlowIgnore²
+    doUpdateCreatorSettings(channelClaim, { featured_channels: newSections });
 
     if (onSave) {
       onSave();
@@ -85,6 +132,20 @@ export default function FeaturedChannelsEdit(props: Props) {
 
   // **************************************************************************
   // **************************************************************************
+
+  if (missingData) {
+    return (
+      <Card
+        title={__('Featured channel list not found')}
+        subtitle={__('Try refreshing the page and re-initiate the edit.')}
+        body={
+          <div className="section__actions">
+            <Button button="primary" label={__('OK')} onClick={handleCancel} />
+          </div>
+        }
+      />
+    );
+  }
 
   return (
     <Card

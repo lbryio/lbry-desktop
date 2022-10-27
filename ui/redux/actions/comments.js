@@ -26,6 +26,7 @@ import {
   selectMyCommentedChannelIdsForId,
   selectLivestreamChatMembersOnlyForChannelId,
   selectMembersOnlyCommentsForChannelId,
+  selectSettingsForChannelId,
 } from 'redux/selectors/comments';
 import { makeSelectNotificationForCommentId } from 'redux/selectors/notifications';
 import { selectActiveChannelClaim } from 'redux/selectors/app';
@@ -1823,9 +1824,33 @@ export const doUpdateCreatorSettings = (channelClaim: ChannelClaim, settings: Pe
       signature: channelSignature.signature,
       signing_ts: channelSignature.signing_ts,
       ...settings,
-    }).catch((err) => {
-      dispatch(doToast({ message: err.message, isError: true }));
-    });
+    })
+      .then((res) => {
+        // 'res' actually contains the new settings already, but I'm lazy to
+        // replicate partial code, so just do a full fetch to update our store.
+        dispatch(doFetchCreatorSettings(channelClaim.claim_id));
+      })
+      .catch((err) => {
+        dispatch(doToast({ message: err.message, isError: true }));
+      });
+  };
+};
+
+export const doDeleteChannelSection = (channelId: string, sectionId: string) => {
+  return async (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const channelClaim = selectClaimForClaimId(state, channelId);
+    const channelSettings = selectSettingsForChannelId(state, channelId);
+    const sections: ?Sections = channelSettings && channelSettings.featured_channels;
+    const entries = (sections && sections.entries.slice()) || [];
+
+    const index = entries.findIndex((x) => x.id === sectionId);
+    if (index > -1 && channelClaim) {
+      entries.splice(index, 1);
+      dispatch(doUpdateCreatorSettings(channelClaim, { featured_channels: { ...sections, entries } }));
+    }
+
+    // TODO: errors?
   };
 };
 

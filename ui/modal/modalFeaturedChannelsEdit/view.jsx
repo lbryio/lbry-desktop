@@ -1,32 +1,25 @@
 // @flow
+// MODALS.FEATURED_CHANNELS_EDIT
+
 import React from 'react';
+
 import './style.scss';
 import FeaturedChannelsEdit from 'component/channelSections/FeaturedChannelsEdit';
 import { Modal } from 'modal/modal';
 
 type Props = {
-  create?: { ownerChannelId: string },
-  edit?: { collectionId: string },
+  channelId: string,
+  sectionId?: string, // null = create new; <string> = edit existing
   // --- redux ---
   doHideModal: () => void,
 };
 
 export default function ModalFeaturedChannelsEdit(props: Props) {
-  const { create, edit, doHideModal } = props;
-
-  if ((!create && !edit) || (create && edit)) {
-    console.error('Invalid param combination'); // eslint-disable-line no-console
-    return null;
-  }
+  const { channelId, sectionId, doHideModal } = props;
 
   return (
     <Modal isOpen type="custom" width="wide-fixed" className="modal-featured-channels-edit">
-      <FeaturedChannelsEdit
-        channelId={create ? create.ownerChannelId : undefined}
-        collectionId={edit ? edit.collectionId : undefined}
-        onSave={doHideModal}
-        onCancel={doHideModal}
-      />
+      <FeaturedChannelsEdit channelId={channelId} sectionId={sectionId} onSave={doHideModal} onCancel={doHideModal} />
     </Modal>
   );
 }

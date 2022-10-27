@@ -43,13 +43,6 @@
   padding: 0 var(--spacing-s);
 }
 
-.channel-section-card__status {
-  color: var(--color-text-error);
-  margin: 0 var(--spacing-s);
-  width: fit-content;
-  align-self: center;
-}
-
 .channel-section-card__item-row {
   display: flex;
   justify-content: space-between;

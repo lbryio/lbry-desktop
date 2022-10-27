@@ -32,6 +32,37 @@ declare type CommentSubmitParams = {
   is_protected?: boolean,
 };
 
+// ****************************************************************************
+// Sections
+// ****************************************************************************
+
+declare type Sections = {
+  version: '0.1' | '1.0',
+  entries: Array<FeaturedChannelsSection | ShortsSection>,
+};
+
+declare type SectionValueTypes = 'featured_channels' | 'shorts';
+
+declare type FeaturedChannelsSection = {
+  id: string,
+  value_type: 'featured_channels',
+  value: {
+    title?: string,
+    description?: string,
+    uris: Array<string>,
+  },
+};
+
+declare type ShortsSection = {
+  // Just a dummy example to start a pattern.
+  id: string,
+  value_type: 'shorts',
+  value: { uris: Array<string> },
+};
+
+// ****************************************************************************
+// ****************************************************************************
+
 declare type PerChannelSettings = {
   words?: Array<string>,
   comments_enabled?: boolean,
@@ -41,6 +72,7 @@ declare type PerChannelSettings = {
   time_since_first_comment?: number,
   livestream_chat_members_only?: boolean,
   comments_members_only?: boolean,
+  featured_channels?: Sections,
 };
 
 // todo: relate individual comments to their commentId

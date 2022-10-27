@@ -4,6 +4,7 @@ export const CONFIRM_EXTERNAL_RESOURCE = 'confirm_external_resource';
 export const CUSTOMIZE_HOMEPAGE = 'customize_homepage';
 export const INCOMPATIBLE_DAEMON = 'incompatible_daemon';
 export const FEATURED_CHANNELS_EDIT = 'featured_channels_edit';
+export const FEATURED_CHANNELS_SORT = 'featured_channels_sort';
 export const FILE_TIMEOUT = 'file_timeout';
 export const FILE_SELECTION = 'file_selection';
 export const DOWNLOADING = 'downloading';

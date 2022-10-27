@@ -249,6 +249,26 @@ export const selectMembersOnlyCommentsForChannelId = (state: State, channelId: C
   return channelSettings && channelSettings.comments_members_only;
 };
 
+export const selectSectionsForChannelId = (state: State, channelId: ClaimId) => {
+  const channelSettings = selectSettingsForChannelId(state, channelId);
+  return channelSettings?.featured_channels;
+};
+
+/**
+ * Returns a sorted list of FeaturedChannelsSection for the given channel-id.
+ * @return (channelId) => Array<FeaturedChannelsSection> | undefined
+ */
+export const selectFeaturedChannelsForChannelId = createCachedSelector(
+  selectSettingsForChannelId,
+  (channelSettings) => {
+    const sections: Sections = channelSettings?.featured_channels;
+    if (sections && sections.entries) {
+      // $FlowIssue
+      return Object.values(sections.entries).filter((x) => x.value_type === 'featured_channels');
+    }
+  }
+)((state, channelId) => String(channelId));
+
 export const selectCommentsForUri = createCachedSelector(
   (state, uri) => uri,
   selectCommentsByClaimId,

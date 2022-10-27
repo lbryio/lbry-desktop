@@ -8,6 +8,10 @@
 - The only section available for now is "Featured Channels" (FC). Channel owners   
   can create multiple Featured Channels lists.
 
+### _2022-10-28:_ Re-implementation Notes
+- The collection-based implementation did not turn out well, as the dependency on the blockchain made certain operations like editing and sorting harder to use/implement.
+- The Commentron's `setting.List|Update` API is now used to store the data instead.
+
 ## Behavioral
 
 ### Channel Page: Tabs

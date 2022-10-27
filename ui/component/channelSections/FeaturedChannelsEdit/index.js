@@ -1,15 +1,25 @@
 import FeaturedChannelsEdit from './view';
 import { connect } from 'react-redux';
-import { doCollectionEdit, doLocalCollectionCreate } from 'redux/actions/collections';
-import { selectCollectionForId } from 'redux/selectors/collections';
+
+import { doUpdateCreatorSettings } from 'redux/actions/comments';
+import { doToast } from 'redux/actions/notifications';
+import { selectClaimForClaimId } from 'redux/selectors/claims';
+import { selectFeaturedChannelsForChannelId, selectSectionsForChannelId } from 'redux/selectors/comments';
+
+const DEFAULT_SECTION = {
+  version: '1.0',
+  entries: [],
+};
 
 const select = (state, props) => ({
-  collection: selectCollectionForId(state, props.collectionId),
+  sections: selectSectionsForChannelId(state, props.channelId) || DEFAULT_SECTION,
+  featuredChannels: selectFeaturedChannelsForChannelId(state, props.channelId),
+  channelClaim: selectClaimForClaimId(state, props.channelId),
 });
 
 const perform = {
-  doLocalCollectionCreate,
-  doCollectionEdit,
+  doUpdateCreatorSettings,
+  doToast,
 };
 
 export default connect(select, perform)(FeaturedChannelsEdit);

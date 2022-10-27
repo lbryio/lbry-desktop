@@ -32,6 +32,7 @@ const MAP = Object.freeze({
   [MODALS.DOWNLOADING]: lazyImport(() => import('modal/modalDownloading' /* webpackChunkName: "modalDownloading" */)),
   [MODALS.ERROR]: ModalError,
   [MODALS.FEATURED_CHANNELS_EDIT]: lazyImport(() => import('modal/modalFeaturedChannelsEdit' /* webpackChunkName: "modalFeaturedChannelsEdit" */)),
+  [MODALS.FEATURED_CHANNELS_SORT]: lazyImport(() => import('modal/modalFeaturedChannelsSort' /* webpackChunkName: "modalFeaturedChannelsSort" */)),
   [MODALS.FILE_SELECTION]: lazyImport(() => import('modal/modalFileSelection' /* webpackChunkName: "modalFileSelection" */)),
   [MODALS.FILE_TIMEOUT]: lazyImport(() => import('modal/modalFileTimeout' /* webpackChunkName: "modalFileTimeout" */)),
   [MODALS.FIRST_REWARD]: lazyImport(() => import('modal/modalFirstReward' /* webpackChunkName: "modalFirstReward" */)),

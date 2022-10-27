@@ -9,7 +9,6 @@ import Button from 'component/button';
 import ChannelThumbnail from 'component/channelThumbnail';
 import ChannelTitle from 'component/channelTitle';
 import Icon from 'component/common/icon';
-import Spinner from 'component/spinner';
 
 import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
@@ -17,34 +16,24 @@ import * as PAGES from 'constants/pages';
 import { formatLbryUrlForWeb } from 'util/url';
 
 type Props = {
-  collectionId: string,
+  id: string,
+  title: string,
+  uris: Array<string>,
+  channelId: ClaimId,
   showAllItems?: boolean,
   // --- redux ---
-  collection: Collection,
-  isUnpublished: boolean,
-  isCollectionMine: boolean,
-  hasEdits: boolean,
-  claimIsPending: boolean,
-  doClearEditsForCollectionId: (id: string) => void,
+  isChannelMine: boolean,
   doOpenModal: (id: string, ?{}) => void,
+  doDeleteChannelSection: (channelId: string, sectionId: string) => void,
 };
 
 export default function Section(props: Props) {
-  const {
-    collectionId,
-    showAllItems,
-    collection,
-    isUnpublished,
-    isCollectionMine,
-    hasEdits,
-    claimIsPending,
-    doClearEditsForCollectionId,
-    doOpenModal,
-  } = props;
+  const { id, title, uris, channelId, showAllItems, isChannelMine, doOpenModal, doDeleteChannelSection } = props;
 
   const { push } = useHistory();
-  const status = isUnpublished || hasEdits ? '*' : null;
-  const items = showAllItems ? collection.items : collection.items.slice(0, 10);
+  const items = showAllItems ? uris : uris.slice(0, 10);
+
+  const collectionId = '';
 
   // **************************************************************************
   // **************************************************************************
@@ -63,10 +52,9 @@ export default function Section(props: Props) {
       </MenuButton>
 
       <MenuList className="menu__list">
-        {isCollectionMine && (
+        {isChannelMine && (
           <>
             <ContextMenuItem label={'Edit'} icon={ICONS.EDIT} onSelect={handleSectionEdit} />
-            {hasEdits && <ContextMenuItem label={'Discard Changes'} icon={ICONS.REMOVE} onSelect={handleDiscard} />}
             <ContextMenuItem label={'Delete'} icon={ICONS.DELETE} onSelect={handleSectionDelete} />
           </>
         )}
@@ -78,19 +66,16 @@ export default function Section(props: Props) {
   // **************************************************************************
 
   function handleSectionEdit() {
-    doOpenModal(MODALS.FEATURED_CHANNELS_EDIT, { edit: { collectionId } });
+    doOpenModal(MODALS.FEATURED_CHANNELS_EDIT, { channelId, sectionId: id });
   }
 
   function handleSectionDelete() {
-    doOpenModal(MODALS.COLLECTION_DELETE, { collectionId, simplify: true });
-  }
-
-  function handleDiscard() {
     doOpenModal(MODALS.CONFIRM, {
-      title: __('Discard Changes'),
-      subtitle: __('Discard all changes? The action cannot be undone.'),
+      title: title ? __('Delete "%list_name%"?', { list_name: title.slice(0, 50) }) : __('Delete featured channels?'),
+      subtitle: __('This action is permanent and cannot be undone.'),
+      labelOk: __('Delete'),
       onConfirm: (closeModal) => {
-        doClearEditsForCollectionId(collectionId);
+        doDeleteChannelSection(channelId, id);
         closeModal();
       },
     });
@@ -102,19 +87,10 @@ export default function Section(props: Props) {
   return (
     <div className="channel-section-card">
       <div className="channel-section-card__header">
-        <div className="channel-section-card__title">
-          {collection.name}
-          {status && <div className="channel-section-card__status">{status}</div>}
-        </div>
-        <div className="channel-section-card__menu">{isCollectionMine && <ContextMenu />}</div>
+        <div className="channel-section-card__title">{title}</div>
+        <div className="channel-section-card__menu">{isChannelMine && <ContextMenu />}</div>
       </div>
       <div className="channel-section-card__content">
-        {claimIsPending && (
-          <div className="help card__title--help">
-            <Spinner type="small" />
-            {__('Your changes will be live in a few minutes')}
-          </div>
-        )}
         <div className="channel-section-card__item-row">
           <div
             className={classnames('channel-section-card__item-list', {
