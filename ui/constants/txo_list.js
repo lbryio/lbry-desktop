@@ -11,7 +11,8 @@ export const SUPPORT = 'support';
 export const CHANNEL = 'channel';
 export const PUBLISH = 'publish';
 export const REPOST = 'repost';
-export const DROPDOWN_TYPES = [ALL, SENT, RECEIVED, SUPPORT, CHANNEL, PUBLISH, REPOST];
+export const COLLECTION = 'collection';
+export const DROPDOWN_TYPES = [ALL, SENT, RECEIVED, SUPPORT, CHANNEL, PUBLISH, REPOST, COLLECTION];
 // dropdown subtypes
 export const TIP = 'tip';
 export const PURCHASE = 'purchase';

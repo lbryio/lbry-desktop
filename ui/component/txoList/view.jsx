@@ -103,6 +103,8 @@ function TxoList(props: Props) {
       params[TXO.TX_TYPE] = currentUrlParams.type;
     } else if (currentUrlParams.type === TXO.PUBLISH) {
       params[TXO.TX_TYPE] = TXO.STREAM;
+    } else if (currentUrlParams.type === TXO.COLLECTION) {
+      params[TXO.TX_TYPE] = currentUrlParams.type;
     }
   }
   if (currentUrlParams.active) {
