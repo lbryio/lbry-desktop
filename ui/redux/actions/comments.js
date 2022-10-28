@@ -1841,13 +1841,13 @@ export const doDeleteChannelSection = (channelId: string, sectionId: string) => 
     const state = getState();
     const channelClaim = selectClaimForClaimId(state, channelId);
     const channelSettings = selectSettingsForChannelId(state, channelId);
-    const sections: ?Sections = channelSettings && channelSettings.featured_channels;
+    const sections: ?Sections = channelSettings && channelSettings.featured_channels; // @REPLACE
     const entries = (sections && sections.entries.slice()) || [];
 
     const index = entries.findIndex((x) => x.id === sectionId);
     if (index > -1 && channelClaim) {
       entries.splice(index, 1);
-      dispatch(doUpdateCreatorSettings(channelClaim, { featured_channels: { ...sections, entries } }));
+      dispatch(doUpdateCreatorSettings(channelClaim, { featured_channels: { ...sections, entries } })); // @REPLACE
     }
 
     // TODO: errors?

@@ -93,7 +93,7 @@ export default function FeaturedChannelsEdit(props: Props) {
 
     const newSections = { ...sections, entries };
     // $FlowIgnore²
-    doUpdateCreatorSettings(channelClaim, { featured_channels: newSections });
+    doUpdateCreatorSettings(channelClaim, { featured_channels: newSections }); // @REPLACE
 
     if (onSave) {
       onSave();
