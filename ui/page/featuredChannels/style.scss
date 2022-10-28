@@ -1,0 +1,50 @@
+.channel_sections {
+  .channel-section-card__item {
+    &:hover {
+      .claim-preview__title {
+        color: var(--color-text);
+      }
+    }
+  }
+  .channel-thumbnail {
+    margin-bottom: var(--spacing-xxxs);
+  }
+  .channel-section-card__menu {
+    padding: unset;
+    .menu__button {
+      transform: rotate(0deg);
+      transition: transform 0.4s;
+
+      &[aria-expanded='true'] {
+        opacity: 1;
+        background-color: var(--color-header-button);
+        border-radius: 50%;
+        transform: rotate(90deg);
+        .icon {
+          stroke: var(--color-primary);
+        }
+      }
+    }
+  }
+}
+
+.channel_sections--disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.channel_sections__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+
+  .button {
+    margin-top: var(--spacing-xs);
+    margin-left: var(--spacing-s);
+  }
+
+  svg {
+    cursor: pointer;
+  }
+}

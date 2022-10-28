@@ -71,6 +71,9 @@ const CreatorDashboard = lazyImport(() => import('page/creatorDashboard' /* webp
 const DiscoverPage = lazyImport(() => import('page/discover' /* webpackChunkName: "discover" */));
 const EmbedWrapperPage = lazyImport(() => import('page/embedWrapper' /* webpackChunkName: "embedWrapper" */));
 const PopoutChatPage = lazyImport(() => import('page/popoutChatWrapper' /* webpackChunkName: "popoutChat" */));
+const FeaturedChannelsPage = lazyImport(() =>
+  import('page/featuredChannels' /* webpackChunkName: "featuredChannels" */)
+);
 const FileListPublished = lazyImport(() =>
   import('page/fileListPublished' /* webpackChunkName: "fileListPublished" */)
 );
@@ -358,6 +361,7 @@ function AppRouter(props: Props) {
 
         <Route path={`/$/${PAGES.HELP}`} exact component={HelpPage} />
 
+        <Route path={`/$/${PAGES.FEATURED_CHANNELS}`} exact component={FeaturedChannelsPage} />
         <Route path={`/$/${PAGES.CODE_2257}`} exact component={Code2257Page} />
         <Route path={`/$/${PAGES.PRIVACY_POLICY}`} exact component={PrivacyPolicyPage} />
         <Route path={`/$/${PAGES.TOS}`} exact component={TOSPage} />

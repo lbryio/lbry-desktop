@@ -13,6 +13,7 @@ import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
 import * as MODALS from 'constants/modal_types';
 import * as PAGES from 'constants/pages';
+import { CHANNEL_SECTIONS_QUERIES as CSQ } from 'constants/urlParams';
 import { formatLbryUrlForWeb } from 'util/url';
 
 type Props = {
@@ -32,8 +33,6 @@ export default function Section(props: Props) {
 
   const { push } = useHistory();
   const items = showAllItems ? uris : uris.slice(0, 10);
-
-  const collectionId = '';
 
   // **************************************************************************
   // **************************************************************************
@@ -104,14 +103,16 @@ export default function Section(props: Props) {
               </div>
             ))}
           </div>
-          <Button
-            className="channel-section-card__item-overflow"
-            button="link"
-            iconRight={ICONS.ARROW_RIGHT}
-            label={__('More')}
-            title={__('View full details')}
-            onClick={() => push(`/$/${PAGES.PLAYLIST}/${collectionId}`)}
-          />
+          {!showAllItems && (
+            <Button
+              className="channel-section-card__item-overflow"
+              button="link"
+              iconRight={ICONS.ARROW_RIGHT}
+              label={__('See all')}
+              title={__('View full details')}
+              onClick={() => push(`/$/${PAGES.FEATURED_CHANNELS}?${CSQ.CLAIM_ID}=${channelId}&${CSQ.SECTION_ID}=${id}`)}
+            />
+          )}
         </div>
       </div>
     </div>

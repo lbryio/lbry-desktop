@@ -37,6 +37,7 @@ exports.LISTS = 'lists';
 exports.PLAYLISTS = 'playlists';
 exports.WATCH_HISTORY = 'watchhistory';
 exports.INVITE = 'invite';
+exports.FEATURED_CHANNELS = 'featured_channels';
 exports.DEPRECATED__DOWNLOADED = 'downloaded';
 exports.DEPRECATED__PUBLISH = 'publish';
 exports.DEPRECATED__PUBLISHED = 'published';
