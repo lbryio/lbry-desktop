@@ -251,7 +251,7 @@ export const selectMembersOnlyCommentsForChannelId = (state: State, channelId: C
 
 export const selectSectionsForChannelId = (state: State, channelId: ClaimId) => {
   const channelSettings = selectSettingsForChannelId(state, channelId);
-  return channelSettings?.featured_channels; // @REPLACE
+  return channelSettings?.channel_sections;
 };
 
 /**
@@ -261,7 +261,7 @@ export const selectSectionsForChannelId = (state: State, channelId: ClaimId) => 
 export const selectFeaturedChannelsForChannelId = createCachedSelector(
   selectSettingsForChannelId,
   (channelSettings) => {
-    const sections: Sections = channelSettings?.featured_channels; // @REPLACE
+    const sections: Sections = channelSettings?.channel_sections;
     if (sections && sections.entries) {
       // $FlowIssue
       return Object.values(sections.entries).filter((x) => x.value_type === 'featured_channels');

@@ -55,7 +55,7 @@ export default function ModalFeaturedChannelsSort(props: Props) {
       }
 
       const newSections = { ...sections, entries };
-      doUpdateCreatorSettings(channelClaim, { featured_channels: newSections }); // @REPLACE
+      doUpdateCreatorSettings(channelClaim, { channel_sections: newSections });
       doHideModal();
     }
   }
