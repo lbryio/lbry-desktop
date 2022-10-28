@@ -32,11 +32,12 @@ const Lazy = {
 type Props = {
   list: Array<any>,
   onGetElemAtIndex: (item: any, index: number) => Node,
+  onIsHiddenAtIndex?: (item: any, index: number) => boolean,
   onDragEnd: ({ source: any, destination: any }) => void,
 };
 
 export default function SortableList(props: Props) {
-  const { list, onGetElemAtIndex, onDragEnd } = props;
+  const { list, onGetElemAtIndex, onIsHiddenAtIndex, onDragEnd } = props;
 
   const draggedItemRef = React.useRef();
 
@@ -53,7 +54,9 @@ export default function SortableList(props: Props) {
           }
           return (
             <div
-              className="sortable__item"
+              className={classnames('sortable__item', {
+                'sortable__item--hidden': onIsHiddenAtIndex && onIsHiddenAtIndex(item, index),
+              })}
               ref={draggableProvided.innerRef}
               {...draggableProvided.draggableProps}
               {...draggableProvided.dragHandleProps}

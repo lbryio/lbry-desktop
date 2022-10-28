@@ -11,6 +11,10 @@
   align-items: center;
 }
 
+.sortable__item--hidden {
+  display: none;
+}
+
 .sortable__drag-handle {
   opacity: 0.4;
   margin-right: var(--spacing-xxs);
