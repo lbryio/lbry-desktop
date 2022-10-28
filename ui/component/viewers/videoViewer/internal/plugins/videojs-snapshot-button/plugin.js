@@ -41,10 +41,17 @@ function onPlayerReady(player: Player, options: Options) {
       // $FlowIssue (when the class is added to the querySelector it errors)
       canvas.getContext('2d').drawImage(video, 0, 0, width, height);
 
-      link.href = canvas.toDataURL();
+      link.href = canvas.toDataURL('image/jpeg');
+
       // strip emojis
       // explanation: https://stackoverflow.com/a/63464318/3973137
-      link.download = options.fileTitle.replace(/[^\p{L}\p{N}\p{P}\p{Z}^$\n]/gu, '');
+      link.download =
+        options.fileTitle
+          .replace(/[^\p{L}\p{N}\p{P}\p{Z}^$\n]/gu, '')
+          // remove last character if it's a space
+          .replace(/\s+$/, '')
+          // remove last character if period
+          .replace(/\.$/, '') + '.jpg';
 
       link.click();
 
