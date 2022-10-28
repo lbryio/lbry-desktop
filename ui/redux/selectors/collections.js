@@ -32,7 +32,6 @@ export const selectMyUpdatedCollections = (state: State) => selectState(state).u
 export const selectPendingCollections = (state: State) => selectState(state).pending;
 export const selectIsResolvingCollectionById = (state: State) => selectState(state).resolvingById;
 export const selectQueueCollection = (state: State) => selectState(state).queue;
-export const selectFeaturedChannelsPublishing = (state: State) => selectState(state).featuredChannelsPublishing;
 
 export const selectCurrentQueueList = createSelector(selectQueueCollection, (queue) => ({ queue }));
 export const selectHasItemsInQueue = createSelector(selectQueueCollection, (queue) => queue.items.length > 0);

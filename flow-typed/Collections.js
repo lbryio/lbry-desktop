@@ -30,7 +30,6 @@ declare type CollectionState = {
   resolvingById: { [id: string]: boolean },
   error?: string | null,
   queue: Collection,
-  featuredChannelsPublishing: boolean,
 };
 
 declare type CollectionGroup = {
