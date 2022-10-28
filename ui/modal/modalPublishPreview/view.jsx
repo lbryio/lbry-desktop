@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import moment from 'moment';
+import classnames from 'classnames';
 
 import './style.scss';
 import Button from 'component/button';
@@ -59,6 +60,7 @@ type Props = {
   remoteFile: string,
   tiersWithExclusiveContent: MembershipTiers,
   tiersWithExclusiveLivestream: MembershipTiers,
+  myMembershipTiers: MembershipTiers,
   restrictingTiers: string,
   appLanguage: string,
 };
@@ -104,6 +106,7 @@ const ModalPublishPreview = (props: Props) => {
     remoteFile,
     tiersWithExclusiveContent,
     tiersWithExclusiveLivestream,
+    myMembershipTiers,
     restrictingTiers,
     appLanguage,
   } = props;
@@ -122,6 +125,8 @@ const ModalPublishPreview = (props: Props) => {
   const modalTitle = getModalTitle();
   const confirmBtnText = getConfirmButtonText();
   const tiers = livestream ? tiersWithExclusiveLivestream : tiersWithExclusiveContent; // See #2285
+
+  const membershipsToUseIds = tiers && tiers.map((membershipTier) => membershipTier?.Membership?.id);
 
   // **************************************************************************
   // **************************************************************************
@@ -308,12 +313,12 @@ const ModalPublishPreview = (props: Props) => {
   }
 
   function getTierRestrictionValue() {
-    if (tiers && restrictingTiers) {
+    if (myMembershipTiers && restrictingTiers) {
       const rt = restrictingTiers.split(',');
 
       return (
         <div className="publish-preview__tier-restrictions">
-          {tiers.map((tier: MembershipTier) => {
+          {myMembershipTiers.map((tier: MembershipTier) => {
             const tierId = tier?.Membership?.id || '0';
             const tierRestrictionOn = rt.includes(tierId.toString());
 
@@ -324,6 +329,9 @@ const ModalPublishPreview = (props: Props) => {
                 type="checkbox"
                 defaultChecked
                 label={tier?.Membership?.name || tierId}
+                className={classnames({
+                  'hide-tier': !membershipsToUseIds.includes(tier.Membership.id),
+                })}
               />
             ) : (
               <div key={tierId} className="dummy-tier" />
@@ -355,6 +363,19 @@ const ModalPublishPreview = (props: Props) => {
     }
   }, [publishSuccess, publishing, livestream, closeModal]);
   // @endif
+
+  React.useEffect(() => {
+    if (myMembershipTiers) {
+      const elementsToHide = document.getElementsByClassName('hide-tier');
+
+      if (elementsToHide) {
+        for (const element of elementsToHide) {
+          // $FlowFixMe
+          element.parentElement.style.display = 'none';
+        }
+      }
+    }
+  }, [myMembershipTiers]);
 
   // **************************************************************************
   // **************************************************************************

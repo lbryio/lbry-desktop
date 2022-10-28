@@ -4,6 +4,7 @@ import ModalPublishPreview from './view';
 import {
   selectMyMembershipTiersWithExclusiveContentPerk,
   selectMyMembershipTiersWithExclusiveLivestreamPerk,
+  selectMembershipTiersForCreatorId,
 } from 'redux/selectors/memberships';
 import { selectPublishFormValue, selectPublishFormValues, selectIsStillEditing } from 'redux/selectors/publish';
 import { selectMyChannelClaims, selectIsStreamPlaceholderForUri } from 'redux/selectors/claims';
@@ -25,6 +26,7 @@ const select = (state, props) => {
     remoteFile: selectPublishFormValue(state, 'remoteFileUrl'),
     tiersWithExclusiveContent: selectMyMembershipTiersWithExclusiveContentPerk(state, channelClaimId),
     tiersWithExclusiveLivestream: selectMyMembershipTiersWithExclusiveLivestreamPerk(state, channelClaimId),
+    myMembershipTiers: selectMembershipTiersForCreatorId(state, channelClaimId),
     restrictingTiers: selectPublishFormValue(state, 'restrictedToMemberships'),
     isStillEditing: selectIsStillEditing(state),
     ffmpegStatus: selectFfmpegStatus(state),
