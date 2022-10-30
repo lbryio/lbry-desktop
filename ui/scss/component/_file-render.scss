@@ -845,13 +845,13 @@ $control-bar-icon-size: 30px;
     }
 
     .vjs-snapshot-button {
+      margin-right: 8px;
       svg {
         height: 19px;
         margin-top: 3px;
         fill: transparent;
         stroke-width: 50px;
         stroke: white;
-        margin-right: 10px;
         opacity: 0.9;
       }
     }
