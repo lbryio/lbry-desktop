@@ -106,6 +106,10 @@ $list-height--mobile: 30vh;
   }
 }
 
+.entry--hidden {
+  display: none;
+}
+
 .entry--no-hover-highlight {
   &:hover {
     background: unset;

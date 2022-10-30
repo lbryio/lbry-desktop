@@ -13,20 +13,23 @@ type Props = {
   noHoverHighlight?: boolean,
   iconRight?: string,
   iconRightOnHoverOnly?: boolean,
+  hideInvalid?: boolean,
 };
 
 export default function Entry(props: Props) {
-  const { uri, claim, resolvingUris, onClick, noHoverHighlight, iconRight, iconRightOnHoverOnly } = props;
+  const { uri, claim, resolvingUris, onClick, noHoverHighlight, iconRight, iconRightOnHoverOnly, hideInvalid } = props;
 
   const title = getClaimTitle(claim);
   const name = claim?.name || '';
   const tooltip = [title || '', name, uri].join('\n');
   const isResolvingUri = resolvingUris.includes(uri);
+  const isInvalid = claim === null;
 
   return (
     <div
       className={classnames('entry', {
         'entry--no-hover-highlight': noHoverHighlight,
+        'entry--hidden': isInvalid && hideInvalid,
         'non-clickable': !uri,
       })}
       title={tooltip}
@@ -48,11 +51,16 @@ export default function Entry(props: Props) {
               {uri === null ? (
                 <span className="entry__title">{'---'}</span>
               ) : isResolvingUri || claim === undefined ? (
-                <span className="entry__title entry__title--placeholder" />
+                <>
+                  <span className="entry__title entry__title--placeholder" />
+                  <span className="entry__name entry__name--placeholder" />
+                </>
               ) : (
-                <span className="entry__title">{'[Removed]'}</span>
+                <>
+                  <span className="entry__title">{'[Removed]'}</span>
+                  <span className="entry__name">{uri}</span>
+                </>
               )}
-              <span className="entry__name entry__name--placeholder" />
             </div>
           </>
         )}

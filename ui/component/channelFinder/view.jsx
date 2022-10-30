@@ -85,6 +85,7 @@ export default function ChannelFinder(props: Props) {
               resolvingUris={resolvingUris}
               onClick={(e) => handleSuggestionClicked(uri)}
               iconRight={selectedUris.includes(uri) ? ICONS.COMPLETE : undefined}
+              hideInvalid
             />
           ))}
     </>
@@ -102,6 +103,7 @@ export default function ChannelFinder(props: Props) {
               resolvingUris={resolvingUris}
               onClick={(e) => handleSuggestionClicked(claimsByUri[uriSearchTerm].permanent_url)}
               iconRight={selectedUris.includes(claimsByUri[uriSearchTerm].permanent_url) ? ICONS.COMPLETE : undefined}
+              hideInvalid
             />
           ) : isUrl ? (
             <div className="main--empty">{__('No results')}</div>
@@ -124,6 +126,7 @@ export default function ChannelFinder(props: Props) {
             resolvingUris={resolvingUris}
             onClick={(e) => handleSuggestionClicked(uri)}
             iconRight={selectedUris.includes(uri) ? ICONS.COMPLETE : undefined}
+            hideInvalid
           />
         ))}
       </div>
