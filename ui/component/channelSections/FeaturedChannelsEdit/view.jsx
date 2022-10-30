@@ -170,6 +170,8 @@ export default function FeaturedChannelsEdit(props: Props) {
             <Button label={__('Done')} button="primary" disabled={!name || uris.length === 0} onClick={handleSave} />
             <Button button="link" label={__('Cancel')} onClick={handleCancel} />
           </div>
+
+          <div className="error__text">{!name && <span>{__('A title is required')}</span>}</div>
         </>
       }
     />
