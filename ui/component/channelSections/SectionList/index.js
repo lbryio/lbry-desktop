@@ -5,7 +5,6 @@ import { doOpenModal } from 'redux/actions/app';
 import { doFetchCreatorSettings } from 'redux/actions/comments';
 
 import { selectClaimIdForUri } from 'redux/selectors/claims';
-import { selectUserHasValidOdyseeMembership } from 'redux/selectors/memberships';
 import {
   selectFeaturedChannelsForChannelId,
   selectFetchingCreatorSettings,
@@ -19,7 +18,6 @@ const select = (state, props) => {
     claimId,
     creatorSettings: selectSettingsForChannelId(state, claimId),
     featuredChannels: selectFeaturedChannelsForChannelId(state, claimId),
-    userHasOdyseeMembership: selectUserHasValidOdyseeMembership(state),
     fetchingCreatorSettings: selectFetchingCreatorSettings(state),
   };
 };
