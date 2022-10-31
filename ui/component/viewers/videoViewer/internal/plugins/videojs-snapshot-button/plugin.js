@@ -10,10 +10,6 @@ type Options = {
 };
 
 function onPlayerReady(player: Player, options: Options) {
-  // needed for canvas to work with cors
-  // $FlowFixMe
-  player.el().childNodes[0].setAttribute('crossorigin', 'anonymous');
-
   const button = videojs.getComponent('Button');
   const snapshotButton = videojs.extend(button, {
     constructor: function () {
@@ -65,6 +61,10 @@ function onPlayerReady(player: Player, options: Options) {
 }
 
 function snapshotButton(options: Options) {
+  // needed for canvas to work with cors
+  // $FlowFixMe
+  this.el().childNodes[0].setAttribute('crossorigin', 'anonymous');
+
   const IS_MOBILE = videojs.browser.IS_ANDROID || videojs.browser.IS_IOS;
   if (!IS_MOBILE) {
     this.ready(() => onPlayerReady(this, videojs.mergeOptions(defaultOptions, options)));
