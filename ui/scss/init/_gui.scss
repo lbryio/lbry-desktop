@@ -1543,6 +1543,9 @@ img {
           }
         }
       }
+      .claim-preview__text {
+        overflow: visible;
+      }
     }
   }
 
@@ -1571,6 +1574,9 @@ img {
     .claim-tile__info {
       padding-bottom: 0;
     }
+    .membership-button-wrapper {
+      margin-top: var(--spacing-xxxs);
+    }
     .claim-preview__primary-actions {
       .button--alt {
         color: var(--color-text);
@@ -1589,6 +1595,18 @@ img {
     .claim-preview__actions {
       .claim-preview__primary-actions {
         margin-top: var(--spacing-xxxs);
+      }
+      @media (max-width: $breakpoint-small) {
+        margin-top: var(--spacing-xxxs) !important;
+        .claim-preview__primary-actions {
+          flex-wrap: nowrap;
+          margin-right: var(--spacing-xxxs);
+          margin-left: calc((4rem + var(--spacing-m)) * -1);
+        }
+        .membership-button-wrapper {
+          display: flex;
+          align-items: center;
+        }
       }
     }
     .claim-preview__repost-author {

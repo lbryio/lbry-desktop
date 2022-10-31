@@ -296,9 +296,11 @@ $thumbnailWidthSmall: 2rem;
   width: calc(100% - var(--spacing-m) - var(--spacing-s));
   padding-top: 1px;
 
+  /*
   @media (max-width: $breakpoint-small) {
     width: calc(100% - 100px - var(--spacing-m) - var(--spacing-s));
   }
+  */
 
   .channel-name {
     color: var(--color-link);

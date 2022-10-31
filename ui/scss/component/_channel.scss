@@ -3,6 +3,16 @@ $metadata-z-index: 1;
 $actions-z-index: 2;
 
 .channelPage-wrapper {
+  .card__header--between {
+    @media (max-width: $breakpoint-small) {
+      .card__title-actions-container {
+        .comment__actions {
+          margin-top: 6px;
+          justify-content: end;
+        }
+      }
+    }
+  }
   .section__header--actions {
     @media (max-width: $breakpoint-small) {
       .section__actions {

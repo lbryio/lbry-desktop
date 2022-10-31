@@ -7,6 +7,7 @@ import PremiumPlusTile from 'component/premiumPlusTile';
 import classnames from 'classnames';
 import Icon from 'component/common/icon';
 import * as ICONS from 'constants/icons';
+import { useIsMobile } from 'effects/use-screensize';
 
 const DISABLE_VIDEO_AD = false;
 
@@ -34,7 +35,7 @@ type Props = {
 
 function Ads(props: Props) {
   const { type = 'video', tileLayout, small, shouldShowAds, className, noFallback } = props;
-
+  const isMobile = useIsMobile();
   const adConfig = AD_CONFIGS.ADNIMATION;
 
   React.useEffect(() => {
@@ -54,7 +55,7 @@ function Ads(props: Props) {
     }
   }, [shouldShowAds, adConfig]);
 
-  const adsSignInDriver = (
+  const adsSignInDriver = !isMobile ? (
     <I18nMessage
       tokens={{
         sign_up_for_premium: (
@@ -64,6 +65,8 @@ function Ads(props: Props) {
     >
       %sign_up_for_premium% for an ad free experience.
     </I18nMessage>
+  ) : (
+    <Button button="link" label={__('Get Odysee Premium+')} navigate={`/$/${PAGES.ODYSEE_MEMBERSHIP}`} />
   );
 
   if (type === 'video') {
