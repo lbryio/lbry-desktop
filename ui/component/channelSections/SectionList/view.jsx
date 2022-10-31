@@ -14,25 +14,13 @@ type Props = {
   editMode?: boolean,
   // --- redux ---
   claimId: ?string,
-  creatorSettings: ?PerChannelSettings,
   featuredChannels: ?Array<FeaturedChannelsSection>,
   fetchingCreatorSettings: boolean,
-  doFetchCreatorSettings: (channelId: string) => Promise<any>,
   doOpenModal: (id: string, props: {}) => void,
 };
 
 export default function SectionList(props: Props) {
-  const {
-    editMode,
-    claimId,
-    creatorSettings,
-    featuredChannels,
-    fetchingCreatorSettings,
-    doFetchCreatorSettings,
-    doOpenModal,
-  } = props;
-
-  const [isFetching, setIsFetching] = React.useState(false);
+  const { editMode, claimId, featuredChannels, fetchingCreatorSettings, doOpenModal } = props;
 
   const sectionCount = featuredChannels ? featuredChannels.length : 0;
 
@@ -43,13 +31,6 @@ export default function SectionList(props: Props) {
   function handleSort() {
     doOpenModal(MODALS.FEATURED_CHANNELS_SORT, { channelId: claimId });
   }
-
-  React.useEffect(() => {
-    if (creatorSettings === undefined && claimId) {
-      setIsFetching(true);
-      doFetchCreatorSettings(claimId).finally(() => setIsFetching(false));
-    }
-  }, [claimId, creatorSettings, doFetchCreatorSettings]);
 
   return (
     <div className={classnames('channel_sections', { 'channel_sections--disabled': fetchingCreatorSettings })}>
@@ -70,11 +51,11 @@ export default function SectionList(props: Props) {
       <div className="channel_sections__list">
         {sectionCount === 0 && (
           <div className="empty main--empty">
-            {isFetching && <Spinner />}
-            {!isFetching && __('No featured channels.')}
+            {fetchingCreatorSettings && <Spinner />}
+            {!fetchingCreatorSettings && __('No featured channels.')}
           </div>
         )}
-        {!isFetching &&
+        {!fetchingCreatorSettings &&
           featuredChannels &&
           featuredChannels.map((fc) => (
             <Section
