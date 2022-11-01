@@ -13,7 +13,7 @@ import { selectViewCountForUri, selectBanStateForUri } from 'lbryinc';
 import { selectStreamingUrlForUri } from 'redux/selectors/file_info';
 import { selectIsActiveLivestreamForUri, selectViewersForId } from 'redux/selectors/livestream';
 import { selectShowMatureContent } from 'redux/selectors/settings';
-import { isClaimNsfw, isStreamPlaceholderClaim, getThumbnailFromClaim } from 'util/claim';
+import { isClaimNsfw, isStreamPlaceholderClaim } from 'util/claim';
 import ClaimPreviewTile from './view';
 import formatMediaDuration from 'util/formatMediaDuration';
 
@@ -30,7 +30,6 @@ const select = (state, props) => {
     date: props.uri && selectDateForUri(state, props.uri),
     isResolvingUri: props.uri && selectIsUriResolving(state, props.uri),
     claimIsMine: props.uri && selectClaimIsMine(state, claim),
-    thumbnail: getThumbnailFromClaim(claim),
     title: props.uri && selectTitleForUri(state, props.uri),
     banState: selectBanStateForUri(state, props.uri),
     geoRestriction: selectGeoRestrictionForUri(state, props.uri),
