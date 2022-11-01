@@ -52,6 +52,8 @@ function FileThumbnail(props: Props) {
 
   const passedThumbnail = rawThumbnail && rawThumbnail.trim().replace(/^http:\/\//i, 'https://');
   const thumbnail = passedThumbnail || thumbnailFromClaim;
+  // thumbnailFromClaim returned null and passedThumbnail is still being set by useGetThumbnail hook
+  const gettingThumbnail = passedThumbnail === undefined && thumbnailFromClaim === null;
   const isGif = thumbnail && thumbnail.endsWith('gif');
 
   React.useEffect(() => {
@@ -97,7 +99,7 @@ function FileThumbnail(props: Props) {
 
   const thumbnailUrl = url && url.replace(/'/g, "\\'");
 
-  if (thumbnailUrl !== undefined) {
+  if (!gettingThumbnail && thumbnailUrl !== undefined) {
     return (
       <Thumb small={small} thumb={thumbnailUrl} fallback={FALLBACK} className={className}>
         <PreviewOverlayProtectedContent uri={uri} />
