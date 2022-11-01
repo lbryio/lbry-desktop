@@ -5,7 +5,7 @@ import type { Node } from 'react';
 import useLazyLoading from 'effects/use-lazy-loading';
 
 type Props = {
-  thumb: string,
+  thumb: ?string,
   fallback: ?string,
   children?: Node,
   className?: string,

@@ -16,6 +16,8 @@ import classnames from 'classnames';
 import Thumb from './internal/thumb';
 import PreviewOverlayProtectedContent from '../previewOverlayProtectedContent';
 
+const FALLBACK = MISSING_THUMB_DEFAULT ? getThumbnailCdnUrl({ thumbnail: MISSING_THUMB_DEFAULT }) : undefined;
+
 type Props = {
   uri?: string,
   tileLayout?: boolean,
@@ -25,7 +27,6 @@ type Props = {
   claim: ?StreamClaim,
   className?: string,
   small?: boolean,
-  forcePlaceholder?: boolean,
   // -- redux --
   hasResolvedClaim: ?boolean, // undefined if uri is not given (irrelevant); boolean otherwise.
   thumbnailFromClaim: ?string,
@@ -41,7 +42,6 @@ function FileThumbnail(props: Props) {
     allowGifs = false,
     className,
     small,
-    forcePlaceholder,
     // -- redux --
     hasResolvedClaim,
     thumbnailFromClaim,
@@ -80,9 +80,7 @@ function FileThumbnail(props: Props) {
     );
   }
 
-  const fallback = MISSING_THUMB_DEFAULT ? getThumbnailCdnUrl({ thumbnail: MISSING_THUMB_DEFAULT }) : undefined;
-
-  let url = thumbnail || (hasResolvedClaim ? MISSING_THUMB_DEFAULT : '');
+  let url = thumbnail;
   // Pass image urls through a compression proxy
   if (thumbnail) {
     if (isGif) {
@@ -97,11 +95,11 @@ function FileThumbnail(props: Props) {
     }
   }
 
-  const thumbnailUrl = url ? url.replace(/'/g, "\\'") : '';
+  const thumbnailUrl = url && url.replace(/'/g, "\\'");
 
-  if (hasResolvedClaim || thumbnailUrl || (forcePlaceholder && !uri)) {
+  if (thumbnailUrl !== undefined) {
     return (
-      <Thumb small={small} thumb={thumbnailUrl || MISSING_THUMB_DEFAULT} fallback={fallback} className={className}>
+      <Thumb small={small} thumb={thumbnailUrl} fallback={FALLBACK} className={className}>
         <PreviewOverlayProtectedContent uri={uri} />
         {children}
       </Thumb>

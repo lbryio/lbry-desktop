@@ -176,8 +176,11 @@ export const isStreamPlaceholderClaim = (claim: ?StreamClaim) => {
 };
 
 export const getThumbnailFromClaim = (claim: ?Claim) => {
-  const thumbnail = claim && claim.value && claim.value.thumbnail;
-  return thumbnail && thumbnail.url ? thumbnail.url.trim().replace(/^http:\/\//i, 'https://') : undefined;
+  if (!claim) return claim;
+
+  const { thumbnail } = claim.value || {};
+
+  return thumbnail && thumbnail.url ? thumbnail.url.trim().replace(/^http:\/\//i, 'https://') : null;
 };
 
 export const getClaimMeta = (claim: ?Claim) => claim && claim.meta;

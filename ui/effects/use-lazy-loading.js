@@ -46,6 +46,8 @@ export default function useLazyLoading(
         tmpImage.src = target.dataset.backgroundImage;
       }
       target.style.backgroundImage = `url(${target.dataset.backgroundImage})`;
+    } else {
+      target.style.backgroundImage = `url(${backgroundFallback})`;
     }
   }
 
