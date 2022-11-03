@@ -2,6 +2,21 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+
+## [unreleased]
+
+### Added
+ - 'Collections' to txo filter _community pr!_ ([#7711](https://github.com/lbryio/lbry-desktop/pull/7711))
+ - Swap comment servers _community pr!_ ([#7670](https://github.com/lbryio/lbry-desktop/pull/7670))
+ 
+### Fixed
+ - Thumbnails no longer disable publish ([#7714](https://github.com/lbryio/lbry-desktop/pull/7714))
+ - Publishing posts were empty ([#7715](https://github.com/lbryio/lbry-desktop/pull/7715))
+ - Minor layout fixes _community pr!_ ([#7715](https://github.com/lbryio/lbry-desktop/pull/7715))
+ 
+ ### Changed
+  - Removed watchman and its errors ([#7710](https://github.com/lbryio/lbry-desktop/pull/7710))
+  
 ## [0.53.6] - [2022-10-21]
 
 ### Fixed
