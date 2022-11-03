@@ -106,7 +106,7 @@ function SelectThumbnail(props: Props) {
         __('This will be visible in a few minutes after you submit this form.')}
       <img
         style={{ display: 'none' }}
-        src={thumbnail}
+        src={thumbnail || ThumbnailMissingImage}
         alt={__('Thumbnail Preview')}
         onError={() => {
           if (updateThumbnailParams) {

@@ -208,7 +208,6 @@ function PublishForm(props: Props) {
     isNameValid(name) &&
     title &&
     bid &&
-    thumbnail &&
     !bidError &&
     !emptyPostError &&
     !(thumbnailError && !thumbnailUploaded) &&
