@@ -162,17 +162,19 @@ function ShowPage(props: Props) {
     ) : (
       <Page>
         <Card
-          title={uri}
+          title={__('Content Blocked')}
           subtitle={
             <>
-              {(!errorCensor || !errorCensor.text) &&
-                __('Your hub has blocked this content because it subscribes to the following blocking channel:')}
-              {errorCensor && errorCensor.text}{' '}
+              {errorCensor &&
+                __(`Your hub has blocked %content% because it subscribes to the following blocking channel:`, {
+                  content: uri,
+                })}{' '}
               <Button
                 button="link"
                 navigate={errorCensor && errorCensor.canonical_url}
                 label={errorCensor && errorCensor.name}
               />
+              {errorCensor && <div className={'error__text'}>{`\nMessage:\n${errorCensor.text}\n`}</div>}
             </>
           }
         />

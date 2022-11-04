@@ -86,16 +86,25 @@ export function doResolveUris(
           // https://github.com/facebook/flow/issues/2221
           if (uriResolveInfo) {
             if (uriResolveInfo.error) {
-              // $FlowFixMe
-              resolveInfo[uri] = {
-                ...fallbackResolveInfo,
-                errorCensor: {
+              // TODO: handled filtered too
+              if (uriResolveInfo.error.name === 'BLOCKED') {
+                // $FlowFixMe
+                resolveInfo[uri] = {
                   // $FlowFixMe
-                  ...uriResolveInfo.error.censor,
-                  // $FlowFixMe
-                  text: uriResolveInfo.error.text,
-                },
-              };
+                  ...fallbackResolveInfo,
+                  errorCensor: {
+                    // $FlowFixMe
+                    ...uriResolveInfo.error.censor,
+                    // $FlowFixMe
+                    text: uriResolveInfo.error.text,
+                  }, // $FlowFixMe
+                };
+              } else {
+                // $FlowFixMe
+                resolveInfo[uri] = {
+                  ...fallbackResolveInfo,
+                };
+              }
             } else {
               if (checkReposts) {
                 if (uriResolveInfo.reposted_claim) {
