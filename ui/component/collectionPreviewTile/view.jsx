@@ -25,14 +25,6 @@ type Props = {
   thumbnail?: string,
   title?: string,
   placeholder: boolean,
-  blackListedOutpoints: Array<{
-    txid: string,
-    nout: number,
-  }>,
-  filteredOutpoints: Array<{
-    txid: string,
-    nout: number,
-  }>,
   blockedChannelUris: Array<string>,
   isMature?: boolean,
   showMature: boolean,

@@ -8,18 +8,15 @@ import { createCachedSelector } from 're-reselect';
 import { selectClaimForUri, makeSelectIsBlacklisted } from 'redux/selectors/claims';
 import { selectMutedChannels } from 'redux/selectors/blocked';
 import { selectModerationBlockList } from 'redux/selectors/comments';
-import { selectBlacklistedOutpointMap, selectFilteredOutpointMap } from 'lbryinc';
 import { getChannelFromClaim } from 'util/claim';
 import { isURIEqual } from 'util/lbryURI';
 
 export const selectBanStateForUri = createCachedSelector(
   selectClaimForUri,
-  selectBlacklistedOutpointMap,
-  selectFilteredOutpointMap,
   selectMutedChannels,
   selectModerationBlockList,
   (state, uri) => makeSelectIsBlacklisted(uri)(state),
-  (claim, blackListedOutpointMap, filteredOutpointMap, mutedChannelUris, personalBlocklist, isBlacklisted) => {
+  (claim, mutedChannelUris, personalBlocklist, isBlacklisted) => {
     const banState = {};
 
     if (!claim) {
@@ -30,27 +27,6 @@ export const selectBanStateForUri = createCachedSelector(
 
     if (isBlacklisted) {
       banState['blacklisted'] = true;
-    }
-
-    // This will be replaced once blocking is done at the wallet server level.
-    if (blackListedOutpointMap) {
-      if (
-        (channelClaim && blackListedOutpointMap[`${channelClaim.txid}:${channelClaim.nout}`]) ||
-        blackListedOutpointMap[`${claim.txid}:${claim.nout}`]
-      ) {
-        banState['blacklisted'] = true;
-      }
-    }
-
-    // We're checking to see if the stream outpoint or signing channel outpoint
-    // is in the filter list.
-    if (filteredOutpointMap) {
-      if (
-        (channelClaim && filteredOutpointMap[`${channelClaim.txid}:${channelClaim.nout}`]) ||
-        filteredOutpointMap[`${claim.txid}:${claim.nout}`]
-      ) {
-        banState['filtered'] = true;
-      }
     }
 
     // block stream claims

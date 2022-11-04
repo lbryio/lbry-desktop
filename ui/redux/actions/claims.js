@@ -87,7 +87,15 @@ export function doResolveUris(
           if (uriResolveInfo) {
             if (uriResolveInfo.error) {
               // $FlowFixMe
-              resolveInfo[uri] = { ...fallbackResolveInfo, errorCensor: uriResolveInfo.error.censor };
+              resolveInfo[uri] = {
+                ...fallbackResolveInfo,
+                errorCensor: {
+                  // $FlowFixMe
+                  ...uriResolveInfo.error.censor,
+                  // $FlowFixMe
+                  text: uriResolveInfo.error.text,
+                },
+              };
             } else {
               if (checkReposts) {
                 if (uriResolveInfo.reposted_claim) {

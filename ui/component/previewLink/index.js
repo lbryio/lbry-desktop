@@ -8,7 +8,6 @@ import {
   makeSelectMetadataItemForUri,
 } from 'redux/selectors/claims';
 import { doResolveUri } from 'redux/actions/claims';
-import { selectBlackListedOutpoints } from 'lbryinc';
 import PreviewLink from './view';
 
 const select = (state, props) => {
@@ -22,7 +21,6 @@ const select = (state, props) => {
     description: makeSelectMetadataItemForUri(props.uri, 'description')(state),
     channelIsMine: selectClaimIsMine(state, claim),
     isResolvingUri: selectIsUriResolving(state, props.uri),
-    blackListedOutpoints: selectBlackListedOutpoints(state),
   };
 };
 

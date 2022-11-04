@@ -167,6 +167,7 @@ declare type ClaimErrorCensor = {
     take_over_height: number,
   },
   name: string,
+  text: string,
   normalized_name: string,
   nout: number,
   permanent_url: string,

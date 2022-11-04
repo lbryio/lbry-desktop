@@ -50,10 +50,6 @@ type Props = {
   channelIsMine: boolean,
   isSubscribed: boolean,
   channelIsBlocked: boolean,
-  blackListedOutpoints: Array<{
-    txid: string,
-    nout: number,
-  }>,
   fetchSubCount: (string) => void,
   subCount: number,
   pending: boolean,
@@ -72,7 +68,6 @@ function ChannelPage(props: Props) {
     // page, ?page= may come back some day?
     channelIsMine,
     isSubscribed,
-    blackListedOutpoints,
     fetchSubCount,
     subCount,
     pending,
@@ -133,14 +128,6 @@ function ChannelPage(props: Props) {
     );
   } else {
     collectionEmpty = <section className="main--empty">{__('No Lists Found')}</section>;
-  }
-
-  let channelIsBlackListed = false;
-
-  if (claim && blackListedOutpoints) {
-    channelIsBlackListed = blackListedOutpoints.some(
-      (outpoint) => outpoint.txid === claim.txid && outpoint.nout === claim.nout
-    );
   }
 
   // If a user changes tabs, update the url so it stays on the same page if they refresh.
@@ -219,9 +206,9 @@ function ChannelPage(props: Props) {
               navigate={`/$/${PAGES.CHANNELS}`}
             />
           )}
-          {!channelIsBlackListed && <ShareButton uri={uri} />}
+          <ShareButton uri={uri} />
           {!(isBlocked || isMuted) && <ClaimSupportButton uri={uri} />}
-          {!(isBlocked || isMuted) && (!channelIsBlackListed || isSubscribed) && <SubscribeButton uri={permanentUrl} />}
+          {!(isBlocked || isMuted) && isSubscribed && <SubscribeButton uri={permanentUrl} />}
           {/* TODO: add channel collections <ClaimCollectionAddButton uri={uri} fileAction /> */}
           <ClaimMenuList uri={claim.permanent_url} inline isChannelPage />
         </div>
@@ -293,7 +280,6 @@ function ChannelPage(props: Props) {
               {currentView === PAGE.CONTENT && (
                 <ChannelContent
                   uri={uri}
-                  channelIsBlackListed={channelIsBlackListed}
                   viewHiddenChannels
                   claimType={['stream', 'repost']}
                   empty={<section className="main--empty">{__('No Content Found')}</section>}
@@ -302,13 +288,7 @@ function ChannelPage(props: Props) {
             </TabPanel>
             <TabPanel>
               {currentView === PAGE.LISTS && (
-                <ChannelContent
-                  claimType={'collection'}
-                  uri={uri}
-                  channelIsBlackListed={channelIsBlackListed}
-                  viewHiddenChannels
-                  empty={collectionEmpty}
-                />
+                <ChannelContent claimType={'collection'} uri={uri} viewHiddenChannels empty={collectionEmpty} />
               )}
             </TabPanel>
             <TabPanel>
