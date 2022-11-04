@@ -615,7 +615,7 @@
 
   @media (max-width: $breakpoint-small) {
     font-size: var(--font-small);
-
+    border-bottom: none;
     .button--link {
       font-size: var(--font-xsmall);
       margin: 0px;

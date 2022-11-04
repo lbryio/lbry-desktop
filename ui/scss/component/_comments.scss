@@ -45,6 +45,12 @@ $thumbnailWidthSmall: 1rem;
   }
 }
 
+.comment__actions-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
 .comment {
   width: 100%;
   display: flex;
