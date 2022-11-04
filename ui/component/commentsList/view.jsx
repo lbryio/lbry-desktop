@@ -366,9 +366,9 @@ const CommentActionButtons = (actionButtonsProps: ActionButtonsProps) => {
   const sortButtonProps = { activeSort: sort, changeSort };
 
   return (
-    <>
+    <div className={'comment__actions-row'}>
       {totalComments > 1 && ENABLE_COMMENT_REACTIONS && (
-        <span className="comment__sort">
+        <div className="comment__sort-group">
           <SortButton {...sortButtonProps} label={__('Best')} icon={ICONS.BEST} sortOption={SORT_BY.POPULARITY} />
           <SortButton
             {...sortButtonProps}
@@ -377,11 +377,9 @@ const CommentActionButtons = (actionButtonsProps: ActionButtonsProps) => {
             sortOption={SORT_BY.CONTROVERSY}
           />
           <SortButton {...sortButtonProps} label={__('New')} icon={ICONS.NEW} sortOption={SORT_BY.NEWEST} />
-        </span>
+        </div>
       )}
-      <div className="button_refresh">
-        <Button button="alt" icon={ICONS.REFRESH} title={__('Refresh')} onClick={() => setPage(0)} />
-      </div>
+
       {allServers.length >= 2 && (
         <div className="button__selected-server">
           <FormField
@@ -408,7 +406,10 @@ const CommentActionButtons = (actionButtonsProps: ActionButtonsProps) => {
           </FormField>
         </div>
       )}
-    </>
+      <div className="button_refresh">
+        <Button button="alt" icon={ICONS.REFRESH} title={__('Refresh')} onClick={() => setPage(0)} />
+      </div>
+    </div>
   );
 };
 

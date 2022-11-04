@@ -363,31 +363,6 @@ export function CommentCreate(props: Props) {
       .catch(() => {});
   }, [canReceiveFiatTip, claim.claim_id, claim.name, claim.signing_channel, stickerSelector]);
 
-  // LIVESTREAM ONLY - REMOVE
-  // Handle keyboard shortcut comment creation
-  // React.useEffect(() => {
-  //   function altEnterListener(e: SyntheticKeyboardEvent<*>) {
-  //     const inputRef = formFieldRef && formFieldRef.current && formFieldRef.current.input;
-  //
-  //     if (inputRef && inputRef.current === document.activeElement) {
-  //       // $FlowFixMe
-  //       const isTyping = e.target.attributes['term'];
-  //
-  //       if (((isLivestream && !isTyping) || e.ctrlKey || e.metaKey) && e.keyCode === KEYCODES.ENTER) {
-  //         e.preventDefault();
-  //         buttonRef.current.click();
-  //       }
-  //     }
-  //   }
-  //
-  //   window.addEventListener('keydown', altEnterListener);
-  //
-  //   // removes the listener so it doesn't cause problems elsewhere in the app
-  //   return () => {
-  //     window.removeEventListener('keydown', altEnterListener);
-  //   };
-  // }, [isLivestream]);
-
   // **************************************************************************
   // Render
   // **************************************************************************

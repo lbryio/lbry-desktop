@@ -13,7 +13,7 @@ const select = (state, props) => {
   if (claimUriBeingPlayed) {
     const claim = makeSelectClaimForUri(props.uri)(state);
     const claimBeingPlayed = makeSelectClaimForUri(claimUriBeingPlayed)(state);
-    isBeingPlayed = claim.claim_id === claimBeingPlayed.claim_id;
+    isBeingPlayed = claim && claim.claim_id === claimBeingPlayed.claim_id;
   }
 
   return {
