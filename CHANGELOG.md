@@ -12,10 +12,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Fixed
  - Thumbnails no longer disable publish ([#7714](https://github.com/lbryio/lbry-desktop/pull/7714))
  - Publishing posts were empty ([#7715](https://github.com/lbryio/lbry-desktop/pull/7715))
- - Minor layout fixes _community pr!_ ([#7715](https://github.com/lbryio/lbry-desktop/pull/7715))
+ - Minor layout fixes _community pr!_ ([#7709](https://github.com/lbryio/lbry-desktop/pull/7709))
+ - Comment section buttons layout ([#7716](https://github.com/lbryio/lbry-desktop/pull/7716))
  
  ### Changed
-  - Removed watchman and its errors ([#7710](https://github.com/lbryio/lbry-desktop/pull/7710))
+ - Removed watchman and its errors ([#7710](https://github.com/lbryio/lbry-desktop/pull/7710))
   
 ## [0.53.6] - [2022-10-21]
 
