@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
  
  ### Changed
  - Removed watchman and its errors ([#7710](https://github.com/lbryio/lbry-desktop/pull/7710))
+ - Updated lbrynet to [0.112.0](https://github.com/lbryio/lbry-sdk/releases/tag/v0.112.0)
   
 ## [0.53.6] - [2022-10-21]
 
