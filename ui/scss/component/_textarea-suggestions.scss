@@ -85,7 +85,7 @@
   border-radius: 0 !important;
 }
 
-.card__main-actions .commentCreate .MuiOutlinedInput-notchedOutline {
+.card__main-actions .comment-create .MuiOutlinedInput-notchedOutline {
   border: 1px solid var(--color-border) !important;
   border-radius: var(--border-radius) !important;
 }
@@ -104,7 +104,7 @@
 
     textarea {
       border: none;
-      margin: 9px 0px;
+      padding: var(--spacing-xxs) var(--spacing-xxs);
     }
 
     button {
@@ -320,7 +320,7 @@
   }
 
   @media (max-width: $breakpoint-small) {
-    .commentCreate {
+    .comment-create {
       .section__actions {
         .button {
           background-color: var(--color-header-button);

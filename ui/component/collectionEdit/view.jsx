@@ -17,7 +17,7 @@ import { useHistory } from 'react-router-dom';
 import { isNameValid, regexInvalidURI } from 'util/lbryURI';
 import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
 import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
-import { FormField } from 'component/common/form';
+import { FormField, FormFieldAreaAdvanced } from 'component/common/form';
 import { handleBidChange } from 'util/publish';
 import { FF_MAX_CHARS_IN_DESCRIPTION } from 'constants/form-field';
 import { INVALID_NAME_ERROR } from 'constants/claim';
@@ -371,7 +371,7 @@ function CollectionForm(props: Props) {
                           usePublishFormMode
                         />
                       </fieldset-section>
-                      <FormField
+                      <FormFieldAreaAdvanced
                         type="markdown"
                         name="content_description2"
                         label={__('Description')}

@@ -41,7 +41,7 @@
         margin: 0px var(--spacing-xxs);
       }
 
-      .button + .commentCreate {
+      .button + .comment-create {
         margin-top: var(--spacing-xxs);
       }
     }
@@ -659,7 +659,7 @@
   }
 }
 
-.button_selectedServer {
+.button__selected-server {
   display: inline;
   float: right;
   select {

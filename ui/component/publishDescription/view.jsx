@@ -1,7 +1,7 @@
 // @flow
 import { FF_MAX_CHARS_IN_DESCRIPTION } from 'constants/form-field';
 import React from 'react';
-import { FormField } from 'component/common/form';
+import { FormFieldAreaAdvanced } from 'component/common/form';
 import usePersistedState from 'effects/use-persisted-state';
 import Card from 'component/common/card';
 
@@ -27,7 +27,7 @@ function PublishDescription(props: Props) {
   return (
     <Card
       actions={
-        <FormField
+        <FormFieldAreaAdvanced
           type={advancedEditor ? 'markdown' : 'textarea'}
           name="content_description"
           label={__('Description')}

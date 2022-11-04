@@ -17,7 +17,7 @@ import CommentBadge from 'component/common/comment-badge'; // have this?
 import ChannelThumbnail from 'component/channelThumbnail';
 import { Menu, MenuButton } from '@reach/menu-button';
 import Icon from 'component/common/icon';
-import { FormField, Form } from 'component/common/form';
+import { FormFieldAreaAdvanced, Form } from 'component/common/form';
 import classnames from 'classnames';
 import usePersistedState from 'effects/use-persisted-state';
 import CommentReactions from 'component/commentReactions';
@@ -319,7 +319,7 @@ function CommentView(props: Props) {
           <div>
             {isEditing ? (
               <Form onSubmit={handleSubmit}>
-                <FormField
+                <FormFieldAreaAdvanced
                   className="comment__edit-input"
                   type={advancedEditor ? 'markdown' : 'textarea'}
                   name="editing_comment"

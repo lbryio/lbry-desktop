@@ -32,12 +32,16 @@ $contentMaxWidth: 60rem;
       }
     }
 
-    .commentCreate {
+    .comment-create {
       border-top: 1px solid var(--color-border);
       padding-top: var(--spacing-s);
 
-      .commentCreate__label {
+      .comment-create__label {
         color: var(--color-text);
+      }
+      .comment-create__header {
+        display: grid;
+        grid-template-columns: 3fr 1fr;
       }
       textarea,
       select,
@@ -81,7 +85,7 @@ $contentMaxWidth: 60rem;
     }
   }
 
-  .commentCreate,
+  .comment-create,
   .comment__content {
     margin: var(--spacing-m);
     margin-bottom: 0;

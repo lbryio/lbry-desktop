@@ -4,7 +4,7 @@ import 'scss/component/_comment-create.scss';
 
 import { buildValidSticker } from 'util/comments';
 import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
-import { FormField, Form } from 'component/common/form';
+import { FormFieldAreaAdvanced, Form } from 'component/common/form';
 import { getChannelIdFromClaim } from 'util/claim';
 import { Lbryio } from 'lbryinc';
 import { useHistory } from 'react-router';
@@ -22,8 +22,8 @@ import I18nMessage from 'component/i18nMessage';
 import Icon from 'component/common/icon';
 import OptimizedImage from 'component/optimizedImage';
 import React from 'react';
-import SelectChannel from 'component/selectChannel';
 import StickerSelector from './sticker-selector';
+import CommentCreateHeader from './comment-create-header';
 import type { ElementRef } from 'react';
 import UriIndicator from 'component/uriIndicator';
 import usePersistedState from 'effects/use-persisted-state';
@@ -409,7 +409,11 @@ export function CommentCreate(props: Props) {
           push(pathPlusRedirect);
         }}
       >
-        <FormField type="textarea" name={'comment_signup_prompt'} placeholder={__('Say something about this...')} />
+        <FormFieldAreaAdvanced
+          type="textarea"
+          name={'comment_signup_prompt'}
+          placeholder={__('Say something about this...')}
+        />
         <div className="section__actions--no-margin">
           <Button disabled button="primary" label={__('Post --[button to submit something]--')} />
         </div>
@@ -420,22 +424,22 @@ export function CommentCreate(props: Props) {
   return (
     <Form
       onSubmit={() => {}}
-      className={classnames('commentCreate', {
-        'commentCreate--reply': isReply,
-        'commentCreate--nestedReply': isNested,
-        'commentCreate--bottom': bottom,
+      className={classnames('comment-create', {
+        'comment-create--reply': isReply,
+        'comment-create--nestedReply': isNested,
+        'comment-create--bottom': bottom,
       })}
     >
       {/* Input Box/Preview Box */}
       {stickerSelector ? (
         <StickerSelector onSelect={(sticker) => handleSelectSticker(sticker)} claimIsMine={claimIsMine} />
       ) : isReviewingStickerComment && activeChannelClaim && selectedSticker ? (
-        <div className="commentCreate__stickerPreview">
-          <div className="commentCreate__stickerPreviewInfo">
+        <div className="comment-create__stickerPreview">
+          <div className="comment-create__stickerPreviewInfo">
             <ChannelThumbnail xsmall uri={activeChannelClaim.canonical_url} />
             <UriIndicator uri={activeChannelClaim.canonical_url} link />
           </div>
-          <div className="commentCreate__stickerPreviewImage">
+          <div className="comment-create__stickerPreviewImage">
             <OptimizedImage src={selectedSticker && selectedSticker.url} waitLoad loading="lazy" />
           </div>
           {/* figure out lbc sticker prices */}
@@ -447,15 +451,15 @@ export function CommentCreate(props: Props) {
           )}
         </div>
       ) : isReviewingSupportComment && activeChannelClaim ? (
-        <div className="commentCreate__supportCommentPreview">
+        <div className="comment-create__supportCommentPreview">
           <CreditAmount
             amount={tipAmount}
-            className="commentCreate__supportCommentPreviewAmount"
+            className="comment-create__supportCommentPreviewAmount"
             isFiat={activeTab === TAB_FIAT}
             size={activeTab === TAB_LBC ? 18 : 2}
           />
           <ChannelThumbnail xsmall uri={activeChannelClaim.canonical_url} />
-          <div className="commentCreate__supportCommentBody">
+          <div className="comment-create__supportCommentBody">
             <UriIndicator uri={activeChannelClaim.canonical_url} link />
             <div>{commentValue}</div>
           </div>
@@ -470,23 +474,22 @@ export function CommentCreate(props: Props) {
             />
           )}
 
-          <FormField
+          <FormFieldAreaAdvanced
             autoFocus={isReply}
             charCount={charCount}
             className={isReply ? 'content_reply' : 'content_comment'}
             disabled={isFetchingChannels}
-            label={
-              <div className="commentCreate__labelWrapper">
-                <span className="commentCreate__label">{(isReply ? __('Replying as') : __('Comment as')) + ' '}</span>
-                <SelectChannel tiny />
-              </div>
+            header={
+              <CommentCreateHeader
+                isReply={isReply}
+                advanced={advancedEditor}
+                advancedHandler={() => setAdvancedEditor(!advancedEditor)}
+              />
             }
             name={isReply ? 'content_reply' : 'content_description'}
-            quickActionLabel={isReply ? undefined : advancedEditor ? __('Simple Editor') : __('Advanced Editor')}
             ref={formFieldRef}
             onChange={handleCommentChange}
             openEmoteMenu={() => setShowEmotes(!showEmotes)}
-            quickActionHandler={() => setAdvancedEditor(!advancedEditor)}
             onFocus={onTextareaFocus}
             onBlur={onTextareaBlur}
             placeholder={__('Say something about this...')}
@@ -654,7 +657,7 @@ export function CommentCreate(props: Props) {
         {/* Help Text */}
         {deletedComment && <div className="error__text">{__('This comment has been deleted.')}</div>}
         {!!minAmount && (
-          <div className="help--notice commentCreate__minAmountNotice">
+          <div className="help--notice comment-create__minAmountNotice">
             <I18nMessage tokens={{ lbc: <CreditAmount noFormat amount={minAmount} /> }}>
               {minTip ? 'Comment min: %lbc%' : minSuper ? 'HyperChat min: %lbc%' : ''}
             </I18nMessage>

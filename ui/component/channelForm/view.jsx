@@ -3,7 +3,7 @@ import * as MODALS from 'constants/modal_types';
 import * as ICONS from 'constants/icons';
 import React from 'react';
 import classnames from 'classnames';
-import { FormField } from 'component/common/form';
+import { FormField, FormFieldAreaAdvanced } from 'component/common/form';
 import Button from 'component/button';
 import TagsSearch from 'component/tagsSearch';
 import ErrorText from 'component/common/error-text';
@@ -376,7 +376,7 @@ function ChannelForm(props: Props) {
                       onChange={(e) => setParams({ ...params, title: e.target.value })}
                       maxLength={MAX_TITLE_LEN}
                     />
-                    <FormField
+                    <FormFieldAreaAdvanced
                       type="markdown"
                       name="content_description2"
                       label={__('Description')}
