@@ -2321,5 +2321,6 @@
   "Autoplay Next is on.": "Autoplay Next is on.",
   "Content Blocked": "Content Blocked",
   "Your hub has blocked %content% because it subscribes to the following blocking channel:": "Your hub has blocked %content% because it subscribes to the following blocking channel:",
+  "Your hub has blocked %content% because it subscribes to %channel%. You can change your hub in %settings%.": "Your hub has blocked %content% because it subscribes to %channel%. You can change your hub in %settings%.",
   "--end--": "--end--"
 }

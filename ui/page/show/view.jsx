@@ -1,12 +1,12 @@
 // @flow
 import * as PAGES from 'constants/pages';
+import I18nMessage from 'component/i18nMessage';
 import React, { useEffect } from 'react';
 import { Redirect, useHistory } from 'react-router-dom';
 import Spinner from 'component/spinner';
 import ChannelPage from 'page/channel';
 import Page from 'component/page';
 import Button from 'component/button';
-import Card from 'component/common/card';
 import { formatLbryUrlForWeb } from 'util/url';
 import { parseURI } from 'util/lbryURI';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
@@ -117,6 +117,7 @@ function ShowPage(props: Props) {
         {!isResolvingUri && !isSubscribed && (
           <div className="main--empty">
             <Yrbl
+              type={'sad'}
               title={isChannel ? __('Channel Not Found') : __('No Content Found')}
               subtitle={
                 isChannel ? (
@@ -147,37 +148,49 @@ function ShowPage(props: Props) {
   } else if (isBlacklisted && !claimIsMine) {
     innerContent = isBlacklistedDueToDMCA ? (
       <Page>
-        <Card
-          title={uri}
-          subtitle={__(
-            'Your hub has blocked access to this content do to a complaint received under the US Digital Millennium Copyright Act.'
-          )}
-          actions={
-            <div className="section__actions">
-              <Button button="link" href="https://lbry.com/faq/dmca" label={__('Read More')} />
-            </div>
-          }
-        />
+        <div className="main--empty">
+          <Yrbl
+            title={isChannel ? __('Channel Not Found') : __('No Content Found')}
+            subtitle={__(
+              'Your hub has blocked access to this content do to a complaint received under the US Digital Millennium Copyright Act.'
+            )}
+            actions={
+              <div className="section__actions">
+                <Button button="link" href="https://lbry.com/faq/dmca" label={__('Read More')} />
+              </div>
+            }
+          />
+        </div>
       </Page>
     ) : (
       <Page>
-        <Card
-          title={__('Content Blocked')}
-          subtitle={
-            <>
-              {errorCensor &&
-                __(`Your hub has blocked %content% because it subscribes to the following blocking channel:`, {
-                  content: uri,
-                })}{' '}
-              <Button
-                button="link"
-                navigate={errorCensor && errorCensor.canonical_url}
-                label={errorCensor && errorCensor.name}
-              />
-              {errorCensor && <div className={'error__text'}>{`\nMessage:\n${errorCensor.text}\n`}</div>}
-            </>
-          }
-        />
+        <div className="main--empty">
+          <Yrbl
+            type={'sad'}
+            title={__('Content Blocked')}
+            subtitle={
+              <div>
+                <I18nMessage
+                  tokens={{
+                    content: uri,
+                    settings: <Button button="link" label={__('Settings')} navigate={`/$/${PAGES.SETTINGS}`} />,
+                    channel: (
+                      <Button
+                        button="link"
+                        navigate={errorCensor && errorCensor.canonical_url}
+                        label={errorCensor && errorCensor.name}
+                      />
+                    ),
+                  }}
+                >
+                  Your hub has blocked %content% because it subscribes to %channel%. You can change your hub in
+                  %settings%.
+                </I18nMessage>
+                {/* {errorCensor && <p>{`Message:\n${errorCensor.text}`}</p>} */}
+              </div>
+            }
+          />
+        </div>
       </Page>
     );
   } else if (claim) {

@@ -9,7 +9,7 @@ import eventTracking from 'videojs-event-tracking';
 import * as OVERLAY from './overlays';
 import './plugins/videojs-mobile-ui/plugin';
 import hlsQualitySelector from './plugins/videojs-hls-quality-selector/plugin';
-import recsys from './plugins/videojs-recsys/plugin';
+// import recsys from './plugins/videojs-recsys/plugin'; // points to view tracking plugin
 import qualityLevels from 'videojs-contrib-quality-levels';
 import LbryVolumeBarClass from './lbry-volume-bar';
 import keyboardShorcuts from './videojs-keyboard-shortcuts';
@@ -92,9 +92,9 @@ if (!Object.keys(videojs.getPlugins()).includes('qualityLevels')) {
   videojs.registerPlugin('qualityLevels', qualityLevels);
 }
 
-if (!Object.keys(videojs.getPlugins()).includes('recsys')) {
-  videojs.registerPlugin('recsys', recsys);
-}
+// if (!Object.keys(videojs.getPlugins()).includes('recsys')) {
+// videojs.registerPlugin('recsys', recsys);
+// }
 
 // ****************************************************************************
 // VideoJs
