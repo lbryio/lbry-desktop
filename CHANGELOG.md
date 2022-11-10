@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 
-## [unreleased]
+## [0.53.7] - [2022-11-10]
 
 ### Added
  - 'Collections' to txo filter _community pr!_ ([#7711](https://github.com/lbryio/lbry-desktop/pull/7711))
