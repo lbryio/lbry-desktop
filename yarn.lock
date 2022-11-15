@@ -7994,6 +7994,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"execa@npm:^0.10.0":
+  version: 0.10.0
+  resolution: "execa@npm:0.10.0"
+  dependencies:
+    cross-spawn: ^6.0.0
+    get-stream: ^3.0.0
+    is-stream: ^1.1.0
+    npm-run-path: ^2.0.0
+    p-finally: ^1.0.0
+    signal-exit: ^3.0.0
+    strip-eof: ^1.0.0
+  checksum: da132af2b209e69d79f91751ac6d15ddbb8d9414f9e5f7a53405232679a3dca00fe11eb14e0cd5c2c374a749061410a7717fcc3094f6dd779cf4d259faa58d9a
+  languageName: node
+  linkType: hard
+
 "execa@npm:^0.7.0":
   version: 0.7.0
   resolution: "execa@npm:0.7.0"
@@ -8305,6 +8320,15 @@ __metadata:
   dependencies:
     pend: ~1.2.0
   checksum: c8585fd5713f4476eb8261150900d2cb7f6ff2d87f8feb306ccc8a1122efd152f1783bdb2b8dc891395744583436bfd8081d8e63ece0ec8687eeefea394d4ff2
+  languageName: node
+  linkType: hard
+
+"ffmpeg-probe@npm:^1.0.6":
+  version: 1.0.6
+  resolution: "ffmpeg-probe@npm:1.0.6"
+  dependencies:
+    execa: ^0.10.0
+  checksum: fe649b2ca41bd48b521d7cc5741663d4c608d7bc596033ee9c76d4c3f5e739881a4d421bdcfa3ea60e28301eae7a85b72cd74d6266e661bccf9aea6578fcfe3c
   languageName: node
   linkType: hard
 
@@ -11450,6 +11474,7 @@ __metadata:
     eslint-plugin-react-hooks: ^1.6.0
     eslint-plugin-standard: ^4.0.1
     express: ^4.17.1
+    ffmpeg-probe: ^1.0.6
     file-loader: ^4.2.0
     flow-bin: ^0.97.0
     flow-typed: ^3.7.0
@@ -17641,7 +17666,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"terser@npm:^4.1.2, terser@npm:^4.6.12, terser@npm:^4.6.3":
+"terser@npm:^4.1.2":
+  version: 4.8.1
+  resolution: "terser@npm:4.8.1"
+  dependencies:
+    commander: ^2.20.0
+    source-map: ~0.6.1
+    source-map-support: ~0.5.12
+  bin:
+    terser: bin/terser
+  checksum: b342819bf7e82283059aaa3f22bb74deb1862d07573ba5a8947882190ad525fd9b44a15074986be083fd379c58b9a879457a330b66dcdb77b485c44267f9a55a
+  languageName: node
+  linkType: hard
+
+"terser@npm:^4.6.12, terser@npm:^4.6.3":
   version: 4.8.0
   resolution: "terser@npm:4.8.0"
   dependencies:

@@ -24,6 +24,8 @@ const mime = require('mime');
 const remote = require('@electron/remote/main');
 const os = require('os');
 const sudo = require('sudo-prompt');
+const probe = require('ffmpeg-probe');
+const MAX_IPC_SEND_BUFFER_SIZE = 500000000; // large files crash when serialized for ipc message
 
 remote.initialize();
 const filePath = path.join(process.resourcesPath, 'static', 'upgradeDisabled');
@@ -351,6 +353,43 @@ ipcMain.handle('get-file-from-path', (event, path, readContents = true) => {
       });
     });
   });
+});
+
+ipcMain.handle('get-file-details-from-path', async (event, path) => {
+    const isFfMp4 = (ffprobeResults) => {
+      return ffprobeResults &&
+      ffprobeResults.format &&
+      ffprobeResults.format.format_name &&
+      ffprobeResults.format.format_name.includes('mp4');
+    };
+    const folders = path.split(/[\\/]/);
+    const name = folders[folders.length - 1];
+    let duration = 0, size = 0, mimeType;
+    try {
+      await fs.promises.stat(path);
+      let ffprobeResults;
+      try {
+        ffprobeResults = await probe(path);
+        duration = ffprobeResults.format.duration;
+        size = ffprobeResults.format.size;
+      } catch (e) {
+      }
+      let fileReadResult;
+      if (size < MAX_IPC_SEND_BUFFER_SIZE) {
+        try {
+          fileReadResult = await fs.promises.readFile(path);
+        } catch (e) {
+
+        }
+      }
+      // TODO: use mmmagic to inspect file and get mime type
+      mimeType = isFfMp4(ffprobeResults) ? 'video/mp4' : mime.getType(name);
+      const fileData = {name, mime: mimeType || undefined, path, duration: duration, size, buffer: fileReadResult };
+      return fileData;
+    } catch (e) {
+      // no stat
+      return { error: 'no file' };
+    }
 });
 
 ipcMain.on('get-disk-space', async (event) => {

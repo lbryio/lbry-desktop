@@ -14,7 +14,7 @@ import I18nMessage from 'component/i18nMessage';
 import usePersistedState from 'effects/use-persisted-state';
 import * as PUBLISH_MODES from 'constants/publish_types';
 import PublishName from 'component/publishName';
-
+import path from 'path';
 type Props = {
   uri: ?string,
   mode: ?string,
@@ -99,18 +99,27 @@ function PublishFile(props: Props) {
     if (!filePath) {
       return;
     }
-    async function readSelectedFile() {
+    async function readSelectedFileDetails() {
       // Read the file to get the file's duration (if possible)
       // and offer transcoding it.
-      const readFileContents = true;
-      const result = await ipcRenderer.invoke('get-file-from-path', filePath, readFileContents);
-      const file = new File([result.buffer], result.name, {
-        type: result.mime,
-      });
-      const fileWithPath = { file, path: result.path };
-      processSelectedFile(fileWithPath);
+      const result = await ipcRenderer.invoke('get-file-details-from-path', filePath);
+      let file;
+      if (result.buffer) {
+        file = new File([result.buffer], result.name, {
+          type: result.mime,
+        });
+      }
+      const fileData: FileData = {
+        path: result.path,
+        name: result.name,
+        mimeType: result.mime || 'application/octet-stream',
+        size: result.size,
+        duration: result.duration,
+        file: file,
+      };
+      processSelectedFile(fileData);
     }
-    readSelectedFile();
+    readSelectedFileDetails();
   }, [filePath]);
 
   useEffect(() => {
@@ -219,11 +228,11 @@ function PublishFile(props: Props) {
     }
   }
 
-  function processSelectedFile(fileWithPath: FileWithPath, clearName = true) {
+  function processSelectedFile(fileData: FileData, clearName = true) {
     window.URL = window.URL || window.webkitURL;
 
     // select file, start to select a new one, then cancel
-    if (!fileWithPath) {
+    if (!fileData || fileData.error) {
       if (isStillEditing || !clearName) {
         updatePublishForm({ filePath: '' });
       } else {
@@ -233,8 +242,11 @@ function PublishFile(props: Props) {
     }
 
     // if video, extract duration so we can warn about bitrate if (typeof file !== 'string')
-    const file = fileWithPath.file;
-    const contentType = file.type && file.type.split('/');
+    const file = fileData.file;
+    // Check to see if it's a video and if mp4
+    const contentType = fileData.mimeType && fileData.mimeType.split('/'); // get this from electron side
+    const duration = fileData.duration;
+    const size = fileData.size;
     const isVideo = contentType && contentType[0] === 'video';
     const isMp4 = contentType && contentType[1] === 'mp4';
 
@@ -243,33 +255,24 @@ function PublishFile(props: Props) {
     if (contentType && contentType[0] === 'text') {
       isTextPost = contentType[1] === 'plain' || contentType[1] === 'markdown';
       setCurrentFileType(contentType.join('/'));
-    } else if (file.name) {
+    } else if (path.parse(fileData.path).ext) {
       // If user's machine is missing a valid content type registration
       // for markdown content: text/markdown, file extension will be used instead
-      const extension = file.name.split('.').pop();
+      const extension = path.parse(fileData.path).ext;
       isTextPost = MARKDOWN_FILE_EXTENSIONS.includes(extension);
     }
 
     if (isVideo) {
       if (isMp4) {
-        const video = document.createElement('video');
-        video.preload = 'metadata';
-        video.onloadedmetadata = () => {
-          updateFileInfo(video.duration, file.size, isVideo);
-          window.URL.revokeObjectURL(video.src);
-        };
-        video.onerror = () => {
-          updateFileInfo(0, file.size, isVideo);
-        };
-        video.src = window.URL.createObjectURL(file);
+        updateFileInfo(duration || 0, size, isVideo);
       } else {
-        updateFileInfo(0, file.size, isVideo);
+        updateFileInfo(duration || 0, size, isVideo);
       }
     } else {
-      updateFileInfo(0, file.size, isVideo);
+      updateFileInfo(0, size, isVideo);
     }
 
-    if (isTextPost) {
+    if (isTextPost && file) {
       // Create reader
       const reader = new FileReader();
       // Handler for file reader
@@ -283,7 +286,7 @@ function PublishFile(props: Props) {
 
     // Strip off extension and replace invalid characters
     if (!isStillEditing) {
-      const fileWithoutExtension = name || (file.name && file.name.substring(0, file.name.lastIndexOf('.'))) || '';
+      const fileWithoutExtension = path.parse(fileData.path).name;
       updatePublishForm({ name: parseName(fileWithoutExtension) });
     }
   }
