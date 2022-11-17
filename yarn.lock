@@ -7045,7 +7045,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-builder@npm:^23.0.2":
+"electron-builder@npm:^23.3.3":
   version: 23.6.0
   resolution: "electron-builder@npm:23.6.0"
   dependencies:
@@ -11346,7 +11346,7 @@ __metadata:
     dotenv-defaults: ^2.0.1
     dotenv-webpack: ^1.8.0
     electron: 17.2.0
-    electron-builder: ^23.0.2
+    electron-builder: ^23.3.3
     electron-devtools-installer: ^3.1.1
     electron-dl: ^3.2.0
     electron-is-dev: ^0.3.0
