@@ -2,11 +2,14 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [unreleased] - [2022-11-10]
+## [0.53.8-alpha.1] - [2022-11-17]
  
 ### Fixed
  - Selecting a large file in publish no longer crashes ([#7736](https://github.com/lbryio/lbry-desktop/pull/7736))
  
+### Changed
+ - Updated xcode to 13.1 and hacked a fix for release ([#7736](https://github.com/lbryio/lbry-desktop/pull/7736))
+
 ## [0.53.7] - [2022-11-10]
 
 ### Added
