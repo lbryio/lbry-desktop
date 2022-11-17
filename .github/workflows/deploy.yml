@@ -49,8 +49,6 @@ jobs:
           /bin/bash -c "$(curl -fsSL https://github.com/alfredapp/dependency-scripts/raw/main/scripts/install-python2.sh)"
           ln -sf /usr/local/bin/python /usr/bin/python
 
-      - name: Create Python Link
-
       - name: Download blockchain headers
         run: |
           mkdir -p ./static/daemon
