@@ -77,7 +77,6 @@ jobs:
           DEFAULT_LANGUAGE: en
           KNOWN_APP_DOMAINS: lbry.tv,lbry.lat,odysee.com
           CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS: 0
-          USE_HARD_LINKS: false
 
       - uses: actions/upload-artifact@v2.2.4
         if: |
