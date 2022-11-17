@@ -2,7 +2,11 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-
+## [unreleased] - [2022-11-10]
+ 
+### Fixed
+ - Selecting a large file in publish no longer crashes ([#7736](https://github.com/lbryio/lbry-desktop/pull/7736))
+ 
 ## [0.53.7] - [2022-11-10]
 
 ### Added
@@ -15,7 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
  - Minor layout fixes _community pr!_ ([#7709](https://github.com/lbryio/lbry-desktop/pull/7709))
  - Comment section buttons layout ([#7716](https://github.com/lbryio/lbry-desktop/pull/7716))
  
- ### Changed
+### Changed
  - Removed watchman and its errors ([#7710](https://github.com/lbryio/lbry-desktop/pull/7710))
  - Updated lbrynet to [0.112.0](https://github.com/lbryio/lbry-sdk/releases/tag/v0.112.0)
   

@@ -38,7 +38,22 @@ jobs:
       - uses: maxim-lobanov/setup-xcode@v1
         if: startsWith(runner.os, 'mac')
         with:
-          xcode-version: '12.4.0'
+          xcode-version: '13.1.0'
+      # This is gonna be hacky.
+      # Github made us upgrade xcode, which would force an upgrade of electron-builder to fix mac.
+      # But there were bugs with copyfiles / extraFiles that kept seeing duplicates erroring on ln.
+      # A flag USE_HARD_LINKS=false in electron-builder.json was suggested in comments, but that broke windows builds.
+      # So for now we'll install python2 on mac and make sure it can find it.
+      # Remove this after successfully upgrading electron-builder.
+      # HACK part 1
+      - uses: Homebrew/actions/setup-homebrew@master
+        if: startsWith(runner.os, 'mac')
+      # HACK part 2
+      - name: Install Python2
+        if: startsWith(runner.os, 'mac')
+        run: |
+          /bin/bash -c "$(curl -fsSL https://github.com/alfredapp/dependency-scripts/raw/main/scripts/install-python2.sh)"
+          echo "PYTHON_PATH=/usr/local/bin/python" >> $GITHUB_ENV
 
       - name: Download blockchain headers
         run: |
