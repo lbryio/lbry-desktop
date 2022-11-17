@@ -47,7 +47,7 @@ jobs:
         if: startsWith(runner.os, 'mac')
         run: |
           /bin/bash -c "$(curl -fsSL https://github.com/alfredapp/dependency-scripts/raw/main/scripts/install-python2.sh)"
-          ln -sf /usr/local/bin/python /usr/bin/python
+          sudo ln -sf /usr/local/bin/python /usr/bin/python
 
       - name: Download blockchain headers
         run: |
