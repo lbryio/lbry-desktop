@@ -40,6 +40,14 @@ jobs:
         with:
           xcode-version: '13.1.0'
 
+      - uses: Homebrew/actions/setup-homebrew@master
+        if: startsWith(runner.os, 'mac')
+
+      - name: Install Python2
+        if: startsWith(runner.os, 'mac')
+        run: |
+          /bin/bash -c "$(curl -fsSL https://github.com/alfredapp/dependency-scripts/raw/main/scripts/install-python2.sh)"
+
       - name: Download blockchain headers
         run: |
           mkdir -p ./static/daemon
@@ -47,6 +55,8 @@ jobs:
           ls ./static/daemon
 
       - name: Build
+        if: startsWith(runner.os, 'mac')
+
         run: |
           yarn dlx cross-env
           yarn --network-timeout 600000
