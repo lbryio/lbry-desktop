@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [0.53.8-alpha.1] - [2022-11-17]
+## [0.53.8] - [2022-11-17]
  
 ### Fixed
  - Selecting a large file in publish no longer crashes ([#7736](https://github.com/lbryio/lbry-desktop/pull/7736))
