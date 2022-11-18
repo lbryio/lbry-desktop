@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
  
 ### Fixed
  - Selecting a large file in publish no longer crashes ([#7736](https://github.com/lbryio/lbry-desktop/pull/7736))
+ - Unfollowing unpublished channels ([#7737](https://github.com/lbryio/lbry-desktop/pull/7737))
+ 
  
 ### Changed
  - Updated xcode to 13.1 and hacked a fix for release ([#7736](https://github.com/lbryio/lbry-desktop/pull/7736))
