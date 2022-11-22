@@ -21,6 +21,7 @@ import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
 import { isClaimNsfw } from 'util/claim';
 import ClaimPreview from './view';
 import formatMediaDuration from 'util/formatMediaDuration';
+import { makeSelectContentWatchedPercentageForUri } from 'redux/selectors/content'; // UPDATE: Added mSCWPFU (Watched content)
 
 const select = (state, props) => {
   const claim = props.uri && selectClaimForUri(state, props.uri);
@@ -46,6 +47,7 @@ const select = (state, props) => {
     wasPurchased: props.uri && makeSelectClaimWasPurchased(props.uri)(state),
     isCollectionMine: makeSelectCollectionIsMine(props.collectionId)(state),
     lang: selectLanguage(state),
+    isWatched: makeSelectContentWatchedPercentageForUri(props.uri)(state) > 80, // UPDATE: Added isWatched, getting percent watched
   };
 };
 

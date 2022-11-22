@@ -20,6 +20,7 @@ import ClaimMenuList from 'component/claimMenuList';
 import CollectionPreviewOverlay from 'component/collectionPreviewOverlay';
 // $FlowFixMe cannot resolve ...
 import PlaceholderTx from 'static/img/placeholderTx.gif';
+import usePersistedState from 'effects/use-persisted-state'; // UPDATE: usePersistedState is required for watched content
 
 type Props = {
   uri: string,
@@ -42,6 +43,7 @@ type Props = {
   collectionId?: string,
   viewCount: string,
   swipeLayout: boolean,
+  isWatched: boolean, // UPDATE: Declare isWatched variable
 };
 
 // preview image cards used in related video functionality, channel overview page and homepage
@@ -67,10 +69,12 @@ function ClaimPreviewTile(props: Props) {
     mediaDuration,
     viewCount,
     swipeLayout = false,
+    isWatched, // UPDATE: Variables to use in the ClaimPreviewTile
   } = props;
   const isRepost = claim && claim.repost_channel_url;
   const isCollection = claim && claim.value_type === 'collection';
   const isStream = claim && claim.value_type === 'stream';
+  const [hideWatched, setHideWatched] = usePersistedState('hideWatched', false);    //UPDATE: Use hideWatched
   // $FlowFixMe
   const isPlayable =
     claim &&
@@ -126,18 +130,23 @@ function ClaimPreviewTile(props: Props) {
 
   let shouldHide = false;
 
-  if (isMature && !showMature) {
-    // Unfortunately needed until this is resolved
-    // https://github.com/lbryio/lbry-sdk/issues/2785
-    shouldHide = true;
-  } else {
-    shouldHide =
-      banState.blacklisted || banState.filtered || (!showHiddenByUser && (banState.muted || banState.blocked));
-  }
+    // UPDATE: Hiding watched content
+    if (isMature && !showMature) {
+        // Unfortunately needed until this is resolved
+        // https://github.com/lbryio/lbry-sdk/issues/2785
+        shouldHide = true;
+    } else {
+        shouldHide =
+            banState.blacklisted ||
+            banState.filtered ||
+            (!showHiddenByUser && (banState.muted || banState.blocked)) ||
+            (isWatched && hideWatched);
+    }
 
-  if (shouldHide) {
-    return null;
-  }
+    if (shouldHide) {
+        return null;
+    }
+    // END OF UPDATE:
 
   const isChannelPage = location.pathname.startsWith('/@');
 

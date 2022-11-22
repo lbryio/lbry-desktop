@@ -10,6 +10,7 @@ import { doFileGet } from 'redux/actions/file';
 import { doResolveUri } from 'redux/actions/claims';
 import { selectViewCountForUri, selectBanStateForUri } from 'lbryinc';
 import { selectShowMatureContent } from 'redux/selectors/settings';
+import { makeSelectContentWatchedPercentageForUri } from 'redux/selectors/content'; // UPDATE: Added percentage watched element
 import { isClaimNsfw } from 'util/claim';
 import ClaimPreviewTile from './view';
 import formatMediaDuration from 'util/formatMediaDuration';
@@ -30,6 +31,7 @@ const select = (state, props) => {
     showMature: selectShowMatureContent(state),
     isMature: claim ? isClaimNsfw(claim) : false,
     viewCount: selectViewCountForUri(state, props.uri),
+    isWatched: makeSelectContentWatchedPercentageForUri(props.uri)(state) > 80, // UPDATE: Get isWatched view percentage and only show < 80%
   };
 };
 
