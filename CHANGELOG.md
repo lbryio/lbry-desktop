@@ -4,6 +4,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [0.53.8] - [2022-11-17]
  
+### Added
+- Added the ability for users to hide content they've already watched throughout the app via a checkbox ([7645](Add Filter for Unwatched Content))
+
 ### Fixed
  - Selecting a large file in publish no longer crashes ([#7736](https://github.com/lbryio/lbry-desktop/pull/7736))
  - Unfollowing unpublished channels ([#7737](https://github.com/lbryio/lbry-desktop/pull/7737))
