@@ -106,7 +106,7 @@ function ChannelForm(props: Props) {
   const languageParam = params.languages;
   const primaryLanguage = Array.isArray(languageParam) && languageParam.length && languageParam[0];
   const secondaryLanguage = Array.isArray(languageParam) && languageParam.length >= 2 && languageParam[1];
-  const [hideWatched, setHideWatched] = usePersistedState('hideWatched', false); // UPDATE: Experimenting with hiding watched content
+  const [hideWatched, setHideWatched] = usePersistedState('hideWatched', false);
   const submitLabel = React.useMemo(() => {
     if (isClaimingInitialRewards) {
       return __('Claiming credits...');
@@ -241,7 +241,7 @@ function ChannelForm(props: Props) {
     errorMsg = __('Invalid %error_type%', { error_type: (thumbError && 'thumbnail') || (coverError && 'cover image') });
   }
 
-    // UPDATE: Add "Hide Watched" to channel pages
+    // Add "Hide Watched" to channel pages
     function getHideWatchedElem() {
         return (
             <div className={classnames(`card claim-search__menus`)}>

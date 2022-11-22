@@ -32,7 +32,7 @@ import ClaimPreviewNoContent from './claim-preview-no-content';
 import CollectionEditButtons from 'component/collectionEditButtons';
 import { useIsMobile } from 'effects/use-screensize';
 import AbandonedChannelPreview from 'component/abandonedChannelPreview';
-import usePersistedState from 'effects/use-persisted-state'; // UPDATE: usePersistedState is required for watched content
+import usePersistedState from 'effects/use-persisted-state';
 
 // preview images used on the landing page and on the channel page
 type Props = {
@@ -83,7 +83,7 @@ type Props = {
   showEdit?: boolean,
   dragHandleProps?: any,
   unavailableUris?: Array<string>,
-  isWatched: boolean, // UPDATE: Declare isWatched variable
+  isWatched: boolean,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -143,11 +143,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     showEdit,
     dragHandleProps,
     unavailableUris,
-    isWatched, // UPDATE: Variables to use in the ClaimPreviewTile
+    isWatched,
   } = props;
 
   const isMobile = useIsMobile();
-  const [hideWatched, setHideWatched] = usePersistedState('hideWatched', false);    //UPDATE: Use hideWatched
+  const [hideWatched, setHideWatched] = usePersistedState('hideWatched', false);
   const isCollection = claim && claim.value_type === 'collection';
   const collectionClaimId = isCollection && claim && claim.claim_id;
   const listId = collectionId || collectionClaimId;
@@ -282,7 +282,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     }
   }, [isValid, uri, isResolvingUri, shouldFetch, resolveUri]);
 
-    // UPDATE: Hiding watched content
     if (isWatched && hideWatched) {
         shouldHide = true;
     }
@@ -290,7 +289,6 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     if (shouldHide) {
         return null;
     }
-    // END OF UPDATE:
 
     if (shouldHide && !showNullPlaceholder) {
     return null;

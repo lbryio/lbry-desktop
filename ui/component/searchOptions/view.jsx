@@ -62,7 +62,7 @@ const SearchOptions = (props: Props) => {
     delete TYPES_ADVANCED[SEARCH_OPTIONS.MEDIA_IMAGE];
     }
 
-  const [hideWatched, setHideWatched] = usePersistedState('hideWatched', false); // UPDATE: Experimenting with hiding watched content
+  const [hideWatched, setHideWatched] = usePersistedState('hideWatched', false);
 
     React.useEffect(() => {
     // We no longer let the user set the search results count, but the value
@@ -72,7 +72,6 @@ const SearchOptions = (props: Props) => {
     }
   }, []);
 
-    // UPDATE: Adding Hide Watched Content checkbox to search
     function getHideWatchedElem() {
         return (
             <div className={`claim-search__checkbox_searchbox`}>
@@ -177,7 +176,7 @@ const SearchOptions = (props: Props) => {
     </>
   );
 
-    // UPDATE: Changed element name to exactMatchElem
+    // Changed element name to exactMatchElem
     const exactMatchElem = (
     <>
       <div className="filter-values">
@@ -223,7 +222,6 @@ const SearchOptions = (props: Props) => {
     </div>
     );
 
-    // UPDATE: Declare constant for the Hide Watch Content element
     const hideWatchedElem = (
         <div>
             {getHideWatchedElem()}
@@ -247,7 +245,7 @@ const SearchOptions = (props: Props) => {
     const uploadDateLabel =
     options[SEARCH_OPTIONS.CLAIM_TYPE] === SEARCH_OPTIONS.INCLUDE_CHANNELS ? __('Creation Date') : __('Upload Date');
 
-    // UPDATE: Added row to table for hiding watched content in search settings
+    // Added row to table for hiding watched content in search settings
     return (
     <div>
       <Button

@@ -20,7 +20,7 @@ import ClaimMenuList from 'component/claimMenuList';
 import CollectionPreviewOverlay from 'component/collectionPreviewOverlay';
 // $FlowFixMe cannot resolve ...
 import PlaceholderTx from 'static/img/placeholderTx.gif';
-import usePersistedState from 'effects/use-persisted-state'; // UPDATE: usePersistedState is required for watched content
+import usePersistedState from 'effects/use-persisted-state';
 
 type Props = {
   uri: string,
@@ -43,7 +43,7 @@ type Props = {
   collectionId?: string,
   viewCount: string,
   swipeLayout: boolean,
-  isWatched: boolean, // UPDATE: Declare isWatched variable
+  isWatched: boolean,
 };
 
 // preview image cards used in related video functionality, channel overview page and homepage
@@ -69,12 +69,12 @@ function ClaimPreviewTile(props: Props) {
     mediaDuration,
     viewCount,
     swipeLayout = false,
-    isWatched, // UPDATE: Variables to use in the ClaimPreviewTile
+    isWatched,
   } = props;
   const isRepost = claim && claim.repost_channel_url;
   const isCollection = claim && claim.value_type === 'collection';
   const isStream = claim && claim.value_type === 'stream';
-  const [hideWatched, setHideWatched] = usePersistedState('hideWatched', false);    //UPDATE: Use hideWatched
+  const [hideWatched, setHideWatched] = usePersistedState('hideWatched', false);
   // $FlowFixMe
   const isPlayable =
     claim &&
@@ -130,7 +130,6 @@ function ClaimPreviewTile(props: Props) {
 
   let shouldHide = false;
 
-    // UPDATE: Hiding watched content
     if (isMature && !showMature) {
         // Unfortunately needed until this is resolved
         // https://github.com/lbryio/lbry-sdk/issues/2785
@@ -146,7 +145,6 @@ function ClaimPreviewTile(props: Props) {
     if (shouldHide) {
         return null;
     }
-    // END OF UPDATE:
 
   const isChannelPage = location.pathname.startsWith('/@');
 
