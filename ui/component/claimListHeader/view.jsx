@@ -67,6 +67,7 @@ function ClaimListHeader(props: Props) {
   const [orderParamUser, setOrderParamUser] = usePersistedState(`orderUser-${location.pathname}`, CS.ORDER_BY_TRENDING);
   const urlParams = new URLSearchParams(search);
   const freshnessParam = freshness || urlParams.get(CS.FRESH_KEY) || defaultFreshness;
+  const [hideWatched, setHideWatched] = usePersistedState('hideWatched', false);
   const contentTypeParam = urlParams.get(CS.CONTENT_KEY);
   const streamTypeParam =
     streamType || (CS.FILE_TYPES.includes(contentTypeParam) && contentTypeParam) || defaultStreamType || null;

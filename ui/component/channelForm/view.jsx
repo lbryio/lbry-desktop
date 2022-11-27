@@ -106,6 +106,7 @@ function ChannelForm(props: Props) {
   const languageParam = params.languages;
   const primaryLanguage = Array.isArray(languageParam) && languageParam.length && languageParam[0];
   const secondaryLanguage = Array.isArray(languageParam) && languageParam.length >= 2 && languageParam[1];
+  const [hideWatched, setHideWatched] = usePersistedState('hideWatched', false); 
   const submitLabel = React.useMemo(() => {
     if (isClaimingInitialRewards) {
       return __('Claiming credits...');
@@ -238,7 +239,23 @@ function ChannelForm(props: Props) {
   }
   if ((!isUpload.thumbnail && thumbError) || (!isUpload.cover && coverError)) {
     errorMsg = __('Invalid %error_type%', { error_type: (thumbError && 'thumbnail') || (coverError && 'cover image') });
-  }
+    }
+
+    function getHideWatchedElem() {
+        return (
+            <div className={classnames(`card claim-search__menus`)}>
+                <FormField
+                    label={__('Hide Watched')}
+                    name="hide_watched"
+                    type="checkbox"
+                    checked={hideWatched}
+                    onChange={() => {
+                        setHideWatched((prev) => !prev);
+                    }}
+                />
+            </div>
+        );
+    }
 
   React.useEffect(() => {
     let nameError;
@@ -525,7 +542,8 @@ function ChannelForm(props: Props) {
                 <div className="section__actions">
                   <ClaimAbandonButton uri={uri} abandonActionCallback={() => replace(`/$/${PAGES.CHANNELS}`)} />
                 </div>
-              )}
+                  )}
+                  {getHideWatchedElem()}
             </>
           }
         />

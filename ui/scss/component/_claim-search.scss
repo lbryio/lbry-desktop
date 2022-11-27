@@ -27,6 +27,22 @@
   }
 }
 
+// UPDATE: Add style for checkbox
+.claim-search__checkbox {
+    padding-left: 45%;
+    padding-top: 7%;
+}
+
+//UPDATE: Added style for checkbox on search page
+.claim-search__checkbox_searchbox {
+    // Placeholder
+}
+
+// UPDATE: Add style for checkbox label
+.checkbox-label {
+    padding-left: 10px;
+}
+
 .claim-search__dropdown {
   font-size: var(--font-body);
   background-color: var(--color-input-bg);
