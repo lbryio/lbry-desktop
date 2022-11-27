@@ -496,7 +496,11 @@ function ClaimListHeader(props: Props) {
                     onClick={handleAdvancedReset}
                   />
                 </div>
-              )}
+                          )}
+                          <div className={'checkbox-label'}>
+                              <label>Hide Watched Content</label>
+                              {getHideWatchedElem()}
+                          </div>
             </div>
           </>
         )}
