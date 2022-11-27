@@ -6,6 +6,7 @@ import { Form, FormField } from 'component/common/form';
 import Button from 'component/button';
 import Icon from 'component/common/icon';
 import classnames from 'classnames';
+import usePersistedState from 'effects/use-persisted-state';
 
 const CLAIM_TYPES = {
   [SEARCH_OPTIONS.INCLUDE_FILES]: 'Files',

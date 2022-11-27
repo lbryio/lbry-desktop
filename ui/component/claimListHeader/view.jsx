@@ -100,6 +100,21 @@ function ClaimListHeader(props: Props) {
     ? languageParam !== languageSetting && languageParam !== null
     : languageParam !== CS.LANGUAGES_ALL && languageParam !== null;
 
+    function getHideWatchedElem() {
+        return (
+            <div className={`claim-search__checkbox`}>
+                <FormField
+                    name="hide_watched"
+                    type="checkbox"
+                    checked={hideWatched}
+                    onChange={() => {
+                        setHideWatched((prev) => !prev);
+                    }}
+                />
+            </div>
+        );
+    }
+
   React.useEffect(() => {
     if (action !== 'POP' && isFiltered()) {
       setExpanded(true);
