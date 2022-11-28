@@ -20,6 +20,7 @@ import ClaimMenuList from 'component/claimMenuList';
 import CollectionPreviewOverlay from 'component/collectionPreviewOverlay';
 // $FlowFixMe cannot resolve ...
 import PlaceholderTx from 'static/img/placeholderTx.gif';
+import usePersistedState from 'effects/use-persisted-state';
 
 type Props = {
   uri: string,
@@ -42,6 +43,7 @@ type Props = {
   collectionId?: string,
   viewCount: string,
   swipeLayout: boolean,
+  isWatched: boolean,
 };
 
 // preview image cards used in related video functionality, channel overview page and homepage
@@ -67,10 +69,12 @@ function ClaimPreviewTile(props: Props) {
     mediaDuration,
     viewCount,
     swipeLayout = false,
+    isWatched,
   } = props;
   const isRepost = claim && claim.repost_channel_url;
   const isCollection = claim && claim.value_type === 'collection';
   const isStream = claim && claim.value_type === 'stream';
+  const [hideWatched, setHideWatched] = usePersistedState('hideWatched', false);
   // $FlowFixMe
   const isPlayable =
     claim &&
@@ -124,20 +128,39 @@ function ClaimPreviewTile(props: Props) {
     }
   }, [isValid, isResolvingUri, uri, resolveUri, shouldFetch]);
 
-  let shouldHide = false;
+    let shouldHide = false;
 
-  if (isMature && !showMature) {
-    // Unfortunately needed until this is resolved
-    // https://github.com/lbryio/lbry-sdk/issues/2785
-    shouldHide = true;
-  } else {
-    shouldHide =
-      banState.blacklisted || banState.filtered || (!showHiddenByUser && (banState.muted || banState.blocked));
-  }
+    if (isMature && !showMature) {
+        // Unfortunately needed until this is resolved
+        // https://github.com/lbryio/lbry-sdk/issues/2785
+        shouldHide = true;
+    } else {
+        shouldHide =
+            banState.blacklisted ||
+            banState.filtered ||
+            (!showHiddenByUser && (banState.muted || banState.blocked)) ||
+            (isWatched && hideWatched);
+    }
 
-  if (shouldHide) {
-    return null;
-  }
+    if (shouldHide) {
+        return null;
+    }
+
+    if (isMature && !showMature) {
+        // Unfortunately needed until this is resolved
+        // https://github.com/lbryio/lbry-sdk/issues/2785
+        shouldHide = true;
+    } else {
+        shouldHide =
+            banState.blacklisted ||
+            banState.filtered ||
+            (!showHiddenByUser && (banState.muted || banState.blocked)) ||
+            (isWatched && hideWatched);
+    }
+
+    if (shouldHide) {
+        return null;
+    }
 
   const isChannelPage = location.pathname.startsWith('/@');
 

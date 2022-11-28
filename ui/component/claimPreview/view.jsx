@@ -32,6 +32,7 @@ import ClaimPreviewNoContent from './claim-preview-no-content';
 import CollectionEditButtons from 'component/collectionEditButtons';
 import { useIsMobile } from 'effects/use-screensize';
 import AbandonedChannelPreview from 'component/abandonedChannelPreview';
+import usePersistedState from 'effects/use-persisted-state';
 
 // preview images used on the landing page and on the channel page
 type Props = {
@@ -82,6 +83,7 @@ type Props = {
   showEdit?: boolean,
   dragHandleProps?: any,
   unavailableUris?: Array<string>,
+  isWatched: boolean,
 };
 
 const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
@@ -141,10 +143,11 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     showEdit,
     dragHandleProps,
     unavailableUris,
+    isWatched,
   } = props;
 
   const isMobile = useIsMobile();
-
+  const [hideWatched, setHideWatched] = usePersistedState('hideWatched', false);
   const isCollection = claim && claim.value_type === 'collection';
   const collectionClaimId = isCollection && claim && claim.claim_id;
   const listId = collectionId || collectionClaimId;
@@ -253,8 +256,9 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     if (customShouldHide(claim)) {
       shouldHide = true;
     }
-  }
+    }
 
+    
   // Weird placement warning
   // Make sure this happens after we figure out if this claim needs to be hidden
   const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, shouldHide);
@@ -272,15 +276,23 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     }
   }
 
-  useEffect(() => {
+    useEffect(() => {
     if (isValid && !isResolvingUri && shouldFetch && uri) {
       resolveUri(uri);
     }
   }, [isValid, uri, isResolvingUri, shouldFetch, resolveUri]);
 
-  if (shouldHide && !showNullPlaceholder) {
+    if (isWatched && hideWatched) {
+        shouldHide = true;
+    }
+
+    if (shouldHide) {
+        return null;
+    }
+
+    if (shouldHide && !showNullPlaceholder) {
     return null;
-  }
+    }
 
   if (placeholder === 'loading' || (uri && !claim && isResolvingUri)) {
     return <ClaimPreviewLoading isChannel={isChannelUri} type={type} />;

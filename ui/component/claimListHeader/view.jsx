@@ -67,6 +67,7 @@ function ClaimListHeader(props: Props) {
   const [orderParamUser, setOrderParamUser] = usePersistedState(`orderUser-${location.pathname}`, CS.ORDER_BY_TRENDING);
   const urlParams = new URLSearchParams(search);
   const freshnessParam = freshness || urlParams.get(CS.FRESH_KEY) || defaultFreshness;
+  const [hideWatched, setHideWatched] = usePersistedState('hideWatched', false);
   const contentTypeParam = urlParams.get(CS.CONTENT_KEY);
   const streamTypeParam =
     streamType || (CS.FILE_TYPES.includes(contentTypeParam) && contentTypeParam) || defaultStreamType || null;
@@ -97,7 +98,37 @@ function ClaimListHeader(props: Props) {
 
   const shouldHighlight = searchInLanguage
     ? languageParam !== languageSetting && languageParam !== null
-    : languageParam !== CS.LANGUAGES_ALL && languageParam !== null;
+        : languageParam !== CS.LANGUAGES_ALL && languageParam !== null;
+
+    function getHideWatchedElem() {
+        return (
+            <div className={`claim-search__checkbox`}>
+                <FormField                    
+                    name="hide_watched"
+                    type="checkbox"
+                    checked={hideWatched}
+                    onChange={() => {
+                        setHideWatched((prev) => !prev);
+                    }}
+                />
+            </div>
+        );
+    }
+
+    function getHideWatchedElem() {
+        return (
+            <div className={`claim-search__checkbox`}>
+                <FormField
+                    name="hide_watched"
+                    type="checkbox"
+                    checked={hideWatched}
+                    onChange={() => {
+                        setHideWatched((prev) => !prev);
+                    }}
+                />
+            </div>
+        );
+    }
 
   React.useEffect(() => {
     if (action !== 'POP' && isFiltered()) {
@@ -481,10 +512,10 @@ function ClaimListHeader(props: Props) {
                         </option>
                       );
                     })}
-                  </FormField>
-                </div>
-              )}
+                   </FormField>
+                              </div>
 
+                          )}
               {channelIdsInUrl && (
                 <div className={'claim-search__input-container'}>
                   <label>{__('Advanced Filters from URL')}</label>
@@ -495,10 +526,14 @@ function ClaimListHeader(props: Props) {
                     onClick={handleAdvancedReset}
                   />
                 </div>
-              )}
+                          )}
+                          <div className={'checkbox-label'}>
+                              <label>Hide Watched Content</label>
+                              {getHideWatchedElem()}
+                          </div>
             </div>
           </>
-        )}
+         )}
       </div>
 
       {hasMatureTags && hiddenNsfwMessage}

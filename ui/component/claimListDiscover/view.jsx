@@ -318,11 +318,6 @@ function ClaimListDiscover(props: Props) {
     if (orderParam === CS.ORDER_BY_TOP && freshnessParam !== CS.FRESH_ALL) {
       options.release_time = `>${Math.floor(moment().subtract(1, freshnessParam).startOf('hour').unix())}`;
     } else if (orderParam === CS.ORDER_BY_NEW || orderParam === CS.ORDER_BY_TRENDING) {
-      // Warning - hack below
-      // If users are following more than 10 channels or tags, limit results to stuff less than a year old
-      // For more than 20, drop it down to 6 months
-      // This helps with timeout issues for users that are following a ton of stuff
-      // https://github.com/lbryio/lbry-sdk/issues/2420
       if (
         (options.channel_ids && options.channel_ids.length > 20) ||
         (options.any_tags && options.any_tags.length > 20)
