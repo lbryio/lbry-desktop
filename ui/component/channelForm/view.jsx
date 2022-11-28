@@ -107,6 +107,7 @@ function ChannelForm(props: Props) {
   const primaryLanguage = Array.isArray(languageParam) && languageParam.length && languageParam[0];
   const secondaryLanguage = Array.isArray(languageParam) && languageParam.length >= 2 && languageParam[1];
   const [hideWatched, setHideWatched] = usePersistedState('hideWatched', false); 
+  const [hideWatched, setHideWatched] = usePersistedState('hideWatched', false);
   const submitLabel = React.useMemo(() => {
     if (isClaimingInitialRewards) {
       return __('Claiming credits...');
@@ -257,7 +258,24 @@ function ChannelForm(props: Props) {
         );
     }
 
-  React.useEffect(() => {
+    // Add "Hide Watched" to channel pages
+    function getHideWatchedElem() {
+        return (
+            <div className={classnames(`card claim-search__menus`)}>
+                <FormField
+                    label={__('Hide Watched')}
+                    name="hide_watched"
+                    type="checkbox"
+                    checked={hideWatched}
+                    onChange={() => {
+                        setHideWatched((prev) => !prev);
+                    }}
+                />
+            </div>
+        );
+    }
+
+    React.useEffect(() => {
     let nameError;
     if (!name && name !== undefined) {
       nameError = __('A name is required for your url');

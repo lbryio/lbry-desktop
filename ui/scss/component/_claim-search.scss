@@ -17,7 +17,7 @@
   margin-top: var(--spacing-m);
   margin-bottom: var(--spacing-m);
   color: var(--color-text-subtitle);
-  align-items: flex-start;
+  align-items: baseline;
 
   @media (min-width: $breakpoint-small) {
     flex-direction: row;
@@ -31,6 +31,7 @@
 .claim-search__checkbox {
     padding-left: 45%;
     padding-top: 7%;
+
 }
 
 //UPDATE: Added style for checkbox on search page

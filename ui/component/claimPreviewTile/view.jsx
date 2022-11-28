@@ -146,18 +146,21 @@ function ClaimPreviewTile(props: Props) {
         return null;
     }
 
-  if (isMature && !showMature) {
-    // Unfortunately needed until this is resolved
-    // https://github.com/lbryio/lbry-sdk/issues/2785
-    shouldHide = true;
-  } else {
-    shouldHide =
-      banState.blacklisted || banState.filtered || (!showHiddenByUser && (banState.muted || banState.blocked));
-  }
+    if (isMature && !showMature) {
+        // Unfortunately needed until this is resolved
+        // https://github.com/lbryio/lbry-sdk/issues/2785
+        shouldHide = true;
+    } else {
+        shouldHide =
+            banState.blacklisted ||
+            banState.filtered ||
+            (!showHiddenByUser && (banState.muted || banState.blocked)) ||
+            (isWatched && hideWatched);
+    }
 
-  if (shouldHide) {
-    return null;
-  }
+    if (shouldHide) {
+        return null;
+    }
 
   const isChannelPage = location.pathname.startsWith('/@');
 

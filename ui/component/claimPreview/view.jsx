@@ -147,7 +147,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
   } = props;
 
   const isMobile = useIsMobile();
-  const [hideWatched, setHideWatched] = usePersistedState('hideWatched', false); 
+  const [hideWatched, setHideWatched] = usePersistedState('hideWatched', false);
   const isCollection = claim && claim.value_type === 'collection';
   const collectionClaimId = isCollection && claim && claim.claim_id;
   const listId = collectionId || collectionClaimId;
@@ -256,8 +256,9 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     if (customShouldHide(claim)) {
       shouldHide = true;
     }
-  }
+    }
 
+    
   // Weird placement warning
   // Make sure this happens after we figure out if this claim needs to be hidden
   const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, shouldHide);
@@ -275,7 +276,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
     }
   }
 
-  useEffect(() => {
+    useEffect(() => {
     if (isValid && !isResolvingUri && shouldFetch && uri) {
       resolveUri(uri);
     }
@@ -291,7 +292,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
 
     if (shouldHide && !showNullPlaceholder) {
     return null;
-  }
+    }
 
   if (placeholder === 'loading' || (uri && !claim && isResolvingUri)) {
     return <ClaimPreviewLoading isChannel={isChannelUri} type={type} />;

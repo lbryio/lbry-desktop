@@ -98,7 +98,22 @@ function ClaimListHeader(props: Props) {
 
   const shouldHighlight = searchInLanguage
     ? languageParam !== languageSetting && languageParam !== null
-    : languageParam !== CS.LANGUAGES_ALL && languageParam !== null;
+        : languageParam !== CS.LANGUAGES_ALL && languageParam !== null;
+
+    function getHideWatchedElem() {
+        return (
+            <div className={`claim-search__checkbox`}>
+                <FormField                    
+                    name="hide_watched"
+                    type="checkbox"
+                    checked={hideWatched}
+                    onChange={() => {
+                        setHideWatched((prev) => !prev);
+                    }}
+                />
+            </div>
+        );
+    }
 
     function getHideWatchedElem() {
         return (
@@ -497,10 +512,10 @@ function ClaimListHeader(props: Props) {
                         </option>
                       );
                     })}
-                  </FormField>
-                </div>
-              )}
+                   </FormField>
+                              </div>
 
+                          )}
               {channelIdsInUrl && (
                 <div className={'claim-search__input-container'}>
                   <label>{__('Advanced Filters from URL')}</label>
@@ -518,7 +533,7 @@ function ClaimListHeader(props: Props) {
                           </div>
             </div>
           </>
-        )}
+         )}
       </div>
 
       {hasMatureTags && hiddenNsfwMessage}

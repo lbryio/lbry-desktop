@@ -60,7 +60,7 @@ const SearchOptions = (props: Props) => {
   if (simple) {
     delete TYPES_ADVANCED[SEARCH_OPTIONS.MEDIA_APPLICATION];
     delete TYPES_ADVANCED[SEARCH_OPTIONS.MEDIA_IMAGE];
-  }
+    }
 
   const [hideWatched, setHideWatched] = usePersistedState('hideWatched', false);
 
@@ -199,6 +199,7 @@ const SearchOptions = (props: Props) => {
         </>
     );
 
+
   const uploadDateElem = (
     <div className="filter-values">
       <FormField
@@ -219,7 +220,13 @@ const SearchOptions = (props: Props) => {
         onClick={() => updateSearchOptions(SEARCH_OPTIONS.TIME_FILTER, '')}
       />
     </div>
-  );
+    );
+
+    const hideWatchedElem = (
+        <div>
+            {getHideWatchedElem()}
+        </div>
+    );
 
     const hideWatchedElem = (
         <div>
@@ -241,7 +248,7 @@ const SearchOptions = (props: Props) => {
     </div>
   );
 
-  const uploadDateLabel =
+    const uploadDateLabel =
     options[SEARCH_OPTIONS.CLAIM_TYPE] === SEARCH_OPTIONS.INCLUDE_CHANNELS ? __('Creation Date') : __('Upload Date');
 
     return (
@@ -270,6 +277,7 @@ const SearchOptions = (props: Props) => {
             </Form>
         </div>
     );
+
 };
 
 export default SearchOptions;
