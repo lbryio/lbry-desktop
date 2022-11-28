@@ -64,7 +64,7 @@ const SearchOptions = (props: Props) => {
 
   const [hideWatched, setHideWatched] = usePersistedState('hideWatched', false);
 
-    React.useEffect(() => {
+  React.useEffect(() => {
     // We no longer let the user set the search results count, but the value
     // will be in local storage for existing users. Override that.
     if (options[SEARCH_OPTIONS.RESULT_COUNT] !== SEARCH_PAGE_SIZE) {
@@ -176,29 +176,29 @@ const SearchOptions = (props: Props) => {
     </>
   );
 
-    // Changed element name to exactMatchElem
     const exactMatchElem = (
-    <>
-      <div className="filter-values">
-        <FormField
-          type="checkbox"
-          name="exact-match"
-          checked={options[SEARCH_OPTIONS.EXACT]}
-          onChange={() => updateSearchOptions(SEARCH_OPTIONS.EXACT, !options[SEARCH_OPTIONS.EXACT])}
-        />
-        <Icon
-          className="icon--help"
-          icon={ICONS.HELP}
-          tooltip
-          size={16}
-          customTooltipText={__(
-            'Find results that include all the given words in the exact order.\nThis can also be done by surrounding the search query with quotation marks (e.g. "hello world").'
-          )}
-          /> 
-          </div>
+        <>
+            <div className="filter-values">
+                <FormField
+                    type="checkbox"
+                    name="exact-match"
+                    checked={options[SEARCH_OPTIONS.EXACT]}
+                    onChange={() => updateSearchOptions(SEARCH_OPTIONS.EXACT, !options[SEARCH_OPTIONS.EXACT])}
+                />
+                <Icon
+                    className="icon--help"
+                    icon={ICONS.HELP}
+                    tooltip
+                    size={16}
+                    customTooltipText={__(
+                        'Find results that include all the given words in the exact order.\nThis can also be done by surrounding the search query with quotation marks (e.g. "hello world").'
+                    )}
+                />
+            </div>
 
-    </>
-  );
+        </>
+    );
+
 
   const uploadDateElem = (
     <div className="filter-values">
@@ -228,7 +228,13 @@ const SearchOptions = (props: Props) => {
         </div>
     );
 
-  const sortByElem = (
+    const hideWatchedElem = (
+        <div>
+            {getHideWatchedElem()}
+        </div>
+    );
+
+    const sortByElem = (
     <div className="filter-values">
       <FormField
         type="select"
@@ -245,33 +251,33 @@ const SearchOptions = (props: Props) => {
     const uploadDateLabel =
     options[SEARCH_OPTIONS.CLAIM_TYPE] === SEARCH_OPTIONS.INCLUDE_CHANNELS ? __('Creation Date') : __('Upload Date');
 
-    // Added row to table for hiding watched content in search settings
     return (
-    <div>
-      <Button
-        button="alt"
-        label={__('Filter')}
-        icon={ICONS.FILTER}
-        iconRight={expanded ? ICONS.UP : ICONS.DOWN}
-        onClick={toggleSearchExpanded}
-      />
-      <Form
-        className={classnames('search__options', {
-          'search__options--expanded': expanded,
-        })}
-      >
-        <table className="table table--condensed">
-          <tbody>
-            {addRow(__('Type'), typeElem)}
-            {addRow(uploadDateLabel, uploadDateElem)}
-            {addRow(__('Sort By'), sortByElem)}
-            {addRow(__('Exact Match'), exactMatchElem)}
-            {addRow(__('Hide Watched Content'), hideWatchedElem)}
-          </tbody>
-        </table>
-      </Form>
-    </div>
-  );
+        <div>
+            <Button
+                button="alt"
+                label={__('Filter')}
+                icon={ICONS.FILTER}
+                iconRight={expanded ? ICONS.UP : ICONS.DOWN}
+                onClick={toggleSearchExpanded}
+            />
+            <Form
+                className={classnames('search__options', {
+                    'search__options--expanded': expanded,
+                })}
+            >
+                <table className="table table--condensed">
+                    <tbody>
+                        {addRow(__('Type'), typeElem)}
+                        {addRow(uploadDateLabel, uploadDateElem)}
+                        {addRow(__('Sort By'), sortByElem)}
+                        {addRow(__('Exact Match'), exactMatchElem)}
+                        {addRow(__('Hide Watched Content'), hideWatchedElem)}
+                    </tbody>
+                </table>
+            </Form>
+        </div>
+    );
+
 };
 
 export default SearchOptions;

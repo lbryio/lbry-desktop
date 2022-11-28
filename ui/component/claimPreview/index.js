@@ -47,7 +47,7 @@ const select = (state, props) => {
     wasPurchased: props.uri && makeSelectClaimWasPurchased(props.uri)(state),
     isCollectionMine: makeSelectCollectionIsMine(props.collectionId)(state),
     lang: selectLanguage(state),
-    isWatched: makeSelectContentWatchedPercentageForUri(props.uri)(state) > 80, // Content considered "watched" when viewed to 80%
+    isWatched: makeSelectContentWatchedPercentageForUri(props.uri)(state) > 80,
   };
 };
 

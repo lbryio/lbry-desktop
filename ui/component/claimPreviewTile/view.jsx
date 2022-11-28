@@ -128,7 +128,23 @@ function ClaimPreviewTile(props: Props) {
     }
   }, [isValid, isResolvingUri, uri, resolveUri, shouldFetch]);
 
-  let shouldHide = false;
+    let shouldHide = false;
+
+    if (isMature && !showMature) {
+        // Unfortunately needed until this is resolved
+        // https://github.com/lbryio/lbry-sdk/issues/2785
+        shouldHide = true;
+    } else {
+        shouldHide =
+            banState.blacklisted ||
+            banState.filtered ||
+            (!showHiddenByUser && (banState.muted || banState.blocked)) ||
+            (isWatched && hideWatched);
+    }
+
+    if (shouldHide) {
+        return null;
+    }
 
     if (isMature && !showMature) {
         // Unfortunately needed until this is resolved

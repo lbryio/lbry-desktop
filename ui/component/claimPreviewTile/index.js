@@ -31,7 +31,7 @@ const select = (state, props) => {
     showMature: selectShowMatureContent(state),
     isMature: claim ? isClaimNsfw(claim) : false,
     viewCount: selectViewCountForUri(state, props.uri),
-    isWatched: makeSelectContentWatchedPercentageForUri(props.uri)(state) > 80, // Content considered "watched" when viewed 80%
+    isWatched: makeSelectContentWatchedPercentageForUri(props.uri)(state) > 80,
   };
 };
 
