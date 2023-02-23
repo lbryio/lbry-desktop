@@ -258,6 +258,23 @@ const VideoJsEvents = ({
       document.querySelector('.vjs-big-play-button').style.setProperty('display', 'none', 'important');
     });
     // player.on('ended', onEnded);
+    const PlaybackRateComponent = player.controlBar.playbackRateMenuButton;
+    const playbackRateBtn = document.querySelector('button.vjs-playback-rate');
+    const playbackRateDiv = playbackRateBtn && playbackRateBtn.parentElement;
+    const playbackRateMenu = document.querySelector('div.vjs-menu');
+    if (playbackRateBtn) {
+      // Remove all mouse events from playback-rate button
+      playbackRateBtn.style.pointerEvents = 'none';
+    }
+    // Set tooltip again
+    playbackRateDiv && playbackRateDiv.setAttribute('title', __('Playback Rate (<, >)'));
+    // Add click event to act same as ex-hover.
+    if (PlaybackRateComponent) {
+      PlaybackRateComponent.on('click', function () {
+        playbackRateDiv && playbackRateDiv.classList.add('vjs-hover');
+        playbackRateMenu && playbackRateMenu.classList.remove('vjs-hidden');
+      });
+    }
   }
 
   return {
