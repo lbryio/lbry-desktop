@@ -2,6 +2,9 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+### Fixed
+ - Playback rate popup triggered by click. ([#7750](https://github.com/lbryio/lbry-desktop/pull/7750))
+ 
 ## [0.53.9] - [2023-2-8]
  
 ### Changed
