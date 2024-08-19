@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.53.10] - [2024-8-19]
+ 
+### Changed
+ - Updated lbrynet to [0.114.0](https://github.com/lbryio/lbry-sdk/releases/tag/v0.114.0)
+
 ## [0.53.9] - [2023-2-8]
  
 ### Changed
