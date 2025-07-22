@@ -1,45 +1,89 @@
-[data-reach-tooltip] {
+// Modern Tooltip Component
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-trigger {
+  display: inline-block;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 10000;
+  max-width: 300px;
+  padding: var(--spacing-s) var(--spacing-m);
+  background: var(--color-tooltip-bg, #2d3748);
+  color: var(--color-tooltip-text, #ffffff);
   border-radius: var(--border-radius);
-  border: none;
-  padding: var(--spacing-s);
-  overflow: hidden;
-  white-space: normal;
+  font-size: var(--font-small);
+  line-height: 1.4;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  transform: scale(0.95);
+  animation: tooltip-fade-in 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  pointer-events: none;
 }
 
-.MuiTooltip-tooltip {
-  border-radius: var(--border-radius) !important;
-  background-color: rgba(var(--color-header-background-base), 0.8) !important;
-  color: var(--color-text) !important;
-  font-size: var(--font-small) !important;
-  border: 2px solid var(--color-text);
-  -webkit-backdrop-filter: blur(4px);
-  backdrop-filter: blur(4px);
+.tooltip__content {
+  position: relative;
+  z-index: 2;
 }
 
-.MuiTooltip-arrow {
-  color: var(--color-text) !important;
-  font-size: var(--font-xxsmall) !important;
+.tooltip__arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
 }
 
-.channel-staked__tooltip {
-  display: flex;
-  align-items: center;
-  line-height: 1rem;
-  padding: var(--spacing-xs);
+.tooltip--top .tooltip__arrow {
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-top-color: var(--color-tooltip-bg, #2d3748);
+  border-bottom: none;
+}
 
-  .channel-staked__tooltip-text {
-    color: var(--color-text) !important;
-    margin-left: var(--spacing-xs);
-    font-size: var(--font-small);
+.tooltip--bottom .tooltip__arrow {
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-bottom-color: var(--color-tooltip-bg, #2d3748);
+  border-top: none;
+}
 
-    .channel-staked__amount {
-      .icon {
-        margin-bottom: 2px;
-      }
-    }
+.tooltip--left .tooltip__arrow {
+  right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-left-color: var(--color-tooltip-bg, #2d3748);
+  border-right: none;
+}
+
+.tooltip--right .tooltip__arrow {
+  left: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-right-color: var(--color-tooltip-bg, #2d3748);
+  border-left: none;
+}
+
+@keyframes tooltip-fade-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
   }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 
-  .credit-amount {
-    color: var(--color-text) !important;
+// Dark theme support
+[data-theme='dark'] {
+  .tooltip {
+    --color-tooltip-bg: #1a202c;
+    --color-tooltip-text: #ffffff;
   }
 }

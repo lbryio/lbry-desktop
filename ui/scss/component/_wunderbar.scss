@@ -5,10 +5,13 @@
   max-width: 30rem;
   //margin-left: var(--spacing-s);
   margin-right: var(--spacing-s);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
     .wunderbar__input {
       outline: 2px solid var(--color-primary);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transform: translateY(-1px);
     }
   }
 }
@@ -98,6 +101,8 @@
   color: var(--color-input);
   padding-right: var(--spacing-s);
   padding-left: 2.2rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
   -webkit-app-region: no-drag;
   border: 1px solid rgba(0, 0, 0, 0);
 

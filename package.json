@@ -24,7 +24,7 @@
     "compile:electron": "node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --config webpack.electron.config.js",
     "compile": "cross-env NODE_ENV=production yarn compile:electron",
     "dev": "yarn dev:electron",
-    "dev:electron": "cross-env NODE_ENV=development node ./electron/devServer.js",
+    "dev:electron": "cross-env NODE_ENV=development NODE_OPTIONS=\"--openssl-legacy-provider\" node ./electron/devServer.js",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
     "build": "cross-env NODE_ENV=production yarn compile:electron && electron-builder build",

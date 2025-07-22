@@ -62,6 +62,7 @@ import TagsFollowingPage from 'page/tagsFollowing';
 import TopPage from 'page/top';
 import UpdatePasswordPage from 'page/passwordUpdate';
 import Welcome from 'page/welcome';
+import TestComponents from 'component/testComponents';
 
 // Tell the browser we are handling scroll restoration
 if ('scrollRestoration' in history) {
@@ -240,6 +241,7 @@ function AppRouter(props: Props) {
       {/* @if TARGET='app' */}
       <Route path={`/$/${PAGES.BACKUP}`} exact component={BackupPage} />
       {/* @endif */}
+      <Route path="/test-ui" exact component={TestComponents} />
       <Route path={`/$/${PAGES.SEARCH}`} exact component={SearchPage} />
       <Route path={`/$/${PAGES.TOP}`} exact component={TopPage} />
       <Route path={`/$/${PAGES.SETTINGS}`} exact component={SettingsPage} />

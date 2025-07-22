@@ -183,12 +183,15 @@
   padding-left: var(--spacing-s);
   font-size: var(--font-small);
   font-weight: var(--font-weight-bold);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateX(0);
 
   .icon {
     height: 1rem;
     width: 1rem;
     stroke: var(--color-navigation-icon);
     stroke-width: 1.5px;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .icon--Heart {
@@ -233,6 +236,11 @@
 
   &:hover:not(.navigation-link--active) {
     @extend .navigation-link--highlighted;
+    transform: translateX(4px);
+
+    .icon {
+      transform: scale(1.1);
+    }
   }
 
   @media not all and (max-width: $breakpoint-medium) {

@@ -1,17 +1,114 @@
-.progress__item {
+// Modern Progress Bar Component
+.progress {
+  width: 100%;
   display: flex;
   align-items: center;
+  gap: var(--spacing-s);
+}
 
-  &:not(:first-of-type) {
-    margin-top: var(--spacing-s);
+.progress__track {
+  flex: 1;
+  height: var(--progress-height, 8px);
+  background: var(--color-progress-track, #e2e8f0);
+  border-radius: var(--progress-radius, 4px);
+  overflow: hidden;
+  position: relative;
+}
+
+.progress__bar {
+  height: 100%;
+  background: var(--color-progress-bar, var(--color-primary));
+  border-radius: var(--progress-radius, 4px);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  z-index: 2;
+}
+
+.progress__bar--animated {
+  background: linear-gradient(
+    90deg,
+    var(--color-progress-bar, var(--color-primary)) 0%,
+    var(--color-progress-bar-hover, var(--color-primary)) 50%,
+    var(--color-progress-bar, var(--color-primary)) 100%
+  );
+  background-size: 200% 100%;
+  animation: progress-shimmer 2s infinite;
+}
+
+.progress__bar--complete {
+  background: var(--color-progress-complete, var(--color-success));
+}
+
+.progress__shimmer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+  animation: shimmer 1.5s infinite;
+  z-index: 1;
+}
+
+.progress__label {
+  font-size: var(--font-small);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-progress-label, var(--color-text));
+  min-width: 40px;
+  text-align: right;
+}
+
+// Size variants
+.progress--small .progress__track {
+  height: 4px;
+}
+
+.progress--large .progress__track {
+  height: 12px;
+}
+
+// Color variants
+.progress--success .progress__bar {
+  background: var(--color-success);
+}
+
+.progress--warning .progress__bar {
+  background: var(--color-warning);
+}
+
+.progress--error .progress__bar {
+  background: var(--color-error);
+}
+
+.progress--info .progress__bar {
+  background: var(--color-info);
+}
+
+@keyframes progress-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
   }
 }
 
-.progress__complete-icon {
-  margin-left: var(--spacing-s);
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
 }
 
-.progress__complete-icon--completed {
-  @extend .progress__complete-icon;
-  stroke: var(--color-primary);
+// Dark theme support
+[data-theme='dark'] {
+  .progress__track {
+    --color-progress-track: #4a5568;
+  }
+
+  .progress__label {
+    --color-progress-label: var(--color-text);
+  }
 }

@@ -23,6 +23,7 @@ body {
   padding: var(--spacing-l); // Unfortunately this is coupled with .claim-preview--tile width calculation
   padding-left: 0;
   padding-right: 0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   > :first-child {
     flex-shrink: 0;
@@ -53,7 +54,7 @@ body {
 
 .sidebar--pusher {
   animation-timing-function: var(--resizing-animation-function);
-  transition: transform var(--resizing-animation-timing);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   transform-origin: top center;
   position: absolute;
 

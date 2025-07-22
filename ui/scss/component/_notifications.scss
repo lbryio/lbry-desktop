@@ -1,0 +1,168 @@
+// Modern Notification System
+.notifications-container {
+  position: fixed;
+  top: calc(var(--header-height) + var(--spacing-m));
+  right: var(--spacing-m);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-s);
+  pointer-events: none;
+
+  @media (max-width: $breakpoint-small) {
+    top: calc(var(--header-height-mobile) + var(--spacing-s));
+    right: var(--spacing-s);
+    left: var(--spacing-s);
+  }
+}
+
+.notification {
+  background: var(--color-notification-bg, var(--color-card-background));
+  border-radius: var(--border-radius);
+  padding: var(--spacing-m);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-left: 4px solid var(--color-notification-border, var(--color-primary));
+  max-width: 400px;
+  pointer-events: auto;
+  transform: translateX(100%);
+  opacity: 0;
+  animation: notification-slide-in 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: translateX(0) translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  }
+
+  &.notification--success {
+    border-left-color: var(--color-success, #10b981);
+  }
+
+  &.notification--error {
+    border-left-color: var(--color-error, #ef4444);
+  }
+
+  &.notification--warning {
+    border-left-color: var(--color-warning, #f59e0b);
+  }
+
+  &.notification--info {
+    border-left-color: var(--color-info, #3b82f6);
+  }
+
+  &.notification--exiting {
+    animation: notification-slide-out 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+}
+
+.notification__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-s);
+}
+
+.notification__title {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-medium);
+  color: var(--color-notification-title, var(--color-text));
+  margin: 0;
+}
+
+.notification__close {
+  background: none;
+  border: none;
+  color: var(--color-notification-close, var(--color-text-subtitle));
+  cursor: pointer;
+  padding: var(--spacing-xxs);
+  border-radius: var(--border-radius);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    background: var(--color-notification-close-hover, rgba(0, 0, 0, 0.1));
+    color: var(--color-notification-close-hover-text, var(--color-text));
+  }
+}
+
+.notification__content {
+  color: var(--color-notification-content, var(--color-text-subtitle));
+  font-size: var(--font-small);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.notification__actions {
+  display: flex;
+  gap: var(--spacing-s);
+  margin-top: var(--spacing-s);
+}
+
+.notification__action {
+  padding: var(--spacing-xs) var(--spacing-s);
+  border-radius: var(--border-radius);
+  border: 1px solid var(--color-notification-action-border, var(--color-border));
+  background: var(--color-notification-action-bg, transparent);
+  color: var(--color-notification-action-text, var(--color-text));
+  cursor: pointer;
+  font-size: var(--font-small);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    background: var(--color-notification-action-hover-bg, var(--color-primary));
+    color: var(--color-notification-action-hover-text, var(--color-primary-contrast));
+    border-color: var(--color-notification-action-hover-border, var(--color-primary));
+  }
+
+  &.notification__action--primary {
+    background: var(--color-primary);
+    color: var(--color-primary-contrast);
+    border-color: var(--color-primary);
+
+    &:hover {
+      background: var(--color-primary-hover, var(--color-primary));
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+@keyframes notification-slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes notification-slide-out {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+// Dark theme support
+[data-theme='dark'] {
+  .notification {
+    --color-notification-bg: var(--color-card-background);
+    --color-notification-border: var(--color-primary);
+    --color-notification-title: var(--color-text);
+    --color-notification-content: var(--color-text-subtitle);
+    --color-notification-close: var(--color-text-subtitle);
+    --color-notification-close-hover: rgba(255, 255, 255, 0.1);
+    --color-notification-close-hover-text: var(--color-text);
+    --color-notification-action-border: var(--color-border);
+    --color-notification-action-bg: transparent;
+    --color-notification-action-text: var(--color-text);
+    --color-notification-action-hover-bg: var(--color-primary);
+    --color-notification-action-hover-text: var(--color-primary-contrast);
+    --color-notification-action-hover-border: var(--color-primary);
+  }
+}

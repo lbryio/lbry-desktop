@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LBRY Desktop Enhanced UI Components</title>
+    <style>
+        /* CSS Variables to match LBRY theme */
+        :root {
+            --color-primary: #007bff;
+            --color-primary-contrast: #ffffff;
+            --color-text: #333333;
+            --color-text-subtitle: #666666;
+            --color-border: #e0e0e0;
+            --color-card-background: #ffffff;
+            --color-header-background: rgba(255, 255, 255, 0.95);
+            --color-navigation-text: #666666;
+            --color-navigation-hover-bg: rgba(0, 123, 255, 0.1);
+            --color-navigation-active: #007bff;
+            --color-navigation-active-text: #ffffff;
+            --color-input-bg: #f8f9fa;
+            --color-input: #333333;
+            --color-input-placeholder: #999999;
+            --color-success: #10b981;
+            --color-error: #ef4444;
+            --color-warning: #f59e0b;
+            --color-info: #3b82f6;
+            --color-secondary: #6c757d;
+            
+            --border-radius: 8px;
+            --card-radius: 12px;
+            --height-button: 40px;
+            --height-navigation: 48px;
+            --height-input: 40px;
+            --header-height: 60px;
+            --spacing-xs: 4px;
+            --spacing-s: 8px;
+            --spacing-m: 16px;
+            --spacing-l: 24px;
+            --spacing-xl: 32px;
+            --font-small: 14px;
+            --font-medium: 16px;
+            --font-weight-bold: 600;
+            --breakpoint-small: 768px;
+            --breakpoint-medium: 1024px;
+            --breakpoint-large: 1200px;
+        }
+
+        /* Dark theme */
+        [data-theme="dark"] {
+            --color-text: #ffffff;
+            --color-text-subtitle: #cccccc;
+            --color-border: #404040;
+            --color-card-background: #2a2a2a;
+            --color-header-background: rgba(42, 42, 42, 0.95);
+            --color-navigation-text: #cccccc;
+            --color-input-bg: #404040;
+            --color-input: #ffffff;
+            --color-input-placeholder: #999999;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--color-text);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: var(--color-card-background);
+            border-radius: var(--card-radius);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: var(--color-header-background);
+            backdrop-filter: blur(8px);
+            padding: var(--spacing-m);
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .header__logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+
+        .header__search {
+            flex: 1;
+            max-width: 400px;
+            margin: 0 var(--spacing-m);
+            position: relative;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .header__search:hover input {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .header__search input {
+            width: 100%;
+            padding: var(--spacing-s) var(--spacing-m);
+            padding-left: 40px;
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            background: var(--color-input-bg);
+            color: var(--color-input);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Navigation */
+        .sidebar {
+            width: 250px;
+            background: var(--color-header-background);
+            padding: var(--spacing-m);
+            border-right: 1px solid var(--color-border);
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: var(--spacing-s) var(--spacing-m);
+            margin-bottom: var(--spacing-xs);
+            border-radius: var(--border-radius);
+            color: var(--color-navigation-text);
+            text-decoration: none;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateX(0);
+        }
+
+        .nav-item:hover {
+            background: var(--color-navigation-hover-bg);
+            color: var(--color-primary);
+            transform: translateX(4px);
+        }
+
+        .nav-item.active {
+            background: var(--color-navigation-active);
+            color: var(--color-navigation-active-text);
+        }
+
+        /* Buttons */
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-s) var(--spacing-m);
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: var(--font-weight-bold);
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .button--primary {
+            background: var(--color-primary);
+            color: var(--color-primary-contrast);
+        }
+
+        .button--primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .button--secondary {
+            background: var(--color-input-bg);
+            color: var(--color-text);
+            border: 1px solid var(--color-border);
+        }
+
+        .button--secondary:hover {
+            background: var(--color-navigation-hover-bg);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Cards */
+        .card {
+            background: var(--color-card-background);
+            border-radius: var(--card-radius);
+            padding: var(--spacing-m);
+            margin-bottom: var(--spacing-m);
+            border: 1px solid var(--color-border);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Skeleton Loading */
+        .skeleton {
+            background: linear-gradient(90deg, 
+                #f0f0f0 25%, 
+                #e0e0e0 50%, 
+                #f0f0f0 75%
+            );
+            background-size: 200% 100%;
+            animation: skeleton-loading 1.5s infinite;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+        }
+
+        .skeleton--text {
+            height: 1em;
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .skeleton--text--short { width: 60%; }
+        .skeleton--text--medium { width: 80%; }
+        .skeleton--text--long { width: 100%; }
+
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--color-primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Progress Bar */
+        .progress {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-s);
+        }
+
+        .progress__track {
+            flex: 1;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress__bar {
+            height: 100%;
+            background: var(--color-primary);
+            border-radius: 4px;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 2;
+        }
+
+        .progress__bar--animated {
+            background: linear-gradient(
+                90deg,
+                var(--color-primary) 0%,
+                var(--color-primary) 50%,
+                var(--color-primary) 100%
+            );
+            background-size: 200% 100%;
+            animation: progress-shimmer 2s infinite;
+        }
+
+        .progress__label {
+            font-size: var(--font-small);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-text);
+            min-width: 40px;
+            text-align: right;
+        }
+
+        @keyframes progress-shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        /* Tooltip */
+        .tooltip-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip {
+            position: fixed;
+            z-index: 10000;
+            max-width: 300px;
+            padding: var(--spacing-s) var(--spacing-m);
+            background: #2d3748;
+            color: #ffffff;
+            border-radius: var(--border-radius);
+            font-size: var(--font-small);
+            line-height: 1.4;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            transform: scale(0.95);
+            animation: tooltip-fade-in 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+            pointer-events: none;
+        }
+
+        @keyframes tooltip-fade-in {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Breadcrumb */
+        .breadcrumb {
+            padding: var(--spacing-m) 0;
+            margin-bottom: var(--spacing-m);
+        }
+
+        .breadcrumb__list {
+            display: flex;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            flex-wrap: wrap;
+        }
+
+        .breadcrumb__item {
+            display: flex;
+            align-items: center;
+            font-size: var(--font-small);
+        }
+
+        .breadcrumb__separator {
+            margin: 0 var(--spacing-s);
+            color: var(--color-text-subtitle);
+            font-weight: var(--font-weight-bold);
+        }
+
+        .breadcrumb__link {
+            display: flex;
+            align-items: center;
+            color: var(--color-text-subtitle);
+            text-decoration: none;
+            padding: var(--spacing-xs) var(--spacing-s);
+            border-radius: var(--border-radius);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .breadcrumb__link:hover {
+            color: var(--color-primary);
+            background: rgba(0, 123, 255, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .breadcrumb__current {
+            display: flex;
+            align-items: center;
+            color: var(--color-text);
+            font-weight: var(--font-weight-bold);
+            padding: var(--spacing-xs) var(--spacing-s);
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            background: var(--color-primary);
+            color: var(--color-primary-contrast);
+        }
+
+        .fab:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .fab--bottom-right {
+            bottom: var(--spacing-l);
+            right: var(--spacing-l);
+            width: 56px;
+            height: 56px;
+        }
+
+        /* Notifications */
+        .notifications-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .notification {
+            background: var(--color-card-background);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-m);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-left: 4px solid var(--color-primary);
+            max-width: 400px;
+            margin-bottom: var(--spacing-s);
+            transform: translateX(100%);
+            opacity: 0;
+            animation: notification-slide-in 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .notification--success { border-left-color: var(--color-success); }
+        .notification--error { border-left-color: var(--color-error); }
+        .notification--warning { border-left-color: var(--color-warning); }
+        .notification--info { border-left-color: var(--color-info); }
+
+        @keyframes notification-slide-in {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Layout */
+        .main-content {
+            display: flex;
+        }
+
+        .content {
+            flex: 1;
+            padding: var(--spacing-m);
+        }
+
+        .demo-section {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .demo-section h2 {
+            margin-bottom: var(--spacing-m);
+            color: var(--color-text);
+            font-size: 24px;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--spacing-m);
+        }
+
+        .demo-item {
+            background: var(--color-card-background);
+            border: 1px solid var(--color-border);
+            border-radius: var(--border-radius);
+            padding: var(--spacing-m);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .demo-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Theme toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid var(--color-border);
+            }
+            
+            .fab--bottom-right {
+                bottom: var(--spacing-m);
+                right: var(--spacing-m);
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="theme-toggle button button--secondary" onclick="toggleTheme()">
+        Toggle Theme
+    </button>
+
+    <div class="notifications-container">
+        <div class="notification notification--success">
+            <h4>Success!</h4>
+            <p>Enhanced UI components loaded successfully.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <header class="header">
+            <div class="header__logo">LBRY Desktop Enhanced</div>
+            <div class="header__search">
+                <input type="text" placeholder="Search content...">
+            </div>
+            <button class="button button--primary">Sign In</button>
+        </header>
+
+        <div class="main-content">
+            <nav class="sidebar">
+                <a href="#" class="nav-item active">
+                    <span>🏠</span>
+                    <span style="margin-left: 8px;">Home</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span>📺</span>
+                    <span style="margin-left: 8px;">Following</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span>🔍</span>
+                    <span style="margin-left: 8px;">Discover</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span>📚</span>
+                    <span style="margin-left: 8px;">Library</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <span>💰</span>
+                    <span style="margin-left: 8px;">Wallet</span>
+                </a>
+            </nav>
+
+            <main class="content">
+                <!-- Breadcrumb Demo -->
+                <div class="demo-section">
+                    <h2>Breadcrumb Navigation</h2>
+                    <nav class="breadcrumb">
+                        <ol class="breadcrumb__list">
+                            <li class="breadcrumb__item">
+                                <a href="#" class="breadcrumb__link">Home</a>
+                            </li>
+                            <li class="breadcrumb__item">
+                                <span class="breadcrumb__separator">/</span>
+                                <a href="#" class="breadcrumb__link">Discover</a>
+                            </li>
+                            <li class="breadcrumb__item">
+                                <span class="breadcrumb__separator">/</span>
+                                <span class="breadcrumb__current">Technology</span>
+                            </li>
+                        </ol>
+                    </nav>
+                </div>
+
+                <!-- Progress Bars Demo -->
+                <div class="demo-section">
+                    <h2>Progress Bars</h2>
+                    <div class="demo-grid">
+                        <div class="demo-item">
+                            <h3>Default Progress</h3>
+                            <div class="progress">
+                                <div class="progress__track">
+                                    <div class="progress__bar" style="width: 65%"></div>
+                                </div>
+                                <div class="progress__label">65%</div>
+                            </div>
+                        </div>
+                        <div class="demo-item">
+                            <h3>Animated Progress</h3>
+                            <div class="progress">
+                                <div class="progress__track">
+                                    <div class="progress__bar progress__bar--animated" style="width: 45%"></div>
+                                </div>
+                                <div class="progress__label">45%</div>
+                            </div>
+                        </div>
+                        <div class="demo-item">
+                            <h3>Success Progress</h3>
+                            <div class="progress">
+                                <div class="progress__track">
+                                    <div class="progress__bar" style="width: 100%; background: var(--color-success)"></div>
+                                </div>
+                                <div class="progress__label">100%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Buttons Demo -->
+                <div class="demo-section">
+                    <h2>Enhanced Buttons</h2>
+                    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                        <button class="button button--primary">Primary Button</button>
+                        <button class="button button--secondary">Secondary Button</button>
+                        <button class="button button--primary">
+                            <span class="spinner"></span>
+                            Loading...
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Interactive Cards Demo -->
+                <div class="demo-section">
+                    <h2>Interactive Cards</h2>
+                    <div class="demo-grid">
+                        <div class="card">
+                            <h3>Content Card 1</h3>
+                            <p>This card has enhanced hover effects with smooth animations and elevation changes.</p>
+                            <button class="button button--primary" style="margin-top: 16px;">View Content</button>
+                        </div>
+                        <div class="card">
+                            <h3>Content Card 2</h3>
+                            <p>Hover over this card to see the smooth transition effects we implemented.</p>
+                            <button class="button button--secondary" style="margin-top: 16px;">Learn More</button>
+                        </div>
+                        <div class="card">
+                            <h3>Content Card 3</h3>
+                            <p>All cards now have consistent animations and better visual feedback.</p>
+                            <button class="button button--primary" style="margin-top: 16px;">Subscribe</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Skeleton Loading Demo -->
+                <div class="demo-section">
+                    <h2>Skeleton Loading States</h2>
+                    <div class="card">
+                        <div class="skeleton skeleton--text skeleton--text--medium"></div>
+                        <div class="skeleton skeleton--text skeleton--text--long"></div>
+                        <div class="skeleton skeleton--text skeleton--text--short"></div>
+                        <div class="skeleton skeleton--text skeleton--text--long"></div>
+                    </div>
+                </div>
+
+                <!-- Tooltip Demo -->
+                <div class="demo-section">
+                    <h2>Tooltips</h2>
+                    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                        <div class="tooltip-wrapper">
+                            <button class="button button--primary" onmouseenter="showTooltip(event, 'This is a helpful tooltip!')" onmouseleave="hideTooltip()">
+                                Hover for Tooltip
+                            </button>
+                        </div>
+                        <div class="tooltip-wrapper">
+                            <button class="button button--secondary" onmouseenter="showTooltip(event, 'Another tooltip with more information')" onmouseleave="hideTooltip()">
+                                Another Tooltip
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Test Notifications -->
+                <div class="demo-section">
+                    <h2>Test Notifications</h2>
+                    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                        <button class="button button--primary" onclick="showNotification('success')">Show Success</button>
+                        <button class="button button--secondary" onclick="showNotification('error')">Show Error</button>
+                        <button class="button button--secondary" onclick="showNotification('warning')">Show Warning</button>
+                        <button class="button button--secondary" onclick="showNotification('info')">Show Info</button>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Floating Action Button -->
+    <button class="fab fab--bottom-right" onclick="showNotification('info', 'FAB clicked!')">
+        <span style="font-size: 24px;">+</span>
+    </button>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            body.setAttribute('data-theme', currentTheme === 'dark' ? 'light' : 'dark');
+        }
+
+        function showNotification(type, customMessage) {
+            const container = document.querySelector('.notifications-container');
+            const notification = document.createElement('div');
+            notification.className = `notification notification--${type}`;
+            
+            const titles = {
+                success: 'Success!',
+                error: 'Error!',
+                warning: 'Warning!',
+                info: 'Info'
+            };
+            
+            const messages = {
+                success: 'Operation completed successfully.',
+                error: 'Something went wrong. Please try again.',
+                warning: 'Please review your input before proceeding.',
+                info: customMessage || 'Here is some helpful information.'
+            };
+            
+            notification.innerHTML = `
+                <h4>${titles[type]}</h4>
+                <p>${messages[type]}</p>
+            `;
+            
+            container.appendChild(notification);
+            
+            // Remove notification after 5 seconds
+            setTimeout(() => {
+                notification.style.animation = 'notification-slide-out 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards';
+                setTimeout(() => {
+                    if (container.contains(notification)) {
+                        container.removeChild(notification);
+                    }
+                }, 300);
+            }, 5000);
+        }
+
+        function showTooltip(event, content) {
+            const tooltip = document.createElement('div');
+            tooltip.className = 'tooltip';
+            tooltip.textContent = content;
+            
+            const rect = event.target.getBoundingClientRect();
+            tooltip.style.left = rect.left + 'px';
+            tooltip.style.top = (rect.top - 40) + 'px';
+            
+            document.body.appendChild(tooltip);
+        }
+
+        function hideTooltip() {
+            const tooltips = document.querySelectorAll('.tooltip');
+            tooltips.forEach(tooltip => {
+                if (document.body.contains(tooltip)) {
+                    document.body.removeChild(tooltip);
+                }
+            });
+        }
+
+        // Add notification slide-out animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes notification-slide-out {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Auto-progress demo
+        let progressValue = 0;
+        const progressBar = document.querySelector('.progress__bar--animated');
+        const progressLabel = progressBar.parentElement.nextElementSibling;
+        
+        setInterval(() => {
+            progressValue = (progressValue + 1) % 100;
+            progressBar.style.width = progressValue + '%';
+            progressLabel.textContent = progressValue + '%';
+        }, 100);
+    </script>
+</body>
+</html> 

@@ -20,6 +20,7 @@ import LANGUAGE_MIGRATIONS from 'constants/language-migrations';
 import FileDrop from 'component/fileDrop';
 import ModalRouter from 'modal/modalRouter';
 import Nag from 'component/common/nag';
+import NotificationManager from 'component/notificationManager';
 
 import SyncFatalError from 'component/syncFatalError';
 import Yrbl from 'component/yrbl';
@@ -350,6 +351,7 @@ function App(props: Props) {
       <ModalRouter />
       <FileDrop />
       <FileRenderFloating />
+      <NotificationManager />
       {isEnhancedLayout && <Yrbl className="yrbl--enhanced" />}
 
       {showUpgradeButton && !isUpdateModalDisplayed && (

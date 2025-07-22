@@ -1,0 +1,74 @@
+// Test Components Page Styles
+.test-components {
+  padding: var(--spacing-l);
+  max-width: 1200px;
+  margin: 0 auto;
+
+  h1 {
+    color: var(--color-text);
+    margin-bottom: var(--spacing-xl);
+    text-align: center;
+    font-size: 32px;
+  }
+}
+
+.test-section {
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-l);
+  background: var(--color-card-background);
+  border-radius: var(--card-radius);
+  border: 1px solid var(--color-border);
+
+  h2 {
+    color: var(--color-text);
+    margin-bottom: var(--spacing-m);
+    font-size: 24px;
+    border-bottom: 2px solid var(--color-primary);
+    padding-bottom: var(--spacing-s);
+  }
+}
+
+.test-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: var(--spacing-m);
+}
+
+.test-item {
+  padding: var(--spacing-m);
+  border: 1px solid var(--color-border);
+  border-radius: var(--border-radius);
+  background: var(--color-input-bg);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+
+  h3 {
+    color: var(--color-text);
+    margin-bottom: var(--spacing-s);
+    font-size: 18px;
+  }
+
+  p {
+    color: var(--color-text-subtitle);
+    margin-bottom: var(--spacing-s);
+  }
+}
+
+// Responsive design
+@media (max-width: $breakpoint-small) {
+  .test-components {
+    padding: var(--spacing-m);
+  }
+
+  .test-section {
+    padding: var(--spacing-m);
+  }
+
+  .test-grid {
+    grid-template-columns: 1fr;
+  }
+}

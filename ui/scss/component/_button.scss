@@ -35,6 +35,9 @@
 
 .button--primary {
   background-color: var(--color-primary) !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
   .button__label {
     color: var(--color-primary-contrast);
@@ -54,9 +57,17 @@
   }
 
   &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
     .icon {
       stroke: var(--color-primary-contrast) !important;
     }
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   &:focus-visible {
@@ -75,6 +86,10 @@
 
 .button--secondary {
   background-color: var(--color-button-secondary-bg) !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
   .button__label {
     color: var(--color-button-secondary-text) !important;
   }
@@ -84,12 +99,20 @@
 
   &:hover {
     background-color: var(--color-button-secondary-bg-hover) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+
     .button__label {
       color: var(--color-button-secondary-text-hover);
     }
     .icon {
       stroke: var(--color-button-secondary-text-hover);
     }
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
 
   &:focus-visible {

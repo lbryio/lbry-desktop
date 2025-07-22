@@ -1,0 +1,98 @@
+// Modern Breadcrumb Component
+.breadcrumb {
+  padding: var(--spacing-m) 0;
+  margin-bottom: var(--spacing-m);
+}
+
+.breadcrumb__list {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+}
+
+.breadcrumb__item {
+  display: flex;
+  align-items: center;
+  font-size: var(--font-small);
+}
+
+.breadcrumb__separator {
+  margin: 0 var(--spacing-s);
+  color: var(--color-breadcrumb-separator, var(--color-text-subtitle));
+  font-weight: var(--font-weight-bold);
+}
+
+.breadcrumb__link {
+  display: flex;
+  align-items: center;
+  color: var(--color-breadcrumb-link, var(--color-text-subtitle));
+  text-decoration: none;
+  padding: var(--spacing-xs) var(--spacing-s);
+  border-radius: var(--border-radius);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    color: var(--color-breadcrumb-link-hover, var(--color-primary));
+    background: var(--color-breadcrumb-link-hover-bg, rgba(0, 123, 255, 0.1));
+    transform: translateY(-1px);
+  }
+
+  &:focus {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+}
+
+.breadcrumb__current {
+  display: flex;
+  align-items: center;
+  color: var(--color-breadcrumb-current, var(--color-text));
+  font-weight: var(--font-weight-bold);
+  padding: var(--spacing-xs) var(--spacing-s);
+}
+
+.breadcrumb__icon {
+  margin-right: var(--spacing-xs);
+  width: 16px;
+  height: 16px;
+}
+
+// Responsive design
+@media (max-width: $breakpoint-small) {
+  .breadcrumb {
+    padding: var(--spacing-s) 0;
+  }
+
+  .breadcrumb__list {
+    font-size: var(--font-xsmall);
+  }
+
+  .breadcrumb__separator {
+    margin: 0 var(--spacing-xs);
+  }
+
+  .breadcrumb__link,
+  .breadcrumb__current {
+    padding: var(--spacing-xxs) var(--spacing-xs);
+  }
+}
+
+// Dark theme support
+[data-theme='dark'] {
+  .breadcrumb__separator {
+    --color-breadcrumb-separator: var(--color-text-subtitle);
+  }
+
+  .breadcrumb__link {
+    --color-breadcrumb-link: var(--color-text-subtitle);
+    --color-breadcrumb-link-hover: var(--color-primary);
+    --color-breadcrumb-link-hover-bg: rgba(0, 123, 255, 0.2);
+  }
+
+  .breadcrumb__current {
+    --color-breadcrumb-current: var(--color-text);
+  }
+}

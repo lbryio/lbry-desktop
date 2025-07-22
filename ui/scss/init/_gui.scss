@@ -736,8 +736,14 @@ img {
   .search__header {
     .claim-preview__wrapper {
       background-color: rgba(var(--color-header-background-base), 0.6);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      transform: translateY(0);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
       &:hover {
         background-color: rgba(var(--color-header-background-base), 0.9);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
       }
     }
   }

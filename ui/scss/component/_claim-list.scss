@@ -856,15 +856,20 @@
   margin-left: var(--spacing-m);
   justify-content: flex-start;
   list-style: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(0);
+  border-radius: var(--border-radius);
 
   .media__thumb {
     overflow: hidden;
+    border-radius: var(--border-radius);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   // Hover Zoom Effect
   .media__thumb {
     background-size: 100%;
-    transition: background-size 0.2s ease-in-out;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .claim-tile__title {
@@ -875,10 +880,13 @@
 
   &:hover {
     cursor: pointer;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 
     .media__thumb {
       box-shadow: 0px 0px 0px 2px var(--color-primary-dynamic) inset;
       background-size: 108%;
+      transform: scale(1.02);
     }
 
     .claim-tile__title {
