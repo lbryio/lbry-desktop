@@ -3396,10 +3396,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"adm-zip@npm:^0.4.13":
-  version: 0.4.16
-  resolution: "adm-zip@npm:0.4.16"
-  checksum: 5ea46664d8b3b073fffeb7f934705fea288708745e708cffc1dd732ce3d2672cecd476b243f9d051892fd12952db2b6bd061975e1ff40057246f6d0cb6534a50
+"adm-zip@npm:^0.6.1":
+  version: 0.6.1
+  resolution: "adm-zip@npm:0.6.1"
+  checksum: 4e3f4c7744e49329ac871c1b2fc4b2537db197b0b8db3ef2a8813a5aab3a12050ee471281e0d16ceb0e768465ef77ffc7f1f9283d1fef30795c1dbc487a16056
   languageName: node
   linkType: hard
 
@@ -11434,7 +11434,7 @@ __metadata:
     "@sentry/webpack-plugin": ^1.10.0
     "@types/three": ^0.103.2
     "@ungap/from-entries": ^0.2.1
-    adm-zip: ^0.4.13
+    adm-zip: ^0.6.1
     auto-launch: ^5.0.5
     babel-eslint: ^10.0.1
     babel-loader: ^8.0.5
