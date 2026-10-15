@@ -11502,7 +11502,7 @@ __metadata:
     mammoth: ^1.4.16
     match-sorter: ^6.3.0
     mime: ^3.0.0
-    moment: ^2.29.2
+    moment: ^2.31.0
     node-fetch: ^2.6.7
     node-html-parser: ^5.1.0
     node-loader: ^0.6.0
@@ -12716,10 +12716,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment@npm:^2.29.2":
-  version: 2.29.4
-  resolution: "moment@npm:2.29.4"
-  checksum: 0ec3f9c2bcba38dc2451b1daed5daded747f17610b92427bebe1d08d48d8b7bdd8d9197500b072d14e326dd0ccf3e326b9e3d07c5895d3d49e39b6803b76e80e
+"moment@npm:^2.31.0":
+  version: 2.31.0
+  resolution: "moment@npm:2.31.0"
+  checksum: e29cff3850438c66228cc43373ea8b6c480c7c3cfaf17ef9327653811d194734e7e2c1108b5cf2527ab0b2ba8907cbcb4f5dc3e764c044d5766eb7c4582759eb
   languageName: node
   linkType: hard
 
