@@ -12,7 +12,8 @@
     {
       "from": "dist/electron/static",
       "to": "./"
-    }
+    },
+    "!**/node_modules/electron/**"
   ],
   "extraResources": [
     {
@@ -81,7 +82,9 @@
     "executableName": "lbry",
     "category": "AudioVideo;Video",
     "desktop": {
-      "MimeType": "x-scheme-handler/lbry"
+      "entry": {
+        "MimeType": "x-scheme-handler/lbry"
+      }
     }
   },
   "deb": {
