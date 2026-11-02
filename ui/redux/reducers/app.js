@@ -1,11 +1,6 @@
 // @flow
 
 import * as ACTIONS from 'constants/action_types';
-import * as remote from '@electron/remote';
-
-// @if TARGET='app'
-const win = remote.BrowserWindow.getFocusedWindow();
-// @endif
 
 const reducers = {};
 
@@ -261,7 +256,7 @@ reducers[ACTIONS.DOWNLOADING_COMPLETED] = (state) => {
 
   // Don't update the badge number if the window is focused
   // @if TARGET='app'
-  if (win && win.isFocused()) return Object.assign({}, state);
+  if (document.hasFocus()) return Object.assign({}, state);
   // @endif
 
   return Object.assign({}, state, {

@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const packageJSON = require('../package.json');
 const fetch = require('node-fetch');
-const decompress = require('decompress');
+const AdmZip = require('adm-zip');
 const os = require('os');
 const del = require('del');
 
@@ -67,11 +67,16 @@ const downloadLBRYFirst = targetPlatform =>
         )
         .then(() => del(`${lbryFirstFilePath}*`))
         .then()
-        .then(() =>
-          decompress(tmpZipPath, lbryFirstDir, {
-            filter: file => path.basename(file.path) === lbryFirstFileName,
-          })
-        )
+        .then(() => {
+          const zip = new AdmZip(tmpZipPath);
+          const entry = zip.getEntries().find(file => path.basename(file.entryName) === lbryFirstFileName);
+
+          if (!entry) {
+            throw new Error(`Could not find ${lbryFirstFileName} in archive`);
+          }
+
+          zip.extractEntryTo(entry, lbryFirstDir, false, true);
+        })
         .then(() => {
           console.log('\x1b[32msuccess\x1b[0m LbryFirst downloaded!');
           if (hasLbryFirstVersion) {

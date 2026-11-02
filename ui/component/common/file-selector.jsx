@@ -1,6 +1,5 @@
 // @flow
 import * as React from 'react';
-import * as remote from '@electron/remote';
 import { ipcRenderer } from 'electron';
 import Button from 'component/button';
 import { FormField } from 'component/common/form';
@@ -68,8 +67,8 @@ class FileSelector extends React.PureComponent<Props> {
       properties = ['openDirectory'];
     }
 
-    remote.dialog
-      .showOpenDialog({
+    ipcRenderer
+      .invoke('dialog:showOpenDialog', {
         properties,
         defaultPath,
         filters: this.props.filters,

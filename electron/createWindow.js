@@ -9,7 +9,6 @@ import { TO_TRAY_WHEN_CLOSED } from 'constants/settings';
 
 import setupBarMenu from './menu/setupBarMenu';
 import * as PAGES from 'constants/pages';
-const remote = require('@electron/remote/main');
 const shell = require('electron').shell;
 function GetAppLangCode() {
   // https://www.electronjs.org/docs/api/locales
@@ -56,7 +55,6 @@ export default appState => {
       plugins: true,
       nodeIntegration: true,
       contextIsolation: false,
-      enableRemoteModule: true, // see about removing this
     },
   };
   const lbryProto = 'lbry://';
@@ -64,7 +62,6 @@ export default appState => {
   const rendererURL = isDev ? `http://localhost:${WEBPACK_ELECTRON_PORT}` : `file://${__dirname}/index.html`;
 
   let window = new BrowserWindow(windowConfiguration);
-  remote.enable(window.webContents);
 
   // Let us register listeners on the window, so we can update the state
   // automatically (the listeners will be removed when the window is closed)
@@ -143,6 +140,10 @@ export default appState => {
 
   window.on('focus', () => {
     window.webContents.send('window-is-focused', null);
+  });
+
+  window.on('leave-full-screen', () => {
+    window.webContents.send('leave-full-screen');
   });
 
   window.on('unresponsive', () => {
