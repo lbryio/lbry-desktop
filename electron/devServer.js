@@ -2,7 +2,7 @@
 const { WEBPACK_ELECTRON_PORT } = require('../config');
 const chalk = require('chalk');
 const webpack = require('webpack');
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const middleware = require('webpack-dev-middleware');
 const express = require('express');
 const app = express();
@@ -25,7 +25,6 @@ renderConfig = merge(renderConfig, {
 
 const mainCompiler = webpack(mainConfig);
 const mainInstance = middleware(mainCompiler, {
-  logLevel: 'warn',
   writeToDisk: filename => {
     // console.log(`Writing '${filename}'.`);
     return true;
@@ -34,7 +33,6 @@ const mainInstance = middleware(mainCompiler, {
 
 const renderCompiler = webpack(renderConfig);
 const renderInstance = middleware(renderCompiler, {
-  logLevel: 'warn',
   publicPath: '/',
 });
 app.use(require('webpack-hot-middleware')(renderCompiler));
