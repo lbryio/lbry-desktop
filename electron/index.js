@@ -4,7 +4,7 @@
 import '@babel/polyfill';
 import SemVer from 'semver';
 import https from 'https';
-import { app, dialog, ipcMain, session, shell, BrowserWindow } from 'electron';
+import { app, dialog, ipcMain, Menu, session, shell, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import Lbry from 'lbry';
 import LbryFirstInstance from './LbryFirstInstance';
@@ -21,13 +21,11 @@ import { diskSpaceLinux, diskSpaceWindows, diskSpaceMac } from '../ui/util/disks
 
 const { download } = require('electron-dl');
 const mime = require('mime');
-const remote = require('@electron/remote/main');
 const os = require('os');
 const sudo = require('sudo-prompt');
 const probe = require('ffmpeg-probe');
 const MAX_IPC_SEND_BUFFER_SIZE = 500000000; // large files crash when serialized for ipc message
 
-remote.initialize();
 const filePath = path.join(process.resourcesPath, 'static', 'upgradeDisabled');
 let upgradeDisabled;
 try {
@@ -38,6 +36,7 @@ try {
 }
 autoUpdater.autoDownload = !upgradeDisabled;
 autoUpdater.allowPrerelease = false;
+autoUpdater.logger = require('electron-log');
 
 const UPDATE_STATE_INIT = 0;
 const UPDATE_STATE_CHECKING = 1;
@@ -57,6 +56,12 @@ let showingAutoUpdateCloseAlert = false;
 // Keep a global reference, if you don't, they will be closed automatically when the JavaScript
 // object is garbage collected.
 let rendererWindow;
+
+const sendToRenderer = (channel, ...args) => {
+  if (rendererWindow && !rendererWindow.isDestroyed()) {
+    rendererWindow.webContents.send(channel, ...args);
+  }
+};
 
 let tray; // eslint-disable-line
 let daemon;
@@ -302,6 +307,68 @@ app.on('before-quit', () => {
   appState.isQuitting = true;
 });
 
+// Renderer -> main process bridge (replaces @electron/remote).
+ipcMain.handle('dialog:showOpenDialog', (event, options) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  return win ? dialog.showOpenDialog(win, options) : dialog.showOpenDialog(options);
+});
+
+ipcMain.on('window:maximize', (event) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  if (win) win.maximize();
+});
+
+ipcMain.on('window:setFullScreen', (event, isFullScreen) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  if (win) win.setFullScreen(Boolean(isFullScreen));
+});
+
+ipcMain.on('app:quit', () => {
+  app.quit();
+});
+
+ipcMain.on('app:setBadge', (event, text) => {
+  if (app.dock) app.dock.setBadge(text || '');
+});
+
+ipcMain.on('app:getPath', (event, name) => {
+  try {
+    event.returnValue = app.getPath(name);
+  } catch (e) {
+    event.returnValue = null;
+  }
+});
+
+ipcMain.on('app:getLocale', (event) => {
+  event.returnValue = app.getLocale();
+});
+
+ipcMain.on('set-allow-prerelease', (event, enabled) => {
+  autoUpdater.allowPrerelease = Boolean(enabled);
+});
+
+ipcMain.on('inspect-element', (event, x, y) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+  if (win) win.webContents.inspectElement(x, y);
+});
+
+ipcMain.on('show-context-menu', (event, template = [], coords = {}) => {
+  const win = BrowserWindow.fromWebContents(event.sender);
+
+  const items = template.map((item) => {
+    if (!item.id) return item;
+    return Object.assign({}, item, {
+      click: () => event.sender.send('context-menu-clicked', item.id),
+    });
+  });
+
+  Menu.buildFromTemplate(items).popup({
+    window: win,
+    x: coords.x,
+    y: coords.y,
+  });
+});
+
 // Get the content of a file as a raw buffer of bytes.
 // Useful to convert a file path to a File instance.
 // Example:
@@ -510,12 +577,18 @@ process.on('uncaughtException', error => {
 });
 
 // Auto updater
+autoUpdater.on('checking-for-update', () => {
+  sendToRenderer('auto-update-checking');
+});
+
 autoUpdater.on('download-progress', () => {
   updateState = UPDATE_STATE_DOWNLOADING;
+  sendToRenderer('auto-update-download-progress');
 });
 
 autoUpdater.on('update-downloaded', () => {
   updateState = UPDATE_STATE_DOWNLOADED;
+  sendToRenderer('auto-update-downloaded');
 
   // If this download was trigger by
   // autoUpdateAccepted it means, the user
@@ -526,7 +599,9 @@ autoUpdater.on('update-downloaded', () => {
   }
 });
 
-autoUpdater.on('update-available', () => {
+autoUpdater.on('update-available', (info) => {
+  sendToRenderer('auto-update-available', info);
+
   if (updateState === UPDATE_STATE_DOWNLOADING) {
     return;
   }
@@ -535,9 +610,12 @@ autoUpdater.on('update-available', () => {
 
 autoUpdater.on('update-not-available', () => {
   updateState = UPDATE_STATE_NO_UPDATES_FOUND;
+  sendToRenderer('auto-update-not-available');
 });
 
-autoUpdater.on('error', () => {
+autoUpdater.on('error', (error) => {
+  sendToRenderer('auto-update-error', error && error.message);
+
   if (updateState === UPDATE_STATE_DOWNLOADING) {
     updateState = UPDATE_STATE_UPDATES_FOUND;
     return;

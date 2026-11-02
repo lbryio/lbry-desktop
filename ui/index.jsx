@@ -6,7 +6,6 @@ import SplashScreen from 'component/splash';
 import * as ACTIONS from 'constants/action_types';
 import { changeZoomFactor } from 'util/zoomWindow';
 import { ipcRenderer, shell } from 'electron';
-import * as remote from '@electron/remote';
 import moment from 'moment';
 import * as MODALS from 'constants/modal_types';
 import React, { Fragment, useState, useEffect } from 'react';
@@ -53,9 +52,6 @@ import 'scss/all.scss';
 
 const startTime = Date.now();
 analytics.startupEvent();
-
-const { autoUpdater } = remote.require('electron-updater');
-autoUpdater.logger = remote.require('electron-log');
 
 if (LBRY_API_URL) {
   Lbryio.setLocalApi(LBRY_API_URL);
@@ -132,23 +128,23 @@ ipcRenderer.on('open-uri-requested', (event, url, newSession) => {
   handleError();
 });
 
-autoUpdater.on('download-progress', () => {
+ipcRenderer.on('auto-update-download-progress', () => {
   app.store.dispatch(doAutoUpdateDownloading());
 });
 
-autoUpdater.on('checking-for-update', () => {
+ipcRenderer.on('auto-update-checking', () => {
   app.store.dispatch(doAutoUpdateReset());
 });
 
-autoUpdater.on('update-available', (e) => {
-  app.store.dispatch(doNotifyUpdateAvailable(e));
+ipcRenderer.on('auto-update-available', (e, info) => {
+  app.store.dispatch(doNotifyUpdateAvailable(info));
 });
 
-autoUpdater.on('update-downloaded', () => {
+ipcRenderer.on('auto-update-downloaded', () => {
   app.store.dispatch(doAutoUpdateReset());
 });
 
-autoUpdater.on('error', () => {
+ipcRenderer.on('auto-update-error', () => {
   app.store.dispatch(doAutoUpdateFail());
 });
 
@@ -183,12 +179,10 @@ ipcRenderer.on('zoom-window', (event, action) => {
   changeZoomFactor(action);
 });
 
-const { dock } = remote.app;
-
 ipcRenderer.on('window-is-focused', () => {
-  if (!dock) return;
+  if (process.platform !== 'darwin') return;
   app.store.dispatch({ type: ACTIONS.WINDOW_FOCUSED });
-  dock.setBadge('');
+  ipcRenderer.send('app:setBadge', '');
 });
 
 ipcRenderer.on('devtools-is-opened', () => {
@@ -197,7 +191,7 @@ ipcRenderer.on('devtools-is-opened', () => {
 
 // Force exit mode for html5 fullscreen api
 // See: https://github.com/electron/electron/issues/18188
-remote.getCurrentWindow().on('leave-full-screen', (event) => {
+ipcRenderer.on('leave-full-screen', () => {
   document.webkitExitFullscreen();
 });
 
@@ -230,30 +224,26 @@ function AppWrapper() {
     if (persistDone) {
       const state = store.getState();
       const enabled = makeSelectClientSetting(SETTINGS.ENABLE_PRERELEASE_UPDATES)(state);
-      if (enabled) {
-        autoUpdater.allowPrerelease = true;
-      } else {
-        autoUpdater.allowPrerelease = false;
-      }
+      ipcRenderer.send('set-allow-prerelease', Boolean(enabled));
     }
   }, [persistDone]);
 
   useEffect(() => {
     // @if TARGET='app'
-    moment.locale(remote.app.getLocale());
+    moment.locale(ipcRenderer.sendSync('app:getLocale'));
 
-    autoUpdater.on('error', (error) => {
-      console.error(error.message); // eslint-disable-line no-console
+    ipcRenderer.on('auto-update-error', (event, message) => {
+      console.error(message); // eslint-disable-line no-console
     });
 
     if (['win32', 'darwin'].includes(process.platform) || !!process.env.APPIMAGE) {
-      autoUpdater.on('update-available', () => {
+      ipcRenderer.on('auto-update-available', () => {
         console.log('Update available'); // eslint-disable-line no-console
       });
-      autoUpdater.on('update-not-available', () => {
+      ipcRenderer.on('auto-update-not-available', () => {
         console.log('Update not available'); // eslint-disable-line no-console
       });
-      autoUpdater.on('update-downloaded', () => {
+      ipcRenderer.on('auto-update-downloaded', () => {
         console.log('Update downloaded'); // eslint-disable-line no-console
         app.store.dispatch(doAutoUpdate());
       });
