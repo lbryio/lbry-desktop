@@ -4,7 +4,14 @@
   "directories": {
     "output": "dist/electron"
   },
+  "extraMetadata": {
+    "main": "main.js"
+  },
   "files": [
+    {
+      "from": ".",
+      "filter": ["package.json"]
+    },
     {
       "from": "dist/electron/webpack",
       "to": "./"

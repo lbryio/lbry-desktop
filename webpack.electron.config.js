@@ -1,12 +1,11 @@
 const config = require('./config');
 const path = require('path');
 const webpack = require('webpack');
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const baseConfig = require('./webpack.base.config.js');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { DefinePlugin, ProvidePlugin } = require('webpack');
 const { getIfUtils, removeEmpty } = require('webpack-config-utils');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 
 const STATIC_ROOT = path.resolve(__dirname, 'static/');
 const DIST_ROOT = path.resolve(__dirname, 'dist/');

@@ -17,7 +17,9 @@ let baseConfig = {
     minimizer: [
       new TerserPlugin({
         parallel: true,
-        sourceMap: true,
+        terserOptions: {
+          sourceMap: true,
+        },
       }),
     ],
   },
@@ -43,8 +45,10 @@ let baseConfig = {
           { loader: 'css-loader' },
           { loader: 'postcss-loader',
             options: {
-              plugins: function () {
-                return [ require('postcss-rtl')() ];
+              postcssOptions: {
+                plugins: function () {
+                  return [ require('postcss-rtl')() ];
+                },
               },
             },
           },
