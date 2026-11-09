@@ -385,7 +385,7 @@ const ClaimPreview = forwardRef<any, {}>((props: Props, ref: any) => {
                   </NavLink>
                 )}
               </div>
-              <div className="claim-tile__info" uri={uri}>
+              <div className="claim-tile__info">
                 {!isChannelUri && signingChannel && (
                   <div className="claim-preview__channel-staked">
                     <UriIndicator focusable={false} uri={uri} link hideAnonymous>

@@ -23,7 +23,6 @@ declare module 'lbry-format' {
  * needed.
  */
 
-
 // Filename aliases
 declare module 'lbry-format/index' {
   declare module.exports: $Exports<'lbry-format'>;

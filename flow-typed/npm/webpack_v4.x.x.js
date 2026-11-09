@@ -64,8 +64,7 @@ declare module 'webpack' {
   declare type ExternalItem =
     | string
     | {
-        [k: string]:
-          | string
+        [k: string]: | string
           | {
               [k: string]: any,
             }
@@ -81,14 +80,12 @@ declare module 'webpack' {
         callback: (err?: Error, result?: string) => void
       ) => void)
     | ExternalItem
-    | Array<
-        | ((
+    | Array<| ((
             context: string,
             request: string,
             callback: (err?: Error, result?: string) => void
           ) => void)
-        | ExternalItem
-      >;
+        | ExternalItem>;
 
   declare type RuleSetCondition =
     | RegExp
@@ -146,8 +143,7 @@ declare module 'webpack' {
     rules?: RuleSetRules,
     sideEffects?: boolean,
     test?: RuleSetConditionOrConditions,
-    type?:
-      | 'javascript/auto'
+    type?: | 'javascript/auto'
       | 'javascript/dynamic'
       | 'javascript/esm'
       | 'json'
@@ -197,8 +193,7 @@ declare module 'webpack' {
   declare type OptimizationSplitChunksOptions = {
     automaticNameDelimiter?: string,
     cacheGroups?: {
-      [k: string]:
-        | false
+      [k: string]: | false
         | Function
         | string
         | RegExp
@@ -255,8 +250,7 @@ declare module 'webpack' {
     providedExports?: boolean,
     removeAvailableModules?: boolean,
     removeEmptyChunks?: boolean,
-    runtimeChunk?:
-      | boolean
+    runtimeChunk?: | boolean
       | ('single' | 'multiple')
       | {
           name?: string | Function,
@@ -273,8 +267,7 @@ declare module 'webpack' {
   };
 
   declare type OutputOptions = {
-    auxiliaryComment?:
-      | string
+    auxiliaryComment?: | string
       | {
           amd?: string,
           commonjs?: string,
@@ -302,8 +295,7 @@ declare module 'webpack' {
     jsonpScriptType?: false | 'text/javascript' | 'module',
     library?: string | Array<string> | LibraryCustomUmdObject,
     libraryExport?: string | ArrayOfStringValues,
-    libraryTarget?:
-      | 'var'
+    libraryTarget?: | 'var'
       | 'assign'
       | 'this'
       | 'window'
@@ -337,8 +329,7 @@ declare module 'webpack' {
   declare type ArrayOfStringOrStringArrayValues = Array<string | Array<string>>;
 
   declare type ResolveOptions = {
-    alias?:
-      | { [k: string]: string }
+    alias?: | { [k: string]: string }
       | Array<{
           alias?: string,
           name?: string,
@@ -384,8 +375,7 @@ declare module 'webpack' {
         chunkOrigins?: boolean,
         chunks?: boolean,
         chunksSort?: string,
-        colors?:
-          | boolean
+        colors?: | boolean
           | {
               bold?: string,
               cyan?: string,
@@ -448,8 +438,7 @@ declare module 'webpack' {
       disableHostCheck?: boolean,
       filename?: string,
       headers?: { [key: string]: string },
-      historyApiFallback?:
-        | boolean
+      historyApiFallback?: | boolean
         | {
             rewrites?: Array<{ from: string, to: string }>,
             disableDotRule?: boolean,
@@ -457,8 +446,7 @@ declare module 'webpack' {
       host?: string,
       hot?: boolean,
       hotOnly?: boolean,
-      https?:
-        | boolean
+      https?: | boolean
         | {
             key: string,
             cert: string,
@@ -470,8 +458,7 @@ declare module 'webpack' {
       noInfo?: boolean,
       open?: boolean | string,
       openPage?: string,
-      overlay?:
-        | boolean
+      overlay?: | boolean
         | {
             errors?: boolean,
             warnings?: boolean,
@@ -506,8 +493,7 @@ declare module 'webpack' {
       watchOptions?: WatchOptions,
       publicPath?: string,
     },
-    devtool?:
-      | '@cheap-eval-source-map'
+    devtool?: | '@cheap-eval-source-map'
       | '@cheap-module-eval-source-map'
       | '@cheap-module-source-map'
       | '@cheap-source-map'
@@ -568,8 +554,7 @@ declare module 'webpack' {
     resolveLoader?: ResolveOptions,
     serve?: { [k: string]: any },
     stats?: StatsOptions,
-    target?:
-      | 'web'
+    target?: | 'web'
       | 'webworker'
       | 'node'
       | 'async-node'

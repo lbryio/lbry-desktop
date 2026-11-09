@@ -56,7 +56,7 @@ function UserChannelFollowIntro(props: Props) {
       };
       setTimeout(delayedChannelSubscribe, 1000);
     }
-  }, [prefsReady]);
+  }, [prefsReady, channelSubscribe]);
 
   return (
     <Card

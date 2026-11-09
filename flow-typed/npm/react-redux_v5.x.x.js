@@ -31,7 +31,7 @@ Decrypting the abbreviations:
   EFO = Extra factory options (used only in connectAdvanced)
 */
 
-declare module "react-redux" {
+declare module 'react-redux' {
   // ------------------------------------------------------------
   // Typings for connect()
   // ------------------------------------------------------------

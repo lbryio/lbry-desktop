@@ -71,7 +71,7 @@ function ModalAffirmPurchase(props: Props) {
         clearTimeout(timeout);
       }
     };
-  }, [success, uri]);
+  }, [success, uri, closeModal]);
 
   return (
     <Modal type="card" isOpen contentLabel={modalTitle} onAborted={cancelPurchase}>

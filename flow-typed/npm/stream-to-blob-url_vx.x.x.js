@@ -23,7 +23,6 @@ declare module 'stream-to-blob-url' {
  * needed.
  */
 
-
 // Filename aliases
 declare module 'stream-to-blob-url/index' {
   declare module.exports: $Exports<'stream-to-blob-url'>;

@@ -23,7 +23,6 @@ declare module 'remark-react' {
  * needed.
  */
 
-
 // Filename aliases
 declare module 'remark-react/index' {
   declare module.exports: $Exports<'remark-react'>;

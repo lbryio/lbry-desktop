@@ -322,7 +322,7 @@ declare class Bluebird$Defer {
   reject: (value: any) => any;
 }
 
-declare module "bluebird" {
+declare module 'bluebird' {
   declare module.exports: typeof Bluebird$Promise;
 
   declare type Disposable<T> = Bluebird$Disposable<T>;

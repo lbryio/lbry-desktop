@@ -2,7 +2,7 @@
 // flow-typed version: 9d7a8571fd/react-hot-loader_v4.6.x/flow_>=v0.53.0
 
 // @flow
-declare module "react-hot-loader" {
+declare module 'react-hot-loader' {
   declare type Module = {
     id: string,
   };
@@ -50,7 +50,7 @@ declare module "react-hot-loader" {
   declare export function setConfig(config: $Shape<Config>): void
 }
 
-declare module "react-hot-loader/root" {
+declare module 'react-hot-loader/root' {
   import type { ContainerProps } from 'react-hot-loader';
 
   declare export function hot<T: React$ComponentType<any>>(

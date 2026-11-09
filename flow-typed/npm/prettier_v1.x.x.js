@@ -1,7 +1,7 @@
 // flow-typed signature: 066c92e9ccb5f0711df8d73cbca837d6
 // flow-typed version: 9e32affdbd/prettier_v1.x.x/flow_>=v0.56.x
 
-declare module "prettier" {
+declare module 'prettier' {
   declare export type AST = Object;
   declare export type Doc = Object;
   declare export type FastPath = Object;

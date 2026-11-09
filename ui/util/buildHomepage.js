@@ -167,7 +167,8 @@ export function GetLinksData(
   }
 
   // **************************************************************************
-  // @if CUSTOM_HOMEPAGE='false'
+  // @_if CUSTOM_HOMEPAGE='false'
+  // TODO Renable
 
   /*
   const YOUTUBER_CHANNEL_IDS = [
@@ -345,7 +346,7 @@ export function GetLinksData(
     if (!showPersonalizedChannels) rowData.push(TOP_CHANNELS);
   }
 
-  // @endif
+  // @_endif
   // **************************************************************************
 
   // TODO: provide better method for exempting from homepage

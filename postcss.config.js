@@ -1,7 +1,7 @@
 module.exports = {
   plugins: {
     'postcss-import': {
-      resolve: function (id) {
+      resolve: function(id) {
         // Handle ~ imports for node_modules
         if (id.startsWith('~')) {
           try {
@@ -11,7 +11,7 @@ module.exports = {
           }
         }
         return id;
-      }
+      },
     },
     cssnano: process.env.NODE_ENV === 'production' ? {} : false,
   },

@@ -262,7 +262,7 @@ function PublishForm(props: Props) {
     if (publishing || publishSuccess) {
       clearPublish();
     }
-  }, [clearPublish]);
+  }, [clearPublish, publishing, publishSuccess]);
 
   useEffect(() => {
     if (!thumbnail) {
@@ -363,7 +363,7 @@ function PublishForm(props: Props) {
     const newParams = new URLSearchParams();
     newParams.set(TYPE_PARAM, mode.toLowerCase());
     replace({ search: newParams.toString() });
-  }, [mode, _uploadType]);
+  }, [mode, _uploadType, replace]);
 
   // @if TARGET='app'
   // Save file changes locally ( desktop )

@@ -58,7 +58,7 @@ function FileList(props: Props) {
         }
       }
     }
-  }, [radio, onChange]);
+  }, [radio, onChange, getFile]);
 
   return (
     <div className={'file-list'}>

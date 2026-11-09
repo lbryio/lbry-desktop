@@ -23,7 +23,6 @@ declare module 'yarnhook' {
  * needed.
  */
 
-
 // Filename aliases
 declare module 'yarnhook/index' {
   declare module.exports: $Exports<'yarnhook'>;

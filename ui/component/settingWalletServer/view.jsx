@@ -73,27 +73,27 @@ function SettingWalletServer(props: Props) {
         doClear();
       }
     },
-    []
+    [doClear]
   );
 
   useEffect(() => {
     if (hasWalletServerPrefs) {
       setUsingCustomServer(true);
     }
-  }, []);
+  }, [hasWalletServerPrefs]);
 
   useEffect(() => {
     const interval = setInterval(() => {
       getDaemonStatus();
     }, STATUS_INTERVAL);
     return () => clearInterval(interval);
-  }, []);
+  }, [getDaemonStatus]);
 
   useEffect(() => {
     if (walletRollbackToDefault) {
       doClear();
     }
-  }, [walletRollbackToDefault]);
+  }, [doClear, walletRollbackToDefault]);
 
   useEffect(() => {
     if (usingCustomServer) {

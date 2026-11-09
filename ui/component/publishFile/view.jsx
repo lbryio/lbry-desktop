@@ -120,7 +120,7 @@ function PublishFile(props: Props) {
       processSelectedFile(fileData);
     }
     readSelectedFileDetails();
-  }, [filePath]);
+  }, [filePath, processSelectedFile]);
 
   useEffect(() => {
     const isOptimizeAvail = currentFile && currentFile !== '' && isVid && ffmpegAvail;

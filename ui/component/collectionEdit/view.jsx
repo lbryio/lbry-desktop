@@ -260,7 +260,7 @@ function CollectionForm(props: Props) {
     const collectionClaimIds = JSON.parse(collectionClaimIdsString);
     setParams({ ...params, claims: collectionClaimIds });
     clearCollectionErrors();
-  }, [collectionClaimIdsString, setParams]);
+  }, [clearCollectionErrors, params, collectionClaimIdsString, setParams]);
 
   React.useEffect(() => {
     let nameError;
@@ -302,14 +302,14 @@ function CollectionForm(props: Props) {
         setParam({ channel_id: undefined });
       }
     }
-  }, [activeChannelId, incognito, initialized]);
+  }, [setParam, activeChannelId, incognito, initialized]);
 
   // setup initial params after we're sure if it's published or not
   React.useEffect(() => {
     if (!uri || (uri && hasClaim)) {
       updateParams(getCollectionParams());
     }
-  }, [uri, hasClaim]);
+  }, [uri, hasClaim, getCollectionParams, updateParams]);
 
   React.useEffect(() => {
     resetThumbnailStatus();

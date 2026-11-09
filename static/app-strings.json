@@ -2328,5 +2328,8 @@
   "lbry-search": "lbry-search",
   "Searches an index built from your own LBRY node": "Searches an index built from your own LBRY node",
   "GraphQL URL": "GraphQL URL",
+  "Images must be %max_size% MB or smaller.": "Images must be %max_size% MB or smaller.",
+  "The image upload service sent an empty response.": "The image upload service sent an empty response.",
+  "There was an error in the upload. The format or extension might not be supported.": "There was an error in the upload. The format or extension might not be supported.",
   "--end--": "--end--"
 }

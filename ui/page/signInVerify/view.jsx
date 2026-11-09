@@ -39,13 +39,13 @@ function SignInVerifyPage(props: Props) {
     if (!authToken || !userSubmittedEmail || !verificationToken) {
       onAuthError(__('Invalid or expired sign-in link.'));
     }
-  }, [authToken, userSubmittedEmail, verificationToken, doToast, push]);
+  }, [onAuthError, authToken, userSubmittedEmail, verificationToken, doToast, push]);
 
   React.useEffect(() => {
     if (!needsRecaptcha) {
       verifyUser();
     }
-  }, [needsRecaptcha]);
+  }, [verifyUser, needsRecaptcha]);
 
   React.useEffect(() => {
     let captchaTimeout;

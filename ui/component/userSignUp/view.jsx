@@ -110,7 +110,7 @@ function UserSignUp(props: Props) {
     if (previousHasVerifiedEmail === false && hasVerifiedEmail && prefsReady) {
       setSettingAndSync(SETTINGS.FIRST_RUN_STARTED, true);
     }
-  }, [hasVerifiedEmail, previousHasVerifiedEmail, prefsReady]);
+  }, [hasVerifiedEmail, previousHasVerifiedEmail, prefsReady, setSettingAndSync]);
 
   React.useEffect(() => {
     // Don't claim the reward if sync is enabled until after a sync has been completed successfully

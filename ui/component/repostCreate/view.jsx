@@ -196,7 +196,7 @@ function RepostCreate(props: Props) {
     if (repostTakeoverAmount) {
       setAutoRepostBid(repostTakeoverAmount);
     }
-  }, [enteredRepostAmount, passedRepostAmount]);
+  }, [setAutoRepostBid, enteredRepostAmount, passedRepostAmount]);
 
   // repost bid error
   React.useEffect(() => {
@@ -211,7 +211,7 @@ function RepostCreate(props: Props) {
       rBidError = __('Your deposit must be higher');
     }
     setRepostBidError(rBidError);
-  }, [setRepostBidError, repostBidError, repostBid]);
+  }, [balance, setRepostBidError, repostBidError, repostBid]);
 
   // setContentUri given enteredUri
   React.useEffect(() => {

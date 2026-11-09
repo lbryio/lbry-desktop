@@ -69,8 +69,7 @@ declare class moment$LocaleData {
   isPM(date: string): boolean;
   meridiem(hours: number, minutes: number, isLower: boolean): string;
   calendar(
-    key:
-      | "sameDay"
+    key: | "sameDay"
       | "nextDay"
       | "lastDay"
       | "nextWeek"
@@ -123,8 +122,7 @@ declare class moment$Moment {
   static ISO_8601: string;
   static (string?: ?string): moment$Moment;
   static (
-    initDate:
-      | moment$MomentOptions
+    initDate: | moment$MomentOptions
       | number
       | Date
       | Array<number>
@@ -157,8 +155,7 @@ declare class moment$Moment {
   static unix(seconds: number): moment$Moment;
   static utc(): moment$Moment;
   static utc(
-    initDate:
-      | moment$MomentOptions
+    initDate: | moment$MomentOptions
       | number
       | Date
       | Array<number>
@@ -373,6 +370,6 @@ declare class moment$Moment {
   static invalid(object: any): moment$Moment;
 }
 
-declare module "moment" {
+declare module 'moment' {
   declare module.exports: Class<moment$Moment>;
 }

@@ -37,7 +37,7 @@ Lbryio.call = (resource, action, params = {}, method = 'get') => {
     }
 
     if (response)
-      return response.json().then(json => {
+      { return response.json().then(json => {
         let error;
         if (json.error) {
           error = new Error(json.error);
@@ -46,7 +46,7 @@ Lbryio.call = (resource, action, params = {}, method = 'get') => {
         }
         error.response = response; // This is primarily a hack used in actions/user.js
         return Promise.reject(error);
-      });
+      }); }
   }
 
   function makeRequest(url, options) {

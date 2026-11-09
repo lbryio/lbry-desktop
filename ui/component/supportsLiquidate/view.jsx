@@ -89,7 +89,14 @@ const SupportsLiquidate = (props: Props) => {
     }
     setUnlockTextAmount(String(defaultValue));
     setDefaultValueAssigned(true);
-  }, [defaultValueAssigned, previewBalance, unlockTextAmount, setUnlockTextAmount, setDefaultValueAssigned]);
+  }, [
+    defaultValue,
+    defaultValueAssigned,
+    previewBalance,
+    unlockTextAmount,
+    setUnlockTextAmount,
+    setDefaultValueAssigned,
+  ]);
 
   // Update message & error based on unlock amount.
   useEffect(() => {
@@ -117,7 +124,7 @@ const SupportsLiquidate = (props: Props) => {
       setMessage(initialMessage);
       setError(false);
     }
-  }, [unlockTextAmount, previewBalance, setMessage, setError]);
+  }, [initialMessage, unlockTextAmount, previewBalance, setMessage, setError]);
 
   return (
     <Card

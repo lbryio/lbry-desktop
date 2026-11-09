@@ -3,7 +3,7 @@
 
 type ExtractReturnType = <Return>((...rest: any[]) => Return) => Return;
 
-declare module "reselect" {
+declare module 'reselect' {
   declare type InputSelector<-TState, TProps, TResult> =
     (state: TState, props: TProps, ...rest: any[]) => TResult
 

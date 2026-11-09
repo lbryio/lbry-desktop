@@ -1,7 +1,7 @@
 // flow-typed signature: 7d44bba9041ba487f4fa83ab9d1bd3c3
 // flow-typed version: 064c20def6/react-toggle_v4.0.x/flow_>=v0.54.x
 
-declare module "react-toggle" {
+declare module 'react-toggle' {
   declare type Icons = {
     checked?: React$Node,
     unchecked?: React$Node

@@ -46,7 +46,7 @@ let baseConfig = {
             loader: 'postcss-loader',
             options: {
               postcssOptions: {
-                plugins: function () {
+                plugins: function() {
                   return [require('postcss-rtl')()];
                 },
               },
@@ -102,7 +102,7 @@ let baseConfig = {
   plugins: [
     new webpack.IgnorePlugin({ resourceRegExp: /^\.\/locale$/, contextRegExp: /moment$/ }),
     new webpack.EnvironmentPlugin({
-      NODE_ENV: 'development' // default value if NODE_ENV is not defined
+      NODE_ENV: 'development', // default value if NODE_ENV is not defined
     }),
     new DefinePlugin({
       __static: `"${path.join(__dirname, 'static').replace(/\\/g, '\\\\')}"`,

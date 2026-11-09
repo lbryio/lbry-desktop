@@ -87,7 +87,7 @@ function UserEmailNew(props: Props) {
     if (emailExists) {
       handleChangeToSignIn();
     }
-  }, [emailExists]);
+  }, [emailExists, handleChangeToSignIn]);
 
   return (
     <div className={classnames('main__sign-up')}>

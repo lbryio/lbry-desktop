@@ -23,7 +23,6 @@ declare module 'async-exit-hook' {
  * needed.
  */
 
-
 // Filename aliases
 declare module 'async-exit-hook/index' {
   declare module.exports: $Exports<'async-exit-hook'>;

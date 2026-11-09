@@ -13,7 +13,7 @@ let mainConfig = {
   },
   output: {
     filename: '[name].js',
-    path: __dirname + '/dist/electron/webpack',
+    path: path.resolve(__dirname,'dist/electron/webpack'),
   },
   module: {
     rules: [
@@ -92,7 +92,7 @@ const renderConfig = {
   },
   output: {
     filename: '[name].js',
-    path: __dirname + '/dist/electron/webpack',
+    path: path.resolve(__dirname,'dist/electron/webpack'),
   },
   module: {
     rules: [

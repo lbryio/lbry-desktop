@@ -67,7 +67,7 @@ const SearchOptions = (props: Props) => {
     if (options[SEARCH_OPTIONS.RESULT_COUNT] !== SEARCH_PAGE_SIZE) {
       setSearchOption(SEARCH_OPTIONS.RESULT_COUNT, SEARCH_PAGE_SIZE);
     }
-  }, []);
+  }, [options, setSearchOption]);
 
   function updateSearchOptions(option, value) {
     setSearchOption(option, value);
