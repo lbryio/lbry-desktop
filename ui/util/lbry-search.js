@@ -22,7 +22,7 @@ const SEARCH_QUERY = `query Search(
 }`;
 
 const HOUR = 60 * 60;
-const TIME_FILTER_SECONDS = {
+const TIME_FILTER_SECONDS: { [string]: number } = {
   [SEARCH_OPTIONS.TIME_FILTER_LAST_HOUR]: HOUR,
   [SEARCH_OPTIONS.TIME_FILTER_TODAY]: 24 * HOUR,
   [SEARCH_OPTIONS.TIME_FILTER_THIS_WEEK]: 7 * 24 * HOUR,
@@ -44,7 +44,10 @@ type Node = {
 // `from` follows the cursor for `from - 1`.
 function cursorBefore(from: number): ?string {
   if (from <= 0) return null;
-  return btoa(`s:${from - 1}`).replace(/=+$/, '').replace(/\+/g, '-').replace(/\//g, '_');
+  return btoa(`s:${from - 1}`)
+    .replace(/=+$/, '')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_');
 }
 
 function claimType(lighthouseType: ?string): ?string {
