@@ -5,21 +5,24 @@
 // so this takes the same string and answers in the same shape as handleFetchResponse:
 // { body: [{ name, claimId }], poweredBy }. Options lbry-search doesn't filter on yet (mature
 // content, free only, release time, related_to) are applied to each page here, so a page can
-// come back short; hasNextPage tells the caller whether there's more. Channel search needs
-// lbry-search's `channel` argument (bitcoinbrisbane/lbry-search#channel-search).
+// come back short; hasNextPage tells the caller whether there's more.
 import { SEARCH_OPTIONS } from 'constants/search';
 import { MATURE_TAGS } from 'constants/tags';
 
 const MAX_PAGE = 100; // lbry-search's largest page
 
-const SEARCH_QUERY = `query Search(
-  $text: String!, $first: Int, $after: String, $type: ClaimType, $mediaType: String, $channel: ID
-) {
-  search(text: $text, first: $first, after: $after, type: $type, mediaType: $mediaType, channel: $channel) {
+// `channel` is newer than the other arguments (bitcoinbrisbane/lbry-search#2) and a server
+// without it rejects any query that names it, so it's only in the query for channel searches.
+function searchQuery(inChannel: boolean) {
+  const channelVar = inChannel ? ', $channel: ID' : '';
+  const channelArg = inChannel ? ', channel: $channel' : '';
+  return `query Search($text: String!, $first: Int, $after: String, $type: ClaimType, $mediaType: String${channelVar}) {
+  search(text: $text, first: $first, after: $after, type: $type, mediaType: $mediaType${channelArg}) {
     nodes { id name tags releaseTime fee { amount } }
     pageInfo { hasNextPage }
   }
 }`;
+}
 
 const HOUR = 60 * 60;
 const TIME_FILTER_SECONDS: { [string]: number } = {
@@ -73,13 +76,14 @@ export default function lbrySearch(endpoint: string, queryString: string) {
   const maxAge = TIME_FILTER_SECONDS[params.get(SEARCH_OPTIONS.TIME_FILTER) || ''];
   const releasedAfter = maxAge ? Date.now() / 1000 - maxAge : 0;
 
+  const channel = params.get('channel_id');
   const variables = {
     text,
     first: Math.min(size, MAX_PAGE),
     after: cursorBefore(from),
     type: claimType(params.get(SEARCH_OPTIONS.CLAIM_TYPE)),
     mediaType: mediaType(params.get('mediaType')),
-    channel: params.get('channel_id'),
+    ...(channel ? { channel } : {}),
   };
 
   const keep = (node: Node) =>
@@ -91,7 +95,7 @@ export default function lbrySearch(endpoint: string, queryString: string) {
   return fetch(endpoint, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ query: SEARCH_QUERY, variables }),
+    body: JSON.stringify({ query: searchQuery(Boolean(channel)), variables }),
   })
     .then((response) => {
       if (response.status !== 200) throw new Error(response.statusText);
