@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [master]
 
+# electron-builder publishes installers to a draft GitHub release on master
+# pushes; the default token needs write access to releases for that.
+permissions:
+  contents: write
+
 jobs:
   lint:
     name: lint
@@ -64,7 +69,7 @@ jobs:
           yarn --network-timeout 600000
           yarn build
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN_NEW }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NOTARIZATION_USERNAME: ${{ secrets.NOTARIZATION_USERNAME }}
           NOTARIZATION_PASSWORD: ${{ secrets.NOTARIZATION_PASSWORD }}
           # CSC_LINK: ${{ secrets.CSC_LINK }}
