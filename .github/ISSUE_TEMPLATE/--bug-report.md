@@ -15,8 +15,6 @@ To make it possible for us to help you, please fill out below information carefu
 Before reporting any issues, please make sure that you're using the latest version.
 - App releases: https://github.com/lbryio/lbry-desktop/releases
 - Standalone daemon: https://github.com/lbryio/lbry/releases
-
-We are also available on live chat at https://chat.lbry.com
 -->
 
 **Bug**
