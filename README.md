@@ -28,10 +28,14 @@ and send our changes there as well.
 ## What's different in this fork
 
 - The LBRY Foundation's 2025 build and CI fixes are merged in.
+- The codebase is being migrated from [Flow](https://flow.org/) to
+  [TypeScript](https://www.typescriptlang.org/) ([#618](https://github.com/bitcoinbrisbane/lbry-desktop/issues/618)).
+  The build compiles TypeScript today; new code should be written in TypeScript, and the
+  remaining Flow-annotated files are being converted incrementally.
 - Open issues from the original tracker are copied here with the
   [`from-lbryio`](https://github.com/bitcoinbrisbane/lbry-desktop/issues?q=label%3Afrom-lbryio) label,
   so they can be worked on.
-- In progress: a setting to search with [lbry-search](https://github.com/bitcoinbrisbane/lbry-search),
+- A setting to search with [lbry-search](https://github.com/bitcoinbrisbane/lbry-search),
   a self-hosted search index that follows an LBRY full node, instead of Lighthouse
   ([#1](https://github.com/bitcoinbrisbane/lbry-desktop/pull/1)).
 

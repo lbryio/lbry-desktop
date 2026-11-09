@@ -30,6 +30,6 @@
   // Only .ts/.tsx enter the program directly — the remaining .js files are
   // Flow-annotated and tsc cannot parse them. allowJs stays on so plain-JS
   // imports (e.g. config.js) resolve; checkJs stays off so they aren't checked.
-  "include": ["ui/**/*.ts", "ui/**/*.tsx", "electron/**/*.ts", "extras/**/*.ts"],
+  "include": ["types/**/*.d.ts", "ui/**/*.ts", "ui/**/*.tsx", "electron/**/*.ts", "extras/**/*.ts"],
   "exclude": ["node_modules", "dist"]
 }
