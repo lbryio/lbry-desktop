@@ -2,6 +2,7 @@
 import * as React from 'react';
 import * as remote from '@electron/remote';
 import { ipcRenderer } from 'electron';
+import path from 'path';
 import Button from 'component/button';
 import { FormField } from 'component/common/form';
 
@@ -18,6 +19,36 @@ type Props = {
   filters?: Array<{ name: string, extension: string[] }>,
   readFile?: boolean,
 };
+
+// The folder of the last file picked with an "openFile" selector, so the next dialog starts there.
+const LAST_FILE_FOLDER_KEY = 'file-selector:last-file-folder';
+
+function getLastFileFolder(): ?string {
+  try {
+    return localStorage.getItem(LAST_FILE_FOLDER_KEY);
+  } catch (e) {
+    return null;
+  }
+}
+
+function setLastFileFolder(filePath: string) {
+  try {
+    localStorage.setItem(LAST_FILE_FOLDER_KEY, path.dirname(filePath));
+  } catch (e) {}
+}
+
+// Where the open dialog starts. With no default, Windows opens the folder the app is installed in.
+function getDefaultPath(type: string, currentPath: ?string): string {
+  if (type === 'openDirectory') {
+    return currentPath || remote.app.getPath('home');
+  }
+  try {
+    return getLastFileFolder() || remote.app.getPath('documents');
+  } catch (e) {
+    // Electron throws if the system has no Documents folder (possible on Linux).
+    return remote.app.getPath('home');
+  }
+}
 
 class FileSelector extends React.PureComponent<Props> {
   static defaultProps = {
@@ -51,33 +82,22 @@ class FileSelector extends React.PureComponent<Props> {
   };
 
   handleDirectoryInputSelection = () => {
-    let defaultPath;
-    let properties;
-    let isWin = process.platform === 'win32';
-    let type = this.props.type;
-
-    if (isWin === true) {
-      defaultPath = process.env.HOME || process.env.HOMEPATH || process.env.USERPROFILE;
-    }
-
-    if (type === 'openFile') {
-      properties = ['openFile'];
-    }
-
-    if (type === 'openDirectory') {
-      properties = ['openDirectory'];
-    }
+    const { type, currentPath, filters, readFile } = this.props;
+    const properties = type === 'openDirectory' ? ['openDirectory'] : ['openFile'];
 
     remote.dialog
       .showOpenDialog({
         properties,
-        defaultPath,
-        filters: this.props.filters,
+        defaultPath: getDefaultPath(type, currentPath),
+        filters,
       })
       .then((result) => {
-        const path = result && result.filePaths[0];
-        if (path) {
-          return ipcRenderer.invoke('get-file-from-path', path, this.props.readFile);
+        const chosenPath = result && result.filePaths[0];
+        if (chosenPath) {
+          if (type === 'openFile') {
+            setLastFileFolder(chosenPath);
+          }
+          return ipcRenderer.invoke('get-file-from-path', chosenPath, readFile);
         }
       })
       .then((result) => {
