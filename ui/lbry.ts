@@ -377,7 +377,7 @@ export function apiCall(
     params: BaseParams | null | undefined,
     resolve: (result: any) => void,
     reject: (error: any) => void
-): Promise<Response> {
+): Promise<void> {
     const counter = new Date().getTime();
     const options: RequestInit = {
         method: 'POST',

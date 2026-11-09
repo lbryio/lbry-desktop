@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.0.0] - [2026-11-09]
+
+### Changed
+ - Major version bump to mark the start of the TypeScript migration ([#618](https://github.com/bitcoinbrisbane/lbry-desktop/issues/618))
+ - The build now compiles TypeScript: babel, webpack, and a check-only `tsconfig.json` (`yarn typecheck`)
+ - `ui/lbry.ts` and `ui/comments.ts` now ship in place of their `.js` twins, which were previously dead code
+
 ## [0.53.9] - [2023-2-8]
  
 ### Changed
