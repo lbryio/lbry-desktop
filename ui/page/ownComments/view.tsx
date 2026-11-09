@@ -145,7 +145,6 @@ export default function OwnComments(props: Props) {
       return (isInViewport || isApproachingViewport) && page < topLevelTotalPages;
     }
 
-// @ts-expect-error - TS2554 - Expected 3 arguments, but got 2.
     const handleCommentScroll = debounce(() => {
       if (shouldFetchNextPage(page, totalPages, window, document)) {
         setPage(page + 1);

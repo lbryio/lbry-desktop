@@ -140,7 +140,6 @@ export default function ClaimList(props: Props) {
   }, []);
 
   useEffect(() => {
-// @ts-expect-error - TS2554 - Expected 3 arguments, but got 2.
     const handleScroll = debounce((e) => {
       if (page && pageSize && onScrollBottom) {
         const mainEl = document.querySelector(`.${MAIN_CLASS}`);

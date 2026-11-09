@@ -3,7 +3,7 @@
 // underscore's deep equal function
 // https://github.com/jashkenas/underscore/blob/master/underscore.js#L1189
 
-export default function isEqual(a: unknown, b: unknown, aStack: unknown, bStack: unknown) {
+export default function isEqual(a: unknown, b: unknown, aStack?: unknown, bStack?: unknown) {
   // Identical objects are equal. `0 === -0`, but they aren't identical.
   // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
   if (a === b) return a !== 0 || 1 / a === 1 / b;

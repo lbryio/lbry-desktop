@@ -67,7 +67,6 @@ function AutoplayCountdown(props: Props) {
     // Ensure correct 'setTimerPaused' on initial render.
     setTimerPaused(shouldPauseAutoplay());
 
-// @ts-expect-error - TS2554 - Expected 3 arguments, but got 2.
     const handleScroll = debounce((e) => {
       setTimerPaused(shouldPauseAutoplay());
     }, DEBOUNCE_SCROLL_HANDLER_MS);

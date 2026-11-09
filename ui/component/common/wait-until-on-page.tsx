@@ -61,7 +61,6 @@ export default function WaitUntilOnPage(props: Props) {
 
   // Handles "element scrolled into viewport".
   React.useEffect(() => {
-// @ts-expect-error - TS2554 - Expected 3 arguments, but got 2.
     const handleDisplayingRef = debounce(() => {
       if (shouldElementRender(ref)) {
         setShouldRender(true);

@@ -173,7 +173,6 @@ export default function FileRenderFloating(props: Props) {
   }
 
   const clampToScreenOnResize = React.useCallback(
-// @ts-expect-error - TS2554 - Expected 3 arguments, but got 2.
     debounce(() => {
       restoreToRelativePosition();
     }, DEBOUNCE_WINDOW_RESIZE_HANDLER_MS),

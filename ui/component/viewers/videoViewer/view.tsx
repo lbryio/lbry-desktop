@@ -114,7 +114,6 @@ function VideoViewer(props: Props) {
   const [videoNode, setVideoNode] = useState();
 
   const updateVolumeState = React.useCallback(
-// @ts-expect-error - TS2554 - Expected 3 arguments, but got 2.
     debounce((volume, muted) => {
       changeVolume(volume);
       changeMute(muted);
@@ -364,7 +363,6 @@ function VideoViewer(props: Props) {
     });
     player.on('volumechange', () => {
       if (player) {
-// @ts-expect-error - TS2554 - Expected 0 arguments, but got 2.
         updateVolumeState(player.volume(), player.muted());
       }
     });

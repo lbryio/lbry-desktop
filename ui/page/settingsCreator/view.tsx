@@ -70,11 +70,8 @@ export default function SettingsCreatorPage(props: Props) {
   const [slowModeMin, setSlowModeMin] = React.useState(0);
   const [lastUpdated, setLastUpdated] = React.useState(1);
 
-// @ts-expect-error - TS2554 - Expected 3 arguments, but got 2.
   const pushSlowModeMinDebounced = React.useMemo(() => debounce(pushSlowModeMin, 1000), []); // eslint-disable-line react-hooks/exhaustive-deps
-// @ts-expect-error - TS2554 - Expected 3 arguments, but got 2.
   const pushMinTipDebounced = React.useMemo(() => debounce(pushMinTip, 1000), []); // eslint-disable-line react-hooks/exhaustive-deps
-// @ts-expect-error - TS2554 - Expected 3 arguments, but got 2.
   const pushMinSuperDebounced = React.useMemo(() => debounce(pushMinSuper, 1000), []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // **************************************************************************
@@ -301,7 +298,6 @@ export default function SettingsCreatorPage(props: Props) {
                       onChange={(e) => {
                         const value = parseInt(e.target.value);
                         setSlowModeMin(value);
-// @ts-expect-error - TS2554 - Expected 0 arguments, but got 2.
                         pushSlowModeMinDebounced(value, activeChannelClaim);
                       }}
                       onBlur={() => setLastUpdated(Date.now())}
@@ -329,11 +325,9 @@ export default function SettingsCreatorPage(props: Props) {
                       onChange={(e) => {
                         const newMinTip = parseFloat(e.target.value);
                         setMinTip(newMinTip);
-// @ts-expect-error - TS2554 - Expected 0 arguments, but got 2.
                         pushMinTipDebounced(newMinTip, activeChannelClaim);
                         if (newMinTip !== 0 && minSuper !== 0) {
                           setMinSuper(0);
-// @ts-expect-error - TS2554 - Expected 0 arguments, but got 2.
                           pushMinSuperDebounced(0, activeChannelClaim);
                         }
                       }}

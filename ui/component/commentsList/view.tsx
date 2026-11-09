@@ -232,7 +232,6 @@ export default function CommentList(props: Props) {
       return (isInViewport || isApproachingViewport) && page < topLevelTotalPages;
     }
 
-// @ts-expect-error - TS2554 - Expected 3 arguments, but got 2.
     const handleCommentScroll = debounce(() => {
       if (shouldFetchNextPage(page, topLevelTotalPages)) {
         setPage(page + 1);
