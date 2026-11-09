@@ -2322,5 +2322,8 @@
   "This will be visible in a few minutes after you submit this form.": "This will be visible in a few minutes after you submit this form.",
   "Anon --[used in <%anonymous% Reposted>]--": "Anon",
   "Your update is now pending. It will take a few minutes to appear for other users.": "Your update is now pending. It will take a few minutes to appear for other users.",
+  "Images must be %max_size% MB or smaller.": "Images must be %max_size% MB or smaller.",
+  "The image upload service sent an empty response.": "The image upload service sent an empty response.",
+  "There was an error in the upload. The format or extension might not be supported.": "There was an error in the upload. The format or extension might not be supported.",
   "--end--": "--end--"
 }

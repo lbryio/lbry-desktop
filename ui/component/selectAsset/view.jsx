@@ -1,11 +1,10 @@
 // @flow
 import React from 'react';
 import FileSelector from 'component/common/file-selector';
-import * as SPEECH_URLS from 'constants/speech_urls';
 import { FormField, Form } from 'component/common/form';
 import Button from 'component/button';
 import Card from 'component/common/card';
-import { generateThumbnailName } from 'util/generate-thumbnail-name';
+import { uploadImage } from 'util/upload-image';
 import usePersistedState from 'effects/use-persisted-state';
 
 const accept = '.png, .jpg, .jpeg, .gif';
@@ -82,17 +81,8 @@ function SelectAsset(props: Props) {
 
     setUploadStatus(SPEECH_UPLOADING);
 
-    const data = new FormData();
-    const name = generateThumbnailName();
-    data.append('name', name);
-    data.append('file', fileSelected);
-
-    return fetch(SPEECH_URLS.SPEECH_PUBLISH, {
-      method: 'POST',
-      body: data,
-    })
-      .then((response) => response.json())
-      .then((json) => (json.success ? onSuccess(`${json.data.serveUrl}`) : uploadError(json.message)))
+    return uploadImage(fileSelected)
+      .then(onSuccess)
       .catch((err) => {
         uploadError(err.message);
         setUploadStatus(SPEECH_READY);
