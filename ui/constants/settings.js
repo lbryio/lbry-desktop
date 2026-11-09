@@ -46,6 +46,8 @@ export const CUSTOM_COMMENTS_SERVER_URL = 'custom_comments_server_url';
 export const CUSTOM_COMMENTS_SERVERS = 'custom_comments_servers';
 export const CUSTOM_SHARE_URL_ENABLED = 'custom_share_url_enabled';
 export const CUSTOM_SHARE_URL = 'custom_share_url';
+export const SEARCH_PROVIDER = 'search_provider';
+export const LBRY_SEARCH_URL = 'lbry_search_url';
 export const ENABLE_PRERELEASE_UPDATES = 'enable_prerelease_updates';
 export const DISABLE_AUTO_UPDATES = 'disable_auto_updates';
 

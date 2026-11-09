@@ -37,3 +37,9 @@ export const SEARCH_OPTIONS = {
 };
 
 export const SEARCH_PAGE_SIZE = 20;
+
+// Which server answers searches (SETTINGS.SEARCH_PROVIDER).
+export const SEARCH_PROVIDERS = {
+  LIGHTHOUSE: 'lighthouse',
+  LBRY_SEARCH: 'lbry_search', // https://github.com/bitcoinbrisbane/lbry-search
+};

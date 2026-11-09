@@ -42,7 +42,8 @@ declare type SearchSuccess = {
     from: number,
     size: number,
     uris: Array<string>,
-    recsys: string,
+    recsys: ?string,
+    hasNextPage?: boolean,
     query: string,
   },
 };

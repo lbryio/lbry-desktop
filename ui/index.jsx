@@ -27,7 +27,7 @@ import {
   doAutoUpdateFail,
 } from 'redux/actions/app';
 import { isURIValid } from 'util/lbryURI';
-import { setSearchApi } from 'redux/actions/search';
+import { setSearchApi, setSearchProvider } from 'redux/actions/search';
 import { doSetLanguage, doFetchLanguage, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { Lbryio, doBlackListedOutpointsSubscribe, doFilteredOutpointsSubscribe } from 'lbryinc';
 import rewards from 'rewards';
@@ -40,7 +40,7 @@ import { PersistGate } from 'redux-persist/integration/react';
 import analytics from 'analytics';
 import { doToast } from 'redux/actions/notifications';
 import { getAuthToken, setAuthToken, doAuthTokenRefresh } from 'util/saved-passwords';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { makeSelectClientSetting, selectClientSetting } from 'redux/selectors/settings';
 import { DEFAULT_LANGUAGE, LBRY_API_URL } from 'config';
 
 // Import 3rd-party styles before ours for the current way we are code-splitting.
@@ -64,6 +64,18 @@ if (LBRY_API_URL) {
 if (process.env.SEARCH_API_URL) {
   setSearchApi(process.env.SEARCH_API_URL);
 }
+
+// Search reads the server from module state rather than the store (it's also used outside
+// redux), so keep it in step with the setting, including when persisted settings load.
+const applySearchSetting = () => {
+  const state = store.getState();
+  setSearchProvider(
+    selectClientSetting(state, SETTINGS.SEARCH_PROVIDER),
+    selectClientSetting(state, SETTINGS.LBRY_SEARCH_URL)
+  );
+};
+applySearchSetting();
+store.subscribe(applySearchSetting);
 
 doAuthTokenRefresh();
 

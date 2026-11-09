@@ -10,6 +10,7 @@ import I18nMessage from 'component/i18nMessage';
 import SettingAutoLaunch from 'component/settingAutoLaunch';
 import SettingClosingBehavior from 'component/settingClosingBehavior';
 import SettingCommentsServer from 'component/settingCommentsServer';
+import SettingSearchServer from 'component/settingSearchServer';
 import SettingShareUrl from 'component/settingShareUrl';
 import SettingsRow from 'component/settingsRow';
 import SettingWalletServer from 'component/settingWalletServer';
@@ -372,6 +373,13 @@ export default function SettingSystem(props: Props) {
 
             <SettingsRow title={__('Comments server')} multirow>
               <SettingCommentsServer />
+            </SettingsRow>
+            <SettingsRow
+              title={__('Search server')}
+              subtitle={__('Lighthouse is the hosted search; lbry-search is one you run yourself.')}
+              multirow
+            >
+              <SettingSearchServer />
             </SettingsRow>
             <SettingsRow title={__('Share url')} multirow>
               <SettingShareUrl />
