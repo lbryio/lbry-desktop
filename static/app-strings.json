@@ -150,6 +150,8 @@
   "Show Desktop Notifications": "Show Desktop Notifications",
   "Appearance": "Appearance",
   "Theme": "Theme",
+  "Full screen": "Full screen",
+  "You can also press %shortcut%.": "You can also press %shortcut%.",
   "Wallet security": "Wallet security",
   "Encrypt my wallet with a custom password.": "Encrypt my wallet with a custom password.",
   "Secure your local wallet data with a custom password.": "Secure your local wallet data with a custom password.",

@@ -149,6 +149,13 @@ export default appState => {
     window.webContents.send('window-is-focused', null);
   });
 
+  // Keep Settings > Appearance > Full screen in step, however full screen was changed (F11, the View menu, or the setting).
+  const sendFullScreen = (fullScreen) => {
+    if (!window.isDestroyed()) window.webContents.send('full-screen-changed', fullScreen);
+  };
+  window.on('enter-full-screen', () => sendFullScreen(true));
+  window.on('leave-full-screen', () => sendFullScreen(false));
+
   window.on('unresponsive', () => {
     dialog.showMessageBox(
       window,
