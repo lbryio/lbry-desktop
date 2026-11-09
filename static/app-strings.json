@@ -2349,5 +2349,6 @@
   "Get Support": "Get Support",
   "support page": "support page",
   "Email %help_link% or visit our %support_link% if you encounter any trouble verifying.": "Email %help_link% or visit our %support_link% if you encounter any trouble verifying.",
+  "Last status: %message% — %details%": "Last status: %message% — %details%",
   "--end--": "--end--"
 }

@@ -37,6 +37,7 @@ type State = {
   message: string,
   launchedModal: boolean,
   error: boolean,
+  errorDetail: string | null,
   isRunning: boolean,
   launchWithIncompatibleDaemon: boolean,
   waitingForWallet: number,
@@ -52,6 +53,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
       message: __('Connecting'),
       launchedModal: false,
       error: false,
+      errorDetail: null,
 // @ts-expect-error - TS2367 - This condition will always return 'false' since the types 'boolean' and 'string' have no overlap.
       launchWithIncompatibleDaemon: !process.env.NODE_ENV === 'production',
       isRunning: false,
@@ -73,9 +75,10 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
       .then(() => {
         this.updateStatus();
       })
-      .catch(() => {
+      .catch((err) => {
         this.setState({
           message: __('Connection Failure'),
+          errorDetail: String((err && err.message) || err),
           details: __(
             'Try closing all LBRY processes and starting again. If this still happens, your anti-virus software or firewall may be preventing LBRY from connecting. Contact hello@lbry.com if you think this is a software bug.'
           ),
@@ -147,6 +150,9 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
           this.updateStatusCallback(sdkStatus, walletStatus);
         }
       });
+    }).catch((err) => {
+      // Record the real failure so the timeout error screen can show it.
+      this.setState({ errorDetail: String((err && err.message) || err) });
     });
   }
 
@@ -238,7 +244,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { error, details } = this.state;
+    const { error, errorDetail, message, details } = this.state;
     const { animationHidden, toggleSplashAnimation } = this.props;
 
     return (
@@ -302,6 +308,16 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
             title={<h1 className="splash__error-title">{__('Error starting up')}</h1>}
             subtitle={
               <React.Fragment>
+                {errorDetail && (
+                  <p className="splash__error-detail">
+                    <code>{errorDetail}</code>
+                  </p>
+                )}
+                {!errorDetail && typeof details === 'string' && (
+                  <p className="splash__error-detail">
+                    {__('Last status: %message% — %details%', { message: message, details: details })}
+                  </p>
+                )}
                 <p>
                   {__(
                     'You can try refreshing to fix it. If you still have issues, your anti-virus software or firewall may be preventing startup.'
