@@ -18,7 +18,7 @@ let mainConfig = {
   module: {
     rules: [
       {
-        test: /\.(jsx?$|s?css$)/,
+        test: /\.([jt]sx?$|s?css$)/,
         use: [
           {
             loader: 'preprocess-loader',
@@ -97,7 +97,7 @@ const renderConfig = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.[jt]sx?$/,
         use: [
           {
             loader: 'preprocess-loader',

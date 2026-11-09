@@ -31,7 +31,7 @@ let baseConfig = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.[jt]sx?$/,
         loader: 'babel-loader',
         options: {
           plugins: ['@babel/plugin-syntax-dynamic-import'],
@@ -76,7 +76,7 @@ let baseConfig = {
   // Allows imports for all directories inside '/ui' :)
   resolve: {
     modules: [UI_ROOT, 'node_modules', __dirname],
-    extensions: ['.js', '.jsx', '.json', '.scss'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json', '.scss'],
     alias: {
       config: path.resolve(__dirname, 'config.js'),
       homepage: 'util/homepage.js',
