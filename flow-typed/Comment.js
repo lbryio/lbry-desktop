@@ -1,4 +1,4 @@
-declare type Comment = {
+declare type LbryComment = {
   comment: string, // comment body
   comment_id: string, // sha256 digest
   claim_id: string, // id linking to the claim this comment
@@ -31,7 +31,7 @@ declare type PerChannelSettings = {
 // todo: relate individual comments to their commentId
 declare type CommentsState = {
   commentsByUri: { [string]: string },
-  superChatsByUri: { [string]: { totalAmount: number, comments: Array<Comment> } },
+  superChatsByUri: { [string]: { totalAmount: number, comments: Array<LbryComment> } },
   byId: { [string]: Array<string> }, // ClaimID -> list of fetched comment IDs.
   totalCommentsById: {}, // ClaimId -> ultimate total (including replies) in commentron.
   repliesByParentId: { [string]: Array<string> }, // ParentCommentID -> list of fetched replies.
@@ -39,7 +39,7 @@ declare type CommentsState = {
   topLevelCommentsById: { [string]: Array<string> }, // ClaimID -> list of fetched top level comments.
   topLevelTotalPagesById: { [string]: number }, // ClaimID -> total number of top-level pages in commentron. Based on COMMENT_PAGE_SIZE_TOP_LEVEL.
   topLevelTotalCommentsById: { [string]: number }, // ClaimID -> total top level comments in commentron.
-  commentById: { [string]: Comment },
+  commentById: { [string]: LbryComment },
   linkedCommentAncestors: { [string]: Array<string> }, // {"linkedCommentId": ["parentId", "grandParentId", ...]}
   pinnedCommentsById: {}, // ClaimId -> array of pinned comment IDs
   isLoading: boolean,
@@ -123,7 +123,7 @@ declare type CommentListParams = {
 };
 
 declare type CommentListResponse = {
-  items: Array<Comment>,
+  items: Array<LbryComment>,
   page: number,
   page_size: number,
   total_items: number,          // Grand total for the claim being commented on.
@@ -138,9 +138,9 @@ declare type CommentByIdParams = {
 }
 
 declare type CommentByIdResponse = {
-  item: Comment,
-  items: Comment,
-  ancestors: Array<Comment>,
+  item: LbryComment,
+  items: LbryComment,
+  ancestors: Array<LbryComment>,
 }
 
 declare type CommentPinParams = {
@@ -153,7 +153,7 @@ declare type CommentPinParams = {
 }
 
 declare type CommentPinResponse = {
-  items: Comment, // "items" is an inherited typo to match SDK. Will be "item" in a new version.
+  items: LbryComment, // "items" is an inherited typo to match SDK. Will be "item" in a new version.
 }
 
 declare type CommentEditParams = {
@@ -163,7 +163,7 @@ declare type CommentEditParams = {
   signing_ts: string,
 }
 
-declare type CommentEditResponse = Comment
+declare type CommentEditResponse = LbryComment
 
 declare type CommentAbandonParams = {
   comment_id: string,
@@ -190,7 +190,7 @@ declare type SuperListResponse = {
   total_pages: number,
   total_items: number,
   total_amount: number,
-  items: Array<Comment>,
+  items: Array<LbryComment>,
   has_hidden_comments: boolean,
 };
 
@@ -299,3 +299,6 @@ declare type BlockWordParams = {
   signing_ts: string,
   words: string, // CSV list of containing words to block comment on content
 };
+
+// Back-compat alias during the TypeScript migration (see types/Comment.d.ts)
+declare type Comment = LbryComment;

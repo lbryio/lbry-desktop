@@ -278,7 +278,7 @@ export const selectRepliesForParentId = createCachedSelector(
  * @param claimId The claim that `comments` reside in.
  * @param filterInputs Values returned by filterCommentsDepOnList.
  */
-const filterComments = (comments: Array<Comment>, claimId?: string, filterInputs: any) => {
+const filterComments = (comments: Array<LbryComment>, claimId?: string, filterInputs: any) => {
   const filterProps = filterInputs.reduce((acc, cur, i) => {
     acc[filterCommentsPropKeys[i]] = cur;
     return acc;

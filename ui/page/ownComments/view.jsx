@@ -23,7 +23,7 @@ function scaleToDevicePixelRatio(value) {
 
 type Props = {
   activeChannelClaim: ?ChannelClaim,
-  allComments: Array<Comment>,
+  allComments: Array<LbryComment>,
   totalComments: number,
   topLevelTotalPages: number,
   isFetchingComments: boolean,

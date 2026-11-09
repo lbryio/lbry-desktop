@@ -11,18 +11,18 @@ const stickerRegex = /(<stkr>:[A-Z0-9_]+:<stkr>)/;
 // https://github.com/reddit-archive/reddit/blob/master/r2/r2/lib/db/_sorts.pyx
 
 type SortProps = {
-  comments: ?Array<Comment>,
+  comments: ?Array<LbryComment>,
   reactionsById: {},
   sort: string,
   isMyComment: (string) => boolean,
 };
 
-export function sortComments(sortProps: SortProps): Array<Comment> {
+export function sortComments(sortProps: SortProps): Array<LbryComment> {
   const { comments, reactionsById, sort, isMyComment } = sortProps;
 
   if (!comments) return [];
 
-  return comments.slice().sort((a: Comment, b: Comment) => {
+  return comments.slice().sort((a: LbryComment, b: LbryComment) => {
     if (a.is_pinned) {
       return -1;
     } else if (b.is_pinned) {

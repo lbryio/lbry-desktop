@@ -35,7 +35,7 @@ import { useIsMobile } from 'effects/use-screensize';
 const AUTO_EXPAND_ALL_REPLIES = false;
 
 type Props = {
-  comment: Comment,
+  comment: LbryComment,
   myChannelIds: ?Array<string>,
   clearPlayingUri: () => void,
   uri: string,

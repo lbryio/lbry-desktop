@@ -6,8 +6,8 @@ import React from 'react';
 import Spinner from 'component/spinner';
 
 type Props = {
-  fetchedReplies: Array<Comment>,
-  resolvedReplies: Array<Comment>,
+  fetchedReplies: Array<LbryComment>,
+  resolvedReplies: Array<LbryComment>,
   uri: string,
   parentId: string,
   claimIsMine: boolean,

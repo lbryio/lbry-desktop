@@ -30,9 +30,9 @@ function scaleToDevicePixelRatio(value) {
 
 type Props = {
   allCommentIds: any,
-  pinnedComments: Array<Comment>,
-  topLevelComments: Array<Comment>,
-  resolvedComments: Array<Comment>,
+  pinnedComments: Array<LbryComment>,
+  topLevelComments: Array<LbryComment>,
+  resolvedComments: Array<LbryComment>,
   topLevelTotalPages: number,
   uri: string,
   claimId?: string,
@@ -340,7 +340,7 @@ export default function CommentList(props: Props) {
 }
 
 type CommentProps = {
-  comments: Array<Comment>,
+  comments: Array<LbryComment>,
 };
 
 const CommentElements = (commentProps: CommentProps) => {

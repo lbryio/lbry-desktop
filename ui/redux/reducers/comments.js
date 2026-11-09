@@ -71,7 +71,7 @@ export default handleActions(
     }),
 
     [ACTIONS.COMMENT_CREATE_COMPLETED]: (state: CommentsState, action: any): CommentsState => {
-      const { comment, claimId, uri }: { comment: Comment, claimId: string, uri: string } = action.data;
+      const { comment, claimId, uri }: { comment: LbryComment, claimId: string, uri: string } = action.data;
 
       const commentById = Object.assign({}, state.commentById);
       const byId = Object.assign({}, state.byId);
