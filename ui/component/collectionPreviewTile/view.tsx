@@ -139,7 +139,6 @@ function CollectionPreviewTile(props: Props) {
       <NavLink {...navLinkProps}>
         {/* @ts-expect-error - TS2739 (ts-migration) */}
         <FileThumbnail uri={collectionItemUrls && collectionItemUrls.length && collectionItemUrls[0]}>
-          // @ts-expect-error - TS2322 (ts-migration)
           <React.Fragment>
             <div className="claim-preview__claim-property-overlay">
               <CollectionCount count={collectionCount} />

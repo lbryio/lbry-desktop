@@ -1,6 +1,6 @@
 //@ts-nocheck
 import videojs from 'video.js';
-import './touchOverlay.js';
+import './touchOverlay';
 import window from 'global/window';
 import './plugin.scss';
 

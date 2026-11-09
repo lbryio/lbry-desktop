@@ -14,7 +14,6 @@ function Tooltip(props: Props) {
   const { arrow = true, children, disableInteractive = true, enterDelay = 300, title } = props;
 
   return (
-    // @ts-expect-error - TS2746 (ts-migration)
     <MUITooltip
       arrow={arrow}
       disableInteractive={disableInteractive}
@@ -22,7 +21,7 @@ function Tooltip(props: Props) {
       enterNextDelay={enterDelay}
       title={title}
     >
-      // @ts-expect-error - TS2739 (ts-migration)
+      {/* @ts-expect-error - TS2739 (ts-migration) */}
       {children}
     </MUITooltip>
   );
