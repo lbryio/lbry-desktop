@@ -7,7 +7,6 @@ const uriRegex = /(lbry:\/\/)[^\s"]*[^)]/g;
 export const punctuationMarks = [',', '.', '!', '?', ':', ';', '-', ']', ')', '}'] as const;
 
 const mentionToken = '@';
-// const mentionTokenCode = 64; // @
 
 const invalidRegex = /[-_.+=?!@#$%^&*:;,{}<>\w/\\]/;
 const mentionRegex = /@[^\s()"-_.+=?!@$%^&*;,{}<>/\\]*/gm;

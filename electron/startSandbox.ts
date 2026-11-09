@@ -1,5 +1,4 @@
 //@ts-nocheck
-// import express from 'express';
 
 // Polyfills and `lbry-redux`
 global.fetch = require('node-fetch');
@@ -8,13 +7,10 @@ if (typeof global.fetch === 'object') {
   global.fetch = global.fetch.default;
 }
 
-// const Lbry = require('lbry');
 
 delete global.window;
 
 export default async function startSandbox() {
-  // const port = 5278;
-  // const sandbox = express();
 
   // sandbox.get('/set/:outpoint', async (req, res) => {
   //   const { outpoint } = req.params;

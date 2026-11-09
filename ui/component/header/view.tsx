@@ -1,4 +1,3 @@
-// import 'scss/component/_header.scss'; // ody codesplits this. no.
 
 import {useIsMobile} from 'effects/use-screensize';
 import { withRouter } from 'react-router';

@@ -10,9 +10,6 @@ import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import { sortLanguageMap } from 'util/default-languages';
 
 // @if TARGET='app'
-// import ErrorText from 'component/common/error-text';
-// import { LbryFirst } from 'lbry-redux';
-// import { ipcRenderer } from 'electron';
 // @endif
 
 type Props = {

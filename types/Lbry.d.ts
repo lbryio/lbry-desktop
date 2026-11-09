@@ -146,14 +146,6 @@ type CommentHideResponse = {
   [key: string]: { hidden: boolean },
 };
 
-// NOTE(ts-migration): CommentPinResponse was declared in both flow-typed/Lbry.js and
-// flow-typed/Comment.js (Flow allowed the duplicate; TypeScript does not). The active
-// declaration lives in types/Comment.d.ts, so this copy is commented out.
-// type CommentPinResponse = {
-//   // keyed by the CommentIds entered
-//   items: LbryComment,
-// };
-
 type CommentAbandonResponse = {
   // keyed by the CommentId given
   abandoned: boolean,
@@ -296,7 +288,6 @@ type LbryTypes = {
   unsetApiHeader: (key: string) => void,
   overrides: { [key: string]: Function | null | undefined },
   setOverride: (methodName: string, newMethod: Function) => void,
-  // getMediaType: (contentType?: string | null, fileName?: string | null) => string,
 
   // Lbry Methods
   stop: () => Promise<string>,

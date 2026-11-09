@@ -53,7 +53,6 @@ function ChannelContent(props: Props) {
     claimType,
     empty,
   } = props;
-  // const claimsInChannel = (claim && claim.meta.claims_in_channel) || 0;
   const claimsInChannel = 9999;
   const [searchQuery, setSearchQuery] = React.useState('');
   const [searchResults, setSearchResults] = React.useState<any>(undefined);

@@ -144,11 +144,6 @@ const VideoJsEvents = ({
     }
   }
 
-  // const onEnded = React.useCallback(() => {
-  //   if (!adUrl) {
-  //     showTapButton(TAP.NONE);
-  //   }
-  // }, [adUrl]);
 
   useEffect(() => {
     const player = playerRef.current;

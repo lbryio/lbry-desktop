@@ -92,16 +92,6 @@ export const selectMyPublishedPlaylistCollections = createSelector(selectMyPubli
 export const makeSelectMyPublishedCollectionForId = (id: string) =>
   createSelector(selectMyPublishedCollections, (myPublishedCollections) => myPublishedCollections[id]);
 
-// export const selectSavedCollections = createSelector(
-//   selectResolvedCollections,
-//   selectSavedCollectionIds,
-//   (resolved, myIds) => {
-//     const mySavedCollections = fromEntries(
-//       Object.entries(resolved).filter(([key, val]) => myIds.includes(key))
-//     );
-//     return mySavedCollections;
-//   }
-// );
 
 export const makeSelectIsResolvingCollectionForId = (id: string) =>
   createSelector(selectState, (state) => {

@@ -108,15 +108,3 @@ jobs:
         with:
           name: Windows
           path: ./dist/electron/*.*
-      #- uses: jakejarvis/s3-sync-action@master
-      #  if: |
-      #    startsWith(runner.os, 'linux')
-      #  with:
-      #    args: --acl public-read --follow-symlinks --exclude '*' --include '*.deb' --include '*.AppImage' --include '*.dmg'
-      #  env:
-      #    AWS_S3_BUCKET: ${{ secrets.ARTIFACTS_BUCKET }}
-      #    AWS_ACCESS_KEY_ID: ${{ secrets.ARTIFACTS_KEY }}
-      #    AWS_SECRET_ACCESS_KEY: ${{ secrets.ARTIFACTS_SECRET }}
-      #    AWS_REGION: 'us-east-1'
-      #    SOURCE_DIR: 'dist/electron'
-      #    DEST_DIR: 'app/release'

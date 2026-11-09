@@ -9,9 +9,7 @@ type Props = {
 export default function I18nMessage(props: Props) {
   const { src, title } = props;
 
-  // const iframeRef = useRef();
 
-  // const [iframeHeight, setIframeHeight] = useState('80vh');
 
   function onLoad() {
     /*

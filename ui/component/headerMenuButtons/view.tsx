@@ -1,4 +1,3 @@
-// import 'scss/component/_header.scss'; // ody codesplits this; no.
 
 import {ENABLE_UI_NOTIFICATIONS} from 'config';
 import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';

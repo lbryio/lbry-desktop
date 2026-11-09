@@ -120,7 +120,6 @@ export const selectHasAdminChannel = createSelector(selectState, (state) => {
   return false;
 
   /// Lint doesn't like this:
-  // return Object.values(state.moderationDelegatorsById).some((x) => x.global);
 });
 
 export const selectCommentsByClaimId = createSelector(selectState, selectCommentsById, (state, byId) => {
@@ -266,7 +265,6 @@ export const selectRepliesForParentId = createCachedSelector(
   // @ts-expect-error - TS2556 (ts-migration)
   ...Object.values(filterCommentsDepOnList),
   (id, repliesByParentId, commentsById, ...filterInputs) => {
-    // const claimId = byUri[uri]; // just parentId (id)
     // @ts-expect-error - TS2538 (ts-migration)
     const replyIdsForParent = repliesByParentId[id] || [];
     if (!replyIdsForParent.length) return null;
@@ -276,7 +274,6 @@ export const selectRepliesForParentId = createCachedSelector(
 // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       comments.push(commentsById[cid]);
     });
-    // const comments = byParentId && byParentId[id];
 
 // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'LbryComment[]'.
     return filterComments(comments, undefined, filterInputs);

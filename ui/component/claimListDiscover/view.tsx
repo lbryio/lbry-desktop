@@ -520,21 +520,6 @@ function ClaimListDiscover(props: Props) {
   }
 
   function resolveOrderByOption(orderBy: string | Array<string>, sortBy: string | Array<string>) {
-    // let order_by; // peterson 038692cafc793616cceaf10b88909fecde07ad0b
-    //
-    // switch (orderBy) {
-    //   case CS.ORDER_BY_TRENDING:
-    //     order_by = CS.ORDER_BY_TRENDING_VALUE;
-    //     break;
-    //   case CS.ORDER_BY_NEW:
-    //     order_by = CS.ORDER_BY_NEW_VALUE;
-    //     break;
-    //   case CS.ORDER_BY_NEW_ASC:
-    //     order_by = CS.ORDER_BY_NEW_ASC_VALUE;
-    //     break;
-    //   default:
-    //     order_by = CS.ORDER_BY_TOP_VALUE;
-    // }
     const order_by =
       orderBy === CS.ORDER_BY_TRENDING
         ? CS.ORDER_BY_TRENDING_VALUE

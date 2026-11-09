@@ -64,7 +64,6 @@ function CollectionPreviewTile(props: Props) {
     }
   }, [collectionId, hasClaim, resolveCollectionItems]);
 
-  // const signingChannel = claim && claim.signing_channel;
 
   const navigateUrl =
     formatLbryUrlForWeb(collectionItemUrls[0] || '/') + (collectionId ? generateListSearchUrlParams(collectionId) : '');
@@ -80,44 +79,6 @@ function CollectionPreviewTile(props: Props) {
     onClick: (e) => e.stopPropagation(),
   } as const;
 
-  /* REMOVE IF WORKS
-  let shouldHide = false;
-
-  if (isMature && !showMature) {
-    // Unfortunately needed until this is resolved
-    // https://github.com/lbryio/lbry-sdk/issues/2785
-    shouldHide = true;
-  }
-
-  // This will be replaced once blocking is done at the wallet server level
-  if (claim && !shouldHide && blackListedOutpoints) {
-    shouldHide = blackListedOutpoints.some(
-      (outpoint) =>
-        (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
-        (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
-    );
-  }
-  // We're checking to see if the stream outpoint
-  // or signing channel outpoint is in the filter list
-  if (claim && !shouldHide && filteredOutpoints) {
-    shouldHide = filteredOutpoints.some(
-      (outpoint) =>
-        (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
-        (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
-    );
-  }
-
-  // block stream claims
-  if (claim && !shouldHide && blockedChannelUris.length && signingChannel) {
-    shouldHide = blockedChannelUris.some((blockedUri) => blockedUri === signingChannel.permanent_url);
-  }
-  // block channel claims if we can't control for them in claim search
-  // e.g. fetchRecommendedSubscriptions
-
-  if (shouldHide) {
-    return null;
-  }
-   */
 
   if (isResolvingUri || isResolvingCollectionClaims) {
     return (

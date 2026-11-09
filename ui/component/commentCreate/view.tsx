@@ -241,11 +241,8 @@ export function CommentCreate(props: Props) {
 
     const params = { amount: tipAmount, claim_id: claimId, channel_id: activeChannelClaim.claim_id } as const;
     // FIAT ONLY - REMOVE
-    // const activeChannelName = activeChannelClaim && activeChannelClaim.name;
-    // const activeChannelId = activeChannelClaim && activeChannelClaim.claim_id;
 
     // setup variables for tip API
-    // const channelClaimId = claim.signing_channel ? claim.signing_channel.claim_id : claim.claim_id;
     const tipChannelName = claim.signing_channel ? claim.signing_channel.name : claim.name;
 
     if (activeTab === TAB_LBC) {
@@ -277,8 +274,6 @@ export function CommentCreate(props: Props) {
       );
     } else {
       // No cash tips - REMOVE
-      // const tipParams: TipParams = { tipAmount: Math.round(tipAmount * 100) / 100, tipChannelName, channelClaimId };
-      // const userParams: UserParams = { activeChannelName, activeChannelId };
       // sendCashTip(tipParams, userParams, claim.claim_id, stripeEnvironment, (customerTipResponse) => {
       //   const { payment_intent_id } = customerTipResponse;
       //

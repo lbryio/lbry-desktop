@@ -53,18 +53,6 @@ export default function SettingContent(props: Props) {
     // clearContentCache,
   } = props;
   // feature disabled until styling is ironed out
-  // const [contentCacheCleared, setContentCacheCleared] = React.useState(false);
-  // const [clearingContentCache, setClearingContentCache] = React.useState(false);
-  // const onClearContentCache = React.useCallback(() => {
-  //   setClearingContentCache(true);
-  //   clearContentCache();
-  //   // Just a small timer to give the user a visual effect
-  //   // that the content is being cleared.
-  //   setTimeout(() => {
-  //     setClearingContentCache(false);
-  //     setContentCacheCleared(true);
-  //   }, 2000);
-  // }, [setClearingContentCache, clearContentCache, setContentCacheCleared]);
 
   return (
     <>

@@ -298,7 +298,6 @@ export const doPublish =
     const myClaimForUri = selectMyClaimForUri(state);
     // @ts-expect-error - TS2741 (ts-migration)
     const myChannels = selectMyChannelClaims(state);
-    // const myClaims = selectMyClaimsWithoutChannels(state);
     // get redux publish form
     const publishData = selectPublishFormValues(state);
 

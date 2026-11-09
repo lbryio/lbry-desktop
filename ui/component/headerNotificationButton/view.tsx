@@ -1,4 +1,3 @@
-// import 'scss/component/_header.scss'; // ody codesplits this; no. REMOVE THESE
 
 import {ENABLE_UI_NOTIFICATIONS} from 'config';
 import { useHistory } from 'react-router';

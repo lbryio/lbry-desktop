@@ -27,11 +27,6 @@ const ClaimCollectionAdd = (props: Props) => {
   const [newCollectionName, setNewCollectionName] = React.useState('');
 
   // TODO: when other collection types added, filter list in context
-  // const isPlayable =
-  //   claim &&
-  //   claim.value &&
-  //   claim.value.stream_type &&
-  //   (claim.value.stream_type === 'audio' || claim.value.stream_type === 'video');
 
   function handleNameInput(e: unknown) {
 // @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.

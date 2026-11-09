@@ -85,12 +85,7 @@ function WalletSendTip(props: Props) {
     ({ channelName } = parseURI(uri));
   } catch (e: any) {}
   // don't need this - fiat only, for reference REMOVE
-  // const activeChannelName = activeChannelClaim && activeChannelClaim.name;
-  // const activeChannelId = activeChannelClaim && activeChannelClaim.claim_id;
-  //
   // // setup variables for backend tip API
-  // const channelClaimId = claim.signing_channel ? claim.signing_channel.claim_id : claim.claim_id;
-  // const tipChannelName = claim.signing_channel ? claim.signing_channel.name : claim.name;
 
   // icon to use or explainer text to show per tab
   let explainerText = '',
