@@ -294,8 +294,11 @@ function PublishFile(props: Props) {
       setPublishMode(PUBLISH_MODES.FILE);
     }
 
-    // Strip off extension and replace invalid characters
-    if (!isStillEditing) {
+    // Strip off extension and replace invalid characters.
+    // Only DEFAULT the name from the file name — never overwrite a name the
+    // user already entered (and never let the 'post.md' temp file used for
+    // text posts rename a post; see #592 / #594).
+    if (!isStillEditing && !name) {
       const fileWithoutExtension = path.parse(fileData.path).name;
       updatePublishForm({ name: parseName(fileWithoutExtension) });
     }
