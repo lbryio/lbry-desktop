@@ -217,7 +217,10 @@ function SocialShare(props: Props) {
       {showClaimLinks && (
         <div className="section">
           {/* @ts-expect-error - TS2741 (ts-migration) */}
-          <CopyableText label={__('LBRY URL')} copyable={`lbry://${lbryUrl}`} />
+          <CopyableText
+            label={__('LBRY URL')}
+            copyable={`lbry://${lbryUrl}${includeStartTime ? `?t=${startTimeSeconds}` : ''}`}
+          />
           {/* @ts-expect-error - TS2741 (ts-migration) */}
           {Boolean(isStream) && <CopyableText label={__('Download Link')} copyable={downloadUrl} />}
         </div>
