@@ -1,8 +1,13 @@
 module.exports = api => {
   api.cache(false);
 
+  // Jest runs on Node and needs CommonJS modules; webpack needs ESM kept
+  // intact for tree-shaking. (api.env() is unusable with api.cache(false),
+  // so read the env var directly — Jest sets NODE_ENV=test.)
+  const isTest = process.env.NODE_ENV === 'test';
+
   return {
-    presets: [['@babel/env', { loose: true, modules: false }], '@babel/react'],
+    presets: [['@babel/env', { loose: true, modules: isTest ? 'commonjs' : false }], '@babel/react'],
     plugins: [
       'import-glob',
       '@babel/plugin-transform-runtime',
