@@ -8,6 +8,7 @@ import SUPPORTED_BROWSER_LANGUAGES from 'constants/supported_browser_languages';
 import { TO_TRAY_WHEN_CLOSED } from 'constants/settings';
 
 import setupBarMenu from './menu/setupBarMenu';
+import { trackMaximized } from './showWindow';
 import * as PAGES from 'constants/pages';
 const remote = require('@electron/remote/main');
 const shell = require('electron').shell;
@@ -65,6 +66,9 @@ export default appState => {
 
   let window = new BrowserWindow(windowConfiguration);
   remote.enable(window.webContents);
+
+  // Before windowState.manage(), which maximizes the window if it was maximized last time.
+  trackMaximized(window);
 
   // Let us register listeners on the window, so we can update the state
   // automatically (the listeners will be removed when the window is closed)
