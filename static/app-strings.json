@@ -2322,5 +2322,11 @@
   "This will be visible in a few minutes after you submit this form.": "This will be visible in a few minutes after you submit this form.",
   "Anon --[used in <%anonymous% Reposted>]--": "Anon",
   "Your update is now pending. It will take a few minutes to appear for other users.": "Your update is now pending. It will take a few minutes to appear for other users.",
+  "Search server": "Search server",
+  "Lighthouse is the hosted search; lbry-search is one you run yourself.": "Lighthouse is the hosted search; lbry-search is one you run yourself.",
+  "Lighthouse": "Lighthouse",
+  "lbry-search": "lbry-search",
+  "Searches an index built from your own LBRY node": "Searches an index built from your own LBRY node",
+  "GraphQL URL": "GraphQL URL",
   "--end--": "--end--"
 }

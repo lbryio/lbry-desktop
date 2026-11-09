@@ -1,5 +1,7 @@
 import * as ACTIONS from 'constants/action_types';
 import * as SETTINGS from 'constants/settings';
+import { SEARCH_PROVIDERS } from 'constants/search';
+import { SEARCH_PROVIDER, LBRY_SEARCH_API } from 'config';
 import moment from 'moment';
 import { getDefaultLanguage } from 'util/default-languages';
 
@@ -50,6 +52,9 @@ const defaultState = {
     [SETTINGS.CUSTOM_COMMENTS_SERVERS]: [],
     [SETTINGS.CUSTOM_SHARE_URL_ENABLED]: false,
     [SETTINGS.CUSTOM_SHARE_URL]: '',
+    [SETTINGS.SEARCH_PROVIDER]:
+      SEARCH_PROVIDER === SEARCH_PROVIDERS.LBRY_SEARCH ? SEARCH_PROVIDERS.LBRY_SEARCH : SEARCH_PROVIDERS.LIGHTHOUSE,
+    [SETTINGS.LBRY_SEARCH_URL]: LBRY_SEARCH_API || '',
 
     [SETTINGS.DARK_MODE_TIMES]: {
       from: { hour: '21', min: '00', formattedTime: '21:00' },

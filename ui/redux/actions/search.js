@@ -9,7 +9,9 @@ import { makeSelectSearchUrisForQuery, selectSearchValue } from 'redux/selectors
 import handleFetchResponse from 'util/handle-fetch';
 import { getSearchQueryString } from 'util/query-params';
 import { getRecommendationSearchOptions } from 'util/search';
-import { SEARCH_SERVER_API } from 'config';
+import lbrySearch from 'util/lbry-search';
+import { SEARCH_PROVIDERS } from 'constants/search';
+import { SEARCH_SERVER_API, LBRY_SEARCH_API } from 'config';
 
 type Dispatch = (action: any) => any;
 type GetState = () => { claims: any, search: SearchState };
@@ -22,13 +24,28 @@ type SearchOptions = {
   isBackgroundSearch?: boolean,
 };
 
+// Every search goes through here. It takes a Lighthouse query string (util/query-params) and
+// sends it to whichever server Settings > System picks: Lighthouse, or lbry-search over GraphQL.
 let lighthouse = {
   CONNECTION_STRING: SEARCH_SERVER_API,
-  search: (queryString: string) => fetch(`${lighthouse.CONNECTION_STRING}?${queryString}`).then(handleFetchResponse),
+  provider: SEARCH_PROVIDERS.LIGHTHOUSE,
+  lbrySearchUrl: LBRY_SEARCH_API,
+  search: (queryString: string): Promise<{ body: Array<any>, poweredBy: ?string, hasNextPage?: boolean }> =>
+    lighthouse.provider === SEARCH_PROVIDERS.LBRY_SEARCH
+      ? lbrySearch(lighthouse.lbrySearchUrl, queryString)
+      : fetch(`${lighthouse.CONNECTION_STRING}?${queryString}`).then(handleFetchResponse),
 };
 
 export const setSearchApi = (endpoint: string) => {
   lighthouse.CONNECTION_STRING = endpoint.replace(/\/*$/, '/'); // exactly one slash at the end;
+};
+
+// Called whenever the store changes (ui/index.jsx), so it follows the setting.
+export const setSearchProvider = (provider: ?string, lbrySearchUrl: ?string) => {
+  lighthouse.provider =
+    provider === SEARCH_PROVIDERS.LBRY_SEARCH ? SEARCH_PROVIDERS.LBRY_SEARCH : SEARCH_PROVIDERS.LIGHTHOUSE;
+  // lbry-search serves /graphql exactly; /graphql/ is a 404.
+  lighthouse.lbrySearchUrl = (lbrySearchUrl || '').trim().replace(/\/+$/, '') || LBRY_SEARCH_API;
 };
 
 export const doSearch = (rawQuery: string, searchOptions: SearchOptions) => (
@@ -65,8 +82,8 @@ export const doSearch = (rawQuery: string, searchOptions: SearchOptions) => (
 
   lighthouse
     .search(queryWithOptions)
-    .then((data: { body: Array<{ name: string, claimId: string }>, poweredBy: string }) => {
-      const { body: result, poweredBy } = data;
+    .then((data: { body: Array<{ name: string, claimId: string }>, poweredBy: ?string, hasNextPage?: boolean }) => {
+      const { body: result, poweredBy, hasNextPage } = data;
       const uris = [];
       const actions = [];
 
@@ -100,6 +117,7 @@ export const doSearch = (rawQuery: string, searchOptions: SearchOptions) => (
           size: size,
           uris,
           recsys: poweredBy,
+          hasNextPage,
         },
       });
       dispatch(batchActions(...actions));

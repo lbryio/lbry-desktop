@@ -1,5 +1,6 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
+import * as SETTINGS from 'constants/settings';
 import { handleActions } from 'util/redux-utils';
 import { SEARCH_OPTIONS, SEARCH_PAGE_SIZE } from 'constants/search';
 import { createNormalizedSearchKey } from 'util/search';
@@ -31,7 +32,7 @@ export default handleActions(
       searching: true,
     }),
     [ACTIONS.SEARCH_SUCCESS]: (state: SearchState, action: SearchSuccess): SearchState => {
-      const { query, uris, from, size, recsys } = action.data;
+      const { query, uris, from, size, recsys, hasNextPage } = action.data;
       const normalizedQuery = createNormalizedSearchKey(query);
       const urisForQuery = state.resultsByQuery[normalizedQuery] && state.resultsByQuery[normalizedQuery]['uris'];
 
@@ -40,8 +41,9 @@ export default handleActions(
         newUris = Array.from(new Set(urisForQuery.concat(uris)));
       }
 
-      // The returned number of urls is less than the page size, so we're on the last page
-      const noMoreResults = size && uris.length < size;
+      // lbry-search says whether there's another page (its pages can be short after filtering).
+      // Otherwise a page smaller than the page size is the last one.
+      const noMoreResults = typeof hasNextPage === 'boolean' ? !hasNextPage : size && uris.length < size;
 
       const results = { uris: newUris, recsys };
       return {
@@ -74,6 +76,12 @@ export default handleActions(
       results: action.data.uris,
       mentionQuery: action.data.query,
     }),
+
+    // Results are cached by query (and persisted), so drop them when the search server changes.
+    [ACTIONS.CLIENT_SETTING_CHANGED]: (state: SearchState, action: { data: { key: string } }): SearchState =>
+      action.data.key === SETTINGS.SEARCH_PROVIDER || action.data.key === SETTINGS.LBRY_SEARCH_URL
+        ? { ...state, resultsByQuery: {}, hasReachedMaxResultsLength: {} }
+        : state,
   },
   defaultState
 );
