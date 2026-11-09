@@ -283,3 +283,16 @@ $thumbnailWidthSmall: 1rem;
     }
   }
 }
+
+// Collapsed state: a slim input until the user focuses it or has a draft,
+// so comments are reachable without scrolling past a large empty editor.
+.comment-create--compact {
+  textarea {
+    min-height: 0 !important;
+    height: 2.5rem !important;
+  }
+
+  .form-field__textarea-info {
+    display: none;
+  }
+}

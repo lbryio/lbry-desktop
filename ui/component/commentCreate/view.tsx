@@ -114,6 +114,7 @@ export function CommentCreate(props: Props) {
   } = useHistory();
 
   const [isSubmitting, setSubmitting] = React.useState(false);
+  const [textareaFocused, setTextareaFocused] = React.useState(false);
   const [commentFailure, setCommentFailure] = React.useState(false);
   const [successTip, setSuccessTip] = React.useState({ txid: undefined, tipAmount: undefined });
   const [isSupportComment, setIsSupportComment] = React.useState<any>();
@@ -187,11 +188,13 @@ export function CommentCreate(props: Props) {
   function onTextareaFocus() {
 // @ts-expect-error - TS2769 - No overload matches this call.
     window.addEventListener('keydown', altEnterListener);
+    setTextareaFocused(true);
   }
 
   function onTextareaBlur() {
 // @ts-expect-error - TS2769 - No overload matches this call.
     window.removeEventListener('keydown', altEnterListener);
+    setTextareaFocused(false);
   }
 
   function handleSupportComment() {
@@ -429,6 +432,9 @@ export function CommentCreate(props: Props) {
         'comment-create--reply': isReply,
         'comment-create--nestedReply': isNested,
         'comment-create--bottom': bottom,
+        // Keep the box small until the user actually starts commenting, so
+        // comments are visible without scrolling past a large empty editor.
+        'comment-create--compact': !isReply && !bottom && !textareaFocused && !commentValue,
       })}
     >
       {/* Input Box/Preview Box */}
