@@ -27,7 +27,6 @@ export default function CreatorAnalytics(props: Props) {
   const [fetchingStats, setFetchingStats] = React.useState(false);
   const claimId = claim && claim.claim_id;
   // TODO: put this back when hubs are fixed
-  // const channelHasClaims = claim && claim.meta && claim.meta.claims_in_channel && claim.meta.claims_in_channel > 0 || true;
   const channelHasClaims = true;
 
   React.useEffect(() => {

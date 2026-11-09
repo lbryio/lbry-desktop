@@ -329,7 +329,6 @@ export const makeSelectMyPurchasesForPage = (query?: string | null, page: number
 
       if (!query) {
         // ensure no duplicates from double purchase bugs
-        // return [...new Set(myPurchases)];
         return Array.from(new Set(myPurchases));
       }
 

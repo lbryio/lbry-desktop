@@ -24,7 +24,6 @@ const parseCsv = (data: unknown, filters = []) => {
     Object.entries(item).forEach(([key]: [any]) => {
       if (!filters.includes(key)) list.push(key);
     });
-    // return headers
     return list.join(',');
   };
 
@@ -40,7 +39,6 @@ const parseCsv = (data: unknown, filters = []) => {
             row.push(sanitizedValue);
           }
         });
-        // return rows
         return row.join(',');
       })
       .join('\n');

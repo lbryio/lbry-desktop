@@ -61,28 +61,8 @@ export const doCollectionDelete = (id: string, colKey: string | null = undefined
 };
 
 // Given a collection, save its collectionId to be resolved and displayed in Library
-// export const doCollectionSave = (
-//   id: string,
-// ) => (dispatch: Dispatch) => {
-//   return dispatch({
-//     type: ACTIONS.COLLECTION_SAVE,
-//     data: {
-//       id: id,
-//     },
-//   });
-// };
 
 // Given a collection and name, copy it to a local private collection with a name
-// export const doCollectionCopy = (
-//   id: string,
-// ) => (dispatch: Dispatch) => {
-//   return dispatch({
-//     type: ACTIONS.COLLECTION_COPY,
-//     data: {
-//       id: id,
-//     },
-//   });
-// };
 
 export const doFetchItemsInCollections = (
   resolveItemsOptions: {

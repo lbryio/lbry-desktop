@@ -134,7 +134,6 @@ function App(props: Props) {
   const { pathname, search } = props.location;
   const [upgradeNagClosed, setUpgradeNagClosed] = useState(false);
   const [resolvedSubscriptions, setResolvedSubscriptions] = useState(false);
-  // const [retryingSync, setRetryingSync] = useState(false);
   const [langRenderKey, setLangRenderKey] = useState(0);
   const [sidebarOpen] = usePersistedState('sidebar', true);
   const showUpgradeButton = (autoUpdateDownloaded || isUpgradeAvailable) && !upgradeNagClosed;

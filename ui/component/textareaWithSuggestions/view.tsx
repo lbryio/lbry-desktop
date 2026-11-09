@@ -95,7 +95,6 @@ export default function TextareaWithSuggestions(props: Props) {
   const [highlightedSuggestion, setHighlightedSuggestion] = React.useState('');
   const [shouldClose, setClose] = React.useState<any>();
   const [debouncedTerm, setDebouncedTerm] = React.useState('');
-  // const [mostSupported, setMostSupported] = React.useState('');
 
   const suggestionTerm = suggestionValue && suggestionValue.term;
   const isEmote = suggestionValue && suggestionValue.isEmote;

@@ -29,7 +29,6 @@ function SettingCommentsServer(props: Props) {
 
   // "migrate" to make sure any currently set custom server is in saved list
   React.useEffect(() => {
-    // const servers = JSON.parse(customServersString);
     // if customServerUrl is not in servers, make sure it is.
   }, [customServerUrl, customServersString, setCustomServers]);
 

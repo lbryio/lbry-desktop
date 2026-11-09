@@ -152,7 +152,6 @@ const onPlayerReady = (player: unknown, options: unknown) => {
  *           Never shows if the endscreen plugin is present
  */
 const mobileUi = function(options: unknown) {
-  // if (videojs.browser.IS_ANDROID || videojs.browser.IS_IOS) {
   if (videojs.browser.IS_ANDROID) {
     this.ready(() => {
       onPlayerReady(this, videojs.mergeOptions(defaults, options));

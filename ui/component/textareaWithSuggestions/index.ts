@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import { doResolveUris } from 'redux/actions/claims';
 import { doSetMentionSearchResults } from 'redux/actions/search';
 import { makeSelectWinningUriForQuery } from 'redux/selectors/search';
-// import { MAX_LIVESTREAM_COMMENTS } from 'constants/livestream';
 import { selectChannelMentionData } from 'redux/selectors/comments';
 import { selectShowMatureContent } from 'redux/selectors/settings';
 import { withRouter } from 'react-router';
@@ -13,7 +12,6 @@ const select = (state: unknown, props: unknown) => {
   const { pathname } = props.location;
   const uri = `lbry:/${pathname.replaceAll(':', '#')}`;
 
-  // const maxComments = props.isLivestream ? MAX_LIVESTREAM_COMMENTS : -1;
   const maxComments = -1;
   const data = selectChannelMentionData(state, uri, maxComments);
   const {

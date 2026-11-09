@@ -369,7 +369,6 @@ export function doClearCache() {
   return (dispatch: unknown) => {
     // Need to update this to work with new version of redux-persist
     // Leaving for now
-    // const reducersToClear = whiteListedReducers.filter(reducerKey => reducerKey !== 'tags');
     // window.cacheStore.purge(reducersToClear);
     window.sessionStorage.clear();
     dispatch(doClearSupport());
@@ -460,22 +459,7 @@ export function doAnalyticsView(uri: unknown, timeToStart: unknown) {
 
 export function doAnalyticsBuffer(uri: unknown, bufferData: unknown) {
   return () => {
-    // return (dispatch, getState) => {
-    // const state = getState();
-    // const claim = selectClaimForUri(state, uri);
-    // const user = selectUser(state);
-    // const {
-    //   value: { video, audio, source },
-    // } = claim;
-    // const timeAtBuffer = parseInt(bufferData.currentTime ? bufferData.currentTime * 1000 : 0);
-    // const bufferDuration = parseInt(bufferData.secondsToLoad ? bufferData.secondsToLoad * 1000 : 0);
-    // const fileDurationInSeconds = (video && video.duration) || (audio && audio.duration);
-    // const fileSize = source.size; // size in bytes
-    // const fileSizeInBits = fileSize * 8;
-    // const bitRate = parseInt(fileSizeInBits / fileDurationInSeconds);
-    // const userId = user && user.id.toString();
     // if there's a logged in user, send buffer event data to watchman
-    // if (<condition>) {
     // STUB: any buffer events here
     // analytics.videoBufferEvent(claim, {
     //   timeAtBuffer,

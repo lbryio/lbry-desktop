@@ -220,30 +220,6 @@ function CommentView(props: Props) {
   }
 
   // find a way to enable linked comments - probably use share url.
-  // const linkedCommentRef = React.useCallback(
-  //   (node) => {
-  //     if (node !== null && window.pendingLinkedCommentScroll) {
-  //       const ROUGH_HEADER_HEIGHT = 125; // @see: --header-height
-  //       delete window.pendingLinkedCommentScroll;
-  //
-  //       const mobileChatElem = document.querySelector('.MuiPaper-root .card--enable-overflow');
-  //       const drawerElem = document.querySelector('.MuiDrawer-root');
-  //       const elem = (isMobile && mobileChatElem) || window;
-  //
-  //       if (elem) {
-  //         elem.scrollTo({
-  //           top:
-  //             node.getBoundingClientRect().top +
-  //             (mobileChatElem && drawerElem ? drawerElem.getBoundingClientRect().top * -1 : elem.scrollY) -
-  //             ROUGH_HEADER_HEIGHT,
-  //           left: 0,
-  //           behavior: 'smooth',
-  //         });
-  //       }
-  //     }
-  //   },
-  //   [isMobile]
-  // );
 
   return (
     <li

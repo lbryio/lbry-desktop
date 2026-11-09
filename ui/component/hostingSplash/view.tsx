@@ -64,7 +64,6 @@ function HostingSplash(props: Props) {
   }
 
   function getAutoLimit() {
-    // return floor of 10% of total
     const totalGB = Math.floor(getManagedLimitMB() / 1024); // eg, 25GB
     return Math.floor(totalGB / 10) * 1024; // eg, 2 GB -> 2048MB
   }

@@ -1,6 +1,5 @@
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
-// import * as MATURE_TAGS from 'constants/ta';
 import React from 'react';
 import classnames from 'classnames';
 import { MATURE_TAGS } from 'constants/tags';

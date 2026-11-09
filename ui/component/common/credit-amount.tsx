@@ -54,7 +54,6 @@ class CreditAmount extends React.PureComponent<Props> {
     } = this.props;
     const minimumRenderableAmount = 10 ** (-1 * precision);
 
-    // return null, otherwise it will try and convert undefined to a string
     if (amount === undefined && customAmounts === undefined) return null;
 
     function getAmountText(amount: number, isFiat?: boolean) {

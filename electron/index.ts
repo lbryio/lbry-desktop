@@ -307,8 +307,6 @@ app.on('before-quit', () => {
 // Get the content of a file as a raw buffer of bytes.
 // Useful to convert a file path to a File instance.
 // Example:
-// const result = await ipcMain.invoke('get-file-from-path', 'path/to/file');
-// const file = new File([result.buffer], result.name);
 // NOTE: if path points to a folder, an empty
 // file will be given.
 ipcMain.handle('get-file-from-path', (event, path, readContents = true) => {

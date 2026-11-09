@@ -229,7 +229,6 @@ const recsys = {
       const actualPlayingUri = playingUri && playingUri.uri;
       const claim = makeSelectClaimForUri(actualPlayingUri)(state);
       const playingClaimId = claim ? claim.claim_id : null;
-      // const primaryUri = selectPrimaryUri(state);
       const floatingPlayer = makeSelectClientSetting(SETTINGS.FLOATING_PLAYER)(state);
       // When leaving page, if floating player is enabled, play will continue.
       Object.keys(recsys.entries).forEach((claimId) => {

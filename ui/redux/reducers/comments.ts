@@ -966,10 +966,6 @@ export default handleActions(
               delegatorUrisForBlockedUri.splice(index, 1);
 
               // // Remove blocked entry if it was removed for all delegators
-              // if (delegatorUrisForBlockedUri.length === 0) {
-              //   delete moderatorBlockListDelegatorsMap[blockedUri];
-              //   newBlockList = newBlockList.filter((uri) => uri !== blockedUri);
-              // }
 
               // Remove from "toggling" flag
               const togglingDelegatorsForBlockedUri = togglingMap[blockedUri];
