@@ -17,7 +17,7 @@ However, for those individuals who want a bit more guidance on the best way to c
 - [Choose an Issue](#choose-an-issue)
 - [Code Overview](#code-overview)
   - [Libraries](#libraries)
-  - [Flow](#flow)
+  - [TypeScript (and Flow)](#typescript-and-flow)
   - [Lint](#lint)
   - [Code Formatting](#code-formatting)
   - [Debug](#debug)
@@ -78,25 +78,34 @@ our styling rules and code best practices.
 
 This project uses [lbry-redux](https://github.com/lbryio/lbry-redux) and [lbryionc](https://github.com/lbryio/lbryinc) to share Redux and LBRY API specific code with other LBRY apps. Over time, more Redux code that is suitable to be shared will be moved into lbry-redux. If modifying Redux code, you may be asked to make some of your changes in lbry-redux rather than lbry-desktop. The steps to work with lbry-redux locally can be found [here](https://github.com/lbryio/lbry-redux#local-development).
 
-### Flow
+### TypeScript (and Flow)
 
-[Flow](https://flow.org/) is a static type checker for JavaScript. Flow checks your code for
-errors through static type annotations. For using Flow, you need to add the following
-annotation to the beginning of the file you're editing:
+The project is migrating from [Flow](https://flow.org/) to
+[TypeScript](https://www.typescriptlang.org/) — see the
+[migration plan](https://github.com/bitcoinbrisbane/lbry-desktop/issues/618) for status and phases.
 
-`// @flow`
+**New code should be written in TypeScript** (`.ts`/`.tsx`). The build compiles it directly, and
+the shared domain types (`Claim`, `LbryComment`, `StreamMetadata`, …) are ambient globals declared
+in `types/*.d.ts` — no import needed. Three types are renamed from their Flow counterparts to
+avoid clashing with the DOM's built-in globals: Flow's `Comment` is `LbryComment`, `Notification`
+is `LbryNotification`, and `Location` (claim geo data) is `ClaimLocation`.
 
-After adding this, you can start adding [type annotations](https://flow.org/en/docs/types/) to
-the code.
+Typecheck the TypeScript sources at any time with:
 
-If you add a project dependency and you want to use it with Flow, you need to import its type
-definitions in the project by running:
+`$ yarn typecheck`
+
+Existing `.js`/`.jsx` files still use Flow until they are converted: a `// @flow` annotation at
+the top of a file enables checking, and the equivalent global types live in `flow-typed/`. If you
+add a dependency and want Flow definitions for it, run:
 
 `$ yarn flow-defs`
 
+Flow and the `flow-typed/` directory will be removed at the end of the migration.
+
 ### Lint
 
-Code linting is ensured by [ESLint](https://eslint.org/) and [Flow CLI](https://flow.org/en/docs/cli/).
+Code linting is ensured by [ESLint](https://eslint.org/) and [Flow CLI](https://flow.org/en/docs/cli/)
+(TypeScript sources are checked separately with `yarn typecheck`).
 
 You can lint all the project's sources at any time by running:
 
