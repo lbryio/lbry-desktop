@@ -81,7 +81,7 @@
     "@babel/preset-env": "^7.12.11",
     "@babel/preset-flow": "^7.12.1",
     "@babel/preset-react": "^7.0.0",
-    "@babel/preset-typescript": "^8.0.7",
+    "@babel/preset-typescript": "^7.24.0",
     "@babel/register": "^7.0.0",
     "@datapunt/matomo-tracker-js": "^0.1.4",
     "@hot-loader/react-dom": "^16.13",
