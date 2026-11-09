@@ -5,6 +5,7 @@ import * as SETTINGS from 'constants/settings';
 import Card from 'component/common/card';
 import { FormField } from 'component/common/form';
 import HomepageSelector from 'component/homepageSelector';
+import SettingFullScreen from 'component/settingFullScreen';
 import SettingLanguage from 'component/settingLanguage';
 import SettingsRow from 'component/settingsRow';
 import ThemeSelector from 'component/themeSelector';
@@ -54,6 +55,15 @@ export default function SettingAppearance(props: Props) {
 
             <SettingsRow title={__('Theme')}>
               <ThemeSelector />
+            </SettingsRow>
+
+            <SettingsRow
+              title={__('Full screen')}
+              subtitle={__('You can also press %shortcut%.', {
+                shortcut: process.platform === 'darwin' ? 'Ctrl+Cmd+F' : 'F11',
+              })}
+            >
+              <SettingFullScreen />
             </SettingsRow>
 
             <SettingsRow title={__('24-hour clock')}>

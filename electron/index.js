@@ -355,6 +355,19 @@ ipcMain.handle('get-file-from-path', (event, path, readContents = true) => {
   });
 });
 
+// For Settings > Appearance > Full screen.
+ipcMain.handle('get-full-screen', (event) => {
+  const window = BrowserWindow.fromWebContents(event.sender);
+  return Boolean(window && window.isFullScreen());
+});
+
+ipcMain.on('set-full-screen', (event, fullScreen) => {
+  const window = BrowserWindow.fromWebContents(event.sender);
+  if (window) {
+    window.setFullScreen(Boolean(fullScreen));
+  }
+});
+
 ipcMain.handle('get-file-details-from-path', async (event, path) => {
     const isFfMp4 = (ffprobeResults) => {
       return ffprobeResults &&
