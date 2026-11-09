@@ -12,6 +12,7 @@ import Daemon from './Daemon';
 import isDev from 'electron-is-dev';
 import createTray from './createTray';
 import createWindow from './createWindow';
+import showWindow from './showWindow';
 import pjson from '../package.json';
 import startSandbox from './startSandbox';
 import installDevtools from './installDevtools';
@@ -199,7 +200,7 @@ if (!gotSingleInstanceLock) {
         rendererWindow.webContents.send('open-uri-requested', URI);
       }
 
-      rendererWindow.show();
+      showWindow(rendererWindow);
     }
   });
 
@@ -234,7 +235,7 @@ if (!gotSingleInstanceLock) {
 
 app.on('activate', () => {
   if (rendererWindow) {
-    rendererWindow.show();
+    showWindow(rendererWindow);
   }
 });
 
@@ -291,7 +292,7 @@ app.on('will-finish-launching', () => {
 
     if (rendererWindow) {
       rendererWindow.webContents.send('open-uri-requested', URL);
-      rendererWindow.show();
+      showWindow(rendererWindow);
     } else {
       appState.macDeepLinkingURI = URL;
     }

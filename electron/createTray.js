@@ -1,30 +1,11 @@
 import { app, Menu, Tray } from 'electron';
 import path from 'path';
+import showWindow from './showWindow';
 
 let tray;
 
 export default window => {
   let iconPath;
-
-  /*
-   * A maximized window can't be properly
-   * restored when minimized to the taskbar
-   * (it will be restored/showed as unmaximized).
-   *
-   * window.isMaximized() will also return
-   * false when minimizing a maximized window.
-   *
-   * The safest way to keep track of the
-   * maximized state using maximize and
-   * unmaximize events.
-   */
-  let isWindowMaximized = false;
-  window.on('maximize', () => {
-    isWindowMaximized = true;
-  });
-  window.on('unmaximize', () => {
-    isWindowMaximized = false;
-  });
 
   switch (process.platform) {
     case 'darwin': {
@@ -42,12 +23,7 @@ export default window => {
 
   tray = new Tray(process.env.NODE_ENV === 'development' ? iconPath : path.join(process.resourcesPath, iconPath));
 
-  const restoreFromTray = () => {
-    if (isWindowMaximized) {
-      window.maximize();
-    }
-    window.show();
-  };
+  const restoreFromTray = () => showWindow(window);
 
   tray.on('double-click', restoreFromTray);
 
