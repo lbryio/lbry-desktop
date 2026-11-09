@@ -7,10 +7,10 @@ import Spinner from 'component/spinner';
 
 type Props = {
   user: ?User,
-  history: { push: string => void, replace: string => void },
+  history: { push: (string) => void, replace: (string) => void },
   location: { search: string },
   userFetchPending: boolean,
-  doUserSignIn: string => void,
+  doUserSignIn: (string) => void,
   emailToVerify: ?string,
   passwordExists: boolean,
 };
@@ -30,7 +30,7 @@ function UserSignIn(props: Props) {
     if (hasVerifiedEmail || (!showEmail && !showPassword && !showLoading)) {
       history.replace(redirect || '/');
     }
-  }, [showEmail, showPassword, showLoading, hasVerifiedEmail]);
+  }, [showEmail, showPassword, showLoading, hasVerifiedEmail, history, redirect]);
 
   React.useEffect(() => {
     if (emailToVerify && emailOnlyLogin) {

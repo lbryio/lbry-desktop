@@ -3,7 +3,7 @@
 
 // From: https://github.com/chalk/chalk/blob/master/index.js.flow
 
-declare module "chalk" {
+declare module 'chalk' {
   declare type TemplateStringsArray = $ReadOnlyArray<string>;
 
   declare type Level = $Values<{

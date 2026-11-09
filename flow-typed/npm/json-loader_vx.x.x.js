@@ -23,7 +23,6 @@ declare module 'json-loader' {
  * needed.
  */
 
-
 // Filename aliases
 declare module 'json-loader/index' {
   declare module.exports: $Exports<'json-loader'>;

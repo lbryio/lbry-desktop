@@ -23,7 +23,6 @@ declare module 'electron-is-dev' {
  * needed.
  */
 
-
 // Filename aliases
 declare module 'electron-is-dev/index' {
   declare module.exports: $Exports<'electron-is-dev'>;

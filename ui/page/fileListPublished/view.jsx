@@ -92,11 +92,11 @@ function FileListPublished(props: Props) {
     params.set('searchText', searchText);
     history.replace('?' + params.toString());
     debounceFilter();
-  }, [myClaims, searchText]);
+  }, [myClaims, searchText, debounceFilter, history, search]);
 
   useEffect(() => {
     doFilterClaims();
-  }, [myClaims, filterBy]);
+  }, [myClaims, filterBy, doFilterClaims]);
 
   const urlTotal = filteredClaims.length;
 
@@ -118,7 +118,7 @@ function FileListPublished(props: Props) {
     const params = new URLSearchParams(search);
     params.set(PAGINATE_PARAM, '1');
     history.replace('?' + params.toString());
-  }, [filteredClaims]);
+  }, [filteredClaims, history, search]);
 
   useEffect(() => {
     fetchAllMyClaims();

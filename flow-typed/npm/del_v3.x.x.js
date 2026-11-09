@@ -37,7 +37,7 @@ type $npm$del$Options = {
   absolute?: boolean
 };
 
-declare module "del" {
+declare module 'del' {
   declare class Del {
     (
       patterns: $npm$del$Patterns,

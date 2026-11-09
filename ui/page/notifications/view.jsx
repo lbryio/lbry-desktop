@@ -77,7 +77,7 @@ export default function NotificationsPage(props: Props) {
       // If there are unread notifications when entering the page, reset to All.
       setName(NOTIFICATIONS.NOTIFICATION_NAME_ALL);
     }
-  }, []);
+  }, [setName, unreadCount, unseenCount]);
 
   React.useEffect(() => {
     if (unseenCount > 0) {
@@ -104,7 +104,7 @@ export default function NotificationsPage(props: Props) {
         }
       }
     }
-  }, [name, notifications, stringifiedNotificationCategories]);
+  }, [name, notifications, stringifiedNotificationCategories, doNotificationList]);
 
   const notificationListElement = (
     <>

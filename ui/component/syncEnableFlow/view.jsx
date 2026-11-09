@@ -34,16 +34,8 @@ const SHARED_KEY = 'shared';
 const LOCAL_KEY = 'local';
 
 function SyncEnableFlow(props: Props) {
-  const {
-    setSyncEnabled,
-    getSyncError,
-    getSyncPending,
-    getSync,
-    checkSync,
-    mode,
-    closeModal,
-    updatePreferences,
-  } = props;
+  const { setSyncEnabled, getSyncError, getSyncPending, getSync, checkSync, mode, closeModal, updatePreferences } =
+    props;
 
   const [step, setStep] = React.useState(INITIAL);
   const [prefDict, setPrefDict]: [any, (any) => void] = React.useState();
@@ -118,7 +110,7 @@ function SyncEnableFlow(props: Props) {
         setStep(FETCH_FOR_DISABLE);
       }
     }
-  }, [mode, setPassword]);
+  }, [mode, setPassword, checkSync]);
 
   React.useEffect(() => {
     if (step === FETCH_FOR_ENABLE) {
@@ -146,7 +138,7 @@ function SyncEnableFlow(props: Props) {
         setStep(CONFIRM);
       });
     }
-  }, [step, setPrefDict, setStep, password]);
+  }, [step, setPrefDict, setStep, password, getSync]);
 
   if (getSyncPending) {
     return (

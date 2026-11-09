@@ -23,7 +23,6 @@ declare module 'decompress' {
  * needed.
  */
 
-
 // Filename aliases
 declare module 'decompress/index' {
   declare module.exports: $Exports<'decompress'>;

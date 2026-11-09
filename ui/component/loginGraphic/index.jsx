@@ -23,7 +23,7 @@ function LoginGraphic(props: any) {
     } else {
       setSrc(imgUrl);
     }
-  }, []);
+  }, [imgUrl]);
 
   if (error || !imgUrl) {
     return null;

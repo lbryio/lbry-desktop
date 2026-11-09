@@ -23,7 +23,6 @@ declare module 'render-media' {
  * needed.
  */
 
-
 // Filename aliases
 declare module 'render-media/index' {
   declare module.exports: $Exports<'render-media'>;

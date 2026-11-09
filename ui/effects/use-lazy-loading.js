@@ -71,7 +71,7 @@ export default function useLazyLoading(
 
     // $FlowFixMe
     lazyLoadingObserver.observe(elementRef.current);
-  }, deps);
+  }, [backgroundFallback, elementRef, yOffsetPx]);
 
   return srcLoaded;
 }

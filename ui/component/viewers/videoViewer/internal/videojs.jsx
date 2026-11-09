@@ -245,7 +245,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         window.player = undefined;
       }
     };
-  }, [isAudio, source]);
+  }, [isAudio, source, curried_function, createVideoPlayerDOM, detectFileType, initializeVideoPlayer]);
 
   // Update video player and reload when source URL changes
   useEffect(() => {
@@ -279,7 +279,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         player.bigPlayButton.hide();
       }
     });
-  }, [source, reload]);
+  }, [source, reload, sourceType, videoJsOptions.sources]);
 
   return (
     // $FlowFixMe

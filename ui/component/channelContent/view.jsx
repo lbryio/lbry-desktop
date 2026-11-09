@@ -102,7 +102,7 @@ function ChannelContent(props: Props) {
       }
     }, DEBOUNCE_WAIT_DURATION_MS);
     return () => clearTimeout(timer);
-  }, [claimId, searchQuery, showMature]);
+  }, [claimId, doResolveUris, searchQuery, showMature]);
 
   React.useEffect(() => {
     setSearchQuery('');

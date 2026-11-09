@@ -23,7 +23,6 @@ declare module 'y18n' {
  * needed.
  */
 
-
 // Filename aliases
 declare module 'y18n/index' {
   declare module.exports: $Exports<'y18n'>;

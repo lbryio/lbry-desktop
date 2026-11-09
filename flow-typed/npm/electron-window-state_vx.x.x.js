@@ -23,7 +23,6 @@ declare module 'electron-window-state' {
  * needed.
  */
 
-
 // Filename aliases
 declare module 'electron-window-state/index' {
   declare module.exports: $Exports<'electron-window-state'>;

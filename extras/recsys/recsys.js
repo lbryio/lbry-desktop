@@ -54,7 +54,7 @@ const recsys = {
    * @param parentClaimId: string,
    * @param newClaimId: string,
    */
-  onClickedRecommended: function (parentClaimId, newClaimId) {
+  onClickedRecommended: function(parentClaimId, newClaimId) {
     const parentEntry = recsys.entries[parentClaimId] ? recsys.entries[parentClaimId] : null;
     const parentUuid = parentEntry['uuid'];
     const parentRecommendedClaims = parentEntry['recClaimIds'] || [];
@@ -72,7 +72,7 @@ const recsys = {
    * Page was loaded. Get or Create entry and populate it with default data, plus recommended content, recsysId, etc.
    * Called from recommendedContent component
    */
-  onRecsLoaded: function (claimId, uris) {
+  onRecsLoaded: function(claimId, uris) {
     if (window.store) {
       const state = window.store.getState();
       if (!recsys.entries[claimId]) {
@@ -91,7 +91,7 @@ const recsys = {
    * @param: claimId: string
    * @param: parentUuid: string (optional)
    */
-  createRecsysEntry: function (claimId, parentUuid) {
+  createRecsysEntry: function(claimId, parentUuid) {
     if (window.store && claimId) {
       const state = window.store.getState();
       const user = selectUser(state);
@@ -128,7 +128,7 @@ const recsys = {
    * @param claimId
    * @param isTentative
    */
-  sendRecsysEntry: function (claimId, isTentative) {
+  sendRecsysEntry: function(claimId, isTentative) {
     const shareTelemetry =
       IS_WEB || (window && window.store && selectDaemonSettings(window.store.getState()).share_usage_data);
 
@@ -151,7 +151,7 @@ const recsys = {
    * @param claimId
    * @param event
    */
-  onRecsysPlayerEvent: function (claimId, event, isEmbedded) {
+  onRecsysPlayerEvent: function(claimId, event, isEmbedded) {
     if (!recsys.entries[claimId]) {
       recsys.createRecsysEntry(claimId);
       // do something to show it's floating or autoplay
@@ -162,7 +162,7 @@ const recsys = {
     recsys.entries[claimId].events.push(event);
     recsys.log('onRecsysPlayerEvent', claimId);
   },
-  log: function (callName, claimId) {
+  log: function(callName, claimId) {
     if (recsys.debug) {
       console.log(`Call: ***${callName}***, ClaimId: ${claimId}, Recsys Entries`, Object.assign({}, recsys.entries));
     }
@@ -172,7 +172,7 @@ const recsys = {
    * Player closed. Check to see if primaryUri = playingUri
    * if so, send the Entry.
    */
-  onPlayerDispose: function (claimId, isEmbedded) {
+  onPlayerDispose: function(claimId, isEmbedded) {
     if (window.store) {
       const state = window.store.getState();
       const playingUri = selectPlayingUri(state);
@@ -221,7 +221,7 @@ const recsys = {
    * Navigate event
    * Send all claimIds that aren't currently playing.
    */
-  onNavigate: function () {
+  onNavigate: function() {
     if (window.store) {
       const state = window.store.getState();
       const playingUri = selectPlayingUri(state);

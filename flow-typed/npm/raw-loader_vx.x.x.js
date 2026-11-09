@@ -23,7 +23,6 @@ declare module 'raw-loader' {
  * needed.
  */
 
-
 // Filename aliases
 declare module 'raw-loader/index' {
   declare module.exports: $Exports<'raw-loader'>;

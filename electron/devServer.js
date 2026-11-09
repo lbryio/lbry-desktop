@@ -57,7 +57,7 @@ mainInstance.waitUntilValid(() => {
     console.log(data.toString());
   });
 
-  process.on('SIGINT', function () {
+  process.on('SIGINT', function() {
     console.log('Killing threads...');
 
     child.kill('SIGINT');

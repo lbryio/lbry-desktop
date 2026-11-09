@@ -157,7 +157,7 @@ const VideoJsEvents = ({
         .getChild('TheaterModeButton')
         .controlText(videoTheaterMode ? __('Default Mode (t)') : __('Theater Mode (t)'));
     }
-  }, [videoTheaterMode]);
+  }, [videoTheaterMode, playerRef]);
 
   // when user clicks 'Unmute' button, turn audio on and hide unmute button
   function unmuteAndHideHint() {
@@ -224,14 +224,14 @@ const VideoJsEvents = ({
         autoplayButton.setAttribute('aria-checked', autoplaySetting);
       }
     }
-  }, [autoplaySetting]);
+  }, [autoplaySetting, playerRef]);
 
   useEffect(() => {
     const player = playerRef.current;
     if (replay && player) {
       player.play();
     }
-  }, [replay]);
+  }, [replay, playerRef]);
 
   function initializeEvents() {
     const player = playerRef.current;

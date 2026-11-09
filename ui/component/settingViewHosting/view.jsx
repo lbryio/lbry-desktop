@@ -105,7 +105,7 @@ function SettingViewHosting(props: Props) {
     if (unlimited && viewHostingLimit !== 0) {
       handleApply();
     }
-  }, [unlimited, viewHostingLimit]);
+  }, [handleApply, unlimited, viewHostingLimit]);
 
   return (
     <>

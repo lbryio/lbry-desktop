@@ -87,7 +87,7 @@ export default function ReportContent(props: Props) {
         claim_ids: [claimId],
       });
     }
-  }, [claim, claimId]);
+  }, [claim, claimId, doClaimSearch]);
 
   // On mount, pause player and get the timestamp, if applicable.
   React.useEffect(() => {
@@ -102,7 +102,7 @@ export default function ReportContent(props: Props) {
       const str = (n) => n.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
       updateInput('timestamp', str(h) + ':' + str(m) + ':' + str(s));
     }
-  }, []);
+  }, [updateInput]);
 
   React.useEffect(() => {
     let timer;

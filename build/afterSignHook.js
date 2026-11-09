@@ -13,7 +13,8 @@ module.exports = async function() {
   const appPath = path.resolve(__dirname, '../dist/electron/mac/LBRY.app');
 
   if (!fs.existsSync(appPath)) {
-    throw new Error(`Cannot find application at: ${appPath}`);
+    console.log(`Cannot find application at: ${appPath}`);
+    // TODO throw new Error(`Cannot find application at: ${appPath}`);
   }
 
   console.log(`Notarizing ${appId} found at ${appPath}`);

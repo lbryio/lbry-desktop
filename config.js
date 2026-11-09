@@ -8,10 +8,10 @@ const config = {
   WEBPACK_WEB_PORT: process.env.WEBPACK_WEB_PORT,
   WEBPACK_ELECTRON_PORT: process.env.WEBPACK_ELECTRON_PORT,
   WEB_SERVER_PORT: process.env.WEB_SERVER_PORT,
-  LBRY_WEB_API: process.env.LBRY_WEB_API, //api.na-backend.odysee.com',
+  LBRY_WEB_API: process.env.LBRY_WEB_API, // api.na-backend.odysee.com',
   LBRY_WEB_PUBLISH_API: process.env.LBRY_WEB_PUBLISH_API,
-  LBRY_API_URL: process.env.LBRY_API_URL, //api.lbry.com',
-  LBRY_WEB_STREAMING_API: process.env.LBRY_WEB_STREAMING_API, //player.odysee.com
+  LBRY_API_URL: process.env.LBRY_API_URL, // api.lbry.com',
+  LBRY_WEB_STREAMING_API: process.env.LBRY_WEB_STREAMING_API, // player.odysee.com
   LBRY_WEB_BUFFER_API: process.env.LBRY_WEB_BUFFER_API,
   SEARCH_SERVER_API: process.env.SEARCH_SERVER_API,
   CLOUD_CONNECT_SITE_NAME: process.env.CLOUD_CONNECT_SITE_NAME,

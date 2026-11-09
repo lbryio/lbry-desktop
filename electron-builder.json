@@ -14,27 +14,6 @@
       "to": "./"
     }
   ],
-  "extraResources": [
-    {
-      "from": "./static/daemon/",
-      "to": "static/daemon/",
-      "filter": ["**/*"]
-    },
-    {
-      "from": "./static/img",
-      "to": "static/img",
-      "filter": ["**/*"]
-    },
-    {
-      "from": "./static/font",
-      "to": "static/font",
-      "filter": ["**/*"]
-    },
-    {
-      "from": "./static/app-update.yml",
-      "to": "app-update.yml"
-    }
-  ],
   "publish": [
     {
       "provider": "github"

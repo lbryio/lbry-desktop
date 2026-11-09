@@ -236,7 +236,15 @@ function App(props: Props) {
       fetchModBlockedList();
       fetchModAmIList();
     }
-  }, [hasMyChannels, hasNoChannels, hasActiveChannelClaim, setActiveChannelIfNotSet, setIncognito]);
+  }, [
+    fetchModAmIList,
+    fetchModBlockedList,
+    hasMyChannels,
+    hasNoChannels,
+    hasActiveChannelClaim,
+    setActiveChannelIfNotSet,
+    setIncognito,
+  ]);
 
   useEffect(() => {
     // $FlowFixMe

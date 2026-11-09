@@ -34,7 +34,7 @@ export default function SettingStorage(props: Props) {
     cleanBlobs().then(() => {
       setCleaning(false);
     });
-  }, []);
+  }, [cleanBlobs]);
 
   return (
     <>

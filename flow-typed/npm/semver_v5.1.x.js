@@ -1,7 +1,7 @@
 // flow-typed signature: dc381ee55406f66b7272c6343db0834b
 // flow-typed version: da30fe6876/semver_v5.1.x/flow_>=v0.25.x
 
-declare module "semver" {
+declare module 'semver' {
   declare type Release =
     | "major"
     | "premajor"

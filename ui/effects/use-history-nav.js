@@ -24,5 +24,5 @@ export default function useHistoryNav(history) {
       window.addEventListener('keydown', handleKeyPress);
     }
     return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [el]);
+  }, [el, history]);
 }
