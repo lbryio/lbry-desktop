@@ -24,7 +24,7 @@ jobs:
         node-version: [16.x]
         os:
           - ubuntu-latest
-          - macos-13
+          - macos-15-intel
           - windows-latest
     runs-on: ${{ matrix.os }}
     continue-on-error: true
@@ -38,7 +38,7 @@ jobs:
       - uses: maxim-lobanov/setup-xcode@v1
         if: startsWith(runner.os, 'mac')
         with:
-          xcode-version: '15.2.0'
+          xcode-version: latest-stable
       - name: Download blockchain headers
         run: |
           mkdir -p ./static/daemon
