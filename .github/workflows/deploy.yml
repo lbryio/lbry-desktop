@@ -17,6 +17,18 @@ jobs:
       - run: yarn lint
       - run: yarn test
 
+  typecheck:
+    name: typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22.x
+      - run: corepack enable
+      - run: yarn
+      - run: yarn typecheck
+
   build:
     needs: ['lint']
     name: 'build'
