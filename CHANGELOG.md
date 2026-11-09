@@ -2,12 +2,32 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [1.0.0] - [2026-11-09]
+## [1.0.0] - [2026-11-10]
+
+The first release from this fork, and the first TypeScript-based build.
+
+### Added
+ - A setting to choose the search server: Lighthouse (hosted) or a self-hosted [lbry-search](https://github.com/bitcoinbrisbane/lbry-search) instance ([#1](https://github.com/bitcoinbrisbane/lbry-desktop/pull/1))
+ - A full screen setting ([#617](https://github.com/bitcoinbrisbane/lbry-desktop/pull/617))
+ - Export and import followed channels ([#614](https://github.com/bitcoinbrisbane/lbry-desktop/pull/614))
+ - The window reopens maximized if it was maximized on close ([#616](https://github.com/bitcoinbrisbane/lbry-desktop/pull/616))
+ - File dialogs start in a sensible folder ([#615](https://github.com/bitcoinbrisbane/lbry-desktop/pull/615))
+ - First unit test suite (Jest), run in CI ([#621](https://github.com/bitcoinbrisbane/lbry-desktop/pull/621))
+
+### Fixed
+ - Thumbnail uploads use Odysee's image service instead of the defunct spee.ch ([#613](https://github.com/bitcoinbrisbane/lbry-desktop/pull/613))
+ - A literal `))}` no longer renders in the price filter dropdown ([#622](https://github.com/bitcoinbrisbane/lbry-desktop/pull/622))
+ - Dead links: the Help page and email verification point to live support pages instead of the defunct chat.lbry.com; the obsolete SEC petition banner is removed ([#627](https://github.com/bitcoinbrisbane/lbry-desktop/pull/627), fixes [#606](https://github.com/bitcoinbrisbane/lbry-desktop/issues/606))
+ - CI: builds run again — the retired macos-13 runner was replaced with macos-15-intel, which had blocked every workflow run
 
 ### Changed
- - Major version bump to mark the start of the TypeScript migration ([#618](https://github.com/bitcoinbrisbane/lbry-desktop/issues/618))
- - The build now compiles TypeScript: babel, webpack, and a check-only `tsconfig.json` (`yarn typecheck`)
- - `ui/lbry.ts` and `ui/comments.ts` now ship in place of their `.js` twins, which were previously dead code
+ - **The entire codebase is now TypeScript** ([#618](https://github.com/bitcoinbrisbane/lbry-desktop/issues/618)): build support and the first shipped TS modules ([#619](https://github.com/bitcoinbrisbane/lbry-desktop/pull/619)), all global domain types ported to ambient declarations ([#620](https://github.com/bitcoinbrisbane/lbry-desktop/pull/620)), and all 877 app source files converted ([#622](https://github.com/bitcoinbrisbane/lbry-desktop/pull/622)). Flow remains only in `flow-typed/` until Phase 3 removes it.
+ - Node 22 minimum; CI builds on Node 22 with a dedicated `tsc` typecheck job ([#624](https://github.com/bitcoinbrisbane/lbry-desktop/pull/624))
+ - Commented-out dead code removed across the codebase ([#625](https://github.com/bitcoinbrisbane/lbry-desktop/pull/625))
+
+### Known issues
+ - macOS builds are unsigned and un-notarized (no signing certificates configured): right-click → Open on first launch
+ - The bundled lbrynet daemon remains v0.113.0
 
 ## [0.53.9] - [2023-2-8]
  
