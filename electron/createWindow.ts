@@ -119,7 +119,9 @@ export default (appState: unknown) => {
   window.loadURL(rendererURL + deepLinkingURI);
 
   window.on('close', event => {
-    if (appState.isQuitting) {
+    // 'window' is nulled when the renderer crashes; a late 'close' event
+    // (e.g. during the uncaughtException quit path) must not dereference it.
+    if (!window || window.isDestroyed() || appState.isQuitting) {
       return;
     }
 
@@ -147,12 +149,12 @@ export default (appState: unknown) => {
   });
 
   window.on('focus', () => {
-    window.webContents.send('window-is-focused', null);
+    if (window && !window.isDestroyed()) window.webContents.send('window-is-focused', null);
   });
 
   // Keep Settings > Appearance > Full screen in step, however full screen was changed (F11, the View menu, or the setting).
   const sendFullScreen = (fullScreen: unknown) => {
-    if (!window.isDestroyed()) window.webContents.send('full-screen-changed', fullScreen);
+    if (window && !window.isDestroyed()) window.webContents.send('full-screen-changed', fullScreen);
   };
   window.on('enter-full-screen', () => sendFullScreen(true));
   window.on('leave-full-screen', () => sendFullScreen(false));
