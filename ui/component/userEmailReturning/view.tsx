@@ -78,11 +78,13 @@ function UserEmailReturning(props: Props) {
           subtitle={__('Log in to %CLOUD_CONNECT_SITE_NAME%', { CLOUD_CONNECT_SITE_NAME })}
           actions={
             <div>
+{ /* @ts-expect-error - TS2769 - No overload matches this call. */}
               <Form onSubmit={handleSubmit} className="section">
                 <FormField
                   autoFocus={!emailExistsFromUrl}
                   placeholder={__('yourstruly@example.com')}
                   type="email"
+// @ts-expect-error - TS2322 - Type '{ autoFocus: boolean; placeholder: string; type: string; id: string; autoComplete: string; name: string; label: string; value: string; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                   id="username"
                   autoComplete="on"
                   name="sign_in_email"
@@ -98,9 +100,11 @@ function UserEmailReturning(props: Props) {
                   label={
                     <React.Fragment>
                       {__('Backup your account and wallet data.')}{' '}
+                      {/* @ts-expect-error - TS2322 (ts-migration) */}
                       <Button button="link" href="https://lbry.com/faq/account-sync" label={__('Learn More')} />
                     </React.Fragment>
                   }
+                  // @ts-expect-error - TS2322 (ts-migration)
                   checked={syncEnabled}
                   onChange={() => setSyncEnabled(!syncEnabled)}
                 />
@@ -108,12 +112,14 @@ function UserEmailReturning(props: Props) {
 
                 <div className="section__actions">
                   <Button
+                    // @ts-expect-error - TS2322 (ts-migration)
                     autoFocus={emailExistsFromUrl}
                     button="primary"
                     type="submit"
                     label={__('Log In')}
                     disabled={!email || !valid || isPending}
                   />
+                  {/* @ts-expect-error - TS2322 (ts-migration) */}
                   <Button button="link" onClick={handleChangeToSignIn} label={__('Sign Up')} />
                 </div>
               </Form>

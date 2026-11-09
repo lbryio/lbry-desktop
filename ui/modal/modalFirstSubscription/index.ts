@@ -6,12 +6,12 @@ import { withRouter } from 'react-router';
 
 import ModalFirstSubscription from './view';
 
-const select = state: unknown => ({
+const select = (state: unknown) => ({
   accessToken: selectAccessToken(state),
   user: selectUser(state),
 });
 
-const perform = dispatch: unknown => () => ({
+const perform = (dispatch: unknown) => () => ({
   closeModal: () => dispatch(doHideModal()),
 });
 

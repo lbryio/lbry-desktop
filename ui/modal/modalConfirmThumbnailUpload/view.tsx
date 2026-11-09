@@ -26,6 +26,7 @@ class ModalConfirmThumbnailUpload extends React.PureComponent<Props> {
 
     return (
       <Modal
+// @ts-expect-error - TS2322 - Type '{ children: Element[]; isOpen: true; title: string; contentLabel: string; type: string; confirmButtonLabel: string; onConfirmed: () => void; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
         isOpen
         title={__('Upload thumbnail')}
         contentLabel={__('Confirm Thumbnail Upload')}

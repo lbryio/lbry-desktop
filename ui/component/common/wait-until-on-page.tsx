@@ -6,8 +6,10 @@ const DEBOUNCE_SCROLL_HANDLER_MS = 50;
 function scaleToDevicePixelRatio(value: unknown) {
   const devicePixelRatio = window.devicePixelRatio || 1.0;
   if (devicePixelRatio < 1.0) {
+// @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     return Math.ceil(value / devicePixelRatio);
   }
+// @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
   return Math.ceil(value * devicePixelRatio);
 }
 
@@ -59,6 +61,7 @@ export default function WaitUntilOnPage(props: Props) {
 
   // Handles "element scrolled into viewport".
   React.useEffect(() => {
+// @ts-expect-error - TS2554 - Expected 3 arguments, but got 2.
     const handleDisplayingRef = debounce(() => {
       if (shouldElementRender(ref)) {
         setShouldRender(true);

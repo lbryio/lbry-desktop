@@ -1,5 +1,5 @@
 //@ts-nocheck
-const { DOMAIN } = require('../../config.js');
+import { DOMAIN } from 'config';
 const AUTH_TOKEN = 'auth_token';
 const SAVED_PASSWORD = 'saved_password';
 const domain =
@@ -59,7 +59,7 @@ function deleteCookie(name: unknown) {
 }
 
 function setSavedPassword(value: unknown, saveToDisk: unknown) {
-  return new Promise((resolve: unknown) => {
+  return new Promise<any>((resolve) => {
     const password = value === undefined || value === null ? '' : value;
     sessionPassword = password;
 
@@ -74,7 +74,7 @@ function setSavedPassword(value: unknown, saveToDisk: unknown) {
 }
 
 function getSavedPassword() {
-  return new Promise((resolve: unknown) => {
+  return new Promise<any>((resolve) => {
     if (sessionPassword) {
       resolve(sessionPassword);
     }
@@ -84,7 +84,7 @@ function getSavedPassword() {
 }
 
 function getPasswordFromCookie() {
-  return new Promise((resolve: unknown) => {
+  return new Promise<any>((resolve) => {
     let password;
     password = getCookie(SAVED_PASSWORD);
     resolve(password);
@@ -92,7 +92,7 @@ function getPasswordFromCookie() {
 }
 
 function deleteSavedPassword() {
-  return new Promise((resolve: unknown) => {
+  return new Promise<any>((resolve) => {
     deleteCookie(SAVED_PASSWORD);
     resolve();
   });
@@ -107,14 +107,14 @@ function setAuthToken(value: unknown) {
 }
 
 function deleteAuthToken() {
-  return new Promise((resolve: unknown) => {
+  return new Promise<any>((resolve) => {
     deleteCookie(AUTH_TOKEN);
     resolve();
   });
 }
 
 function doSignOutCleanup() {
-  return new Promise((resolve: unknown) => {
+  return new Promise<any>((resolve) => {
     deleteAuthToken();
     deleteSavedPassword();
     resolve();
@@ -129,7 +129,7 @@ function doAuthTokenRefresh() {
   }
 }
 
-module.exports = {
+export {
   setSavedPassword,
   getSavedPassword,
   getPasswordFromCookie,

@@ -16,7 +16,7 @@ type SideNavLink = {
   section?: string,
   onClick?: () => any,
   icon: string,
-  extra?: Node
+  extra?: React.ReactNode
 };
 
 const SIDE_LINKS: Array<SideNavLink> = [
@@ -69,10 +69,12 @@ export default function SettingsSideNavigation() {
   function getOnClickHandler(section: unknown) {
     if (section) {
       if (location.pathname === `/$/${PAGES.SETTINGS}`) {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
         return () => scrollToSection(section);
       } else if (location.pathname.startsWith(`/$/${PAGES.SETTINGS}/`)) {
         return () => {
           goBack();
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
           setTimeout(() => scrollToSection(section), 5);
         };
       }
@@ -112,6 +114,7 @@ export default function SettingsSideNavigation() {
                 <li key={linkProps.title}>
                   <Button
                     {...linkProps}
+                    // @ts-expect-error - TS2322 (ts-migration)
                     label={__(linkProps.title)}
                     title={__(linkProps.title)}
                     icon={linkProps.icon}
@@ -144,6 +147,7 @@ export default function SettingsSideNavigation() {
                     <li key={linkProps.title}>
                       <Button
                         {...passedProps}
+                        // @ts-expect-error - TS2322 (ts-migration)
                         label={__(linkProps.title)}
                         title={__(linkProps.title)}
                         icon={linkProps.icon}

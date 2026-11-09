@@ -86,6 +86,7 @@ function ChannelBlockButton(props: Props) {
     }
   }
 
+  // @ts-expect-error - TS2322 (ts-migration)
   return <Button button={isBlocked ? 'alt' : 'secondary'} label={getButtonText(blockLevel)} onClick={handleClick} />;
 }
 

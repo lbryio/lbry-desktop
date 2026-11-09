@@ -12,6 +12,7 @@ class ModalFirstReward extends React.PureComponent<Props> {
     const { closeModal } = this.props;
 
     return (
+// @ts-expect-error - TS2322 - Type '{ children: Element; type: string; isOpen: true; contentLabel: string; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
       <Modal type="card" isOpen contentLabel={__('Your first reward')}>
         <Card
           title={__('Your first reward')}
@@ -27,6 +28,7 @@ class ModalFirstReward extends React.PureComponent<Props> {
               <p>{__('No need to understand it all just yet! Try watching or publishing something next.')}</p>
             </React.Fragment>
           }
+// @ts-expect-error - TS2322 - Type 'Element' is not assignable to type 'string | Node'.
           actions={<Button button="primary" onClick={closeModal} label={__('You Got It Dude')} />}
         />
       </Modal>

@@ -18,7 +18,9 @@ export const selectMutedAndBlockedChannelIds = createSelector(
   selectState,
   (state) => state.comments,
   (state, commentsState) => {
+    // @ts-expect-error - TS2339 (ts-migration)
     const mutedUris = state.blockedChannels;
+    // @ts-expect-error - TS2339 (ts-migration)
     const blockedUris = commentsState.moderationBlockList;
     return Array.from(
       new Set((mutedUris || []).concat(blockedUris || []).map((uri) => splitBySeparator(uri)[1]))

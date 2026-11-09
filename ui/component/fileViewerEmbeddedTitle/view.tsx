@@ -34,6 +34,7 @@ function FileViewerEmbeddedTitle(props: Props) {
         </div>
       ) : (
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           label={title}
           aria-label={title}
           button="link"
@@ -43,6 +44,7 @@ function FileViewerEmbeddedTitle(props: Props) {
       )}
 
       <div className="file-viewer__embedded-info">
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         <Button className="file-viewer__overlay-logo" disabled={preferEmbed} aria-label={__('Home')} {...lbryLinkProps}>
           <Logo type={'embed'} />
         </Button>

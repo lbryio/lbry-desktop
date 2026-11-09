@@ -46,6 +46,7 @@ export default function SettingAppearance(props: Props) {
               <FormField
                 name="search-in-language"
                 type="checkbox"
+// @ts-expect-error - TS2322 - Type '{ name: string; type: string; checked: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 checked={searchInLanguage}
                 onChange={() => setSearchInLanguage(!searchInLanguage)}
               />
@@ -69,6 +70,7 @@ export default function SettingAppearance(props: Props) {
                 type="checkbox"
                 name="clock24h"
                 onChange={() => setClientSetting(SETTINGS.CLOCK_24H, !clock24h)}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; onChange: () => void; checked: boolean; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 checked={clock24h}
               />
             </SettingsRow>
@@ -77,6 +79,7 @@ export default function SettingAppearance(props: Props) {
                 type="checkbox"
                 name="background"
                 onChange={() => setClientSetting(SETTINGS.DISABLE_BACKGROUND, !disableBackground)}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; onChange: () => void; checked: boolean; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 checked={disableBackground}
               />
             </SettingsRow>
@@ -85,6 +88,7 @@ export default function SettingAppearance(props: Props) {
                 type="checkbox"
                 name="hide_balance"
                 onChange={() => setClientSetting(SETTINGS.HIDE_BALANCE, !hideBalance)}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; onChange: () => void; checked: boolean; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 checked={hideBalance}
               />
             </SettingsRow>

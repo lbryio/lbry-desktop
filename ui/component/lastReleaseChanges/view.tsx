@@ -22,9 +22,12 @@ const LastReleaseChanges = (props: Props) => {
   );
   const seeReleaseNotes = (
     <p className="help">
+      {/* @ts-expect-error - TS2745 (ts-migration) */}
       <I18nMessage
+        // @ts-expect-error - TS2322 (ts-migration)
         tokens={{
           release_notes: (
+            // @ts-expect-error - TS2322 (ts-migration)
             <Button button="link" label={__('release notes')} href="https://github.com/lbryio/lbry-desktop/releases" />
           ),
         }}

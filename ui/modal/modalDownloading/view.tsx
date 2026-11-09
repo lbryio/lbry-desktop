@@ -26,8 +26,10 @@ class ModalDownloading extends React.PureComponent<Props> {
     } = this.props;
 
     return (
+// @ts-expect-error - TS2322 - Type '{ children: (string | Element)[]; title: string; isOpen: true; contentLabel: string; type: string; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
       <Modal title={__('Downloading update')} isOpen contentLabel={__('Downloading update')} type="custom">
         {downloadProgress ? `${downloadProgress}% ${__('complete')}` : null}
+        {/* @ts-expect-error - TS2769 (ts-migration) */}
         <Line percent={downloadProgress || 0} strokeWidth="4" />
         {downloadComplete ? (
           <React.Fragment>
@@ -44,6 +46,7 @@ class ModalDownloading extends React.PureComponent<Props> {
             <p>{__('After the install is complete, please reopen the app.')}</p>
             <p>
               {__('Note: You can also install the AppImage version for streamlined updates.')}{' '}
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="link" label={__('Download here.')} href="https://lbry.com/get/lbry.AppImage" />
             </p>
           </React.Fragment>
@@ -54,12 +57,14 @@ class ModalDownloading extends React.PureComponent<Props> {
         <div className="card__actions">
           {downloadComplete ? (
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               disabled={upgradeInitialized}
               button="primary"
               label={__(upgradeInitialized ? 'Installing, please wait...' : 'Begin Upgrade')}
               onClick={startUpgrade}
             />
           ) : null}
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <Button disabled={upgradeInitialized} button="link" label={__('Cancel')} onClick={cancelUpgrade} />
         </div>
       </Modal>

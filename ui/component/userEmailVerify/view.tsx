@@ -30,6 +30,7 @@ class UserEmailVerify extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
+// @ts-expect-error - TS2322 - Type 'Timeout' is not assignable to type 'number'.
     this.emailVerifyCheckInterval = setInterval(() => {
       this.checkIfVerified();
     }, 5000);
@@ -92,17 +93,23 @@ class UserEmailVerify extends React.PureComponent<Props, State> {
             <React.Fragment>
               <div className="section__actions">
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   button="primary"
                   label={__('Resend Link')}
                   onClick={this.handleResendVerificationEmail}
                   disabled={resendingEmail}
                 />
+                {/* @ts-expect-error - TS2741 (ts-migration) */}
                 <UserSignOutButton label={__('Start Over')} />
               </div>
               <p className="help--card-actions">
+                {/* @ts-expect-error - TS2745 (ts-migration) */}
                 <I18nMessage
+                  // @ts-expect-error - TS2322 (ts-migration)
                   tokens={{
+                    // @ts-expect-error - TS2322 (ts-migration)
                     help_link: <Button button="link" href={`mailto:${SITE_HELP_EMAIL}`} label={`${SITE_HELP_EMAIL}`} />,
+                    // @ts-expect-error - TS2322 (ts-migration)
                     chat_link: <Button button="link" href="https://chat.lbry.com" label={__('chat')} />,
                   }}
                 >

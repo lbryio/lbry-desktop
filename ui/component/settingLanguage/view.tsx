@@ -19,6 +19,7 @@ function SettingLanguage(props: Props) {
   }
 
   function onLanguageChange(e: unknown) {
+// @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
     const { value } = e.target;
     setPreviousLanguage(language || getDefaultLanguage());
     setLanguage(value);
@@ -48,6 +49,7 @@ function SettingLanguage(props: Props) {
         </FormField>
       )}
 
+      {/* @ts-expect-error - TS2322 (ts-migration) */}
       {previousLanguage && <Spinner type="small" />}
     </React.Fragment>
   );

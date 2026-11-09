@@ -45,11 +45,13 @@ class FileRender extends React.PureComponent<Props> {
 
   componentDidMount() {
     const { embedded } = this.props;
+// @ts-expect-error - TS2769 - No overload matches this call.
     window.addEventListener('keydown', this.escapeListener, true);
     analytics.playerLoadedEvent(embedded);
   }
 
   componentWillUnmount() {
+// @ts-expect-error - TS2769 - No overload matches this call.
     window.removeEventListener('keydown', this.escapeListener, true);
   }
 
@@ -92,6 +94,7 @@ class FileRender extends React.PureComponent<Props> {
           />
         );
       case RENDER_MODES.IMAGE:
+// @ts-expect-error - TS2322 - Type '{ uri: string; source: string; }' is not assignable to type 'IntrinsicAttributes & Props'.
         return <ImageViewer uri={uri} source={source} />;
       case RENDER_MODES.HTML:
         return <HtmlViewer source={downloadPath || source} />;
@@ -101,9 +104,11 @@ class FileRender extends React.PureComponent<Props> {
           <DocumentViewer
             source={{
               // @if TARGET='app'
+// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type 'BufferEncoding | ReadStreamOptions'.
               file: (options) => fs.createReadStream(downloadPath, options),
               // @endif
               stream: source,
+// @ts-expect-error - TS2322 - Type '{ file: (options: string) => ReadStream; stream: string; fileExtension: string; contentType: string; }' is not assignable to type '{ file: (arg1?: string) => any; stream: string; contentType: string; }'.
               fileExtension,
               contentType,
             }}
@@ -122,6 +127,7 @@ class FileRender extends React.PureComponent<Props> {
               fileType: fileExtension,
               downloadPath,
             }}
+            // @ts-expect-error - TS2322 (ts-migration)
             theme={currentTheme}
           />
         );
@@ -130,6 +136,7 @@ class FileRender extends React.PureComponent<Props> {
           <ComicBookViewer
             source={{
               // @if TARGET='app'
+// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type 'BufferEncoding | ReadStreamOptions'.
               file: (options) => fs.createReadStream(downloadPath, options),
               // @endif
               stream: source,
@@ -138,6 +145,7 @@ class FileRender extends React.PureComponent<Props> {
           />
         );
       case RENDER_MODES.APPLICATION:
+        // @ts-expect-error - TS2322 (ts-migration)
         return <AppViewer uri={uri} />;
     }
 
@@ -150,6 +158,7 @@ class FileRender extends React.PureComponent<Props> {
     return (
       <div
         className={classnames('file-render', className, {
+// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"document" | "md" | "pdf" | "html" | "docx" | "plain_text"'.
           'file-render--document': RENDER_MODES.TEXT_MODES.includes(renderMode),
           'file-render--embed': embedded,
           'file-render--video': renderMode === RENDER_MODES.VIDEO || renderMode === RENDER_MODES.AUDIO,

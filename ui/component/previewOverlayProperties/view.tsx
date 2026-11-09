@@ -16,7 +16,7 @@ type Props = {
   isSubscribed: boolean,
   small: boolean,
   claim: Claim,
-  properties?: (arg1: Claim) => Node | null | undefined,
+  properties?: (arg1: Claim) => React.ReactNode | null | undefined,
   iconOnly: boolean,
   editedCollection: Collection
 };
@@ -34,6 +34,7 @@ export default function PreviewOverlayProperties(props: Props) {
     editedCollection,
   } = props;
   const isCollection = claim && claim.value_type === 'collection';
+// @ts-expect-error - TS2339 - Property 'claims' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'. | TS2339 - Property 'claims' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
   const claimLength = claim && claim.value && claim.value.claims && claim.value.claims.length;
 
   const claimCount = editedCollection ? editedCollection.items.length : claimLength;
@@ -50,6 +51,7 @@ export default function PreviewOverlayProperties(props: Props) {
         properties(claim)
       ) : (
         <>
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           {!isStream && <ClaimType uri={uri} small={small} />}
           {editedCollection && (
             <Icon
@@ -61,6 +63,7 @@ export default function PreviewOverlayProperties(props: Props) {
             />
           )}
           {isCollection && claim && !iconOnly && <div>{claimCount}</div>}
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           {!iconOnly && isStream && <VideoDuration uri={uri} />}
           {isStream && <FileType uri={uri} small={small} />}
           {isSubscribed && !isCollection && <Icon tooltip size={size} icon={ICONS.SUBSCRIBE} />}

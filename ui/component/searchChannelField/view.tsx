@@ -50,6 +50,7 @@ export default function SearchChannelField(props: Props) {
         }
       }
     } else {
+// @ts-expect-error - TS2345 - Argument of type '{ message: string; isError: boolean; }' is not assignable to parameter of type '{ message: string; }'.
       doToast({ message: __('Invalid channel URL "%url%"', { url: newTags[0].name }), isError: true });
     }
   }
@@ -74,7 +75,9 @@ export default function SearchChannelField(props: Props) {
 
   function handleKeyPress(e: unknown) {
     // We have to use 'key' instead of 'keyCode' in this event.
+// @ts-expect-error - TS2339 - Property 'key' does not exist on type 'unknown'.
     if (e.key === 'Enter' && addTagRef && addTagRef.current && addTagRef.current.click) {
+// @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
       e.preventDefault();
       addTagRef.current.click();
     }
@@ -82,7 +85,9 @@ export default function SearchChannelField(props: Props) {
 
   function getFoundChannelRenderActionsFn() {
     function handleFoundChannelClick(claim: unknown) {
+// @ts-expect-error - TS2339 - Property 'name' does not exist on type 'unknown'. | TS2339 - Property 'claim_id' does not exist on type 'unknown'.
       if (claim && claim.name && claim.claim_id) {
+// @ts-expect-error - TS2339 - Property 'name' does not exist on type 'unknown'. | TS2339 - Property 'claim_id' does not exist on type 'unknown'.
         addTag([{ name: claim.name + '#' + claim.claim_id }]);
         clearSearchTerm();
       }
@@ -92,6 +97,7 @@ export default function SearchChannelField(props: Props) {
       return (
         <Button
           ref={addTagRef}
+          // @ts-expect-error - TS2322 (ts-migration)
           button="primary"
           label={labelFoundAction}
           onClick={() => handleFoundChannelClick(claim)}
@@ -133,6 +139,7 @@ export default function SearchChannelField(props: Props) {
         label={label}
         labelAddNew={labelAddNew}
         tagsPassedIn={values.map((x) => ({ name: x }))}
+        // @ts-expect-error - TS2322 (ts-migration)
         onSelect={addTag}
         onRemove={removeTag}
         disableAutoFocus
@@ -145,6 +152,7 @@ export default function SearchChannelField(props: Props) {
         <FormField
           type="text"
           name="moderator_search"
+          // @ts-expect-error - TS2322 (ts-migration)
           className="form-field--address"
           label={
             <>

@@ -65,6 +65,7 @@ export default function TagsSearch(props: Props) {
   const [newTag, setNewTag] = useState('');
   const doesTagMatch = (name: unknown) => {
     const nextTag = newTag.slice(newTag.lastIndexOf(',') + 1, newTag.length).trim();
+// @ts-expect-error - TS2339 - Property 'toLowerCase' does not exist on type 'unknown'.
     return newTag ? name.toLowerCase().includes(nextTag.toLowerCase()) : true;
   };
 
@@ -97,10 +98,12 @@ export default function TagsSearch(props: Props) {
   }
 
   function onChange(e: unknown) {
+// @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
     setNewTag(e.target.value);
   }
 
   function handleSubmit(e: unknown) {
+// @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
     e.preventDefault();
     let tags = newTag.trim();
 
@@ -125,6 +128,7 @@ export default function TagsSearch(props: Props) {
       const arrOfObjectTags = newTagsArr.map((tag) => {
         return { name: tag };
       });
+      // @ts-expect-error - TS2741 (ts-migration)
       onSelect(arrOfObjectTags);
     } else {
       newTagsArr.forEach((tag) => {
@@ -141,6 +145,7 @@ export default function TagsSearch(props: Props) {
 
   function handleTagClick(tag: string) {
     if (onSelect) {
+      // @ts-expect-error - TS2741 (ts-migration)
       onSelect([{ name: tag }]);
     } else {
       const wasFollowing = followedTags.map((t) => t.name).includes(tag);
@@ -153,16 +158,21 @@ export default function TagsSearch(props: Props) {
     if (selectedTag) {
       onRemove(selectedTag);
     } else if (onSelect) {
+      // @ts-expect-error - TS2741 (ts-migration)
       onSelect([{ name: tag }]);
     }
   }
   return (
     <React.Fragment>
+{ /* @ts-expect-error - TS2769 - No overload matches this call. */}
       <Form className="tags__input-wrapper" onSubmit={handleSubmit}>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
         <fieldset-section>
           <label>
             {limitSelect < TAG_FOLLOW_MAX ? (
+              // @ts-expect-error - TS2745 (ts-migration)
               <I18nMessage
+                // @ts-expect-error - TS2322 (ts-migration)
                 tokens={{
                   number: limitSelect - countWithoutSpecialTags,
                   selectTagsLabel: label,
@@ -178,8 +188,10 @@ export default function TagsSearch(props: Props) {
             {countWithoutSpecialTags === 0 && <Tag key={`placeholder-tag`} name={'example'} disabled type={'remove'} />}
             {Boolean(tagsPassedIn.length) &&
               tagsPassedIn
+                // @ts-expect-error - TS2345 (ts-migration)
                 .filter((t) => !INTERNAL_TAGS.includes(t.name))
                 .map((tag) => (
+                  // @ts-expect-error - TS2741 (ts-migration)
                   <Tag
                     key={`passed${tag.name}`}
                     name={tag.name}
@@ -193,6 +205,7 @@ export default function TagsSearch(props: Props) {
           {!hideInputField && (
             <FormField
               autoFocus={!disableAutoFocus}
+// @ts-expect-error - TS2322 - Type '{ autoFocus: boolean; className: string; onChange: (e: unknown) => void; placeholder: string; type: string; value: string; disabled: boolean; label: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
               className="tag__input"
               onChange={onChange}
               placeholder={placeholder || __('gaming, crypto')}
@@ -219,18 +232,22 @@ export default function TagsSearch(props: Props) {
                   <Tag
                     disabled={tag !== 'mature' && maxed}
                     key={`suggested${tag}`}
+                    // @ts-expect-error - TS2322 (ts-migration)
                     name={tag}
                     type="add"
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
                     onClick={() => handleTagClick(tag)}
                   />
                 ))}
               </ul>
             </section>
           )}
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
         </fieldset-section>
         {experimentalFeature &&
           !disableControlTags &&
           onSelect && ( // onSelect ensures this does not appear on TagFollow
+// @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'.
             <fieldset-section>
               <label>{__('Control Tags')}</label>
               {CONTROL_TAGS.map((t) => (
@@ -246,10 +263,12 @@ export default function TagsSearch(props: Props) {
                       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
                       .join(' ')
                   )}
+// @ts-expect-error - TS2322 - Type '{ key: "c:disable-comments" | "disable-support" | "c:preference-embed"; name: "c:disable-comments" | "disable-support" | "c:preference-embed"; type: string; blockWrap: false; label: string; checked: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                   checked={tagsPassedIn.some((te) => te.name === t)}
                   onChange={() => handleUtilityTagCheckbox(t)}
                 />
               ))}
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
             </fieldset-section>
           )}
       </Form>

@@ -2,7 +2,7 @@
 import {useEffect, useState} from 'react';
 
 const getProgress = (elapsed: unknown, duration: unknown) => Math.min(elapsed / duration, 1);
-const easeOut = progress: unknown => Math.pow(progress - 1, 5) + 1;
+const easeOut = (progress: unknown) => Math.pow(progress - 1, 5) + 1;
 
 export default function useTween(duration: unknown, onRest: unknown) {
   const [value, setValue] = useState(0);
@@ -12,7 +12,7 @@ export default function useTween(duration: unknown, onRest: unknown) {
     let elapsed = 0;
     let frame;
 
-    const tick = now: unknown => {
+    const tick = (now: unknown) => {
       elapsed = now - start;
       const progress = getProgress(elapsed, duration);
       setValue(easeOut(progress));

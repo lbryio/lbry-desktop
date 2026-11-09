@@ -15,6 +15,7 @@ type Props = {
 
 export default function Tag(props: Props) {
   const { name, onClick, type = 'link', disabled = false } = props;
+// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"porn" | "porno" | "nsfw" | "mature" | "xxx" | "sex" | "creampie" | "blowjob" | "handjob" | "vagina" | "boobs" | "big boobs" | "big dick" | "pussy" | "cumshot" | "anal" | "hard fucking" | "ass" | "fuck" | "hentai"'.
   const isMature = MATURE_TAGS.includes(name);
   const clickProps = onClick ? { onClick } : { navigate: `/$/${PAGES.DISCOVER}?t=${encodeURIComponent(name)}` };
 
@@ -33,6 +34,7 @@ export default function Tag(props: Props) {
   return (
     <Button
       {...clickProps}
+      // @ts-expect-error - TS2322 (ts-migration)
       disabled={disabled}
       title={title}
       className={classnames('tag', {

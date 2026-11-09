@@ -4,7 +4,9 @@ import videojs from 'video.js';
 class TheaterModeButton extends videojs.getComponent('Button') {
   constructor(player: unknown, options = {}) {
     super(player, options);
+// @ts-expect-error - TS2339 - Property 'addClass' does not exist on type 'TheaterModeButton'.
     this.addClass('vjs-button--theater-mode');
+// @ts-expect-error - TS2339 - Property 'controlText' does not exist on type 'TheaterModeButton'.
     this.controlText('Theater Mode');
   }
 }

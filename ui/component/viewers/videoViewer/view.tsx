@@ -97,6 +97,7 @@ function VideoViewer(props: Props) {
   const permanentUrl = claim && claim.permanent_url;
   const claimId = claim && claim.claim_id;
   const isAudio = contentType.includes('audio');
+// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"video/quicktime" | "application/x-ext-mkv" | "video/x-matroska" | "video/x-ms-wmv" | "video/x-msvideo" | "video/mpeg" | "video/m4v" | "audio/ogg" | "application/x-ext-ogg" | "application/x-ext-m4a"'.
   const forcePlayer = FORCE_CONTENT_TYPE_PLAYER.includes(contentType);
   const { push } = useHistory();
   const [doNavigate, setDoNavigate] = useState(false);
@@ -113,6 +114,7 @@ function VideoViewer(props: Props) {
   const [videoNode, setVideoNode] = useState();
 
   const updateVolumeState = React.useCallback(
+// @ts-expect-error - TS2554 - Expected 3 arguments, but got 2.
     debounce((volume, muted) => {
       changeVolume(volume);
       changeMute(muted);
@@ -208,11 +210,13 @@ function VideoViewer(props: Props) {
       }
     } else {
       if (videoNode) {
+// @ts-expect-error - TS2339 - Property 'currentTime' does not exist on type 'never'.
         const currentTime = videoNode.currentTime;
 
         if (currentTime <= 5) {
           if (previousListUri && permanentUrl !== previousListUri) doPlay(previousListUri);
         } else {
+// @ts-expect-error - TS2339 - Property 'currentTime' does not exist on type 'never'.
           videoNode.currentTime = 0;
         }
         setDoNavigate(false);
@@ -270,20 +274,24 @@ function VideoViewer(props: Props) {
   }
 
   function handlePosition(player: unknown) {
+// @ts-expect-error - TS2339 - Property 'currentTime' does not exist on type 'unknown'.
     const currTime = player.currentTime();
     const durationInSeconds = claim.value.video && claim.value.video.duration;
     if (Number(durationInSeconds) > Number(currTime)) {
+// @ts-expect-error - TS2339 - Property 'currentTime' does not exist on type 'unknown'.
       savePosition(uri, player.currentTime());
     }
   }
 
   function restorePlaybackRate(player: unknown) {
     if (!vjsCallbackDataRef.current.embedded) {
+// @ts-expect-error - TS2339 - Property 'playbackRate' does not exist on type 'unknown'.
       player.playbackRate(vjsCallbackDataRef.current.videoPlaybackRate);
     }
   }
 
   const playerReadyDependencyList = [uri];
+// @ts-expect-error - TS2345 - Argument of type 'number' is not assignable to parameter of type 'string'.
   playerReadyDependencyList.push(desktopPlayStartTime);
 
   const doPlayNext = () => {
@@ -313,7 +321,7 @@ function VideoViewer(props: Props) {
 
     // https://blog.videojs.com/autoplay-best-practices-with-video-js/#Programmatic-Autoplay-and-Success-Failure-Detection
     const playPromise = player.play();
-    const timeoutPromise = new Promise((resolve: unknown, reject: unknown) =>
+    const timeoutPromise = new Promise<any>((resolve, reject) =>
       setTimeout(() => reject(PLAY_TIMEOUT_ERROR), PLAY_TIMEOUT_LIMIT)
     );
 
@@ -337,9 +345,11 @@ function VideoViewer(props: Props) {
     player.on('loadedmetadata', () => restorePlaybackRate(player));
 
     // used for tracking buffering for watchman
+// @ts-expect-error - TS2345 - Argument of type '(e: Event, data: any) => void' is not assignable to parameter of type '(arg1?: any) => void'.
     player.on('tracking:buffered', doTrackingBuffered);
 
     // first play tracking, used for initializing the watchman api
+// @ts-expect-error - TS2345 - Argument of type '(e: Event, data: any) => void' is not assignable to parameter of type '(arg1?: any) => void'.
     player.on('tracking:firstplay', doTrackingFirstPlay);
     player.on('ended', () => setEnded(true));
     player.on('play', onPlay);
@@ -354,6 +364,7 @@ function VideoViewer(props: Props) {
     });
     player.on('volumechange', () => {
       if (player) {
+// @ts-expect-error - TS2554 - Expected 0 arguments, but got 2.
         updateVolumeState(player.volume(), player.muted());
       }
     });

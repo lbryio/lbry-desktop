@@ -34,8 +34,10 @@ const VideoJsFunctions = ({
           },
         ];
 
+// @ts-expect-error - TS2349 - This expression is not callable.
         return res(videoJsOptions);
       } catch (error: any) {
+// @ts-expect-error - TS2349 - This expression is not callable.
         return rej(error);
       }
     });

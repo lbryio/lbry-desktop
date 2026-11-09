@@ -42,6 +42,7 @@ function CollectionSelectItem(props: Props) {
     <div className={'collection-select__item'}>
       <FormField
         checked={hasClaim}
+// @ts-expect-error - TS2322 - Type 'Collection' is not assignable to type 'boolean'.
         disabled={collectionPending}
         icon={icon}
         type="checkbox"

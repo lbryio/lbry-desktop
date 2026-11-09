@@ -72,6 +72,7 @@ function UserPasswordReset(props: Props) {
         title={__('Reset your password')}
         actions={
           <div>
+{ /* @ts-expect-error - TS2769 - No overload matches this call. */}
             <Form onSubmit={handleSubmit} className="section">
               <FormField
                 autoFocus
@@ -79,6 +80,7 @@ function UserPasswordReset(props: Props) {
                 placeholder={__('yourstruly@example.com')}
                 type="email"
                 name="sign_in_email"
+// @ts-expect-error - TS2322 - Type '{ autoFocus: true; disabled: boolean; placeholder: string; type: string; name: string; id: string; autoComplete: string; label: string; value: string; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 id="username"
                 autoComplete="on"
                 label={__('Email')}
@@ -88,12 +90,15 @@ function UserPasswordReset(props: Props) {
 
               <div className="section__actions">
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   button="primary"
                   type="submit"
                   label={passwordResetPending ? __('Resetting') : __('Reset Password')}
                   disabled={!email || !valid || passwordResetPending || passwordResetSuccess}
                 />
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <Button button="link" label={__('Cancel')} onClick={handleRestart} />
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 {passwordResetPending && <Spinner type="small" />}
               </div>
             </Form>

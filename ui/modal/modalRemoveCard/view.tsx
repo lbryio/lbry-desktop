@@ -17,6 +17,7 @@ export default function ModalRemoveCard(props: Props) {
   const { closeModal, paymentMethodId } = props;
 
   function removeCard() {
+    // @ts-expect-error - TS2339 (ts-migration)
     Lbryio.call(
       'customer',
       'detach',
@@ -34,18 +35,21 @@ export default function ModalRemoveCard(props: Props) {
   }
 
   return (
+// @ts-expect-error - TS2322 - Type '{ children: Element; ariaHideApp: boolean; isOpen: true; contentLabel: string; type: string; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
     <Modal ariaHideApp={false} isOpen contentLabel={'hello'} type="card" onAborted={closeModal}>
       <Card
         title={__('Confirm Remove Card')}
         actions={
           <div className="section__actions">
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               className="stripe__confirm-remove-card"
               button="secondary"
               icon={ICONS.DELETE}
               label={__('Remove Card')}
               onClick={removeCard}
             />
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <Button button="link" label={__('Cancel')} onClick={closeModal} />
           </div>
         }

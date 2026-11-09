@@ -15,6 +15,7 @@ function SettingEnablePrereleases(props: Props) {
         onChange={() => {
           setClientSetting(!enablePrereleases);
         }}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; onChange: () => void; checked: boolean; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
         checked={enablePrereleases}
       />
     </React.Fragment>

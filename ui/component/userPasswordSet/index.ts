@@ -4,7 +4,7 @@ import { doClearEmailEntry, doUserFetch } from 'redux/actions/user';
 import { doToast } from 'redux/actions/notifications';
 import UserSignIn from './view';
 
-const select = state: unknown => ({
+const select = (state: unknown) => ({
   // passwordSetSuccess: selectPasswordSetSuccess(state),
   // passwordSetIsPending: selectPasswordSetIsPending(state),
   // passwordSetError: selectPasswordSetError(state),

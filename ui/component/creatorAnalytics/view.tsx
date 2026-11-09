@@ -38,6 +38,7 @@ export default function CreatorAnalytics(props: Props) {
   React.useEffect(() => {
     if (claimId && channelForEffect && channelHasClaims) {
       setFetchingStats(true);
+      // @ts-expect-error - TS2339 (ts-migration)
       Lbryio.call('reports', 'content', { claim_id: claimId })
         .then((res) => {
           setFetchingStats(false);
@@ -89,6 +90,7 @@ export default function CreatorAnalytics(props: Props) {
                   actions={
                     <div className="section__actions">
                       <Button
+                        // @ts-expect-error - TS2322 (ts-migration)
                         button="primary"
                         label={__('Upload Something')}
                         onClick={() => {
@@ -108,6 +110,7 @@ export default function CreatorAnalytics(props: Props) {
                   actions={
                     <div className="section__actions">
                       <Button
+                        // @ts-expect-error - TS2322 (ts-migration)
                         button="primary"
                         label={__('Upload Something')}
                         onClick={() => history.push(`/$/${PAGES.UPLOAD}`)}
@@ -125,6 +128,7 @@ export default function CreatorAnalytics(props: Props) {
         <div className="section">
           <div className="columns">
             <Card
+              // @ts-expect-error - TS2322 (ts-migration)
               iconColor
               title={<span>{__('%follower_count% followers', { follower_count: stats.ChannelSubs })}</span>}
               icon={ICONS.SUBSCRIBE}
@@ -215,6 +219,7 @@ export default function CreatorAnalytics(props: Props) {
               actions={
                 <div className="section__actions">
                   <Button
+                    // @ts-expect-error - TS2322 (ts-migration)
                     button="primary"
                     icon={ICONS.PUBLISH}
                     label={__('Upload')}

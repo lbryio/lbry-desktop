@@ -7,8 +7,10 @@ import { setSavedPassword } from 'util/saved-passwords';
 type Props = {
   closeModal: () => void,
   walletEncryptSucceded: boolean,
+// @ts-expect-error - TS2300 - Duplicate identifier 'updateWalletStatus'.
   updateWalletStatus: boolean,
   encryptWallet: (arg1?: string | null | undefined) => void,
+// @ts-expect-error - TS2300 - Duplicate identifier 'updateWalletStatus'. | TS2717 - Subsequent property declarations must have the same type.  Property 'updateWalletStatus' must be of type 'boolean', but here has type '() => void'.
   updateWalletStatus: () => void
 };
 
@@ -43,6 +45,7 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
     if (state.submitted) {
       if (props.walletEncryptSucceded === true) {
         props.closeModal();
+// @ts-expect-error - TS2349 - This expression is not callable.
         props.updateWalletStatus();
       } else if (props.walletEncryptSucceded === false) {
         // See https://github.com/lbryio/lbry/issues/1307
@@ -104,6 +107,7 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
     const { passwordMismatch, understandError, failMessage } = this.state;
     return (
       <Modal
+// @ts-expect-error - TS2322 - Type '{ children: Element[]; isOpen: true; title: string; contentLabel: string; type: string; onConfirmed: () => void; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
         isOpen
         title={__('Encrypt wallet')}
         contentLabel={__('Encrypt wallet')}
@@ -116,8 +120,10 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
             {__(
               'Encrypting your wallet will require a password to access your local wallet data when LBRY starts. Please enter a new password for your wallet.'
             )}{' '}
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />.
           </p>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
           <fieldset-section>
             <FormField
               autoFocus
@@ -128,7 +134,9 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
               name="wallet-new-password"
               onChange={(event) => this.onChangeNewPassword(event)}
             />
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
           </fieldset-section>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
           <fieldset-section>
             <FormField
               error={passwordMismatch === true ? 'Passwords do not match' : false}
@@ -138,15 +146,19 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
               name="wallet-new-password-confirm"
               onChange={(event) => this.onChangeNewPasswordConfirm(event)}
             />
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
           </fieldset-section>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
           <fieldset-section>
             <FormField
               label={__('Remember Password')}
               type="checkbox"
               name="wallet-remember-password"
               onChange={(event) => this.onChangeRememberPassword(event)}
+// @ts-expect-error - TS2322 - Type '{ label: string; type: string; name: string; onChange: (event: any) => void; checked: boolean; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
               checked={this.state.rememberPassword}
             />
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
           </fieldset-section>
 
           <div className="help--warning">
@@ -155,6 +167,7 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
             )}
           </div>
           <FormField
+// @ts-expect-error - TS2769 - No overload matches this call.
             inputButton={<Submit label={failMessage ? __('Encrypting Wallet') : __('Encrypt wallet')} />}
             error={
               understandError === true
@@ -170,6 +183,7 @@ class ModalWalletEncrypt extends React.PureComponent<Props, State> {
           {failMessage && <div className="error__text">{__(failMessage)}</div>}
         </Form>
         <div className="card__actions">
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <Button button="link" label={__('Cancel')} onClick={closeModal} />
         </div>
       </Modal>

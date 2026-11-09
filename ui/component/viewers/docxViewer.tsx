@@ -40,6 +40,7 @@ class DocxViewer extends React.PureComponent<Props, State> {
 
     // Parse docx to html
     mammoth
+      // @ts-expect-error - TS2345 (ts-migration)
       .convertToHtml({ path: source }, options)
       .then(result => {
         this.setState({ content: result.value, loading: false });
@@ -47,6 +48,7 @@ class DocxViewer extends React.PureComponent<Props, State> {
       .catch(() => {
         this.setState({ error: true, loading: false });
       })
+      // @ts-expect-error - TS2339 (ts-migration)
       .done();
   }
 

@@ -44,6 +44,7 @@ class ModalConfirmTransaction extends React.PureComponent<Props> {
     const activeChannelUrl = activeChannelClaim && activeChannelClaim.canonical_url;
     const title = __('Confirm Transaction');
     return (
+// @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; contentLabel: string; type: string; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
       <Modal isOpen contentLabel={title} type="card" onAborted={closeModal}>
         <Form onSubmit={() => this.onConfirmed()}>
           <Card
@@ -79,7 +80,9 @@ class ModalConfirmTransaction extends React.PureComponent<Props> {
             actions={
               <>
                 <div className="section__actions">
+                  {/* @ts-expect-error - TS2322 (ts-migration) */}
                   <Button autoFocus button="primary" label={__('Send')} onClick={() => this.onConfirmed()} />
+                  {/* @ts-expect-error - TS2322 (ts-migration) */}
                   <Button button="link" label={__('Cancel')} onClick={closeModal} />
                 </div>
                 <p className="help">{__('Once the transaction is sent, it cannot be reversed.')}</p>

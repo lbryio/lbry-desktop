@@ -1,4 +1,3 @@
-//@ts-nocheck
 /* eslint-disable no-console */
 const { WEBPACK_ELECTRON_PORT } = require('../config');
 const chalk = require('chalk');

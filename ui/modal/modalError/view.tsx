@@ -20,6 +20,7 @@ class ModalError extends React.PureComponent<Props> {
     const failedToDownloadError = errorMessage.startsWith('Failed to download');
 
     if (process.env.NODE_ENV === 'production' && !failedToDownloadError) {
+      // @ts-expect-error - TS2339 (ts-migration)
       Lbryio.call('event', 'desktop_error', { error_message: JSON.stringify(error) });
     }
   }
@@ -42,6 +43,7 @@ class ModalError extends React.PureComponent<Props> {
     for (const key of Object.keys(errorObj)) {
       const val = typeof errorObj[key] === 'string' ? errorObj[key] : JSON.stringify(errorObj[key]);
       const label = errorKeyLabels[key];
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       errorInfoList.push(
         <li key={key}>
           <strong>{label}</strong>: {val}
@@ -50,6 +52,7 @@ class ModalError extends React.PureComponent<Props> {
     }
 
     return (
+// @ts-expect-error - TS2322 - Type '{ children: Element[]; isOpen: true; contentLabel: string; title: string; className: string; onConfirmed: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
       <Modal isOpen contentLabel={__('Error')} title={__('Error')} className="error-modal" onConfirmed={closeModal}>
         <p>
           {__(

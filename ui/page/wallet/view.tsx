@@ -29,6 +29,7 @@ const WalletPage = (props: Props) => {
   const loading = totalBalance === undefined;
 
   return (
+    // @ts-expect-error - TS2740 (ts-migration)
     <Page>
       {loading && (
         <div className="main--empty">
@@ -41,6 +42,7 @@ const WalletPage = (props: Props) => {
             <YrblWalletEmpty includeWalletLink />
           ) : (
             <div className="card-stack">
+              {/* @ts-expect-error - TS2741 (ts-migration) */}
               <WalletBalance />
               <TxoList search={search} />
             </div>

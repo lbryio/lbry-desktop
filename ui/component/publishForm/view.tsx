@@ -197,6 +197,7 @@ function PublishForm(props: Props) {
     (myClaimForUri && myClaimForUri.signing_channel && myClaimForUri.signing_channel.claim_id) ||
     (activeChannelClaim && activeChannelClaim.claim_id);
 
+// @ts-expect-error - TS2367 - This condition will always return 'true' since the types 'string' and 'boolean' have no overlap.
   const nameEdited = isStillEditing && name !== prevName;
   const thumbnailUploaded = uploadThumbnailStatus === THUMBNAIL_STATUSES.COMPLETE && thumbnail;
 
@@ -247,6 +248,7 @@ function PublishForm(props: Props) {
       submitLabel = __('Uploading...');
     }
   } else if (previewing) {
+    // @ts-expect-error - TS2322 (ts-migration)
     submitLabel = <Spinner type="small" />;
   } else {
     if (isStillEditing) {
@@ -271,8 +273,11 @@ function PublishForm(props: Props) {
 
   // Save previous name of the editing claim
   useEffect(() => {
+// @ts-expect-error - TS2367 - This condition will always return 'false' since the types 'boolean' and 'string' have no overlap. | TS2339 - Property 'trim' does not exist on type 'true'.
     if (isStillEditing && (!prevName || !prevName.trim() === '')) {
+// @ts-expect-error - TS2367 - This condition will always return 'true' since the types 'string' and 'boolean' have no overlap.
       if (name !== prevName) {
+// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type 'SetStateAction<boolean>'.
         setPrevName(name);
       }
     }
@@ -292,6 +297,7 @@ function PublishForm(props: Props) {
     // We are only going to store the full uri, but we need to resolve the uri with and without the channel name
     let uri;
     try {
+// @ts-expect-error - TS2345 - Argument of type '{ streamName: string; activeChannelName: string; }' is not assignable to parameter of type 'LbryUrlObj'.
       uri = name && buildURI({ streamName: name, activeChannelName });
     } catch (e: any) {}
 
@@ -375,7 +381,8 @@ function PublishForm(props: Props) {
     // Create a temporary file and save file changes
     if (output && output !== '') {
       // Save file changes
-      return new Promise((resolve: unknown, reject: unknown) => {
+      return new Promise<any>((resolve, reject) => {
+// @ts-expect-error - TS2345 - Argument of type '(error: any, data: any) => void' is not assignable to parameter of type 'NoParamCallback'.
         fs.writeFile(output, fileText, (error, data) => {
           // Handle error, cant save changes or create file
           error ? reject(error) : resolve(output);
@@ -457,6 +464,7 @@ function PublishForm(props: Props) {
   // Editing claim uri
   return (
     <div className="card-stack">
+      {/* @ts-expect-error - TS2322 (ts-migration) */}
       <ChannelSelect disabled={disabled} />
 
       <PublishFile
@@ -464,6 +472,7 @@ function PublishForm(props: Props) {
         mode={mode}
         fileMimeType={fileMimeType}
         disabled={disabled || publishing}
+        // @ts-expect-error - TS2322 (ts-migration)
         inProgress={isInProgress}
         setPublishMode={setMode}
         setPrevFileText={setPrevFileText}
@@ -475,6 +484,7 @@ function PublishForm(props: Props) {
             {AVAILABLE_MODES.map((modeName) => (
               <Button
                 key={String(modeName)}
+                // @ts-expect-error - TS2322 (ts-migration)
                 icon={modeName}
                 iconSize={18}
                 label={__(MODE_TO_I18N_STR[String(modeName)] || '---')}
@@ -492,6 +502,7 @@ function PublishForm(props: Props) {
       {!publishing && (
         <div className={classnames({ 'card--disabled': formDisabled })}>
           {mode !== PUBLISH_MODES.POST && <PublishDescription disabled={formDisabled} />}
+{ /* @ts-expect-error - TS2322 - Type 'Element' is not assignable to type 'string | React.ReactNode'. */}
           <Card actions={<SelectThumbnail />} />
           <label>{__('Tags')}</label>
           <TagsSelect
@@ -499,6 +510,7 @@ function PublishForm(props: Props) {
             disableAutoFocus
             hideHeader
             label={__('Selected Tags')}
+            // @ts-expect-error - TS2322 (ts-migration)
             empty={__('No tags added')}
             limitSelect={TAGS_LIMIT}
             help={__(
@@ -509,9 +521,11 @@ function PublishForm(props: Props) {
               const validatedTags: unknown = [];
               newTags.forEach((newTag) => {
                 if (!tags.some((tag) => tag.name === newTag.name)) {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
                   validatedTags.push(newTag);
                 }
               });
+// @ts-expect-error - TS2488 - Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
               updatePublishForm({ tags: [...tags, ...validatedTags] });
             }}
             onRemove={(clickedTag) => {
@@ -521,14 +535,17 @@ function PublishForm(props: Props) {
             tagsChosen={tags}
           />
 
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <PublishBid disabled={isStillEditing || formDisabled} />
           <PublishPrice disabled={formDisabled} />
+          {/* @ts-expect-error - TS2740 (ts-migration) */}
           <PublishAdditionalOptions disabled={formDisabled} />
         </div>
       )}
       <section>
         <div className="section__actions">
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             button="primary"
             onClick={handlePublish}
             label={submitLabel}
@@ -541,16 +558,21 @@ function PublishForm(props: Props) {
               previewing
             }
           />
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <Button button="link" onClick={clearPublish} label={__('New --[clears Publish Form]--')} />
         </div>
         <p className="help">
           {!formDisabled && !formValid ? (
+            // @ts-expect-error - TS2322 (ts-migration)
             <PublishFormErrors mode={mode} waitForFile={waitingForFile} />
           ) : (
+            // @ts-expect-error - TS2745 (ts-migration)
             <I18nMessage
+              // @ts-expect-error - TS2322 (ts-migration)
               tokens={{
                 lbry_terms_of_service: (
                   <Button
+                    // @ts-expect-error - TS2322 (ts-migration)
                     button="link"
                     href="https://www.lbry.com/termsofservice"
                     label={__('%site_name% Terms of Service', { site_name: SITE_NAME })}

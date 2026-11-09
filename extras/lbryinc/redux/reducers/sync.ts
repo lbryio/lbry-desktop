@@ -16,7 +16,7 @@ const defaultState = {
   hashChanged: false,
 } as const;
 
-reducers[ACTIONS.GET_SYNC_STARTED] = state: unknown =>
+reducers[ACTIONS.GET_SYNC_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
     getSyncIsPending: true,
     getSyncErrorMessage: null,
@@ -37,7 +37,7 @@ reducers[ACTIONS.GET_SYNC_FAILED] = (state: unknown, action: unknown) =>
     getSyncErrorMessage: action.data.error,
   });
 
-reducers[ACTIONS.SET_SYNC_STARTED] = state: unknown =>
+reducers[ACTIONS.SET_SYNC_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
     setSyncIsPending: true,
     setSyncErrorMessage: null,
@@ -57,14 +57,14 @@ reducers[ACTIONS.SET_SYNC_COMPLETED] = (state: unknown, action: unknown) =>
     syncHash: action.data.syncHash,
   });
 
-reducers[ACTIONS.SYNC_APPLY_STARTED] = state: unknown =>
+reducers[ACTIONS.SYNC_APPLY_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
     syncApplyPasswordError: false,
     syncApplyIsPending: true,
     syncApplyErrorMessage: '',
   });
 
-reducers[ACTIONS.SYNC_APPLY_COMPLETED] = state: unknown =>
+reducers[ACTIONS.SYNC_APPLY_COMPLETED] = (state: unknown) =>
   Object.assign({}, state, {
     syncApplyIsPending: false,
     syncApplyErrorMessage: '',
@@ -76,7 +76,7 @@ reducers[ACTIONS.SYNC_APPLY_FAILED] = (state: unknown, action: unknown) =>
     syncApplyErrorMessage: action.data.error,
   });
 
-reducers[ACTIONS.SYNC_APPLY_BAD_PASSWORD] = state: unknown =>
+reducers[ACTIONS.SYNC_APPLY_BAD_PASSWORD] = (state: unknown) =>
   Object.assign({}, state, {
     syncApplyPasswordError: true,
   });

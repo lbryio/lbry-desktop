@@ -40,6 +40,7 @@ export default function SettingStorage(props: Props) {
       <div className="card__title-section">
         <h2 className={classnames('card__title', { 'section__title--large': isWelcome })}>
           {isWelcome ? __('Custom Hosting') : __('Hosting')}
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           {(isSetting || isCleaning) && <Spinner type={'small'} />}
         </h2>
       </div>
@@ -50,6 +51,7 @@ export default function SettingStorage(props: Props) {
           <>
             <SettingsRow
               title={__('Enable Data Hosting')}
+              // @ts-expect-error - TS2322 (ts-migration)
               subtitle={
                 <React.Fragment>
                   {__('Help improve the P2P data network (and make LBRY users happy) by hosting data.')}
@@ -63,9 +65,11 @@ export default function SettingStorage(props: Props) {
               title={__('Viewed Hosting')}
               multirow
               disabled={!saveBlobs}
+              // @ts-expect-error - TS2322 (ts-migration)
               subtitle={
                 <React.Fragment>
                   {__("View History Hosting lets you choose how much storage to use hosting content you've consumed.")}{' '}
+                  {/* @ts-expect-error - TS2322 (ts-migration) */}
                   <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/host-content" />
                 </React.Fragment>
               }
@@ -76,9 +80,11 @@ export default function SettingStorage(props: Props) {
               title={__('Auto Hosting')}
               multirow
               disabled={!saveBlobs}
+              // @ts-expect-error - TS2322 (ts-migration)
               subtitle={
                 <React.Fragment>
                   {__('Automatic Hosting downloads a small portion of content active on the network.')}{' '}
+                  {/* @ts-expect-error - TS2322 (ts-migration) */}
                   <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/host-content" />
                 </React.Fragment>
               }

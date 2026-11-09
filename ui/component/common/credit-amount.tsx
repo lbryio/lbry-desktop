@@ -59,6 +59,7 @@ class CreditAmount extends React.PureComponent<Props> {
 
     function getAmountText(amount: number, isFiat?: boolean) {
       const fullPrice = formatFullPrice(amount, 2);
+// @ts-expect-error - TS2345 - Argument of type 'number' is not assignable to parameter of type 'string'.
       const isFree = parseFloat(amount) === 0;
       let formattedAmount;
 
@@ -96,6 +97,7 @@ class CreditAmount extends React.PureComponent<Props> {
 
     return (
       <span
+// @ts-expect-error - TS2322 - Type 'string | number' is not assignable to type 'string'.
         title={amount ? formatFullPrice(amount, 2) : ''}
         className={classnames(className, {
           'super-chat': superChat,

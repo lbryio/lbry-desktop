@@ -193,6 +193,7 @@ export const makeSelectFileRenderModeForUri = (uri: string) =>
 
 export const selectInsufficientCreditsForUri = (state: State, uri: string) => {
   const isMine = selectClaimIsMineForUri(state, uri);
+  // @ts-expect-error - TS2741 (ts-migration)
   const costInfo = selectCostInfoForUri(state, uri);
   const balance = selectBalance(state);
   return !isMine && costInfo && costInfo.cost > 0 && costInfo.cost > balance;

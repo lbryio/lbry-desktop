@@ -10,7 +10,7 @@ import LbcSymbol from 'component/common/lbc-symbol';
 type Props = {
   includeWalletLink: boolean,
   type?: string,
-  actions?: Node
+  actions?: React.ReactNode
 };
 export default function YrblHelp(props: Props) {
   const { includeWalletLink = false, type = 'sad' } = props;
@@ -23,11 +23,13 @@ export default function YrblHelp(props: Props) {
         subtitle={
           <div>
             <p>
+              {/* @ts-expect-error - TS2745, TS2322 (ts-migration) */}
               <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
                 You need %lbc% to create a channel and upload content.
               </I18nMessage>
             </p>
             <p>
+              {/* @ts-expect-error - TS2745, TS2322 (ts-migration) */}
               <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
                 Never fear though, there are tons of ways to earn %lbc%. You can earn or purchase %lbc%, or you can have
                 your friends send you some.
@@ -37,9 +39,11 @@ export default function YrblHelp(props: Props) {
         }
         actions={
           <div className="section__actions">
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <Button button="secondary" icon={ICONS.BUY} label={'Buy Credits'} navigate={`/$/${PAGES.BUY}`} />
             {includeWalletLink && (
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 icon={ICONS.RECEIVE}
                 button="secondary"
                 label={__('Your Address')}

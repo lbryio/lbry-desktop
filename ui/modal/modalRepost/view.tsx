@@ -18,9 +18,11 @@ class ModalRepost extends React.PureComponent<Props> {
     const { closeModal, uri, name, contentUri, setContentUri, repostUri, setRepostUri } = this.props;
 
     return (
+// @ts-expect-error - TS2322 - Type '{ children: Element; onAborted: () => void; isOpen: true; type: string; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
       <Modal onAborted={closeModal} isOpen type="card">
         <Card
           title={__('Repost')}
+// @ts-expect-error - TS2322 - Type 'Element' is not assignable to type 'string | Node'.
           actions={<RepostCreate isModal uri={uri} name={name} onCancel={closeModal} contentUri={contentUri} setContentUri={setContentUri} repostUri={repostUri} setRepostUri={setRepostUri} />}
         />
       </Modal>

@@ -2,6 +2,7 @@ import type {ReactNode} from 'react';
 import { getThumbnailCdnUrl } from 'util/thumbnail';
 import React from 'react';
 import FreezeframeWrapper from './FreezeframeWrapper';
+// @ts-expect-error - TS2792 - Cannot find module './placeholder.png'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import Placeholder from './placeholder.png';
 import { MISSING_THUMB_DEFAULT } from 'config';
 import classnames from 'classnames';
@@ -10,7 +11,7 @@ import Thumb from './thumb';
 type Props = {
   uri: string,
   thumbnail: string | null | undefined // externally sourced image,
-  children?: Node,
+  children?: React.ReactNode,
   allowGifs: boolean,
   claim: StreamClaim | null | undefined,
   doResolveUri: (arg1: string) => void,
@@ -54,6 +55,7 @@ function FileThumbnail(props: Props) {
 
   if (!allowGifs && isGif) {
     return (
+// @ts-expect-error - TS2322 - Type '{ children: (Node | Element)[]; src: string; className: any; }' is not assignable to type 'IntrinsicAttributes & Pick<unknown, never> & Pick<InferProps<{ src: Validator<string>; className: Validator<string>; }>, "src" | "className">'.
       <FreezeframeWrapper src={thumbnail} className={classnames('media__thumb', className)}>
         {children}
         {viewedBar}

@@ -42,6 +42,7 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
     }
 
     return (
+// @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; type: string; contentLabel: string; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
       <Modal isOpen type="card" contentLabel={__(contentLabel)} onAborted={handleClose}>
         <Card
           title={__('Success')}
@@ -57,6 +58,7 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
                     {__(
                       `Upload will continue in the background, please do not shut down immediately. Leaving the app running helps the network, thank you!`
                     )}{' '}
+                    {/* @ts-expect-error - TS2322 (ts-migration) */}
                     <Button button="link" href="https://lbry.com/faq/host-content" label={__('Learn More')} />
                   </React.Fragment>
                 </p>
@@ -66,6 +68,7 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
           actions={
             <div className="section__actions">
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="primary"
                 label={__('View My Uploads')}
                 onClick={() => {
@@ -74,6 +77,7 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
                   closeModal();
                 }}
               />
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="link" label={__('Close')} onClick={handleClose} />
             </div>
           }

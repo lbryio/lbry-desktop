@@ -33,6 +33,7 @@ function CollectionPreviewOverlay(props: Props) {
               if (index < 2) {
                 return (
                   <div key={item} className="collection-preview__overlay-grid-items">
+                    {/* @ts-expect-error - TS2739 (ts-migration) */}
                     <FileThumbnail uri={item} key={item} />
                   </div>
                 );

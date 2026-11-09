@@ -13,6 +13,7 @@ class ModalIncompatibleDaemon extends React.PureComponent<Props> {
 
     return (
       <Modal
+// @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; title: string; contentLabel: string; type: string; confirmButtonLabel: string; abortButtonLabel: string; onConfirmed: () => void; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
         isOpen
         title={__('Incompatible daemon')}
         contentLabel={__('Incompatible daemon running')}
@@ -28,6 +29,7 @@ class ModalIncompatibleDaemon extends React.PureComponent<Props> {
           )}{' '}
           {/* I noticed the period below could end up on a line by itself. This is probably not the ideal solution, but seems better than not adding this. */}
           <span style={{ whiteSpace: 'nowrap' }}>
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/incompatible-protocol-version" />
           </span>
         </p>

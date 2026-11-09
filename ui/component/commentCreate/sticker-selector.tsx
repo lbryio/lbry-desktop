@@ -1,3 +1,4 @@
+// @ts-expect-error - TS2882 (ts-migration)
 import 'scss/component/_sticker-selector.scss';
 import { FREE_GLOBAL_STICKERS, PAID_GLOBAL_STICKERS } from 'constants/stickers';
 import * as ICONS from 'constants/icons';
@@ -43,11 +44,13 @@ export default function StickerSelector(props: Props) {
         {rowStickers.map((sticker) => (
           <Button
             key={sticker.name}
+            // @ts-expect-error - TS2322 (ts-migration)
             title={sticker.name}
             button="alt"
             className="button--file-action"
             onClick={() => onSelect(sticker)}
           >
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <OptimizedImage src={sticker.url} waitLoad loading="lazy" />
             {sticker.price && sticker.price > 0 && (
               <CreditAmount superChatLight amount={sticker.price} size={2} isFiat />
@@ -77,6 +80,7 @@ export default function StickerSelector(props: Props) {
                 ((claimIsMine && linkProps.section !== 'Tips') || !claimIsMine) && (
                   <li key={linkProps.section}>
                     <Button
+                      // @ts-expect-error - TS2322 (ts-migration)
                       label={__(linkProps.section)}
                       title={__(linkProps.section)}
                       icon={linkProps.icon}

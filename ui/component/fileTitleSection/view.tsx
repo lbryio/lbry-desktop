@@ -38,10 +38,12 @@ function FileTitleSection(props: Props) {
     <>
       {!hasAcknowledgedSec && (
         <div className="notice-message">
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <Button button="close" icon={ICONS.REMOVE} onClick={() => setHasAcknowledgedSec(true)} />
           <h1 className="section__title">{__('Help LBRY Save Crypto')}</h1>
           <p className="section__subtitle">
             {__('The US government is attempting to destroy the cryptocurrency industry. Can you help?')}{' '}
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <Button label={__('Learn more and sign petition')} button="link" href="https://helplbrysavecrypto.com" />
           </p>
         </div>
@@ -62,6 +64,7 @@ function FileTitleSection(props: Props) {
         titleActions={<FilePrice uri={normalizeURI(uri)} type="filepage" />}
         body={
           <React.Fragment>
+            {/* @ts-expect-error - TS2741 (ts-migration) */}
             <ClaimInsufficientCredits uri={uri} />
             <FileSubtitle uri={uri} />
           </React.Fragment>
@@ -86,9 +89,12 @@ function FileTitleSection(props: Props) {
               <div>
                 {ENABLE_MATURE && (
                   <>
+                    {/* @ts-expect-error - TS2745 (ts-migration) */}
                     <I18nMessage
+                      // @ts-expect-error - TS2322 (ts-migration)
                       tokens={{
                         content_settings: (
+                          // @ts-expect-error - TS2322 (ts-migration)
                           <Button button="link" label={__('content settings')} navigate={`/$/${PAGES.SETTINGS}`} />
                         ),
                       }}
@@ -99,8 +105,11 @@ function FileTitleSection(props: Props) {
                 )}
                 {!ENABLE_MATURE && (
                   <>
+                    {/* @ts-expect-error - TS2745 (ts-migration) */}
                     <I18nMessage
+                      // @ts-expect-error - TS2322 (ts-migration)
                       tokens={{
+                        // @ts-expect-error - TS2322 (ts-migration)
                         download_url: <Button label={__('lbry.com')} button="link" href="https://lbry.com/get" />,
                       }}
                     >
@@ -113,7 +122,9 @@ function FileTitleSection(props: Props) {
             </div>
           ) : (
             <div className="section">
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <ClaimAuthor channelSubCount={subCount} uri={uri} />
+              {/* @ts-expect-error - TS2741 (ts-migration) */}
               <FileDescription uri={uri} />
             </div>
           )

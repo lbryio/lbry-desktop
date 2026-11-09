@@ -2,7 +2,7 @@
 import {connect} from 'react-redux';
 import i18n from './view';
 
-const select = state: unknown => ({});
+const select = (state: unknown) => ({});
 
 const perform = () => ({});
 

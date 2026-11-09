@@ -34,6 +34,7 @@ const PublishReleaseDate = (props: Props) => {
 
   const onDateTimePickerChanged = (value: unknown) => {
     if (value) {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string | Date'.
       newDate(value);
     } else {
       // "!value" should never happen since we now hide the "clear" button,
@@ -82,6 +83,7 @@ const PublishReleaseDate = (props: Props) => {
         {showDatePicker && (
           <DateTimePicker
             className="date-picker-input"
+            // @ts-expect-error - TS2322 (ts-migration)
             calendarClassName="form-field-calendar"
             onChange={onDateTimePickerChanged}
             value={date}
@@ -93,6 +95,7 @@ const PublishReleaseDate = (props: Props) => {
         )}
         {showEditBtn && (
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             button="link"
             label={__('Edit')}
             aria-label={__('Set custom release date')}
@@ -101,6 +104,7 @@ const PublishReleaseDate = (props: Props) => {
         )}
         {showDatePicker && isEdit && releaseTime && (
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             button="link"
             label={__('Reset')}
             aria-label={__('Reset to original (previous) publish date')}
@@ -109,6 +113,7 @@ const PublishReleaseDate = (props: Props) => {
         )}
         {showDatePicker && (
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             button="link"
             label={__('Now')}
             aria-label={__('Set to current date and time')}
@@ -117,6 +122,7 @@ const PublishReleaseDate = (props: Props) => {
         )}
         {showDefaultBtn && (
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             button="link"
             label={__('Default')}
             aria-label={__('Remove custom release date')}

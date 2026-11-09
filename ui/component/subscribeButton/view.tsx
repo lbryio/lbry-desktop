@@ -75,6 +75,7 @@ export default function SubscribeButton(props: Props) {
       <div className="button-group button-group-subscribed">
         <Button
           ref={buttonRef}
+          // @ts-expect-error - TS2322 (ts-migration)
           iconColor="red"
           largestLabel={isMobile && shrinkOnMobile ? '' : subscriptionLabel}
           icon={ICONS.UNSUBSCRIBE}
@@ -102,6 +103,7 @@ export default function SubscribeButton(props: Props) {
     <div className="button-group">
       <Button
         ref={buttonRef}
+        // @ts-expect-error - TS2322 (ts-migration)
         iconColor="red"
         className={isSubscribed ? 'button-following' : ''}
         largestLabel={isMobile && shrinkOnMobile ? '' : subscriptionLabel}
@@ -125,6 +127,7 @@ export default function SubscribeButton(props: Props) {
       {isSubscribed && uiNotificationsEnabled && (
         <>
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             button="alt"
             icon={notificationsDisabled ? ICONS.BELL : ICONS.BELL_ON}
             className={isSubscribed ? 'button-following' : ''}

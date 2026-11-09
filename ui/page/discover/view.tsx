@@ -71,7 +71,9 @@ function DiscoverPage(props: Props) {
         href="https://lbry.com/faq/trending"
         title={__('Learn more about LBRY Credits on %DOMAIN%', { DOMAIN })}
       >
+        {/* @ts-expect-error - TS2745 (ts-migration) */}
         <I18nMessage
+          // @ts-expect-error - TS2322 (ts-migration)
           tokens={{
             lbc: <LbcSymbol />,
           }}
@@ -83,6 +85,7 @@ function DiscoverPage(props: Props) {
       tag && !isMobile && (
         <Button
           ref={buttonRef}
+          // @ts-expect-error - TS2322 (ts-migration)
           button="alt"
           icon={ICONS.SUBSCRIBE}
           iconColor="red"
@@ -118,6 +121,7 @@ function DiscoverPage(props: Props) {
         {(tag === CS.TAGS_ALL && __('All Content')) || (tag === CS.TAGS_FOLLOWED && __('Followed Tags')) || tag}
 
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           className="claim-search__tags-link"
           button="link"
           label={__('Manage Tags')}
@@ -136,6 +140,7 @@ function DiscoverPage(props: Props) {
 
   // GET ELEM DATA??
   return (
+    // @ts-expect-error - TS2322 (ts-migration)
     <Page noFooter fullWidthPage={tileLayout}>
       <ClaimListDiscover
         tileLayout={repostedUri ? false : tileLayout}

@@ -17,6 +17,7 @@ class ModalCommentAcknowledgement extends React.PureComponent<Props> {
 
     return (
       <Modal
+// @ts-expect-error - TS2322 - Type '{ children: Element[]; isOpen: true; onAborted: () => void; title: string; onConfirmed: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
         isOpen
         onAborted={onAbortedOrConfirmed}
         title={__('Comment acknowledgement')}

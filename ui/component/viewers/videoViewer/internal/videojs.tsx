@@ -3,6 +3,7 @@ import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 import classnames from 'classnames';
 import videojs from 'video.js';
+// @ts-expect-error - TS2882 (ts-migration)
 import 'video.js/dist/alt/video-js-cdn.min.css';
 import eventTracking from 'videojs-event-tracking';
 import * as OVERLAY from './overlays';
@@ -65,6 +66,7 @@ const videoPlaybackRates = [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2];
 const IS_IOS =
   (/iPad|iPhone|iPod/.test(navigator.platform) ||
     (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)) &&
+// @ts-expect-error - TS2339 - Property 'MSStream' does not exist on type 'Window & typeof globalThis'.
   !window.MSStream;
 
 const VIDEO_JS_OPTIONS = {
@@ -182,18 +184,22 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       LbryVolumeBarClass.replaceExisting(player);
 
       // Add reloadSourceOnError plugin
+// @ts-expect-error - TS2339 - Property 'reloadSourceOnError' does not exist on type 'never'.
       player.reloadSourceOnError({ errorInterval: 10 });
 
       // initialize mobile UI
+// @ts-expect-error - TS2339 - Property 'mobileUi' does not exist on type 'never'.
       player.mobileUi(); // Inits mobile version. No-op if Desktop.
 
       // Add quality selector to player
+// @ts-expect-error - TS2339 - Property 'hlsQualitySelector' does not exist on type 'never'.
       player.hlsQualitySelector({
         displayCurrentQuality: true,
       });
 
       // Add recsys plugin
       if (shareTelemetry) {
+// @ts-expect-error - TS2339 - Property 'recsys' does not exist on type 'never'.
         player.recsys({
           videoId: claimId,
           userId: userId,
@@ -201,15 +207,18 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       }
 
       // set playsinline for mobile
+// @ts-expect-error - TS2339 - Property 'children_' does not exist on type 'never'.
       player.children_[0].setAttribute('playsinline', '');
 
       // I think this is a callback function
+// @ts-expect-error - TS2339 - Property 'querySelector' does not exist on type 'never'.
       const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
       onPlayerReady(player, videoNode);
     });
 
     // fixes #3498 (https://github.com/lbryio/lbry-desktop/issues/3498)
     // summary: on firefox the focus would stick to the fullscreen button which caused buggy behavior with spacebar
+// @ts-expect-error - TS2339 - Property 'blur' does not exist on type 'Element'.
     vjs.on('fullscreenchange', () => document.activeElement && document.activeElement.blur());
 
     return vjs;
@@ -226,6 +235,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       const vjsPlayer = initializeVideoPlayer(vjsElement);
 
       // Add reference to player to global scope
+// @ts-expect-error - TS2339 - Property 'player' does not exist on type 'Window & typeof globalThis'.
       window.player = vjsPlayer;
 
       // Set reference in component state
@@ -236,11 +246,14 @@ export default React.memo<Props>(function VideoJs(props: Props) {
 
     // Cleanup
     return () => {
+// @ts-expect-error - TS2769 - No overload matches this call.
       window.removeEventListener('keydown', curried_function);
 
       const player = playerRef.current;
       if (player) {
+// @ts-expect-error - TS2339 - Property 'dispose' does not exist on type 'never'.
         player.dispose();
+// @ts-expect-error - TS2339 - Property 'player' does not exist on type 'Window & typeof globalThis'.
         window.player = undefined;
       }
     };
@@ -262,6 +275,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       }
 
       // Modify video source in options
+// @ts-expect-error - TS2540 - Cannot assign to 'sources' because it is a read-only property.
       videoJsOptions.sources = [
         {
           src: finalSource,
@@ -274,7 +288,9 @@ export default React.memo<Props>(function VideoJs(props: Props) {
       if (!player) return;
 
       // PR #5570: Temp workaround to avoid double Play button until the next re-architecture.
+// @ts-expect-error - TS2339 - Property 'paused' does not exist on type 'never'.
       if (!player.paused()) {
+// @ts-expect-error - TS2339 - Property 'bigPlayButton' does not exist on type 'never'.
         player.bigPlayButton.hide();
       }
     });
@@ -284,6 +300,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
     // $FlowFixMe
     <div className={classnames('video-js-parent', { 'video-js-parent--ios': IS_IOS })} ref={containerRef}>
       <Button
+        // @ts-expect-error - TS2322 (ts-migration)
         label={__('Tap to unmute')}
         button="link"
         icon={ICONS.VOLUME_MUTED}
@@ -292,6 +309,7 @@ export default React.memo<Props>(function VideoJs(props: Props) {
         ref={tapToUnmuteRef}
       />
       <Button
+        // @ts-expect-error - TS2322 (ts-migration)
         label={__('Retry')}
         button="link"
         icon={ICONS.REFRESH}

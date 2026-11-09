@@ -52,6 +52,7 @@ function TransactionListTable(props: Props) {
                 txos.map((t, i) => (
                   <TxoListItem
                     key={`${t.txid}:${t.nout}-${i}`}
+                    // @ts-expect-error - TS2322 (ts-migration)
                     txo={t}
                     reward={rewards && rewards[t.txid]}
                     isRevokeable={t.is_my_output && !t.is_spent && REVOCABLE_TYPES.includes(t.type)}

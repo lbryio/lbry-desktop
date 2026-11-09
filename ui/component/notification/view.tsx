@@ -53,7 +53,9 @@ export default function Notification(props: Props) {
   const notificationTarget = getNotificationTarget();
 
   const creatorIcon = (channelUrl: unknown) => (
+    // @ts-expect-error - TS2322 (ts-migration)
     <UriIndicator uri={channelUrl} link>
+      {/* @ts-expect-error - TS2322 (ts-migration) */}
       <ChannelThumbnail small uri={channelUrl} />
     </UriIndicator>
   );
@@ -102,6 +104,7 @@ export default function Notification(props: Props) {
   let uriIndicator;
   const title = titleSplit.map((message, index) => {
     if (channelName === message) {
+      // @ts-expect-error - TS2322 (ts-migration)
       uriIndicator = <UriIndicator uri={channelUrl} link />;
       fullTitle.push(' ');
       const resultTitle = fullTitle;
@@ -190,6 +193,7 @@ export default function Notification(props: Props) {
                 </div>
               ) : stickerFromComment ? (
                 <div className="sticker__comment">
+                  {/* @ts-expect-error - TS2322 (ts-migration) */}
                   <OptimizedImage src={stickerFromComment.url} waitLoad loading="lazy" />
                 </div>
               ) : (
@@ -200,9 +204,11 @@ export default function Notification(props: Props) {
             </div>
 
             {notification_rule === RULE.NEW_CONTENT && (
+              // @ts-expect-error - TS2739 (ts-migration)
               <FileThumbnail uri={notification_parameters.device.target} className="notificationContent__thumbnail" />
             )}
             {notification_rule === RULE.NEW_LIVESTREAM && (
+              // @ts-expect-error - TS2739 (ts-migration)
               <FileThumbnail
                 thumbnail={notification_parameters.device.image_url}
                 className="notificationContent__thumbnail"
@@ -213,6 +219,7 @@ export default function Notification(props: Props) {
           <div className="notification__extra">
             {!is_read && (
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 className="notification__markSeen"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -221,6 +228,7 @@ export default function Notification(props: Props) {
               />
             )}
             <div className="notification__time">
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <DateTime timeAgo date={notification.active_at} />
             </div>
           </div>
@@ -254,11 +262,13 @@ export default function Notification(props: Props) {
         <div>
           <div className="notification__reactions">
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               label={__('Reply')}
               className="comment__action"
               onClick={() => setReplying(!isReplying)}
               icon={ICONS.REPLY}
             />
+            {/* @ts-expect-error - TS2741 (ts-migration) */}
             <CommentReactions
               uri={notificationTarget}
               commentId={notification_parameters.dynamic.hash}
@@ -274,12 +284,14 @@ export default function Notification(props: Props) {
               onDoneReplying={() => setReplying(false)}
               onCancelReplying={() => setReplying(false)}
               setQuickReply={setQuickReply}
+              // @ts-expect-error - TS2322 (ts-migration)
               supportDisabled
               shouldFetchComment
             />
           )}
 
           {quickReply && (
+            // @ts-expect-error - TS2739 (ts-migration)
             <CommentsReplies
               uri={notificationTarget}
               parentId={notification_parameters.dynamic.hash}

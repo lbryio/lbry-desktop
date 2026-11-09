@@ -4,6 +4,7 @@ import * as ACTIONS from 'constants/action_types';
 export const doFetchViewCount = (claimIdCsv: string) => (dispatch: Dispatch) => {
   dispatch({ type: ACTIONS.FETCH_VIEW_COUNT_STARTED });
 
+  // @ts-expect-error - TS2339 (ts-migration)
   return Lbryio.call('file', 'view_count', { claim_id: claimIdCsv })
     .then((result: Array<number>) => {
       const viewCounts = result;
@@ -17,6 +18,7 @@ export const doFetchViewCount = (claimIdCsv: string) => (dispatch: Dispatch) => 
 export const doFetchSubCount = (claimId: string) => (dispatch: Dispatch) => {
   dispatch({ type: ACTIONS.FETCH_SUB_COUNT_STARTED });
 
+  // @ts-expect-error - TS2339 (ts-migration)
   return Lbryio.call('subscription', 'sub_count', { claim_id: claimId })
     .then((result: Array<number>) => {
       const subCount = result[0];

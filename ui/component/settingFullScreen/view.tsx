@@ -1,4 +1,5 @@
 import React from 'react';
+// @ts-expect-error - TS2792 - Cannot find module 'electron'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import { ipcRenderer } from 'electron';
 import { FormField } from 'component/common/form';
 
@@ -26,6 +27,7 @@ export default function SettingFullScreen() {
     <FormField
       type="checkbox"
       name="full_screen"
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; checked: boolean; onChange: () => any; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
       checked={fullScreen}
       onChange={() => ipcRenderer.send('set-full-screen', !fullScreen)}
     />

@@ -1,3 +1,4 @@
+// @ts-expect-error - TS2882 (ts-migration)
 import 'easymde/dist/easymde.min.css';
 import { FF_MAX_CHARS_DEFAULT } from 'constants/form-field';
 import { openEditorMenu, stopContextMenu } from 'util/context-menu';
@@ -19,7 +20,7 @@ type Props = {
   helper?: string | React.ReactNode,
   hideSuggestions?: boolean,
   isLivestream?: boolean,
-  label?: string | Node,
+  label?: string | React.ReactNode,
   labelOnLeft: boolean,
   name: string,
   noEmojis?: boolean,
@@ -51,6 +52,7 @@ export class FormFieldAreaAdvanced extends React.PureComponent<Props> {
     const { autoFocus } = this.props;
     const input = this.input.current;
 
+// @ts-expect-error - TS2339 - Property 'focus' does not exist on type 'unknown'.
     if (input && autoFocus) input.focus();
   }
 
@@ -89,6 +91,7 @@ export class FormFieldAreaAdvanced extends React.PureComponent<Props> {
     const quickAction =
       quickActionLabel && quickActionHandler ? (
         <div className="form-field__quick-action">
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <Button button="link" onClick={quickActionHandler} label={quickActionLabel} />
         </div>
       ) : null;
@@ -100,6 +103,7 @@ export class FormFieldAreaAdvanced extends React.PureComponent<Props> {
 
           const getInstance = (editor: unknown) => {
             // SimpleMDE max char check
+// @ts-expect-error - TS2339 - Property 'codemirror' does not exist on type 'unknown'.
             editor.codemirror.on('beforeChange', (instance, changes) => {
               if (textAreaMaxLength && changes.update) {
                 var str = changes.text.join('\n');
@@ -116,6 +120,7 @@ export class FormFieldAreaAdvanced extends React.PureComponent<Props> {
             });
 
             // "Create Link (Ctrl-K)": highlight URL instead of label:
+// @ts-expect-error - TS2339 - Property 'codemirror' does not exist on type 'unknown'.
             editor.codemirror.on('changes', (instance, changes) => {
               try {
                 // Grab the last change from the buffered list. I assume the
@@ -154,6 +159,7 @@ export class FormFieldAreaAdvanced extends React.PureComponent<Props> {
 
           return (
             <div className="form-field--SimpleMDE" onContextMenu={stopContextMenu}>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
               <fieldset-section>
                 {!header && (
                   <div className="form-field__two-column">
@@ -167,6 +173,7 @@ export class FormFieldAreaAdvanced extends React.PureComponent<Props> {
                 <SimpleMDE
                   {...inputProps}
                   id={name}
+                  // @ts-expect-error - TS2322 (ts-migration)
                   type="textarea"
                   events={handleEvents}
                   getMdeInstance={getInstance}
@@ -174,17 +181,20 @@ export class FormFieldAreaAdvanced extends React.PureComponent<Props> {
                     spellChecker: true,
                     hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'],
                     previewRender(plainText: unknown) {
+// @ts-expect-error - TS2322 - Type 'unknown' is not assignable to type 'string'.
                       const preview = <MarkdownPreview content={plainText} noDataStore />;
                       return ReactDOMServer.renderToString(preview);
                     },
                   }}
                 />
                 {countInfo}
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
               </fieldset-section>
             </div>
           );
         case 'textarea':
           return (
+// @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'.
             <fieldset-section>
               {!header && (label || quickAction) && (
                 <div className="form-field__two-column">
@@ -198,6 +208,7 @@ export class FormFieldAreaAdvanced extends React.PureComponent<Props> {
                   type={type}
                   id={name}
                   maxLength={textAreaMaxLength || FF_MAX_CHARS_DEFAULT}
+// @ts-expect-error - TS2322 - Type '{ current: unknown; }' is not assignable to type 'LegacyRef<HTMLTextAreaElement>'.
                   ref={this.input}
                   {...inputProps}
                 />
@@ -214,6 +225,7 @@ export class FormFieldAreaAdvanced extends React.PureComponent<Props> {
               <div className="form-field__textarea-info">
                 {!noEmojis && openEmoteMenu && (
                   <Button
+                    // @ts-expect-error - TS2322 (ts-migration)
                     type="alt"
                     className="button--comment-icons"
                     title="Emotes"
@@ -224,6 +236,7 @@ export class FormFieldAreaAdvanced extends React.PureComponent<Props> {
                 )}
                 {countInfo}
               </div>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
             </fieldset-section>
           );
       }

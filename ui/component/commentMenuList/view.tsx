@@ -225,6 +225,7 @@ function CommentMenuList(props: Props) {
 
       {activeChannelClaim && (
         <div className="comment__menu-active">
+          {/* @ts-expect-error - TS2739 (ts-migration) */}
           <ChannelThumbnail xsmall noLazyLoad uri={activeChannelClaim.permanent_url} />
           <div className="comment__menu-channel">
             {__('Interacting as %channelName%', { channelName: activeChannelClaim.name })}

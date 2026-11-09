@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import { doHideModal } from 'redux/actions/app';
 import ModalSocialShare from './view';
 
-const perform = dispatch: unknown => ({
+const perform = (dispatch: unknown) => ({
   closeModal: () => dispatch(doHideModal()),
 });
 

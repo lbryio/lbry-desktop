@@ -19,9 +19,11 @@ export default function ClaimTags(props: Props) {
   let tagsToDisplay: unknown = [];
 
   if (tags.includes('mature')) {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
     tagsToDisplay.push('mature');
   }
 
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
   for (var i = 0; tagsToDisplay.length < numberOfTags - 2; i++) {
     const tag = followedTags[i];
     if (!tag) {
@@ -29,6 +31,7 @@ export default function ClaimTags(props: Props) {
     }
 
     if (tags.includes(tag.name)) {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       tagsToDisplay.push(tag.name);
     }
   }
@@ -37,22 +40,28 @@ export default function ClaimTags(props: Props) {
 
   for (var i = 0; i < sortedTags.length; i++) {
     const tag = sortedTags[i];
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
     if (!tag || tagsToDisplay.length === numberOfTags) {
       break;
     }
 
+// @ts-expect-error - TS2339 - Property 'includes' does not exist on type 'unknown'.
     if (!tagsToDisplay.includes(tag)) {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       tagsToDisplay.push(tag);
     }
   }
 
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
   if (!tagsToDisplay.length) {
     return null;
   }
 
   return (
     <div className={classnames('claim__tags', { 'claim__tags--large': type === 'large' })}>
+{ /* @ts-expect-error - TS2339 - Property 'map' does not exist on type 'unknown'. */}
       {tagsToDisplay.map((tag) => (
+        // @ts-expect-error - TS2322 (ts-migration)
         <Tag key={tag} title={tag} name={tag} />
       ))}
     </div>

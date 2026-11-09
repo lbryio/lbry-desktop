@@ -11,6 +11,7 @@ const TruncatedText = (props: Props) => {
   const { text, children, lines, showTooltip } = props;
   const tooltip = showTooltip ? children || text : '';
   return (
+// @ts-expect-error - TS2322 - Type '{}' is not assignable to type 'string'.
     <span title={tooltip} className="truncated-text" style={{ WebkitLineClamp: lines }}>
       {children || text}
     </span>

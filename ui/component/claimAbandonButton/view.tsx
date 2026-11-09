@@ -28,6 +28,7 @@ export default function ClaimAbandonButton(props: Props) {
 
   return (
     <Button
+      // @ts-expect-error - TS2322 (ts-migration)
       disabled={!claim}
       label={buttonLabel}
       button="alt"

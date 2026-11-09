@@ -5,7 +5,7 @@ import * as ACTIONS from 'constants/action_types';
 const CHECK_BLACK_LISTED_CONTENT_INTERVAL = 60 * 60 * 1000;
 
 export function doFetchBlackListedOutpoints() {
-  return dispatch: unknown => {
+  return (dispatch: unknown) => {
     dispatch({
       type: ACTIONS.FETCH_BLACK_LISTED_CONTENT_STARTED,
     });
@@ -46,7 +46,7 @@ export function doFetchBlackListedOutpoints() {
 }
 
 export function doBlackListedOutpointsSubscribe() {
-  return dispatch: unknown => {
+  return (dispatch: unknown) => {
     dispatch(doFetchBlackListedOutpoints());
     setInterval(() => dispatch(doFetchBlackListedOutpoints()), CHECK_BLACK_LISTED_CONTENT_INTERVAL);
   };

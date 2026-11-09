@@ -41,11 +41,13 @@ function UserFirstChannel(props: Props) {
   }
 
   function handleChannelChange(e: unknown) {
+// @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
     const { value } = e.target;
     setChannel(value);
     if (!isNameValid(value)) {
       setNameError(INVALID_NAME_ERROR);
     } else {
+// @ts-expect-error - TS2554 - Expected 1 arguments, but got 0.
       setNameError();
     }
   }
@@ -62,7 +64,9 @@ function UserFirstChannel(props: Props) {
         }
         actions={
           <Form onSubmit={handleCreateChannel}>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
             <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
               <fieldset-section>
                 <label htmlFor="auth_first_channel">
                   {createChannelError || nameError ? (
@@ -72,6 +76,7 @@ function UserFirstChannel(props: Props) {
                   )}
                 </label>
                 <div className="form-field__prefix">@</div>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
               </fieldset-section>
 
               <FormField
@@ -79,13 +84,16 @@ function UserFirstChannel(props: Props) {
                 placeholder={__('channel')}
                 type="text"
                 name="auth_first_channel"
+// @ts-expect-error - TS2322 - Type '{ autoFocus: true; placeholder: string; type: string; name: string; className: string; value: string; onChange: (e: unknown) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 className="form-field--short"
                 value={channel}
                 onChange={handleChannelChange}
               />
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
             </fieldset-group>
             <div className="section__actions">
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="primary"
                 type="submit"
                 disabled={nameError || !channel || creatingChannel || claimingReward}
@@ -93,10 +101,13 @@ function UserFirstChannel(props: Props) {
               />
             </div>
             <div className="help--card-actions">
+              {/* @ts-expect-error - TS2745 (ts-migration) */}
               <I18nMessage
+                // @ts-expect-error - TS2322 (ts-migration)
                 tokens={{
                   sync_channel: (
                     <Button
+                      // @ts-expect-error - TS2322 (ts-migration)
                       button="link"
                       label={__('Sync it and skip this step')}
                       onClick={() => doToggleInterestedInYoutubeSync()}

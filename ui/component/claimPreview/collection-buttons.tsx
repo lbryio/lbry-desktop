@@ -16,6 +16,7 @@ function CollectionButtons(props: Props) {
     <div className="collection-preview__edit-buttons">
       <div className="collection-preview__edit-group">
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           className={'button-collection-manage top-left'}
           icon={ICONS.UP_TOP}
           disabled={collectionIndex === 0}
@@ -30,6 +31,7 @@ function CollectionButtons(props: Props) {
           }}
         />
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           className={'button-collection-manage bottom-left'}
           icon={ICONS.DOWN_BOTTOM}
           disabled={collectionIndex === lastCollectionIndex}
@@ -46,6 +48,7 @@ function CollectionButtons(props: Props) {
       </div>
       <div className="collection-preview__edit-group">
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           className={'button-collection-manage'}
           disabled={collectionIndex === 0}
           icon={ICONS.UP}
@@ -60,6 +63,7 @@ function CollectionButtons(props: Props) {
           }}
         />
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           className={'button-collection-manage'}
           icon={ICONS.DOWN}
           disabled={collectionIndex === lastCollectionIndex}
@@ -77,6 +81,7 @@ function CollectionButtons(props: Props) {
       {!confirmDelete && (
         <div className="collection-preview__edit-group collection-preview__delete ">
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             className={'button-collection-manage button-collection-delete top-right bottom-right'}
             icon={ICONS.DELETE}
             onClick={(e) => {
@@ -88,6 +93,7 @@ function CollectionButtons(props: Props) {
       {confirmDelete && (
         <div className="collection-preview__edit-group collection-preview__delete">
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             className={'button-collection-manage button-collection-delete-cancel top-right'}
             icon={ICONS.REMOVE}
             onClick={(e) => {
@@ -95,12 +101,14 @@ function CollectionButtons(props: Props) {
             }}
           />
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             className={'button-collection-manage button-collection-delete-confirm bottom-right'}
             icon={ICONS.DELETE}
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
               if (editCollection)
+// @ts-expect-error - TS2345 - Argument of type '{ claims: Claim[]; remove: true; }' is not assignable to parameter of type 'CollectionEditParams'.
                 editCollection(listId, { claims: [claim], remove: true });
             }}
           />

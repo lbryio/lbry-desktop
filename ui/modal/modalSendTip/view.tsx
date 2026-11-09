@@ -14,6 +14,7 @@ class ModalSendTip extends React.PureComponent<Props> {
     const { closeModal, uri, claimIsMine } = this.props;
 
     return (
+// @ts-expect-error - TS2322 - Type '{ children: Element; onAborted: () => void; isOpen: true; type: string; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
       <Modal onAborted={closeModal} isOpen type="card">
         <SendTip uri={uri} claimIsMine={claimIsMine} onCancel={closeModal} />
       </Modal>

@@ -26,17 +26,20 @@ function PublishPage(props: Props) {
     <Page
       noFooter
       noSideNavigation
+      // @ts-expect-error - TS2741 (ts-migration)
       backout={{
         title: __('Upload'),
         backLabel: __('Back'),
       }}
     >
+      {/* @ts-expect-error - TS2322, TS2741 (ts-migration) */}
       {balance === 0 && <YrblWalletEmpty />}
       {balance !== 0 && fetchingChannels ? (
         <div className="main--empty">
           <Spinner />
         </div>
       ) : (
+        // @ts-expect-error - TS2740 (ts-migration)
         <PublishForm scrollToTop={scrollToTop} disabled={balance === 0} />
       )}
     </Page>

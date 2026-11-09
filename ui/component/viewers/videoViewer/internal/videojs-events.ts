@@ -9,6 +9,7 @@ const TAP = {
 } as const;
 
 const setLabel = (controlBar: unknown, childName: unknown, label: unknown) => {
+// @ts-expect-error - TS2339 - Property 'getChild' does not exist on type 'unknown'.
   const c = controlBar.getChild(childName);
   if (c) {
     c.controlText(label);
@@ -65,6 +66,7 @@ const VideoJsEvents = ({
     const player = playerRef.current;
     if (player) {
       const ctrlBar = player.getChild('controlBar');
+// @ts-expect-error - TS2339 - Property 'type' does not exist on type 'unknown'.
       switch (e.type) {
         case 'play':
           setLabel(ctrlBar, 'PlayToggle', __('Pause (space)'));
@@ -100,6 +102,7 @@ const VideoJsEvents = ({
           resolveCtrlText({ type: 'fullscreenchange' });
           break;
         default:
+// @ts-expect-error - TS2339 - Property 'type' does not exist on type 'unknown'.
           if (isDev) throw Error('Unexpected: ' + e.type);
           break;
       }
@@ -110,6 +113,7 @@ const VideoJsEvents = ({
     const player = playerRef.current;
 
     const bigPlayButton = document.querySelector('.vjs-big-play-button');
+// @ts-expect-error - TS2339 - Property 'style' does not exist on type 'Element'.
     if (bigPlayButton) bigPlayButton.style.setProperty('display', 'none');
 
     if (player && (player.muted() || player.volume() === 0)) {
@@ -179,9 +183,12 @@ const VideoJsEvents = ({
   function showTapButton(tapButton: unknown) {
     const setButtonVisibility = (theRef: unknown, newState: unknown) => {
       // Use the DOM to control the state of the button to prevent re-renders.
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
       if (theRef.current) {
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
         const curState = theRef.current.style.visibility === 'visible';
         if (newState !== curState) {
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
           theRef.current.style.visibility = newState ? 'visible' : 'hidden';
         }
       }
@@ -246,10 +253,12 @@ const VideoJsEvents = ({
     player.on('canplaythrough', function () {
       setTimeout(function () {
         const vjsControlBar = document.querySelector('.vjs-control-bar');
+// @ts-expect-error - TS2339 - Property 'style' does not exist on type 'Element'.
         if (vjsControlBar) vjsControlBar.style.removeProperty('opacity');
       }, 1000 * 3); // wait 3 seconds to hit control bar
     });
     player.on('playing', function () {
+// @ts-expect-error - TS2339 - Property 'style' does not exist on type 'Element'.
       document.querySelector('.vjs-big-play-button').style.setProperty('display', 'none', 'important');
     });
     // player.on('ended', onEnded);

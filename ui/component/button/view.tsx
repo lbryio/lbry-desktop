@@ -15,7 +15,7 @@ type Props = {
   icon: string | null | undefined,
   iconRight: string | null | undefined,
   disabled: boolean | null | undefined,
-  children: Node | null | undefined,
+  children: React.ReactNode | null | undefined,
   navigate: string | null | undefined,
   className: string | null | undefined,
   description: string | null | undefined,
@@ -150,6 +150,7 @@ const Button = forwardRef<any, Record<any, any>>((props: Props, ref: any) => {
         title={title}
         onClick={onClick}
         aria-label={ariaLabel}
+// @ts-expect-error - TS2322 - Type '{ children: Element; target: "_blank"; rel: string; href: string; className: any; title: string; onClick: (arg1?: any) => any; "aria-label": string; disabled: boolean; }' is not assignable to type 'DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>'.
         disabled={disabled} // is there a reason this wasn't here before?
       >
         {content}
@@ -211,6 +212,7 @@ const Button = forwardRef<any, Record<any, any>>((props: Props, ref: any) => {
         }
       }}
       disabled={disable}
+// @ts-expect-error - TS2322 - Type 'string' is not assignable to type '"button" | "reset" | "submit"'.
       type={type}
       {...otherProps}
     >

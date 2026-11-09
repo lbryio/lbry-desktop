@@ -9,7 +9,7 @@ import Native from 'native';
 import Lbry from 'lbry';
 
 type Props = {
-  children: Node,
+  children: React.ReactNode,
   history: {
     replace: (arg1: string) => void
   }
@@ -23,6 +23,7 @@ type State = {
 
 class ErrorBoundary extends React.Component<Props, State> {
   constructor() {
+// @ts-expect-error - TS2554 - Expected 1-2 arguments, but got 0.
     super();
     this.state = { hasError: false, sentryEventId: undefined, desktopErrorReported: false };
 
@@ -41,6 +42,7 @@ class ErrorBoundary extends React.Component<Props, State> {
         errorMessage += `app version: ${localVersion}\n`;
         errorMessage += `sdk version: ${sdkVersion}\n`;
         errorMessage += `page: ${window.location.href.split('.html')[1]}\n`;
+// @ts-expect-error - TS2339 - Property 'stack' does not exist on type 'unknown'.
         errorMessage += `${error.stack}`;
         analytics.error(errorMessage).then((isSharingData) => {
           this.setState({ desktopErrorReported: isSharingData });
@@ -71,10 +73,13 @@ class ErrorBoundary extends React.Component<Props, State> {
             type="sad"
             title={__('Aw shucks!')}
             subtitle={
+              // @ts-expect-error - TS2745 (ts-migration)
               <I18nMessage
+                // @ts-expect-error - TS2322 (ts-migration)
                 tokens={{
                   refreshing_the_app_link: (
                     <Button
+                      // @ts-expect-error - TS2322 (ts-migration)
                       button="link"
                       className="load-screen__button"
                       label={__('refreshing the app')}

@@ -21,6 +21,7 @@ export default function CollectionButtons(props: Props) {
 
   const orderButton = (className: string, title: string, icon: string, disabled: boolean, handleClick?: () => void) => (
     <Button
+      // @ts-expect-error - TS2322 (ts-migration)
       className={`button-collection-manage ${className}`}
       icon={icon}
       title={title}
@@ -39,6 +40,7 @@ export default function CollectionButtons(props: Props) {
     >
       <div className="collection-preview__edit-group" {...dragHandleProps}>
         <div className="button-collection-manage button-collection-drag top-left bottom-left">
+{ /* @ts-expect-error - TS2769 - No overload matches this call. */}
           <Icon icon={ICONS.DRAG} title={__('Drag')} size={20} />
         </div>
       </div>
@@ -66,6 +68,7 @@ export default function CollectionButtons(props: Props) {
       {!confirmDelete ? (
         <div className="collection-preview__edit-group collection-preview__delete ">
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             className="button-collection-manage button-collection-delete top-right bottom-right"
             icon={ICONS.DELETE}
             title={__('Remove')}
@@ -75,6 +78,7 @@ export default function CollectionButtons(props: Props) {
       ) : (
         <div className="collection-preview__edit-group collection-preview__delete">
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             className="button-collection-manage button-collection-delete-cancel top-right"
             icon={ICONS.REMOVE}
             title={__('Cancel')}

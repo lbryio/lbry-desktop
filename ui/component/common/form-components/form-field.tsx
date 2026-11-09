@@ -1,3 +1,4 @@
+// @ts-expect-error - TS2882 (ts-migration)
 import 'easymde/dist/easymde.min.css';
 import { FF_MAX_CHARS_DEFAULT } from 'constants/form-field';
 import React from 'react';
@@ -14,7 +15,7 @@ type Props = {
   error?: string | boolean,
   helper?: string | React.ReactNode,
   inputButton?: React.ReactNode,
-  label?: string | Node,
+  label?: string | React.ReactNode,
   labelOnLeft: boolean,
   max?: number,
   min?: number,
@@ -48,6 +49,7 @@ export class FormField extends React.PureComponent<Props> {
     const { autoFocus } = this.props;
     const input = this.input.current;
 
+// @ts-expect-error - TS2339 - Property 'focus' does not exist on type 'unknown'.
     if (input && autoFocus) input.focus();
   }
 
@@ -73,6 +75,7 @@ export class FormField extends React.PureComponent<Props> {
       ...inputProps
     } = this.props;
 
+// @ts-expect-error - TS2339 - Property 'message' does not exist on type 'never'.
     const errorMessage = typeof error === 'object' ? error.message : error;
 
     // Ideally, the character count should (and can) be appended to the
@@ -84,24 +87,29 @@ export class FormField extends React.PureComponent<Props> {
       <span className="comment__char-count-mde">{`${charCount || '0'}/${textAreaMaxLength}`}</span>
     );
     const Wrapper = blockWrap
+// @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. | TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'.
       ? ({ children: innerChildren }) => <fieldset-section class="radio">{innerChildren}</fieldset-section>
       : ({ children: innerChildren }) => <span className="radio">{innerChildren}</span>;
 
     const inputSimple = (type: string) => (
       <>
+{ /* @ts-expect-error - TS2322 - Type '{ defaultValue?: string | number; disabled?: boolean; max?: number; min?: number; placeholder?: string | number; range?: number; readOnly?: boolean; value?: string | number; onChange?: (arg1?: any) => any; id: string; type: string; }' is not assignable to type 'DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>'. */}
         <input id={name} type={type} {...inputProps} />
         <label htmlFor={name}>{label}</label>
       </>
     );
 
     const inputSelect = (selectClass: string) => (
+// @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'.
       <fieldset-section class={selectClass}>
         {(label || errorMessage) && (
           <label htmlFor={name}>{errorMessage ? <span className="error__text">{errorMessage}</span> : label}</label>
         )}
+{ /* @ts-expect-error - TS2322 - Type '{ children: ReactNode; defaultValue?: string | number; disabled?: boolean; max?: number; min?: number; placeholder?: string | number; range?: number; readOnly?: boolean; value?: string | number; onChange?: (arg1?: any) => any; id: string; }' is not assignable to type 'DetailedHTMLProps<SelectHTMLAttributes<HTMLSelectElement>, HTMLSelectElement>'. */}
         <select id={name} {...inputProps}>
           {children}
         </select>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
       </fieldset-section>
     );
 
@@ -119,6 +127,7 @@ export class FormField extends React.PureComponent<Props> {
           return inputSelect('select--slim');
         case 'textarea':
           return (
+// @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'.
             <fieldset-section>
               {label && (
                 <div className="form-field__two-column">
@@ -129,24 +138,30 @@ export class FormField extends React.PureComponent<Props> {
                 type={type}
                 id={name}
                 maxLength={textAreaMaxLength || FF_MAX_CHARS_DEFAULT}
+// @ts-expect-error - TS2322 - Type '{ current: unknown; }' is not assignable to type 'LegacyRef<HTMLTextAreaElement>'.
                 ref={this.input}
                 {...inputProps}
               />
               <div className="form-field__textarea-info">{countInfo}</div>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
             </fieldset-section>
           );
         default:
+// @ts-expect-error - TS2322 - Type '{ current: unknown; }' is not assignable to type 'LegacyRef<HTMLInputElement>'.
           const inputElement = <input type={type} id={name} {...inputProps} ref={this.input} />;
           const inner = inputButton ? (
+// @ts-expect-error - TS2339 - Property 'input-submit' does not exist on type 'JSX.IntrinsicElements'.
             <input-submit>
               {inputElement}
               {inputButton}
+{ /* @ts-expect-error - TS2339 - Property 'input-submit' does not exist on type 'JSX.IntrinsicElements'. */}
             </input-submit>
           ) : (
             inputElement
           );
 
           return (
+// @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'.
             <fieldset-section>
               {(label || errorMessage) && (
                 <label htmlFor={name}>
@@ -155,6 +170,7 @@ export class FormField extends React.PureComponent<Props> {
               )}
               {prefix && <label htmlFor={name}>{prefix}</label>}
               {inner}
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
             </fieldset-section>
           );
       }

@@ -14,7 +14,7 @@ type Props = {
   resolveUri: (arg1: string) => void,
   uri: string,
   // to allow for other elements to be nested within the UriIndicator
-  children: Node | null | undefined,
+  children: React.ReactNode | null | undefined,
   inline: boolean,
   external?: boolean,
   className?: string,
@@ -89,6 +89,7 @@ class UriIndicator extends React.PureComponent<Props> {
         return (
           <Button
             aria-hidden={!focusable}
+            // @ts-expect-error - TS2322 (ts-migration)
             tabIndex={focusable ? 0 : -1}
             className={className}
             target={external ? '_blank' : undefined}
@@ -100,6 +101,7 @@ class UriIndicator extends React.PureComponent<Props> {
       } else {
         return (
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             className={classnames(className, 'button--uri-indicator')}
             navigate={channelLink}
             target={external ? '_blank' : undefined}

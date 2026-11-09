@@ -4,6 +4,7 @@ import { FormField } from 'component/common/form-components/form-field';
 import { Form } from 'component/common/form-components/form';
 import { withRouter } from 'react-router-dom';
 
+// @ts-expect-error - TS2792 - Cannot find module 'static/img/yrblhappy.svg'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import image from 'static/img/yrblhappy.svg';
 import * as DAEMON_SETTINGS from 'constants/daemon_settings';
 
@@ -122,6 +123,7 @@ function HostingSplash(props: Props) {
               <FormField
                 name={'managedhosting'}
                 type="radio"
+// @ts-expect-error - TS2322 - Type '{ name: string; type: string; checked: boolean; label: string; helper: string; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 checked={hostingChoice === 'MANAGED'}
                 label={getManagedCopy()}
                 helper={getManagedHelper()}
@@ -130,6 +132,7 @@ function HostingSplash(props: Props) {
               <FormField
                 name={'customhosting'}
                 type="radio"
+                // @ts-expect-error - TS2322 (ts-migration)
                 checked={hostingChoice === 'CUSTOM'}
                 label={<>{__('Custom')}</>}
                 helper={__(`You choose how much data to host.`)}
@@ -137,8 +140,10 @@ function HostingSplash(props: Props) {
               />
             </fieldset>
           </div>
+{ /* @ts-expect-error - TS2769 - No overload matches this call. */}
           <Form onSubmit={handleSubmit} className="section__body">
             <div className={'card__actions'}>
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="primary" label={hostingChoice === 'CUSTOM' ? __('Next') : __(`Let's go`)} type="submit" />
             </div>
           </Form>

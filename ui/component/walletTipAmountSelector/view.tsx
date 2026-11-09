@@ -1,3 +1,4 @@
+// @ts-expect-error - TS2882 (ts-migration)
 import 'scss/component/_wallet-tip-selector.scss';
 import { FormField } from 'component/common/form';
 import { Lbryio } from 'lbryinc';
@@ -27,7 +28,9 @@ type Props = {
   customTipAmount?: number,
   exchangeRate?: any,
   fiatConversion?: boolean,
+// @ts-expect-error - TS2300 - Duplicate identifier 'tipError'.
   tipError: boolean,
+// @ts-expect-error - TS2300 - Duplicate identifier 'tipError'. | TS2717 - Subsequent property declarations must have the same type.  Property 'tipError' must be of type 'boolean', but here has type 'string'.
   tipError: string,
   uri: string,
   onChange: (arg1: number) => void,
@@ -92,6 +95,7 @@ function WalletTipAmountSelector(props: Props) {
 
   // parse number as float and sets it in the parent component
   function handleCustomPriceChange(amount: number) {
+// @ts-expect-error - TS2345 - Argument of type 'number' is not assignable to parameter of type 'string'.
     const tipAmountValue = parseFloat(amount);
     onChange(tipAmountValue);
     if (fiatConversion && exchangeRate && setConvertedAmount && convertedAmount !== tipAmountValue * exchangeRate) {
@@ -110,6 +114,7 @@ function WalletTipAmountSelector(props: Props) {
   React.useEffect(() => {
     if (!stripeEnvironment) return;
 
+    // @ts-expect-error - TS2339 (ts-migration)
     Lbryio.call(
       'customer',
       'status',
@@ -132,6 +137,7 @@ function WalletTipAmountSelector(props: Props) {
   React.useEffect(() => {
     if (!stripeEnvironment) return;
 
+    // @ts-expect-error - TS2339 (ts-migration)
     Lbryio.call(
       'account',
       'check',
@@ -226,6 +232,7 @@ function WalletTipAmountSelector(props: Props) {
           tipAmountsToDisplay.map((defaultAmount) => (
             <Button
               key={defaultAmount}
+              // @ts-expect-error - TS2322 (ts-migration)
               disabled={shouldDisableAmountSelector(defaultAmount)}
               className={classnames('button-toggle button-toggle--expandformobile', {
                 'button-toggle--active':
@@ -242,6 +249,7 @@ function WalletTipAmountSelector(props: Props) {
           ))}
 
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           disabled={shouldDisableFiatSelectors}
           className={classnames('button-toggle button-toggle--expandformobile', {
             'button-toggle--active': useCustomTip,
@@ -252,6 +260,7 @@ function WalletTipAmountSelector(props: Props) {
         />
         {activeTab === TAB_LBC && DEFAULT_TIP_AMOUNTS.some((val) => val > balance) && (
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             button="secondary"
             className="button-toggle-group-action"
             icon={ICONS.BUY}
@@ -282,6 +291,7 @@ function WalletTipAmountSelector(props: Props) {
             name="tip-input"
             disabled={!customTipAmount && shouldDisableAmountSelector(0)}
             error={tipError}
+// @ts-expect-error - TS2322 - Type 'string' is not assignable to type 'number'.
             min="0"
             step="any"
             type="number"
@@ -298,6 +308,7 @@ function WalletTipAmountSelector(props: Props) {
         (!hasCardSaved
           ? getHelpMessage(
               <>
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" />
                 {' ' + __('To Tip Creators')}
               </>

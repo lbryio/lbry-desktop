@@ -1,5 +1,5 @@
 //@ts-nocheck
-const { URL, LBRY_WEB_STREAMING_API } = require('../../config');
+import { URL, LBRY_WEB_STREAMING_API } from 'config';
 
 const CONTINENT_COOKIE = 'continent';
 
@@ -35,4 +35,4 @@ function generateDirectUrl(claimName: unknown, claimId: unknown) {
 }
 
 // module.exports needed since the web server imports this function
-module.exports = { generateStreamUrl, generateEmbedUrl, generateDownloadUrl, generateDirectUrl, CONTINENT_COOKIE };
+export { generateStreamUrl, generateEmbedUrl, generateDownloadUrl, generateDirectUrl, CONTINENT_COOKIE };

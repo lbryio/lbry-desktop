@@ -21,6 +21,7 @@ function ModalAutoGenerateThumbnail(props: Props) {
 
   function uploadImage() {
     const imageBuffer = captureSnapshot();
+    // @ts-expect-error - TS2322 (ts-migration)
     const file = new File([imageBuffer], 'thumbnail.png', { type: 'image/png' });
 
     if (imageBuffer) {
@@ -38,7 +39,9 @@ function ModalAutoGenerateThumbnail(props: Props) {
     }
 
     const canvas = document.createElement('canvas');
+// @ts-expect-error - TS2339 - Property 'videoWidth' does not exist on type 'never'.
     canvas.width = player.videoWidth;
+// @ts-expect-error - TS2339 - Property 'videoHeight' does not exist on type 'never'.
     canvas.height = player.videoHeight;
     const context = canvas.getContext('2d');
     context.drawImage(player, 0, 0, canvas.width, canvas.height);
@@ -55,9 +58,13 @@ function ModalAutoGenerateThumbnail(props: Props) {
     }
 
     const fixedWidth = 450;
+// @ts-expect-error - TS2339 - Property 'videoWidth' does not exist on type 'never'.
     const videoWidth = player.videoWidth;
+// @ts-expect-error - TS2339 - Property 'videoHeight' does not exist on type 'never'.
     const videoHeight = player.videoHeight;
+// @ts-expect-error - TS2339 - Property 'width' does not exist on type 'never'.
     player.width = fixedWidth;
+// @ts-expect-error - TS2339 - Property 'height' does not exist on type 'never'.
     player.height = Math.floor(videoHeight * (fixedWidth / videoWidth));
   }
 
@@ -67,6 +74,7 @@ function ModalAutoGenerateThumbnail(props: Props) {
 
   return (
     <Modal
+// @ts-expect-error - TS2322 - Type '{ children: Element[]; isOpen: true; title: string; contentLabel: string; type: string; confirmButtonLabel: string; onConfirmed: () => void; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
       isOpen
       title={__('Upload thumbnail')}
       contentLabel={__('Confirm Thumbnail Upload')}

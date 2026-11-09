@@ -60,6 +60,7 @@ function ChannelAbout(props: Props) {
 
           <label>{__('Tags')}</label>
           <div className="media__info-text">
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <ClaimTags uri={uri} type="large" />
           </div>
 
@@ -78,6 +79,7 @@ function ChannelAbout(props: Props) {
 
           <label>{__('Last Updated')}</label>
           <div className="media__info-text">
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <DateTime timeAgo uri={uri} />
           </div>
 
@@ -94,6 +96,7 @@ function ChannelAbout(props: Props) {
           <label>{__('Staked LBRY Credits')}</label>
           <div className="media__info-text">
             <CreditAmount
+// @ts-expect-error - TS2769 - No overload matches this call.
               badge={false}
               amount={parseFloat(claim.amount) + parseFloat(claim.meta.support_amount)}
               precision={8}

@@ -97,12 +97,14 @@ function ChannelsFollowingDiscover(props: Props) {
   });
 
   return (
+    // @ts-expect-error - TS2740 (ts-migration)
     <Page className="discoverPage-wrapper">
       {rowDataWithGenericOptions.map(({ title, link, help, options = {} }) => (
         <div key={title} className="claim-grid__wrapper">
           <h1 className="section__actions">
             {link ? (
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 className="claim-grid__title"
                 button="link"
                 navigate={link}

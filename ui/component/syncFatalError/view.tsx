@@ -25,6 +25,7 @@ export default function SyncFatalError(props: Props) {
         actions={
           <div className="section__actions">
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               button="primary"
               icon={ICONS.REFRESH}
               label={__('Refresh')}

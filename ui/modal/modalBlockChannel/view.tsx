@@ -116,6 +116,7 @@ export default function ModalBlockChannel(props: Props) {
 
     const handleValidInput = (seconds: unknown) => {
       if (seconds !== timeoutSec) {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'SetStateAction<number>'.
         setTimeoutSec(seconds);
       }
       if (timeoutInputErr) {
@@ -148,7 +149,9 @@ export default function ModalBlockChannel(props: Props) {
   function getTabElem(value: unknown, label: unknown) {
     return (
       <Button
+        // @ts-expect-error - TS2322 (ts-migration)
         key={value}
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
         label={__(label)}
         button="alt"
         onClick={() => setTab(value)}
@@ -178,8 +181,11 @@ export default function ModalBlockChannel(props: Props) {
     return (
       <FormField
         type="radio"
+// @ts-expect-error - TS2322 - Type 'unknown' is not assignable to type 'string'.
         name={value}
+// @ts-expect-error - TS2322 - Type 'unknown' is not assignable to type 'Key'.
         key={value}
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
         label={disabled && disabledLabel ? __(disabledLabel) : __(label)}
         disabled={disabled}
         checked={blockType === value}
@@ -225,6 +231,7 @@ export default function ModalBlockChannel(props: Props) {
   function getActiveChannelElem() {
     return activeChannelClaim ? (
       <div className="block-modal--active-channel">
+        {/* @ts-expect-error - TS2739 (ts-migration) */}
         <ChannelThumbnail xsmall noLazyLoad uri={activeChannelClaim.permanent_url} />
         <div className="block-modal--active-channel-label">
           {__('Interacting as %channelName%', { channelName: activeChannelClaim.name })}
@@ -273,6 +280,7 @@ export default function ModalBlockChannel(props: Props) {
   }
 
   return (
+// @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; type: string; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
     <Modal isOpen type="card" onAborted={closeModal}>
       <Card
         title={__('Block Channel')}
@@ -311,7 +319,9 @@ export default function ModalBlockChannel(props: Props) {
 
             <div className="block-modal--finalize">
               <div className="section__actions">
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <Button button="primary" label={__('Block')} onClick={handleBlock} disabled={blockButtonDisabled} />
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <Button button="link" label={__('Cancel')} onClick={closeModal} />
                 {getActiveChannelElem()}
               </div>

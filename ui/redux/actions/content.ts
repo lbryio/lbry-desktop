@@ -1,6 +1,7 @@
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 // @if TARGET='app'
+// @ts-expect-error - TS2792 - Cannot find module 'electron'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import { ipcRenderer } from 'electron';
 // @endif
 import { doOpenModal } from 'redux/actions/app';
@@ -136,10 +137,12 @@ export function doPurchaseUriWrapper(uri: string, cost: number, saveFile: boolea
   return (dispatch: Dispatch, getState: () => any) => {
     function onSuccess(fileInfo: unknown) {
       if (saveFile) {
+// @ts-expect-error - TS2339 - Property 'outpoint' does not exist on type 'unknown'.
         dispatch(doUpdateLoadStatus(uri, fileInfo.outpoint));
       }
 
       if (cb) {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'GetResponse'.
         cb(fileInfo);
       }
     }
@@ -210,6 +213,7 @@ export function doPlayUri(
         attemptPlay(instantPurchaseMax.amount);
       } else {
         // Need to convert currency of instant purchase maximum before trying to play
+        // @ts-expect-error - TS2339 (ts-migration)
         Lbryio.getExchangeRates().then(({ LBC_USD }) => {
           attemptPlay(instantPurchaseMax.amount / LBC_USD);
         });

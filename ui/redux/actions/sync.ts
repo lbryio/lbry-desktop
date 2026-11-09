@@ -77,6 +77,7 @@ export function doSetSync(oldHash: string, newHash: string, data: any) {
       type: ACTIONS.SET_SYNC_STARTED,
     });
 
+    // @ts-expect-error - TS2339 (ts-migration)
     return Lbryio.call('sync', 'set', { old_hash: oldHash, new_hash: newHash, data }, 'post')
       .then((response) => {
         if (!response.hash) {
@@ -155,6 +156,7 @@ export function doGetSync(passedPassword?: string, callback?: (arg1?: any, arg2?
         throw new Error('Second argument passed to "doGetSync" must be a function');
       }
 
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'boolean'.
       callback(error, hasNewData);
     }
   }
@@ -184,6 +186,7 @@ export function doGetSync(passedPassword?: string, callback?: (arg1?: any, arg2?
         data.unlockFailed = true;
         throw new Error();
       })
+      // @ts-expect-error - TS2339 (ts-migration)
       .then((hash?: string) => Lbryio.call('sync', 'get', { hash }, 'post'))
       .then((response: any) => {
         const syncHash = response.hash;
@@ -224,6 +227,7 @@ export function doGetSync(passedPassword?: string, callback?: (arg1?: any, arg2?
             dispatch({ type: ACTIONS.SYNC_APPLY_BAD_PASSWORD });
           }
 
+// @ts-expect-error - TS2554 - Expected 2 arguments, but got 1.
           handleCallback(syncAttemptError);
         } else if (data.hasSyncedWallet) {
           const error = (syncAttemptError && syncAttemptError.message) || 'Error getting synced wallet';
@@ -238,6 +242,7 @@ export function doGetSync(passedPassword?: string, callback?: (arg1?: any, arg2?
             dispatch({ type: ACTIONS.SYNC_APPLY_BAD_PASSWORD });
           }
 
+// @ts-expect-error - TS2554 - Expected 2 arguments, but got 1.
           handleCallback(error);
         } else {
           const noWalletError = syncAttemptError && syncAttemptError.message === NO_WALLET_ERROR;
@@ -259,9 +264,11 @@ export function doGetSync(passedPassword?: string, callback?: (arg1?: any, arg2?
             Lbry.sync_apply({ password })
               .then(({ hash: walletHash, data: syncApplyData }) => {
                 dispatch(doSetSync('', walletHash, syncApplyData));
+// @ts-expect-error - TS2554 - Expected 2 arguments, but got 0.
                 handleCallback();
               })
               .catch((syncApplyError) => {
+// @ts-expect-error - TS2554 - Expected 2 arguments, but got 1.
                 handleCallback(syncApplyError);
               });
           }
@@ -305,6 +312,7 @@ export function doCheckSync() {
     });
 
     Lbry.sync_hash().then((hash) => {
+      // @ts-expect-error - TS2339 (ts-migration)
       Lbryio.call('sync', 'get', { hash }, 'post')
         .then((response) => {
           const data = {
@@ -327,8 +335,9 @@ export function doCheckSync() {
 }
 
 export function doResetSync() {
-  return (dispatch: Dispatch): Promise<any> => new Promise((resolve: unknown) => {
+  return (dispatch: Dispatch): Promise<any> => new Promise<any>((resolve) => {
     dispatch({ type: ACTIONS.SYNC_RESET });
+// @ts-expect-error - TS2794 - Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
     resolve();
   });
 }
@@ -337,6 +346,7 @@ export function doSyncEncryptAndDecrypt(oldPassword: string, newPassword: string
   return (dispatch: Dispatch) => {
     const data: Record<string, any> = {};
     return Lbry.sync_hash()
+      // @ts-expect-error - TS2339 (ts-migration)
       .then((hash) => Lbryio.call('sync', 'get', { hash }, 'post'))
       .then((syncGetResponse) => {
         data.oldHash = syncGetResponse.hash;

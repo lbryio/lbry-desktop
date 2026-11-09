@@ -22,6 +22,7 @@ import { parse } from 'node-html-parser';
 const RE_EMOTE = /:\+1:|:-1:|:[\w-]+:/;
 
 function isEmote(title: unknown, src: unknown) {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'. | TS2339 - Property 'includes' does not exist on type 'unknown'.
   return title && RE_EMOTE.test(title) && src.includes('static.odycdn.com/emoticons');
 }
 
@@ -109,11 +110,13 @@ const SimpleImageLink = (props: ImageLinkProps) => {
   }
 
   if (isEmote(title, src)) {
+    // @ts-expect-error - TS2322 (ts-migration)
     return <OptimizedImage src={src} title={title} className="emote" waitLoad loading="lazy" />;
   }
 
   return (
     <Button
+      // @ts-expect-error - TS2322 (ts-migration)
       button="link"
       iconRight={ICONS.EXTERNAL}
       label={title || alt || src}
@@ -185,10 +188,15 @@ export default React.memo<MarkdownProps>(function MarkdownPreview(props: Markdow
         ? SimpleLink
         : (linkProps: unknown) => (
             <MarkdownLink
+              // @ts-expect-error - TS2698 (ts-migration)
               {...linkProps}
+              // @ts-expect-error - TS2322 (ts-migration)
               parentCommentId={parentCommentId}
+              // @ts-expect-error - TS2322 (ts-migration)
               isMarkdownPost={isMarkdownPost}
+              // @ts-expect-error - TS2322 (ts-migration)
               simpleLinks={simpleLinks}
+              // @ts-expect-error - TS2322 (ts-migration)
               allowPreview={isStakeEnoughForPreview(stakedLevel)}
             />
           ),

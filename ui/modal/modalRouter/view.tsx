@@ -171,6 +171,7 @@ function ModalRouter(props: Props) {
   }, [pathname, hideModal]);
 
   if (error) {
+    // @ts-expect-error - TS2741 (ts-migration)
     return <ModalError {...error} />;
   }
 

@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal } from 'modal/modal';
 import { formatFileSystemPath } from 'util/url';
 // @if TARGET='app'
+// @ts-expect-error - TS2792 - Cannot find module 'electron'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import { shell } from 'electron';
 // @endif
 
@@ -45,6 +46,7 @@ function ModalOpenExternalResource(props: Props) {
 
   return (
     <Modal
+// @ts-expect-error - TS2322 - Type '{ children: Element[]; isOpen: true; title: string; contentLabel: string; type: string; confirmButtonLabel: string; onConfirmed: () => void; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
       isOpen
       title={__('Warning!')}
       contentLabel={__('Confirm External Resource')}

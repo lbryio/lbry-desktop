@@ -48,6 +48,7 @@ class PreviewLink extends React.PureComponent<Props> {
               </span>
             </span>
             <span className="media__subtitle">
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <UriIndicator uri={uri} link />
             </span>
             <span className="claim-preview-properties">

@@ -30,6 +30,7 @@ function LibraryPage(props: Props) {
   }, [doPurchaseList, page]);
 
   return (
+    // @ts-expect-error - TS2740 (ts-migration)
     <Page>
       {loading && !hasDownloads && (
         <div className="main--empty">
@@ -43,6 +44,7 @@ function LibraryPage(props: Props) {
             title={__("You haven't downloaded anything from LBRY yet")}
             actions={
               <div className="section__actions">
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <Button button="primary" navigate="/" label={__('Explore New Content')} />
               </div>
             }

@@ -51,6 +51,7 @@ export function doToggleSubscription(
 
       if (!isSubscribed) {
         // They are sharing data, we can store their subscriptions in our internal database
+        // @ts-expect-error - TS2339 (ts-migration)
         Lbryio.call('subscription', 'new', {
           channel_name: subscription.channelName,
           claim_id: channelClaimId,
@@ -59,6 +60,7 @@ export function doToggleSubscription(
 
         dispatch(doClaimRewardType(REWARDS.TYPE_SUBSCRIPTION, { failSilently: true }));
       } else {
+        // @ts-expect-error - TS2339 (ts-migration)
         Lbryio.call('subscription', 'delete', {
           claim_id: channelClaimId,
         });
@@ -135,6 +137,7 @@ export function doImportFollowing(text: string) {
     const isFollowed = (name: unknown, id: unknown) =>
       followed.some(
         (f) =>
+// @ts-expect-error - TS2339 - Property 'startsWith' does not exist on type 'unknown'.
           f.channelClaimId && (f.channelClaimId === id || (f.channelName === name && id.startsWith(f.channelClaimId)))
       );
 
@@ -145,12 +148,14 @@ export function doImportFollowing(text: string) {
       const id = channel && channel.channelClaimId;
       if (channel && id && !isFollowed(channel.channelName, id) && !addedIds.has(id)) {
         addedIds.add(id);
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
         toAdd.push({ ...entry, claimId: id });
       }
     });
 
     // The sidebar lists the newest follow first, so follow in reverse to keep the file's order.
     toAdd
+// @ts-expect-error - TS2339 - Property 'slice' does not exist on type 'unknown'.
       .slice()
       .reverse()
       .forEach(({ uri, channelName, notificationsDisabled }) =>
@@ -158,8 +163,11 @@ export function doImportFollowing(text: string) {
       );
 
     // Same as following one channel at a time: only tell LBRY's servers if the user shares usage data.
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
     if (toAdd.length && state.settings.daemonSettings.share_usage_data) {
+// @ts-expect-error - TS2339 - Property 'forEach' does not exist on type 'unknown'.
       toAdd.forEach((entry) => {
+        // @ts-expect-error - TS2339 (ts-migration)
         Lbryio.call('subscription', 'new', {
           channel_name: entry.channelName,
           claim_id: entry.claimId,
@@ -170,7 +178,9 @@ export function doImportFollowing(text: string) {
     }
 
     return {
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
       added: toAdd.length,
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
       alreadyFollowing: entries.length - toAdd.length,
       invalid,
     };

@@ -33,7 +33,9 @@ function ClaimRepostAuthor(props: Props) {
         <div className="claim-preview__repost-ribbon claim-preview__repost-ribbon--anon">
           <Icon icon={ICONS.REPOST} size={10} />
           <span>
+            {/* @ts-expect-error - TS2745 (ts-migration) */}
             <I18nMessage
+              // @ts-expect-error - TS2322 (ts-migration)
               tokens={{
                 anonymous: <strong>{__('Anon --[used in <%anonymous% Reposted>]--')}</strong>,
               }}
@@ -54,6 +56,7 @@ function ClaimRepostAuthor(props: Props) {
       <div className="claim-preview__repost-ribbon">
         <Icon icon={ICONS.REPOST} size={10} className="claim-preview__repost-icon" />
         <br />
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         <UriIndicator link uri={repostChannelUrl} />
       </div>
     </div>

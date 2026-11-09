@@ -22,6 +22,7 @@ function PublishPrice(props: Props) {
               type="radio"
               name="content_free"
               label={__('Free')}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; label: string; checked: boolean; disabled: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
               checked={contentIsFree}
               disabled={disabled}
               onChange={() => updatePublishForm({ contentIsFree: true })}
@@ -31,6 +32,7 @@ function PublishPrice(props: Props) {
               type="radio"
               name="content_cost"
               label={__('Add a price to this file')}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; label: string; checked: boolean; disabled: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
               checked={!contentIsFree}
               disabled={disabled}
               onChange={() => updatePublishForm({ contentIsFree: false })}
@@ -39,6 +41,7 @@ function PublishPrice(props: Props) {
               <FormFieldPrice
                 name="content_cost_amount"
                 min={0}
+// @ts-expect-error - TS2322 - Type 'Fee' is not assignable to type 'FormPrice'.
                 price={fee}
                 onChange={(newFee) => updatePublishForm({ fee: newFee })}
               />

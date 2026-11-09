@@ -34,6 +34,7 @@ class DateTime extends React.Component<Props, State> {
     for (var i = 0; i < suffixList.length; ++i) {
       // moment() is very liberal with it's rounding.
       // Always round down dates for better youtube parity.
+      // @ts-expect-error - TS2345 (ts-migration)
       duration = Math.floor(moment().diff(date, suffixList[i]));
       if (duration > 0) {
         break;

@@ -31,6 +31,7 @@ export default function HeaderProfileMenuButton(props: HeaderMenuButtonProps) {
           })}
         >
           {activeChannelUrl ? (
+            // @ts-expect-error - TS2739 (ts-migration)
             <ChannelThumbnail uri={activeChannelUrl} small noLazyLoad />
           ) : (
             <Icon size={18} icon={ICONS.ACCOUNT} aria-hidden />

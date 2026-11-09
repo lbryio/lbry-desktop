@@ -6,23 +6,23 @@ import Button from 'component/button';
 import * as ICONS from 'constants/icons';
 
 type Props = {
-  title?: string | Node,
-  subtitle?: string | Node,
-  titleActions?: string | Node,
+  title?: string | React.ReactNode,
+  subtitle?: string | React.ReactNode,
+  titleActions?: string | React.ReactNode,
   id?: string,
-  body?: string | Node,
-  actions?: string | Node,
+  body?: string | React.ReactNode,
+  actions?: string | React.ReactNode,
   icon?: string,
   className?: string,
   isPageTitle?: boolean,
   noTitleWrap?: boolean,
   isBodyList?: boolean,
   defaultExpand?: boolean,
-  nag?: Node,
+  nag?: React.ReactNode,
   smallTitle?: boolean,
   onClick?: () => void,
-  children?: Node,
-  secondPane?: Node
+  children?: React.ReactNode,
+  secondPane?: React.ReactNode
 };
 
 export default function Card(props: Props) {
@@ -97,6 +97,7 @@ export default function Card(props: Props) {
               {expandable && (
                 <div className="card__title-actions">
                   <Button
+                    // @ts-expect-error - TS2322 (ts-migration)
                     button="alt"
                     aria-expanded={expanded}
                     aria-label={expanded ? __('Less') : __('More')}

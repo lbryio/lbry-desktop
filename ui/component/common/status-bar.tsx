@@ -1,4 +1,5 @@
 import React from 'react';
+// @ts-expect-error - TS2792 - Cannot find module 'electron'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import { ipcRenderer } from 'electron';
 import classnames from 'classnames';
 
@@ -11,6 +12,7 @@ type State = {
 
 class StatusBar extends React.PureComponent<Props, State> {
   constructor() {
+// @ts-expect-error - TS2554 - Expected 1-2 arguments, but got 0.
     super();
     this.state = {
       hoverUrl: '',

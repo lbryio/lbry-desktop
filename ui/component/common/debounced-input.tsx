@@ -27,6 +27,7 @@ export default function DebouncedInput(props: Props) {
     <div className={classnames({ wunderbar: !inline, 'wunderbar--inline': inline })}>
       {icon && <Icon icon={icon} />}
       <FormField
+// @ts-expect-error - TS2322 - Type '{ className: any; type: string; name: string; spellCheck: boolean; placeholder: string; value: string; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
         className={classnames({ wunderbar__input: !inline, 'wunderbar__input--inline': inline })}
         type="text"
         name="debounced_search"

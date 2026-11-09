@@ -90,14 +90,18 @@ export default function ReportContent(props: Props) {
 
   // On mount, pause player and get the timestamp, if applicable.
   React.useEffect(() => {
+// @ts-expect-error - TS2339 - Property 'player' does not exist on type 'Window & typeof globalThis'.
     if (window.player) {
+// @ts-expect-error - TS2339 - Property 'player' does not exist on type 'Window & typeof globalThis'.
       window.player.pause();
 
+// @ts-expect-error - TS2339 - Property 'player' does not exist on type 'Window & typeof globalThis'.
       const seconds = window.player.currentTime();
       const h = Math.floor(seconds / 3600);
       const m = Math.floor((seconds % 3600) / 60);
       const s = Math.floor((seconds % 3600) % 60);
 
+// @ts-expect-error - TS2554 - Expected 0 arguments, but got 2.
       const str = (n: unknown) => n.toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
       updateInput('timestamp', str(h) + ':' + str(m) + ':' + str(s));
     }
@@ -121,8 +125,10 @@ export default function ReportContent(props: Props) {
 
     const pushParam = (params: unknown, label: unknown, value: unknown, encode = true) => {
       if (encode) {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'. | TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string | number | boolean'.
         params.push(`${label}=${encodeURIComponent(value)}`);
       } else {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
         params.push(`${label}=${value}`);
       }
     };
@@ -139,9 +145,11 @@ export default function ReportContent(props: Props) {
     }
 
     switch (input.type) {
+// @ts-expect-error - TS2678 - Type '"Infringes my rights"' is not comparable to type '""'.
       case REPORT_API.INFRINGES_MY_RIGHTS:
         pushParam(params, 'signature', input.signature);
         switch (input.category) {
+// @ts-expect-error - TS2678 - Type '"Copyright issue"' is not comparable to type '""'.
           case REPORT_API.COPYRIGHT_ISSUES:
             pushParam(params, 'additional_email', input.additional_email);
             pushParam(params, 'phone_number', input.phone_number);
@@ -156,12 +164,14 @@ export default function ReportContent(props: Props) {
             pushParam(params, 'remove_now', input.remove_now.toString(), false);
             break;
 
+// @ts-expect-error - TS2678 - Type '"Other legal issue"' is not comparable to type '""'.
           case REPORT_API.OTHER_LEGAL_ISSUES:
             pushParam(params, 'reporter_name', input.reporter_name);
             pushParam(params, 'acting_on_behalf_of', input.acting_on_behalf_of);
             pushParam(params, 'specific_law', input.specific_law);
             pushParam(params, 'law_url', input.law_url);
             pushParam(params, 'clarification', input.clarification);
+// @ts-expect-error - TS2367 - This condition will always return 'false' since the types '"self"' and '"client"' have no overlap.
             if (input.acting_on_behalf_of === REPORT_API.BEHALF_CLIENT) {
               pushParam(params, 'client_name', input.client_name);
             }
@@ -179,6 +189,7 @@ export default function ReportContent(props: Props) {
         break;
     }
 
+// @ts-expect-error - TS2339 - Property 'join' does not exist on type 'unknown'.
     doReportContent(input.category, params.join('&'));
   }
 
@@ -205,6 +216,7 @@ export default function ReportContent(props: Props) {
               input.affected_party &&
               input.copyright_owner_name &&
               input.relationship_to_copyrighted_content &&
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'never'.
               input.relationship_to_copyrighted_content.length > REPORT_API.RELATIONSHIP_FIELD_MIN_WIDTH
             );
           case REPORT_API.OTHER_LEGAL_ISSUES:
@@ -228,6 +240,7 @@ export default function ReportContent(props: Props) {
     if (category === REPORT_API.COPYRIGHT_ISSUES) {
       return (
         input.email.match(EMAIL_REGEX) &&
+// @ts-expect-error - TS2339 - Property 'match' does not exist on type 'never'.
         (!input.additional_email || input.additional_email.match(EMAIL_REGEX)) &&
         input.phone_number
       );
@@ -279,6 +292,7 @@ export default function ReportContent(props: Props) {
                       name={x}
                       key={x}
                       label={__(String(x))}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; key: string; label: string; checked: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                       checked={x === input.type}
                       onChange={() => updateInput('type', x)}
                     />
@@ -288,6 +302,7 @@ export default function ReportContent(props: Props) {
             </div>
             <div className="section__actions">
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="primary"
                 label={__('Next')}
                 disabled={input.type === ''}
@@ -309,6 +324,7 @@ export default function ReportContent(props: Props) {
                 </div>
                 <div className="section section--vertical-compact">
                   <fieldset>
+{ /* @ts-expect-error - TS2339 - Property 'map' does not exist on type 'never'. */}
                     {REPORT_API.PARAMETERS['type'][input.type][REPORT_API.CATEGORIES].map((x) => {
                       return (
                         <FormField
@@ -316,6 +332,7 @@ export default function ReportContent(props: Props) {
                           name={x}
                           key={x}
                           label={__(String(x))}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: any; key: any; label: string; checked: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                           checked={input.category === x}
                           onChange={() => updateInput('category', x)}
                         />
@@ -325,8 +342,10 @@ export default function ReportContent(props: Props) {
                 </div>
               </div>
               <div className="section__actions">
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <Button button="alt" label={__('Back')} onClick={() => setPage(PAGE_TYPE)} />
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   button="primary"
                   label={__('Next')}
                   disabled={!input.category || input.category === ''}
@@ -339,8 +358,10 @@ export default function ReportContent(props: Props) {
 
       case PAGE_INFRINGEMENT_DETAILS:
         switch (input.type) {
+// @ts-expect-error - TS2678 - Type '"Infringes my rights"' is not comparable to type '""'.
           case REPORT_API.INFRINGES_MY_RIGHTS:
             switch (input.category) {
+// @ts-expect-error - TS2678 - Type '"Copyright issue"' is not comparable to type '""'.
               case REPORT_API.COPYRIGHT_ISSUES:
                 body = (
                   <div className="section section--vertical-compact">
@@ -364,6 +385,7 @@ export default function ReportContent(props: Props) {
                       name="copyright_owner_name"
                       label={__('Copyright owner name')}
                       value={input.copyright_owner_name}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; label: string; value: ""; maxlength: number; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                       maxlength={REPORT_API.COPYRIGHT_OWNER_MAX_LENGTH}
                       onChange={(e) => updateInput('copyright_owner_name', e.target.value)}
                     />
@@ -376,12 +398,14 @@ export default function ReportContent(props: Props) {
                       onChange={(e) => updateInput('relationship_to_copyrighted_content', e.target.value)}
                       charCount={input.relationship_to_copyrighted_content.length}
                       textAreaMaxLength={FF_MAX_CHARS_REPORT_CONTENT_DETAILS}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; label: string; placeholder: string; value: ""; onChange: (e: any) => void; charCount: number; textAreaMaxLength: number; noEmojis: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                       noEmojis
                     />
                     <FormField
                       type="checkbox"
                       name="remove_now"
                       label={__('Remove now')}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; label: string; checked: true; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                       checked={input.remove_now}
                       onChange={() => updateInput('remove_now', !input.remove_now)}
                     />
@@ -389,6 +413,7 @@ export default function ReportContent(props: Props) {
                 );
                 break;
 
+// @ts-expect-error - TS2678 - Type '"Other legal issue"' is not comparable to type '""'.
               case REPORT_API.OTHER_LEGAL_ISSUES:
                 body = (
                   <div className="section section--vertical-compact">
@@ -415,6 +440,7 @@ export default function ReportContent(props: Props) {
                         {__('Client')}
                       </option>
                     </FormField>
+{ /* @ts-expect-error - TS2367 - This condition will always return 'false' since the types '"self"' and '"client"' have no overlap. */}
                     {input.acting_on_behalf_of === REPORT_API.BEHALF_CLIENT && (
                       <FormField
                         type="text"
@@ -449,6 +475,7 @@ export default function ReportContent(props: Props) {
                       value={input.clarification}
                       textAreaMaxLength={FF_MAX_CHARS_REPORT_CONTENT_DETAILS}
                       onChange={(e) => updateInput('clarification', e.target.value)}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; label: string; placeholder: string; value: ""; textAreaMaxLength: number; onChange: (e: any) => void; noEmojis: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                       noEmojis
                     />
                   </div>
@@ -472,6 +499,7 @@ export default function ReportContent(props: Props) {
                       name="timestamp"
                       label={__('Timestamp')}
                       placeholder={'00:23:59'}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; label: string; placeholder: string; pattern: string; value: ""; maxlength: number; onChange: (e: any) => void; error: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                       pattern="[0-9]{3}"
                       value={input.timestamp}
                       maxlength={8}
@@ -492,6 +520,7 @@ export default function ReportContent(props: Props) {
                     charCount={input.additionalDetails.length}
                     textAreaMaxLength={FF_MAX_CHARS_REPORT_CONTENT_DETAILS}
                     placeholder={__('Provide additional details')}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; value: ""; onChange: (e: any) => void; charCount: number; textAreaMaxLength: number; placeholder: string; noEmojis: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                     noEmojis
                   />
                 </div>
@@ -503,8 +532,10 @@ export default function ReportContent(props: Props) {
           <>
             {body}
             <div className="section__actions">
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="alt" label={__('Back')} onClick={() => setPage(PAGE_CATEGORY)} />
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="primary"
                 label={__('Next')}
                 disabled={!isInfringementDetailsValid(input.type, input.category)}
@@ -527,6 +558,7 @@ export default function ReportContent(props: Props) {
                   value={input.email}
                   onChange={(e) => updateInput('email', e.target.value)}
                 />
+{ /* @ts-expect-error - TS2367 - This condition will always return 'false' since the types '""' and '"Copyright issue"' have no overlap. */}
                 {input.category === REPORT_API.COPYRIGHT_ISSUES && (
                   <>
                     <FormField
@@ -543,6 +575,7 @@ export default function ReportContent(props: Props) {
                       label={__('Phone number')}
                       placeholder={'e.g. +1 (xxx) xxx-xx-xx'}
                       value={input.phone_number}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; label: string; placeholder: string; value: ""; maxlength: number; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                       maxlength={FF_MAX_CHARS_REPORT_CONTENT_SHORT}
                       onChange={(e) => updateInput('phone_number', e.target.value)}
                     />
@@ -560,17 +593,21 @@ export default function ReportContent(props: Props) {
                     'Set to "Anonymous" if you do not want to associate your channel in this report.'
                   )}
                 />
+                {/* @ts-expect-error - TS2739 (ts-migration) */}
                 <ChannelSelector />
               </div>
             </div>
             <div className="section__actions">
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="alt" label={__('Back')} onClick={() => setPage(PAGE_INFRINGEMENT_DETAILS)} />
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="primary"
                 label={__('Next')}
                 disabled={!isSubmitterDetailsValid(input.type, input.category)}
                 onClick={() =>
                   setPage(
+// @ts-expect-error - TS2367 - This condition will always return 'false' since the types '""' and '"Copyright issue"' have no overlap.
                     input.category === REPORT_API.COPYRIGHT_ISSUES ? PAGE_SUBMITTER_DETAILS_ADDRESS : PAGE_CONFIRM
                   )
                 }
@@ -589,6 +626,7 @@ export default function ReportContent(props: Props) {
                 label={__('Address')}
                 placeholder={'Street address'}
                 value={input.street_address}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; label: string; placeholder: string; value: ""; maxlength: number; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 maxlength={FF_MAX_CHARS_REPORT_CONTENT_ADDRESS}
                 onChange={(e) => updateInput('street_address', e.target.value)}
               />
@@ -597,6 +635,7 @@ export default function ReportContent(props: Props) {
                 name="city"
                 placeholder={__('City')}
                 value={input.city}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; placeholder: string; value: ""; maxlength: number; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 maxlength={FF_MAX_CHARS_REPORT_CONTENT_SHORT}
                 onChange={(e) => updateInput('city', e.target.value)}
               />
@@ -605,6 +644,7 @@ export default function ReportContent(props: Props) {
                 name="state_or_province"
                 placeholder={__('State/province')}
                 value={input.state_or_province}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; placeholder: string; value: ""; maxlength: number; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 maxlength={FF_MAX_CHARS_REPORT_CONTENT_SHORT}
                 onChange={(e) => updateInput('state_or_province', e.target.value)}
               />
@@ -613,6 +653,7 @@ export default function ReportContent(props: Props) {
                 name="zip_code"
                 placeholder={__('Zip code')}
                 value={input.zip_code}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; placeholder: string; value: ""; maxlength: number; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 maxlength={FF_MAX_CHARS_REPORT_CONTENT_SHORT}
                 onChange={(e) => updateInput('zip_code', e.target.value)}
               />
@@ -621,13 +662,16 @@ export default function ReportContent(props: Props) {
                 name="country"
                 label={__('Country')}
                 value={input.country}
+// @ts-expect-error - TS2322 - Type '{ children: (Element | Element[])[]; type: string; name: string; label: string; value: ""; maxlength: number; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 maxlength={FF_MAX_CHARS_REPORT_CONTENT_SHORT}
                 onChange={(e) => updateInput('country', e.target.value)}
               >
+{ /* @ts-expect-error - TS2322 - Type 'boolean' is not assignable to type 'string | number | readonly string[]'. */}
                 <option value="" disabled defaultValue>
                   {__('Select your country')}
                 </option>
                 {COUNTRIES.map((country) => (
+// @ts-expect-error - TS2322 - Type 'unknown' is not assignable to type 'Key'. | TS2322 - Type 'unknown' is not assignable to type 'string | number | readonly string[]'.
                   <option key={country} value={country}>
                     {country}
                   </option>
@@ -635,8 +679,10 @@ export default function ReportContent(props: Props) {
               </FormField>
             </div>
             <div className="section__actions">
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="alt" label={__('Back')} onClick={() => setPage(PAGE_SUBMITTER_DETAILS)} />
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="primary"
                 label={__('Next')}
                 disabled={!isSubmitterDetailsAddressValid()}
@@ -652,6 +698,7 @@ export default function ReportContent(props: Props) {
             <div className="section section--padded card--inline confirm__wrapper">
               <div className="confirm__label">{__('Contact details')}</div>
               <div className="confirm__value">{input.email}</div>
+{ /* @ts-expect-error - TS2367 - This condition will always return 'false' since the types '""' and '"Infringes my rights"' have no overlap. */}
               {input.type === REPORT_API.INFRINGES_MY_RIGHTS && (
                 <FormField
                   type="text"
@@ -659,6 +706,7 @@ export default function ReportContent(props: Props) {
                   label={__('Signature')}
                   placeholder={__('e.g. John Doe')}
                   value={input.signature}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; label: string; placeholder: string; value: ""; maxlength: number; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                   maxlength={FF_MAX_CHARS_REPORT_CONTENT_SHORT}
                   onChange={(e) => updateInput('signature', e.target.value)}
                 />
@@ -666,10 +714,13 @@ export default function ReportContent(props: Props) {
             </div>
             <div className="section">{__('Send report?')}</div>
             <div className="section__actions">
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="alt" label={__('Back')} onClick={() => setPage(PAGE_SUBMITTER_DETAILS)} />
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="primary"
                 label={__('Send Report')}
+// @ts-expect-error - TS2367 - This condition will always return 'false' since the types '""' and '"Infringes my rights"' have no overlap.
                 disabled={input.type === REPORT_API.INFRINGES_MY_RIGHTS ? !input.signature : false}
                 onClick={() => {
                   onSubmit();
@@ -701,7 +752,9 @@ export default function ReportContent(props: Props) {
           <>
             <div className="section">{body}</div>
             <div className="section__actions">
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               {error && <Button button="alt" label={__('Back')} onClick={() => setPage(PAGE_CONFIRM)} />}
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="primary" label={__('Close')} disabled={isReporting} onClick={() => goBack()} />
             </div>
           </>

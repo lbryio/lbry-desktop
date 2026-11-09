@@ -1,6 +1,7 @@
 import React from 'react';
 import { parseURI } from 'util/lbryURI';
 import classnames from 'classnames';
+// @ts-expect-error - TS2792 - Cannot find module './gerbil.png'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import Gerbil from './gerbil.png';
 import FreezeframeWrapper from 'component/fileThumbnail/FreezeframeWrapper';
 import ChannelStakedIndicator from 'component/channelStakedIndicator';
@@ -14,6 +15,7 @@ type Props = {
   thumbnailPreview: string | null | undefined,
   obscure?: boolean,
   small?: boolean,
+// @ts-expect-error - TS2300 - Duplicate identifier 'xsmall'.
   xsmall?: boolean,
   allowGifs?: boolean,
   claim: ChannelClaim | null | undefined,
@@ -23,6 +25,7 @@ type Props = {
   noLazyLoad?: boolean,
   hideStakedIndicator?: boolean,
   hideTooltip?: boolean,
+// @ts-expect-error - TS2300 - Duplicate identifier 'xsmall'.
   xsmall?: boolean,
   noOptimization?: boolean,
   setThumbUploadError: (arg1: boolean) => void,
@@ -87,7 +90,9 @@ function ChannelThumbnail(props: Props) {
 
   if (isGif && !allowGifs) {
     return (
+// @ts-expect-error - TS2322 - Type '{ children: Element; src: any; className: any; }' is not assignable to type 'IntrinsicAttributes & Pick<unknown, never> & Pick<InferProps<{ src: Validator<string>; className: Validator<string>; }>, "src" | "className">'.
       <FreezeframeWrapper src={channelThumbnail} className={classnames('channel-thumbnail', className)}>
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         {!hideStakedIndicator && <ChannelStakedIndicator uri={uri} claim={claim} hideTooltip={hideTooltip} />}
       </FreezeframeWrapper>
     );
@@ -107,6 +112,7 @@ function ChannelThumbnail(props: Props) {
         <div className="channel-thumbnail--waiting">{__('This will be visible in a few minutes.')}</div>
       ) : (
         <OptimizedImage
+          // @ts-expect-error - TS2322 (ts-migration)
           alt={__('Channel profile picture')}
           className={!channelThumbnail ? 'channel-thumbnail__default' : 'channel-thumbnail__custom'}
           src={avatarSrc}
@@ -128,6 +134,7 @@ function ChannelThumbnail(props: Props) {
           }}
         />
       )}
+      {/* @ts-expect-error - TS2322 (ts-migration) */}
       {!hideStakedIndicator && <ChannelStakedIndicator uri={uri} claim={claim} />}
     </div>
   );

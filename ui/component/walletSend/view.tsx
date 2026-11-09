@@ -52,6 +52,7 @@ type Props = {
 
 class WalletSend extends React.PureComponent<Props> {
   constructor() {
+// @ts-expect-error - TS2554 - Expected 1-2 arguments, but got 0.
     super();
 
     (this as any).handleSubmit = this.handleSubmit.bind(this);
@@ -103,6 +104,7 @@ class WalletSend extends React.PureComponent<Props> {
       <Card
         title={__('Send Credits')}
         subtitle={
+          // @ts-expect-error - TS2745, TS2322 (ts-migration)
           <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
             Send LBRY Credits to your friends or favorite creators.
           </I18nMessage>
@@ -119,6 +121,7 @@ class WalletSend extends React.PureComponent<Props> {
                 <div className="section">
                   <Button
                     key="Address"
+                    // @ts-expect-error - TS2322 (ts-migration)
                     label={__('Address')}
                     button="alt"
                     onClick={() => setIsAddress(true)}
@@ -126,6 +129,7 @@ class WalletSend extends React.PureComponent<Props> {
                   />
                   <Button
                     key="Search"
+                    // @ts-expect-error - TS2322 (ts-migration)
                     label={__('Search')}
                     button="alt"
                     onClick={() => setIsAddress(false)}
@@ -134,6 +138,7 @@ class WalletSend extends React.PureComponent<Props> {
                 </div>
 
                 <div className="section">
+                  {/* @ts-expect-error - TS2739 (ts-migration) */}
                   {!isAddress && <ChannelSelector />}
 
                   <Form onSubmit={handleSubmit}>
@@ -143,15 +148,18 @@ class WalletSend extends React.PureComponent<Props> {
                         name="search"
                         error={contentError}
                         placeholder={__('Enter a name, @username or URL')}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; error: string; placeholder: string; className: string; label: string; onChange: (event: any) => void; onBlur: any; value: any; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                         className="form-field--address"
                         label={__('Recipient search')}
                         onChange={(event) => setEnteredContentUri(event.target.value)}
                         onBlur={handleBlur}
+                        // @ts-expect-error - TS2339 (ts-migration)
                         value={values.search}
                       />
                     )}
 
                     {!isAddress && (
+// @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'.
                       <fieldset-section>
                         <ClaimPreview
                           key={contentUri}
@@ -162,9 +170,11 @@ class WalletSend extends React.PureComponent<Props> {
                           hideMenu
                           hideRepostLabel
                         />
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
                       </fieldset-section>
                     )}
 
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
                     <fieldset-group class="fieldset-group--smushed">
                       <FormField
                         autoFocus
@@ -173,6 +183,7 @@ class WalletSend extends React.PureComponent<Props> {
                         label={__('Amount')}
                         className="form-field--price-amount"
                         affixClass="form-field--fix-no-height"
+// @ts-expect-error - TS2322 - Type 'string' is not assignable to type 'number'.
                         min="0"
                         step="any"
                         placeholder="12.34"
@@ -187,6 +198,7 @@ class WalletSend extends React.PureComponent<Props> {
                           type="text"
                           name="address"
                           placeholder={'bbFxRyXXXXXXXXXXXZD8nE7XTLUxYnddTs'}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; placeholder: string; className: string; label: string; onChange: (event: any) => void; onBlur: any; value: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                           className="form-field--address"
                           label={__('Recipient address')}
                           onChange={(event) =>
@@ -196,10 +208,12 @@ class WalletSend extends React.PureComponent<Props> {
                           value={draftTransaction.address}
                         />
                       )}
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
                     </fieldset-group>
 
                     <div className="card__actions">
                       <Button
+                        // @ts-expect-error - TS2322 (ts-migration)
                         button="primary"
                         type="submit"
                         label={__(sendLabel)}
@@ -214,7 +228,9 @@ class WalletSend extends React.PureComponent<Props> {
                       />
                       {!!Object.keys(errors).length || (
                         <span className="error__text">
+                          {/* @ts-expect-error - TS2339 (ts-migration) */}
                           {(!!draftTransaction.address && touched.address && errors.address) ||
+                            // @ts-expect-error - TS2339 (ts-migration)
                             (!!draftTransaction.amount && touched.amount && errors.amount) ||
                             (parseFloat(draftTransaction.amount) === balance &&
                               __('Decrease amount to account for transaction fee')) ||

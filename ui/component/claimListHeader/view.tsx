@@ -24,7 +24,7 @@ type Props = {
   defaultOrderBy?: string,
   hideAdvancedFilter: boolean,
   hasMatureTags: boolean,
-  hiddenNsfwMessage?: Node,
+  hiddenNsfwMessage?: React.ReactNode,
   channelIds?: Array<string>,
   tileLayout: boolean,
   doSetClientSetting: (arg1: string, arg2: boolean, arg3?: boolean | null | undefined) => void,
@@ -68,6 +68,7 @@ function ClaimListHeader(props: Props) {
   const freshnessParam = freshness || urlParams.get(CS.FRESH_KEY) || defaultFreshness;
   const contentTypeParam = urlParams.get(CS.CONTENT_KEY);
   const streamTypeParam =
+// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"audio" | "video" | "image" | "document" | "model" | "binary"'.
     streamType || (CS.FILE_TYPES.includes(contentTypeParam) && contentTypeParam) || defaultStreamType || null;
   const durationParam = urlParams.get(CS.DURATION_KEY) || null;
   const languageParam = urlParams.get(CS.LANGUAGE_KEY) || null;
@@ -75,6 +76,7 @@ function ClaimListHeader(props: Props) {
   const channelIdsInUrl = urlParams.get(CS.CHANNEL_IDS_KEY);
   const channelIdsParam = channelIdsInUrl ? channelIdsInUrl.split(',') : channelIds;
   const feeAmountParam = urlParams.get('fee_amount') || feeAmount || CS.FEE_AMOUNT_ANY;
+// @ts-expect-error - TS2367 - This condition will always return 'true' since the types 'string[]' and 'string' have no overlap. | TS2367 - This condition will always return 'true' since the types 'string[]' and 'string' have no overlap.
   const showDuration = !claimType || (claimType && claimType !== CS.CLAIM_CHANNEL && claimType !== CS.CLAIM_COLLECTION);
   const isFiltered = () =>
     Boolean(
@@ -150,69 +152,91 @@ function ClaimListHeader(props: Props) {
         newUrlParams.set(k, urlParams.get(k));
     });
 
+// @ts-expect-error - TS2339 - Property 'key' does not exist on type 'unknown'.
     switch (delta.key) {
       case CS.ORDER_BY_KEY:
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
         newUrlParams.set(CS.ORDER_BY_KEY, delta.value);
         break;
       case CS.SORT_BY_KEY:
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
         if (delta.value === CS.SORT_BY.NEWEST.key) {
           newUrlParams.delete(CS.SORT_BY_KEY);
         } else {
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
           newUrlParams.set(CS.SORT_BY_KEY, delta.value);
         }
         break;
       case CS.FRESH_KEY:
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'. | TS2339 - Property 'value' does not exist on type 'unknown'.
         if (delta.value === defaultFreshness || delta.value === CS.FRESH_DEFAULT) {
           newUrlParams.delete(CS.FRESH_KEY);
         } else {
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
           newUrlParams.set(CS.FRESH_KEY, delta.value);
         }
         break;
       case CS.CONTENT_KEY:
         if (
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
           delta.value === CS.CLAIM_CHANNEL ||
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
           delta.value === CS.CLAIM_REPOST ||
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
           delta.value === CS.CLAIM_COLLECTION
         ) {
           newUrlParams.delete(CS.DURATION_KEY);
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
           newUrlParams.set(CS.CONTENT_KEY, delta.value);
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
         } else if (delta.value === CS.CONTENT_ALL) {
           newUrlParams.delete(CS.CONTENT_KEY);
         } else {
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
           newUrlParams.set(CS.CONTENT_KEY, delta.value);
         }
         break;
       case CS.DURATION_KEY:
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
         if (delta.value === CS.DURATION_ALL) {
           newUrlParams.delete(CS.DURATION_KEY);
         } else {
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
           newUrlParams.set(CS.DURATION_KEY, delta.value);
         }
         break;
       case CS.LANGUAGE_KEY:
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
         newUrlParams.set(CS.LANGUAGE_KEY, delta.value);
         break;
       case CS.TAGS_KEY:
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
         if (delta.value === CS.TAGS_ALL) {
           if (defaultTags === CS.TAGS_ALL) {
             newUrlParams.delete(CS.TAGS_KEY);
           } else {
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
             newUrlParams.set(CS.TAGS_KEY, delta.value);
           }
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
         } else if (delta.value === CS.TAGS_FOLLOWED) {
           if (defaultTags === CS.TAGS_FOLLOWED) {
             newUrlParams.delete(CS.TAGS_KEY);
           } else {
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
             newUrlParams.set(CS.TAGS_KEY, delta.value); // redundant but special
           }
         } else {
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
           newUrlParams.set(CS.TAGS_KEY, delta.value);
         }
         break;
       case CS.FEE_AMOUNT_KEY:
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
         if (delta.value === CS.FEE_AMOUNT_ANY) {
           newUrlParams.delete(CS.FEE_AMOUNT_KEY);
         } else {
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
           newUrlParams.set(CS.FEE_AMOUNT_KEY, delta.value);
         }
         break;
@@ -228,6 +252,7 @@ function ClaimListHeader(props: Props) {
             {CS.ORDER_BY_TYPES.map((type) => (
               <Button
                 key={type}
+                // @ts-expect-error - TS2322 (ts-migration)
                 onClick={(e) =>
                   handleChange({
                     key: CS.ORDER_BY_KEY,
@@ -249,6 +274,7 @@ function ClaimListHeader(props: Props) {
           {!hideAdvancedFilter && (
             <Button
               aria-label={__('More')}
+              // @ts-expect-error - TS2322 (ts-migration)
               className={classnames(`button-toggle button-toggle--top button-toggle--more`, {
                 'button-toggle--custom': isFiltered(),
                 'button-toggle--active': expanded,
@@ -261,6 +287,7 @@ function ClaimListHeader(props: Props) {
         <div className="claim-search__menu-group">
           {tileLayout !== undefined && (
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               onClick={() => {
                 doSetClientSetting(SETTINGS.TILE_LAYOUT, !tileLayout);
               }}
@@ -279,6 +306,7 @@ function ClaimListHeader(props: Props) {
             {orderParam === CS.ORDER_BY_TOP && (
               <div className="claim-search__input-container">
                 <FormField
+// @ts-expect-error - TS2322 - Type '{ children: Element[]; className: any; type: string; name: string; label: string; value: string; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                   className={classnames('claim-search__dropdown', {
                     'claim-search__dropdown--selected': freshnessParam !== defaultFreshness,
                   })}
@@ -319,6 +347,7 @@ function ClaimListHeader(props: Props) {
                 })}
               >
                 <FormField
+// @ts-expect-error - TS2322 - Type '{ children: Element[]; className: any; type: string; name: string; label: string; value: string; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                   className={classnames('claim-search__dropdown', {
                     'claim-search__dropdown--selected': contentTypeParam,
                   })}
@@ -364,6 +393,7 @@ function ClaimListHeader(props: Props) {
                 })}
               >
                 <FormField
+// @ts-expect-error - TS2322 - Type '{ children: (Element | Element[])[]; className: any; type: string; name: string; label: string; value: string; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                   className={classnames('claim-search__dropdown', {
                     'claim-search__dropdown--selected': shouldHighlight,
                   })}
@@ -397,6 +427,7 @@ function ClaimListHeader(props: Props) {
             {showDuration && (
               <div className={'claim-search__input-container'}>
                 <FormField
+// @ts-expect-error - TS2322 - Type '{ children: Element[]; className: any; label: string; type: string; name: string; disabled: boolean; value: string; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                   className={classnames('claim-search__dropdown', {
                     'claim-search__dropdown--selected': durationParam,
                   })}
@@ -432,9 +463,11 @@ function ClaimListHeader(props: Props) {
             )}
 
             {/* PAID FIELD */}
+{ /* @ts-expect-error - TS2367 - This condition will always return 'true' since the types 'string[]' and 'string' have no overlap. */}
             {claimType !== CS.CLAIM_CHANNEL && (
               <div className={'claim-search__input-container'}>
                 <FormField
+// @ts-expect-error - TS2322 - Type '{ children: Element[]; className: any; label: string; type: string; name: string; value: string; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                   className={classnames('claim-search__dropdown', {
                     'claim-search__dropdown--selected':
                       feeAmountParam === CS.FEE_AMOUNT_ONLY_FREE || feeAmountParam === CS.FEE_AMOUNT_ONLY_PAID,
@@ -453,7 +486,6 @@ function ClaimListHeader(props: Props) {
                   <option value={CS.FEE_AMOUNT_ANY}>{__('Any')}</option>
                   <option value={CS.FEE_AMOUNT_ONLY_FREE}>{__('Free')}</option>
                   <option value={CS.FEE_AMOUNT_ONLY_PAID}>{__('Paid')}</option>
-                  ))}
                 </FormField>
               </div>
             )}
@@ -461,6 +493,7 @@ function ClaimListHeader(props: Props) {
             {orderParam === CS.ORDER_BY_NEW && (
               <div className={'claim-search__input-container'}>
                 <FormField
+// @ts-expect-error - TS2322 - Type '{ children: Element[]; className: any; label: string; type: string; name: string; value: string; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                   className={classnames('claim-search__dropdown', {
                     'claim-search__dropdown--selected': sortByParam,
                   })}
@@ -487,6 +520,7 @@ function ClaimListHeader(props: Props) {
               <div className={'claim-search__input-container'}>
                 <label>{__('Advanced Filters from URL')}</label>
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   button="alt"
                   className="claim-search__filter-button"
                   label={__('Clear')}

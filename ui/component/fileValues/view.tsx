@@ -41,6 +41,7 @@ class FileValues extends PureComponent<Props> {
               <td> {__('Purchase Amount')}</td>
               <td>
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   button="link"
                   href={`https://explorer.lbry.com/tx/${purchaseReceipt.txid}`}
                   label={<CreditAmount amount={Number(purchaseReceipt.amount)} precision={2} />}
@@ -61,6 +62,7 @@ class FileValues extends PureComponent<Props> {
               {claimIsMine && !pendingAmount && Boolean(supportsAmount) && (
                 <>
                   <Button
+                    // @ts-expect-error - TS2322 (ts-migration)
                     button="link"
                     className="expandable__button"
                     icon={ICONS.UNLOCK}
@@ -76,6 +78,7 @@ class FileValues extends PureComponent<Props> {
                 <CreditAmount amount={Number(supportsAmount)} precision={2} />
               )}
 
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               {claimIsMine && pendingAmount && <Spinner type={'small'} />}
             </td>
           </tr>
@@ -97,6 +100,7 @@ class FileValues extends PureComponent<Props> {
             </td>
             <td>
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="link"
                 label={claim.meta.is_controlling ? __('Yes') : __('No')}
                 navigate={`/$/${PAGES.TOP}?name=${claim.name}`}

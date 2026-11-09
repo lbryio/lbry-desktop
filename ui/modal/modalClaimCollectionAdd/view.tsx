@@ -10,6 +10,7 @@ type Props = {
 const ModalClaimCollectionAdd = (props: Props) => {
   const { doHideModal, uri } = props;
   return (
+// @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; type: string; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
     <Modal isOpen type="card" onAborted={doHideModal}>
       <ClaimCollectionAdd uri={uri} closeModal={doHideModal} />
     </Modal>

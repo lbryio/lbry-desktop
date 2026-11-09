@@ -7,6 +7,7 @@ import { selectClaimForUri } from 'redux/selectors/claims';
 export const doFetchReactions = (claimId: string) => (dispatch: Dispatch) => {
   dispatch({ type: ACTIONS.REACTIONS_LIST_STARTED });
 
+  // @ts-expect-error - TS2339 (ts-migration)
   return Lbryio.call('reaction', 'list', { claim_ids: claimId }, 'post')
     .then((reactions: Array<number>) => {
       dispatch({ type: ACTIONS.REACTIONS_LIST_COMPLETED, data: { claimId, reactions } });
@@ -23,6 +24,7 @@ export const doReactionLike = (uri: string) => (dispatch: Dispatch, getState: Ge
   const claimId = claim.claim_id;
   const shouldRemove = myReaction === REACTION_TYPES.LIKE;
 
+  // @ts-expect-error - TS2339 (ts-migration)
   return Lbryio.call(
     'reaction',
     'react',
@@ -49,6 +51,7 @@ export const doReactionDislike = (uri: string) => (dispatch: Dispatch, getState:
   const claimId = claim.claim_id;
   const shouldRemove = myReaction === REACTION_TYPES.DISLIKE;
 
+  // @ts-expect-error - TS2339 (ts-migration)
   return Lbryio.call(
     'reaction',
     'react',

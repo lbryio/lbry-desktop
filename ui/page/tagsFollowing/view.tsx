@@ -15,6 +15,7 @@ function TagsFollowingPage(props: Props) {
   const { tileLayout } = props;
 
   return (
+    // @ts-expect-error - TS2322 (ts-migration)
     <Page noFooter fullWidthPage>
       <ClaimListDiscover
         headerLabel={
@@ -28,6 +29,7 @@ function TagsFollowingPage(props: Props) {
         tileLayout={tileLayout}
         meta={
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             button="secondary"
             icon={ICONS.EDIT}
             label={__('Manage')}

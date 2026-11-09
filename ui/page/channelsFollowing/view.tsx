@@ -24,6 +24,7 @@ function ChannelsFollowingPage(props: Props) {
   return !hasSubsribedChannels ? (
     <ChannelsFollowingDiscoverPage />
   ) : (
+    // @ts-expect-error - TS2322 (ts-migration)
     <Page noFooter fullWidthPage={tileLayout}>
       <ClaimListDiscover
         tileLayout={tileLayout}
@@ -37,6 +38,7 @@ function ChannelsFollowingPage(props: Props) {
         channelIds={channelIds}
         meta={
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             icon={ICONS.SEARCH}
             button="secondary"
             label={__('Discover Channels')}

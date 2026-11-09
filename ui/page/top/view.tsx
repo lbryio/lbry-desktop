@@ -20,7 +20,9 @@ function TopPage(props: Props) {
   // if the query was actually '@name', still offer repost for 'name'
   const queryName = name[0] === '@' ? name.slice(1) : name;
   return (
+    // @ts-expect-error - TS2740 (ts-migration)
     <Page className="topPage-wrapper">
+      {/* @ts-expect-error - TS2322, TS2741 (ts-migration) */}
       <SearchTopClaim query={name} hideLink setChannelActive={setChannelActive} />
       <ClaimListDiscover
         name={channelActive ? `@${queryName}` : queryName}
@@ -28,16 +30,20 @@ function TopPage(props: Props) {
         defaultOrderBy={CS.ORDER_BY_TOP}
         meta={
           <div className="search__top-links">
+            {/* @ts-expect-error - TS2745 (ts-migration) */}
             <I18nMessage
+              // @ts-expect-error - TS2322 (ts-migration)
               tokens={{
                 repost: (
                   <Button
+                    // @ts-expect-error - TS2322 (ts-migration)
                     button="secondary"
                     navigate={`/$/${PAGES.REPOST_NEW}?to=${queryName}`}
                     label={__('Repost Here')}
                   />
                 ),
                 publish: (
+                  // @ts-expect-error - TS2322 (ts-migration)
                   <Button button="secondary" onClick={() => beginPublish(queryName)} label={__('Publish Here')} />
                 ),
               }}
@@ -56,6 +62,7 @@ function TopPage(props: Props) {
         header={
           <div className="claim-search__menu-group">
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               label={queryName}
               onClick={() => setChannelActive(false)}
               className={classnames('button-toggle', {
@@ -63,6 +70,7 @@ function TopPage(props: Props) {
               })}
             />
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               label={`@${queryName}`}
               onClick={() => setChannelActive(true)}
               className={classnames('button-toggle', {

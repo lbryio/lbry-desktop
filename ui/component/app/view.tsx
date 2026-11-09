@@ -160,7 +160,9 @@ function App(props: Props) {
   useEffect(() => {
     if (!uploadCount) return;
     const handleBeforeUnload = (event: unknown) => {
+// @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
       event.preventDefault();
+// @ts-expect-error - TS2339 - Property 'returnValue' does not exist on type 'unknown'.
       event.returnValue = __('There are pending uploads.'); // without setting this to something it doesn't work
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
@@ -170,6 +172,7 @@ function App(props: Props) {
   // allows user to navigate history using the forward and backward buttons on a mouse
   useEffect(() => {
     const handleForwardAndBackButtons = (e: unknown) => {
+// @ts-expect-error - TS2339 - Property 'button' does not exist on type 'unknown'.
       switch (e.button) {
         case MOUSE_BACK_BTN:
           history.index > 0 && history.goBack();
@@ -186,7 +189,9 @@ function App(props: Props) {
   // allows user to pause miniplayer using the spacebar without the page scrolling down
   useEffect(() => {
     const handleKeyPress = (e: unknown) => {
+// @ts-expect-error - TS2339 - Property 'key' does not exist on type 'unknown'. | TS2339 - Property 'target' does not exist on type 'unknown'.
       if (e.key === ' ' && e.target === document.body) {
+// @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
         e.preventDefault();
       }
     };
@@ -196,6 +201,7 @@ function App(props: Props) {
 
   // Enable ctrl +/- zooming on Desktop.
   // @if TARGET='app'
+// @ts-expect-error - TS2554 - Expected 1 arguments, but got 0.
   useZoom();
   // @endif
 

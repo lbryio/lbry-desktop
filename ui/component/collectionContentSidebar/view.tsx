@@ -41,6 +41,7 @@ export default function CollectionContent(props: Props) {
   const [showEdit, setShowEdit] = React.useState(false);
 
   function handleOnDragEnd(result: unknown) {
+// @ts-expect-error - TS2339 - Property 'source' does not exist on type '{}'. | TS2339 - Property 'destination' does not exist on type '{}'.
     const { source, destination } = result;
 
     if (!destination) return;
@@ -58,6 +59,7 @@ export default function CollectionContent(props: Props) {
       title={
         <>
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             button="link"
             className="file-page__playlist-collection__row"
             navigate={`/$/${PAGES.LIST}/${id}`}
@@ -70,6 +72,7 @@ export default function CollectionContent(props: Props) {
           />
           <span className="file-page__playlist-collection__row">
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               button="alt"
               title={__('Loop')}
               icon={ICONS.REPEAT}
@@ -78,6 +81,7 @@ export default function CollectionContent(props: Props) {
               onClick={() => doToggleLoopList(id, !loop)}
             />
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               button="alt"
               title={__('Shuffle')}
               icon={ICONS.SHUFFLE}
@@ -91,6 +95,7 @@ export default function CollectionContent(props: Props) {
       titleActions={
         isMyCollection && (
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             title={__('Edit')}
             className={classnames('button-toggle', { 'button-toggle--active': showEdit })}
             icon={ICONS.EDIT}
@@ -106,6 +111,7 @@ export default function CollectionContent(props: Props) {
                 isCardBody
                 type="small"
                 activeUri={url}
+                // @ts-expect-error - TS2322 (ts-migration)
                 uris={collectionUrls}
                 collectionId={id}
                 empty={__('List is Empty')}

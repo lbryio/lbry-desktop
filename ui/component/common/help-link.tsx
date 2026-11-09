@@ -13,6 +13,7 @@ export default function HelpLink(props: Props) {
   const { href, navigate, icon, description } = props;
   return (
     <Button
+      // @ts-expect-error - TS2322 (ts-migration)
       onClick={e => {
         if (href) {
           e.stopPropagation();

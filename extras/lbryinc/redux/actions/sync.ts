@@ -7,7 +7,7 @@ import { doWalletEncrypt, doWalletDecrypt } from 'redux/actions/wallet';
 const NO_WALLET_ERROR = 'no wallet found for this user';
 
 export function doSetDefaultAccount(success: unknown, failure: unknown) {
-  return dispatch: unknown => {
+  return (dispatch: unknown) => {
     dispatch({
       type: ACTIONS.SET_DEFAULT_ACCOUNT,
     });
@@ -56,7 +56,7 @@ export function doSetDefaultAccount(success: unknown, failure: unknown) {
 }
 
 export function doSetSync(oldHash: unknown, newHash: unknown, data: unknown) {
-  return dispatch: unknown => {
+  return (dispatch: unknown) => {
     dispatch({
       type: ACTIONS.SET_SYNC_STARTED,
     });
@@ -94,7 +94,7 @@ export function doGetSync(passedPassword: unknown, callback: unknown) {
     }
   }
 
-  return dispatch: unknown => {
+  return (dispatch: unknown) => {
     dispatch({
       type: ACTIONS.GET_SYNC_STARTED,
     });
@@ -198,7 +198,7 @@ export function doGetSync(passedPassword: unknown, callback: unknown) {
 }
 
 export function doSyncApply(syncHash: unknown, syncData: unknown, password: unknown) {
-  return dispatch: unknown => {
+  return (dispatch: unknown) => {
     dispatch({
       type: ACTIONS.SYNC_APPLY_STARTED,
     });
@@ -227,7 +227,7 @@ export function doSyncApply(syncHash: unknown, syncData: unknown, password: unkn
 }
 
 export function doCheckSync() {
-  return dispatch: unknown => {
+  return (dispatch: unknown) => {
     dispatch({
       type: ACTIONS.GET_SYNC_STARTED,
     });
@@ -255,15 +255,15 @@ export function doCheckSync() {
 }
 
 export function doResetSync() {
-  return dispatch: unknown =>
-    new Promise(resolve: unknown => {
+  return (dispatch: unknown) =>
+    new Promise<any>((resolve) => {
       dispatch({ type: ACTIONS.SYNC_RESET });
       resolve();
     });
 }
 
 export function doSyncEncryptAndDecrypt(oldPassword: unknown, newPassword: unknown, encrypt: unknown) {
-  return dispatch: unknown => {
+  return (dispatch: unknown) => {
     const data: Record<string, any> = {};
     return Lbry.sync_hash()
       .then(hash => Lbryio.call('sync', 'get', { hash }, 'post'))

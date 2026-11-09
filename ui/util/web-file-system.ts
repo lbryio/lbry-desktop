@@ -3,21 +3,21 @@
 
 // Wrapper for webkitGetAsEntry
 // Note: webkitGetAsEntry might be renamed to GetAsEntry
-const getAsEntry = item: unknown => {
+const getAsEntry = (item: unknown) => {
   if (item.kind === 'file' && item.webkitGetAsEntry) {
     return item.webkitGetAsEntry();
   }
 };
 
 // Get file object from fileEntry
-const getFile = fileEntry: unknown => new Promise((resolve: unknown, reject: unknown) => fileEntry.file(resolve, reject));
+const getFile = (fileEntry: unknown) => new Promise<any>((resolve, reject) => fileEntry.file(resolve, reject));
 
 // Read entries from directory
-const readDirectory = directory: unknown => {
+const readDirectory = (directory: unknown) => {
   // Some browsers don't support this
   if (directory.createReader !== undefined) {
     let dirReader = directory.createReader();
-    return new Promise((resolve: unknown, reject: unknown) => dirReader.readEntries(resolve, reject));
+    return new Promise<any>((resolve, reject) => dirReader.readEntries(resolve, reject));
   }
 };
 
@@ -40,7 +40,7 @@ const getFiles = (items: unknown, directoryEntries = false) => {
 // Generate a valid file tree from dataTransfer:
 // - Ignores directory entries
 // - Ignores recursive search
-export const getTree = async dataTransfer: unknown => {
+export const getTree = async (dataTransfer: unknown) => {
   if (dataTransfer) {
     const { items, files } = dataTransfer;
     // Handle single item drop

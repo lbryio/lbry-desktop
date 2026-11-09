@@ -4,7 +4,8 @@ import { selectClaimIdForUri } from 'redux/selectors/claims';
 type State = {
   claims: any
 };
-const selectState = state: unknown => state.stats || {};
+// @ts-expect-error - TS2339 - Property 'stats' does not exist on type 'unknown'.
+const selectState = (state: unknown) => state.stats || {};
 export const selectViewCount = createSelector(selectState, state => state.viewCountById);
 export const selectSubCount = createSelector(selectState, state => state.subCountById);
 

@@ -2,7 +2,7 @@
 const { exec } = require('child_process');
 
 export const diskSpaceLinux = (path: unknown) => {
-  return new Promise((resolve: unknown, reject: unknown) => {
+  return new Promise<any>((resolve, reject) => {
     exec(`df ${path}`, (error, stdout, stderr) => {
       if (error) {
         return reject(error);
@@ -32,7 +32,7 @@ export const diskSpaceMac = (path: unknown) => {
 };
 
 export const diskSpaceWindows = (path: unknown) => {
-  return new Promise((resolve: unknown, reject: unknown) => {
+  return new Promise<any>((resolve, reject) => {
     exec(`wmic logicaldisk get size,freespace,caption`, (error, stdout, stderr) => {
       if (error) {
         return reject(error);

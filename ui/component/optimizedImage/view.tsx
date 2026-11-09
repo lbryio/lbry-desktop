@@ -20,11 +20,15 @@ function OptimizedImage(props: Props) {
 
   function getOptimizedImgUrl(url: unknown, width: unknown, height: unknown) {
     let optimizedUrl = url;
+// @ts-expect-error - TS2339 - Property 'startsWith' does not exist on type 'unknown'.
     if (url && !url.startsWith('/public/')) {
+// @ts-expect-error - TS2339 - Property 'trim' does not exist on type 'unknown'.
       optimizedUrl = url.trim().replace(/^http:\/\//i, 'https://');
 
       // @if TARGET='web'
+// @ts-expect-error - TS2339 - Property 'endsWith' does not exist on type 'unknown'.
       if (!optimizedUrl.endsWith('.gif')) {
+// @ts-expect-error - TS2322 - Type 'unknown' is not assignable to type 'string'. | TS2322 - Type 'unknown' is not assignable to type 'number'. | TS2322 - Type 'unknown' is not assignable to type 'number'.
         optimizedUrl = getThumbnailCdnUrl({ thumbnail: optimizedUrl, width, height, quality: 85 });
       }
       // @endif
@@ -33,11 +37,14 @@ function OptimizedImage(props: Props) {
   }
 
   function getOptimumSize(elem: unknown) {
+// @ts-expect-error - TS2339 - Property 'parentElement' does not exist on type 'unknown'. | TS2339 - Property 'parentElement' does not exist on type 'unknown'. | TS2339 - Property 'parentElement' does not exist on type 'unknown'.
     if (!elem || !elem.parentElement || !elem.parentElement.clientWidth || !elem.parentElement.clientHeight) {
       return null;
     }
 
+// @ts-expect-error - TS2339 - Property 'parentElement' does not exist on type 'unknown'.
     let width = elem.parentElement.clientWidth;
+// @ts-expect-error - TS2339 - Property 'parentElement' does not exist on type 'unknown'.
     let height = elem.parentElement.clientHeight;
 
     width = scaleToDevicePixelRatio(width, window);
@@ -55,6 +62,7 @@ function OptimizedImage(props: Props) {
     if (objectFit === 'cover' && elem) {
       const containerSize = getOptimumSize(elem);
       if (containerSize) {
+// @ts-expect-error - TS2339 - Property 'naturalWidth' does not exist on type 'unknown'.
         if (elem.naturalWidth < containerSize.width) {
           // For 'cover', we don't want to stretch the image. We started off by
           // filling up the container height, but the width still has a gap for
@@ -63,10 +71,12 @@ function OptimizedImage(props: Props) {
           // image so that "objectFit=cover" will center it without stretching and
           // making it blur. The double fetch might seem wasteful, but on
           // average the total transferred bytes is still less than the original.
+// @ts-expect-error - TS2339 - Property 'naturalHeight' does not exist on type 'unknown'.
           const probablyMaxedOut = elem.naturalHeight < containerSize.height;
           if (!probablyMaxedOut) {
             const newOptimizedSrc = getOptimizedImgUrl(origSrc, containerSize.width, 0);
             if (newOptimizedSrc && newOptimizedSrc !== optimizedSrc) {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'SetStateAction<string>'.
               setOptimizedSrc(newOptimizedSrc);
             }
           }
@@ -84,6 +94,7 @@ function OptimizedImage(props: Props) {
       const newOptimizedSrc = getOptimizedImgUrl(src, width, height);
 
       if (newOptimizedSrc !== optimizedSrc) {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'SetStateAction<string>'.
         setOptimizedSrc(newOptimizedSrc);
       }
     } else {

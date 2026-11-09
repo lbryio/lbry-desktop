@@ -29,6 +29,7 @@ function ClaimPreviewSubtitle(props: Props) {
     <div className="media__subtitle">
       {claim ? (
         <React.Fragment>
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <UriIndicator uri={uri} link />{' '}
           {!pending && claim && (
             <>
@@ -39,6 +40,7 @@ function ClaimPreviewSubtitle(props: Props) {
               {!isChannel && (
                 <>
                   <FileViewCountInline uri={uri} />
+                  {/* @ts-expect-error - TS2322 (ts-migration) */}
                   <DateTime timeAgo uri={uri} />
                 </>
               )}
@@ -49,6 +51,7 @@ function ClaimPreviewSubtitle(props: Props) {
         <React.Fragment>
           <div>{__('Upload something and claim this spot!')}</div>
           <div className="card__actions">
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <Button onClick={() => beginPublish(name)} button="primary" label={__('Publish to %uri%', { uri })} />
           </div>
         </React.Fragment>

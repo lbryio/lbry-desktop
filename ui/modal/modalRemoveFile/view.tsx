@@ -34,10 +34,12 @@ function ModalRemoveFile(props: Props) {
   }, [uri, doResolveUri]);
 
   return (
+// @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; contentLabel: string; type: string; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
     <Modal isOpen contentLabel={__('Confirm File Remove')} type="card" onAborted={closeModal}>
       <Card
         title={__('Remove File')}
         subtitle={
+          // @ts-expect-error - TS2745, TS2322 (ts-migration)
           <I18nMessage tokens={{ title: <cite>{`"${title}"`}</cite> }}>
             Are you sure you'd like to remove %title%?
           </I18nMessage>
@@ -49,6 +51,7 @@ function ModalRemoveFile(props: Props) {
               name="file_delete"
               label={__('Delete this file from my computer')}
               type="checkbox"
+// @ts-expect-error - TS2322 - Type '{ name: string; label: string; type: string; checked: any; onChange: () => any; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
               checked={deleteChecked}
               onChange={() => setDeleteChecked(!deleteChecked)}
             />
@@ -59,11 +62,13 @@ function ModalRemoveFile(props: Props) {
                 <FormField
                   name="claim_abandon"
                   label={
+                    // @ts-expect-error - TS2745, TS2322 (ts-migration)
                     <I18nMessage tokens={{ lbc: <LbcSymbol postfix={claim.amount} /> }}>
                       Remove from blockchain (%lbc%)
                     </I18nMessage>
                   }
                   type="checkbox"
+                  // @ts-expect-error - TS2322 (ts-migration)
                   checked={abandonChecked}
                   onChange={() => setAbandonChecked(!abandonChecked)}
                 />
@@ -89,11 +94,13 @@ function ModalRemoveFile(props: Props) {
           <>
             <div className="section__actions">
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="primary"
                 label={isAbandoning ? __('Removing...') : __('OK')}
                 disabled={isAbandoning || !(deleteChecked || abandonChecked)}
                 onClick={() => deleteFile(uri, deleteChecked, claimIsMine ? abandonChecked : false, doGoBack, claim)}
               />
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="link" label={__('Cancel')} onClick={closeModal} />
             </div>
             <p className="help">{__('These changes will appear shortly.')}</p>

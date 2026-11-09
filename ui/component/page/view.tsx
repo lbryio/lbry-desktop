@@ -10,9 +10,11 @@ import SettingsSideNavigation from 'component/settingsSideNavigation';
 import SideNavigation from 'component/sideNavigation';
 import StatusBar from 'component/common/status-bar';
 import usePersistedState from 'effects/use-persisted-state';
+// @ts-expect-error - TS2724 - '"react"' has no exported member named 'Element'. Did you mean 'CElement'?
 import type { Element, ReactNode } from 'react';
 
 type Props = {
+// @ts-expect-error - TS2300 - Duplicate identifier 'className'.
   className: string | null | undefined,
   autoUpdateDownloaded: boolean,
   isUpgradeAvailable: boolean,
@@ -23,7 +25,8 @@ type Props = {
     title: string,
     simpleTitle: string // Just use the same value as `title` if `title` is already short (~< 10 chars), unless you have a better idea for title overlfow on mobile
   },
-  children: Node | Array<Node>,
+  children: React.ReactNode | Array<React.ReactNode>,
+// @ts-expect-error - TS2300 - Duplicate identifier 'className'.
   className: string | null | undefined,
   filePage: boolean,
   fullWidthPage: boolean,
@@ -78,6 +81,7 @@ function Page(props: Props) {
 
   return (
     <>
+      {/* @ts-expect-error - TS2322 (ts-migration) */}
       <Wallpaper uri={url} />
       {!noHeader && (
         <Header
@@ -99,6 +103,7 @@ function Page(props: Props) {
             <SettingsSideNavigation />
           ) : (
             !noSideNavigation && (
+              // @ts-expect-error - TS2739 (ts-migration)
               <SideNavigation
                 sidebarOpen={sidebarOpen}
                 setSidebarOpen={setSidebarOpen}

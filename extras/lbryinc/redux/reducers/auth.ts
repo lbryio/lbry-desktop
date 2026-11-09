@@ -6,13 +6,13 @@ const defaultState = {
   authenticating: false,
 } as const;
 
-reducers[ACTIONS.GENERATE_AUTH_TOKEN_FAILURE] = state: unknown =>
+reducers[ACTIONS.GENERATE_AUTH_TOKEN_FAILURE] = (state: unknown) =>
   Object.assign({}, state, {
     authToken: null,
     authenticating: false,
   });
 
-reducers[ACTIONS.GENERATE_AUTH_TOKEN_STARTED] = state: unknown =>
+reducers[ACTIONS.GENERATE_AUTH_TOKEN_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
     authenticating: true,
   });

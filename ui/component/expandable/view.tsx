@@ -32,6 +32,7 @@ export default function Expandable(props: Props) {
             {children}
           </div>
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             button="link"
             className="expandable__button"
             label={expanded ? __('Less') : __('More')}

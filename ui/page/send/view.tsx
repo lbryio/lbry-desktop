@@ -2,6 +2,7 @@ import React from 'react';
 import Page from 'component/page';
 import LbcSymbol from 'component/common/lbc-symbol';
 import WalletSend from 'component/walletSend';
+// @ts-expect-error - TS2305 (ts-migration)
 import { URL as SITE_URL, URL_LOCAL, URL_DEV } from 'config';
 import { parseURI, isNameValid, isURIValid, normalizeURI } from 'util/lbryURI';
 
@@ -22,15 +23,21 @@ export default function SendPage(props: Props) {
     const WEB_LOCAL_PREFIX = `${URL_LOCAL}/`;
     const WEB_PROD_PREFIX = `${SITE_URL}/`;
     const ODYSEE_PREFIX = `https://odysee.com/`;
+// @ts-expect-error - TS2339 - Property 'includes' does not exist on type 'unknown'.
     const includesLbryTvProd = value.includes(WEB_PROD_PREFIX);
+// @ts-expect-error - TS2339 - Property 'includes' does not exist on type 'unknown'.
     const includesOdysee = value.includes(ODYSEE_PREFIX);
+// @ts-expect-error - TS2339 - Property 'includes' does not exist on type 'unknown'.
     const includesLbryTvLocal = value.includes(WEB_LOCAL_PREFIX);
+// @ts-expect-error - TS2339 - Property 'includes' does not exist on type 'unknown'.
     const includesLbryTvDev = value.includes(WEB_DEV_PREFIX);
     const wasCopiedFromWeb = includesLbryTvDev || includesLbryTvLocal || includesLbryTvProd || includesOdysee;
+// @ts-expect-error - TS2339 - Property 'startsWith' does not exist on type 'unknown'.
     const isLbryUrl = value.startsWith('lbry://') && value !== 'lbry://';
     const error = '';
 
     const addLbryIfNot = (term: unknown) => {
+// @ts-expect-error - TS2339 - Property 'startsWith' does not exist on type 'unknown'.
       return term.startsWith('lbry://') ? term : `lbry://${term}`;
     };
     if (wasCopiedFromWeb) {
@@ -39,6 +46,7 @@ export default function SendPage(props: Props) {
       if (includesLbryTvDev) prefix = WEB_DEV_PREFIX;
       if (includesOdysee) prefix = ODYSEE_PREFIX;
 
+// @ts-expect-error - TS2339 - Property 'slice' does not exist on type 'unknown'.
       let query = (value && value.slice(prefix.length).replace(/:/g, '#')) || '';
       try {
         const lbryUrl = `lbry://${query}`;
@@ -50,7 +58,9 @@ export default function SendPage(props: Props) {
     }
 
     if (!isLbryUrl) {
+// @ts-expect-error - TS2339 - Property 'startsWith' does not exist on type 'unknown'.
       if (value.startsWith('@')) {
+// @ts-expect-error - TS2339 - Property 'slice' does not exist on type 'unknown'.
         if (isNameValid(value.slice(1))) {
           return [value, null];
         } else {
@@ -60,10 +70,12 @@ export default function SendPage(props: Props) {
       return [addLbryIfNot(value), null];
     } else {
       try {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
         const isValid = isURIValid(value);
         if (isValid) {
           let uri;
           try {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
             uri = normalizeURI(value);
           } catch (e: any) {
             return [value, null];
@@ -113,6 +125,7 @@ export default function SendPage(props: Props) {
       className="main--send"
       backout={{
         backoutLabel: __('Done'),
+        // @ts-expect-error - TS2322 (ts-migration)
         title: (
           <>
             <LbcSymbol prefix={__('Send')} size={28} />

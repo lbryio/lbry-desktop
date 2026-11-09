@@ -33,7 +33,7 @@ const defaultState = {
   referrerSetError: '',
 } as const;
 
-reducers[ACTIONS.AUTHENTICATION_STARTED] = state: unknown =>
+reducers[ACTIONS.AUTHENTICATION_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
     authenticationIsPending: true,
     userIsPending: true,
@@ -48,14 +48,14 @@ reducers[ACTIONS.AUTHENTICATION_SUCCESS] = (state: unknown, action: unknown) =>
     user: action.data.user,
   });
 
-reducers[ACTIONS.AUTHENTICATION_FAILURE] = state: unknown =>
+reducers[ACTIONS.AUTHENTICATION_FAILURE] = (state: unknown) =>
   Object.assign({}, state, {
     authenticationIsPending: false,
     userIsPending: false,
     user: null,
   });
 
-reducers[ACTIONS.USER_FETCH_STARTED] = state: unknown =>
+reducers[ACTIONS.USER_FETCH_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
     userIsPending: true,
   });
@@ -67,7 +67,7 @@ reducers[ACTIONS.USER_FETCH_SUCCESS] = (state: unknown, action: unknown) =>
     emailToVerify: action.data.user.has_verified_email ? null : state.emailToVerify,
   });
 
-reducers[ACTIONS.USER_FETCH_FAILURE] = state: unknown =>
+reducers[ACTIONS.USER_FETCH_FAILURE] = (state: unknown) =>
   Object.assign({}, state, {
     userIsPending: true,
     user: null,
@@ -89,7 +89,7 @@ reducers[ACTIONS.USER_PHONE_NEW_SUCCESS] = (state: unknown, action: unknown) =>
     phoneNewIsPending: false,
   });
 
-reducers[ACTIONS.USER_PHONE_RESET] = state: unknown =>
+reducers[ACTIONS.USER_PHONE_RESET] = (state: unknown) =>
   Object.assign({}, state, {
     phoneToVerify: null,
   });
@@ -100,7 +100,7 @@ reducers[ACTIONS.USER_PHONE_NEW_FAILURE] = (state: unknown, action: unknown) =>
     phoneNewErrorMessage: action.data.error,
   });
 
-reducers[ACTIONS.USER_PHONE_VERIFY_STARTED] = state: unknown =>
+reducers[ACTIONS.USER_PHONE_VERIFY_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
     phoneVerifyIsPending: true,
     phoneVerifyErrorMessage: '',
@@ -119,7 +119,7 @@ reducers[ACTIONS.USER_PHONE_VERIFY_FAILURE] = (state: unknown, action: unknown) 
     phoneVerifyErrorMessage: action.data.error,
   });
 
-reducers[ACTIONS.USER_EMAIL_NEW_STARTED] = state: unknown =>
+reducers[ACTIONS.USER_EMAIL_NEW_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
     emailNewIsPending: true,
     emailNewErrorMessage: '',
@@ -137,12 +137,12 @@ reducers[ACTIONS.USER_EMAIL_NEW_SUCCESS] = (state: unknown, action: unknown) => 
   });
 };
 
-reducers[ACTIONS.USER_EMAIL_NEW_EXISTS] = state: unknown =>
+reducers[ACTIONS.USER_EMAIL_NEW_EXISTS] = (state: unknown) =>
   Object.assign({}, state, {
     emailAlreadyExists: true,
   });
 
-reducers[ACTIONS.USER_EMAIL_NEW_DOES_NOT_EXIST] = state: unknown =>
+reducers[ACTIONS.USER_EMAIL_NEW_DOES_NOT_EXIST] = (state: unknown) =>
   Object.assign({}, state, {
     emailDoesNotExist: true,
   });
@@ -153,7 +153,7 @@ reducers[ACTIONS.USER_EMAIL_NEW_FAILURE] = (state: unknown, action: unknown) =>
     emailNewErrorMessage: action.data.error,
   });
 
-reducers[ACTIONS.USER_EMAIL_NEW_CLEAR_ENTRY] = state: unknown => {
+reducers[ACTIONS.USER_EMAIL_NEW_CLEAR_ENTRY] = (state: unknown) => {
   const newUser = { ...state.user } as const;
   delete newUser.primary_email;
 
@@ -167,7 +167,7 @@ reducers[ACTIONS.USER_EMAIL_NEW_CLEAR_ENTRY] = state: unknown => {
   });
 };
 
-reducers[ACTIONS.USER_PASSWORD_SET_CLEAR] = state: unknown =>
+reducers[ACTIONS.USER_PASSWORD_SET_CLEAR] = (state: unknown) =>
   Object.assign({}, state, {
     passwordResetSuccess: false,
     passwordResetPending: false,
@@ -176,7 +176,7 @@ reducers[ACTIONS.USER_PASSWORD_SET_CLEAR] = state: unknown =>
     passwordSetSuccess: false,
   });
 
-reducers[ACTIONS.USER_EMAIL_VERIFY_STARTED] = state: unknown =>
+reducers[ACTIONS.USER_EMAIL_VERIFY_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
     emailVerifyIsPending: true,
     emailVerifyErrorMessage: '',
@@ -203,7 +203,7 @@ reducers[ACTIONS.USER_EMAIL_VERIFY_SET] = (state: unknown, action: unknown) =>
     emailToVerify: action.data.email,
   });
 
-reducers[ACTIONS.USER_IDENTITY_VERIFY_STARTED] = state: unknown =>
+reducers[ACTIONS.USER_IDENTITY_VERIFY_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
     identityVerifyIsPending: true,
     identityVerifyErrorMessage: '',
@@ -230,7 +230,7 @@ reducers[ACTIONS.FETCH_ACCESS_TOKEN_SUCCESS] = (state: unknown, action: unknown)
   });
 };
 
-reducers[ACTIONS.USER_INVITE_STATUS_FETCH_STARTED] = state: unknown =>
+reducers[ACTIONS.USER_INVITE_STATUS_FETCH_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
     inviteStatusIsPending: true,
   });
@@ -244,13 +244,13 @@ reducers[ACTIONS.USER_INVITE_STATUS_FETCH_SUCCESS] = (state: unknown, action: un
     referralCode: action.data.referralCode,
   });
 
-reducers[ACTIONS.USER_INVITE_NEW_STARTED] = state: unknown =>
+reducers[ACTIONS.USER_INVITE_NEW_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
     inviteNewIsPending: true,
     inviteNewErrorMessage: '',
   });
 
-reducers[ACTIONS.USER_INVITE_NEW_SUCCESS] = state: unknown =>
+reducers[ACTIONS.USER_INVITE_NEW_SUCCESS] = (state: unknown) =>
   Object.assign({}, state, {
     inviteNewIsPending: false,
     inviteNewErrorMessage: '',
@@ -262,14 +262,14 @@ reducers[ACTIONS.USER_INVITE_NEW_FAILURE] = (state: unknown, action: unknown) =>
     inviteNewErrorMessage: action.data.error.message,
   });
 
-reducers[ACTIONS.USER_INVITE_STATUS_FETCH_FAILURE] = state: unknown =>
+reducers[ACTIONS.USER_INVITE_STATUS_FETCH_FAILURE] = (state: unknown) =>
   Object.assign({}, state, {
     inviteStatusIsPending: false,
     invitesRemaining: null,
     invitees: null,
   });
 
-reducers[ACTIONS.USER_YOUTUBE_IMPORT_STARTED] = state: unknown =>
+reducers[ACTIONS.USER_YOUTUBE_IMPORT_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
     youtubeChannelImportPending: true,
     youtubeChannelImportErrorMessage: '',
@@ -294,28 +294,28 @@ reducers[ACTIONS.USER_YOUTUBE_IMPORT_FAILURE] = (state: unknown, action: unknown
     youtubeChannelImportErrorMessage: action.data,
   });
 
-reducers[ACTIONS.USER_EMAIL_VERIFY_RETRY_STARTED] = state: unknown =>
+reducers[ACTIONS.USER_EMAIL_VERIFY_RETRY_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
     resendingVerificationEmail: true,
   });
 
-reducers[ACTIONS.USER_EMAIL_VERIFY_RETRY_SUCCESS] = state: unknown =>
+reducers[ACTIONS.USER_EMAIL_VERIFY_RETRY_SUCCESS] = (state: unknown) =>
   Object.assign({}, state, {
     resendingVerificationEmail: false,
   });
 
-reducers[ACTIONS.USER_EMAIL_VERIFY_RETRY_FAILURE] = state: unknown =>
+reducers[ACTIONS.USER_EMAIL_VERIFY_RETRY_FAILURE] = (state: unknown) =>
   Object.assign({}, state, {
     resendingVerificationEmail: false,
   });
 
-reducers[ACTIONS.USER_SET_REFERRER_STARTED] = state: unknown =>
+reducers[ACTIONS.USER_SET_REFERRER_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
     referrerSetIsPending: true,
     referrerSetError: defaultState.referrerSetError,
   });
 
-reducers[ACTIONS.USER_SET_REFERRER_SUCCESS] = state: unknown =>
+reducers[ACTIONS.USER_SET_REFERRER_SUCCESS] = (state: unknown) =>
   Object.assign({}, state, {
     referrerSetIsPending: false,
     referrerSetError: defaultState.referrerSetError,
@@ -327,25 +327,25 @@ reducers[ACTIONS.USER_SET_REFERRER_FAILURE] = (state: unknown, action: unknown) 
     referrerSetError: action.data.error.message,
   });
 
-reducers[ACTIONS.USER_SET_REFERRER_RESET] = state: unknown =>
+reducers[ACTIONS.USER_SET_REFERRER_RESET] = (state: unknown) =>
   Object.assign({}, state, {
     referrerSetIsPending: false,
     referrerSetError: defaultState.referrerSetError,
   });
 
-reducers[ACTIONS.USER_PASSWORD_EXISTS] = state: unknown =>
+reducers[ACTIONS.USER_PASSWORD_EXISTS] = (state: unknown) =>
   Object.assign({}, state, {
     passwordExistsForUser: true,
   });
 
-reducers[ACTIONS.USER_PASSWORD_RESET_STARTED] = state: unknown =>
+reducers[ACTIONS.USER_PASSWORD_RESET_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
     passwordResetPending: true,
     passwordResetSuccess: defaultState.passwordResetSuccess,
     passwordResetError: null,
   });
 
-reducers[ACTIONS.USER_PASSWORD_RESET_SUCCESS] = state: unknown =>
+reducers[ACTIONS.USER_PASSWORD_RESET_SUCCESS] = (state: unknown) =>
   Object.assign({}, state, {
     passwordResetPending: false,
     passwordResetSuccess: true,
@@ -357,13 +357,13 @@ reducers[ACTIONS.USER_PASSWORD_RESET_FAILURE] = (state: unknown, action: unknown
     passwordResetError: action.data.error,
   });
 
-reducers[ACTIONS.USER_PASSWORD_SET_STARTED] = state: unknown =>
+reducers[ACTIONS.USER_PASSWORD_SET_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
     passwordSetPending: true,
     passwordSetSuccess: defaultState.passwordSetSuccess,
   });
 
-reducers[ACTIONS.USER_PASSWORD_SET_SUCCESS] = state: unknown =>
+reducers[ACTIONS.USER_PASSWORD_SET_SUCCESS] = (state: unknown) =>
   Object.assign({}, state, {
     passwordSetPending: false,
     passwordSetSuccess: true,

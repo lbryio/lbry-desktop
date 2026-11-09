@@ -56,7 +56,9 @@ const SearchOptions = (props: Props) => {
   }, [stringifiedOptions]);
 
   if (simple) {
+// @ts-expect-error - TS2704 - The operand of a 'delete' operator cannot be a read-only property.
     delete TYPES_ADVANCED[SEARCH_OPTIONS.MEDIA_APPLICATION];
+// @ts-expect-error - TS2704 - The operand of a 'delete' operator cannot be a read-only property.
     delete TYPES_ADVANCED[SEARCH_OPTIONS.MEDIA_IMAGE];
   }
 
@@ -69,8 +71,10 @@ const SearchOptions = (props: Props) => {
   }, [options, setSearchOption]);
 
   function updateSearchOptions(option: unknown, value: unknown) {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
     setSearchOption(option, value);
     if (onSearchOptionsChanged) {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
       onSearchOptionsChanged(option);
     }
   }
@@ -108,6 +112,7 @@ const SearchOptions = (props: Props) => {
             return (
               <Button
                 key={option}
+                // @ts-expect-error - TS2322 (ts-migration)
                 label={t[1]}
                 className={classnames(`button-toggle`, {
                   'button-toggle--active': options[SEARCH_OPTIONS.CLAIM_TYPE] === option,
@@ -118,6 +123,7 @@ const SearchOptions = (props: Props) => {
           })}
         </div>
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           button="close"
           className={classnames('close-button', {
             'close-button--visible': options[SEARCH_OPTIONS.CLAIM_TYPE] !== SEARCH_OPTIONS.INCLUDE_FILES_AND_CHANNELS,
@@ -138,6 +144,7 @@ const SearchOptions = (props: Props) => {
                 blockWrap={false}
                 disabled={options[SEARCH_OPTIONS.CLAIM_TYPE] !== SEARCH_OPTIONS.INCLUDE_FILES}
                 label={t[1]}
+// @ts-expect-error - TS2322 - Type '{ key: string; name: string; type: string; blockWrap: false; disabled: boolean; label: "Video" | "Image" | "Other" | "Audio" | "Text"; checked: any; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 checked={!isFilteringByChannel && options[option]}
                 onChange={() => updateSearchOptions(option, !options[option])}
               />
@@ -154,6 +161,7 @@ const SearchOptions = (props: Props) => {
         <FormField
           type="checkbox"
           name="exact-match"
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; checked: any; onChange: () => void; label: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
           checked={options[SEARCH_OPTIONS.EXACT]}
           onChange={() => updateSearchOptions(SEARCH_OPTIONS.EXACT, !options[SEARCH_OPTIONS.EXACT])}
           label={__('Exact match')}
@@ -183,6 +191,7 @@ const SearchOptions = (props: Props) => {
         {OBJ_TO_OPTION_ELEM(TIME_FILTER)}
       </FormField>
       <Button
+        // @ts-expect-error - TS2322 (ts-migration)
         button="close"
         className={classnames('close-button', {
           'close-button--visible': options[SEARCH_OPTIONS.TIME_FILTER],
@@ -213,6 +222,7 @@ const SearchOptions = (props: Props) => {
   return (
     <div>
       <Button
+        // @ts-expect-error - TS2322 (ts-migration)
         button="alt"
         label={__('Filter')}
         icon={ICONS.FILTER}
@@ -220,6 +230,7 @@ const SearchOptions = (props: Props) => {
         onClick={toggleSearchExpanded}
       />
       <Form
+// @ts-expect-error - TS2769 - No overload matches this call.
         className={classnames('search__options', {
           'search__options--expanded': expanded,
         })}

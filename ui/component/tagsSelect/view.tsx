@@ -59,12 +59,16 @@ export default function TagsSelect(props: Props) {
 
   function handleTagClick(tag: unknown) {
     if (onRemove) {
+      // @ts-expect-error - TS2345 (ts-migration)
       onRemove(tag);
     } else if (doToggleTagFollowDesktop) {
+// @ts-expect-error - TS2339 - Property 'name' does not exist on type 'unknown'.
       doToggleTagFollowDesktop(tag.name);
 
+// @ts-expect-error - TS2339 - Property 'name' does not exist on type 'unknown'.
       const wasFollowing = followedTags.map(tag => tag.name).includes(tag.name);
       const nowFollowing = !wasFollowing;
+// @ts-expect-error - TS2339 - Property 'name' does not exist on type 'unknown'.
       analytics.tagFollowEvent(tag.name, nowFollowing, 'tag-select');
     }
   }
@@ -84,15 +88,18 @@ export default function TagsSelect(props: Props) {
             <React.Fragment>
               {title}
               {showClose && tagsToDisplay.length > 0 && !hasClosed && (
+                // @ts-expect-error - TS2322 (ts-migration)
                 <Button button="close" icon={ICONS.REMOVE} onClick={handleClose} />
               )}
             </React.Fragment>
           )
         }
         subtitle={
+// @ts-expect-error - TS2367 - This condition will always return 'true' since the types 'string' and 'boolean' have no overlap.
           help !== false && (
             <span>
               {help || __("The tags you follow will change what's trending for you.")}{' '}
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/trending" />.
             </span>
           )
@@ -102,6 +109,7 @@ export default function TagsSelect(props: Props) {
             <TagsSearch
               label={label}
               onRemove={handleTagClick}
+              // @ts-expect-error - TS2322 (ts-migration)
               onSelect={onSelect}
               suggestMature={suggestMature && !hasMatureTag}
               disableAutoFocus={disableAutoFocus}

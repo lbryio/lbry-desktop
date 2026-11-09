@@ -98,6 +98,7 @@ function UserSignUp(props: Props) {
     canHijackSignInFlowWithSpinner && (isCurrentlyFetchingSomething || isWaitingForSomethingToFinish);
 
   function setSettingAndSync(setting: unknown, value: unknown) {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
     setClientSetting(setting, value, true);
   }
 
@@ -133,6 +134,7 @@ function UserSignUp(props: Props) {
   // If it never finds one, assume the user has completed every step and redirect them
   const SIGN_IN_FLOW = [
     showEmail && (
+      // @ts-expect-error - TS2741 (ts-migration)
       <UserEmailNew
         interestedInYoutubSync={interestedInYoutubeSync}
         doToggleInterestedInYoutubeSync={doToggleInterestedInYoutubeSync}
@@ -152,6 +154,7 @@ function UserSignUp(props: Props) {
           setSettingAndSync(SETTINGS.FOLLOWING_ACKNOWLEDGED, true);
           replace(`${pathname}?${urlParams.toString()}`);
         }}
+        // @ts-expect-error - TS2322 (ts-migration)
         onBack={() => {
           if (urlParams.get('reset_scroll')) {
             urlParams.delete('reset_scroll');
@@ -164,6 +167,7 @@ function UserSignUp(props: Props) {
       />
     ),
     showTagsIntro && (
+      // @ts-expect-error - TS2741 (ts-migration)
       <UserTagFollowIntro
         onContinue={() => {
           let url = `/$/${PAGES.AUTH}?reset_scroll=1&${STEP_PARAM}=channels`;

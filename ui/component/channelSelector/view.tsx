@@ -29,7 +29,9 @@ function ChannelListItem(props: ListItemProps) {
 
   return (
     <div className={classnames('channel__list-item', { 'channel__list-item--selected': isSelected })}>
+      {/* @ts-expect-error - TS2739 (ts-migration) */}
       <ChannelThumbnail uri={uri} hideStakedIndicator xsmall noLazyLoad />
+      {/* @ts-expect-error - TS2322 (ts-migration) */}
       <ChannelTitle uri={uri} />
       {isSelected && <Icon icon={ICONS.DOWN} />}
     </div>
@@ -60,6 +62,7 @@ function ChannelSelector(props: Props) {
 
   function handleChannelSelect(channelClaim: unknown) {
     doSetIncognito(false);
+// @ts-expect-error - TS2339 - Property 'claim_id' does not exist on type 'unknown'.
     doSetActiveChannel(channelClaim.claim_id);
   }
 

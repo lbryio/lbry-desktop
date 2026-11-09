@@ -15,9 +15,12 @@ export default (props: Props) => {
     obscureNsfw &&
     Boolean(number) && (
       <div className="section--padded section__subtitle">
+        {/* @ts-expect-error - TS2745 (ts-migration) */}
         <I18nMessage
+          // @ts-expect-error - TS2322 (ts-migration)
           tokens={{
             content_viewing_preferences_link: (
+              // @ts-expect-error - TS2322 (ts-migration)
               <Button button="link" navigate="/$/settings" label={__('content viewing preferences')} />
             ),
             number: number,

@@ -123,6 +123,7 @@ export const doFetchItemsInCollections = (
 
     const sortResults = (items: Array<Claim>, claimList: unknown) => {
       const newItems: Array<Claim> = [];
+// @ts-expect-error - TS2339 - Property 'forEach' does not exist on type 'unknown'.
       claimList.forEach((id) => {
         const index = items.findIndex((i) => i.claim_id === id);
         if (index >= 0) {
@@ -224,15 +225,19 @@ export const doFetchItemsInCollections = (
   collectionIds.forEach((collectionId) => {
     const claim = makeSelectClaimForClaimId(collectionId)(stateAfterClaimSearch);
     if (!claim) {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       invalidCollectionIds.push(collectionId);
     } else {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       promisedCollectionItemFetches.push(fetchItemsForCollectionClaim(claim, pageSize));
     }
   });
 
+// @ts-expect-error - TS2322 - Type '[] | unknown[]' is not assignable to type '{ claimId: string; items: GenericClaim[]; }[]'.
   const collectionItemsById: Array<{
     claimId: string,
     items: Array<GenericClaim> | null | undefined
+// @ts-expect-error - TS2769 - No overload matches this call.
   }> = await Promise.all(promisedCollectionItemFetches);
 
   const newCollectionObjectsById: Record<string, any> = {};
@@ -254,6 +259,7 @@ export const doFetchItemsInCollections = (
 
       if (collectionItems) {
         collectionItems.forEach((collectionItem) => {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
           newItems.push(collectionItem.permanent_url);
           valueTypes.add(collectionItem.value_type);
           if (collectionItem.value.stream_type) {
@@ -287,6 +293,7 @@ export const doFetchItemsInCollections = (
         });
       }
     } else {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       invalidCollectionIds.push(collectionId);
     }
   });
@@ -368,6 +375,7 @@ export const doCollectionEdit = (collectionId: string, params: CollectionEditPar
         id: collectionId,
         collectionKey:
           ((editedCollection || publishedCollection) && 'edited') ||
+// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"watchlater" | "favorites" | "favoriteChannels"'.
           (COLS.BUILTIN_LISTS.includes(collectionId) && 'builtin') ||
           (unpublishedCollection && 'unpublished'),
         collection: {

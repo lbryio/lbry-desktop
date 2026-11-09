@@ -9,9 +9,13 @@ type Props = {
 };
 
 const isValidServerString = (serverString: unknown) => {
+// @ts-expect-error - TS2339 - Property 'indexOf' does not exist on type 'unknown'.
   const si = serverString.indexOf('/');
+// @ts-expect-error - TS2339 - Property 'indexOf' does not exist on type 'unknown'.
   const pi = serverString.indexOf(':');
+// @ts-expect-error - TS2339 - Property 'slice' does not exist on type 'unknown'.
   const path = si === -1 ? '' : serverString.slice(si);
+// @ts-expect-error - TS2339 - Property 'slice' does not exist on type 'unknown'.
   const hostMaybePort = si === -1 ? serverString : serverString.slice(0, si);
   const host = pi === -1 ? hostMaybePort : hostMaybePort.slice(0, pi);
   const port = pi === -1 ? '' : hostMaybePort.slice(pi + 1);
@@ -51,6 +55,7 @@ function ServerInputRow(props: Props) {
   return (
     <Form onSubmit={onSubmit}>
       <div className="setting-item-input">
+{ /* @ts-expect-error - TS2741 - Property 'name' is missing in type '{ type: string; label: string; placeholder: string; value: string; onChange: (e: any) => void; }' but required in type 'Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | "type" | "name" | "value" | "disabled" | "label" | "children" | "render" | ... 15 more ... | "onChange">'. */}
         <FormField
           type="text"
           label={__('Name')}
@@ -77,13 +82,16 @@ function ServerInputRow(props: Props) {
           label={'Use https'}
           name="use_https"
           type="checkbox"
+// @ts-expect-error - TS2322 - Type '{ label: string; name: string; type: string; checked: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
           checked={useHttps}
           onChange={() => setUseHttps(!useHttps)}
         />
       </div>
 
       <div className="section__actions setting-item-input">
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         <Button type="submit" button="primary" label={__('Add')} disabled={!validServerString || !nameString} />
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         <Button type="button" button="inverse" onClick={() => onCancel(false)} label={__('Cancel')} />
       </div>
     </Form>

@@ -17,6 +17,7 @@ type Props = {
 
 class FileExporter extends React.PureComponent<Props> {
   constructor() {
+// @ts-expect-error - TS2554 - Expected 1-2 arguments, but got 0.
     super();
     (this as any).handleDownload = this.handleDownload.bind(this);
   }
@@ -42,6 +43,7 @@ class FileExporter extends React.PureComponent<Props> {
           {!progressMsg && (
             <div className="button-group">
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="alt"
                 disabled={disabled}
                 icon={ICONS.FETCH}
@@ -51,6 +53,7 @@ class FileExporter extends React.PureComponent<Props> {
               />
               {data && (
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   button="alt"
                   disabled={disabled}
                   icon={ICONS.DOWNLOAD}
@@ -63,6 +66,7 @@ class FileExporter extends React.PureComponent<Props> {
           {progressMsg && (
             <>
               {__(progressMsg)}
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Spinner type="small" />
             </>
           )}
@@ -71,6 +75,7 @@ class FileExporter extends React.PureComponent<Props> {
     } else {
       return (
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           button="primary"
           disabled={disabled}
           icon={ICONS.DOWNLOAD}

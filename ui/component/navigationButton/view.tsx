@@ -27,16 +27,21 @@ type Props = {
 
 // determines which slice of entries should make up the back or forward button drop-downs (isBackward vs !isBackward respectively)
 const sliceEntries = (currentIndex: unknown, entries: unknown, historyLength: unknown, isBackward: unknown, maxSize: unknown) => {
+// @ts-expect-error - TS2365 - Operator '+' cannot be applied to types 'unknown' and '1'.
   let l = isBackward ? 0 : currentIndex + 1;
   let r = isBackward ? currentIndex : historyLength;
+// @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
   const exceedsMax = maxSize < r - l;
   if (!exceedsMax) {
+// @ts-expect-error - TS2339 - Property 'slice' does not exist on type 'unknown'.
     return entries.slice(l, r);
   } else if (isBackward) {
+// @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type. | TS2363 - The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     l = r - maxSize;
   } else {
     r = l + maxSize;
   }
+// @ts-expect-error - TS2339 - Property 'slice' does not exist on type 'unknown'.
   return entries.slice(l, r);
 };
 
@@ -84,6 +89,7 @@ const NavigationButton = (props: Props) => {
       // @endif
     >
       <Button
+        // @ts-expect-error - TS2322 (ts-migration)
         className={`header__navigation-item header__navigation-item--${isBackward ? 'back' : 'forward'}`}
         description={isBackward ? __('Navigate back') : __('Navigate forward')}
         onBlur={() => setShowHistory(false)}

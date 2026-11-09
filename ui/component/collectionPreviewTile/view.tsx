@@ -11,6 +11,7 @@ import FileThumbnail from 'component/fileThumbnail';
 
 type Props = {
   uri: string,
+// @ts-expect-error - TS2300 - Duplicate identifier 'collectionId'.
   collectionId: string,
   collectionName: string,
   collectionCount: number,
@@ -35,6 +36,7 @@ type Props = {
   blockedChannelUris: Array<string>,
   isMature?: boolean,
   showMature: boolean,
+// @ts-expect-error - TS2300 - Duplicate identifier 'collectionId'.
   collectionId: string,
   deleteCollection: (arg1: string) => void,
   resolveCollectionItems: (arg1?: any) => void,
@@ -135,7 +137,9 @@ function CollectionPreviewTile(props: Props) {
   return (
     <li role="link" onClick={handleClick} className={'card claim-preview--tile'}>
       <NavLink {...navLinkProps}>
+        {/* @ts-expect-error - TS2739 (ts-migration) */}
         <FileThumbnail uri={collectionItemUrls && collectionItemUrls.length && collectionItemUrls[0]}>
+          // @ts-expect-error - TS2322 (ts-migration)
           <React.Fragment>
             <div className="claim-preview__claim-property-overlay">
               <CollectionCount count={collectionCount} />

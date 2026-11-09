@@ -26,6 +26,7 @@ const defaultState: CommentsState = {
   myComments: undefined,
   isFetchingReacts: false,
   pendingCommentReactions: [],
+// @ts-expect-error - TS2322 - Type '{ commentById: {}; byId: {}; totalCommentsById: {}; repliesByParentId: {}; repliesTotalPagesByParentId: {}; topLevelCommentsById: {}; topLevelTotalPagesById: {}; topLevelTotalCommentsById: {}; ... 31 more ...; fetchingBlockedWords: false; }' is not assignable to type 'CommentsState'.
   typesReacting: [],
   myReactsByCommentId: undefined,
   othersReactsByCommentId: undefined,
@@ -50,9 +51,13 @@ const defaultState: CommentsState = {
 };
 
 function pushToArrayInObject(obj: unknown, key: unknown, valueToPush: unknown) {
+// @ts-expect-error - TS2538 - Type 'unknown' cannot be used as an index type.
   if (!obj[key]) {
+// @ts-expect-error - TS2538 - Type 'unknown' cannot be used as an index type.
     obj[key] = [valueToPush];
+// @ts-expect-error - TS2538 - Type 'unknown' cannot be used as an index type.
   } else if (!obj[key].includes(valueToPush)) {
+// @ts-expect-error - TS2538 - Type 'unknown' cannot be used as an index type.
     obj[key].push(valueToPush);
   }
 }
@@ -281,7 +286,9 @@ export default handleActions(
 
         const commonUpdateAction = (comment: unknown, commentById: unknown, commentIds: unknown, index: unknown) => {
           // map the comment_ids to the new comments
+// @ts-expect-error - TS2339 - Property 'comment_id' does not exist on type 'unknown'.
           commentById[comment.comment_id] = comment;
+// @ts-expect-error - TS2538 - Type 'unknown' cannot be used as an index type. | TS2339 - Property 'comment_id' does not exist on type 'unknown'.
           commentIds[index] = comment.comment_id;
         };
 
@@ -351,16 +358,24 @@ export default handleActions(
       const linkedCommentAncestors = Object.assign({}, state.linkedCommentAncestors);
 
       const updateStore = (comment: unknown, commentById: unknown, byId: unknown, repliesByParentId: unknown, topLevelCommentsById: unknown) => {
+// @ts-expect-error - TS2339 - Property 'comment_id' does not exist on type 'unknown'.
         commentById[comment.comment_id] = comment;
+// @ts-expect-error - TS2339 - Property 'comment_id' does not exist on type 'unknown'. | TS2339 - Property 'comment_id' does not exist on type 'unknown'.
         byId[claimId] ? byId[claimId].unshift(comment.comment_id) : (byId[claimId] = [comment.comment_id]);
 
+// @ts-expect-error - TS2339 - Property 'parent_id' does not exist on type 'unknown'.
         const parentId = comment.parent_id;
+// @ts-expect-error - TS2339 - Property 'parent_id' does not exist on type 'unknown'.
         if (comment.parent_id) {
+// @ts-expect-error - TS2339 - Property 'comment_id' does not exist on type 'unknown'.
           pushToArrayInObject(repliesByParentId, parentId, comment.comment_id);
         } else {
+// @ts-expect-error - TS2339 - Property 'is_pinned' does not exist on type 'unknown'.
           if (comment.is_pinned) {
+// @ts-expect-error - TS2339 - Property 'comment_id' does not exist on type 'unknown'.
             pushToArrayInObject(pinnedCommentsById, claimId, comment.comment_id);
           } else {
+// @ts-expect-error - TS2339 - Property 'comment_id' does not exist on type 'unknown'.
             pushToArrayInObject(topLevelCommentsById, claimId, comment.comment_id);
           }
         }
@@ -429,11 +444,13 @@ export default handleActions(
       const othersReacts = Object.assign({}, state.othersReactsByCommentId);
 
       function deleteReacts(reactObj: unknown, commentIdsToRemove: unknown) {
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
         if (commentIdsToRemove && commentIdsToRemove.length > 0) {
           let reactionKeys = Object.keys(reactObj);
           reactionKeys.forEach((rk) => {
             const colonIndex = rk.indexOf(':');
             const commentId = colonIndex === -1 ? rk : rk.substring(0, colonIndex);
+// @ts-expect-error - TS2339 - Property 'includes' does not exist on type 'unknown'.
             if (commentIdsToRemove.includes(commentId)) {
               delete reactObj[rk];
             }
@@ -503,21 +520,27 @@ export default handleActions(
             const existingSuperChat = superChatCommentsForUri[i];
             if (existingSuperChat.support_amount < comment.support_amount && !hasAddedNewComment) {
               hasAddedNewComment = true;
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
               sortedSuperChatComments.push(comment);
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
               sortedSuperChatComments.push(existingSuperChat);
             } else {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
               sortedSuperChatComments.push(existingSuperChat);
             }
 
             // If the new superchat hasn't been added yet, it must be the smallest superchat in the list
             if (
               i === superChatCommentsForUri.length - 1 &&
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
               sortedSuperChatComments.length === superChatCommentsForUri.length
             ) {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
               sortedSuperChatComments.push(comment);
             }
           }
 
+// @ts-expect-error - TS2740 - Type '{}' is missing the following properties from type 'LbryComment[]': length, pop, push, concat, and 28 more.
           superChatsByUri[uri].comments = sortedSuperChatComments;
           superChatsByUri[uri].totalAmount += comment.support_amount;
         } else {
@@ -1062,6 +1085,7 @@ export default handleActions(
         if (!settingsByChannelId[channelId]) {
           settingsByChannelId[channelId] = {};
         }
+// @ts-expect-error - TS2740 - Type '{}' is missing the following properties from type 'string[]': length, pop, push, concat, and 28 more.
         settingsByChannelId[channelId].words = x[1];
       });
 

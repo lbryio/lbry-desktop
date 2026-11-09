@@ -13,9 +13,12 @@ export default function SkipNavigationButton() {
     // Find first focusable element
     const element = document.querySelector(focusableElementQuery);
     // Trigger focus to skip navigation
+// @ts-expect-error - TS2339 - Property 'focus' does not exist on type 'Element'.
     if (element && element.focus) {
+// @ts-expect-error - TS2339 - Property 'focus' does not exist on type 'Element'.
       element.focus();
     }
   };
+  // @ts-expect-error - TS2322 (ts-migration)
   return <Button className={'skip-button'} onClick={skipNavigation} label={__('Skip Navigation')} button={'link'} />;
 }

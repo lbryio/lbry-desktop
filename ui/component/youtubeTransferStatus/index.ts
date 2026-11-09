@@ -9,14 +9,14 @@ import {
 } from 'redux/selectors/user';
 import YoutubeChannelList from './view';
 
-const select = state: unknown => ({
+const select = (state: unknown) => ({
   youtubeChannels: selectYoutubeChannels(state),
   youtubeImportPending: selectYouTubeImportPending(state),
   userFetchPending: selectUserIsPending(state),
   videosImported: selectYouTubeImportVideosComplete(state),
 });
 
-const perform = dispatch: unknown => ({
+const perform = (dispatch: unknown) => ({
   claimChannels: () => dispatch(doClaimYoutubeChannels()),
   updateUser: () => dispatch(doUserFetch()),
   checkYoutubeTransfer: () => dispatch(doCheckYoutubeTransfer()),

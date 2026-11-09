@@ -3,7 +3,7 @@ import * as ACTIONS from 'constants/action_types';
 import { Lbryio } from 'lbryinc';
 
 export function doGenerateAuthToken(installationId: unknown) {
-  return dispatch: unknown => {
+  return (dispatch: unknown) => {
     dispatch({
       type: ACTIONS.GENERATE_AUTH_TOKEN_STARTED,
     });

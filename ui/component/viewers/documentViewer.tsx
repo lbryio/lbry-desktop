@@ -57,6 +57,7 @@ class DocumentViewer extends React.PureComponent<Props, State> {
     const { contentType } = source;
 
     return renderMode === RENDER_MODES.MARKDOWN ? (
+// @ts-expect-error - TS2322 - Type '{ content: string; isMarkdownPost: true; promptLinks: true; }' is not assignable to type 'IntrinsicAttributes & MarkdownProps'.
       <MarkdownPreview content={content} isMarkdownPost promptLinks />
     ) : (
       <CodeViewer value={content} contentType={contentType} theme={theme} />

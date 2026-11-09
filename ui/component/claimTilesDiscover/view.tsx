@@ -24,7 +24,7 @@ type Props = {
   pinUrls?: Array<string>,
   uris: Array<string>,
   showNoSourceClaims?: boolean,
-  renderProperties?: (arg1: Claim) => Node | null | undefined,
+  renderProperties?: (arg1: Claim) => React.ReactNode | null | undefined,
   fetchViewCount?: boolean,
   // claim search options are below
   tags: Array<string>,
@@ -105,6 +105,7 @@ function ClaimTilesDiscover(props: Props) {
   useFetchViewCount(fetchViewCount, uris, claimsByUri, doFetchViewCount);
 
   const finalUris = isUnfetchedClaimSearch && prevUris.current ? prevUris.current : uris;
+// @ts-expect-error - TS2322 - Type 'string[]' is not assignable to type 'undefined'.
   prevUris.current = finalUris;
   // Run `doClaimSearch`
   React.useEffect(() => {

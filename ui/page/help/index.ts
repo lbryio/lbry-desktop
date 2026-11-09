@@ -6,7 +6,7 @@ import { selectAccessToken, selectUser } from 'redux/selectors/user';
 import { selectDaemonSettings } from 'redux/selectors/settings';
 import HelpPage from './view';
 
-const select = state: unknown => ({
+const select = (state: unknown) => ({
   user: selectUser(state),
   accessToken: selectAccessToken(state),
   deamonSettings: selectDaemonSettings(state),

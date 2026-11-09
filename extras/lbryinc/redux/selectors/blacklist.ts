@@ -1,7 +1,7 @@
 //@ts-nocheck
 import {createSelector} from 'reselect';
 
-export const selectState = state: unknown => state.blacklist || {};
+export const selectState = (state: unknown) => state.blacklist || {};
 
 export const selectBlackListedOutpoints = createSelector(
   selectState,

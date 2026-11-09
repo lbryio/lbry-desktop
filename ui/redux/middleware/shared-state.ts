@@ -53,9 +53,11 @@ export const buildSharedStateMiddleware = (
       shared[key] = value;
     });
 
+// @ts-expect-error - TS2554 - Expected 4 arguments, but got 2.
     if (!isEqual(oldShared, shared)) {
       // only update if the preference changed from last call in the same session
       oldShared = shared;
+// @ts-expect-error - TS2554 - Expected 5 arguments, but got 3.
       dispatch(doPreferenceSet(preferenceKey, shared, SHARED_PREFERENCE_VERSION));
     }
 

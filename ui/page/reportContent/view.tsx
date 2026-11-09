@@ -8,6 +8,7 @@ export default function ReportContentPage(props: any) {
       noSideNavigation
       className="main--report-content"
       backout={{
+        // @ts-expect-error - TS2561 (ts-migration)
         backoutLabel: __('Done'),
         title: __('Report content'),
       }}

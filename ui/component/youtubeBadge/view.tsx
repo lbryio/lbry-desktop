@@ -13,6 +13,7 @@ export default function YoutubeBadge(props: Props) {
 
   React.useEffect(() => {
     if (channelClaimId) {
+      // @ts-expect-error - TS2339 (ts-migration)
       Lbryio.call('yt', 'get_youtuber', { channel_claim_id: channelClaimId }).then(response => {
         if (response.is_verified_youtuber) {
           setIsVerified(true);

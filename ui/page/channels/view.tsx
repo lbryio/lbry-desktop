@@ -40,19 +40,24 @@ export default function ChannelsPage(props: Props) {
   }, [fetchChannelListMine]);
 
   useEffect(() => {
+    // @ts-expect-error - TS2339 (ts-migration)
     Lbryio.call('user_rewards', 'view_rate').then((data) => setRewardData(data));
   }, [setRewardData]);
 
   return (
+    // @ts-expect-error - TS2740 (ts-migration)
     <Page className="channelsPage-wrapper">
       <div className="card-stack">
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         {hasYoutubeChannels && <YoutubeTransferStatus hideChannelLink />}
 
         {channelUrls && Boolean(channelUrls.length) && (
+          // @ts-expect-error - TS2740 (ts-migration)
           <ClaimList
             header={<h1 className="section__title">{__('Your channels')}</h1>}
             headerAltControls={
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="secondary"
                 icon={ICONS.CHANNEL}
                 label={__('New Channel')}
@@ -68,6 +73,7 @@ export default function ChannelsPage(props: Props) {
               ) : (
                 <div className="section__actions">
                   <Button
+                    // @ts-expect-error - TS2322 (ts-migration)
                     button="alt"
                     icon={ICONS.ANALYTICS}
                     label={__('Analytics')}
@@ -121,6 +127,7 @@ export default function ChannelsPage(props: Props) {
                 subtitle={__("You haven't created a channel yet. All of your beautiful channels will be listed here!")}
                 actions={
                   <div className="section__actions">
+                    {/* @ts-expect-error - TS2322 (ts-migration) */}
                     <Button button="primary" label={__('Create Channel')} navigate={`/$/${PAGES.CHANNEL_NEW}`} />
                   </div>
                 }

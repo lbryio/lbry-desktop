@@ -71,6 +71,7 @@ class FileDetails extends PureComponent<Props> {
             <span>{__('Downloaded to')}</span>
             <span>
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="link"
                 className="button--download-link"
                 onClick={() => {

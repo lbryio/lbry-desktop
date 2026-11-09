@@ -19,9 +19,13 @@ function ClaimInsufficientCredits(props: Props) {
 
   return (
     <div className="media__insufficient-credits help--warning">
+      {/* @ts-expect-error - TS2745 (ts-migration) */}
       <I18nMessage
+        // @ts-expect-error - TS2322 (ts-migration)
         tokens={{
+          // @ts-expect-error - TS2322 (ts-migration)
           reward_link: <Button button="link" navigate="/$/rewards" label={__('Rewards')} />,
+          // @ts-expect-error - TS2322 (ts-migration)
           buy_link: <Button button="link" navigate="/$/buy" label={__('buy')} />,
           lbc: <LbcSymbol />,
         }}

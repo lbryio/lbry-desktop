@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { doHideModal } from 'redux/actions/app';
 import ModalFirstReward from './view';
 
-const select = state: unknown => {
+const select = (state: unknown) => {
   const selectReward = makeSelectRewardByType();
 
   return {
@@ -13,7 +13,7 @@ const select = state: unknown => {
   };
 };
 
-const perform = dispatch: unknown => ({
+const perform = (dispatch: unknown) => ({
   closeModal: () => dispatch(doHideModal()),
 });
 

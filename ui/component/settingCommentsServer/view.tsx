@@ -62,18 +62,25 @@ function SettingCommentsServer(props: Props) {
 
   const commentServerLabel = (serverDetails: unknown, onRemove: unknown) => (
     <span className={'compound-label'}>
+{ /* @ts-expect-error - TS2339 - Property 'name' does not exist on type 'unknown'. */}
       <span>{serverDetails.name}</span>
+{ /* @ts-expect-error - TS2339 - Property 'url' does not exist on type 'unknown'. */}
       <span className="compound-label__details">{serverDetails.url}</span>
+{ /* @ts-expect-error - TS2349 - This expression is not callable. */}
       {onRemove && <Button button={'inverse'} label={__('Remove')} onClick={() => onRemove(serverDetails)} />}
     </span>
   );
   const commentServerRadio = (customServerEnabled: unknown, customServerUrl: unknown, onClick: unknown, onRemove: unknown, serverDetails: unknown) => (
     <FormField
       type="radio"
+// @ts-expect-error - TS2339 - Property 'url' does not exist on type 'unknown'.
       checked={(!customServerEnabled && !onRemove) || (customServerEnabled && customServerUrl === serverDetails.url)}
+// @ts-expect-error - TS2349 - This expression is not callable.
       onClick={() => onClick(serverDetails)}
       label={commentServerLabel(serverDetails, onRemove)}
+// @ts-expect-error - TS2339 - Property 'name' does not exist on type 'unknown'. | TS2339 - Property 'url' does not exist on type 'unknown'.
       name={`${serverDetails.name}${serverDetails.url}`}
+// @ts-expect-error - TS2339 - Property 'name' does not exist on type 'unknown'. | TS2339 - Property 'url' does not exist on type 'unknown'.
       key={`${serverDetails.name}${serverDetails.url}`}
     />
   );
@@ -89,6 +96,7 @@ function SettingCommentsServer(props: Props) {
       <div className={'fieldset-section'}>
         {!addServer && (
           <div className="section__actions">
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <Button type="button" button="inverse" onClick={() => setAddServer(true)} label={__('Add A Server')} />
           </div>
         )}

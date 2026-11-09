@@ -13,6 +13,7 @@ function SelectHomepage(props: Props) {
   const { homepage, setHomepage } = props;
 
   function handleSetHomepage(e: unknown) {
+// @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
     const { value } = e.target;
     setHomepage(value);
   }

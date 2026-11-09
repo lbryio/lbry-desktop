@@ -66,7 +66,9 @@ function SyncEnableFlow(props: Props) {
 
   const makeMergedPrefs = (alt: unknown, base: unknown) => {
     let finalPrefs = base;
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
     let baseData = base.value;
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
     let altData = alt.value;
     if (!altData) {
       return base;
@@ -93,6 +95,7 @@ function SyncEnableFlow(props: Props) {
     baseData.blocked = Array.from(mergedBlockListSet);
     baseData.subscriptions = Array.from(mergedSubscriptionsSet);
     baseData.tags = Array.from(mergedTagsSet);
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
     finalPrefs.value = baseData;
     return finalPrefs;
   };
@@ -113,6 +116,7 @@ function SyncEnableFlow(props: Props) {
 
   React.useEffect(() => {
     if (step === FETCH_FOR_ENABLE) {
+// @ts-expect-error - TS2345 - Argument of type '(e: any, hasChanged: any) => void' is not assignable to parameter of type '() => void'.
       getSync(password, (e, hasChanged) => {
         if (e) {
           setStep(ERROR);
@@ -153,10 +157,13 @@ function SyncEnableFlow(props: Props) {
       subtitle={
         <div>
           {(error || getSyncError) && (
+            // @ts-expect-error - TS2745 (ts-migration)
             <I18nMessage
+              // @ts-expect-error - TS2322 (ts-migration)
               tokens={{
                 click_here: (
                   <Button
+                    // @ts-expect-error - TS2322 (ts-migration)
                     button="link"
                     href="https://lbry.com/faq/accounts-and-sync#limitations"
                     label={__('Click here')}
@@ -201,28 +208,33 @@ function SyncEnableFlow(props: Props) {
           {step === CONFIRM && (
             <div className={'card__actions'}>
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="primary"
                 name={'syncbutton'}
                 label={mode === ENABLE_MODE ? __('Enable Sync') : __('Disable Sync')}
                 onClick={() => handleSyncToggle()}
               />
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="link" name={'cancel'} label={__('Cancel')} onClick={() => closeModal()} />
             </div>
           )}
           {(step === FETCH_FOR_ENABLE || step === FETCH_FOR_DISABLE) && (
             <div className={'card__actions'}>
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="primary"
                 name={'syncbutton'}
                 label={mode === ENABLE_MODE ? __('Enable Sync') : __('Disable Sync')}
                 onClick={() => handleSyncToggle()}
                 disabled
               />
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="link" name={'cancel'} label={__('Cancel')} onClick={() => closeModal()} />
             </div>
           )}
           {(error || getSyncError) && (
             <div className={'card__actions'}>
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="primary" name={'cancel'} label={__('Close')} onClick={() => closeModal()} />
               <ErrorText>{error || (getSyncError && String(getSyncError)) || __('Unknown error')}</ErrorText>
             </div>

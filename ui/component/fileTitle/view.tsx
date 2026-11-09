@@ -5,7 +5,7 @@ import classnames from 'classnames';
 type Props = {
   title: string,
   className?: string,
-  children?: Node
+  children?: React.ReactNode
 };
 
 function FileTitle(props: Props) {

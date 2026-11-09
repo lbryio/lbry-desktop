@@ -1,4 +1,5 @@
 import type {ElementRef} from 'react';
+// @ts-expect-error - TS2305 (ts-migration)
 import { URL, URL_LOCAL, URL_DEV, KNOWN_APP_DOMAINS } from 'config';
 import * as PAGES from 'constants/pages';
 import * as ICONS from 'constants/icons';
@@ -65,6 +66,7 @@ export default function WunderBarSuggestions(props: Props) {
   const viewResultsRef: ElementRef<any> = React.useRef();
   const exploreTagRef: ElementRef<any> = React.useRef();
 
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'. | TS2339 - Property 'current' does not exist on type 'unknown'.
   const isRefFocused = (ref: unknown) => ref && ref.current && ref.current === document.activeElement;
   const isFocused = isRefFocused(inputRef) || isRefFocused(viewResultsRef) || isRefFocused(exploreTagRef);
 
@@ -111,11 +113,15 @@ export default function WunderBarSuggestions(props: Props) {
 
     const knownAppDomains = KNOWN_APP_DOMAINS.map((x) => `https://${x}/`); // Match WEB_PROD_PREFIX's 'https://xx/' format.
     const webDomainList = [WEB_PROD_PREFIX, ...knownAppDomains, WEB_LOCAL_PREFIX, WEB_DEV_PREFIX];
+// @ts-expect-error - TS2339 - Property 'includes' does not exist on type 'unknown'.
     const webDomainIndex = webDomainList.findIndex((x) => value.includes(x));
     const wasCopiedFromWeb = webDomainIndex !== -1;
+// @ts-expect-error - TS2339 - Property 'startsWith' does not exist on type 'unknown'.
     const isLbryUrl = value.startsWith('lbry://');
 
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
     if (inputRef.current) {
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
       inputRef.current.blur();
     }
 
@@ -127,6 +133,7 @@ export default function WunderBarSuggestions(props: Props) {
 
     if (wasCopiedFromWeb) {
       const prefix = webDomainList[webDomainIndex];
+// @ts-expect-error - TS2339 - Property 'slice' does not exist on type 'unknown'.
       let query = value.slice(prefix.length).replace(/:/g, '#');
 
       if (query.includes(SEARCH_PREFIX)) {
@@ -144,12 +151,16 @@ export default function WunderBarSuggestions(props: Props) {
       }
     }
 
+// @ts-expect-error - TS2339 - Property 'startsWith' does not exist on type 'unknown'.
     if (value.startsWith(TAG_SEARCH_PREFIX)) {
+// @ts-expect-error - TS2339 - Property 'slice' does not exist on type 'unknown'.
       const tag = value.slice(TAG_SEARCH_PREFIX.length);
       push(`/$/${PAGES.DISCOVER}?t=${tag}`);
     } else if (!isLbryUrl) {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
       navigateToSearchPage(value);
     } else {
+// @ts-expect-error - TS2339 - Property 'slice' does not exist on type 'unknown'.
       let query = 'lbry://' + value.slice(LBRY_PROTOCOL.length).replace(/:/g, '#');
       try {
         if (isURIValid(query)) {
@@ -160,6 +171,7 @@ export default function WunderBarSuggestions(props: Props) {
           doShowSnackBar(INVALID_URL_ERROR);
         }
       } catch (e: any) {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
         navigateToSearchPage(value);
       }
     }
@@ -178,6 +190,7 @@ export default function WunderBarSuggestions(props: Props) {
   React.useEffect(() => {
     function handleHomeEndCaretPos(elem: unknown, shiftKey: unknown, isHome: unknown) {
       if (elem) {
+// @ts-expect-error - TS2339 - Property 'selectionStart' does not exist on type 'unknown'. | TS2339 - Property 'selectionStart' does not exist on type 'unknown'.
         const cur = elem.selectionStart ? elem.selectionStart : 0;
         let begin;
         let final;
@@ -190,12 +203,16 @@ export default function WunderBarSuggestions(props: Props) {
           scrollPx = 0;
           direction = 'backward';
         } else {
+// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
           final = elem.value.length;
           begin = shiftKey ? cur : final;
+// @ts-expect-error - TS2339 - Property 'scrollWidth' does not exist on type 'unknown'. | TS2339 - Property 'clientWidth' does not exist on type 'unknown'.
           scrollPx = elem.scrollWidth - elem.clientWidth;
         }
 
+// @ts-expect-error - TS2339 - Property 'setSelectionRange' does not exist on type 'unknown'.
         elem.setSelectionRange(begin, final, direction);
+// @ts-expect-error - TS2339 - Property 'scrollLeft' does not exist on type 'unknown'.
         elem.scrollLeft = scrollPx;
         return true;
       }
@@ -204,10 +221,13 @@ export default function WunderBarSuggestions(props: Props) {
     }
 
     function overrideHomeEndHandling(event: unknown) {
+// @ts-expect-error - TS2339 - Property 'ctrlKey' does not exist on type '{}'. | TS2339 - Property 'metaKey' does not exist on type '{}'. | TS2339 - Property 'shiftKey' does not exist on type '{}'. | TS2339 - Property 'key' does not exist on type '{}'.
       const { ctrlKey, metaKey, shiftKey, key } = event;
       if (!ctrlKey && !metaKey) {
         if (key === 'Home' || key === 'End') {
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
           if (handleHomeEndCaretPos(inputRef.current, shiftKey, key === 'Home')) {
+// @ts-expect-error - TS2339 - Property 'stopPropagation' does not exist on type 'unknown'.
             event.stopPropagation();
           }
         }
@@ -216,12 +236,16 @@ export default function WunderBarSuggestions(props: Props) {
 
     // Injecting the listener at the element level puts it before
     // ReachUI::ComboBoxInput's listener, allowing us to skip their handling.
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
     if (inputRef.current) {
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
       inputRef.current.addEventListener('keydown', overrideHomeEndHandling);
     }
 
     return () => {
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
       if (inputRef.current) {
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
         inputRef.current.removeEventListener('keydown', overrideHomeEndHandling);
       }
     };
@@ -229,25 +253,34 @@ export default function WunderBarSuggestions(props: Props) {
 
   React.useEffect(() => {
     function handleKeyDown(event: unknown) {
+// @ts-expect-error - TS2339 - Property 'ctrlKey' does not exist on type '{}'. | TS2339 - Property 'metaKey' does not exist on type '{}'. | TS2339 - Property 'keyCode' does not exist on type '{}'.
       const { ctrlKey, metaKey, keyCode } = event;
 
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
       if (!inputRef.current) {
         return;
       }
 
       if (keyCode === K_KEY_CODE && ctrlKey) {
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
         inputRef.current.focus();
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
         inputRef.current.select();
         return;
       }
 
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
       if (inputRef.current === document.activeElement && keyCode === ESC_KEY_CODE) {
         // If the user presses escape and the text has already been cleared then blur the widget
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
         if (inputRef.current.value === '') {
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
           inputRef.current.blur();
         } else {
           // Remove the current text
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
           inputRef.current.value = '';
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
           inputRef.current.focus();
         }
       }
@@ -256,6 +289,7 @@ export default function WunderBarSuggestions(props: Props) {
       const shouldFocus =
         process.platform === 'darwin' ? keyCode === L_KEY_CODE && metaKey : keyCode === L_KEY_CODE && ctrlKey;
       if (shouldFocus) {
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
         inputRef.current.focus();
       }
       // @endif
@@ -265,26 +299,33 @@ export default function WunderBarSuggestions(props: Props) {
 
     // @if TARGET='app'
     function handleDoubleClick(event: unknown) {
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
       if (!inputRef.current) {
         return;
       }
 
+// @ts-expect-error - TS2339 - Property 'stopPropagation' does not exist on type 'unknown'.
       event.stopPropagation();
     }
 
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
     inputRef.current.addEventListener('dblclick', handleDoubleClick);
     // @endif
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
       if (inputRef.current) {
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
         inputRef.current.removeEventListener('dblclick', handleDoubleClick);
       }
     };
   }, [inputRef]);
 
   React.useEffect(() => {
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
     if (isMobile && inputRef.current) {
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
       inputRef.current.focus();
     }
   }, [inputRef, isMobile]);
@@ -302,11 +343,13 @@ export default function WunderBarSuggestions(props: Props) {
   return (
     <>
       <Form
+// @ts-expect-error - TS2769 - No overload matches this call.
         className={classnames('wunderbar__wrapper', { 'wunderbar__wrapper--mobile': isMobile })}
         onSubmit={() => handleSelect(term)}
       >
         <Combobox className="wunderbar" onSelect={handleSelect} openOnFocus>
           <Icon icon={ICONS.SEARCH} />
+          {/* @ts-expect-error - TS2769 (ts-migration) */}
           <ComboboxInput
             ref={inputRef}
             className="wunderbar__input"
@@ -324,9 +367,11 @@ export default function WunderBarSuggestions(props: Props) {
                 {!noBottomLinks && (
                   <div className="wunderbar__bottom-links">
                     <ComboboxOption value={term} className="wunderbar__more-results">
+                      {/* @ts-expect-error - TS2322 (ts-migration) */}
                       <Button ref={viewResultsRef} button="link" label={__('View All Results')} />
                     </ComboboxOption>
                     <ComboboxOption value={`${TAG_SEARCH_PREFIX}${term}`} className="wunderbar__more-results">
+                      {/* @ts-expect-error - TS2322 (ts-migration) */}
                       <Button ref={exploreTagRef} className="wunderbar__tag-search" button="link">
                         {__('Explore')}
                         <div className="tag">{term.split(' ').join('')}</div>
@@ -337,10 +382,12 @@ export default function WunderBarSuggestions(props: Props) {
 
                 <hr className="wunderbar__top-separator" />
 
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 {uriFromQueryIsValid && !noTopSuggestion ? <WunderbarTopSuggestion query={nameFromQuery} /> : null}
 
                 <div className="wunderbar__label">{__('Search Results')}</div>
 
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 {showPlaceholder && term.length > LIGHTHOUSE_MIN_CHARACTERS ? <Spinner type="small" /> : null}
 
                 {!showPlaceholder && results

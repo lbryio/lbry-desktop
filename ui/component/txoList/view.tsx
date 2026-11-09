@@ -254,11 +254,13 @@ function TxoList(props: Props) {
                 )}
                 {!hideStatus && (
                   <div>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
                     <fieldset-section>
                       <label>{__('Status')}</label>
                       <div className={'txo__radios'}>
                         {/* active transactions button */}
                         <Button
+                          // @ts-expect-error - TS2322 (ts-migration)
                           onClick={(e) => handleChange({ changedParameterKey: TXO.ACTIVE, value: 'active' })}
                           className={classnames(`button-toggle`, {
                             'button-toggle--active': active === TXO.ACTIVE,
@@ -267,6 +269,7 @@ function TxoList(props: Props) {
                         />
                         {/* historical transactions button */}
                         <Button
+                          // @ts-expect-error - TS2322 (ts-migration)
                           onClick={(e) => handleChange({ changedParameterKey: TXO.ACTIVE, value: 'spent' })}
                           className={classnames(`button-toggle`, {
                             'button-toggle--active': active === 'spent',
@@ -275,6 +278,7 @@ function TxoList(props: Props) {
                         />
                         {/* all transactions button */}
                         <Button
+                          // @ts-expect-error - TS2322 (ts-migration)
                           onClick={(e) => handleChange({ changedParameterKey: TXO.ACTIVE, value: 'all' })}
                           className={classnames(`button-toggle`, {
                             'button-toggle--active': active === 'all',
@@ -282,6 +286,7 @@ function TxoList(props: Props) {
                           label={__('All')}
                         />
                       </div>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
                     </fieldset-section>
                   </div>
                 )}
@@ -301,11 +306,13 @@ function TxoList(props: Props) {
                     progressMsg={isFetchingTransactions ? __('Fetching data') : ''}
                   />
                 </div>
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <Button button="alt" icon={ICONS.REFRESH} label={__('Refresh')} onClick={() => fetchTxoPage()} />
               </div>
             </div>
           </div>
           {/* listing of the lbc transactions */}
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <TransactionListTable txos={txoPage} />
           <Paginate totalPages={Math.ceil(txoItemCount / Number(pageSize))} />
         </div>

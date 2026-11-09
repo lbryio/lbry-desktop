@@ -4,6 +4,7 @@ import I18nMessage from 'component/i18nMessage';
 import { FormField } from 'component/common/form-components/form-field';
 import { Form } from 'component/common/form-components/form';
 import { withRouter } from 'react-router-dom';
+// @ts-expect-error - TS2792 - Cannot find module 'static/img/yrblsec.svg'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import image from 'static/img/yrblsec.svg';
 
 const LIMITED = 'limited';
@@ -47,11 +48,13 @@ function PrivacyAgreement(props: Props) {
               )}
             </h3>
           </div>
+{ /* @ts-expect-error - TS2769 - No overload matches this call. */}
           <Form onSubmit={handleSubmit} className="section__body">
             <fieldset>
               <FormField
                 name={'shareWithLBRY'}
                 type="radio"
+                // @ts-expect-error - TS2322 (ts-migration)
                 checked={share === LIMITED}
                 label={
                   <>
@@ -64,6 +67,7 @@ function PrivacyAgreement(props: Props) {
                 disabled={authenticated}
                 name={'shareNot'}
                 type="radio"
+                // @ts-expect-error - TS2322 (ts-migration)
                 checked={share === NONE}
                 label={
                   <>
@@ -78,8 +82,11 @@ function PrivacyAgreement(props: Props) {
               {authenticated && (
                 <div className="card--inline section--padded">
                   <p className="help--inline">
+                    {/* @ts-expect-error - TS2745 (ts-migration) */}
                     <I18nMessage
+                      // @ts-expect-error - TS2322 (ts-migration)
                       tokens={{
+                        // @ts-expect-error - TS2322 (ts-migration)
                         signout_button: <Button button="link" label={__('Sign Out')} onClick={signOut} />,
                       }}
                     >
@@ -90,6 +97,7 @@ function PrivacyAgreement(props: Props) {
               )}
             </fieldset>
             <div className={'card__actions'}>
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="primary" label={__(`Next`)} disabled={!share} type="submit" />
             </div>
             {share === NONE && (

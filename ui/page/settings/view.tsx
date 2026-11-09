@@ -37,6 +37,7 @@ class SettingsPage extends React.PureComponent<Props> {
         noFooter
         settingsPage
         noSideNavigation
+        // @ts-expect-error - TS2741 (ts-migration)
         backout={{ title: __('Settings'), backLabel: __('Back') }}
         className="card-stack"
       >

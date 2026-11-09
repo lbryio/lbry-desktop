@@ -15,7 +15,7 @@ const EXCHANGE_RATE_TIMEOUT = 20 * 60 * 1000;
 const INTERNAL_APIS_DOWN = 'internal_apis_down';
 
 // We can't use env's because they aren't passed into node_modules
-Lbryio.setLocalApi = endpoint: unknown => {
+Lbryio.setLocalApi = (endpoint: unknown) => {
   Lbryio.CONNECTION_STRING = endpoint.replace(/\/*$/, '/'); // exactly one slash at the end;
 };
 
@@ -88,7 +88,7 @@ Lbryio.call = (resource: unknown, action: unknown, params = {}, method = 'get') 
 Lbryio.authToken = null;
 
 Lbryio.getAuthToken = () =>
-  new Promise(resolve: unknown => {
+  new Promise<any>((resolve) => {
     if (Lbryio.authToken) {
       resolve(Lbryio.authToken);
     } else if (Lbryio.overrides.getAuthToken) {
@@ -123,13 +123,13 @@ Lbryio.authenticate = (domain: unknown, language: unknown) => {
       language: language || 'en',
     } as const;
 
-    return new Promise(resolve: unknown => {
+    return new Promise<any>((resolve) => {
       resolve(params);
     });
   }
 
   if (Lbryio.authenticationPromise === null) {
-    Lbryio.authenticationPromise = new Promise((resolve: unknown, reject: unknown) => {
+    Lbryio.authenticationPromise = new Promise<any>((resolve, reject) => {
       Lbryio.getAuthToken()
         .then(token => {
           if (!token || token.length > 60) {
@@ -155,7 +155,7 @@ Lbryio.authenticate = (domain: unknown, language: unknown) => {
           return Lbry.status()
             .then(
               status =>
-                new Promise((res: unknown, rej: unknown) => {
+                new Promise<any>((res, rej) => {
                   const appId =
                     domain && domain !== 'lbry.tv'
                       ? (domain.replace(/[.]/gi, '') + status.installation_id).slice(0, 66)
@@ -216,7 +216,7 @@ Lbryio.getExchangeRates = () => {
     !Lbryio.exchangeLastFetched ||
     Date.now() - Lbryio.exchangeLastFetched > EXCHANGE_RATE_TIMEOUT
   ) {
-    Lbryio.exchangePromise = new Promise((resolve: unknown, reject: unknown) => {
+    Lbryio.exchangePromise = new Promise<any>((resolve, reject) => {
       Lbryio.call('lbc', 'exchange_rate', {}, 'get', true)
         .then(({ lbc_usd: LBC_USD, lbc_btc: LBC_BTC, btc_usd: BTC_USD }) => {
           const rates = { LBC_USD, LBC_BTC, BTC_USD } as const;

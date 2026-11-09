@@ -13,7 +13,9 @@ function FileSubtitle(props: Props) {
   return (
     <div className="media__subtitle--between">
       <div className="file__viewdate">
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         <DateTime uri={uri} show={DateTime.SHOW_DATE} />
+        {/* @ts-expect-error - TS2741 (ts-migration) */}
         <FileViewCount uri={uri} />
       </div>
 

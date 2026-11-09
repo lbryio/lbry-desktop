@@ -39,7 +39,7 @@ type Props = {
 };
 
 function filePreview(file: unknown) {
-  return new Promise((resolve: unknown) => {
+  return new Promise<any>((resolve) => {
     const reader = new FileReader();
     reader.onload = () => {
       resolve(reader.result.toString());
@@ -47,6 +47,7 @@ function filePreview(file: unknown) {
     reader.onerror = () => {
       resolve(undefined);
     };
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'Blob'.
     reader.readAsDataURL(file);
   });
 }
@@ -74,6 +75,7 @@ function SelectAsset(props: Props) {
         preview = await filePreview(fileSelected);
       }
 
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
       onUpdate(thumbnailUrl, !useUrl, preview);
 
       if (onDone) {
@@ -105,6 +107,7 @@ function SelectAsset(props: Props) {
   }
   const formBody = (
     <>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
       <fieldset-section>
         {error && <div className="error__text">{error}</div>}
         {useUrl ? (
@@ -127,6 +130,7 @@ function SelectAsset(props: Props) {
             autoFocus
             disabled={uploadStatus === SPEECH_UPLOADING}
             label={fileSelectorLabel}
+// @ts-expect-error - TS2322 - Type '{ filters: { name: string; extension: string[]; }[]; type: string; autoFocus: true; disabled: boolean; label: any; name: string; currentPath: string; onFileChosen: (fileWithPath: FileWithPath) => void; accept: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FileSelector> & Pick<Readonly<Props> & Readonly<...>, "error" | ... 7 more ... | "accept"> & InexactPartial<...> & InexactPartial<...>'.
             name="assetSelector"
             currentPath={pathSelected}
             onFileChosen={(fileWithPath) => {
@@ -138,11 +142,13 @@ function SelectAsset(props: Props) {
             accept={accept}
           />
         )}
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
       </fieldset-section>
 
       <div className="section__actions">
         {onDone && (
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             button="primary"
             type="submit"
             label={useUrl ? __('Done') : __('Upload')}
@@ -154,6 +160,7 @@ function SelectAsset(props: Props) {
           name="toggle-upload"
           type="checkbox"
           label={__('Use a URL')}
+// @ts-expect-error - TS2322 - Type '{ name: string; type: string; label: string; checked: any; onChange: () => any; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
           checked={useUrl}
           onChange={() => setUseUrl(!useUrl)}
         />
@@ -162,6 +169,7 @@ function SelectAsset(props: Props) {
   );
 
   if (inline) {
+// @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. | TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'.
     return <fieldset-section>{formBody}</fieldset-section>;
   }
 

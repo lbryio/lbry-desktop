@@ -7,13 +7,13 @@ import { doSetClientSetting } from 'redux/actions/settings';
 import { doSignOut, doHandleSyncComplete } from 'redux/actions/app';
 import SyncPassword from './view';
 
-const select = state: unknown => ({
+const select = (state: unknown) => ({
   getSyncIsPending: selectGetSyncIsPending(state),
   email: selectUserEmail(state),
   passwordError: selectSyncApplyPasswordError(state),
 });
 
-const perform = dispatch: unknown => ({
+const perform = (dispatch: unknown) => ({
   getSync: (cb, password) => dispatch(doGetSyncDesktop(cb, password)),
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
   handleSyncComplete: (error, hasDataChanged) => dispatch(doHandleSyncComplete(error, hasDataChanged)),

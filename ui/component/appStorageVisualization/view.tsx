@@ -1,5 +1,6 @@
 import * as React from 'react';
 import I18nMessage from 'component/i18nMessage';
+// @ts-expect-error - TS2792 - Cannot find module 'electron'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import { ipcRenderer } from 'electron';
 
 type Props = {
@@ -39,6 +40,7 @@ function StorageViz(props: Props) {
       ? freeMB - (autoHostingLimit - autoBlobSpace) + viewBlobSpace
       : viewHostingLimit + viewBlobSpace;
 
+// @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
   const getPercent = (val: unknown, lim = totalMB) => (val / lim) * 100;
   const getGB = (val: unknown) => (Number(val) / 1024).toFixed(2);
 
@@ -62,6 +64,7 @@ function StorageViz(props: Props) {
           <div className={'storage__viewed--used'} style={{ width: `${viewUsedPercentOfLimit}%` }} />
           <div className={'storage__viewed--free'} />
         </div>
+        {/* @ts-expect-error - TS2353 (ts-migration) */}
         {viewHostingLimit !== 0 && <div style={{ 'background-color': 'unset' }} />}
       </div>
       <div className={'storage__legend-wrapper'}>
@@ -80,7 +83,9 @@ function StorageViz(props: Props) {
               {autoHostingLimit === 0 ? (
                 __('Disabled')
               ) : (
+                // @ts-expect-error - TS2745 (ts-migration)
                 <I18nMessage
+                  // @ts-expect-error - TS2322 (ts-migration)
                   tokens={{
                     spaceUsed: getGB(autoBlobSpace),
                     limit: getGB(autoHostingLimit),
@@ -100,7 +105,9 @@ function StorageViz(props: Props) {
               {viewHostingLimit === 1 ? (
                 __('Disabled')
               ) : (
+                // @ts-expect-error - TS2745 (ts-migration)
                 <I18nMessage
+                  // @ts-expect-error - TS2322 (ts-migration)
                   tokens={{
                     spaceUsed: getGB(viewBlobSpace),
                     limit: viewHostingLimit !== 0 ? getGB(viewHostingLimit) : getGB(viewFree),

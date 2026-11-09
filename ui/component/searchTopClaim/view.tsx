@@ -65,14 +65,18 @@ export default function SearchTopClaim(props: Props) {
   React.useEffect(() => {
     let urisToResolve: unknown = [];
     if (uriFromQuery) {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       urisToResolve.push(uriFromQuery);
     }
 
     if (channelUriFromQuery) {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       urisToResolve.push(channelUriFromQuery);
     }
 
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
     if (urisToResolve.length > 0) {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string[]'.
       doResolveUris(urisToResolve);
     }
   }, [doResolveUris, uriFromQuery, channelUriFromQuery]);
@@ -112,10 +116,13 @@ export default function SearchTopClaim(props: Props) {
       )}
       {!winningUri && !isSearching && !isResolvingWinningUri && uriFromQuery && (
         <div className="card card--section help--inline">
+          {/* @ts-expect-error - TS2745 (ts-migration) */}
           <I18nMessage
+            // @ts-expect-error - TS2322 (ts-migration)
             tokens={{
               repost: (
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   button="link"
                   onClick={() => push(`/$/${PAGES.REPOST_NEW}${name ? `?to=${name}` : ''}`)}
                   label={__('Repost')}
@@ -123,6 +130,7 @@ export default function SearchTopClaim(props: Props) {
               ),
               publish: (
                 <span>
+                  {/* @ts-expect-error - TS2322 (ts-migration) */}
                   <Button button="link" onClick={() => beginPublish(name)} label={__('publish')} />
                 </span>
               ),
@@ -136,9 +144,11 @@ export default function SearchTopClaim(props: Props) {
         <div className="section__actions--between section__actions--no-margin">
           <span />
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             button="link"
             className="search__top-link"
             label={
+              // @ts-expect-error - TS2745, TS2322 (ts-migration)
               <I18nMessage tokens={{ name: <strong>{query}</strong> }}>View competing uploads for %name%</I18nMessage>
             }
             navigate={`/$/${PAGES.TOP}?name=${query}`}

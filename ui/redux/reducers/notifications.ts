@@ -3,6 +3,7 @@ import { handleActions } from 'util/redux-utils';
 
 const defaultState: NotificationState = {
   notifications: [],
+// @ts-expect-error - TS2322 - Type '{ notifications: undefined[]; notificationsFiltered: undefined[]; notificationCategories: undefined; fetchingNotifications: boolean; toasts: undefined[]; errors: undefined[]; }' is not assignable to type 'NotificationState'.
   notificationsFiltered: [],
   notificationCategories: undefined,
   fetchingNotifications: false,
@@ -77,7 +78,9 @@ export default handleActions(
       const markIdsAsRead = (list: unknown, ids: unknown) => {
         return (
           list &&
+// @ts-expect-error - TS2339 - Property 'map' does not exist on type 'unknown'.
           list.map((n) => {
+// @ts-expect-error - TS2339 - Property 'includes' does not exist on type 'unknown'.
             if (ids.includes(n.id)) {
               return { ...n, is_read: true };
             } else {
@@ -103,7 +106,9 @@ export default handleActions(
       const { notificationIds } = action.data;
 
       const markIdsAsSeen = (list: unknown, ids: unknown) => {
+// @ts-expect-error - TS2339 - Property 'map' does not exist on type 'unknown'.
         return list.map((n) => {
+// @ts-expect-error - TS2339 - Property 'includes' does not exist on type 'unknown'.
           if (ids.includes(n.id)) {
             return { ...n, is_seen: true };
           }
@@ -122,6 +127,7 @@ export default handleActions(
       const { notificationId } = action.data;
 
       const deleteId = (list: unknown, id: unknown) => {
+// @ts-expect-error - TS2339 - Property 'filter' does not exist on type 'unknown'.
         return list.filter((n) => n.id !== id);
       };
 

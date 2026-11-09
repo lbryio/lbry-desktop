@@ -127,6 +127,7 @@ export const walletReducer = handleActions(
 
       const { transactions } = action.data;
       transactions.forEach((transaction) => {
+// @ts-expect-error - TS2542 - Index signature in type '{ readonly [x: string]: Transaction; }' only permits reading.
         byId[transaction.txid] = transaction;
       });
 

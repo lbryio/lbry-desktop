@@ -33,7 +33,7 @@ type Props = {
 };
 
 type State = {
-  details: string | Node,
+  details: string | React.ReactNode,
   message: string,
   launchedModal: boolean,
   error: boolean,
@@ -52,6 +52,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
       message: __('Connecting'),
       launchedModal: false,
       error: false,
+// @ts-expect-error - TS2367 - This condition will always return 'false' since the types 'boolean' and 'string' have no overlap.
       launchWithIncompatibleDaemon: !process.env.NODE_ENV === 'production',
       isRunning: false,
       waitingForWallet: 0,
@@ -99,6 +100,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
 
     // Every time we make it to a new step in the daemon startup process, reset the timer
     // If nothing changes after 1 minute, show the error message.
+// @ts-expect-error - TS2322 - Type 'Timeout' is not assignable to type 'number'.
     this.timeout = setTimeout(() => {
       this.setState({ error: true });
     }, FORTY_FIVE_SECONDS);
@@ -224,6 +226,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
       case MODALS.INCOMPATIBLE_DAEMON:
         return <ModalIncompatibleDaemon onContinueAnyway={this.runWithIncompatibleDaemon} />;
       case MODALS.WALLET_UNLOCK:
+        // @ts-expect-error - TS2741 (ts-migration)
         return <ModalWalletUnlock />;
       case MODALS.UPGRADE:
         return <ModalUpgrade />;
@@ -248,6 +251,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
         )}
 
         {!animationHidden && !error && (
+// @ts-expect-error - TS2339 - Property 'css-doodle' does not exist on type 'JSX.IntrinsicElements'.
           <css-doodle class="doodle">
             {`
             --color: @p(var(--color-primary), var(--color-secondary), var(--color-focus), var(--color-nothing));
@@ -282,10 +286,12 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
             }
           )
           `}
+{ /* @ts-expect-error - TS2339 - Property 'css-doodle' does not exist on type 'JSX.IntrinsicElements'. */}
           </css-doodle>
         )}
         {!error && (
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             className="splash__animation-toggle"
             label={!animationHidden ? __('I feel woosy! Stop spinning!') : __('Spin Spin Sugar')}
             onClick={() => toggleSplashAnimation()}
@@ -302,10 +308,13 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
                   )}
                 </p>
                 <p>
+                  {/* @ts-expect-error - TS2745 (ts-migration) */}
                   <I18nMessage
+                    // @ts-expect-error - TS2322 (ts-migration)
                     tokens={{
                       help_link: (
                         <Button
+                          // @ts-expect-error - TS2322 (ts-migration)
                           button="link"
                           href="https://lbry.com/faq/startup-troubleshooting"
                           label={__('this link')}
@@ -320,6 +329,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
             }
             actions={
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="primary"
                 icon={ICONS.REFRESH}
                 label={__('Refresh')}

@@ -19,6 +19,7 @@ export const selectMyEditedCollections = createSelector(selectState, (state) => 
 
 export const selectPendingCollections = createSelector(selectState, (state) => state.pending);
 
+// @ts-expect-error - TS2339 (ts-migration)
 export const selectLastUsedCollection = createSelector(selectState, (state) => state.lastUsedCollection);
 
 export const makeSelectEditedCollectionForId = (id: string) =>
@@ -133,10 +134,12 @@ export const makeSelectClaimUrlInCollection = (url: string) =>
       collections.map((list) => {
         Object.entries(list).forEach(([key, value]: [any, any]) => {
           value.items.map((item) => {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
             itemsInCollections.push(item);
           });
         });
       });
+// @ts-expect-error - TS2339 - Property 'includes' does not exist on type 'unknown'.
       return itemsInCollections.includes(url);
     }
   );
@@ -163,6 +166,7 @@ export const makeSelectIndexForUrlInCollection = (url: string, id: string, ignor
     makeSelectUrlsForCollectionId(id),
     makeSelectClaimForUri(url),
     (shuffleState, urls, claim) => {
+      // @ts-expect-error - TS2339 (ts-migration)
       const shuffleUrls = !ignoreShuffle && shuffleState && shuffleState.collectionId === id && shuffleState.newUrls;
       const listUrls = shuffleUrls || urls;
 
@@ -170,6 +174,7 @@ export const makeSelectIndexForUrlInCollection = (url: string, id: string, ignor
       if (index > -1) {
         return index;
       } else if (claim) {
+        // @ts-expect-error - TS2339 (ts-migration)
         const index = listUrls && listUrls.findIndex((u) => u === claim.permanent_url);
         if (index > -1) return index;
         return claim;
@@ -185,15 +190,19 @@ export const makeSelectPreviousUrlForCollectionAndUrl = (id: string, url: string
     makeSelectIndexForUrlInCollection(url, id),
     makeSelectUrlsForCollectionId(id),
     (shuffleState, loopState, index, urls) => {
+      // @ts-expect-error - TS2339 (ts-migration)
       const loopList = loopState && loopState.collectionId === id && loopState.loop;
+      // @ts-expect-error - TS2339 (ts-migration)
       const shuffleUrls = shuffleState && shuffleState.collectionId === id && shuffleState.newUrls;
 
+      // @ts-expect-error - TS2365 (ts-migration)
       if (index > -1) {
         const listUrls = shuffleUrls || urls;
         let nextUrl;
         if (index === 0 && loopList) {
           nextUrl = listUrls[listUrls.length - 1];
         } else {
+          // @ts-expect-error - TS2362 (ts-migration)
           nextUrl = listUrls[index - 1];
         }
         return nextUrl || null;
@@ -210,12 +219,16 @@ export const makeSelectNextUrlForCollectionAndUrl = (id: string, url: string) =>
     makeSelectIndexForUrlInCollection(url, id),
     makeSelectUrlsForCollectionId(id),
     (shuffleState, loopState, index, urls) => {
+      // @ts-expect-error - TS2339 (ts-migration)
       const loopList = loopState && loopState.collectionId === id && loopState.loop;
+      // @ts-expect-error - TS2339 (ts-migration)
       const shuffleUrls = shuffleState && shuffleState.collectionId === id && shuffleState.newUrls;
 
+      // @ts-expect-error - TS2365 (ts-migration)
       if (index > -1) {
         const listUrls = shuffleUrls || urls;
         // We'll get the next playable url
+        // @ts-expect-error - TS2365 (ts-migration)
         let remainingUrls = listUrls.slice(index + 1);
         if (!remainingUrls.length && loopList) {
           remainingUrls = listUrls.slice(0);
@@ -236,6 +249,7 @@ export const makeSelectPrevPlayableUrlFromCollectionAndUrl = (collectionId: stri
       let prevPlayableClaim;
       do {
         prevUrl = makeSelectPreviousUrlForCollectionAndUrl(collectionId, prevUrl)(state);
+        // @ts-expect-error - TS2345 (ts-migration)
         prevPlayableClaim = makeSelectClaimForUri(prevUrl)(state);
       } while (prevUrl && !isClaimPlayable(prevPlayableClaim));
       return prevUrl;
@@ -250,6 +264,7 @@ export const makeSelectNextPlayableUrlFromCollectionAndUrl = (collectionId: stri
       let nextPlayableClaim;
       do {
         nextUrl = makeSelectNextUrlForCollectionAndUrl(collectionId, nextUrl)(state);
+        // @ts-expect-error - TS2345 (ts-migration)
         nextPlayableClaim = makeSelectClaimForUri(nextUrl)(state);
       } while (nextUrl && !isClaimPlayable(nextPlayableClaim));
       return nextUrl;
@@ -264,7 +279,9 @@ export const makeSelectNameForCollectionId = (id: string) =>
 export const makeSelectCountForCollectionId = (id: string) =>
   createSelector(makeSelectCollectionForId(id), (collection) => {
     if (collection) {
+      // @ts-expect-error - TS2339 (ts-migration)
       if (collection.itemCount !== undefined) {
+        // @ts-expect-error - TS2339 (ts-migration)
         return collection.itemCount;
       }
       let itemCount = 0;

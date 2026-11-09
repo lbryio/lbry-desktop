@@ -19,7 +19,7 @@ type Props = {
 const INVALID_SHOWN_MAX = 5;
 
 function readText(file: File): Promise<string> {
-  return new Promise((resolve: unknown, reject: unknown) => {
+  return new Promise<any>((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => resolve(String(reader.result));
     reader.onerror = () => reject(new Error(__("Couldn't read this file.")));
@@ -74,11 +74,13 @@ export default function SettingFollowing(props: Props) {
           disabled={subscriptions.length === 0}
         />
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           button="secondary"
           icon={ICONS.FILE}
           label={importing ? __('Importing...') : __('Import')}
           aria-label={__('Follow the channels in a file')}
           disabled={importing}
+// @ts-expect-error - TS2339 - Property 'click' does not exist on type 'never'.
           onClick={() => fileInput.current && fileInput.current.click()}
         />
         <input

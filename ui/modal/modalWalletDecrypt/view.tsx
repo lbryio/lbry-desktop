@@ -39,6 +39,7 @@ class ModalWalletDecrypt extends React.PureComponent<Props, State> {
 
     return (
       <Modal
+// @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; title: string; contentLabel: string; type: string; confirmButtonLabel: string; abortButtonLabel: string; onConfirmed: () => void; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
         isOpen
         title={__('Decrypt wallet')}
         contentLabel={__('Decrypt wallet')}
@@ -52,6 +53,7 @@ class ModalWalletDecrypt extends React.PureComponent<Props, State> {
           {__(
             'Your wallet has been encrypted with a local password, performing this action will remove this password.'
           )}{' '}
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/wallet-encryption" />.
         </p>
       </Modal>

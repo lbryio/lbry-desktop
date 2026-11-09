@@ -25,6 +25,7 @@ function UserTagFollowIntro(props: Props) {
             <div className="section__actions--between">
               <span />
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button={followedTags.length < 1 ? 'alt' : 'primary'}
                 onClick={onContinue}
                 label={followedTags.length < 1 ? __('Skip') : __('Continue')}
@@ -32,6 +33,7 @@ function UserTagFollowIntro(props: Props) {
             </div>
           </Form>
           <div className="section__body">
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <TagsSelect hideHeader limitShow={300} help={false} showClose={false} title={__('Follow new tags')} />
             {followingCount > 0 && (
               <Nag

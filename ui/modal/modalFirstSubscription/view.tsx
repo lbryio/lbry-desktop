@@ -28,6 +28,7 @@ const ModalFirstSubscription = (props: Props) => {
   const title = __('You Followed Your First Channel!');
 
   return (
+// @ts-expect-error - TS2322 - Type '{ children: Element; type: string; isOpen: true; contentLabel: string; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
     <Modal type="card" isOpen contentLabel={title}>
       <Card
         title={title}
@@ -41,11 +42,13 @@ const ModalFirstSubscription = (props: Props) => {
         }
         actions={
           <div className="section__actions">
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <Button button="primary" onClick={closeModal} label={__('Got it')} />
             <React.Fragment>
               {user && user.primary_email ? (
                 <React.Fragment>
                   <Button
+                    // @ts-expect-error - TS2322 (ts-migration)
                     button="link"
                     href={`https://lbry.com/list/edit/${accessToken}`}
                     label={__('Update email preferences')}
@@ -54,6 +57,7 @@ const ModalFirstSubscription = (props: Props) => {
               ) : (
                 <React.Fragment>
                   <Button
+                    // @ts-expect-error - TS2322 (ts-migration)
                     button="link"
                     onClick={() => {
                       closeModal();

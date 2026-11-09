@@ -69,9 +69,12 @@ export default function CommentReactions(props: Props) {
 
   const getCountForReact = (type: unknown) => {
     let count = 0;
+// @ts-expect-error - TS2538 - Type 'unknown' cannot be used as an index type.
     if (othersReacts && othersReacts[type]) {
+// @ts-expect-error - TS2538 - Type 'unknown' cannot be used as an index type.
       count += othersReacts[type];
     }
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
     if (myReacts && myReacts.includes(type)) {
       count += 1;
     }
@@ -106,6 +109,7 @@ export default function CommentReactions(props: Props) {
   return (
     <>
       <Button
+        // @ts-expect-error - TS2322 (ts-migration)
         title={__('Upvote')}
         icon={likeIcon}
         iconSize={isMobile && 12}
@@ -120,6 +124,7 @@ export default function CommentReactions(props: Props) {
         }
       />
       <Button
+        // @ts-expect-error - TS2322 (ts-migration)
         title={__('Downvote')}
         icon={dislikeIcon}
         iconSize={isMobile && 12}
@@ -136,6 +141,7 @@ export default function CommentReactions(props: Props) {
 
       {!shouldHide && ENABLE_CREATOR_REACTIONS && (canCreatorReact || creatorLiked) && (
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           disabled={!canCreatorReact || !claimIsMine}
           title={claimIsMine ? __('You loved this') : __('Creator loved this')}
           icon={creatorLiked ? ICONS.CREATOR_LIKE : ICONS.SUBSCRIBE}
@@ -143,6 +149,7 @@ export default function CommentReactions(props: Props) {
           onClick={() => react(commentId, REACTION_TYPES.CREATOR_LIKE)}
         >
           {creatorLiked && (
+            // @ts-expect-error - TS2739 (ts-migration)
             <ChannelThumbnail xsmall uri={authorUri} hideStakedIndicator className="comment__creator-like" allowGifs />
           )}
         </Button>

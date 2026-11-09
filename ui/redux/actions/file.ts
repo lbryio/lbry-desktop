@@ -1,6 +1,7 @@
 import * as ACTIONS from 'constants/action_types';
 import * as ABANDON_STATES from 'constants/abandon_states';
 // @if TARGET='app'
+// @ts-expect-error - TS2792 - Cannot find module 'electron'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import { shell } from 'electron';
 // @endif
 import Lbry from 'lbry';
@@ -85,9 +86,11 @@ export function doDeleteFileAndMaybeGoBack(
     const actions: unknown = [];
 
     if (!abandonClaim) {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       actions.push(doHideModal());
     }
 
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
     actions.push(
       doDeleteFile(
         outpoint || claimOutpoint,
@@ -108,11 +111,13 @@ export function doDeleteFileAndMaybeGoBack(
     );
 
     if (playingUri && playingUri.uri === uri) {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       actions.push(doSetPlayingUri({ uri: null }));
     }
     // it would be nice to stay on the claim if you just want to delete it
     // we need to alter autoplay to not start downloading again after you delete it
 
+// @ts-expect-error - TS2488 - Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
     dispatch(batchActions(...actions));
   };
 }
@@ -217,6 +222,7 @@ export function doPurchaseUri(
     }
 
     const { cost } = costInfo;
+// @ts-expect-error - TS2345 - Argument of type 'number' is not assignable to parameter of type 'string'.
     if (parseFloat(cost) > balance) {
       dispatch({
         type: ACTIONS.PURCHASE_URI_FAILED,

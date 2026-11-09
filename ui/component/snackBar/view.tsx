@@ -37,6 +37,7 @@ class SnackBar extends React.PureComponent<Props> {
     const { message, linkText, linkTarget, isError } = snack;
 
     if (this.hideTimeout === null) {
+// @ts-expect-error - TS2322 - Type 'Timeout' is not assignable to type 'number'.
       this.hideTimeout = setTimeout(() => {
         this.hideTimeout = null;
         removeSnack();
@@ -59,6 +60,7 @@ class SnackBar extends React.PureComponent<Props> {
         {linkText && linkTarget && (
           // This is a little weird because of `linkTarget` code in `lbry-redux`
           // Any navigation code should happen in the app, and that should be removed from lbry-redux
+          // @ts-expect-error - TS2322 (ts-migration)
           <Button navigate={`/$${linkTarget}`} className="snack-bar__action" label={linkText} />
         )}
       </div>

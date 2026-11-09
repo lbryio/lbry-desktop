@@ -133,6 +133,7 @@ const Header = (props: Props) => {
         <div>
           {hideBalance ? (
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               navigate={`/$/${PAGES.WALLET}`}
               className="header__navigationItem--icon header__navigationItem--balance"
               label={!(hideBalance || Number(roundedBalance) === 0) && roundedBalance}
@@ -144,6 +145,7 @@ const Header = (props: Props) => {
             />
           ) : (
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               navigate={`/$/${PAGES.WALLET}`}
               className="button--file-action header__navigationItem--balance"
               label={hideBalance || Number(roundedBalance) === 0 ? __('Your Wallet') : roundedBalance}
@@ -174,6 +176,7 @@ const Header = (props: Props) => {
         {!authHeader && canBackout ? (
           <>
             <div className="header__menu--left">
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button onClick={onBackout} button="link" label={backLabel || __('Cancel')} icon={ICONS.ARROW_LEFT} />
             </div>
             {backTitle && <h1 className="header__authTitle">{(isMobile && simpleBackTitle) || backTitle}</h1>}
@@ -188,17 +191,20 @@ const Header = (props: Props) => {
                   <span style={{ position: 'relative' }}>
                     <Button
                       aria-label={sidebarLabel}
+                      // @ts-expect-error - TS2322 (ts-migration)
                       className="header__navigationItem--icon button-rotate"
                       icon={ICONS.MENU}
                       aria-expanded={sidebarOpen}
                       onClick={() => setSidebarOpen(!sidebarOpen)}
                     >
+                      {/* @ts-expect-error - TS2741 (ts-migration) */}
                       {isAbsoluteSideNavHidden && isMobile && <NotificationBubble />}
                     </Button>
                   </span>
                 )}
                 <Button
                   aria-label={__('Home')}
+                  // @ts-expect-error - TS2322 (ts-migration)
                   className="header__navigationItem--logo"
                   onClick={() => {
                     // here use state.router.location.pathname
@@ -209,6 +215,7 @@ const Header = (props: Props) => {
                   }}
                   {...homeButtonNavigationProps}
                 >
+                  {/* @ts-expect-error - TS2741 (ts-migration) */}
                   <Logo />
                 </Button>
               </div>
@@ -217,7 +224,9 @@ const Header = (props: Props) => {
                 <div className="header__center">
                   {!authHeader && (
                     <div className="header__buttons">
+                      {/* @ts-expect-error - TS2739 (ts-migration) */}
                       <NavigationButton isBackward history={history} />
+                      {/* @ts-expect-error - TS2739 (ts-migration) */}
                       <NavigationButton isBackward={false} history={history} />
                     </div>
                   )}
@@ -232,6 +241,7 @@ const Header = (props: Props) => {
                   !hideCancel && (
                     <div className="header__menu--right">
                       <Button
+                        // @ts-expect-error - TS2322 (ts-migration)
                         title={__('Go Back')}
                         button="alt"
                         // className="button--header-close"

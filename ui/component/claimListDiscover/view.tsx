@@ -58,12 +58,12 @@ type Props = {
   channelIds?: Array<string>,
   claimIds?: Array<string>,
   subscribedChannels: Array<Subscription>,
-  header?: Node,
-  headerLabel?: string | Node,
-  hiddenNsfwMessage?: Node,
-  injectedItem: Node | null | undefined,
-  meta?: Node,
-  renderProperties?: (arg1: Claim) => Node,
+  header?: React.ReactNode,
+  headerLabel?: string | React.ReactNode,
+  hiddenNsfwMessage?: React.ReactNode,
+  injectedItem: React.ReactNode | null | undefined,
+  meta?: React.ReactNode,
+  renderProperties?: (arg1: Claim) => React.ReactNode,
   history: {
     action: string,
     push: (arg1: string) => void,
@@ -203,8 +203,10 @@ function ClaimListDiscover(props: Props) {
 
   const contentTypeParam = urlParams.get(CS.CONTENT_KEY);
   const claimTypeParam =
+// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"stream" | "channel" | "collection" | "repost"'.
     claimType || (CS.CLAIM_TYPES.includes(contentTypeParam) && contentTypeParam) || defaultClaimType || null;
   const streamTypeParam =
+// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"audio" | "video" | "image" | "document" | "model" | "binary"'.
     streamType || (CS.FILE_TYPES.includes(contentTypeParam) && contentTypeParam) || defaultStreamType || null;
   const durationParam = urlParams.get(CS.DURATION_KEY) || null;
   const channelIdsInUrl = urlParams.get(CS.CHANNEL_IDS_KEY);
@@ -268,7 +270,9 @@ function ClaimListDiscover(props: Props) {
     // it's faster, but we will need to remove it if we start using total_pages
     no_totals: true,
     not_channel_ids: isChannel ? undefined : mutedAndBlockedChannelIds,
+// @ts-expect-error - TS2322 - Type 'readonly ["porn", "porno", "nsfw", "mature", "xxx", "sex", "creampie", "blowjob", "handjob", "vagina", "boobs", "big boobs", "big dick", "pussy", "cumshot", "anal", "hard fucking", "ass", "fuck", "hentai"] | []' is not assignable to type 'string[]'.
     not_tags: !showNsfw ? MATURE_TAGS : [],
+// @ts-expect-error - TS2322 - Type 'string[] | readonly ["release_time"] | readonly ["effective_amount"] | readonly ["trending_score"]' is not assignable to type 'string[]'.
     order_by: resolveOrderByOption(orderParam, sortByParam),
   };
 
@@ -315,6 +319,7 @@ function ClaimListDiscover(props: Props) {
     options.release_time = releaseTime;
   } else if (claimType !== CS.CLAIM_CHANNEL) {
     if (orderParam === CS.ORDER_BY_TOP && freshnessParam !== CS.FRESH_ALL) {
+      // @ts-expect-error - TS2769 (ts-migration)
       options.release_time = `>${Math.floor(moment().subtract(1, freshnessParam).startOf('hour').unix())}`;
     } else if (orderParam === CS.ORDER_BY_NEW || orderParam === CS.ORDER_BY_TRENDING) {
       // Warning - hack below
@@ -391,6 +396,7 @@ function ClaimListDiscover(props: Props) {
     }
   }
 
+// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"porn" | "porno" | "nsfw" | "mature" | "xxx" | "sex" | "creampie" | "blowjob" | "handjob" | "vagina" | "boobs" | "big boobs" | "big dick" | "pussy" | "cumshot" | "anal" | "hard fucking" | "ass" | "fuck" | "hentai"'.
   const hasMatureTags = tagsParam && tagsParam.split(',').some((t) => MATURE_TAGS.includes(t));
 
   const searchKey = createNormalizedClaimSearchKey(options);
@@ -432,10 +438,13 @@ function ClaimListDiscover(props: Props) {
   const timedOutMessage = (
     <div>
       <p>
+        {/* @ts-expect-error - TS2745 (ts-migration) */}
         <I18nMessage
+          // @ts-expect-error - TS2322 (ts-migration)
           tokens={{
             again: (
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="link"
                 label={__('try again in a few seconds.')}
                 onClick={() => setForceRefresh(Date.now())}
@@ -447,8 +456,11 @@ function ClaimListDiscover(props: Props) {
         </I18nMessage>
       </p>
       <p>
+        {/* @ts-expect-error - TS2745 (ts-migration) */}
         <I18nMessage
+          // @ts-expect-error - TS2322 (ts-migration)
           tokens={{
+            // @ts-expect-error - TS2322 (ts-migration)
             contact_support: <Button button="link" label={__('contact support')} href="https://lbry.com/faq/support" />,
           }}
         >
@@ -474,10 +486,12 @@ function ClaimListDiscover(props: Props) {
 
     // Compare every field except for 'page' and 'release_time'.
     // There might be better ways to achieve this.
+// @ts-expect-error - TS2698 - Spread types may only be created from object types.
     let tmpPrevOptions = { ...prevOptions };
     tmpPrevOptions.page = -1;
     tmpPrevOptions.release_time = '';
 
+// @ts-expect-error - TS2698 - Spread types may only be created from object types.
     let tmpOptions = { ...options };
     tmpOptions.page = -1;
     tmpOptions.release_time = '';
@@ -554,6 +568,7 @@ function ClaimListDiscover(props: Props) {
       tags={tags}
       freshness={freshness}
       defaultFreshness={defaultFreshness}
+      // @ts-expect-error - TS2322 (ts-migration)
       claimType={claimType}
       streamType={streamType}
       defaultStreamType={defaultStreamType}
@@ -594,6 +609,7 @@ function ClaimListDiscover(props: Props) {
             includeSupportAction={includeSupportAction}
             injectedItem={injectedItem}
             showHiddenByUser={showHiddenByUser}
+            // @ts-expect-error - TS2322 (ts-migration)
             searchOptions={options}
             showNoSourceClaims={showNoSourceClaims}
             empty={empty}
@@ -631,6 +647,7 @@ function ClaimListDiscover(props: Props) {
             includeSupportAction={includeSupportAction}
             injectedItem={injectedItem}
             showHiddenByUser={showHiddenByUser}
+            // @ts-expect-error - TS2322 (ts-migration)
             searchOptions={options}
             showNoSourceClaims={hasNoSource || showNoSourceClaims}
             empty={empty}

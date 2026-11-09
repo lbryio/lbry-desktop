@@ -36,6 +36,7 @@ function ServerInputRow(props: Props) {
   return (
     <Form onSubmit={onSubmit}>
       <div className="section__actions">
+{ /* @ts-expect-error - TS2741 - Property 'name' is missing in type '{ type: string; label: string; placeholder: string; value: string; onChange: (e: any) => void; }' but required in type 'Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | "type" | "name" | "value" | "disabled" | "label" | "children" | "render" | ... 15 more ... | "onChange">'. */}
         <FormField
           type="text"
           label={__('Host')}
@@ -44,6 +45,7 @@ function ServerInputRow(props: Props) {
           onChange={e => setHostString(e.target.value)}
         />
         <span className="form-field__conjuction">:</span>
+{ /* @ts-expect-error - TS2741 - Property 'name' is missing in type '{ type: string; label: string; placeholder: string; value: string; onChange: (e: any) => void; }' but required in type 'Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | "type" | "name" | "value" | "disabled" | "label" | "children" | "render" | ... 15 more ... | "onChange">'. */}
         <FormField
           type="number"
           label={__('Port')}
@@ -54,6 +56,7 @@ function ServerInputRow(props: Props) {
       </div>
 
       <div className="section__actions">
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         <Button type="submit" button="primary" label={__('Add')} disabled={!validServerString} />
       </div>
     </Form>

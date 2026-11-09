@@ -6,7 +6,7 @@ import useLazyLoading from 'effects/use-lazy-loading';
 type Props = {
   thumb: string,
   fallback: string | null | undefined,
-  children?: Node,
+  children?: React.ReactNode,
   className?: string
 };
 

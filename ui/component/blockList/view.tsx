@@ -61,6 +61,7 @@ export default function BlockList(props: Props) {
 
   function getRenderActions() {
     if (getActionButtons) {
+// @ts-expect-error - TS2339 - Property 'permanent_url' does not exist on type 'unknown'.
       return (claim: unknown) => <div className="section__actions">{getActionButtons(claim.permanent_url)}</div>;
     }
     return undefined;
@@ -105,6 +106,7 @@ export default function BlockList(props: Props) {
           subtitle={subtitleEmptyList}
           actions={
             <div className="section__actions">
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="primary" label={__('Go Home')} navigate="/" />
             </div>
           }
@@ -125,6 +127,7 @@ export default function BlockList(props: Props) {
         />
       </div>
       <div className={classnames('section block-list', className)}>
+        {/* @ts-expect-error - TS2740 (ts-migration) */}
         <ClaimList
           uris={searchList || paginatedLocalList}
           showUnresolvedClaims
@@ -153,11 +156,14 @@ function SearchList(props: LsbProps) {
   const { list, placeholder, formatter, onResultsUpdated } = props;
   const [term, setTerm] = React.useState('');
   const results = useAuthorMatch(term, list);
+// @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
   const handleChange = (event: unknown) => setTerm(event.target.value);
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'SetStateAction<string>'.
   const handleSelect = (e: unknown) => setTerm(e);
 
   React.useEffect(() => {
     if (onResultsUpdated) {
+      // @ts-expect-error - TS2345 (ts-migration)
       onResultsUpdated(results);
     }
   }, [results]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -176,6 +182,7 @@ function SearchList(props: LsbProps) {
                   <ComboboxOption
                     className="wunderbar__more-results"
                     key={index}
+                    // @ts-expect-error - TS2769, TS2345 (ts-migration)
                     value={formatter ? formatter(result) : result}
                   />
                 ))}
@@ -191,11 +198,14 @@ function SearchList(props: LsbProps) {
 }
 
 function useAuthorMatch(term: unknown, list: unknown) {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
   const throttledTerm = useThrottle(term, 200);
   return React.useMemo(() => {
     return !throttledTerm || throttledTerm.trim() === ''
       ? null
+      // @ts-expect-error - TS2345 (ts-migration)
       : matchSorter(list, throttledTerm, {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
           keys: [(item: unknown) => reduceUriToChannelName(item)],
           threshold: matchSorter.rankings.CONTAINS,
         });

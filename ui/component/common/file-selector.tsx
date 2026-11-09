@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as remote from '@electron/remote';
+// @ts-expect-error - TS2792 - Cannot find module 'electron'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import { ipcRenderer } from 'electron';
 import path from 'path';
 import Button from 'component/button';
@@ -62,6 +63,7 @@ class FileSelector extends React.PureComponent<Props> {
   fileInput: React.ElementRef<any>;
 
   constructor() {
+// @ts-expect-error - TS2554 - Expected 1-2 arguments, but got 0.
     super();
     this.fileInput = React.createRef();
     this.handleFileInputSelection = this.handleFileInputSelection.bind(this);
@@ -70,6 +72,7 @@ class FileSelector extends React.PureComponent<Props> {
   }
 
   handleFileInputSelection = () => {
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
     const { files } = this.fileInput.current;
     if (!files) {
       return;
@@ -80,6 +83,7 @@ class FileSelector extends React.PureComponent<Props> {
     if (this.props.onFileChosen) {
       this.props.onFileChosen({ file, path: file.path || file.name });
     }
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
     this.fileInput.current.value = null; // clear the file input
   };
 
@@ -114,6 +118,7 @@ class FileSelector extends React.PureComponent<Props> {
   };
 
   fileInputButton = () => {
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
     this.fileInput.current.click();
   };
 
@@ -132,10 +137,12 @@ class FileSelector extends React.PureComponent<Props> {
           error={error}
           disabled={disabled}
           type="text"
+// @ts-expect-error - TS2322 - Type 'string' is not assignable to type 'boolean'.
           readOnly="readonly"
           value={placeHolder || __('Choose a file')}
           inputButton={
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               autoFocus={autoFocus}
               button="primary"
               disabled={disabled}
@@ -152,6 +159,7 @@ class FileSelector extends React.PureComponent<Props> {
           type={'file'}
           style={{ display: 'none' }}
           accept={accept}
+// @ts-expect-error - TS2322 - Type 'unknown' is not assignable to type 'LegacyRef<HTMLInputElement>'.
           ref={this.fileInput}
           onChange={() => (type === 'openDirectory' ? () => {} : this.handleFileInputSelection())}
           webkitdirectory={type === 'openDirectory' ? 'True' : null}

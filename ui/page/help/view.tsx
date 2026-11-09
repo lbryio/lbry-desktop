@@ -3,6 +3,7 @@ import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
 import * as React from 'react';
 // @if TARGET='app'
+// @ts-expect-error - TS2792 - Cannot find module 'electron'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import { shell } from 'electron';
 import WalletBackup from 'component/walletBackup';
 // @endif
@@ -126,6 +127,7 @@ class HelpPage extends React.PureComponent<Props, State> {
     }
 
     return (
+      // @ts-expect-error - TS2740 (ts-migration)
       <Page className="card-stack">
         <Card
           title={__('Read the FAQ')}
@@ -135,12 +137,14 @@ class HelpPage extends React.PureComponent<Props, State> {
               {
                 <>
                   <Button
+                    // @ts-expect-error - TS2322 (ts-migration)
                     href="https://lbry.com/faq/lbry-basics"
                     label={__('Read the App Basics FAQ')}
                     icon={ICONS.HELP}
                     button="secondary"
                   />
                   <Button
+                    // @ts-expect-error - TS2322 (ts-migration)
                     href="https://lbry.com/faq"
                     label={__('View all LBRY FAQs')}
                     icon={ICONS.HELP}
@@ -155,6 +159,7 @@ class HelpPage extends React.PureComponent<Props, State> {
         <Card
           title={__('Find assistance')}
           subtitle={
+            // @ts-expect-error - TS2745, TS2322 (ts-migration)
             <I18nMessage tokens={{ channel: <strong>#help</strong>, help_email: SITE_HELP_EMAIL }}>
               Live help is available most hours in the %channel% channel of our Discord chat room. Or you can always
               email us at %help_email%.
@@ -162,7 +167,9 @@ class HelpPage extends React.PureComponent<Props, State> {
           }
           actions={
             <div className="section__actions">
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="secondary" label={__('Join Our Chat')} icon={ICONS.CHAT} href="https://chat.lbry.com" />
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="secondary" label={__('Email Us')} icon={ICONS.WEB} href={`mailto:${SITE_HELP_EMAIL}`} />
             </div>
           }
@@ -177,6 +184,7 @@ class HelpPage extends React.PureComponent<Props, State> {
           }
           actions={
             <div className="section__actions">
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button navigate="/$/report" label={__('Submit Feedback')} icon={ICONS.FEEDBACK} button="secondary" />
             </div>
           }
@@ -185,8 +193,11 @@ class HelpPage extends React.PureComponent<Props, State> {
         <Card
           title={__('View your log')}
           subtitle={
+            // @ts-expect-error - TS2745 (ts-migration)
             <I18nMessage
+              // @ts-expect-error - TS2322 (ts-migration)
               tokens={{
+                // @ts-expect-error - TS2322 (ts-migration)
                 support_link: <Button button="link" label={__('support')} href="https://lbry.com/faq/support" />,
               }}
             >
@@ -196,12 +207,14 @@ class HelpPage extends React.PureComponent<Props, State> {
           actions={
             <div className="section__actions">
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="secondary"
                 label={__('Open Log')}
                 icon={ICONS.OPEN_LOG}
                 onClick={() => this.openLogFile(dataDirectory)}
               />
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="secondary"
                 label={__('Open Log Folder')}
                 icon={ICONS.OPEN_LOG_FOLDER}
@@ -226,6 +239,7 @@ class HelpPage extends React.PureComponent<Props, State> {
                         <React.Fragment>
                           {user.primary_email}{' '}
                           <Button
+                            // @ts-expect-error - TS2322 (ts-migration)
                             button="link"
                             navigate={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`}
                             label={__('Update mailing preferences')}
@@ -234,6 +248,7 @@ class HelpPage extends React.PureComponent<Props, State> {
                       ) : (
                         <React.Fragment>
                           <span className="empty">{__('none')} </span>
+                          {/* @ts-expect-error - TS2322 (ts-migration) */}
                           <Button button="link" onClick={() => doAuth()} label={__('set email')} />
                         </React.Fragment>
                       )}
@@ -247,6 +262,7 @@ class HelpPage extends React.PureComponent<Props, State> {
                     <td>{__('Access Token')}</td>
                     <td>
                       {this.state.accessTokenHidden && (
+                        // @ts-expect-error - TS2322 (ts-migration)
                         <Button button="link" label={__('View')} onClick={this.showAccessToken} />
                       )}
                       {!this.state.accessTokenHidden && accessToken && (
@@ -270,6 +286,7 @@ class HelpPage extends React.PureComponent<Props, State> {
             this.state.upgradeAvailable !== null && this.state.upgradeAvailable ? (
               <span>
                 {__('A newer version of LBRY is available.')}{' '}
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <Button button="link" href={newVerLink} label={__('Download now!')} />
               </span>
             ) : null
@@ -284,6 +301,7 @@ class HelpPage extends React.PureComponent<Props, State> {
                     <td>
                       {this.state.uiVersion ? this.state.uiVersion + ' - ' : ''}
                       <Button
+                        // @ts-expect-error - TS2322 (ts-migration)
                         button="link"
                         label={__('Changelog')}
                         href="https://github.com/lbryio/lbry-desktop/blob/master/CHANGELOG.md"

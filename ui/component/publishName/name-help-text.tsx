@@ -25,7 +25,9 @@ function NameHelpText(props: Props) {
     nameHelpText = (
       <React.Fragment>
         <div className="error__text">
+          {/* @ts-expect-error - TS2745 (ts-migration) */}
           <I18nMessage
+            // @ts-expect-error - TS2322 (ts-migration)
             tokens={{
               existing_uri: (
                 <u>
@@ -38,6 +40,7 @@ function NameHelpText(props: Props) {
           </I18nMessage>
         </div>
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           button="link"
           label={__('Edit existing claim instead')}
           onClick={() => onEditMyClaim(myClaimForUri, editUri)}

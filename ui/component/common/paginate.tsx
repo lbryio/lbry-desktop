@@ -60,8 +60,11 @@ function Paginate(props: Props) {
   return (
     // Hide the paginate controls if we are loading or there is only one page
     // It should still be rendered to trigger the onPageChange callback
+// @ts-expect-error - TS2769 - No overload matches this call.
     <Form style={totalPages <= 1 ? { display: 'none' } : null} onSubmit={handlePaginateKeyUp}>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
       <fieldset-group class="fieldset-group--smushed fieldgroup--paginate">
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
         <fieldset-section>
           <ReactPaginate
             pageCount={totalPages}
@@ -79,11 +82,13 @@ function Paginate(props: Props) {
             initialPage={currentPage - 1}
             containerClassName="pagination"
           />
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
         </fieldset-section>
         {!isMobile && (
           <FormField
             value={textValue}
             onChange={(e) => setTextValue(e.target.value)}
+// @ts-expect-error - TS2322 - Type '{ value: string; onChange: (e: any) => void; className: string; "aria-label": string; placeholder: string; type: string; name: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
             className="paginate-goto"
             aria-label={__('Go to page:')}
             placeholder={__('Go to')}
@@ -91,6 +96,7 @@ function Paginate(props: Props) {
             name="paginate-file"
           />
         )}
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
       </fieldset-group>
     </Form>
   );

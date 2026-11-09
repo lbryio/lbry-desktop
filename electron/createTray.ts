@@ -5,7 +5,7 @@ import showWindow from './showWindow';
 
 let tray;
 
-export default window: unknown => {
+export default (window: unknown) => {
   let iconPath;
 
   switch (process.platform) {

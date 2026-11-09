@@ -17,6 +17,7 @@ import FileWatchLaterLink from 'component/fileWatchLaterLink';
 import ClaimRepostAuthor from 'component/claimRepostAuthor';
 import ClaimMenuList from 'component/claimMenuList';
 import CollectionPreviewOverlay from 'component/collectionPreviewOverlay';
+// @ts-expect-error - TS2792 - Cannot find module 'static/img/placeholderTx.gif'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import PlaceholderTx from 'static/img/placeholderTx.gif';
 
 type Props = {
@@ -84,8 +85,10 @@ function ClaimPreviewTile(props: Props) {
     // $FlowFixMe
     claim.value &&
     // $FlowFixMe
+// @ts-expect-error - TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
     claim.value.stream_type &&
     // $FlowFixMe
+// @ts-expect-error - TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'. | TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
     (claim.value.stream_type === 'audio' || claim.value.stream_type === 'video');
   const collectionClaimId = isCollection && claim && claim.claim_id;
   const shouldFetch = claim === undefined;
@@ -194,11 +197,13 @@ function ClaimPreviewTile(props: Props) {
               </div>
               {/* @if TARGET='app' */}
               <div className="claim-preview__hover-actions">
+                {/* @ts-expect-error - TS2739 (ts-migration) */}
                 {isStream && <FileDownloadLink focusable={false} uri={canonicalUrl} hideOpenButton />}
               </div>
               {/* @endif */}
 
               <div className="claim-preview__file-property-overlay">
+                {/* @ts-expect-error - TS2739 (ts-migration) */}
                 <PreviewOverlayProperties uri={uri} properties={liveProperty || properties} />
               </div>
             </React.Fragment>
@@ -218,11 +223,13 @@ function ClaimPreviewTile(props: Props) {
             <TruncatedText text={title || (claim && claim.name)} lines={isChannel ? 1 : 2} />
             {isChannel && (
               <div className="claim-tile__about">
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <UriIndicator uri={uri} />
               </div>
             )}
           </h2>
         </NavLink>
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         <ClaimMenuList uri={uri} collectionId={listId} channelUri={channelUri} />
       </div>
       <div>
@@ -233,14 +240,18 @@ function ClaimPreviewTile(props: Props) {
         >
           {!isChannel && (
             <React.Fragment>
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <UriIndicator focusable={false} uri={uri} link hideAnonymous>
+                {/* @ts-expect-error - TS2322, TS2739 (ts-migration) */}
                 <ChannelThumbnail uri={channelUri} xsmall />
               </UriIndicator>
 
               <div className="claim-tile__about">
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <UriIndicator uri={uri} link />
                 <div className="claim-tile__about--counts">
                   <FileViewCountInline uri={uri} />
+                  {/* @ts-expect-error - TS2322 (ts-migration) */}
                   <DateTime timeAgo uri={uri} />
                 </div>
               </div>
@@ -249,6 +260,7 @@ function ClaimPreviewTile(props: Props) {
         </div>
         {isRepost && (
           <div className="claim-tile__repost-author">
+            {/* @ts-expect-error - TS2741 (ts-migration) */}
             <ClaimRepostAuthor uri={uri} />
           </div>
         )}

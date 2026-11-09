@@ -1,3 +1,4 @@
+// @ts-expect-error - TS2882 (ts-migration)
 import 'scss/component/_comment-badge.scss';
 
 import classnames from 'classnames';
@@ -20,6 +21,7 @@ export default function CommentBadge(props: Props) {
   const { icon, label, size = 20 } = props;
 
   return (
+    // @ts-expect-error - TS2322 (ts-migration)
     <Tooltip title={label} placement="top">
       <span
         className={classnames('comment__badge', {

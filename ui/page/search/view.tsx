@@ -78,11 +78,14 @@ export default function SearchPage(props: Props) {
   }
 
   return (
+    // @ts-expect-error - TS2740 (ts-migration)
     <Page className="searchPage-wrapper">
       <section className="search">
         {urlQuery && (
           <>
+            {/* @ts-expect-error - TS2741 (ts-migration) */}
             {isValid && <SearchTopClaim query={modifiedUrlQuery} isSearching={isSearching} />}
+            {/* @ts-expect-error - TS2740 (ts-migration) */}
             <ClaimList
               uris={uris}
               loading={isSearching}
@@ -91,6 +94,7 @@ export default function SearchPage(props: Props) {
               // needs to be unique to indicate when a fetch is needed.
               page={from + 1}
               pageSize={SEARCH_PAGE_SIZE}
+              // @ts-expect-error - TS2322 (ts-migration)
               header={<SearchOptions additionalOptions={searchOptions} onSearchOptionsChanged={resetPage} />}
             />
 

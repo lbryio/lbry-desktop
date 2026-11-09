@@ -25,6 +25,7 @@ function FileDescription(props: Props) {
   const { uri, claim, metadata, pendingAmount, doOpenModal, claimIsMine, expandOverride } = props;
   const [expanded, setExpanded] = React.useState(false);
   const [showCreditDetails, setShowCreditDetails] = React.useState(false);
+// @ts-expect-error - TS2345 - Argument of type 'string | number' is not assignable to parameter of type 'string'.
   const amount = claim ? parseFloat(claim.amount) + parseFloat(pendingAmount || claim.meta.support_amount) : undefined;
   const formattedAmount = formatCredits(amount, 2, true);
   const hasSupport = claim && claim.meta && claim.meta.support_amount && Number(claim.meta.support_amount) > 0;
@@ -45,7 +46,9 @@ function FileDescription(props: Props) {
         })}
       >
         {description && <MarkdownPreview className="markdown-preview--description" content={description} simpleLinks />}
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         <ClaimTags uri={uri} type="large" />
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         <FileDetails uri={uri} />
       </div>
 
@@ -53,8 +56,10 @@ function FileDescription(props: Props) {
         {!expandOverride && (
           <>
             {expanded ? (
+              // @ts-expect-error - TS2322 (ts-migration)
               <Button button="link" label={__('Less')} onClick={() => setExpanded(!expanded)} />
             ) : (
+              // @ts-expect-error - TS2322 (ts-migration)
               <Button button="link" label={__('More')} onClick={() => setExpanded(!expanded)} />
             )}
           </>
@@ -63,6 +68,7 @@ function FileDescription(props: Props) {
         <div className="section__actions--no-margin">
           {claimIsMine && hasSupport && (
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               button="link"
               className="expandable__button"
               icon={ICONS.UNLOCK}
@@ -72,6 +78,7 @@ function FileDescription(props: Props) {
               }}
             />
           )}
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <Button button="link" onClick={() => setShowCreditDetails(!showCreditDetails)}>
             <LbcSymbol postfix={showCreditDetails ? __('Hide') : formattedAmount} />
           </Button>
@@ -80,6 +87,7 @@ function FileDescription(props: Props) {
 
       {showCreditDetails && (
         <div className="section">
+          {/* @ts-expect-error - TS2741 (ts-migration) */}
           <FileValues uri={uri} />
         </div>
       )}

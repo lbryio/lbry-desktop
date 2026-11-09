@@ -6,6 +6,7 @@ import Icon from 'component/common/icon';
 
 function ListsPage() {
   return (
+    // @ts-expect-error - TS2740 (ts-migration)
     <Page className="playlistPage-wrapper">
       <label className="claim-list__header-label">
         <span>

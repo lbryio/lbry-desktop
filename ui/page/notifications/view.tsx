@@ -61,11 +61,14 @@ export default function NotificationsPage(props: Props) {
           notification_parameters.dynamic.hash;
 
         if (commentId) {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
           idsForReactionFetch.push(commentId);
         }
       });
 
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
       if (idsForReactionFetch.length !== 0) {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string[]'.
         doCommentReactList(idsForReactionFetch);
       }
     }
@@ -110,13 +113,16 @@ export default function NotificationsPage(props: Props) {
       <div className="claim-list__header">
         <h1 className="card__title">{__('Notifications')}</h1>
         <div className="claim-list__alt-controls--wrap">
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           {fetching && <Spinner type="small" />}
 
           {unreadCount > 0 && (
+            // @ts-expect-error - TS2322 (ts-migration)
             <Button icon={ICONS.EYE} onClick={doReadNotifications} button="secondary" label={__('Mark all as read')} />
           )}
           {notificationCategories && (
             <FormField
+// @ts-expect-error - TS2322 - Type '{ children: Element[]; className: string; type: string; name: string; value: any; onChange: (e: any) => any; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
               className="notification__filter"
               type="select"
               name="filter"
@@ -138,6 +144,7 @@ export default function NotificationsPage(props: Props) {
         <div className="card">
           <div className="notification_list">
             {list.map((notification) => {
+              // @ts-expect-error - TS2741 (ts-migration)
               return <Notification key={notification.id} notification={notification} />;
             })}
           </div>
@@ -154,6 +161,7 @@ export default function NotificationsPage(props: Props) {
               }
               actions={
                 <div className="section__actions">
+                  {/* @ts-expect-error - TS2322 (ts-migration) */}
                   <Button button="primary" icon={ICONS.HOME} label={__('Go Home')} navigate="/" />
                 </div>
               }
@@ -165,6 +173,7 @@ export default function NotificationsPage(props: Props) {
   );
 
   return (
+    // @ts-expect-error - TS2740 (ts-migration)
     <Page>
       {initialFetchDone ? (
         notificationListElement

@@ -17,6 +17,7 @@ class ModalUpgrade extends React.PureComponent<Props> {
     return (
       <Modal
         className={IS_MAC ? '' : 'main-wrapper--scrollbar'}
+// @ts-expect-error - TS2322 - Type '{ children: (string | Element)[]; className: string; isOpen: true; contentLabel: string; title: string; type: string; confirmButtonLabel: string; abortButtonLabel: string; onConfirmed: () => void; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
         isOpen
         contentLabel={__('Upgrade available')}
         title={__('LBRY leveled up')}
@@ -27,6 +28,7 @@ class ModalUpgrade extends React.PureComponent<Props> {
         onAborted={skipUpgrade}
       >
         {__('A new version %release_tag% of LBRY is ready for you.', { release_tag: releaseVersion })}
+        {/* @ts-expect-error - TS2741 (ts-migration) */}
         <LastReleaseChanges hideReleaseVersion />
       </Modal>
     );

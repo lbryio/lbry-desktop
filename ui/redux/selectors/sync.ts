@@ -1,7 +1,7 @@
 //@ts-nocheck
 import {createSelector} from 'reselect';
 
-const selectState = state: unknown => state.sync || {};
+const selectState = (state: unknown) => state.sync || {};
 
 export const selectHasSyncedWallet = createSelector(selectState, state => state.hasSyncedWallet);
 

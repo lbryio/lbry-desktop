@@ -21,6 +21,7 @@ const buildIcon = (iconStrokes: React.ReactNode, customSvgValues = {}) =>
     const { size = 24, color = 'currentColor', title, ...otherProps } = props;
     return (
       <svg
+// @ts-expect-error - TS2322 - Type 'ForwardedRef<unknown>' is not assignable to type 'LegacyRef<SVGSVGElement>'.
         ref={ref}
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -576,6 +577,7 @@ export const icons = {
       <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
     </g>
   ),
+  // @ts-expect-error - TS1117 (ts-migration)
   [ICONS.VOLUME_MUTED]: buildIcon(
     <g>
       <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
@@ -849,6 +851,7 @@ export const icons = {
       <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
     </g>
   ),
+  // @ts-expect-error - TS1117 (ts-migration)
   [ICONS.PURCHASED]: buildIcon(
     <g>
       <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" />
@@ -860,6 +863,7 @@ export const icons = {
       <polyline points="22 4 12 14.01 9 11.01" />
     </g>
   ),
+  // @ts-expect-error - TS1117 (ts-migration)
   [ICONS.NOT_COMPLETED]: buildIcon(<circle cx="12" cy="12" r="10" />),
   [ICONS.PINNED]: buildIcon(
     <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
@@ -890,6 +894,7 @@ export const icons = {
       <path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" />
     </g>
   ),
+  // @ts-expect-error - TS1117 (ts-migration)
   [ICONS.OPEN_LOG_FOLDER]: buildIcon(
     <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z" />
   ),
@@ -1182,6 +1187,7 @@ export const icons = {
       strokeMiterlimit="10"
     />
   ),
+  // @ts-expect-error - TS1117 (ts-migration)
   [ICONS.BELL]: buildIcon(
     <g>
       <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
@@ -1961,6 +1967,7 @@ export const icons = {
       <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10" />
     </g>
   ),
+  // @ts-expect-error - TS1117 (ts-migration)
   [ICONS.REPEAT]: buildIcon(
     <g>
       <polyline points="17 1 21 5 17 9" />

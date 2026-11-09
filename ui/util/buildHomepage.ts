@@ -48,6 +48,7 @@ function getLimitPerChannel(size: unknown, isChannel: unknown) {
   if (isChannel) {
     return 1;
   } else {
+    // @ts-expect-error - TS2365 (ts-migration)
     return size < 250 ? (size < 150 ? 3 : 2) : 1;
   }
 }
@@ -134,6 +135,7 @@ export function GetLinksData(
   showNsfw?: boolean
 ) {
   function getPageSize(originalSize: unknown) {
+// @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     return isLargeScreen ? originalSize * (3 / 2) : originalSize;
   }
 
@@ -159,6 +161,7 @@ export function GetLinksData(
         }),
       },
     } as const;
+// @ts-expect-error - TS2345 - Argument of type '{ readonly title: string; readonly link: "/$/following"; readonly icon: "Heart"; readonly options: { readonly orderBy: readonly ["release_time"]; readonly releaseTime: string; readonly pageSize: unknown; readonly streamTypes: any; readonly channelIds: string[]; }; }' is not assignable to parameter of type 'RowDataItem'.
     rowData.push(RECENT_FROM_FOLLOWING);
   }
 
@@ -319,11 +322,13 @@ export function GetLinksData(
           link: `/$/${PAGES.DISCOVER}?t=${tag.name}`,
           options: {
             pageSize: 4,
+// @ts-expect-error - TS2322 - Type '{ pageSize: number; tags: string[]; claimType: string[]; }' is not assignable to type '{ channelIds?: string[]; pageSize?: number; limitClaimsPerChannel?: number; languages?: string[]; }'.
             tags: [tag.name],
             claimType: ['stream'],
           },
         });
       });
+// @ts-expect-error - TS2345 - Argument of type '{ readonly title: string; readonly link: "/$/tags"; readonly icon: "Tag"; readonly options: { readonly pageSize: unknown; readonly tags: string[]; readonly claimType: readonly ["stream"]; readonly limitClaimsPerChannel: 2; }; }' is not assignable to parameter of type 'RowDataItem'.
       if (showPersonalizedTags && !showIndividualTags) rowData.push(TRENDING_FOR_TAGS);
       if (showPersonalizedTags && showIndividualTags) {
         individualTagDataItems.forEach((item: RowDataItem) => {
@@ -334,11 +339,15 @@ export function GetLinksData(
   }
 
   if (!CUSTOM_HOMEPAGE) {
+// @ts-expect-error - TS2345 - Argument of type '{ readonly title: string; readonly link: "/$/discover?order=top&fresh=day"; readonly options: { readonly pageSize: unknown; readonly orderBy: readonly ["effective_amount"]; readonly claimType: readonly ["stream"]; readonly limitClaimsPerChannel: 2; readonly releaseTime: `>${number}`; }; }' is not assignable to parameter of type 'RowDataItem'.
     rowData.push(TOP_CONTENT_TODAY);
     if (language !== 'en') {
+// @ts-expect-error - TS2345 - Argument of type '{ readonly title: string; readonly link: `/$/discover?order=top&fresh=day&language=${string}`; readonly options: { readonly languages: readonly [string]; readonly pageSize: unknown; readonly orderBy: readonly ["effective_amount"]; readonly claimType: readonly ["stream"]; readonly limitClaimsPerChannel: 2; readonly r...' is not assignable to parameter of type 'RowDataItem'.
       rowData.push(LANGUAGE_CATEGORY);
     }
+// @ts-expect-error - TS2345 - Argument of type '{ readonly title: string; readonly link: "/@lbry:3f"; readonly options: { readonly orderBy: readonly ["release_time"]; readonly pageSize: unknown; readonly channelIds: readonly ["3fda836a92faaceedfe398225fb9b2ee2ed1f01a"]; }; }' is not assignable to parameter of type 'RowDataItem'.
     rowData.push(LATEST_FROM_LBRY);
+// @ts-expect-error - TS2345 - Argument of type '{ readonly title: string; readonly link: "/$/discover?claim_type=channel&order=top&fresh=all"; readonly options: { readonly orderBy: readonly ["effective_amount"]; readonly claimType: readonly ["channel"]; }; }' is not assignable to parameter of type 'RowDataItem'.
     if (!showPersonalizedChannels) rowData.push(TOP_CHANNELS);
   }
 

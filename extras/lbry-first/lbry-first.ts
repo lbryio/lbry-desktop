@@ -16,6 +16,7 @@ const LbryFirst: LbryFirstTypes = {
   apiRequestHeaders: { 'Content-Type': 'application/json' },
 
   // Allow overriding lbryFirst connection string (e.g. to `/api/proxy` for lbryweb)
+// @ts-expect-error - TS2322 - Type '{ isConnected: false; connectPromise: null; lbryFirstConnectionString: string; apiRequestHeaders: { 'Content-Type': string; }; setLbryFirstConnectionString: (value: string) => void; setApiHeader: (key: string, value: string) => void; ... 11 more ...; connect: () => Promise<...>; }' is not assignable to type 'LbryFirstTypes'.
   setLbryFirstConnectionString: (value: string) => {
     LbryFirst.lbryFirstConnectionString = value;
   },
@@ -41,6 +42,7 @@ const LbryFirst: LbryFirstTypes = {
   version: () => lbryFirstCallWithResult('version', {}),
 
   // Upload to youtube
+// @ts-expect-error - TS2739 - Type '{}' is missing the following properties from type '{ title: string; description: string; file_path: string; }': title, description, file_path
   upload: (params: {
     title: string,
     description: string,
@@ -87,7 +89,7 @@ const LbryFirst: LbryFirstTypes = {
   // Connect to lbry-first
   connect: () => {
     if (LbryFirst.connectPromise === null) {
-      LbryFirst.connectPromise = new Promise((resolve: unknown, reject: unknown) => {
+      LbryFirst.connectPromise = new Promise<any>((resolve, reject) => {
         let tryNum = 0;
         // Check every half second to see if the lbryFirst is accepting connections
         function checkLbryFirstStarted() {
@@ -113,9 +115,12 @@ const LbryFirst: LbryFirstTypes = {
 };
 
 function checkAndParse(response: unknown) {
+// @ts-expect-error - TS2339 - Property 'status' does not exist on type 'unknown'. | TS2339 - Property 'status' does not exist on type 'unknown'.
   if (response.status >= 200 && response.status < 300) {
+// @ts-expect-error - TS2339 - Property 'json' does not exist on type 'unknown'.
     return response.json();
   }
+// @ts-expect-error - TS2339 - Property 'json' does not exist on type 'unknown'.
   return response.json().then(json => {
     let error;
     if (json.error) {
@@ -156,7 +161,7 @@ export function apiCall(method: string, params: Record<any, any> | null | undefi
 }
 
 function lbryFirstCallWithResult(name: string, params: Record<any, any> | null = {}) {
-  return new Promise((resolve: unknown, reject: unknown) => {
+  return new Promise<any>((resolve, reject) => {
     apiCall(
       name,
       params,
@@ -177,7 +182,7 @@ const lbryFirstProxy = new Proxy(LbryFirst, {
     }
 
     return (params = {}) =>
-      new Promise((resolve: unknown, reject: unknown) => {
+      new Promise<any>((resolve, reject) => {
         apiCall(name, params, resolve, reject);
       });
   },

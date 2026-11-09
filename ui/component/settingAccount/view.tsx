@@ -44,6 +44,7 @@ export default function SettingAccount(props: Props) {
             {isAuthenticated && (
               <SettingsRow title={__('Password')}>
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   button="inverse"
                   label={__('Manage')}
                   icon={ICONS.ARROW_RIGHT}
@@ -52,11 +53,13 @@ export default function SettingAccount(props: Props) {
               </SettingsRow>
             )}
 
+{ /* @ts-expect-error - TS2367 - This condition will always return 'true' since the types 'boolean' and 'string' have no overlap. */}
             <SyncToggle disabled={walletEncrypted && !storedPassword && storedPassword !== ''} />
 
             {hasChannels && (
               <SettingsRow title={__('Comments')} subtitle={__('View your past comments.')}>
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   button="inverse"
                   label={__('Manage')}
                   icon={ICONS.ARROW_RIGHT}

@@ -164,6 +164,7 @@ const ModalPublishPreview = (props: Props) => {
 
   const tagsValue =
     // Do nothing for onClick(). Setting to 'null' results in "View Tag" action -- we don't want to leave the modal.
+    // @ts-expect-error - TS2322 (ts-migration)
     tags.map((tag) => <Tag key={tag.name} title={tag.name} name={tag.name} type={'flow'} onClick={() => {}} />);
 
   const depositValue = bid ? <LbcSymbol postfix={`${bid}`} size={14} /> : <p>---</p>;
@@ -171,6 +172,7 @@ const ModalPublishPreview = (props: Props) => {
   let priceValue = __('Free');
   if (!contentIsFree) {
     if (fee.currency === 'LBC') {
+// @ts-expect-error - TS2322 - Type 'Element' is not assignable to type 'string'.
       priceValue = <LbcSymbol postfix={fee.amount} />;
     } else {
       priceValue = `${fee.amount} ${fee.currency}`;
@@ -181,6 +183,7 @@ const ModalPublishPreview = (props: Props) => {
     const channelClaim = myChannels && myChannels.find((x) => x.name === channel);
     return channel ? (
       <div className="channel-value">
+        {/* @ts-expect-error - TS2739 (ts-migration) */}
         {channelClaim && <ChannelThumbnail xsmall noLazyLoad uri={channelClaim.permanent_url} />}
         {channel}
       </div>
@@ -193,10 +196,12 @@ const ModalPublishPreview = (props: Props) => {
   };
 
   const releaseTimeStr = (time: unknown) => {
+// @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     return time ? moment(new Date(time * 1000)).format('MMMM Do, YYYY - h:mm a') : '';
   };
 
   return (
+// @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; contentLabel: any; type: string; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
     <Modal isOpen contentLabel={modalTitle} type="card" onAborted={closeModal}>
       <Form onSubmit={onConfirmed}>
         <Card
@@ -234,7 +239,9 @@ const ModalPublishPreview = (props: Props) => {
           actions={
             <>
               <div className="section__actions">
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <Button autoFocus button="primary" disabled={publishing} label={confirmBtnText} onClick={onConfirmed} />
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <Button button="link" label={__('Cancel')} onClick={closeModal} />
               </div>
               <p className="help">{__('Once the transaction is sent, it cannot be reversed.')}</p>
@@ -242,6 +249,7 @@ const ModalPublishPreview = (props: Props) => {
                 type="checkbox"
                 name="sync_toggle"
                 label={__('Skip preview and confirmation')}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; label: string; checked: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 checked={!enablePublishPreview}
                 onChange={() => setEnablePublishPreview(!enablePublishPreview)}
               />

@@ -55,8 +55,10 @@ class NavigationHistoryItem extends React.PureComponent<Props> {
           'item-list__row--selected': selected,
         })}
       >
+{ /* @ts-expect-error - TS2322 - Type '{ checked: boolean; type: string; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'. */}
         {!slim && <FormField checked={selected} type="checkbox" onChange={onSelect} />}
         <span className="">{moment(lastViewed).from(moment())}</span>
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         <Button className="item-list__element" button="link" label={uri} navigate={uri} />
         <span className="item-list__element">{title}</span>
       </div>

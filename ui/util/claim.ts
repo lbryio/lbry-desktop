@@ -112,8 +112,10 @@ export function getChannelFromClaim(claim?: Claim | null) {
 }
 
 export function isClaimPlayable(claim?: Claim | null) {
+// @ts-expect-error - TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
   if (!claim || !claim.value || !claim.value.stream_type) {
     return false;
   }
+// @ts-expect-error - TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
   return ['audio', 'video'].includes(claim.value.stream_type);
 }

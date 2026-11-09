@@ -13,6 +13,7 @@ export default function ShareButton(props: Props) {
 
   return (
     <Button
+      // @ts-expect-error - TS2322 (ts-migration)
       button="secondary"
       icon={ICONS.SHARE}
       label={__('Share')}

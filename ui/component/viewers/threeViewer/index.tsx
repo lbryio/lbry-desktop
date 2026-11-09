@@ -33,16 +33,19 @@ const Loader = (fileType: unknown, manager: unknown) => {
     stl: () => new STLLoader(manager),
     obj: () => new OBJLoader2(manager),
   } as const;
+// @ts-expect-error - TS2538 - Type 'unknown' cannot be used as an index type. | TS2538 - Type 'unknown' cannot be used as an index type.
   return fileTypes[fileType] ? fileTypes[fileType]() : null;
 };
 
 const ThreeLoader = ({ fileType = null, downloadPath = null }, renderModel: unknown, managerEvents: unknown) => {
   if (fileType && downloadPath) {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type '{ onLoad: any; onStart: any; onError: any; }'.
     const manager = Manager(managerEvents);
     const loader = Loader(fileType, manager);
 
     if (loader) {
       loader.load(`file://${downloadPath}`, data => {
+// @ts-expect-error - TS2349 - This expression is not callable.
         renderModel(fileType, data);
       });
     }
@@ -70,7 +73,8 @@ type State = {
 };
 
 class ThreeViewer extends React.PureComponent<Props, State> {
-  static testWebgl = (): Promise<void> => new Promise((resolve: unknown, reject: unknown) => {
+  static testWebgl = (): Promise<void> => new Promise<any>((resolve, reject) => {
+// @ts-expect-error - TS2794 - Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
     if (detectWebGL()) resolve();
     else reject();
   });
@@ -97,12 +101,18 @@ class ThreeViewer extends React.PureComponent<Props, State> {
       if (child instanceof Mesh) {
         const box = new Box3().setFromObject(child);
         // Max
+// @ts-expect-error - TS2540 - Cannot assign to 'x' because it is a read-only property.
         max.x = box.max.x > max.x ? box.max.x : max.x;
+// @ts-expect-error - TS2540 - Cannot assign to 'y' because it is a read-only property.
         max.y = box.max.y > max.y ? box.max.y : max.y;
+// @ts-expect-error - TS2540 - Cannot assign to 'z' because it is a read-only property.
         max.z = box.max.z > max.z ? box.max.z : max.z;
         // Min
+// @ts-expect-error - TS2540 - Cannot assign to 'x' because it is a read-only property.
         min.x = box.min.x < min.x ? box.min.x : min.x;
+// @ts-expect-error - TS2540 - Cannot assign to 'y' because it is a read-only property.
         min.y = box.min.y < min.y ? box.min.y : min.y;
+// @ts-expect-error - TS2540 - Cannot assign to 'z' because it is a read-only property.
         min.z = box.min.z < min.z ? box.min.z : min.z;
       }
     });
@@ -192,6 +202,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
       this.mesh.traverse(child => {
         if (child instanceof Mesh) {
           if (child.geometry) child.geometry.dispose();
+          // @ts-expect-error - TS2339 (ts-migration)
           if (child.material) child.material.dispose();
         }
       });
@@ -264,6 +275,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
         color: this.materialColor,
         reset: () => {
           // Reset material color
+// @ts-expect-error - TS2540 - Cannot assign to 'color' because it is a read-only property.
           config.color = this.materialColor;
           // Reset material
           this.material.color.set(config.color);
@@ -298,6 +310,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
         .add(this.material, 'flatShading')
         .name('FlatShading')
         .onChange(() => {
+// @ts-expect-error - TS2554 - Expected 2 arguments, but got 1.
           this.updateMaterial(this.material);
         })
         .listen();
@@ -404,6 +417,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
       if (child instanceof Mesh) {
         // Get geometry from child
         const geometry = new Geometry();
+        // @ts-expect-error - TS2345 (ts-migration)
         geometry.fromBufferGeometry(child.geometry);
         geometry.mergeVertices();
         geometry.computeVertexNormals();

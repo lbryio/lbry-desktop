@@ -1,6 +1,7 @@
 import type {ReactNode} from 'react';
 import * as ICONS from 'constants/icons';
 import React, { useState, useEffect } from 'react';
+// @ts-expect-error - TS2792 - Cannot find module 'electron'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import { ipcRenderer } from 'electron';
 import { regexInvalidURI } from 'util/lbryURI';
 import PostEditor from 'component/postEditor';
@@ -37,7 +38,7 @@ type Props = {
   subtitle: string,
   setPublishMode: (arg1: string) => void,
   setPrevFileText: (arg1: string) => void,
-  header: Node,
+  header: React.ReactNode,
   channelId: string,
   setWaitForFile: (arg1: boolean) => void
 };
@@ -110,6 +111,7 @@ function PublishFile(props: Props) {
       }
       const fileData: FileData = {
         path: result.path,
+// @ts-expect-error - TS2322 - Type '{ path: any; name: any; mimeType: any; size: any; duration: any; file: any; }' is not assignable to type 'FileData'.
         name: result.name,
         mimeType: result.mime || 'application/octet-stream',
         size: result.size,
@@ -144,8 +146,10 @@ function PublishFile(props: Props) {
   }
 
   function getTimeForMB(s: unknown) {
+    // @ts-expect-error - TS2365 (ts-migration)
     if (s < MINUTES_THRESHOLD) {
       return Math.floor(secondsToProcess);
+    // @ts-expect-error - TS2365 (ts-migration)
     } else if (s >= MINUTES_THRESHOLD && s < HOURS_THRESHOLD) {
       return Math.floor(secondsToProcess / 60);
     } else {
@@ -154,9 +158,11 @@ function PublishFile(props: Props) {
   }
 
   function getUnitsForMB(s: unknown) {
+    // @ts-expect-error - TS2365 (ts-migration)
     if (s < MINUTES_THRESHOLD) {
       if (secondsToProcess > 1) return __('seconds');
       return __('second');
+    // @ts-expect-error - TS2365 (ts-migration)
     } else if (s >= MINUTES_THRESHOLD && s < HOURS_THRESHOLD) {
       if (Math.floor(secondsToProcess / 60) > 1) return __('minutes');
       return __('minute');
@@ -171,6 +177,7 @@ function PublishFile(props: Props) {
       return (
         <p className="help--warning">
           {__('Your video has a bitrate over 5 Mbps. We suggest transcoding to provide viewers the best experience.')}{' '}
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <Button button="link" label={__('Upload Guide')} href="https://lbry.com/faq/video-publishing-guide" />
         </p>
       );
@@ -182,6 +189,7 @@ function PublishFile(props: Props) {
           {__(
             'Your video may not be the best format. Use MP4s in H264/AAC format and a friendly bitrate (under 5 Mbps) and resolution (720p) for more reliable streaming.'
           )}{' '}
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <Button button="link" label={__('Upload Guide')} href="https://lbry.com/faq/video-publishing-guide" />
         </p>
       );
@@ -201,6 +209,7 @@ function PublishFile(props: Props) {
           {__(
             'For video content, use MP4s in H264/AAC format and a friendly bitrate (under 5 Mbps) and resolution (720p) for more reliable streaming.'
           )}{' '}
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <Button button="link" label={__('Upload Guide')} href="https://lbry.com/faq/video-publishing-guide" />
         </p>
       );
@@ -209,10 +218,12 @@ function PublishFile(props: Props) {
 
   function parseName(newName: unknown) {
     let INVALID_URI_CHARS = new RegExp(regexInvalidURI, 'gu');
+// @ts-expect-error - TS2339 - Property 'replace' does not exist on type 'unknown'.
     return newName.replace(INVALID_URI_CHARS, '-');
   }
 
   function handleTitleChange(event: unknown) {
+// @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
     const title = event.target.value;
     // Update title
     updatePublishForm({ title });
@@ -305,10 +316,12 @@ function PublishFile(props: Props) {
       title={
         <div>
           {header} {/* display mode buttons from parent */}
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           {publishing && <Spinner type={'small'} />}
           {inProgress && (
             <div>
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="close"
                 label={__('New --[clears Publish Form]--')}
                 icon={ICONS.REFRESH}
@@ -321,6 +334,7 @@ function PublishFile(props: Props) {
       subtitle={subtitle || (isStillEditing && __('You are currently editing your upload.'))}
       actions={
         <React.Fragment>
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <PublishName uri={uri} />
           <FormField
             type="text"
@@ -349,6 +363,7 @@ function PublishFile(props: Props) {
           {showFileUpload && (
             <FormField
               type="checkbox"
+// @ts-expect-error - TS2322 - Type '{ type: string; checked: any; disabled: boolean; onChange: () => any; label: string; name: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
               checked={userOptimize}
               disabled={!optimizeAvail}
               onChange={() => setUserOptimize(!userOptimize)}
@@ -358,8 +373,11 @@ function PublishFile(props: Props) {
           )}
           {showFileUpload && !ffmpegAvail && (
             <p className="help">
+              {/* @ts-expect-error - TS2745 (ts-migration) */}
               <I18nMessage
+                // @ts-expect-error - TS2322 (ts-migration)
                 tokens={{
+                  // @ts-expect-error - TS2322 (ts-migration)
                   settings_link: <Button button="link" navigate="/$/settings" label={__('Settings')} />,
                 }}
               >
@@ -369,7 +387,9 @@ function PublishFile(props: Props) {
           )}
           {showFileUpload && Boolean(size) && ffmpegAvail && optimize && isVid && (
             <p className="help">
+              {/* @ts-expect-error - TS2745 (ts-migration) */}
               <I18nMessage
+                // @ts-expect-error - TS2322 (ts-migration)
                 tokens={{
                   size: Math.ceil(sizeInMB),
                   processTime: getTimeForMB(sizeInMB),

@@ -23,6 +23,7 @@ function ModalRemoveCollection(props: Props) {
   const [confirmName, setConfirmName] = useState('');
 
   return (
+// @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; contentLabel: string; type: string; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
     <Modal isOpen contentLabel={__('Confirm List Unpublish')} type="card" onAborted={closeModal}>
       <Card
         title={__('Delete List')}
@@ -31,9 +32,11 @@ function ModalRemoveCollection(props: Props) {
             <React.Fragment>
               <p>{__('This will permanently delete the list.')}</p>
               <p>{__('Type "%name%" to confirm.', { name: collectionName })}</p>
+{ /* @ts-expect-error - TS2741 - Property 'name' is missing in type '{ value: string; type: string; onChange: (e: any) => void; }' but required in type 'Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | "type" | "name" | "value" | "disabled" | "label" | "children" | "render" | ... 15 more ... | "onChange">'. */}
               <FormField value={confirmName} type={'text'} onChange={(e) => setConfirmName(e.target.value)} />
             </React.Fragment>
           ) : (
+            // @ts-expect-error - TS2745, TS2322 (ts-migration)
             <I18nMessage tokens={{ title: <cite>{uri && title ? `"${title}"` : `"${collectionName}"`}</cite> }}>
               Are you sure you'd like to remove %title%?
             </I18nMessage>
@@ -43,6 +46,7 @@ function ModalRemoveCollection(props: Props) {
           <>
             <div className="section__actions">
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="primary"
                 label={__('Delete')}
                 disabled={uri && collectionName !== confirmName}
@@ -52,6 +56,7 @@ function ModalRemoveCollection(props: Props) {
                   closeModal();
                 }}
               />
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="link" label={__('Cancel')} onClick={closeModal} />
             </div>
           </>

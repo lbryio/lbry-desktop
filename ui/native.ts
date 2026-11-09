@@ -7,7 +7,7 @@ const Native: Record<string, any> = {};
 
 // @if TARGET='app'
 Native.getAppVersionInfo = () =>
-  new Promise(resolve: unknown => {
+  new Promise<any>((resolve) => {
     // @if TARGET='app'
     ipcRenderer.once('version-info-received', (event, versionInfo) => {
       resolve(versionInfo);

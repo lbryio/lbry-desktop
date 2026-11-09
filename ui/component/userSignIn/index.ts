@@ -4,7 +4,7 @@ import { selectUser, selectUserIsPending, selectEmailToVerify, selectPasswordExi
 import { doUserSignIn } from 'redux/actions/user';
 import UserSignIn from './view';
 
-const select = state: unknown => ({
+const select = (state: unknown) => ({
   user: selectUser(state),
   userFetchPending: selectUserIsPending(state),
   emailToVerify: selectEmailToVerify(state),

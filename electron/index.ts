@@ -312,7 +312,7 @@ app.on('before-quit', () => {
 // NOTE: if path points to a folder, an empty
 // file will be given.
 ipcMain.handle('get-file-from-path', (event, path, readContents = true) => {
-  return new Promise((resolve: unknown, reject: unknown) => {
+  return new Promise<any>((resolve, reject) => {
     fs.stat(path, (error, stats) => {
       if (error) {
         reject(error);
@@ -439,7 +439,7 @@ ipcMain.on('version-info-requested', () => {
 
   const localVersion = pjson.version;
   let result = '';
-  const onSuccess = res: unknown => {
+  const onSuccess = (res: unknown) => {
     res.on('data', data => {
       result += data;
     });

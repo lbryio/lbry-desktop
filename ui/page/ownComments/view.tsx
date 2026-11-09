@@ -15,8 +15,10 @@ import debounce from 'util/debounce';
 function scaleToDevicePixelRatio(value: unknown) {
   const devicePixelRatio = window.devicePixelRatio || 1.0;
   if (devicePixelRatio < 1.0) {
+// @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     return Math.ceil(value / devicePixelRatio);
   }
+// @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
   return Math.ceil(value * devicePixelRatio);
 }
 
@@ -53,6 +55,7 @@ export default function OwnComments(props: Props) {
   const moreBelow = page < totalPages;
 
   function getCommentsElem(comments: unknown) {
+// @ts-expect-error - TS2339 - Property 'map' does not exist on type 'unknown'.
     return comments.map((comment) => {
       const contentClaim = claimsById[comment.claim_id];
       const isChannel = contentClaim && contentClaim.value_type === 'channel';
@@ -79,6 +82,7 @@ export default function OwnComments(props: Props) {
                 isTopLevel
                 hideActions
                 comment={comment}
+                // @ts-expect-error - TS2322 (ts-migration)
                 commentIsMine
                 numDirectReplies={0} // Don't show replies here
               />
@@ -119,8 +123,11 @@ export default function OwnComments(props: Props) {
         return false;
       }
 
+// @ts-expect-error - TS2339 - Property 'getBoundingClientRect' does not exist on type 'never'.
       const rect = spinnerRef.current.getBoundingClientRect();
+// @ts-expect-error - TS2339 - Property 'innerHeight' does not exist on type 'unknown'. | TS2339 - Property 'documentElement' does not exist on type 'unknown'.
       const windowH = window.innerHeight || document.documentElement.clientHeight;
+// @ts-expect-error - TS2339 - Property 'innerWidth' does not exist on type 'unknown'. | TS2339 - Property 'documentElement' does not exist on type 'unknown'.
       const windowW = window.innerWidth || document.documentElement.clientWidth;
 
       const isApproachingViewport = yPrefetchPx !== 0 && rect.top < windowH + scaleToDevicePixelRatio(yPrefetchPx);
@@ -138,6 +145,7 @@ export default function OwnComments(props: Props) {
       return (isInViewport || isApproachingViewport) && page < topLevelTotalPages;
     }
 
+// @ts-expect-error - TS2554 - Expected 3 arguments, but got 2.
     const handleCommentScroll = debounce(() => {
       if (shouldFetchNextPage(page, totalPages, window, document)) {
         setPage(page + 1);
@@ -162,7 +170,9 @@ export default function OwnComments(props: Props) {
   }
 
   return (
+    // @ts-expect-error - TS2741 (ts-migration)
     <Page noFooter noSideNavigation settingsPage backout={{ title: __('Your comments'), backLabel: __('Back') }}>
+      {/* @ts-expect-error - TS2322, TS2739 (ts-migration) */}
       <ChannelSelector hideAnon />
       <Card
         isBodyList
@@ -177,6 +187,7 @@ export default function OwnComments(props: Props) {
         }
         titleActions={
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             button="alt"
             icon={ICONS.REFRESH}
             title={__('Refresh')}
@@ -190,6 +201,7 @@ export default function OwnComments(props: Props) {
             {wasResetAndReady && <ul className="comments">{allComments && getCommentsElem(allComments)}</ul>}
             {(isFetchingComments || moreBelow) && (
               <div className="main--empty" ref={spinnerRef}>
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <Spinner type="small" />
               </div>
             )}

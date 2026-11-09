@@ -111,7 +111,9 @@ export default function TextareaWithSuggestions(props: Props) {
   const showPlaceholder =
     isMention && !invalidTerm && (isTyping || loading || (results && results.length > 0 && !hasNewResolvedResults));
 
+// @ts-expect-error - TS2339 - Property 'includes' does not exist on type 'unknown'.
   const shouldFilter = (uri: unknown, previous: unknown) => uri !== canonicalCreatorUri && (!previous || !previous.includes(uri));
+// @ts-expect-error - TS2554 - Expected 2 arguments, but got 1.
   const filteredCommentors = canonicalCommentors && canonicalCommentors.filter((uri) => shouldFilter(uri));
   const filteredSubs = canonicalSubs && canonicalSubs.filter((uri) => shouldFilter(uri, filteredCommentors));
   const filteredTop =
@@ -135,17 +137,25 @@ export default function TextareaWithSuggestions(props: Props) {
     emojiNames = hasMinEmojiLength ? EMOJIS.names.filter((name) => !emoteNames.includes(`:${name}:`)) : [];
     const emotesAndEmojis = [...emoteNames, ...emojiNames];
 
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
     allOptions.push(...emotesAndEmojis);
   } else {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
     if (canonicalCreatorUri) allOptions.push(canonicalCreatorUri);
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
     if (filteredSubs) allOptions.push(...filteredSubs);
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
     if (filteredCommentors) allOptions.push(...filteredCommentors);
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
     if (filteredTop) allOptions.push(filteredTop);
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
     if (filteredSearch) allOptions.push(...filteredSearch);
   }
 
   const allOptionsGrouped =
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
     allOptions.length > 0
+// @ts-expect-error - TS2339 - Property 'map' does not exist on type 'unknown'.
       ? allOptions.map((option) => {
           const groupName = isEmote
             ? (emoteNames.includes(option) && __('Emotes')) || (emojiNames.includes(option) && __('Emojis'))
@@ -217,6 +227,7 @@ export default function TextareaWithSuggestions(props: Props) {
           isEmote = groupValue && groupValue === 'Emote';
           currentSuggestionIndex = previousLastIndex + tempExec.index;
           currentLastIndex = previousLastIndex + tempRe.lastIndex;
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
           previousLastIndexes.push(currentLastIndex);
         }
 
@@ -319,12 +330,15 @@ export default function TextareaWithSuggestions(props: Props) {
 
       if (highlightedSuggestion && keyCode === KEYCODES.TAB) {
         e.preventDefault();
+// @ts-expect-error - TS2339 - Property 'label' does not exist on type 'string'.
         handleSelect(highlightedSuggestion.label);
       }
     }
 
+// @ts-expect-error - TS2769 - No overload matches this call.
     window.addEventListener('keydown', handleKeyDown);
 
+// @ts-expect-error - TS2769 - No overload matches this call.
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [handleSelect, highlightedSuggestion, suggestionTerm]);
 
@@ -373,7 +387,9 @@ export default function TextareaWithSuggestions(props: Props) {
       filterOptions={(options) => options.filter(({ label }) => allMatches.includes(label))}
       freeSolo
       fullWidth
+      // @ts-expect-error - TS2339 (ts-migration)
       getOptionLabel={(option) => option.label || ''}
+      // @ts-expect-error - TS2339 (ts-migration)
       groupBy={(option) => option.group}
       id={id}
       inputValue={messageValue}
@@ -382,9 +398,11 @@ export default function TextareaWithSuggestions(props: Props) {
       onBlur={() => onBlur && onBlur()}
       /* Different from onInputChange, onChange is only used for the selected value,
         so here it is acting simply as a selection handler (see it as onSelect) */
+      // @ts-expect-error - TS2339 (ts-migration)
       onChange={(event, value) => handleSelect(value.label)}
       onClose={(event, reason) => reason !== 'selectOption' && setClose(true)}
       onFocus={() => onFocus && onFocus()}
+      // @ts-expect-error - TS2345 (ts-migration)
       onHighlightChange={(event, option) => setHighlightedSuggestion(option)}
       onInputChange={(event, value, reason) => reason === 'input' && handleInputChange(value)}
       onOpen={() => suggestionTerm && setClose(false)}
@@ -394,6 +412,7 @@ export default function TextareaWithSuggestions(props: Props) {
       options={allOptionsGrouped}
       renderGroup={({ group, children }) => renderGroup(group, children)}
       renderInput={(params) => renderInput(params)}
+      // @ts-expect-error - TS2339 (ts-migration)
       renderOption={(optionProps, option) => renderOption(optionProps, option.label)}
     />
   );
@@ -409,6 +428,7 @@ function useSuggestionMatch(term: string, list: Array<string>) {
   return React.useMemo(() => {
     return !throttledTerm || throttledTerm.trim() === ''
       ? undefined
+      // @ts-expect-error - TS2322 (ts-migration)
       : matchSorter(list, term, { keys: [(item: unknown) => item] });
   }, [list, term, throttledTerm]);
 }

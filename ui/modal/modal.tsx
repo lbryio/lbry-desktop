@@ -52,6 +52,7 @@ export function Modal(props: ModalProps) {
       {title && <h1 className="card__title card__title--deprecated">{title}</h1>}
       {type === 'card' && (
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           iconSize={isMobile ? 24 : undefined}
           button="close"
           aria-label={__('Close')}
@@ -62,8 +63,10 @@ export function Modal(props: ModalProps) {
       {children}
       {type === 'custom' || type === 'card' ? null : ( // custom modals define their own buttons
         <div className="card__actions">
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <Button button="primary" label={confirmButtonLabel} disabled={confirmButtonDisabled} onClick={onConfirmed} />
           {type === 'confirm' ? (
+            // @ts-expect-error - TS2322 (ts-migration)
             <Button button="link" label={abortButtonLabel} disabled={abortButtonDisabled} onClick={onAborted} />
           ) : null}
         </div>
@@ -103,8 +106,10 @@ export class ExpandableModal extends React.PureComponent<ModalProps, State> {
         {this.props.children}
         {this.state.expanded ? <div>{this.props.extraContent}</div> : null}
         <div className="card__actions">
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <Button button="primary" label={this.props.confirmButtonLabel} onClick={this.props.onConfirmed} />
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             button="link"
             label={!this.state.expanded ? this.props.expandButtonLabel : this.props.hideButtonLabel}
             onClick={() => {

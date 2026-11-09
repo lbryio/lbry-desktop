@@ -1,4 +1,5 @@
 import React from 'react';
+// @ts-expect-error - TS2882 (ts-migration)
 import 'scss/component/_view_count.scss';
 import { useHistory } from 'react-router';
 import { toCompactNotation } from 'util/string';
@@ -35,6 +36,7 @@ export default function FileViewCountInline(props: Props) {
 
   return (
     <span className="view_count">
+{ /* @ts-expect-error - TS2367 - This condition will always return 'true' since the types 'string' and 'number' have no overlap. */}
       {viewCount !== 1 ? __('%view_count% views', { view_count: formattedViewCount }) : __('1 view')}
     </span>
   );

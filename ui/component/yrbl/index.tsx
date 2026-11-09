@@ -1,7 +1,9 @@
 import type {ReactNode} from 'react';
 import * as React from 'react';
 import classnames from 'classnames';
+// @ts-expect-error - TS2792 - Cannot find module 'static/img/yrblhappy.svg'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import YrblHappy from 'static/img/yrblhappy.svg';
+// @ts-expect-error - TS2792 - Cannot find module 'static/img/yrblsad.svg'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import YrblSad from 'static/img/yrblsad.svg';
 
 type Props = {
@@ -9,7 +11,7 @@ type Props = {
   subtitle?: string | React.ReactNode,
   type: string,
   className?: string,
-  actions?: Node,
+  actions?: React.ReactNode,
   alwaysShow?: boolean
 };
 

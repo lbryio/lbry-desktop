@@ -28,6 +28,7 @@ type State = {
 
 class TransactionListTableItem extends React.PureComponent<Props, State> {
   constructor() {
+// @ts-expect-error - TS2554 - Expected 1-2 arguments, but got 0.
     super();
     this.state = { abandonState: ABANDON_STATES.READY };
     (this as any).abandonClaim = this.abandonClaim.bind(this);
@@ -42,12 +43,14 @@ class TransactionListTableItem extends React.PureComponent<Props, State> {
     }
 
     if (this.state.abandonState === ABANDON_STATES.PENDING) {
+      // @ts-expect-error - TS2322 (ts-migration)
       return <Spinner type={'small'} />;
     }
 
     if (tip && type === TXO.SUPPORT) {
       return (
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           disabled={abandonState === ABANDON_STATES.DONE}
           button="secondary"
           icon={ICONS.UNLOCK}
@@ -59,6 +62,7 @@ class TransactionListTableItem extends React.PureComponent<Props, State> {
     const abandonTitle = type === TXO.SUPPORT ? 'Abandon Support' : 'Abandon Claim';
     return (
       <Button
+        // @ts-expect-error - TS2322 (ts-migration)
         disabled={abandonState === ABANDON_STATES.DONE}
         button="secondary"
         icon={ICONS.DELETE}
@@ -122,8 +126,10 @@ class TransactionListTableItem extends React.PureComponent<Props, State> {
         <td className="table__date">
           {timestamp ? (
             <div>
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <DateTime date={date} show={DateTime.SHOW_DATE} formatOptions={dateFormat} />
               <div className="table__item-label">
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <DateTime date={date} show={DateTime.SHOW_TIME} />
               </div>
             </div>
@@ -141,11 +147,13 @@ class TransactionListTableItem extends React.PureComponent<Props, State> {
           {isRevokeable && this.getLink(type, isTip, valueType)}
         </td>
         <td>
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           {forClaim && <Button button="link" navigate={uri} label={claimName} disabled={!date} />}
           {!forClaim && reward && <span>{reward.reward_title}</span>}
           {isLbryViewReward && <div className="table__item-label">{__('%SITE_NAME% view reward', { SITE_NAME })}</div>}
           {isTip && signingChannel && !isLbryViewReward && (
             <div className="table__item-label">
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <UriIndicator uri={signingChannel && signingChannel.permanent_url} link />
             </div>
           )}

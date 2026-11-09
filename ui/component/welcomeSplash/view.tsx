@@ -2,6 +2,7 @@ import React from 'react';
 import Button from 'component/button';
 import { withRouter } from 'react-router-dom';
 import I18nMessage from 'component/i18nMessage';
+// @ts-expect-error - TS2792 - Cannot find module 'static/img/yrblhappy.svg'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import YrblHappy from 'static/img/yrblhappy.svg';
 
 type Props = {
@@ -28,11 +29,15 @@ function WelcomePage(props: Props) {
         </div>
       </div>
       <div className={'first-run__actions'}>
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         <Button button="primary" label={__(`Next`)} onClick={handleNextPage} />
       </div>
       <p className="section__subtitle">
+        {/* @ts-expect-error - TS2745 (ts-migration) */}
         <I18nMessage
+          // @ts-expect-error - TS2322 (ts-migration)
           tokens={{
+            // @ts-expect-error - TS2322 (ts-migration)
             terms: <Button button="link" href="https://www.lbry.com/termsofservice" label={__('Terms of Service')} />,
           }}
         >

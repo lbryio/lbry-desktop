@@ -19,6 +19,7 @@ function SettingAutoLaunch(props: Props) {
         onChange={(e) => {
           setAutoLaunch(e.target.checked);
         }}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; onChange: (e: any) => void; checked: string; label: string; helper: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
         checked={autoLaunch}
         label={noLabels ? '' : __('Start minimized')}
         helper={

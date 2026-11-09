@@ -68,6 +68,7 @@ const WalletBalance = (props: Props) => {
       title={<LbcSymbol postfix={formatCredits(totalBalance, 8)} isTitle />}
       subtitle={
         totalLocked > 0 ? (
+          // @ts-expect-error - TS2745, TS2322 (ts-migration)
           <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
             Your total balance. All of this is yours, but some %lbc% is in use on channels and content right now.
           </I18nMessage>
@@ -78,13 +79,16 @@ const WalletBalance = (props: Props) => {
       actions={
         <>
           <h2 className="section__title--small">
+            {/* @ts-expect-error - TS2745, TS2322 (ts-migration) */}
             <I18nMessage tokens={{ lbc_amount: <CreditAmount amount={balance} precision={4} /> }}>
               %lbc_amount% immediately spendable
             </I18nMessage>
           </h2>
 
           <h2 className="section__title--small">
+            {/* @ts-expect-error - TS2745 (ts-migration) */}
             <I18nMessage
+              // @ts-expect-error - TS2322 (ts-migration)
               tokens={{
                 lbc_amount: <CreditAmount amount={totalLocked} precision={4} />,
               }}
@@ -92,6 +96,7 @@ const WalletBalance = (props: Props) => {
               %lbc_amount% boosting content
             </I18nMessage>
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               button="link"
               label={detailsExpanded ? __('View less') : __('View more')}
               iconRight={detailsExpanded ? ICONS.UP : ICONS.DOWN}
@@ -109,6 +114,7 @@ const WalletBalance = (props: Props) => {
                   <span className="dd__text">
                     {Boolean(tipsBalance) && (
                       <Button
+                        // @ts-expect-error - TS2322 (ts-migration)
                         button="link"
                         className="dd__button"
                         disabled={operationPending}
@@ -153,16 +159,22 @@ const WalletBalance = (props: Props) => {
             </p>
           )}
           <div className="section__actions">
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <Button button="primary" label={__('Buy')} icon={ICONS.BUY} navigate={`/$/${PAGES.BUY}`} />
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <Button button="secondary" label={__('Receive')} icon={ICONS.RECEIVE} navigate={`/$/${PAGES.RECEIVE}`} />
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <Button button="secondary" label={__('Send')} icon={ICONS.SEND} navigate={`/$/${PAGES.SEND}`} />
           </div>
           {(otherCount > WALLET_CONSOLIDATE_UTXOS || consolidateIsPending || consolidatingUtxos) && (
             <p className="help">
+              {/* @ts-expect-error - TS2745 (ts-migration) */}
               <I18nMessage
+                // @ts-expect-error - TS2322 (ts-migration)
                 tokens={{
                   now: (
                     <Button
+                      // @ts-expect-error - TS2322 (ts-migration)
                       button="link"
                       onClick={() => doUtxoConsolidate()}
                       disabled={operationPending}

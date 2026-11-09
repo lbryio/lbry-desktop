@@ -13,14 +13,18 @@ function ModalRepost(props: Props) {
   const { doHideModal, doSignOut } = props;
 
   return (
+// @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; type: string; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
     <Modal isOpen type="card">
       <Card
         title={__('Sign out')}
         subtitle={
+          // @ts-expect-error - TS2745 (ts-migration)
           <I18nMessage
+            // @ts-expect-error - TS2322 (ts-migration)
             tokens={{
               rename_wallet_instructions: (
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   button="link"
                   label={__('rename your existing wallet')}
                   href="https://lbry.com/faq/lbry-directories"
@@ -34,7 +38,9 @@ function ModalRepost(props: Props) {
         }
         actions={
           <div className="section__actions">
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <Button button="primary" label={__('Sign Out')} onClick={doSignOut} />
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <Button button="link" label={__('Cancel')} onClick={doHideModal} />
           </div>
         }

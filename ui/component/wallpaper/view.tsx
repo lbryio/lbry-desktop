@@ -1,5 +1,6 @@
 import React from 'react';
 // import { resetColors } from 'util/theme';
+// @ts-expect-error - TS2792 - Cannot find module 'static/img/freespch.png'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import freeezepeach from 'static/img/freespch.png';
 type Props = {
   // uri: ?string,

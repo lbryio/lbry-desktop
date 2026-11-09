@@ -43,6 +43,7 @@ function PublishName(props: Props) {
   }
 
   function handleNameChange(event: unknown) {
+// @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
     updatePublishForm({ name: event.target.value });
   }
 
@@ -63,10 +64,13 @@ function PublishName(props: Props) {
 
   return (
     <>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
       <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
         <fieldset-section>
           <label>{__('Name')}</label>
           <div className="form-field__prefix">{prefix}</div>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
         </fieldset-section>
         <FormField
           type="text"
@@ -75,8 +79,10 @@ function PublishName(props: Props) {
           error={nameError}
           disabled={isStillEditing}
           onChange={handleNameChange}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; value: string; error: any; disabled: boolean; onChange: (event: unknown) => void; onBlur: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
           onBlur={() => setBlurred(true)}
         />
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
       </fieldset-group>
       <div className="form-field__help">
         <NameHelpText

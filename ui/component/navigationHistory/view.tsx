@@ -20,6 +20,7 @@ type State = {
 
 class UserHistoryPage extends React.PureComponent<Props, State> {
   constructor() {
+// @ts-expect-error - TS2554 - Expected 1-2 arguments, but got 0.
     super();
 
     this.state = {
@@ -36,8 +37,10 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
 
     const newItemsSelected = { ...itemsSelected } as const;
     if (itemsSelected[uri]) {
+// @ts-expect-error - TS2542 - Index signature in type '{ readonly [x: string]: any; }' only permits reading.
       delete newItemsSelected[uri];
     } else {
+// @ts-expect-error - TS2542 - Index signature in type '{ readonly [x: string]: any; }' only permits reading.
       newItemsSelected[uri] = true;
     }
 
@@ -79,10 +82,12 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
       <React.Fragment>
         <div className="card__actions">
           {Object.keys(itemsSelected).length ? (
+            // @ts-expect-error - TS2322 (ts-migration)
             <Button button="link" label={__('Delete')} onClick={this.removeSelected} />
           ) : (
             <span>{/* Using an empty span so spacing stays the same if the button isn't rendered */}</span>
           )}
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <Button button="link" label={allSelected ? __('Cancel') : __('Select All')} onClick={selectHandler} />
         </div>
         {!!historyItems.length && (
@@ -110,6 +115,7 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
           </h2>
 
           <div className="card__actions card__actions--center">
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <Button button="primary" navigate="/" label={__('Explore new content')} />
           </div>
         </section>

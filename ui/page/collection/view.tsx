@@ -76,9 +76,11 @@ export default function CollectionPage(props: Props) {
   const [newName, setNewName] = React.useState(collectionName);
 
   const { name, totalItems } = collection || {};
+// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"watchlater" | "favorites" | "favoriteChannels"'.
   const isBuiltin = COLLECTIONS_CONSTS.BUILTIN_LISTS.includes(collectionId);
 
   function handleOnDragEnd(result: unknown) {
+// @ts-expect-error - TS2339 - Property 'source' does not exist on type '{}'. | TS2339 - Property 'destination' does not exist on type '{}'.
     const { source, destination } = result;
 
     if (!destination) return;
@@ -108,6 +110,7 @@ export default function CollectionPage(props: Props) {
 
   const pending = (
     <div className="help card__title--help">
+      {/* @ts-expect-error - TS2322 (ts-migration) */}
       <Spinner type={'small'} />
       {__('Your publish is being confirmed and will be live soon')}
     </div>
@@ -115,6 +118,7 @@ export default function CollectionPage(props: Props) {
 
   const unpublished = (
     <Button
+      // @ts-expect-error - TS2322 (ts-migration)
       button="close"
       icon={ICONS.REFRESH}
       label={__('Clear Edits')}
@@ -124,6 +128,7 @@ export default function CollectionPage(props: Props) {
 
   const removeUnavailable = (
     <Button
+      // @ts-expect-error - TS2322 (ts-migration)
       button="close"
       icon={ICONS.DELETE}
       label={__('Remove all unavailable claims')}
@@ -146,6 +151,7 @@ export default function CollectionPage(props: Props) {
       <span className="collection__subtitle">
         {collectionCount === 1 ? __('1 item') : __('%collectionCount% items', { collectionCount })}
       </span>
+      {/* @ts-expect-error - TS2322 (ts-migration) */}
       {uri && <ClaimAuthor uri={uri} />}
     </div>
   );
@@ -156,18 +162,21 @@ export default function CollectionPage(props: Props) {
           <FormField
             autoFocus
             type="text"
+// @ts-expect-error - TS2322 - Type '{ autoFocus: true; type: string; className: string; name: string; value: string; inputButton: Element; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
             className={'editable-text__field'}
             name="rename_collection"
             value={newName}
             inputButton={
               <>
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   icon={ICONS.COMPLETE}
                   disabled={!(newName || '').trim() || collectionName === newName}
                   onClick={handleRenameCollection}
                   className={'editable-text__input-button'}
                 />
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   icon={ICONS.REMOVE}
                   onClick={() => {
                     setIsRenamingList(false);
@@ -193,6 +202,7 @@ export default function CollectionPage(props: Props) {
             {!uri && (
               <>
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   className={'editable-text__input-button'}
                   icon={ICONS.EDIT}
                   onClick={() => setIsRenamingList(true)}
@@ -211,6 +221,7 @@ export default function CollectionPage(props: Props) {
           setShowInfo={setShowInfo}
           showInfo={showInfo}
           isBuiltin={isBuiltin}
+          // @ts-expect-error - TS2322 (ts-migration)
           collectionUrls={collectionUrls}
           setShowEdit={setShowEdit}
           showEdit={showEdit}
@@ -229,6 +240,7 @@ export default function CollectionPage(props: Props) {
 
   if (!collection && (isResolvingCollection || !didTryResolve)) {
     return (
+      // @ts-expect-error - TS2740 (ts-migration)
       <Page>
         <h2 className="main--empty empty">{__('Loading...')}</h2>
       </Page>
@@ -237,6 +249,7 @@ export default function CollectionPage(props: Props) {
 
   if (!collection && !isResolvingCollection && didTryResolve) {
     return (
+      // @ts-expect-error - TS2740 (ts-migration)
       <Page>
         <h2 className="main--empty empty">{__('Nothing here')}</h2>
       </Page>
@@ -246,6 +259,7 @@ export default function CollectionPage(props: Props) {
   if (editing) {
     return (
       <Page
+        // @ts-expect-error - TS2322 (ts-migration)
         noFooter
         noSideNavigation={editing}
         backout={{
@@ -253,6 +267,7 @@ export default function CollectionPage(props: Props) {
           simpleTitle: uri ? __('Editing') : __('Publishing'),
         }}
       >
+        {/* @ts-expect-error - TS2322, TS2741 (ts-migration) */}
         <CollectionEdit
           uri={uri}
           collectionId={collectionId}
@@ -266,6 +281,7 @@ export default function CollectionPage(props: Props) {
 
   if (urlsReady) {
     return (
+      // @ts-expect-error - TS2740 (ts-migration)
       <Page className="playlistPage-wrapper">
         {editing}
         <div className={classnames('section card-stack')}>
@@ -274,6 +290,7 @@ export default function CollectionPage(props: Props) {
           <DragDropContext onDragEnd={handleOnDragEnd}>
             <Droppable droppableId="list__ordering">
               {(DroppableProvided) => (
+                // @ts-expect-error - TS2740 (ts-migration)
                 <ClaimList
                   uris={collectionUrls}
                   collectionId={collectionId}

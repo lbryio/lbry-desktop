@@ -11,6 +11,7 @@ function VideoDuration(props: Props) {
   const media = claim && claim.value && (claim.value.video || claim.value.audio);
   let duration;
   if (media && media.duration) {
+// @ts-expect-error - TS2554 - Expected 2 arguments, but got 1.
     duration = formatMediaDuration(media.duration);
   }
 

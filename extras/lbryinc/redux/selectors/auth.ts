@@ -1,7 +1,7 @@
 //@ts-nocheck
 import {createSelector} from 'reselect';
 
-const selectState = state: unknown => state.auth || {};
+const selectState = (state: unknown) => state.auth || {};
 
 export const selectAuthToken = createSelector(selectState, state => state.authToken);
 

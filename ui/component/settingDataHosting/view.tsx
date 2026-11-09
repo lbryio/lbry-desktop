@@ -38,16 +38,21 @@ function SettingDataHosting(props: Props) {
     } else {
       const numberGb = Number(gb);
       if (isTrulyANumber(numberGb)) {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'SetStateAction<string | number>'.
         setNetworkBlobSpaceLimit(gb);
       }
     }
   }
 
   function handleKeyDown(e: unknown) {
+// @ts-expect-error - TS2339 - Property 'keyCode' does not exist on type 'unknown'.
     if (e.keyCode === KEYCODES.ESCAPE) {
+// @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
       e.preventDefault();
       setNetworkBlobSpaceLimit(String(networkLimitSetting / 1024));
+// @ts-expect-error - TS2339 - Property 'keyCode' does not exist on type 'unknown'.
     } else if (e.keyCode === KEYCODES.ENTER) {
+// @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
       e.preventDefault();
       handleApply();
     }
@@ -70,10 +75,12 @@ function SettingDataHosting(props: Props) {
           type="number"
           label={__(`Automatic Hosting (GB)`)}
           disabled={!daemonSettings.save_blobs || isSetting}
+// @ts-expect-error - TS2322 - Type '{ name: string; type: string; label: string; disabled: boolean; onKeyDown: (e: unknown) => void; inputButton: Element; onChange: (e: any) => void; value: string | number; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
           onKeyDown={handleKeyDown}
           inputButton={
             <>
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 disabled={
                   // disabled if settings are equal or not valid amounts
                   String(networkLimitSetting) === convertGbToMbStr(networkBlobSpaceLimitGB) ||
@@ -88,6 +95,7 @@ function SettingDataHosting(props: Props) {
                 icon={ICONS.COMPLETE}
               />
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 disabled={
                   // disabled if settings are equal or not valid amounts
                   String(networkLimitSetting) === convertGbToMbStr(networkBlobSpaceLimitGB) ||

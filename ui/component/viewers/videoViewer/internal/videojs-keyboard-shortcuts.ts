@@ -17,8 +17,10 @@ function activeElementIsPartOfVideoElement() {
 function volumeUp(event: unknown, playerRef: unknown) {
   // dont run if video element is not active element (otherwise runs when scrolling using keypad)
   const videoElementIsActive = activeElementIsPartOfVideoElement();
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
   const player = playerRef.current;
   if (!player || !videoElementIsActive) return;
+// @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
   event.preventDefault();
   player.volume(player.volume() + 0.05);
   OVERLAY.showVolumeverlay(player, Math.round(player.volume() * 100));
@@ -28,8 +30,10 @@ function volumeUp(event: unknown, playerRef: unknown) {
 function volumeDown(event: unknown, playerRef: unknown) {
   // dont run if video element is not active element (otherwise runs when scrolling using keypad)
   const videoElementIsActive = activeElementIsPartOfVideoElement();
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
   const player = playerRef.current;
   if (!player || !videoElementIsActive) return;
+// @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
   event.preventDefault();
   player.volume(player.volume() - 0.05);
   OVERLAY.showVolumeverlay(player, Math.round(player.volume() * 100));
@@ -37,7 +41,9 @@ function volumeDown(event: unknown, playerRef: unknown) {
 }
 
 function seekVideo(stepSize: number, playerRef: unknown, containerRef: unknown) {
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
   const player = playerRef.current;
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'. | TS2339 - Property 'current' does not exist on type 'unknown'.
   const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
   if (!videoNode || !player) return;
   const duration = videoNode.duration;
@@ -55,6 +61,7 @@ function seekVideo(stepSize: number, playerRef: unknown, containerRef: unknown) 
 }
 
 function toggleFullscreen(playerRef: unknown) {
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
   const player = playerRef.current;
   if (!player) return;
   if (!player.isFullscreen()) {
@@ -65,18 +72,21 @@ function toggleFullscreen(playerRef: unknown) {
 }
 
 function toggleMute(containerRef: unknown) {
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'. | TS2339 - Property 'current' does not exist on type 'unknown'.
   const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
   if (!videoNode) return;
   videoNode.muted = !videoNode.muted;
 }
 
 function togglePlay(containerRef: unknown) {
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'. | TS2339 - Property 'current' does not exist on type 'unknown'.
   const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
   if (!videoNode) return;
   videoNode.paused ? videoNode.play() : videoNode.pause();
 }
 
 function changePlaybackSpeed(shouldSpeedUp: boolean, playerRef: unknown) {
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
   const player = playerRef.current;
   if (!player) return;
   const isSpeedUp = shouldSpeedUp;
@@ -102,6 +112,7 @@ const VideoJsKeyboardShorcuts = ({
   toggleVideoTheaterMode: any // function
 }) => {
   function toggleTheaterMode(playerRef: unknown) {
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
     const player = playerRef.current;
     if (!player) return;
     // TODO: have to fix this
@@ -112,7 +123,9 @@ const VideoJsKeyboardShorcuts = ({
   }
 
   function handleKeyDown(e: KeyboardEvent, playerRef: unknown, containerRef: unknown) {
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
     const player = playerRef.current;
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'. | TS2339 - Property 'current' does not exist on type 'unknown'.
     const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
     if (!videoNode || !player || isUserTyping()) return;
     handleSingleKeyActions(e, playerRef, containerRef);

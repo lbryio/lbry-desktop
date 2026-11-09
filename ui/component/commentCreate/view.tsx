@@ -1,3 +1,4 @@
+// @ts-expect-error - TS2882 (ts-migration)
 import 'scss/component/_comment-create.scss';
 
 import { buildValidSticker } from 'util/comments';
@@ -165,8 +166,10 @@ export function CommentCreate(props: Props) {
   function handleCommentChange(event: unknown) {
     let commentValue;
     if (isReply) {
+// @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
       commentValue = advancedEditor ? event : event.target.value;
     } else {
+// @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
       commentValue = advancedEditor ? event : event.target.value;
     }
 
@@ -176,15 +179,18 @@ export function CommentCreate(props: Props) {
   function altEnterListener(e: React.KeyboardEvent<any>) {
     if ((e.ctrlKey || e.metaKey) && e.keyCode === KEYCODES.ENTER) {
       e.preventDefault();
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
       buttonRef.current.click();
     }
   }
 
   function onTextareaFocus() {
+// @ts-expect-error - TS2769 - No overload matches this call.
     window.addEventListener('keydown', altEnterListener);
   }
 
   function onTextareaBlur() {
+// @ts-expect-error - TS2769 - No overload matches this call.
     window.removeEventListener('keydown', altEnterListener);
   }
 
@@ -194,6 +200,7 @@ export function CommentCreate(props: Props) {
     if (!channelId) {
       doToast({
         message: __('Unable to verify channel settings. Try refreshing the page.'),
+// @ts-expect-error - TS2345 - Argument of type '{ message: string; isError: boolean; }' is not assignable to parameter of type '{ message: string; }'.
         isError: true,
       });
       return;
@@ -201,6 +208,7 @@ export function CommentCreate(props: Props) {
 
     // if comment post didn't work, but tip was already made, try again to create comment
     if (commentFailure && tipAmount === successTip.tipAmount) {
+// @ts-expect-error - TS2554 - Expected 3 arguments, but got 1.
       handleCreateComment(successTip.txid);
       return;
     } else {
@@ -215,6 +223,7 @@ export function CommentCreate(props: Props) {
       if (lockedMinAmount !== currentMinAmount) {
         doToast({
           message: __('The creator just updated the minimum setting. Please revise or double-check your tip amount.'),
+// @ts-expect-error - TS2345 - Argument of type '{ message: string; isError: boolean; }' is not assignable to parameter of type '{ message: string; }'.
           isError: true,
         });
         setReviewingSupportComment(false);
@@ -248,6 +257,7 @@ export function CommentCreate(props: Props) {
           const { txid } = response;
           // todo: why the setTimeout?
           setTimeout(() => {
+// @ts-expect-error - TS2554 - Expected 3 arguments, but got 1.
             handleCreateComment(txid);
           }, 1500);
 
@@ -297,6 +307,7 @@ export function CommentCreate(props: Props) {
 
     const stickerValue = selectedSticker && buildValidSticker(selectedSticker.name);
 
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
     createComment(stickerValue || commentValue, claimId, parentId, txid, payment_intent_id, environment, !!stickerValue)
       .then((res) => {
         setSubmitting(false);
@@ -347,6 +358,7 @@ export function CommentCreate(props: Props) {
 
   // Stickers: Get LBC-USD exchange rate if hasn't yet and selected a paid sticker
   React.useEffect(() => {
+    // @ts-expect-error - TS2339 (ts-migration)
     if (stickerPrice && !exchangeRate) Lbryio.getExchangeRates().then(({ LBC_USD }) => setExchangeRate(LBC_USD));
   }, [exchangeRate, stickerPrice]);
 
@@ -358,6 +370,7 @@ export function CommentCreate(props: Props) {
     const channelClaimId = claim.signing_channel ? claim.signing_channel.claim_id : claim.claim_id;
     const tipChannelName = claim.signing_channel ? claim.signing_channel.name : claim.name;
 
+    // @ts-expect-error - TS2339 (ts-migration)
     Lbryio.call(
       'account',
       'check',
@@ -383,6 +396,7 @@ export function CommentCreate(props: Props) {
   // **************************************************************************
 
   const getActionButton = (title: string, label: string | null | undefined, icon: string, handleClick: () => void) => (
+    // @ts-expect-error - TS2322 (ts-migration)
     <Button title={title} label={label} button="alt" icon={icon} onClick={handleClick} />
   );
 
@@ -405,6 +419,7 @@ export function CommentCreate(props: Props) {
           placeholder={__('Say something about this...')}
         />
         <div className="section__actions--no-margin">
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <Button disabled button="primary" label={__('Post --[button to submit something]--')} />
         </div>
       </div>
@@ -414,6 +429,7 @@ export function CommentCreate(props: Props) {
   return (
     <Form
       onSubmit={() => {}}
+// @ts-expect-error - TS2769 - No overload matches this call.
       className={classnames('comment-create', {
         'comment-create--reply': isReply,
         'comment-create--nestedReply': isNested,
@@ -426,14 +442,18 @@ export function CommentCreate(props: Props) {
       ) : isReviewingStickerComment && activeChannelClaim && selectedSticker ? (
         <div className="comment-create__stickerPreview">
           <div className="comment-create__stickerPreviewInfo">
+            {/* @ts-expect-error - TS2739 (ts-migration) */}
             <ChannelThumbnail xsmall uri={activeChannelClaim.canonical_url} />
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <UriIndicator uri={activeChannelClaim.canonical_url} link />
           </div>
           <div className="comment-create__stickerPreviewImage">
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <OptimizedImage src={selectedSticker && selectedSticker.url} waitLoad loading="lazy" />
           </div>
           {/* figure out lbc sticker prices */}
           {selectedSticker.price && exchangeRate && (
+            // @ts-expect-error - TS2741 (ts-migration)
             <FilePrice
               customPrices={{ priceFiat: selectedSticker.price, priceLBC: selectedSticker.price / exchangeRate }}
               isFiat
@@ -448,8 +468,10 @@ export function CommentCreate(props: Props) {
             isFiat={activeTab === TAB_FIAT}
             size={activeTab === TAB_LBC ? 18 : 2}
           />
+          {/* @ts-expect-error - TS2739 (ts-migration) */}
           <ChannelThumbnail xsmall uri={activeChannelClaim.canonical_url} />
           <div className="comment-create__supportCommentBody">
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <UriIndicator uri={activeChannelClaim.canonical_url} link />
             <div>{commentValue}</div>
           </div>
@@ -477,6 +499,7 @@ export function CommentCreate(props: Props) {
               />
             }
             name={isReply ? 'content_reply' : 'content_description'}
+// @ts-expect-error - TS2322 - Type 'unknown' is not assignable to type 'LegacyRef<FormFieldAreaAdvanced>'.
             ref={formFieldRef}
             onChange={handleCommentChange}
             openEmoteMenu={() => setShowEmotes(!showEmotes)}
@@ -491,6 +514,7 @@ export function CommentCreate(props: Props) {
       )}
 
       {(isSupportComment || (isReviewingStickerComment && stickerPrice)) && (
+        // @ts-expect-error - TS2741 (ts-migration)
         <WalletTipAmountSelector
           activeTab={activeTab}
           amount={tipAmount}
@@ -512,6 +536,7 @@ export function CommentCreate(props: Props) {
         {/* Submit Button */}
         {isReviewingSupportComment ? (
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             autoFocus
             button="primary"
             disabled={disabled || !minAmountMet}
@@ -526,6 +551,7 @@ export function CommentCreate(props: Props) {
           />
         ) : isReviewingStickerComment && selectedSticker ? (
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             button="primary"
             label={__('Send')}
             disabled={isSupportComment && (tipError || disableReviewButton)}
@@ -533,6 +559,7 @@ export function CommentCreate(props: Props) {
               if (isSupportComment) {
                 handleSupportComment();
               } else {
+// @ts-expect-error - TS2554 - Expected 3 arguments, but got 0.
                 handleCreateComment();
               }
               setSelectedSticker(null);
@@ -543,6 +570,7 @@ export function CommentCreate(props: Props) {
           />
         ) : isSupportComment ? (
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             disabled={disabled || tipError || disableReviewButton || !minAmountMet}
             type="button"
             button="primary"
@@ -553,6 +581,7 @@ export function CommentCreate(props: Props) {
         ) : (
           (!minTip || claimIsMine) && (
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               ref={buttonRef}
               button="primary"
               disabled={disabled || stickerSelector}
@@ -566,6 +595,7 @@ export function CommentCreate(props: Props) {
                   ? __('Commenting...')
                   : __('Comment --[button to submit something]--')
               }
+// @ts-expect-error - TS2554 - Expected 3 arguments, but got 0.
               onClick={() => activeChannelClaim && commentValue.length && handleCreateComment()}
             />
           )
@@ -621,6 +651,7 @@ export function CommentCreate(props: Props) {
           isReviewingStickerComment ||
           (isReply && !minTip)) && (
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             disabled={isSupportComment && isSubmitting}
             button="link"
             label={__('Cancel')}
@@ -648,6 +679,7 @@ export function CommentCreate(props: Props) {
         {deletedComment && <div className="error__text">{__('This comment has been deleted.')}</div>}
         {!!minAmount && (
           <div className="help--notice comment-create__minAmountNotice">
+            {/* @ts-expect-error - TS2745, TS2322 (ts-migration) */}
             <I18nMessage tokens={{ lbc: <CreditAmount noFormat amount={minAmount} /> }}>
               {minTip ? 'Comment min: %lbc%' : minSuper ? 'HyperChat min: %lbc%' : ''}
             </I18nMessage>

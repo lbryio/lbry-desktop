@@ -5,6 +5,7 @@ import SettingAccountPassword from 'component/settingAccountPassword';
 
 export default function PasswordUpdate() {
   return (
+    // @ts-expect-error - TS2741 (ts-migration)
     <Page noFooter noSideNavigation settingsPage backout={{ title: __('Password'), backLabel: __('Back') }}>
       <Card isBodyList body={<SettingAccountPassword />} />
     </Page>

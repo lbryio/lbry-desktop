@@ -58,11 +58,15 @@ function clampRectToScreen(x: unknown, y: unknown, rect: unknown) {
     const screenW = getScreenWidth();
     const screenH = getScreenHeight();
 
+// @ts-expect-error - TS2339 - Property 'width' does not exist on type 'unknown'.
     if (x + rect.width > screenW - ESTIMATED_SCROLL_BAR_PX) {
+// @ts-expect-error - TS2339 - Property 'width' does not exist on type 'unknown'.
       x = screenW - rect.width - ESTIMATED_SCROLL_BAR_PX;
     }
 
+// @ts-expect-error - TS2339 - Property 'height' does not exist on type 'unknown'.
     if (y + rect.height > screenH) {
+// @ts-expect-error - TS2339 - Property 'height' does not exist on type 'unknown'.
       y = screenH - rect.height;
     }
   }
@@ -72,7 +76,9 @@ function clampRectToScreen(x: unknown, y: unknown, rect: unknown) {
 
 function calculateRelativePos(x: unknown, y: unknown) {
   return {
+// @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     x: x / getScreenWidth(),
+// @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     y: y / getScreenHeight(),
   };
 }
@@ -152,6 +158,7 @@ export default function FileRenderFloating(props: Props) {
 
   const isFree = costInfo && costInfo.cost === 0;
   const canViewFile = isFree || claimWasPurchased;
+// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"audio" | "video"'.
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode);
   const isReadyToPlay = isPlayable && (streamingUrl || (fileInfo && fileInfo.completed));
   const loadingMessage =
@@ -166,6 +173,7 @@ export default function FileRenderFloating(props: Props) {
   }
 
   const clampToScreenOnResize = React.useCallback(
+// @ts-expect-error - TS2554 - Expected 3 arguments, but got 2.
     debounce(() => {
       restoreToRelativePosition();
     }, DEBOUNCE_WINDOW_RESIZE_HANDLER_MS),
@@ -224,6 +232,7 @@ export default function FileRenderFloating(props: Props) {
       x: rect.x,
     } as const;
 
+// @ts-expect-error - TS2345 - Argument of type '{ windowOffset: number; top: number; right: number; bottom: number; left: number; width: number; height: number; x: number; }' is not assignable to parameter of type '(prevState: undefined) => undefined'.
     setFileViewerRect({ ...objectRect, windowOffset: window.pageYOffset });
   }, [mainFilePlaying]);
 
@@ -246,6 +255,7 @@ export default function FileRenderFloating(props: Props) {
   }, [handleResize]);
 
   useEffect(() => {
+// @ts-expect-error - TS2345 - Argument of type 'number' is not assignable to parameter of type '(prevState: undefined) => undefined'.
     setDesktopPlayStartTime(Date.now());
 
     return () => {
@@ -303,7 +313,9 @@ export default function FileRenderFloating(props: Props) {
 
   function handleDragMove(e: unknown, ui: unknown) {
     const { x, y } = position;
+// @ts-expect-error - TS2339 - Property 'x' does not exist on type 'unknown'.
     const newX = ui.x;
+// @ts-expect-error - TS2339 - Property 'y' does not exist on type 'unknown'.
     const newY = ui.y;
 
     // Mark as dragging if the position changed and we were not dragging before.
@@ -317,6 +329,7 @@ export default function FileRenderFloating(props: Props) {
       setWasDragging(false);
     }
 
+// @ts-expect-error - TS2339 - Property 'x' does not exist on type 'unknown'. | TS2339 - Property 'y' does not exist on type 'unknown'.
     let newPos = { x: ui.x, y: ui.y };
     if (newPos.x !== position.x || newPos.y !== position.y) {
       newPos = clampRectToScreen(newPos.x, newPos.y, getFloatingPlayerRect());
@@ -349,11 +362,16 @@ export default function FileRenderFloating(props: Props) {
         style={
           !isFloating && fileViewerRect
             ? {
+// @ts-expect-error - TS2339 - Property 'width' does not exist on type 'never'.
                 width: fileViewerRect.width,
+// @ts-expect-error - TS2339 - Property 'height' does not exist on type 'never'.
                 height: fileViewerRect.height,
+// @ts-expect-error - TS2339 - Property 'x' does not exist on type 'never'.
                 left: fileViewerRect.x,
                 top:
+// @ts-expect-error - TS2339 - Property 'windowOffset' does not exist on type 'never'.
                   fileViewerRect.windowOffset +
+// @ts-expect-error - TS2339 - Property 'top' does not exist on type 'never'.
                   fileViewerRect.top -
                   (isMobile ? 0 : HEADER_HEIGHT) -
                   (IS_DESKTOP_MAC ? 24 : 0),
@@ -368,6 +386,7 @@ export default function FileRenderFloating(props: Props) {
         >
           {isFloating && (
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               title={__('Close')}
               onClick={closeFloatingPlayer}
               icon={ICONS.REMOVE}
@@ -402,8 +421,10 @@ export default function FileRenderFloating(props: Props) {
           {isFloating && (
             <div className="draggable content__info">
               <div className="claim-preview__title" title={title || uri}>
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <Button label={title || uri} navigate={navigateUrl} button="link" className="content__floating-link" />
               </div>
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <UriIndicator link uri={uri} />
             </div>
           )}

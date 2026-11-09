@@ -47,6 +47,7 @@ function SignInVerifyPage(props: Props) {
 
   React.useEffect(() => {
     if (!needsRecaptcha) {
+// @ts-expect-error - TS2554 - Expected 1 arguments, but got 0.
       verifyUser();
     }
   }, [verifyUser, needsRecaptcha]);
@@ -76,6 +77,7 @@ function SignInVerifyPage(props: Props) {
   }
 
   function verifyUser(captchaValue: unknown) {
+    // @ts-expect-error - TS2339 (ts-migration)
     Lbryio.call('user_email', 'confirm', {
       auth_token: authToken,
       email: userSubmittedEmail,
@@ -91,6 +93,7 @@ function SignInVerifyPage(props: Props) {
   }
 
   return (
+    // @ts-expect-error - TS2322 (ts-migration)
     <Page authPage noFooter>
       <div className="main__sign-up">
         <Card
@@ -106,9 +109,12 @@ function SignInVerifyPage(props: Props) {
               </p>
               {showCaptchaMessage && !isAuthenticationSuccess && (
                 <p>
+                  {/* @ts-expect-error - TS2745 (ts-migration) */}
                   <I18nMessage
+                    // @ts-expect-error - TS2322 (ts-migration)
                     tokens={{
                       refresh: (
+                        // @ts-expect-error - TS2322 (ts-migration)
                         <Button button="link" label={__('refreshing')} onClick={() => window.location.reload()} />
                       ),
                     }}

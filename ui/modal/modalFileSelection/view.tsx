@@ -49,6 +49,7 @@ const ModalFileSelection = (props: Props) => {
   };
 
   return (
+// @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; type: string; onAborted: () => void; onConfirmed: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
     <Modal isOpen type="card" onAborted={handleCloseModal} onConfirmed={handleCloseModal}>
       <Card
         icon={ICONS.PUBLISH}
@@ -61,11 +62,13 @@ const ModalFileSelection = (props: Props) => {
             </div>
             <div className="section__actions">
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 disabled={!selectedFile || !files || !files.length}
                 button="primary"
                 label={__('Accept')}
                 onClick={handleSubmit}
               />
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="link" label={__('Cancel')} onClick={handleCloseModal} />
             </div>
           </div>

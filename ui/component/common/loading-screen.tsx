@@ -22,6 +22,7 @@ class LoadingScreen extends React.PureComponent<Props> {
           <Spinner
             light={!isDocument}
             delayed
+            // @ts-expect-error - TS2322 (ts-migration)
             text={status && <span className={classnames('content__loading-text')}>{status}</span>}
           />
         )}

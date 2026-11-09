@@ -12,6 +12,7 @@ export default function ReceivePage(props: Props) {
       className="main--buy"
       backout={{
         backoutLabel: __('Done'),
+        // @ts-expect-error - TS2322 (ts-migration)
         title: (
           <>
             <LbcSymbol prefix={__('Receive')} size={28} />

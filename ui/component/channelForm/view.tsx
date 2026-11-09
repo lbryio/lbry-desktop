@@ -19,7 +19,9 @@ import LbcSymbol from 'component/common/lbc-symbol';
 import SUPPORTED_LANGUAGES from 'constants/supported_languages';
 import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
 import { sortLanguageMap } from 'util/default-languages';
+// @ts-expect-error - TS2792 - Cannot find module 'component/selectThumbnail/thumbnail-broken.png'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import ThumbnailBrokenImage from 'component/selectThumbnail/thumbnail-broken.png';
+// @ts-expect-error - TS2792 - Cannot find module 'component/channelThumbnail/gerbil.png'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import Gerbil from 'component/channelThumbnail/gerbil.png';
 
 const LANG_NONE = 'none';
@@ -172,6 +174,7 @@ function ChannelForm(props: Props) {
 
   function handleBidChange(bid: number) {
     const { balance, amount } = props;
+// @ts-expect-error - TS2345 - Argument of type 'number' is not assignable to parameter of type 'string'. | TS2345 - Argument of type 'number' is not assignable to parameter of type 'string'.
     const totalAvailableBidAmount = (parseFloat(amount) || 0.0) + (parseFloat(balance) || 0.0);
 
     setParams({ ...params, amount: bid });
@@ -204,6 +207,7 @@ function ChannelForm(props: Props) {
       if (code === LANG_NONE || code === langs[0]) {
         langs.splice(1, 1);
       } else {
+// @ts-expect-error - TS2538 - Type 'unknown' cannot be used as an index type.
         langs[index] = code;
       }
     }
@@ -287,10 +291,12 @@ function ChannelForm(props: Props) {
       <header className="channel-cover">
         <div className="channel__quick-actions">
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             button="alt"
             title={__('Cover')}
             onClick={() =>
               openModal(MODALS.IMAGE_UPLOAD, {
+// @ts-expect-error - TS2322 - Type '(coverUrl: any, isUpload: any, preview: any) => void' is not assignable to type '(arg1: string, arg2: boolean) => void'.
                 onUpdate: (coverUrl, isUpload, preview) => handleCoverChange(coverUrl, isUpload, preview),
                 title: __('Edit Cover Image'),
                 helpText: __('(6.25:1)'),
@@ -313,6 +319,7 @@ function ChannelForm(props: Props) {
         <div className="channel__primary-info">
           <div className="channel__edit-thumb">
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               button="alt"
               title={__('Edit')}
               onClick={() =>
@@ -334,6 +341,7 @@ function ChannelForm(props: Props) {
             thumbnailPreview={thumbnailPreview}
             allowGifs
             setThumbUploadError={setThumbError}
+            // @ts-expect-error - TS2322 (ts-migration)
             thumbUploadError={thumbError}
           />
           <h1 className="channel__title">
@@ -343,22 +351,32 @@ function ChannelForm(props: Props) {
         <div className="channel-cover__gradient" />
       </header>
 
+{ /* @ts-expect-error - TS2322 - Type '{ children: Element[]; className: string; }' is not assignable to type 'IntrinsicAttributes & TabsProps'. */}
       <Tabs className="channelPage-wrapper">
+{ /* @ts-expect-error - TS2322 - Type '{ children: Element[]; className: string; }' is not assignable to type 'IntrinsicAttributes & TabListProps'. */}
         <TabList className="tabs__list--channel-page">
+{ /* @ts-expect-error - TS2559 - Type '{ children: string; }' has no properties in common with type 'IntrinsicAttributes & TabProps'. */}
           <Tab>{__('General')}</Tab>
+{ /* @ts-expect-error - TS2559 - Type '{ children: string; }' has no properties in common with type 'IntrinsicAttributes & TabProps'. */}
           <Tab>{__('Credit Details')}</Tab>
+{ /* @ts-expect-error - TS2559 - Type '{ children: string; }' has no properties in common with type 'IntrinsicAttributes & TabProps'. */}
           <Tab>{__('Tags')}</Tab>
+{ /* @ts-expect-error - TS2559 - Type '{ children: string; }' has no properties in common with type 'IntrinsicAttributes & TabProps'. */}
           <Tab>{__('Other')}</Tab>
         </TabList>
+{ /* @ts-expect-error - TS2559 - Type '{ children: Element[]; }' has no properties in common with type 'IntrinsicAttributes & TabPanelsProps'. */}
         <TabPanels>
           <TabPanel>
             <Card
               body={
                 <>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
                   <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
                     <fieldset-section>
                       <label htmlFor="channel_name">{__('Name')}</label>
                       <div className="form-field__prefix">@</div>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
                     </fieldset-section>
 
                     <FormField
@@ -370,8 +388,10 @@ function ChannelForm(props: Props) {
                       error={nameError}
                       disabled={!isNewChannel}
                       onChange={(e) => setParams({ ...params, name: e.target.value })}
+// @ts-expect-error - TS2322 - Type '{ autoFocus: boolean; type: string; name: string; placeholder: string; value: any; error: any; disabled: boolean; onChange: (e: any) => void; maxLength: number; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                       maxLength={MAX_NAME_LEN}
                     />
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
                   </fieldset-group>
                   {!isNewChannel && <span className="form-field__help">{__('This field cannot be changed.')}</span>}
 
@@ -382,6 +402,7 @@ function ChannelForm(props: Props) {
                     placeholder={__('My Awesome Channel')}
                     value={params.title}
                     onChange={(e) => setParams({ ...params, title: e.target.value })}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; label: string; placeholder: string; value: any; onChange: (e: any) => void; maxLength: number; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                     maxLength={MAX_TITLE_LEN}
                   />
                   <FormFieldAreaAdvanced
@@ -408,6 +429,7 @@ function ChannelForm(props: Props) {
                   label={<LbcSymbol postfix={__('Deposit')} size={14} />}
                   value={params.amount}
                   error={bidError}
+// @ts-expect-error - TS2322 - Type 'string' is not assignable to type 'number'.
                   min="0.0"
                   disabled={false}
                   onChange={(event) => handleBidChange(parseFloat(event.target.value))}
@@ -437,6 +459,7 @@ function ChannelForm(props: Props) {
                     setParams({ ...params, tags: newTags });
                   }}
                   onSelect={(newTags) => {
+                    // @ts-expect-error - TS2339 (ts-migration)
                     newTags.forEach((newTag) => {
                       if (!params.tags.map((savedTag) => savedTag.name).includes(newTag.name)) {
                         setParams({ ...params, tags: [...params.tags, newTag] });
@@ -519,7 +542,9 @@ function ChannelForm(props: Props) {
         actions={
           <>
             <div className="section__actions">
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="primary" disabled={submitDisabled} label={submitLabel} onClick={handleSubmit} />
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="link" label={__('Cancel')} onClick={onDone} />
             </div>
             {errorMsg ? (
@@ -531,6 +556,7 @@ function ChannelForm(props: Props) {
             )}
             {!isNewChannel && (
               <div className="section__actions">
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <ClaimAbandonButton uri={uri} abandonActionCallback={() => replace(`/$/${PAGES.CHANNELS}`)} />
               </div>
             )}

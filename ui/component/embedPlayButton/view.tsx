@@ -92,6 +92,7 @@ export default function EmbedPlayButton(props: Props) {
 
   return (
     <div
+// @ts-expect-error - TS2322 - Type '{ children: Element[]; disabled: boolean; role: "button"; className: string; onClick: () => void; style: { backgroundImage: string; }; }' is not assignable to type 'DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>'.
       disabled={disabled}
       role="button"
       className="embed__inline-button"
@@ -100,6 +101,7 @@ export default function EmbedPlayButton(props: Props) {
     >
       <FileViewerEmbeddedTitle uri={uri} isInApp />
       <Button
+        // @ts-expect-error - TS2322 (ts-migration)
         onClick={handleClick}
         iconSize={30}
         title={__('Play')}

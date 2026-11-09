@@ -28,6 +28,7 @@ function SettingSearchServer(props: Props) {
   }, [url, lbrySearchUrl, setLbrySearchUrl]);
 
   return (
+// @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'.
     <fieldset-section>
       <FormField
         type="radio"
@@ -38,6 +39,7 @@ function SettingSearchServer(props: Props) {
             <span className="compound-label__details">{SEARCH_SERVER_API}</span>
           </span>
         }
+        // @ts-expect-error - TS2322 (ts-migration)
         checked={!useLbrySearch}
         onChange={(e) => e.target.checked && setProvider(SEARCH_PROVIDERS.LIGHTHOUSE)}
       />
@@ -50,12 +52,14 @@ function SettingSearchServer(props: Props) {
             <span className="compound-label__details">{__('Searches an index built from your own LBRY node')}</span>
           </span>
         }
+        // @ts-expect-error - TS2322 (ts-migration)
         checked={useLbrySearch}
         onChange={(e) => e.target.checked && setProvider(SEARCH_PROVIDERS.LBRY_SEARCH)}
       />
 
       {useLbrySearch && (
         <div className="section__body">
+{ /* @ts-expect-error - TS2741 - Property 'name' is missing in type '{ type: string; label: string; placeholder: string; value: string; onChange: (e: any) => void; }' but required in type 'Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | "type" | "name" | "value" | "disabled" | "label" | "children" | "render" | ... 15 more ... | "onChange">'. */}
           <FormField
             type="text"
             label={__('GraphQL URL')}
@@ -65,6 +69,7 @@ function SettingSearchServer(props: Props) {
           />
         </div>
       )}
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
     </fieldset-section>
   );
 }

@@ -212,6 +212,7 @@ export const selectMyClaimsRaw = createSelector(selectState, selectClaimsById, (
   ids.forEach((id) => {
     if (byId[id]) {
       // I'm not sure why this check is necessary, but it ought to be a quick fix for https://github.com/lbryio/lbry-desktop/issues/544
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       claims.push(byId[id]);
     }
   });
@@ -483,6 +484,7 @@ export const selectMyClaimsPageNumber = createSelector(
   selectState,
   (state) => (state.claimListMinePage && state.claimListMinePage.items) || [],
 
+  // @ts-expect-error - TS2339 (ts-migration)
   (state) => (state.txoPage && state.txoPage.page) || 1
 );
 
@@ -497,11 +499,14 @@ export const selectMyClaims = createSelector(
     const claims: unknown = [];
 
     myClaimIds.forEach((id) => {
+      // @ts-expect-error - TS2538 (ts-migration)
       const claim = byId[id];
 
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       if (claim && abandoningIds.indexOf(id) === -1) claims.push(claim);
     });
 
+// @ts-expect-error - TS2488 - Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
     return [...claims];
   }
 );
@@ -534,6 +539,7 @@ export const selectAllMyClaimsByOutpoint = createSelector(
 export const selectMyClaimsOutpoints = createSelector(selectMyClaims, (myClaims) => {
   const outpoints: unknown = [];
 
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
   myClaims.forEach((claim) => outpoints.push(`${claim.txid}:${claim.nout}`));
 
   return outpoints;
@@ -549,6 +555,7 @@ export const selectMyChannelClaims = createSelector(selectMyChannelClaimIds, (my
     return myChannelClaimIds;
   }
 
+// @ts-expect-error - TS2339 - Property 'store' does not exist on type 'Window & typeof globalThis'.
   if (!window || !window.store) {
     return undefined;
   }
@@ -559,6 +566,7 @@ export const selectMyChannelClaims = createSelector(selectMyChannelClaimIds, (my
   // If we put 'state' or 'byId' as the input selector, it essentially
   // recalculates every time. Putting 'state' as input to createSelector() is
   // always wrong from a memoization standpoint.
+// @ts-expect-error - TS2339 - Property 'store' does not exist on type 'Window & typeof globalThis'.
   const state = window.store.getState();
   const byId = selectClaimsById(state);
 
@@ -566,6 +574,7 @@ export const selectMyChannelClaims = createSelector(selectMyChannelClaimIds, (my
   myChannelClaimIds.forEach((id) => {
     if (byId[id]) {
       // I'm not sure why this check is necessary, but it ought to be a quick fix for https://github.com/lbryio/lbry-desktop/issues/544
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       claims.push(byId[id]);
     }
   });
@@ -766,6 +775,7 @@ export const makeSelectSupportsForUri = (uri: string) =>
     let total = 0;
 
     Object.values(byOutpoint).forEach((support) => {
+// @ts-expect-error - TS2339 - Property 'claim_id' does not exist on type '{}'. | TS2339 - Property 'amount' does not exist on type '{}'.
       const { claim_id, amount } = support;
       total = claim_id === claimId && amount ? total + parseFloat(amount) : total;
     });

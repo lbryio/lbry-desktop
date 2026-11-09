@@ -14,6 +14,7 @@ function UserSignOutButton(props: Props) {
 
   return (
     <Button
+      // @ts-expect-error - TS2322 (ts-migration)
       button={button}
       label={label || __('Sign Out')}
       onClick={() => {

@@ -16,9 +16,12 @@ function HostingSplashCustom(props: Props) {
     <section className="main--contained">
       <div className={'first-run__wrapper'}>
         <SettingStorage isWelcome />
+{ /* @ts-expect-error - TS2769 - No overload matches this call. */}
         <Form onSubmit={handleNextPage} className="section__body">
           <div className={'card__actions'}>
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <Button button="primary" label={__(`Let's go`)} type="submit" />
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <Button button="link" label={__(`Go back`)} onClick={handleGoBack} />
           </div>
         </Form>

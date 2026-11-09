@@ -31,8 +31,10 @@ export default function NotificationHeaderButton(props: Props) {
 
   return (
     <Tooltip title={__('Notifications')}>
+{ /* @ts-expect-error - TS2322 - Type 'Element' is not assignable to type 'Node'. */}
       <Button onClick={handleMenuClick} className="header__navigationItem--icon">
         <Icon size={18} icon={ICONS.NOTIFICATION} aria-hidden />
+        {/* @ts-expect-error - TS2741 (ts-migration) */}
         <NotificationBubble />
       </Button>
     </Tooltip>

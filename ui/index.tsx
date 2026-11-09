@@ -93,7 +93,7 @@ Lbryio.setOverride('setAuthToken', (authToken) => {
 Lbryio.setOverride(
   'getAuthToken',
   () =>
-    new Promise((resolve: unknown) => {
+    new Promise<any>((resolve) => {
       const authTokenToReturn = authToken || getAuthToken();
       resolve(authTokenToReturn);
     })

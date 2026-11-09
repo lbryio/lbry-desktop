@@ -1,4 +1,5 @@
 //@ts-nocheck
+// @ts-expect-error - TS1208 - 'detect-user-bandwidth.ts' cannot be compiled under '--isolatedModules' because it is considered a global script file. Add an import, export, or an empty 'export {}' statement to make it a module.
 const imageAddr = 'https://upload.wikimedia.org/wikipedia/commons/b/b9/Pizigani_1367_Chart_1MB.jpg';
 const downloadSize = 1093957; // this must match with the image above
 

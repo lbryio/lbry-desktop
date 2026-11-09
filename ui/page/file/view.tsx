@@ -112,6 +112,7 @@ function FilePage(props: Props) {
   ]);
 
   function renderFilePageLayout() {
+// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"audio" | "video"'.
     if (RENDER_MODES.FLOATING_MODES.includes(renderMode)) {
       return (
         <React.Fragment>
@@ -123,9 +124,11 @@ function FilePage(props: Props) {
       );
     }
 
+// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"application"'.
     if (RENDER_MODES.UNRENDERABLE_MODES.includes(renderMode)) {
       return (
         <React.Fragment>
+          {/* @ts-expect-error - TS2739 (ts-migration) */}
           <FileTitleSection uri={uri} />
           <FileRenderDownload uri={uri} isFree={cost === 0} />
         </React.Fragment>
@@ -136,9 +139,11 @@ function FilePage(props: Props) {
       return <PostViewer uri={uri} />;
     }
 
+// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"document" | "md" | "pdf" | "html" | "docx" | "plain_text"'.
     if (RENDER_MODES.TEXT_MODES.includes(renderMode)) {
       return (
         <React.Fragment>
+          {/* @ts-expect-error - TS2739 (ts-migration) */}
           <FileTitleSection uri={uri} />
           <FileRenderInitiator uri={uri} />
           <FileRenderInline uri={uri} />
@@ -153,6 +158,7 @@ function FilePage(props: Props) {
             <FileRenderInitiator uri={uri} />
             <FileRenderInline uri={uri} />
           </div>
+          {/* @ts-expect-error - TS2739 (ts-migration) */}
           <FileTitleSection uri={uri} />
         </React.Fragment>
       );
@@ -162,6 +168,7 @@ function FilePage(props: Props) {
       <React.Fragment>
         <FileRenderInitiator uri={uri} videoTheaterMode={videoTheaterMode} />
         <FileRenderInline uri={uri} />
+        {/* @ts-expect-error - TS2739 (ts-migration) */}
         <FileTitleSection uri={uri} />
       </React.Fragment>
     );
@@ -169,11 +176,14 @@ function FilePage(props: Props) {
 
   if (obscureNsfw && isMature) {
     return (
+      // @ts-expect-error - TS2740 (ts-migration)
       <Page className="file-page" filePage isMarkdown={isMarkdown}>
         <div className={classnames('section card-stack', `file-page__${renderMode}`)}>
+          {/* @ts-expect-error - TS2741 (ts-migration) */}
           <FileTitleSection uri={uri} isNsfwBlocked />
         </div>
         {collection && !isMarkdown && !videoTheaterMode && !isMediumScreen && (
+          // @ts-expect-error - TS2322 (ts-migration)
           <CollectionContent id={collectionId} uri={uri} />
         )}
         {!collection && !isMarkdown && !videoTheaterMode && !isMediumScreen && <RecommendedContent uri={uri} />}
@@ -182,6 +192,7 @@ function FilePage(props: Props) {
   }
 
   return (
+    // @ts-expect-error - TS2740 (ts-migration)
     <Page className="file-page" filePage isMarkdown={isMarkdown}>
       <div className={classnames('section card-stack', `file-page__${renderMode}`)}>
         {renderFilePageLayout()}
@@ -189,18 +200,21 @@ function FilePage(props: Props) {
         {!isMarkdown && (
           <div className="file-page__secondary-content">
             <div>
+{ /* @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"audio" | "video"'. */}
               {RENDER_MODES.FLOATING_MODES.includes(renderMode) && <FileTitleSection uri={uri} />}
               {commentsDisabled && <Empty text={__('The creator of this content has disabled comments.')} />}
               {!commentsDisabled && <CommentsList uri={uri} linkedCommentId={linkedCommentId} />}
             </div>
             {!collection && !isMarkdown && videoTheaterMode && !isMediumScreen && <RecommendedContent uri={uri} />}
             {collection && !isMarkdown && videoTheaterMode && !isMediumScreen && (
+              // @ts-expect-error - TS2322 (ts-migration)
               <CollectionContent id={collectionId} uri={uri} />
             )}
           </div>
         )}
       </div>
       {collection && !isMarkdown && !videoTheaterMode && !isMediumScreen && (
+        // @ts-expect-error - TS2322 (ts-migration)
         <CollectionContent id={collectionId} uri={uri} />
       )}
       {!collection && !isMarkdown && !videoTheaterMode && !isMediumScreen && <RecommendedContent uri={uri} />}

@@ -30,12 +30,14 @@ export default function NotificationSettingsPage(props: Props) {
 
   React.useEffect(() => {
     if (isAuthenticated) {
+      // @ts-expect-error - TS2339 (ts-migration)
       Lbryio.call('tag', 'list', lbryIoParams)
         .then(setTags)
         .catch((e) => {
           setError(true);
         });
 
+      // @ts-expect-error - TS2339 (ts-migration)
       Lbryio.call('user_email', 'status', lbryIoParams)
         .then((res) => {
           const enabledEmails =
@@ -57,8 +59,10 @@ export default function NotificationSettingsPage(props: Props) {
   function handleChangeTag(name: unknown, newIsEnabled: unknown) {
     const tagParams = newIsEnabled ? { add: name } : { remove: name };
 
+    // @ts-expect-error - TS2339 (ts-migration)
     Lbryio.call('user_tag', 'edit', { ...lbryIoParams, ...tagParams }).then(() => {
       const newTagMap = { ...tagMap } as const;
+// @ts-expect-error - TS2538 - Type 'unknown' cannot be used as an index type.
       newTagMap[name] = newIsEnabled;
 
       setTagMap(newTagMap);
@@ -66,6 +70,7 @@ export default function NotificationSettingsPage(props: Props) {
   }
 
   function handleChangeEmail(email: unknown, newIsEnabled: unknown) {
+    // @ts-expect-error - TS2339 (ts-migration)
     Lbryio.call('user_email', 'edit', {
       email: email,
       enabled: newIsEnabled,
@@ -95,6 +100,7 @@ export default function NotificationSettingsPage(props: Props) {
       noSideNavigation
       settingsPage
       className="card-stack"
+      // @ts-expect-error - TS2741 (ts-migration)
       backout={{ title: __('Manage notifications'), backLabel: __('Back') }}
     >
       {error ? (
@@ -105,11 +111,13 @@ export default function NotificationSettingsPage(props: Props) {
           actions={
             <div className="section__actions">
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="secondary"
                 label={__('Refresh')}
                 icon={ICONS.REFRESH}
                 onClick={() => window.location.reload()}
               />
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="secondary" label={__('Go Home')} icon={ICONS.HOME} navigate={'/'} />
             </div>
           }
@@ -132,6 +140,7 @@ export default function NotificationSettingsPage(props: Props) {
                   type="checkbox"
                   name="desktopNotification"
                   onChange={() => setClientSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, !osNotificationsEnabled)}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; onChange: () => void; checked: boolean; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                   checked={osNotificationsEnabled}
                 />
               </SettingsRow>
@@ -154,12 +163,14 @@ export default function NotificationSettingsPage(props: Props) {
                 body={
                   <>
                     {enabledEmails.map(({ email, isEnabled }) => (
+                      // @ts-expect-error - TS2741 (ts-migration)
                       <SettingsRow key={email} subtitle={__(email)}>
                         <FormField
                           type="checkbox"
                           name={`active-email:${email}`}
                           key={email}
                           onChange={() => handleChangeEmail(email, !isEnabled)}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; key: any; onChange: () => void; checked: any; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                           checked={isEnabled}
                         />
                       </SettingsRow>
@@ -185,12 +196,14 @@ export default function NotificationSettingsPage(props: Props) {
                     {tags.map((tag) => {
                       const isEnabled = tagMap[tag.name];
                       return (
+                        // @ts-expect-error - TS2741 (ts-migration)
                         <SettingsRow key={tag.name} subtitle={__(tag.description)}>
                           <FormField
                             type="checkbox"
                             key={tag.name}
                             name={tag.name}
                             onChange={() => handleChangeTag(tag.name, !isEnabled)}
+// @ts-expect-error - TS2322 - Type '{ type: string; key: any; name: any; onChange: () => void; checked: any; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                             checked={isEnabled}
                           />
                         </SettingsRow>

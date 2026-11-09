@@ -37,6 +37,7 @@ type TabsProps = {
 };
 
 // Use context so child TabPanels can set the active tab, which is kept in Tabs' state
+// @ts-expect-error - TS2554 - Expected 1 arguments, but got 0.
 const AnimatedContext = createContext<any>();
 
 function Tabs(props: TabsProps) {

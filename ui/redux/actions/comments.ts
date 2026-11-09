@@ -26,6 +26,7 @@ const FETCH_API_FAILED_TO_FETCH = 'Failed to fetch';
 const PROMISE_FULFILLED = 'fulfilled';
 
 declare type CommentronErrorMap = {
+// @ts-expect-error - TS1170 - A computed property name in a type literal must refer to an expression whose type is a literal type or a 'unique symbol' type. | TS2693 - 'string' only refers to a type, but is being used as a value here.
   [string]: {
     commentron: string | RegExp,
     replacement: string,
@@ -36,6 +37,7 @@ declare type CommentronErrorMap = {
 
 // prettier-ignore
 const ERR_MAP: CommentronErrorMap = {
+  // @ts-expect-error - TS2353 (ts-migration)
   SIMILAR_NAME: {
     commentron: /^your user name (.*) is too close to the creator's user name (.*) and may cause confusion. Please use another identity.$/,
     replacement: 'Your user name "%1%" is too close to the creator\'s user name "%2%" and may cause confusion. Please use another identity.',
@@ -69,6 +71,7 @@ const ERR_MAP: CommentronErrorMap = {
 function devToast(dispatch: unknown, msg: unknown) {
   if (isDev) {
     console.error(msg); // eslint-disable-line
+// @ts-expect-error - TS2349 - This expression is not callable.
     dispatch(doToast({ isError: true, message: `DEV: ${msg}` }));
   }
 }
@@ -238,6 +241,7 @@ export function doCommentListOwn(
       page_size: pageSize,
       sort_by: sortBy,
       author_claim_id: channelId,
+// @ts-expect-error - TS2345 - Argument of type '{ page: number; page_size: number; sort_by: number; author_claim_id: string; requestor_channel_name: any; requestor_channel_id: any; signature: any; signing_ts: any; }' is not assignable to parameter of type 'CommentListParams'.
       requestor_channel_name: channelClaim.name,
       requestor_channel_id: channelClaim.claim_id,
       signature: channelSignature.signature,
@@ -603,6 +607,7 @@ export function doCommentCreate(
     return Comments.comment_create({
       comment: comment,
       claim_id: claim_id,
+// @ts-expect-error - TS2345 - Argument of type '{ environment?: string; payment_intent_id?: string; support_tx_id?: string; comment: string; claim_id: string; channel_id: any; channel_name: any; parent_id: string; signature: any; signing_ts: any; sticker: boolean; }' is not assignable to parameter of type 'CommentCreateParams'.
       channel_id: activeChannelClaim.claim_id,
       channel_name: activeChannelClaim.name,
       parent_id: parent_id,
@@ -848,6 +853,7 @@ async function channelSignData(channelClaimId: string, data: string) {
 
 function safeParseURI(uri: unknown) {
   try {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
     return parseURI(uri);
   } catch {
     return {};
@@ -947,6 +953,7 @@ function doCommentModToggleBlock(
         channelSignatures = response;
         return Promise.allSettled(
           channelSignatures
+// @ts-expect-error - TS2339 - Property 'filter' does not exist on type 'unknown'.
             .filter((x) => x !== undefined && x !== null)
             .map((signatureData) =>
               commentAction({
@@ -961,6 +968,7 @@ function doCommentModToggleBlock(
                 creator_channel_id: creatorUri ? creatorId : undefined,
                 creator_channel_name: creatorUri ? creatorName : undefined,
                 block_all: unblock ? undefined : blockLevel === BLOCK_LEVEL.ADMIN,
+// @ts-expect-error - TS2345 - Argument of type '{ time_out: number; un_blocked_channel_id: string; un_blocked_channel_name: string; blocked_channel_id?: undefined; blocked_channel_name?: undefined; mod_channel_id: any; mod_channel_name: any; ... 5 more ...; global_un_block: boolean; } | { ...; }' is not assignable to parameter of type 'ModerationBlockParams'.
                 global_un_block: unblock ? blockLevel === BLOCK_LEVEL.ADMIN : undefined,
                 ...sharedModBlockParams,
                 time_out: unblock ? undefined : timeoutSec,
@@ -974,12 +982,15 @@ function doCommentModToggleBlock(
               if (res.status === 'rejected') {
                 // TODO: This should be error codes
                 if (res.reason.message !== 'validation is disallowed for non controlling channels') {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
                   failures.push(channelSignatures[index].name + ': ' + res.reason.message);
                 }
               }
             });
 
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
             if (failures.length !== 0) {
+// @ts-expect-error - TS2339 - Property 'join' does not exist on type 'unknown'.
               dispatch(doToast({ message: failures.join(), isError: true }));
               dispatch({
                 type: unblock ? ACTIONS.COMMENT_MODERATION_UN_BLOCK_FAILED : ACTIONS.COMMENT_MODERATION_BLOCK_FAILED,
@@ -1141,7 +1152,7 @@ export function doCommentModUnBlockAsModerator(commenterUri: string, creatorUri:
 export function doFetchModBlockedList() {
   return async (dispatch: Dispatch, getState: GetState) => {
     const LOOP_CHUNK_SIZE = 1;
-    const yieldThread = () => new Promise((resolve: unknown) => setTimeout(resolve));
+    const yieldThread = () => new Promise<any>((resolve) => setTimeout(resolve));
 
     const state = getState();
     const myChannels = selectMyChannelClaims(state);
@@ -1161,6 +1172,7 @@ export function doFetchModBlockedList() {
         channelSignatures = response;
         return Promise.allSettled(
           channelSignatures
+// @ts-expect-error - TS2339 - Property 'filter' does not exist on type 'unknown'.
             .filter((x) => x !== undefined && x !== null)
             .map((signatureData) =>
               Comments.moderation_block_list({
@@ -1186,14 +1198,17 @@ export function doFetchModBlockedList() {
 
             const blockListsPerChannel: unknown = [];
             for (let i = 0; i < res.length; ++i) {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
               blockListsPerChannel.push(res[i].value);
               if (i % 2 === 0) {
                 await yieldThread();
               }
             }
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
             for (let i = 0; i < blockListsPerChannel.length; ++i) {
               const storeList = async (fetchedList: unknown, blockedList: unknown, timeoutMap: unknown, blockedByMap: unknown) => {
                 if (fetchedList) {
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
                   for (let j = 0; j < fetchedList.length; ++j) {
                     const blockedChannel = fetchedList[j];
                     if (j > 0 && i % LOOP_CHUNK_SIZE === 0) {
@@ -1205,7 +1220,9 @@ export function doFetchModBlockedList() {
                         channelClaimId: blockedChannel.blocked_channel_id,
                       });
 
+// @ts-expect-error - TS2339 - Property 'find' does not exist on type 'unknown'.
                       if (!blockedList.find((blockedChannel) => isURIEqual(blockedChannel.channelUri, channelUri))) {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
                         blockedList.push({ channelUri, blockedAt: blockedChannel.blocked_at });
 
                         if (blockedChannel.banned_for) {
@@ -1245,7 +1262,9 @@ export function doFetchModBlockedList() {
                 await yieldThread();
               }
 
+// @ts-expect-error - TS2554 - Expected 4 arguments, but got 3.
               await storeList(blocked_channels, personalBlockList, personalTimeoutMap);
+// @ts-expect-error - TS2554 - Expected 4 arguments, but got 3.
               await storeList(globally_blocked_channels, adminBlockList, adminTimeoutMap);
               await storeList(
                 delegated_blocked_channels,
@@ -1258,20 +1277,26 @@ export function doFetchModBlockedList() {
               type: ACTIONS.COMMENT_MODERATION_BLOCK_LIST_COMPLETED,
               data: {
                 personalBlockList:
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
                   personalBlockList.length > 0
                     ? personalBlockList
+// @ts-expect-error - TS2339 - Property 'sort' does not exist on type 'unknown'. | TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type. | TS2363 - The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
                         .sort((a, b) => new Date(a.blockedAt) - new Date(b.blockedAt))
                         .map((blockedChannel) => blockedChannel.channelUri)
                     : null,
                 adminBlockList:
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
                   adminBlockList.length > 0
                     ? adminBlockList
+// @ts-expect-error - TS2339 - Property 'sort' does not exist on type 'unknown'. | TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type. | TS2363 - The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
                         .sort((a, b) => new Date(a.blockedAt) - new Date(b.blockedAt))
                         .map((blockedChannel) => blockedChannel.channelUri)
                     : null,
                 moderatorBlockList:
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
                   moderatorBlockList.length > 0
                     ? moderatorBlockList
+// @ts-expect-error - TS2339 - Property 'sort' does not exist on type 'unknown'. | TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type. | TS2363 - The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
                         .sort((a, b) => new Date(a.blockedAt) - new Date(b.blockedAt))
                         .map((blockedChannel) => blockedChannel.channelUri)
                     : null,
@@ -1495,6 +1520,7 @@ export function doFetchCommentModAmIList(channelClaim: ChannelClaim) {
         channelSignatures = response;
         return Promise.allSettled(
           channelSignatures
+// @ts-expect-error - TS2339 - Property 'filter' does not exist on type 'unknown'.
             .filter((x) => x !== undefined && x !== null)
             .map((signatureData) =>
               Comments.moderation_am_i({
@@ -1684,12 +1710,14 @@ export const doFetchBlockedWords = () => {
             hexdata: toHex(channelClaim.name),
           });
 
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
           channelSignatures.push({ ...channelSignature, claim_id: channelClaim.claim_id, name: channelClaim.name });
         } catch (e: any) {}
       }
     }
 
     return Promise.all(
+// @ts-expect-error - TS2339 - Property 'map' does not exist on type 'unknown'.
       channelSignatures.map((signatureData) =>
         Comments.setting_list_blocked_words({
           channel_name: signatureData.name,
@@ -1702,6 +1730,7 @@ export const doFetchBlockedWords = () => {
       .then((blockedWords) => {
         const blockedWordsByChannelId: Record<string, any> = {};
 
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
         for (let i = 0; i < channelSignatures.length; ++i) {
           const claim_id = channelSignatures[i].claim_id;
           blockedWordsByChannelId[claim_id] = blockedWords[i].word_list;

@@ -7,7 +7,7 @@ import UserSignOutButton from 'component/userSignOutButton';
 import Card from 'component/common/card';
 
 type Props = {
-  cancelButton: Node,
+  cancelButton: React.ReactNode,
   email: string,
   resendVerificationEmail: (arg1: string) => void,
   checkEmailVerified: () => void,
@@ -46,12 +46,14 @@ function UserEmail(props: Props) {
         isVerified ? (
           <FormField
             type="text"
+            // @ts-expect-error - TS2322 (ts-migration)
             className="form-field--copyable"
             readOnly
             label={
               <React.Fragment>
                 {__('Your email')}{' '}
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   button="link"
                   label={__('Update mailing preferences')}
                   href={`http://lbry.io/list/edit/${accessToken}`}
@@ -62,6 +64,7 @@ function UserEmail(props: Props) {
             value={email || ''}
           />
         ) : (
+          // @ts-expect-error - TS2322 (ts-migration)
           <Button button="primary" label={__('Log In')} navigate={`/$/${PAGES.AUTH}`} />
         )
       }

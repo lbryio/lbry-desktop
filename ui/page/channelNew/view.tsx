@@ -25,9 +25,12 @@ function ChannelNew(props: Props) {
   }, [isAuthenticated, claimConfirmEmailReward, emptyBalance]);
 
   return (
+    // @ts-expect-error - TS2741 (ts-migration)
     <Page noSideNavigation noFooter backout={{ title: __('Create a channel'), backLabel: __('Cancel') }}>
+      {/* @ts-expect-error - TS2322, TS2741 (ts-migration) */}
       {emptyBalance && <YrblWalletEmpty />}
 
+      {/* @ts-expect-error - TS2322, TS2739 (ts-migration) */}
       <ChannelForm
         disabled={emptyBalance}
         onDone={() => {

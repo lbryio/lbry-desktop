@@ -136,8 +136,11 @@ const SupportsLiquidate = (props: Props) => {
             {__('Keeping it locked improves the trust and discoverability of your content.')}
           </p>
           <p>
+            {/* @ts-expect-error - TS2745 (ts-migration) */}
             <I18nMessage
+              // @ts-expect-error - TS2322 (ts-migration)
               tokens={{
+                // @ts-expect-error - TS2322 (ts-migration)
                 learn_more: <Button button="link" label={__('Learn More')} href="https://lbry.com/faq/tipping" />,
               }}
             >
@@ -155,7 +158,9 @@ const SupportsLiquidate = (props: Props) => {
           ) : (
             <>
               <div className="section">
+                {/* @ts-expect-error - TS2745 (ts-migration) */}
                 <I18nMessage
+                  // @ts-expect-error - TS2322 (ts-migration)
                   tokens={{
                     amount: (
                       <strong>
@@ -177,6 +182,7 @@ const SupportsLiquidate = (props: Props) => {
                       name="supports_liquidate_range"
                       type={'range'}
                       min={0}
+// @ts-expect-error - TS2322 - Type '{ name: string; type: string; min: number; step: number; max: any; value: number; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                       step={0.01}
                       max={previewBalance}
                       value={amount}
@@ -191,6 +197,7 @@ const SupportsLiquidate = (props: Props) => {
                       type="text"
                       value={unlockTextAmount}
                       helper={message}
+// @ts-expect-error - TS2322 - Type '{ type: string; value: string; helper: string; onFocus: () => void; onChange: (e: any) => void; onBlur: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                       onFocus={handleUnlockTextFocus}
                       onChange={(e) => handleChangeUnlockText(e.target.value)}
                       onBlur={handleUnlockTextBlur}
@@ -202,6 +209,7 @@ const SupportsLiquidate = (props: Props) => {
           )}
           <div className="section__actions">
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               disabled={error}
               button="primary"
               onClick={abandonClaimError ? handleClose : handleSubmit}

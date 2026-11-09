@@ -22,10 +22,13 @@ class FirstRunEmailCollection extends React.PureComponent<Props> {
       return null;
     }
 
+    // @ts-expect-error - TS2322 (ts-migration)
     const cancelButton = <Button button="link" onClick={completeFirstRun} label={__('Not Now')} />;
     if (user && !user.has_verified_email && !email) {
+      // @ts-expect-error - TS2322 (ts-migration)
       return <UserEmailNew cancelButton={cancelButton} />;
     } else if (user && !user.has_verified_email) {
+      // @ts-expect-error - TS2322 (ts-migration)
       return <UserEmailVerify cancelButton={cancelButton} />;
     }
 

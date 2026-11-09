@@ -17,8 +17,8 @@ const SORT_OLD = 'old';
 type Props = {
   uris: Array<string>,
   prefixUris?: Array<string>,
-  header: Node | boolean,
-  headerAltControls: Node,
+  header: React.ReactNode | boolean,
+  headerAltControls: React.ReactNode,
   loading: boolean,
   type: string,
   activeUri?: string,
@@ -31,11 +31,11 @@ type Props = {
   persistedStorageKey?: string,
   showHiddenByUser: boolean,
   showUnresolvedClaims?: boolean,
-  renderActions?: (arg1: Claim) => Node | null | undefined,
-  renderProperties?: (arg1: Claim) => Node | null | undefined,
+  renderActions?: (arg1: Claim) => React.ReactNode | null | undefined,
+  renderProperties?: (arg1: Claim) => React.ReactNode | null | undefined,
   includeSupportAction?: boolean,
-  injectedItem: Node | null | undefined,
-  timedOutMessage?: Node,
+  injectedItem: React.ReactNode | null | undefined,
+  timedOutMessage?: React.ReactNode,
   tileLayout?: boolean,
   searchInLanguage: boolean,
   hideMenu?: boolean,
@@ -140,6 +140,7 @@ export default function ClaimList(props: Props) {
   }, []);
 
   useEffect(() => {
+// @ts-expect-error - TS2554 - Expected 3 arguments, but got 2.
     const handleScroll = debounce((e) => {
       if (page && pageSize && onScrollBottom) {
         const mainEl = document.querySelector(`.${MAIN_CLASS}`);
@@ -212,12 +213,14 @@ export default function ClaimList(props: Props) {
           {header && (
             <div className={classnames('claim-list__header', { 'section__title--small': type === 'small' })}>
               {header}
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               {loading && <Spinner type="small" />}
               {(headerAltControls || defaultSort) && (
                 <div className="claim-list__alt-controls">
                   {headerAltControls}
                   {defaultSort && (
                     <FormField
+// @ts-expect-error - TS2322 - Type '{ children: Element[]; className: string; type: string; name: string; value: any; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                       className="claim-list__dropdown"
                       type="select"
                       name="file_sort"

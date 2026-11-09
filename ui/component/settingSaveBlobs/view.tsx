@@ -23,6 +23,7 @@ function SettingDataHosting(props: Props) {
         type="checkbox"
         name="save_blobs"
         onChange={() => setDaemonSetting('save_blobs', !daemonSettings.save_blobs)}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; onChange: () => void; checked: boolean; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
         checked={daemonSettings.save_blobs}
       />
     </>

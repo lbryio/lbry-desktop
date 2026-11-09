@@ -13,6 +13,7 @@ class PdfViewer extends React.PureComponent<Props> {
     return (
       <div className="file-viewer file-viewer--document" onContextMenu={stopContextMenu}>
         <div className="file-viewer file-viewer--iframe">
+          {/* @ts-expect-error - TS2741 (ts-migration) */}
           <IframeReact title={__('File preview')} src={src} />
         </div>
       </div>

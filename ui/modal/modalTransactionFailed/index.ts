@@ -5,7 +5,7 @@ import ModalTransactionFailed from './view';
 
 const select = () => ({});
 
-const perform = dispatch: unknown => ({
+const perform = (dispatch: unknown) => ({
   closeModal: () => dispatch(doHideModal()),
 });
 

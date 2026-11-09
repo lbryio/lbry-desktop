@@ -39,8 +39,10 @@ export default function WunderbarSuggestion(props: Props) {
           'wunderbar__suggestion--channel': isChannel,
         })}
       >
+        {/* @ts-expect-error - TS2739 (ts-migration) */}
         {isChannel && <ChannelThumbnail small uri={uri} />}
         {!isChannel && (
+          // @ts-expect-error - TS2746 (ts-migration)
           <FileThumbnail uri={uri}>
             {/* @if TARGET='app' */}
             {!isCollection && (

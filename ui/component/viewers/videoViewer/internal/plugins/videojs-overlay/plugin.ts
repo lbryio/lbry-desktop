@@ -33,7 +33,7 @@ const registerPlugin = videojs.registerPlugin || videojs.plugin;
  */
 
 /* eslint-disable no-self-compare */
-const isNumber = n: unknown => typeof n === 'number' && n === n;
+const isNumber = (n: unknown) => typeof n === 'number' && n === n;
 /* eslint-enable no-self-compare */
 
 /**
@@ -42,7 +42,7 @@ const isNumber = n: unknown => typeof n === 'number' && n === n;
  * @param  {String} s
  * @return {Boolean}
  */
-const hasNoWhitespace = s: unknown => typeof s === 'string' && /^\S+$/.test(s);
+const hasNoWhitespace = (s: unknown) => typeof s === 'string' && /^\S+$/.test(s);
 
 /**
  * Overlay component.
@@ -76,7 +76,7 @@ class Overlay extends Component {
     // caused by crappy libraries clobbering Function.prototype.bind.
     // - https://github.com/videojs/video.js/issues/3097
     ['endListener_', 'rewindListener_', 'startListener_'].forEach(name => {
-      this[name] = e: unknown => Overlay.prototype[name].call(this, e);
+      this[name] = (e: unknown) => Overlay.prototype[name].call(this, e);
     });
 
     // If the start event is a timeupdate, we need to watch for rewinds (i.e.,

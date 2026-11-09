@@ -7,14 +7,14 @@ import { makeSelectClaimRewardError, makeSelectIsRewardClaimPending } from 'redu
 
 import ModalRewardCode from './view';
 
-const select = state: unknown => ({
+const select = (state: unknown) => ({
   rewardIsPending: makeSelectIsRewardClaimPending()(state, {
     reward_type: REWARDS.TYPE_REWARD_CODE,
   }),
   error: makeSelectClaimRewardError()(state, { reward_type: REWARDS.TYPE_REWARD_CODE }),
 });
 
-const perform = dispatch: unknown => ({
+const perform = (dispatch: unknown) => ({
   closeModal: () => dispatch(doHideModal()),
   submitRewardCode: code => dispatch(doClaimRewardType(REWARDS.TYPE_REWARD_CODE, { params: { code } })),
 });

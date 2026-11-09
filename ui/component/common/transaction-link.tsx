@@ -11,6 +11,7 @@ const TransactionLink = (props: Props) => {
   const href = `https://explorer.lbry.com/tx/${id}`;
   const label = id.slice(0, 7);
 
+  // @ts-expect-error - TS2322 (ts-migration)
   return <Button button="link" href={href} label={label} />;
 };
 

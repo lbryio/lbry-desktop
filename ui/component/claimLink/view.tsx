@@ -73,6 +73,7 @@ class ClaimLink extends React.Component<Props> {
 
     return isChannel ? (
       <>
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         <UriIndicator uri={uri} link />
         <span>{fullUri.length > uri.length ? fullUri.substring(uri.length, fullUri.length) : ''}</span>
       </>
@@ -85,9 +86,11 @@ class ClaimLink extends React.Component<Props> {
         >
           <EmbedPlayButton uri={uri} parentCommentId={parentCommentId} isMarkdownPost={isMarkdownPost} />
         </div>
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         <Button button="link" className="preview-link__url" label={uri} navigate={uri} />
       </div>
     ) : (
+      // @ts-expect-error - TS2322 (ts-migration)
       <Button button="link" title={children} label={children} className="button--external-link" navigate={uri} />
     );
   }

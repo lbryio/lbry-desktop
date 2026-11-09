@@ -57,6 +57,7 @@ export default function YoutubeTransferStatus(props: Props) {
   }
 
   function getMessage(channel: unknown) {
+// @ts-expect-error - TS2339 - Property 'transferable' does not exist on type '{}'. | TS2339 - Property 'transfer_state' does not exist on type '{}'. | TS2339 - Property 'sync_status' does not exist on type '{}'.
     const { transferable, transfer_state: transferState, sync_status: syncStatus } = channel;
     if (!transferable) {
       switch (transferState) {
@@ -115,8 +116,11 @@ export default function YoutubeTransferStatus(props: Props) {
 
             {isYoutubeTransferComplete && !isNotElligible && __('View your channel or choose a new channel to sync.')}
             {isNotElligible && (
+              // @ts-expect-error - TS2745 (ts-migration)
               <I18nMessage
+                // @ts-expect-error - TS2322 (ts-migration)
                 tokens={{
+                  // @ts-expect-error - TS2322 (ts-migration)
                   here: <Button button="link" href="https://lbry.com/faq/youtube" label={__('here')} />,
                   email: SITE_HELP_EMAIL,
                 }}
@@ -172,6 +176,7 @@ export default function YoutubeTransferStatus(props: Props) {
                           <div className="progress__item">
                             {__('Wait for your videos to be synced')}
                             {isWaitingForSync ? (
+                              // @ts-expect-error - TS2322 (ts-migration)
                               <Spinner type="small" />
                             ) : (
                               <Icon icon={ICONS.COMPLETED} className="progress__complete-icon--completed" />
@@ -204,6 +209,7 @@ export default function YoutubeTransferStatus(props: Props) {
             <div className="section__actions">
               {!isYoutubeTransferComplete && (
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   button="primary"
                   disabled={youtubeImportPending || !transferEnabled}
                   onClick={claimChannels}
@@ -211,6 +217,7 @@ export default function YoutubeTransferStatus(props: Props) {
                 />
               )}
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button={isYoutubeTransferComplete ? 'primary' : 'link'}
                 label={__('Explore %SITE_NAME%', { SITE_NAME })}
                 navigate="/"
@@ -223,7 +230,9 @@ export default function YoutubeTransferStatus(props: Props) {
                 : __('You will be able to claim your channel once it has finished syncing.')}{' '}
               {youtubeImportPending &&
                 __('You will not be able to edit the channel or content until the transfer process completes.')}{' '}
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="link" label={__('Learn More')} href="https://lbry.com/faq/youtube#transfer" />{' '}
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               {addNewChannel && <Button button="link" label={__('Add Another Channel')} onClick={addNewChannel} />}
             </p>
           </>

@@ -1,7 +1,7 @@
 //@ts-nocheck
 import {createSelector} from 'reselect';
 
-export const selectState = state: unknown => state.filtered || {};
+export const selectState = (state: unknown) => state.filtered || {};
 
 export const selectFilteredOutpoints = createSelector(
   selectState,

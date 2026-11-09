@@ -5,7 +5,7 @@ import React from 'react';
 import Button from 'component/button';
 
 type Props = {
-  message: string | Node,
+  message: string | React.ReactNode,
   actionText?: string,
   href?: string,
   type?: string,
@@ -32,6 +32,7 @@ export default function Nag(props: Props) {
       <div className="nag__message">{message}</div>
       {(href || onClick) && (
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           className={classnames('nag__button', {
             'nag__button--helpful': type === 'helpful',
             'nag__button--error': type === 'error',
@@ -43,6 +44,7 @@ export default function Nag(props: Props) {
       )}
       {onClose && (
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           className={classnames('nag__button nag__close', {
             'nag__button--helpful': type === 'helpful',
             'nag__button--error': type === 'error',

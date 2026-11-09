@@ -70,6 +70,7 @@ function UserChannelFollowIntro(props: Props) {
             <ClaimListDiscover
               meta={
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   button={subscribedChannels.length < 1 ? 'alt' : 'primary'}
                   onClick={onContinue}
                   label={subscribedChannels.length < 1 ? __('Skip') : __('Continue')}

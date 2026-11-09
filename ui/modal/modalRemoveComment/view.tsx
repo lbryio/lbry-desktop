@@ -25,6 +25,7 @@ function ModalRemoveComment(props: Props) {
   } = props;
 
   return (
+// @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; contentLabel: string; type: string; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
     <Modal isOpen contentLabel={__('Confirm Comment Deletion')} type="card" onAborted={closeModal}>
       <Card
         title={__('Remove Comment')}
@@ -42,6 +43,7 @@ function ModalRemoveComment(props: Props) {
           <>
             <div className="section__actions">
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="primary"
                 label={__('Remove')}
                 onClick={() => {
@@ -50,6 +52,7 @@ function ModalRemoveComment(props: Props) {
                   if (setQuickReply) setQuickReply(undefined);
                 }}
               />
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="link" label={__('Cancel')} onClick={closeModal} />
             </div>
           </>

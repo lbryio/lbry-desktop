@@ -22,9 +22,11 @@ function FileWatchLaterLink(props: Props) {
   let isHovering = useHover(buttonRef);
 
   function handleWatchLater(e: unknown) {
+// @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
     e.preventDefault();
     doToast({
       message: hasClaimInWatchLater ? __('Item removed from Watch Later') : __('Item added to Watch Later'),
+// @ts-expect-error - TS2345 - Argument of type '{ message: string; linkText: string; linkTarget: string; }' is not assignable to parameter of type '{ message: string; }'.
       linkText: !hasClaimInWatchLater && __('See All'),
       linkTarget: !hasClaimInWatchLater && '/list/watchlater',
     });
@@ -44,6 +46,7 @@ function FileWatchLaterLink(props: Props) {
   return (
     <Button
       ref={buttonRef}
+      // @ts-expect-error - TS2322 (ts-migration)
       title={title}
       label={label}
       className="button--file-action"

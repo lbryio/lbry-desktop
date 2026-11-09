@@ -60,6 +60,7 @@ function PostEditor(props: Props) {
 
   useEffect(() => {
     function readFileStream(url: unknown) {
+// @ts-expect-error - TS2769 - No overload matches this call.
       return fetch(url).then((res) => res.text());
     }
 

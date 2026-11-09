@@ -8,8 +8,8 @@ type Props = {
   withText?: boolean,
   isTitle?: boolean,
   size?: number,
-  prefix?: string | number | Node,
-  postfix?: string | number | Node
+  prefix?: string | number | React.ReactNode,
+  postfix?: string | number | React.ReactNode
 };
 
 const LbcSymbol = (props: Props) => {

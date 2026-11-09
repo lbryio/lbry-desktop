@@ -11,6 +11,7 @@ class ModalPasswordUnsave extends React.PureComponent<Props> {
   render() {
     return (
       <Modal
+// @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; contentLabel: string; title: string; type: string; confirmButtonLabel: string; abortButtonLabel: string; onConfirmed: () => Promise<void>; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
         isOpen
         contentLabel={__('Unsave Password')}
         title={__('Clear saved password')}

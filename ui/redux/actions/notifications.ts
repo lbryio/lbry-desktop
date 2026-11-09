@@ -58,6 +58,7 @@ export function doNotificationList(types?: Array<string>) {
 
     try {
       if (!notificationTypes) {
+        // @ts-expect-error - TS2339 (ts-migration)
         const notificationCategories = await Lbryio.call('notification', 'categories');
         if (notificationCategories) {
           dispatch({
@@ -69,6 +70,7 @@ export function doNotificationList(types?: Array<string>) {
         }
       }
 
+      // @ts-expect-error - TS2339 (ts-migration)
       return Lbryio.call('notification', 'list', params).then((response) => {
         const notifications = response || [];
         const channelsToResolve = notifications
@@ -122,11 +124,13 @@ export function doReadNotifications(notificationsIds: Array<number>) {
       ids = notificationsIds;
     } else {
       // A null or invalid argument will wipe all unread notifications.
+// @ts-expect-error - TS2339 - Property 'filter' does not exist on type 'unknown'.
       const getUnreadIds = (list: unknown) => list.filter((n) => !n.is_read).map((n) => n.id);
       ids = Array.from(new Set([...getUnreadIds(notifications), ...getUnreadIds(notificationsFiltered)]));
     }
 
     dispatch({ type: ACTIONS.NOTIFICATION_READ_STARTED });
+    // @ts-expect-error - TS2339 (ts-migration)
     return Lbryio.call('notification', 'edit', { notification_ids: ids.join(','), is_read: true })
       .then(() => {
         dispatch({ type: ACTIONS.NOTIFICATION_READ_COMPLETED, data: { notificationIds: ids } });
@@ -140,6 +144,7 @@ export function doReadNotifications(notificationsIds: Array<number>) {
 export function doSeeNotifications(notificationIds: Array<string>) {
   return (dispatch: Dispatch) => {
     dispatch({ type: ACTIONS.NOTIFICATION_SEEN_STARTED });
+    // @ts-expect-error - TS2339 (ts-migration)
     return Lbryio.call('notification', 'edit', { notification_ids: notificationIds.join(','), is_seen: true })
       .then(() => {
         dispatch({
@@ -165,6 +170,7 @@ export function doSeeAllNotifications() {
       return;
     }
 
+// @ts-expect-error - TS2339 - Property 'filter' does not exist on type 'unknown'.
     const getUnseenIds = (list: unknown) => list.filter((n) => !n.is_seen).map((n) => n.id);
     const unseenIds = Array.from(new Set([...getUnseenIds(notifications), ...getUnseenIds(notificationsFiltered)]));
 
@@ -174,6 +180,7 @@ export function doSeeAllNotifications() {
 
 export function doDeleteNotification(notificationId: number) {
   return (dispatch: Dispatch) => {
+    // @ts-expect-error - TS2339 (ts-migration)
     Lbryio.call('notification', 'delete', { notification_ids: notificationId })
       .then(() => {
         dispatch({ type: ACTIONS.NOTIFICATION_DELETE_COMPLETED, data: { notificationId } });

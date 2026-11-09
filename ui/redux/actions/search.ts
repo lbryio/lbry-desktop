@@ -33,6 +33,7 @@ let lighthouse = {
   provider: SEARCH_PROVIDERS.LIGHTHOUSE,
   lbrySearchUrl: LBRY_SEARCH_API,
   // Resolves to { body: [{ name, claimId }], poweredBy, hasNextPage? }.
+// @ts-expect-error - TS2367 - This condition will always return 'false' since the types '"lighthouse"' and '"lbry_search"' have no overlap.
   search: (queryString: string): Promise<any> => lighthouse.provider === SEARCH_PROVIDERS.LBRY_SEARCH
     ? lbrySearch(lighthouse.lbrySearchUrl, queryString)
     : fetch(`${lighthouse.CONNECTION_STRING}?${queryString}`).then(handleFetchResponse),
@@ -44,6 +45,7 @@ export const setSearchApi = (endpoint: string) => {
 
 // Called whenever the store changes (ui/index.jsx), so it follows the setting.
 export const setSearchProvider = (provider?: string | null, lbrySearchUrl?: string | null) => {
+// @ts-expect-error - TS2322 - Type '"lighthouse" | "lbry_search"' is not assignable to type '"lighthouse"'.
   lighthouse.provider =
     provider === SEARCH_PROVIDERS.LBRY_SEARCH ? SEARCH_PROVIDERS.LBRY_SEARCH : SEARCH_PROVIDERS.LIGHTHOUSE;
   // lbry-search serves /graphql exactly; /graphql/ is a 404.
@@ -109,13 +111,16 @@ export const doSearch =
 
             const url = buildURI(urlObj);
             if (isURIValid(url)) {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
               uris.push(url);
             }
           }
         });
 
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'. | TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string[]'.
         actions.push(doResolveUris(uris));
 
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
         actions.push({
           type: ACTIONS.SEARCH_SUCCESS,
           data: {
@@ -127,6 +132,7 @@ export const doSearch =
             hasNextPage,
           },
         });
+// @ts-expect-error - TS2488 - Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
         dispatch(batchActions(...actions));
       })
       .catch(() => {

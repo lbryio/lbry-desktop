@@ -25,6 +25,7 @@ type State = {
 
 export const selectState = (state: State): SearchState => state.search;
 
+// @ts-expect-error - TS2339 - Property 'searchQuery' does not exist on type 'SearchState'.
 export const selectSearchValue: (state: State) => string = (state) => selectState(state).searchQuery;
 export const selectSearchOptions: (state: State) => SearchOptions = (state) => selectState(state).options;
 export const selectIsSearching: (state: State) => boolean = (state) => selectState(state).searching;
@@ -32,6 +33,7 @@ export const selectSearchResultByQuery: (state: State) => {
   [key: string]: Array<string>
 } = (state) =>
   selectState(state).resultsByQuery;
+// @ts-expect-error - TS2344 - Type 'boolean' does not satisfy the constraint 'string | number | symbol'.
 export const selectHasReachedMaxResultsLength: (state: State) => Partial<Record<boolean, Array<boolean>>> = (state) =>
   selectState(state).hasReachedMaxResultsLength;
 export const selectMentionSearchResults: (state: State) => Array<string> = (state) => selectState(state).results;

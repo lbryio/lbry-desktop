@@ -6,7 +6,7 @@ export const isTouch = () => {
   return 'ontouchstart' in window || 'onmsgesturechange' in window;
 };
 
-export const htmlToNode = html: unknown => {
+export const htmlToNode = (html: unknown) => {
   const $wrap = window.document.createElement('div');
   $wrap.innerHTML = html;
   const $content = $wrap.childNodes;

@@ -21,6 +21,7 @@ function ImageViewer(props: Props) {
       )}
       {!loadingError && (
         <div className="file-viewer">
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <ZoomableImage src={source} onError={() => setLoadingError(true)} />
         </div>
       )}

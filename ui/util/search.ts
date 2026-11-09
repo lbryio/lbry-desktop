@@ -1,4 +1,5 @@
 import {isNameValid, isURIValid, normalizeURI, parseURI} from 'util/lbryURI';
+// @ts-expect-error - TS2305 (ts-migration)
 import { URL as SITE_URL, URL_LOCAL, URL_DEV } from 'config';
 import { SEARCH_OPTIONS } from 'constants/search';
 
@@ -39,6 +40,7 @@ export function getUriForSearchTerm(term: string) {
   const error = '';
 
   const addLbryIfNot = (term: unknown) => {
+// @ts-expect-error - TS2339 - Property 'startsWith' does not exist on type 'unknown'.
     return term.startsWith('lbry://') ? term : `lbry://${term}`;
   };
 

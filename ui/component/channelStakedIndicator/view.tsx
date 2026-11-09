@@ -43,6 +43,7 @@ function ChannelStakedIndicator(props: Props) {
         title={
           <div className="channel-staked__tooltip">
             <div className="channel-staked__tooltip-icons">
+{ /* @ts-expect-error - TS2322 - Type '{ icon: string; isControlling: boolean; size: number; }' is not assignable to type 'IntrinsicAttributes & LevelIconProps'. */}
               <LevelIcon icon={icon} isControlling={isControlling} size={isControlling ? 14 : 10} />
             </div>
 

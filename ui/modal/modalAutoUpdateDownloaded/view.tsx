@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 // @if TARGET='app'
+// @ts-expect-error - TS2792 - Cannot find module 'electron'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import { ipcRenderer } from 'electron';
 // @endif
 import { Modal } from 'modal/modal';
@@ -33,6 +34,7 @@ const ModalAutoUpdateDownloaded = (props: Props) => {
 
   return (
     <Modal
+// @ts-expect-error - TS2322 - Type '{ children: Element[]; isOpen: true; type: string; contentLabel: string; title: string; confirmButtonLabel: string; abortButtonLabel: string; confirmButtonDisabled: boolean; onConfirmed: () => void; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
       isOpen
       type="confirm"
       contentLabel={__('Upgrade Downloaded')}
@@ -43,6 +45,7 @@ const ModalAutoUpdateDownloaded = (props: Props) => {
       onConfirmed={handleConfirm}
       onAborted={handleAbort}
     >
+      {/* @ts-expect-error - TS2741 (ts-migration) */}
       <LastReleaseChanges />
       {errorWhileUpdating && <p>{__('There was an error while updating. Please try again.')}</p>}
     </Modal>

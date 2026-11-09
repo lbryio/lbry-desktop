@@ -36,12 +36,14 @@ export default function FileRenderInline(props: Props) {
   let renderContent = isReadyToPlay;
 
   // Force non-streaming content to wait for download
+// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"comic" | "document" | "md" | "pdf" | "html" | "docx" | "cad" | "plain_text"'.
   if (NON_STREAM_MODES.includes(renderMode)) {
     renderContent = isReadyToView;
   }
 
   useEffect(() => {
     if (isPlaying) {
+// @ts-expect-error - TS2345 - Argument of type 'number' is not assignable to parameter of type '(prevState: undefined) => undefined'.
       setPlayTime(Date.now());
     }
   }, [isPlaying, setPlayTime, uri]);

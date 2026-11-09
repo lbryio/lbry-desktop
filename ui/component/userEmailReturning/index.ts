@@ -12,7 +12,7 @@ import { doUserCheckIfEmailExists, doClearEmailEntry } from 'redux/actions/user'
 import { doSetWalletSyncPreference } from 'redux/actions/settings';
 import UserEmailReturning from './view';
 
-const select = state: unknown => ({
+const select = (state: unknown) => ({
   errorMessage: selectEmailNewErrorMessage(state),
   emailToVerify: selectEmailToVerify(state),
   emailDoesNotExist: selectEmailDoesNotExist(state),

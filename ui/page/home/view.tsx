@@ -51,6 +51,7 @@ function HomePage(props: Props) {
   }: SectionHeaderProps) => {
     return (
       <h1 className="claim-grid__header">
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         <Button navigate={navigate} button="link">
           <Icon className="claim-grid__header-icon" sectionIcon icon={icon} size={20} />
           <span className="claim-grid__title">{title}</span>
@@ -63,23 +64,28 @@ function HomePage(props: Props) {
   function getRowElements(title: unknown, route: unknown, link: unknown, icon: unknown, help: unknown, options: unknown, index: unknown, pinUrls: unknown) {
     const tilePlaceholder = (
       <ul className="claim-grid">
+{ /* @ts-expect-error - TS2339 - Property 'pageSize' does not exist on type 'unknown'. */}
         {new Array(options.pageSize || 8).fill(1).map((x, i) => (
           <ClaimPreviewTile key={i} placeholder />
         ))}
       </ul>
     );
 
+    // @ts-expect-error - TS2698 (ts-migration)
     const claimTiles = <ClaimTilesDiscover {...options} hasSource pinUrls={pinUrls} />;
 
     return (
+// @ts-expect-error - TS2322 - Type 'unknown' is not assignable to type 'Key'.
       <div key={title} className="claim-grid__wrapper">
         {/* category header */}
         {index !== 0 && title && typeof title === 'string' && (
+// @ts-expect-error - TS2322 - Type 'unknown' is not assignable to type 'string'. | TS2322 - Type 'unknown' is not assignable to type 'string'. | TS2322 - Type 'unknown' is not assignable to type 'string'.
           <SectionHeader title={__(title)} navigate={route || link} icon={icon} help={help} />
         )}
 
         {index === 0 && <>{claimTiles}</>}
         {index !== 0 && (
+// @ts-expect-error - TS2322 - Type '{ children: Element; name: unknown; placeholder: Element; yOffset: number; }' is not assignable to type 'IntrinsicAttributes & Props'.
           <WaitUntilOnPage name={title} placeholder={tilePlaceholder} yOffset={800}>
             {claimTiles}
           </WaitUntilOnPage>
@@ -88,6 +94,7 @@ function HomePage(props: Props) {
         {/* view more button */}
         {(route || link) && (
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             className="claim-grid__title--secondary"
             button="link"
             navigate={route || link}
@@ -100,6 +107,7 @@ function HomePage(props: Props) {
   }
 
   return (
+    // @ts-expect-error - TS2740 (ts-migration)
     <Page fullWidthPage>
       {!subscribedChannels.length && (
         <div className="notice-message">
@@ -108,6 +116,7 @@ function HomePage(props: Props) {
           </h1>
           <p className="section__actions">
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               button="primary"
               navigate={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
               label={__('Find new channels to follow')}

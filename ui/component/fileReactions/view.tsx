@@ -45,6 +45,7 @@ function FileReactions(props: Props) {
       )}
 
       <Button
+        // @ts-expect-error - TS2322 (ts-migration)
         title={__('I like this')}
         authSrc="filereaction_like"
         className={classnames('button--file-action button-like', {
@@ -56,6 +57,7 @@ function FileReactions(props: Props) {
         onClick={() => doReactionLike(uri)}
       />
       <Button
+        // @ts-expect-error - TS2322 (ts-migration)
         authSrc={'filereaction_dislike'}
         title={__('I dislike this')}
         className={classnames('button--file-action button-dislike', {

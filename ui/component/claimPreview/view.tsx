@@ -59,9 +59,9 @@ type Props = {
   },
   hasVisitedUri: boolean,
   blockedUris: Array<string>,
-  actions: boolean | Node | string | number,
-  properties: boolean | Node | string | number | ((arg1: Claim) => Node),
-  empty?: Node,
+  actions: boolean | React.ReactNode | string | number,
+  properties: boolean | React.ReactNode | string | number | ((arg1: Claim) => React.ReactNode),
+  empty?: React.ReactNode,
   onClick?: (e?: any, claim?: Claim | null | undefined, index?: number) => any,
   streamingUrl: string | null | undefined,
   getFile: (arg1: string) => void,
@@ -73,7 +73,7 @@ type Props = {
   showNullPlaceholder?: boolean,
   includeSupportAction?: boolean,
   hideActions?: boolean,
-  renderActions?: (arg1: Claim) => Node | null | undefined,
+  renderActions?: (arg1: Claim) => React.ReactNode | null | undefined,
   wrapperElement?: string,
   hideRepostLabel?: boolean,
   repostUrl?: string,
@@ -92,6 +92,7 @@ type Props = {
   unavailableUris?: Array<string>
 };
 
+// @ts-expect-error - TS2345 - Argument of type '(props: Props, ref: any) => Node | React.JSX.Element' is not assignable to parameter of type 'ForwardRefRenderFunction<any, Record<any, any>>'.
 const ClaimPreview = forwardRef<any, Record<any, any>>((props: Props, ref: any) => {
   const {
     // core
@@ -173,6 +174,7 @@ const ClaimPreview = forwardRef<any, Record<any, any>>((props: Props, ref: any) 
     const formattedSubCountLocale = formatNumber(channelSubCount, 2, false);
     return (
       <div className="media__subtitle">
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         <Tooltip title={formattedSubCountLocale} followCursor placement="top">
           <span className="claim-preview__channel-sub-count">
             {channelSubCount === 1 ? __('1 Follower') : __('%formattedSubCount% Followers', { formattedSubCount })}
@@ -188,8 +190,10 @@ const ClaimPreview = forwardRef<any, Record<any, any>>((props: Props, ref: any) 
     // $FlowFixMe
     claim.value &&
     // $FlowFixMe
+// @ts-expect-error - TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
     claim.value.stream_type &&
     // $FlowFixMe
+// @ts-expect-error - TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'. | TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
     (claim.value.stream_type === 'audio' || claim.value.stream_type === 'video');
   const isChannelUri = isChannelClaim(claim, uri);
   const signingChannel = claim && claim.signing_channel;
@@ -228,6 +232,7 @@ const ClaimPreview = forwardRef<any, Record<any, any>>((props: Props, ref: any) 
     if (onClick) {
       onClick(e, claim, indexInContainer); // not sure indexInContainer is used for anything.
     }
+// @ts-expect-error - TS2339 - Property 'stopPropagation' does not exist on type 'unknown'.
     e.stopPropagation();
   };
 
@@ -312,6 +317,7 @@ const ClaimPreview = forwardRef<any, Record<any, any>>((props: Props, ref: any) 
   }
 
   if (!shouldFetch && showUnresolvedClaim && !isResolvingUri && isChannelUri && claim === null) {
+    // @ts-expect-error - TS2322 (ts-migration)
     return <AbandonedChannelPreview uri={uri} type />;
   }
   if (placeholder === 'publish' && !claim && uri.startsWith('lbry://@')) {
@@ -320,6 +326,7 @@ const ClaimPreview = forwardRef<any, Record<any, any>>((props: Props, ref: any) 
 
   return (
     <WrapperElement
+      // @ts-expect-error - TS2322 (ts-migration)
       ref={ref}
       role="link"
       onClick={pending || type === 'inline' ? undefined : handleOnClick}
@@ -332,6 +339,7 @@ const ClaimPreview = forwardRef<any, Record<any, any>>((props: Props, ref: any) 
       key={uri}
     >
       <>
+        {/* @ts-expect-error - TS2741 (ts-migration) */}
         {!hideRepostLabel && <ClaimRepostAuthor uri={uri} />}
 
         <div
@@ -348,17 +356,21 @@ const ClaimPreview = forwardRef<any, Record<any, any>>((props: Props, ref: any) 
           })}
         >
           {isMyCollection && showEdit && (
+            // @ts-expect-error - TS2322 (ts-migration)
             <CollectionEditButtons uri={uri} collectionId={listId} dragHandleProps={dragHandleProps} />
           )}
 
           {isChannelUri && claim ? (
+            // @ts-expect-error - TS2322 (ts-migration)
             <UriIndicator focusable={false} uri={uri} link>
+              {/* @ts-expect-error - TS2322, TS2739 (ts-migration) */}
               <ChannelThumbnail uri={uri} small={type === 'inline'} />
             </UriIndicator>
           ) : (
             <>
               {!pending ? (
                 <NavLink aria-hidden tabIndex={-1} {...navLinkProps}>
+                  {/* @ts-expect-error - TS2746 (ts-migration) */}
                   <FileThumbnail uri={uri} thumbnail={thumbnailUrl}>
                     <div className="claim-preview__hover-actions">
                       {isPlayable && <FileWatchLaterLink focusable={false} uri={repostedContentUri} />}
@@ -366,16 +378,19 @@ const ClaimPreview = forwardRef<any, Record<any, any>>((props: Props, ref: any) 
                     {/* @if TARGET='app' */}
                     <div className="claim-preview__hover-actions">
                       {claim && !isCollection && (
+                        // @ts-expect-error - TS2739 (ts-migration)
                         <FileDownloadLink focusable={false} uri={canonicalUrl} hideOpenButton hideDownloadStatus />
                       )}
                     </div>
                     {/* @endif */}
                     <div className="claim-preview__file-property-overlay">
+                      {/* @ts-expect-error - TS2741 (ts-migration) */}
                       <PreviewOverlayProperties uri={uri} small={type === 'small'} />
                     </div>
                   </FileThumbnail>
                 </NavLink>
               ) : (
+                // @ts-expect-error - TS2741 (ts-migration)
                 <FileThumbnail uri={uri} thumbnail={thumbnailUrl} />
               )}
             </>
@@ -395,12 +410,15 @@ const ClaimPreview = forwardRef<any, Record<any, any>>((props: Props, ref: any) 
               <div className="claim-tile__info">
                 {!isChannelUri && signingChannel && (
                   <div className="claim-preview__channel-staked">
+                    {/* @ts-expect-error - TS2322 (ts-migration) */}
                     <UriIndicator focusable={false} uri={uri} link hideAnonymous>
+                      {/* @ts-expect-error - TS2322, TS2739 (ts-migration) */}
                       <ChannelThumbnail uri={signingChannel.permanent_url} xsmall />
                     </UriIndicator>
                   </div>
                 )}
                 <ClaimPreviewSubtitle uri={uri} type={type} />
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 {(pending || !!reflectingProgress) && <PublishPending uri={uri} />}
                 {channelSubscribers}
               </div>
@@ -415,6 +433,7 @@ const ClaimPreview = forwardRef<any, Record<any, any>>((props: Props, ref: any) 
                     ) : (
                       <div className="claim-preview__primary-actions">
                         {isChannelUri && !banState.muted && !claimIsMine && (
+                          // @ts-expect-error - TS2741 (ts-migration)
                           <SubscribeButton
                             uri={repostedChannelUri || (uri.startsWith('lbry://') ? uri : `lbry://${uri}`)}
                           />
@@ -431,6 +450,7 @@ const ClaimPreview = forwardRef<any, Record<any, any>>((props: Props, ref: any) 
                       ? properties(claim)
                       : properties !== undefined
                       ? properties
+                      // @ts-expect-error - TS2322 (ts-migration)
                       : !isMobile && <ClaimTags uri={uri} type={type} />}
                   </React.Fragment>
                 )}
@@ -438,6 +458,7 @@ const ClaimPreview = forwardRef<any, Record<any, any>>((props: Props, ref: any) 
             )}
           </div>
         </div>
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         {!hideMenu && <ClaimMenuList uri={uri} collectionId={listId} />}
       </>
     </WrapperElement>

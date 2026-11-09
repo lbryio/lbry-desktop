@@ -118,6 +118,7 @@ function ClaimMenuList(props: Props) {
   const [doShuffle, setDoShuffle] = React.useState(false);
   const incognitoClaim = contentChannelUri && !contentChannelUri.includes('@');
   const isChannel = !incognitoClaim && !contentSigningChannel;
+// @ts-expect-error - TS2339 - Property 'claims' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'. | TS2339 - Property 'claims' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
   const claimLength = claim && claim.value && claim.value.claims && claim.value.claims.length;
   const claimCount = editedCollection ? editedCollection.items.length : claimLength;
   const isEmptyCollection = (Number(claimCount) || 0) <= 0;
@@ -158,6 +159,7 @@ function ClaimMenuList(props: Props) {
   }
 
   const lbryUrl: string = generateLbryContentUrl(claim.canonical_url, claim.permanent_url);
+// @ts-expect-error - TS2554 - Expected 7 arguments, but got 2.
   const shareUrl: string = generateShareUrl(SHARE_DOMAIN, lbryUrl);
   const isCollectionClaim = claim && claim.value_type === 'collection';
   const isPlayable =
@@ -165,8 +167,10 @@ function ClaimMenuList(props: Props) {
     // $FlowFixMe
     contentClaim.value &&
     // $FlowFixMe
+// @ts-expect-error - TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
     contentClaim.value.stream_type &&
     // $FlowFixMe
+// @ts-expect-error - TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'. | TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
     (contentClaim.value.stream_type === 'audio' || contentClaim.value.stream_type === 'video');
 
   function handleAdd(source: unknown, name: unknown, collectionId: unknown) {
@@ -174,6 +178,7 @@ function ClaimMenuList(props: Props) {
       message: source ? __('Item removed from %name%', { name }) : __('Item added to %name%', { name }),
     });
     if (contentClaim) {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
       doCollectionEdit(collectionId, { uris: [contentClaim.permanent_url], remove: source, type: 'playlist' });
     }
   }
@@ -248,11 +253,14 @@ function ClaimMenuList(props: Props) {
 
   function copyToClipboard(textToCopy: unknown, successMsg: unknown, failureMsg: unknown) {
     navigator.clipboard
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
       .writeText(textToCopy)
       .then(() => {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
         doToast({ message: __(successMsg) });
       })
       .catch(() => {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
         doToast({ message: __(failureMsg), isError: true });
       });
   }
@@ -268,14 +276,21 @@ function ClaimMenuList(props: Props) {
   // changes MenuButton behavior to show/hide MenuList not on press but on click event
   let isEventSimulated = false;
   const menuButtonHandler = (e: unknown) => {
+// @ts-expect-error - TS2339 - Property 'key' does not exist on type 'unknown'.
     if (e.key === 'Enter') {
+// @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
       e.preventDefault();
+// @ts-expect-error - TS2339 - Property 'type' does not exist on type 'unknown'.
       e.type = 'click';
     }
+// @ts-expect-error - TS2339 - Property 'type' does not exist on type 'unknown'.
     if (!isEventSimulated && e.type === 'mousedown') {
+// @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
       e.preventDefault();
+// @ts-expect-error - TS2339 - Property 'type' does not exist on type 'unknown'.
     } else if (e.type === 'click') {
       isEventSimulated = true;
+// @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
       e.target.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
       isEventSimulated = false;
     }

@@ -73,6 +73,7 @@ function ModalAffirmPurchase(props: Props) {
   }, [success, uri, closeModal]);
 
   return (
+// @ts-expect-error - TS2322 - Type '{ children: Element; type: string; isOpen: true; contentLabel: string; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
     <Modal type="card" isOpen contentLabel={modalTitle} onAborted={cancelPurchase}>
       <Card
         title={modalTitle}
@@ -88,7 +89,9 @@ function ModalAffirmPurchase(props: Props) {
                 </div>
               )}
               {/* Keep this message rendered but hidden so the width doesn't change */}
+              {/* @ts-expect-error - TS2745 (ts-migration) */}
               <I18nMessage
+                // @ts-expect-error - TS2322 (ts-migration)
                 tokens={{
                   claim_title: <strong>{title ? `"${title}"` : uri}</strong>,
                 }}
@@ -104,11 +107,13 @@ function ModalAffirmPurchase(props: Props) {
         actions={
           <div className="section__actions" style={success ? { visibility: 'hidden' } : undefined}>
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               button="primary"
               disabled={purchasing}
               label={purchasing ? __('Purchasing...') : __('Purchase')}
               onClick={onAffirmPurchase}
             />
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <Button button="link" label={__('Cancel')} onClick={cancelPurchase} />
           </div>
         }

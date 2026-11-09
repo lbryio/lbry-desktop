@@ -282,6 +282,7 @@ reducers[ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED] = (state: State, action: any):
   claims.forEach((claim: Claim) => {
     const { permanent_url: permanentUri, claim_id: claimId, canonical_url: canonicalUri } = claim;
     if (claim.type && claim.type.match(/claim|update/)) {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       urlsForCurrentPage.push(permanentUri);
       if (claim.confirmations < 1) {
         pendingById[claimId] = claim;
@@ -472,6 +473,7 @@ reducers[ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED] = (state: State, action: any): 
   // check if count has changed - that means cached pagination will be wrong, so clear it
   const previousCount = paginatedClaimsByChannel[uri] && paginatedClaimsByChannel[uri]['itemCount'];
   const byChannel = claimsInChannel === previousCount ? Object.assign({}, paginatedClaimsByChannel[uri]) : {};
+// @ts-expect-error - TS2339 - Property 'all' does not exist on type '{}'.
   const allClaimIds = new Set(byChannel.all);
   const currentPageClaimIds: unknown = [];
   const byId = Object.assign({}, state.byId);
@@ -481,16 +483,21 @@ reducers[ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED] = (state: State, action: any): 
   if (claims !== undefined) {
     claims.forEach((claim) => {
       allClaimIds.add(claim.claim_id);
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       currentPageClaimIds.push(claim.claim_id);
       byId[claim.claim_id] = claim;
       claimsByUri[claim.canonical_url] = claim.claim_id;
     });
   }
 
+// @ts-expect-error - TS2339 - Property 'all' does not exist on type '{}'.
   byChannel.all = allClaimIds;
+// @ts-expect-error - TS2339 - Property 'pageCount' does not exist on type '{}'.
   byChannel.pageCount = totalPages;
+// @ts-expect-error - TS2339 - Property 'itemCount' does not exist on type '{}'.
   byChannel.itemCount = claimsInChannel;
   byChannel[page] = currentPageClaimIds;
+// @ts-expect-error - TS2739 - Type '{}' is missing the following properties from type '{ [key: number]: string[]; all: string[]; pageCount: number; itemCount: number; }': all, pageCount, itemCount
   paginatedClaimsByChannel[uri] = byChannel;
   delete fetchingChannelClaims[uri];
 
@@ -582,6 +589,7 @@ reducers[ACTIONS.UPDATE_CONFIRMED_CLAIMS] = (state: State, action: any): State =
       newClaim = mergeClaim(oldClaim, claim);
     }
     if (type && type.match(/claim|update|channel/)) {
+// @ts-expect-error - TS2322 - Type 'GenericClaim' is not assignable to type 'Claim'.
       byId[claimId] = newClaim;
     }
   });
@@ -610,12 +618,15 @@ reducers[ACTIONS.ABANDON_CLAIM_SUCCEEDED] = (state: State, action: any): State =
 
   Object.keys(claimsByUri).forEach((uri) => {
     if (claimsByUri[uri] === claimId) {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       abandonedUris.push(uri);
       delete claimsByUri[uri];
     }
   });
 
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
   if (abandonedUris.length > 0 && state.myClaimsPageResults) {
+// @ts-expect-error - TS2339 - Property 'includes' does not exist on type 'unknown'.
     myClaimsPageResults = state.myClaimsPageResults.filter((uri) => !abandonedUris.includes(uri));
   }
 
@@ -769,6 +780,7 @@ reducers[ACTIONS.CLAIM_SEARCH_COMPLETED] = (state: State, action: any): State =>
   }
 
   // the returned number of urls is less than the page size, so we're on the last page
+// @ts-expect-error - TS2322 - Type 'boolean' is not assignable to type 'boolean[]'.
   claimSearchByQueryLastPageReached[query] = urls.length < pageSize;
 
   delete fetchingClaimSearchByQuery[query];
@@ -790,6 +802,7 @@ reducers[ACTIONS.CLAIM_SEARCH_FAILED] = (state: State, action: any): State => {
   delete fetchingClaimSearchByQuery[query];
 
   if (claimSearchByQuery[query] && claimSearchByQuery[query].length !== 0) {
+// @ts-expect-error - TS2322 - Type 'boolean' is not assignable to type 'boolean[]'.
     claimSearchByQueryLastPageReached[query] = true;
   } else {
     claimSearchByQuery[query] = null;
@@ -816,7 +829,9 @@ reducers[ACTIONS.CLAIM_REPOST_COMPLETED] = (state: State, action: any): State =>
   const claimThatWasReposted = byId[originalClaimId];
 
   const repostStub = { ...repostClaim, reposted_claim: claimThatWasReposted } as const;
+// @ts-expect-error - TS2542 - Index signature in type '{ readonly [x: string]: Claim; }' only permits reading.
   byId[repostStub.claim_id] = repostStub;
+// @ts-expect-error - TS2542 - Index signature in type '{ readonly [x: string]: string; }' only permits reading.
   claimsByUri[repostStub.permanent_url] = repostStub.claim_id;
 
   return {
@@ -843,6 +858,7 @@ reducers[ACTIONS.CLEAR_REPOST_ERROR] = (state: State): State => {
   };
 };
 reducers[ACTIONS.ADD_FILES_REFLECTING] = (state: State, action: unknown): State => {
+// @ts-expect-error - TS2339 - Property 'data' does not exist on type 'unknown'.
   const pendingClaim = action.data;
   const { reflectingById } = state;
   const claimId = pendingClaim && pendingClaim.claim_id;
@@ -855,6 +871,7 @@ reducers[ACTIONS.ADD_FILES_REFLECTING] = (state: State, action: unknown): State 
   });
 };
 reducers[ACTIONS.UPDATE_FILES_REFLECTING] = (state: State, action: unknown): State => {
+// @ts-expect-error - TS2339 - Property 'data' does not exist on type 'unknown'.
   const newReflectingById = action.data;
 
   return Object.assign({}, state, {
@@ -863,6 +880,7 @@ reducers[ACTIONS.UPDATE_FILES_REFLECTING] = (state: State, action: unknown): Sta
   });
 };
 reducers[ACTIONS.TOGGLE_CHECKING_REFLECTING] = (state: State, action: unknown): State => {
+// @ts-expect-error - TS2339 - Property 'data' does not exist on type 'unknown'.
   const checkingReflecting = action.data;
 
   return Object.assign({}, state, {
@@ -871,6 +889,7 @@ reducers[ACTIONS.TOGGLE_CHECKING_REFLECTING] = (state: State, action: unknown): 
   });
 };
 reducers[ACTIONS.TOGGLE_CHECKING_PENDING] = (state: State, action: unknown): State => {
+// @ts-expect-error - TS2339 - Property 'data' does not exist on type 'unknown'.
   const checking = action.data;
 
   return Object.assign({}, state, {
@@ -914,6 +933,7 @@ reducers[ACTIONS.PURCHASE_LIST_COMPLETED] = (state: State, action: any): State =
 
     byId[claimId] = claim;
     byUri[uri] = claimId;
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
     urlsForCurrentPage.push(uri);
   });
 
@@ -974,6 +994,7 @@ reducers[ACTIONS.CLEAR_PURCHASED_URI_SUCCESS] = (state: State): State => {
   };
 };
 
+// @ts-expect-error - TS2322 - Type '{ readonly blacklistedByUri: {}; readonly byId: {}; readonly claimsByUri: {}; readonly paginatedClaimsByChannel: {}; readonly channelClaimCounts: {}; readonly fetchingChannelClaims: {}; ... 40 more ...; readonly allClaimListMine: readonly []; }' is not assignable to type 'State'.
 export function claimsReducer(state: State | null | undefined = defaultState, action: any) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);

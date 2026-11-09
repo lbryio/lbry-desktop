@@ -18,6 +18,7 @@ function ClaimType(props: Props) {
     return <Icon size={size} icon={ICONS.STACK} />;
   } else if (claimType === 'channel') {
     return <Icon size={size} icon={ICONS.CHANNEL} />;
+// @ts-expect-error - TS2367 - This condition will always return 'false' since the types '"stream"' and '"repost"' have no overlap.
   } else if (claimType === 'repost') {
     return <Icon size={size} icon={ICONS.REPOST} />;
   }

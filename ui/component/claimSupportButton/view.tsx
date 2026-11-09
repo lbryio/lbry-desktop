@@ -22,6 +22,7 @@ export default function ClaimSupportButton(props: Props) {
 
   return (
     <Button
+      // @ts-expect-error - TS2322 (ts-migration)
       button={fileAction ? undefined : 'secondary'}
       className={classnames({ 'button--file-action': fileAction })}
       icon={ICONS.LBC}

@@ -85,6 +85,7 @@ function FileListPublished(props: Props) {
     setFilteredClaims(filtered);
   };
 
+// @ts-expect-error - TS2554 - Expected 3 arguments, but got 2.
   const debounceFilter = debounce(doFilterClaims, 200);
 
   useEffect(() => {
@@ -129,15 +130,18 @@ function FileListPublished(props: Props) {
   }, [fetchAllMyClaims]);
 
   return (
+    // @ts-expect-error - TS2740 (ts-migration)
     <Page>
       <div className="card-stack">
         {!!urls && (
           <>
             <ClaimList
+              // @ts-expect-error - TS2322 (ts-migration)
               noEmpty
               header={
                 <span>
                   <Button
+                    // @ts-expect-error - TS2322 (ts-migration)
                     label={__('All')}
                     aria-label={__('All uploads')}
                     onClick={() => setFilterBy(FILTER_ALL)}
@@ -146,6 +150,7 @@ function FileListPublished(props: Props) {
                     })}
                   />
                   <Button
+                    // @ts-expect-error - TS2322 (ts-migration)
                     label={__('Uploads')}
                     onClick={() => setFilterBy(FILTER_UPLOADS)}
                     className={classnames(`button-toggle`, {
@@ -153,6 +158,7 @@ function FileListPublished(props: Props) {
                     })}
                   />
                   <Button
+                    // @ts-expect-error - TS2322 (ts-migration)
                     label={__('Reposts')}
                     onClick={() => {
                       setFilterBy(FILTER_REPOSTS);
@@ -167,6 +173,7 @@ function FileListPublished(props: Props) {
               headerAltControls={
                 <div className="card__actions--inline">
                   <Button
+                    // @ts-expect-error - TS2322 (ts-migration)
                     button="secondary"
                     label={__('Refresh')}
                     icon={ICONS.REFRESH}
@@ -174,15 +181,18 @@ function FileListPublished(props: Props) {
                     onClick={fetchAllMyClaims}
                   />
                   <Button
+                    // @ts-expect-error - TS2322 (ts-migration)
                     icon={ICONS.PUBLISH}
                     button="primary"
                     label={__('Upload')}
                     navigate={`/$/${PAGES.UPLOAD}`}
                     onClick={() => clearPublish()}
                   />
+{ /* @ts-expect-error - TS2769 - No overload matches this call. */}
                   <Form onSubmit={() => {}} className="wunderbar--inline">
                     <Icon icon={ICONS.SEARCH} />
                     <FormField
+// @ts-expect-error - TS2322 - Type '{ className: string; value: string; onChange: (e: any) => void; type: string; placeholder: string; disabled: boolean; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                       className="wunderbar__input--inline"
                       value={searchText}
                       onChange={(e) => setSearchText(e.target.value)}
@@ -218,6 +228,7 @@ function FileListPublished(props: Props) {
                   filterBy !== FILTER_REPOSTS && (
                     <div className="section__actions">
                       <Button
+                        // @ts-expect-error - TS2322 (ts-migration)
                         button="primary"
                         navigate={`/$/${PAGES.UPLOAD}`}
                         label={__('Upload Something New')}

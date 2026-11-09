@@ -1,4 +1,5 @@
 import * as React from 'react';
+// @ts-expect-error - TS2792 - Cannot find module 'electron'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import { shell } from 'electron';
 import * as remote from '@electron/remote';
 import Button from 'component/button';
@@ -88,6 +89,7 @@ class WalletBackup extends React.PureComponent<Props, State> {
 
   render() {
     const { daemonSettings = {} } = this.props;
+// @ts-expect-error - TS2339 - Property 'wallet_dir' does not exist on type '{}'.
     const { wallet_dir: lbryumWalletDir } = daemonSettings;
 
     return (
@@ -116,10 +118,13 @@ class WalletBackup extends React.PureComponent<Props, State> {
           <React.Fragment>
             <CopyableText copyable={lbryumWalletDir} snackMessage={__('Path copied.')} />
             <p className="help">
+              {/* @ts-expect-error - TS2745 (ts-migration) */}
               <I18nMessage
+                // @ts-expect-error - TS2322 (ts-migration)
                 tokens={{
                   helpLink: (
                     <Button
+                      // @ts-expect-error - TS2322 (ts-migration)
                       button="link"
                       href="https://lbry.com/faq/how-to-backup-wallet"
                       label={__('see this article')}
@@ -140,10 +145,12 @@ class WalletBackup extends React.PureComponent<Props, State> {
             </p>
             <div className="card__actions">
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="primary"
                 label={__('Create Backup')}
                 onClick={() => this.backupWalletDir(lbryumWalletDir)}
               />
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="link" label={__('Open Folder')} onClick={() => shell.openPath(lbryumWalletDir)} />
             </div>
           </React.Fragment>

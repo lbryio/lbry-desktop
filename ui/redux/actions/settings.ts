@@ -267,7 +267,7 @@ export function doPushSettingsToPrefs() {
     const selectedClientSettings = getSubsetFromKeysArray(clientSettings, CLIENT_SYNC_KEYS);
     const newSharedPreferences = { ...sharedPreferences, ...selectedClientSettings } as const;
 
-    return new Promise((resolve: unknown, reject: unknown) => {
+    return new Promise<any>((resolve, reject) => {
       dispatch({
         type: ACTIONS.SYNC_CLIENT_SETTINGS,
         data: newSharedPreferences,

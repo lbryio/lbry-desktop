@@ -26,7 +26,7 @@ function GetAppLangCode() {
   return SUPPORTED_BROWSER_LANGUAGES[langCode];
 }
 
-export default appState: unknown => {
+export default (appState: unknown) => {
   // Get primary display dimensions from Electron.
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 

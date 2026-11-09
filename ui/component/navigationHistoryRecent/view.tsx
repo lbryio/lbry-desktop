@@ -20,6 +20,7 @@ export default function NavigationHistoryRecent(props: Props) {
         <NavigationHistoryItem slim key={uri} uri={uri} lastViewed={lastViewed} />
       ))}
       <div className="card__actions">
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         <Button navigate="/$/library/all" button="link" label={__('See All Visited Links')} />
       </div>
     </div>

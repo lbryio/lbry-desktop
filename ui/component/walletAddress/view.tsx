@@ -60,11 +60,13 @@ class WalletAddress extends React.PureComponent<Props, State> {
 
             <div className="card__actions">
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="secondary"
                 label={__('Get New Address')}
                 onClick={getNewAddress}
                 disabled={gettingNewAddress}
               />
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="link" label={showQR ? __('Hide QR code') : __('Show QR code')} onClick={this.toggleQR} />
             </div>
             <p className="help">

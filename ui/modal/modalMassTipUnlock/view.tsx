@@ -28,6 +28,7 @@ export default function ModalSupportsLiquidate(props: Props) {
   }, [tipsBalance, doHideModal]);
 
   return (
+// @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; contentLabel: string; type: string; confirmButtonLabel: string; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
     <Modal isOpen contentLabel={__('Unlock all tips')} type="card" confirmButtonLabel="done" onAborted={doHideModal}>
       <Card
         icon={ICONS.UNLOCK}
@@ -35,7 +36,9 @@ export default function ModalSupportsLiquidate(props: Props) {
         subtitle={
           <>
             <p>
+              {/* @ts-expect-error - TS2745 (ts-migration) */}
               <I18nMessage
+                // @ts-expect-error - TS2322 (ts-migration)
                 tokens={{
                   lbc: <LbcSymbol />,
                 }}
@@ -44,8 +47,11 @@ export default function ModalSupportsLiquidate(props: Props) {
               </I18nMessage>
             </p>
             <p>
+              {/* @ts-expect-error - TS2745 (ts-migration) */}
               <I18nMessage
+                // @ts-expect-error - TS2322 (ts-migration)
                 tokens={{
+                  // @ts-expect-error - TS2322 (ts-migration)
                   learn_more: <Button button="link" label={__('Learn More')} href="https://lbry.com/faq/tipping" />,
                 }}
               >
@@ -58,6 +64,7 @@ export default function ModalSupportsLiquidate(props: Props) {
           <>
             <div className="section__actions">
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="primary"
                 onClick={() => doTipClaimMass()}
                 disabled={massClaimingTips}

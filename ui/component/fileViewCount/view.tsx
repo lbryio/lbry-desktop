@@ -25,6 +25,7 @@ function FileViewCount(props: Props) {
   return (
     <Tooltip title={`${countFullResolution}`}>
       <span className="media__subtitle--centered">
+{ /* @ts-expect-error - TS2367 - This condition will always return 'true' since the types 'string' and 'number' have no overlap. */}
         {viewCount !== 1 ? __('%view_count% views', { view_count: countCompact }) : __('1 view')}
         {<HelpLink href="https://lbry.com/faq/views" />}
       </span>

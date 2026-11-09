@@ -31,6 +31,7 @@ export default function TextareaSuggestionsItem(props: Props) {
 
     return (
       <div {...autocompleteProps}>
+        {/* @ts-expect-error - TS2739 (ts-migration) */}
         <ChannelThumbnail xsmall uri={uri} />
 
         <div className="textareaSuggestion__label">

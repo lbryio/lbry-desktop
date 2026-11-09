@@ -31,6 +31,7 @@ export function updateQueryParam(uri: string, key: string, value: string) {
 }
 
 export const getSearchQueryString = (query: string, options: any = {}) => {
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
   const isSurroundedByQuotes = (str: unknown) => str[0] === '"' && str[str.length - 1] === '"';
   const encodedQuery = encodeURIComponent(query);
   const queryParams = [
@@ -53,6 +54,7 @@ export const getSearchQueryString = (query: string, options: any = {}) => {
       if (!claimType.includes(SEARCH_OPTIONS.INCLUDE_CHANNELS)) {
         queryParams.push(
           `mediaType=${[
+// @ts-expect-error - TS2339 - Property 'MEDIA_FILE' does not exist on type '{ readonly RESULT_COUNT: "size"; readonly CLAIM_TYPE: "claimType"; readonly RELATED_TO: "related_to"; readonly INCLUDE_FILES: "file"; readonly INCLUDE_CHANNELS: "channel"; readonly INCLUDE_FILES_AND_CHANNELS: "file,channel"; ... 16 more ...; readonly TIME_FILTER_THIS_YEAR: "thisyear"; }'.
             SEARCH_OPTIONS.MEDIA_FILE,
             SEARCH_OPTIONS.MEDIA_AUDIO,
             SEARCH_OPTIONS.MEDIA_VIDEO,

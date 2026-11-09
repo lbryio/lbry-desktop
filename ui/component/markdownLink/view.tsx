@@ -82,13 +82,16 @@ function MarkdownLink(props: Props) {
     // Video timestamp markers
     element = (
       <Button
+        // @ts-expect-error - TS2322 (ts-migration)
         button="link"
         iconRight={undefined}
         title={title || decodedUri}
         label={children}
         className="button--external-link"
         onClick={() => {
+// @ts-expect-error - TS2339 - Property 'player' does not exist on type 'Window & typeof globalThis'.
           if (window.player) {
+// @ts-expect-error - TS2339 - Property 'player' does not exist on type 'Window & typeof globalThis'.
             window.player.currentTime(parseInt(href.slice(3)));
             window.scrollTo(0, 0);
           }
@@ -98,6 +101,7 @@ function MarkdownLink(props: Props) {
   } else if (!simpleLinks && ((protocol && protocol[0] === 'lbry:' && isURIValid(decodedUri)) || lbryUrlFromLink)) {
     element = (
       <ClaimLink
+        // @ts-expect-error - TS2322 (ts-migration)
         uri={lbryUrlFromLink || decodedUri}
         autoEmbed={embed}
         parentCommentId={parentCommentId}
@@ -115,6 +119,7 @@ function MarkdownLink(props: Props) {
 
     element = (
       <Button
+        // @ts-expect-error - TS2322 (ts-migration)
         button="link"
         iconRight={isLbryLink ? undefined : ICONS.EXTERNAL}
         title={title || decodedUri}

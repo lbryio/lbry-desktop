@@ -11,6 +11,7 @@ const ModalSyncEnable = (props: Props) => {
   const { closeModal, mode } = props;
 
   return (
+// @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; type: string; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
     <Modal isOpen type="card" onAborted={closeModal}>
       <SyncToggleFlow closeModal={closeModal} mode={mode} />
     </Modal>

@@ -14,6 +14,7 @@ type RadioProps = {
 // Same as FormField type="radio" but it works with reakit:
 const ForwardedRadio = React.forwardRef((props: RadioProps, ref) => (
   <span className="radio">
+{ /* @ts-expect-error - TS2322 - Type 'ForwardedRef<unknown>' is not assignable to type 'LegacyRef<HTMLInputElement>'. */}
     <input {...props} type="radio" ref={ref} />
     <label htmlFor={props.id}>{props.label}</label>
   </span>
@@ -37,9 +38,11 @@ function FileList(props: Props) {
         const first = radio.items[0].ref.current;
         // First auto-selection
         if (first && first.id === radio.currentId && !radio.state) {
+          // @ts-expect-error - TS2339 (ts-migration)
           const file = getFile(first.value);
           // Update state and select new file
           onChange(file);
+          // @ts-expect-error - TS2339 (ts-migration)
           radio.setState(first.value);
         }
 
@@ -48,10 +51,13 @@ function FileList(props: Props) {
           const stop = radio.items.find((item) => item.id === radio.currentId);
           const element = stop && stop.ref.current;
           // Only update state if new item is selected
+          // @ts-expect-error - TS2339 (ts-migration)
           if (element && element.value !== radio.state) {
+            // @ts-expect-error - TS2339 (ts-migration)
             const file = getFile(element.value);
             // Select new file and update state
             onChange(file);
+            // @ts-expect-error - TS2339 (ts-migration)
             radio.setState(element.value);
           }
         }

@@ -16,12 +16,14 @@ type Props = {
 export default function CollectionAddButton(props: Props) {
   const { doOpenModal, uri, fileAction, type = 'playlist', claim, isSaved } = props;
 
+// @ts-expect-error - TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
   const streamType = (claim && claim.value && claim.value.stream_type) || '';
   const isPlayable = streamType === 'video' || streamType === 'audio';
 
   if (!isPlayable) return null;
   return (
     <Button
+      // @ts-expect-error - TS2322 (ts-migration)
       button={fileAction ? undefined : 'alt'}
       className={classnames({ 'button--file-action': fileAction })}
       icon={fileAction ? (!isSaved ? ICONS.ADD : ICONS.STACK) : ICONS.LIBRARY}

@@ -3,6 +3,7 @@ import { DEFAULT_KNOWN_TAGS, DEFAULT_FOLLOWED_TAGS } from 'constants/tags';
 import { handleActions } from 'util/redux-utils';
 
 function getDefaultKnownTags() {
+// @ts-expect-error - TS2769 - No overload matches this call.
   return DEFAULT_FOLLOWED_TAGS.concat(DEFAULT_KNOWN_TAGS).reduce<Record<string, any>>((tagsMap, tag) => {
     tagsMap[tag] = { name: tag };
     return tagsMap;

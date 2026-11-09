@@ -42,11 +42,13 @@ function UserPasswordReset(props: Props) {
   function handleSubmit() {
     setLoading(true);
 
+    // @ts-expect-error - TS2339 (ts-migration)
     Lbryio.call('user_email', 'confirm', {
       email: email,
       verification_token: verificationToken,
     })
       .then(() =>
+        // @ts-expect-error - TS2339 (ts-migration)
         Lbryio.call(
           'user_password',
           'set',
@@ -83,6 +85,7 @@ function UserPasswordReset(props: Props) {
         subtitle={__('Setting a new password for %email%', { email })}
         actions={
           <div>
+{ /* @ts-expect-error - TS2769 - No overload matches this call. */}
             <Form onSubmit={handleSubmit} className="section">
               <FormField
                 autoFocus
@@ -95,12 +98,15 @@ function UserPasswordReset(props: Props) {
 
               <div className="section__actions">
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   button="primary"
                   type="submit"
                   label={loading ? __('Updating Password') : __('Update Password')}
                   disabled={!password || loading}
                 />
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <Button button="link" label={__('Cancel')} onClick={handleRestart} />
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 {loading && <Spinner type="small" />}
               </div>
             </Form>

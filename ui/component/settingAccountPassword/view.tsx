@@ -47,6 +47,7 @@ export default function SettingAccountPassword(props: Props) {
 
   return (
     <SettingsRow title={title} subtitle={subtitle} multirow>
+{ /* @ts-expect-error - TS2769 - No overload matches this call. */}
       <Form onSubmit={handleSubmit} className="section">
         {hasPassword && (
           <FormField
@@ -66,10 +67,13 @@ export default function SettingAccountPassword(props: Props) {
         />
 
         <div className="section__actions">
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <Button button="primary" type="submit" label={__('Set Password')} disabled={!newPassword} />
           {hasPassword ? (
+            // @ts-expect-error - TS2322 (ts-migration)
             <Button button="link" label={__('Forgot Password?')} navigate={`/$/${PAGES.AUTH_PASSWORD_RESET}`} />
           ) : (
+            // @ts-expect-error - TS2322 (ts-migration)
             <Button button="link" label={__('Cancel')} onClick={() => goBack()} />
           )}
         </div>

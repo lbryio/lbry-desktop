@@ -11,6 +11,7 @@ import { creditsToString } from 'util/format-credits';
 import analytics from 'analytics';
 import LbcSymbol from 'component/common/lbc-symbol';
 import ClaimPreview from 'component/claimPreview';
+// @ts-expect-error - TS2305 (ts-migration)
 import { URL as SITE_URL, URL_LOCAL, URL_DEV } from 'config';
 import HelpLink from 'component/common/help-link';
 import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
@@ -99,7 +100,9 @@ function RepostCreate(props: Props) {
     if (balance && balance > 0.02) {
       if (uri) {
         setRepostBid(0.01);
+      // @ts-expect-error - TS2365 (ts-migration)
       } else if (balance > amount) {
+// @ts-expect-error - TS2339 - Property 'toFixed' does not exist on type 'unknown'.
         setRepostBid(Number(amount.toFixed(2)));
       } else {
         setRepostBid(0.01);
@@ -112,15 +115,21 @@ function RepostCreate(props: Props) {
     const WEB_LOCAL_PREFIX = `${URL_LOCAL}/`;
     const WEB_PROD_PREFIX = `${SITE_URL}/`;
     const ODYSEE_PREFIX = `https://odysee.com/`;
+// @ts-expect-error - TS2339 - Property 'includes' does not exist on type 'unknown'.
     const includesLbryTvProd = value.includes(WEB_PROD_PREFIX);
+// @ts-expect-error - TS2339 - Property 'includes' does not exist on type 'unknown'.
     const includesOdysee = value.includes(ODYSEE_PREFIX);
+// @ts-expect-error - TS2339 - Property 'includes' does not exist on type 'unknown'.
     const includesLbryTvLocal = value.includes(WEB_LOCAL_PREFIX);
+// @ts-expect-error - TS2339 - Property 'includes' does not exist on type 'unknown'.
     const includesLbryTvDev = value.includes(WEB_DEV_PREFIX);
     const wasCopiedFromWeb = includesLbryTvDev || includesLbryTvLocal || includesLbryTvProd || includesOdysee;
+// @ts-expect-error - TS2339 - Property 'startsWith' does not exist on type 'unknown'.
     const isLbryUrl = value.startsWith('lbry://') && value !== 'lbry://';
     const error = '';
 
     const addLbryIfNot = (term: unknown) => {
+// @ts-expect-error - TS2339 - Property 'startsWith' does not exist on type 'unknown'.
       return term.startsWith('lbry://') ? term : `lbry://${term}`;
     };
     if (wasCopiedFromWeb) {
@@ -129,6 +138,7 @@ function RepostCreate(props: Props) {
       if (includesLbryTvDev) prefix = WEB_DEV_PREFIX;
       if (includesOdysee) prefix = ODYSEE_PREFIX;
 
+// @ts-expect-error - TS2339 - Property 'slice' does not exist on type 'unknown'.
       let query = (value && value.slice(prefix.length).replace(/:/g, '#')) || '';
       try {
         const lbryUrl = `lbry://${query}`;
@@ -140,7 +150,9 @@ function RepostCreate(props: Props) {
     }
 
     if (!isLbryUrl) {
+// @ts-expect-error - TS2339 - Property 'startsWith' does not exist on type 'unknown'.
       if (value.startsWith('@')) {
+// @ts-expect-error - TS2339 - Property 'slice' does not exist on type 'unknown'.
         if (isNameValid(value.slice(1))) {
           return [value, null];
         } else {
@@ -150,10 +162,12 @@ function RepostCreate(props: Props) {
       return [addLbryIfNot(value), null];
     } else {
       try {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
         const isValid = isURIValid(value);
         if (isValid) {
           let uri;
           try {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
             uri = normalizeURI(value);
           } catch (e: any) {
             return [value, null];
@@ -267,6 +281,7 @@ function RepostCreate(props: Props) {
       return redirect;
     } else if (entered) {
       try {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
         const { claimName } = parseURI(entered);
         return claimName ? `/${claimName}` : '/';
       } catch (e: any) {
@@ -274,6 +289,7 @@ function RepostCreate(props: Props) {
       }
     } else if (passed) {
       try {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
         const { claimName } = parseURI(passed);
         return claimName ? `/${claimName}` : '/';
       } catch (e: any) {
@@ -296,6 +312,7 @@ function RepostCreate(props: Props) {
         analytics.apiLogPublish(repostClaim);
         doToast({
           message: __('Woohoo! Successfully reposted this claim.'),
+// @ts-expect-error - TS2345 - Argument of type '{ message: string; linkText: string; linkTarget: string; }' is not assignable to parameter of type '{ message: string; }'.
           linkText: __('Uploads'),
           linkTarget: '/uploads',
         });
@@ -331,10 +348,13 @@ function RepostCreate(props: Props) {
         className="repost-wrapper"
         actions={
           <div>
+            {/* @ts-expect-error - TS2739 (ts-migration) */}
             <ChannelSelector />
             {uri && (
+// @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'.
               <fieldset-section>
                 <ClaimPreview key={uri} uri={uri} actions={''} showNullPlaceholder />
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
               </fieldset-section>
             )}
             {!uri && name && (
@@ -352,14 +372,19 @@ function RepostCreate(props: Props) {
             )}
 
             {!uri && (
+// @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'.
               <fieldset-section>
                 <ClaimPreview key={contentUri} uri={contentUri} actions={''} type={'large'} showNullPlaceholder />
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
               </fieldset-section>
             )}
 
             <React.Fragment>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
               <fieldset-section>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
                 <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
                   <fieldset-section>
                     <label htmlFor="auth_first_channel">
                       {repostNameError ? (
@@ -372,6 +397,7 @@ function RepostCreate(props: Props) {
                       )}
                     </label>
                     <div className="form-field__prefix">{repostUrlName}</div>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
                   </fieldset-section>
                   <FormField
                     type="text"
@@ -380,12 +406,15 @@ function RepostCreate(props: Props) {
                     onChange={(event) => setEnteredRepostName(event.target.value)}
                     placeholder={__('MyFunName')}
                   />
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
                 </fieldset-group>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
               </fieldset-section>
 
               <FormField
                 type="number"
                 name="repost_bid"
+// @ts-expect-error - TS2322 - Type 'string' is not assignable to type 'number'.
                 min="0"
                 step="any"
                 placeholder="0.123"
@@ -411,6 +440,7 @@ function RepostCreate(props: Props) {
 
             <div className="section__actions">
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 icon={ICONS.REPOST}
                 disabled={
                   resolvingRepost ||
@@ -424,6 +454,7 @@ function RepostCreate(props: Props) {
                 label={reposting ? __('Reposting') : __('Repost')}
                 onClick={handleSubmit}
               />
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="link" label={__('Cancel')} onClick={cancelIt} />
             </div>
           </div>

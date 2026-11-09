@@ -24,6 +24,7 @@ class Spinner extends PureComponent<Props, State> {
   };
 
   constructor() {
+// @ts-expect-error - TS2554 - Expected 1-2 arguments, but got 0.
     super();
 
     this.state = { show: false };
@@ -38,6 +39,7 @@ class Spinner extends PureComponent<Props, State> {
     } else {
       // If the delayed prop is passed in, wait some time before showing the loading indicator
       // We don't want the spinner to just flash for a fraction of a second
+// @ts-expect-error - TS2322 - Type 'Timeout' is not assignable to type 'number'.
       this.delayedTimeout = setTimeout(() => {
         this.setState({ show: true });
       }, 750);

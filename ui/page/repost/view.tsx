@@ -52,13 +52,16 @@ function RepostPage(props: Props) {
     <Page
       noFooter
       noSideNavigation
+      // @ts-expect-error - TS2741 (ts-migration)
       backout={{
         title: __('Repost'),
         backLabel: __('Back'),
       }}
     >
+      {/* @ts-expect-error - TS2322, TS2741 (ts-migration) */}
       {balance === 0 && <YrblWalletEmpty />}
       <div className={classnames({ 'card--disabled': balance === 0 })}>
+        {/* @ts-expect-error - TS2741 (ts-migration) */}
         <RepostCreate
           uri={decodedFrom}
           name={repostTo}

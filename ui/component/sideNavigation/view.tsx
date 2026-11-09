@@ -21,7 +21,7 @@ type SideNavLink = {
   route?: string,
   onClick?: () => any,
   icon: string,
-  extra?: Node,
+  extra?: React.ReactNode,
   hideForUnauth?: boolean
 };
 
@@ -248,6 +248,7 @@ function SideNavigation(props: Props) {
       <li key={route || link || title}>
         <Button
           {...passedProps}
+          // @ts-expect-error - TS2322 (ts-migration)
           icon={icon}
           navigate={route || link}
           label={__(title)}
@@ -286,6 +287,7 @@ function SideNavigation(props: Props) {
             {!subscriptionFilter && subscriptions.length > FOLLOWED_ITEM_INITIAL_LIMIT && (
               <Button
                 key="showMore"
+                // @ts-expect-error - TS2322 (ts-migration)
                 label={expandSubscriptions ? __('Show less') : __('Show more')}
                 className="navigation-link"
                 onClick={() => setExpandSubscriptions(!expandSubscriptions)}
@@ -305,12 +307,14 @@ function SideNavigation(props: Props) {
           <ul className="navigation__secondary navigation-links">
             {displayedFollowedTags.map(({ name }, key) => (
               <li key={name} className="navigation-link__wrapper">
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <Button navigate={`/$/discover?t=${name}`} label={`#${name}`} className="navigation-link" />
               </li>
             ))}
             {followedTags.length > FOLLOWED_ITEM_INITIAL_LIMIT && (
               <Button
                 key="showMore"
+                // @ts-expect-error - TS2322 (ts-migration)
                 label={expandTags ? __('Show less') : __('Show more')}
                 className="navigation-link"
                 onClick={() => setExpandTags(!expandTags)}
@@ -348,26 +352,33 @@ function SideNavigation(props: Props) {
       }
     }
 
+// @ts-expect-error - TS2769 - No overload matches this call.
     window.addEventListener('keydown', handleKeydown);
 
+// @ts-expect-error - TS2769 - No overload matches this call.
     return () => window.removeEventListener('keydown', handleKeydown);
   }, [sidebarOpen, setSidebarOpen, isAbsolute]);
 
   const helpLinks = (
     <ul className="navigation__tertiary navigation-links--small">
       <li className="navigation-link">
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         <Button label={__('About --[link title in Sidebar or Footer]--')} href="https://lbry.com/about" />
       </li>
       <li className="navigation-link">
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         <Button label={__('FAQ')} href="https://lbry.com/faq" />
       </li>
       <li className="navigation-link">
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         <Button label={__('Support --[used in footer; general help/support]--')} href="https://lbry.com/support" />
       </li>
       <li className="navigation-link">
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         <Button label={__('Terms')} href="https://lbry.com/termsofservice" />
       </li>
       <li className="navigation-link">
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         <Button label={__('Privacy Policy')} href="https://lbry.com/privacy" />
       </li>
     </ul>
@@ -439,10 +450,12 @@ function SubscriptionListItem({
   return (
     <li className="navigation-link__wrapper">
       <Button
+        // @ts-expect-error - TS2322 (ts-migration)
         navigate={uri}
         className="navigation-link navigation-link--with-thumbnail"
         activeClass="navigation-link--active"
       >
+        {/* @ts-expect-error - TS2739 (ts-migration) */}
         <ChannelThumbnail xsmall uri={uri} hideStakedIndicator />
         <span dir="auto" className="button__label">
           {channelName}

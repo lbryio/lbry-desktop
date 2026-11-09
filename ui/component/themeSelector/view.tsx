@@ -73,6 +73,7 @@ export default function ThemeSelector(props: Props) {
 
   return (
     <>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
       <fieldset-section>
         <FormField
           name="theme_select"
@@ -87,18 +88,22 @@ export default function ThemeSelector(props: Props) {
             </option>
           ))}
         </FormField>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
       </fieldset-section>
 
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
       <fieldset-section>
         <FormField
           type="checkbox"
           name="automatic_dark_mode"
           onChange={() => onAutomaticDarkModeChange(!automaticDarkModeEnabled)}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; onChange: () => void; checked: boolean; label: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
           checked={automaticDarkModeEnabled}
           label={__('Automatic dark mode')}
         />
 
         {automaticDarkModeEnabled && (
+// @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'.
           <fieldset-group class="fieldset-group--smushed">
             <FormField
               type="select"
@@ -127,8 +132,10 @@ export default function ThemeSelector(props: Props) {
                 </option>
               ))}
             </FormField>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
           </fieldset-group>
         )}
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
       </fieldset-section>
     </>
   );

@@ -4,7 +4,9 @@ import videojs from 'video.js';
 class PlayPreviousButton extends videojs.getComponent('Button') {
   constructor(player: unknown, options = {}) {
     super(player, options);
+// @ts-expect-error - TS2339 - Property 'addClass' does not exist on type 'PlayPreviousButton'.
     this.addClass('vjs-button--play-previous');
+// @ts-expect-error - TS2339 - Property 'controlText' does not exist on type 'PlayPreviousButton'.
     this.controlText('Play Previous');
   }
 }

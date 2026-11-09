@@ -61,6 +61,7 @@ const defaultState: PublishState = {
   language: '',
   releaseTime: undefined,
   releaseTimeEdited: undefined,
+// @ts-expect-error - TS2322 - Type '{ editingURI: undefined; fileText: string; filePath: undefined; fileDur: number; fileSize: number; fileVid: false; remoteFileUrl: undefined; contentIsFree: true; fee: { amount: number; currency: string; }; ... 24 more ...; useLBRYUploader: false; }' is not assignable to type 'PublishState'.
   nsfw: false,
   channel: CHANNEL_ANONYMOUS,
   channelId: '',
@@ -90,6 +91,7 @@ export const publishReducer = handleActions(
     },
     [ACTIONS.CLEAR_PUBLISH]: (state: PublishState): PublishState => ({
       ...defaultState,
+// @ts-expect-error - TS2322 - Type '{ uri: undefined; channel: string; bid: number; optimize: boolean; language: string; editingURI: string; fileText: string; filePath: string; remoteFileUrl: string; contentIsFree: boolean; fileDur: number; ... 18 more ...; useLBRYUploader: boolean; }' is not assignable to type 'PublishState'.
       uri: undefined,
       channel: state.channel,
       bid: state.bid || 0.01,
@@ -98,15 +100,18 @@ export const publishReducer = handleActions(
     }),
     [ACTIONS.PUBLISH_START]: (state: PublishState): PublishState => ({
       ...state,
+// @ts-expect-error - TS2322 - Type '{ publishing: boolean; publishSuccess: boolean; editingURI: string; fileText: string; filePath: string; remoteFileUrl: string; contentIsFree: boolean; fileDur: number; fileSize: number; fileVid: boolean; ... 20 more ...; useLBRYUploader: boolean; }' is not assignable to type 'PublishState'.
       publishing: true,
       publishSuccess: false,
     }),
     [ACTIONS.PUBLISH_FAIL]: (state: PublishState): PublishState => ({
       ...state,
+// @ts-expect-error - TS2322 - Type '{ publishing: boolean; editingURI: string; fileText: string; filePath: string; remoteFileUrl: string; contentIsFree: boolean; fileDur: number; fileSize: number; fileVid: boolean; fee: { amount: number; currency: string; }; ... 19 more ...; useLBRYUploader: boolean; }' is not assignable to type 'PublishState'.
       publishing: false,
     }),
     [ACTIONS.PUBLISH_SUCCESS]: (state: PublishState): PublishState => ({
       ...state,
+// @ts-expect-error - TS2322 - Type '{ publishing: boolean; publishSuccess: boolean; editingURI: string; fileText: string; filePath: string; remoteFileUrl: string; contentIsFree: boolean; fileDur: number; fileSize: number; fileVid: boolean; ... 20 more ...; useLBRYUploader: boolean; }' is not assignable to type 'PublishState'.
       publishing: false,
       publishSuccess: true,
     }),

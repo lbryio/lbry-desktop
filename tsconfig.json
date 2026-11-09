@@ -27,9 +27,9 @@
       "*": ["./ui/*", "./*"]
     }
   },
-  // Only .ts/.tsx enter the program directly — the remaining .js files are
-  // Flow-annotated and tsc cannot parse them. allowJs stays on so plain-JS
-  // imports (e.g. config.js) resolve; checkJs stays off so they aren't checked.
-  "include": ["types/**/*.d.ts", "ui/**/*.ts", "ui/**/*.tsx", "electron/**/*.ts", "extras/**/*.ts"],
+  // allowJs stays on so the remaining plain-JS modules (config.js,
+  // homepages/, electron/devServer.js) resolve; checkJs stays off so they
+  // aren't checked.
+  "include": ["types", "ui", "electron", "extras"],
   "exclude": ["node_modules", "dist"]
 }

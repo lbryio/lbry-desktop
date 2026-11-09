@@ -22,8 +22,10 @@ const DEBOUNCE_SCROLL_HANDLER_MS = 200;
 function scaleToDevicePixelRatio(value: unknown) {
   const devicePixelRatio = window.devicePixelRatio || 1.0;
   if (devicePixelRatio < 1.0) {
+// @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     return Math.ceil(value / devicePixelRatio);
   }
+// @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
   return Math.ceil(value * devicePixelRatio);
 }
 
@@ -47,6 +49,7 @@ type Props = {
     [key: string]: Array<string>
   } | null | undefined // "CommentId:MyChannelId" -> reaction array (note the ID concatenation),
   othersReactsById: {
+// @ts-expect-error - TS2749 - 'REACTION_TYPES.LIKE' refers to a value, but is being used as a type here. Did you mean 'typeof REACTION_TYPES.LIKE'? | TS2749 - 'REACTION_TYPES.DISLIKE' refers to a value, but is being used as a type here. Did you mean 'typeof REACTION_TYPES.DISLIKE'?
     [key: string]: Partial<Record<REACTION_TYPES.LIKE | REACTION_TYPES.DISLIKE, number>>
   } | null | undefined,
   activeChannelId: string | null | undefined,
@@ -195,8 +198,10 @@ export default function CommentList(props: Props) {
   // Scroll to linked-comment
   useEffect(() => {
     if (linkedCommentId) {
+// @ts-expect-error - TS2339 - Property 'pendingLinkedCommentScroll' does not exist on type 'Window & typeof globalThis'.
       window.pendingLinkedCommentScroll = true;
     } else {
+// @ts-expect-error - TS2339 - Property 'pendingLinkedCommentScroll' does not exist on type 'Window & typeof globalThis'.
       delete window.pendingLinkedCommentScroll;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -207,6 +212,7 @@ export default function CommentList(props: Props) {
     function shouldFetchNextPage(page: unknown, topLevelTotalPages: unknown, yPrefetchPx = 1000) {
       if (!spinnerRef || !spinnerRef.current) return false;
 
+// @ts-expect-error - TS2339 - Property 'getBoundingClientRect' does not exist on type 'never'.
       const rect = spinnerRef.current.getBoundingClientRect();
       const windowH = window.innerHeight || document.documentElement.clientHeight;
       const windowW = window.innerWidth || document.documentElement.clientWidth;
@@ -226,6 +232,7 @@ export default function CommentList(props: Props) {
       return (isInViewport || isApproachingViewport) && page < topLevelTotalPages;
     }
 
+// @ts-expect-error - TS2554 - Expected 3 arguments, but got 2.
     const handleCommentScroll = debounce(() => {
       if (shouldFetchNextPage(page, topLevelTotalPages)) {
         setPage(page + 1);
@@ -271,8 +278,10 @@ export default function CommentList(props: Props) {
     if (!topLevelComments || alreadyResolved) return;
 
     const urisToResolve: unknown = [];
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
     topLevelComments.map(({ channel_url }) => channel_url !== undefined && urisToResolve.push(channel_url));
 
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'. | TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string[]'.
     if (urisToResolve.length > 0) doResolveUris(urisToResolve, true);
   }, [alreadyResolved, doResolveUris, topLevelComments]);
 
@@ -297,6 +306,7 @@ export default function CommentList(props: Props) {
         <>
           {isMobile && <CommentActionButtons {...actionButtonsProps} />}
 
+          {/* @ts-expect-error - TS2740 (ts-migration) */}
           <CommentCreate uri={uri} />
 
           {channelSettings && channelSettings.comments_enabled && !isFetchingComments && !totalComments && (
@@ -311,8 +321,10 @@ export default function CommentList(props: Props) {
           >
             {readyToDisplayComments && (
               <>
+{ /* @ts-expect-error - TS2786 - 'CommentElements' cannot be used as a JSX component. */}
                 {pinnedComments && <CommentElements comments={pinnedComments} {...commentProps} />}
 
+{ /* @ts-expect-error - TS2786 - 'CommentElements' cannot be used as a JSX component. */}
                 {commentsToDisplay && <CommentElements comments={commentsToDisplay} {...commentProps} />}
               </>
             )}
@@ -322,6 +334,7 @@ export default function CommentList(props: Props) {
             <div className="card__bottom-actions--comments">
               {(!expandedComments || moreBelow) && (
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   button="link"
                   title={!expandedComments ? __('Expand') : __('More')}
                   label={!expandedComments ? __('Expand') : __('More')}
@@ -330,6 +343,7 @@ export default function CommentList(props: Props) {
               )}
               {expandedComments && (
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   button="link"
                   title={__('Collapse')}
                   label={__('Collapse')}
@@ -341,6 +355,7 @@ export default function CommentList(props: Props) {
 
           {(isFetchingComments || (hasDefaultExpansion && moreBelow) || !canDisplayComments) && (
             <div className="main--empty" ref={spinnerRef}>
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Spinner type="small" />
             </div>
           )}
@@ -357,6 +372,7 @@ type CommentProps = {
 const CommentElements = (commentProps: CommentProps) => {
   const { comments, ...commentsProps } = commentProps;
 
+  // @ts-expect-error - TS2740 (ts-migration)
   return comments.map((comment) => <CommentView key={comment.comment_id} comment={comment} {...commentsProps} />);
 };
 
@@ -380,19 +396,23 @@ const CommentActionButtons = (actionButtonsProps: ActionButtonsProps) => {
     <div className={'comment__actions-row'}>
       {totalComments > 1 && ENABLE_COMMENT_REACTIONS && (
         <div className="comment__sort-group">
+{ /* @ts-expect-error - TS2322 - Type 'number' is not assignable to type 'string'. */}
           <SortButton {...sortButtonProps} label={__('Best')} icon={ICONS.BEST} sortOption={SORT_BY.POPULARITY} />
           <SortButton
             {...sortButtonProps}
             label={__('Controversial')}
             icon={ICONS.CONTROVERSIAL}
+// @ts-expect-error - TS2322 - Type 'number' is not assignable to type 'string'.
             sortOption={SORT_BY.CONTROVERSY}
           />
+{ /* @ts-expect-error - TS2322 - Type 'number' is not assignable to type 'string'. */}
           <SortButton {...sortButtonProps} label={__('New')} icon={ICONS.NEW} sortOption={SORT_BY.NEWEST} />
         </div>
       )}
 
       {allServers.length >= 2 && (
         <div className="button__selected-server">
+{ /* @ts-expect-error - TS2741 - Property 'name' is missing in type '{ children: Element[]; type: string; onChange: (x: any) => void; value: string; }' but required in type 'Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | "type" | "name" | "value" | "disabled" | "label" | "children" | "render" | ... 15 more ... | "onChange">'. */}
           <FormField
             type="select-tiny"
             onChange={function (x) {
@@ -418,6 +438,7 @@ const CommentActionButtons = (actionButtonsProps: ActionButtonsProps) => {
         </div>
       )}
       <div className="button_refresh">
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         <Button button="alt" icon={ICONS.REFRESH} title={__('Refresh')} onClick={() => setPage(0)} />
       </div>
     </div>
@@ -436,6 +457,7 @@ const SortButton = (sortButtonProps: SortButtonProps) => {
   return (
     <Button
       {...buttonProps}
+      // @ts-expect-error - TS2322 (ts-migration)
       className={classnames(`button-toggle`, { 'button-toggle--active': activeSort === sortOption })}
       button="alt"
       iconSize={18}

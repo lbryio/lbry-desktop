@@ -9,6 +9,7 @@ function ZoomableImage(props: Props) {
   const { openModal, ...imgProps } = props;
 
   const onClick = () => {
+// @ts-expect-error - TS2339 - Property 'src' does not exist on type '{}'. | TS2339 - Property 'title' does not exist on type '{}'. | TS2339 - Property 'alt' does not exist on type '{}'.
     openModal(MODALS.VIEW_IMAGE, { src: imgProps.src, title: imgProps.title || imgProps.alt });
   };
 

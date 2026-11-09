@@ -6,7 +6,9 @@ import * as React from 'react';
 import { FormField } from 'component/common/form';
 import FileSelector from 'component/common/file-selector';
 import Button from 'component/button';
+// @ts-expect-error - TS2792 - Cannot find module './thumbnail-missing.png'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import ThumbnailMissingImage from './thumbnail-missing.png';
+// @ts-expect-error - TS2792 - Cannot find module './thumbnail-broken.png'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import ThumbnailBrokenImage from './thumbnail-broken.png';
 
 type Props = {
@@ -64,7 +66,9 @@ function SelectThumbnail(props: Props) {
   let isSupportedVideo = false;
   if (typeof actualFilePath === 'string') {
     isSupportedVideo = Lbry.getMediaType(null, actualFilePath) === 'video';
+// @ts-expect-error - TS2339 - Property 'type' does not exist on type 'never'.
   } else if (actualFilePath && actualFilePath.type) {
+// @ts-expect-error - TS2339 - Property 'type' does not exist on type 'never'.
     isSupportedVideo = actualFilePath.type.split('/')[0] === 'video';
   }
 
@@ -140,6 +144,7 @@ function SelectThumbnail(props: Props) {
               <div className="column__item">
                 <p>{__('Upload complete.')}</p>
                 <div className="section__actions">
+                  {/* @ts-expect-error - TS2322 (ts-migration) */}
                   <Button button="link" label={__('New thumbnail')} onClick={resetThumbnailStatus} />
                 </div>
               </div>
@@ -171,6 +176,7 @@ function SelectThumbnail(props: Props) {
                 )}
                 <div className="card__actions">
                   <Button
+                    // @ts-expect-error - TS2322 (ts-migration)
                     button="link"
                     label={manualInput ? __('Use thumbnail upload tool') : __('Enter a thumbnail URL')}
                     onClick={() =>
@@ -183,6 +189,7 @@ function SelectThumbnail(props: Props) {
                     // Disabled on desktop until this is resolved
                     // https://github.com/electron/electron/issues/20750#issuecomment-709505902
                     <Button
+                      // @ts-expect-error - TS2322 (ts-migration)
                       button="link"
                       label={__('Take a snapshot from your video')}
                       onClick={() => openModal(MODALS.AUTO_GENERATE_THUMBNAIL, { filePath: actualFilePath })}

@@ -12,6 +12,7 @@ import { useIsMediumScreen } from 'effects/use-screensize';
 import isUserTyping from 'util/detect-typing';
 import { getThumbnailCdnUrl } from 'util/thumbnail';
 import Nag from 'component/common/nag';
+// @ts-expect-error - TS2792 - Cannot find module 'static/img/fileRenderPlaceholder.png'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import FileRenderPlaceholder from 'static/img/fileRenderPlaceholder.png';
 
 type Props = {
@@ -69,7 +70,9 @@ export default function FileRenderInitiator(props: Props) {
   const isFree = costInfo && costInfo.cost === 0;
   const canViewFile = isFree || claimWasPurchased;
   const fileStatus = fileInfo && fileInfo.status;
+// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"audio" | "video"'.
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode);
+// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"document" | "md" | "pdf" | "html" | "docx" | "plain_text"'.
   const isText = RENDER_MODES.TEXT_MODES.includes(renderMode);
   const isMediumScreen = useIsMediumScreen();
   const [thumbnail, setThumbnail] = React.useState(FileRenderPlaceholder);
@@ -176,6 +179,7 @@ export default function FileRenderInitiator(props: Props) {
       )}
       {!disabled && (
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           onClick={viewFile}
           iconSize={30}
           title={isPlayable ? __('Play') : __('View')}

@@ -4,11 +4,11 @@ import { doDismissToast } from 'redux/actions/notifications';
 import { selectToast } from 'redux/selectors/notifications';
 import SnackBar from './view';
 
-const perform = dispatch: unknown => ({
+const perform = (dispatch: unknown) => ({
   removeSnack: () => dispatch(doDismissToast()),
 });
 
-const select = state: unknown => ({
+const select = (state: unknown) => ({
   snack: selectToast(state),
 });
 

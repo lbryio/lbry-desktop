@@ -18,6 +18,7 @@ export default function WunderBar(props: Props) {
   const isMobile = useIsMobile();
 
   return isMobile ? (
+    // @ts-expect-error - TS2322 (ts-migration)
     <Button icon={ICONS.SEARCH} className="wunderbar__mobile-search" onClick={() => doOpenMobileSearch({ ...props })} />
   ) : (
     <WunderbarSuggestions

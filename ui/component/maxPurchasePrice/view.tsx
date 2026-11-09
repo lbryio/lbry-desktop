@@ -44,6 +44,7 @@ export default function MaxPurchasePrice(props: Props) {
       <FormField
         type="radio"
         name="no_max_purchase_no_limit"
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; checked: boolean; label: string; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
         checked={disableMaxKeyFee}
         label={__('No Limit')}
         onChange={() => onKeyFeeDisableChange(true)}
@@ -51,6 +52,7 @@ export default function MaxPurchasePrice(props: Props) {
       <FormField
         type="radio"
         name="max_purchase_limit"
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; checked: boolean; onChange: () => void; label: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
         checked={!disableMaxKeyFee}
         onChange={() => {
           onKeyFeeDisableChange(false);
@@ -59,6 +61,7 @@ export default function MaxPurchasePrice(props: Props) {
         label={__('Choose limit')}
       />
 
+{ /* @ts-expect-error - TS2739 - Type '{ name: string; min: number; onChange: (newValue: Price) => void; price: Price; disabled: boolean; }' is missing the following properties from type 'Readonly<Props>': placeholder, step */}
       <FormFieldPrice
         name="max_key_fee"
         min={0}

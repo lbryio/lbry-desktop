@@ -34,6 +34,7 @@ const ClaimCollectionAdd = (props: Props) => {
   //   (claim.value.stream_type === 'audio' || claim.value.stream_type === 'video');
 
   function handleNameInput(e: unknown) {
+// @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
     const { value } = e.target;
     setNewCollectionName(value);
   }
@@ -47,15 +48,18 @@ const ClaimCollectionAdd = (props: Props) => {
   function altEnterListener(e: React.KeyboardEvent<any>) {
     if (e.keyCode === KEYCODES.ENTER) {
       e.preventDefault();
+// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
       buttonref.current.click();
     }
   }
 
   function onTextareaFocus() {
+// @ts-expect-error - TS2769 - No overload matches this call.
     window.addEventListener('keydown', altEnterListener);
   }
 
   function onTextareaBlur() {
+// @ts-expect-error - TS2769 - No overload matches this call.
     window.removeEventListener('keydown', altEnterListener);
   }
 
@@ -70,6 +74,7 @@ const ClaimCollectionAdd = (props: Props) => {
       actions={
         <div className="card__body">
           {uri && (
+// @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'.
             <fieldset-section>
               <div className={'card__body-scrollable'}>
                 {(Object.values(builtin) as any)
@@ -77,6 +82,7 @@ const ClaimCollectionAdd = (props: Props) => {
                   .filter((list) => (isChannel ? list.type === 'collection' : list.type === 'playlist'))
                   .map((l) => {
                     const { id } = l;
+                    // @ts-expect-error - TS2322 (ts-migration)
                     return <CollectionSelectItem collectionId={id} uri={permanentUrl} key={id} category={'builtin'} />;
                   })}
                 {unpublished &&
@@ -86,6 +92,7 @@ const ClaimCollectionAdd = (props: Props) => {
                     .map((l) => {
                       const { id } = l;
                       return (
+                        // @ts-expect-error - TS2322 (ts-migration)
                         <CollectionSelectItem collectionId={id} uri={permanentUrl} key={id} category={'unpublished'} />
                       );
                     })}
@@ -93,12 +100,15 @@ const ClaimCollectionAdd = (props: Props) => {
                   (Object.values(published) as any).map((l) => {
                     const { id } = l;
                     return (
+                      // @ts-expect-error - TS2322 (ts-migration)
                       <CollectionSelectItem collectionId={id} uri={permanentUrl} key={id} category={'published'} />
                     );
                   })}
               </div>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
             </fieldset-section>
           )}
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
           <fieldset-section>
             {addNewCollection && (
               <FormField
@@ -107,6 +117,7 @@ const ClaimCollectionAdd = (props: Props) => {
                 name="new_collection"
                 value={newCollectionName}
                 label={__('New List Title')}
+// @ts-expect-error - TS2322 - Type '{ autoFocus: true; type: string; name: string; value: string; label: string; onFocus: () => void; onBlur: () => void; inputButton: Element; onChange: (e: unknown) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 onFocus={onTextareaFocus}
                 onBlur={onTextareaBlur}
                 inputButton={
@@ -116,8 +127,10 @@ const ClaimCollectionAdd = (props: Props) => {
                       className={'button-toggle'}
                       disabled={!newCollectionName.length}
                       onClick={() => handleAddCollection()}
+                      // @ts-expect-error - TS2322 (ts-migration)
                       ref={buttonref}
                     />
+                    {/* @ts-expect-error - TS2322 (ts-migration) */}
                     <Button className={'button-toggle'} icon={ICONS.REMOVE} onClick={() => handleClearNew()} />
                   </>
                 }
@@ -125,10 +138,13 @@ const ClaimCollectionAdd = (props: Props) => {
               />
             )}
             {!addNewCollection && (
+              // @ts-expect-error - TS2322 (ts-migration)
               <Button button={'link'} label={__('New List')} onClick={() => setAddNewCollection(true)} />
             )}
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
           </fieldset-section>
           <div className="card__actions">
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <Button button="secondary" label={__('Done')} disabled={addNewCollection} onClick={closeModal} />
           </div>
         </div>

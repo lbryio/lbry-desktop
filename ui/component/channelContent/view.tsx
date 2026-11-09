@@ -69,6 +69,7 @@ function ChannelContent(props: Props) {
       : TYPES_TO_ALLOW_FILTER.includes(claimType));
 
   function handleInputChange(e: unknown) {
+// @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
     const { value } = e.target;
     setSearchQuery(value);
   }
@@ -113,6 +114,7 @@ function ChannelContent(props: Props) {
   return (
     <Fragment>
       {!fetching && Boolean(claimsInChannel) && !channelIsBlocked && !channelIsBlackListed && (
+        // @ts-expect-error - TS2322 (ts-migration)
         <HiddenNsfwClaims uri={uri} />
       )}
       {!fetching && channelIsBlackListed && (
@@ -123,6 +125,7 @@ function ChannelContent(props: Props) {
             )}
           </p>
           <div className="section__actions">
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <Button button="link" href="https://lbry.com/faq/dmca" label={__('Read More')} />
           </div>
         </section>
@@ -134,6 +137,7 @@ function ChannelContent(props: Props) {
         </div>
       )}
 
+      {/* @ts-expect-error - TS2322 (ts-migration) */}
       {!channelIsMine && claimsInChannel > 0 && <HiddenNsfwClaims uri={uri} />}
 
       <ClaimListDiscover
@@ -154,9 +158,11 @@ function ChannelContent(props: Props) {
         infiniteScroll={defaultInfiniteScroll}
         meta={
           showFilters && (
+// @ts-expect-error - TS2769 - No overload matches this call.
             <Form onSubmit={() => {}} className="wunderbar--inline">
               <Icon icon={ICONS.SEARCH} />
               <FormField
+// @ts-expect-error - TS2322 - Type '{ className: string; value: string; onChange: (e: unknown) => void; type: string; placeholder: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 className="wunderbar__input--inline"
                 value={searchQuery}
                 onChange={handleInputChange}

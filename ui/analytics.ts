@@ -103,8 +103,9 @@ const analytics: Analytics = {
     sendMatomoEvent('Media', 'TimeToStart', claimId, timeToStartVideo);
   },
   error: (message) => {
-    return new Promise((resolve: unknown) => {
+    return new Promise<any>((resolve) => {
       if (internalAnalyticsEnabled && isProduction) {
+        // @ts-expect-error - TS2339 (ts-migration)
         return Lbryio.call('event', 'desktop_error', { error_message: message }).then(() => {
           resolve(true);
         });
@@ -114,7 +115,7 @@ const analytics: Analytics = {
     });
   },
   sentryError: (error, errorInfo) => {
-    return new Promise((resolve: unknown) => {
+    return new Promise<any>((resolve) => {
       if (internalAnalyticsEnabled && isProduction) {
         Sentry.withScope((scope) => {
           scope.setExtras(errorInfo);
@@ -139,9 +140,12 @@ const analytics: Analytics = {
       const searchParams = search && new URLSearchParams(search);
 
       if (searchParams && searchParams.get('src')) {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
         dimensions.push({ id: 1, value: searchParams.get('src') });
       }
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
       if (dimensions.length) {
+// @ts-expect-error - TS2740 - Type '{}' is missing the following properties from type '{ id: number; value: string; }[]': length, pop, push, concat, and 28 more.
         params['customDimensions'] = dimensions;
       }
       MatomoInstance.trackPageView(params);
@@ -151,21 +155,25 @@ const analytics: Analytics = {
     if (internalAnalyticsEnabled && userId) {
       window._paq.push(['setUserId', String(userId)]);
       Native.getAppVersionInfo().then(({ localVersion }) => {
+// @ts-expect-error - TS2554 - Expected 4 arguments, but got 3.
         sendMatomoEvent('Version', 'Desktop-Version', localVersion);
       });
     }
   },
   toggleInternal: (enabled: boolean): void => {
     internalAnalyticsEnabled = enabled;
+// @ts-expect-error - TS2345 - Argument of type 'boolean' is not assignable to parameter of type 'string'.
     window.localStorage.setItem(SHARE_INTERNAL, enabled);
   },
 
+// @ts-expect-error - TS2322 - Type '{ videoBufferEvent: (claim: StreamClaim, data: { timeAtBuffer: number; bufferDuration: number; bitRate: number; duration: number; userId: string; playerPoweredBy: string; readyState: number; }) => Promise<...>; ... 26 more ...; purchaseEvent: (purchaseInt: number) => void; }' is not assignable to type 'Analytics'.
   toggleThirdParty: (enabled: boolean): void => {
+// @ts-expect-error - TS2345 - Argument of type 'boolean' is not assignable to parameter of type 'string'.
     window.localStorage.setItem(SHARE_THIRD_PARTY, enabled);
   },
 
   apiLogView: (uri, outpoint, claimId, timeToStart) => {
-    return new Promise((resolve: unknown, reject: unknown) => {
+    return new Promise<any>((resolve, reject) => {
       if (internalAnalyticsEnabled && (isProduction || devInternalApis)) {
         const params: {
           uri: string,
@@ -182,14 +190,17 @@ const analytics: Analytics = {
           params.time_to_start = timeToStart;
         }
 
+        // @ts-expect-error - TS2339 (ts-migration)
         resolve(Lbryio.call('file', 'view', params));
       } else {
+// @ts-expect-error - TS2794 - Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
         resolve();
       }
     });
   },
   apiLogSearch: () => {
     if (internalAnalyticsEnabled && isProduction) {
+      // @ts-expect-error - TS2339 (ts-migration)
       Lbryio.call('event', 'search');
     }
   },
@@ -207,52 +218,67 @@ const analytics: Analytics = {
         params['channel_claim_id'] = channelClaimId;
       }
 
+      // @ts-expect-error - TS2339 (ts-migration)
       Lbryio.call('event', 'publish', params);
     }
   },
 
   apiSyncTags: (params) => {
     if (internalAnalyticsEnabled && isProduction) {
+      // @ts-expect-error - TS2339 (ts-migration)
       Lbryio.call('content_tags', 'sync', params);
     }
   },
   adsFetchedEvent: () => {
+// @ts-expect-error - TS2554 - Expected 4 arguments, but got 2.
     sendMatomoEvent('Media', 'AdsFetched');
   },
   adsReceivedEvent: (response) => {
+// @ts-expect-error - TS2554 - Expected 4 arguments, but got 3.
     sendMatomoEvent('Media', 'AdsReceived', JSON.stringify(response));
   },
   adsErrorEvent: (response) => {
+// @ts-expect-error - TS2554 - Expected 4 arguments, but got 3.
     sendMatomoEvent('Media', 'AdsError', JSON.stringify(response));
   },
   playerLoadedEvent: (embedded) => {
+// @ts-expect-error - TS2554 - Expected 4 arguments, but got 3.
     sendMatomoEvent('Player', 'Loaded', embedded ? 'embedded' : 'onsite');
   },
   playerStartedEvent: (embedded) => {
+// @ts-expect-error - TS2554 - Expected 4 arguments, but got 3.
     sendMatomoEvent('Player', 'Started', embedded ? 'embedded' : 'onsite');
   },
   tagFollowEvent: (tag, following) => {
+// @ts-expect-error - TS2554 - Expected 4 arguments, but got 3.
     sendMatomoEvent('Tag', following ? 'Tag-Follow' : 'Tag-Unfollow', tag);
   },
   channelBlockEvent: (uri, blocked, location) => {
+// @ts-expect-error - TS2554 - Expected 4 arguments, but got 2.
     sendMatomoEvent(blocked ? 'Channel-Hidden' : 'Channel-Unhidden', uri);
   },
   emailProvidedEvent: () => {
+// @ts-expect-error - TS2554 - Expected 4 arguments, but got 2.
     sendMatomoEvent('Engagement', 'Email-Provided');
   },
   emailVerifiedEvent: () => {
+// @ts-expect-error - TS2554 - Expected 4 arguments, but got 2.
     sendMatomoEvent('Engagement', 'Email-Verified');
   },
   rewardEligibleEvent: () => {
+// @ts-expect-error - TS2554 - Expected 4 arguments, but got 2.
     sendMatomoEvent('Engagement', 'Reward-Eligible');
   },
   openUrlEvent: (url: string) => {
+// @ts-expect-error - TS2554 - Expected 4 arguments, but got 3.
     sendMatomoEvent('Engagement', 'Open-Url', url);
   },
   trendingAlgorithmEvent: (trendingAlgorithm: string) => {
+// @ts-expect-error - TS2554 - Expected 4 arguments, but got 3.
     sendMatomoEvent('Engagement', 'Trending-Algorithm', trendingAlgorithm);
   },
   startupEvent: () => {
+// @ts-expect-error - TS2554 - Expected 4 arguments, but got 2.
     sendMatomoEvent('Startup', 'Startup');
   },
   readyEvent: (timeToReady: number) => {
@@ -266,12 +292,14 @@ const analytics: Analytics = {
 function sendMatomoEvent(category: unknown, action: unknown, name: unknown, value: unknown) {
   if (internalAnalyticsEnabled) {
     const event = { category, action, name, value } as const;
+    // @ts-expect-error - TS2345 (ts-migration)
     MatomoInstance.trackEvent(event);
   }
 }
 
 const MatomoInstance = new MatomoTracker({
   urlBase: MATOMO_URL,
+  // @ts-expect-error - TS2322 (ts-migration)
   siteId: MATOMO_ID, // optional, default value: `1`
 });
 

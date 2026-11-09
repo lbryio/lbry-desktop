@@ -102,7 +102,9 @@ function ShowPage(props: Props) {
 
   let innerContent = '';
   if ((!claim || (claim && !claim.name)) && !isBlacklisted) {
+// @ts-expect-error - TS2322 - Type 'Element' is not assignable to type 'string'.
     innerContent = (
+      // @ts-expect-error - TS2740 (ts-migration)
       <Page>
         {(claim === undefined ||
           isResolvingUri ||
@@ -122,11 +124,13 @@ function ShowPage(props: Props) {
                 ) : (
                   <div className="section__actions">
                     <Button
+                      // @ts-expect-error - TS2322 (ts-migration)
                       button="primary"
                       label={__('Publish Something')}
                       onClick={() => beginPublish(contentName)}
                     />
                     <Button
+                      // @ts-expect-error - TS2322 (ts-migration)
                       button="secondary"
                       onClick={() => push(`/$/${PAGES.REPOST_NEW}${contentName ? `?to=${contentName}` : ''}`)}
                       label={__('Repost Something')}
@@ -141,9 +145,12 @@ function ShowPage(props: Props) {
       </Page>
     );
   } else if (claim && claim.name.length && claim.name[0] === '@') {
+// @ts-expect-error - TS2322 - Type 'Element' is not assignable to type 'string'.
     innerContent = <ChannelPage uri={uri} location={location} />;
   } else if (isBlacklisted && !claimIsMine) {
+// @ts-expect-error - TS2322 - Type 'Element' is not assignable to type 'string'.
     innerContent = isBlacklistedDueToDMCA ? (
+      // @ts-expect-error - TS2740 (ts-migration)
       <Page>
         <Card
           title={uri}
@@ -152,12 +159,14 @@ function ShowPage(props: Props) {
           )}
           actions={
             <div className="section__actions">
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="link" href="https://lbry.com/faq/dmca" label={__('Read More')} />
             </div>
           }
         />
       </Page>
     ) : (
+      // @ts-expect-error - TS2740 (ts-migration)
       <Page>
         <Card
           title={uri}
@@ -165,6 +174,7 @@ function ShowPage(props: Props) {
             <>
               {__('Your hub has blocked this content because it subscribes to the following blocking channel:')}{' '}
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 button="link"
                 navigate={errorCensor && errorCensor.canonical_url}
                 label={errorCensor && errorCensor.name}
@@ -175,6 +185,7 @@ function ShowPage(props: Props) {
       </Page>
     );
   } else if (claim) {
+// @ts-expect-error - TS2322 - Type 'Element' is not assignable to type 'string'.
     innerContent = <FilePage uri={uri} location={location} />;
   }
 

@@ -91,10 +91,12 @@ function FileActions(props: Props) {
       <ClaimCollectionAddButton uri={uri} fileAction />
       {!hideRepost && <ClaimRepostButton uri={uri} claim={claim} hasChannels={hasChannels} />}
       <Button
+        // @ts-expect-error - TS2322 (ts-migration)
         className="button--file-action"
         icon={ICONS.SHARE}
         label={isMobile ? undefined : __('Share')}
         title={__('Share')}
+// @ts-expect-error - TS2345 - Argument of type '{ uri: string; webShareable: boolean; collectionId: string; }' is not assignable to parameter of type '{ uri: string; claimIsMine?: boolean; isSupport?: boolean; }'.
         onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, webShareable, collectionId })}
       />
     </>
@@ -102,9 +104,11 @@ function FileActions(props: Props) {
 
   const rhsSection = (
     <>
+      {/* @ts-expect-error - TS2739 (ts-migration) */}
       <FileDownloadLink uri={uri} />
       {claimIsMine && (
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           className="button--file-action"
           icon={ICONS.EDIT}
           label={__('Edit')}
@@ -116,6 +120,7 @@ function FileActions(props: Props) {
       )}
       {showDelete && (
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           title={__('Remove from your library')}
           className="button--file-action"
           icon={ICONS.DELETE}

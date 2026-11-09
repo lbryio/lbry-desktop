@@ -1,3 +1,4 @@
+// @ts-expect-error - TS2882 (ts-migration)
 import 'scss/component/_emote-selector.scss';
 import { EMOTES_48px as EMOTES } from 'constants/emotes';
 import * as ICONS from 'constants/icons';
@@ -31,6 +32,7 @@ export default function EmoteSelector(props: Props) {
 
   return (
     <div className="emoteSelector">
+      {/* @ts-expect-error - TS2322 (ts-migration) */}
       <Button button="close" icon={ICONS.REMOVE} onClick={closeSelector} />
 
       <div className="emoteSelector__list">
@@ -39,6 +41,7 @@ export default function EmoteSelector(props: Props) {
             {OLD_QUICK_EMOJIS.map((emoji) => (
               <Button
                 key={emoji}
+                // @ts-expect-error - TS2322 (ts-migration)
                 label={emoji}
                 title={`:${EMOJIS.getName(emoji)}:`}
                 button="alt"
@@ -52,6 +55,7 @@ export default function EmoteSelector(props: Props) {
               return (
                 <Button
                   key={emoteName}
+                  // @ts-expect-error - TS2322 (ts-migration)
                   title={emoteName}
                   button="alt"
                   className="button--file-action"

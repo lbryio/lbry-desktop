@@ -3397,7 +3397,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^16":
+"@types/react-dom@npm:^16.9.0":
   version: 16.9.25
   resolution: "@types/react-dom@npm:16.9.25"
   peerDependencies:
@@ -3427,16 +3427,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*":
-  version: 19.1.12
-  resolution: "@types/react@npm:19.1.12"
-  dependencies:
-    csstype: ^3.0.2
-  checksum: da3affb60344c8868076e73bf92474faceef814ad3097a240ea533d80950431078f1bc41bdca771287acafe4488a98d5ac1b083c2ca914ee7f748acb4d849efb
-  languageName: node
-  linkType: hard
-
-"@types/react@npm:^16":
+"@types/react@npm:^16.14.70":
   version: 16.14.70
   resolution: "@types/react@npm:16.14.70"
   dependencies:

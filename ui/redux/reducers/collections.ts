@@ -25,6 +25,7 @@ const defaultState: CollectionState = {
   },
   resolved: {},
   unpublished: {}, // sync
+// @ts-expect-error - TS2322 - Type '{ builtin: { watchlater: { items: undefined[]; id: string; name: string; updatedAt: number; type: string; }; favorites: { items: undefined[]; id: string; name: string; type: string; updatedAt: number; }; }; resolved: {}; ... 6 more ...; error: null; }' is not assignable to type 'CollectionState'.
   lastUsedCollection: undefined,
   edited: {},
   pending: {},

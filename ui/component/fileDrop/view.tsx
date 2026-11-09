@@ -56,6 +56,7 @@ function FileDrop(props: Props) {
     // Not all files have a type
     if (!type) return ICONS.FILE;
     // Detect common types
+// @ts-expect-error - TS2339 - Property 'split' does not exist on type 'unknown'.
     const contentType = type.split('/')[0];
     if (contentType === 'text') return ICONS.TEXT;
     if (contentType === 'image') return ICONS.IMAGE;

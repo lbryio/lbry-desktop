@@ -78,6 +78,7 @@ function SocialShare(props: Props) {
   };
 
   if (TWITTER_ACCOUNT) {
+// @ts-expect-error - TS2339 - Property 'via' does not exist on type '{ url: string; text: string; hashtags: string; }'.
     tweetIntentParams.via = TWITTER_ACCOUNT;
   }
 
@@ -95,6 +96,7 @@ function SocialShare(props: Props) {
 
   return (
     <React.Fragment>
+      {/* @ts-expect-error - TS2741 (ts-migration) */}
       <CopyableText copyable={shareUrl} />
       {showStartAt && (
         <div className="section__checkbox">
@@ -102,6 +104,7 @@ function SocialShare(props: Props) {
             type="checkbox"
             name="share_start_at_checkbox"
             onChange={() => setincludeStartTime(!includeStartTime)}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; onChange: () => any; checked: false; label: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
             checked={includeStartTime}
             label={__('Start at')}
           />
@@ -120,6 +123,7 @@ function SocialShare(props: Props) {
             type="checkbox"
             name="share_collection_id_checkbox"
             onChange={() => setIncludeCollectionId(!includeCollectionId)}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; onChange: () => void; checked: boolean; label: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
             checked={includeCollectionId}
             label={__('Include List ID')}
           />
@@ -127,6 +131,7 @@ function SocialShare(props: Props) {
       )}
       <div className="section__actions">
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           className="share"
           iconSize={24}
           icon={ICONS.TWITTER}
@@ -134,6 +139,7 @@ function SocialShare(props: Props) {
           href={tweetIntent}
         />
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           className="share"
           iconSize={24}
           icon={ICONS.REDDIT}
@@ -143,6 +149,7 @@ function SocialShare(props: Props) {
         {IOS && (
           // Only ios client supports share urls
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             className="share"
             iconSize={24}
             icon={ICONS.TELEGRAM}
@@ -151,6 +158,7 @@ function SocialShare(props: Props) {
           />
         )}
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           className="share"
           iconSize={24}
           icon={ICONS.LINKEDIN}
@@ -158,6 +166,7 @@ function SocialShare(props: Props) {
           href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedLbryURL}`}
         />
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           className="share"
           iconSize={24}
           icon={ICONS.FACEBOOK}
@@ -166,6 +175,7 @@ function SocialShare(props: Props) {
         />
         {webShareable && !isCollection && !isChannel && (
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             className="share"
             iconSize={24}
             icon={ICONS.EMBED}
@@ -177,6 +187,7 @@ function SocialShare(props: Props) {
           />
         )}
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           className="share"
           iconSize={24}
           icon={ICONS.SHARE_LINK}
@@ -190,10 +201,12 @@ function SocialShare(props: Props) {
 
       {SUPPORTS_SHARE_API && isMobile && (
         <div className="section__actions">
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <Button icon={ICONS.SHARE} button="primary" label={__('Share via...')} onClick={handleWebShareClick} />
         </div>
       )}
       {showEmbed && (
+        // @ts-expect-error - TS2739 (ts-migration)
         <EmbedTextArea
           label={__('Embedded')}
           claim={claim}
@@ -203,7 +216,9 @@ function SocialShare(props: Props) {
       )}
       {showClaimLinks && (
         <div className="section">
+          {/* @ts-expect-error - TS2741 (ts-migration) */}
           <CopyableText label={__('LBRY URL')} copyable={`lbry://${lbryUrl}`} />
+          {/* @ts-expect-error - TS2741 (ts-migration) */}
           {Boolean(isStream) && <CopyableText label={__('Download Link')} copyable={downloadUrl} />}
         </div>
       )}

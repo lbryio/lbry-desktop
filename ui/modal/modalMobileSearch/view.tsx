@@ -14,6 +14,7 @@ export default function ModalMobileSearch(props: Props) {
   const { closeModal, channelsOnly, noTopSuggestion, noBottomLinks, customSelectAction } = props;
 
   return (
+// @ts-expect-error - TS2322 - Type '{ children: Element; onAborted: () => void; isOpen: true; type: string; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
     <Modal onAborted={closeModal} isOpen type="card">
       <WunderbarSuggestions
         isMobile

@@ -33,7 +33,7 @@ export default function useFetched() {
     let draggingElement = false;
 
     // Handle file drop
-    const handleDropEvent = event: unknown => {
+    const handleDropEvent = (event: unknown) => {
       // Ignore non file types ( html elements / text )
       if (!draggingElement) {
         event.stopPropagation();
@@ -51,12 +51,12 @@ export default function useFetched() {
     };
 
     // Drag event for non files type ( html elements / text )
-    const handleDragElementEvent = event: unknown => {
+    const handleDragElementEvent = (event: unknown) => {
       draggingElement = DRAG_STATE[event.type];
     };
 
     // Drag events
-    const handleDragEvent = event: unknown => {
+    const handleDragEvent = (event: unknown) => {
       event.stopPropagation();
       event.preventDefault();
       // Prevent multiple drop areas
@@ -72,7 +72,7 @@ export default function useFetched() {
     };
 
     // Register / Unregister listeners
-    const handleEventListeners = event: unknown => {
+    const handleEventListeners = (event: unknown) => {
       const action = `${event}EventListener`;
       // Handle drop event
       document[action]('drop', handleDropEvent);

@@ -18,6 +18,7 @@ function AbandonedChannelPreview(props: Props) {
   return (
     <li className={classnames('claim-preview__wrapper', 'claim-preview__wrapper--notice')}>
       <div className={classnames('claim-preview', { 'claim-preview--large': type === 'large' })}>
+        {/* @ts-expect-error - TS2739 (ts-migration) */}
         <ChannelThumbnail uri={uri} />
         <div className="claim-preview__text">
           <div className="claim-preview-metadata">
@@ -29,7 +30,9 @@ function AbandonedChannelPreview(props: Props) {
           <div className="claim-preview__actions">
             <div className="section__actions">
               <ChannelBlockButton uri={uri} />
+              {/* @ts-expect-error - TS2741 (ts-migration) */}
               <ChannelMuteButton uri={uri} />
+              {/* @ts-expect-error - TS2741 (ts-migration) */}
               <SubscribeButton uri={uri} />
             </div>
           </div>

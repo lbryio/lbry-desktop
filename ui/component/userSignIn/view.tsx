@@ -46,6 +46,7 @@ function UserSignIn(props: Props) {
     <section>
       {(showEmail || showPassword) && (
         <div>
+          {/* @ts-expect-error - TS2739 (ts-migration) */}
           {showEmail && <UserEmailReturning />}
           {showPassword && <UserSignInPassword onHandleEmailOnly={() => setEmailOnlyLogin(true)} />}
         </div>

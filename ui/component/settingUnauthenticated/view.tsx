@@ -31,6 +31,7 @@ export default function SettingUnauthenticated(props: Props) {
             <FormField
               name="search-in-language"
               type="checkbox"
+// @ts-expect-error - TS2322 - Type '{ name: string; type: string; checked: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
               checked={searchInLanguage}
               onChange={() => setSearchInLanguage(!searchInLanguage)}
             />

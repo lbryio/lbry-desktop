@@ -108,7 +108,7 @@ export function doAuthenticate(
 
 export function doUserFetch() {
   return (dispatch: unknown) =>
-    new Promise((resolve: unknown, reject: unknown) => {
+    new Promise<any>((resolve, reject) => {
       dispatch({
         type: ACTIONS.USER_FETCH_STARTED,
       });
@@ -275,7 +275,7 @@ export function doUserSignIn(email: unknown, password: unknown) {
 
 export function doUserSignUp(email: unknown, password: unknown) {
   return (dispatch: unknown) =>
-    new Promise((resolve: unknown, reject: unknown) => {
+    new Promise<any>((resolve, reject) => {
       dispatch({
         type: ACTIONS.USER_EMAIL_NEW_STARTED,
         email,

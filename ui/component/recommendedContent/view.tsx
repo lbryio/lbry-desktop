@@ -55,6 +55,7 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
 
   function handleRecommendationClicked(e: unknown, clickedClaim: unknown) {
     if (claim) {
+// @ts-expect-error - TS2339 - Property 'claim_id' does not exist on type 'unknown'.
       onRecommendationClicked(claim.claim_id, clickedClaim.claim_id);
     }
   }
@@ -69,6 +70,7 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
         signingChannel && (
           <div className="recommended-content__bubble">
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               className={classnames('button-bubble', {
                 'button-bubble--active': viewMode === VIEW_ALL_RELATED,
               })}
@@ -77,6 +79,7 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
             />
 
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               className={classnames('button-bubble', {
                 'button-bubble--active': viewMode === VIEW_MORE_FROM,
               })}
@@ -89,6 +92,7 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
       body={
         <div>
           {viewMode === VIEW_ALL_RELATED && (
+            // @ts-expect-error - TS2740 (ts-migration)
             <ClaimList
               type="small"
               loading={isSearching}

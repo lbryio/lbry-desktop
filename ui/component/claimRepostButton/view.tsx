@@ -23,6 +23,7 @@ export default function ClaimRepostButton(props: Props) {
 
   return (
     <Button
+      // @ts-expect-error - TS2322 (ts-migration)
       button="alt"
       className="button--file-action"
       icon={ICONS.REPOST}
@@ -34,6 +35,7 @@ export default function ClaimRepostButton(props: Props) {
         if (!hasChannels) {
           doToast({
             message: __('A channel is required to repost on %SITE_NAME%', { SITE_NAME }),
+// @ts-expect-error - TS2345 - Argument of type '{ message: string; linkText: string; linkTarget: string; }' is not assignable to parameter of type '{ message: string; }'.
             linkText: __('Create Channel'),
             linkTarget: '/channel/new',
           });

@@ -60,6 +60,7 @@ function SettingViewHosting(props: Props) {
       setContentBlobSpaceLimit(MINIMUM_VIEW_SETTING); // setting 0 means unlimited.
     } else {
       if (isTrulyANumber(Number(gb))) {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'SetStateAction<string>'.
         setContentBlobSpaceLimit(gb);
       }
     }
@@ -89,10 +90,14 @@ function SettingViewHosting(props: Props) {
   }
 
   function handleKeyDown(e: unknown) {
+// @ts-expect-error - TS2339 - Property 'keyCode' does not exist on type 'unknown'.
     if (e.keyCode === KEYCODES.ESCAPE) {
+// @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
       e.preventDefault();
       setContentBlobSpaceLimit(String(viewHostingLimit / 1024));
+// @ts-expect-error - TS2339 - Property 'keyCode' does not exist on type 'unknown'.
     } else if (e.keyCode === KEYCODES.ENTER) {
+// @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
       e.preventDefault();
       handleApply();
     }
@@ -111,6 +116,7 @@ function SettingViewHosting(props: Props) {
         <FormField
           type="checkbox"
           name="hosting_limit"
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; checked: boolean; disabled: boolean; label: string; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
           checked={unlimited}
           disabled={disabled || isSetting}
           label={__('Unlimited View Hosting')}
@@ -120,10 +126,12 @@ function SettingViewHosting(props: Props) {
           name="content_blob_limit_gb"
           type="number"
           min={0}
+// @ts-expect-error - TS2322 - Type '{ name: string; type: string; min: number; onKeyDown: (e: unknown) => void; inputButton: Element; disabled: boolean; onWheel: (e: any) => any; label: string; onChange: (e: any) => void; value: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
           onKeyDown={handleKeyDown}
           inputButton={
             <>
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 disabled={
                   // disabled if settings are equal or not valid amounts
                   (viewHostingLimit === 1 && contentBlobSpaceLimitGB <= MINIMUM_VIEW_SETTING) ||
@@ -146,6 +154,7 @@ function SettingViewHosting(props: Props) {
                 icon={ICONS.COMPLETE}
               />
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 disabled={
                   // disabled if settings are equal or not valid amounts
                   (viewHostingLimit === 1 && contentBlobSpaceLimitGB <= MINIMUM_VIEW_SETTING) ||

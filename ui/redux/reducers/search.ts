@@ -9,6 +9,7 @@ const defaultSearchTypes = LIGHTHOUSE_DEFAULT_TYPES && LIGHTHOUSE_DEFAULT_TYPES.
 const defaultState: SearchState = {
   // $FlowFixMe
   options: {
+// @ts-expect-error - TS2322 - Type '{ size: number; claimType: "file,channel"; audio: boolean; video: boolean; text: boolean; image: boolean; application: boolean; }' is not assignable to type 'SearchOptions'.
     [SEARCH_OPTIONS.RESULT_COUNT]: SEARCH_PAGE_SIZE,
     [SEARCH_OPTIONS.CLAIM_TYPE]: SEARCH_OPTIONS.INCLUDE_FILES_AND_CHANNELS,
     [SEARCH_OPTIONS.MEDIA_AUDIO]: defaultSearchTypes.includes(SEARCH_OPTIONS.MEDIA_AUDIO),

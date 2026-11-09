@@ -78,6 +78,7 @@ function WalletSendTip(props: Props) {
   const titleText = claimIsMine
     ? __('Boost Your %claimTypeText%', { claimTypeText })
     : __('Boost This %claimTypeText%', { claimTypeText });
+// @ts-expect-error - TS2339 - Property 'claim_id' does not exist on type '{}'.
   const { claim_id: claimId } = claim;
   let channelName;
   try {
@@ -115,6 +116,7 @@ function WalletSendTip(props: Props) {
   /** FUNCTIONS **/
 
   function getClaimTypeText() {
+// @ts-expect-error - TS2339 - Property 'value_type' does not exist on type '{}'.
     switch (claim.value_type) {
       case 'stream':
         return __('Content');
@@ -156,6 +158,7 @@ function WalletSendTip(props: Props) {
         sendSupportOrConfirm(instantTipMax.amount);
       } else {
         // Need to convert currency of instant purchase maximum before trying to send support
+        // @ts-expect-error - TS2339 (ts-migration)
         Lbryio.getExchangeRates().then(({ LBC_USD }) => sendSupportOrConfirm(instantTipMax.amount / LBC_USD));
       }
     } else {
@@ -173,6 +176,7 @@ function WalletSendTip(props: Props) {
     }
 
     function convertToTwoDecimals(number: unknown) {
+// @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
       return (Math.round(number * 100) / 100).toFixed(2);
     }
 
@@ -197,6 +201,7 @@ function WalletSendTip(props: Props) {
   const getTabButton = (tabIcon: string, tabLabel: string, tabName: string) => (
     <Button
       key={tabName}
+      // @ts-expect-error - TS2322 (ts-migration)
       icon={tabIcon}
       label={tabLabel}
       button="alt"
@@ -231,6 +236,7 @@ function WalletSendTip(props: Props) {
             <div className="section__subtitle">
               {explainerText}
               {/* {activeTab === TAB_FIAT && !hasCardSaved && <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add A Card')} button="link" />} */}
+              {/* @ts-expect-error - TS2322 (ts-migration) */}
               {<Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />}
             </div>
           </>
@@ -254,18 +260,22 @@ function WalletSendTip(props: Props) {
                 </div>
               </div>
               <div className="section__actions">
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <Button autoFocus onClick={handleSubmit} button="primary" disabled={isPending} label={__('Confirm')} />
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <Button button="link" label={__('Cancel')} onClick={() => setConfirmationPage(false)} />
               </div>
             </>
           ) : !((activeTab === TAB_LBC || activeTab === TAB_BOOST) && balance === 0) ? (
             <>
+              {/* @ts-expect-error - TS2739 (ts-migration) */}
               <ChannelSelector />
 
               {/* section to pick tip/boost amount */}
               <WalletTipAmountSelector
                 setTipError={setTipError}
                 tipError={tipError}
+                // @ts-expect-error - TS2322 (ts-migration)
                 claim={claim}
                 activeTab={TAB_LBC} // active tab
                 amount={tipAmount}
@@ -276,6 +286,7 @@ function WalletSendTip(props: Props) {
               {/* send tip/boost button */}
               <div className="section__actions">
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   autoFocus
                   icon={isSupport ? ICONS.TRENDING : ICONS.SUPPORT}
                   button="primary"
@@ -290,11 +301,13 @@ function WalletSendTip(props: Props) {
             // if it's LBC and there is no balance, you can prompt to purchase LBC
             <Card
               title={
+                // @ts-expect-error - TS2745, TS2322 (ts-migration)
                 <I18nMessage tokens={{ lbc: <LbcSymbol size={22} /> }}>
                   {__('Supporting content requires %lbc%')}
                 </I18nMessage>
               }
               subtitle={
+                // @ts-expect-error - TS2745, TS2322 (ts-migration)
                 <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
                   {__(
                     'With %lbc%, you can send tips to your favorite creators, or help boost their content for more people to see.'
@@ -304,17 +317,20 @@ function WalletSendTip(props: Props) {
               actions={
                 <div className="section__actions">
                   <Button
+                    // @ts-expect-error - TS2322 (ts-migration)
                     icon={ICONS.REWARDS}
                     button="primary"
                     label={__('Earn Rewards')}
                     navigate={`/$/${PAGES.REWARDS}`}
                   />
                   <Button
+                    // @ts-expect-error - TS2322 (ts-migration)
                     icon={ICONS.BUY}
                     button="secondary"
                     label={__('Buy/Swap Credits')}
                     navigate={`/$/${PAGES.BUY}`}
                   />
+                  {/* @ts-expect-error - TS2322 (ts-migration) */}
                   <Button button="link" label={__('Nevermind')} onClick={doHideModal} />
                 </div>
               }

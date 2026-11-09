@@ -86,6 +86,7 @@ function UserEmailNew(props: Props) {
 
   React.useEffect(() => {
     if (emailExists) {
+// @ts-expect-error - TS2554 - Expected 1 arguments, but got 0.
       handleChangeToSignIn();
     }
   }, [emailExists, handleChangeToSignIn]);
@@ -97,6 +98,7 @@ function UserEmailNew(props: Props) {
         subtitle={__('Connect your wallet to Odysee')}
         actions={
           <div className={classnames({ 'card--disabled': DOMAIN === 'lbry.tv' && IS_WEB })}>
+{ /* @ts-expect-error - TS2769 - No overload matches this call. */}
             <Form onSubmit={handleSubmit} className="section">
               <FormField
                 autoFocus
@@ -121,9 +123,11 @@ function UserEmailNew(props: Props) {
                 label={
                   <React.Fragment>
                     {__('Backup your account and wallet data.')}{' '}
+                    {/* @ts-expect-error - TS2322 (ts-migration) */}
                     <Button button="link" href="https://lbry.com/faq/account-sync" label={__('Learn More')} />
                   </React.Fragment>
                 }
+                // @ts-expect-error - TS2322 (ts-migration)
                 checked={formSyncEnabled}
                 onChange={() => setFormSyncEnabled(!formSyncEnabled)}
               />
@@ -132,11 +136,13 @@ function UserEmailNew(props: Props) {
                 <FormField
                   type="checkbox"
                   name="share_data_checkbox"
+                  // @ts-expect-error - TS2322 (ts-migration)
                   checked={localShareUsageData}
                   onChange={handleUsageDataChange}
                   label={
                     <React.Fragment>
                       {__('Share usage data with LBRY inc.')}{' '}
+                      {/* @ts-expect-error - TS2322 (ts-migration) */}
                       <Button button="link" href="https://lbry.com/faq/privacy-and-data" label={__('Learn More')} />
                       {!localShareUsageData && <span className="error__text"> ({__('Required')})</span>}
                     </React.Fragment>
@@ -145,6 +151,7 @@ function UserEmailNew(props: Props) {
               )}
               <div className="section__actions">
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   button="primary"
                   type="submit"
                   label={__('Sign Up')}
@@ -152,11 +159,15 @@ function UserEmailNew(props: Props) {
                     !email || !password || !valid || (!IS_WEB && !localShareUsageData && !shareUsageData) || isPending
                   }
                 />
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <Button button="link" onClick={handleChangeToSignIn} label={__('Log In')} />
               </div>
               <p className="help--card-actions">
+                {/* @ts-expect-error - TS2745 (ts-migration) */}
                 <I18nMessage
+                  // @ts-expect-error - TS2322 (ts-migration)
                   tokens={{
+                    // @ts-expect-error - TS2322 (ts-migration)
                     terms: <Button button="link" href="https://www.lbry.com/termsofservice" label={__('terms')} />,
                   }}
                 >

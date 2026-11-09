@@ -164,6 +164,7 @@ function CommentView(props: Props) {
 
       // a user will try and press the escape key to cancel editing their comment
       const handleEscape = (event: unknown) => {
+// @ts-expect-error - TS2339 - Property 'keyCode' does not exist on type 'unknown'.
         if (event.keyCode === KEYCODES.ESCAPE) {
           setEditing(false);
         }
@@ -185,6 +186,7 @@ function CommentView(props: Props) {
   }, [page, uri, commentId, fetchReplies]);
 
   function handleEditMessageChanged(event: unknown) {
+// @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
     setCommentValue(advancedEditor ? event : event.target.value);
   }
 
@@ -260,8 +262,10 @@ function CommentView(props: Props) {
       >
         <div className="comment__thumbnail-wrapper">
           {authorUri ? (
+            // @ts-expect-error - TS2739 (ts-migration)
             <ChannelThumbnail uri={authorUri} obscure={channelIsBlocked} xsmall className="comment__author-thumbnail" />
           ) : (
+            // @ts-expect-error - TS2739 (ts-migration)
             <ChannelThumbnail xsmall className="comment__author-thumbnail" />
           )}
         </div>
@@ -280,12 +284,15 @@ function CommentView(props: Props) {
                     'comment__author--creator': commentByOwnerOfContent,
                   })}
                   link
+                  // @ts-expect-error - TS2322 (ts-migration)
                   uri={authorUri}
                 />
               )}
               <Button
+                // @ts-expect-error - TS2322 (ts-migration)
                 className="comment__time"
                 onClick={handleTimeClick}
+                // @ts-expect-error - TS2322 (ts-migration)
                 label={<DateTime date={timePosted} timeAgo />}
               />
 
@@ -305,6 +312,7 @@ function CommentView(props: Props) {
                 <MenuButton className="menu__button">
                   <Icon size={18} icon={ICONS.MORE_VERTICAL} />
                 </MenuButton>
+                {/* @ts-expect-error - TS2741 (ts-migration) */}
                 <CommentMenuList
                   uri={uri}
                   isTopLevel={isTopLevel}
@@ -323,6 +331,7 @@ function CommentView(props: Props) {
             {isEditing ? (
               <Form onSubmit={handleSubmit}>
                 <FormFieldAreaAdvanced
+// @ts-expect-error - TS2322 - Type '{ className: string; type: string; name: string; value: string; charCount: number; onChange: (event: unknown) => void; textAreaMaxLength: number; handleSubmit: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormFieldAreaAdvanced> & Pick<Readonly<Props> & Readonly<...>, "type" | ... 18 more ... | "quickActionHandler"> & InexactPartial<...> & InexactPartial<...>'.
                   className="comment__edit-input"
                   type={advancedEditor ? 'markdown' : 'textarea'}
                   name="editing_comment"
@@ -333,7 +342,9 @@ function CommentView(props: Props) {
                   handleSubmit={handleSubmit}
                 />
                 <div className="section__actions section__actions--no-margin">
+                  {/* @ts-expect-error - TS2322 (ts-migration) */}
                   <Button button="primary" type="submit" label={__('Done')} disabled={message === editedMessage} />
+                  {/* @ts-expect-error - TS2322 (ts-migration) */}
                   <Button button="link" label={__('Cancel')} onClick={() => setEditing(false)} />
                 </div>
               </Form>
@@ -346,12 +357,14 @@ function CommentView(props: Props) {
                     </div>
                   ) : stickerFromMessage ? (
                     <div className="sticker__comment">
+                      {/* @ts-expect-error - TS2322 (ts-migration) */}
                       <OptimizedImage src={stickerFromMessage.url} waitLoad loading="lazy" />
                     </div>
                   ) : editedMessage.length >= LENGTH_TO_COLLAPSE ? (
                     <Expandable>
                       <MarkdownPreview
                         content={message}
+// @ts-expect-error - TS2322 - Type '{ content: string; promptLinks: true; parentCommentId: string; stakedLevel: number; }' is not assignable to type 'IntrinsicAttributes & MarkdownProps'.
                         promptLinks
                         parentCommentId={commentId}
                         stakedLevel={stakedLevel}
@@ -360,6 +373,7 @@ function CommentView(props: Props) {
                   ) : (
                     <MarkdownPreview
                       content={message}
+// @ts-expect-error - TS2322 - Type '{ content: string; promptLinks: true; parentCommentId: string; stakedLevel: number; }' is not assignable to type 'IntrinsicAttributes & MarkdownProps'.
                       promptLinks
                       parentCommentId={commentId}
                       stakedLevel={stakedLevel}
@@ -371,6 +385,7 @@ function CommentView(props: Props) {
                   <div className="comment__actions">
                     {threadDepth !== 0 && (
                       <Button
+                        // @ts-expect-error - TS2322 (ts-migration)
                         label={commentingEnabled ? __('Reply') : __('Log in to reply')}
                         className="comment__action"
                         onClick={handleCommentReply}
@@ -378,6 +393,7 @@ function CommentView(props: Props) {
                         iconSize={isMobile && 12}
                       />
                     )}
+                    {/* @ts-expect-error - TS2739 (ts-migration) */}
                     {ENABLE_COMMENT_REACTIONS && <CommentReactions uri={uri} commentId={commentId} />}
                   </div>
                 )}
@@ -385,6 +401,7 @@ function CommentView(props: Props) {
                 {numDirectReplies > 0 && !showReplies && (
                   <div className="comment__actions">
                     <Button
+                      // @ts-expect-error - TS2322 (ts-migration)
                       label={
                         numDirectReplies < 2
                           ? __('Show reply')
@@ -405,6 +422,7 @@ function CommentView(props: Props) {
                 {numDirectReplies > 0 && showReplies && (
                   <div className="comment__actions">
                     <Button
+                      // @ts-expect-error - TS2322 (ts-migration)
                       label={__('Hide replies')}
                       button="link"
                       onClick={() => setShowReplies(false)}
@@ -425,6 +443,7 @@ function CommentView(props: Props) {
                     onCancelReplying={() => {
                       setReplying(false);
                     }}
+                    // @ts-expect-error - TS2322 (ts-migration)
                     supportDisabled={supportDisabled}
                   />
                 )}
@@ -435,6 +454,7 @@ function CommentView(props: Props) {
       </div>
 
       {showReplies && (
+        // @ts-expect-error - TS2741 (ts-migration)
         <CommentsReplies
           threadDepth={threadDepth - 1}
           uri={uri}

@@ -46,7 +46,7 @@ rewards.claimReward = (type: unknown, rewardParams: unknown) => {
     }, reject);
   }
 
-  return new Promise((resolve: unknown, reject: unknown) => {
+  return new Promise<any>((resolve, reject) => {
     Lbry.address_unused().then((address) => {
       const params = {
         reward_type: type,

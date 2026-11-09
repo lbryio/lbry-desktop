@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import { selectTheme } from 'redux/selectors/settings';
 import Spinner from './view';
 
-const mapStateToProps = state: unknown => ({
+const mapStateToProps = (state: unknown) => ({
   theme: selectTheme(state),
 });
 

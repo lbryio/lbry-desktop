@@ -55,6 +55,7 @@ export default function CollectionsListMine(props: Props) {
   let filteredCollections;
   if (searchText && collectionsToShow) {
     filteredCollections = collectionsToShow
+// @ts-expect-error - TS2339 - Property 'filter' does not exist on type 'unknown'.
       .filter((id) => {
         return (
           (unpublishedCollections[id] &&
@@ -65,9 +66,11 @@ export default function CollectionsListMine(props: Props) {
       })
       .slice(0, COLLECTION_SHOW_COUNT);
   } else {
+// @ts-expect-error - TS2339 - Property 'slice' does not exist on type 'unknown'.
     filteredCollections = collectionsToShow.slice(0, COLLECTION_SHOW_COUNT) || [];
   }
 
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
   const totalLength = collectionsToShow ? collectionsToShow.length : 0;
   const filteredLength = filteredCollections.length;
   const isTruncated = totalLength > filteredLength;
@@ -83,10 +86,12 @@ export default function CollectionsListMine(props: Props) {
   }
 
   function onTextareaFocus() {
+// @ts-expect-error - TS2769 - No overload matches this call.
     window.addEventListener('keydown', escapeListener);
   }
 
   function onTextareaBlur() {
+// @ts-expect-error - TS2769 - No overload matches this call.
     window.removeEventListener('keydown', escapeListener);
   }
   return <>
@@ -98,6 +103,7 @@ export default function CollectionsListMine(props: Props) {
             <div className="claim-grid__wrapper" key={list.name}>
               <h1 className="claim-grid__header">
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   className="claim-grid__title"
                   button="link"
                   navigate={`/$/${PAGES.LIST}/${list.id}`}
@@ -119,6 +125,7 @@ export default function CollectionsListMine(props: Props) {
                   }
                 />
               </h1>
+              {/* @ts-expect-error - TS2740 (ts-migration) */}
               <ClaimList tileLayout key={list.name} uris={itemUrls.slice(0, 6)} collectionId={list.id} />
             </div>
           )}
@@ -129,6 +136,7 @@ export default function CollectionsListMine(props: Props) {
       <div className="claim-grid__header section">
         <h1 className="claim-grid__title">
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             className="claim-grid__title"
             button="link"
             navigate={playlistPageUrl}
@@ -155,6 +163,7 @@ export default function CollectionsListMine(props: Props) {
             <div className="claim-search__menu-group">
               {COLLECTION_FILTERS.map((value) => (
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   label={__(value)}
                   key={value}
                   button="alt"
@@ -166,9 +175,11 @@ export default function CollectionsListMine(props: Props) {
               ))}
             </div>
           </div>
+{ /* @ts-expect-error - TS2769 - No overload matches this call. */}
           <Form onSubmit={() => {}} className="wunderbar--inline">
             <Icon icon={ICONS.SEARCH} />
             <FormField
+// @ts-expect-error - TS2322 - Type '{ onFocus: () => void; onBlur: () => void; className: string; value: string; onChange: (e: any) => void; type: string; placeholder: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
               onFocus={onTextareaFocus}
               onBlur={onTextareaBlur}
               className="wunderbar__input--inline"
@@ -190,6 +201,7 @@ export default function CollectionsListMine(props: Props) {
             </>
           )}
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             button="link"
             navigate={playlistPageUrl}
             label={<span className="claim-grid__title-span">{__('View All Playlists')}</span>}
@@ -201,6 +213,7 @@ export default function CollectionsListMine(props: Props) {
           <div className="claim-grid">
             {filteredCollections &&
               filteredCollections.length > 0 &&
+              // @ts-expect-error - TS2322 (ts-migration)
               filteredCollections.map((key) => <CollectionPreviewTile tileLayout collectionId={key} key={key} />)}
             {!filteredCollections.length && <div className="empty main--empty">{__('No matching playlists')}</div>}
           </div>

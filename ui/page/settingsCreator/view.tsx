@@ -70,8 +70,11 @@ export default function SettingsCreatorPage(props: Props) {
   const [slowModeMin, setSlowModeMin] = React.useState(0);
   const [lastUpdated, setLastUpdated] = React.useState(1);
 
+// @ts-expect-error - TS2554 - Expected 3 arguments, but got 2.
   const pushSlowModeMinDebounced = React.useMemo(() => debounce(pushSlowModeMin, 1000), []); // eslint-disable-line react-hooks/exhaustive-deps
+// @ts-expect-error - TS2554 - Expected 3 arguments, but got 2.
   const pushMinTipDebounced = React.useMemo(() => debounce(pushMinTip, 1000), []); // eslint-disable-line react-hooks/exhaustive-deps
+// @ts-expect-error - TS2554 - Expected 3 arguments, but got 2.
   const pushMinSuperDebounced = React.useMemo(() => debounce(pushMinSuper, 1000), []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // **************************************************************************
@@ -141,6 +144,7 @@ export default function SettingsCreatorPage(props: Props) {
 
   function parseModUri(uri: unknown) {
     try {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
       return parseURI(uri);
     } catch (e: any) {}
     return undefined;
@@ -168,14 +172,18 @@ export default function SettingsCreatorPage(props: Props) {
     const validatedNewTags: unknown = [];
     newTags.forEach((newTag) => {
       if (!mutedWordTags.some((tag) => tag.name === newTag.name)) {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
         validatedNewTags.push(newTag);
       }
     });
 
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
     if (validatedNewTags.length !== 0) {
+// @ts-expect-error - TS2488 - Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
       setMutedWordTags([...mutedWordTags, ...validatedNewTags]);
       commentBlockWords(
         activeChannelClaim,
+// @ts-expect-error - TS2339 - Property 'map' does not exist on type 'unknown'.
         validatedNewTags.map((x) => x.name)
       );
       setLastUpdated(Date.now());
@@ -244,10 +252,12 @@ export default function SettingsCreatorPage(props: Props) {
       noFooter
       noSideNavigation
       settingsPage
+      // @ts-expect-error - TS2741 (ts-migration)
       backout={{ title: __('Creator settings'), backLabel: __('Back') }}
       className="card-stack"
     >
       <div className="card-stack">
+        {/* @ts-expect-error - TS2739 (ts-migration) */}
         <ChannelSelector hideAnon />
 
         {isBusy && (
@@ -273,6 +283,7 @@ export default function SettingsCreatorPage(props: Props) {
                     <FormField
                       type="checkbox"
                       name="comments_enabled"
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; checked: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                       checked={commentsEnabled}
                       onChange={() => setSettings({ comments_enabled: !commentsEnabled })}
                     />
@@ -282,6 +293,7 @@ export default function SettingsCreatorPage(props: Props) {
                     <FormField
                       name="slow_mode_min_gap"
                       min={0}
+// @ts-expect-error - TS2322 - Type '{ name: string; min: number; step: number; type: string; placeholder: string; value: number; onChange: (e: any) => void; onBlur: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                       step={1}
                       type="number"
                       placeholder="1"
@@ -289,6 +301,7 @@ export default function SettingsCreatorPage(props: Props) {
                       onChange={(e) => {
                         const value = parseInt(e.target.value);
                         setSlowModeMin(value);
+// @ts-expect-error - TS2554 - Expected 0 arguments, but got 2.
                         pushSlowModeMinDebounced(value, activeChannelClaim);
                       }}
                       onBlur={() => setLastUpdated(Date.now())}
@@ -296,13 +309,16 @@ export default function SettingsCreatorPage(props: Props) {
                   </SettingsRow>
 
                   <SettingsRow
+                    // @ts-expect-error - TS2322 (ts-migration)
                     title={
+                      // @ts-expect-error - TS2745, TS2322 (ts-migration)
                       <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>Minimum %lbc% tip amount for comments</I18nMessage>
                     }
                     subtitle={__(HELP.MIN_TIP)}
                   >
                     <FormField
                       name="min_tip_amount_comment"
+// @ts-expect-error - TS2322 - Type '{ name: string; className: string; max: number; min: number; step: number; type: string; placeholder: string; value: number; onChange: (e: any) => void; onBlur: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                       className="form-field--price-amount"
                       max={LBC_MAX}
                       min={LBC_MIN}
@@ -313,9 +329,11 @@ export default function SettingsCreatorPage(props: Props) {
                       onChange={(e) => {
                         const newMinTip = parseFloat(e.target.value);
                         setMinTip(newMinTip);
+// @ts-expect-error - TS2554 - Expected 0 arguments, but got 2.
                         pushMinTipDebounced(newMinTip, activeChannelClaim);
                         if (newMinTip !== 0 && minSuper !== 0) {
                           setMinSuper(0);
+// @ts-expect-error - TS2554 - Expected 0 arguments, but got 2.
                           pushMinSuperDebounced(0, activeChannelClaim);
                         }
                       }}
@@ -341,6 +359,7 @@ export default function SettingsCreatorPage(props: Props) {
                         labelAddNew={__('Add words')}
                         labelSuggestions={__('Suggestions')}
                         onRemove={removeMutedWord}
+                        // @ts-expect-error - TS2322 (ts-migration)
                         onSelect={addMutedWords}
                         disableAutoFocus
                         tagsPassedIn={mutedWordTags}

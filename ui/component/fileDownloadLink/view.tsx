@@ -48,6 +48,7 @@ function FileDownloadLink(props: Props) {
   } = props;
 
   function handleDownload(e: unknown) {
+// @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
     e.preventDefault();
     download(uri);
   }
@@ -75,6 +76,7 @@ function FileDownloadLink(props: Props) {
     const openLabel = __('Open file');
     return hideOpenButton ? null : (
       <Button
+        // @ts-expect-error - TS2322 (ts-migration)
         button={buttonType}
         className={buttonType ? undefined : 'button--file-action'}
         title={openLabel}
@@ -82,6 +84,7 @@ function FileDownloadLink(props: Props) {
         icon={ICONS.EXTERNAL}
         onClick={() => {
           pause();
+// @ts-expect-error - TS2345 - Argument of type '{ path: string; isMine: boolean; }' is not assignable to parameter of type '{ path: string; }'.
           openModal(MODALS.CONFIRM_EXTERNAL_RESOURCE, { path: fileInfo.download_path, isMine: claimIsMine });
         }}
         aria-hidden={!focusable}
@@ -94,6 +97,7 @@ function FileDownloadLink(props: Props) {
 
   return (
     <Button
+      // @ts-expect-error - TS2322 (ts-migration)
       button={buttonType}
       className={buttonType ? undefined : 'button--file-action'}
       title={label}

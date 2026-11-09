@@ -10,14 +10,14 @@ import {
 import { doToast } from 'redux/actions/notifications';
 import UserEmailVerify from './view';
 
-const select = state: unknown => ({
+const select = (state: unknown) => ({
   email: selectEmailToVerify(state),
   isReturningUser: selectEmailAlreadyExists(state),
   user: selectUser(state),
   resendingEmail: selectResendingVerificationEmail(state),
 });
 
-const perform = dispatch: unknown => ({
+const perform = (dispatch: unknown) => ({
   resendVerificationEmail: email => dispatch(doUserResendVerificationEmail(email)),
   checkEmailVerified: () => dispatch(doUserCheckEmailVerified()),
   toast: message => dispatch(doToast({ message })),

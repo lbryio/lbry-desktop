@@ -24,6 +24,7 @@ import OptimizedImage from 'component/optimizedImage';
 import Yrbl from 'component/yrbl';
 import I18nMessage from 'component/i18nMessage';
 import TruncatedText from 'component/common/truncated-text';
+// @ts-expect-error - TS2792 - Cannot find module 'static/img/placeholderTx.gif'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import PlaceholderTx from 'static/img/placeholderTx.gif';
 
 export const PAGE_VIEW_QUERY = `view`;
@@ -124,8 +125,11 @@ function ChannelPage(props: Props) {
       <section className="main--empty">
         {
           <p>
+            {/* @ts-expect-error - TS2745 (ts-migration) */}
             <I18nMessage
+              // @ts-expect-error - TS2322 (ts-migration)
               tokens={{
+                // @ts-expect-error - TS2322 (ts-migration)
                 pick: <Button button="link" navigate={`/$/${PAGES.LISTS}`} label={__('Pick')} />,
               }}
             >
@@ -201,6 +205,7 @@ function ChannelPage(props: Props) {
   if (editing) {
     return (
       <Page
+        // @ts-expect-error - TS2322 (ts-migration)
         noFooter
         noSideNavigation={editing}
         backout={{
@@ -208,17 +213,20 @@ function ChannelPage(props: Props) {
           simpleTitle: __('Editing'),
         }}
       >
+        {/* @ts-expect-error - TS2322, TS2739 (ts-migration) */}
         <ChannelForm uri={uri} onDone={() => goBack()} />
       </Page>
     );
   }
 
   return (
+    // @ts-expect-error - TS2322 (ts-migration)
     <Page className="channelPage-wrapper" noFooter>
       <header className="channel-cover">
         <div className="channel__quick-actions">
           {isMyYouTubeChannel && (
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               button="alt"
               label={__('Claim Your Channel')}
               icon={ICONS.YOUTUBE}
@@ -227,13 +235,17 @@ function ChannelPage(props: Props) {
           )}
           {!channelIsBlackListed && <ShareButton uri={uri} />}
           {!(isBlocked || isMuted) && <ClaimSupportButton uri={uri} />}
+          {/* @ts-expect-error - TS2741 (ts-migration) */}
           {!(isBlocked || isMuted) && (!channelIsBlackListed || isSubscribed) && <SubscribeButton uri={permanentUrl} />}
           {/* TODO: add channel collections <ClaimCollectionAddButton uri={uri} fileAction /> */}
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <ClaimMenuList uri={claim.permanent_url} inline isChannelPage />
         </div>
         {cover && <img className={classnames('channel-cover__custom')} src={PlaceholderTx} />}
+        {/* @ts-expect-error - TS2322 (ts-migration) */}
         {cover && <OptimizedImage className={classnames('channel-cover__custom')} src={cover} objectFit="cover" />}
         <div className="channel__primary-info">
+          {/* @ts-expect-error - TS2739 (ts-migration) */}
           <ChannelThumbnail className="channel__thumbnail--channel-page" uri={uri} allowGifs />
           <h1 className="channel__title">
             <TruncatedText lines={2} showTooltip>
@@ -251,6 +263,7 @@ function ChannelPage(props: Props) {
                   <span>{__('Your changes will be live in a few minutes')}</span>
                 ) : (
                   <Button
+                    // @ts-expect-error - TS2322 (ts-migration)
                     button="alt"
                     title={__('Edit')}
                     onClick={() => push(`?${PAGE_VIEW_QUERY}=${PAGE.EDIT}`)}
@@ -281,6 +294,7 @@ function ChannelPage(props: Props) {
             }
             actions={
               <div className="section__actions">
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <Button button="primary" label={__('View Content')} onClick={() => setViewBlockedChannel(true)} />
               </div>
             }
@@ -288,12 +302,18 @@ function ChannelPage(props: Props) {
         </div>
       ) : (
         <Tabs onChange={onTabChange} index={tabIndex}>
+{ /* @ts-expect-error - TS2322 - Type '{ children: Element[]; className: string; }' is not assignable to type 'IntrinsicAttributes & TabListProps'. */}
           <TabList className="tabs__list--channel-page">
+{ /* @ts-expect-error - TS2322 - Type '{ children: string; disabled: boolean; }' is not assignable to type 'IntrinsicAttributes & TabProps'. */}
             <Tab disabled={editing}>{__('Content')}</Tab>
+{ /* @ts-expect-error - TS2322 - Type '{ children: string; disabled: boolean; }' is not assignable to type 'IntrinsicAttributes & TabProps'. */}
             <Tab disabled={editing}>{__('Playlists')}</Tab>
+{ /* @ts-expect-error - TS2559 - Type '{ children: string; }' has no properties in common with type 'IntrinsicAttributes & TabProps'. */}
             <Tab>{editing ? __('Editing Your Channel') : __('About --[tab title in Channel Page]--')}</Tab>
+{ /* @ts-expect-error - TS2322 - Type '{ children: string; disabled: boolean; }' is not assignable to type 'IntrinsicAttributes & TabProps'. */}
             <Tab disabled={editing}>{__('Community')}</Tab>
           </TabList>
+{ /* @ts-expect-error - TS2559 - Type '{ children: Element[]; }' has no properties in common with type 'IntrinsicAttributes & TabPanelsProps'. */}
           <TabPanels>
             <TabPanel>
               {currentView === PAGE.CONTENT && (

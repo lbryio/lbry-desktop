@@ -78,6 +78,7 @@ export default handleActions(
     }),
     [ACTIONS.SET_VIEW_MODE]: (state: SubscriptionState, action): SubscriptionState => ({
       ...state,
+// @ts-expect-error - TS2322 - Type '{ viewMode: any; subscriptions: Subscription[]; following: Following[]; loading: boolean; firstRunCompleted: boolean; }' is not assignable to type 'SubscriptionState'.
       viewMode: action.data,
     }),
     [ACTIONS.SYNC_STATE_POPULATE]: (

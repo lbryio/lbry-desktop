@@ -16,6 +16,7 @@ class ModalFileTimeout extends React.PureComponent<Props> {
     } = this.props;
 
     return (
+// @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; title: string; contentLabel: string; onConfirmed: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
       <Modal isOpen title={__('Unable to download')} contentLabel={__('Download failed')} onConfirmed={closeModal}>
         <p className="error-modal__error-list">
           {__('LBRY was unable to download the stream')}:

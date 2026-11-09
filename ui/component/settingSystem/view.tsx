@@ -149,16 +149,19 @@ export default function SettingSystem(props: Props) {
               type="checkbox"
               name="save_files"
               onChange={() => setDaemonSetting('save_files', !daemonSettings.save_files)}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; onChange: () => void; checked: boolean; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
               checked={daemonSettings.save_files}
             />
           </SettingsRow>
           <SettingsRow
             title={__('Share usage and diagnostic data')}
+            // @ts-expect-error - TS2322 (ts-migration)
             subtitle={
               <React.Fragment>
                 {__(
                   `This is information like error logging, performance tracking, and usage statistics. It includes your IP address and basic system details, but no other identifying information (unless you connect to a cloud service)`
                 )}{' '}
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <Button button="link" label={__('Learn more')} href="https://lbry.com/privacypolicy" />
               </React.Fragment>
             }
@@ -168,6 +171,7 @@ export default function SettingSystem(props: Props) {
               type="checkbox"
               name="share_internal"
               onChange={() => setDaemonSetting('share_usage_data', !daemonSettings.share_usage_data)}
+              // @ts-expect-error - TS2322 (ts-migration)
               checked={daemonSettings.share_usage_data}
               label={<React.Fragment>{__('Allow the app to share data to LBRY.inc')}</React.Fragment>}
               helper={
@@ -181,6 +185,7 @@ export default function SettingSystem(props: Props) {
               type="checkbox"
               name="share_third_party"
               onChange={(e) => toggle3PAnalytics(e.target.checked)}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; onChange: (e: any) => void; checked: boolean; label: string; helper: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
               checked={allowAnalytics}
               label={__('Allow the app to access third party analytics platforms')}
               helper={__('We use detailed analytics to improve all aspects of the LBRY experience.')}
@@ -215,9 +220,11 @@ export default function SettingSystem(props: Props) {
             <SettingDisableAutoUpdates />
           </SettingsRow>
           <SettingsRow
+            // @ts-expect-error - TS2322 (ts-migration)
             title={
               <span>
                 {__('Automatic transcoding')}
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 {findingFFmpeg && <Spinner type="small" />}
               </span>
             }
@@ -234,10 +241,13 @@ export default function SettingSystem(props: Props) {
             />
             <p className="help">
               {ffmpegAvailable ? (
+                // @ts-expect-error - TS2745 (ts-migration)
                 <I18nMessage
+                  // @ts-expect-error - TS2322 (ts-migration)
                   tokens={{
                     learn_more: (
                       <Button
+                        // @ts-expect-error - TS2322 (ts-migration)
                         button="link"
                         label={__('Learn more')}
                         href="https://lbry.com/faq/video-publishing-guide#automatic"
@@ -248,10 +258,13 @@ export default function SettingSystem(props: Props) {
                   FFmpeg is correctly configured. %learn_more%
                 </I18nMessage>
               ) : (
+                // @ts-expect-error - TS2745 (ts-migration)
                 <I18nMessage
+                  // @ts-expect-error - TS2322 (ts-migration)
                   tokens={{
                     check_again: (
                       <Button
+                        // @ts-expect-error - TS2322 (ts-migration)
                         button="link"
                         label={__('Check again')}
                         onClick={() => findFFmpeg()}
@@ -260,6 +273,7 @@ export default function SettingSystem(props: Props) {
                     ),
                     learn_more: (
                       <Button
+                        // @ts-expect-error - TS2322 (ts-migration)
                         button="link"
                         label={__('Learn more')}
                         href="https://lbry.com/faq/video-publishing-guide#automatic"
@@ -275,11 +289,15 @@ export default function SettingSystem(props: Props) {
           </SettingsRow>
           <SettingsRow
             title={__('Encrypt my wallet with a custom password')}
+            // @ts-expect-error - TS2322 (ts-migration)
             subtitle={
               <React.Fragment>
+                {/* @ts-expect-error - TS2745 (ts-migration) */}
                 <I18nMessage
+                  // @ts-expect-error - TS2322 (ts-migration)
                   tokens={{
                     learn_more: (
+                      // @ts-expect-error - TS2322 (ts-migration)
                       <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/account-sync" />
                     ),
                   }}
@@ -298,6 +316,7 @@ export default function SettingSystem(props: Props) {
               type="checkbox"
               name="encrypt_wallet"
               onChange={() => onChangeEncryptWallet()}
+// @ts-expect-error - TS2322 - Type '{ disabled: true; type: string; name: string; onChange: () => void; checked: boolean; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
               checked={walletEncrypted}
             />
           </SettingsRow>
@@ -311,6 +330,7 @@ export default function SettingSystem(props: Props) {
                 type="checkbox"
                 name="save_password"
                 onChange={onConfirmForgetPassword}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; onChange: () => void; checked: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 checked={storedPassword}
               />
             </SettingsRow>
@@ -334,6 +354,7 @@ export default function SettingSystem(props: Props) {
             )}
           />
           */}
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
             <fieldset-section>
               <FormField
                 name="max_connections"
@@ -349,15 +370,20 @@ export default function SettingSystem(props: Props) {
                   </option>
                 ))}
               </FormField>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
             </fieldset-section>
           </SettingsRow>
 
           <SettingsRow
             title={__('Wallet server')}
+            // @ts-expect-error - TS2322 (ts-migration)
             subtitle={
+              // @ts-expect-error - TS2745 (ts-migration)
               <I18nMessage
+                // @ts-expect-error - TS2322 (ts-migration)
                 tokens={{
                   learn_more: (
+                    // @ts-expect-error - TS2322 (ts-migration)
                     <Button button="link" href="http://lbry.com/faq/wallet-servers" label={__('Learn More')} />
                   ),
                 }}
@@ -389,6 +415,7 @@ export default function SettingSystem(props: Props) {
             subtitle={__('This might fix issues that you are having. Your wallet will not be affected.')}
           >
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               button="primary"
               icon={ALERT}
               label={clearingCache ? __('Clearing') : __('Clear Cache')}

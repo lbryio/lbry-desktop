@@ -91,6 +91,7 @@ export default function lbrySearch(endpoint: string, queryString: string) {
 
   const keep = (node: Node) =>
     node.id !== relatedTo &&
+// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"porn" | "porno" | "nsfw" | "mature" | "xxx" | "sex" | "creampie" | "blowjob" | "handjob" | "vagina" | "boobs" | "big boobs" | "big dick" | "pussy" | "cumshot" | "anal" | "hard fucking" | "ass" | "fuck" | "hentai"'.
     !(hideMature && node.tags.some((tag) => MATURE.has(tag.toLowerCase()))) &&
     !(freeOnly && node.fee) &&
     !(releasedAfter && (node.releaseTime || 0) < releasedAfter);

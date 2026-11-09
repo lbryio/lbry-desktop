@@ -19,6 +19,7 @@ type Props = {
 
 export default function ModalRevokeClaim(props: Props) {
   const { tx, claim, closeModal, abandonTxo, abandonClaim, cb, doResolveUri } = props;
+// @ts-expect-error - TS2339 - Property 'is_my_input' does not exist on type 'Claim | Txo'.
   const { value_type: valueType, type, normalized_name: name, is_my_input: isSupport } = tx || claim;
   const [channelName, setChannelName] = useState('');
 
@@ -48,6 +49,7 @@ export default function ModalRevokeClaim(props: Props) {
         <React.Fragment>
           <p>{__('Are you sure you want to remove this boost?')}</p>
           <p>
+            {/* @ts-expect-error - TS2745, TS2322 (ts-migration) */}
             <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
               These Credits are permanently yours and this boost can be removed at any time. Removing this boost will
               reduce discoverability and return %lbc% to your spendable balance.
@@ -73,6 +75,7 @@ export default function ModalRevokeClaim(props: Props) {
             {__('This will permanently remove your channel. Content published under this channel will be orphaned.')}
           </p>
           <p>{__('Are you sure? Type %name% to confirm that you wish to remove the channel.', { name })}</p>
+{ /* @ts-expect-error - TS2741 - Property 'name' is missing in type '{ type: string; onChange: (e: any) => void; }' but required in type 'Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | "type" | "name" | "value" | "disabled" | "label" | "children" | "render" | ... 15 more ... | "onChange">'. */}
           <FormField type={'text'} onChange={(e) => setChannelName(e.target.value)} />
         </React.Fragment>
       );
@@ -82,6 +85,7 @@ export default function ModalRevokeClaim(props: Props) {
       <React.Fragment>
         <p>{__('Are you sure you want to remove this?')}</p>
         <p>
+          {/* @ts-expect-error - TS2745, TS2322 (ts-migration) */}
           <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
             This will prevent others from resolving and accessing the content you published. It will return the %lbc% to
             your spendable balance.
@@ -100,6 +104,7 @@ export default function ModalRevokeClaim(props: Props) {
   const label = getButtonLabel(type, isSupport);
 
   return (
+// @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; contentLabel: string; type: string; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
     <Modal isOpen contentLabel={label} type="card" onAborted={closeModal}>
       <Card
         title={label}
@@ -107,11 +112,13 @@ export default function ModalRevokeClaim(props: Props) {
         actions={
           <div className="section__actions">
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               disabled={shouldConfirmChannel && name !== channelName}
               button="primary"
               label={label}
               onClick={revokeClaim}
             />
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <Button button="link" label={__('Cancel')} onClick={closeModal} />
           </div>
         }

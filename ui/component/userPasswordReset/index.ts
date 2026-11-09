@@ -10,7 +10,7 @@ import { doUserPasswordReset, doClearPasswordEntry, doClearEmailEntry } from 're
 import { doToast } from 'redux/actions/notifications';
 import UserSignIn from './view';
 
-const select = state: unknown => ({
+const select = (state: unknown) => ({
   passwordResetSuccess: selectPasswordResetSuccess(state),
   passwordResetIsPending: selectPasswordResetIsPending(state),
   passwordResetError: selectPasswordResetError(state),

@@ -80,7 +80,7 @@ class FreezeframeLite {
   }
 
   process(freeze: unknown) {
-    return new Promise(resolve: unknown => {
+    return new Promise<any>((resolve) => {
       const { $canvas, $image, $container } = freeze;
       const { clientWidth, clientHeight } = $image;
 

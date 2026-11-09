@@ -80,6 +80,7 @@ function CollectionActions(props: Props) {
   const lhsSection = (
     <>
       <Button
+        // @ts-expect-error - TS2322 (ts-migration)
         className="button--file-action"
         icon={ICONS.PLAY}
         label={__('Play')}
@@ -91,6 +92,7 @@ function CollectionActions(props: Props) {
         }}
       />
       <Button
+        // @ts-expect-error - TS2322 (ts-migration)
         className="button--file-action"
         icon={ICONS.SHUFFLE}
         label={__('Shuffle Play')}
@@ -108,6 +110,7 @@ function CollectionActions(props: Props) {
           {/* TODO Add ClaimRepostButton component */}
           {uri && (
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               className="button--file-action"
               icon={ICONS.SHARE}
               label={__('Share')}
@@ -126,6 +129,7 @@ function CollectionActions(props: Props) {
         (isMyCollection ? (
           <>
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               title={uri ? __('Update') : __('Publish')}
               label={uri ? __('Update') : __('Publish')}
               className={classnames('button--file-action')}
@@ -136,6 +140,7 @@ function CollectionActions(props: Props) {
               disabled={claimIsPending}
             />
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               className={classnames('button--file-action')}
               title={__('Delete List')}
               onClick={() => openModal(MODALS.COLLECTION_DELETE, { uri, collectionId, redirect: `/$/${PAGES.LISTS}` })}
@@ -147,6 +152,7 @@ function CollectionActions(props: Props) {
           </>
         ) : (
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             title={__('Report content')}
             className="button--file-action"
             icon={ICONS.REPORT}
@@ -160,6 +166,7 @@ function CollectionActions(props: Props) {
     <div className="section">
       {uri && (
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           title={__('Info')}
           className={classnames('button-toggle', {
             'button-toggle--active': showInfo,
@@ -171,6 +178,7 @@ function CollectionActions(props: Props) {
 
       {isMyCollection && (
         <Button
+          // @ts-expect-error - TS2322 (ts-migration)
           title={__('Edit')}
           className={classnames('button-toggle', { 'button-toggle--active': showEdit })}
           icon={ICONS.EDIT}

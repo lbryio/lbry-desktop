@@ -13,6 +13,7 @@ type Props = {
 
 class LicenseType extends React.PureComponent<Props> {
   constructor() {
+// @ts-expect-error - TS2554 - Expected 1-2 arguments, but got 0.
     super();
 
     (this as any).handleLicenseOnChange = this.handleLicenseOnChange.bind(this);
@@ -77,6 +78,7 @@ class LicenseType extends React.PureComponent<Props> {
         {licenseType === OTHER && (
           <fieldset>
             <legend>{__('Provide a description and link to your license')}</legend>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
             <fieldset-group>
               <FormField
                 label={__('License description')}
@@ -95,6 +97,7 @@ class LicenseType extends React.PureComponent<Props> {
                 value={licenseUrl}
                 onChange={handleLicenseUrlChange}
               />
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
             </fieldset-group>
           </fieldset>
         )}

@@ -123,32 +123,41 @@ function CollectionForm(props: Props) {
 
   function parseName(newName: unknown) {
     let INVALID_URI_CHARS = new RegExp(regexInvalidURI, 'gu');
+// @ts-expect-error - TS2339 - Property 'replace' does not exist on type 'unknown'.
     return newName.replace(INVALID_URI_CHARS, '-');
   }
 
   function setParam(paramObj: unknown) {
+// @ts-expect-error - TS2698 - Spread types may only be created from object types.
     setParams({ ...params, ...paramObj });
   }
 
   function updateParams(paramsObj: unknown) {
+// @ts-expect-error - TS2698 - Spread types may only be created from object types.
     setParams({ ...params, ...paramsObj });
   }
 
   // TODO remove this or better decide whether app should delete languages[2+]
   // This was added because a previous update setting was duplicating language codes
   function dedupeLanguages(languages: unknown) {
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
     if (languages.length <= 1) {
       return languages;
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
     } else if (languages.length === 2) {
       if (languages[0] !== languages[1]) {
         return languages;
       } else {
         return [languages[0]];
       }
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
     } else if (languages.length > 2) {
       const newLangs: unknown = [];
+// @ts-expect-error - TS2339 - Property 'forEach' does not exist on type 'unknown'.
       languages.forEach((l) => {
+// @ts-expect-error - TS2339 - Property 'includes' does not exist on type 'unknown'.
         if (!newLangs.includes(l)) {
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
           newLangs.push(l);
         }
       });
@@ -189,6 +198,7 @@ function CollectionForm(props: Props) {
       description,
       title: claim ? title : collectionName,
       bid: String(amount || 0.001),
+// @ts-expect-error - TS2322 - Type 'unknown' is not assignable to type 'string[]'.
       languages: languages ? dedupeLanguages(languages) : [],
       locations: locations || [],
       tags: tags
@@ -205,6 +215,7 @@ function CollectionForm(props: Props) {
   }
 
   function handleOnDragEnd(result: unknown) {
+// @ts-expect-error - TS2339 - Property 'source' does not exist on type '{}'. | TS2339 - Property 'destination' does not exist on type '{}'.
     const { source, destination } = result;
 
     if (!destination) return;
@@ -231,6 +242,7 @@ function CollectionForm(props: Props) {
       if (code === LANG_NONE || code === langs[0]) {
         langs.splice(1, 1);
       } else {
+// @ts-expect-error - TS2538 - Type 'unknown' cannot be used as an index type.
         langs[index] = code;
       }
     }
@@ -320,24 +332,35 @@ function CollectionForm(props: Props) {
     <>
       <div className={classnames('main--contained', { 'card--disabled': disabled })}>
         <Tabs>
+{ /* @ts-expect-error - TS2322 - Type '{ children: Element[]; className: string; }' is not assignable to type 'IntrinsicAttributes & TabListProps'. */}
           <TabList className="tabs__list--collection-edit-page">
+{ /* @ts-expect-error - TS2559 - Type '{ children: string; }' has no properties in common with type 'IntrinsicAttributes & TabProps'. */}
             <Tab>{__('General')}</Tab>
+{ /* @ts-expect-error - TS2559 - Type '{ children: string; }' has no properties in common with type 'IntrinsicAttributes & TabProps'. */}
             <Tab>{__('Items')}</Tab>
+{ /* @ts-expect-error - TS2559 - Type '{ children: string; }' has no properties in common with type 'IntrinsicAttributes & TabProps'. */}
             <Tab>{__('Credits')}</Tab>
+{ /* @ts-expect-error - TS2559 - Type '{ children: string; }' has no properties in common with type 'IntrinsicAttributes & TabProps'. */}
             <Tab>{__('Tags')}</Tab>
+{ /* @ts-expect-error - TS2559 - Type '{ children: string; }' has no properties in common with type 'IntrinsicAttributes & TabProps'. */}
             <Tab>{__('Other')}</Tab>
           </TabList>
+{ /* @ts-expect-error - TS2559 - Type '{ children: Element[]; }' has no properties in common with type 'IntrinsicAttributes & TabPanelsProps'. */}
           <TabPanels>
             <TabPanel>
               <div className={'card-stack'}>
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <ChannelSelector disabled={disabled} />
                 <Card
                   body={
                     <>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
                       <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
                         <fieldset-section>
                           <label htmlFor="channel_name">{__('Name')}</label>
                           <div className="form-field__prefix">{prefix}</div>
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
                         </fieldset-section>
 
                         <FormField
@@ -350,6 +373,7 @@ function CollectionForm(props: Props) {
                           disabled={!isNewCollection}
                           onChange={(e) => setParams({ ...params, name: e.target.value || '' })}
                         />
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
                       </fieldset-group>
                       {!isNewCollection && (
                         <span className="form-field__help">{__('This field cannot be changed.')}</span>
@@ -363,7 +387,9 @@ function CollectionForm(props: Props) {
                         value={params.title}
                         onChange={(e) => setParams({ ...params, title: e.target.value })}
                       />
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
                       <fieldset-section>
+                        {/* @ts-expect-error - TS2740 (ts-migration) */}
                         <SelectThumbnail
                           thumbnail={params.thumbnail_url}
                           thumbnailError={thumbError}
@@ -371,6 +397,7 @@ function CollectionForm(props: Props) {
                           updateThumbnailParams={handleUpdateThumbnail}
                           usePublishFormMode
                         />
+{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
                       </fieldset-section>
                       <FormFieldAreaAdvanced
                         type="markdown"
@@ -390,6 +417,7 @@ function CollectionForm(props: Props) {
               <DragDropContext onDragEnd={handleOnDragEnd}>
                 <Droppable droppableId="list__ordering">
                   {(DroppableProvided) => (
+                    // @ts-expect-error - TS2740 (ts-migration)
                     <ClaimList
                       uris={collectionUrls}
                       collectionId={collectionId}
@@ -412,6 +440,7 @@ function CollectionForm(props: Props) {
                     label={<LbcSymbol postfix={__('Deposit')} size={14} />}
                     value={params.bid}
                     error={bidError}
+// @ts-expect-error - TS2322 - Type 'string' is not assignable to type 'number'.
                     min="0.0"
                     disabled={false}
                     onChange={(event) =>
@@ -437,6 +466,7 @@ function CollectionForm(props: Props) {
                       setParams({ ...params, tags: newTags });
                     }}
                     onSelect={(newTags) => {
+                      // @ts-expect-error - TS2339 (ts-migration)
                       newTags.forEach((newTag) => {
                         if (!params.tags.map((savedTag) => savedTag.name).includes(newTag.name)) {
                           setParams({ ...params, tags: [...params.tags, newTag] });
@@ -503,6 +533,7 @@ function CollectionForm(props: Props) {
             <>
               <div className="section__actions">
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   button="primary"
                   disabled={
                     creatingCollection || updatingCollection || nameError || bidError || thumbnailError || !hasClaims
@@ -510,6 +541,7 @@ function CollectionForm(props: Props) {
                   label={creatingCollection || updatingCollection ? __('Submitting') : __('Submit')}
                   onClick={handleSubmit}
                 />
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <Button button="link" label={__('Cancel')} onClick={() => onDone(collectionId)} />
               </div>
               {submitError ? (
@@ -521,6 +553,7 @@ function CollectionForm(props: Props) {
               )}
               {!isNewCollection && (
                 <div className="section__actions">
+                  {/* @ts-expect-error - TS2322 (ts-migration) */}
                   <ClaimAbandonButton uri={uri} abandonActionCallback={() => replace(`/$/${PAGES.LIBRARY}`)} />
                 </div>
               )}

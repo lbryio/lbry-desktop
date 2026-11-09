@@ -23,8 +23,10 @@ export default function ClaimProperties(props: Props) {
     >
       {
         <>
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <ClaimType uri={uri} small />
           {/*   // $FlowFixMe */}
+{ /* @ts-expect-error - TS2339 - Property 'claims' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'. | TS2339 - Property 'claims' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'. */}
           {isCollection && claim && claim.value.claims && !iconOnly && <div>{claim.value.claims.length}</div>}
           {isSubscribed && <Icon size={size} tooltip icon={ICONS.SUBSCRIBE} />}
           <FilePrice hideFree uri={uri} />

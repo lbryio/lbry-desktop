@@ -65,6 +65,7 @@ export default function Welcome(props: Props) {
   };
 
   return (
+    // @ts-expect-error - TS2740 (ts-migration)
     <Page noHeader noSideNavigation>
       {welcomePage === SPLASH_PAGE && <WelcomeSplash handleNextPage={handleNextPage} />}
       {welcomePage === PRIVACY_PAGE && <PrivacyAgreement handleNextPage={handleNextPage} />}

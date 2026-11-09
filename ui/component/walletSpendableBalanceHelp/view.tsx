@@ -11,6 +11,7 @@ function WalletSpendableBalanceHelp(props: Props) {
   const { balance, inline } = props;
 
   const getMessage = (text: string) => (
+    // @ts-expect-error - TS2745, TS2322 (ts-migration)
     <I18nMessage tokens={{ balance: <CreditAmount amount={balance} precision={4} /> }}>{text}</I18nMessage>
   );
 

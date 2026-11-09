@@ -65,6 +65,7 @@ export default function PlaylistsMine(props: Props) {
 
   let filteredCollections;
   if (searchText && collectionsToShow) {
+// @ts-expect-error - TS2339 - Property 'filter' does not exist on type 'unknown'.
     filteredCollections = collectionsToShow.filter((id) => {
       return (
         (unpublishedCollections[id] &&
@@ -90,20 +91,24 @@ export default function PlaylistsMine(props: Props) {
   }
 
   function onTextareaFocus() {
+// @ts-expect-error - TS2769 - No overload matches this call.
     window.addEventListener('keydown', escapeListener);
   }
 
   function onTextareaBlur() {
+// @ts-expect-error - TS2769 - No overload matches this call.
     window.removeEventListener('keydown', escapeListener);
   }
 
   function handleFilterType(val: unknown) {
     const newParams = new URLSearchParams();
     if (val) {
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
       newParams.set(FILTER_TYPE_PARAM, val);
     }
     newParams.set(PAGE_PARAM, '1');
     history.replace(`?${newParams.toString()}`);
+// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'SetStateAction<string>'.
     setFilterType(val);
   }
 
@@ -126,6 +131,7 @@ export default function PlaylistsMine(props: Props) {
             <div className="claim-search__menu-group">
               {COLLECTION_FILTERS.map((value) => (
                 <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
                   label={__(value)}
                   key={value}
                   onClick={() => handleFilterType(value)}
@@ -136,9 +142,11 @@ export default function PlaylistsMine(props: Props) {
               ))}
             </div>
           </div>
+{ /* @ts-expect-error - TS2769 - No overload matches this call. */}
           <Form onSubmit={() => {}} className="wunderbar--inline">
             <Icon icon={ICONS.SEARCH} />
             <FormField
+// @ts-expect-error - TS2322 - Type '{ onFocus: () => void; onBlur: () => void; className: string; value: string; onChange: (e: any) => void; type: string; placeholder: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
               onFocus={onTextareaFocus}
               onBlur={onTextareaBlur}
               className="wunderbar__input--inline"
@@ -156,6 +164,7 @@ export default function PlaylistsMine(props: Props) {
             <div className="claim-grid">
               {paginatedCollections &&
                 paginatedCollections.length > 0 &&
+                // @ts-expect-error - TS2322 (ts-migration)
                 paginatedCollections.map((key) => <CollectionPreviewTile tileLayout collectionId={key} key={key} />)}
               {!paginatedCollections.length && <div className="empty main--empty">{__('No matching playlists')}</div>}
             </div>

@@ -29,6 +29,7 @@ export default function I18nMessage(props: Props) {
   return (
     // style={{height: iframeHeight}}
     // ref={iframeRef}
+// @ts-expect-error - TS2322 - Type 'boolean' is not assignable to type 'string'.
     <iframe src={src} title={title} onLoad={onLoad} sandbox={!IS_WEB} />
   );
 }

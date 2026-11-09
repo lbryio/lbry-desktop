@@ -30,6 +30,7 @@ function SyncToggle(props: Props) {
         type="checkbox"
         name="sync_toggle"
         label={disabled || !verifiedEmail ? __('Sync your balance and preferences across devices.') : undefined}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; label: string; checked: string; onChange: () => void; disabled: boolean; helper: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
         checked={syncEnabled && verifiedEmail}
         onChange={() => openModal(MODALS.SYNC_ENABLE, { mode: syncEnabled ? 'disable' : 'enable' })}
         disabled={disabled || !verifiedEmail}
@@ -42,6 +43,7 @@ function SyncToggle(props: Props) {
       {!verifiedEmail && (
         <div>
           <p className="help">{__('An email address is required to sync your account.')}</p>
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <Button button="primary" label={__('Add Email')} />
         </div>
       )}

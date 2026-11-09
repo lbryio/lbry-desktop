@@ -15,9 +15,12 @@ export default function HiddenNsfw(props: Props) {
   return (
     <div className="section--padded section__subtitle">
       <Icon className="icon--hidden" icon={ICONS.EYE_OFF} />
+      {/* @ts-expect-error - TS2745 (ts-migration) */}
       <I18nMessage
+        // @ts-expect-error - TS2322 (ts-migration)
         tokens={{
           type,
+          // @ts-expect-error - TS2322 (ts-migration)
           settings: <Button button="link" label={__('settings')} navigate={`/$/${PAGES.SETTINGS}`} />,
         }}
       >

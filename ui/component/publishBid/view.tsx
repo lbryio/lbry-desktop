@@ -47,6 +47,7 @@ function PublishName(props: Props) {
         <FormField
           type="number"
           name="content_bid"
+// @ts-expect-error - TS2322 - Type 'string' is not assignable to type 'number'.
           min="0"
           step="any"
           placeholder="0.123"

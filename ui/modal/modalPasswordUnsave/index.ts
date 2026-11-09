@@ -5,7 +5,7 @@ import { doHideModal } from 'redux/actions/app';
 
 // const select = () => ({});
 //
-const perform = dispatch: unknown => ({
+const perform = (dispatch: unknown) => ({
   closeModal: () => dispatch(doHideModal()),
 });
 

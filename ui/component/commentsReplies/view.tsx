@@ -52,8 +52,10 @@ function CommentsReplies(props: Props) {
     if (!fetchedReplies || alreadyResolved) return;
 
     const urisToResolve: unknown = [];
+// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
     fetchedReplies.map(({ channel_url }) => channel_url !== undefined && urisToResolve.push(channel_url));
 
+// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'. | TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string[]'.
     if (urisToResolve.length > 0) doResolveUris(urisToResolve);
   }, [alreadyResolved, doResolveUris, fetchedReplies]);
 
@@ -68,6 +70,7 @@ function CommentsReplies(props: Props) {
       {!isExpanded ? (
         <div className="comment__actions--nested">
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             className="comment__action"
             label={__('Show Replies')}
             onClick={() => setExpanded(!isExpanded)}
@@ -76,6 +79,7 @@ function CommentsReplies(props: Props) {
         </div>
       ) : (
         <div className="comment__replies">
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
           <Button className="comment__threadline" aria-label="Hide Replies" onClick={() => setExpanded(false)} />
 
           <ul className="comments--replies">
@@ -90,6 +94,7 @@ function CommentsReplies(props: Props) {
                   comment={comment}
                   claimIsMine={claimIsMine}
                   linkedCommentId={linkedCommentId}
+                  // @ts-expect-error - TS2322 (ts-migration)
                   commentingEnabled={userCanComment}
                   supportDisabled={supportDisabled}
                 />
@@ -100,6 +105,7 @@ function CommentsReplies(props: Props) {
       {isExpanded && fetchedReplies && hasMore && (
         <div className="comment__actions--nested">
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             button="link"
             label={__('Show more')}
             onClick={() => onShowMore && onShowMore()}
@@ -110,6 +116,7 @@ function CommentsReplies(props: Props) {
       {(isFetchingByParentId[parentId] || isResolvingReplies || !canDisplayComments) && (
         <div className="comment__replies-container">
           <div className="comment__actions--nested">
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
             <Spinner type="small" />
           </div>
         </div>

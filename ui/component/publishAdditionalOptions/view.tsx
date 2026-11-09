@@ -192,6 +192,7 @@ function PublishAdditionalOptions(props: Props) {
 
           <div className="section__actions">
             <Button
+              // @ts-expect-error - TS2322 (ts-migration)
               label={hideSection ? __('Additional Options') : __('Hide')}
               button="link"
               onClick={toggleHideSection}

@@ -4,13 +4,13 @@ import { doUserResendVerificationEmail, doUserCheckEmailVerified, doFetchAccessT
 import { selectEmailToVerify, selectUser, selectAccessToken } from 'redux/selectors/user';
 import UserEmailVerify from './view';
 
-const select = state: unknown => ({
+const select = (state: unknown) => ({
   email: selectEmailToVerify(state),
   user: selectUser(state),
   accessToken: selectAccessToken(state),
 });
 
-const perform = dispatch: unknown => ({
+const perform = (dispatch: unknown) => ({
   resendVerificationEmail: email => dispatch(doUserResendVerificationEmail(email)),
   checkEmailVerified: () => dispatch(doUserCheckEmailVerified()),
   fetchAccessToken: () => dispatch(doFetchAccessToken()),

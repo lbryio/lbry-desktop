@@ -27,6 +27,7 @@ export default function NudgeFloating(props: Props) {
         <div className="nudge__wrapper">
           <span className="nudge__text">{text}</span>
           <Button
+            // @ts-expect-error - TS2322 (ts-migration)
             className="nudge__close"
             button="close"
             icon={ICONS.REMOVE}

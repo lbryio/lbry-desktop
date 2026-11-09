@@ -21,6 +21,7 @@ function ChannelMuteButton(props: Props) {
   }
 
   return (
+    // @ts-expect-error - TS2322 (ts-migration)
     <Button button={isMuted ? 'alt' : 'secondary'} label={isMuted ? __('Unmute') : __('Mute')} onClick={handleClick} />
   );
 }

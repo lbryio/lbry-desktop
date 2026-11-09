@@ -48,6 +48,7 @@ export default function BuyPage(props: Props) {
   const [url, setUrl] = React.useState<any>();
   const [country, setCountry] = React.useState(initialCountry);
   const [showPurchaseScreen, setShowPurchaseScreen] = React.useState(false);
+// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"Argentina" | "Australia" | "Austria" | "Belgium" | "Brazil" | "Bulgaria" | "Canada" | "Chile" | "Colombia" | "Croatia" | "Cyprus" | "Czech Republic" | "Denmark" | "Estonia" | ... 45 more ... | "Viet Nam"'.
   const isValid = SUPPORTED_MOONPAY_COUNTRIES.includes(country);
   const { goBack } = useHistory();
 
@@ -82,8 +83,11 @@ export default function BuyPage(props: Props) {
 
   const title = __('Buy Credits');
   const subtitle = (
+    // @ts-expect-error - TS2745 (ts-migration)
     <I18nMessage
+      // @ts-expect-error - TS2322 (ts-migration)
       tokens={{
+        // @ts-expect-error - TS2322 (ts-migration)
         learn_more: <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/buy-lbc" />,
       }}
     >
@@ -97,6 +101,7 @@ export default function BuyPage(props: Props) {
       className="main--swap"
       backout={{
         backoutLabel: __('Done'),
+        // @ts-expect-error - TS2322 (ts-migration)
         title: <LbcSymbol prefix={__('Buy LBC')} size={28} />,
       }}
     >
@@ -151,10 +156,12 @@ export default function BuyPage(props: Props) {
                           value={country}
                           onChange={(e) => setCountry(e.target.value)}
                         >
+{ /* @ts-expect-error - TS2322 - Type 'boolean' is not assignable to type 'string | number | readonly string[]'. */}
                           <option value="" disabled defaultValue>
                             {__('Select your country')}
                           </option>
                           {COUNTRIES.map((country, index) => (
+// @ts-expect-error - TS2322 - Type 'unknown' is not assignable to type 'Key'. | TS2322 - Type 'unknown' is not assignable to type 'string | number | readonly string[]'.
                             <option key={country} value={country}>
                               {country}
                             </option>
@@ -166,6 +173,7 @@ export default function BuyPage(props: Props) {
                           {isValid ? (
                             <div className="section__actions">
                               <Button
+                                // @ts-expect-error - TS2322 (ts-migration)
                                 button="primary"
                                 label={__('Continue')}
                                 onClick={() => setShowPurchaseScreen(true)}
@@ -173,8 +181,10 @@ export default function BuyPage(props: Props) {
                             </div>
                           ) : (
                             <div className="section__actions">
+                              {/* @ts-expect-error - TS2322 (ts-migration) */}
                               <Button button="alt" label={__('Go Back')} onClick={() => goBack()} />
                               <Button
+                                // @ts-expect-error - TS2322 (ts-migration)
                                 button="link"
                                 label={__('Try Anyway')}
                                 onClick={() => setShowPurchaseScreen(true)}

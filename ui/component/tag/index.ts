@@ -2,7 +2,7 @@
 import {connect} from 'react-redux';
 import Tag from './view';
 
-const select = state: unknown => ({});
+const select = (state: unknown) => ({});
 
 const perform = () => ({});
 
