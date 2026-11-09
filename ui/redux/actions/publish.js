@@ -11,7 +11,7 @@ import { push } from 'connected-react-router';
 import analytics from 'analytics';
 import { doOpenModal } from 'redux/actions/app';
 import { CC_LICENSES, COPYRIGHT, OTHER, NONE, PUBLIC_DOMAIN } from 'constants/licenses';
-import { SPEECH_STATUS, SPEECH_PUBLISH } from 'constants/speech_urls';
+import { uploadImage } from 'util/upload-image';
 import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
 import { creditsToString } from 'util/format-credits';
 import Lbry from 'lbry';
@@ -92,40 +92,18 @@ export const doPublishDesktop = (filePath: ?File, preview?: boolean) => (dispatc
   dispatch(doPublish(publishSuccess, publishFail));
 };
 
-export const doResetThumbnailStatus = () => (dispatch: Dispatch) => {
+// The upload service has no status endpoint (spee.ch had one), so assume it's up: a failed upload
+// says so, and the "Enter a thumbnail URL" option is always there.
+export const doResetThumbnailStatus = () => (dispatch: Dispatch) =>
   dispatch({
     type: ACTIONS.UPDATE_PUBLISH_FORM,
     data: {
       thumbnailPath: '',
       thumbnailError: undefined,
+      uploadThumbnailStatus: THUMBNAIL_STATUSES.READY,
+      thumbnail: '',
     },
   });
-
-  return fetch(SPEECH_STATUS)
-    .then((res) => res.json())
-    .then((status) => {
-      if (status.disabled) {
-        throw Error();
-      }
-
-      return dispatch({
-        type: ACTIONS.UPDATE_PUBLISH_FORM,
-        data: {
-          uploadThumbnailStatus: THUMBNAIL_STATUSES.READY,
-          thumbnail: '',
-        },
-      });
-    })
-    .catch(() =>
-      dispatch({
-        type: ACTIONS.UPDATE_PUBLISH_FORM,
-        data: {
-          uploadThumbnailStatus: THUMBNAIL_STATUSES.API_DOWN,
-          thumbnail: '',
-        },
-      })
-    );
-};
 
 export const doClearPublish = () => (dispatch: Dispatch) => {
   dispatch({ type: ACTIONS.CLEAR_PUBLISH });
@@ -143,13 +121,6 @@ export const doUploadThumbnail =
   (dispatch: Dispatch) => {
     const downMessage = __('Thumbnail upload service may be down, try again later.');
     let thumbnail, fileExt, fileName, fileType;
-
-    const makeid = () => {
-      let text = '';
-      const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      for (let i = 0; i < 24; i += 1) text += possible.charAt(Math.floor(Math.random() * 62));
-      return text;
-    };
 
     const uploadError = (error = '') => {
       dispatch(
@@ -174,23 +145,17 @@ export const doUploadThumbnail =
       },
     });
 
-    const doUpload = (data) => {
-      return fetch(SPEECH_PUBLISH, {
-        method: 'POST',
-        body: data,
-      })
-        .then((res) => res.text())
-        .then((text) => (text.length ? JSON.parse(text) : {}))
-        .then((json) => {
-          if (!json.success) return uploadError(json.message || downMessage);
+    const doUpload = (file) =>
+      uploadImage(file)
+        .then((url) => {
           if (cb) {
-            cb(json.data.serveUrl);
+            cb(url);
           }
           return dispatch({
             type: ACTIONS.UPDATE_PUBLISH_FORM,
             data: {
               uploadThumbnailStatus: THUMBNAIL_STATUSES.COMPLETE,
-              thumbnail: json.data.serveUrl,
+              thumbnail: url,
             },
           });
         })
@@ -201,10 +166,9 @@ export const doUploadThumbnail =
           if (message === 'Failed to fetch') {
             message = downMessage;
           }
-          const userInput = [fileName, fileExt, fileType, thumbnail];
+          const userInput = [fileName, fileExt, fileType];
           uploadError(`${message}\nUser input:  ${userInput.join(', ')}`);
         });
-    };
 
     dispatch({
       type: ACTIONS.UPDATE_PUBLISH_FORM,
@@ -212,17 +176,12 @@ export const doUploadThumbnail =
     });
 
     if (fsAdapter && fsAdapter.readFile && filePath) {
-      fsAdapter.readFile(filePath, 'base64').then((base64Image) => {
+      const localPath = filePath;
+      fsAdapter.readFile(localPath, 'base64').then((base64Image) => {
         fileExt = 'png';
         fileName = 'thumbnail.png';
         fileType = 'image/png';
-
-        const data = new FormData();
-        const name = makeid();
-        data.append('name', name);
-        // $FlowFixMe
-        data.append('file', { uri: 'file://' + filePath, type: fileType, name: fileName });
-        return doUpload(data);
+        return doUpload({ uri: 'file://' + localPath, type: fileType, name: fileName });
       });
     } else {
       if (filePath && fs && path) {
@@ -238,13 +197,8 @@ export const doUploadThumbnail =
         return null;
       }
 
-      const data = new FormData();
-      const name = makeid();
       const file = thumbnailBlob || (thumbnail && new File([thumbnail], fileName, { type: fileType }));
-      data.append('name', name);
-      // $FlowFixMe
-      data.append('file', file);
-      return doUpload(data);
+      return doUpload(file);
     }
   };
 
