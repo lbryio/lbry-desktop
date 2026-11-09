@@ -1,5 +1,0 @@
-// @flow
-// Flow declaration stub for ui/lbry.ts. Flow cannot read TypeScript, so the
-// module is typed as `any` on the Flow side until Flow is removed (Phase 3
-// of the TypeScript migration, see issue #618).
-declare module.exports: any;

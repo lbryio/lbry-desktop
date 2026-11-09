@@ -1,0 +1,75 @@
+import * as PAGES from 'constants/pages';
+import type { ReactNode } from 'react';
+import React, { useEffect } from 'react';
+import Button from 'component/button';
+import { FormField } from 'component/common/form';
+import UserSignOutButton from 'component/userSignOutButton';
+import Card from 'component/common/card';
+
+type Props = {
+  cancelButton: React.ReactNode,
+  email: string,
+  resendVerificationEmail: (arg1: string) => void,
+  checkEmailVerified: () => void,
+  user: {
+    has_verified_email: boolean
+  },
+  fetchAccessToken: () => void,
+  accessToken: string
+};
+
+function UserEmail(props: Props) {
+  const { email, user, accessToken, fetchAccessToken } = props;
+
+  let isVerified = false;
+  if (user) {
+    isVerified = user.has_verified_email;
+  }
+
+  useEffect(() => {
+    if (!accessToken) {
+      fetchAccessToken();
+    }
+  }, [accessToken, fetchAccessToken]);
+
+  return (
+    <Card
+      title={__('Cloud Account')}
+      subtitle={
+        isVerified
+          ? undefined
+          : __(
+              'Connecting with a cloud account will allow you to earn rewards, receive content and security updates, and optionally backup your data.'
+            )
+      }
+      actions={
+        isVerified ? (
+          <FormField
+            type="text"
+            // @ts-expect-error - TS2322 (ts-migration)
+            className="form-field--copyable"
+            readOnly
+            label={
+              <React.Fragment>
+                {__('Your email')}{' '}
+                <Button
+                  // @ts-expect-error - TS2322 (ts-migration)
+                  button="link"
+                  label={__('Update mailing preferences')}
+                  href={`http://lbry.io/list/edit/${accessToken}`}
+                />
+              </React.Fragment>
+            }
+            inputButton={<UserSignOutButton button="secondary" />}
+            value={email || ''}
+          />
+        ) : (
+          // @ts-expect-error - TS2322 (ts-migration)
+          <Button button="primary" label={__('Log In')} navigate={`/$/${PAGES.AUTH}`} />
+        )
+      }
+    />
+  );
+}
+
+export default UserEmail;

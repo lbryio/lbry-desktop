@@ -1,0 +1,20 @@
+//@ts-nocheck
+import {connect} from 'react-redux';
+import * as SETTINGS from 'constants/settings';
+import { doSetClientSetting } from 'redux/actions/settings';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
+import SettingCommentsServer from './view';
+
+const select = (state: unknown) => ({
+  customServerEnabled: makeSelectClientSetting(SETTINGS.CUSTOM_COMMENTS_SERVER_ENABLED)(state),
+  customServerUrl: makeSelectClientSetting(SETTINGS.CUSTOM_COMMENTS_SERVER_URL)(state),
+  customCommentServers: makeSelectClientSetting(SETTINGS.CUSTOM_COMMENTS_SERVERS)(state),
+});
+
+const perform = (dispatch: unknown) => ({
+  setCustomServerEnabled: (val) => dispatch(doSetClientSetting(SETTINGS.CUSTOM_COMMENTS_SERVER_ENABLED, val, true)),
+  setCustomServerUrl: (url) => dispatch(doSetClientSetting(SETTINGS.CUSTOM_COMMENTS_SERVER_URL, url, true)),
+  setCustomServers: (servers) => dispatch(doSetClientSetting(SETTINGS.CUSTOM_COMMENTS_SERVERS, servers, true)),
+});
+
+export default connect(select, perform)(SettingCommentsServer);

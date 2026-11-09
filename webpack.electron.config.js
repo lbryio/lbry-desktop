@@ -9,7 +9,7 @@ const DIST_ROOT = path.resolve(__dirname, 'dist/');
 let mainConfig = {
   target: 'electron-main',
   entry: {
-    main: './electron/index.js',
+    main: './electron/index.ts',
   },
   output: {
     filename: '[name].js',
@@ -81,14 +81,14 @@ let plugins = [
     IS_WEB: JSON.stringify(false),
   }),
   new ProvidePlugin({
-    __: ['i18n.js', '__'],
+    __: ['i18n', '__'],
   }),
 ];
 
 const renderConfig = {
   target: 'electron-renderer',
   entry: {
-    ui: ['./ui/index.jsx'],
+    ui: ['./ui/index.tsx'],
   },
   output: {
     filename: '[name].js',

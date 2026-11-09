@@ -1,0 +1,264 @@
+import React from 'react';
+import moment from 'moment';
+import Button from 'component/button';
+import { Form, FormField } from 'component/common/form';
+import { Modal } from 'modal/modal';
+import Card from 'component/common/card';
+import Tag from 'component/tag';
+import MarkdownPreview from 'component/common/markdown-preview';
+import { COPYRIGHT, OTHER } from 'constants/licenses';
+import LbcSymbol from 'component/common/lbc-symbol';
+import ChannelThumbnail from 'component/channelThumbnail';
+import * as ICONS from 'constants/icons';
+import Icon from 'component/common/icon';
+import { NO_FILE } from 'redux/actions/publish';
+
+type Props = {
+  filePath: File | null | undefined,
+  isMarkdownPost: boolean,
+  optimize: boolean,
+  title: string | null | undefined,
+  description: string | null | undefined,
+  channel: string | null | undefined,
+  bid: number | null | undefined,
+  uri: string | null | undefined,
+  contentIsFree: boolean,
+  fee: {
+    amount: string,
+    currency: string
+  },
+  language: string,
+  releaseTimeEdited: number | null | undefined,
+  licenseType: string,
+  otherLicenseDescription: string | null | undefined,
+  licenseUrl: string | null | undefined,
+  tags: Array<Tag>,
+  isVid: boolean,
+  ffmpegStatus: any,
+  previewResponse: PublishResponse,
+  publish: (arg1?: string | null | undefined, arg2?: boolean | null | undefined) => void,
+  closeModal: () => void,
+  enablePublishPreview: boolean,
+  setEnablePublishPreview: (arg1: boolean) => void,
+  isStillEditing: boolean,
+  myChannels: Array<ChannelClaim> | null | undefined,
+  publishSuccess: boolean,
+  publishing: boolean,
+  remoteFile: string
+};
+
+// class ModalPublishPreview extends React.PureComponent<Props> {
+const ModalPublishPreview = (props: Props) => {
+  const {
+    filePath,
+    isMarkdownPost,
+    optimize,
+    title,
+    description,
+    channel,
+    bid,
+    uri,
+    contentIsFree,
+    fee,
+    language,
+    releaseTimeEdited,
+    licenseType,
+    otherLicenseDescription,
+    licenseUrl,
+    tags,
+    isVid,
+    ffmpegStatus = {},
+    previewResponse,
+    enablePublishPreview,
+    setEnablePublishPreview,
+    isStillEditing,
+    myChannels,
+    publishing,
+    publish,
+    closeModal,
+  } = props;
+
+  const maxCharsBeforeOverflow = 128;
+
+  const formattedTitle = React.useMemo(() => {
+    if (title && title.length > maxCharsBeforeOverflow) {
+      return title.slice(0, maxCharsBeforeOverflow).trim() + '...';
+    }
+    return title;
+  }, [title]);
+
+  const formattedUri = React.useMemo(() => {
+    if (uri && uri.length > maxCharsBeforeOverflow) {
+      return uri.slice(0, maxCharsBeforeOverflow).trim() + '...';
+    }
+    return uri;
+  }, [uri]);
+
+  // leave the confirm modal up if we're not going straight to upload/reflecting
+  function onConfirmed() {
+    // Publish for real:
+    publish(getFilePathName(filePath), false);
+    // @if TARGET='app'
+    closeModal();
+    // @endif
+  }
+
+  function getFilePathName(filePath?: File | null) {
+    if (!filePath) {
+      return NO_FILE;
+    }
+    return filePath.name;
+  }
+
+  function createRow(label: string, value: any) {
+    return (
+      <tr>
+        <td>{label}</td>
+        <td>{value}</td>
+      </tr>
+    );
+  }
+
+  const txFee = previewResponse ? previewResponse['total_fee'] : null;
+  const isOptimizeAvail = filePath && isVid && ffmpegStatus.available;
+  let modalTitle;
+  if (isStillEditing) {
+    modalTitle = __('Confirm Edit');
+  } else {
+    modalTitle = __('Confirm Upload');
+  }
+
+  let confirmBtnText;
+  if (!publishing) {
+    if (isStillEditing) {
+      confirmBtnText = __('Save');
+    } else {
+      confirmBtnText = __('Upload');
+    }
+  } else {
+    if (isStillEditing) {
+      confirmBtnText = __('Saving');
+    } else {
+      confirmBtnText = __('Uploading');
+    }
+  }
+
+  const descriptionValue = description ? (
+    <div className="media__info-text-preview">
+      <MarkdownPreview content={description} simpleLinks />
+    </div>
+  ) : null;
+
+  const licenseValue =
+    licenseType === COPYRIGHT ? (
+      <p>© {otherLicenseDescription}</p>
+    ) : licenseType === OTHER ? (
+      <p>
+        {otherLicenseDescription}
+        <br />
+        {licenseUrl}
+      </p>
+    ) : (
+      <p>{licenseType}</p>
+    );
+
+  const tagsValue =
+    // Do nothing for onClick(). Setting to 'null' results in "View Tag" action -- we don't want to leave the modal.
+    // @ts-expect-error - TS2322 (ts-migration)
+    tags.map((tag) => <Tag key={tag.name} title={tag.name} name={tag.name} type={'flow'} onClick={() => {}} />);
+
+  const depositValue = bid ? <LbcSymbol postfix={`${bid}`} size={14} /> : <p>---</p>;
+
+  let priceValue = __('Free');
+  if (!contentIsFree) {
+    if (fee.currency === 'LBC') {
+// @ts-expect-error - TS2322 - Type 'Element' is not assignable to type 'string'.
+      priceValue = <LbcSymbol postfix={fee.amount} />;
+    } else {
+      priceValue = `${fee.amount} ${fee.currency}`;
+    }
+  }
+
+  const channelValue = (channel: unknown) => {
+    const channelClaim = myChannels && myChannels.find((x) => x.name === channel);
+    return channel ? (
+      <div className="channel-value">
+        {/* @ts-expect-error - TS2739 (ts-migration) */}
+        {channelClaim && <ChannelThumbnail xsmall noLazyLoad uri={channelClaim.permanent_url} />}
+        {channel}
+      </div>
+    ) : (
+      <div className="channel-value">
+        <Icon sectionIcon icon={ICONS.ANONYMOUS} />
+        <i>{__('Anonymous')}</i>
+      </div>
+    );
+  };
+
+  const releaseTimeStr = (time: unknown) => {
+// @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    return time ? moment(new Date(time * 1000)).format('MMMM Do, YYYY - h:mm a') : '';
+  };
+
+  return (
+// @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; contentLabel: any; type: string; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
+    <Modal isOpen contentLabel={modalTitle} type="card" onAborted={closeModal}>
+      <Form onSubmit={onConfirmed}>
+        <Card
+          title={modalTitle}
+          body={
+            <>
+              <div className="section">
+                <table className="table table--condensed table--publish-preview">
+                  <tbody>
+                    {!isMarkdownPost && createRow(__('File'), getFilePathName(filePath))}
+                    {isOptimizeAvail && createRow(__('Transcode'), optimize ? __('Yes') : __('No'))}
+                    {createRow(__('Title'), formattedTitle)}
+                    {createRow(__('Description'), descriptionValue)}
+                    {createRow(__('Channel'), channelValue(channel))}
+                    {createRow(__('URL'), formattedUri)}
+                    {createRow(__('Deposit'), depositValue)}
+                    {createRow(__('Price'), priceValue)}
+                    {createRow(__('Language'), language)}
+                    {releaseTimeEdited && createRow(__('Release date'), releaseTimeStr(releaseTimeEdited))}
+                    {createRow(__('License'), licenseValue)}
+                    {createRow(__('Tags'), tagsValue)}
+                  </tbody>
+                </table>
+              </div>
+              {txFee && (
+                <div className="section" aria-label={__('Estimated transaction fee:')}>
+                  <b>{__('Est. transaction fee:')}</b>&nbsp;&nbsp;
+                  <em>
+                    <LbcSymbol postfix={txFee} />
+                  </em>
+                </div>
+              )}
+            </>
+          }
+          actions={
+            <>
+              <div className="section__actions">
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
+                <Button autoFocus button="primary" disabled={publishing} label={confirmBtnText} onClick={onConfirmed} />
+                {/* @ts-expect-error - TS2322 (ts-migration) */}
+                <Button button="link" label={__('Cancel')} onClick={closeModal} />
+              </div>
+              <p className="help">{__('Once the transaction is sent, it cannot be reversed.')}</p>
+              <FormField
+                type="checkbox"
+                name="sync_toggle"
+                label={__('Skip preview and confirmation')}
+// @ts-expect-error - TS2322 - Type '{ type: string; name: string; label: string; checked: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+                checked={!enablePublishPreview}
+                onChange={() => setEnablePublishPreview(!enablePublishPreview)}
+              />
+            </>
+          }
+        />
+      </Form>
+    </Modal>
+  );
+};
+
+export default ModalPublishPreview;

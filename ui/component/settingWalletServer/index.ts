@@ -1,0 +1,34 @@
+//@ts-nocheck
+import {connect} from 'react-redux';
+import {
+  selectIsWalletReconnecting,
+  selectWalletRollbackToDefault,
+  selectWalletConnectingToDefault,
+} from 'redux/selectors/wallet';
+import * as DAEMON_SETTINGS from 'constants/daemon_settings';
+import {
+  doSetDaemonSetting,
+  doClearDaemonSetting,
+  doGetDaemonStatus,
+  doSaveCustomWalletServers,
+} from 'redux/actions/settings';
+import { selectSavedWalletServers, selectDaemonStatus, selectHasWalletServerPrefs } from 'redux/selectors/settings';
+import SettingWalletServer from './view';
+
+const select = (state: unknown) => ({
+  daemonStatus: selectDaemonStatus(state),
+  customWalletServers: selectSavedWalletServers(state),
+  hasWalletServerPrefs: selectHasWalletServerPrefs(state),
+  walletReconnecting: selectIsWalletReconnecting(state),
+  walletRollbackToDefault: selectWalletRollbackToDefault(state),
+  walletReconnectingToDefault: selectWalletConnectingToDefault(state),
+});
+
+const perform = (dispatch: unknown) => ({
+  setCustomWalletServers: (value) => dispatch(doSetDaemonSetting(DAEMON_SETTINGS.LBRYUM_SERVERS, value)),
+  clearWalletServers: () => dispatch(doClearDaemonSetting(DAEMON_SETTINGS.LBRYUM_SERVERS)),
+  getDaemonStatus: () => dispatch(doGetDaemonStatus()),
+  saveServerConfig: (servers) => dispatch(doSaveCustomWalletServers(servers)),
+});
+
+export default connect(select, perform)(SettingWalletServer);

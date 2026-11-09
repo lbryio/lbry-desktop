@@ -33,7 +33,7 @@ declare type DoToast = {
     - Always saved, but can be manually deleted
     - Can happen in the background, or because of user interaction (ex: publish confirmed)
 */
-declare type Notification = {
+declare type LbryNotification = {
   id: string, // Unique id
   dateCreated: number,
   isRead: boolean, // Used to display "new" notifications that a user hasn't seen yet
@@ -46,13 +46,13 @@ declare type Notification = {
 
 declare type DoNotification = {
   type: ACTIONS.CREATE_NOTIFICATION,
-  data: Notification,
+  data: LbryNotification,
 };
 
 declare type DoEditNotification = {
   type: ACTIONS.EDIT_NOTIFICATION,
   data: {
-    notification: Notification,
+    notification: LbryNotification,
   },
 };
 
@@ -87,7 +87,7 @@ declare type DoDismissError = {
   NotificationState
 */
 declare type NotificationState = {
-  notifications: Array<Notification>,
+  notifications: Array<LbryNotification>,
   errors: Array<ErrorNotification>,
   toasts: Array<Toast>,
 };
@@ -134,3 +134,6 @@ declare type NotificationCategory = {
   name: string,
   types: ?Array<string>,
 };
+
+// Back-compat alias during the TypeScript migration (see types/Notification.d.ts)
+declare type Notification = LbryNotification;

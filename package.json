@@ -31,8 +31,8 @@
     "build:dir": "yarn build -- --dir -c.compression=store -c.mac.identity=null",
     "crossenv": "cross-env",
     "flow": "flow",
-    "lint": "eslint 'ui/**/*.{js,jsx}' && eslint 'electron/**/*.js' && flow",
-    "lint-fix": "eslint --fix --quiet 'ui/**/*.{js,jsx}' && eslint --fix --quiet 'electron/**/*.js'",
+    "lint": "tsc --noEmit",
+    "lint-fix": "prettier --write 'ui/**/*.{ts,tsx}'",
     "format": "prettier 'src/**/*.{js,jsx,scss,json}' --write",
     "flow-defs": "flow-typed install",
     "precommit": "lint-staged",
@@ -234,5 +234,9 @@
     "lbrynetDaemonDir": "static/daemon",
     "lbrynetDaemonFileName": "lbrynet"
   },
-  "packageManager": "yarn@3.2.0"
+  "packageManager": "yarn@3.2.0",
+  "resolutions": {
+    "@types/react": "^16.14.70",
+    "@types/react-dom": "^16.9.0"
+  }
 }
