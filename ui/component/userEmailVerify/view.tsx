@@ -110,10 +110,10 @@ class UserEmailVerify extends React.PureComponent<Props, State> {
                     // @ts-expect-error - TS2322 (ts-migration)
                     help_link: <Button button="link" href={`mailto:${SITE_HELP_EMAIL}`} label={`${SITE_HELP_EMAIL}`} />,
                     // @ts-expect-error - TS2322 (ts-migration)
-                    chat_link: <Button button="link" href="https://chat.lbry.com" label={__('chat')} />,
+                    support_link: <Button button="link" href="https://lbry.com/support" label={__('support page')} />,
                   }}
                 >
-                  Email %help_link% or join our %chat_link% if you encounter any trouble verifying.
+                  Email %help_link% or visit our %support_link% if you encounter any trouble verifying.
                 </I18nMessage>
               </p>
             </React.Fragment>

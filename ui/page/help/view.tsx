@@ -168,7 +168,7 @@ class HelpPage extends React.PureComponent<Props, State> {
           actions={
             <div className="section__actions">
               {/* @ts-expect-error - TS2322 (ts-migration) */}
-              <Button button="secondary" label={__('Join Our Chat')} icon={ICONS.CHAT} href="https://chat.lbry.com" />
+              <Button button="secondary" label={__('Get Support')} icon={ICONS.CHAT} href="https://lbry.com/support" />
               {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="secondary" label={__('Email Us')} icon={ICONS.WEB} href={`mailto:${SITE_HELP_EMAIL}`} />
             </div>

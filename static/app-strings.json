@@ -2346,5 +2346,8 @@
   "Images must be %max_size% MB or smaller.": "Images must be %max_size% MB or smaller.",
   "The image upload service sent an empty response.": "The image upload service sent an empty response.",
   "There was an error in the upload. The format or extension might not be supported.": "There was an error in the upload. The format or extension might not be supported.",
+  "Get Support": "Get Support",
+  "support page": "support page",
+  "Email %help_link% or visit our %support_link% if you encounter any trouble verifying.": "Email %help_link% or visit our %support_link% if you encounter any trouble verifying.",
   "--end--": "--end--"
 }
