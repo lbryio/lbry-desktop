@@ -10,6 +10,7 @@ import Card from 'component/common/card';
 import { FormField, FormFieldPrice } from 'component/common/form';
 import MaxPurchasePrice from 'component/maxPurchasePrice';
 import SettingsRow from 'component/settingsRow';
+import SettingFollowing from 'component/settingFollowing';
 
 type Price = {
   currency: string,
@@ -171,6 +172,10 @@ export default function SettingContent(props: Props) {
               />
             </SettingsRow>
 
+            <SettingsRow title={__('Followed channels')} subtitle={__(HELP.FOLLOWING_FILE)} multirow>
+              <SettingFollowing />
+            </SettingsRow>
+
             {myChannelUrls && myChannelUrls.length > 0 && (
               <SettingsRow title={__('Creator settings')}>
                 <Button
@@ -236,4 +241,5 @@ const HELP = {
   MAX_PURCHASE_PRICE: 'This will prevent you from purchasing any content over a certain cost, as a safety measure.',
   ONLY_CONFIRM_OVER_AMOUNT: '', // [feel redundant. Disable for now] "When this option is chosen, LBRY won't ask you to confirm purchases or tips below your chosen amount.",
   PUBLISH_PREVIEW: 'Show preview and confirmation dialog before publishing content.',
+  FOLLOWING_FILE: 'Save the channels you follow to a file, or follow every channel in a file. Import takes a file exported here, or a list of channel URLs with one per line. No account or sync needed.',
 };
