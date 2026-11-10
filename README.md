@@ -100,6 +100,13 @@ Please don't report security problems in public issues. Report them privately th
 repository's [Security tab](https://github.com/bitcoinbrisbane/lbry-desktop/security/advisories/new).
 See [SECURITY.md](SECURITY.md) for what to include and what's in scope.
 
+## Acknowledgements
+
+- The seed phrase utilities in `ui/util/wallet/mnemonic.ts` are vendored from
+  [lBC-wallet-with-mining-ability](https://github.com/mnaghshvarian/lBC-wallet-with-mining-ability)
+  by [@mnaghshvarian](https://github.com/mnaghshvarian) (MIT), via our
+  [fork](https://github.com/bitcoinbrisbane/lBC-wallet-with-mining-ability). Thank you!
+
 ## License
 
 MIT. See [LICENSE](LICENSE).
