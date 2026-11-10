@@ -11,7 +11,6 @@ import { TO_TRAY_WHEN_CLOSED } from 'constants/settings';
 import setupBarMenu from './menu/setupBarMenu';
 import { trackMaximized } from './showWindow';
 import * as PAGES from 'constants/pages';
-const remote = require('@electron/remote/main');
 const shell = require('electron').shell;
 function GetAppLangCode() {
   // https://www.electronjs.org/docs/api/locales
@@ -58,7 +57,6 @@ export default (appState: unknown) => {
       plugins: true,
       nodeIntegration: true,
       contextIsolation: false,
-      enableRemoteModule: true, // see about removing this
     },
   } as const;
   const lbryProto = 'lbry://';
@@ -66,7 +64,6 @@ export default (appState: unknown) => {
   const rendererURL = isDev ? `http://localhost:${WEBPACK_ELECTRON_PORT}` : `file://${__dirname}/index.html`;
 
   let window = new BrowserWindow(windowConfiguration);
-  remote.enable(window.webContents);
 
   // Before windowState.manage(), which maximizes the window if it was maximized last time.
   trackMaximized(window);
@@ -157,7 +154,11 @@ export default (appState: unknown) => {
     if (window && !window.isDestroyed()) window.webContents.send('full-screen-changed', fullScreen);
   };
   window.on('enter-full-screen', () => sendFullScreen(true));
-  window.on('leave-full-screen', () => sendFullScreen(false));
+  window.on('leave-full-screen', () => {
+    sendFullScreen(false);
+    // Force exit mode for html5 fullscreen api (see ui/index).
+    if (window && !window.isDestroyed()) window.webContents.send('leave-full-screen');
+  });
 
   window.on('unresponsive', () => {
     dialog.showMessageBox(
