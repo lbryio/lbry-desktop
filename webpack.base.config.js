@@ -32,8 +32,22 @@ let baseConfig = {
     rules: [
       {
         test: /\.[jt]sx?$/,
+        exclude: /node_modules/,
         loader: 'babel-loader',
         options: {
+          plugins: ['@babel/plugin-syntax-dynamic-import'],
+        },
+      },
+      {
+        // Some dependencies ship modern syntax; transpile just those packages
+        // instead of all of node_modules.
+        test: /\.jsx?$/,
+        include: [/node_modules[\\/](parse-duration|adm-zip|mammoth|electron-updater|uuid|@sentry)[\\/]/],
+        loader: 'babel-loader',
+        options: {
+          configFile: false,
+          babelrc: false,
+          presets: [['@babel/env', { loose: true, modules: false }]],
           plugins: ['@babel/plugin-syntax-dynamic-import'],
         },
       },

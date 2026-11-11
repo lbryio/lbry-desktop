@@ -1,4 +1,5 @@
-import * as remote from '@electron/remote';
+// @ts-expect-error - TS2305 - Module '"electron"' has no exported member 'ipcRenderer'.
+import { ipcRenderer } from 'electron';
 import React from 'react';
 import classnames from 'classnames';
 import * as RENDER_MODES from 'constants/file_render_modes';
@@ -21,19 +22,19 @@ import ImageViewer from 'component/viewers/imageViewer';
 import PdfViewer from 'component/viewers/pdfViewer';
 
 type Props = {
-  uri: string,
-  streamingUrl: string,
-  embedded?: boolean,
-  contentType: string,
-  claim: StreamClaim,
-  currentTheme: string,
-  downloadPath: string,
-  fileExtension: string,
-  autoplay: boolean,
-  renderMode: string,
-  thumbnail: string,
-  desktopPlayStartTime?: number,
-  className?: string
+  uri: string;
+  streamingUrl: string;
+  embedded?: boolean;
+  contentType: string;
+  claim: StreamClaim;
+  currentTheme: string;
+  downloadPath: string;
+  fileExtension: string;
+  autoplay: boolean;
+  renderMode: string;
+  thumbnail: string;
+  desktopPlayStartTime?: number;
+  className?: string;
 };
 
 class FileRender extends React.PureComponent<Props> {
@@ -45,13 +46,13 @@ class FileRender extends React.PureComponent<Props> {
 
   componentDidMount() {
     const { embedded } = this.props;
-// @ts-expect-error - TS2769 - No overload matches this call.
+    // @ts-expect-error - TS2769 - No overload matches this call.
     window.addEventListener('keydown', this.escapeListener, true);
     analytics.playerLoadedEvent(embedded);
   }
 
   componentWillUnmount() {
-// @ts-expect-error - TS2769 - No overload matches this call.
+    // @ts-expect-error - TS2769 - No overload matches this call.
     window.removeEventListener('keydown', this.escapeListener, true);
   }
 
@@ -66,7 +67,7 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   exitFullscreen() {
-    remote.getCurrentWindow().setFullScreen(false);
+    ipcRenderer.send('window:setFullScreen', false);
   }
 
   renderViewer() {
@@ -94,7 +95,7 @@ class FileRender extends React.PureComponent<Props> {
           />
         );
       case RENDER_MODES.IMAGE:
-// @ts-expect-error - TS2322 - Type '{ uri: string; source: string; }' is not assignable to type 'IntrinsicAttributes & Props'.
+        // @ts-expect-error - TS2322 - Type '{ uri: string; source: string; }' is not assignable to type 'IntrinsicAttributes & Props'.
         return <ImageViewer uri={uri} source={source} />;
       case RENDER_MODES.HTML:
         return <HtmlViewer source={downloadPath || source} />;
@@ -104,11 +105,11 @@ class FileRender extends React.PureComponent<Props> {
           <DocumentViewer
             source={{
               // @if TARGET='app'
-// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type 'BufferEncoding | ReadStreamOptions'.
+              // @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type 'BufferEncoding | ReadStreamOptions'.
               file: (options) => fs.createReadStream(downloadPath, options),
               // @endif
               stream: source,
-// @ts-expect-error - TS2322 - Type '{ file: (options: string) => ReadStream; stream: string; fileExtension: string; contentType: string; }' is not assignable to type '{ file: (arg1?: string) => any; stream: string; contentType: string; }'.
+              // @ts-expect-error - TS2322 - Type '{ file: (options: string) => ReadStream; stream: string; fileExtension: string; contentType: string; }' is not assignable to type '{ file: (arg1?: string) => any; stream: string; contentType: string; }'.
               fileExtension,
               contentType,
             }}
@@ -136,7 +137,7 @@ class FileRender extends React.PureComponent<Props> {
           <ComicBookViewer
             source={{
               // @if TARGET='app'
-// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type 'BufferEncoding | ReadStreamOptions'.
+              // @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type 'BufferEncoding | ReadStreamOptions'.
               file: (options) => fs.createReadStream(downloadPath, options),
               // @endif
               stream: source,
@@ -158,7 +159,7 @@ class FileRender extends React.PureComponent<Props> {
     return (
       <div
         className={classnames('file-render', className, {
-// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"document" | "md" | "pdf" | "html" | "docx" | "plain_text"'.
+          // @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"document" | "md" | "pdf" | "html" | "docx" | "plain_text"'.
           'file-render--document': RENDER_MODES.TEXT_MODES.includes(renderMode),
           'file-render--embed': embedded,
           'file-render--video': renderMode === RENDER_MODES.VIDEO || renderMode === RENDER_MODES.AUDIO,

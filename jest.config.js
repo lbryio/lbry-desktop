@@ -13,7 +13,7 @@ module.exports = {
     '^electron$': '<rootDir>/ui/__tests__/__mocks__/electron.js',
     '^@electron/remote$': '<rootDir>/ui/__tests__/__mocks__/electron.js',
     // jsdom's browser condition resolves uuid to its ESM build, which Jest can't parse.
-    '^uuid$': '<rootDir>/node_modules/uuid/dist/index.js',
+    '^uuid$': '<rootDir>/node_modules/uuid/dist/cjs/index.js',
     '\\.(scss|css)$': '<rootDir>/ui/__tests__/__mocks__/style.js',
   },
 };

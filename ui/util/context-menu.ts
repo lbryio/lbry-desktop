@@ -1,8 +1,44 @@
 //@ts-nocheck
-import {clipboard, shell} from 'electron';
-import * as remote from '@electron/remote';
+import { clipboard, ipcRenderer, shell } from 'electron';
 import { convertToShareLink } from 'util/lbryURI';
 const isDev = process.env.NODE_ENV !== 'production';
+
+let contextMenuId = 0;
+const contextMenuCallbacks = {};
+
+ipcRenderer.on('context-menu-clicked', (event, id) => {
+  const callback = contextMenuCallbacks[id];
+  if (callback) {
+    delete contextMenuCallbacks[id];
+    callback();
+  }
+});
+
+function serializeTemplate(templates) {
+  return templates.map((template) => {
+    const item = Object.assign({}, template);
+
+    if (item.submenu) {
+      item.submenu = serializeTemplate(item.submenu);
+    }
+
+    if (typeof item.click === 'function') {
+      const id = `context-menu-${contextMenuId++}`;
+      contextMenuCallbacks[id] = item.click;
+      item.id = id;
+      delete item.click;
+      // A role would take precedence over the click handler in the main process.
+      delete item.role;
+    }
+
+    return item;
+  });
+}
+
+function popupContextMenu(templates) {
+  Object.keys(contextMenuCallbacks).forEach((id) => delete contextMenuCallbacks[id]);
+  ipcRenderer.send('show-context-menu', serializeTemplate(templates));
+}
 
 function injectDevelopmentTemplate(event: unknown, templates: unknown) {
   if (!isDev) return templates;
@@ -13,7 +49,7 @@ function injectDevelopmentTemplate(event: unknown, templates: unknown) {
       label: 'Inspect element',
       accelerator: 'CmdOrCtrl+Shift+I',
       click: () => {
-        remote.getCurrentWindow().inspectElement(screenX, screenY);
+        ipcRenderer.send('inspect-element', screenX, screenY);
       },
     },
   ];
@@ -62,7 +98,7 @@ export function openContextMenu(event: unknown, templates = [], canEdit = false,
   }
 
   injectDevelopmentTemplate(event, templates);
-  remote.Menu.buildFromTemplate(templates).popup({});
+  popupContextMenu(templates);
 }
 
 // This function is used for the markdown description on the publish page
@@ -136,7 +172,7 @@ export function openClaimPreviewMenu(claim: unknown, event: unknown) {
   injectDevelopmentTemplate(event, templates);
 
   if (templates.length !== 0) {
-    remote.Menu.buildFromTemplate(templates).popup({});
+    popupContextMenu(templates);
   }
   // @endif
 }

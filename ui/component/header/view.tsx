@@ -1,5 +1,4 @@
-
-import {useIsMobile} from 'effects/use-screensize';
+import { useIsMobile } from 'effects/use-screensize';
 import { withRouter } from 'react-router';
 import * as ICONS from 'constants/icons';
 import * as PAGES from 'constants/pages';
@@ -13,40 +12,41 @@ import React from 'react';
 import SkipNavigationButton from 'component/skipNavigationButton';
 import Tooltip from 'component/common/tooltip';
 import WunderBar from 'component/wunderbar';
-import * as remote from '@electron/remote';
+// @ts-expect-error - TS2305 - Module '"electron"' has no exported member 'ipcRenderer'.
+import { ipcRenderer } from 'electron';
 import { IS_MAC } from 'component/app/view';
 import NavigationButton from 'component/navigationButton';
 
 type Props = {
-  authHeader: boolean,
+  authHeader: boolean;
   backout: {
-    backLabel?: string,
-    backNavDefault?: string,
-    title: string,
-    simpleTitle: string // Just use the same value as `title` if `title` is already short (~< 10 chars), unless you have a better idea for title overlfow on mobile
-  },
-  balance: number,
-  emailToVerify?: string,
-  hasNavigated: boolean,
-  hideBalance: boolean,
-  hideCancel: boolean,
+    backLabel?: string;
+    backNavDefault?: string;
+    title: string;
+    simpleTitle: string; // Just use the same value as `title` if `title` is already short (~< 10 chars), unless you have a better idea for title overlfow on mobile
+  };
+  balance: number;
+  emailToVerify?: string;
+  hasNavigated: boolean;
+  hideBalance: boolean;
+  hideCancel: boolean;
   history: {
-    goBack: () => void,
+    goBack: () => void;
     location: {
-      pathname: string
-    },
-    push: (arg1: string) => void,
-    replace: (arg1: string) => void
-  },
-  isAbsoluteSideNavHidden: boolean,
-  roundedBalance: string,
-  roundedSpendableBalance: string,
-  sidebarOpen: boolean,
-  syncError: string | null | undefined,
-  clearEmailEntry: () => void,
-  clearPasswordEntry: () => void,
-  setSidebarOpen: (arg1: boolean) => void,
-  signOut: () => void
+      pathname: string;
+    };
+    push: (arg1: string) => void;
+    replace: (arg1: string) => void;
+  };
+  isAbsoluteSideNavHidden: boolean;
+  roundedBalance: string;
+  roundedSpendableBalance: string;
+  sidebarOpen: boolean;
+  syncError: string | null | undefined;
+  clearEmailEntry: () => void;
+  clearPasswordEntry: () => void;
+  setSidebarOpen: (arg1: boolean) => void;
+  signOut: () => void;
 };
 
 const Header = (props: Props) => {
@@ -168,7 +168,7 @@ const Header = (props: Props) => {
         'header--mac': IS_MAC,
       })}
       onDoubleClick={(e) => {
-        remote.getCurrentWindow().maximize();
+        ipcRenderer.send('window:maximize');
       }}
     >
       <div className="card__actions--between header__contents">
