@@ -4,7 +4,7 @@ import { changeZoomFactor, ZOOM } from "util/zoomWindow";
 
 export default function useHover(ref: unknown) {
   useEffect(() => {
-    const handleKeyPress = (e: unknown) => {
+    const handleKeyPress = (e: KeyEvent) => {
       if (e.ctrlKey && !e.shiftKey) {
         switch (e.code) {
           case "NumpadAdd":
@@ -33,7 +33,7 @@ export default function useHover(ref: unknown) {
   }, []);
 
   useEffect(() => {
-    const handleWheel = (e: unknown) => {
+    const handleWheel = (e: FormFieldChangeEvent) => {
       if (e.ctrlKey && !e.shiftKey) {
         if (e.deltaY < 0) {
           changeZoomFactor(ZOOM.INCREMENT);

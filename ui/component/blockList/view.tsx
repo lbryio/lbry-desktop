@@ -156,10 +156,8 @@ function SearchList(props: LsbProps) {
   const { list, placeholder, formatter, onResultsUpdated } = props;
   const [term, setTerm] = React.useState("");
   const results = useAuthorMatch(term, list);
-  // @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
-  const handleChange = (event: unknown) => setTerm(event.target.value);
-  // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'SetStateAction<string>'.
-  const handleSelect = (e: unknown) => setTerm(e);
+  const handleChange = (event: FormFieldChangeEvent) => setTerm(event.target.value);
+  const handleSelect = (value: string) => setTerm(value);
 
   React.useEffect(() => {
     if (onResultsUpdated) {

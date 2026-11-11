@@ -222,8 +222,7 @@ function PublishFile(props: Props) {
     return newName.replace(INVALID_URI_CHARS, "-");
   }
 
-  function handleTitleChange(event: unknown) {
-    // @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
+  function handleTitleChange(event: FormFieldChangeEvent) {
     const title = event.target.value;
     // Update title
     updatePublishForm({ title });

@@ -17,7 +17,7 @@ type Props = {
 function CollectionSelectItem(props: Props) {
   const { collection, hasClaim, category, editCollection, uri, collectionPending } = props;
   const { name, id } = collection;
-  const handleChange = (e: unknown) => {
+  const handleChange = (e: FormFieldChangeEvent) => {
     editCollection(id, { uris: [uri], remove: hasClaim });
   };
 

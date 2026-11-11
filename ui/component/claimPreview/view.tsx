@@ -228,11 +228,10 @@ const ClaimPreview = forwardRef<any, Record<any, any>>((props: Props, ref: any) 
     });
   }
 
-  const handleNavLinkClick = (e: unknown) => {
+  const handleNavLinkClick = (e: MouseClickEvent) => {
     if (onClick) {
       onClick(e, claim, indexInContainer); // not sure indexInContainer is used for anything.
     }
-    // @ts-expect-error - TS2339 - Property 'stopPropagation' does not exist on type 'unknown'.
     e.stopPropagation();
   };
 
@@ -271,7 +270,7 @@ const ClaimPreview = forwardRef<any, Record<any, any>>((props: Props, ref: any) 
   // Make sure this happens after we figure out if this claim needs to be hidden
   const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, shouldHide);
 
-  function handleOnClick(e: unknown) {
+  function handleOnClick(e: MouseClickEvent) {
     if (onClick) {
       onClick(e, claim, indexInContainer);
     }

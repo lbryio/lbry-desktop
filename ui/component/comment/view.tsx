@@ -162,8 +162,7 @@ function CommentView(props: Props) {
       setCharCount(editedMessage.length);
 
       // a user will try and press the escape key to cancel editing their comment
-      const handleEscape = (event: unknown) => {
-        // @ts-expect-error - TS2339 - Property 'keyCode' does not exist on type 'unknown'.
+      const handleEscape = (event: KeyboardEvent) => {
         if (event.keyCode === KEYCODES.ESCAPE) {
           setEditing(false);
         }
@@ -184,7 +183,7 @@ function CommentView(props: Props) {
     }
   }, [page, uri, commentId, fetchReplies]);
 
-  function handleEditMessageChanged(event: unknown) {
+  function handleEditMessageChanged(event: FormFieldChangeEvent) {
     // @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
     setCommentValue(advancedEditor ? event : event.target.value);
   }
@@ -306,7 +305,7 @@ function CommentView(props: Props) {
             {isEditing ? (
               <Form onSubmit={handleSubmit}>
                 <FormFieldAreaAdvanced
-                  // @ts-expect-error - TS2322 - Type '{ className: string; type: string; name: string; value: string; charCount: number; onChange: (event: unknown) => void; textAreaMaxLength: number; handleSubmit: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormFieldAreaAdvanced> & Pick<Readonly<Props> & Readonly<...>, "type" | ... 18 more ... | "quickActionHandler"> & InexactPartial<...> & InexactPartial<...>'.
+                  // @ts-expect-error - TS2322 - Type '{ className: string; type: string; name: string; value: string; charCount: number; onChange: (event: FormFieldChangeEvent) => void; textAreaMaxLength: number; handleSubmit: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormFieldAreaAdvanced> & Pick<Readonly<Props> & Readonly<...>, "type" | ... 18 more ... | "quickActionHandler"> & InexactPartial<...> & InexactPartial<...>'.
                   className="comment__edit-input"
                   type={advancedEditor ? "markdown" : "textarea"}
                   name="editing_comment"

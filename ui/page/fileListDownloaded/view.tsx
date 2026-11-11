@@ -46,8 +46,7 @@ function FileListDownloaded(props: Props) {
   const [viewMode, setViewMode] = usePersistedState("library-view-mode", VIEW_PURCHASES);
   const [searchQuery, setSearchQuery] = useState("");
 
-  function handleInputChange(e: unknown) {
-    // @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
+  function handleInputChange(e: FormFieldChangeEvent) {
     const { value } = e.target;
     if (value !== searchQuery) {
       setSearchQuery(value);
@@ -85,7 +84,7 @@ function FileListDownloaded(props: Props) {
         <Form onSubmit={() => {}} className="wunderbar--inline">
           <Icon icon={ICONS.SEARCH} />
           <FormField
-            // @ts-expect-error - TS2322 - Type '{ className: string; onChange: (e: unknown) => void; value: string; type: string; name: string; placeholder: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+            // @ts-expect-error - TS2322 - Type '{ className: string; onChange: (e: FormFieldChangeEvent) => void; value: string; type: string; name: string; placeholder: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
             className="wunderbar__input--inline"
             onChange={handleInputChange}
             value={query}

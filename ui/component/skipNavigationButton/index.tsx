@@ -3,7 +3,7 @@ import Button from "component/button";
 // Allow screen reader users ( or keyboard navigation )
 // to jump to main content
 export default function SkipNavigationButton() {
-  const skipNavigation = (e: unknown) => {
+  const skipNavigation = (e: MouseClickEvent) => {
     // Match any focusable element
     const focusableElementQuery = `
       #main-content [tabindex]:not([tabindex="-1"]):not(:disabled),

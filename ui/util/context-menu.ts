@@ -178,7 +178,7 @@ export function openClaimPreviewMenu(claim: unknown, event: unknown) {
 }
 
 // Block context menu
-export function stopContextMenu(event: unknown) {
+export function stopContextMenu(event: MouseClickEvent) {
   if (navigator.userAgent.toLowerCase().indexOf(" electron/") > -1) {
     event.preventDefault();
     event.stopPropagation();

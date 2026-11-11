@@ -50,8 +50,7 @@ function FileDownloadLink(props: Props) {
     hideDownloadStatus = false,
   } = props;
 
-  function handleDownload(e: unknown) {
-    // @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
+  function handleDownload(e: MouseClickEvent) {
     e.preventDefault();
     download(uri);
   }

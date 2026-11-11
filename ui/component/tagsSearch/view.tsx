@@ -96,13 +96,11 @@ export default function TagsSearch(props: Props) {
     suggestedTags.push("mature");
   }
 
-  function onChange(e: unknown) {
-    // @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
+  function onChange(e: FormFieldChangeEvent) {
     setNewTag(e.target.value);
   }
 
-  function handleSubmit(e: unknown) {
-    // @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
+  function handleSubmit(e: FormSubmitEvent | MouseClickEvent) {
     e.preventDefault();
     const tags = newTag.trim();
 
@@ -204,7 +202,7 @@ export default function TagsSearch(props: Props) {
           {!hideInputField && (
             <FormField
               autoFocus={!disableAutoFocus}
-              // @ts-expect-error - TS2322 - Type '{ autoFocus: boolean; className: string; onChange: (e: unknown) => void; placeholder: string; type: string; value: string; disabled: boolean; label: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+              // @ts-expect-error - TS2322 - Type '{ autoFocus: boolean; className: string; onChange: (e: FormFieldChangeEvent) => void; placeholder: string; type: string; value: string; disabled: boolean; label: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
               className="tag__input"
               onChange={onChange}
               placeholder={placeholder || __("gaming, crypto")}
@@ -225,7 +223,7 @@ export default function TagsSearch(props: Props) {
                     name={newTag}
                     type="add"
                     onClick={
-                      newTag.includes("") ? (e: unknown) => handleSubmit(e) : (e: unknown) => handleTagClick(newTag)
+                      newTag.includes("") ? (e: MouseClickEvent) => handleSubmit(e) : () => handleTagClick(newTag)
                     }
                   />
                 )}

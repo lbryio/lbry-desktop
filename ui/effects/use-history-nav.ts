@@ -4,7 +4,7 @@ import { useActiveElement } from "./use-active-element";
 export default function useHistoryNav(history: unknown) {
   const el = useActiveElement(); // disable if we're in a textarea.
   useEffect(() => {
-    const handleKeyPress = (e: unknown) => {
+    const handleKeyPress = (e: KeyEvent) => {
       if ((e.metaKey || e.altKey) && !e.ctrlKey && !e.shiftKey) {
         switch (e.code) {
           case "ArrowLeft":

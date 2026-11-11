@@ -69,11 +69,9 @@ export default function SearchChannelField(props: Props) {
     setSearchUri("");
   }
 
-  function handleKeyPress(e: unknown) {
+  function handleKeyPress(e: KeyEvent) {
     // We have to use 'key' instead of 'keyCode' in this event.
-    // @ts-expect-error - TS2339 - Property 'key' does not exist on type 'unknown'.
     if (e.key === "Enter" && addTagRef && addTagRef.current && addTagRef.current.click) {
-      // @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
       e.preventDefault();
       addTagRef.current.click();
     }

@@ -156,13 +156,11 @@ export function CommentCreate(props: Props) {
     }
   }
 
-  function handleCommentChange(event: unknown) {
+  function handleCommentChange(event: FormFieldChangeEvent) {
     let commentValue;
     if (isReply) {
-      // @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
       commentValue = advancedEditor ? event : event.target.value;
     } else {
-      // @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
       commentValue = advancedEditor ? event : event.target.value;
     }
 

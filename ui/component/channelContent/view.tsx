@@ -67,8 +67,7 @@ function ChannelContent(props: Props) {
       ? claimType.every((ct) => TYPES_TO_ALLOW_FILTER.includes(ct))
       : TYPES_TO_ALLOW_FILTER.includes(claimType));
 
-  function handleInputChange(e: unknown) {
-    // @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
+  function handleInputChange(e: FormFieldChangeEvent) {
     const { value } = e.target;
     setSearchQuery(value);
   }
@@ -161,7 +160,7 @@ function ChannelContent(props: Props) {
             <Form onSubmit={() => {}} className="wunderbar--inline">
               <Icon icon={ICONS.SEARCH} />
               <FormField
-                // @ts-expect-error - TS2322 - Type '{ className: string; value: string; onChange: (e: unknown) => void; type: string; placeholder: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+                // @ts-expect-error - TS2322 - Type '{ className: string; value: string; onChange: (e: FormFieldChangeEvent) => void; type: string; placeholder: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 className="wunderbar__input--inline"
                 value={searchQuery}
                 onChange={handleInputChange}

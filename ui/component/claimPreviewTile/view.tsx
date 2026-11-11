@@ -122,7 +122,7 @@ function ClaimPreviewTile(props: Props) {
   // Aria-label value for claim preview
   const ariaLabelData = isChannel ? title : formatClaimPreviewTitle(title, channelTitle, date, mediaDuration);
 
-  function handleClick(e: unknown) {
+  function handleClick(e: MouseClickEvent) {
     if (navigateUrl) {
       history.push(navigateUrl);
     }

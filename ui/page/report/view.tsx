@@ -18,7 +18,7 @@ class ReportPage extends React.Component {
     };
   }
 
-  onMessageChange(event: unknown) {
+  onMessageChange(event: FormFieldChangeEvent) {
     this.setState({
       message: event.target.value,
     });

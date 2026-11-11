@@ -28,8 +28,7 @@ const ClaimCollectionAdd = (props: Props) => {
 
   // TODO: when other collection types added, filter list in context
 
-  function handleNameInput(e: unknown) {
-    // @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
+  function handleNameInput(e: FormFieldChangeEvent) {
     const { value } = e.target;
     setNewCollectionName(value);
   }
@@ -112,7 +111,7 @@ const ClaimCollectionAdd = (props: Props) => {
                 name="new_collection"
                 value={newCollectionName}
                 label={__("New List Title")}
-                // @ts-expect-error - TS2322 - Type '{ autoFocus: true; type: string; name: string; value: string; label: string; onFocus: () => void; onBlur: () => void; inputButton: Element; onChange: (e: unknown) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+                // @ts-expect-error - TS2322 - Type '{ autoFocus: true; type: string; name: string; value: string; label: string; onFocus: () => void; onBlur: () => void; inputButton: Element; onChange: (e: FormFieldChangeEvent) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 onFocus={onTextareaFocus}
                 onBlur={onTextareaBlur}
                 inputButton={

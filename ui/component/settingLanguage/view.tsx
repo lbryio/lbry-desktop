@@ -18,8 +18,7 @@ function SettingLanguage(props: Props) {
     setPreviousLanguage(null);
   }
 
-  function onLanguageChange(e: unknown) {
-    // @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
+  function onLanguageChange(e: FormFieldChangeEvent) {
     const { value } = e.target;
     setPreviousLanguage(language || getDefaultLanguage());
     setLanguage(value);

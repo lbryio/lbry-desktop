@@ -78,7 +78,7 @@ class RecsysPlugin extends Component {
     this.lastTimeUpdate = recsysEvent.offset;
   }
 
-  onPause(event: unknown) {
+  onPause(event: FormFieldChangeEvent) {
     const recsysEvent = newRecsysPlayerEvent(PlayerEvent.event.stop, this.player.currentTime());
     this.log("onPause", recsysEvent);
     RecSys.onRecsysPlayerEvent(this.options_.videoId, recsysEvent);
@@ -86,13 +86,13 @@ class RecsysPlugin extends Component {
     this.inPause = true;
   }
 
-  onEnded(event: unknown) {
+  onEnded(event: FormFieldChangeEvent) {
     const recsysEvent = newRecsysPlayerEvent(PlayerEvent.event.stop, this.player.currentTime());
     this.log("onEnded", recsysEvent);
     RecSys.onRecsysPlayerEvent(this.options_.videoId, recsysEvent);
   }
 
-  onRateChange(event: unknown) {
+  onRateChange(event: FormFieldChangeEvent) {
     const recsysEvent = newRecsysPlayerEvent(
       PlayerEvent.event.speed,
       this.player.currentTime(),
@@ -117,7 +117,7 @@ class RecsysPlugin extends Component {
     this.currentTimeUpdate = nextCurrentTime;
   }
 
-  onSeeked(event: unknown) {
+  onSeeked(event: KeyEvent) {
     const curTime = this.player.currentTime();
 
     // There are three patterns for seeking:

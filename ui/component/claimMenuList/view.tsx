@@ -268,22 +268,16 @@ function ClaimMenuList(props: Props) {
 
   // changes MenuButton behavior to show/hide MenuList not on press but on click event
   let isEventSimulated = false;
-  const menuButtonHandler = (e: unknown) => {
+  const menuButtonHandler = (e: MouseClickEvent | KeyEvent) => {
     // @ts-expect-error - TS2339 - Property 'key' does not exist on type 'unknown'.
     if (e.key === "Enter") {
-      // @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
       e.preventDefault();
-      // @ts-expect-error - TS2339 - Property 'type' does not exist on type 'unknown'.
       e.type = "click";
     }
-    // @ts-expect-error - TS2339 - Property 'type' does not exist on type 'unknown'.
     if (!isEventSimulated && e.type === "mousedown") {
-      // @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
       e.preventDefault();
-      // @ts-expect-error - TS2339 - Property 'type' does not exist on type 'unknown'.
     } else if (e.type === "click") {
       isEventSimulated = true;
-      // @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
       e.target.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
       isEventSimulated = false;
     }

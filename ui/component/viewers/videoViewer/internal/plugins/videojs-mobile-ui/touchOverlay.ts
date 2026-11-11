@@ -72,7 +72,7 @@ class TouchOverlay extends Component {
    *        The touch event
    *
    */
-  handleTap(event: unknown) {
+  handleTap(event: MouseClickEvent) {
     // Don't handle taps on the play button
     if (event.target !== this.el_) {
       return;
@@ -102,7 +102,7 @@ class TouchOverlay extends Component {
    *        The touch event
    *
    */
-  handleSingleTap(event: unknown) {
+  handleSingleTap(event: FormFieldChangeEvent) {
     this.removeClass("skip");
     this.toggleClass("show-play-toggle");
   }
@@ -114,7 +114,7 @@ class TouchOverlay extends Component {
    *        The touch event
    *
    */
-  handleDoubleTap(event: unknown) {
+  handleDoubleTap(event: FormFieldChangeEvent) {
     const rect = this.el_.getBoundingClientRect();
     const x = event.changedTouches[0].clientX - rect.left;
 

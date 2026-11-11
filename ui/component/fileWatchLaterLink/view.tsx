@@ -17,8 +17,7 @@ function FileWatchLaterLink(props: Props) {
   const buttonRef = useRef();
   const isHovering = useHover(buttonRef);
 
-  function handleWatchLater(e: unknown) {
-    // @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
+  function handleWatchLater(e: MouseClickEvent) {
     e.preventDefault();
     doToast({
       message: hasClaimInWatchLater ? __("Item removed from Watch Later") : __("Item added to Watch Later"),

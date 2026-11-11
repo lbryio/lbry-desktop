@@ -89,15 +89,11 @@ function SettingViewHosting(props: Props) {
     getDaemonStatus();
   }
 
-  function handleKeyDown(e: unknown) {
-    // @ts-expect-error - TS2339 - Property 'keyCode' does not exist on type 'unknown'.
+  function handleKeyDown(e: KeyEvent) {
     if (e.keyCode === KEYCODES.ESCAPE) {
-      // @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
       e.preventDefault();
       setContentBlobSpaceLimit(String(viewHostingLimit / 1024));
-      // @ts-expect-error - TS2339 - Property 'keyCode' does not exist on type 'unknown'.
     } else if (e.keyCode === KEYCODES.ENTER) {
-      // @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
       e.preventDefault();
       handleApply();
     }
@@ -126,7 +122,7 @@ function SettingViewHosting(props: Props) {
           name="content_blob_limit_gb"
           type="number"
           min={0}
-          // @ts-expect-error - TS2322 - Type '{ name: string; type: string; min: number; onKeyDown: (e: unknown) => void; inputButton: Element; disabled: boolean; onWheel: (e: any) => any; label: string; onChange: (e: any) => void; value: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+          // @ts-expect-error - TS2322 - Type '{ name: string; type: string; min: number; onKeyDown: (e: FormFieldChangeEvent) => void; inputButton: Element; disabled: boolean; onWheel: (e: any) => any; label: string; onChange: (e: any) => void; value: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
           onKeyDown={handleKeyDown}
           inputButton={
             <>

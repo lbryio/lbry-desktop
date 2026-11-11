@@ -220,14 +220,12 @@ export default function WunderBarSuggestions(props: Props) {
       return false;
     }
 
-    function overrideHomeEndHandling(event: unknown) {
-      // @ts-expect-error - TS2339 - Property 'ctrlKey' does not exist on type '{}'. | TS2339 - Property 'metaKey' does not exist on type '{}'. | TS2339 - Property 'shiftKey' does not exist on type '{}'. | TS2339 - Property 'key' does not exist on type '{}'.
+    function overrideHomeEndHandling(event: KeyEvent) {
       const { ctrlKey, metaKey, shiftKey, key } = event;
       if (!ctrlKey && !metaKey) {
         if (key === "Home" || key === "End") {
           // @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
           if (handleHomeEndCaretPos(inputRef.current, shiftKey, key === "Home")) {
-            // @ts-expect-error - TS2339 - Property 'stopPropagation' does not exist on type 'unknown'.
             event.stopPropagation();
           }
         }
@@ -252,8 +250,7 @@ export default function WunderBarSuggestions(props: Props) {
   }, [inputRef]);
 
   React.useEffect(() => {
-    function handleKeyDown(event: unknown) {
-      // @ts-expect-error - TS2339 - Property 'ctrlKey' does not exist on type '{}'. | TS2339 - Property 'metaKey' does not exist on type '{}'. | TS2339 - Property 'keyCode' does not exist on type '{}'.
+    function handleKeyDown(event: KeyboardEvent) {
       const { ctrlKey, metaKey, keyCode } = event;
 
       // @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
@@ -298,13 +295,12 @@ export default function WunderBarSuggestions(props: Props) {
     window.addEventListener("keydown", handleKeyDown);
 
     // @if TARGET='app'
-    function handleDoubleClick(event: unknown) {
+    function handleDoubleClick(event: MouseEvent) {
       // @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
       if (!inputRef.current) {
         return;
       }
 
-      // @ts-expect-error - TS2339 - Property 'stopPropagation' does not exist on type 'unknown'.
       event.stopPropagation();
     }
 

@@ -67,7 +67,7 @@ function CollectionPreviewTile(props: Props) {
   const navigateUrl =
     formatLbryUrlForWeb(collectionItemUrls[0] || "/") + (collectionId ? generateListSearchUrlParams(collectionId) : "");
 
-  function handleClick(e: unknown) {
+  function handleClick(e: MouseClickEvent) {
     if (navigateUrl) {
       push(navigateUrl);
     }

@@ -33,12 +33,12 @@ class LbryVolumeBarClass extends videojs.getComponent(VIDEOJS_VOLUME_BAR_CLASS) 
     }
   }
 
-  handleMouseDown(event: unknown) {
+  handleMouseDown(event: MouseClickEvent) {
     super.handleMouseDown(event);
     event.stopPropagation();
   }
 
-  handleMouseMove(event: unknown) {
+  handleMouseMove(event: MouseClickEvent) {
     super.handleMouseMove(event);
     event.stopPropagation();
   }

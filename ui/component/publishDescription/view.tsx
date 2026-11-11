@@ -17,8 +17,7 @@ function PublishDescription(props: Props) {
     setAdvancedEditor(!advancedEditor);
   }
 
-  function handleCommentChange(event: unknown) {
-    // @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
+  function handleCommentChange(event: FormFieldChangeEvent) {
     const descriptionValue = advancedEditor ? event : event.target.value;
 
     updatePublishForm({ description: descriptionValue });

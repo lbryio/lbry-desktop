@@ -62,11 +62,10 @@ const VideoJsEvents = ({
   // - videojs changes the MuteToggle text at 'loadstart', so this was chosen
   // as the listener to update static texts.
 
-  function resolveCtrlText(e: unknown) {
+  function resolveCtrlText(e: { type: string }) {
     const player = playerRef.current;
     if (player) {
       const ctrlBar = player.getChild("controlBar");
-      // @ts-expect-error - TS2339 - Property 'type' does not exist on type 'unknown'.
       switch (e.type) {
         case "play":
           setLabel(ctrlBar, "PlayToggle", __("Pause (space)"));
@@ -102,7 +101,6 @@ const VideoJsEvents = ({
           resolveCtrlText({ type: "fullscreenchange" });
           break;
         default:
-          // @ts-expect-error - TS2339 - Property 'type' does not exist on type 'unknown'.
           if (isDev) throw Error("Unexpected: " + e.type);
           break;
       }
