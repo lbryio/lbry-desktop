@@ -80,7 +80,7 @@ export function doAuthenticate(
   callInstall = true,
   domain = null
 ) {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.AUTHENTICATION_STARTED,
     });
@@ -113,7 +113,7 @@ export function doAuthenticate(
 }
 
 export function doUserFetch() {
-  return (dispatch: unknown) =>
+  return (dispatch: Dispatch) =>
     new Promise<any>((resolve, reject) => {
       dispatch({
         type: ACTIONS.USER_FETCH_STARTED,
@@ -139,7 +139,7 @@ export function doUserFetch() {
 
 export function doUserCheckEmailVerified() {
   // This will happen in the background so we don't need loading booleans
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     Lbryio.getCurrentUser().then((user) => {
       if (user.has_verified_email) {
         dispatch(doRewardList());
@@ -160,7 +160,7 @@ export function doUserPhoneReset() {
 }
 
 export function doUserPhoneNew(phone: unknown, countryCode: unknown) {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.USER_PHONE_NEW_STARTED,
       data: { phone, country_code: countryCode },
@@ -188,7 +188,7 @@ export function doUserPhoneNew(phone: unknown, countryCode: unknown) {
 }
 
 export function doUserCheckIfEmailExists(email: unknown) {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.USER_EMAIL_NEW_STARTED,
       email,
@@ -241,7 +241,7 @@ export function doUserCheckIfEmailExists(email: unknown) {
 }
 
 export function doUserSignIn(email: unknown, password: unknown) {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.USER_EMAIL_NEW_STARTED,
       email,
@@ -280,7 +280,7 @@ export function doUserSignIn(email: unknown, password: unknown) {
 }
 
 export function doUserSignUp(email: unknown, password: unknown) {
-  return (dispatch: unknown) =>
+  return (dispatch: Dispatch) =>
     new Promise<any>((resolve, reject) => {
       dispatch({
         type: ACTIONS.USER_EMAIL_NEW_STARTED,
@@ -315,7 +315,7 @@ export function doUserSignUp(email: unknown, password: unknown) {
 }
 
 export function doUserPasswordReset(email: unknown) {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.USER_PASSWORD_RESET_STARTED,
       email,
@@ -338,7 +338,7 @@ export function doUserPasswordReset(email: unknown) {
 }
 
 export function doUserPasswordSet(newPassword: unknown, oldPassword: unknown, authToken: unknown) {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.USER_PASSWORD_SET_STARTED,
     });
@@ -370,7 +370,7 @@ export function doUserPasswordSet(newPassword: unknown, oldPassword: unknown, au
 }
 
 export function doUserResendVerificationEmail(email: unknown) {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.USER_EMAIL_VERIFY_RETRY_STARTED,
     });
@@ -418,7 +418,7 @@ export function doUserEmailVerifyFailure(error: unknown) {
 }
 
 export function doFetchAccessToken() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     const success = (token: unknown) =>
       dispatch({
         type: ACTIONS.FETCH_ACCESS_TOKEN_SUCCESS,
@@ -429,14 +429,14 @@ export function doFetchAccessToken() {
 }
 
 export function doUserSetReferrerReset() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.USER_SET_REFERRER_RESET,
     });
   };
 }
 export function doUserSetReferrer(referrer: unknown, shouldClaim: unknown) {
-  return async (dispatch: unknown, getState: unknown) => {
+  return async (dispatch: Dispatch, getState: GetState) => {
     dispatch({
       type: ACTIONS.USER_SET_REFERRER_STARTED,
     });
@@ -493,7 +493,7 @@ export function doUserSetReferrer(referrer: unknown, shouldClaim: unknown) {
 }
 
 export function doUserSetCountry(country: unknown) {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const user = selectUser(state);
 
@@ -508,7 +508,7 @@ export function doUserSetCountry(country: unknown) {
 }
 
 export function doClaimYoutubeChannels() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.USER_YOUTUBE_IMPORT_STARTED,
     });
@@ -556,7 +556,7 @@ export function doClaimYoutubeChannels() {
 }
 
 export function doCheckYoutubeTransfer() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.USER_YOUTUBE_IMPORT_STARTED,
     });

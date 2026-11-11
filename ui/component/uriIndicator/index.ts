@@ -11,7 +11,7 @@ const select = (state: unknown, props: unknown) => ({
   uri: normalizeURI(props.uri),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   resolveUri: (uri) => dispatch(doResolveUri(uri)),
 });
 

@@ -10,7 +10,7 @@ const select = (state: unknown, props: unknown) => ({
   isUpdateAvailable: selectIsUpgradeAvailable(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   closeModal: () => dispatch(doHideModal()),
   declineAutoUpdate: () => dispatch(doAutoUpdateDeclined()),
 });

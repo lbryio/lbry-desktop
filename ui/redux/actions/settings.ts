@@ -24,7 +24,7 @@ export const IS_MAC = process.platform === "darwin";
 const UPDATE_IS_NIGHT_INTERVAL = 5 * 60 * 1000;
 
 export function doFetchDaemonSettings() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     Lbry.settings_get().then((settings) => {
       analytics.toggleInternal(settings.share_usage_data);
       dispatch({
@@ -38,7 +38,7 @@ export function doFetchDaemonSettings() {
 }
 
 export function doFindFFmpeg() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.FINDING_FFMPEG_STARTED,
     });
@@ -52,7 +52,7 @@ export function doFindFFmpeg() {
 }
 
 export function doGetDaemonStatus() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     return Lbry.status().then((status) => {
       dispatch({
         type: ACTIONS.DAEMON_STATUS_RECEIVED,
@@ -66,7 +66,7 @@ export function doGetDaemonStatus() {
 }
 
 export function doClearDaemonSetting(key: unknown) {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const ready = selectPrefsReady(state);
 
@@ -102,7 +102,7 @@ export function doClearDaemonSetting(key: unknown) {
 }
 // if doPopulate is applying settings, we don't want to cause a loop; doNotDispatch = true.
 export function doSetDaemonSetting(key: unknown, value: unknown, doNotDispatch = false) {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const ready = selectPrefsReady(state);
     if (!ready) {
@@ -156,7 +156,7 @@ export function doSetDaemonSetting(key: unknown, value: unknown, doNotDispatch =
 }
 
 export function doCleanBlobs(fetchAfter = true) {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     return Lbry.blob_clean().then(() => {
       if (fetchAfter) {
         dispatch(doFetchDaemonSettings());
@@ -174,7 +174,7 @@ export function doSaveCustomWalletServers(servers: unknown) {
 }
 
 export function doSetClientSetting(key: unknown, value: unknown, pushPrefs: unknown) {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const ready = selectPrefsReady(state);
 
@@ -203,7 +203,7 @@ export function doUpdateIsNight() {
 }
 
 export function doUpdateIsNightAsync() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch(doUpdateIsNight());
 
     setInterval(() => dispatch(doUpdateIsNight()), UPDATE_IS_NIGHT_INTERVAL);
@@ -212,7 +212,7 @@ export function doUpdateIsNightAsync() {
 
 export function doSetDarkTime(value: unknown, options: unknown) {
   const { fromTo, time } = options;
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const darkModeTimes = state.settings.clientSettings[SETTINGS.DARK_MODE_TIMES];
     const { hour, min } = darkModeTimes[fromTo];
@@ -234,7 +234,7 @@ export function doSetDarkTime(value: unknown, options: unknown) {
 
 export function doGetWalletSyncPreference() {
   const SYNC_KEY = "enable-sync";
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     return Lbry.preference_get({ key: SYNC_KEY }).then((result) => {
       const enabled = result && result[SYNC_KEY];
       if (enabled !== null) {
@@ -247,7 +247,7 @@ export function doGetWalletSyncPreference() {
 
 export function doSetWalletSyncPreference(pref: unknown) {
   const SYNC_KEY = "enable-sync";
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     return Lbry.preference_set({ key: SYNC_KEY, value: pref }).then((result) => {
       const enabled = result && result[SYNC_KEY];
       if (enabled !== null) {
@@ -259,7 +259,7 @@ export function doSetWalletSyncPreference(pref: unknown) {
 }
 
 export function doPushSettingsToPrefs() {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const {
       settings: { clientSettings, sharedPreferences },
@@ -278,7 +278,7 @@ export function doPushSettingsToPrefs() {
 }
 
 export function doEnterSettingsPage() {
-  return async (dispatch: unknown, getState: unknown) => {
+  return async (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
     const hasVerifiedEmail = state.user && state.user.user && state.user.user.has_verified_email;
@@ -294,7 +294,7 @@ export function doEnterSettingsPage() {
 }
 
 export function doExitSettingsPage() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch(doSetSyncLock(false));
     dispatch(doPushSettingsToPrefs());
     // syncLoop is restarted in store.js sharedStateCB if necessary
@@ -302,7 +302,7 @@ export function doExitSettingsPage() {
 }
 
 export function doFetchLanguage(language: unknown) {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const { settings } = getState();
 
     if (settings.language !== language || (settings.loadedLanguages && !settings.loadedLanguages.includes(language))) {
@@ -328,7 +328,7 @@ export function doFetchLanguage(language: unknown) {
 }
 
 export function doSetHomepage(code: unknown) {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     let languageCode;
     if (code === getDefaultLanguage()) {
       languageCode = null;
@@ -340,7 +340,7 @@ export function doSetHomepage(code: unknown) {
 }
 
 export function doSetLanguage(language: unknown) {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const { settings } = getState();
     const { daemonSettings } = settings;
     const { share_usage_data: shareSetting } = daemonSettings;
@@ -394,7 +394,7 @@ export function doSetLanguage(language: unknown) {
 }
 
 export function doSetAutoLaunch(value: unknown) {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const autoLaunch = makeSelectClientSetting(SETTINGS.AUTO_LAUNCH)(state);
 
@@ -444,14 +444,14 @@ export function doSetAutoLaunch(value: unknown) {
 }
 
 export function doSetAppToTrayWhenClosed(value: unknown) {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     window.localStorage.setItem(SETTINGS.TO_TRAY_WHEN_CLOSED, value);
     dispatch(doSetClientSetting(SETTINGS.TO_TRAY_WHEN_CLOSED, value));
   };
 }
 
 export function toggleVideoTheaterMode() {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const videoTheaterMode = makeSelectClientSetting(SETTINGS.VIDEO_THEATER_MODE)(state);
 
@@ -460,7 +460,7 @@ export function toggleVideoTheaterMode() {
 }
 
 export function toggleAutoplayNext() {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const ready = selectPrefsReady(state);
     const autoplayNext = makeSelectClientSetting(SETTINGS.AUTOPLAY_NEXT)(state);

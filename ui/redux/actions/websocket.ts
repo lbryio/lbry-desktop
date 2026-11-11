@@ -55,7 +55,7 @@ export const doSocketConnect = (url: unknown, cb: unknown) => {
   connectToSocket();
 };
 
-export const doSocketDisconnect = (url: unknown) => (dispatch: unknown) => {
+export const doSocketDisconnect = (url: unknown) => (dispatch: Dispatch) => {
   if (sockets[url] !== undefined && sockets[url] !== null) {
     closingSockets[url] = true;
     sockets[url].close();
@@ -67,7 +67,7 @@ export const doSocketDisconnect = (url: unknown) => (dispatch: unknown) => {
   }
 };
 
-export const doNotificationSocketConnect = (enableNotifications: unknown) => (dispatch: unknown) => {
+export const doNotificationSocketConnect = (enableNotifications: unknown) => (dispatch: Dispatch) => {
   const authToken = getAuthToken();
   if (!authToken) {
     console.error("Unable to connect to web socket because auth token is missing");
@@ -87,7 +87,7 @@ export const doNotificationSocketConnect = (enableNotifications: unknown) => (di
   });
 };
 
-export const doCommentSocketConnect = (uri: unknown, claimId: unknown) => (dispatch: unknown) => {
+export const doCommentSocketConnect = (uri: unknown, claimId: unknown) => (dispatch: Dispatch) => {
   const url = getCommentSocketUrl(claimId);
 
   doSocketConnect(url, (response) => {
@@ -112,7 +112,7 @@ export const doCommentSocketConnect = (uri: unknown, claimId: unknown) => (dispa
   });
 };
 
-export const doCommentSocketDisconnect = (claimId: unknown) => (dispatch: unknown) => {
+export const doCommentSocketDisconnect = (claimId: unknown) => (dispatch: Dispatch) => {
   const url = getCommentSocketUrl(claimId);
 
   dispatch(doSocketDisconnect(url));

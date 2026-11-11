@@ -14,7 +14,7 @@ const select = (state: unknown) => ({
   authenticated: selectUserVerifiedEmail(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   setShareDataInternal: (share) => dispatch(doSetDaemonSetting(DAEMON_SETTINGS.SHARE_USAGE_DATA, share)),
   signOut: () => dispatch(doSignOut()),
   authenticateIfSharingData: () =>

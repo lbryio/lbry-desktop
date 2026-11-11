@@ -13,7 +13,7 @@ const select = (state: unknown, props: unknown) => ({
   showMature: selectShowMatureContent(state),
 });
 
-const perform = (dispatch: unknown, ownProps: unknown) => ({
+const perform = (dispatch: Dispatch, ownProps: unknown) => ({
   doResolveUris: (uris) => dispatch(doResolveUris(uris)),
   navigateToSearchPage: (query) => {
     const encodedQuery = encodeURIComponent(query);

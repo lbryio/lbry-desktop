@@ -8,7 +8,7 @@ import { selectUserIsRewardApproved } from "redux/selectors/user";
 import rewards from "rewards";
 
 export function doRewardList() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.FETCH_REWARDS_STARTED,
     });
@@ -30,7 +30,7 @@ export function doRewardList() {
 }
 
 export function doClaimRewardType(rewardType: unknown, options = {}) {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const userIsRewardApproved = selectUserIsRewardApproved(state);
     const unclaimedRewards = selectUnclaimedRewards(state);
@@ -122,13 +122,13 @@ export function doClaimRewardType(rewardType: unknown, options = {}) {
 }
 
 export function doClaimInitialRewards() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch(doClaimRewardType(rewards.TYPE_CONFIRM_EMAIL));
   };
 }
 
 export function doClaimEligiblePurchaseRewards() {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const unclaimedRewards = selectUnclaimedRewards(state);
     const userIsRewardApproved = selectUserIsRewardApproved(state);
@@ -148,7 +148,7 @@ export function doClaimEligiblePurchaseRewards() {
 }
 
 export function doClaimRewardClearError(reward: unknown) {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.CLAIM_REWARD_CLEAR_ERROR,
       data: { reward },
@@ -157,7 +157,7 @@ export function doClaimRewardClearError(reward: unknown) {
 }
 
 export function doFetchRewardedContent() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     const success = (nameToClaimId: unknown) => {
       dispatch({
         type: ACTIONS.FETCH_REWARD_CONTENT_COMPLETED,

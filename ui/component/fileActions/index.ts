@@ -25,7 +25,7 @@ const select = (state: unknown, props: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   prepareEdit: (publishData, uri, fileInfo) => {
     if (publishData.signing_channel) {

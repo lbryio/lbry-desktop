@@ -14,7 +14,7 @@ const select = (state: unknown) => ({
   prefsReady: selectPrefsReady(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   channelSubscribe: (uri) => dispatch(doChannelSubscribe(uri)),
 });
 

@@ -14,7 +14,7 @@ const select = (state: unknown) => ({
   error: makeSelectClaimRewardError()(state, { reward_type: REWARDS.TYPE_REWARD_CODE }),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   closeModal: () => dispatch(doHideModal()),
   submitRewardCode: (code) => dispatch(doClaimRewardType(REWARDS.TYPE_REWARD_CODE, { params: { code } })),
 });

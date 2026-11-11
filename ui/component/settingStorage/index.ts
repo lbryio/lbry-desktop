@@ -15,7 +15,7 @@ const select = (state: unknown) => ({
   isSetting: selectSettingDaemonSettings(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   setDaemonSetting: (key, value) => dispatch(doSetDaemonSetting(key, value)),
   clearDaemonSetting: (key) => dispatch(doClearDaemonSetting(key)),
   clearCache: () => dispatch(doClearCache()),

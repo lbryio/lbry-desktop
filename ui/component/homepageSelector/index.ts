@@ -8,7 +8,7 @@ const select = (state: unknown) => ({
   homepage: selectHomepageCode(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   setHomepage: (value) => dispatch(doSetHomepage(value)),
 });
 

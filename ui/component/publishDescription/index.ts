@@ -8,7 +8,7 @@ const select = (state: unknown) => ({
   description: makeSelectPublishFormValue("description")(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   updatePublishForm: (value) => dispatch(doUpdatePublishForm(value)),
 });
 

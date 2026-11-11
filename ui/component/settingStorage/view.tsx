@@ -59,6 +59,7 @@ export default function SettingStorage(props: Props) {
               }
               footer={<AppStorageViz />}
             >
+              {/* @ts-expect-error - TS2741 (ts-migration) */}
               <SettingSaveBlobs />
             </SettingsRow>
             <SettingsRow
@@ -74,6 +75,7 @@ export default function SettingStorage(props: Props) {
                 </React.Fragment>
               }
             >
+              {/* @ts-expect-error - TS2739 (ts-migration) */}
               <SettingViewHosting disabled={!saveBlobs} />
             </SettingsRow>
             <SettingsRow
@@ -89,6 +91,7 @@ export default function SettingStorage(props: Props) {
                 </React.Fragment>
               }
             >
+              {/* @ts-expect-error - TS2739 (ts-migration) */}
               <SettingDataHosting />
             </SettingsRow>
           </>

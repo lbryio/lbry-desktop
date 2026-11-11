@@ -24,6 +24,7 @@ export default function SettingUnauthenticated(props: Props) {
       body={
         <>
           <SettingsRow title={__("Language")} subtitle={__(HELP_LANGUAGE)}>
+            {/* @ts-expect-error - TS2741 (ts-migration) */}
             <SettingLanguage />
           </SettingsRow>
 
@@ -39,6 +40,7 @@ export default function SettingUnauthenticated(props: Props) {
 
           {homepages && Object.keys(homepages).length > 1 && (
             <SettingsRow title={__("Homepage")} subtitle={__("Tailor your experience.")}>
+              {/* @ts-expect-error - TS2741 (ts-migration) */}
               <HomepageSelector />
             </SettingsRow>
           )}

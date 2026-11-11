@@ -12,7 +12,7 @@ const select = (state: unknown, props: unknown) => ({
   incognito: selectIncognito(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   closeModal: () => dispatch(doHideModal()),
   sendToAddress: (address, amount) => dispatch(doSendDraftTransaction(address, amount)),
   sendTip: (params, isSupport) => dispatch(doSendTip(params, isSupport)),

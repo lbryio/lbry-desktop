@@ -11,7 +11,7 @@ const select = (state: unknown, props: unknown) => ({
   pending: makeSelectClaimIsPending(props.uri)(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   beginPublish: (name) => {
     dispatch(doClearPublish());
     dispatch(doPrepareEdit({ name }));

@@ -150,6 +150,7 @@ function PublishAdditionalOptions(props: Props) {
               )} */}
               {/* @endif */}
               <div className="section">
+                {/* @ts-expect-error - TS2739 (ts-migration) */}
                 <PublishReleaseDate />
 
                 <FormField

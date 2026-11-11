@@ -21,7 +21,7 @@ const select = (state: unknown) => ({
   amountNeededForTakeover: selectTakeOverAmount(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   updatePublishForm: (value) => dispatch(doUpdatePublishForm(value)),
   prepareEdit: (claim, uri) => dispatch(doPrepareEdit(claim, uri)),
   setActiveChannel: (claimId) => dispatch(doSetActiveChannel(claimId)),

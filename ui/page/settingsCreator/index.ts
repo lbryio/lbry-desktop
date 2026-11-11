@@ -26,7 +26,7 @@ const select = (state: unknown) => ({
   moderationDelegatesById: selectModerationDelegatesById(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   commentBlockWords: (channelClaim, words) => dispatch(doCommentBlockWords(channelClaim, words)),
   commentUnblockWords: (channelClaim, words) => dispatch(doCommentUnblockWords(channelClaim, words)),
   fetchCreatorSettings: (channelClaimId) => dispatch(doFetchCreatorSettings(channelClaimId)),

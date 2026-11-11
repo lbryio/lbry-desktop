@@ -87,7 +87,7 @@ const select = (state: unknown, props: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   openFolder: (path) => dispatch(doOpenFileInFolder(path)),
   prepareEdit: (publishData, uri, fileInfo) => {
     if (publishData.signing_channel) {

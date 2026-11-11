@@ -10,7 +10,7 @@ const select = (state: unknown, props: unknown) => ({
   error: selectError(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   openModal: (props) => dispatch(doOpenModal(props)),
   hideModal: (props) => dispatch(doHideModal(props)),
 });

@@ -22,7 +22,7 @@ const select = (state: unknown) => ({
   user: selectUser(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   setSync: (value) => dispatch(doSetWalletSyncPreference(value)),
   setShareDiagnosticData: (shouldShareData) =>
     dispatch(doSetDaemonSetting(DAEMON_SETTINGS.SHARE_USAGE_DATA, shouldShareData)),

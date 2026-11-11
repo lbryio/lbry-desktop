@@ -11,7 +11,7 @@ const select = (state: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   setClientSetting: (value) => dispatch(doSetClientSetting(SETTINGS.ENABLE_PRERELEASE_UPDATES, value)),
 });
 

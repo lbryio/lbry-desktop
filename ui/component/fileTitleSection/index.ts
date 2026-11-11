@@ -19,7 +19,7 @@ const select = (state: unknown, props: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   fetchSubCount: (claimId) => dispatch(doFetchSubCount(claimId)),
 });
 

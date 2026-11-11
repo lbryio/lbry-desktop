@@ -10,7 +10,7 @@ const select = (state: unknown) => ({
   gettingNewAddress: selectGettingNewAddress(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   checkAddressIsMine: (address) => dispatch(doCheckAddressIsMine(address)),
   getNewAddress: () => dispatch(doGetNewAddress()),
 });

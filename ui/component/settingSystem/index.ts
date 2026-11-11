@@ -25,7 +25,7 @@ const select = (state: unknown) => ({
   allowAnalytics: selectAllowAnalytics(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   setDaemonSetting: (key, value) => dispatch(doSetDaemonSetting(key, value)),
   clearDaemonSetting: (key) => dispatch(doClearDaemonSetting(key)),
   clearCache: () => dispatch(doClearCache()),

@@ -18,7 +18,7 @@ const select = (state: unknown) => ({
   failedInstallation: selectUpgradeFailedInstallation(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   startUpgrade: () => dispatch(doStartUpgrade()),
   cancelUpgrade: () => {
     dispatch(doHideModal());

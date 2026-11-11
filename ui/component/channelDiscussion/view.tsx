@@ -16,6 +16,7 @@ function ChannelDiscussion(props: Props) {
   }
   return (
     <section className="section">
+      {/* @ts-expect-error - TS2740 (ts-migration) */}
       <CommentsList uri={uri} linkedCommentId={linkedCommentId} commentsAreExpanded />
     </section>
   );

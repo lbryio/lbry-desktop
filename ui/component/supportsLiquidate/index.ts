@@ -24,7 +24,7 @@ const select = (state: unknown, props: unknown) => ({
   abandonClaimError: selectAbandonClaimSupportError(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   abandonSupportForClaim: (claimId, type, keep, preview) =>
     dispatch(doSupportAbandonForClaim(claimId, type, keep, preview)),
 });

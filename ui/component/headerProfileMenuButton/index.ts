@@ -12,7 +12,7 @@ const select = (state: unknown) => ({
   authenticated: selectUserVerifiedEmail(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   openSignOutModal: () => dispatch(doOpenModal(MODALS.SIGN_OUT)),
 });
 

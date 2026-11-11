@@ -10,7 +10,7 @@ const select = (state: unknown) => ({
   autoLaunch: makeSelectClientSetting(SETTINGS.AUTO_LAUNCH)(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   showToast: (options) => dispatch(doToast(options)),
   setAutoLaunch: (value) => dispatch(doSetAutoLaunch(value)),
 });

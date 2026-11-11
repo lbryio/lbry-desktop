@@ -8,7 +8,7 @@ const select = (state: unknown, props: unknown) => ({
   metadata: makeSelectMetadataForUri(props.uri)(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   closeModal: () => dispatch(doHideModal()),
 });
 

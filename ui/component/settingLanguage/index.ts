@@ -8,7 +8,7 @@ const select = (state: unknown) => ({
   language: selectLanguage(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   setLanguage: (value) => dispatch(doSetLanguage(value)),
 });
 

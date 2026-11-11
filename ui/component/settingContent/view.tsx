@@ -169,6 +169,7 @@ export default function SettingContent(props: Props) {
             </SettingsRow>
 
             <SettingsRow title={__("Followed channels")} subtitle={__(HELP.FOLLOWING_FILE)} multirow>
+              {/* @ts-expect-error - TS2739 (ts-migration) */}
               <SettingFollowing />
             </SettingsRow>
 
@@ -194,6 +195,7 @@ export default function SettingContent(props: Props) {
               />
             </SettingsRow>
             <SettingsRow title={__("Max purchase price")} subtitle={__(HELP.MAX_PURCHASE_PRICE)} multirow>
+              {/* @ts-expect-error - TS2741 (ts-migration) */}
               <MaxPurchasePrice />
             </SettingsRow>
             <SettingsRow title={__("Purchase and tip confirmations")} multirow>

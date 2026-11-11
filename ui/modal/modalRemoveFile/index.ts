@@ -18,7 +18,7 @@ const select = (state: unknown, props: unknown) => ({
   isAbandoning: makeSelectIsAbandoningClaimForUri(props.uri)(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   closeModal: () => dispatch(doHideModal()),
   doResolveUri: (uri) => dispatch(doResolveUri(uri)),
   deleteFile: (uri, deleteFromComputer, abandonClaim, doGoBack, claim) => {

@@ -12,7 +12,7 @@ const select = (state: unknown) => ({
   deamonSettings: selectDaemonSettings(state),
 });
 
-const perform = (dispatch: unknown, ownProps: unknown) => ({
+const perform = (dispatch: Dispatch, ownProps: unknown) => ({
   doAuth: () => ownProps.history.push(`/$/${PAGES.AUTH}?redirect=/$/${PAGES.HELP}`),
   fetchAccessToken: () => dispatch(doFetchAccessToken()),
 });

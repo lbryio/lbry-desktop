@@ -47,10 +47,15 @@ class SettingsPage extends React.PureComponent<Props> {
           </section>
         ) : (
           <div className={"card-stack"}>
+            {/* @ts-expect-error - TS2739 (ts-migration) */}
             <SettingAppearance />
+            {/* @ts-expect-error - TS2739 (ts-migration) */}
             <SettingAccount />
+            {/* @ts-expect-error - TS2740 (ts-migration) */}
             <SettingContent />
+            {/* @ts-expect-error - TS2740 (ts-migration) */}
             <SettingSystem />
+            {/* @ts-expect-error - TS2739 (ts-migration) */}
             <SettingStorage />
           </div>
         )}

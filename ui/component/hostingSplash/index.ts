@@ -21,7 +21,7 @@ const select = (state: unknown) => ({
   saveBlobs: selectSaveBlobs(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   setDaemonSetting: (key, value) => dispatch(doSetDaemonSetting(key, value)),
 });
 

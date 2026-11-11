@@ -66,7 +66,7 @@ const select = (state: unknown, props: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   changeVolume: (volume) => dispatch(doChangeVolume(volume)),
   savePosition: (uri, position) => dispatch(savePosition(uri, position)),
   clearPosition: (uri) => dispatch(clearPosition(uri)),

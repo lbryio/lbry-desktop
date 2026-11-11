@@ -40,7 +40,7 @@ const select = (state: unknown, props: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   fetchFileInfo: (uri) => dispatch(doFetchFileInfo(uri)),
   fetchCostInfo: (uri) => dispatch(doFetchCostInfoForUri(uri)),
   setViewed: (uri) => dispatch(doSetContentHistoryItem(uri)),

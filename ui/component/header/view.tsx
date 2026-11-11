@@ -157,6 +157,7 @@ const Header = (props: Props) => {
         </div>
       </Tooltip>
 
+      {/* @ts-expect-error - TS2739 (ts-migration) */}
       <HeaderProfileMenuButton />
     </div>
   );
@@ -230,6 +231,7 @@ const Header = (props: Props) => {
                     </div>
                   )}
                   <WunderBar />
+                  {/* @ts-expect-error - TS2739 (ts-migration) */}
                   <HeaderMenuButtons />
                 </div>
               )}

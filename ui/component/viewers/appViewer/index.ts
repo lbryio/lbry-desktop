@@ -8,6 +8,6 @@ const select = (state: unknown, props: unknown) => ({
   contentType: makeSelectContentTypeForUri(props.uri)(state),
 });
 
-const perform = (dispatch: unknown) => ({});
+const perform = (dispatch: Dispatch) => ({});
 
 export default connect(select, perform)(AppViewer);

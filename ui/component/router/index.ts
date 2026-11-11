@@ -39,7 +39,7 @@ const select = (state: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   setHasNavigated: () => dispatch(doSetHasNavigated()),
   setReferrer: (referrer) => dispatch(doUserSetReferrer(referrer)),
 });

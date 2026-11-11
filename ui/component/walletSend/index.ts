@@ -7,7 +7,7 @@ import WalletSend from "./view";
 import { withRouter } from "react-router";
 import { selectToast } from "redux/selectors/notifications";
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
 });
 

@@ -40,7 +40,7 @@ const select = (state: unknown, props: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   search: (query, options) => dispatch(doSearch(query, options)),
 });
 

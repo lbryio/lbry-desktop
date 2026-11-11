@@ -15,7 +15,7 @@ const select = (state: unknown) => ({
   daemonStatus: selectDaemonStatus(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   setWelcomeVersion: (version) => dispatch(doSetWelcomeVersion(version || WELCOME_VERSION)),
   setShareDataInternal: (share) => dispatch(doSetDaemonSetting(DAEMON_SETTINGS.SHARE_USAGE_DATA, share)),
   setDaemonSetting: (key, value) => dispatch(doSetDaemonSetting(DAEMON_SETTINGS.BLOB_STORAGE_LIMIT_MB, value)),

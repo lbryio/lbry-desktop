@@ -4,7 +4,7 @@ import { doHideModal } from "redux/actions/app";
 import ModalRemoveComment from "./view";
 import { doCommentAbandon } from "redux/actions/comments";
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   closeModal: () => dispatch(doHideModal()),
   deleteComment: (commentId, creatorChannelUrl) => dispatch(doCommentAbandon(commentId, creatorChannelUrl)),
 });

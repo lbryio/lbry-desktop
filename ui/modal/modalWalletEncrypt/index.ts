@@ -10,7 +10,7 @@ const select = (state: unknown) => ({
   walletEncryptResult: selectWalletEncryptResult(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   closeModal: () => dispatch(doHideModal()),
   encryptWallet: (password) => dispatch(doWalletEncrypt(password)),
   updateWalletStatus: () => dispatch(doWalletStatus()),

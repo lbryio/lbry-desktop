@@ -240,8 +240,10 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
         // @ts-expect-error - TS2741 (ts-migration)
         return <ModalWalletUnlock />;
       case MODALS.UPGRADE:
+        // @ts-expect-error - TS2741 (ts-migration)
         return <ModalUpgrade />;
       case MODALS.DOWNLOADING:
+        // @ts-expect-error - TS2739 (ts-migration)
         return <ModalDownloading />;
       default:
         return null;

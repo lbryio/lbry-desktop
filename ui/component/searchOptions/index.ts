@@ -11,7 +11,7 @@ const select = (state: unknown) => ({
   expanded: selectSearchOptionsExpanded(state),
 });
 
-const perform = (dispatch: unknown, ownProps: unknown) => {
+const perform = (dispatch: Dispatch, ownProps: unknown) => {
   const additionalOptions = ownProps.additionalOptions || {};
   return {
     setSearchOption: (option, value) => dispatch(doUpdateSearchOptions({ [option]: value }, additionalOptions)),

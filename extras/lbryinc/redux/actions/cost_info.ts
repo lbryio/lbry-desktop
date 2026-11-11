@@ -4,7 +4,7 @@ import { Lbryio } from "lbryinc";
 import { selectClaimForUri } from "redux/selectors/claims";
 
 export function doFetchCostInfoForUri(uri: unknown) {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const claim = selectClaimForUri(state, uri);
 

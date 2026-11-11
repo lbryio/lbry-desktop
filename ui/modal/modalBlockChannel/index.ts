@@ -14,7 +14,7 @@ const select = (state: unknown, props: unknown) => ({
   moderationDelegatorsById: selectModerationDelegatorsById(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   closeModal: () => dispatch(doHideModal()),
   commentModBlock: (a, b) => dispatch(doCommentModBlock(a, b)),
   commentModBlockAsAdmin: (a, b, c) => dispatch(doCommentModBlockAsAdmin(a, b, c)),

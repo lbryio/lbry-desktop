@@ -22,7 +22,7 @@ const select = (state: unknown) => ({
   isVid: makeSelectPublishFormValue("fileVid")(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   clearPublish: () => dispatch(doClearPublish()),
   updatePublishForm: (value) => dispatch(doUpdatePublishForm(value)),
   showToast: (message) => dispatch(doToast({ message, isError: true })),

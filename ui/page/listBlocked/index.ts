@@ -30,7 +30,7 @@ const select = (state: unknown) => ({
   fetchingModerationBlockList: selectFetchingModerationBlockList(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   fetchModBlockedList: () => dispatch(doFetchModBlockedList()),
   fetchModAmIList: () => dispatch(doFetchCommentModAmIList()),
 });

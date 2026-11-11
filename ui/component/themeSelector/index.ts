@@ -13,7 +13,7 @@ const select = (state: unknown) => ({
   clock24h: makeSelectClientSetting(SETTINGS.CLOCK_24H)(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
   setDarkTime: (time, options) => dispatch(doSetDarkTime(time, options)),
 });

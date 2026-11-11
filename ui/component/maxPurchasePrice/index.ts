@@ -7,7 +7,7 @@ import MaxPurchasePrice from "./view";
 const select = (state: unknown) => ({
   daemonSettings: selectDaemonSettings(state),
 });
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   setDaemonSetting: (key, value) => dispatch(doSetDaemonSetting(key, value)),
 });
 

@@ -9,7 +9,7 @@ const select = (state: unknown) => ({
   daemonSettings: selectDaemonSettings(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   enterSettings: () => dispatch(doEnterSettingsPage()),
   exitSettings: () => dispatch(doExitSettingsPage()),
 });

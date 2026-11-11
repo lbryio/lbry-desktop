@@ -10,7 +10,7 @@ const select = (state: unknown) => ({
   accessToken: selectAccessToken(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   resendVerificationEmail: (email) => dispatch(doUserResendVerificationEmail(email)),
   checkEmailVerified: () => dispatch(doUserCheckEmailVerified()),
   fetchAccessToken: () => dispatch(doFetchAccessToken()),

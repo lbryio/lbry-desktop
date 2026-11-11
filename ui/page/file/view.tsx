@@ -206,6 +206,7 @@ function FilePage(props: Props) {
               {/* @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"audio" | "video"'. */}
               {RENDER_MODES.FLOATING_MODES.includes(renderMode) && <FileTitleSection uri={uri} />}
               {commentsDisabled && <Empty text={__("The creator of this content has disabled comments.")} />}
+              {/* @ts-expect-error - TS2740 (ts-migration) */}
               {!commentsDisabled && <CommentsList uri={uri} linkedCommentId={linkedCommentId} />}
             </div>
             {!collection && !isMarkdown && videoTheaterMode && !isMediumScreen && <RecommendedContent uri={uri} />}
@@ -223,6 +224,7 @@ function FilePage(props: Props) {
       {!collection && !isMarkdown && !videoTheaterMode && !isMediumScreen && <RecommendedContent uri={uri} />}
       {isMarkdown && (
         <div className="file-page__post-comments">
+          {/* @ts-expect-error - TS2740 (ts-migration) */}
           {!commentsDisabled && <CommentsList uri={uri} linkedCommentId={linkedCommentId} commentsAreExpanded />}
         </div>
       )}

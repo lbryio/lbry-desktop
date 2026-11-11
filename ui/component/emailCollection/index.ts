@@ -12,7 +12,7 @@ const select = (state: unknown) => ({
   user: selectUser(state),
 });
 
-const perform = (dispatch: unknown) => () => ({
+const perform = (dispatch: Dispatch) => () => ({
   acknowledgeEmail: () => {
     dispatch(doSetClientSetting(SETTINGS.EMAIL_COLLECTION_ACKNOWLEDGED, true));
   },

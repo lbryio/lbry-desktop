@@ -14,7 +14,7 @@ const select = (state: unknown, props: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   doToast: (props) => dispatch(doToast(props)),
   doCollectionEdit: (collection, props) => dispatch(doCollectionEdit(collection, props)),
 });

@@ -14,7 +14,7 @@ const select = (state: unknown, props: unknown) => ({
   user: selectUser(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   openFolder: (path) => dispatch(doOpenFileInFolder(path)),
 });
 

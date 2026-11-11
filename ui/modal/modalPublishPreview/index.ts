@@ -21,7 +21,7 @@ const select = (state: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   publish: (filePath, preview) => dispatch(doPublishDesktop(filePath, preview)),
   closeModal: () => dispatch(doHideModal()),
   setEnablePublishPreview: (value) => dispatch(doSetClientSetting(SETTINGS.ENABLE_PUBLISH_PREVIEW, value)),

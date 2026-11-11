@@ -18,7 +18,7 @@ const select = (state: unknown, props: unknown) => ({
   claimWasPurchased: makeSelectClaimWasPurchased(props.uri)(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   triggerAnalyticsView: (uri, timeToStart) => dispatch(doAnalyticsView(uri, timeToStart)),
   claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
 });

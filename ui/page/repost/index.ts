@@ -9,7 +9,7 @@ const select = (state: unknown, props: unknown) => ({
   balance: selectBalance(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   resolveUri: (uri) => dispatch(doResolveUri(uri)),
 });
 

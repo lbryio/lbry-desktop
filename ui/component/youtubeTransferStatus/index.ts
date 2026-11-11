@@ -16,7 +16,7 @@ const select = (state: unknown) => ({
   videosImported: selectYouTubeImportVideosComplete(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   claimChannels: () => dispatch(doClaimYoutubeChannels()),
   updateUser: () => dispatch(doUserFetch()),
   checkYoutubeTransfer: () => dispatch(doCheckYoutubeTransfer()),

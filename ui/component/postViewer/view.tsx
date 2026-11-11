@@ -119,6 +119,7 @@ function PostViewer(props: Props) {
         <FileRenderInitiator uri={uri} />
         <FileRenderInline uri={uri} />
       </div>
+      {/* @ts-expect-error - TS2740 (ts-migration) */}
       <FileActions uri={uri} />
     </div>
   );

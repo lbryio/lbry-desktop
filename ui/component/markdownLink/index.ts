@@ -4,7 +4,7 @@ import { doOpenModal } from "redux/actions/app";
 import MarkdownLink from "./view";
 
 const select = () => ({});
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
 });
 

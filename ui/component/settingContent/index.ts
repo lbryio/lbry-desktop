@@ -23,7 +23,7 @@ const select = (state: unknown) => ({
   enablePublishPreview: makeSelectClientSetting(SETTINGS.ENABLE_PUBLISH_PREVIEW)(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
   clearPlayingUri: () => dispatch(doSetPlayingUri({ uri: null })),
   clearContentCache: () => dispatch(clearContentCache()),

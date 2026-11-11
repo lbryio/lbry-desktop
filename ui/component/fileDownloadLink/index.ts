@@ -27,7 +27,7 @@ const select = (state: unknown, props: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   pause: () => dispatch(doSetPlayingUri({ uri: null })),
   download: (uri) => dispatch(doPlayUri(uri, false, true, () => dispatch(doAnalyticsView(uri)))),

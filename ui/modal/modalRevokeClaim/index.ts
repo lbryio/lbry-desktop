@@ -10,7 +10,7 @@ const select = (state: unknown) => ({
   transactionItems: selectTransactionItems(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   toast: (message, isError) => dispatch(doToast({ message, isError })),
   closeModal: () => dispatch(doHideModal()),
   abandonTxo: (txo, cb) => dispatch(doAbandonTxo(txo, cb)),

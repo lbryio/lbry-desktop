@@ -14,7 +14,7 @@ const select = (state: unknown) => ({
   filePath: makeSelectPublishFormValue("filePath")(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   updatePublishForm: (value) => dispatch(doUpdatePublishForm(value)),
 });

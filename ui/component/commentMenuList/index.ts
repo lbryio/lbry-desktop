@@ -21,7 +21,7 @@ const select = (state: unknown, props: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   clearPlayingUri: () => dispatch(doSetPlayingUri({ uri: null })),
   muteChannel: (channelUri) => dispatch(doChannelMute(channelUri)),

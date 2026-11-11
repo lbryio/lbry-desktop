@@ -108,6 +108,7 @@ function CollectionPreviewTile(props: Props) {
       <NavLink {...navLinkProps}>
         <h2 className="claim-tile__title">
           <TruncatedText text={collectionName} lines={1} />
+          {/* @ts-expect-error - TS2741 (ts-migration) */}
           <CollectionMenuList collectionId={collectionId} />
         </h2>
       </NavLink>

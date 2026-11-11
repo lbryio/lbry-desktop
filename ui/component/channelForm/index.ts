@@ -41,7 +41,7 @@ const select = (state: unknown, props: unknown) => ({
   hasClaimedInitialRewards: selectHasClaimedInitialRewards(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   updateChannel: (params) => dispatch(doUpdateChannel(params)),
   createChannel: (params) => {

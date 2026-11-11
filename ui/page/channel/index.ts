@@ -39,7 +39,7 @@ const select = (state: unknown, props: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   fetchSubCount: (claimId) => dispatch(doFetchSubCount(claimId)),
 });

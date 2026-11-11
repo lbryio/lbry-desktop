@@ -200,16 +200,19 @@ export default function SettingSystem(props: Props) {
                   "Improve view speed and help the LBRY network by allowing the app to cuddle up in your system tray."
                 )}
               >
+                {/* @ts-expect-error - TS2741 (ts-migration) */}
                 <SettingAutoLaunch noLabels />
               </SettingsRow>
             )}
             <SettingsRow title={__("Leave app running in notification area when the window is closed")}>
+              {/* @ts-expect-error - TS2741 (ts-migration) */}
               <SettingClosingBehavior noLabels />
             </SettingsRow>
             <SettingsRow
               title={__("Enable Upgrade to Test Builds")}
               subtitle={__("Prereleases may break things and we may not be able to fix them for you.")}
             >
+              {/* @ts-expect-error - TS2741 (ts-migration) */}
               <SettingEnablePrereleases />
             </SettingsRow>
             <SettingsRow
@@ -218,6 +221,7 @@ export default function SettingSystem(props: Props) {
                 "Preven't new updates to be downloaded automatically in the background (we will keep notifying you if there is an update)"
               )}
             >
+              {/* @ts-expect-error - TS2741 (ts-migration) */}
               <SettingDisableAutoUpdates />
             </SettingsRow>
             <SettingsRow
@@ -395,10 +399,12 @@ export default function SettingSystem(props: Props) {
               }
               multirow
             >
+              {/* @ts-expect-error - TS2740 (ts-migration) */}
               <SettingWalletServer />
             </SettingsRow>
 
             <SettingsRow title={__("Comments server")} multirow>
+              {/* @ts-expect-error - TS2739 (ts-migration) */}
               <SettingCommentsServer />
             </SettingsRow>
             <SettingsRow
@@ -406,9 +412,11 @@ export default function SettingSystem(props: Props) {
               subtitle={__("Lighthouse is the hosted search; lbry-search is one you run yourself.")}
               multirow
             >
+              {/* @ts-expect-error - TS2739 (ts-migration) */}
               <SettingSearchServer />
             </SettingsRow>
             <SettingsRow title={__("Share url")} multirow>
+              {/* @ts-expect-error - TS2739 (ts-migration) */}
               <SettingShareUrl />
             </SettingsRow>
             <SettingsRow

@@ -65,7 +65,7 @@ const select = (state: unknown, props: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown, ownProps: unknown) => ({
+const perform = (dispatch: Dispatch, ownProps: unknown) => ({
   fetchTopLevelComments: (uri, parentId, page, pageSize, sortBy) =>
     dispatch(doCommentList(uri, parentId, page, pageSize, sortBy)),
   fetchComment: (commentId) => dispatch(doCommentById(commentId)),

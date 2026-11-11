@@ -14,7 +14,7 @@ const select = (state: unknown) => ({
   hasChannels: selectHasChannels(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   doWalletStatus: () => dispatch(doWalletStatus()),
 });
 

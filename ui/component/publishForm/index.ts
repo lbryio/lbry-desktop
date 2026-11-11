@@ -67,7 +67,7 @@ const select = (state: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   updatePublishForm: (value) => dispatch(doUpdatePublishForm(value)),
   clearPublish: () => dispatch(doClearPublish()),
   resolveUri: (uri) => dispatch(doResolveUri(uri)),

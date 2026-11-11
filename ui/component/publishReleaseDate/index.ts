@@ -9,7 +9,7 @@ const select = (state: unknown) => ({
   releaseTimeEdited: makeSelectPublishFormValue("releaseTimeEdited")(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   updatePublishForm: (value) => dispatch(doUpdatePublishForm(value)),
 });
 

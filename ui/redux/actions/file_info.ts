@@ -5,7 +5,7 @@ import { selectClaimsByUri } from "redux/selectors/claims";
 import { selectIsFetchingFileList, selectUrisLoading } from "redux/selectors/file_info";
 
 export function doFetchFileInfo(uri: unknown) {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const claim = selectClaimsByUri(state)[uri];
     const outpoint = claim ? `${claim.txid}:${claim.nout}` : null;
@@ -36,7 +36,7 @@ export function doFetchFileInfo(uri: unknown) {
 }
 
 export function doFileList(page = 1, pageSize = 99999) {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const isFetching = selectIsFetchingFileList(state);
 
@@ -59,7 +59,7 @@ export function doFileList(page = 1, pageSize = 99999) {
 }
 
 export function doFetchFileInfos() {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const isFetchingFileInfo = selectIsFetchingFileList(state);
     if (!isFetchingFileInfo) dispatch(doFileList());

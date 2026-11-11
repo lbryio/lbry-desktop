@@ -47,7 +47,7 @@ const select = (state: unknown, props: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   closeFloatingPlayer: () => dispatch(doSetPlayingUri({ uri: null })),
   doFetchRecommendedContent: (uri, mature) => dispatch(doFetchRecommendedContent(uri, mature)),
   doPlayUri: (uri, collectionId, hideFailModal) =>

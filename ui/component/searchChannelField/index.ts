@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { doToast } from "redux/actions/notifications";
 import SearchChannelField from "./view";
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   doToast: (options) => dispatch(doToast(options)),
 });
 

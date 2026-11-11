@@ -21,6 +21,6 @@ const select = (state: unknown, props: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({ doResolveUris: (uris) => dispatch(doResolveUris(uris, true)) });
+const perform = (dispatch: Dispatch) => ({ doResolveUris: (uris) => dispatch(doResolveUris(uris, true)) });
 
 export default connect(select, perform)(CommentsReplies);

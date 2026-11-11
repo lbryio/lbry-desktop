@@ -23,7 +23,7 @@ const select = (state: unknown, props: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   doClaimSearch: (options) => dispatch(doClaimSearch(options)),
   doReportContent: (category, params) => dispatch(doReportContent(category, params)),
 });

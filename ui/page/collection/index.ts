@@ -51,7 +51,7 @@ const select = (state: unknown, props: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   fetchCollectionItems: (claimId, cb) => dispatch(doFetchItemsInCollection({ collectionId: claimId }, cb)), // if this collection is not resolved, resolve it
   deleteCollection: (id, colKey) => dispatch(doCollectionDelete(id, colKey)),
   editCollection: (id, params) => dispatch(doCollectionEdit(id, params)),

@@ -9,7 +9,7 @@ const select = (state: unknown) => ({
   toTrayWhenClosed: makeSelectClientSetting(SETTINGS.TO_TRAY_WHEN_CLOSED)(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   setToTrayWhenClosed: (value) => dispatch(doSetAppToTrayWhenClosed(value)),
 });
 

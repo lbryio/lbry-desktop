@@ -403,6 +403,7 @@ function PublishFile(props: Props) {
             </p>
           )}
           {isPublishPost && (
+            // @ts-expect-error - TS2739 (ts-migration)
             <PostEditor
               label={__("Post --[noun, markdown post tab button]--")}
               uri={uri}

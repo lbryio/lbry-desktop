@@ -13,7 +13,7 @@ const select = (state: unknown, props: unknown) => ({
   isStillEditing: selectIsStillEditing(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   updatePublishForm: (value) => dispatch(doUpdatePublishForm(value)),
   fetchStreamingUrl: (uri) => dispatch(doPlayUri(uri)),
 });

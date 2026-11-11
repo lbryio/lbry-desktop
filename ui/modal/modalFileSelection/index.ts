@@ -5,7 +5,7 @@ import { doUpdatePublishForm } from "redux/actions/publish";
 
 import ModaFileSelection from "./view";
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   hideModal: (props) => dispatch(doHideModal(props)),
   updatePublishForm: (value) => dispatch(doUpdatePublishForm(value)),
 });

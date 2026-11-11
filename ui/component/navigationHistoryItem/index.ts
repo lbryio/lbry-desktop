@@ -8,7 +8,7 @@ const select = (state: unknown, props: unknown) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   resolveUri: (uri) => dispatch(doResolveUri(uri)),
 });
 

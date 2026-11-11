@@ -16,7 +16,7 @@ const select = (state: unknown) => ({
   activeChannelClaim: selectActiveChannelClaim(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   createChannel: (name, amount) => dispatch(doCreateChannel(name, amount)),
   fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
   setActiveChannel: (claimId) => dispatch(doSetActiveChannel(claimId)),

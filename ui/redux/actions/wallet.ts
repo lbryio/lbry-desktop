@@ -18,7 +18,7 @@ const FIFTEEN_SECONDS = 15000;
 let walletBalancePromise = null;
 
 export function doUpdateBalance() {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const {
       wallet: { totalBalance: totalInStore },
     } = getState();
@@ -56,14 +56,14 @@ export function doUpdateBalance() {
 }
 
 export function doBalanceSubscribe() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch(doUpdateBalance());
     setInterval(() => dispatch(doUpdateBalance()), 10000);
   };
 }
 
 export function doFetchTransactions(page = 1, pageSize = 999999) {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.FETCH_TRANSACTIONS_STARTED,
     });
@@ -80,7 +80,7 @@ export function doFetchTransactions(page = 1, pageSize = 999999) {
 }
 
 export function doFetchTxoPage() {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const fetchId = Math.random().toString(36).slice(2, 11);
 
     dispatch({
@@ -138,7 +138,7 @@ export function doFetchTxoPage() {
 }
 
 export function doUpdateTxoPageParams(params: unknown) {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.UPDATE_TXO_FETCH_PARAMS,
       data: params,
@@ -149,7 +149,7 @@ export function doUpdateTxoPageParams(params: unknown) {
 }
 
 export function doFetchSupports(page = 1, pageSize = 99999) {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.FETCH_SUPPORTS_STARTED,
     });
@@ -166,7 +166,7 @@ export function doFetchSupports(page = 1, pageSize = 99999) {
 }
 
 export function doFetchUtxoCounts() {
-  return async (dispatch: unknown) => {
+  return async (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.FETCH_UTXO_COUNT_STARTED,
     });
@@ -190,7 +190,7 @@ export function doFetchUtxoCounts() {
 }
 
 export function doUtxoConsolidate() {
-  return async (dispatch: unknown) => {
+  return async (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.DO_UTXO_CONSOLIDATE_STARTED,
     });
@@ -212,7 +212,7 @@ export function doUtxoConsolidate() {
 }
 
 export function doTipClaimMass() {
-  return async (dispatch: unknown) => {
+  return async (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.TIP_CLAIM_MASS_STARTED,
     });
@@ -234,7 +234,7 @@ export function doTipClaimMass() {
 }
 
 export function doGetNewAddress() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.GET_NEW_ADDRESS_STARTED,
     });
@@ -249,7 +249,7 @@ export function doGetNewAddress() {
 }
 
 export function doCheckAddressIsMine(address: unknown) {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.CHECK_ADDRESS_IS_MINE_STARTED,
     });
@@ -265,7 +265,7 @@ export function doCheckAddressIsMine(address: unknown) {
 }
 
 export function doSendDraftTransaction(address: unknown, amount: unknown) {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const balance = selectBalance(state);
 
@@ -350,7 +350,7 @@ export function doSendTip(
   errorCallback: unknown,
   shouldNotify = true
 ) {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const balance = selectBalance(state);
     const myClaims = selectMyClaimsRaw(state);
@@ -430,7 +430,7 @@ export function doClearSupport() {
 }
 
 export function doWalletEncrypt(newPassword: unknown) {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.WALLET_ENCRYPT_START,
     });
@@ -452,7 +452,7 @@ export function doWalletEncrypt(newPassword: unknown) {
 }
 
 export function doWalletUnlock(password: unknown) {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.WALLET_UNLOCK_START,
     });
@@ -474,7 +474,7 @@ export function doWalletUnlock(password: unknown) {
 }
 
 export function doWalletLock() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.WALLET_LOCK_START,
     });
@@ -497,7 +497,7 @@ export function doWalletLock() {
 
 // Collect all tips for a claim
 export function doSupportAbandonForClaim(claimId: unknown, claimType: unknown, keep: unknown, preview: unknown) {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     if (preview) {
       dispatch({
         type: ACTIONS.ABANDON_CLAIM_SUPPORT_PREVIEW,
@@ -532,7 +532,7 @@ export function doSupportAbandonForClaim(claimId: unknown, claimType: unknown, k
 }
 
 export function doWalletReconnect(toDefaultServer = false) {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     dispatch({
       type: ACTIONS.WALLET_RESTART,
       data: toDefaultServer,
@@ -576,7 +576,7 @@ export function doWalletReconnect(toDefaultServer = false) {
 }
 
 export function doWalletDecrypt() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.WALLET_DECRYPT_START,
     });
@@ -598,7 +598,7 @@ export function doWalletDecrypt() {
 }
 
 export function doWalletStatus() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.WALLET_STATUS_START,
     });
@@ -622,7 +622,7 @@ export function doSetTransactionListFilter(filterOption: unknown) {
 }
 
 export function doUpdateBlockHeight() {
-  return (dispatch: unknown) =>
+  return (dispatch: Dispatch) =>
     Lbry.status().then((status) => {
       if (status.wallet) {
         dispatch({
@@ -634,7 +634,7 @@ export function doUpdateBlockHeight() {
 }
 
 // Calls transaction_show on txes until any pending txes are confirmed
-export const doCheckPendingTxs = () => (dispatch: unknown, getState: unknown) => {
+export const doCheckPendingTxs = () => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
   const pendingTxsById = selectPendingSupportTransactions(state); // {}
   const pendingOtherTxes = selectPendingOtherTransactions(state);
@@ -735,7 +735,7 @@ export const doSendCashTip =
     stripeEnvironment: unknown,
     successCallback: unknown
   ) =>
-  (dispatch: unknown) => {
+  (dispatch: Dispatch) => {
     Lbryio.call(
       "customer",
       "tip",

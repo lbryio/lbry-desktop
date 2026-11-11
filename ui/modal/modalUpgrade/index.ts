@@ -8,7 +8,7 @@ const select = (state: unknown) => ({
   releaseVersion: selectRemoteVersion(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   downloadUpgrade: () => dispatch(doDownloadUpgrade()),
   skipUpgrade: () => {
     dispatch(doHideModal());

@@ -8,7 +8,7 @@ const select = (state: unknown, props: unknown) => ({
   reflectingInfo: props.uri && makeSelectReflectingClaimForUri(props.uri)(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   checkReflecting: () => dispatch(doCheckReflectingFiles()),
 });
 

@@ -17,7 +17,7 @@ const select = (state: unknown, props: unknown) => ({
   unpublished: selectMyUnpublishedCollections(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   addCollection: (name, items, type) => dispatch(doLocalCollectionCreate(name, items, type)),
 });
 

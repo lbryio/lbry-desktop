@@ -23,7 +23,7 @@ const select = (state: unknown, props: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   resolve: (uri) => dispatch(doResolveUri(uri)),
   react: (commentId, type) => dispatch(doCommentReact(commentId, type)),
   doToast: (params) => dispatch(doToast(params)),

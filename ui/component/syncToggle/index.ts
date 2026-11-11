@@ -14,7 +14,7 @@ const select = (state: unknown) => ({
   getSyncError: selectGetSyncErrorMessage(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   setSyncEnabled: (value) => dispatch(doSetWalletSyncPreference(value)),
   openModal: (id, props) => dispatch(doOpenModal(id, props)),
 });

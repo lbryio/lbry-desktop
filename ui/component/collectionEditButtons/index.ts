@@ -13,7 +13,7 @@ const select = (state: unknown, props: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown, ownProps: unknown) => {
+const perform = (dispatch: Dispatch, ownProps: unknown) => {
   const { collectionId } = ownProps;
 
   return {

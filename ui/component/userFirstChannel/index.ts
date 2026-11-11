@@ -13,7 +13,7 @@ const select = (state: unknown) => ({
   createChannelError: selectCreateChannelError(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   createChannel: (name, amount) => dispatch(doCreateChannel(name, amount)),
 });
 

@@ -11,7 +11,7 @@ const select = (state: unknown) => ({
   customCommentServers: makeSelectClientSetting(SETTINGS.CUSTOM_COMMENTS_SERVERS)(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   setCustomServerEnabled: (val) => dispatch(doSetClientSetting(SETTINGS.CUSTOM_COMMENTS_SERVER_ENABLED, val, true)),
   setCustomServerUrl: (url) => dispatch(doSetClientSetting(SETTINGS.CUSTOM_COMMENTS_SERVER_URL, url, true)),
   setCustomServers: (servers) => dispatch(doSetClientSetting(SETTINGS.CUSTOM_COMMENTS_SERVERS, servers, true)),

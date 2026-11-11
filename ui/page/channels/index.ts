@@ -24,7 +24,7 @@ const select = (state: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
   doSetActiveChannel: (claimId) => dispatch(doSetActiveChannel(claimId)),
 });

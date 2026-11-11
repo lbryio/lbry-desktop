@@ -193,6 +193,7 @@ function ClaimPreviewTile(props: Props) {
           {!isChannel && (
             <React.Fragment>
               <div className="claim-preview__hover-actions">
+                {/* @ts-expect-error - TS2741 (ts-migration) */}
                 {isPlayable && <FileWatchLaterLink focusable={false} uri={repostedContentUri} />}
               </div>
               {/* @if TARGET='app' */}

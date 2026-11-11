@@ -10,7 +10,7 @@ const select = (state: unknown) => ({
   customShareUrl: makeSelectClientSetting(SETTINGS.CUSTOM_SHARE_URL)(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   setCustomShareUrlEnabled: (val) => dispatch(doSetClientSetting(SETTINGS.CUSTOM_SHARE_URL_ENABLED, val, true)),
   setCustomShareUrl: (url) => dispatch(doSetClientSetting(SETTINGS.CUSTOM_SHARE_URL, url, true)),
 });

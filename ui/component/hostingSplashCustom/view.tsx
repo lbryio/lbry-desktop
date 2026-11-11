@@ -15,6 +15,7 @@ function HostingSplashCustom(props: Props) {
   return (
     <section className="main--contained">
       <div className={"first-run__wrapper"}>
+        {/* @ts-expect-error - TS2739 (ts-migration) */}
         <SettingStorage isWelcome />
         {/* @ts-expect-error - TS2769 - No overload matches this call. */}
         <Form onSubmit={handleNextPage} className="section__body">

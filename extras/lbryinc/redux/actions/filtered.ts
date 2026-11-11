@@ -5,7 +5,7 @@ import * as ACTIONS from "constants/action_types";
 const CHECK_FILTERED_CONTENT_INTERVAL = 60 * 60 * 1000;
 
 export function doFetchFilteredOutpoints() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.FETCH_FILTERED_CONTENT_STARTED,
     });
@@ -41,7 +41,7 @@ export function doFetchFilteredOutpoints() {
 }
 
 export function doFilteredOutpointsSubscribe() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch(doFetchFilteredOutpoints());
     setInterval(() => dispatch(doFetchFilteredOutpoints()), CHECK_FILTERED_CONTENT_INTERVAL);
   };

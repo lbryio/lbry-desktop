@@ -26,7 +26,7 @@ const select = (state: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   doCommentReset: (a) => dispatch(doCommentReset(a)),
   doCommentListOwn: (a, b, c) => dispatch(doCommentListOwn(a, b, c)),
 });

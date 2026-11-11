@@ -35,7 +35,7 @@ const select = (state: unknown, props: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   doToggleShuffleList: (collectionId, shuffle) => {
     dispatch(doToggleLoopList(collectionId, false, true));

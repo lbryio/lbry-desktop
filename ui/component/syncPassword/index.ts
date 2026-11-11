@@ -13,7 +13,7 @@ const select = (state: unknown) => ({
   passwordError: selectSyncApplyPasswordError(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   getSync: (cb, password) => dispatch(doGetSyncDesktop(cb, password)),
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
   handleSyncComplete: (error, hasDataChanged) => dispatch(doHandleSyncComplete(error, hasDataChanged)),

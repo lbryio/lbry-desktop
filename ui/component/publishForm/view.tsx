@@ -501,6 +501,7 @@ function PublishForm(props: Props) {
 
       {!publishing && (
         <div className={classnames({ "card--disabled": formDisabled })}>
+          {/* @ts-expect-error - TS2741 (ts-migration) */}
           {mode !== PUBLISH_MODES.POST && <PublishDescription disabled={formDisabled} />}
           {/* @ts-expect-error - TS2322 - Type 'Element' is not assignable to type 'string | React.ReactNode'. */}
           <Card actions={<SelectThumbnail />} />
@@ -537,6 +538,7 @@ function PublishForm(props: Props) {
 
           {/* @ts-expect-error - TS2322 (ts-migration) */}
           <PublishBid disabled={isStillEditing || formDisabled} />
+          {/* @ts-expect-error - TS2739 (ts-migration) */}
           <PublishPrice disabled={formDisabled} />
           {/* @ts-expect-error - TS2740 (ts-migration) */}
           <PublishAdditionalOptions disabled={formDisabled} />

@@ -12,7 +12,7 @@ const select = (state: unknown) => ({
   hideBalance: makeSelectClientSetting(SETTINGS.HIDE_BALANCE)(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
   setSearchInLanguage: (value) => dispatch(doSetClientSetting(SETTINGS.SEARCH_IN_LANGUAGE, value)),
 });

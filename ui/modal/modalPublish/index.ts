@@ -5,7 +5,7 @@ import ModalPublishSuccess from "./view";
 import { doClearPublish } from "redux/actions/publish";
 import { push } from "connected-react-router";
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   closeModal: () => dispatch(doHideModal()),
   clearPublish: () => dispatch(doClearPublish()),
   navigate: (path) => dispatch(push(path)),

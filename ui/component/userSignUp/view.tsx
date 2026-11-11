@@ -140,6 +140,7 @@ function UserSignUp(props: Props) {
         doToggleInterestedInYoutubeSync={doToggleInterestedInYoutubeSync}
       />
     ),
+    // @ts-expect-error - TS2739 (ts-migration)
     showEmailVerification && <UserEmailVerify />,
     showFollowIntro && (
       <UserChannelFollowIntro

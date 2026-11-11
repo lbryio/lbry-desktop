@@ -10,7 +10,7 @@ const select = (state: unknown) => ({
   isAuthenticated: Boolean(selectUserVerifiedEmail(state)),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
 });
 

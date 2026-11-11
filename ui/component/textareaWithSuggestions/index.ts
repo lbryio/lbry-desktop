@@ -37,7 +37,7 @@ const select = (state: unknown, props: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   doResolveUris: (uris) => dispatch(doResolveUris(uris, true)),
   doSetMentionSearchResults: (query, uris) => dispatch(doSetMentionSearchResults(query, uris)),
 });

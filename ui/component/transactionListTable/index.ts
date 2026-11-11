@@ -10,7 +10,7 @@ const select = (state: unknown) => ({
   loading: selectIsFetchingTxos(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
 });
 

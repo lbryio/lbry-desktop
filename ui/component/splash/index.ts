@@ -14,7 +14,7 @@ const select = (state: unknown) => ({
   animationHidden: selectSplashAnimationEnabled(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   checkDaemonVersion: () => dispatch(doCheckDaemonVersion()),
   notifyUnlockWallet: (shouldTryWithBlankPassword) =>
     dispatch(doOpenModal(MODALS.WALLET_UNLOCK, { shouldTryWithBlankPassword })),

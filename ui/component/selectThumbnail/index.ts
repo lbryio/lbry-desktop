@@ -16,7 +16,7 @@ const select = (state: unknown, props: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   updatePublishForm: (value) => dispatch(doUpdatePublishForm(value)),
   resetThumbnailStatus: () => dispatch(doResetThumbnailStatus()),
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),

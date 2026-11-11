@@ -24,7 +24,7 @@ const select = (state: unknown) => ({
   transactionsFile: selectTransactionsFile(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   fetchTxoPage: () => dispatch(doFetchTxoPage()),
   fetchTransactions: () => dispatch(doFetchTransactions()),

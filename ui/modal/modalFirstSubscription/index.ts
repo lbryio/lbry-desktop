@@ -11,7 +11,7 @@ const select = (state: unknown) => ({
   user: selectUser(state),
 });
 
-const perform = (dispatch: unknown) => () => ({
+const perform = (dispatch: Dispatch) => () => ({
   closeModal: () => dispatch(doHideModal()),
 });
 

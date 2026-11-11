@@ -8,7 +8,7 @@ const select = (state: unknown) => ({
   transactionItems: selectTransactionItems(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   closeModal: () => dispatch(doHideModal()),
 });
 

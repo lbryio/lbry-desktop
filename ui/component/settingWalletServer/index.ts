@@ -24,7 +24,7 @@ const select = (state: unknown) => ({
   walletReconnectingToDefault: selectWalletConnectingToDefault(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   setCustomWalletServers: (value) => dispatch(doSetDaemonSetting(DAEMON_SETTINGS.LBRYUM_SERVERS, value)),
   clearWalletServers: () => dispatch(doClearDaemonSetting(DAEMON_SETTINGS.LBRYUM_SERVERS)),
   getDaemonStatus: () => dispatch(doGetDaemonStatus()),

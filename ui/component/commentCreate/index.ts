@@ -28,7 +28,7 @@ const select = (state: unknown, props: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown, ownProps: unknown) => ({
+const perform = (dispatch: Dispatch, ownProps: unknown) => ({
   createComment: (comment, claimId, parentId, txid, payment_intent_id, environment, sticker) =>
     dispatch(doCommentCreate(comment, claimId, parentId, ownProps.uri, txid, payment_intent_id, environment, sticker)),
   doFetchCreatorSettings: (channelClaimId) => dispatch(doFetchCreatorSettings(channelClaimId)),

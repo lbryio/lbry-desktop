@@ -372,6 +372,7 @@ const ClaimPreview = forwardRef<any, Record<any, any>>((props: Props, ref: any) 
                   {/* @ts-expect-error - TS2746 (ts-migration) */}
                   <FileThumbnail uri={uri} thumbnail={thumbnailUrl}>
                     <div className="claim-preview__hover-actions">
+                      {/* @ts-expect-error - TS2741 (ts-migration) */}
                       {isPlayable && <FileWatchLaterLink focusable={false} uri={repostedContentUri} />}
                     </div>
                     {/* @if TARGET='app' */}
@@ -416,6 +417,7 @@ const ClaimPreview = forwardRef<any, Record<any, any>>((props: Props, ref: any) 
                     </UriIndicator>
                   </div>
                 )}
+                {/* @ts-expect-error - TS2741 (ts-migration) */}
                 <ClaimPreviewSubtitle uri={uri} type={type} />
                 {/* @ts-expect-error - TS2322 (ts-migration) */}
                 {(pending || !!reflectingProgress) && <PublishPending uri={uri} />}

@@ -14,7 +14,7 @@ const select = (state: unknown) => ({
   user: selectUser(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   handleThemeToggle: (automaticDarkModeEnabled, currentTheme) => {
     if (automaticDarkModeEnabled) dispatch(doSetClientSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED, false));
     dispatch(doSetClientSetting(SETTINGS.THEME, currentTheme === "dark" ? "light" : "dark", true));

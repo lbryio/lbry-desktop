@@ -19,6 +19,7 @@ function FileSubtitle(props: Props) {
         <FileViewCount uri={uri} />
       </div>
 
+      {/* @ts-expect-error - TS2740 (ts-migration) */}
       <FileActions uri={uri} />
     </div>
   );

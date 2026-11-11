@@ -271,6 +271,7 @@ export default function Notification(props: Props) {
           </div>
 
           {isReplying && (
+            // @ts-expect-error - TS2740 (ts-migration)
             <CommentCreate
               isReply
               uri={notificationTarget}
@@ -278,7 +279,6 @@ export default function Notification(props: Props) {
               onDoneReplying={() => setReplying(false)}
               onCancelReplying={() => setReplying(false)}
               setQuickReply={setQuickReply}
-              // @ts-expect-error - TS2322 (ts-migration)
               supportDisabled
               shouldFetchComment
             />

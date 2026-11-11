@@ -79,7 +79,7 @@ export function doSkipUpgrade() {
 }
 
 export function doStartUpgrade() {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const upgradeDownloadPath = selectUpgradeDownloadPath(state);
 
@@ -97,7 +97,7 @@ export function doShowUpgradeInstallationError() {
 }
 
 export function doDownloadUpgrade() {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const url = selectUpdateUrl(state);
     ipcRenderer.send("download-upgrade", { url, options: {} });
@@ -115,7 +115,7 @@ export function doDownloadUpgradeRequested() {
   // This will probably be reorganized once we get auto-update going on Linux and remove
   // the old logic.
 
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     if (["win32", "darwin"].includes(process.platform) || !!process.env.APPIMAGE) {
       // electron-updater behavior
       dispatch(doOpenModal(MODALS.AUTO_UPDATE_DOWNLOADED));
@@ -127,7 +127,7 @@ export function doDownloadUpgradeRequested() {
 }
 
 export function doClearUpgradeTimer() {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
 
     if (selectUpgradeTimer(state)) {
@@ -140,7 +140,7 @@ export function doClearUpgradeTimer() {
 }
 
 export function doAutoUpdate() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.AUTO_UPDATE_DOWNLOADED,
     });
@@ -152,7 +152,7 @@ export function doAutoUpdate() {
 }
 
 export function doAutoUpdateDeclined() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch(doClearUpgradeTimer());
 
     dispatch({
@@ -167,7 +167,7 @@ export function doCancelUpgrade() {
 }
 
 export function doCheckUpgradeAvailable() {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     dispatch({
       type: ACTIONS.CHECK_UPGRADE_START,
@@ -191,7 +191,7 @@ export function doCheckUpgradeAvailable() {
 }
 
 export function doNotifyUpdateAvailable(e: unknown) {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const remoteVersion = e.releaseName || e.version;
 
     const state = getState();
@@ -242,7 +242,7 @@ export function doAutoUpdateFail() {
   Initiate a timer that will check for an app upgrade every 10 minutes.
  */
 export function doCheckUpgradeSubscribe() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     const checkUpgradeTimer = setInterval(() => dispatch(doCheckUpgradeAvailable()), CHECK_UPGRADE_INTERVAL);
     dispatch({
       type: ACTIONS.CHECK_UPGRADE_SUBSCRIBE,
@@ -252,7 +252,7 @@ export function doCheckUpgradeSubscribe() {
 }
 
 export function doCheckDaemonVersion() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     // @if TARGET='app'
     Lbry.version().then(({ lbrynet_version: lbrynetVersion }) => {
       // Avoid the incompatible daemon modal if running in dev mode
@@ -280,37 +280,37 @@ export function doCheckDaemonVersion() {
 }
 
 export function doNotifyEncryptWallet() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch(doOpenModal(MODALS.WALLET_ENCRYPT));
   };
 }
 
 export function doNotifyDecryptWallet() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch(doOpenModal(MODALS.WALLET_DECRYPT));
   };
 }
 
 export function doNotifyUnlockWallet() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch(doOpenModal(MODALS.WALLET_UNLOCK));
   };
 }
 
 export function doNotifyForgetPassword(props: unknown) {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch(doOpenModal(MODALS.WALLET_PASSWORD_UNSAVE, props));
   };
 }
 
 export function doAlertError(errorList: unknown) {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch(doError(errorList));
   };
 }
 
 export function doAlertWaitingForSync() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch(
       doToast({
         message: __("Please wait a bit, we are still getting your account ready."),
@@ -321,7 +321,7 @@ export function doAlertWaitingForSync() {
 }
 
 export function doDaemonReady() {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
 
     // TODO: call doFetchDaemonSettings, then get usage data, and call doAuthenticate once they are loaded into the store
@@ -365,7 +365,7 @@ export function doDaemonReady() {
 }
 
 export function doClearCache() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     // Need to update this to work with new version of redux-persist
     // Leaving for now
     // window.cacheStore.purge(reducersToClear);
@@ -385,7 +385,7 @@ export function doQuit() {
 }
 
 export function doQuitAnyDaemon() {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     // @if TARGET='app'
     Lbry.stop()
       .catch(() => {
@@ -407,7 +407,7 @@ export function doQuitAnyDaemon() {
 }
 
 export function doChangeVolume(volume: unknown) {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.VOLUME_CHANGED,
       data: {
@@ -418,7 +418,7 @@ export function doChangeVolume(volume: unknown) {
 }
 
 export function doChangeMute(muted: unknown) {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     dispatch({
       type: ACTIONS.VOLUME_MUTED,
       data: {
@@ -441,7 +441,7 @@ export function doToggleSearchExpanded() {
 }
 
 export function doAnalyticsView(uri: unknown, timeToStart: unknown) {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const claim = selectClaimForUri(state, uri);
     const { txid, nout, claim_id: claimId } = claim;
@@ -474,7 +474,7 @@ export function doAnalyticsBuffer(uri: unknown, bufferData: unknown) {
 }
 
 export function doAnalyticsTagSync() {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const tags = selectFollowedTagsList(state);
     const stringOfTags = tags.join(",");
@@ -495,7 +495,7 @@ export function doAnaltyicsPurchaseEvent(fileInfo: unknown) {
 }
 
 export function doSignIn() {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const user = selectUser(state);
     const notificationsEnabled = user.experimental_ui;
@@ -548,7 +548,7 @@ export function doSetHasNavigated() {
 }
 
 export function doToggle3PAnalytics(allowParam: unknown, doNotDispatch: unknown) {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const allowState = selectAllowAnalytics(state);
     const allow = allowParam !== undefined && allowParam !== null ? allowParam : allowState;
@@ -565,7 +565,7 @@ export function doToggle3PAnalytics(allowParam: unknown, doNotDispatch: unknown)
 export function doGetAndPopulatePreferences() {
   const { SDK_SYNC_KEYS } = SHARED_PREFERENCES;
 
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
     const hasVerifiedEmail = state.user && state.user.user && state.user.user.has_verified_email;
@@ -621,7 +621,7 @@ export function doGetAndPopulatePreferences() {
 }
 
 export function doHandleSyncComplete(error: unknown, hasNewData: unknown) {
-  return (dispatch: unknown) => {
+  return (dispatch: Dispatch) => {
     if (!error) {
       if (hasNewData) {
         dispatch(doGetAndPopulatePreferences());
@@ -635,7 +635,7 @@ export function doHandleSyncComplete(error: unknown, hasNewData: unknown) {
 }
 
 export function doSyncWithPreferences() {
-  return (dispatch: unknown) => dispatch(doSyncLoop());
+  return (dispatch: Dispatch) => dispatch(doSyncLoop());
 }
 
 export function doToggleInterestedInYoutubeSync() {
@@ -651,7 +651,7 @@ export function doToggleSplashAnimation() {
 }
 
 export function doSetActiveChannel(claimId: unknown) {
-  return (dispatch: unknown, getState: unknown) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     if (claimId) {
       return dispatch({
         type: ACTIONS.SET_ACTIVE_CHANNEL,

@@ -34,11 +34,13 @@ export default function SettingAppearance(props: Props) {
           <>
             {homepages && Object.keys(homepages).length > 1 && (
               <SettingsRow title={__("Homepage")} subtitle={__("Tailor your experience.")}>
+                {/* @ts-expect-error - TS2741 (ts-migration) */}
                 <HomepageSelector />
               </SettingsRow>
             )}
 
             <SettingsRow title={__("Language")} subtitle={__(HELP.LANGUAGE)}>
+              {/* @ts-expect-error - TS2741 (ts-migration) */}
               <SettingLanguage />
             </SettingsRow>
 
@@ -53,6 +55,7 @@ export default function SettingAppearance(props: Props) {
             </SettingsRow>
 
             <SettingsRow title={__("Theme")}>
+              {/* @ts-expect-error - TS2739 (ts-migration) */}
               <ThemeSelector />
             </SettingsRow>
 

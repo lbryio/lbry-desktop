@@ -13,7 +13,7 @@ const select = (state: unknown, props: unknown) => {
   };
 };
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   fetchViewCount: (claimId) => dispatch(doFetchViewCount(claimId)),
   doAnalyticsView: (uri) => dispatch(doAnalyticsView(uri)),
 });

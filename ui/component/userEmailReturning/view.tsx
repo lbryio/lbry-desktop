@@ -71,6 +71,7 @@ function UserEmailReturning(props: Props) {
   return (
     <div className={classnames("main__sign-in")}>
       {showEmailVerification ? (
+        // @ts-expect-error - TS2739 (ts-migration)
         <UserEmailVerify />
       ) : (
         <Card

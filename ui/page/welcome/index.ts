@@ -10,7 +10,7 @@ const select = (state: unknown) => ({
   daemonStatus: selectDaemonStatus(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   updateWelcomeVersion: (version) => dispatch(doSetWelcomeVersion(version || WELCOME_VERSION)),
 });
 

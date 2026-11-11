@@ -68,10 +68,9 @@ const ERR_MAP: CommentronErrorMap = {
   },
 };
 
-function devToast(dispatch: unknown, msg: unknown) {
+function devToast(dispatch: Dispatch, msg: unknown) {
   if (isDev) {
     console.error(msg);
-    // @ts-expect-error - TS2349 - This expression is not callable.
     dispatch(doToast({ isError: true, message: `DEV: ${msg}` }));
   }
 }

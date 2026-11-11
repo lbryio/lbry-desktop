@@ -23,7 +23,7 @@ const select = (state: unknown) => ({
   getSyncPending: selectGetSyncIsPending(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   setSyncEnabled: (value) => dispatch(doSetWalletSyncPreference(value)),
   checkSync: () => dispatch(doCheckSync()),
   getSync: (pw, cb) => dispatch(doGetSync(pw, cb)),

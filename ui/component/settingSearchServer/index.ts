@@ -11,7 +11,7 @@ const select = (state: unknown) => ({
 });
 
 // Kept on this device, not synced: an lbry-search server is often a local one.
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   setProvider: (provider) => dispatch(doSetClientSetting(SETTINGS.SEARCH_PROVIDER, provider)),
   setLbrySearchUrl: (url) => dispatch(doSetClientSetting(SETTINGS.LBRY_SEARCH_URL, url)),
 });

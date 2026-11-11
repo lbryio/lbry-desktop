@@ -55,7 +55,7 @@ const select = (state: unknown) => ({
   isUpdateModalDisplayed: selectIsUpdateModalDisplayed(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   fetchAccessToken: () => dispatch(doFetchAccessToken()),
   fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
   fetchCollectionListMine: () => dispatch(doFetchCollectionListMine()),

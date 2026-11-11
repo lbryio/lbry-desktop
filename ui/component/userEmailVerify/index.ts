@@ -17,7 +17,7 @@ const select = (state: unknown) => ({
   resendingEmail: selectResendingVerificationEmail(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   resendVerificationEmail: (email) => dispatch(doUserResendVerificationEmail(email)),
   checkEmailVerified: () => dispatch(doUserCheckEmailVerified()),
   toast: (message) => dispatch(doToast({ message })),

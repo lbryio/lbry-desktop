@@ -9,7 +9,7 @@ const select = (state: unknown) => ({
   following: selectFollowing(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   importFollowing: (text) => dispatch(doImportFollowing(text)),
 });
 

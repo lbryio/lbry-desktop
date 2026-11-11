@@ -47,7 +47,7 @@ const select = (state: unknown, props: unknown) => ({
   collectionClaimIds: makeSelectClaimIdsForCollectionId(props.collectionId)(state),
 });
 
-const perform = (dispatch: unknown, ownProps: unknown) => ({
+const perform = (dispatch: Dispatch, ownProps: unknown) => ({
   publishCollectionUpdate: (params) => dispatch(doCollectionPublishUpdate(params)),
   publishCollection: (params, collectionId) => dispatch(doCollectionPublish(params, collectionId)),
   clearCollectionErrors: () => dispatch({ type: ACTIONS.CLEAR_COLLECTION_ERRORS }),

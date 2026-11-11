@@ -10,7 +10,7 @@ const select = (state: unknown) => ({
   diskSpace: selectDiskSpace(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   getDaemonStatus: () => dispatch(doGetDaemonStatus()),
   setDaemonSetting: (key, value) => dispatch(doSetDaemonSetting(key, value)),
 });

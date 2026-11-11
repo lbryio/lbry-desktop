@@ -11,7 +11,7 @@ const select = (state: unknown, props: unknown) => ({
   playingUri: selectPlayingUri(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   analyticsPurchaseEvent: (fileInfo) => dispatch(doAnaltyicsPurchaseEvent(fileInfo)),
   setPlayingUri: (uri) => dispatch(doSetPlayingUri({ uri })),
   closeModal: () => dispatch(doHideModal()),

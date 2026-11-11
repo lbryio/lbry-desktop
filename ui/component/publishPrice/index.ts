@@ -9,7 +9,7 @@ const select = (state: unknown) => ({
   fee: makeSelectPublishFormValue("fee")(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   updatePublishForm: (values) => dispatch(doUpdatePublishForm(values)),
 });
 

@@ -22,7 +22,7 @@ const select = (state: unknown) => ({
   user: selectUser(state),
 });
 
-const perform = (dispatch: unknown) => ({
+const perform = (dispatch: Dispatch) => ({
   clearEmailEntry: () => dispatch(doClearEmailEntry()),
   clearPasswordEntry: () => dispatch(doClearPasswordEntry()),
   signOut: () => dispatch(doSignOut()),
