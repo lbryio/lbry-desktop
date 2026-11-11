@@ -1,4 +1,5 @@
 import * as MODALS from 'constants/modal_types';
+import * as PAGES from 'constants/pages';
 import React from 'react';
 import Button from 'component/button';
 import SettingsRow from 'component/settingsRow';
@@ -43,8 +44,12 @@ function SyncToggle(props: Props) {
       {!verifiedEmail && (
         <div>
           <p className="help">{__('An email address is required to sync your account.')}</p>
-          {/* @ts-expect-error - TS2322 (ts-migration) */}
-          <Button button="primary" label={__('Add Email')} />
+          <Button
+            // @ts-expect-error - TS2322 (ts-migration)
+            button="primary"
+            label={__('Add Email')}
+            navigate={`/$/${PAGES.AUTH}?redirect=${encodeURIComponent(props.location.pathname)}`}
+          />
         </div>
       )}
     </SettingsRow>
