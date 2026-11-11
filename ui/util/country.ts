@@ -1,10 +1,10 @@
 //@ts-nocheck
-import {countries as countryData} from 'country-data';
+import { countries as countryData } from "country-data";
 
 export const COUNTRIES = Array.from(
   new Set(
     countryData.all
-      .filter((country) => country.status !== 'deleted')
+      .filter((country) => country.status !== "deleted")
       .map((country) => country.name)
       .sort((a, b) => {
         if (a > b) {

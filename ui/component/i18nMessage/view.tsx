@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
 type Props = {
-  tokens: any,
-  children: string // e.g. "Read %faq_link% for more detail"
+  tokens: any;
+  children: string; // e.g. "Read %faq_link% for more detail"
 };
 
 export default function I18nMessage(props: Props) {

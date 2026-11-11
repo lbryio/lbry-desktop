@@ -1,17 +1,17 @@
-import React from 'react';
-import { withRouter } from 'react-router-dom';
-import FileThumbnail from 'component/fileThumbnail';
+import React from "react";
+import { withRouter } from "react-router-dom";
+import FileThumbnail from "component/fileThumbnail";
 
 type Props = {
-  uri: string,
-  collectionId: string,
-  collectionName: string,
-  collectionCount: number,
-  editedCollection?: Collection,
-  pendingCollection?: Collection,
-  claim: Claim | null | undefined,
-  collectionItemUrls: Array<string>,
-  fetchCollectionItems: (arg1: string) => void
+  uri: string;
+  collectionId: string;
+  collectionName: string;
+  collectionCount: number;
+  editedCollection?: Collection;
+  pendingCollection?: Collection;
+  claim: Claim | null | undefined;
+  collectionItemUrls: Array<string>;
+  fetchCollectionItems: (arg1: string) => void;
 };
 
 function CollectionPreviewOverlay(props: Props) {

@@ -1,5 +1,5 @@
 //@ts-nocheck
-import * as ACTIONS from 'constants/action_types';
+import * as ACTIONS from "constants/action_types";
 const reducers: Record<string, any> = {};
 const defaultState = {
   fetching: false,
@@ -35,7 +35,7 @@ reducers[ACTIONS.FETCH_REWARDS_COMPLETED] = (state: unknown, action: unknown) =>
   });
 };
 
-function setClaimRewardState(state: unknown, reward: unknown, isClaiming: unknown, errorMessage = '') {
+function setClaimRewardState(state: unknown, reward: unknown, isClaiming: unknown, errorMessage = "") {
   const newClaimPendingByType = Object.assign({}, state.claimPendingByType);
   const newClaimErrorsByType = Object.assign({}, state.claimErrorsByType);
 
@@ -63,7 +63,7 @@ function setClaimRewardState(state: unknown, reward: unknown, isClaiming: unknow
 reducers[ACTIONS.CLAIM_REWARD_STARTED] = (state: unknown, action: unknown) => {
   const { reward } = action.data;
 
-  return setClaimRewardState(state, reward, true, '');
+  return setClaimRewardState(state, reward, true, "");
 };
 
 reducers[ACTIONS.CLAIM_REWARD_SUCCESS] = (state: unknown, action: unknown) => {
@@ -82,19 +82,19 @@ reducers[ACTIONS.CLAIM_REWARD_SUCCESS] = (state: unknown, action: unknown) => {
     claimedRewardsById: { ...claimedRewardsById },
   } as const;
 
-  return setClaimRewardState(newState, reward, false, '');
+  return setClaimRewardState(newState, reward, false, "");
 };
 
 reducers[ACTIONS.CLAIM_REWARD_FAILURE] = (state: unknown, action: unknown) => {
   const { reward, error } = action.data;
 
-  return setClaimRewardState(state, reward, false, error ? error.message : '');
+  return setClaimRewardState(state, reward, false, error ? error.message : "");
 };
 
 reducers[ACTIONS.CLAIM_REWARD_CLEAR_ERROR] = (state: unknown, action: unknown) => {
   const { reward } = action.data;
 
-  return setClaimRewardState(state, reward, state.claimPendingByType[reward.reward_type], '');
+  return setClaimRewardState(state, reward, state.claimPendingByType[reward.reward_type], "");
 };
 
 reducers[ACTIONS.FETCH_REWARD_CONTENT_COMPLETED] = (state: unknown, action: unknown) => {

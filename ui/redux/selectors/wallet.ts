@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {createSelector} from 'reselect';
-import * as TRANSACTIONS from 'constants/transaction_types';
-import { PAGE_SIZE, LATEST_PAGE_SIZE } from 'constants/transaction_list';
-import { selectClaimIdsByUri } from 'redux/selectors/claims';
-import parseData from 'util/parse-data';
+import { createSelector } from "reselect";
+import * as TRANSACTIONS from "constants/transaction_types";
+import { PAGE_SIZE, LATEST_PAGE_SIZE } from "constants/transaction_list";
+import { selectClaimIdsByUri } from "redux/selectors/claims";
+import parseData from "util/parse-data";
 export const selectState = (state: unknown) => state.wallet || {};
 
 export const selectWalletState = selectState;
@@ -68,7 +68,7 @@ export const selectTransactionsById = createSelector(selectState, (state) => sta
 export const selectSupportsByOutpoint = createSelector(selectState, (state) => state.supports || {});
 
 export const selectTotalSupports = createSelector(selectSupportsByOutpoint, (byOutpoint) => {
-  let total = parseFloat('0.0');
+  let total = parseFloat("0.0");
 
   Object.values(byOutpoint).forEach((support) => {
     const { amount } = support;
@@ -101,7 +101,7 @@ export const selectTransactionItems = createSelector(selectTransactionsById, (by
     append.push(
       ...tx.claim_info.map((item) =>
         Object.assign({}, tx, item, {
-          type: item.claim_name[0] === '@' ? TRANSACTIONS.CHANNEL : TRANSACTIONS.PUBLISH,
+          type: item.claim_name[0] === "@" ? TRANSACTIONS.CHANNEL : TRANSACTIONS.PUBLISH,
         })
       )
     );
@@ -189,7 +189,7 @@ export const selectTransactionsFile = createSelector(selectTransactionItems, (tr
     return undefined;
   }
 
-  const parsed = parseData(transactions, 'csv');
+  const parsed = parseData(transactions, "csv");
   if (!parsed) {
     // Invalid data, or failed to parse.
     return null;
@@ -216,7 +216,7 @@ export const selectBlocks = createSelector(selectState, (state) => state.blocks)
 
 export const selectCurrentHeight = createSelector(selectState, (state) => state.latestBlock);
 
-export const selectTransactionListFilter = createSelector(selectState, (state) => state.transactionListFilter || '');
+export const selectTransactionListFilter = createSelector(selectState, (state) => state.transactionListFilter || "");
 
 export const selectFilteredTransactions = createSelector(
   selectTransactionItems,

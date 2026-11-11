@@ -1,13 +1,13 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doClaimYoutubeChannels, doUserFetch, doCheckYoutubeTransfer } from 'redux/actions/user';
+import { connect } from "react-redux";
+import { doClaimYoutubeChannels, doUserFetch, doCheckYoutubeTransfer } from "redux/actions/user";
 import {
   selectYoutubeChannels,
   selectYouTubeImportVideosComplete,
   selectYouTubeImportPending,
   selectUserIsPending,
-} from 'redux/selectors/user';
-import YoutubeChannelList from './view';
+} from "redux/selectors/user";
+import YoutubeChannelList from "./view";
 
 const select = (state: unknown) => ({
   youtubeChannels: selectYoutubeChannels(state),

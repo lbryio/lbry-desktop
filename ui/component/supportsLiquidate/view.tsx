@@ -1,32 +1,32 @@
-import * as ICONS from 'constants/icons';
-import React, { useCallback, useEffect, useState } from 'react';
-import CreditAmount from 'component/common/credit-amount';
-import Button from 'component/button';
-import { Form, FormField } from 'component/common/form';
-import Card from 'component/common/card';
-import I18nMessage from 'component/i18nMessage';
-import ErrorText from 'component/common/error-text';
+import * as ICONS from "constants/icons";
+import React, { useCallback, useEffect, useState } from "react";
+import CreditAmount from "component/common/credit-amount";
+import Button from "component/button";
+import { Form, FormField } from "component/common/form";
+import Card from "component/common/card";
+import I18nMessage from "component/i18nMessage";
+import ErrorText from "component/common/error-text";
 
 type Props = {
-  balance: number,
-  totalBalance: number,
-  claimsBalance: number,
-  supportsBalance: number,
-  tipsBalance: number,
-  claim: any,
-  metaData: any,
-  handleClose: () => void,
-  abandonSupportForClaim: (arg1: string, arg2: string, arg3: boolean | string, arg4: boolean) => any,
-  abandonClaimError: string | null | undefined
+  balance: number;
+  totalBalance: number;
+  claimsBalance: number;
+  supportsBalance: number;
+  tipsBalance: number;
+  claim: any;
+  metaData: any;
+  handleClose: () => void;
+  abandonSupportForClaim: (arg1: string, arg2: string, arg3: boolean | string, arg4: boolean) => any;
+  abandonClaimError: string | null | undefined;
 };
 
 const SupportsLiquidate = (props: Props) => {
   const { claim, abandonSupportForClaim, handleClose, abandonClaimError } = props;
   const [previewBalance, setPreviewBalance] = useState(undefined);
   const [defaultValueAssigned, setDefaultValueAssigned] = useState(false);
-  const [unlockTextAmount, setUnlockTextAmount] = useState('');
+  const [unlockTextAmount, setUnlockTextAmount] = useState("");
   const [error, setError] = useState(false);
-  const initialMessage = __('How much would you like to unlock?');
+  const initialMessage = __("How much would you like to unlock?");
   const [message, setMessage] = useState(initialMessage);
   const amount = Number(unlockTextAmount) || 0;
   const defaultValue = previewBalance ? previewBalance * 0.25 : 0;
@@ -63,7 +63,7 @@ const SupportsLiquidate = (props: Props) => {
   const handleChangeUnlockText = useCallback(
     (newValue) => {
       // Get rid of all characters except digits, commas and periods.
-      const onlyValidAmount = newValue.replace(/[^0-9.,]+/, '');
+      const onlyValidAmount = newValue.replace(/[^0-9.,]+/, "");
       setUnlockTextAmount(onlyValidAmount);
     },
     [setUnlockTextAmount]
@@ -72,13 +72,13 @@ const SupportsLiquidate = (props: Props) => {
   const handleUnlockTextFocus = useCallback(() => {
     // Get rid of empty zero when user starts typing (small ux improvement)
     if (Number(unlockTextAmount) === 0) {
-      setUnlockTextAmount('');
+      setUnlockTextAmount("");
     }
   }, [unlockTextAmount, setUnlockTextAmount]);
 
   const handleUnlockTextBlur = useCallback(() => {
     if (!unlockTextAmount || isNaN(Number(unlockTextAmount))) {
-      setUnlockTextAmount(previewBalance ? String(defaultValue) : '0');
+      setUnlockTextAmount(previewBalance ? String(defaultValue) : "0");
     }
   }, [unlockTextAmount, setUnlockTextAmount, previewBalance, defaultValue]);
 
@@ -102,22 +102,22 @@ const SupportsLiquidate = (props: Props) => {
     const unlockAmount = Number(unlockTextAmount);
     const previewBalanceNumber = Number(previewBalance);
     if (unlockTextAmount && isNaN(unlockAmount)) {
-      setMessage(__('Amount must be a number'));
+      setMessage(__("Amount must be a number"));
       setError(true);
     } else if (unlockAmount > previewBalanceNumber) {
-      setMessage(__('Amount cannot be more than available'));
+      setMessage(__("Amount cannot be more than available"));
       setError(true);
     } else if (Math.abs(unlockAmount - previewBalanceNumber) <= Number.EPSILON) {
       setMessage(__(`She's about to close up the library!`));
       setError(false);
     } else if (unlockAmount > previewBalanceNumber / 2) {
-      setMessage(__('Your content will do better with more staked on it'));
+      setMessage(__("Your content will do better with more staked on it"));
       setError(false);
     } else if (unlockAmount === 0) {
-      setMessage(__('Amount cannot be zero'));
+      setMessage(__("Amount cannot be zero"));
       setError(true);
     } else if (unlockAmount <= previewBalanceNumber / 2) {
-      setMessage(__('A prudent choice'));
+      setMessage(__("A prudent choice"));
       setError(false);
     } else {
       setMessage(initialMessage);
@@ -128,12 +128,12 @@ const SupportsLiquidate = (props: Props) => {
   return (
     <Card
       icon={ICONS.UNLOCK}
-      title={__('Unlock tips')}
+      title={__("Unlock tips")}
       subtitle={
         <>
           <p>
-            {__('You can unlock all or some of these LBRY Credits at any time.')}{' '}
-            {__('Keeping it locked improves the trust and discoverability of your content.')}
+            {__("You can unlock all or some of these LBRY Credits at any time.")}{" "}
+            {__("Keeping it locked improves the trust and discoverability of your content.")}
           </p>
           <p>
             {/* @ts-expect-error - TS2745 (ts-migration) */}
@@ -141,7 +141,7 @@ const SupportsLiquidate = (props: Props) => {
               // @ts-expect-error - TS2322 (ts-migration)
               tokens={{
                 // @ts-expect-error - TS2322 (ts-migration)
-                learn_more: <Button button="link" label={__('Learn More')} href="https://lbry.com/faq/tipping" />,
+                learn_more: <Button button="link" label={__("Learn More")} href="https://lbry.com/faq/tipping" />,
               }}
             >
               It's usually only worth unlocking what you intend to use immediately. %learn_more%
@@ -173,16 +173,16 @@ const SupportsLiquidate = (props: Props) => {
                 </I18nMessage>
               </div>
               <div className="section">
-                {previewBalance === 0 && <p>{__('No unlockable tips available')}</p>}
-                {previewBalance === undefined && <p>{__('Loading...')}</p>}
+                {previewBalance === 0 && <p>{__("No unlockable tips available")}</p>}
+                {previewBalance === undefined && <p>{__("Loading...")}</p>}
                 {previewBalance && (
                   <Form onSubmit={handleSubmit}>
-                    <label htmlFor="supports_liquidate_range">{__('Amount to unlock')}</label>
+                    <label htmlFor="supports_liquidate_range">{__("Amount to unlock")}</label>
                     <FormField
                       name="supports_liquidate_range"
-                      type={'range'}
+                      type={"range"}
                       min={0}
-// @ts-expect-error - TS2322 - Type '{ name: string; type: string; min: number; step: number; max: any; value: number; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+                      // @ts-expect-error - TS2322 - Type '{ name: string; type: string; min: number; step: number; max: any; value: number; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                       step={0.01}
                       max={previewBalance}
                       value={amount}
@@ -197,7 +197,7 @@ const SupportsLiquidate = (props: Props) => {
                       type="text"
                       value={unlockTextAmount}
                       helper={message}
-// @ts-expect-error - TS2322 - Type '{ type: string; value: string; helper: string; onFocus: () => void; onChange: (e: any) => void; onBlur: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+                      // @ts-expect-error - TS2322 - Type '{ type: string; value: string; helper: string; onFocus: () => void; onChange: (e: any) => void; onBlur: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                       onFocus={handleUnlockTextFocus}
                       onChange={(e) => handleChangeUnlockText(e.target.value)}
                       onBlur={handleUnlockTextBlur}
@@ -213,7 +213,7 @@ const SupportsLiquidate = (props: Props) => {
               disabled={error}
               button="primary"
               onClick={abandonClaimError ? handleClose : handleSubmit}
-              label={abandonClaimError ? __('Done') : __('Unlock')}
+              label={abandonClaimError ? __("Done") : __("Unlock")}
             />
           </div>
         </React.Fragment>

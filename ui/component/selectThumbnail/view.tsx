@@ -1,35 +1,35 @@
-import * as MODALS from 'constants/modal_types';
-import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
-import Lbry from 'lbry';
-import { DOMAIN } from 'config';
-import * as React from 'react';
-import { FormField } from 'component/common/form';
-import FileSelector from 'component/common/file-selector';
-import Button from 'component/button';
+import * as MODALS from "constants/modal_types";
+import * as THUMBNAIL_STATUSES from "constants/thumbnail_upload_statuses";
+import Lbry from "lbry";
+import { DOMAIN } from "config";
+import * as React from "react";
+import { FormField } from "component/common/form";
+import FileSelector from "component/common/file-selector";
+import Button from "component/button";
 // @ts-expect-error - TS2792 - Cannot find module './thumbnail-missing.png'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-import ThumbnailMissingImage from './thumbnail-missing.png';
+import ThumbnailMissingImage from "./thumbnail-missing.png";
 // @ts-expect-error - TS2792 - Cannot find module './thumbnail-broken.png'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-import ThumbnailBrokenImage from './thumbnail-broken.png';
+import ThumbnailBrokenImage from "./thumbnail-broken.png";
 
 type Props = {
-  filePath: string | null | undefined,
+  filePath: string | null | undefined;
   fileInfos: {
-    [key: string]: FileListItem
-  },
-  myClaimForUri: StreamClaim | null | undefined,
-  thumbnail: string | null | undefined,
-  formDisabled: boolean,
-  uploadThumbnailStatus: string,
-  thumbnailPath: string | null | undefined,
-  thumbnailError: string | null | undefined,
-  thumbnailParam: string | null | undefined,
-  thumbnailParamError: boolean,
-  thumbnailParamStatus: string,
-  openModal: (id: string, arg2: Record<any, any>) => void,
-  updatePublishForm: (arg1: Record<any, any>) => void,
-  updateThumbnailParams: (arg1: Record<any, any>) => void,
-  resetThumbnailStatus: () => void,
-  usePublishFormMode: boolean
+    [key: string]: FileListItem;
+  };
+  myClaimForUri: StreamClaim | null | undefined;
+  thumbnail: string | null | undefined;
+  formDisabled: boolean;
+  uploadThumbnailStatus: string;
+  thumbnailPath: string | null | undefined;
+  thumbnailError: string | null | undefined;
+  thumbnailParam: string | null | undefined;
+  thumbnailParamError: boolean;
+  thumbnailParamStatus: string;
+  openModal: (id: string, arg2: Record<any, any>) => void;
+  updatePublishForm: (arg1: Record<any, any>) => void;
+  updateThumbnailParams: (arg1: Record<any, any>) => void;
+  resetThumbnailStatus: () => void;
+  usePublishFormMode: boolean;
 };
 
 function SelectThumbnail(props: Props) {
@@ -53,7 +53,7 @@ function SelectThumbnail(props: Props) {
   const thumbnail = publishForm ? props.thumbnail : thumbnailParam;
   const thumbnailError = publishForm ? props.thumbnailError : props.thumbnailParamError;
 
-  const accept = '.png, .jpg, .jpeg, .gif';
+  const accept = ".png, .jpg, .jpeg, .gif";
   const manualInput = status === THUMBNAIL_STATUSES.API_DOWN || status === THUMBNAIL_STATUSES.MANUAL;
   const thumbUploaded = status === THUMBNAIL_STATUSES.COMPLETE && thumbnail;
   const isUrlInput = thumbnail !== ThumbnailMissingImage && thumbnail !== ThumbnailBrokenImage;
@@ -64,16 +64,16 @@ function SelectThumbnail(props: Props) {
 
   const actualFilePath = filePath || downloadPath;
   let isSupportedVideo = false;
-  if (typeof actualFilePath === 'string') {
-    isSupportedVideo = Lbry.getMediaType(null, actualFilePath) === 'video';
-// @ts-expect-error - TS2339 - Property 'type' does not exist on type 'never'.
+  if (typeof actualFilePath === "string") {
+    isSupportedVideo = Lbry.getMediaType(null, actualFilePath) === "video";
+    // @ts-expect-error - TS2339 - Property 'type' does not exist on type 'never'.
   } else if (actualFilePath && actualFilePath.type) {
-// @ts-expect-error - TS2339 - Property 'type' does not exist on type 'never'.
-    isSupportedVideo = actualFilePath.type.split('/')[0] === 'video';
+    // @ts-expect-error - TS2339 - Property 'type' does not exist on type 'never'.
+    isSupportedVideo = actualFilePath.type.split("/")[0] === "video";
   }
 
   function handleThumbnailChange(e: React.ChangeEvent<any>) {
-    const newThumbnail = e.target.value.replace(' ', '');
+    const newThumbnail = e.target.value.replace(" ", "");
     if (updateThumbnailParams) {
       updateThumbnailParams({ thumbnail_url: newThumbnail });
     }
@@ -108,11 +108,11 @@ function SelectThumbnail(props: Props) {
     <div className="column__item thumbnail-picker__preview" style={{ backgroundImage: `url(${String(thumbnailSrc)})` }}>
       {thumbUploaded &&
         thumbnailError !== false &&
-        __('This will be visible in a few minutes after you submit this form.')}
+        __("This will be visible in a few minutes after you submit this form.")}
       <img
-        style={{ display: 'none' }}
+        style={{ display: "none" }}
         src={thumbnail || ThumbnailMissingImage}
-        alt={__('Thumbnail Preview')}
+        alt={__("Thumbnail Preview")}
         onError={() => {
           if (updateThumbnailParams) {
             updateThumbnailParams({ thumbnail_error: Boolean(thumbnail) });
@@ -137,15 +137,15 @@ function SelectThumbnail(props: Props) {
     <>
       {status !== THUMBNAIL_STATUSES.IN_PROGRESS && (
         <>
-          <label>{__('Thumbnail')}</label>
+          <label>{__("Thumbnail")}</label>
           <div className="column">
             {thumbPreview}
             {publishForm && thumbUploaded ? (
               <div className="column__item">
-                <p>{__('Upload complete.')}</p>
+                <p>{__("Upload complete.")}</p>
                 <div className="section__actions">
                   {/* @ts-expect-error - TS2322 (ts-migration) */}
-                  <Button button="link" label={__('New thumbnail')} onClick={resetThumbnailStatus} />
+                  <Button button="link" label={__("New thumbnail")} onClick={resetThumbnailStatus} />
                 </div>
               </div>
             ) : (
@@ -163,8 +163,8 @@ function SelectThumbnail(props: Props) {
                 ) : (
                   <FileSelector
                     currentPath={thumbnailPath}
-                    label={__('Thumbnail')}
-                    placeholder={__('Choose an enticing thumbnail')}
+                    label={__("Thumbnail")}
+                    placeholder={__("Choose an enticing thumbnail")}
                     accept={accept}
                     onFileChosen={(fileWithPath) =>
                       openModal(MODALS.CONFIRM_THUMBNAIL_UPLOAD, {
@@ -178,7 +178,7 @@ function SelectThumbnail(props: Props) {
                   <Button
                     // @ts-expect-error - TS2322 (ts-migration)
                     button="link"
-                    label={manualInput ? __('Use thumbnail upload tool') : __('Enter a thumbnail URL')}
+                    label={manualInput ? __("Use thumbnail upload tool") : __("Enter a thumbnail URL")}
                     onClick={() =>
                       updatePublishForm({
                         uploadThumbnailStatus: manualInput ? THUMBNAIL_STATUSES.READY : THUMBNAIL_STATUSES.MANUAL,
@@ -191,7 +191,7 @@ function SelectThumbnail(props: Props) {
                     <Button
                       // @ts-expect-error - TS2322 (ts-migration)
                       button="link"
-                      label={__('Take a snapshot from your video')}
+                      label={__("Take a snapshot from your video")}
                       onClick={() => openModal(MODALS.AUTO_GENERATE_THUMBNAIL, { filePath: actualFilePath })}
                     />
                   )}
@@ -202,12 +202,12 @@ function SelectThumbnail(props: Props) {
         </>
       )}
 
-      {status === THUMBNAIL_STATUSES.IN_PROGRESS && <p>{__('Uploading thumbnail')}...</p>}
+      {status === THUMBNAIL_STATUSES.IN_PROGRESS && <p>{__("Uploading thumbnail")}...</p>}
       {!thumbUploaded && (
         <p className="help">
           {manualInput
-            ? __('Enter a URL for your thumbnail.')
-            : __('Upload your thumbnail to %domain%. Recommended size is 16:9.', { domain: DOMAIN })}
+            ? __("Enter a URL for your thumbnail.")
+            : __("Upload your thumbnail to %domain%. Recommended size is 16:9.", { domain: DOMAIN })}
         </p>
       )}
     </>

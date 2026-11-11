@@ -1,19 +1,19 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectBalance } from 'redux/selectors/wallet';
+import { connect } from "react-redux";
+import { selectBalance } from "redux/selectors/wallet";
 import {
   makeSelectPublishFormValue,
   selectMyClaimForUri,
   selectIsResolvingPublishUris,
   selectTakeOverAmount,
-} from 'redux/selectors/publish';
-import { doUpdatePublishForm, doPrepareEdit } from 'redux/actions/publish';
-import PublishPage from './view';
+} from "redux/selectors/publish";
+import { doUpdatePublishForm, doPrepareEdit } from "redux/actions/publish";
+import PublishPage from "./view";
 
 const select = (state: unknown) => ({
-  name: makeSelectPublishFormValue('name')(state),
-  bid: makeSelectPublishFormValue('bid')(state),
-  uri: makeSelectPublishFormValue('uri')(state),
+  name: makeSelectPublishFormValue("name")(state),
+  bid: makeSelectPublishFormValue("bid")(state),
+  uri: makeSelectPublishFormValue("uri")(state),
   isResolvingUri: selectIsResolvingPublishUris(state),
   balance: selectBalance(state),
   myClaimForUri: selectMyClaimForUri(state),

@@ -1,19 +1,19 @@
-import React from 'react';
-import homepages from 'homepages';
-import LANGUAGES from 'constants/languages';
-import { FormField } from 'component/common/form';
-import { getDefaultHomepageKey } from 'util/default-languages';
+import React from "react";
+import homepages from "homepages";
+import LANGUAGES from "constants/languages";
+import { FormField } from "component/common/form";
+import { getDefaultHomepageKey } from "util/default-languages";
 
 type Props = {
-  homepage: string,
-  setHomepage: (arg1: string) => void
+  homepage: string;
+  setHomepage: (arg1: string) => void;
 };
 
 function SelectHomepage(props: Props) {
   const { homepage, setHomepage } = props;
 
   function handleSetHomepage(e: unknown) {
-// @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
     const { value } = e.target;
     setHomepage(value);
   }
@@ -29,7 +29,7 @@ function SelectHomepage(props: Props) {
         value={homepage || getDefaultHomepageKey()}
       >
         {Object.keys(homepages).map((hp) => (
-          <option key={'hp' + hp} value={hp}>
+          <option key={"hp" + hp} value={hp}>
             {`${LANGUAGES[hp][1]}`}
           </option>
         ))}

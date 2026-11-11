@@ -1,19 +1,19 @@
-import React, {useEffect} from 'react';
-import { FormFieldAreaAdvanced } from 'component/common/form';
+import React, { useEffect } from "react";
+import { FormFieldAreaAdvanced } from "component/common/form";
 
 type Props = {
-  uri: string | null | undefined,
-  label: string | null | undefined,
-  disabled: boolean | null | undefined,
-  filePath: File,
-  fileText: string | null | undefined,
-  fileMimeType: string | null | undefined,
-  streamingUrl: string | null | undefined,
-  isStillEditing: boolean,
-  fetchStreamingUrl: (arg1: string) => void,
-  setPrevFileText: (arg1: string) => void,
-  updatePublishForm: (arg1: Record<any, any>) => void,
-  setCurrentFileType: (arg1: string) => void
+  uri: string | null | undefined;
+  label: string | null | undefined;
+  disabled: boolean | null | undefined;
+  filePath: File;
+  fileText: string | null | undefined;
+  fileMimeType: string | null | undefined;
+  streamingUrl: string | null | undefined;
+  isStillEditing: boolean;
+  fetchStreamingUrl: (arg1: string) => void;
+  setPrevFileText: (arg1: string) => void;
+  updatePublishForm: (arg1: Record<any, any>) => void;
+  setCurrentFileType: (arg1: string) => void;
 };
 
 function PostEditor(props: Props) {
@@ -60,7 +60,7 @@ function PostEditor(props: Props) {
 
   useEffect(() => {
     function readFileStream(url: unknown) {
-// @ts-expect-error - TS2769 - No overload matches this call.
+      // @ts-expect-error - TS2769 - No overload matches this call.
       return fetch(url).then((res) => res.text());
     }
 
@@ -74,14 +74,14 @@ function PostEditor(props: Props) {
           updatePublishForm({ fileText: text });
         }
       } catch (error: any) {
-        console.error(error); // eslint-disable-line
+        console.error(error);
       }
     }
 
     if (editing) {
       // Editing same file (previously published)
       // User can use a different file to replace the content
-      if (!ready && !filePath && !fileText && streamingUrl && fileMimeType === 'text/markdown') {
+      if (!ready && !filePath && !fileText && streamingUrl && fileMimeType === "text/markdown") {
         setCurrentFileType(fileMimeType);
         updateEditorText(streamingUrl);
       }
@@ -100,11 +100,11 @@ function PostEditor(props: Props) {
 
   return (
     <FormFieldAreaAdvanced
-      type={'markdown'}
+      type={"markdown"}
       name="content_post"
       label={label}
-      placeholder={__('My content for this post...')}
-      value={ready ? fileText : __('Loading...')}
+      placeholder={__("My content for this post...")}
+      value={ready ? fileText : __("Loading...")}
       disabled={!ready || disabled}
       onChange={(value) => updatePublishForm({ fileText: value })}
     />

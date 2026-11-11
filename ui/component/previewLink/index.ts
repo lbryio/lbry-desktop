@@ -1,5 +1,5 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import {
   selectClaimIsMine,
   selectTitleForUri,
@@ -7,10 +7,10 @@ import {
   selectClaimForUri,
   selectIsUriResolving,
   makeSelectMetadataItemForUri,
-} from 'redux/selectors/claims';
-import { doResolveUri } from 'redux/actions/claims';
-import { selectBlackListedOutpoints } from 'lbryinc';
-import PreviewLink from './view';
+} from "redux/selectors/claims";
+import { doResolveUri } from "redux/actions/claims";
+import { selectBlackListedOutpoints } from "lbryinc";
+import PreviewLink from "./view";
 
 const select = (state: unknown, props: unknown) => {
   const claim = selectClaimForUri(state, props.uri);
@@ -20,7 +20,7 @@ const select = (state: unknown, props: unknown) => {
     claim,
     title: selectTitleForUri(state, props.uri),
     thumbnail: getThumbnailFromClaim(claim),
-    description: makeSelectMetadataItemForUri(props.uri, 'description')(state),
+    description: makeSelectMetadataItemForUri(props.uri, "description")(state),
     channelIsMine: selectClaimIsMine(state, claim),
     isResolvingUri: selectIsUriResolving(state, props.uri),
     blackListedOutpoints: selectBlackListedOutpoints(state),

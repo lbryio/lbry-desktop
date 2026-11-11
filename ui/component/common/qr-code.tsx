@@ -1,11 +1,11 @@
-import React from 'react';
-import classnames from 'classnames';
-import ReactQrCode from 'qrcode.react';
+import React from "react";
+import classnames from "classnames";
+import ReactQrCode from "qrcode.react";
 
 type Props = {
-  value: string,
-  paddingRight?: boolean,
-  paddingTop?: boolean
+  value: string;
+  paddingRight?: boolean;
+  paddingTop?: boolean;
 };
 
 class QRCode extends React.Component<Props> {
@@ -18,9 +18,9 @@ class QRCode extends React.Component<Props> {
     const { value, paddingRight, paddingTop } = this.props;
     return (
       <div
-        className={classnames('qr-code', {
-          'qr-code--right-padding': paddingRight,
-          'qr-code--top-padding': paddingTop,
+        className={classnames("qr-code", {
+          "qr-code--right-padding": paddingRight,
+          "qr-code--top-padding": paddingTop,
         })}
       >
         <ReactQrCode value={value} />

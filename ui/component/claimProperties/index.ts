@@ -1,8 +1,8 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectClaimIsMine, selectClaimForUri } from 'redux/selectors/claims';
-import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
-import ClaimProperties from './view';
+import { connect } from "react-redux";
+import { selectClaimIsMine, selectClaimForUri } from "redux/selectors/claims";
+import { selectIsSubscribedForUri } from "redux/selectors/subscriptions";
+import ClaimProperties from "./view";
 
 const select = (state: unknown, props: unknown) => {
   const claim = selectClaimForUri(state, props.uri);

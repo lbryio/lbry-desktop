@@ -1,8 +1,8 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectClaimForUri, selectClaimIsMine } from 'redux/selectors/claims';
-import { doCollectionEdit, doFetchItemsInCollection } from 'redux/actions/collections';
-import { doPrepareEdit } from 'redux/actions/publish';
+import { connect } from "react-redux";
+import { selectClaimForUri, selectClaimIsMine } from "redux/selectors/claims";
+import { doCollectionEdit, doFetchItemsInCollection } from "redux/actions/collections";
+import { doPrepareEdit } from "redux/actions/publish";
 import {
   makeSelectCollectionForId,
   makeSelectCollectionForIdHasClaimUrl,
@@ -10,31 +10,31 @@ import {
   makeSelectEditedCollectionForId,
   makeSelectUrlsForCollectionId,
   selectLastUsedCollection,
-} from 'redux/selectors/collections';
-import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
-import { doOpenFileInFolder } from 'redux/actions/file';
-import * as COLLECTIONS_CONSTS from 'constants/collections';
-import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
-import { doChannelMute, doChannelUnmute } from 'redux/actions/blocked';
-import { doSetActiveChannel, doSetIncognito, doOpenModal } from 'redux/actions/app';
+} from "redux/selectors/collections";
+import { makeSelectFileInfoForUri } from "redux/selectors/file_info";
+import { doOpenFileInFolder } from "redux/actions/file";
+import * as COLLECTIONS_CONSTS from "constants/collections";
+import { makeSelectChannelIsMuted } from "redux/selectors/blocked";
+import { doChannelMute, doChannelUnmute } from "redux/actions/blocked";
+import { doSetActiveChannel, doSetIncognito, doOpenModal } from "redux/actions/app";
 import {
   doCommentModBlock,
   doCommentModUnBlock,
   doCommentModBlockAsAdmin,
   doCommentModUnBlockAsAdmin,
-} from 'redux/actions/comments';
+} from "redux/actions/comments";
 import {
   selectHasAdminChannel,
   makeSelectChannelIsBlocked,
   makeSelectChannelIsAdminBlocked,
-} from 'redux/selectors/comments';
-import { doToast } from 'redux/actions/notifications';
-import { doChannelSubscribe, doChannelUnsubscribe } from 'redux/actions/subscriptions';
-import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
-import { selectListShuffle } from 'redux/selectors/content';
-import { doToggleLoopList, doToggleShuffleList } from 'redux/actions/content';
-import ClaimPreview from './view';
-import fs from 'fs';
+} from "redux/selectors/comments";
+import { doToast } from "redux/actions/notifications";
+import { doChannelSubscribe, doChannelUnsubscribe } from "redux/actions/subscriptions";
+import { selectIsSubscribedForUri } from "redux/selectors/subscriptions";
+import { selectListShuffle } from "redux/selectors/content";
+import { doToggleLoopList, doToggleShuffleList } from "redux/actions/content";
+import ClaimPreview from "./view";
+import fs from "fs";
 
 const select = (state: unknown, props: unknown) => {
   const claim = selectClaimForUri(state, props.uri, false); // @KP test no repost!

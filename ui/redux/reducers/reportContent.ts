@@ -1,9 +1,9 @@
-import * as ACTIONS from 'constants/action_types';
-import { handleActions } from 'util/redux-utils';
+import * as ACTIONS from "constants/action_types";
+import { handleActions } from "util/redux-utils";
 
 const defaultState: ReportContentState = {
   isReporting: false,
-  error: '',
+  error: "",
 };
 
 export default handleActions(
@@ -11,12 +11,12 @@ export default handleActions(
     [ACTIONS.REPORT_CONTENT_STARTED]: (state: ReportContentState): ReportContentState => ({
       ...state,
       isReporting: true,
-      error: '',
+      error: "",
     }),
     [ACTIONS.REPORT_CONTENT_COMPLETED]: (state: ReportContentState): ReportContentState => ({
       ...state,
       isReporting: false,
-      error: '',
+      error: "",
     }),
     [ACTIONS.REPORT_CONTENT_FAILED]: (state: ReportContentState, action): ReportContentState => ({
       ...state,

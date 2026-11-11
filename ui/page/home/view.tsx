@@ -1,21 +1,21 @@
-import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
-import { SITE_NAME } from 'config';
-import React from 'react';
-import Page from 'component/page';
-import Button from 'component/button';
-import ClaimTilesDiscover from 'component/claimTilesDiscover';
-import ClaimPreviewTile from 'component/claimPreviewTile';
-import Icon from 'component/common/icon';
-import WaitUntilOnPage from 'component/common/wait-until-on-page';
-import { useIsLargeScreen } from 'effects/use-screensize';
-import { GetLinksData } from 'util/buildHomepage';
+import * as ICONS from "constants/icons";
+import * as PAGES from "constants/pages";
+import { SITE_NAME } from "config";
+import React from "react";
+import Page from "component/page";
+import Button from "component/button";
+import ClaimTilesDiscover from "component/claimTilesDiscover";
+import ClaimPreviewTile from "component/claimPreviewTile";
+import Icon from "component/common/icon";
+import WaitUntilOnPage from "component/common/wait-until-on-page";
+import { useIsLargeScreen } from "effects/use-screensize";
+import { GetLinksData } from "util/buildHomepage";
 
 type Props = {
-  followedTags: Array<Tag>,
-  subscribedChannels: Array<Subscription>,
-  showNsfw: boolean,
-  homepageData: any
+  followedTags: Array<Tag>;
+  subscribedChannels: Array<Subscription>;
+  showNsfw: boolean;
+  homepageData: any;
 };
 
 function HomePage(props: Props) {
@@ -38,17 +38,12 @@ function HomePage(props: Props) {
   );
 
   type SectionHeaderProps = {
-    title: string,
-    navigate?: string,
-    icon?: string,
-    help?: string
+    title: string;
+    navigate?: string;
+    icon?: string;
+    help?: string;
   };
-  const SectionHeader = ({
-    title,
-    navigate = '/',
-    icon = '',
-    help,
-  }: SectionHeaderProps) => {
+  const SectionHeader = ({ title, navigate = "/", icon = "", help }: SectionHeaderProps) => {
     return (
       <h1 className="claim-grid__header">
         {/* @ts-expect-error - TS2322 (ts-migration) */}
@@ -61,10 +56,19 @@ function HomePage(props: Props) {
     );
   };
 
-  function getRowElements(title: unknown, route: unknown, link: unknown, icon: unknown, help: unknown, options: unknown, index: unknown, pinUrls: unknown) {
+  function getRowElements(
+    title: unknown,
+    route: unknown,
+    link: unknown,
+    icon: unknown,
+    help: unknown,
+    options: unknown,
+    index: unknown,
+    pinUrls: unknown
+  ) {
     const tilePlaceholder = (
       <ul className="claim-grid">
-{ /* @ts-expect-error - TS2339 - Property 'pageSize' does not exist on type 'unknown'. */}
+        {/* @ts-expect-error - TS2339 - Property 'pageSize' does not exist on type 'unknown'. */}
         {new Array(options.pageSize || 8).fill(1).map((x, i) => (
           <ClaimPreviewTile key={i} placeholder />
         ))}
@@ -75,17 +79,17 @@ function HomePage(props: Props) {
     const claimTiles = <ClaimTilesDiscover {...options} hasSource pinUrls={pinUrls} />;
 
     return (
-// @ts-expect-error - TS2322 - Type 'unknown' is not assignable to type 'Key'.
+      // @ts-expect-error - TS2322 - Type 'unknown' is not assignable to type 'Key'.
       <div key={title} className="claim-grid__wrapper">
         {/* category header */}
-        {index !== 0 && title && typeof title === 'string' && (
-// @ts-expect-error - TS2322 - Type 'unknown' is not assignable to type 'string'. | TS2322 - Type 'unknown' is not assignable to type 'string'. | TS2322 - Type 'unknown' is not assignable to type 'string'.
+        {index !== 0 && title && typeof title === "string" && (
+          // @ts-expect-error - TS2322 - Type 'unknown' is not assignable to type 'string'. | TS2322 - Type 'unknown' is not assignable to type 'string'. | TS2322 - Type 'unknown' is not assignable to type 'string'.
           <SectionHeader title={__(title)} navigate={route || link} icon={icon} help={help} />
         )}
 
         {index === 0 && <>{claimTiles}</>}
         {index !== 0 && (
-// @ts-expect-error - TS2322 - Type '{ children: Element; name: unknown; placeholder: Element; yOffset: number; }' is not assignable to type 'IntrinsicAttributes & Props'.
+          // @ts-expect-error - TS2322 - Type '{ children: Element; name: unknown; placeholder: Element; yOffset: number; }' is not assignable to type 'IntrinsicAttributes & Props'.
           <WaitUntilOnPage name={title} placeholder={tilePlaceholder} yOffset={800}>
             {claimTiles}
           </WaitUntilOnPage>
@@ -99,7 +103,7 @@ function HomePage(props: Props) {
             button="link"
             navigate={route || link}
             iconRight={ICONS.ARROW_RIGHT}
-            label={__('View More')}
+            label={__("View More")}
           />
         )}
       </div>
@@ -119,7 +123,7 @@ function HomePage(props: Props) {
               // @ts-expect-error - TS2322 (ts-migration)
               button="primary"
               navigate={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
-              label={__('Find new channels to follow')}
+              label={__("Find new channels to follow")}
             />
           </p>
         </div>

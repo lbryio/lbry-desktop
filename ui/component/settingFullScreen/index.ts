@@ -1,3 +1,3 @@
 //@ts-nocheck
-import SettingFullScreen from './view';
+import SettingFullScreen from "./view";
 export default SettingFullScreen;

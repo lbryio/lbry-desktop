@@ -1,23 +1,23 @@
-import React from 'react';
-import { Modal } from 'modal/modal';
-import { deleteSavedPassword } from 'util/saved-passwords';
+import React from "react";
+import { Modal } from "modal/modal";
+import { deleteSavedPassword } from "util/saved-passwords";
 
 type Props = {
-  closeModal: () => void,
-  callback?: () => void
+  closeModal: () => void;
+  callback?: () => void;
 };
 
 class ModalPasswordUnsave extends React.PureComponent<Props> {
   render() {
     return (
       <Modal
-// @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; contentLabel: string; title: string; type: string; confirmButtonLabel: string; abortButtonLabel: string; onConfirmed: () => Promise<void>; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
+        // @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; contentLabel: string; title: string; type: string; confirmButtonLabel: string; abortButtonLabel: string; onConfirmed: () => Promise<void>; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
         isOpen
-        contentLabel={__('Unsave Password')}
-        title={__('Clear saved password')}
+        contentLabel={__("Unsave Password")}
+        title={__("Clear saved password")}
         type="confirm"
-        confirmButtonLabel={__('Forget')}
-        abortButtonLabel={__('Nevermind')}
+        confirmButtonLabel={__("Forget")}
+        abortButtonLabel={__("Nevermind")}
         onConfirmed={() =>
           deleteSavedPassword().then(() => {
             this.props.closeModal();
@@ -29,8 +29,8 @@ class ModalPasswordUnsave extends React.PureComponent<Props> {
         onAborted={this.props.closeModal}
       >
         <p>
-          {__('You are about to delete your saved password.')}{' '}
-          {__('Your wallet will still be encrypted, but you will have to remember and enter it manually on startup.')}
+          {__("You are about to delete your saved password.")}{" "}
+          {__("Your wallet will still be encrypted, but you will have to remember and enter it manually on startup.")}
         </p>
       </Modal>
     );

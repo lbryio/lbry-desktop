@@ -1,15 +1,15 @@
-import * as ACTIONS from 'constants/action_types';
-import * as SETTINGS from 'constants/settings';
-import { handleActions } from 'util/redux-utils';
-import { SEARCH_OPTIONS, SEARCH_PAGE_SIZE } from 'constants/search';
-import { createNormalizedSearchKey } from 'util/search';
-import { LIGHTHOUSE_DEFAULT_TYPES } from 'config';
-const defaultSearchTypes = LIGHTHOUSE_DEFAULT_TYPES && LIGHTHOUSE_DEFAULT_TYPES.split(',');
+import * as ACTIONS from "constants/action_types";
+import * as SETTINGS from "constants/settings";
+import { handleActions } from "util/redux-utils";
+import { SEARCH_OPTIONS, SEARCH_PAGE_SIZE } from "constants/search";
+import { createNormalizedSearchKey } from "util/search";
+import { LIGHTHOUSE_DEFAULT_TYPES } from "config";
+const defaultSearchTypes = LIGHTHOUSE_DEFAULT_TYPES && LIGHTHOUSE_DEFAULT_TYPES.split(",");
 
 const defaultState: SearchState = {
   // $FlowFixMe
   options: {
-// @ts-expect-error - TS2322 - Type '{ size: number; claimType: "file,channel"; audio: boolean; video: boolean; text: boolean; image: boolean; application: boolean; }' is not assignable to type 'SearchOptions'.
+    // @ts-expect-error - TS2322 - Type '{ size: number; claimType: "file,channel"; audio: boolean; video: boolean; text: boolean; image: boolean; application: boolean; }' is not assignable to type 'SearchOptions'.
     [SEARCH_OPTIONS.RESULT_COUNT]: SEARCH_PAGE_SIZE,
     [SEARCH_OPTIONS.CLAIM_TYPE]: SEARCH_OPTIONS.INCLUDE_FILES_AND_CHANNELS,
     [SEARCH_OPTIONS.MEDIA_AUDIO]: defaultSearchTypes.includes(SEARCH_OPTIONS.MEDIA_AUDIO),
@@ -22,7 +22,7 @@ const defaultState: SearchState = {
   hasReachedMaxResultsLength: {},
   searching: false,
   results: [],
-  mentionQuery: '',
+  mentionQuery: "",
 };
 
 export default handleActions(
@@ -34,7 +34,7 @@ export default handleActions(
     [ACTIONS.SEARCH_SUCCESS]: (state: SearchState, action: SearchSuccess): SearchState => {
       const { query, uris, from, size, recsys, hasNextPage } = action.data;
       const normalizedQuery = createNormalizedSearchKey(query);
-      const urisForQuery = state.resultsByQuery[normalizedQuery] && state.resultsByQuery[normalizedQuery]['uris'];
+      const urisForQuery = state.resultsByQuery[normalizedQuery] && state.resultsByQuery[normalizedQuery]["uris"];
 
       let newUris = uris;
       if (from !== 0 && urisForQuery) {
@@ -43,7 +43,7 @@ export default handleActions(
 
       // lbry-search says whether there's another page (its pages can be short after filtering).
       // Otherwise a page smaller than the page size is the last one.
-      const noMoreResults = typeof hasNextPage === 'boolean' ? !hasNextPage : size && uris.length < size;
+      const noMoreResults = typeof hasNextPage === "boolean" ? !hasNextPage : size && uris.length < size;
 
       const results = { uris: newUris, recsys } as const;
       return {
@@ -82,12 +82,13 @@ export default handleActions(
       state: SearchState,
       action: {
         data: {
-          key: string
-        }
-      },
-    ): SearchState => action.data.key === SETTINGS.SEARCH_PROVIDER || action.data.key === SETTINGS.LBRY_SEARCH_URL
-      ? { ...state, resultsByQuery: {}, hasReachedMaxResultsLength: {} }
-      : state,
+          key: string;
+        };
+      }
+    ): SearchState =>
+      action.data.key === SETTINGS.SEARCH_PROVIDER || action.data.key === SETTINGS.LBRY_SEARCH_URL
+        ? { ...state, resultsByQuery: {}, hasReachedMaxResultsLength: {} }
+        : state,
   },
   defaultState
 );

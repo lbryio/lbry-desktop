@@ -1,5 +1,5 @@
-import * as ACTIONS from 'constants/action_types';
-import { handleActions } from 'util/redux-utils';
+import * as ACTIONS from "constants/action_types";
+import { handleActions } from "util/redux-utils";
 
 const defaultState: BlocklistState = {
   blockedChannels: [],
@@ -22,13 +22,16 @@ export default handleActions(
         blockedChannels: newBlockedChannels,
       };
     },
-    [ACTIONS.SYNC_STATE_POPULATE]: (state: BlocklistState, action: {
-      data: {
-        blocked: Array<string> | null | undefined
+    [ACTIONS.SYNC_STATE_POPULATE]: (
+      state: BlocklistState,
+      action: {
+        data: {
+          blocked: Array<string> | null | undefined;
+        };
       }
-    }) => {
+    ) => {
       const { blocked } = action.data;
-      const sanitizedBlocked = blocked && blocked.filter((e) => typeof e === 'string');
+      const sanitizedBlocked = blocked && blocked.filter((e) => typeof e === "string");
       return {
         ...state,
         blockedChannels: sanitizedBlocked || state.blockedChannels,

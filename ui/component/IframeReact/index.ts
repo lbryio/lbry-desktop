@@ -1,6 +1,6 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import IframeReact from './view';
+import { connect } from "react-redux";
+import IframeReact from "./view";
 
 const select = (state: unknown) => ({});
 

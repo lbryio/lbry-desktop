@@ -1,14 +1,14 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import {
   makeSelectClaimIsMine,
   makeSelectIsAbandoningClaimForUri,
   makeSelectClaimForClaimId,
-} from 'redux/selectors/claims';
-import { doCollectionDelete } from 'redux/actions/collections';
-import { makeSelectNameForCollectionId } from 'redux/selectors/collections';
-import { doHideModal } from 'redux/actions/app';
-import ModalRemoveCollection from './view';
+} from "redux/selectors/claims";
+import { doCollectionDelete } from "redux/actions/collections";
+import { makeSelectNameForCollectionId } from "redux/selectors/collections";
+import { doHideModal } from "redux/actions/app";
+import ModalRemoveCollection from "./view";
 
 const select = (state: unknown, props: unknown) => {
   const claim = makeSelectClaimForClaimId(props.collectionId)(state);

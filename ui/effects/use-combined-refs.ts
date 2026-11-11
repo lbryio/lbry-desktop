@@ -1,14 +1,14 @@
 //@ts-nocheck
-import React from 'react';
+import React from "react";
 
 export default function useCombinedRefs(...refs) {
   const targetRef = React.useRef();
 
   React.useEffect(() => {
-    refs.forEach(ref => {
+    refs.forEach((ref) => {
       if (!ref) return;
 
-      if (typeof ref === 'function') {
+      if (typeof ref === "function") {
         ref(targetRef.current);
       } else {
         ref.current = targetRef.current;

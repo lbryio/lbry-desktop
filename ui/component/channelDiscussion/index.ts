@@ -1,16 +1,16 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { withRouter } from 'react-router';
-import { DISABLE_COMMENTS_TAG } from 'constants/tags';
-import ChannelDiscussion from './view';
-import { makeSelectTagInClaimOrChannelForUri } from 'redux/selectors/claims';
+import { connect } from "react-redux";
+import { withRouter } from "react-router";
+import { DISABLE_COMMENTS_TAG } from "constants/tags";
+import ChannelDiscussion from "./view";
+import { makeSelectTagInClaimOrChannelForUri } from "redux/selectors/claims";
 
 const select = (state: unknown, props: unknown) => {
   const { search } = props.location;
   const urlParams = new URLSearchParams(search);
 
   return {
-    linkedCommentId: urlParams.get('lc'),
+    linkedCommentId: urlParams.get("lc"),
     commentsDisabled: makeSelectTagInClaimOrChannelForUri(props.uri, DISABLE_COMMENTS_TAG)(state),
   };
 };

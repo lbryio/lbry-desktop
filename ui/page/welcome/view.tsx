@@ -1,10 +1,10 @@
-import React from 'react';
-import PrivacyAgreement from 'component/privacyAgreement';
-import HostingSplash from 'component/hostingSplash';
-import HostingSplashCustom from 'component/hostingSplashCustom';
-import WelcomeSplash from 'component/welcomeSplash';
-import Page from 'component/page';
-import { useHistory } from 'react-router-dom';
+import React from "react";
+import PrivacyAgreement from "component/privacyAgreement";
+import HostingSplash from "component/hostingSplash";
+import HostingSplashCustom from "component/hostingSplashCustom";
+import WelcomeSplash from "component/welcomeSplash";
+import Page from "component/page";
+import { useHistory } from "react-router-dom";
 
 const SPLASH_PAGE = 0;
 const PRIVACY_PAGE = 1;
@@ -13,29 +13,29 @@ const HOSTING_ADVANCED = 3;
 
 type DaemonStatus = {
   disk_space: {
-    content_blobs_storage_used_mb: string,
-    published_blobs_storage_used_mb: string,
-    running: true,
-    seed_blobs_storage_used_mb: string,
-    total_used_mb: string
-  }
+    content_blobs_storage_used_mb: string;
+    published_blobs_storage_used_mb: string;
+    running: true;
+    seed_blobs_storage_used_mb: string;
+    total_used_mb: string;
+  };
 };
 
 type DaemonSettings = {
-  download_dir: string,
-  share_usage_data: boolean,
-  max_connections_per_download?: number,
-  save_files: boolean,
-  save_blobs: boolean,
-  ffmpeg_path: string
+  download_dir: string;
+  share_usage_data: boolean;
+  max_connections_per_download?: number;
+  save_files: boolean;
+  save_blobs: boolean;
+  ffmpeg_path: string;
 };
 
 type Props = {
   // --- select ---
-  daemonSettings: DaemonSettings,
-  daemonStatus: DaemonStatus,
+  daemonSettings: DaemonSettings;
+  daemonStatus: DaemonStatus;
   // -- perform ---
-  updateWelcomeVersion: () => void
+  updateWelcomeVersion: () => void;
 };
 export default function Welcome(props: Props) {
   const { updateWelcomeVersion } = props;
@@ -60,7 +60,7 @@ export default function Welcome(props: Props) {
 
   const handleDone = () => {
     updateWelcomeVersion();
-    replace('/');
+    replace("/");
   };
 
   return (

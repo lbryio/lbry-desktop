@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doSetClientSetting } from 'redux/actions/settings';
-import { selectosNotificationsEnabled } from 'redux/selectors/settings';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
-import NotificationSettingsPage from './view';
+import { connect } from "react-redux";
+import { doSetClientSetting } from "redux/actions/settings";
+import { selectosNotificationsEnabled } from "redux/selectors/settings";
+import { selectUserVerifiedEmail } from "redux/selectors/user";
+import NotificationSettingsPage from "./view";
 
 const select = (state: unknown) => ({
   osNotificationsEnabled: selectosNotificationsEnabled(state),

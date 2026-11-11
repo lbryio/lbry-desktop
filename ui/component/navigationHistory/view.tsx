@@ -1,26 +1,26 @@
-import * as React from 'react';
-import Button from 'component/button';
-import NavigationHistoryItem from 'component/navigationHistoryItem';
-import Paginate from 'component/common/paginate';
+import * as React from "react";
+import Button from "component/button";
+import NavigationHistoryItem from "component/navigationHistoryItem";
+import Paginate from "component/common/paginate";
 
 type HistoryItem = {
-  uri: string,
-  lastViewed: number
+  uri: string;
+  lastViewed: number;
 };
 
 type Props = {
-  historyItems: Array<HistoryItem>,
-  pageCount: number,
-  clearHistoryUri: (arg1: string) => void
+  historyItems: Array<HistoryItem>;
+  pageCount: number;
+  clearHistoryUri: (arg1: string) => void;
 };
 
 type State = {
-  itemsSelected: Record<any, any>
+  itemsSelected: Record<any, any>;
 };
 
 class UserHistoryPage extends React.PureComponent<Props, State> {
   constructor() {
-// @ts-expect-error - TS2554 - Expected 1-2 arguments, but got 0.
+    // @ts-expect-error - TS2554 - Expected 1-2 arguments, but got 0.
     super();
 
     this.state = {
@@ -37,10 +37,10 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
 
     const newItemsSelected = { ...itemsSelected } as const;
     if (itemsSelected[uri]) {
-// @ts-expect-error - TS2542 - Index signature in type '{ readonly [x: string]: any; }' only permits reading.
+      // @ts-expect-error - TS2542 - Index signature in type '{ readonly [x: string]: any; }' only permits reading.
       delete newItemsSelected[uri];
     } else {
-// @ts-expect-error - TS2542 - Index signature in type '{ readonly [x: string]: any; }' only permits reading.
+      // @ts-expect-error - TS2542 - Index signature in type '{ readonly [x: string]: any; }' only permits reading.
       newItemsSelected[uri] = true;
     }
 
@@ -66,7 +66,7 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
     const { clearHistoryUri } = this.props;
     const { itemsSelected } = this.state;
 
-    Object.keys(itemsSelected).forEach(uri => clearHistoryUri(uri));
+    Object.keys(itemsSelected).forEach((uri) => clearHistoryUri(uri));
     this.setState({
       itemsSelected: {},
     });
@@ -83,16 +83,16 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
         <div className="card__actions">
           {Object.keys(itemsSelected).length ? (
             // @ts-expect-error - TS2322 (ts-migration)
-            <Button button="link" label={__('Delete')} onClick={this.removeSelected} />
+            <Button button="link" label={__("Delete")} onClick={this.removeSelected} />
           ) : (
             <span>{/* Using an empty span so spacing stays the same if the button isn't rendered */}</span>
           )}
           {/* @ts-expect-error - TS2322 (ts-migration) */}
-          <Button button="link" label={allSelected ? __('Cancel') : __('Select All')} onClick={selectHandler} />
+          <Button button="link" label={allSelected ? __("Cancel") : __("Select All")} onClick={selectHandler} />
         </div>
         {!!historyItems.length && (
           <section className="card  item-list">
-            {historyItems.map(item => (
+            {historyItems.map((item) => (
               <NavigationHistoryItem
                 key={item.uri}
                 uri={item.uri}
@@ -111,12 +111,12 @@ class UserHistoryPage extends React.PureComponent<Props, State> {
       <div className="main--empty">
         <section className="card card--section">
           <h2 className="card__title card__title--deprecated">
-            {__('Your history is empty, what are you doing here?')}
+            {__("Your history is empty, what are you doing here?")}
           </h2>
 
           <div className="card__actions card__actions--center">
             {/* @ts-expect-error - TS2322 (ts-migration) */}
-            <Button button="primary" navigate="/" label={__('Explore new content')} />
+            <Button button="primary" navigate="/" label={__("Explore new content")} />
           </div>
         </section>
       </div>

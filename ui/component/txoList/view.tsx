@@ -1,38 +1,38 @@
-import * as ICONS from 'constants/icons';
-import React, { useEffect } from 'react';
-import { withRouter } from 'react-router';
-import * as TXO from 'constants/txo_list';
-import TransactionListTable from 'component/transactionListTable';
-import Paginate from 'component/common/paginate';
-import { FormField } from 'component/common/form-components/form-field';
-import Button from 'component/button';
-import Card from 'component/common/card';
-import { toCapitalCase } from 'util/string';
-import classnames from 'classnames';
-import HelpLink from 'component/common/help-link';
-import FileExporter from 'component/common/file-exporter';
+import * as ICONS from "constants/icons";
+import React, { useEffect } from "react";
+import { withRouter } from "react-router";
+import * as TXO from "constants/txo_list";
+import TransactionListTable from "component/transactionListTable";
+import Paginate from "component/common/paginate";
+import { FormField } from "component/common/form-components/form-field";
+import Button from "component/button";
+import Card from "component/common/card";
+import { toCapitalCase } from "util/string";
+import classnames from "classnames";
+import HelpLink from "component/common/help-link";
+import FileExporter from "component/common/file-exporter";
 
 type Props = {
-  search: string,
+  search: string;
   history: {
-    action: string,
-    push: (arg1: string) => void,
-    replace: (arg1: string) => void
-  },
-  txoPage: Array<Transaction>,
-  txoPageNumber: string,
-  txoItemCount: number,
-  fetchTxoPage: () => void,
-  fetchTransactions: () => void,
-  isFetchingTransactions: boolean,
-  transactionsFile: string,
-  updateTxoPageParams: (arg1?: any) => void,
-  toast: (arg1: string, arg2: boolean) => void
+    action: string;
+    push: (arg1: string) => void;
+    replace: (arg1: string) => void;
+  };
+  txoPage: Array<Transaction>;
+  txoPageNumber: string;
+  txoItemCount: number;
+  fetchTxoPage: () => void;
+  fetchTransactions: () => void;
+  isFetchingTransactions: boolean;
+  transactionsFile: string;
+  updateTxoPageParams: (arg1?: any) => void;
+  toast: (arg1: string, arg2: boolean) => void;
 };
 
 type Delta = {
-  changedParameterKey: string,
-  value: string
+  changedParameterKey: string;
+  value: string;
 };
 
 function TxoList(props: Props) {
@@ -111,9 +111,9 @@ function TxoList(props: Props) {
     }
   }
   if (currentUrlParams.active) {
-    if (currentUrlParams.active === 'spent') {
+    if (currentUrlParams.active === "spent") {
       params[TXO.IS_SPENT] = true;
-    } else if (currentUrlParams.active === 'active') {
+    } else if (currentUrlParams.active === "active") {
       params[TXO.IS_NOT_SPENT] = true;
     }
   }
@@ -145,17 +145,17 @@ function TxoList(props: Props) {
       case TXO.TYPE:
         newUrlParams.set(TXO.TYPE, delta.value);
         if (delta.value === TXO.SENT || delta.value === TXO.RECEIVED) {
-          newUrlParams.set(TXO.ACTIVE, 'all');
+          newUrlParams.set(TXO.ACTIVE, "all");
           if (currentUrlParams.subtype) {
             newUrlParams.set(TXO.SUB_TYPE, currentUrlParams.subtype);
           } else {
-            newUrlParams.set(TXO.SUB_TYPE, 'all');
+            newUrlParams.set(TXO.SUB_TYPE, "all");
           }
         }
         if (currentUrlParams.active && !hideStatus) {
           newUrlParams.set(TXO.ACTIVE, currentUrlParams.active);
         } else {
-          newUrlParams.set(TXO.ACTIVE, 'all');
+          newUrlParams.set(TXO.ACTIVE, "all");
         }
         newUrlParams.set(TXO.PAGE, String(1));
         newUrlParams.set(TXO.PAGE_SIZE, currentUrlParams.pageSize);
@@ -164,7 +164,7 @@ function TxoList(props: Props) {
         if (currentUrlParams.type) {
           newUrlParams.set(TXO.TYPE, currentUrlParams.type);
         }
-        newUrlParams.set(TXO.ACTIVE, 'all');
+        newUrlParams.set(TXO.ACTIVE, "all");
         newUrlParams.set(TXO.SUB_TYPE, delta.value);
         newUrlParams.set(TXO.PAGE, String(1));
         newUrlParams.set(TXO.PAGE_SIZE, currentUrlParams.pageSize);
@@ -215,11 +215,11 @@ function TxoList(props: Props) {
                     name="type"
                     label={
                       <>
-                        {__('Type')}
+                        {__("Type")}
                         <HelpLink href="https://lbry.com/faq/transaction-types" />
                       </>
                     }
-                    value={type || 'all'}
+                    value={type || "all"}
                     onChange={(e) => handleChange({ changedParameterKey: TXO.TYPE, value: e.target.value })}
                   >
                     {Object.values(TXO.DROPDOWN_TYPES).map((v) => {
@@ -237,8 +237,8 @@ function TxoList(props: Props) {
                     <FormField
                       type="select"
                       name="subtype"
-                      label={__('Payment Type')}
-                      value={subtype || 'all'}
+                      label={__("Payment Type")}
+                      value={subtype || "all"}
                       onChange={(e) => handleChange({ changedParameterKey: TXO.SUB_TYPE, value: e.target.value })}
                     >
                       {Object.values(TXO.DROPDOWN_SUBTYPES).map((v) => {
@@ -254,39 +254,39 @@ function TxoList(props: Props) {
                 )}
                 {!hideStatus && (
                   <div>
-{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
+                    {/* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
                     <fieldset-section>
-                      <label>{__('Status')}</label>
-                      <div className={'txo__radios'}>
+                      <label>{__("Status")}</label>
+                      <div className={"txo__radios"}>
                         {/* active transactions button */}
                         <Button
                           // @ts-expect-error - TS2322 (ts-migration)
-                          onClick={(e) => handleChange({ changedParameterKey: TXO.ACTIVE, value: 'active' })}
+                          onClick={(e) => handleChange({ changedParameterKey: TXO.ACTIVE, value: "active" })}
                           className={classnames(`button-toggle`, {
-                            'button-toggle--active': active === TXO.ACTIVE,
+                            "button-toggle--active": active === TXO.ACTIVE,
                           })}
-                          label={__('Active')}
+                          label={__("Active")}
                         />
                         {/* historical transactions button */}
                         <Button
                           // @ts-expect-error - TS2322 (ts-migration)
-                          onClick={(e) => handleChange({ changedParameterKey: TXO.ACTIVE, value: 'spent' })}
+                          onClick={(e) => handleChange({ changedParameterKey: TXO.ACTIVE, value: "spent" })}
                           className={classnames(`button-toggle`, {
-                            'button-toggle--active': active === 'spent',
+                            "button-toggle--active": active === "spent",
                           })}
-                          label={__('Historical')}
+                          label={__("Historical")}
                         />
                         {/* all transactions button */}
                         <Button
                           // @ts-expect-error - TS2322 (ts-migration)
-                          onClick={(e) => handleChange({ changedParameterKey: TXO.ACTIVE, value: 'all' })}
+                          onClick={(e) => handleChange({ changedParameterKey: TXO.ACTIVE, value: "all" })}
                           className={classnames(`button-toggle`, {
-                            'button-toggle--active': active === 'all',
+                            "button-toggle--active": active === "all",
                           })}
-                          label={__('All')}
+                          label={__("All")}
                         />
                       </div>
-{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
+                      {/* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
                     </fieldset-section>
                   </div>
                 )}
@@ -294,20 +294,20 @@ function TxoList(props: Props) {
               {/* export and refresh buttons */}
               <div className="card__actions--inline">
                 {!isFetchingTransactions && transactionsFile === null && (
-                  <label>{<span className="error__text">{__('Failed to process fetched data.')}</span>}</label>
+                  <label>{<span className="error__text">{__("Failed to process fetched data.")}</span>}</label>
                 )}
                 <div className="txo__export">
                   <FileExporter
                     data={transactionsFile}
-                    label={__('Export All')}
-                    tooltip={__('Fetch transaction data for export')}
-                    defaultFileName={'transactions-history.csv'}
+                    label={__("Export All")}
+                    tooltip={__("Fetch transaction data for export")}
+                    defaultFileName={"transactions-history.csv"}
                     onFetch={() => fetchTransactions()}
-                    progressMsg={isFetchingTransactions ? __('Fetching data') : ''}
+                    progressMsg={isFetchingTransactions ? __("Fetching data") : ""}
                   />
                 </div>
                 {/* @ts-expect-error - TS2322 (ts-migration) */}
-                <Button button="alt" icon={ICONS.REFRESH} label={__('Refresh')} onClick={() => fetchTxoPage()} />
+                <Button button="alt" icon={ICONS.REFRESH} label={__("Refresh")} onClick={() => fetchTxoPage()} />
               </div>
             </div>
           </div>

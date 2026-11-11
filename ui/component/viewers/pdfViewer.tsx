@@ -1,9 +1,9 @@
-import * as React from 'react';
-import { stopContextMenu } from 'util/context-menu';
-import IframeReact from 'component/IframeReact';
+import * as React from "react";
+import { stopContextMenu } from "util/context-menu";
+import IframeReact from "component/IframeReact";
 
 type Props = {
-  source: string
+  source: string;
 };
 
 class PdfViewer extends React.PureComponent<Props> {
@@ -14,7 +14,7 @@ class PdfViewer extends React.PureComponent<Props> {
       <div className="file-viewer file-viewer--document" onContextMenu={stopContextMenu}>
         <div className="file-viewer file-viewer--iframe">
           {/* @ts-expect-error - TS2741 (ts-migration) */}
-          <IframeReact title={__('File preview')} src={src} />
+          <IframeReact title={__("File preview")} src={src} />
         </div>
       </div>
     );

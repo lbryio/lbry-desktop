@@ -1,59 +1,52 @@
-import {ENABLE_FILE_REACTIONS} from 'config';
-import * as PAGES from 'constants/pages';
-import * as MODALS from 'constants/modal_types';
-import * as ICONS from 'constants/icons';
-import React from 'react';
-import Button from 'component/button';
-import FileDownloadLink from 'component/fileDownloadLink';
-import { buildURI } from 'util/lbryURI';
-import * as COLLECTIONS_CONSTS from 'constants/collections';
-import * as RENDER_MODES from 'constants/file_render_modes';
-import { useIsMobile } from 'effects/use-screensize';
-import ClaimSupportButton from 'component/claimSupportButton';
-import ClaimCollectionAddButton from 'component/claimCollectionAddButton';
-import { useHistory } from 'react-router';
-import FileReactions from 'component/fileReactions';
-import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
-import Icon from 'component/common/icon';
-import ClaimRepostButton from 'component/claimRepostButton';
+import { ENABLE_FILE_REACTIONS } from "config";
+import * as PAGES from "constants/pages";
+import * as MODALS from "constants/modal_types";
+import * as ICONS from "constants/icons";
+import React from "react";
+import Button from "component/button";
+import FileDownloadLink from "component/fileDownloadLink";
+import { buildURI } from "util/lbryURI";
+import * as COLLECTIONS_CONSTS from "constants/collections";
+import * as RENDER_MODES from "constants/file_render_modes";
+import { useIsMobile } from "effects/use-screensize";
+import ClaimSupportButton from "component/claimSupportButton";
+import ClaimCollectionAddButton from "component/claimCollectionAddButton";
+import { useHistory } from "react-router";
+import FileReactions from "component/fileReactions";
+import { Menu, MenuButton, MenuList, MenuItem } from "@reach/menu-button";
+import Icon from "component/common/icon";
+import ClaimRepostButton from "component/claimRepostButton";
 
 type Props = {
-  uri: string,
-  claim: StreamClaim,
+  uri: string;
+  claim: StreamClaim;
   openModal: (
     id: string,
     arg2: {
-      uri: string,
-      claimIsMine?: boolean,
-      isSupport?: boolean
-    },
-  ) => void,
-  prepareEdit: (arg1: Record<any, any>, arg2: string, arg3: Record<any, any>) => void,
-  claimIsMine: boolean,
-  fileInfo: FileListItem,
-  costInfo: {
-    cost: number
-  } | null | undefined,
-  renderMode: string,
-  hasChannels: boolean,
-  hideRepost?: boolean,
-  download: (arg1: string) => void,
-  streamingUrl: string | null | undefined
+      uri: string;
+      claimIsMine?: boolean;
+      isSupport?: boolean;
+    }
+  ) => void;
+  prepareEdit: (arg1: Record<any, any>, arg2: string, arg3: Record<any, any>) => void;
+  claimIsMine: boolean;
+  fileInfo: FileListItem;
+  costInfo:
+    | {
+        cost: number;
+      }
+    | null
+    | undefined;
+  renderMode: string;
+  hasChannels: boolean;
+  hideRepost?: boolean;
+  download: (arg1: string) => void;
+  streamingUrl: string | null | undefined;
 };
 
 function FileActions(props: Props) {
-  const {
-    fileInfo,
-    uri,
-    openModal,
-    claimIsMine,
-    claim,
-    costInfo,
-    renderMode,
-    prepareEdit,
-    hasChannels,
-    hideRepost,
-  } = props;
+  const { fileInfo, uri, openModal, claimIsMine, claim, costInfo, renderMode, prepareEdit, hasChannels, hideRepost } =
+    props;
   const {
     push,
     location: { search },
@@ -94,9 +87,9 @@ function FileActions(props: Props) {
         // @ts-expect-error - TS2322 (ts-migration)
         className="button--file-action"
         icon={ICONS.SHARE}
-        label={isMobile ? undefined : __('Share')}
-        title={__('Share')}
-// @ts-expect-error - TS2345 - Argument of type '{ uri: string; webShareable: boolean; collectionId: string; }' is not assignable to parameter of type '{ uri: string; claimIsMine?: boolean; isSupport?: boolean; }'.
+        label={isMobile ? undefined : __("Share")}
+        title={__("Share")}
+        // @ts-expect-error - TS2345 - Argument of type '{ uri: string; webShareable: boolean; collectionId: string; }' is not assignable to parameter of type '{ uri: string; claimIsMine?: boolean; isSupport?: boolean; }'.
         onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, webShareable, collectionId })}
       />
     </>
@@ -111,7 +104,7 @@ function FileActions(props: Props) {
           // @ts-expect-error - TS2322 (ts-migration)
           className="button--file-action"
           icon={ICONS.EDIT}
-          label={__('Edit')}
+          label={__("Edit")}
           navigate={`/$/${PAGES.UPLOAD}`}
           onClick={() => {
             prepareEdit(claim, editUri, fileInfo);
@@ -121,10 +114,10 @@ function FileActions(props: Props) {
       {showDelete && (
         <Button
           // @ts-expect-error - TS2322 (ts-migration)
-          title={__('Remove from your library')}
+          title={__("Remove from your library")}
           className="button--file-action"
           icon={ICONS.DELETE}
-          description={__('Delete')}
+          description={__("Delete")}
           onClick={() => openModal(MODALS.CONFIRM_FILE_REMOVE, { uri })}
         />
       )}
@@ -146,7 +139,7 @@ function FileActions(props: Props) {
             >
               <div className="menu__link">
                 <Icon aria-hidden icon={ICONS.REPORT} />
-                {__('Report content')}
+                {__("Report content")}
               </div>
             </MenuItem>
           </MenuList>

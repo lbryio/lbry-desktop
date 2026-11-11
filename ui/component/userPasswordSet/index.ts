@@ -1,8 +1,8 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doClearEmailEntry, doUserFetch } from 'redux/actions/user';
-import { doToast } from 'redux/actions/notifications';
-import UserSignIn from './view';
+import { connect } from "react-redux";
+import { doClearEmailEntry, doUserFetch } from "redux/actions/user";
+import { doToast } from "redux/actions/notifications";
+import UserSignIn from "./view";
 
 const select = (state: unknown) => ({
   // passwordSetSuccess: selectPasswordSetSuccess(state),

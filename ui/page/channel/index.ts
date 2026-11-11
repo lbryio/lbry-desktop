@@ -1,5 +1,5 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import {
   selectClaimIsMine,
   selectTitleForUri,
@@ -8,15 +8,15 @@ import {
   selectCurrentChannelPage,
   selectClaimForUri,
   makeSelectClaimIsPending,
-} from 'redux/selectors/claims';
-import { selectMyUnpublishedCollections } from 'redux/selectors/collections';
-import { selectBlackListedOutpoints, doFetchSubCount, selectSubCountForUri } from 'lbryinc'; // ban state
-import { selectYoutubeChannels } from 'redux/selectors/user';
-import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
-import { selectModerationBlockList } from 'redux/selectors/comments';
-import { selectMutedChannels } from 'redux/selectors/blocked';
-import { doOpenModal } from 'redux/actions/app';
-import ChannelPage from './view';
+} from "redux/selectors/claims";
+import { selectMyUnpublishedCollections } from "redux/selectors/collections";
+import { selectBlackListedOutpoints, doFetchSubCount, selectSubCountForUri } from "lbryinc"; // ban state
+import { selectYoutubeChannels } from "redux/selectors/user";
+import { selectIsSubscribedForUri } from "redux/selectors/subscriptions";
+import { selectModerationBlockList } from "redux/selectors/comments";
+import { selectMutedChannels } from "redux/selectors/blocked";
+import { doOpenModal } from "redux/actions/app";
+import ChannelPage from "./view";
 
 const select = (state: unknown, props: unknown) => {
   const claim = selectClaimForUri(state, props.uri);

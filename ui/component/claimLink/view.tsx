@@ -1,22 +1,22 @@
-import {INLINE_PLAYER_WRAPPER_CLASS} from 'component/fileRenderFloating/view';
-import * as React from 'react';
-import Button from 'component/button';
-import classnames from 'classnames';
-import EmbedPlayButton from 'component/embedPlayButton';
-import UriIndicator from 'component/uriIndicator';
+import { INLINE_PLAYER_WRAPPER_CLASS } from "component/fileRenderFloating/view";
+import * as React from "react";
+import Button from "component/button";
+import classnames from "classnames";
+import EmbedPlayButton from "component/embedPlayButton";
+import UriIndicator from "component/uriIndicator";
 
 type Props = {
-  uri: string,
-  fullUri: string,
-  claim: StreamClaim,
-  children: React.ReactNode,
-  description: string | null | undefined,
-  isResolvingUri: boolean,
-  doResolveUri: (arg1: string) => void,
-  playingUri: PlayingUri | null | undefined,
-  parentCommentId?: string,
-  isMarkdownPost?: boolean,
-  allowPreview: boolean
+  uri: string;
+  fullUri: string;
+  claim: StreamClaim;
+  children: React.ReactNode;
+  description: string | null | undefined;
+  isResolvingUri: boolean;
+  doResolveUri: (arg1: string) => void;
+  playingUri: PlayingUri | null | undefined;
+  parentCommentId?: string;
+  isMarkdownPost?: boolean;
+  allowPreview: boolean;
 };
 
 class ClaimLink extends React.Component<Props> {
@@ -46,39 +46,30 @@ class ClaimLink extends React.Component<Props> {
   };
 
   render() {
-    const {
-      uri,
-      fullUri,
-      claim,
-      children,
-      isResolvingUri,
-      playingUri,
-      parentCommentId,
-      isMarkdownPost,
-      allowPreview,
-    } = this.props;
+    const { uri, fullUri, claim, children, isResolvingUri, playingUri, parentCommentId, isMarkdownPost, allowPreview } =
+      this.props;
     const isUnresolved = (!isResolvingUri && !claim) || !claim;
     const isPlayingInline =
       playingUri &&
       playingUri.uri === uri &&
-      ((playingUri.source === 'comment' && parentCommentId === playingUri.commentId) ||
-        playingUri.source === 'markdown');
+      ((playingUri.source === "comment" && parentCommentId === playingUri.commentId) ||
+        playingUri.source === "markdown");
 
     if (isUnresolved) {
       return <span>{children}</span>;
     }
 
     const { value_type: valueType } = claim;
-    const isChannel = valueType === 'channel';
+    const isChannel = valueType === "channel";
 
     return isChannel ? (
       <>
         {/* @ts-expect-error - TS2322 (ts-migration) */}
         <UriIndicator uri={uri} link />
-        <span>{fullUri.length > uri.length ? fullUri.substring(uri.length, fullUri.length) : ''}</span>
+        <span>{fullUri.length > uri.length ? fullUri.substring(uri.length, fullUri.length) : ""}</span>
       </>
     ) : allowPreview ? (
-      <div className={classnames('claim-link')}>
+      <div className={classnames("claim-link")}>
         <div
           className={classnames({
             [INLINE_PLAYER_WRAPPER_CLASS]: isPlayingInline,

@@ -1,12 +1,12 @@
 //@ts-nocheck
-import * as MODALS from 'constants/modal_types';
-import { connect } from 'react-redux';
-import { selectDaemonVersionMatched, selectModal, selectSplashAnimationEnabled } from 'redux/selectors/app';
-import { doCheckDaemonVersion, doOpenModal, doHideModal, doToggleSplashAnimation } from 'redux/actions/app';
-import { doClearDaemonSetting } from 'redux/actions/settings';
-import * as DAEMON_SETTINGS from 'constants/daemon_settings';
-import { doToast } from 'redux/actions/notifications';
-import SplashScreen from './view';
+import * as MODALS from "constants/modal_types";
+import { connect } from "react-redux";
+import { selectDaemonVersionMatched, selectModal, selectSplashAnimationEnabled } from "redux/selectors/app";
+import { doCheckDaemonVersion, doOpenModal, doHideModal, doToggleSplashAnimation } from "redux/actions/app";
+import { doClearDaemonSetting } from "redux/actions/settings";
+import * as DAEMON_SETTINGS from "constants/daemon_settings";
+import { doToast } from "redux/actions/notifications";
+import SplashScreen from "./view";
 
 const select = (state: unknown) => ({
   modal: selectModal(state),

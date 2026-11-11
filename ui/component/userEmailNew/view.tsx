@@ -1,32 +1,32 @@
-import * as PAGES from 'constants/pages';
-import { DOMAIN } from 'config';
-import React, { useState } from 'react';
-import { FormField, Form } from 'component/common/form';
-import Button from 'component/button';
-import analytics from 'analytics';
-import { EMAIL_REGEX } from 'constants/email';
-import I18nMessage from 'component/i18nMessage';
-import { useHistory } from 'react-router-dom';
-import Card from 'component/common/card';
-import ErrorText from 'component/common/error-text';
-import Nag from 'component/common/nag';
-import classnames from 'classnames';
+import * as PAGES from "constants/pages";
+import { DOMAIN } from "config";
+import React, { useState } from "react";
+import { FormField, Form } from "component/common/form";
+import Button from "component/button";
+import analytics from "analytics";
+import { EMAIL_REGEX } from "constants/email";
+import I18nMessage from "component/i18nMessage";
+import { useHistory } from "react-router-dom";
+import Card from "component/common/card";
+import ErrorText from "component/common/error-text";
+import Nag from "component/common/nag";
+import classnames from "classnames";
 
 type Props = {
-  errorMessage: string | null | undefined,
-  emailExists: boolean,
-  isPending: boolean,
-  syncEnabled: boolean,
-  setSync: (arg1: boolean) => void,
-  balance: number,
+  errorMessage: string | null | undefined;
+  emailExists: boolean;
+  isPending: boolean;
+  syncEnabled: boolean;
+  setSync: (arg1: boolean) => void;
+  balance: number;
   daemonSettings: {
-    share_usage_data: boolean
-  },
-  setShareDiagnosticData: (arg1: boolean) => void,
-  doSignUp: (arg1: string, arg2?: string | null | undefined) => Promise<any>,
-  clearEmailEntry: () => void,
-  interestedInYoutubSync: boolean,
-  doToggleInterestedInYoutubeSync: () => void
+    share_usage_data: boolean;
+  };
+  setShareDiagnosticData: (arg1: boolean) => void;
+  doSignUp: (arg1: string, arg2?: string | null | undefined) => Promise<any>;
+  clearEmailEntry: () => void;
+  interestedInYoutubSync: boolean;
+  doToggleInterestedInYoutubeSync: () => void;
 };
 
 function UserEmailNew(props: Props) {
@@ -43,10 +43,10 @@ function UserEmailNew(props: Props) {
   const { share_usage_data: shareUsageData } = daemonSettings;
   const { push, location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
-  const emailFromUrl = urlParams.get('email');
-  const defaultEmail = emailFromUrl ? decodeURIComponent(emailFromUrl) : '';
+  const emailFromUrl = urlParams.get("email");
+  const defaultEmail = emailFromUrl ? decodeURIComponent(emailFromUrl) : "";
   const [email, setEmail] = useState(defaultEmail);
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState("");
   const [localShareUsageData, setLocalShareUsageData] = React.useState(false);
   const [formSyncEnabled, setFormSyncEnabled] = useState(true);
   const valid = email.match(EMAIL_REGEX);
@@ -60,7 +60,7 @@ function UserEmailNew(props: Props) {
     setSync(formSyncEnabled);
     setShareDiagnosticData(true);
     // @endif
-    doSignUp(email, password === '' ? undefined : password).then(() => {
+    doSignUp(email, password === "" ? undefined : password).then(() => {
       analytics.emailProvidedEvent();
     });
   }
@@ -68,17 +68,17 @@ function UserEmailNew(props: Props) {
   function handleChangeToSignIn(additionalParams: unknown) {
     clearEmailEntry();
 
-    let url = `/$/${PAGES.AUTH_SIGNIN}`;
+    const url = `/$/${PAGES.AUTH_SIGNIN}`;
     const urlParams = new URLSearchParams(location.search);
 
-    urlParams.delete('email');
+    urlParams.delete("email");
     if (email) {
-      urlParams.set('email', encodeURIComponent(email));
+      urlParams.set("email", encodeURIComponent(email));
     }
 
-    urlParams.delete('email_exists');
+    urlParams.delete("email_exists");
     if (emailExists) {
-      urlParams.set('email_exists', '1');
+      urlParams.set("email_exists", "1");
     }
 
     push(`${url}?${urlParams.toString()}`);
@@ -86,33 +86,33 @@ function UserEmailNew(props: Props) {
 
   React.useEffect(() => {
     if (emailExists) {
-// @ts-expect-error - TS2554 - Expected 1 arguments, but got 0.
+      // @ts-expect-error - TS2554 - Expected 1 arguments, but got 0.
       handleChangeToSignIn();
     }
   }, [emailExists, handleChangeToSignIn]);
 
   return (
-    <div className={classnames('main__sign-up')}>
+    <div className={classnames("main__sign-up")}>
       <Card
-        title={__('Cloud Connect')}
-        subtitle={__('Connect your wallet to Odysee')}
+        title={__("Cloud Connect")}
+        subtitle={__("Connect your wallet to Odysee")}
         actions={
-          <div className={classnames({ 'card--disabled': DOMAIN === 'lbry.tv' && IS_WEB })}>
-{ /* @ts-expect-error - TS2769 - No overload matches this call. */}
+          <div className={classnames({ "card--disabled": DOMAIN === "lbry.tv" && IS_WEB })}>
+            {/* @ts-expect-error - TS2769 - No overload matches this call. */}
             <Form onSubmit={handleSubmit} className="section">
               <FormField
                 autoFocus
-                placeholder={__('yourstruly@example.com')}
+                placeholder={__("yourstruly@example.com")}
                 type="email"
                 name="sign_up_email"
-                label={__('Email')}
+                label={__("Email")}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
               <FormField
                 type="password"
                 name="sign_in_password"
-                label={__('Password')}
+                label={__("Password")}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -122,9 +122,8 @@ function UserEmailNew(props: Props) {
                 name="sync_checkbox"
                 label={
                   <React.Fragment>
-                    {__('Backup your account and wallet data.')}{' '}
-                    {/* @ts-expect-error - TS2322 (ts-migration) */}
-                    <Button button="link" href="https://lbry.com/faq/account-sync" label={__('Learn More')} />
+                    {__("Backup your account and wallet data.")} {/* @ts-expect-error - TS2322 (ts-migration) */}
+                    <Button button="link" href="https://lbry.com/faq/account-sync" label={__("Learn More")} />
                   </React.Fragment>
                 }
                 // @ts-expect-error - TS2322 (ts-migration)
@@ -141,10 +140,9 @@ function UserEmailNew(props: Props) {
                   onChange={handleUsageDataChange}
                   label={
                     <React.Fragment>
-                      {__('Share usage data with LBRY inc.')}{' '}
-                      {/* @ts-expect-error - TS2322 (ts-migration) */}
-                      <Button button="link" href="https://lbry.com/faq/privacy-and-data" label={__('Learn More')} />
-                      {!localShareUsageData && <span className="error__text"> ({__('Required')})</span>}
+                      {__("Share usage data with LBRY inc.")} {/* @ts-expect-error - TS2322 (ts-migration) */}
+                      <Button button="link" href="https://lbry.com/faq/privacy-and-data" label={__("Learn More")} />
+                      {!localShareUsageData && <span className="error__text"> ({__("Required")})</span>}
                     </React.Fragment>
                   }
                 />
@@ -154,13 +152,13 @@ function UserEmailNew(props: Props) {
                   // @ts-expect-error - TS2322 (ts-migration)
                   button="primary"
                   type="submit"
-                  label={__('Sign Up')}
+                  label={__("Sign Up")}
                   disabled={
                     !email || !password || !valid || (!IS_WEB && !localShareUsageData && !shareUsageData) || isPending
                   }
                 />
                 {/* @ts-expect-error - TS2322 (ts-migration) */}
-                <Button button="link" onClick={handleChangeToSignIn} label={__('Log In')} />
+                <Button button="link" onClick={handleChangeToSignIn} label={__("Log In")} />
               </div>
               <p className="help--card-actions">
                 {/* @ts-expect-error - TS2745 (ts-migration) */}
@@ -168,7 +166,7 @@ function UserEmailNew(props: Props) {
                   // @ts-expect-error - TS2322 (ts-migration)
                   tokens={{
                     // @ts-expect-error - TS2322 (ts-migration)
-                    terms: <Button button="link" href="https://www.lbry.com/termsofservice" label={__('terms')} />,
+                    terms: <Button button="link" href="https://www.lbry.com/termsofservice" label={__("terms")} />,
                   }}
                 >
                   By creating an account, you agree to our %terms% and confirm you're over the age of 13.

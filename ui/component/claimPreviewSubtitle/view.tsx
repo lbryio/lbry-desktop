@@ -1,17 +1,17 @@
-import React from 'react';
-import UriIndicator from 'component/uriIndicator';
-import DateTime from 'component/dateTime';
-import Button from 'component/button';
-import FileViewCountInline from 'component/fileViewCountInline';
-import { parseURI } from 'util/lbryURI';
-import { formatNumber } from 'util/number';
+import React from "react";
+import UriIndicator from "component/uriIndicator";
+import DateTime from "component/dateTime";
+import Button from "component/button";
+import FileViewCountInline from "component/fileViewCountInline";
+import { parseURI } from "util/lbryURI";
+import { formatNumber } from "util/number";
 
 type Props = {
-  uri: string,
-  claim: Claim | null | undefined,
-  pending?: boolean,
-  type: string,
-  beginPublish: (arg1?: string | null | undefined) => void
+  uri: string;
+  claim: Claim | null | undefined;
+  pending?: boolean;
+  type: string;
+  beginPublish: (arg1?: string | null | undefined) => void;
 };
 
 // previews used in channel overview and homepage (and other places?)
@@ -30,12 +30,12 @@ function ClaimPreviewSubtitle(props: Props) {
       {claim ? (
         <React.Fragment>
           {/* @ts-expect-error - TS2322 (ts-migration) */}
-          <UriIndicator uri={uri} link />{' '}
+          <UriIndicator uri={uri} link />{" "}
           {!pending && claim && (
             <>
               {isChannel &&
-                type !== 'inline' &&
-                `${formatNumber(claimsInChannel, 2, true)} ${claimsInChannel === 1 ? __('upload') : __('uploads')}`}
+                type !== "inline" &&
+                `${formatNumber(claimsInChannel, 2, true)} ${claimsInChannel === 1 ? __("upload") : __("uploads")}`}
 
               {!isChannel && (
                 <>
@@ -49,10 +49,10 @@ function ClaimPreviewSubtitle(props: Props) {
         </React.Fragment>
       ) : (
         <React.Fragment>
-          <div>{__('Upload something and claim this spot!')}</div>
+          <div>{__("Upload something and claim this spot!")}</div>
           <div className="card__actions">
             {/* @ts-expect-error - TS2322 (ts-migration) */}
-            <Button onClick={() => beginPublish(name)} button="primary" label={__('Publish to %uri%', { uri })} />
+            <Button onClick={() => beginPublish(name)} button="primary" label={__("Publish to %uri%", { uri })} />
           </div>
         </React.Fragment>
       )}

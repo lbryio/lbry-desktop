@@ -1,26 +1,26 @@
-import * as React from 'react';
-import { normalizeURI } from 'util/lbryURI';
-import FilePrice from 'component/filePrice';
-import ClaimInsufficientCredits from 'component/claimInsufficientCredits';
-import FileSubtitle from 'component/fileSubtitle';
-import ClaimAuthor from 'component/claimAuthor';
-import Card from 'component/common/card';
-import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
-import Icon from 'component/common/icon';
-import I18nMessage from 'component/i18nMessage';
-import Button from 'component/button';
-import FileDescription from 'component/fileDescription';
-import { ENABLE_MATURE } from 'config';
+import * as React from "react";
+import { normalizeURI } from "util/lbryURI";
+import FilePrice from "component/filePrice";
+import ClaimInsufficientCredits from "component/claimInsufficientCredits";
+import FileSubtitle from "component/fileSubtitle";
+import ClaimAuthor from "component/claimAuthor";
+import Card from "component/common/card";
+import * as ICONS from "constants/icons";
+import * as PAGES from "constants/pages";
+import Icon from "component/common/icon";
+import I18nMessage from "component/i18nMessage";
+import Button from "component/button";
+import FileDescription from "component/fileDescription";
+import { ENABLE_MATURE } from "config";
 
 type Props = {
-  uri: string,
-  title: string,
-  nsfw: boolean,
-  isNsfwBlocked: boolean,
-  subCount: number,
-  channelClaimId?: string,
-  fetchSubCount: (arg1: string) => void
+  uri: string;
+  title: string;
+  nsfw: boolean;
+  isNsfwBlocked: boolean;
+  subCount: number;
+  channelClaimId?: string;
+  fetchSubCount: (arg1: string) => void;
 };
 
 function FileTitleSection(props: Props) {
@@ -42,7 +42,7 @@ function FileTitleSection(props: Props) {
             {title}
             {nsfw && (
               <span className="media__title-badge">
-                <span className="badge badge--tag-mature">{__('Mature')}</span>
+                <span className="badge badge--tag-mature">{__("Mature")}</span>
               </span>
             )}
           </React.Fragment>
@@ -62,13 +62,13 @@ function FileTitleSection(props: Props) {
                 {!ENABLE_MATURE && (
                   <>
                     <Icon className="icon--hidden" icon={ICONS.EYE_OFF} />
-                    {__('Mature content is not supported.')}
+                    {__("Mature content is not supported.")}
                   </>
                 )}
                 {ENABLE_MATURE && (
                   <>
                     <Icon className="icon--hidden" icon={ICONS.EYE_OFF} />
-                    {__('Mature content blocked.')}
+                    {__("Mature content blocked.")}
                   </>
                 )}
               </h2>
@@ -81,7 +81,7 @@ function FileTitleSection(props: Props) {
                       tokens={{
                         content_settings: (
                           // @ts-expect-error - TS2322 (ts-migration)
-                          <Button button="link" label={__('content settings')} navigate={`/$/${PAGES.SETTINGS}`} />
+                          <Button button="link" label={__("content settings")} navigate={`/$/${PAGES.SETTINGS}`} />
                         ),
                       }}
                     >
@@ -96,7 +96,7 @@ function FileTitleSection(props: Props) {
                       // @ts-expect-error - TS2322 (ts-migration)
                       tokens={{
                         // @ts-expect-error - TS2322 (ts-migration)
-                        download_url: <Button label={__('lbry.com')} button="link" href="https://lbry.com/get" />,
+                        download_url: <Button label={__("lbry.com")} button="link" href="https://lbry.com/get" />,
                       }}
                     >
                       You can download the LBRY Desktop or Android app on %download_url% and enable mature content in

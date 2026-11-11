@@ -1,18 +1,18 @@
-import type {ReactNode} from 'react';
-import * as React from 'react';
-import classnames from 'classnames';
+import type { ReactNode } from "react";
+import * as React from "react";
+import classnames from "classnames";
 // @ts-expect-error - TS2792 - Cannot find module 'static/img/yrblhappy.svg'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-import YrblHappy from 'static/img/yrblhappy.svg';
+import YrblHappy from "static/img/yrblhappy.svg";
 // @ts-expect-error - TS2792 - Cannot find module 'static/img/yrblsad.svg'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-import YrblSad from 'static/img/yrblsad.svg';
+import YrblSad from "static/img/yrblsad.svg";
 
 type Props = {
-  title?: string,
-  subtitle?: string | React.ReactNode,
-  type: string,
-  className?: string,
-  actions?: React.ReactNode,
-  alwaysShow?: boolean
+  title?: string;
+  subtitle?: string | React.ReactNode;
+  type: string;
+  className?: string;
+  actions?: React.ReactNode;
+  alwaysShow?: boolean;
 };
 
 const yrblTypes = {
@@ -22,7 +22,7 @@ const yrblTypes = {
 
 export default class extends React.PureComponent<Props> {
   static defaultProps = {
-    type: 'happy',
+    type: "happy",
   };
 
   render() {
@@ -34,8 +34,8 @@ export default class extends React.PureComponent<Props> {
       <div className="yrbl__wrap">
         <img
           alt="Friendly gerbil"
-          className={classnames('yrbl', className, {
-            'yrbl--always-show': alwaysShow,
+          className={classnames("yrbl", className, {
+            "yrbl--always-show": alwaysShow,
           })}
           src={`${image}`}
         />

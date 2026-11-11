@@ -1,35 +1,29 @@
-import * as ICONS from 'constants/icons';
-import React, { useEffect } from 'react';
-import { Lbryio } from 'lbryinc';
-import ClaimList from 'component/claimList';
-import Page from 'component/page';
-import Button from 'component/button';
-import YoutubeTransferStatus from 'component/youtubeTransferStatus';
-import Spinner from 'component/spinner';
-import Yrbl from 'component/yrbl';
-import LbcSymbol from 'component/common/lbc-symbol';
-import * as PAGES from 'constants/pages';
-import HelpLink from 'component/common/help-link';
-import { useHistory } from 'react-router';
+import * as ICONS from "constants/icons";
+import React, { useEffect } from "react";
+import { Lbryio } from "lbryinc";
+import ClaimList from "component/claimList";
+import Page from "component/page";
+import Button from "component/button";
+import YoutubeTransferStatus from "component/youtubeTransferStatus";
+import Spinner from "component/spinner";
+import Yrbl from "component/yrbl";
+import LbcSymbol from "component/common/lbc-symbol";
+import * as PAGES from "constants/pages";
+import HelpLink from "component/common/help-link";
+import { useHistory } from "react-router";
 
 type Props = {
-  channelUrls: Array<string>,
-  fetchChannelListMine: () => void,
-  fetchingChannels: boolean,
-  youtubeChannels: Array<any> | null | undefined,
-  doSetActiveChannel: (arg1: string) => void,
-  pendingChannels: Array<string>
+  channelUrls: Array<string>;
+  fetchChannelListMine: () => void;
+  fetchingChannels: boolean;
+  youtubeChannels: Array<any> | null | undefined;
+  doSetActiveChannel: (arg1: string) => void;
+  pendingChannels: Array<string>;
 };
 
 export default function ChannelsPage(props: Props) {
-  const {
-    channelUrls,
-    fetchChannelListMine,
-    fetchingChannels,
-    youtubeChannels,
-    doSetActiveChannel,
-    pendingChannels,
-  } = props;
+  const { channelUrls, fetchChannelListMine, fetchingChannels, youtubeChannels, doSetActiveChannel, pendingChannels } =
+    props;
   const [rewardData, setRewardData] = React.useState<any>();
   const hasYoutubeChannels = youtubeChannels && Boolean(youtubeChannels.length);
 
@@ -41,7 +35,7 @@ export default function ChannelsPage(props: Props) {
 
   useEffect(() => {
     // @ts-expect-error - TS2339 (ts-migration)
-    Lbryio.call('user_rewards', 'view_rate').then((data) => setRewardData(data));
+    Lbryio.call("user_rewards", "view_rate").then((data) => setRewardData(data));
   }, [setRewardData]);
 
   return (
@@ -54,13 +48,13 @@ export default function ChannelsPage(props: Props) {
         {channelUrls && Boolean(channelUrls.length) && (
           // @ts-expect-error - TS2740 (ts-migration)
           <ClaimList
-            header={<h1 className="section__title">{__('Your channels')}</h1>}
+            header={<h1 className="section__title">{__("Your channels")}</h1>}
             headerAltControls={
               <Button
                 // @ts-expect-error - TS2322 (ts-migration)
                 button="secondary"
                 icon={ICONS.CHANNEL}
-                label={__('New Channel')}
+                label={__("New Channel")}
                 navigate={`/$/${PAGES.CHANNEL_NEW}`}
               />
             }
@@ -76,7 +70,7 @@ export default function ChannelsPage(props: Props) {
                     // @ts-expect-error - TS2322 (ts-migration)
                     button="alt"
                     icon={ICONS.ANALYTICS}
-                    label={__('Analytics')}
+                    label={__("Analytics")}
                     onClick={() => {
                       doSetActiveChannel(claim.claim_id);
                       push(`/$/${PAGES.CREATOR_DASHBOARD}`);
@@ -102,7 +96,7 @@ export default function ChannelsPage(props: Props) {
                 return (
                   <span className="claim-preview__custom-properties">
                     <span className="help--inline">
-                      {__('Earnings per view')} <HelpLink href="https://lbry.com/faq/view-rewards" />
+                      {__("Earnings per view")} <HelpLink href="https://lbry.com/faq/view-rewards" />
                     </span>
 
                     <span>
@@ -123,12 +117,12 @@ export default function ChannelsPage(props: Props) {
           {!fetchingChannels ? (
             <section className="main--empty">
               <Yrbl
-                title={__('No channels')}
+                title={__("No channels")}
                 subtitle={__("You haven't created a channel yet. All of your beautiful channels will be listed here!")}
                 actions={
                   <div className="section__actions">
                     {/* @ts-expect-error - TS2322 (ts-migration) */}
-                    <Button button="primary" label={__('Create Channel')} navigate={`/$/${PAGES.CHANNEL_NEW}`} />
+                    <Button button="primary" label={__("Create Channel")} navigate={`/$/${PAGES.CHANNEL_NEW}`} />
                   </div>
                 }
               />

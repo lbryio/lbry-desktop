@@ -1,25 +1,25 @@
 //@ts-nocheck
-import * as ACTIONS from 'constants/action_types';
-import * as SETTINGS from 'constants/settings';
-import { SEARCH_PROVIDERS } from 'constants/search';
-import { SEARCH_PROVIDER, LBRY_SEARCH_API } from 'config';
-import moment from 'moment';
-import { getDefaultLanguage } from 'util/default-languages';
+import * as ACTIONS from "constants/action_types";
+import * as SETTINGS from "constants/settings";
+import { SEARCH_PROVIDERS } from "constants/search";
+import { SEARCH_PROVIDER, LBRY_SEARCH_API } from "config";
+import moment from "moment";
+import { getDefaultLanguage } from "util/default-languages";
 
 const reducers: Record<string, any> = {};
-let settingLanguage: unknown = [];
+const settingLanguage: unknown = [];
 try {
-  let appLanguage = window.localStorage.getItem(SETTINGS.LANGUAGE);
+  const appLanguage = window.localStorage.getItem(SETTINGS.LANGUAGE);
   settingLanguage.push(appLanguage);
 } catch (e: any) {}
 settingLanguage.push(getDefaultLanguage());
-settingLanguage.push('en');
+settingLanguage.push("en");
 
 const defaultState = {
   isNight: false,
   isSettingDaemonSettings: false,
   findingFFmpeg: false,
-  loadedLanguages: [...Object.keys(window.i18n_messages), 'en'] || ['en'],
+  loadedLanguages: [...Object.keys(window.i18n_messages), "en"] || ["en"],
   customWalletServers: [],
   sharedPreferences: {},
   daemonSettings: {},
@@ -35,8 +35,8 @@ const defaultState = {
     // UI
     [SETTINGS.LANGUAGE]: null,
     [SETTINGS.SEARCH_IN_LANGUAGE]: false,
-    [SETTINGS.THEME]: __('dark'),
-    [SETTINGS.THEMES]: [__('dark'), __('light')],
+    [SETTINGS.THEME]: __("dark"),
+    [SETTINGS.THEMES]: [__("dark"), __("light")],
     [SETTINGS.HOMEPAGE]: null,
     [SETTINGS.HIDE_SPLASH_ANIMATION]: false,
     [SETTINGS.HIDE_BALANCE]: false,
@@ -49,23 +49,23 @@ const defaultState = {
     [SETTINGS.VIDEO_PLAYBACK_RATE]: 1,
     [SETTINGS.DESKTOP_WINDOW_ZOOM]: 1,
     [SETTINGS.CUSTOM_COMMENTS_SERVER_ENABLED]: false,
-    [SETTINGS.CUSTOM_COMMENTS_SERVER_URL]: '',
+    [SETTINGS.CUSTOM_COMMENTS_SERVER_URL]: "",
     [SETTINGS.CUSTOM_COMMENTS_SERVERS]: [],
     [SETTINGS.CUSTOM_SHARE_URL_ENABLED]: false,
-    [SETTINGS.CUSTOM_SHARE_URL]: '',
+    [SETTINGS.CUSTOM_SHARE_URL]: "",
     [SETTINGS.SEARCH_PROVIDER]:
       SEARCH_PROVIDER === SEARCH_PROVIDERS.LBRY_SEARCH ? SEARCH_PROVIDERS.LBRY_SEARCH : SEARCH_PROVIDERS.LIGHTHOUSE,
-    [SETTINGS.LBRY_SEARCH_URL]: LBRY_SEARCH_API || '',
+    [SETTINGS.LBRY_SEARCH_URL]: LBRY_SEARCH_API || "",
 
     [SETTINGS.DARK_MODE_TIMES]: {
-      from: { hour: '21', min: '00', formattedTime: '21:00' },
-      to: { hour: '8', min: '00', formattedTime: '8:00' },
+      from: { hour: "21", min: "00", formattedTime: "21:00" },
+      to: { hour: "8", min: "00", formattedTime: "8:00" },
     },
 
     // Purchasing
     [SETTINGS.INSTANT_PURCHASE_ENABLED]: false,
     [SETTINGS.INSTANT_PURCHASE_MAX]: {
-      currency: 'LBC',
+      currency: "LBC",
       amount: 0.1,
     },
 
@@ -135,8 +135,8 @@ reducers[ACTIONS.CLIENT_SETTING_CHANGED] = (state: unknown, action: unknown) => 
 reducers[ACTIONS.UPDATE_IS_NIGHT] = (state: unknown) => {
   const { from, to } = state.clientSettings[SETTINGS.DARK_MODE_TIMES];
   const momentNow = moment();
-  const startNightMoment = moment(from.formattedTime, 'HH:mm');
-  const endNightMoment = moment(to.formattedTime, 'HH:mm');
+  const startNightMoment = moment(from.formattedTime, "HH:mm");
+  const endNightMoment = moment(to.formattedTime, "HH:mm");
   const isNight = !(momentNow.isAfter(endNightMoment) && momentNow.isBefore(startNightMoment));
 
   return Object.assign({}, state, {

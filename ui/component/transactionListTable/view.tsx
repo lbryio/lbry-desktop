@@ -1,33 +1,33 @@
-import * as MODALS from 'constants/modal_types';
-import React from 'react';
-import TxoListItem from 'component/transactionListTableItem';
-import Spinner from 'component/spinner';
-import LbcSymbol from 'component/common/lbc-symbol';
+import * as MODALS from "constants/modal_types";
+import React from "react";
+import TxoListItem from "component/transactionListTableItem";
+import Spinner from "component/spinner";
+import LbcSymbol from "component/common/lbc-symbol";
 
 type Props = {
-  emptyMessage: string | null | undefined,
-  loading: boolean,
+  emptyMessage: string | null | undefined;
+  loading: boolean;
   openModal: (
     id: string,
     arg2: {
-      tx: Txo,
-      cb: (arg1: string) => void
-    },
-  ) => void,
-  rewards: Record<any, any>,
-  txos: Array<Txo>
+      tx: Txo;
+      cb: (arg1: string) => void;
+    }
+  ) => void;
+  rewards: Record<any, any>;
+  txos: Array<Txo>;
 };
 
 function TransactionListTable(props: Props) {
   const { emptyMessage, rewards, loading, txos } = props;
-  const REVOCABLE_TYPES = ['channel', 'stream', 'repost', 'support', 'claim', 'collection'];
+  const REVOCABLE_TYPES = ["channel", "stream", "repost", "support", "claim", "collection"];
   function revokeClaim(tx: any, cb: (arg1: string) => void) {
     props.openModal(MODALS.CONFIRM_CLAIM_REVOKE, { tx, cb });
   }
 
   return (
     <React.Fragment>
-      {!loading && !txos.length && <h2 className="main--empty empty">{emptyMessage || __('No transactions.')}</h2>}
+      {!loading && !txos.length && <h2 className="main--empty empty">{emptyMessage || __("No transactions.")}</h2>}
       {loading && (
         <h2 className="main--empty empty">
           <Spinner delayed />
@@ -38,10 +38,10 @@ function TransactionListTable(props: Props) {
           <table className="table table--transactions">
             <thead>
               <tr>
-                <th className="table-column-lbc-date">{__('Date')}</th>
-                <th className="table-column-lbc-type">{<>{__('Type')}</>}</th>
-                <th>{__('Details')} </th>
-                <th className="table-column-lbc-transaction">{__('Transaction')}</th>
+                <th className="table-column-lbc-date">{__("Date")}</th>
+                <th className="table-column-lbc-type">{<>{__("Type")}</>}</th>
+                <th>{__("Details")} </th>
+                <th className="table-column-lbc-transaction">{__("Transaction")}</th>
                 <th className="table__item--align-right">
                   <LbcSymbol size={18} />
                 </th>

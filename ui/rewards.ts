@@ -1,40 +1,40 @@
 //@ts-nocheck
-import Lbry from 'lbry';
-import { doToast } from 'redux/actions/notifications';
-import { Lbryio } from 'lbryinc';
+import Lbry from "lbry";
+import { doToast } from "redux/actions/notifications";
+import { Lbryio } from "lbryinc";
 
 const rewards: Record<string, any> = {};
 
-rewards.TYPE_NEW_DEVELOPER = 'new_developer';
-rewards.TYPE_NEW_USER = 'new_user';
-rewards.TYPE_CONFIRM_EMAIL = 'email_provided';
-rewards.TYPE_FIRST_CHANNEL = 'new_channel';
-rewards.TYPE_FIRST_STREAM = 'first_stream';
-rewards.TYPE_MANY_DOWNLOADS = 'many_downloads';
-rewards.TYPE_FIRST_PUBLISH = 'first_publish';
-rewards.TYPE_REFERRAL = 'referrer';
-rewards.TYPE_REFEREE = 'referee';
-rewards.TYPE_REWARD_CODE = 'reward_code';
-rewards.TYPE_SUBSCRIPTION = 'subscription';
-rewards.YOUTUBE_CREATOR = 'youtube_creator';
-rewards.TYPE_DAILY_VIEW = 'daily_view';
-rewards.TYPE_NEW_ANDROID = 'new_android';
+rewards.TYPE_NEW_DEVELOPER = "new_developer";
+rewards.TYPE_NEW_USER = "new_user";
+rewards.TYPE_CONFIRM_EMAIL = "email_provided";
+rewards.TYPE_FIRST_CHANNEL = "new_channel";
+rewards.TYPE_FIRST_STREAM = "first_stream";
+rewards.TYPE_MANY_DOWNLOADS = "many_downloads";
+rewards.TYPE_FIRST_PUBLISH = "first_publish";
+rewards.TYPE_REFERRAL = "referrer";
+rewards.TYPE_REFEREE = "referee";
+rewards.TYPE_REWARD_CODE = "reward_code";
+rewards.TYPE_SUBSCRIPTION = "subscription";
+rewards.YOUTUBE_CREATOR = "youtube_creator";
+rewards.TYPE_DAILY_VIEW = "daily_view";
+rewards.TYPE_NEW_ANDROID = "new_android";
 
 rewards.claimReward = (type: unknown, rewardParams: unknown) => {
   function requestReward(resolve: unknown, reject: unknown, params: unknown) {
     if (!Lbryio.enabled) {
-      reject(new Error(__('Rewards are not enabled.')));
+      reject(new Error(__("Rewards are not enabled.")));
       return;
     }
 
-    Lbryio.call('reward', 'claim', params, 'post').then((reward) => {
+    Lbryio.call("reward", "claim", params, "post").then((reward) => {
       const message = reward.reward_notification || `You have claimed a ${reward.reward_amount} LBRY Credit reward.`;
 
       // Display global notice
       const action = doToast({
         message,
-        linkText: __('Show All'),
-        linkTarget: '/rewards',
+        linkText: __("Show All"),
+        linkTarget: "/rewards",
       });
       window.store.dispatch(action);
 
@@ -63,15 +63,15 @@ rewards.claimReward = (type: unknown, rewardParams: unknown) => {
                 claims.items.find(
                   (foundClaim) =>
                     foundClaim.name.length &&
-                    foundClaim.name[0] === '@' &&
+                    foundClaim.name[0] === "@" &&
                     foundClaim.txid.length &&
-                    foundClaim.type === 'claim'
+                    foundClaim.type === "claim"
                 );
               if (claim) {
                 params.transaction_id = claim.txid;
                 requestReward(resolve, reject, params);
               } else {
-                reject(new Error(__('Please create a channel identity first.')));
+                reject(new Error(__("Please create a channel identity first.")));
               }
             })
             .catch(reject);
@@ -85,9 +85,9 @@ rewards.claimReward = (type: unknown, rewardParams: unknown) => {
                 claims.items.find(
                   (foundClaim) =>
                     foundClaim.name.length &&
-                    foundClaim.name[0] !== '@' &&
+                    foundClaim.name[0] !== "@" &&
                     foundClaim.txid.length &&
-                    foundClaim.type === 'claim'
+                    foundClaim.type === "claim"
                 );
               if (claim) {
                 params.transaction_id = claim.txid;
@@ -96,9 +96,9 @@ rewards.claimReward = (type: unknown, rewardParams: unknown) => {
                 reject(
                   claims.length
                     ? new Error(
-                        __('Please upload something and wait for confirmation by the network to claim this reward.')
+                        __("Please upload something and wait for confirmation by the network to claim this reward.")
                       )
-                    : new Error(__('Please upload something to claim this reward.'))
+                    : new Error(__("Please upload something to claim this reward."))
                 );
               }
             })

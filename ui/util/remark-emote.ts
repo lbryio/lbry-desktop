@@ -1,8 +1,8 @@
 //@ts-nocheck
-import {EMOTES_48px as EMOTES} from 'constants/emotes';
-import visit from 'unist-util-visit';
+import { EMOTES_48px as EMOTES } from "constants/emotes";
+import visit from "unist-util-visit";
 
-const EMOTE_NODE_TYPE = 'emote';
+const EMOTE_NODE_TYPE = "emote";
 const RE_EMOTE = /:\+1:|:-1:|:[\w-]+:/;
 
 // ***************************************************************************
@@ -63,7 +63,7 @@ function locateEmote(value: unknown, fromIndex: unknown) {
 const createEmoteNode = (text: unknown) => ({
   type: EMOTE_NODE_TYPE,
   value: text,
-  children: [{ type: 'text', value: text }],
+  children: [{ type: "text", value: text }],
 });
 
 // Generate a markdown image from emote
@@ -90,7 +90,7 @@ export function inlineEmote() {
   tokenizers.emote = tokenizeEmote;
 
   // Run it just before `text`.
-  methods.splice(methods.indexOf('text'), 0, 'emote');
+  methods.splice(methods.indexOf("text"), 0, "emote");
 }
 
 // ***************************************************************************
@@ -98,14 +98,14 @@ export function inlineEmote() {
 // ***************************************************************************
 
 const transformer = (node: unknown, index: unknown, parent: unknown) => {
-  if (node.type === EMOTE_NODE_TYPE && parent && parent.type === 'paragraph') {
+  if (node.type === EMOTE_NODE_TYPE && parent && parent.type === "paragraph") {
     const emoteStr = node.value;
     const emote = EMOTES.find(({ name }) => emoteStr.toUpperCase() === name);
 
-    node.type = 'image';
+    node.type = "image";
     node.url = emote.url;
     node.title = emoteStr;
-    node.children = [{ type: 'text', value: emoteStr }];
+    node.children = [{ type: "text", value: emoteStr }];
     if (!node.data || !node.data.hProperties) {
       // Create new node data
       node.data = {

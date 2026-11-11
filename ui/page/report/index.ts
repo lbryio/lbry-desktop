@@ -1,4 +1,4 @@
 //@ts-nocheck
-import ReportPage from './view';
+import ReportPage from "./view";
 
 export default ReportPage;

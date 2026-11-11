@@ -1,6 +1,6 @@
-import * as ACTIONS from 'constants/action_types';
-import { parseURI, normalizeURI, isURIEqual } from 'util/lbryURI';
-import { handleActions } from 'util/redux-utils';
+import * as ACTIONS from "constants/action_types";
+import { parseURI, normalizeURI, isURIEqual } from "util/lbryURI";
+import { handleActions } from "util/redux-utils";
 
 const defaultState: SubscriptionState = {
   subscriptions: [], // Deprecated
@@ -13,9 +13,9 @@ export default handleActions(
   {
     [ACTIONS.CHANNEL_SUBSCRIBE]: (state: SubscriptionState, action): SubscriptionState => {
       const newSubscription: {
-        uri: string,
-        channelName: string,
-        notificationsDisabled: boolean
+        uri: string;
+        channelName: string;
+        notificationsDisabled: boolean;
       } = action.data;
       const newSubscriptions: Array<Subscription> = state.subscriptions.slice();
       let newFollowing: Array<Following> = state.following.slice();
@@ -78,16 +78,16 @@ export default handleActions(
     }),
     [ACTIONS.SET_VIEW_MODE]: (state: SubscriptionState, action): SubscriptionState => ({
       ...state,
-// @ts-expect-error - TS2322 - Type '{ viewMode: any; subscriptions: Subscription[]; following: Following[]; loading: boolean; firstRunCompleted: boolean; }' is not assignable to type 'SubscriptionState'.
+      // @ts-expect-error - TS2322 - Type '{ viewMode: any; subscriptions: Subscription[]; following: Following[]; loading: boolean; firstRunCompleted: boolean; }' is not assignable to type 'SubscriptionState'.
       viewMode: action.data,
     }),
     [ACTIONS.SYNC_STATE_POPULATE]: (
       state: SubscriptionState,
       action: {
         data: {
-          subscriptions: Array<string> | null | undefined,
-          following: Array<Subscription> | null | undefined
-        }
+          subscriptions: Array<string> | null | undefined;
+          following: Array<Subscription> | null | undefined;
+        };
       }
     ) => {
       const { subscriptions, following } = action.data;
@@ -107,7 +107,7 @@ export default handleActions(
           const { channelName } = parseURI(uri);
           return {
             uri,
-            channelName: channelName ? `@${channelName}` : '',
+            channelName: channelName ? `@${channelName}` : "",
           };
         });
         newSubscriptions = parsedSubscriptions;

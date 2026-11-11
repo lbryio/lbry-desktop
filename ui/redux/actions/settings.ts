@@ -1,26 +1,26 @@
 //@ts-nocheck
-import Lbry from 'lbry';
-import { doWalletReconnect } from 'redux/actions/wallet';
-import * as SETTINGS from 'constants/settings';
-import * as DAEMON_SETTINGS from 'constants/daemon_settings';
-import * as ACTIONS from 'constants/action_types';
-import * as SHARED_PREFERENCES from 'constants/shared_preferences';
-import { doToast } from 'redux/actions/notifications';
-import analytics from 'analytics';
-import SUPPORTED_LANGUAGES from 'constants/supported_languages';
-import { launcher } from 'util/autoLaunch';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { doSyncLoop, doSyncUnsubscribe, doSetSyncLock } from 'redux/actions/sync';
-import { doAlertWaitingForSync, doGetAndPopulatePreferences } from 'redux/actions/app';
-import { selectPrefsReady } from 'redux/selectors/sync';
-import { Lbryio } from 'lbryinc';
-import { getDefaultLanguage } from 'util/default-languages';
-import { getSubsetFromKeysArray } from 'util/sync-settings';
+import Lbry from "lbry";
+import { doWalletReconnect } from "redux/actions/wallet";
+import * as SETTINGS from "constants/settings";
+import * as DAEMON_SETTINGS from "constants/daemon_settings";
+import * as ACTIONS from "constants/action_types";
+import * as SHARED_PREFERENCES from "constants/shared_preferences";
+import { doToast } from "redux/actions/notifications";
+import analytics from "analytics";
+import SUPPORTED_LANGUAGES from "constants/supported_languages";
+import { launcher } from "util/autoLaunch";
+import { makeSelectClientSetting } from "redux/selectors/settings";
+import { doSyncLoop, doSyncUnsubscribe, doSetSyncLock } from "redux/actions/sync";
+import { doAlertWaitingForSync, doGetAndPopulatePreferences } from "redux/actions/app";
+import { selectPrefsReady } from "redux/selectors/sync";
+import { Lbryio } from "lbryinc";
+import { getDefaultLanguage } from "util/default-languages";
+import { getSubsetFromKeysArray } from "util/sync-settings";
 
-const { DEFAULT_LANGUAGE } = require('config');
+const { DEFAULT_LANGUAGE } = require("config");
 const { SDK_SYNC_KEYS, CLIENT_SYNC_KEYS } = SHARED_PREFERENCES;
 
-export const IS_MAC = process.platform === 'darwin';
+export const IS_MAC = process.platform === "darwin";
 const UPDATE_IS_NIGHT_INTERVAL = 5 * 60 * 1000;
 
 export function doFetchDaemonSettings() {
@@ -144,7 +144,7 @@ export function doSetDaemonSetting(key: unknown, value: unknown, doNotDispatch =
         });
       })
       .catch((e) => {
-        console.log('error setting or fetching daemon setting', e.message);
+        console.log("error setting or fetching daemon setting", e.message);
         dispatch({
           type: ACTIONS.SETTING_DAEMON_SETTINGS,
           data: {
@@ -161,7 +161,7 @@ export function doCleanBlobs(fetchAfter = true) {
       if (fetchAfter) {
         dispatch(doFetchDaemonSettings());
       }
-      return 'done';
+      return "done";
     });
   };
 }
@@ -216,13 +216,13 @@ export function doSetDarkTime(value: unknown, options: unknown) {
     const state = getState();
     const darkModeTimes = state.settings.clientSettings[SETTINGS.DARK_MODE_TIMES];
     const { hour, min } = darkModeTimes[fromTo];
-    const newHour = time === 'hour' ? value : hour;
-    const newMin = time === 'min' ? value : min;
+    const newHour = time === "hour" ? value : hour;
+    const newMin = time === "min" ? value : min;
     const modifiedTimes = {
       [fromTo]: {
         hour: newHour,
         min: newMin,
-        formattedTime: newHour + ':' + newMin,
+        formattedTime: newHour + ":" + newMin,
       },
     } as const;
     const mergedTimes = { ...darkModeTimes, ...modifiedTimes } as const;
@@ -233,7 +233,7 @@ export function doSetDarkTime(value: unknown, options: unknown) {
 }
 
 export function doGetWalletSyncPreference() {
-  const SYNC_KEY = 'enable-sync';
+  const SYNC_KEY = "enable-sync";
   return (dispatch: unknown) => {
     return Lbry.preference_get({ key: SYNC_KEY }).then((result) => {
       const enabled = result && result[SYNC_KEY];
@@ -246,7 +246,7 @@ export function doGetWalletSyncPreference() {
 }
 
 export function doSetWalletSyncPreference(pref: unknown) {
-  const SYNC_KEY = 'enable-sync';
+  const SYNC_KEY = "enable-sync";
   return (dispatch: unknown) => {
     return Lbry.preference_set({ key: SYNC_KEY, value: pref }).then((result) => {
       const enabled = result && result[SYNC_KEY];
@@ -307,7 +307,7 @@ export function doFetchLanguage(language: unknown) {
 
     if (settings.language !== language || (settings.loadedLanguages && !settings.loadedLanguages.includes(language))) {
       // this should match the behavior/logic in index-web.html
-      fetch('https://lbry.com/i18n/get/lbry-desktop/app-strings/' + language + '.json')
+      fetch("https://lbry.com/i18n/get/lbry-desktop/app-strings/" + language + ".json")
         .then((r) => r.json())
         .then((j) => {
           window.i18n_messages[language] = j;
@@ -357,7 +357,7 @@ export function doSetLanguage(language: unknown) {
       (settings.loadedLanguages && !settings.loadedLanguages.includes(language))
     ) {
       // this should match the behavior/logic in index-web.html
-      fetch('https://lbry.com/i18n/get/lbry-desktop/app-strings/' + language + '.json')
+      fetch("https://lbry.com/i18n/get/lbry-desktop/app-strings/" + language + ".json")
         .then((r) => r.json())
         .then((j) => {
           window.i18n_messages[language] = j;
@@ -373,7 +373,7 @@ export function doSetLanguage(language: unknown) {
           window.localStorage.setItem(SETTINGS.LANGUAGE, language);
           dispatch(doSetClientSetting(SETTINGS.LANGUAGE, languageSetting));
           if (isSharingData) {
-            Lbryio.call('user', 'language', {
+            Lbryio.call("user", "language", {
               language: language,
             });
           }
@@ -384,7 +384,7 @@ export function doSetLanguage(language: unknown) {
           const languageName = SUPPORTED_LANGUAGES[language] ? SUPPORTED_LANGUAGES[language] : language;
           dispatch(
             doToast({
-              message: __('Failed to load %language% translations.', { language: languageName }),
+              message: __("Failed to load %language% translations.", { language: languageName }),
               isError: true,
             })
           );
@@ -398,7 +398,7 @@ export function doSetAutoLaunch(value: unknown) {
     const state = getState();
     const autoLaunch = makeSelectClientSetting(SETTINGS.AUTO_LAUNCH)(state);
 
-    if (IS_MAC || process.env.NODE_ENV !== 'production') {
+    if (IS_MAC || process.env.NODE_ENV !== "production") {
       return;
     }
 
@@ -469,7 +469,7 @@ export function toggleAutoplayNext() {
 
     dispatch(
       doToast({
-        message: autoplayNext ? __('Autoplay Next is off.') : __('Autoplay Next is on.'),
+        message: autoplayNext ? __("Autoplay Next is off.") : __("Autoplay Next is on."),
       })
     );
   };

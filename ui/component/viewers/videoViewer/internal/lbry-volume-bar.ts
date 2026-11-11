@@ -3,14 +3,14 @@
 // LbryVolumeBarClass
 // ****************************************************************************
 
-import videojs from 'video.js';
+import videojs from "video.js";
 
-const isDev = process.env.NODE_ENV !== 'production';
+const isDev = process.env.NODE_ENV !== "production";
 
-const VIDEOJS_CONTROL_BAR_CLASS = 'ControlBar';
-const VIDEOJS_VOLUME_PANEL_CLASS = 'VolumePanel';
-const VIDEOJS_VOLUME_CONTROL_CLASS = 'VolumeControl';
-const VIDEOJS_VOLUME_BAR_CLASS = 'VolumeBar';
+const VIDEOJS_CONTROL_BAR_CLASS = "ControlBar";
+const VIDEOJS_VOLUME_PANEL_CLASS = "VolumePanel";
+const VIDEOJS_VOLUME_CONTROL_CLASS = "VolumeControl";
+const VIDEOJS_VOLUME_BAR_CLASS = "VolumeBar";
 
 class LbryVolumeBarClass extends videojs.getComponent(VIDEOJS_VOLUME_BAR_CLASS) {
   constructor(player: unknown, options = {}) {
@@ -29,7 +29,7 @@ class LbryVolumeBarClass extends videojs.getComponent(VIDEOJS_VOLUME_BAR_CLASS) 
     } catch (error: any) {
       // In case it slips in 'Production', the original volume bar will be used and the site should still be working
       // (just not exactly the way we want).
-      if (isDev) throw Error('\n\nvideojs.jsx: Volume Panel hierarchy changed?\n\n' + error);
+      if (isDev) throw Error("\n\nvideojs.jsx: Volume Panel hierarchy changed?\n\n" + error);
     }
   }
 

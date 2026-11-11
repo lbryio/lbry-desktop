@@ -1,49 +1,49 @@
-import type {ReactNode} from 'react';
-import * as PAGES from 'constants/pages';
-import * as ICONS from 'constants/icons';
-import * as KEYCODES from 'constants/keycodes';
-import React from 'react';
-import Button from 'component/button';
-import classnames from 'classnames';
-import NotificationBubble from 'component/notificationBubble';
-import DebouncedInput from 'component/common/debounced-input';
-import ChannelThumbnail from 'component/channelThumbnail';
-import { useIsMobile, isTouch } from 'effects/use-screensize';
-import { IS_MAC } from 'component/app/view';
-import { useHistory } from 'react-router';
-import { ENABLE_UI_NOTIFICATIONS } from 'config';
+import type { ReactNode } from "react";
+import * as PAGES from "constants/pages";
+import * as ICONS from "constants/icons";
+import * as KEYCODES from "constants/keycodes";
+import React from "react";
+import Button from "component/button";
+import classnames from "classnames";
+import NotificationBubble from "component/notificationBubble";
+import DebouncedInput from "component/common/debounced-input";
+import ChannelThumbnail from "component/channelThumbnail";
+import { useIsMobile, isTouch } from "effects/use-screensize";
+import { IS_MAC } from "component/app/view";
+import { useHistory } from "react-router";
+import { ENABLE_UI_NOTIFICATIONS } from "config";
 
 const FOLLOWED_ITEM_INITIAL_LIMIT = 10;
 const touch = isTouch();
 type SideNavLink = {
-  title: string,
-  link?: string,
-  route?: string,
-  onClick?: () => any,
-  icon: string,
-  extra?: React.ReactNode,
-  hideForUnauth?: boolean
+  title: string;
+  link?: string;
+  route?: string;
+  onClick?: () => any;
+  icon: string;
+  extra?: React.ReactNode;
+  hideForUnauth?: boolean;
 };
 
 // ****************************************************************************
 // ****************************************************************************
 
 type Props = {
-  subscriptions: Array<Subscription>,
-  followedTags: Array<Tag>,
-  email: string | null | undefined,
-  uploadCount: number,
-  doSignOut: () => void,
-  sidebarOpen: boolean,
-  setSidebarOpen: (arg1: boolean) => void,
-  isMediumScreen: boolean,
-  isOnFilePage: boolean,
-  unseenCount: number,
-  purchaseSuccess: boolean,
-  doClearPurchasedUriSuccess: () => void,
-  user: User | null | undefined,
-  homepageData: any,
-  activeChannelStakedLevel: number
+  subscriptions: Array<Subscription>;
+  followedTags: Array<Tag>;
+  email: string | null | undefined;
+  uploadCount: number;
+  doSignOut: () => void;
+  sidebarOpen: boolean;
+  setSidebarOpen: (arg1: boolean) => void;
+  isMediumScreen: boolean;
+  isOnFilePage: boolean;
+  unseenCount: number;
+  purchaseSuccess: boolean;
+  doClearPurchasedUriSuccess: () => void;
+  user: User | null | undefined;
+  homepageData: any;
+  activeChannelStakedLevel: number;
 };
 
 function SideNavigation(props: Props) {
@@ -67,113 +67,113 @@ function SideNavigation(props: Props) {
   } = useHistory();
 
   const HOME = {
-    title: 'Home',
+    title: "Home",
     link: `/`,
     icon: ICONS.HOME,
     onClick: () => {
-      if (pathname === '/') window.location.reload();
+      if (pathname === "/") window.location.reload();
     },
   } as const;
 
   const RECENT_FROM_FOLLOWING = {
-    title: 'Following --[sidebar button]--',
+    title: "Following --[sidebar button]--",
     link: `/$/${PAGES.CHANNELS_FOLLOWING}`,
     icon: ICONS.SUBSCRIBE,
   } as const;
   const TAGS_FROM_FOLLOWING = {
-    title: 'Your Tags',
+    title: "Your Tags",
     link: `/$/${PAGES.TAGS_FOLLOWING}`,
     icon: ICONS.TAG,
   } as const;
 
   const DISCOVER = {
-    title: 'Discover',
+    title: "Discover",
     link: `/$/${PAGES.DISCOVER}`,
     icon: ICONS.DISCOVER,
   } as const;
 
   const LIBRARY = {
-    title: 'Library',
+    title: "Library",
     link: `/$/${PAGES.LIBRARY}`,
     icon: ICONS.PURCHASED,
   } as const;
 
   const NOTIFICATIONS = {
-    title: 'Notifications',
+    title: "Notifications",
     link: `/$/${PAGES.NOTIFICATIONS}`,
     icon: ICONS.NOTIFICATION,
     extra: <NotificationBubble inline />,
   } as const;
 
   const PLAYLISTS = {
-    title: 'Lists',
+    title: "Lists",
     link: `/$/${PAGES.LISTS}`,
     icon: ICONS.STACK,
   } as const;
 
   const MOBILE_LINKS: Array<SideNavLink> = [
     {
-      title: 'Upload',
+      title: "Upload",
       link: `/$/${PAGES.UPLOAD}`,
       icon: ICONS.PUBLISH,
     },
     {
-      title: 'New Channel',
+      title: "New Channel",
       link: `/$/${PAGES.CHANNEL_NEW}`,
       icon: ICONS.CHANNEL,
       hideForUnauth: true,
     },
     {
-      title: 'Uploads',
+      title: "Uploads",
       link: `/$/${PAGES.UPLOADS}`,
       icon: ICONS.PUBLISH,
       hideForUnauth: true,
     },
 
     {
-      title: 'Channels',
+      title: "Channels",
       link: `/$/${PAGES.CHANNELS}`,
       icon: ICONS.CHANNEL,
       hideForUnauth: true,
     },
     {
-      title: 'Creator Analytics',
+      title: "Creator Analytics",
       link: `/$/${PAGES.CREATOR_DASHBOARD}`,
       icon: ICONS.ANALYTICS,
       hideForUnauth: true,
     },
     {
-      title: 'Wallet',
+      title: "Wallet",
       link: `/$/${PAGES.WALLET}`,
       icon: ICONS.WALLET,
       hideForUnauth: true,
     },
     {
-      title: 'Rewards',
+      title: "Rewards",
       link: `/$/${PAGES.REWARDS}`,
       icon: ICONS.REWARDS,
       hideForUnauth: true,
     },
     {
-      title: 'Invites',
+      title: "Invites",
       link: `/$/${PAGES.INVITE}`,
       icon: ICONS.INVITE,
       hideForUnauth: true,
     },
     {
-      title: 'Settings',
+      title: "Settings",
       link: `/$/${PAGES.SETTINGS}`,
       icon: ICONS.SETTINGS,
       hideForUnauth: true,
     },
     {
-      title: 'Help',
+      title: "Help",
       link: `/$/${PAGES.HELP}`,
       icon: ICONS.HELP,
       hideForUnauth: true,
     },
     {
-      title: 'Sign Out',
+      title: "Sign Out",
       onClick: doSignOut,
       icon: ICONS.SIGN_OUT,
       hideForUnauth: true,
@@ -215,7 +215,7 @@ function SideNavigation(props: Props) {
   const showSubscriptionSection = shouldRenderLargeMenu && subscriptions && subscriptions.length > 0;
   const showTagSection = sidebarOpen && followedTags && followedTags.length;
 
-  const [subscriptionFilter, setSubscriptionFilter] = React.useState('');
+  const [subscriptionFilter, setSubscriptionFilter] = React.useState("");
 
   const filteredSubscriptions = subscriptions.filter(
     (sub) => !subscriptionFilter || sub.channelName.toLowerCase().includes(subscriptionFilter.toLowerCase())
@@ -253,9 +253,9 @@ function SideNavigation(props: Props) {
           navigate={route || link}
           label={__(title)}
           title={__(title)}
-          className={classnames('navigation-link', {
-            'navigation-link--pulse': icon === ICONS.LIBRARY && pulseLibrary,
-            'navigation-link--highlighted': icon === ICONS.NOTIFICATION && unseenCount > 0,
+          className={classnames("navigation-link", {
+            "navigation-link--pulse": icon === ICONS.LIBRARY && pulseLibrary,
+            "navigation-link--highlighted": icon === ICONS.NOTIFICATION && unseenCount > 0,
           })}
           activeClass="navigation-link--active"
         />
@@ -271,7 +271,7 @@ function SideNavigation(props: Props) {
           <ul className="navigation__secondary navigation-links">
             {subscriptions.length > FOLLOWED_ITEM_INITIAL_LIMIT && (
               <li className="navigation-item">
-                <DebouncedInput icon={ICONS.SEARCH} placeholder={__('Filter')} onChange={setSubscriptionFilter} />
+                <DebouncedInput icon={ICONS.SEARCH} placeholder={__("Filter")} onChange={setSubscriptionFilter} />
               </li>
             )}
             {displayedSubscriptions.map((subscription) => (
@@ -280,7 +280,7 @@ function SideNavigation(props: Props) {
             {!!subscriptionFilter && !displayedSubscriptions.length && (
               <li>
                 <div className="navigation-item">
-                  <div className="empty empty--centered">{__('No results')}</div>
+                  <div className="empty empty--centered">{__("No results")}</div>
                 </div>
               </li>
             )}
@@ -288,7 +288,7 @@ function SideNavigation(props: Props) {
               <Button
                 key="showMore"
                 // @ts-expect-error - TS2322 (ts-migration)
-                label={expandSubscriptions ? __('Show less') : __('Show more')}
+                label={expandSubscriptions ? __("Show less") : __("Show more")}
                 className="navigation-link"
                 onClick={() => setExpandSubscriptions(!expandSubscriptions)}
               />
@@ -315,7 +315,7 @@ function SideNavigation(props: Props) {
               <Button
                 key="showMore"
                 // @ts-expect-error - TS2322 (ts-migration)
-                label={expandTags ? __('Show less') : __('Show more')}
+                label={expandTags ? __("Show less") : __("Show more")}
                 className="navigation-link"
                 onClick={() => setExpandTags(!expandTags)}
               />
@@ -331,7 +331,7 @@ function SideNavigation(props: Props) {
     if (purchaseSuccess) {
       setPulseLibrary(true);
 
-      let timeout = setTimeout(() => {
+      const timeout = setTimeout(() => {
         setPulseLibrary(false);
         doClearPurchasedUriSuccess();
       }, 2500);
@@ -345,61 +345,61 @@ function SideNavigation(props: Props) {
       if (e.keyCode === KEYCODES.ESCAPE && isAbsolute) {
         setSidebarOpen(false);
       } else if (e.keyCode === KEYCODES.BACKSLASH) {
-        const hasActiveInput = document.querySelector('input:focus, textarea:focus');
+        const hasActiveInput = document.querySelector("input:focus, textarea:focus");
         if (!hasActiveInput) {
           setSidebarOpen(!sidebarOpen);
         }
       }
     }
 
-// @ts-expect-error - TS2769 - No overload matches this call.
-    window.addEventListener('keydown', handleKeydown);
+    // @ts-expect-error - TS2769 - No overload matches this call.
+    window.addEventListener("keydown", handleKeydown);
 
-// @ts-expect-error - TS2769 - No overload matches this call.
-    return () => window.removeEventListener('keydown', handleKeydown);
+    // @ts-expect-error - TS2769 - No overload matches this call.
+    return () => window.removeEventListener("keydown", handleKeydown);
   }, [sidebarOpen, setSidebarOpen, isAbsolute]);
 
   const helpLinks = (
     <ul className="navigation__tertiary navigation-links--small">
       <li className="navigation-link">
         {/* @ts-expect-error - TS2322 (ts-migration) */}
-        <Button label={__('About --[link title in Sidebar or Footer]--')} href="https://lbry.com/about" />
+        <Button label={__("About --[link title in Sidebar or Footer]--")} href="https://lbry.com/about" />
       </li>
       <li className="navigation-link">
         {/* @ts-expect-error - TS2322 (ts-migration) */}
-        <Button label={__('FAQ')} href="https://lbry.com/faq" />
+        <Button label={__("FAQ")} href="https://lbry.com/faq" />
       </li>
       <li className="navigation-link">
         {/* @ts-expect-error - TS2322 (ts-migration) */}
-        <Button label={__('Support --[used in footer; general help/support]--')} href="https://lbry.com/support" />
+        <Button label={__("Support --[used in footer; general help/support]--")} href="https://lbry.com/support" />
       </li>
       <li className="navigation-link">
         {/* @ts-expect-error - TS2322 (ts-migration) */}
-        <Button label={__('Terms')} href="https://lbry.com/termsofservice" />
+        <Button label={__("Terms")} href="https://lbry.com/termsofservice" />
       </li>
       <li className="navigation-link">
         {/* @ts-expect-error - TS2322 (ts-migration) */}
-        <Button label={__('Privacy Policy')} href="https://lbry.com/privacy" />
+        <Button label={__("Privacy Policy")} href="https://lbry.com/privacy" />
       </li>
     </ul>
   );
 
   return (
     <div
-      className={classnames('navigation__wrapper', {
-        'navigation__wrapper--micro': showMicroMenu,
-        'navigation__wrapper--absolute': isAbsolute,
+      className={classnames("navigation__wrapper", {
+        "navigation__wrapper--micro": showMicroMenu,
+        "navigation__wrapper--absolute": isAbsolute,
       })}
     >
       <nav
-        aria-label={'Sidebar'}
-        className={classnames('navigation', {
-          'navigation--micro': showMicroMenu,
-          'navigation--push': showPushMenu,
-          'navigation-file-page-and-mobile': hideMenuFromView,
-          'navigation-touch': touch,
+        aria-label={"Sidebar"}
+        className={classnames("navigation", {
+          "navigation--micro": showMicroMenu,
+          "navigation--push": showPushMenu,
+          "navigation-file-page-and-mobile": hideMenuFromView,
+          "navigation-touch": touch,
           // @if TARGET='app'
-          'navigation--mac': IS_MAC,
+          "navigation--mac": IS_MAC,
           // @endif
         })}
       >
@@ -408,10 +408,10 @@ function SideNavigation(props: Props) {
             <ul className="navigation-links--absolute mobile-only">{notificationsEnabled && getLink(NOTIFICATIONS)}</ul>
 
             <ul
-              className={classnames('navigation-links', {
-                'navigation-links--micro': showMicroMenu,
-                'navigation-links--absolute': shouldRenderLargeMenu,
-                'navigation--mac': IS_MAC,
+              className={classnames("navigation-links", {
+                "navigation-links--micro": showMicroMenu,
+                "navigation-links--absolute": shouldRenderLargeMenu,
+                "navigation--mac": IS_MAC,
               })}
             >
               {getLink(HOME)}
@@ -432,8 +432,8 @@ function SideNavigation(props: Props) {
         {(!canDisposeMenu || sidebarOpen) && shouldRenderLargeMenu && helpLinks}
       </nav>
       <div
-        className={classnames('navigation__overlay', {
-          'navigation__overlay--active': isAbsolute && sidebarOpen,
+        className={classnames("navigation__overlay", {
+          "navigation__overlay--active": isAbsolute && sidebarOpen,
         })}
         onClick={() => setSidebarOpen(false)}
       />
@@ -441,11 +441,7 @@ function SideNavigation(props: Props) {
   );
 }
 
-function SubscriptionListItem({
-  subscription,
-}: {
-  subscription: Subscription
-}) {
+function SubscriptionListItem({ subscription }: { subscription: Subscription }) {
   const { uri, channelName } = subscription;
   return (
     <li className="navigation-link__wrapper">

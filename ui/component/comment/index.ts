@@ -1,25 +1,25 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import {
   selectStakedLevelForChannelUri,
   makeSelectClaimForUri,
   selectThumbnailForUri,
   selectHasChannels,
   selectMyClaimIdsRaw,
-} from 'redux/selectors/claims';
-import { doCommentUpdate, doCommentList } from 'redux/actions/comments';
-import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
-import { doToast } from 'redux/actions/notifications';
-import { doClearPlayingUri } from 'redux/actions/content';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
+} from "redux/selectors/claims";
+import { doCommentUpdate, doCommentList } from "redux/actions/comments";
+import { makeSelectChannelIsMuted } from "redux/selectors/blocked";
+import { doToast } from "redux/actions/notifications";
+import { doClearPlayingUri } from "redux/actions/content";
+import { selectUserVerifiedEmail } from "redux/selectors/user";
 import {
   selectLinkedCommentAncestors,
   selectOthersReactsForComment,
   makeSelectTotalReplyPagesForParentId,
-} from 'redux/selectors/comments';
-import { selectActiveChannelClaim } from 'redux/selectors/app';
-import { selectPlayingUri } from 'redux/selectors/content';
-import Comment from './view';
+} from "redux/selectors/comments";
+import { selectActiveChannelClaim } from "redux/selectors/app";
+import { selectPlayingUri } from "redux/selectors/content";
+import Comment from "./view";
 
 const select = (state: unknown, props: unknown) => {
   const { comment, uri } = props;

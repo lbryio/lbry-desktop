@@ -1,6 +1,6 @@
 //@ts-nocheck
-import * as ACTIONS from 'constants/action_types';
-import { handleActions } from 'util/redux-utils';
+import * as ACTIONS from "constants/action_types";
+import { handleActions } from "util/redux-utils";
 
 const defaultState = {
   fetchingBlackListedOutpoints: false,
@@ -10,7 +10,7 @@ const defaultState = {
 
 export const blacklistReducer = handleActions(
   {
-    [ACTIONS.FETCH_BLACK_LISTED_CONTENT_STARTED]: state => ({
+    [ACTIONS.FETCH_BLACK_LISTED_CONTENT_STARTED]: (state) => ({
       ...state,
       fetchingBlackListedOutpoints: true,
     }),

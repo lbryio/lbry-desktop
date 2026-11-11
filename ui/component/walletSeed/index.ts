@@ -1,3 +1,3 @@
-import WalletSeed from './view';
+import WalletSeed from "./view";
 
 export default WalletSeed;

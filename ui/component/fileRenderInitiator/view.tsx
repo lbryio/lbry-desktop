@@ -2,46 +2,46 @@
 // The actual viewer for a file exists in TextViewer and FileRenderFloating
 // They can't exist in one component because we need to handle/listen for the start of a new file view
 // while a file is currently being viewed
-import React, {useEffect, useCallback} from 'react';
-import classnames from 'classnames';
-import * as PAGES from 'constants/pages';
-import * as RENDER_MODES from 'constants/file_render_modes';
-import * as KEYCODES from 'constants/keycodes';
-import Button from 'component/button';
-import { useIsMediumScreen } from 'effects/use-screensize';
-import isUserTyping from 'util/detect-typing';
-import { getThumbnailCdnUrl } from 'util/thumbnail';
-import Nag from 'component/common/nag';
+import React, { useEffect, useCallback } from "react";
+import classnames from "classnames";
+import * as PAGES from "constants/pages";
+import * as RENDER_MODES from "constants/file_render_modes";
+import * as KEYCODES from "constants/keycodes";
+import Button from "component/button";
+import { useIsMediumScreen } from "effects/use-screensize";
+import isUserTyping from "util/detect-typing";
+import { getThumbnailCdnUrl } from "util/thumbnail";
+import Nag from "component/common/nag";
 // @ts-expect-error - TS2792 - Cannot find module 'static/img/fileRenderPlaceholder.png'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-import FileRenderPlaceholder from 'static/img/fileRenderPlaceholder.png';
+import FileRenderPlaceholder from "static/img/fileRenderPlaceholder.png";
 
 type Props = {
-  play: (arg1: string, arg2: string, arg3: boolean) => void,
-  isPlaying: boolean,
-  fileInfo: FileListItem,
-  uri: string,
+  play: (arg1: string, arg2: string, arg3: boolean) => void;
+  isPlaying: boolean;
+  fileInfo: FileListItem;
+  uri: string;
   history: {
-    push: (arg1: string) => void
-  },
+    push: (arg1: string) => void;
+  };
   location: {
-    search: string | null | undefined,
-    pathname: string,
-    href: string,
+    search: string | null | undefined;
+    pathname: string;
+    href: string;
     state: {
-      forceAutoplay: boolean
-    }
-  },
-  obscurePreview: boolean,
-  insufficientCredits: boolean,
-  claimThumbnail?: string,
-  autoplay: boolean,
-  costInfo: any,
-  inline: boolean,
-  renderMode: string,
-  claim: StreamClaim,
-  claimWasPurchased: boolean,
-  videoTheaterMode: boolean,
-  collectionId: string
+      forceAutoplay: boolean;
+    };
+  };
+  obscurePreview: boolean;
+  insufficientCredits: boolean;
+  claimThumbnail?: string;
+  autoplay: boolean;
+  costInfo: any;
+  inline: boolean;
+  renderMode: string;
+  claim: StreamClaim;
+  claimWasPurchased: boolean;
+  videoTheaterMode: boolean;
+  collectionId: string;
 };
 
 export default function FileRenderInitiator(props: Props) {
@@ -63,16 +63,16 @@ export default function FileRenderInitiator(props: Props) {
   } = props;
 
   // check if there is a time or autoplay parameter, if so force autoplay
-  const urlTimeParam = location && location.href && location.href.indexOf('t=') > -1;
+  const urlTimeParam = location && location.href && location.href.indexOf("t=") > -1;
   const forceAutoplayParam = location && location.state && location.state.forceAutoplay;
   const autoplay = forceAutoplayParam || urlTimeParam || props.autoplay;
 
   const isFree = costInfo && costInfo.cost === 0;
   const canViewFile = isFree || claimWasPurchased;
   const fileStatus = fileInfo && fileInfo.status;
-// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"audio" | "video"'.
+  // @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"audio" | "video"'.
   const isPlayable = RENDER_MODES.FLOATING_MODES.includes(renderMode);
-// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"document" | "md" | "pdf" | "html" | "docx" | "plain_text"'.
+  // @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"document" | "md" | "pdf" | "html" | "docx" | "plain_text"'.
   const isText = RENDER_MODES.TEXT_MODES.includes(renderMode);
   const isMediumScreen = useIsMediumScreen();
   const [thumbnail, setThumbnail] = React.useState(FileRenderPlaceholder);
@@ -121,20 +121,20 @@ export default function FileRenderInitiator(props: Props) {
       if (!isUserTyping() && e.keyCode === KEYCODES.SPACEBAR) {
         e.preventDefault();
 
-        if (!isPlaying || fileStatus === 'stopped') {
+        if (!isPlaying || fileStatus === "stopped") {
           viewFile(e);
         }
       }
     }
 
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isPlaying, fileStatus, viewFile]);
 
   useEffect(() => {
-    const videoOnPage = document.querySelector('video');
+    const videoOnPage = document.querySelector("video");
     if (
       (canViewFile || forceAutoplayParam) &&
       ((autoplay && (!videoOnPage || forceAutoplayParam) && isPlayable) ||
@@ -161,19 +161,19 @@ export default function FileRenderInitiator(props: Props) {
       ref={containerRef}
       onClick={disabled ? undefined : viewFile}
       style={thumbnail && !obscurePreview ? { backgroundImage: `url("${thumbnail}")` } : {}}
-      className={classnames('content__cover', {
-        'content__cover--disabled': disabled,
-        'content__cover--theater-mode': videoTheaterMode && !isMediumScreen,
-        'content__cover--text': isText,
-        'card__media--nsfw': obscurePreview,
+      className={classnames("content__cover", {
+        "content__cover--disabled": disabled,
+        "content__cover--theater-mode": videoTheaterMode && !isMediumScreen,
+        "content__cover--text": isText,
+        "card__media--nsfw": obscurePreview,
       })}
     >
       {!claimWasPurchased && insufficientCredits && (
         <Nag
           type="helpful"
           inline
-          message={__('You need more Credits to purchase this.')}
-          actionText={__('Open Rewards')}
+          message={__("You need more Credits to purchase this.")}
+          actionText={__("Open Rewards")}
           onClick={() => history.push(`/$/${PAGES.REWARDS}`)}
         />
       )}
@@ -182,10 +182,10 @@ export default function FileRenderInitiator(props: Props) {
           // @ts-expect-error - TS2322 (ts-migration)
           onClick={viewFile}
           iconSize={30}
-          title={isPlayable ? __('Play') : __('View')}
-          className={classnames('button--icon', {
-            'button--play': isPlayable,
-            'button--view': !isPlayable,
+          title={isPlayable ? __("Play") : __("View")}
+          className={classnames("button--icon", {
+            "button--play": isPlayable,
+            "button--view": !isPlayable,
           })}
         />
       )}

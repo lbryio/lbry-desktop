@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectReceiveAddress, selectGettingNewAddress } from 'redux/selectors/wallet';
-import { doCheckAddressIsMine, doGetNewAddress } from 'redux/actions/wallet';
-import WalletAddress from './view';
-import { withRouter } from 'react-router';
+import { connect } from "react-redux";
+import { selectReceiveAddress, selectGettingNewAddress } from "redux/selectors/wallet";
+import { doCheckAddressIsMine, doGetNewAddress } from "redux/actions/wallet";
+import WalletAddress from "./view";
+import { withRouter } from "react-router";
 
 const select = (state: unknown) => ({
   receiveAddress: selectReceiveAddress(state),

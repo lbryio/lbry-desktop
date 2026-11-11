@@ -1,33 +1,33 @@
-import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
-import React from 'react';
-import { parseURI } from 'util/lbryURI';
-import ClaimPreview from 'component/claimPreview';
-import Button from 'component/button';
-import ClaimEffectiveAmount from 'component/claimEffectiveAmount';
-import ClaimRepostAuthor from 'component/claimRepostAuthor';
-import I18nMessage from 'component/i18nMessage';
-import { useHistory } from 'react-router';
-import LbcSymbol from 'component/common/lbc-symbol';
-import { DOMAIN } from 'config';
+import * as ICONS from "constants/icons";
+import * as PAGES from "constants/pages";
+import React from "react";
+import { parseURI } from "util/lbryURI";
+import ClaimPreview from "component/claimPreview";
+import Button from "component/button";
+import ClaimEffectiveAmount from "component/claimEffectiveAmount";
+import ClaimRepostAuthor from "component/claimRepostAuthor";
+import I18nMessage from "component/i18nMessage";
+import { useHistory } from "react-router";
+import LbcSymbol from "component/common/lbc-symbol";
+import { DOMAIN } from "config";
 
 type Props = {
-  query: string,
-  winningUri: string | null | undefined,
-  doResolveUris: (arg1: Array<string>) => void,
-  hideLink?: boolean,
-  setChannelActive: (arg1: boolean) => void,
-  beginPublish: (arg1?: string | null | undefined) => void,
-  pendingIds: Array<string>,
-  isResolvingWinningUri: boolean,
-  winningClaim: Claim | null | undefined,
-  isSearching: boolean
+  query: string;
+  winningUri: string | null | undefined;
+  doResolveUris: (arg1: Array<string>) => void;
+  hideLink?: boolean;
+  setChannelActive: (arg1: boolean) => void;
+  beginPublish: (arg1?: string | null | undefined) => void;
+  pendingIds: Array<string>;
+  isResolvingWinningUri: boolean;
+  winningClaim: Claim | null | undefined;
+  isSearching: boolean;
 };
 
 export default function SearchTopClaim(props: Props) {
   const {
     doResolveUris,
-    query = '',
+    query = "",
     winningUri,
     winningClaim,
     hideLink = false,
@@ -63,20 +63,20 @@ export default function SearchTopClaim(props: Props) {
   }, [setChannelActive, winningUriIsChannel]);
 
   React.useEffect(() => {
-    let urisToResolve: unknown = [];
+    const urisToResolve: unknown = [];
     if (uriFromQuery) {
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       urisToResolve.push(uriFromQuery);
     }
 
     if (channelUriFromQuery) {
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       urisToResolve.push(channelUriFromQuery);
     }
 
-// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
     if (urisToResolve.length > 0) {
-// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string[]'.
+      // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string[]'.
       doResolveUris(urisToResolve);
     }
   }, [doResolveUris, uriFromQuery, channelUriFromQuery]);
@@ -88,9 +88,9 @@ export default function SearchTopClaim(props: Props) {
           <a
             className="media__uri"
             href="https://lbry.com/faq/trending"
-            title={__('Learn more about LBRY Credits on %DOMAIN%', { DOMAIN })}
+            title={__("Learn more about LBRY Credits on %DOMAIN%", { DOMAIN })}
           >
-            <LbcSymbol prefix={__('Most supported')} />
+            <LbcSymbol prefix={__("Most supported")} />
           </a>
         </div>
       )}
@@ -111,7 +111,7 @@ export default function SearchTopClaim(props: Props) {
       )}
       {!winningUri && (isSearching || isResolvingWinningUri) && (
         <div className="card">
-          <ClaimPreview placeholder={'loading'} />
+          <ClaimPreview placeholder={"loading"} />
         </div>
       )}
       {!winningUri && !isSearching && !isResolvingWinningUri && uriFromQuery && (
@@ -124,14 +124,14 @@ export default function SearchTopClaim(props: Props) {
                 <Button
                   // @ts-expect-error - TS2322 (ts-migration)
                   button="link"
-                  onClick={() => push(`/$/${PAGES.REPOST_NEW}${name ? `?to=${name}` : ''}`)}
-                  label={__('Repost')}
+                  onClick={() => push(`/$/${PAGES.REPOST_NEW}${name ? `?to=${name}` : ""}`)}
+                  label={__("Repost")}
                 />
               ),
               publish: (
                 <span>
                   {/* @ts-expect-error - TS2322 (ts-migration) */}
-                  <Button button="link" onClick={() => beginPublish(name)} label={__('publish')} />
+                  <Button button="link" onClick={() => beginPublish(name)} label={__("publish")} />
                 </span>
               ),
             }}

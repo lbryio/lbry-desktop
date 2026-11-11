@@ -1,24 +1,24 @@
-import * as React from 'react';
-import Button from 'component/button';
-import UserSignOutButton from 'component/userSignOutButton';
-import I18nMessage from 'component/i18nMessage';
-import Card from 'component/common/card';
-import { SITE_HELP_EMAIL } from 'config';
+import * as React from "react";
+import Button from "component/button";
+import UserSignOutButton from "component/userSignOutButton";
+import I18nMessage from "component/i18nMessage";
+import Card from "component/common/card";
+import { SITE_HELP_EMAIL } from "config";
 const THIRTY_SECONDS_IN_MS = 30000;
 type Props = {
-  email: string,
-  isReturningUser: boolean,
-  resendVerificationEmail: (arg1: string) => void,
-  resendingEmail: boolean,
-  checkEmailVerified: () => void,
-  toast: (arg1: string) => void,
+  email: string;
+  isReturningUser: boolean;
+  resendVerificationEmail: (arg1: string) => void;
+  resendingEmail: boolean;
+  checkEmailVerified: () => void;
+  toast: (arg1: string) => void;
   user: {
-    has_verified_email: boolean
-  }
+    has_verified_email: boolean;
+  };
 };
 
 type State = {
-  wait: boolean
+  wait: boolean;
 };
 
 class UserEmailVerify extends React.PureComponent<Props, State> {
@@ -30,7 +30,7 @@ class UserEmailVerify extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-// @ts-expect-error - TS2322 - Type 'Timeout' is not assignable to type 'number'.
+    // @ts-expect-error - TS2322 - Type 'Timeout' is not assignable to type 'number'.
     this.emailVerifyCheckInterval = setInterval(() => {
       this.checkIfVerified();
     }, 5000);
@@ -54,13 +54,13 @@ class UserEmailVerify extends React.PureComponent<Props, State> {
     const { email, resendVerificationEmail, toast } = this.props;
     if (!this.state.wait) {
       resendVerificationEmail(email);
-      toast(__('New email sent.'));
+      toast(__("New email sent."));
       this.setState({
         wait: true,
       });
       setTimeout(() => this.setState({ wait: false }), THIRTY_SECONDS_IN_MS);
     } else {
-      toast(__('Please wait a bit longer before requesting again.'));
+      toast(__("Please wait a bit longer before requesting again."));
     }
   }
 
@@ -77,14 +77,14 @@ class UserEmailVerify extends React.PureComponent<Props, State> {
     return (
       <div className="main__sign-up">
         <Card
-          title={isReturningUser ? __('Check Your email') : __('Confirm your account')}
+          title={isReturningUser ? __("Check Your email") : __("Confirm your account")}
           subtitle={
             <p>
               {__(
-                'We just sent an email to %email% with a link for you to %verify_text%. Remember to check other email folders like spam or promotions.',
+                "We just sent an email to %email% with a link for you to %verify_text%. Remember to check other email folders like spam or promotions.",
                 {
                   email,
-                  verify_text: isReturningUser ? __('log in') : __('verify your account'),
+                  verify_text: isReturningUser ? __("log in") : __("verify your account"),
                 }
               )}
             </p>
@@ -95,12 +95,12 @@ class UserEmailVerify extends React.PureComponent<Props, State> {
                 <Button
                   // @ts-expect-error - TS2322 (ts-migration)
                   button="primary"
-                  label={__('Resend Link')}
+                  label={__("Resend Link")}
                   onClick={this.handleResendVerificationEmail}
                   disabled={resendingEmail}
                 />
                 {/* @ts-expect-error - TS2741 (ts-migration) */}
-                <UserSignOutButton label={__('Start Over')} />
+                <UserSignOutButton label={__("Start Over")} />
               </div>
               <p className="help--card-actions">
                 {/* @ts-expect-error - TS2745 (ts-migration) */}
@@ -110,7 +110,7 @@ class UserEmailVerify extends React.PureComponent<Props, State> {
                     // @ts-expect-error - TS2322 (ts-migration)
                     help_link: <Button button="link" href={`mailto:${SITE_HELP_EMAIL}`} label={`${SITE_HELP_EMAIL}`} />,
                     // @ts-expect-error - TS2322 (ts-migration)
-                    support_link: <Button button="link" href="https://lbry.com/support" label={__('support page')} />,
+                    support_link: <Button button="link" href="https://lbry.com/support" label={__("support page")} />,
                   }}
                 >
                   Email %help_link% or visit our %support_link% if you encounter any trouble verifying.

@@ -1,5 +1,5 @@
 //@ts-nocheck
-import React from 'react';
+import React from "react";
 
 // Check if component is mounted, useful to prevent state updates after component unmounted
 function useIsMounted() {

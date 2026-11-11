@@ -1,19 +1,19 @@
-import {CLOUD_CONNECT_SITE_NAME} from 'config';
-import React from 'react';
-import { Modal } from 'modal/modal';
-import Button from 'component/button';
-import * as PAGES from 'constants/pages';
-import Card from 'component/common/card';
+import { CLOUD_CONNECT_SITE_NAME } from "config";
+import React from "react";
+import { Modal } from "modal/modal";
+import Button from "component/button";
+import * as PAGES from "constants/pages";
+import Card from "component/common/card";
 
 type Props = {
-  closeModal: () => void,
-  accessToken: string,
-  user: any,
-  doAuth: () => void,
+  closeModal: () => void;
+  accessToken: string;
+  user: any;
+  doAuth: () => void;
   history: {
-    push: (arg1: string) => void
-  },
-  location: UrlLocation
+    push: (arg1: string) => void;
+  };
+  location: UrlLocation;
 };
 
 const ModalFirstSubscription = (props: Props) => {
@@ -25,25 +25,25 @@ const ModalFirstSubscription = (props: Props) => {
     location: { pathname },
   } = props;
 
-  const title = __('You Followed Your First Channel!');
+  const title = __("You Followed Your First Channel!");
 
   return (
-// @ts-expect-error - TS2322 - Type '{ children: Element; type: string; isOpen: true; contentLabel: string; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
+    // @ts-expect-error - TS2322 - Type '{ children: Element; type: string; isOpen: true; contentLabel: string; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
     <Modal type="card" isOpen contentLabel={title}>
       <Card
         title={title}
         subtitle={
           <>
-            {__('Awesome! You just followed your first channel.')}{' '}
+            {__("Awesome! You just followed your first channel.")}{" "}
             {user && user.primary_email
-              ? __('You will receive notifications related to new content.')
-              : __('Connect to %SITE_NAME% to receive notifications about new content.', { CLOUD_CONNECT_SITE_NAME })}
+              ? __("You will receive notifications related to new content.")
+              : __("Connect to %SITE_NAME% to receive notifications about new content.", { CLOUD_CONNECT_SITE_NAME })}
           </>
         }
         actions={
           <div className="section__actions">
             {/* @ts-expect-error - TS2322 (ts-migration) */}
-            <Button button="primary" onClick={closeModal} label={__('Got it')} />
+            <Button button="primary" onClick={closeModal} label={__("Got it")} />
             <React.Fragment>
               {user && user.primary_email ? (
                 <React.Fragment>
@@ -51,7 +51,7 @@ const ModalFirstSubscription = (props: Props) => {
                     // @ts-expect-error - TS2322 (ts-migration)
                     button="link"
                     href={`https://lbry.com/list/edit/${accessToken}`}
-                    label={__('Update email preferences')}
+                    label={__("Update email preferences")}
                   />
                 </React.Fragment>
               ) : (
@@ -63,7 +63,7 @@ const ModalFirstSubscription = (props: Props) => {
                       closeModal();
                       history.push(`/$/${PAGES.AUTH}?redirect=${pathname}`);
                     }}
-                    label={__('Log in')}
+                    label={__("Log in")}
                   />
                 </React.Fragment>
               )}

@@ -1,19 +1,19 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import {
   makeSelectClaimForUri,
   selectIsUriResolving,
   getThumbnailFromClaim,
   selectTitleForUri,
   selectDateForUri,
-} from 'redux/selectors/claims';
-import { doFileGet } from 'redux/actions/file';
-import { doResolveUri } from 'redux/actions/claims';
-import { selectViewCountForUri, selectBanStateForUri } from 'lbryinc';
-import { selectShowMatureContent } from 'redux/selectors/settings';
-import { isClaimNsfw } from 'util/claim';
-import ClaimPreviewTile from './view';
-import formatMediaDuration from 'util/formatMediaDuration';
+} from "redux/selectors/claims";
+import { doFileGet } from "redux/actions/file";
+import { doResolveUri } from "redux/actions/claims";
+import { selectViewCountForUri, selectBanStateForUri } from "lbryinc";
+import { selectShowMatureContent } from "redux/selectors/settings";
+import { isClaimNsfw } from "util/claim";
+import ClaimPreviewTile from "./view";
+import formatMediaDuration from "util/formatMediaDuration";
 
 const select = (state: unknown, props: unknown) => {
   const claim = props.uri && makeSelectClaimForUri(props.uri)(state);

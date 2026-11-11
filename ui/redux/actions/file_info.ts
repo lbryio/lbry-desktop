@@ -1,8 +1,8 @@
 //@ts-nocheck
-import * as ACTIONS from 'constants/action_types';
-import Lbry from 'lbry';
-import { selectClaimsByUri } from 'redux/selectors/claims';
-import { selectIsFetchingFileList, selectUrisLoading } from 'redux/selectors/file_info';
+import * as ACTIONS from "constants/action_types";
+import Lbry from "lbry";
+import { selectClaimsByUri } from "redux/selectors/claims";
+import { selectIsFetchingFileList, selectUrisLoading } from "redux/selectors/file_info";
 
 export function doFetchFileInfo(uri: unknown) {
   return (dispatch: unknown, getState: unknown) => {

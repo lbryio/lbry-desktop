@@ -1,16 +1,19 @@
-import React from 'react';
-import Button from 'component/button';
-import UserEmailNew from 'component/userEmailNew';
-import UserEmailVerify from 'component/userEmailVerify';
+import React from "react";
+import Button from "component/button";
+import UserEmailNew from "component/userEmailNew";
+import UserEmailVerify from "component/userEmailVerify";
 
 type Props = {
-  email: string,
-  emailCollectionAcknowledged: boolean,
-  user: {
-    has_verified_email: boolean
-  } | null | undefined,
-  completeFirstRun: () => void,
-  acknowledgeEmail: () => void
+  email: string;
+  emailCollectionAcknowledged: boolean;
+  user:
+    | {
+        has_verified_email: boolean;
+      }
+    | null
+    | undefined;
+  completeFirstRun: () => void;
+  acknowledgeEmail: () => void;
 };
 
 class FirstRunEmailCollection extends React.PureComponent<Props> {
@@ -23,7 +26,7 @@ class FirstRunEmailCollection extends React.PureComponent<Props> {
     }
 
     // @ts-expect-error - TS2322 (ts-migration)
-    const cancelButton = <Button button="link" onClick={completeFirstRun} label={__('Not Now')} />;
+    const cancelButton = <Button button="link" onClick={completeFirstRun} label={__("Not Now")} />;
     if (user && !user.has_verified_email && !email) {
       // @ts-expect-error - TS2322 (ts-migration)
       return <UserEmailNew cancelButton={cancelButton} />;

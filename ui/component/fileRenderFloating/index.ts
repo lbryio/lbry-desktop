@@ -1,25 +1,25 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectTitleForUri, makeSelectClaimIsNsfw, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
-import { makeSelectFileInfoForUri, makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
+import { connect } from "react-redux";
+import { selectTitleForUri, makeSelectClaimIsNsfw, makeSelectClaimWasPurchased } from "redux/selectors/claims";
+import { makeSelectFileInfoForUri, makeSelectStreamingUrlForUri } from "redux/selectors/file_info";
 import {
   makeSelectNextUrlForCollectionAndUrl,
   makeSelectPreviousUrlForCollectionAndUrl,
-} from 'redux/selectors/collections';
-import * as SETTINGS from 'constants/settings';
+} from "redux/selectors/collections";
+import * as SETTINGS from "constants/settings";
 import {
   makeSelectIsPlayerFloating,
   selectPrimaryUri,
   selectPlayingUri,
   makeSelectFileRenderModeForUri,
-} from 'redux/selectors/content';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { selectCostInfoForUri } from 'lbryinc';
-import { doPlayUri, doSetPlayingUri } from 'redux/actions/content';
-import { doFetchRecommendedContent } from 'redux/actions/search';
-import { doAnaltyicsPurchaseEvent } from 'redux/actions/app';
-import { withRouter } from 'react-router';
-import FileRenderFloating from './view';
+} from "redux/selectors/content";
+import { makeSelectClientSetting } from "redux/selectors/settings";
+import { selectCostInfoForUri } from "lbryinc";
+import { doPlayUri, doSetPlayingUri } from "redux/actions/content";
+import { doFetchRecommendedContent } from "redux/actions/search";
+import { doAnaltyicsPurchaseEvent } from "redux/actions/app";
+import { withRouter } from "react-router";
+import FileRenderFloating from "./view";
 
 const select = (state: unknown, props: unknown) => {
   const playingUri = selectPlayingUri(state);

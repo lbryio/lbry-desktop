@@ -1,5 +1,5 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import {
   selectIsUriResolving,
   getThumbnailFromClaim,
@@ -8,7 +8,7 @@ import {
   makeSelectClaimIsNsfw,
   selectClaimIdForUri,
   makeSelectClaimForClaimId,
-} from 'redux/selectors/claims';
+} from "redux/selectors/claims";
 import {
   makeSelectUrlsForCollectionId,
   makeSelectNameForCollectionId,
@@ -16,13 +16,13 @@ import {
   makeSelectPendingCollectionForId,
   makeSelectCountForCollectionId,
   makeSelectIsResolvingCollectionForId,
-} from 'redux/selectors/collections';
-import { doFetchItemsInCollection, doCollectionDelete } from 'redux/actions/collections';
-import { doResolveUri } from 'redux/actions/claims';
-import { selectMutedChannels } from 'redux/selectors/blocked';
-import { selectBlackListedOutpoints, selectFilteredOutpoints } from 'lbryinc';
-import { selectShowMatureContent } from 'redux/selectors/settings';
-import CollectionPreviewTile from './view';
+} from "redux/selectors/collections";
+import { doFetchItemsInCollection, doCollectionDelete } from "redux/actions/collections";
+import { doResolveUri } from "redux/actions/claims";
+import { selectMutedChannels } from "redux/selectors/blocked";
+import { selectBlackListedOutpoints, selectFilteredOutpoints } from "lbryinc";
+import { selectShowMatureContent } from "redux/selectors/settings";
+import CollectionPreviewTile from "./view";
 
 const select = (state: unknown, props: unknown) => {
   const collectionId = props.collectionId || (props.uri && selectClaimIdForUri(state, props.uri));

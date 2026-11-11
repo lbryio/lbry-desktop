@@ -1,17 +1,17 @@
-import * as ICONS from 'constants/icons';
-import * as COLLECTIONS_CONSTS from 'constants/collections';
-import React from 'react';
-import { FormField } from 'component/common/form';
-import Icon from 'component/common/icon';
+import * as ICONS from "constants/icons";
+import * as COLLECTIONS_CONSTS from "constants/collections";
+import React from "react";
+import { FormField } from "component/common/form";
+import Icon from "component/common/icon";
 
 type Props = {
-  collection: Collection,
-  hasClaim: boolean,
-  category: string,
-  edited: boolean,
-  editCollection: (arg1: string, arg2: CollectionEditParams) => void,
-  uri: string,
-  collectionPending: Collection
+  collection: Collection;
+  hasClaim: boolean;
+  category: string;
+  edited: boolean;
+  editCollection: (arg1: string, arg2: CollectionEditParams) => void;
+  uri: string;
+  collectionPending: Collection;
 };
 
 function CollectionSelectItem(props: Props) {
@@ -23,13 +23,13 @@ function CollectionSelectItem(props: Props) {
 
   let icon;
   switch (category) {
-    case 'builtin':
+    case "builtin":
       icon =
         (id === COLLECTIONS_CONSTS.WATCH_LATER_ID && ICONS.TIME) ||
         (id === COLLECTIONS_CONSTS.FAVORITES_ID && ICONS.STAR) ||
         ICONS.STACK;
       break;
-    case 'published':
+    case "published":
       icon = ICONS.STACK;
       break;
     default:
@@ -39,10 +39,10 @@ function CollectionSelectItem(props: Props) {
   }
 
   return (
-    <div className={'collection-select__item'}>
+    <div className={"collection-select__item"}>
       <FormField
         checked={hasClaim}
-// @ts-expect-error - TS2322 - Type 'Collection' is not assignable to type 'boolean'.
+        // @ts-expect-error - TS2322 - Type 'Collection' is not assignable to type 'boolean'.
         disabled={collectionPending}
         icon={icon}
         type="checkbox"
@@ -50,7 +50,7 @@ function CollectionSelectItem(props: Props) {
         onChange={handleChange} // edit the collection
         label={
           <span>
-            <Icon icon={icon} className={'icon-collection-select'} />
+            <Icon icon={icon} className={"icon-collection-select"} />
             {`${name}`}
           </span>
         } // the collection name

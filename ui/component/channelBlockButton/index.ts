@@ -1,6 +1,6 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectClaimIdForUri } from 'redux/selectors/claims';
+import { connect } from "react-redux";
+import { selectClaimIdForUri } from "redux/selectors/claims";
 import {
   doCommentModUnBlock,
   doCommentModBlock,
@@ -8,17 +8,17 @@ import {
   doCommentModUnBlockAsAdmin,
   doCommentModUnBlockAsModerator,
   doCommentModBlockAsModerator,
-} from 'redux/actions/comments';
+} from "redux/actions/comments";
 import {
   makeSelectChannelIsBlocked,
   makeSelectChannelIsAdminBlocked,
   makeSelectChannelIsModeratorBlockedForCreator,
   makeSelectUriIsBlockingOrUnBlocking,
   makeSelectIsTogglingForDelegator,
-} from 'redux/selectors/comments';
+} from "redux/selectors/comments";
 
-import { BLOCK_LEVEL } from 'constants/comment';
-import ChannelBlockButton from './view';
+import { BLOCK_LEVEL } from "constants/comment";
+import ChannelBlockButton from "./view";
 
 const select = (state: unknown, props: unknown) => {
   let isBlocked;

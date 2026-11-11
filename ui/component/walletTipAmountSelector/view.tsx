@@ -1,42 +1,42 @@
 // @ts-expect-error - TS2882 (ts-migration)
-import 'scss/component/_wallet-tip-selector.scss';
-import { FormField } from 'component/common/form';
-import { Lbryio } from 'lbryinc';
-import { MINIMUM_PUBLISH_BID } from 'constants/claim';
-import { useIsMobile } from 'effects/use-screensize';
-import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
-import Button from 'component/button';
-import classnames from 'classnames';
-import React from 'react';
-import usePersistedState from 'effects/use-persisted-state';
-import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
+import "scss/component/_wallet-tip-selector.scss";
+import { FormField } from "component/common/form";
+import { Lbryio } from "lbryinc";
+import { MINIMUM_PUBLISH_BID } from "constants/claim";
+import { useIsMobile } from "effects/use-screensize";
+import * as ICONS from "constants/icons";
+import * as PAGES from "constants/pages";
+import Button from "component/button";
+import classnames from "classnames";
+import React from "react";
+import usePersistedState from "effects/use-persisted-state";
+import WalletSpendableBalanceHelp from "component/walletSpendableBalanceHelp";
 
-import { getStripeEnvironment } from 'util/stripe';
+import { getStripeEnvironment } from "util/stripe";
 const stripeEnvironment = getStripeEnvironment();
 
 const DEFAULT_TIP_AMOUNTS = [1, 5, 25, 100];
-const TAB_FIAT = 'TabFiat';
-const TAB_LBC = 'TabLBC';
+const TAB_FIAT = "TabFiat";
+const TAB_LBC = "TabLBC";
 
 type Props = {
-  activeTab: string,
-  amount: number,
-  balance: number,
-  claim: StreamClaim,
-  convertedAmount?: number,
-  customTipAmount?: number,
-  exchangeRate?: any,
-  fiatConversion?: boolean,
-// @ts-expect-error - TS2300 - Duplicate identifier 'tipError'.
-  tipError: boolean,
-// @ts-expect-error - TS2300 - Duplicate identifier 'tipError'. | TS2717 - Subsequent property declarations must have the same type.  Property 'tipError' must be of type 'boolean', but here has type 'string'.
-  tipError: string,
-  uri: string,
-  onChange: (arg1: number) => void,
-  setConvertedAmount?: (arg1: number) => void,
-  setDisableSubmitButton: (arg1: boolean) => void,
-  setTipError: (arg1?: any) => void
+  activeTab: string;
+  amount: number;
+  balance: number;
+  claim: StreamClaim;
+  convertedAmount?: number;
+  customTipAmount?: number;
+  exchangeRate?: any;
+  fiatConversion?: boolean;
+  // @ts-expect-error - TS2300 - Duplicate identifier 'tipError'.
+  tipError: boolean;
+  // @ts-expect-error - TS2300 - Duplicate identifier 'tipError'. | TS2717 - Subsequent property declarations must have the same type.  Property 'tipError' must be of type 'boolean', but here has type 'string'.
+  tipError: string;
+  uri: string;
+  onChange: (arg1: number) => void;
+  setConvertedAmount?: (arg1: number) => void;
+  setDisableSubmitButton: (arg1: boolean) => void;
+  setTipError: (arg1?: any) => void;
 };
 
 function WalletTipAmountSelector(props: Props) {
@@ -57,8 +57,8 @@ function WalletTipAmountSelector(props: Props) {
   } = props;
 
   const isMobile = useIsMobile();
-  const [useCustomTip, setUseCustomTip] = usePersistedState('comment-support:useCustomTip', true);
-  const [hasCardSaved, setHasSavedCard] = usePersistedState('comment-support:hasCardSaved', false);
+  const [useCustomTip, setUseCustomTip] = usePersistedState("comment-support:useCustomTip", true);
+  const [hasCardSaved, setHasSavedCard] = usePersistedState("comment-support:hasCardSaved", false);
   const [canReceiveFiatTip, setCanReceiveFiatTip] = React.useState<any>(); // dont persist because it needs to be calc'd per creator
 
   const convertToTwoDecimalsOrMore = (number: number, decimals: number = 2) =>
@@ -68,8 +68,8 @@ function WalletTipAmountSelector(props: Props) {
     customTipAmount && fiatConversion && activeTab === TAB_FIAT
       ? [customTipAmount]
       : customTipAmount && exchangeRate
-      ? [convertToTwoDecimalsOrMore(customTipAmount / exchangeRate)]
-      : DEFAULT_TIP_AMOUNTS;
+        ? [convertToTwoDecimalsOrMore(customTipAmount / exchangeRate)]
+        : DEFAULT_TIP_AMOUNTS;
 
   // if it's fiat but there's no card saved OR the creator can't receive fiat tips
   const shouldDisableFiatSelectors = activeTab === TAB_FIAT && (!hasCardSaved || !canReceiveFiatTip);
@@ -86,16 +86,18 @@ function WalletTipAmountSelector(props: Props) {
    */
   function shouldDisableAmountSelector(amount: number) {
     // if it's LBC but the balance isn't enough, or fiat conditions met
-    return ((amount > balance || balance === 0) && activeTab !== TAB_FIAT) ||
-    shouldDisableFiatSelectors ||
-    (customTipAmount && fiatConversion && activeTab !== TAB_FIAT && exchangeRate
-      ? convertToTwoDecimalsOrMore(amount * exchangeRate) < customTipAmount
-      : customTipAmount && amount < customTipAmount);
+    return (
+      ((amount > balance || balance === 0) && activeTab !== TAB_FIAT) ||
+      shouldDisableFiatSelectors ||
+      (customTipAmount && fiatConversion && activeTab !== TAB_FIAT && exchangeRate
+        ? convertToTwoDecimalsOrMore(amount * exchangeRate) < customTipAmount
+        : customTipAmount && amount < customTipAmount)
+    );
   }
 
   // parse number as float and sets it in the parent component
   function handleCustomPriceChange(amount: number) {
-// @ts-expect-error - TS2345 - Argument of type 'number' is not assignable to parameter of type 'string'.
+    // @ts-expect-error - TS2345 - Argument of type 'number' is not assignable to parameter of type 'string'.
     const tipAmountValue = parseFloat(amount);
     onChange(tipAmountValue);
     if (fiatConversion && exchangeRate && setConvertedAmount && convertedAmount !== tipAmountValue * exchangeRate) {
@@ -116,12 +118,12 @@ function WalletTipAmountSelector(props: Props) {
 
     // @ts-expect-error - TS2339 (ts-migration)
     Lbryio.call(
-      'customer',
-      'status',
+      "customer",
+      "status",
       {
         environment: stripeEnvironment,
       },
-      'post'
+      "post"
     ).then((customerStatusResponse) => {
       const defaultPaymentMethodId =
         customerStatusResponse.Customer &&
@@ -139,14 +141,14 @@ function WalletTipAmountSelector(props: Props) {
 
     // @ts-expect-error - TS2339 (ts-migration)
     Lbryio.call(
-      'account',
-      'check',
+      "account",
+      "check",
       {
         channel_claim_id: channelClaimId,
         channel_name: tipChannelName,
         environment: stripeEnvironment,
       },
-      'post'
+      "post"
     )
       .then((accountCheckResponse) => {
         if (accountCheckResponse === true && canReceiveFiatTip !== true) {
@@ -160,9 +162,9 @@ function WalletTipAmountSelector(props: Props) {
     let regexp;
 
     if (amount === 0) {
-      setTipError(__('Amount cannot be zero.'));
-    } else if (!amount || typeof amount !== 'number') {
-      setTipError(__('Amount must be a number.'));
+      setTipError(__("Amount cannot be zero."));
+    } else if (!amount || typeof amount !== "number") {
+      setTipError(__("Amount must be a number."));
     } else {
       // if it's not fiat, aka it's boost or lbc tip
       if (activeTab !== TAB_FIAT) {
@@ -170,13 +172,13 @@ function WalletTipAmountSelector(props: Props) {
         const validTipInput = regexp.test(String(amount));
 
         if (!validTipInput) {
-          setTipError(__('Amount must have no more than 8 decimal places'));
+          setTipError(__("Amount must have no more than 8 decimal places"));
         } else if (amount === balance) {
-          setTipError(__('Please decrease the amount to account for transaction fees'));
+          setTipError(__("Please decrease the amount to account for transaction fees"));
         } else if (amount > balance || balance === 0) {
-          setTipError(__('Not enough Credits'));
+          setTipError(__("Not enough Credits"));
         } else if (amount < MINIMUM_PUBLISH_BID) {
-          setTipError(__('Amount must be higher'));
+          setTipError(__("Amount must be higher"));
         } else if (
           convertedAmount &&
           exchangeRate &&
@@ -188,13 +190,13 @@ function WalletTipAmountSelector(props: Props) {
 
           if (validCustomTipInput) {
             setTipError(
-              __('Amount of $%input_amount% LBC in USB is lower than price of $%price_amount%', {
+              __("Amount of $%input_amount% LBC in USB is lower than price of $%price_amount%", {
                 input_amount: convertToTwoDecimalsOrMore(convertedAmount, 4),
                 price_amount: convertToTwoDecimalsOrMore(customTipAmount),
               })
             );
           } else {
-            setTipError(__('Amount must have no more than 2 decimal places'));
+            setTipError(__("Amount must have no more than 2 decimal places"));
           }
         } else {
           setTipError(false);
@@ -205,14 +207,14 @@ function WalletTipAmountSelector(props: Props) {
         const validTipInput = regexp.test(String(amount));
 
         if (!validTipInput) {
-          setTipError(__('Amount must have no more than 2 decimal places'));
+          setTipError(__("Amount must have no more than 2 decimal places"));
         } else if (amount < 1) {
-          setTipError(__('Amount must be at least one dollar'));
+          setTipError(__("Amount must be at least one dollar"));
         } else if (amount > 1000) {
-          setTipError(__('Amount cannot be over 1000 dollars'));
+          setTipError(__("Amount cannot be over 1000 dollars"));
         } else if (customTipAmount && amount < customTipAmount) {
           setTipError(
-            __('Amount is lower than price of $%price_amount%', {
+            __("Amount is lower than price of $%price_amount%", {
               price_amount: convertToTwoDecimalsOrMore(customTipAmount),
             })
           );
@@ -234,10 +236,10 @@ function WalletTipAmountSelector(props: Props) {
               key={defaultAmount}
               // @ts-expect-error - TS2322 (ts-migration)
               disabled={shouldDisableAmountSelector(defaultAmount)}
-              className={classnames('button-toggle button-toggle--expandformobile', {
-                'button-toggle--active':
+              className={classnames("button-toggle button-toggle--expandformobile", {
+                "button-toggle--active":
                   convertToTwoDecimalsOrMore(defaultAmount) === convertToTwoDecimalsOrMore(amount) && !useCustomTip,
-                'button-toggle--disabled': amount > balance,
+                "button-toggle--disabled": amount > balance,
               })}
               label={defaultAmount}
               icon={activeTab === TAB_LBC ? ICONS.LBC : ICONS.FINANCE}
@@ -251,11 +253,11 @@ function WalletTipAmountSelector(props: Props) {
         <Button
           // @ts-expect-error - TS2322 (ts-migration)
           disabled={shouldDisableFiatSelectors}
-          className={classnames('button-toggle button-toggle--expandformobile', {
-            'button-toggle--active': useCustomTip,
+          className={classnames("button-toggle button-toggle--expandformobile", {
+            "button-toggle--active": useCustomTip,
           })}
           icon={activeTab === TAB_LBC ? ICONS.LBC : ICONS.FINANCE}
-          label={__('Custom')}
+          label={__("Custom")}
           onClick={() => setUseCustomTip(true)}
         />
         {activeTab === TAB_LBC && DEFAULT_TIP_AMOUNTS.some((val) => val > balance) && (
@@ -264,7 +266,7 @@ function WalletTipAmountSelector(props: Props) {
             button="secondary"
             className="button-toggle-group-action"
             icon={ICONS.BUY}
-            title={__('Buy or swap more LBRY Credits')}
+            title={__("Buy or swap more LBRY Credits")}
             navigate={`/$/${PAGES.BUY}`}
           />
         )}
@@ -274,13 +276,13 @@ function WalletTipAmountSelector(props: Props) {
         fiatConversion &&
         activeTab !== TAB_FIAT &&
         getHelpMessage(
-          __('This support is priced in $USD.') +
+          __("This support is priced in $USD.") +
             (convertedAmount
-              ? ' ' +
-                __('The current exchange rate for the submitted LBC amount is ~ $%exchange_amount%.', {
+              ? " " +
+                __("The current exchange rate for the submitted LBC amount is ~ $%exchange_amount%.", {
                   exchange_amount: convertToTwoDecimalsOrMore(convertedAmount),
                 })
-              : '')
+              : "")
         )}
 
       {/* custom number input form */}
@@ -291,7 +293,7 @@ function WalletTipAmountSelector(props: Props) {
             name="tip-input"
             disabled={!customTipAmount && shouldDisableAmountSelector(0)}
             error={tipError}
-// @ts-expect-error - TS2322 - Type 'string' is not assignable to type 'number'.
+            // @ts-expect-error - TS2322 - Type 'string' is not assignable to type 'number'.
             min="0"
             step="any"
             type="number"
@@ -309,13 +311,13 @@ function WalletTipAmountSelector(props: Props) {
           ? getHelpMessage(
               <>
                 {/* @ts-expect-error - TS2322 (ts-migration) */}
-                <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add a Card')} button="link" />
-                {' ' + __('To Tip Creators')}
+                <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__("Add a Card")} button="link" />
+                {" " + __("To Tip Creators")}
               </>
             )
           : !canReceiveFiatTip
-          ? getHelpMessage(__('Only creators that verify cash accounts can receive tips'))
-          : getHelpMessage(__('Send a tip directly from your attached card')))}
+            ? getHelpMessage(__("Only creators that verify cash accounts can receive tips"))
+            : getHelpMessage(__("Send a tip directly from your attached card")))}
     </>
   );
 }

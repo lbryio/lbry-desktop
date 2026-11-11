@@ -1,6 +1,6 @@
-import React from 'react';
-import Button from 'component/button';
-import DateTimePicker from 'react-datetime-picker';
+import React from "react";
+import Button from "component/button";
+import DateTimePicker from "react-datetime-picker";
 
 function linuxTimestampToDate(linuxTimestamp: number) {
   return new Date(linuxTimestamp * 1000);
@@ -10,14 +10,14 @@ function dateToLinuxTimestamp(date: Date) {
   return Number(Math.round(date.getTime() / 1000));
 }
 
-const NOW = 'now';
-const DEFAULT = 'default';
-const RESET_TO_ORIGINAL = 'reset-to-original';
+const NOW = "now";
+const DEFAULT = "default";
+const RESET_TO_ORIGINAL = "reset-to-original";
 
 type Props = {
-  releaseTime: number | null | undefined,
-  releaseTimeEdited: number | null | undefined,
-  updatePublishForm: (arg1: Record<any, any>) => void
+  releaseTime: number | null | undefined;
+  releaseTimeEdited: number | null | undefined;
+  updatePublishForm: (arg1: Record<any, any>) => void;
 };
 
 const PublishReleaseDate = (props: Props) => {
@@ -34,7 +34,7 @@ const PublishReleaseDate = (props: Props) => {
 
   const onDateTimePickerChanged = (value: unknown) => {
     if (value) {
-// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string | Date'.
+      // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string | Date'.
       newDate(value);
     } else {
       // "!value" should never happen since we now hide the "clear" button,
@@ -78,7 +78,7 @@ const PublishReleaseDate = (props: Props) => {
 
   return (
     <div className="form-field-date-picker">
-      <label>{__('Release date')}</label>
+      <label>{__("Release date")}</label>
       <div className="controls">
         {showDatePicker && (
           <DateTimePicker
@@ -97,8 +97,8 @@ const PublishReleaseDate = (props: Props) => {
           <Button
             // @ts-expect-error - TS2322 (ts-migration)
             button="link"
-            label={__('Edit')}
-            aria-label={__('Set custom release date')}
+            label={__("Edit")}
+            aria-label={__("Set custom release date")}
             onClick={() => newDate(NOW)}
           />
         )}
@@ -106,8 +106,8 @@ const PublishReleaseDate = (props: Props) => {
           <Button
             // @ts-expect-error - TS2322 (ts-migration)
             button="link"
-            label={__('Reset')}
-            aria-label={__('Reset to original (previous) publish date')}
+            label={__("Reset")}
+            aria-label={__("Reset to original (previous) publish date")}
             onClick={() => newDate(RESET_TO_ORIGINAL)}
           />
         )}
@@ -115,8 +115,8 @@ const PublishReleaseDate = (props: Props) => {
           <Button
             // @ts-expect-error - TS2322 (ts-migration)
             button="link"
-            label={__('Now')}
-            aria-label={__('Set to current date and time')}
+            label={__("Now")}
+            aria-label={__("Set to current date and time")}
             onClick={() => newDate(NOW)}
           />
         )}
@@ -124,8 +124,8 @@ const PublishReleaseDate = (props: Props) => {
           <Button
             // @ts-expect-error - TS2322 (ts-migration)
             button="link"
-            label={__('Default')}
-            aria-label={__('Remove custom release date')}
+            label={__("Default")}
+            aria-label={__("Remove custom release date")}
             onClick={() => newDate(DEFAULT)}
           />
         )}

@@ -1,12 +1,12 @@
 //@ts-nocheck
-import {getFormatter} from './intlNumberFormat';
+import { getFormatter } from "./intlNumberFormat";
 
 export function formatCredits(amount: unknown, precision: unknown, shortFormat = false) {
-  const language = localStorage.getItem('language') || undefined;
+  const language = localStorage.getItem("language") || undefined;
   const actualAmount = Number(amount);
   const safePrecision = Math.min(20, Math.max(1, precision || 0));
 
-  if (Number.isNaN(actualAmount) || actualAmount === 0) return '0';
+  if (Number.isNaN(actualAmount) || actualAmount === 0) return "0";
 
   if (shortFormat) {
     const formatter = getFormatter(language, {
@@ -14,8 +14,8 @@ export function formatCredits(amount: unknown, precision: unknown, shortFormat =
       maximumFractionDigits: safePrecision,
       roundingIncrement: 5,
       // Display suffix (M, K, etc.)
-      notation: 'compact',
-      compactDisplay: 'short',
+      notation: "compact",
+      compactDisplay: "short",
     });
     return formatter.format(actualAmount);
   }
@@ -29,14 +29,14 @@ export function formatCredits(amount: unknown, precision: unknown, shortFormat =
 }
 
 export function formatFullPrice(amount: unknown, precision = 1) {
-  let formated = '';
+  let formated = "";
 
-  const quantity = amount.toString().split('.');
+  const quantity = amount.toString().split(".");
   const fraction = quantity[1];
 
   if (fraction) {
-    const decimals = fraction.split('');
-    const first = decimals.filter((number) => number !== '0')[0];
+    const decimals = fraction.split("");
+    const first = decimals.filter((number) => number !== "0")[0];
     const index = decimals.indexOf(first);
 
     // Set format fraction

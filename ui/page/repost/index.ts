@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 
-import { doResolveUri } from 'redux/actions/claims';
-import { selectBalance } from 'redux/selectors/wallet';
-import RepostPage from './view';
+import { doResolveUri } from "redux/actions/claims";
+import { selectBalance } from "redux/selectors/wallet";
+import RepostPage from "./view";
 
 const select = (state: unknown, props: unknown) => ({
   balance: selectBalance(state),

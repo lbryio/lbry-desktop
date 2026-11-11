@@ -1,19 +1,19 @@
-import * as React from 'react';
-import { FormField } from './form-field';
+import * as React from "react";
+import { FormField } from "./form-field";
 
 type FormPrice = {
-  amount: number,
-  currency: string
+  amount: number;
+  currency: string;
 };
 
 type Props = {
-  price: FormPrice,
-  onChange: (arg1: FormPrice) => void,
-  placeholder: number,
-  min: number,
-  disabled: boolean,
-  name: string,
-  step: number | null | undefined
+  price: FormPrice;
+  onChange: (arg1: FormPrice) => void;
+  placeholder: number;
+  min: number;
+  disabled: boolean;
+  name: string;
+  step: number | null | undefined;
 };
 
 export class FormFieldPrice extends React.PureComponent<Props> {
@@ -45,13 +45,13 @@ export class FormFieldPrice extends React.PureComponent<Props> {
     const { price, placeholder, min, disabled, name, step } = this.props;
 
     return (
-// @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'.
+      // @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'.
       <fieldset-group class="fieldset-group--smushed">
         <FormField
           name={`${name}_amount`}
-          label={__('Price')}
+          label={__("Price")}
           type="number"
-// @ts-expect-error - TS2322 - Type '{ name: string; label: string; type: string; className: string; min: number; value: number; onWheel: (e: any) => any; onChange: (event: ChangeEvent<any>) => void; placeholder: number; disabled: boolean; step: string | number; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+          // @ts-expect-error - TS2322 - Type '{ name: string; label: string; type: string; className: string; min: number; value: number; onWheel: (e: any) => any; onChange: (event: ChangeEvent<any>) => void; placeholder: number; disabled: boolean; step: string | number; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
           className="form-field--price-amount"
           min={min}
           value={price.amount}
@@ -59,23 +59,23 @@ export class FormFieldPrice extends React.PureComponent<Props> {
           onChange={this.handleAmountChange}
           placeholder={placeholder || 5}
           disabled={disabled}
-          step={step || 'any'}
+          step={step || "any"}
         />
         <FormField
-          label={__('Currency')}
+          label={__("Currency")}
           name={`${name}_currency`}
           type="select"
-// @ts-expect-error - TS2322 - Type '{ children: Element[]; label: string; name: string; type: string; id: string; className: string; disabled: boolean; onChange: (event: ChangeEvent<any>) => void; value: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+          // @ts-expect-error - TS2322 - Type '{ children: Element[]; label: string; name: string; type: string; id: string; className: string; disabled: boolean; onChange: (event: ChangeEvent<any>) => void; value: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
           id={`${name}_currency`}
           className="input--currency-select"
           disabled={disabled}
           onChange={this.handleCurrencyChange}
           value={price.currency}
         >
-          <option value="LBC">{__('LBRY Credits')}</option>
-          <option value="USD">{__('US Dollars')}</option>
+          <option value="LBC">{__("LBRY Credits")}</option>
+          <option value="USD">{__("US Dollars")}</option>
         </FormField>
-{ /* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
+        {/* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
       </fieldset-group>
     );
   }

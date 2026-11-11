@@ -1,10 +1,10 @@
-import ChannelThumbnail from 'component/channelThumbnail';
-import React from 'react';
+import ChannelThumbnail from "component/channelThumbnail";
+import React from "react";
 
 type Props = {
-  claim?: Claim,
-  emote?: any,
-  uri?: string
+  claim?: Claim;
+  emote?: any;
+  uri?: string;
 };
 
 export default function TextareaSuggestionsItem(props: Props) {
@@ -27,7 +27,7 @@ export default function TextareaSuggestionsItem(props: Props) {
   }
 
   if (claim) {
-    const value = claim.canonical_url.replace('lbry://', '').replace('#', ':');
+    const value = claim.canonical_url.replace("lbry://", "").replace("#", ":");
 
     return (
       <div {...autocompleteProps}>

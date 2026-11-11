@@ -1,9 +1,9 @@
 //@ts-nocheck
 // Widths are taken from "ui/scss/init/vars.scss"
-import React from 'react';
+import React from "react";
 
 function useWindowSize() {
-  const isWindowClient = typeof window === 'object';
+  const isWindowClient = typeof window === "object";
   const [windowSize, setWindowSize] = React.useState(isWindowClient ? window.innerWidth : undefined);
 
   React.useEffect(() => {
@@ -12,9 +12,9 @@ function useWindowSize() {
     }
 
     if (isWindowClient) {
-      window.addEventListener('resize', setSize);
+      window.addEventListener("resize", setSize);
 
-      return () => window.removeEventListener('resize', setSize);
+      return () => window.removeEventListener("resize", setSize);
     }
   }, [isWindowClient, setWindowSize]);
 
@@ -37,5 +37,5 @@ export function useIsLargeScreen() {
 }
 
 export function isTouch() {
-  return 'ontouchstart' in window || 'onmsgesturechange' in window;
+  return "ontouchstart" in window || "onmsgesturechange" in window;
 }

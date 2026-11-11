@@ -1,13 +1,13 @@
 //@ts-nocheck
-import * as MODALS from 'constants/modal_types';
-import { connect } from 'react-redux';
-import { selectShowMatureContent } from 'redux/selectors/settings';
-import { doToast } from 'redux/actions/notifications';
-import { doOpenModal, doHideModal } from 'redux/actions/app';
-import { withRouter } from 'react-router';
-import { doResolveUris } from 'redux/actions/claims';
-import analytics from 'analytics';
-import Wunderbar from './view';
+import * as MODALS from "constants/modal_types";
+import { connect } from "react-redux";
+import { selectShowMatureContent } from "redux/selectors/settings";
+import { doToast } from "redux/actions/notifications";
+import { doOpenModal, doHideModal } from "redux/actions/app";
+import { withRouter } from "react-router";
+import { doResolveUris } from "redux/actions/claims";
+import analytics from "analytics";
+import Wunderbar from "./view";
 
 const select = (state: unknown, props: unknown) => ({
   showMature: selectShowMatureContent(state),
@@ -16,7 +16,7 @@ const select = (state: unknown, props: unknown) => ({
 const perform = (dispatch: unknown, ownProps: unknown) => ({
   doResolveUris: (uris) => dispatch(doResolveUris(uris)),
   navigateToSearchPage: (query) => {
-    let encodedQuery = encodeURIComponent(query);
+    const encodedQuery = encodeURIComponent(query);
     ownProps.history.push({ pathname: `/$/search`, search: `?q=${encodedQuery}` });
     analytics.apiLogSearch();
   },

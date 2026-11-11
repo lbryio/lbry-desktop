@@ -1,6 +1,6 @@
 //@ts-nocheck
-import * as DAEMON_SETTINGS from 'constants/daemon_settings';
-import isEqual from 'util/deep-equal';
+import * as DAEMON_SETTINGS from "constants/daemon_settings";
+import isEqual from "util/deep-equal";
 
 export function stringifyServerParam(configList: unknown) {
   return configList.reduce<Array<any>>((acc, cur) => {

@@ -1,13 +1,13 @@
-import React, {useState} from 'react';
-import { FormField } from 'component/common/form';
-import Spinner from 'component/spinner';
-import SUPPORTED_LANGUAGES from 'constants/supported_languages';
-import LANGUAGES from 'constants/languages';
-import { getDefaultLanguage, sortLanguageMap } from 'util/default-languages';
+import React, { useState } from "react";
+import { FormField } from "component/common/form";
+import Spinner from "component/spinner";
+import SUPPORTED_LANGUAGES from "constants/supported_languages";
+import LANGUAGES from "constants/languages";
+import { getDefaultLanguage, sortLanguageMap } from "util/default-languages";
 
 type Props = {
-  language: string,
-  setLanguage: (arg1: string) => void
+  language: string;
+  setLanguage: (arg1: string) => void;
 };
 
 function SettingLanguage(props: Props) {
@@ -19,7 +19,7 @@ function SettingLanguage(props: Props) {
   }
 
   function onLanguageChange(e: unknown) {
-// @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
     const { value } = e.target;
     setPreviousLanguage(language || getDefaultLanguage());
     setLanguage(value);
@@ -27,7 +27,7 @@ function SettingLanguage(props: Props) {
       if (LANGUAGES[value].length >= 3) {
         document.documentElement.dir = LANGUAGES[value][2];
       } else {
-        document.documentElement.dir = 'ltr';
+        document.documentElement.dir = "ltr";
       }
     }
   }

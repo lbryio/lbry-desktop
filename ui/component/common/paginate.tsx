@@ -1,27 +1,27 @@
-import React from 'react';
-import { withRouter } from 'react-router';
-import { Form, FormField } from 'component/common/form';
-import ReactPaginate from 'react-paginate';
-import { useIsMobile } from 'effects/use-screensize';
+import React from "react";
+import { withRouter } from "react-router";
+import { Form, FormField } from "component/common/form";
+import ReactPaginate from "react-paginate";
+import { useIsMobile } from "effects/use-screensize";
 
-const PAGINATE_PARAM = 'page';
+const PAGINATE_PARAM = "page";
 
 type Props = {
-  totalPages: number,
+  totalPages: number;
   location: {
-    search: string
-  },
+    search: string;
+  };
   history: {
-    push: (arg1: string) => void
-  },
-  onPageChange?: (arg1: number) => void,
-  disableHistory?: boolean // Disables the use of '&page=' param and history stack.
+    push: (arg1: string) => void;
+  };
+  onPageChange?: (arg1: number) => void;
+  disableHistory?: boolean; // Disables the use of '&page=' param and history stack.
 };
 
 function Paginate(props: Props) {
   const { totalPages = 1, location, history, onPageChange, disableHistory } = props;
   const { search } = location;
-  const [textValue, setTextValue] = React.useState('');
+  const [textValue, setTextValue] = React.useState("");
   const urlParams = new URLSearchParams(search);
   const urlParamPage = Number(urlParams.get(PAGINATE_PARAM));
   const initialPage = disableHistory ? 1 : urlParamPage || 1;
@@ -39,7 +39,7 @@ function Paginate(props: Props) {
       if (!disableHistory) {
         const params = new URLSearchParams(search);
         params.set(PAGINATE_PARAM, newPageNumber.toString());
-        history.push('?' + params.toString());
+        history.push("?" + params.toString());
       }
     }
   }
@@ -60,11 +60,11 @@ function Paginate(props: Props) {
   return (
     // Hide the paginate controls if we are loading or there is only one page
     // It should still be rendered to trigger the onPageChange callback
-// @ts-expect-error - TS2769 - No overload matches this call.
-    <Form style={totalPages <= 1 ? { display: 'none' } : null} onSubmit={handlePaginateKeyUp}>
-{ /* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
+    // @ts-expect-error - TS2769 - No overload matches this call.
+    <Form style={totalPages <= 1 ? { display: "none" } : null} onSubmit={handlePaginateKeyUp}>
+      {/* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
       <fieldset-group class="fieldset-group--smushed fieldgroup--paginate">
-{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
+        {/* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
         <fieldset-section>
           <ReactPaginate
             pageCount={totalPages}
@@ -82,21 +82,21 @@ function Paginate(props: Props) {
             initialPage={currentPage - 1}
             containerClassName="pagination"
           />
-{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
+          {/* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
         </fieldset-section>
         {!isMobile && (
           <FormField
             value={textValue}
             onChange={(e) => setTextValue(e.target.value)}
-// @ts-expect-error - TS2322 - Type '{ value: string; onChange: (e: any) => void; className: string; "aria-label": string; placeholder: string; type: string; name: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+            // @ts-expect-error - TS2322 - Type '{ value: string; onChange: (e: any) => void; className: string; "aria-label": string; placeholder: string; type: string; name: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
             className="paginate-goto"
-            aria-label={__('Go to page:')}
-            placeholder={__('Go to')}
+            aria-label={__("Go to page:")}
+            placeholder={__("Go to")}
             type="text"
             name="paginate-file"
           />
         )}
-{ /* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
+        {/* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
       </fieldset-group>
     </Form>
   );

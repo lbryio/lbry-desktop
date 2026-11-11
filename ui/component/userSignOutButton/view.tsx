@@ -1,22 +1,22 @@
-import React from 'react';
-import Button from 'component/button';
+import React from "react";
+import Button from "component/button";
 
 type Props = {
-  button: string,
-  label?: string,
-  doSignOut: () => void,
-  doClearEmailEntry: () => void,
-  doClearPasswordEntry: () => void
+  button: string;
+  label?: string;
+  doSignOut: () => void;
+  doClearEmailEntry: () => void;
+  doClearPasswordEntry: () => void;
 };
 
 function UserSignOutButton(props: Props) {
-  const { button = 'link', doSignOut, doClearEmailEntry, doClearPasswordEntry, label } = props;
+  const { button = "link", doSignOut, doClearEmailEntry, doClearPasswordEntry, label } = props;
 
   return (
     <Button
       // @ts-expect-error - TS2322 (ts-migration)
       button={button}
-      label={label || __('Sign Out')}
+      label={label || __("Sign Out")}
       onClick={() => {
         doClearPasswordEntry();
         doClearEmailEntry();

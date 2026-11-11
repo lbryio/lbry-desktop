@@ -1,13 +1,13 @@
-import {normalizeURI, parseURI, isURIValid} from 'util/lbryURI';
-import { selectSupportsByOutpoint } from 'redux/selectors/wallet';
-import { createSelector } from 'reselect';
-import { createCachedSelector } from 're-reselect';
-import { isClaimNsfw, filterClaims } from 'util/claim';
-import { selectBlackListedOutpoints } from 'lbryinc';
-import * as CLAIM from 'constants/claim';
+import { normalizeURI, parseURI, isURIValid } from "util/lbryURI";
+import { selectSupportsByOutpoint } from "redux/selectors/wallet";
+import { createSelector } from "reselect";
+import { createCachedSelector } from "re-reselect";
+import { isClaimNsfw, filterClaims } from "util/claim";
+import { selectBlackListedOutpoints } from "lbryinc";
+import * as CLAIM from "constants/claim";
 
 type State = {
-  claims: any
+  claims: any;
 };
 
 const selectState = (state: State) => state.claims || {};
@@ -90,7 +90,7 @@ export const makeSelectBlacklistedDueToDMCA = (claimUri: string) =>
     if (!claimError) {
       return false;
     }
-    return claimError.name === '@LBRY-DMCA';
+    return claimError.name === "@LBRY-DMCA";
   });
 
 export const makeSelectClaimErrorCensor = (claimUri: string) =>
@@ -163,7 +163,7 @@ export const selectClaimForUri = createCachedSelector(
       }
     }
   }
-)((state, uri, returnRepost = true) => `${String(uri)}:${returnRepost ? '1' : '0'}`);
+)((state, uri, returnRepost = true) => `${String(uri)}:${returnRepost ? "1" : "0"}`);
 
 // Note: this is deprecated. Use "selectClaimForUri(state, uri)" instead.
 export const makeSelectClaimForUri = (uri: string, returnRepost: boolean = true) =>
@@ -212,7 +212,7 @@ export const selectMyClaimsRaw = createSelector(selectState, selectClaimsById, (
   ids.forEach((id) => {
     if (byId[id]) {
       // I'm not sure why this check is necessary, but it ought to be a quick fix for https://github.com/lbryio/lbry-desktop/issues/544
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       claims.push(byId[id]);
     }
   });
@@ -320,9 +320,12 @@ export const makeSelectMyPurchasesForPage = (query?: string | null, page: number
   createSelector(
     selectMyPurchases,
     selectClaimsByUri,
-    (myPurchases: Array<string>, claimsByUri: {
-      [key: string]: Claim
-    }) => {
+    (
+      myPurchases: Array<string>,
+      claimsByUri: {
+        [key: string]: Claim;
+      }
+    ) => {
       if (!myPurchases) {
         return undefined;
       }
@@ -366,14 +369,14 @@ export const makeSelectClaimsInChannelForPage = (uri: string, page?: number) =>
 export const makeSelectTotalClaimsInChannelSearch = (uri: string) =>
   createSelector(selectClaimsById, selectAllClaimsByChannel, (byId, allClaims) => {
     const byChannel = allClaims[uri] || {};
-    return byChannel['itemCount'];
+    return byChannel["itemCount"];
   });
 
 // THIS IS LEFT OVER FROM ONE_TAB CHANNEL CONTENT
 export const makeSelectTotalPagesInChannelSearch = (uri: string) =>
   createSelector(selectClaimsById, selectAllClaimsByChannel, (byId, allClaims) => {
     const byChannel = allClaims[uri] || {};
-    return byChannel['pageCount'];
+    return byChannel["pageCount"];
   });
 
 export const selectMetadataForUri = (state: State, uri: string) => {
@@ -407,8 +410,8 @@ export const selectDateForUri = createCachedSelector(
       (claim.value.release_time
         ? claim.value.release_time * 1000
         : claim.meta && claim.meta.creation_timestamp
-        ? claim.meta.creation_timestamp * 1000
-        : null);
+          ? claim.meta.creation_timestamp * 1000
+          : null);
     if (!timestamp) {
       return undefined;
     }
@@ -425,7 +428,7 @@ export const makeSelectAmountForUri = (uri: string) =>
 export const makeSelectEffectiveAmountForUri = (uri: string) =>
   createSelector(makeSelectClaimForUri(uri, false), (claim) => {
     return (
-      claim && claim.meta && typeof claim.meta.effective_amount === 'string' && Number(claim.meta.effective_amount)
+      claim && claim.meta && typeof claim.meta.effective_amount === "string" && Number(claim.meta.effective_amount)
     );
   });
 
@@ -437,7 +440,7 @@ export const makeSelectContentTypeForUri = (uri: string) =>
 
 export const getThumbnailFromClaim = (claim: Claim) => {
   const thumbnail = claim && claim.value && claim.value.thumbnail;
-  return thumbnail && thumbnail.url ? thumbnail.url.trim().replace(/^http:\/\//i, 'https://') : undefined;
+  return thumbnail && thumbnail.url ? thumbnail.url.trim().replace(/^http:\/\//i, "https://") : undefined;
 };
 
 export const selectThumbnailForUri = createCachedSelector(selectClaimForUri, (claim) => {
@@ -448,10 +451,10 @@ export const makeSelectCoverForUri = (uri: string) =>
   createSelector(makeSelectClaimForUri(uri), (claim) => {
     if (claim && claim.value.cover) {
       const cover = claim && claim.value && claim.value.cover;
-      return cover && cover.url ? cover.url.trim().replace(/^http:\/\//i, 'https://') : undefined;
+      return cover && cover.url ? cover.url.trim().replace(/^http:\/\//i, "https://") : undefined;
     } else {
       const cover = claim && claim.signing_channel && claim.signing_channel.value && claim.signing_channel.value.cover;
-      return cover && cover.url ? cover.url.trim().replace(/^http:\/\//i, 'https://') : undefined;
+      return cover && cover.url ? cover.url.trim().replace(/^http:\/\//i, "https://") : undefined;
     }
   });
 
@@ -459,7 +462,7 @@ export const makeSelectAvatarForUri = (uri: string) =>
   createSelector(makeSelectClaimForUri(uri), (claim) => {
     if (claim && claim.value.cover) {
       const avatar = claim && claim.value && claim.value.thumbnail && claim.value.thumbnail;
-      return avatar && avatar.url ? avatar.url.trim().replace(/^http:\/\//i, 'https://') : undefined;
+      return avatar && avatar.url ? avatar.url.trim().replace(/^http:\/\//i, "https://") : undefined;
     } else {
       const avatar =
         claim &&
@@ -467,7 +470,7 @@ export const makeSelectAvatarForUri = (uri: string) =>
         claim.signing_channel.value &&
         claim.signing_channel.value.thumbnail &&
         claim.signing_channel.value.thumbnail;
-      return avatar && avatar.url ? avatar.url.trim().replace(/^http:\/\//i, 'https://') : false;
+      return avatar && avatar.url ? avatar.url.trim().replace(/^http:\/\//i, "https://") : false;
     }
   });
 
@@ -501,11 +504,11 @@ export const selectMyClaims = createSelector(
       // @ts-expect-error - TS2538 (ts-migration)
       const claim = byId[id];
 
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       if (claim && abandoningIds.indexOf(id) === -1) claims.push(claim);
     });
 
-// @ts-expect-error - TS2488 - Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
+    // @ts-expect-error - TS2488 - Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
     return [...claims];
   }
 );
@@ -538,7 +541,7 @@ export const selectAllMyClaimsByOutpoint = createSelector(
 export const selectMyClaimsOutpoints = createSelector(selectMyClaims, (myClaims) => {
   const outpoints: unknown = [];
 
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+  // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
   myClaims.forEach((claim) => outpoints.push(`${claim.txid}:${claim.nout}`));
 
   return outpoints;
@@ -554,7 +557,7 @@ export const selectMyChannelClaims = createSelector(selectMyChannelClaimIds, (my
     return myChannelClaimIds;
   }
 
-// @ts-expect-error - TS2339 - Property 'store' does not exist on type 'Window & typeof globalThis'.
+  // @ts-expect-error - TS2339 - Property 'store' does not exist on type 'Window & typeof globalThis'.
   if (!window || !window.store) {
     return undefined;
   }
@@ -565,7 +568,7 @@ export const selectMyChannelClaims = createSelector(selectMyChannelClaimIds, (my
   // If we put 'state' or 'byId' as the input selector, it essentially
   // recalculates every time. Putting 'state' as input to createSelector() is
   // always wrong from a memoization standpoint.
-// @ts-expect-error - TS2339 - Property 'store' does not exist on type 'Window & typeof globalThis'.
+  // @ts-expect-error - TS2339 - Property 'store' does not exist on type 'Window & typeof globalThis'.
   const state = window.store.getState();
   const byId = selectClaimsById(state);
 
@@ -573,7 +576,7 @@ export const selectMyChannelClaims = createSelector(selectMyChannelClaimIds, (my
   myChannelClaimIds.forEach((id) => {
     if (byId[id]) {
       // I'm not sure why this check is necessary, but it ought to be a quick fix for https://github.com/lbryio/lbry-desktop/issues/544
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       claims.push(byId[id]);
     }
   });
@@ -614,7 +617,7 @@ export const makeSelectPendingClaimForUri = (uri: string) =>
     } catch (e: any) {
       return null;
     }
-    const pendingClaims = (Object.values(pendingById) as any);
+    const pendingClaims = Object.values(pendingById) as any;
     const matchingClaim = pendingClaims.find((claim: GenericClaim) => {
       return claim.normalized_name === uriChannelName || claim.normalized_name === uriStreamName;
     });
@@ -646,7 +649,7 @@ export const makeSelectOmittedCountForChannel = (uri: string) =>
     makeSelectTotalItemsForChannel(uri),
     makeSelectTotalClaimsInChannelSearch(uri),
     (claimsInChannel, claimsInSearch) => {
-      if (claimsInChannel && typeof claimsInSearch === 'number' && claimsInSearch >= 0) {
+      if (claimsInChannel && typeof claimsInSearch === "number" && claimsInSearch >= 0) {
         return claimsInChannel - claimsInSearch;
       } else return 0;
     }
@@ -690,15 +693,15 @@ export const makeSelectChannelForClaimUri = (uri: string, includePrefix: boolean
     const { canonical_url: canonicalUrl, permanent_url: permanentUrl } = claim.signing_channel;
 
     if (canonicalUrl) {
-      return includePrefix ? canonicalUrl : canonicalUrl.slice('lbry://'.length);
+      return includePrefix ? canonicalUrl : canonicalUrl.slice("lbry://".length);
     } else {
-      return includePrefix ? permanentUrl : permanentUrl.slice('lbry://'.length);
+      return includePrefix ? permanentUrl : permanentUrl.slice("lbry://".length);
     }
   });
 
 export const makeSelectChannelPermUrlForClaimUri = (uri: string, includePrefix: boolean = false) =>
   createSelector(makeSelectClaimForUri(uri), (claim?: Claim | null) => {
-    if (claim && claim.value_type === 'channel') {
+    if (claim && claim.value_type === "channel") {
       return claim.permanent_url;
     }
     if (!claim || !claim.signing_channel || !claim.is_channel_signature_valid) {
@@ -774,7 +777,7 @@ export const makeSelectSupportsForUri = (uri: string) =>
     let total = 0;
 
     Object.values(byOutpoint).forEach((support) => {
-// @ts-expect-error - TS2339 - Property 'claim_id' does not exist on type '{}'. | TS2339 - Property 'amount' does not exist on type '{}'.
+      // @ts-expect-error - TS2339 - Property 'claim_id' does not exist on type '{}'. | TS2339 - Property 'amount' does not exist on type '{}'.
       const { claim_id, amount } = support;
       total = claim_id === claimId && amount ? total + parseFloat(amount) : total;
     });
@@ -824,7 +827,7 @@ export const makeSelectClaimIsStreamPlaceholder = (uri: string) =>
       return false;
     }
 
-    return Boolean(claim.value_type === 'stream' && !claim.value.source);
+    return Boolean(claim.value_type === "stream" && !claim.value.source);
   });
 
 export const selectTotalStakedAmountForChannelUri = createCachedSelector(selectClaimForUri, (claim) => {

@@ -1,15 +1,15 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectClaimIsMine, selectClaimForUri, selectHasChannels } from 'redux/selectors/claims';
-import { makeSelectStreamingUrlForUri, makeSelectFileInfoForUri } from 'redux/selectors/file_info';
-import { doPrepareEdit } from 'redux/actions/publish';
-import { selectCostInfoForUri } from 'lbryinc';
-import { doSetPlayingUri, doPlayUri } from 'redux/actions/content';
-import { doToast } from 'redux/actions/notifications';
-import { doOpenModal, doSetActiveChannel, doSetIncognito, doAnalyticsView } from 'redux/actions/app';
-import fs from 'fs';
-import FileActions from './view';
-import { makeSelectFileRenderModeForUri } from 'redux/selectors/content';
+import { connect } from "react-redux";
+import { selectClaimIsMine, selectClaimForUri, selectHasChannels } from "redux/selectors/claims";
+import { makeSelectStreamingUrlForUri, makeSelectFileInfoForUri } from "redux/selectors/file_info";
+import { doPrepareEdit } from "redux/actions/publish";
+import { selectCostInfoForUri } from "lbryinc";
+import { doSetPlayingUri, doPlayUri } from "redux/actions/content";
+import { doToast } from "redux/actions/notifications";
+import { doOpenModal, doSetActiveChannel, doSetIncognito, doAnalyticsView } from "redux/actions/app";
+import fs from "fs";
+import FileActions from "./view";
+import { makeSelectFileRenderModeForUri } from "redux/selectors/content";
 
 const select = (state: unknown, props: unknown) => {
   const claim = selectClaimForUri(state, props.uri);

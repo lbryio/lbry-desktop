@@ -1,5 +1,5 @@
-import React from 'react';
-import { generateStreamUrl } from 'util/web';
+import React from "react";
+import { generateStreamUrl } from "util/web";
 
 export default function useGetThumbnail(
   uri: string,
@@ -10,11 +10,11 @@ export default function useGetThumbnail(
 ) {
   let thumbnailToUse;
 
-// @ts-expect-error - TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
-  const isImage = claim && claim.value && claim.value.stream_type === 'image';
-// @ts-expect-error - TS2339 - Property 'fee' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'. | TS2339 - Property 'fee' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
+  // @ts-expect-error - TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
+  const isImage = claim && claim.value && claim.value.stream_type === "image";
+  // @ts-expect-error - TS2339 - Property 'fee' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'. | TS2339 - Property 'fee' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
   const isFree = claim && claim.value && (!claim.value.fee || Number(claim.value.fee.amount) <= 0);
-  const isCollection = claim && claim.value_type === 'collection';
+  const isCollection = claim && claim.value_type === "collection";
   const thumbnailInClaim = claim && claim.value && claim.value.thumbnail && claim.value.thumbnail.url;
 
   // @if TARGET='web'
@@ -23,7 +23,7 @@ export default function useGetThumbnail(
   } else if (claim && isImage && isFree) {
     thumbnailToUse = generateStreamUrl(claim.name, claim.claim_id);
   } else if (isCollection) {
-    thumbnailToUse = 'http://spee.ch/default-thumb-odysee:e.jpg';
+    thumbnailToUse = "http://spee.ch/default-thumb-odysee:e.jpg";
   }
   // @endif
 

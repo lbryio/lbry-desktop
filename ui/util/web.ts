@@ -1,29 +1,35 @@
 //@ts-nocheck
-import { URL, LBRY_WEB_STREAMING_API } from 'config';
+import { URL, LBRY_WEB_STREAMING_API } from "config";
 
-const CONTINENT_COOKIE = 'continent';
+const CONTINENT_COOKIE = "continent";
 
 function generateStreamUrl(claimName: unknown, claimId: unknown) {
   return `${LBRY_WEB_STREAMING_API}/content/claims/${encodeURIComponent(claimName)
-    .replace(/'/g, '%27')
-    .replace(/\(/g, '%28')
-    .replace(/\)/g, '%29')}/${claimId}/stream`;
+    .replace(/'/g, "%27")
+    .replace(/\(/g, "%28")
+    .replace(/\)/g, "%29")}/${claimId}/stream`;
 }
 
-function generateEmbedUrl(claimName: unknown, claimId: unknown, includeStartTime: unknown, startTime: unknown, referralLink: unknown) {
-  let urlParams = new URLSearchParams();
+function generateEmbedUrl(
+  claimName: unknown,
+  claimId: unknown,
+  includeStartTime: unknown,
+  startTime: unknown,
+  referralLink: unknown
+) {
+  const urlParams = new URLSearchParams();
   if (includeStartTime && startTime) {
-    urlParams.append('t', startTime);
+    urlParams.append("t", startTime);
   }
 
   if (referralLink) {
-    urlParams.append('r', referralLink);
+    urlParams.append("r", referralLink);
   }
 
   return `${URL}/$/embed/${encodeURIComponent(claimName)
-    .replace(/'/g, '%27')
-    .replace(/\(/g, '%28')
-    .replace(/\)/g, '%29')}/${claimId}?${urlParams.toString()}`;
+    .replace(/'/g, "%27")
+    .replace(/\(/g, "%28")
+    .replace(/\)/g, "%29")}/${claimId}?${urlParams.toString()}`;
 }
 
 function generateDownloadUrl(claimName: unknown, claimId: unknown) {

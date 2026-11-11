@@ -1,13 +1,10 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doHideModal } from 'redux/actions/app';
-import ModalSocialShare from './view';
+import { connect } from "react-redux";
+import { doHideModal } from "redux/actions/app";
+import ModalSocialShare from "./view";
 
 const perform = (dispatch: unknown) => ({
   closeModal: () => dispatch(doHideModal()),
 });
 
-export default connect(
-  null,
-  perform
-)(ModalSocialShare);
+export default connect(null, perform)(ModalSocialShare);

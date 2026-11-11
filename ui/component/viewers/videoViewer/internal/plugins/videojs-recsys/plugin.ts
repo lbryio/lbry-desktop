@@ -1,9 +1,9 @@
 //@ts-nocheck
 // Created by xander on 6/21/2021
-import videojs from 'video.js';
+import videojs from "video.js";
 
-import RecSys from 'extras/recsys/recsys';
-const VERSION = '0.0.1';
+import RecSys from "extras/recsys/recsys";
+const VERSION = "0.0.1";
 
 /* RecSys */
 const PlayerEvent = {
@@ -37,7 +37,7 @@ const defaults = {
   embedded: false,
 } as const;
 
-const Component = videojs.getComponent('Component');
+const Component = videojs.getComponent("Component");
 const registerPlugin = videojs.registerPlugin || videojs.plugin;
 
 class RecsysPlugin extends Component {
@@ -58,20 +58,20 @@ class RecsysPlugin extends Component {
     this.inPause = false;
 
     // Plugin event listeners
-    player.on('playing', (event) => this.onPlay(event));
-    player.on('pause', (event) => this.onPause(event));
-    player.on('ended', (event) => this.onEnded(event));
-    player.on('ratechange', (event) => this.onRateChange(event));
-    player.on('timeupdate', (event) => this.onTimeUpdate(event));
-    player.on('seeked', (event) => this.onSeeked(event));
+    player.on("playing", (event) => this.onPlay(event));
+    player.on("pause", (event) => this.onPause(event));
+    player.on("ended", (event) => this.onEnded(event));
+    player.on("ratechange", (event) => this.onRateChange(event));
+    player.on("timeupdate", (event) => this.onTimeUpdate(event));
+    player.on("seeked", (event) => this.onSeeked(event));
 
     // Event trigger to send recsys event
-    player.on('dispose', (event) => this.onDispose(event));
+    player.on("dispose", (event) => this.onDispose(event));
   }
 
   onPlay(event: unknown) {
     const recsysEvent = newRecsysPlayerEvent(PlayerEvent.event.start, this.player.currentTime());
-    this.log('onPlay', recsysEvent);
+    this.log("onPlay", recsysEvent);
     RecSys.onRecsysPlayerEvent(this.options_.videoId, recsysEvent, this.options_.embedded);
 
     this.inPause = false;
@@ -80,7 +80,7 @@ class RecsysPlugin extends Component {
 
   onPause(event: unknown) {
     const recsysEvent = newRecsysPlayerEvent(PlayerEvent.event.stop, this.player.currentTime());
-    this.log('onPause', recsysEvent);
+    this.log("onPause", recsysEvent);
     RecSys.onRecsysPlayerEvent(this.options_.videoId, recsysEvent);
 
     this.inPause = true;
@@ -88,7 +88,7 @@ class RecsysPlugin extends Component {
 
   onEnded(event: unknown) {
     const recsysEvent = newRecsysPlayerEvent(PlayerEvent.event.stop, this.player.currentTime());
-    this.log('onEnded', recsysEvent);
+    this.log("onEnded", recsysEvent);
     RecSys.onRecsysPlayerEvent(this.options_.videoId, recsysEvent);
   }
 
@@ -98,7 +98,7 @@ class RecsysPlugin extends Component {
       this.player.currentTime(),
       this.player.playbackRate()
     );
-    this.log('onRateChange', recsysEvent);
+    this.log("onRateChange", recsysEvent);
     RecSys.onRecsysPlayerEvent(this.options_.videoId, recsysEvent);
   }
 
@@ -138,7 +138,7 @@ class RecsysPlugin extends Component {
     if (fromTime !== curTime) {
       // This removes duplicates that aren't useful.
       const recsysEvent = newRecsysPlayerEvent(PlayerEvent.event.scrub, fromTime, curTime);
-      this.log('onSeeked', recsysEvent);
+      this.log("onSeeked", recsysEvent);
       RecSys.onRecsysPlayerEvent(this.options_.videoId, recsysEvent);
     }
   }
@@ -154,7 +154,7 @@ class RecsysPlugin extends Component {
   }
 }
 
-videojs.registerComponent('recsys', RecsysPlugin);
+videojs.registerComponent("recsys", RecsysPlugin);
 
 const onPlayerReady = (player: unknown, options: unknown) => {
   player.recsys = new RecsysPlugin(player, options);
@@ -174,6 +174,6 @@ const plugin = function (options: unknown) {
 
 plugin.VERSION = VERSION;
 
-registerPlugin('recsys', plugin);
+registerPlugin("recsys", plugin);
 
 export default plugin;

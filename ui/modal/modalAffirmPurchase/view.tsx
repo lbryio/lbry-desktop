@@ -1,24 +1,24 @@
-import React from 'react';
-import classnames from 'classnames';
-import FilePrice from 'component/filePrice';
-import { Modal } from 'modal/modal';
-import Card from 'component/common/card';
-import I18nMessage from 'component/i18nMessage';
-import Button from 'component/button';
-import { isURIEqual } from 'util/lbryURI';
+import React from "react";
+import classnames from "classnames";
+import FilePrice from "component/filePrice";
+import { Modal } from "modal/modal";
+import Card from "component/common/card";
+import I18nMessage from "component/i18nMessage";
+import Button from "component/button";
+import { isURIEqual } from "util/lbryURI";
 
 // This number is tied to transitions in scss/purchase.scss
 const ANIMATION_LENGTH = 2500;
 
 type Props = {
-  closeModal: () => void,
-  loadVideo: (arg1: string, arg2: (arg1: GetResponse) => void) => void,
-  uri: string,
-  cancelPurchase: () => void,
-  metadata: StreamMetadata,
-  analyticsPurchaseEvent: (arg1: GetResponse) => void,
-  playingUri: PlayingUri | null | undefined,
-  setPlayingUri: (arg1?: string | null | undefined) => void
+  closeModal: () => void;
+  loadVideo: (arg1: string, arg2: (arg1: GetResponse) => void) => void;
+  uri: string;
+  cancelPurchase: () => void;
+  metadata: StreamMetadata;
+  analyticsPurchaseEvent: (arg1: GetResponse) => void;
+  playingUri: PlayingUri | null | undefined;
+  setPlayingUri: (arg1?: string | null | undefined) => void;
 };
 
 function ModalAffirmPurchase(props: Props) {
@@ -33,7 +33,7 @@ function ModalAffirmPurchase(props: Props) {
   } = props;
   const [success, setSuccess] = React.useState(false);
   const [purchasing, setPurchasing] = React.useState(false);
-  const modalTitle = __('Confirm Purchase');
+  const modalTitle = __("Confirm Purchase");
 
   function onAffirmPurchase() {
     setPurchasing(true);
@@ -73,18 +73,18 @@ function ModalAffirmPurchase(props: Props) {
   }, [success, uri, closeModal]);
 
   return (
-// @ts-expect-error - TS2322 - Type '{ children: Element; type: string; isOpen: true; contentLabel: string; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
+    // @ts-expect-error - TS2322 - Type '{ children: Element; type: string; isOpen: true; contentLabel: string; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
     <Modal type="card" isOpen contentLabel={modalTitle} onAborted={cancelPurchase}>
       <Card
         title={modalTitle}
         subtitle={
-          <div className={classnames('purchase-stuff', { 'purchase-stuff--purchased': success })}>
+          <div className={classnames("purchase-stuff", { "purchase-stuff--purchased": success })}>
             <div>
               {success && (
                 <div className="purchase-stuff__text--purchased">
-                  {__('Purchased!')}
+                  {__("Purchased!")}
                   <div className="purchase_stuff__subtext--purchased">
-                    {__('This content will now be in your Library.')}
+                    {__("This content will now be in your Library.")}
                   </div>
                 </div>
               )}
@@ -105,16 +105,16 @@ function ModalAffirmPurchase(props: Props) {
           </div>
         }
         actions={
-          <div className="section__actions" style={success ? { visibility: 'hidden' } : undefined}>
+          <div className="section__actions" style={success ? { visibility: "hidden" } : undefined}>
             <Button
               // @ts-expect-error - TS2322 (ts-migration)
               button="primary"
               disabled={purchasing}
-              label={purchasing ? __('Purchasing...') : __('Purchase')}
+              label={purchasing ? __("Purchasing...") : __("Purchase")}
               onClick={onAffirmPurchase}
             />
             {/* @ts-expect-error - TS2322 (ts-migration) */}
-            <Button button="link" label={__('Cancel')} onClick={cancelPurchase} />
+            <Button button="link" label={__("Cancel")} onClick={cancelPurchase} />
           </div>
         }
       />

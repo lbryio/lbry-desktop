@@ -1,5 +1,5 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import {
   selectNotifications,
   selectNotificationsFiltered,
@@ -7,11 +7,11 @@ import {
   selectUnreadNotificationCount,
   selectUnseenNotificationCount,
   selectNotificationCategories,
-} from 'redux/selectors/notifications';
-import { doCommentReactList } from 'redux/actions/comments';
-import { selectActiveChannelClaim } from 'redux/selectors/app';
-import { doReadNotifications, doNotificationList, doSeeAllNotifications } from 'redux/actions/notifications';
-import NotificationsPage from './view';
+} from "redux/selectors/notifications";
+import { doCommentReactList } from "redux/actions/comments";
+import { selectActiveChannelClaim } from "redux/selectors/app";
+import { doReadNotifications, doNotificationList, doSeeAllNotifications } from "redux/actions/notifications";
+import NotificationsPage from "./view";
 
 const select = (state: unknown) => ({
   notifications: selectNotifications(state),

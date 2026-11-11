@@ -1,19 +1,19 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doUpdatePublishForm, doPrepareEdit } from 'redux/actions/publish';
+import { connect } from "react-redux";
+import { doUpdatePublishForm, doPrepareEdit } from "redux/actions/publish";
 import {
   makeSelectPublishFormValue,
   selectIsStillEditing,
   selectMyClaimForUri,
   selectTakeOverAmount,
-} from 'redux/selectors/publish';
-import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
-import { doSetActiveChannel } from 'redux/actions/app';
-import PublishPage from './view';
+} from "redux/selectors/publish";
+import { selectActiveChannelClaim, selectIncognito } from "redux/selectors/app";
+import { doSetActiveChannel } from "redux/actions/app";
+import PublishPage from "./view";
 
 const select = (state: unknown) => ({
-  name: makeSelectPublishFormValue('name')(state),
-  uri: makeSelectPublishFormValue('uri')(state),
+  name: makeSelectPublishFormValue("name")(state),
+  uri: makeSelectPublishFormValue("uri")(state),
   isStillEditing: selectIsStillEditing(state),
   myClaimForUri: selectMyClaimForUri(state),
   activeChannelClaim: selectActiveChannelClaim(state),

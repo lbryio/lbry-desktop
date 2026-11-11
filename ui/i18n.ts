@@ -1,9 +1,9 @@
 //@ts-nocheck
 // @if TARGET='app'
-let fs = require('fs');
+const fs = require("fs");
 // @endif
 
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = process.env.NODE_ENV === "production";
 let knownMessages = null;
 let localStorageAvailable;
 try {
@@ -16,23 +16,23 @@ window.i18n_messages = window.i18n_messages || {};
 
 // @if TARGET='app'
 function saveMessageDesktop(message: unknown) {
-  const messagesFilePath = __static + '/app-strings.json';
+  const messagesFilePath = __static + "/app-strings.json";
 
   if (knownMessages === null) {
     try {
-      knownMessages = JSON.parse(fs.readFileSync(messagesFilePath, 'utf-8'));
+      knownMessages = JSON.parse(fs.readFileSync(messagesFilePath, "utf-8"));
     } catch (err: any) {
-      throw new Error('Error parsing i18n messages file: ' + messagesFilePath + ' err: ' + err);
+      throw new Error("Error parsing i18n messages file: " + messagesFilePath + " err: " + err);
     }
   }
 
   if (!knownMessages[message]) {
-    const END = '--end--';
+    const END = "--end--";
     delete knownMessages[END];
     knownMessages[message] = removeContextMetadata(message);
     knownMessages[END] = END;
 
-    fs.writeFile(messagesFilePath, JSON.stringify(knownMessages, null, 2) + '\n', 'utf-8', (err) => {
+    fs.writeFile(messagesFilePath, JSON.stringify(knownMessages, null, 2) + "\n", "utf-8", (err) => {
       if (err) {
         throw err;
       }
@@ -50,8 +50,8 @@ function removeContextMetadata(message: unknown) {
   // Example string entries with context-metadata:
   //   "About --[About section in Help Page]--": "About",
   //   "About --[tab title in Channel Page]--": "About",
-  const CONTEXT_BEGIN = '--[';
-  const CONTEXT_FINAL = ']--';
+  const CONTEXT_BEGIN = "--[";
+  const CONTEXT_FINAL = "]--";
 
   // If the resolved string still contains the context-metadata, then it's one of the following:
   // 1. In development mode, where 'en.json' in the server hasn't been updated with the string yet.
@@ -73,12 +73,12 @@ function removeContextMetadata(message: unknown) {
 
 export function __(message: unknown, tokens: unknown) {
   if (!message) {
-    return '';
+    return "";
   }
 
   const language = localStorageAvailable
-    ? window.localStorage.getItem('language') || 'en'
-    : window.navigator.language.slice(0, 2) || 'en';
+    ? window.localStorage.getItem("language") || "en"
+    : window.navigator.language.slice(0, 2) || "en";
   if (!isProduction) {
     saveMessageDesktop(message);
   }

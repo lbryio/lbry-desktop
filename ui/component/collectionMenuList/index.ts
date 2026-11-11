@@ -1,10 +1,10 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { makeSelectNameForCollectionId } from 'redux/selectors/collections';
-import { doOpenModal } from 'redux/actions/app';
-import { selectListShuffle } from 'redux/selectors/content';
-import { doToggleLoopList, doToggleShuffleList } from 'redux/actions/content';
-import CollectionMenuList from './view';
+import { connect } from "react-redux";
+import { makeSelectNameForCollectionId } from "redux/selectors/collections";
+import { doOpenModal } from "redux/actions/app";
+import { selectListShuffle } from "redux/selectors/content";
+import { doToggleLoopList, doToggleShuffleList } from "redux/actions/content";
+import CollectionMenuList from "./view";
 
 const select = (state: unknown, props: unknown) => {
   const collectionId = props.collectionId;

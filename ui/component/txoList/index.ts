@@ -1,7 +1,7 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doOpenModal } from 'redux/actions/app';
-import { doFetchTxoPage, doFetchTransactions, doUpdateTxoPageParams } from 'redux/actions/wallet';
+import { connect } from "react-redux";
+import { doOpenModal } from "redux/actions/app";
+import { doFetchTxoPage, doFetchTransactions, doUpdateTxoPageParams } from "redux/actions/wallet";
 import {
   selectIsFetchingTxos,
   selectIsFetchingTransactions,
@@ -10,9 +10,9 @@ import {
   selectTxoPage,
   selectTxoPageNumber,
   selectTxoItemCount,
-} from 'redux/selectors/wallet';
-import { withRouter } from 'react-router';
-import TxoList from './view';
+} from "redux/selectors/wallet";
+import { withRouter } from "react-router";
+import TxoList from "./view";
 
 const select = (state: unknown) => ({
   txoFetchError: selectFetchingTxosError(state),

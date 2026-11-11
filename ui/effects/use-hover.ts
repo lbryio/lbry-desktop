@@ -1,5 +1,5 @@
 //@ts-nocheck
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from "react";
 
 export default function useHover(ref: unknown) {
   const [isHovering, setIsHovering] = useState(false);
@@ -10,12 +10,12 @@ export default function useHover(ref: unknown) {
   useEffect(() => {
     const refElement = ref.current;
     if (refElement) {
-      refElement.addEventListener('mouseenter', hoverFunc);
-      refElement.addEventListener('mouseleave', unHoverFunc);
+      refElement.addEventListener("mouseenter", hoverFunc);
+      refElement.addEventListener("mouseleave", unHoverFunc);
 
       return () => {
-        refElement.removeEventListener('mouseenter', hoverFunc);
-        refElement.removeEventListener('mouseleave', unHoverFunc);
+        refElement.removeEventListener("mouseenter", hoverFunc);
+        refElement.removeEventListener("mouseleave", unHoverFunc);
       };
     }
   }, [ref, isHovering]);

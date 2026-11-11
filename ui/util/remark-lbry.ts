@@ -1,24 +1,24 @@
 //@ts-nocheck
-import {parseURI} from 'util/lbryURI';
-import visit from 'unist-util-visit';
+import { parseURI } from "util/lbryURI";
+import visit from "unist-util-visit";
 
-const protocol = 'lbry://';
+const protocol = "lbry://";
 const uriRegex = /(lbry:\/\/)[^\s"]*[^)]/g;
-export const punctuationMarks = [',', '.', '!', '?', ':', ';', '-', ']', ')', '}'] as const;
+export const punctuationMarks = [",", ".", "!", "?", ":", ";", "-", "]", ")", "}"] as const;
 
-const mentionToken = '@';
+const mentionToken = "@";
 
 const invalidRegex = /[-_.+=?!@#$%^&*:;,{}<>\w/\\]/;
 const mentionRegex = /@[^\s()"-_.+=?!@$%^&*;,{}<>/\\]*/gm;
 
 function handlePunctuation(value: unknown) {
-  const protocolIndex = value.indexOf('lbry://') === 0 ? protocol.length - 1 : 0;
+  const protocolIndex = value.indexOf("lbry://") === 0 ? protocol.length - 1 : 0;
   const channelModifierIndex =
-    (value.indexOf(':', protocolIndex) >= 0 && value.indexOf(':', protocolIndex)) ||
-    (value.indexOf('#', protocolIndex) >= 0 && value.indexOf('#', protocolIndex));
+    (value.indexOf(":", protocolIndex) >= 0 && value.indexOf(":", protocolIndex)) ||
+    (value.indexOf("#", protocolIndex) >= 0 && value.indexOf("#", protocolIndex));
   const claimModifierIndex =
-    (value.indexOf(':', channelModifierIndex + 1) >= 0 && value.indexOf(':', channelModifierIndex + 1)) ||
-    (value.indexOf('#', channelModifierIndex + 1) >= 0 && value.indexOf('#', channelModifierIndex + 1)) ||
+    (value.indexOf(":", channelModifierIndex + 1) >= 0 && value.indexOf(":", channelModifierIndex + 1)) ||
+    (value.indexOf("#", channelModifierIndex + 1) >= 0 && value.indexOf("#", channelModifierIndex + 1)) ||
     channelModifierIndex;
 
   let punctuationIndex;
@@ -46,7 +46,7 @@ function locateMention(value: unknown, fromIndex: unknown) {
 
 // Find claim url
 function locateURI(value: unknown, fromIndex: unknown) {
-  var index = value.indexOf(protocol, fromIndex);
+  const index = value.indexOf(protocol, fromIndex);
 
   // Skip invalid uri
   if (index > 0 && invalidRegex.test(value.charAt(index - 1))) {
@@ -58,13 +58,13 @@ function locateURI(value: unknown, fromIndex: unknown) {
 
 // Generate a valid markdown link
 const createURI = (text: unknown, uri: unknown, embed = false) => ({
-  type: 'link',
-  url: (uri.startsWith(protocol) ? '' : protocol) + uri,
+  type: "link",
+  url: (uri.startsWith(protocol) ? "" : protocol) + uri,
   data: {
     // Custom attribute
     hProperties: { embed },
   },
-  children: [{ type: 'text', value: text }],
+  children: [{ type: "text", value: text }],
 });
 
 const validateURI = (match: unknown, eat: unknown) => {
@@ -125,7 +125,7 @@ tokenizeMention.notInLink = true;
 tokenizeMention.notInBlock = false;
 
 const visitor = (node: unknown, index: unknown, parent: unknown) => {
-  if (node.type === 'link' && parent && parent.type === 'paragraph') {
+  if (node.type === "link" && parent && parent.type === "paragraph") {
     try {
       const uri = parseURI(node.url);
       const isValid = uri && uri.claimName;
@@ -152,7 +152,7 @@ const visitor = (node: unknown, index: unknown, parent: unknown) => {
 
 // transform
 const transform = (tree: unknown) => {
-  visit(tree, ['link'], visitor);
+  visit(tree, ["link"], visitor);
 };
 
 export const formattedLinks = () => transform;
@@ -168,6 +168,6 @@ export function inlineLinks() {
   tokenizers.mention = tokenizeMention;
 
   // Run it just before `text`.
-  methods.splice(methods.indexOf('text'), 0, 'uri');
-  methods.splice(methods.indexOf('text'), 0, 'mention');
+  methods.splice(methods.indexOf("text"), 0, "uri");
+  methods.splice(methods.indexOf("text"), 0, "mention");
 }

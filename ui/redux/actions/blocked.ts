@@ -1,7 +1,7 @@
-import * as ACTIONS from 'constants/action_types';
-import { selectPrefsReady } from 'redux/selectors/sync';
-import { doAlertWaitingForSync } from 'redux/actions/app';
-import { doToast } from 'redux/actions/notifications';
+import * as ACTIONS from "constants/action_types";
+import { selectPrefsReady } from "redux/selectors/sync";
+import { doAlertWaitingForSync } from "redux/actions/app";
+import { doToast } from "redux/actions/notifications";
 
 export function doToggleMuteChannel(uri: string, showLink: boolean, unmute: boolean = false) {
   return async (dispatch: Dispatch, getState: GetState) => {
@@ -19,11 +19,13 @@ export function doToggleMuteChannel(uri: string, showLink: boolean, unmute: bool
       },
     });
 
-    dispatch(doToast({
-      message: __(!unmute ? 'Channel muted. You will not see them again.' : 'Channel unmuted!'),
-      linkText: __(showLink ? 'See All' : ''),
-      linkTarget: '/settings/block_and_mute',
-    }));
+    dispatch(
+      doToast({
+        message: __(!unmute ? "Channel muted. You will not see them again." : "Channel unmuted!"),
+        linkText: __(showLink ? "See All" : ""),
+        linkTarget: "/settings/block_and_mute",
+      })
+    );
   };
 }
 

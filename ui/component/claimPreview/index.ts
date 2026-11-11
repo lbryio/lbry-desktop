@@ -1,5 +1,5 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import {
   selectClaimForUri,
   selectIsUriResolving,
@@ -9,19 +9,19 @@ import {
   makeSelectClaimWasPurchased,
   selectTitleForUri,
   selectDateForUri,
-} from 'redux/selectors/claims';
-import { makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
-import { makeSelectCollectionIsMine } from 'redux/selectors/collections';
+} from "redux/selectors/claims";
+import { makeSelectStreamingUrlForUri } from "redux/selectors/file_info";
+import { makeSelectCollectionIsMine } from "redux/selectors/collections";
 
-import { doResolveUri } from 'redux/actions/claims';
-import { doFileGet } from 'redux/actions/file';
-import { selectBanStateForUri } from 'lbryinc';
-import { selectLanguage, selectShowMatureContent } from 'redux/selectors/settings';
-import { makeSelectHasVisitedUri } from 'redux/selectors/content';
-import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
-import { isClaimNsfw } from 'util/claim';
-import ClaimPreview from './view';
-import formatMediaDuration from 'util/formatMediaDuration';
+import { doResolveUri } from "redux/actions/claims";
+import { doFileGet } from "redux/actions/file";
+import { selectBanStateForUri } from "lbryinc";
+import { selectLanguage, selectShowMatureContent } from "redux/selectors/settings";
+import { makeSelectHasVisitedUri } from "redux/selectors/content";
+import { selectIsSubscribedForUri } from "redux/selectors/subscriptions";
+import { isClaimNsfw } from "util/claim";
+import ClaimPreview from "./view";
+import formatMediaDuration from "util/formatMediaDuration";
 
 const select = (state: unknown, props: unknown) => {
   const claim = props.uri && selectClaimForUri(state, props.uri);

@@ -1,24 +1,24 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import {
   makeSelectSearchDownloadUrlsForPage,
   selectDownloadUrlsCount,
   selectIsFetchingFileList,
-} from 'redux/selectors/file_info';
+} from "redux/selectors/file_info";
 import {
   makeSelectMyPurchasesForPage,
   selectIsFetchingMyPurchases,
   selectMyPurchasesCount,
-} from 'redux/selectors/claims';
-import FileListDownloaded from './view';
-import { withRouter } from 'react-router';
+} from "redux/selectors/claims";
+import FileListDownloaded from "./view";
+import { withRouter } from "react-router";
 
 const select = (state: unknown, props: unknown) => {
   const { history, location } = props;
   const { search } = location;
   const urlParams = new URLSearchParams(search);
-  const query = urlParams.get('query') || '';
-  const page = Number(urlParams.get('page')) || 1;
+  const query = urlParams.get("query") || "";
+  const page = Number(urlParams.get("page")) || 1;
   return {
     page,
     history,

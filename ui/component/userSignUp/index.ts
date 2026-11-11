@@ -1,25 +1,25 @@
 //@ts-nocheck
-import REWARD_TYPES from 'rewards';
-import { connect } from 'react-redux';
-import { selectGetSyncIsPending, selectSyncHash, selectPrefsReady } from 'redux/selectors/sync';
-import { doClaimRewardType } from 'redux/actions/rewards';
-import { doSetClientSetting } from 'redux/actions/settings';
-import { selectClaimedRewards, makeSelectIsRewardClaimPending } from 'redux/selectors/rewards';
-import { doUserFetch } from 'redux/actions/user';
+import REWARD_TYPES from "rewards";
+import { connect } from "react-redux";
+import { selectGetSyncIsPending, selectSyncHash, selectPrefsReady } from "redux/selectors/sync";
+import { doClaimRewardType } from "redux/actions/rewards";
+import { doSetClientSetting } from "redux/actions/settings";
+import { selectClaimedRewards, makeSelectIsRewardClaimPending } from "redux/selectors/rewards";
+import { doUserFetch } from "redux/actions/user";
 import {
   selectUserIsPending,
   selectYoutubeChannels,
   selectEmailToVerify,
   selectUser,
   selectAccessToken,
-} from 'redux/selectors/user';
-import { selectMyChannelClaims, selectFetchingMyChannels, selectCreatingChannel } from 'redux/selectors/claims';
-import { selectBalance } from 'redux/selectors/wallet';
-import * as SETTINGS from 'constants/settings';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { selectInterestedInYoutubeSync } from 'redux/selectors/app';
-import { doToggleInterestedInYoutubeSync } from 'redux/actions/app';
-import UserSignIn from './view';
+} from "redux/selectors/user";
+import { selectMyChannelClaims, selectFetchingMyChannels, selectCreatingChannel } from "redux/selectors/claims";
+import { selectBalance } from "redux/selectors/wallet";
+import * as SETTINGS from "constants/settings";
+import { makeSelectClientSetting } from "redux/selectors/settings";
+import { selectInterestedInYoutubeSync } from "redux/selectors/app";
+import { doToggleInterestedInYoutubeSync } from "redux/actions/app";
+import UserSignIn from "./view";
 
 const select = (state: unknown) => ({
   emailToVerify: selectEmailToVerify(state),

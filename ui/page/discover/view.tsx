@@ -1,32 +1,32 @@
-import {DOMAIN, ENABLE_NO_SOURCE_CLAIMS} from 'config';
-import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
-import * as CS from 'constants/claim_search';
-import React, { useRef } from 'react';
-import Page from 'component/page';
-import ClaimListDiscover from 'component/claimListDiscover';
-import Button from 'component/button';
-import useHover from 'effects/use-hover';
-import { useIsMobile } from 'effects/use-screensize';
-import analytics from 'analytics';
-import HiddenNsfw from 'component/common/hidden-nsfw';
-import Icon from 'component/common/icon';
-import LbcSymbol from 'component/common/lbc-symbol';
-import I18nMessage from 'component/i18nMessage';
+import { DOMAIN, ENABLE_NO_SOURCE_CLAIMS } from "config";
+import * as ICONS from "constants/icons";
+import * as PAGES from "constants/pages";
+import * as CS from "constants/claim_search";
+import React, { useRef } from "react";
+import Page from "component/page";
+import ClaimListDiscover from "component/claimListDiscover";
+import Button from "component/button";
+import useHover from "effects/use-hover";
+import { useIsMobile } from "effects/use-screensize";
+import analytics from "analytics";
+import HiddenNsfw from "component/common/hidden-nsfw";
+import Icon from "component/common/icon";
+import LbcSymbol from "component/common/lbc-symbol";
+import I18nMessage from "component/i18nMessage";
 
 const LIMIT_CLAIMS_PER_CHANNEL = 3;
 
 type Props = {
   location: {
-    search: string
-  },
-  followedTags: Array<Tag>,
-  repostedUri: string,
-  repostedClaim: GenericClaim | null | undefined,
-  doToggleTagFollowDesktop: (arg1: string) => void,
-  doResolveUri: (arg1: string) => void,
-  dynamicRouteProps: RowDataItem,
-  tileLayout: boolean
+    search: string;
+  };
+  followedTags: Array<Tag>;
+  repostedUri: string;
+  repostedClaim: GenericClaim | null | undefined;
+  doToggleTagFollowDesktop: (arg1: string) => void;
+  doResolveUri: (arg1: string) => void;
+  dynamicRouteProps: RowDataItem;
+  tileLayout: boolean;
 };
 
 function DiscoverPage(props: Props) {
@@ -45,13 +45,13 @@ function DiscoverPage(props: Props) {
   const isMobile = useIsMobile();
 
   const urlParams = new URLSearchParams(search);
-  const claimType = urlParams.get('claim_type');
-  const tagsQuery = urlParams.get('t') || null;
-  const tags = tagsQuery ? tagsQuery.split(',') : null;
+  const claimType = urlParams.get("claim_type");
+  const tagsQuery = urlParams.get("t") || null;
+  const tags = tagsQuery ? tagsQuery.split(",") : null;
   const repostedClaimIsResolved = repostedUri && repostedClaim;
 
   const discoverIcon = ICONS.DISCOVER;
-  const discoverLabel = __('All Content');
+  const discoverLabel = __("All Content");
   // Eventually allow more than one tag on this page
   // Restricting to one to make follow/unfollow simpler
   const tag = (tags && tags[0]) || null;
@@ -59,9 +59,9 @@ function DiscoverPage(props: Props) {
     (dynamicRouteProps && dynamicRouteProps.options && dynamicRouteProps.options.channelIds) || undefined;
 
   const isFollowing = followedTags.map(({ name }) => name).includes(tag);
-  let label = isFollowing ? __('Following --[button label indicating a channel has been followed]--') : __('Follow');
+  let label = isFollowing ? __("Following --[button label indicating a channel has been followed]--") : __("Follow");
   if (isHovering && isFollowing) {
-    label = __('Unfollow');
+    label = __("Unfollow");
   }
 
   function getElemMeta() {
@@ -69,7 +69,7 @@ function DiscoverPage(props: Props) {
       <a
         className="help"
         href="https://lbry.com/faq/trending"
-        title={__('Learn more about LBRY Credits on %DOMAIN%', { DOMAIN })}
+        title={__("Learn more about LBRY Credits on %DOMAIN%", { DOMAIN })}
       >
         {/* @ts-expect-error - TS2745 (ts-migration) */}
         <I18nMessage
@@ -107,24 +107,24 @@ function DiscoverPage(props: Props) {
       doToggleTagFollowDesktop(tag);
 
       const nowFollowing = !isFollowing;
-      analytics.tagFollowEvent(tag, nowFollowing, 'tag-page');
+      analytics.tagFollowEvent(tag, nowFollowing, "tag-page");
     }
   }
 
   let headerLabel;
   if (repostedClaim) {
-    headerLabel = __('Reposts of %uri%', { uri: repostedUri });
+    headerLabel = __("Reposts of %uri%", { uri: repostedUri });
   } else if (tag) {
     headerLabel = (
       <span>
         <Icon icon={ICONS.TAG} size={10} />
-        {(tag === CS.TAGS_ALL && __('All Content')) || (tag === CS.TAGS_FOLLOWED && __('Followed Tags')) || tag}
+        {(tag === CS.TAGS_ALL && __("All Content")) || (tag === CS.TAGS_FOLLOWED && __("Followed Tags")) || tag}
 
         <Button
           // @ts-expect-error - TS2322 (ts-migration)
           className="claim-search__tags-link"
           button="link"
-          label={__('Manage Tags')}
+          label={__("Manage Tags")}
           navigate={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`}
         />
       </span>

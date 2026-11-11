@@ -1,23 +1,23 @@
-import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
-import React from 'react';
-import { Lbryio } from 'lbryinc';
-import ClaimPreview from 'component/claimPreview';
-import Card from 'component/common/card';
-import Spinner from 'component/spinner';
-import Icon from 'component/common/icon';
-import Button from 'component/button';
-import Yrbl from 'component/yrbl';
-import { useHistory } from 'react-router-dom';
-import analytics from 'analytics';
+import * as ICONS from "constants/icons";
+import * as PAGES from "constants/pages";
+import React from "react";
+import { Lbryio } from "lbryinc";
+import ClaimPreview from "component/claimPreview";
+import Card from "component/common/card";
+import Spinner from "component/spinner";
+import Icon from "component/common/icon";
+import Button from "component/button";
+import Yrbl from "component/yrbl";
+import { useHistory } from "react-router-dom";
+import analytics from "analytics";
 
 type Props = {
-  claim: ChannelClaim | null | undefined,
-  fetchingChannels: boolean
+  claim: ChannelClaim | null | undefined;
+  fetchingChannels: boolean;
 };
 
-const UNAUTHENTICATED_ERROR = 'unauthenticated';
-const GENERIC_ERROR = 'error';
+const UNAUTHENTICATED_ERROR = "unauthenticated";
+const GENERIC_ERROR = "error";
 
 export default function CreatorAnalytics(props: Props) {
   const { claim } = props;
@@ -38,7 +38,7 @@ export default function CreatorAnalytics(props: Props) {
     if (claimId && channelForEffect && channelHasClaims) {
       setFetchingStats(true);
       // @ts-expect-error - TS2339 (ts-migration)
-      Lbryio.call('reports', 'content', { claim_id: claimId })
+      Lbryio.call("reports", "content", { claim_id: claimId })
         .then((res) => {
           setFetchingStats(false);
           setStats(res);
@@ -68,11 +68,11 @@ export default function CreatorAnalytics(props: Props) {
               {error && (
                 <Yrbl
                   type="sad"
-                  title={error === GENERIC_ERROR ? __('No stats found') : __('Error fetching stats')}
+                  title={error === GENERIC_ERROR ? __("No stats found") : __("Error fetching stats")}
                   subtitle={
                     error === GENERIC_ERROR
                       ? __(
-                          'There are no stats for this channel yet, it will take a few views. Make sure you are signed in with the correct email and have data sharing turned on.'
+                          "There are no stats for this channel yet, it will take a few views. Make sure you are signed in with the correct email and have data sharing turned on."
                         )
                       : __(
                           "You are not able to see this channel's stats. Make sure you are signed in with the correct email and have data sharing turned on."
@@ -85,13 +85,13 @@ export default function CreatorAnalytics(props: Props) {
                 <Yrbl
                   type="sad"
                   title={__("You haven't uploaded anything")}
-                  subtitle={__('Upload something to start tracking your stats!')}
+                  subtitle={__("Upload something to start tracking your stats!")}
                   actions={
                     <div className="section__actions">
                       <Button
                         // @ts-expect-error - TS2322 (ts-migration)
                         button="primary"
-                        label={__('Upload Something')}
+                        label={__("Upload Something")}
                         onClick={() => {
                           history.push(`/$/${PAGES.UPLOAD}`);
                         }}
@@ -103,7 +103,7 @@ export default function CreatorAnalytics(props: Props) {
                 <Yrbl
                   title={
                     channelHasClaims
-                      ? __('No recent uploads')
+                      ? __("No recent uploads")
                       : __("You haven't uploaded anything with this channel yet!")
                   }
                   actions={
@@ -111,7 +111,7 @@ export default function CreatorAnalytics(props: Props) {
                       <Button
                         // @ts-expect-error - TS2322 (ts-migration)
                         button="primary"
-                        label={__('Upload Something')}
+                        label={__("Upload Something")}
                         onClick={() => history.push(`/$/${PAGES.UPLOAD}`)}
                       />
                     </div>
@@ -129,13 +129,13 @@ export default function CreatorAnalytics(props: Props) {
             <Card
               // @ts-expect-error - TS2322 (ts-migration)
               iconColor
-              title={<span>{__('%follower_count% followers', { follower_count: stats.ChannelSubs })}</span>}
+              title={<span>{__("%follower_count% followers", { follower_count: stats.ChannelSubs })}</span>}
               icon={ICONS.SUBSCRIBE}
               subtitle={
                 <div className="card__data-subtitle">
                   <span>
-                    {0 > -1 && '+'}{' '}
-                    {__('%follower_count_weekly_change% this week', {
+                    {0 > -1 && "+"}{" "}
+                    {__("%follower_count_weekly_change% this week", {
                       follower_count_weekly_change: stats.ChannelSubChange || 0,
                     })}
                   </span>
@@ -145,11 +145,11 @@ export default function CreatorAnalytics(props: Props) {
             />
             <Card
               icon={ICONS.EYE}
-              title={<span>{__('%all_content_views% views', { all_content_views: stats.AllContentViews })}</span>}
+              title={<span>{__("%all_content_views% views", { all_content_views: stats.AllContentViews })}</span>}
               subtitle={
                 <div className="card__data-subtitle">
                   <span>
-                    {__('+ %all_content_views_weekly_change% this week', {
+                    {__("+ %all_content_views_weekly_change% this week", {
                       all_content_views_weekly_change: stats.AllContentViewChange || 0,
                     })}
                   </span>
@@ -187,7 +187,7 @@ export default function CreatorAnalytics(props: Props) {
           {stats.VideoURITopNew ? (
             <Card
               className="section"
-              title={__('Most viewed recent content')}
+              title={__("Most viewed recent content")}
               body={
                 <React.Fragment>
                   <div className="card--inline">
@@ -196,8 +196,8 @@ export default function CreatorAnalytics(props: Props) {
                   <div className="section__subtitle card__data-subtitle">
                     <span>
                       {stats.VideoViewsTopNew === 1
-                        ? __('1 view')
-                        : __('%view_count% views - %view_count_change% this week', {
+                        ? __("1 view")
+                        : __("%view_count% views - %view_count_change% this week", {
                             view_count: stats.VideoViewsTopNew,
                             view_count_change: stats.VideoViewChangeTopNew,
                           })}
@@ -210,7 +210,7 @@ export default function CreatorAnalytics(props: Props) {
           ) : (
             <Card
               className="section"
-              title={__('Your recent content')}
+              title={__("Your recent content")}
               subtitle={
                 !stats.VideoURITopNew &&
                 __("No recent uploads found for this channel. Upload something new and track how it's performing here.")
@@ -221,7 +221,7 @@ export default function CreatorAnalytics(props: Props) {
                     // @ts-expect-error - TS2322 (ts-migration)
                     button="primary"
                     icon={ICONS.PUBLISH}
-                    label={__('Upload')}
+                    label={__("Upload")}
                     onClick={() => history.push(`/$/${PAGES.UPLOAD}`)}
                   />
                 </div>
@@ -232,7 +232,7 @@ export default function CreatorAnalytics(props: Props) {
           {stats.VideoURITopCommentNew && stats.VideoCommentTopCommentNew > 0 && (
             <Card
               className="section"
-              title={__('Most commented recent content')}
+              title={__("Most commented recent content")}
               body={
                 <React.Fragment>
                   <div className="card--inline">
@@ -241,8 +241,8 @@ export default function CreatorAnalytics(props: Props) {
                   <div className="section__subtitle card__data-subtitle">
                     <span>
                       {stats.VideoCommentTopCommentNew === 1
-                        ? __('1 comment')
-                        : __('%comment_count% comments - %comment_count_change% this week', {
+                        ? __("1 comment")
+                        : __("%comment_count% comments - %comment_count_change% this week", {
                             comment_count: stats.VideoCommentTopCommentNew,
                             comment_count_change: stats.VideoCommentChangeTopCommentNew,
                           })}
@@ -258,7 +258,7 @@ export default function CreatorAnalytics(props: Props) {
 
           <Card
             className="section"
-            title={__('Most viewed content all time')}
+            title={__("Most viewed content all time")}
             body={
               <React.Fragment>
                 <div className="card--inline">
@@ -266,7 +266,7 @@ export default function CreatorAnalytics(props: Props) {
                 </div>
                 <div className="section__subtitle card__data-subtitle">
                   <span>
-                    {__('%all_time_top_views% views - %all_time_views_weekly_change% this week', {
+                    {__("%all_time_top_views% views - %all_time_views_weekly_change% this week", {
                       all_time_top_views: stats.VideoViewsTopAllTime,
                       all_time_views_weekly_change: stats.VideoViewChangeTopAllTime,
                     })}

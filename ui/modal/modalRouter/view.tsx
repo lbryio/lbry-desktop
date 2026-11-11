@@ -1,67 +1,67 @@
-import React from 'react';
-import { withRouter } from 'react-router';
-import * as MODALS from 'constants/modal_types';
+import React from "react";
+import { withRouter } from "react-router";
+import * as MODALS from "constants/modal_types";
 
-import ModalAffirmPurchase from 'modal/modalAffirmPurchase';
+import ModalAffirmPurchase from "modal/modalAffirmPurchase";
 
-import ModalAutoGenerateThumbnail from 'modal/modalAutoGenerateThumbnail';
+import ModalAutoGenerateThumbnail from "modal/modalAutoGenerateThumbnail";
 
-import ModalAutoUpdateDownloaded from 'modal/modalAutoUpdateDownloaded';
+import ModalAutoUpdateDownloaded from "modal/modalAutoUpdateDownloaded";
 
-import ModalBlockChannel from 'modal/modalBlockChannel';
+import ModalBlockChannel from "modal/modalBlockChannel";
 
-import ModalClaimCollectionAdd from 'modal/modalClaimCollectionAdd';
+import ModalClaimCollectionAdd from "modal/modalClaimCollectionAdd";
 
-import ModalCommentAcknowledgement from 'modal/modalCommentAcknowledgement';
+import ModalCommentAcknowledgement from "modal/modalCommentAcknowledgement";
 
-import ModalConfirmThumbnailUpload from 'modal/modalConfirmThumbnailUpload';
+import ModalConfirmThumbnailUpload from "modal/modalConfirmThumbnailUpload";
 
-import ModalConfirmTransaction from 'modal/modalConfirmTransaction';
+import ModalConfirmTransaction from "modal/modalConfirmTransaction";
 
-import ModalDeleteCollection from 'modal/modalRemoveCollection';
+import ModalDeleteCollection from "modal/modalRemoveCollection";
 
-import ModalDownloading from 'modal/modalDownloading';
-import ModalError from 'modal/modalError';
-import ModalFileSelection from 'modal/modalFileSelection';
+import ModalDownloading from "modal/modalDownloading";
+import ModalError from "modal/modalError";
+import ModalFileSelection from "modal/modalFileSelection";
 
-import ModalFileTimeout from 'modal/modalFileTimeout';
-import ModalFirstReward from 'modal/modalFirstReward';
-import ModalFirstSubscription from 'modal/modalFirstSubscription';
+import ModalFileTimeout from "modal/modalFileTimeout";
+import ModalFirstReward from "modal/modalFirstReward";
+import ModalFirstSubscription from "modal/modalFirstSubscription";
 
-import ModalImageUpload from 'modal/modalImageUpload';
-import ModalMassTipsUnlock from 'modal/modalMassTipUnlock';
+import ModalImageUpload from "modal/modalImageUpload";
+import ModalMassTipsUnlock from "modal/modalMassTipUnlock";
 
-import ModalMobileSearch from 'modal/modalMobileSearch';
+import ModalMobileSearch from "modal/modalMobileSearch";
 
-import ModalOpenExternalResource from 'modal/modalOpenExternalResource';
+import ModalOpenExternalResource from "modal/modalOpenExternalResource";
 
-import ModalPasswordUnsave from 'modal/modalPasswordUnsave';
+import ModalPasswordUnsave from "modal/modalPasswordUnsave";
 
-import ModalPublish from 'modal/modalPublish';
-import ModalPublishPreview from 'modal/modalPublishPreview';
+import ModalPublish from "modal/modalPublish";
+import ModalPublishPreview from "modal/modalPublishPreview";
 
-import ModalRemoveCard from 'modal/modalRemoveCard';
-import ModalRemoveComment from 'modal/modalRemoveComment';
+import ModalRemoveCard from "modal/modalRemoveCard";
+import ModalRemoveComment from "modal/modalRemoveComment";
 
-import ModalRemoveFile from 'modal/modalRemoveFile';
-import ModalRevokeClaim from 'modal/modalRevokeClaim';
-import ModalRewardCode from 'modal/modalRewardCode';
-import ModalSendTip from 'modal/modalSendTip';
-import ModalRepost from 'modal/modalRepost';
-import ModalSignOut from 'modal/modalSignOut';
-import ModalSocialShare from 'modal/modalSocialShare';
-import ModalSupportsLiquidate from 'modal/modalSupportsLiquidate';
+import ModalRemoveFile from "modal/modalRemoveFile";
+import ModalRevokeClaim from "modal/modalRevokeClaim";
+import ModalRewardCode from "modal/modalRewardCode";
+import ModalSendTip from "modal/modalSendTip";
+import ModalRepost from "modal/modalRepost";
+import ModalSignOut from "modal/modalSignOut";
+import ModalSocialShare from "modal/modalSocialShare";
+import ModalSupportsLiquidate from "modal/modalSupportsLiquidate";
 
-import ModalSyncEnable from 'modal/modalSyncEnable';
-import ModalTransactionFailed from 'modal/modalTransactionFailed';
+import ModalSyncEnable from "modal/modalSyncEnable";
+import ModalTransactionFailed from "modal/modalTransactionFailed";
 
-import ModalUpgrade from 'modal/modalUpgrade';
-import ModalViewImage from 'modal/modalViewImage';
-import ModalWalletDecrypt from 'modal/modalWalletDecrypt';
+import ModalUpgrade from "modal/modalUpgrade";
+import ModalViewImage from "modal/modalViewImage";
+import ModalWalletDecrypt from "modal/modalWalletDecrypt";
 
-import ModalWalletEncrypt from 'modal/modalWalletEncrypt';
+import ModalWalletEncrypt from "modal/modalWalletEncrypt";
 
-import ModalWalletUnlock from 'modal/modalWalletUnlock';
+import ModalWalletUnlock from "modal/modalWalletUnlock";
 
 function getModal(id: unknown) {
   switch (id) {
@@ -150,16 +150,16 @@ function getModal(id: unknown) {
 }
 type Props = {
   modal: {
-    id: string,
-    modalProps: Record<any, any>
-  },
+    id: string;
+    modalProps: Record<any, any>;
+  };
   error: {
-    message: string
-  },
+    message: string;
+  };
   location: {
-    pathname: string
-  },
-  hideModal: () => void
+    pathname: string;
+  };
+  hideModal: () => void;
 };
 
 function ModalRouter(props: Props) {

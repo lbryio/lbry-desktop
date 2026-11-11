@@ -2,23 +2,23 @@
 // This folder is modified based on the original freezeframe@4.0.0-alpha.7
 // https://github.com/ctrl-freaks/freezeframe.js/tree/master/packages/freezeframe/src
 // Contains subset of features from the main Freezeframe to reduce bundle size.
-import imagesLoaded from 'imagesloaded';
+import imagesLoaded from "imagesloaded";
 
-import { isTouch, wrapNode, htmlToNode } from './utils';
-import * as templates from './templates';
-import { classes } from './classes';
-import './styles.scss';
+import { isTouch, wrapNode, htmlToNode } from "./utils";
+import * as templates from "./templates";
+import { classes } from "./classes";
+import "./styles.scss";
 
 const defaultOptions = {
   responsive: true,
-  trigger: 'hover',
+  trigger: "hover",
   overlay: false,
 } as const;
 
 const events = {
-  START: 'start',
-  STOP: 'stop',
-  TOGGLE: 'toggle',
+  START: "start",
+  STOP: "stop",
+  TOGGLE: "toggle",
 } as const;
 
 class FreezeframeLite {
@@ -48,7 +48,7 @@ class FreezeframeLite {
   }
 
   load($images: unknown) {
-    imagesLoaded($images).on('progress', (instance, { img }) => {
+    imagesLoaded($images).on("progress", (instance, { img }) => {
       this.setup(img);
     });
   }
@@ -84,16 +84,16 @@ class FreezeframeLite {
       const { $canvas, $image, $container } = freeze;
       const { clientWidth, clientHeight } = $image;
 
-      $canvas.setAttribute('width', clientWidth);
-      $canvas.setAttribute('height', clientHeight);
+      $canvas.setAttribute("width", clientWidth);
+      $canvas.setAttribute("height", clientHeight);
 
-      const context = $canvas.getContext('2d');
+      const context = $canvas.getContext("2d");
       context.drawImage($image, 0, 0, clientWidth, clientHeight);
 
       $canvas.classList.add(classes.CANVAS_READY);
 
       $canvas.addEventListener(
-        'transitionend',
+        "transitionend",
         () => {
           this.ready($container);
           resolve(freeze);
@@ -115,13 +115,13 @@ class FreezeframeLite {
     const { $image } = freeze;
 
     if (!this.isTouch) {
-      $image.addEventListener('mouseenter', () => {
+      $image.addEventListener("mouseenter", () => {
         this.toggleOn(freeze);
         this.emit(events.START, freeze, true);
         this.emit(events.TOGGLE, freeze, true);
       });
 
-      $image.addEventListener('mouseleave', () => {
+      $image.addEventListener("mouseleave", () => {
         this.toggleOff(freeze);
         this.emit(events.START, freeze, false);
         this.emit(events.TOGGLE, freeze, false);
@@ -142,7 +142,7 @@ class FreezeframeLite {
     const { $container, $image } = freeze;
 
     if ($container.classList.contains(classes.READY)) {
-      $image.setAttribute('src', $image.src);
+      $image.setAttribute("src", $image.src);
       $container.classList.remove(classes.INACTIVE);
       $container.classList.add(classes.ACTIVE);
     }
@@ -160,7 +160,7 @@ class FreezeframeLite {
   }
 
   emit(event: unknown, items: unknown, isPlaying: unknown) {
-    this.eventListeners[event].forEach(cb => {
+    this.eventListeners[event].forEach((cb) => {
       cb(items.length === 1 ? items[0] : items, isPlaying);
     });
   }

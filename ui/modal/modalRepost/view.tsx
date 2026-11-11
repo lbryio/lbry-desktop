@@ -1,16 +1,16 @@
-import React from 'react';
-import { Modal } from 'modal/modal';
-import RepostCreate from 'component/repostCreate';
-import Card from 'component/common/card';
+import React from "react";
+import { Modal } from "modal/modal";
+import RepostCreate from "component/repostCreate";
+import Card from "component/common/card";
 
 type Props = {
-  closeModal: () => void,
-  uri: string,
-  name: string,
-  contentUri: string,
-  setContentUri: () => void,
-  repostUri: string,
-  setRepostUri: () => void
+  closeModal: () => void;
+  uri: string;
+  name: string;
+  contentUri: string;
+  setContentUri: () => void;
+  repostUri: string;
+  setRepostUri: () => void;
 };
 
 class ModalRepost extends React.PureComponent<Props> {
@@ -18,12 +18,23 @@ class ModalRepost extends React.PureComponent<Props> {
     const { closeModal, uri, name, contentUri, setContentUri, repostUri, setRepostUri } = this.props;
 
     return (
-// @ts-expect-error - TS2322 - Type '{ children: Element; onAborted: () => void; isOpen: true; type: string; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
+      // @ts-expect-error - TS2322 - Type '{ children: Element; onAborted: () => void; isOpen: true; type: string; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
       <Modal onAborted={closeModal} isOpen type="card">
         <Card
-          title={__('Repost')}
-// @ts-expect-error - TS2322 - Type 'Element' is not assignable to type 'string | Node'.
-          actions={<RepostCreate isModal uri={uri} name={name} onCancel={closeModal} contentUri={contentUri} setContentUri={setContentUri} repostUri={repostUri} setRepostUri={setRepostUri} />}
+          title={__("Repost")}
+          actions={
+            <RepostCreate
+              isModal
+              uri={uri}
+              name={name}
+              // @ts-expect-error - TS2322 (ts-migration)
+              onCancel={closeModal}
+              contentUri={contentUri}
+              setContentUri={setContentUri}
+              repostUri={repostUri}
+              setRepostUri={setRepostUri}
+            />
+          }
         />
       </Modal>
     );

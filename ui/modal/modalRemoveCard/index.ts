@@ -1,10 +1,10 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doHideModal } from 'redux/actions/app';
-import { doAbandonTxo, doResolveUri } from 'redux/actions/claims';
-import { selectTransactionItems } from 'redux/selectors/wallet';
-import { doToast } from 'redux/actions/notifications';
-import ModalRevokeClaim from './view';
+import { connect } from "react-redux";
+import { doHideModal } from "redux/actions/app";
+import { doAbandonTxo, doResolveUri } from "redux/actions/claims";
+import { selectTransactionItems } from "redux/selectors/wallet";
+import { doToast } from "redux/actions/notifications";
+import ModalRevokeClaim from "./view";
 
 const select = (state: unknown) => ({
   transactionItems: selectTransactionItems(state),

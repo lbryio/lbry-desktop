@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectHasChannels, selectFetchingMyChannels } from 'redux/selectors/claims';
-import { selectActiveChannelClaim } from 'redux/selectors/app';
-import { doSetActiveChannel } from 'redux/actions/app';
-import CreatorDashboardPage from './view';
+import { connect } from "react-redux";
+import { selectHasChannels, selectFetchingMyChannels } from "redux/selectors/claims";
+import { selectActiveChannelClaim } from "redux/selectors/app";
+import { doSetActiveChannel } from "redux/actions/app";
+import CreatorDashboardPage from "./view";
 
 const select = (state: unknown) => ({
   hasChannels: selectHasChannels(state),

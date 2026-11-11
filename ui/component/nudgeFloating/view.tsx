@@ -1,12 +1,12 @@
-import * as ICONS from 'constants/icons';
-import React from 'react';
-import usePersistedState from 'effects/use-persisted-state';
-import Button from 'component/button';
+import * as ICONS from "constants/icons";
+import React from "react";
+import usePersistedState from "effects/use-persisted-state";
+import Button from "component/button";
 
 type Props = {
-  user: User | null | undefined,
-  name: string,
-  text: string
+  user: User | null | undefined;
+  name: string;
+  text: string;
 };
 
 export default function NudgeFloating(props: Props) {

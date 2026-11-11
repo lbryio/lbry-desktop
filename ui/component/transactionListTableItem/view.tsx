@@ -1,34 +1,37 @@
-import * as ICONS from 'constants/icons';
-import { SITE_NAME } from 'config';
-import React from 'react';
-import ButtonTransaction from 'component/common/transaction-link';
-import CreditAmount from 'component/common/credit-amount';
-import DateTime from 'component/dateTime';
-import Button from 'component/button';
-import Spinner from 'component/spinner';
-import { toCapitalCase } from 'util/string';
-import { buildURI, parseURI } from 'util/lbryURI';
-import * as TXO from 'constants/txo_list';
-import * as ABANDON_STATES from 'constants/abandon_states';
-import UriIndicator from 'component/uriIndicator';
+import * as ICONS from "constants/icons";
+import { SITE_NAME } from "config";
+import React from "react";
+import ButtonTransaction from "component/common/transaction-link";
+import CreditAmount from "component/common/credit-amount";
+import DateTime from "component/dateTime";
+import Button from "component/button";
+import Spinner from "component/spinner";
+import { toCapitalCase } from "util/string";
+import { buildURI, parseURI } from "util/lbryURI";
+import * as TXO from "constants/txo_list";
+import * as ABANDON_STATES from "constants/abandon_states";
+import UriIndicator from "component/uriIndicator";
 
 type Props = {
-  txo: Txo,
-  revokeClaim: (arg1: Txo, arg2: (arg1: string) => void) => void,
-  isRevokeable: boolean,
-  reward: {
-    reward_title: string
-  } | null | undefined,
-  signingChannel: ChannelClaim
+  txo: Txo;
+  revokeClaim: (arg1: Txo, arg2: (arg1: string) => void) => void;
+  isRevokeable: boolean;
+  reward:
+    | {
+        reward_title: string;
+      }
+    | null
+    | undefined;
+  signingChannel: ChannelClaim;
 };
 
 type State = {
-  abandonState: string
+  abandonState: string;
 };
 
 class TransactionListTableItem extends React.PureComponent<Props, State> {
   constructor() {
-// @ts-expect-error - TS2554 - Expected 1-2 arguments, but got 0.
+    // @ts-expect-error - TS2554 - Expected 1-2 arguments, but got 0.
     super();
     this.state = { abandonState: ABANDON_STATES.READY };
     (this as any).abandonClaim = this.abandonClaim.bind(this);
@@ -38,13 +41,13 @@ class TransactionListTableItem extends React.PureComponent<Props, State> {
   getLink(type: string, tip: boolean, valueType: string) {
     const { abandonState } = this.state;
 
-    if (type === 'claim' && valueType !== 'repost') {
+    if (type === "claim" && valueType !== "repost") {
       return null;
     }
 
     if (this.state.abandonState === ABANDON_STATES.PENDING) {
       // @ts-expect-error - TS2322 (ts-migration)
-      return <Spinner type={'small'} />;
+      return <Spinner type={"small"} />;
     }
 
     if (tip && type === TXO.SUPPORT) {
@@ -55,11 +58,11 @@ class TransactionListTableItem extends React.PureComponent<Props, State> {
           button="secondary"
           icon={ICONS.UNLOCK}
           onClick={this.abandonClaim}
-          title={__('Unlock tip')}
+          title={__("Unlock tip")}
         />
       );
     }
-    const abandonTitle = type === TXO.SUPPORT ? 'Abandon Support' : 'Abandon Claim';
+    const abandonTitle = type === TXO.SUPPORT ? "Abandon Support" : "Abandon Claim";
     return (
       <Button
         // @ts-expect-error - TS2322 (ts-migration)
@@ -93,18 +96,18 @@ class TransactionListTableItem extends React.PureComponent<Props, State> {
 
     const isLbryViewReward =
       txo.signing_channel &&
-      (txo.signing_channel.channel_id === '74562a01e5836c04040b80bf1f4d685fec02cc90' ||
-        txo.signing_channel.channel_id === '7d0b0f83a195fd1278e1944ddda4cda8d9c01a56');
+      (txo.signing_channel.channel_id === "74562a01e5836c04040b80bf1f4d685fec02cc90" ||
+        txo.signing_channel.channel_id === "7d0b0f83a195fd1278e1944ddda4cda8d9c01a56");
     const name = txoListName;
-    const isMinus = (type === 'support' || type === 'payment' || type === 'other') && isMyInput && !isMyOutput;
-    const isTip = type === 'support' && ((isMyInput && !isMyOutput) || (!isMyInput && isMyOutput));
+    const isMinus = (type === "support" || type === "payment" || type === "other") && isMyInput && !isMyOutput;
+    const isTip = type === "support" && ((isMyInput && !isMyOutput) || (!isMyInput && isMyOutput));
     const date = new Date(timestamp * 1000);
 
     // Ensure the claim name exists and is valid
     let uri;
     let claimName;
     try {
-      if (name.startsWith('@')) {
+      if (name.startsWith("@")) {
         ({ claimName } = parseURI(name));
         uri = buildURI({ channelName: claimName, channelClaimId: claimId });
       } else {
@@ -114,9 +117,9 @@ class TransactionListTableItem extends React.PureComponent<Props, State> {
     } catch (e: any) {}
 
     const dateFormat = {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric',
+      month: "short",
+      day: "numeric",
+      year: "numeric",
     } as const;
 
     const forClaim = name && claimId;
@@ -134,23 +137,23 @@ class TransactionListTableItem extends React.PureComponent<Props, State> {
               </div>
             </div>
           ) : (
-            <span className="empty">{__('Pending')}</span>
+            <span className="empty">{__("Pending")}</span>
           )}
         </td>
         <td className="table__item--actionable">
           <span>
-            {(isTip && __('Tip')) ||
-              (type === 'support' && !isTip && __('Support --[noun; transaction type]--')) ||
-              (valueType && ((valueType === 'stream' && __('Upload')) || __(toCapitalCase(valueType)))) ||
+            {(isTip && __("Tip")) ||
+              (type === "support" && !isTip && __("Support --[noun; transaction type]--")) ||
+              (valueType && ((valueType === "stream" && __("Upload")) || __(toCapitalCase(valueType)))) ||
               (type && __(toCapitalCase(type)))}
-          </span>{' '}
+          </span>{" "}
           {isRevokeable && this.getLink(type, isTip, valueType)}
         </td>
         <td>
           {/* @ts-expect-error - TS2322 (ts-migration) */}
           {forClaim && <Button button="link" navigate={uri} label={claimName} disabled={!date} />}
           {!forClaim && reward && <span>{reward.reward_title}</span>}
-          {isLbryViewReward && <div className="table__item-label">{__('%SITE_NAME% view reward', { SITE_NAME })}</div>}
+          {isLbryViewReward && <div className="table__item-label">{__("%SITE_NAME% view reward", { SITE_NAME })}</div>}
           {isTip && signingChannel && !isLbryViewReward && (
             <div className="table__item-label">
               {/* @ts-expect-error - TS2322 (ts-migration) */}

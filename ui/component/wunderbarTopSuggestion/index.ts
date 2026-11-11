@@ -1,20 +1,20 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import {
   makeSelectClaimForUri,
   selectIsUriResolving,
   makeSelectTagInClaimOrChannelForUri,
-} from 'redux/selectors/claims';
-import { doResolveUris } from 'redux/actions/claims';
-import { parseURI } from 'util/lbryURI';
-import { makeSelectWinningUriForQuery } from 'redux/selectors/search';
-import WunderbarTopSuggestion from './view';
-import { PREFERENCE_EMBED } from 'constants/tags';
+} from "redux/selectors/claims";
+import { doResolveUris } from "redux/actions/claims";
+import { parseURI } from "util/lbryURI";
+import { makeSelectWinningUriForQuery } from "redux/selectors/search";
+import WunderbarTopSuggestion from "./view";
+import { PREFERENCE_EMBED } from "constants/tags";
 
 const select = (state: unknown, props: unknown) => {
   const uriFromQuery = `lbry://${props.query}`;
 
-  let uris = [uriFromQuery];
+  const uris = [uriFromQuery];
   try {
     const { isChannel } = parseURI(uriFromQuery);
 

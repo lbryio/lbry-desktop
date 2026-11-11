@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import Welcome from './view';
-import { doSetWelcomeVersion } from 'redux/actions/app';
-import { WELCOME_VERSION } from 'config';
-import { selectDaemonSettings, selectDaemonStatus } from 'redux/selectors/settings';
+import { connect } from "react-redux";
+import Welcome from "./view";
+import { doSetWelcomeVersion } from "redux/actions/app";
+import { WELCOME_VERSION } from "config";
+import { selectDaemonSettings, selectDaemonStatus } from "redux/selectors/settings";
 
 const select = (state: unknown) => ({
   daemonSettings: selectDaemonSettings(state),

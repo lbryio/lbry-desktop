@@ -1,6 +1,6 @@
-import * as OVERLAY from './overlays';
-import * as KEYCODES from 'constants/keycodes';
-import isUserTyping from 'util/detect-typing';
+import * as OVERLAY from "./overlays";
+import * as KEYCODES from "constants/keycodes";
+import isUserTyping from "util/detect-typing";
 
 const SEEK_STEP_5 = 5;
 const SEEK_STEP = 10; // time to seek in seconds
@@ -9,7 +9,7 @@ const videoPlaybackRates = [0.25, 0.5, 0.75, 1, 1.1, 1.25, 1.5, 1.75, 2];
 
 // check if active (clicked) element is part of video div, used for keyboard shortcuts (volume etc)
 function activeElementIsPartOfVideoElement() {
-  const videoElementParent = document.getElementsByClassName('video-js-parent')[0];
+  const videoElementParent = document.getElementsByClassName("video-js-parent")[0];
   const activeElement = document.activeElement;
   return videoElementParent.contains(activeElement);
 }
@@ -17,10 +17,10 @@ function activeElementIsPartOfVideoElement() {
 function volumeUp(event: unknown, playerRef: unknown) {
   // dont run if video element is not active element (otherwise runs when scrolling using keypad)
   const videoElementIsActive = activeElementIsPartOfVideoElement();
-// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
+  // @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
   const player = playerRef.current;
   if (!player || !videoElementIsActive) return;
-// @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
+  // @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
   event.preventDefault();
   player.volume(player.volume() + 0.05);
   OVERLAY.showVolumeverlay(player, Math.round(player.volume() * 100));
@@ -30,10 +30,10 @@ function volumeUp(event: unknown, playerRef: unknown) {
 function volumeDown(event: unknown, playerRef: unknown) {
   // dont run if video element is not active element (otherwise runs when scrolling using keypad)
   const videoElementIsActive = activeElementIsPartOfVideoElement();
-// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
+  // @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
   const player = playerRef.current;
   if (!player || !videoElementIsActive) return;
-// @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
+  // @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
   event.preventDefault();
   player.volume(player.volume() - 0.05);
   OVERLAY.showVolumeverlay(player, Math.round(player.volume() * 100));
@@ -41,10 +41,10 @@ function volumeDown(event: unknown, playerRef: unknown) {
 }
 
 function seekVideo(stepSize: number, playerRef: unknown, containerRef: unknown) {
-// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
+  // @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
   const player = playerRef.current;
-// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'. | TS2339 - Property 'current' does not exist on type 'unknown'.
-  const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
+  // @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'. | TS2339 - Property 'current' does not exist on type 'unknown'.
+  const videoNode = containerRef.current && containerRef.current.querySelector("video, audio");
   if (!videoNode || !player) return;
   const duration = videoNode.duration;
   const currentTime = videoNode.currentTime;
@@ -61,7 +61,7 @@ function seekVideo(stepSize: number, playerRef: unknown, containerRef: unknown) 
 }
 
 function toggleFullscreen(playerRef: unknown) {
-// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
+  // @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
   const player = playerRef.current;
   if (!player) return;
   if (!player.isFullscreen()) {
@@ -72,21 +72,21 @@ function toggleFullscreen(playerRef: unknown) {
 }
 
 function toggleMute(containerRef: unknown) {
-// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'. | TS2339 - Property 'current' does not exist on type 'unknown'.
-  const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
+  // @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'. | TS2339 - Property 'current' does not exist on type 'unknown'.
+  const videoNode = containerRef.current && containerRef.current.querySelector("video, audio");
   if (!videoNode) return;
   videoNode.muted = !videoNode.muted;
 }
 
 function togglePlay(containerRef: unknown) {
-// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'. | TS2339 - Property 'current' does not exist on type 'unknown'.
-  const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
+  // @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'. | TS2339 - Property 'current' does not exist on type 'unknown'.
+  const videoNode = containerRef.current && containerRef.current.querySelector("video, audio");
   if (!videoNode) return;
   videoNode.paused ? videoNode.play() : videoNode.pause();
 }
 
 function changePlaybackSpeed(shouldSpeedUp: boolean, playerRef: unknown) {
-// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
+  // @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
   const player = playerRef.current;
   if (!player) return;
   const isSpeedUp = shouldSpeedUp;
@@ -107,12 +107,12 @@ const VideoJsKeyboardShorcuts = ({
   playPrevious,
   toggleVideoTheaterMode,
 }: {
-  playNext: any // function,
-  playPrevious: any // function,
-  toggleVideoTheaterMode: any // function
+  playNext: any; // function,
+  playPrevious: any; // function,
+  toggleVideoTheaterMode: any; // function
 }) => {
   function toggleTheaterMode(playerRef: unknown) {
-// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
     const player = playerRef.current;
     if (!player) return;
     // TODO: have to fix this
@@ -123,10 +123,10 @@ const VideoJsKeyboardShorcuts = ({
   }
 
   function handleKeyDown(e: KeyboardEvent, playerRef: unknown, containerRef: unknown) {
-// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
     const player = playerRef.current;
-// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'. | TS2339 - Property 'current' does not exist on type 'unknown'.
-    const videoNode = containerRef.current && containerRef.current.querySelector('video, audio');
+    // @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'. | TS2339 - Property 'current' does not exist on type 'unknown'.
+    const videoNode = containerRef.current && containerRef.current.querySelector("video, audio");
     if (!videoNode || !player || isUserTyping()) return;
     handleSingleKeyActions(e, playerRef, containerRef);
     handleShiftKeyActions(e, playerRef);
@@ -140,7 +140,6 @@ const VideoJsKeyboardShorcuts = ({
     if (e.keyCode === KEYCODES.P) playPrevious();
   }
 
-  // eslint-disable-next-line flowtype/no-types-missing-file-annotation
   function handleSingleKeyActions(e: KeyboardEvent, playerRef: unknown, containerRef: unknown) {
     if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
     if (e.keyCode === KEYCODES.SPACEBAR || e.keyCode === KEYCODES.K) togglePlay(containerRef);
@@ -155,7 +154,7 @@ const VideoJsKeyboardShorcuts = ({
     if (e.keyCode === KEYCODES.LEFT) seekVideo(-SEEK_STEP_5, playerRef, containerRef);
   }
 
-  var curried_function = function (playerRef: any, containerRef: any) {
+  const curried_function = function (playerRef: any, containerRef: any) {
     return function curried_func(e: any) {
       handleKeyDown(e, playerRef, containerRef);
     };

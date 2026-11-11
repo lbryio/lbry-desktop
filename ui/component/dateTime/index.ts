@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectDateForUri } from 'redux/selectors/claims';
-import * as SETTINGS from 'constants/settings';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
-import DateTime from './view';
+import { connect } from "react-redux";
+import { selectDateForUri } from "redux/selectors/claims";
+import * as SETTINGS from "constants/settings";
+import { makeSelectClientSetting } from "redux/selectors/settings";
+import DateTime from "./view";
 
 const select = (state: unknown, props: unknown) => ({
   date: props.date || selectDateForUri(state, props.uri),

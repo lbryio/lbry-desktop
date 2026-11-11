@@ -1,77 +1,68 @@
-import {URL, SHARE_DOMAIN_URL} from 'config';
-import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
-import * as MODALS from 'constants/modal_types';
-import * as COLLECTIONS_CONSTS from 'constants/collections';
-import React from 'react';
-import classnames from 'classnames';
-import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
-import Icon from 'component/common/icon';
-import { generateShareUrl, generateLbryContentUrl, formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
-import { useHistory } from 'react-router';
-import { buildURI, parseURI } from 'util/lbryURI';
+import { URL, SHARE_DOMAIN_URL } from "config";
+import * as ICONS from "constants/icons";
+import * as PAGES from "constants/pages";
+import * as MODALS from "constants/modal_types";
+import * as COLLECTIONS_CONSTS from "constants/collections";
+import React from "react";
+import classnames from "classnames";
+import { Menu, MenuButton, MenuList, MenuItem } from "@reach/menu-button";
+import Icon from "component/common/icon";
+import { generateShareUrl, generateLbryContentUrl, formatLbryUrlForWeb, generateListSearchUrlParams } from "util/url";
+import { useHistory } from "react-router";
+import { buildURI, parseURI } from "util/lbryURI";
 
 const SHARE_DOMAIN = SHARE_DOMAIN_URL || URL;
-const PAGE_VIEW_QUERY = 'view';
-const EDIT_PAGE = 'edit';
+const PAGE_VIEW_QUERY = "view";
+const EDIT_PAGE = "edit";
 
 type SubscriptionArgs = {
-  channelName: string,
-  uri: string,
-  notificationsDisabled?: boolean
+  channelName: string;
+  uri: string;
+  notificationsDisabled?: boolean;
 };
 
 type Props = {
-  uri: string,
-  claim: Claim | null | undefined,
-  repostedClaim: Claim | null | undefined,
-  contentClaim: Claim | null | undefined,
-  contentSigningChannel: Claim | null | undefined,
-  contentChannelUri: string,
-  openModal: (id: string, arg2: Record<any, any>) => void,
-  inline?: boolean,
-  channelIsMuted: boolean,
-  channelIsBlocked: boolean,
-  channelIsAdminBlocked: boolean,
-  isAdmin: boolean,
-  doChannelMute: (arg1: string) => void,
-  doChannelUnmute: (arg1: string) => void,
-  doCommentModBlock: (arg1: string) => void,
-  doCommentModUnBlock: (arg1: string) => void,
-  doCommentModBlockAsAdmin: (
-    arg1: string,
-    arg2?: string | null | undefined,
-    arg3?: string | null | undefined,
-  ) => void,
-  doCommentModUnBlockAsAdmin: (arg1: string, arg2: string) => void,
-  doCollectionEdit: (arg1: string, arg2?: any) => void,
-  hasClaimInWatchLater: boolean,
-  hasClaimInFavorites: boolean,
-  claimInCollection: boolean,
-  collectionId: string,
-  isMyCollection: boolean,
-  doToast: (
-    arg1: {
-      message: string,
-      isError?: boolean
-    },
-  ) => void,
-  claimIsMine: boolean,
-  fileInfo: FileListItem,
-  openFolder: (path: string) => void,
-  prepareEdit: (arg1: Record<any, any>, arg2: string, arg3: Record<any, any>) => void,
-  isSubscribed: boolean,
-  doChannelSubscribe: (arg1: SubscriptionArgs) => void,
-  doChannelUnsubscribe: (arg1: SubscriptionArgs) => void,
-  isChannelPage: boolean,
-  editedCollection: Collection,
-  playNextUri: string,
-  resolvedList: boolean,
-  fetchCollectionItems: (arg1: string) => void,
-  doToggleShuffleList: (arg1: string) => void,
-  lastUsedCollection: Collection | null | undefined,
-  hasClaimInLastUsedCollection: boolean,
-  lastUsedCollectionIsNotBuiltin: boolean
+  uri: string;
+  claim: Claim | null | undefined;
+  repostedClaim: Claim | null | undefined;
+  contentClaim: Claim | null | undefined;
+  contentSigningChannel: Claim | null | undefined;
+  contentChannelUri: string;
+  openModal: (id: string, arg2: Record<any, any>) => void;
+  inline?: boolean;
+  channelIsMuted: boolean;
+  channelIsBlocked: boolean;
+  channelIsAdminBlocked: boolean;
+  isAdmin: boolean;
+  doChannelMute: (arg1: string) => void;
+  doChannelUnmute: (arg1: string) => void;
+  doCommentModBlock: (arg1: string) => void;
+  doCommentModUnBlock: (arg1: string) => void;
+  doCommentModBlockAsAdmin: (arg1: string, arg2?: string | null | undefined, arg3?: string | null | undefined) => void;
+  doCommentModUnBlockAsAdmin: (arg1: string, arg2: string) => void;
+  doCollectionEdit: (arg1: string, arg2?: any) => void;
+  hasClaimInWatchLater: boolean;
+  hasClaimInFavorites: boolean;
+  claimInCollection: boolean;
+  collectionId: string;
+  isMyCollection: boolean;
+  doToast: (arg1: { message: string; isError?: boolean }) => void;
+  claimIsMine: boolean;
+  fileInfo: FileListItem;
+  openFolder: (path: string) => void;
+  prepareEdit: (arg1: Record<any, any>, arg2: string, arg3: Record<any, any>) => void;
+  isSubscribed: boolean;
+  doChannelSubscribe: (arg1: SubscriptionArgs) => void;
+  doChannelUnsubscribe: (arg1: SubscriptionArgs) => void;
+  isChannelPage: boolean;
+  editedCollection: Collection;
+  playNextUri: string;
+  resolvedList: boolean;
+  fetchCollectionItems: (arg1: string) => void;
+  doToggleShuffleList: (arg1: string) => void;
+  lastUsedCollection: Collection | null | undefined;
+  hasClaimInLastUsedCollection: boolean;
+  lastUsedCollectionIsNotBuiltin: boolean;
 };
 
 function ClaimMenuList(props: Props) {
@@ -118,9 +109,9 @@ function ClaimMenuList(props: Props) {
     lastUsedCollectionIsNotBuiltin,
   } = props;
   const [doShuffle, setDoShuffle] = React.useState(false);
-  const incognitoClaim = contentChannelUri && !contentChannelUri.includes('@');
+  const incognitoClaim = contentChannelUri && !contentChannelUri.includes("@");
   const isChannel = !incognitoClaim && !contentSigningChannel;
-// @ts-expect-error - TS2339 - Property 'claims' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'. | TS2339 - Property 'claims' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
+  // @ts-expect-error - TS2339 - Property 'claims' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'. | TS2339 - Property 'claims' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
   const claimLength = claim && claim.value && claim.value.claims && claim.value.claims.length;
   const claimCount = editedCollection ? editedCollection.items.length : claimLength;
   const isEmptyCollection = (Number(claimCount) || 0) <= 0;
@@ -128,11 +119,11 @@ function ClaimMenuList(props: Props) {
   const showDelete = claimIsMine || (fileInfo && (fileInfo.written_bytes > 0 || fileInfo.blobs_completed > 0));
   const subscriptionLabel = repostedClaim
     ? isSubscribed
-      ? __('Unfollow @%channelName%', { channelName })
-      : __('Follow @%channelName%', { channelName })
+      ? __("Unfollow @%channelName%", { channelName })
+      : __("Follow @%channelName%", { channelName })
     : isSubscribed
-    ? __('Unfollow')
-    : __('Follow');
+      ? __("Unfollow")
+      : __("Follow");
 
   const { push, replace } = useHistory();
 
@@ -161,27 +152,27 @@ function ClaimMenuList(props: Props) {
   }
 
   const lbryUrl: string = generateLbryContentUrl(claim.canonical_url, claim.permanent_url);
-// @ts-expect-error - TS2554 - Expected 7 arguments, but got 2.
+  // @ts-expect-error - TS2554 - Expected 7 arguments, but got 2.
   const shareUrl: string = generateShareUrl(SHARE_DOMAIN, lbryUrl);
-  const isCollectionClaim = claim && claim.value_type === 'collection';
+  const isCollectionClaim = claim && claim.value_type === "collection";
   const isPlayable =
     contentClaim &&
     // $FlowFixMe
     contentClaim.value &&
     // $FlowFixMe
-// @ts-expect-error - TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
+    // @ts-expect-error - TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
     contentClaim.value.stream_type &&
     // $FlowFixMe
-// @ts-expect-error - TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'. | TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
-    (contentClaim.value.stream_type === 'audio' || contentClaim.value.stream_type === 'video');
+    // @ts-expect-error - TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'. | TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
+    (contentClaim.value.stream_type === "audio" || contentClaim.value.stream_type === "video");
 
   function handleAdd(source: unknown, name: unknown, collectionId: unknown) {
     doToast({
-      message: source ? __('Item removed from %name%', { name }) : __('Item added to %name%', { name }),
+      message: source ? __("Item removed from %name%", { name }) : __("Item added to %name%", { name }),
     });
     if (contentClaim) {
-// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
-      doCollectionEdit(collectionId, { uris: [contentClaim.permanent_url], remove: source, type: 'playlist' });
+      // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
+      doCollectionEdit(collectionId, { uris: [contentClaim.permanent_url], remove: source, type: "playlist" });
     }
   }
 
@@ -189,7 +180,7 @@ function ClaimMenuList(props: Props) {
     const subscriptionHandler = isSubscribed ? doChannelUnsubscribe : doChannelSubscribe;
     if (channelName) {
       subscriptionHandler({
-        channelName: '@' + channelName,
+        channelName: "@" + channelName,
         uri: contentChannelUri,
         notificationsDisabled: true,
       });
@@ -228,7 +219,7 @@ function ClaimMenuList(props: Props) {
       push(`/$/${PAGES.UPLOAD}`);
       prepareEdit(claim, editUri, fileInfo);
     } else {
-      const channelUrl = claim.name + ':' + claim.claim_id;
+      const channelUrl = claim.name + ":" + claim.claim_id;
       push(`/${channelUrl}?${PAGE_VIEW_QUERY}=${EDIT_PAGE}`);
     }
   }
@@ -237,7 +228,7 @@ function ClaimMenuList(props: Props) {
     if (!repostedClaim && !isChannel) {
       openModal(MODALS.CONFIRM_FILE_REMOVE, { uri, doGoBack: false });
     } else {
-      openModal(MODALS.CONFIRM_CLAIM_REVOKE, { claim, cb: isChannel && (() => (replace(`/$/${PAGES.CHANNELS}`))) });
+      openModal(MODALS.CONFIRM_CLAIM_REVOKE, { claim, cb: isChannel && (() => replace(`/$/${PAGES.CHANNELS}`)) });
     }
   }
 
@@ -247,7 +238,7 @@ function ClaimMenuList(props: Props) {
 
   function handleToggleAdminBlock() {
     if (channelIsAdminBlocked) {
-      doCommentModUnBlockAsAdmin(contentChannelUri, '');
+      doCommentModUnBlockAsAdmin(contentChannelUri, "");
     } else {
       doCommentModBlockAsAdmin(contentChannelUri, undefined, undefined);
     }
@@ -255,20 +246,20 @@ function ClaimMenuList(props: Props) {
 
   function copyToClipboard(textToCopy: unknown, successMsg: unknown, failureMsg: unknown) {
     navigator.clipboard
-// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
+      // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
       .writeText(textToCopy)
       .then(() => {
-// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
+        // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
         doToast({ message: __(successMsg) });
       })
       .catch(() => {
-// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
+        // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
         doToast({ message: __(failureMsg), isError: true });
       });
   }
 
   function handleCopyLink() {
-    copyToClipboard(shareUrl, 'Link copied.', 'Failed to copy link.');
+    copyToClipboard(shareUrl, "Link copied.", "Failed to copy link.");
   }
 
   function handleReportContent() {
@@ -278,22 +269,22 @@ function ClaimMenuList(props: Props) {
   // changes MenuButton behavior to show/hide MenuList not on press but on click event
   let isEventSimulated = false;
   const menuButtonHandler = (e: unknown) => {
-// @ts-expect-error - TS2339 - Property 'key' does not exist on type 'unknown'.
-    if (e.key === 'Enter') {
-// @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'key' does not exist on type 'unknown'.
+    if (e.key === "Enter") {
+      // @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
       e.preventDefault();
-// @ts-expect-error - TS2339 - Property 'type' does not exist on type 'unknown'.
-      e.type = 'click';
+      // @ts-expect-error - TS2339 - Property 'type' does not exist on type 'unknown'.
+      e.type = "click";
     }
-// @ts-expect-error - TS2339 - Property 'type' does not exist on type 'unknown'.
-    if (!isEventSimulated && e.type === 'mousedown') {
-// @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'type' does not exist on type 'unknown'.
+    if (!isEventSimulated && e.type === "mousedown") {
+      // @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
       e.preventDefault();
-// @ts-expect-error - TS2339 - Property 'type' does not exist on type 'unknown'.
-    } else if (e.type === 'click') {
+      // @ts-expect-error - TS2339 - Property 'type' does not exist on type 'unknown'.
+    } else if (e.type === "click") {
       isEventSimulated = true;
-// @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
-      e.target.dispatchEvent(new MouseEvent('mousedown', { bubbles: true }));
+      // @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
+      e.target.dispatchEvent(new MouseEvent("mousedown", { bubbles: true }));
       isEventSimulated = false;
     }
   };
@@ -301,7 +292,7 @@ function ClaimMenuList(props: Props) {
   return (
     <Menu>
       <MenuButton
-        className={classnames('menu__button', { 'claim__menu-button': !inline, 'claim__menu-button--inline': inline })}
+        className={classnames("menu__button", { "claim__menu-button": !inline, "claim__menu-button--inline": inline })}
         onMouseDown={menuButtonHandler}
         onClick={(e) => {
           e.stopPropagation();
@@ -320,7 +311,7 @@ function ClaimMenuList(props: Props) {
               <MenuItem className="comment__menu-option" onSelect={() => push(`/$/${PAGES.LIST}/${collectionId}`)}>
                 <a className="menu__link" href={`/$/${PAGES.LIST}/${collectionId}`}>
                   <Icon aria-hidden icon={ICONS.VIEW} />
-                  {__('View List')}
+                  {__("View List")}
                 </a>
               </MenuItem>
               {!isEmptyCollection && (
@@ -333,7 +324,7 @@ function ClaimMenuList(props: Props) {
                 >
                   <div className="menu__link">
                     <Icon aria-hidden icon={ICONS.SHUFFLE} />
-                    {__('Shuffle Play')}
+                    {__("Shuffle Play")}
                   </div>
                 </MenuItem>
               )}
@@ -344,8 +335,8 @@ function ClaimMenuList(props: Props) {
                     onSelect={() => push(`/$/${PAGES.LIST}/${collectionId}?view=edit`)}
                   >
                     <div className="menu__link">
-                      <Icon aria-hidden iconColor={'red'} icon={ICONS.PUBLISH} />
-                      {editedCollection ? __('Publish') : __('Edit List')}
+                      <Icon aria-hidden iconColor={"red"} icon={ICONS.PUBLISH} />
+                      {editedCollection ? __("Publish") : __("Edit List")}
                     </div>
                   </MenuItem>
                   <MenuItem
@@ -354,7 +345,7 @@ function ClaimMenuList(props: Props) {
                   >
                     <div className="menu__link">
                       <Icon aria-hidden icon={ICONS.DELETE} />
-                      {__('Delete List')}
+                      {__("Delete List")}
                     </div>
                   </MenuItem>
                 </>
@@ -366,31 +357,31 @@ function ClaimMenuList(props: Props) {
                 {/* WATCH LATER */}
                 <MenuItem
                   className="comment__menu-option"
-                  onSelect={() => handleAdd(hasClaimInWatchLater, __('Watch Later'), COLLECTIONS_CONSTS.WATCH_LATER_ID)}
+                  onSelect={() => handleAdd(hasClaimInWatchLater, __("Watch Later"), COLLECTIONS_CONSTS.WATCH_LATER_ID)}
                 >
                   <div className="menu__link">
                     <Icon aria-hidden icon={hasClaimInWatchLater ? ICONS.DELETE : ICONS.TIME} />
-                    {hasClaimInWatchLater ? __('In Watch Later') : __('Watch Later')}
+                    {hasClaimInWatchLater ? __("In Watch Later") : __("Watch Later")}
                   </div>
                 </MenuItem>
                 {/* FAVORITES LIST */}
                 <MenuItem
                   className="comment__menu-option"
-                  onSelect={() => handleAdd(hasClaimInFavorites, __('Favorites'), COLLECTIONS_CONSTS.FAVORITES_ID)}
+                  onSelect={() => handleAdd(hasClaimInFavorites, __("Favorites"), COLLECTIONS_CONSTS.FAVORITES_ID)}
                 >
                   <div className="menu__link">
                     <Icon aria-hidden icon={hasClaimInFavorites ? ICONS.DELETE : ICONS.STAR} />
-                    {hasClaimInFavorites ? __('In Favorites') : __('Favorites')}
+                    {hasClaimInFavorites ? __("In Favorites") : __("Favorites")}
                   </div>
                 </MenuItem>
                 {/* CURRENTLY ONLY SUPPORT PLAYLISTS FOR PLAYABLE; LATER DIFFERENT TYPES */}
                 <MenuItem
                   className="comment__menu-option"
-                  onSelect={() => openModal(MODALS.COLLECTION_ADD, { uri, type: 'playlist' })}
+                  onSelect={() => openModal(MODALS.COLLECTION_ADD, { uri, type: "playlist" })}
                 >
                   <div className="menu__link">
                     <Icon aria-hidden icon={ICONS.STACK} />
-                    {__('Add to Lists')}
+                    {__("Add to Lists")}
                   </div>
                 </MenuItem>
                 {lastUsedCollection && lastUsedCollectionIsNotBuiltin && (
@@ -404,8 +395,8 @@ function ClaimMenuList(props: Props) {
                       {!hasClaimInLastUsedCollection && <Icon aria-hidden icon={ICONS.ADD} />}
                       {hasClaimInLastUsedCollection && <Icon aria-hidden icon={ICONS.DELETE} />}
                       {!hasClaimInLastUsedCollection &&
-                        __('Add to %collection%', { collection: lastUsedCollection.name })}
-                      {hasClaimInLastUsedCollection && __('In %collection%', { collection: lastUsedCollection.name })}
+                        __("Add to %collection%", { collection: lastUsedCollection.name })}
+                      {hasClaimInLastUsedCollection && __("In %collection%", { collection: lastUsedCollection.name })}
                     </div>
                   </MenuItem>
                 )}
@@ -419,7 +410,7 @@ function ClaimMenuList(props: Props) {
             <MenuItem className="comment__menu-option" onSelect={handleSupport}>
               <div className="menu__link">
                 <Icon aria-hidden icon={ICONS.LBC} />
-                {__('Support --[button to support a claim]--')}
+                {__("Support --[button to support a claim]--")}
               </div>
             </MenuItem>
           </>
@@ -446,7 +437,7 @@ function ClaimMenuList(props: Props) {
                   <MenuItem className="comment__menu-option" onSelect={handleToggleBlock}>
                     <div className="menu__link">
                       <Icon aria-hidden icon={ICONS.BLOCK} />
-                      {channelIsBlocked ? __('Unblock Channel') : __('Block Channel')}
+                      {channelIsBlocked ? __("Unblock Channel") : __("Block Channel")}
                     </div>
                   </MenuItem>
 
@@ -454,7 +445,7 @@ function ClaimMenuList(props: Props) {
                     <MenuItem className="comment__menu-option" onSelect={handleToggleAdminBlock}>
                       <div className="menu__link">
                         <Icon aria-hidden icon={ICONS.GLOBE} />
-                        {channelIsAdminBlocked ? __('Global Unblock Channel') : __('Global Block Channel')}
+                        {channelIsAdminBlocked ? __("Global Unblock Channel") : __("Global Block Channel")}
                       </div>
                     </MenuItem>
                   )}
@@ -462,7 +453,7 @@ function ClaimMenuList(props: Props) {
                   <MenuItem className="comment__menu-option" onSelect={handleToggleMute}>
                     <div className="menu__link">
                       <Icon aria-hidden icon={ICONS.MUTE} />
-                      {channelIsMuted ? __('Unmute Channel') : __('Mute Channel')}
+                      {channelIsMuted ? __("Unmute Channel") : __("Mute Channel")}
                     </div>
                   </MenuItem>
                 </>
@@ -473,7 +464,7 @@ function ClaimMenuList(props: Props) {
                   <MenuItem className="comment__menu-option" onSelect={handleEdit}>
                     <div className="menu__link">
                       <Icon aria-hidden icon={ICONS.EDIT} />
-                      {__('Edit')}
+                      {__("Edit")}
                     </div>
                   </MenuItem>
                 )}
@@ -484,7 +475,7 @@ function ClaimMenuList(props: Props) {
               <MenuItem className="comment__menu-option" onSelect={() => openFolder(fileInfo.download_path)}>
                 <div className="menu__link">
                   <Icon aria-hidden icon={ICONS.OPEN_LOG_FOLDER} />
-                  {__('Open in Folder')}
+                  {__("Open in Folder")}
                 </div>
               </MenuItem>
             )}
@@ -492,7 +483,7 @@ function ClaimMenuList(props: Props) {
               <MenuItem className="comment__menu-option" onSelect={handleDelete}>
                 <div className="menu__link">
                   <Icon aria-hidden icon={ICONS.DELETE} />
-                  {__('Delete')}
+                  {__("Delete")}
                 </div>
               </MenuItem>
             )}
@@ -502,14 +493,14 @@ function ClaimMenuList(props: Props) {
         <MenuItem className="comment__menu-option" onSelect={handleCopyLink}>
           <div className="menu__link">
             <Icon aria-hidden icon={ICONS.COPY_LINK} />
-            {__('Copy Link')}
+            {__("Copy Link")}
           </div>
         </MenuItem>
         {!claimIsMine && !isMyCollection && (
           <MenuItem className="comment__menu-option" onSelect={handleReportContent}>
             <div className="menu__link">
               <Icon aria-hidden icon={ICONS.REPORT} />
-              {__('Report Content')}
+              {__("Report Content")}
             </div>
           </MenuItem>
         )}

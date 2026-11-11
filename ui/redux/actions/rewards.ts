@@ -1,11 +1,11 @@
 //@ts-nocheck
-import {Lbryio} from 'lbryinc';
-import { doUpdateBalance } from 'redux/actions/wallet';
-import { doToast } from 'redux/actions/notifications';
-import * as ACTIONS from 'constants/action_types';
-import { selectUnclaimedRewards } from 'redux/selectors/rewards';
-import { selectUserIsRewardApproved } from 'redux/selectors/user';
-import rewards from 'rewards';
+import { Lbryio } from "lbryinc";
+import { doUpdateBalance } from "redux/actions/wallet";
+import { doToast } from "redux/actions/notifications";
+import * as ACTIONS from "constants/action_types";
+import { selectUnclaimedRewards } from "redux/selectors/rewards";
+import { selectUserIsRewardApproved } from "redux/selectors/user";
+import rewards from "rewards";
 
 export function doRewardList() {
   return (dispatch: unknown) => {
@@ -13,7 +13,7 @@ export function doRewardList() {
       type: ACTIONS.FETCH_REWARDS_STARTED,
     });
 
-    Lbryio.call('reward', 'list', { multiple_rewards_per_type: true })
+    Lbryio.call("reward", "list", { multiple_rewards_per_type: true })
       .then((userRewards) => {
         dispatch({
           type: ACTIONS.FETCH_REWARDS_COMPLETED,
@@ -178,6 +178,6 @@ export function doFetchRewardedContent() {
       });
     };
 
-    Lbryio.call('reward', 'list_featured').then(success, failure);
+    Lbryio.call("reward", "list_featured").then(success, failure);
   };
 }

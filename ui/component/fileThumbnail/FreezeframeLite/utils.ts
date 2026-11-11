@@ -3,11 +3,11 @@
 // https://github.com/ctrl-freaks/freezeframe.js/tree/master/packages/freezeframe/src
 
 export const isTouch = () => {
-  return 'ontouchstart' in window || 'onmsgesturechange' in window;
+  return "ontouchstart" in window || "onmsgesturechange" in window;
 };
 
 export const htmlToNode = (html: unknown) => {
-  const $wrap = window.document.createElement('div');
+  const $wrap = window.document.createElement("div");
   $wrap.innerHTML = html;
   const $content = $wrap.childNodes;
   return $content.length > 1 ? $content : $content[0];

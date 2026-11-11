@@ -1,14 +1,14 @@
-import {Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption} from '@reach/combobox';
-import { matchSorter } from 'match-sorter';
-import React from 'react';
-import classnames from 'classnames';
-import Button from 'component/button';
-import ClaimList from 'component/claimList';
-import Icon from 'component/common/icon';
-import Paginate from 'component/common/paginate';
-import Yrbl from 'component/yrbl';
-import * as ICONS from 'constants/icons';
-import useThrottle from 'effects/use-throttle';
+import { Combobox, ComboboxInput, ComboboxPopover, ComboboxList, ComboboxOption } from "@reach/combobox";
+import { matchSorter } from "match-sorter";
+import React from "react";
+import classnames from "classnames";
+import Button from "component/button";
+import ClaimList from "component/claimList";
+import Icon from "component/common/icon";
+import Paginate from "component/common/paginate";
+import Yrbl from "component/yrbl";
+import * as ICONS from "constants/icons";
+import useThrottle from "effects/use-throttle";
 
 const PAGE_SIZE = 10;
 
@@ -17,7 +17,7 @@ function reduceUriToChannelName(uri: string) {
   // kosher in the first place, just do a quick substring call. Add a
   // try-catch just in case.
   try {
-    return uri.substring(uri.indexOf('@') + 1, uri.indexOf('#'));
+    return uri.substring(uri.indexOf("@") + 1, uri.indexOf("#"));
   } catch {
     return uri;
   }
@@ -28,12 +28,12 @@ function reduceUriToChannelName(uri: string) {
 // ****************************************************************************
 
 type Props = {
-  uris: Array<string>,
-  help: string,
-  titleEmptyList: string,
-  subtitleEmptyList: string,
-  getActionButtons?: (url: string) => React.ReactElement,
-  className: string | null | undefined
+  uris: Array<string>;
+  help: string;
+  titleEmptyList: string;
+  subtitleEmptyList: string;
+  getActionButtons?: (url: string) => React.ReactElement;
+  className: string | null | undefined;
 };
 
 export default function BlockList(props: Props) {
@@ -61,7 +61,7 @@ export default function BlockList(props: Props) {
 
   function getRenderActions() {
     if (getActionButtons) {
-// @ts-expect-error - TS2339 - Property 'permanent_url' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'permanent_url' does not exist on type 'unknown'.
       return (claim: unknown) => <div className="section__actions">{getActionButtons(claim.permanent_url)}</div>;
     }
     return undefined;
@@ -107,7 +107,7 @@ export default function BlockList(props: Props) {
           actions={
             <div className="section__actions">
               {/* @ts-expect-error - TS2322 (ts-migration) */}
-              <Button button="primary" label={__('Go Home')} navigate="/" />
+              <Button button="primary" label={__("Go Home")} navigate="/" />
             </div>
           }
         />
@@ -118,15 +118,15 @@ export default function BlockList(props: Props) {
   return (
     <>
       <div className="help--notice">{help}</div>
-      <div className="section" style={{ zIndex: '4' }}>
+      <div className="section" style={{ zIndex: "4" }}>
         <SearchList
           list={localList}
-          placeholder={__('e.g. odysee')}
+          placeholder={__("e.g. odysee")}
           formatter={formatSearchSuggestion}
           onResultsUpdated={filterSearchResults}
         />
       </div>
-      <div className={classnames('section block-list', className)}>
+      <div className={classnames("section block-list", className)}>
         {/* @ts-expect-error - TS2740 (ts-migration) */}
         <ClaimList
           uris={searchList || paginatedLocalList}
@@ -146,19 +146,19 @@ export default function BlockList(props: Props) {
 // ****************************************************************************
 
 type LsbProps = {
-  list: Array<string> | null | undefined,
-  placeholder?: string,
-  formatter?: (suggestion: string) => string,
-  onResultsUpdated?: (arg1?: Array<string> | null | undefined) => void
+  list: Array<string> | null | undefined;
+  placeholder?: string;
+  formatter?: (suggestion: string) => string;
+  onResultsUpdated?: (arg1?: Array<string> | null | undefined) => void;
 };
 
 function SearchList(props: LsbProps) {
   const { list, placeholder, formatter, onResultsUpdated } = props;
-  const [term, setTerm] = React.useState('');
+  const [term, setTerm] = React.useState("");
   const results = useAuthorMatch(term, list);
-// @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
+  // @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
   const handleChange = (event: unknown) => setTerm(event.target.value);
-// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'SetStateAction<string>'.
+  // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'SetStateAction<string>'.
   const handleSelect = (e: unknown) => setTerm(e);
 
   React.useEffect(() => {
@@ -166,11 +166,11 @@ function SearchList(props: LsbProps) {
       // @ts-expect-error - TS2345 (ts-migration)
       onResultsUpdated(results);
     }
-  }, [results]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [results]);
 
   return (
     <div className="wunderbar__wrapper">
-      <label>{__('Search blocked channel name')}</label>
+      <label>{__("Search blocked channel name")}</label>
       <Combobox className="wunderbar" onSelect={handleSelect}>
         <Icon icon={ICONS.SEARCH} />
         <ComboboxInput selectOnClick className="wunderbar__input" onChange={handleChange} placeholder={placeholder} />
@@ -188,7 +188,7 @@ function SearchList(props: LsbProps) {
                 ))}
               </ComboboxList>
             ) : (
-              <span style={{ display: 'block', margin: 8 }}>{__('No results')}</span>
+              <span style={{ display: "block", margin: 8 }}>{__("No results")}</span>
             )}
           </ComboboxPopover>
         )}
@@ -198,16 +198,16 @@ function SearchList(props: LsbProps) {
 }
 
 function useAuthorMatch(term: unknown, list: unknown) {
-// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
+  // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
   const throttledTerm = useThrottle(term, 200);
   return React.useMemo(() => {
-    return !throttledTerm || throttledTerm.trim() === ''
+    return !throttledTerm || throttledTerm.trim() === ""
       ? null
-      // @ts-expect-error - TS2345 (ts-migration)
-      : matchSorter(list, throttledTerm, {
-// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
+      : // @ts-expect-error - TS2345 (ts-migration)
+        matchSorter(list, throttledTerm, {
+          // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
           keys: [(item: unknown) => reduceUriToChannelName(item)],
           threshold: matchSorter.rankings.CONTAINS,
         });
-  }, [throttledTerm]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [throttledTerm]);
 }

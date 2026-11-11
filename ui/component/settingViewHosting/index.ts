@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doSetDaemonSetting, doGetDaemonStatus, doCleanBlobs } from 'redux/actions/settings';
-import { selectViewHostingLimit, selectViewBlobSpace, selectSettingDaemonSettings } from 'redux/selectors/settings';
-import SettingViewHosting from './view';
-import { selectDiskSpace } from 'redux/selectors/app';
+import { connect } from "react-redux";
+import { doSetDaemonSetting, doGetDaemonStatus, doCleanBlobs } from "redux/actions/settings";
+import { selectViewHostingLimit, selectViewBlobSpace, selectSettingDaemonSettings } from "redux/selectors/settings";
+import SettingViewHosting from "./view";
+import { selectDiskSpace } from "redux/selectors/app";
 
 const select = (state: unknown) => ({
   viewHostingLimit: selectViewHostingLimit(state),

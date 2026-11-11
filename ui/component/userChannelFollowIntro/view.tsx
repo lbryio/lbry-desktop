@@ -1,23 +1,23 @@
-import React, {useEffect} from 'react';
-import ClaimListDiscover from 'component/claimListDiscover';
-import * as CS from 'constants/claim_search';
-import Nag from 'component/common/nag';
-import { parseURI } from 'util/lbryURI';
-import Button from 'component/button';
-import Card from 'component/common/card';
-import { AUTO_FOLLOW_CHANNELS, CUSTOM_HOMEPAGE, SITE_NAME } from 'config';
+import React, { useEffect } from "react";
+import ClaimListDiscover from "component/claimListDiscover";
+import * as CS from "constants/claim_search";
+import Nag from "component/common/nag";
+import { parseURI } from "util/lbryURI";
+import Button from "component/button";
+import Card from "component/common/card";
+import { AUTO_FOLLOW_CHANNELS, CUSTOM_HOMEPAGE, SITE_NAME } from "config";
 
 type Props = {
-  subscribedChannels: Array<Subscription>,
-  onContinue: () => void,
-  channelSubscribe: (sub: Subscription) => void,
-  homepageData: any,
-  prefsReady: boolean
+  subscribedChannels: Array<Subscription>;
+  onContinue: () => void;
+  channelSubscribe: (sub: Subscription) => void;
+  homepageData: any;
+  prefsReady: boolean;
 };
 
 const channelsToSubscribe = AUTO_FOLLOW_CHANNELS.trim()
-  .split(' ')
-  .filter((x) => x !== '');
+  .split(" ")
+  .filter((x) => x !== "");
 
 function UserChannelFollowIntro(props: Props) {
   const { subscribedChannels, channelSubscribe, onContinue, homepageData, prefsReady } = props;
@@ -59,9 +59,9 @@ function UserChannelFollowIntro(props: Props) {
 
   return (
     <Card
-      title={__('Find channels to follow')}
+      title={__("Find channels to follow")}
       subtitle={__(
-        '%SITE_NAME% works better if you find and follow a couple creators you like. You can also block channels you never want to see.',
+        "%SITE_NAME% works better if you find and follow a couple creators you like. You can also block channels you never want to see.",
         { SITE_NAME }
       )}
       actions={
@@ -71,9 +71,9 @@ function UserChannelFollowIntro(props: Props) {
               meta={
                 <Button
                   // @ts-expect-error - TS2322 (ts-migration)
-                  button={subscribedChannels.length < 1 ? 'alt' : 'primary'}
+                  button={subscribedChannels.length < 1 ? "alt" : "primary"}
                   onClick={onContinue}
-                  label={subscribedChannels.length < 1 ? __('Skip') : __('Continue')}
+                  label={subscribedChannels.length < 1 ? __("Skip") : __("Continue")}
                 />
               }
               defaultOrderBy={CS.ORDER_BY_TRENDING}
@@ -87,14 +87,14 @@ function UserChannelFollowIntro(props: Props) {
                 type="helpful"
                 message={
                   followingCountIgnoringAutoFollows === 1
-                    ? __('Nice! You are currently following %followingCount% creator', {
+                    ? __("Nice! You are currently following %followingCount% creator", {
                         followingCount: followingCountIgnoringAutoFollows,
                       })
-                    : __('Nice! You are currently following %followingCount% creators', {
+                    : __("Nice! You are currently following %followingCount% creators", {
                         followingCount: followingCountIgnoringAutoFollows,
                       })
                 }
-                actionText={__('Continue')}
+                actionText={__("Continue")}
                 onClick={onContinue}
               />
             )}

@@ -1,12 +1,12 @@
-import React from 'react';
+import React from "react";
 // @ts-expect-error - TS2792 - Cannot find module 'static/img/freespch.png'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-import freeezepeach from 'static/img/freespch.png';
+import freeezepeach from "static/img/freespch.png";
 type Props = {
   // uri: ?string,
   // cover: ?string,
   // avatar: ?string,
-  reset: boolean | null | undefined,
-  disableBackground: boolean | null | undefined
+  reset: boolean | null | undefined;
+  disableBackground: boolean | null | undefined;
 };
 
 const Wallpaper = (props: Props) => {
@@ -230,12 +230,12 @@ const Wallpaper = (props: Props) => {
   return (
     <>
       <div
-        className={'background-image'}
+        className={"background-image"}
         style={{
           backgroundImage: disableBackground ? `none` : `url(${freeezepeach})`,
         }}
       />
-      <div className={'theme'} />
+      <div className={"theme"} />
     </>
   );
   // }

@@ -1,12 +1,12 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doClearPublish, doPrepareEdit } from 'redux/actions/publish';
-import { doResolveUris } from 'redux/actions/claims';
-import { selectPendingIds, makeSelectClaimForUri } from 'redux/selectors/claims';
-import { makeSelectWinningUriForQuery, selectIsResolvingWinningUri } from 'redux/selectors/search';
-import SearchTopClaim from './view';
-import { push } from 'connected-react-router';
-import * as PAGES from 'constants/pages';
+import { connect } from "react-redux";
+import { doClearPublish, doPrepareEdit } from "redux/actions/publish";
+import { doResolveUris } from "redux/actions/claims";
+import { selectPendingIds, makeSelectClaimForUri } from "redux/selectors/claims";
+import { makeSelectWinningUriForQuery, selectIsResolvingWinningUri } from "redux/selectors/search";
+import SearchTopClaim from "./view";
+import { push } from "connected-react-router";
+import * as PAGES from "constants/pages";
 
 const select = (state: unknown, props: unknown) => {
   const winningUri = makeSelectWinningUriForQuery(props.query)(state);

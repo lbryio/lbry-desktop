@@ -1,5 +1,5 @@
 type State = {
-  costInfo: any
+  costInfo: any;
 };
 
 export const selectState = (state: State) => state.costInfo || {};

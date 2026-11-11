@@ -1,21 +1,27 @@
 //@ts-nocheck
-import Lbry from 'lbry';
-import { selectClaimForUri } from 'redux/selectors/claims';
-import { doFetchChannelListMine } from 'redux/actions/claims';
-import { isURIValid, normalizeURI } from 'util/lbryURI';
-import { batchActions } from 'util/batch-actions';
+import Lbry from "lbry";
+import { selectClaimForUri } from "redux/selectors/claims";
+import { doFetchChannelListMine } from "redux/actions/claims";
+import { isURIValid, normalizeURI } from "util/lbryURI";
+import { batchActions } from "util/batch-actions";
 
-import * as ACTIONS from 'constants/action_types';
-import { doClaimRewardType, doRewardList } from 'redux/actions/rewards';
-import { selectUser } from 'redux/selectors/user';
-import rewards from 'rewards';
-import { Lbryio } from 'lbryinc';
-import { DOMAIN } from 'config';
-import { getDefaultLanguage } from 'util/default-languages';
-const AUTH_IN_PROGRESS = 'authInProgress';
-export let sessionStorageAvailable = false;
+import * as ACTIONS from "constants/action_types";
+import { doClaimRewardType, doRewardList } from "redux/actions/rewards";
+import { selectUser } from "redux/selectors/user";
+import rewards from "rewards";
+import { Lbryio } from "lbryinc";
+import { DOMAIN } from "config";
+import { getDefaultLanguage } from "util/default-languages";
+const AUTH_IN_PROGRESS = "authInProgress";
+export const sessionStorageAvailable = false;
 
-export function doInstallNew(appVersion: unknown, os = null, firebaseToken = null, callbackForUsersWhoAreSharingData: unknown, domain: unknown) {
+export function doInstallNew(
+  appVersion: unknown,
+  os = null,
+  firebaseToken = null,
+  callbackForUsersWhoAreSharingData: unknown,
+  domain: unknown
+) {
   const payload = { app_version: appVersion, domain } as const;
   if (firebaseToken) {
     payload.firebase_token = firebaseToken;
@@ -23,15 +29,15 @@ export function doInstallNew(appVersion: unknown, os = null, firebaseToken = nul
 
   Lbry.status().then((status) => {
     payload.app_id =
-      domain && domain !== 'lbry.tv'
-        ? (domain.replace(/[.]/gi, '') + status.installation_id).slice(0, 66)
+      domain && domain !== "lbry.tv"
+        ? (domain.replace(/[.]/gi, "") + status.installation_id).slice(0, 66)
         : status.installation_id;
     payload.node_id = status.lbry_id;
     Lbry.version().then((version) => {
       payload.daemon_version = version.lbrynet_version;
       payload.operating_system = os || version.os_system;
       payload.platform = version.platform;
-      Lbryio.call('install', 'new', payload);
+      Lbryio.call("install", "new", payload);
 
       if (callbackForUsersWhoAreSharingData) {
         callbackForUsersWhoAreSharingData(status);
@@ -60,7 +66,7 @@ export function doInstallNewWithParams(
     payload.daemon_version = lbrynetVersion;
     payload.operating_system = os;
     payload.platform = platform;
-    Lbryio.call('install', 'new', payload);
+    Lbryio.call("install", "new", payload);
   };
 }
 
@@ -174,7 +180,7 @@ export function doUserPhoneNew(phone: unknown, countryCode: unknown) {
       });
     };
 
-    Lbryio.call('user', 'phone_number_new', { phone_number: phone, country_code: countryCode }, 'post').then(
+    Lbryio.call("user", "phone_number_new", { phone_number: phone, country_code: countryCode }, "post").then(
       success,
       failure
     );
@@ -204,7 +210,7 @@ export function doUserCheckIfEmailExists(email: unknown) {
         });
       } else {
         // If they don't have a password, they will need to use the email verification api
-        Lbryio.call('user_email', 'resend_token', { email, only_if_expired: true }, 'post');
+        Lbryio.call("user_email", "resend_token", { email, only_if_expired: true }, "post");
       }
     };
 
@@ -218,7 +224,7 @@ export function doUserCheckIfEmailExists(email: unknown) {
         data: { error },
       });
 
-    Lbryio.call('user', 'exists', { email }, 'post')
+    Lbryio.call("user", "exists", { email }, "post")
       .catch((error) => {
         if (error.response && error.response.status === 404) {
           dispatch({
@@ -255,14 +261,14 @@ export function doUserSignIn(email: unknown, password: unknown) {
         data: { error },
       });
 
-    Lbryio.call('user', 'signin', { email, ...(password ? { password } : {}) }, 'post')
+    Lbryio.call("user", "signin", { email, ...(password ? { password } : {}) }, "post")
       .catch((error) => {
         if (error.response && error.response.status === 409) {
           dispatch({
             type: ACTIONS.USER_EMAIL_NEW_EXISTS,
           });
 
-          return Lbryio.call('user_email', 'resend_token', { email, only_if_expired: true }, 'post').then(
+          return Lbryio.call("user_email", "resend_token", { email, only_if_expired: true }, "post").then(
             success,
             failure
           );
@@ -304,7 +310,7 @@ export function doUserSignUp(email: unknown, password: unknown) {
         reject(error);
       };
 
-      Lbryio.call('user', 'signup', { email, ...(password ? { password } : {}) }, 'post').then(success, failure);
+      Lbryio.call("user", "signup", { email, ...(password ? { password } : {}) }, "post").then(success, failure);
     });
 }
 
@@ -327,7 +333,7 @@ export function doUserPasswordReset(email: unknown) {
         data: { error },
       });
 
-    Lbryio.call('user_password', 'reset', { email }, 'post').then(success, failure);
+    Lbryio.call("user_password", "reset", { email }, "post").then(success, failure);
   };
 }
 
@@ -351,14 +357,14 @@ export function doUserPasswordSet(newPassword: unknown, oldPassword: unknown, au
       });
 
     Lbryio.call(
-      'user_password',
-      'set',
+      "user_password",
+      "set",
       {
         new_password: newPassword,
         ...(oldPassword ? { old_password: oldPassword } : {}),
         ...(authToken ? { auth_token: authToken } : {}),
       },
-      'post'
+      "post"
     ).then(success, failure);
   };
 }
@@ -382,7 +388,7 @@ export function doUserResendVerificationEmail(email: unknown) {
       });
     };
 
-    Lbryio.call('user_email', 'resend_token', { email, only_if_expired: true }, 'post')
+    Lbryio.call("user_email", "resend_token", { email, only_if_expired: true }, "post")
       .catch((error) => {
         if (error.response && error.response.status === 409) {
           throw error;
@@ -446,9 +452,9 @@ export function doUserSetReferrer(referrer: unknown, shouldClaim: unknown) {
           if (response && response[uri] && !response[uri].error) claim = response && response[uri];
           if (claim) {
             if (claim.signing_channel) {
-              referrerCode = claim.signing_channel.permanent_url.replace('lbry://', '');
+              referrerCode = claim.signing_channel.permanent_url.replace("lbry://", "");
             } else {
-              referrerCode = claim.permanent_url.replace('lbry://', '');
+              referrerCode = claim.permanent_url.replace("lbry://", "");
             }
           }
         } catch (error: any) {
@@ -458,7 +464,7 @@ export function doUserSetReferrer(referrer: unknown, shouldClaim: unknown) {
           });
         }
       } else {
-        referrerCode = claim.permanent_url.replace('lbry://', '');
+        referrerCode = claim.permanent_url.replace("lbry://", "");
       }
     }
 
@@ -467,7 +473,7 @@ export function doUserSetReferrer(referrer: unknown, shouldClaim: unknown) {
     }
 
     try {
-      await Lbryio.call('user', 'referral', { referrer: referrerCode }, 'post');
+      await Lbryio.call("user", "referral", { referrer: referrerCode }, "post");
       dispatch({
         type: ACTIONS.USER_SET_REFERRER_SUCCESS,
       });
@@ -491,7 +497,7 @@ export function doUserSetCountry(country: unknown) {
     const state = getState();
     const user = selectUser(state);
 
-    Lbryio.call('user_country', 'set', { country }).then(() => {
+    Lbryio.call("user_country", "set", { country }).then(() => {
       const newUser = { ...user, country } as const;
       dispatch({
         type: ACTIONS.USER_FETCH_SUCCESS,
@@ -511,7 +517,7 @@ export function doClaimYoutubeChannels() {
     return Lbry.address_list({ page: 1, page_size: 99999 })
       .then((addressList) => addressList.items[0])
       .then((address) =>
-        Lbryio.call('yt', 'transfer', {
+        Lbryio.call("yt", "transfer", {
           address: address.address,
           public_key: address.pubkey,
         }).then((response) => {
@@ -555,7 +561,7 @@ export function doCheckYoutubeTransfer() {
       type: ACTIONS.USER_YOUTUBE_IMPORT_STARTED,
     });
 
-    return Lbryio.call('yt', 'transfer')
+    return Lbryio.call("yt", "transfer")
       .then((response) => {
         if (response && response.length) {
           dispatch({

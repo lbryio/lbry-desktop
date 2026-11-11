@@ -1,12 +1,12 @@
-import React from 'react';
+import React from "react";
 
 type Props = {
-  message: string | null | undefined
+  message: string | null | undefined;
 };
 
 class BusyIndicator extends React.PureComponent<Props> {
   static defaultProps = {
-    message: '',
+    message: "",
   };
 
   render() {

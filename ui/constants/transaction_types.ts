@@ -1,10 +1,10 @@
 //@ts-nocheck
-export const TIP = 'tip';
-export const SUPPORT = 'support';
-export const CHANNEL = 'channel';
-export const UPDATE = 'update';
-export const ALL = 'all';
-export const SPEND = 'spend';
-export const RECEIVE = 'receive';
-export const PUBLISH = 'publish';
-export const ABANDON = 'abandon';
+export const TIP = "tip";
+export const SUPPORT = "support";
+export const CHANNEL = "channel";
+export const UPDATE = "update";
+export const ALL = "all";
+export const SPEND = "spend";
+export const RECEIVE = "receive";
+export const PUBLISH = "publish";
+export const ABANDON = "abandon";

@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import * as SETTINGS from 'constants/settings';
-import { doSetClientSetting, doSetDarkTime } from 'redux/actions/settings';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
-import ThemeSelector from './view';
+import { connect } from "react-redux";
+import * as SETTINGS from "constants/settings";
+import { doSetClientSetting, doSetDarkTime } from "redux/actions/settings";
+import { makeSelectClientSetting } from "redux/selectors/settings";
+import ThemeSelector from "./view";
 
 const select = (state: unknown) => ({
   currentTheme: makeSelectClientSetting(SETTINGS.THEME)(state),

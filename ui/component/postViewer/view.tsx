@@ -1,32 +1,32 @@
-import * as React from 'react';
-import * as ICONS from 'constants/icons';
-import * as MODALS from 'constants/modal_types';
-import { formatCredits } from 'util/format-credits';
-import FileDetails from 'component/fileDetails';
-import ClaimAuthor from 'component/claimAuthor';
-import FileTitle from 'component/fileTitle';
-import FileActions from 'component/fileActions';
-import FileRenderInitiator from 'component/fileRenderInitiator';
-import FileRenderInline from 'component/fileRenderInline';
-import FileValues from 'component/fileValues';
-import FileViewCount from 'component/fileViewCount';
-import ClaimTags from 'component/claimTags';
-import DateTime from 'component/dateTime';
-import Button from 'component/button';
-import LbcSymbol from 'component/common/lbc-symbol';
-import classnames from 'classnames';
+import * as React from "react";
+import * as ICONS from "constants/icons";
+import * as MODALS from "constants/modal_types";
+import { formatCredits } from "util/format-credits";
+import FileDetails from "component/fileDetails";
+import ClaimAuthor from "component/claimAuthor";
+import FileTitle from "component/fileTitle";
+import FileActions from "component/fileActions";
+import FileRenderInitiator from "component/fileRenderInitiator";
+import FileRenderInline from "component/fileRenderInline";
+import FileValues from "component/fileValues";
+import FileViewCount from "component/fileViewCount";
+import ClaimTags from "component/claimTags";
+import DateTime from "component/dateTime";
+import Button from "component/button";
+import LbcSymbol from "component/common/lbc-symbol";
+import classnames from "classnames";
 
 const EXPAND = {
-  NONE: 'none',
-  CREDIT_DETAILS: 'credit_details',
-  FILE_DETAILS: 'file_details',
+  NONE: "none",
+  CREDIT_DETAILS: "credit_details",
+  FILE_DETAILS: "file_details",
 } as const;
 
 type Props = {
-  uri: string,
-  claim: StreamClaim | null | undefined,
-  claimIsMine: boolean,
-  doOpenModal: (id: string, arg2: Record<any, any>) => void
+  uri: string;
+  claim: StreamClaim | null | undefined;
+  claimIsMine: boolean;
+  doOpenModal: (id: string, arg2: Record<any, any>) => void;
 };
 
 function PostViewer(props: Props) {
@@ -45,7 +45,7 @@ function PostViewer(props: Props) {
     if (expand === newExpand) {
       setExpand(EXPAND.NONE);
     } else {
-// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'SetStateAction<"none">'.
+      // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'SetStateAction<"none">'.
       setExpand(newExpand);
     }
   }
@@ -55,8 +55,8 @@ function PostViewer(props: Props) {
       {/* @ts-expect-error - TS2322 (ts-migration) */}
       <FileTitle uri={uri} className="post__title" />
       <div
-        className={classnames('post__info', {
-          'post__info--expanded': expand !== EXPAND.NONE,
+        className={classnames("post__info", {
+          "post__info--expanded": expand !== EXPAND.NONE,
         })}
       >
         <span className="post__date">
@@ -71,13 +71,13 @@ function PostViewer(props: Props) {
             button="link"
             className="dim"
             icon={ICONS.INFO}
-            aria-label={__('View claim details')}
+            aria-label={__("View claim details")}
             onClick={() => handleExpand(EXPAND.FILE_DETAILS)}
           />
           {/* @ts-expect-error - TS2322 (ts-migration) */}
           <Button button="link" className="dim" onClick={() => handleExpand(EXPAND.CREDIT_DETAILS)}>
-{ /* @ts-expect-error - TS2367 - This condition will always return 'false' since the types '"none"' and '"credit_details"' have no overlap. */}
-            <LbcSymbol postfix={expand === EXPAND.CREDIT_DETAILS ? __('Hide') : formattedAmount} />
+            {/* @ts-expect-error - TS2367 - This condition will always return 'false' since the types '"none"' and '"credit_details"' have no overlap. */}
+            <LbcSymbol postfix={expand === EXPAND.CREDIT_DETAILS ? __("Hide") : formattedAmount} />
           </Button>
           {claimIsMine && hasSupport && (
             <Button
@@ -85,7 +85,7 @@ function PostViewer(props: Props) {
               button="link"
               className="expandable__button"
               icon={ICONS.UNLOCK}
-              aria-label={__('Unlock tips')}
+              aria-label={__("Unlock tips")}
               onClick={() => {
                 doOpenModal(MODALS.LIQUIDATE_SUPPORTS, { uri });
               }}
@@ -94,7 +94,7 @@ function PostViewer(props: Props) {
         </div>
       </div>
 
-{ /* @ts-expect-error - TS2367 - This condition will always return 'false' since the types '"none"' and '"credit_details"' have no overlap. */}
+      {/* @ts-expect-error - TS2367 - This condition will always return 'false' since the types '"none"' and '"credit_details"' have no overlap. */}
       {expand === EXPAND.CREDIT_DETAILS && (
         <div className="section post__info--credit-details">
           {/* @ts-expect-error - TS2741 (ts-migration) */}
@@ -102,7 +102,7 @@ function PostViewer(props: Props) {
         </div>
       )}
 
-{ /* @ts-expect-error - TS2367 - This condition will always return 'false' since the types '"none"' and '"file_details"' have no overlap. */}
+      {/* @ts-expect-error - TS2367 - This condition will always return 'false' since the types '"none"' and '"file_details"' have no overlap. */}
       {expand === EXPAND.FILE_DETAILS && (
         <div className="section post__info--credit-details">
           {/* @ts-expect-error - TS2322 (ts-migration) */}

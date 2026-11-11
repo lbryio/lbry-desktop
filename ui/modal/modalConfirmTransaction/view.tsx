@@ -1,28 +1,28 @@
-import React from 'react';
-import Button from 'component/button';
-import { Form } from 'component/common/form';
-import { Modal } from 'modal/modal';
-import Card from 'component/common/card';
-import LbcSymbol from 'component/common/lbc-symbol';
-import ClaimPreview from 'component/claimPreview';
+import React from "react";
+import Button from "component/button";
+import { Form } from "component/common/form";
+import { Modal } from "modal/modal";
+import Card from "component/common/card";
+import LbcSymbol from "component/common/lbc-symbol";
+import ClaimPreview from "component/claimPreview";
 
 type TipParams = {
-  amount: number,
-  claim_id: string,
-  channel_id?: string
+  amount: number;
+  claim_id: string;
+  channel_id?: string;
 };
 
 type Props = {
-  destination: string,
-  amount: number,
-  closeModal: () => void,
-  sendToAddress: (arg1: string, arg2: number) => void,
-  sendTip: (arg1: TipParams, arg2: boolean) => void,
-  isAddress: boolean,
-  claim: StreamClaim,
-  activeChannelClaim: ChannelClaim | null | undefined,
-  incognito: boolean,
-  setConfirmed: (arg1: boolean) => void
+  destination: string;
+  amount: number;
+  closeModal: () => void;
+  sendToAddress: (arg1: string, arg2: number) => void;
+  sendTip: (arg1: TipParams, arg2: boolean) => void;
+  isAddress: boolean;
+  claim: StreamClaim;
+  activeChannelClaim: ChannelClaim | null | undefined;
+  incognito: boolean;
+  setConfirmed: (arg1: boolean) => void;
 };
 
 class ModalConfirmTransaction extends React.PureComponent<Props> {
@@ -42,9 +42,9 @@ class ModalConfirmTransaction extends React.PureComponent<Props> {
   render() {
     const { amount, destination, closeModal, isAddress, incognito, activeChannelClaim } = this.props;
     const activeChannelUrl = activeChannelClaim && activeChannelClaim.canonical_url;
-    const title = __('Confirm Transaction');
+    const title = __("Confirm Transaction");
     return (
-// @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; contentLabel: string; type: string; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
+      // @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; contentLabel: string; type: string; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
       <Modal isOpen contentLabel={title} type="card" onAborted={closeModal}>
         <Form onSubmit={() => this.onConfirmed()}>
           <Card
@@ -52,24 +52,38 @@ class ModalConfirmTransaction extends React.PureComponent<Props> {
             body={
               <div className="section section--padded card--inline confirm__wrapper">
                 <div className="section">
-                  <div className="confirm__label">{__('Sending')}</div>
+                  <div className="confirm__label">{__("Sending")}</div>
                   <div className="confirm__value">{<LbcSymbol postfix={amount} size={22} />}</div>
 
-                  {!isAddress && <div className="confirm__label">{__('From')}</div>}
+                  {!isAddress && <div className="confirm__label">{__("From")}</div>}
                   {!isAddress && (
                     <div className="confirm__value">
                       {incognito ? (
-                        'Anonymous'
+                        "Anonymous"
                       ) : (
-                        <ClaimPreview key={activeChannelUrl} uri={activeChannelUrl} actions={''} type={'small'} hideMenu hideRepostLabel />
+                        <ClaimPreview
+                          key={activeChannelUrl}
+                          uri={activeChannelUrl}
+                          actions={""}
+                          type={"small"}
+                          hideMenu
+                          hideRepostLabel
+                        />
                       )}
                     </div>
                   )}
 
-                  <div className="confirm__label">{__('To')}</div>
+                  <div className="confirm__label">{__("To")}</div>
                   <div className="confirm__value">
                     {!isAddress ? (
-                      <ClaimPreview key={destination} uri={destination} actions={''} type={'small'} hideMenu hideRepostLabel />
+                      <ClaimPreview
+                        key={destination}
+                        uri={destination}
+                        actions={""}
+                        type={"small"}
+                        hideMenu
+                        hideRepostLabel
+                      />
                     ) : (
                       destination
                     )}
@@ -81,11 +95,11 @@ class ModalConfirmTransaction extends React.PureComponent<Props> {
               <>
                 <div className="section__actions">
                   {/* @ts-expect-error - TS2322 (ts-migration) */}
-                  <Button autoFocus button="primary" label={__('Send')} onClick={() => this.onConfirmed()} />
+                  <Button autoFocus button="primary" label={__("Send")} onClick={() => this.onConfirmed()} />
                   {/* @ts-expect-error - TS2322 (ts-migration) */}
-                  <Button button="link" label={__('Cancel')} onClick={closeModal} />
+                  <Button button="link" label={__("Cancel")} onClick={closeModal} />
                 </div>
-                <p className="help">{__('Once the transaction is sent, it cannot be reversed.')}</p>
+                <p className="help">{__("Once the transaction is sent, it cannot be reversed.")}</p>
               </>
             }
           />

@@ -1,5 +1,5 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import {
   selectTitleForUri,
   selectThumbnailForUri,
@@ -10,30 +10,30 @@ import {
   selectUpdatingCollection,
   selectCreateCollectionError,
   selectCreatingCollection,
-} from 'redux/selectors/claims';
+} from "redux/selectors/claims";
 import {
   makeSelectCollectionForId,
   makeSelectUrlsForCollectionId,
   makeSelectClaimIdsForCollectionId,
-} from 'redux/selectors/collections';
-import { doCollectionPublish, doCollectionPublishUpdate } from 'redux/actions/claims';
-import { selectBalance } from 'redux/selectors/wallet';
-import * as ACTIONS from 'constants/action_types';
+} from "redux/selectors/collections";
+import { doCollectionPublish, doCollectionPublishUpdate } from "redux/actions/claims";
+import { selectBalance } from "redux/selectors/wallet";
+import * as ACTIONS from "constants/action_types";
 
-import CollectionForm from './view';
-import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
-import { doSetActiveChannel, doSetIncognito } from 'redux/actions/app';
-import { doCollectionEdit } from 'redux/actions/collections';
-import { doResetThumbnailStatus } from 'redux/actions/publish';
+import CollectionForm from "./view";
+import { selectActiveChannelClaim, selectIncognito } from "redux/selectors/app";
+import { doSetActiveChannel, doSetIncognito } from "redux/actions/app";
+import { doCollectionEdit } from "redux/actions/collections";
+import { doResetThumbnailStatus } from "redux/actions/publish";
 
 const select = (state: unknown, props: unknown) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
   title: selectTitleForUri(state, props.uri),
   thumbnailUrl: selectThumbnailForUri(state, props.uri),
-  description: makeSelectMetadataItemForUri(props.uri, 'description')(state),
-  tags: makeSelectMetadataItemForUri(props.uri, 'tags')(state),
-  locations: makeSelectMetadataItemForUri(props.uri, 'locations')(state),
-  languages: makeSelectMetadataItemForUri(props.uri, 'languages')(state),
+  description: makeSelectMetadataItemForUri(props.uri, "description")(state),
+  tags: makeSelectMetadataItemForUri(props.uri, "tags")(state),
+  locations: makeSelectMetadataItemForUri(props.uri, "locations")(state),
+  languages: makeSelectMetadataItemForUri(props.uri, "languages")(state),
   amount: makeSelectAmountForUri(props.uri)(state),
   updateError: selectUpdateCollectionError(state),
   updatingCollection: selectUpdatingCollection(state),

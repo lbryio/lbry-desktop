@@ -1,12 +1,12 @@
-import * as ICONS from 'constants/icons';
-import React from 'react';
-import Button from 'component/button';
+import * as ICONS from "constants/icons";
+import React from "react";
+import Button from "component/button";
 
 type Props = {
-  href?: string,
-  navigate?: string,
-  icon?: string,
-  description?: string
+  href?: string;
+  navigate?: string;
+  icon?: string;
+  description?: string;
 };
 
 export default function HelpLink(props: Props) {
@@ -14,7 +14,7 @@ export default function HelpLink(props: Props) {
   return (
     <Button
       // @ts-expect-error - TS2322 (ts-migration)
-      onClick={e => {
+      onClick={(e) => {
         if (href) {
           e.stopPropagation();
         }
@@ -22,7 +22,7 @@ export default function HelpLink(props: Props) {
       className="icon--help"
       icon={icon || ICONS.HELP}
       iconSize={14}
-      description={description || __('Help')}
+      description={description || __("Help")}
       href={href}
       navigate={navigate}
     />

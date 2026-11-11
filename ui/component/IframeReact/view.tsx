@@ -1,15 +1,13 @@
-import React from 'react';
+import React from "react";
 
 type Props = {
-  fullHeight: boolean,
-  src: string,
-  title: string
+  fullHeight: boolean;
+  src: string;
+  title: string;
 };
 
 export default function I18nMessage(props: Props) {
   const { src, title } = props;
-
-
 
   function onLoad() {
     /*
@@ -27,7 +25,7 @@ export default function I18nMessage(props: Props) {
   return (
     // style={{height: iframeHeight}}
     // ref={iframeRef}
-// @ts-expect-error - TS2322 - Type 'boolean' is not assignable to type 'string'.
+    // @ts-expect-error - TS2322 - Type 'boolean' is not assignable to type 'string'.
     <iframe src={src} title={title} onLoad={onLoad} sandbox={!IS_WEB} />
   );
 }

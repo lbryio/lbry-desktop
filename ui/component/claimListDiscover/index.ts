@@ -1,20 +1,20 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import {
   selectClaimsByUri,
   selectClaimSearchByQuery,
   selectClaimSearchByQueryLastPageReached,
   selectFetchingClaimSearch,
-} from 'redux/selectors/claims';
-import { doClaimSearch } from 'redux/actions/claims';
-import * as SETTINGS from 'constants/settings';
-import { selectFollowedTags } from 'redux/selectors/tags';
-import { selectMutedChannels } from 'redux/selectors/blocked';
-import { doToggleTagFollowDesktop } from 'redux/actions/tags';
-import { makeSelectClientSetting, selectShowMatureContent, selectLanguage } from 'redux/selectors/settings';
-import { selectModerationBlockList } from 'redux/selectors/comments';
-import ClaimListDiscover from './view';
-import { doFetchViewCount } from 'lbryinc';
+} from "redux/selectors/claims";
+import { doClaimSearch } from "redux/actions/claims";
+import * as SETTINGS from "constants/settings";
+import { selectFollowedTags } from "redux/selectors/tags";
+import { selectMutedChannels } from "redux/selectors/blocked";
+import { doToggleTagFollowDesktop } from "redux/actions/tags";
+import { makeSelectClientSetting, selectShowMatureContent, selectLanguage } from "redux/selectors/settings";
+import { selectModerationBlockList } from "redux/selectors/comments";
+import ClaimListDiscover from "./view";
+import { doFetchViewCount } from "lbryinc";
 
 const select = (state: unknown) => ({
   followedTags: selectFollowedTags(state),

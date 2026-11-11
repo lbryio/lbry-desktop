@@ -1,12 +1,12 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doWalletStatus } from 'redux/actions/wallet';
-import { doClearCache } from 'redux/actions/app';
-import { doSetDaemonSetting, doClearDaemonSetting, doCleanBlobs } from 'redux/actions/settings';
-import { selectDaemonSettings, selectDaemonStatus, selectSettingDaemonSettings } from 'redux/selectors/settings';
+import { connect } from "react-redux";
+import { doWalletStatus } from "redux/actions/wallet";
+import { doClearCache } from "redux/actions/app";
+import { doSetDaemonSetting, doClearDaemonSetting, doCleanBlobs } from "redux/actions/settings";
+import { selectDaemonSettings, selectDaemonStatus, selectSettingDaemonSettings } from "redux/selectors/settings";
 
-import SettingStorage from './view';
-import { selectDiskSpace } from 'redux/selectors/app';
+import SettingStorage from "./view";
+import { selectDiskSpace } from "redux/selectors/app";
 
 const select = (state: unknown) => ({
   daemonSettings: selectDaemonSettings(state),

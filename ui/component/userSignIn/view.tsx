@@ -1,22 +1,22 @@
-import React from 'react';
-import { withRouter } from 'react-router';
-import UserEmailReturning from 'component/userEmailReturning';
-import UserSignInPassword from 'component/userSignInPassword';
-import Spinner from 'component/spinner';
+import React from "react";
+import { withRouter } from "react-router";
+import UserEmailReturning from "component/userEmailReturning";
+import UserSignInPassword from "component/userSignInPassword";
+import Spinner from "component/spinner";
 
 type Props = {
-  user: User | null | undefined,
+  user: User | null | undefined;
   history: {
-    push: (arg1: string) => void,
-    replace: (arg1: string) => void
-  },
+    push: (arg1: string) => void;
+    replace: (arg1: string) => void;
+  };
   location: {
-    search: string
-  },
-  userFetchPending: boolean,
-  doUserSignIn: (arg1: string) => void,
-  emailToVerify: string | null | undefined,
-  passwordExists: boolean
+    search: string;
+  };
+  userFetchPending: boolean;
+  doUserSignIn: (arg1: string) => void;
+  emailToVerify: string | null | undefined;
+  passwordExists: boolean;
 };
 
 function UserSignIn(props: Props) {
@@ -25,14 +25,14 @@ function UserSignIn(props: Props) {
   const urlParams = new URLSearchParams(search);
   const [emailOnlyLogin, setEmailOnlyLogin] = React.useState(false);
   const hasVerifiedEmail = user && user.has_verified_email;
-  const redirect = urlParams.get('redirect');
+  const redirect = urlParams.get("redirect");
   const showLoading = userFetchPending;
   const showEmail = !passwordExists || emailOnlyLogin;
   const showPassword = !showEmail && emailToVerify && passwordExists;
 
   React.useEffect(() => {
     if (hasVerifiedEmail || (!showEmail && !showPassword && !showLoading)) {
-      history.replace(redirect || '/');
+      history.replace(redirect || "/");
     }
   }, [showEmail, showPassword, showLoading, hasVerifiedEmail, history, redirect]);
 

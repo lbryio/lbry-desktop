@@ -1,27 +1,27 @@
-import React from 'react';
-import Button from 'component/button';
-import Page from 'component/page';
-import Spinner from 'component/spinner';
-import DownloadList from 'page/fileListDownloaded';
-import Yrbl from 'component/yrbl';
-import { useHistory } from 'react-router';
+import React from "react";
+import Button from "component/button";
+import Page from "component/page";
+import Spinner from "component/spinner";
+import DownloadList from "page/fileListDownloaded";
+import Yrbl from "component/yrbl";
+import { useHistory } from "react-router";
 
 // https://github.com/lbryio/lbry-sdk/issues/2964
 export const PURCHASES_PAGE_SIZE = 10;
 
 type Props = {
-  allDownloadedUrlsCount: number,
-  myPurchases: Array<string>,
-  fetchingMyPurchases: boolean,
-  fetchingFileList: boolean,
-  doPurchaseList: (arg1: number, arg2: number) => void
+  allDownloadedUrlsCount: number;
+  myPurchases: Array<string>;
+  fetchingMyPurchases: boolean;
+  fetchingFileList: boolean;
+  doPurchaseList: (arg1: number, arg2: number) => void;
 };
 
 function LibraryPage(props: Props) {
   const { allDownloadedUrlsCount, myPurchases, fetchingMyPurchases, fetchingFileList, doPurchaseList } = props;
   const { location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
-  const page = Number(urlParams.get('page')) || 1;
+  const page = Number(urlParams.get("page")) || 1;
   const hasDownloads = allDownloadedUrlsCount > 0 || (myPurchases && myPurchases.length > 0);
   const loading = fetchingFileList || fetchingMyPurchases;
 
@@ -45,7 +45,7 @@ function LibraryPage(props: Props) {
             actions={
               <div className="section__actions">
                 {/* @ts-expect-error - TS2322 (ts-migration) */}
-                <Button button="primary" navigate="/" label={__('Explore New Content')} />
+                <Button button="primary" navigate="/" label={__("Explore New Content")} />
               </div>
             }
           />

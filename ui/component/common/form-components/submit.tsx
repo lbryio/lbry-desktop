@@ -1,14 +1,14 @@
-import * as React from 'react';
-import Button from 'component/button';
+import * as React from "react";
+import Button from "component/button";
 
 type Props = {
-  label: string,
-  disabled: boolean
+  label: string;
+  disabled: boolean;
 };
 
 export class Submit extends React.PureComponent<Props> {
   static defaultProps = {
-    label: 'Submit',
+    label: "Submit",
   };
 
   render() {

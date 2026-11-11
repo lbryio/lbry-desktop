@@ -1,15 +1,15 @@
-import React from 'react';
-import classnames from 'classnames';
-import { ComboboxOption } from '@reach/combobox';
-import FileThumbnail from 'component/fileThumbnail';
-import ChannelThumbnail from 'component/channelThumbnail';
-import FileProperties from 'component/previewOverlayProperties';
-import ClaimProperties from 'component/claimProperties';
+import React from "react";
+import classnames from "classnames";
+import { ComboboxOption } from "@reach/combobox";
+import FileThumbnail from "component/fileThumbnail";
+import ChannelThumbnail from "component/channelThumbnail";
+import FileProperties from "component/previewOverlayProperties";
+import ClaimProperties from "component/claimProperties";
 
 type Props = {
-  claim: Claim | null | undefined,
-  uri: string,
-  isResolvingUri: boolean
+  claim: Claim | null | undefined;
+  uri: string;
+  isResolvingUri: boolean;
 };
 
 export default function WunderbarSuggestion(props: Props) {
@@ -29,14 +29,14 @@ export default function WunderbarSuggestion(props: Props) {
     return null;
   }
 
-  const isChannel = claim.value_type === 'channel';
-  const isCollection = claim.value_type === 'collection';
+  const isChannel = claim.value_type === "channel";
+  const isCollection = claim.value_type === "collection";
 
   return (
     <ComboboxOption value={uri}>
       <div
-        className={classnames('wunderbar__suggestion', {
-          'wunderbar__suggestion--channel': isChannel,
+        className={classnames("wunderbar__suggestion", {
+          "wunderbar__suggestion--channel": isChannel,
         })}
       >
         {/* @ts-expect-error - TS2739 (ts-migration) */}
@@ -61,7 +61,7 @@ export default function WunderbarSuggestion(props: Props) {
         <span className="wunderbar__suggestion-label">
           <div className="wunderbar__suggestion-title">{claim.value.title}</div>
           <div className="wunderbar__suggestion-name">
-            {isChannel ? claim.name : (claim.signing_channel && claim.signing_channel.name) || __('Anonymous')}
+            {isChannel ? claim.name : (claim.signing_channel && claim.signing_channel.name) || __("Anonymous")}
           </div>
         </span>
       </div>

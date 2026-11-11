@@ -1,18 +1,18 @@
-import * as PAGES from 'constants/pages';
-import * as ICONS from 'constants/icons';
-import * as CS from 'constants/claim_search';
-import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
-import React from 'react';
-import ChannelsFollowingDiscoverPage from 'page/channelsFollowingDiscover';
-import ClaimListDiscover from 'component/claimListDiscover';
-import Page from 'component/page';
-import Button from 'component/button';
-import Icon from 'component/common/icon';
-import { splitBySeparator } from 'util/lbryURI';
+import * as PAGES from "constants/pages";
+import * as ICONS from "constants/icons";
+import * as CS from "constants/claim_search";
+import { ENABLE_NO_SOURCE_CLAIMS } from "config";
+import React from "react";
+import ChannelsFollowingDiscoverPage from "page/channelsFollowingDiscover";
+import ClaimListDiscover from "component/claimListDiscover";
+import Page from "component/page";
+import Button from "component/button";
+import Icon from "component/common/icon";
+import { splitBySeparator } from "util/lbryURI";
 
 type Props = {
-  subscribedChannels: Array<Subscription>,
-  tileLayout: boolean
+  subscribedChannels: Array<Subscription>;
+  tileLayout: boolean;
 };
 
 function ChannelsFollowingPage(props: Props) {
@@ -31,7 +31,7 @@ function ChannelsFollowingPage(props: Props) {
         headerLabel={
           <span>
             <Icon icon={ICONS.SUBSCRIBE} size={10} />
-            {__('Following')}
+            {__("Following")}
           </span>
         }
         defaultOrderBy={CS.ORDER_BY_NEW}
@@ -41,7 +41,7 @@ function ChannelsFollowingPage(props: Props) {
             // @ts-expect-error - TS2322 (ts-migration)
             icon={ICONS.SEARCH}
             button="secondary"
-            label={__('Discover Channels')}
+            label={__("Discover Channels")}
             navigate={`/$/${PAGES.CHANNELS_FOLLOWING_DISCOVER}`}
           />
         }

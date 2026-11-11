@@ -5,11 +5,11 @@
 */
 
 const prefixes = {
-  exitFullscreen: ['exitFullscreen', 'msExitFullscreen', 'mozCancelFullScreen', 'webkitExitFullscreen'],
-  fullscreenChange: ['fullscreenChange', 'MSFullscreenChange', 'mozfullscreenchange', 'webkitfullscreenchange'],
-  fullscreenEnabled: ['fullscreenEnabled', 'msFullscreenEnabled', 'mozFullScreenEnabled', 'webkitFullscreenEnabled'],
-  fullscreenElement: ['fullscreenElement', 'msFullscreenElement', 'mozFullScreenElement', 'webkitFullscreenElement'],
-  requestFullscreen: ['requestFullscreen', 'msRequestFullscreen', 'mozRequestFullScreen', 'webkitRequestFullscreen'],
+  exitFullscreen: ["exitFullscreen", "msExitFullscreen", "mozCancelFullScreen", "webkitExitFullscreen"],
+  fullscreenChange: ["fullscreenChange", "MSFullscreenChange", "mozfullscreenchange", "webkitfullscreenchange"],
+  fullscreenEnabled: ["fullscreenEnabled", "msFullscreenEnabled", "mozFullScreenEnabled", "webkitFullscreenEnabled"],
+  fullscreenElement: ["fullscreenElement", "msFullscreenElement", "mozFullScreenElement", "webkitFullscreenElement"],
+  requestFullscreen: ["requestFullscreen", "msRequestFullscreen", "mozRequestFullScreen", "webkitRequestFullscreen"],
 } as const;
 
 const getPrefix = () => {

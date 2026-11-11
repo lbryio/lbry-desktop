@@ -1,21 +1,21 @@
-import React, {useEffect} from 'react';
-import Lbry from 'lbry';
-import { parseURI, isNameValid } from 'util/lbryURI';
-import ClaimList from 'component/claimList';
-import Page from 'component/page';
-import SearchOptions from 'component/searchOptions';
-import SearchTopClaim from 'component/searchTopClaim';
-import { formatLbryUrlForWeb } from 'util/url';
-import { useHistory } from 'react-router';
-import { SEARCH_PAGE_SIZE } from 'constants/search';
+import React, { useEffect } from "react";
+import Lbry from "lbry";
+import { parseURI, isNameValid } from "util/lbryURI";
+import ClaimList from "component/claimList";
+import Page from "component/page";
+import SearchOptions from "component/searchOptions";
+import SearchTopClaim from "component/searchTopClaim";
+import { formatLbryUrlForWeb } from "util/url";
+import { useHistory } from "react-router";
+import { SEARCH_PAGE_SIZE } from "constants/search";
 
 type Props = {
-  urlQuery: string,
-  searchOptions: SearchOptions,
-  search: (arg1: string, arg2: SearchOptions) => void,
-  isSearching: boolean,
-  uris: Array<string>,
-  hasReachedMaxResultsLength: boolean
+  urlQuery: string;
+  searchOptions: SearchOptions;
+  search: (arg1: string, arg2: SearchOptions) => void;
+  isSearching: boolean;
+  uris: Array<string>;
+  hasReachedMaxResultsLength: boolean;
 };
 
 export default function SearchPage(props: Props) {
@@ -23,7 +23,7 @@ export default function SearchPage(props: Props) {
   const { push } = useHistory();
   const [from, setFrom] = React.useState(0);
 
-  const modifiedUrlQuery = urlQuery.trim().replace(/\s+/g, '').replace(/:/g, '#');
+  const modifiedUrlQuery = urlQuery.trim().replace(/\s+/g, "").replace(/:/g, "#");
   const uriFromQuery = `lbry://${modifiedUrlQuery}`;
 
   let streamName;
@@ -98,7 +98,7 @@ export default function SearchPage(props: Props) {
               header={<SearchOptions additionalOptions={searchOptions} onSearchOptionsChanged={resetPage} />}
             />
 
-            <div className="main--empty help">{__('These search results are provided by LBRY, Inc.')}</div>
+            <div className="main--empty help">{__("These search results are provided by LBRY, Inc.")}</div>
           </>
         )}
       </section>

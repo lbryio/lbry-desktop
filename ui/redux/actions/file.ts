@@ -1,31 +1,31 @@
-import * as ACTIONS from 'constants/action_types';
-import * as ABANDON_STATES from 'constants/abandon_states';
+import * as ACTIONS from "constants/action_types";
+import * as ABANDON_STATES from "constants/abandon_states";
 // @if TARGET='app'
 // @ts-expect-error - TS2792 - Cannot find module 'electron'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-import { shell } from 'electron';
+import { shell } from "electron";
 // @endif
-import Lbry from 'lbry';
-import { selectClaimForUri } from 'redux/selectors/claims';
-import { doAbandonClaim } from 'redux/actions/claims';
-import { batchActions } from 'util/batch-actions';
+import Lbry from "lbry";
+import { selectClaimForUri } from "redux/selectors/claims";
+import { doAbandonClaim } from "redux/actions/claims";
+import { batchActions } from "util/batch-actions";
 
-import { doHideModal } from 'redux/actions/app';
-import { goBack } from 'connected-react-router';
-import { doSetPlayingUri } from 'redux/actions/content';
-import { selectPlayingUri } from 'redux/selectors/content';
-import { doToast } from 'redux/actions/notifications';
-import { selectBalance } from 'redux/selectors/wallet';
+import { doHideModal } from "redux/actions/app";
+import { goBack } from "connected-react-router";
+import { doSetPlayingUri } from "redux/actions/content";
+import { selectPlayingUri } from "redux/selectors/content";
+import { doToast } from "redux/actions/notifications";
+import { selectBalance } from "redux/selectors/wallet";
 import {
   makeSelectFileInfoForUri,
   selectDownloadingByOutpoint,
   makeSelectStreamingUrlForUri,
-} from 'redux/selectors/file_info';
+} from "redux/selectors/file_info";
 
 type Dispatch = (action?: any) => any;
 type GetState = () => {
-  claims: any,
-  file: FileState,
-  content: any
+  claims: any;
+  file: FileState;
+  content: any;
 };
 export function doOpenFileInFolder(path: string) {
   return () => {
@@ -80,17 +80,17 @@ export function doDeleteFileAndMaybeGoBack(
   return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const playingUri = selectPlayingUri(state);
-    const { outpoint } = makeSelectFileInfoForUri(uri)(state) || '';
+    const { outpoint } = makeSelectFileInfoForUri(uri)(state) || "";
     const { nout, txid } = selectClaimForUri(state, uri);
     const claimOutpoint = `${txid}:${nout}`;
     const actions: unknown = [];
 
     if (!abandonClaim) {
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       actions.push(doHideModal());
     }
 
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
     actions.push(
       doDeleteFile(
         outpoint || claimOutpoint,
@@ -111,13 +111,13 @@ export function doDeleteFileAndMaybeGoBack(
     );
 
     if (playingUri && playingUri.uri === uri) {
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       actions.push(doSetPlayingUri({ uri: null }));
     }
     // it would be nice to stay on the claim if you just want to delete it
     // we need to alter autoplay to not start downloading again after you delete it
 
-// @ts-expect-error - TS2488 - Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
+    // @ts-expect-error - TS2488 - Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
     dispatch(batchActions(...actions));
   };
 }
@@ -138,7 +138,7 @@ export function doFileGet(uri: string, saveFile: boolean = true, onSuccess?: (ar
     // set save_file argument to True to save the file (old behaviour)
     Lbry.get({ uri, save_file: saveFile })
       .then((streamInfo: GetResponse) => {
-        const timeout = streamInfo === null || typeof streamInfo !== 'object' || streamInfo.error === 'Timeout';
+        const timeout = streamInfo === null || typeof streamInfo !== "object" || streamInfo.error === "Timeout";
         if (timeout) {
           dispatch({
             type: ACTIONS.FETCH_FILE_INFO_FAILED,
@@ -190,7 +190,7 @@ export function doFileGet(uri: string, saveFile: boolean = true, onSuccess?: (ar
 export function doPurchaseUri(
   uri: string,
   costInfo: {
-    cost: number
+    cost: number;
   },
   saveFile: boolean = true,
   onSuccess?: (arg1: GetResponse) => any
@@ -222,11 +222,11 @@ export function doPurchaseUri(
     }
 
     const { cost } = costInfo;
-// @ts-expect-error - TS2345 - Argument of type 'number' is not assignable to parameter of type 'string'.
+    // @ts-expect-error - TS2345 - Argument of type 'number' is not assignable to parameter of type 'string'.
     if (parseFloat(cost) > balance) {
       dispatch({
         type: ACTIONS.PURCHASE_URI_FAILED,
-        data: { uri, error: 'Insufficient credits' },
+        data: { uri, error: "Insufficient credits" },
       });
 
       Promise.resolve();

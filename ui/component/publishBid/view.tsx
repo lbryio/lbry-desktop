@@ -1,19 +1,19 @@
-import {MINIMUM_PUBLISH_BID} from 'constants/claim';
-import React, { useState, useEffect } from 'react';
-import { FormField } from 'component/common/form';
-import BidHelpText from './bid-help-text';
-import Card from 'component/common/card';
-import LbcSymbol from 'component/common/lbc-symbol';
-import WalletSpendableBalanceHelp from 'component/walletSpendableBalanceHelp';
+import { MINIMUM_PUBLISH_BID } from "constants/claim";
+import React, { useState, useEffect } from "react";
+import { FormField } from "component/common/form";
+import BidHelpText from "./bid-help-text";
+import Card from "component/common/card";
+import LbcSymbol from "component/common/lbc-symbol";
+import WalletSpendableBalanceHelp from "component/walletSpendableBalanceHelp";
 
 type Props = {
-  name: string,
-  bid: number,
-  balance: number,
-  myClaimForUri: StreamClaim | null | undefined,
-  isResolvingUri: boolean,
-  amountNeededForTakeover: number,
-  updatePublishForm: (arg1: Record<any, any>) => void
+  name: string;
+  bid: number;
+  balance: number;
+  myClaimForUri: StreamClaim | null | undefined;
+  isResolvingUri: boolean;
+  amountNeededForTakeover: number;
+  updatePublishForm: (arg1: Record<any, any>) => void;
 };
 
 function PublishName(props: Props) {
@@ -26,15 +26,15 @@ function PublishName(props: Props) {
 
     let bidError;
     if (bid === 0) {
-      bidError = __('Deposit cannot be 0');
+      bidError = __("Deposit cannot be 0");
     } else if (bid < MINIMUM_PUBLISH_BID) {
-      bidError = __('Your deposit must be higher');
+      bidError = __("Your deposit must be higher");
     } else if (totalAvailableBidAmount < bid) {
-      bidError = __('Deposit cannot be higher than your available balance: %balance%', {
+      bidError = __("Deposit cannot be higher than your available balance: %balance%", {
         balance: totalAvailableBidAmount,
       });
     } else if (totalAvailableBidAmount <= bid + 0.05) {
-      bidError = __('Please decrease your deposit to account for transaction fees or acquire more LBRY Credits.');
+      bidError = __("Please decrease your deposit to account for transaction fees or acquire more LBRY Credits.");
     }
 
     setBidError(bidError);
@@ -47,21 +47,21 @@ function PublishName(props: Props) {
         <FormField
           type="number"
           name="content_bid"
-// @ts-expect-error - TS2322 - Type 'string' is not assignable to type 'number'.
+          // @ts-expect-error - TS2322 - Type 'string' is not assignable to type 'number'.
           min="0"
           step="any"
           placeholder="0.123"
           className="form-field--price-amount"
-          label={<LbcSymbol postfix={__('Deposit')} size={12} />}
+          label={<LbcSymbol postfix={__("Deposit")} size={12} />}
           value={bid}
           error={bidError}
           disabled={!name}
-          onChange={event => updatePublishForm({ bid: parseFloat(event.target.value) })}
-          onWheel={e => e.stopPropagation()}
+          onChange={(event) => updatePublishForm({ bid: parseFloat(event.target.value) })}
+          onWheel={(e) => e.stopPropagation()}
           helper={
             <>
               <BidHelpText
-                uri={'lbry://' + name}
+                uri={"lbry://" + name}
                 amountNeededForTakeover={amountNeededForTakeover}
                 isResolvingUri={isResolvingUri}
               />

@@ -1,48 +1,48 @@
-import type {ReactNode} from 'react';
-import React, { forwardRef, useRef } from 'react';
-import Icon from 'component/common/icon';
-import classnames from 'classnames';
-import { NavLink } from 'react-router-dom';
-import { formatLbryUrlForWeb } from 'util/url';
-import useCombinedRefs from 'effects/use-combined-refs';
+import type { ReactNode } from "react";
+import React, { forwardRef, useRef } from "react";
+import Icon from "component/common/icon";
+import classnames from "classnames";
+import { NavLink } from "react-router-dom";
+import { formatLbryUrlForWeb } from "util/url";
+import useCombinedRefs from "effects/use-combined-refs";
 
 type Props = {
-  id: string | null | undefined,
-  href: string | null | undefined,
-  title: string | null | undefined,
-  label: string | null | undefined,
-  largestLabel: string | null | undefined,
-  icon: string | null | undefined,
-  iconRight: string | null | undefined,
-  disabled: boolean | null | undefined,
-  children: React.ReactNode | null | undefined,
-  navigate: string | null | undefined,
-  className: string | null | undefined,
-  description: string | null | undefined,
-  type: string,
-  button: string | null | undefined // primary, secondary, alt, link,
-  iconSize?: number,
-  iconColor?: string,
-  activeClass?: string,
-  innerRef: any | null | undefined,
-  authSrc?: string,
+  id: string | null | undefined;
+  href: string | null | undefined;
+  title: string | null | undefined;
+  label: string | null | undefined;
+  largestLabel: string | null | undefined;
+  icon: string | null | undefined;
+  iconRight: string | null | undefined;
+  disabled: boolean | null | undefined;
+  children: React.ReactNode | null | undefined;
+  navigate: string | null | undefined;
+  className: string | null | undefined;
+  description: string | null | undefined;
+  type: string;
+  button: string | null | undefined; // primary, secondary, alt, link,
+  iconSize?: number;
+  iconColor?: string;
+  activeClass?: string;
+  innerRef: any | null | undefined;
+  authSrc?: string;
   // Events
-  onClick: (arg1?: any) => any | null | undefined,
-  onMouseEnter: (arg1?: any) => any | null | undefined,
-  onMouseLeave: (arg1?: any) => any | null | undefined,
-  pathname: string,
-  emailVerified: boolean,
-  myref: any,
-  dispatch: any,
-  ['aria-label']?: string,
-  user: User | null | undefined
+  onClick: (arg1?: any) => any | null | undefined;
+  onMouseEnter: (arg1?: any) => any | null | undefined;
+  onMouseLeave: (arg1?: any) => any | null | undefined;
+  pathname: string;
+  emailVerified: boolean;
+  myref: any;
+  dispatch: any;
+  ["aria-label"]?: string;
+  user: User | null | undefined;
 };
 
 // use forwardRef to allow consumers to pass refs to the button content if they want to
 // flow requires forwardRef have default type arguments passed to it
 const Button = forwardRef<any, Record<any, any>>((props: Props, ref: any) => {
   const {
-    type = 'button',
+    type = "button",
     onClick,
     href,
     title,
@@ -74,18 +74,18 @@ const Button = forwardRef<any, Record<any, any>>((props: Props, ref: any) => {
   const disable = disabled;
 
   const combinedClassName = classnames(
-    'button',
+    "button",
     button
       ? {
-          'button--primary': button === 'primary',
-          'button--secondary': button === 'secondary',
-          'button--alt': button === 'alt',
-          'button--inverse': button === 'inverse',
-          'button--close': button === 'close',
-          'button--disabled': disable,
-          'button--link': button === 'link',
+          "button--primary": button === "primary",
+          "button--secondary": button === "secondary",
+          "button--alt": button === "alt",
+          "button--inverse": button === "inverse",
+          "button--close": button === "close",
+          "button--disabled": disable,
+          "button--link": button === "link",
         }
-      : 'button--no-style',
+      : "button--no-style",
     className
   );
 
@@ -94,7 +94,7 @@ const Button = forwardRef<any, Record<any, any>>((props: Props, ref: any) => {
   const size = iconSize || (!label && !children) ? 18 : undefined; // Fall back to default
 
   // Label can be a string or object ( use title instead )
-  const ariaLabel = description || (typeof label === 'string' ? label : title);
+  const ariaLabel = description || (typeof label === "string" ? label : title);
 
   const content = (
     <span className="button__content">
@@ -108,26 +108,26 @@ const Button = forwardRef<any, Record<any, any>>((props: Props, ref: any) => {
 
       {/* largestLabel is used when a single button has two different labels based on hover state */}
       {largestLabel && (
-        <div dir="auto" className="button__label" style={{ position: 'relative' }}>
+        <div dir="auto" className="button__label" style={{ position: "relative" }}>
           <div
             style={{
-              position: 'relative',
-              left: '50%',
-              top: '50%',
+              position: "relative",
+              left: "50%",
+              top: "50%",
               transform: `translate(-50%, 0%)`,
             }}
           >
-            <span style={{ visibility: 'hidden' }}>
+            <span style={{ visibility: "hidden" }}>
               {largestLabel || label}
               <div
                 style={{
-                  position: 'absolute',
-                  left: '50%',
-                  top: '50%',
+                  position: "absolute",
+                  left: "50%",
+                  top: "50%",
                   transform: `translate(-50%, -50%)`,
                 }}
               >
-                <span style={{ visibility: 'visible' }}>{label}</span>
+                <span style={{ visibility: "visible" }}>{label}</span>
               </div>
             </span>
           </div>
@@ -139,7 +139,7 @@ const Button = forwardRef<any, Record<any, any>>((props: Props, ref: any) => {
     </span>
   );
 
-  if (href || (navigate && navigate.startsWith('http'))) {
+  if (href || (navigate && navigate.startsWith("http"))) {
     // TODO: replace the below with an outbound link tracker for matomo
     return (
       <a
@@ -150,7 +150,7 @@ const Button = forwardRef<any, Record<any, any>>((props: Props, ref: any) => {
         title={title}
         onClick={onClick}
         aria-label={ariaLabel}
-// @ts-expect-error - TS2322 - Type '{ children: Element; target: "_blank"; rel: string; href: string; className: any; title: string; onClick: (arg1?: any) => any; "aria-label": string; disabled: boolean; }' is not assignable to type 'DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>'.
+        // @ts-expect-error - TS2322 - Type '{ children: Element; target: "_blank"; rel: string; href: string; className: any; title: string; onClick: (arg1?: any) => any; "aria-label": string; disabled: boolean; }' is not assignable to type 'DetailedHTMLProps<AnchorHTMLAttributes<HTMLAnchorElement>, HTMLAnchorElement>'.
         disabled={disabled} // is there a reason this wasn't here before?
       >
         {content}
@@ -161,9 +161,9 @@ const Button = forwardRef<any, Record<any, any>>((props: Props, ref: any) => {
   // Handle lbry:// uris passed in, or already formatted web urls
   let path = navigate;
   if (path) {
-    if (path.startsWith('lbry://')) {
+    if (path.startsWith("lbry://")) {
       path = formatLbryUrlForWeb(path);
-    } else if (!path.startsWith('/')) {
+    } else if (!path.startsWith("/")) {
       // Force a leading slash so new paths aren't appended on to the current path
       path = `/${path}`;
     }
@@ -173,8 +173,8 @@ const Button = forwardRef<any, Record<any, any>>((props: Props, ref: any) => {
   // the 'title' mechanism, but only if it isn't being used.
   let defaultTooltip;
   if (!title) {
-    if (props['aria-label']) {
-      defaultTooltip = props['aria-label'];
+    if (props["aria-label"]) {
+      defaultTooltip = props["aria-label"];
     } else if (description) {
       defaultTooltip = description;
     }
@@ -212,7 +212,7 @@ const Button = forwardRef<any, Record<any, any>>((props: Props, ref: any) => {
         }
       }}
       disabled={disable}
-// @ts-expect-error - TS2322 - Type 'string' is not assignable to type '"button" | "reset" | "submit"'.
+      // @ts-expect-error - TS2322 - Type 'string' is not assignable to type '"button" | "reset" | "submit"'.
       type={type}
       {...otherProps}
     >

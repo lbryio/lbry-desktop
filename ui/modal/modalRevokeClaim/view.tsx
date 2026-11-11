@@ -1,27 +1,27 @@
-import React, {useState} from 'react';
-import { Modal } from 'modal/modal';
-import { FormField } from 'component/common/form';
-import * as txnTypes from 'constants/transaction_types';
-import Card from 'component/common/card';
-import Button from 'component/button';
-import I18nMessage from 'component/i18nMessage';
-import LbcSymbol from 'component/common/lbc-symbol';
+import React, { useState } from "react";
+import { Modal } from "modal/modal";
+import { FormField } from "component/common/form";
+import * as txnTypes from "constants/transaction_types";
+import Card from "component/common/card";
+import Button from "component/button";
+import I18nMessage from "component/i18nMessage";
+import LbcSymbol from "component/common/lbc-symbol";
 
 type Props = {
-  closeModal: () => void,
-  abandonTxo: (arg1: Txo, arg2: () => void) => void,
-  abandonClaim: (arg1: Claim, arg2?: () => void | null | undefined) => void,
-  tx: Txo,
-  claim: Claim,
-  cb: () => void,
-  doResolveUri: (arg1: string) => void
+  closeModal: () => void;
+  abandonTxo: (arg1: Txo, arg2: () => void) => void;
+  abandonClaim: (arg1: Claim, arg2?: () => void | null | undefined) => void;
+  tx: Txo;
+  claim: Claim;
+  cb: () => void;
+  doResolveUri: (arg1: string) => void;
 };
 
 export default function ModalRevokeClaim(props: Props) {
   const { tx, claim, closeModal, abandonTxo, abandonClaim, cb, doResolveUri } = props;
-// @ts-expect-error - TS2339 - Property 'is_my_input' does not exist on type 'Claim | Txo'.
+  // @ts-expect-error - TS2339 - Property 'is_my_input' does not exist on type 'Claim | Txo'.
   const { value_type: valueType, type, normalized_name: name, is_my_input: isSupport } = tx || claim;
-  const [channelName, setChannelName] = useState('');
+  const [channelName, setChannelName] = useState("");
 
   React.useEffect(() => {
     if (claim) {
@@ -30,24 +30,24 @@ export default function ModalRevokeClaim(props: Props) {
   }, [claim, doResolveUri]);
 
   const shouldConfirmChannel =
-    valueType === txnTypes.CHANNEL || type === txnTypes.CHANNEL || (type === txnTypes.UPDATE && name.startsWith('@'));
+    valueType === txnTypes.CHANNEL || type === txnTypes.CHANNEL || (type === txnTypes.UPDATE && name.startsWith("@"));
 
   function getButtonLabel(type: string, isSupport: boolean) {
     if (isSupport && type === txnTypes.SUPPORT) {
-      return __('Confirm Support Removal');
+      return __("Confirm Support Removal");
     } else if (type === txnTypes.SUPPORT) {
-      return __('Confirm Tip Unlock');
+      return __("Confirm Tip Unlock");
     } else if (type === txnTypes.CHANNEL) {
-      return __('Confirm Channel Removal');
+      return __("Confirm Channel Removal");
     }
-    return __('Confirm Removal');
+    return __("Confirm Removal");
   }
 
   function getMsgBody(type: string, isSupport: boolean, name: string) {
     if (isSupport && type === txnTypes.SUPPORT) {
       return (
         <React.Fragment>
-          <p>{__('Are you sure you want to remove this boost?')}</p>
+          <p>{__("Are you sure you want to remove this boost?")}</p>
           <p>
             {/* @ts-expect-error - TS2745, TS2322 (ts-migration) */}
             <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
@@ -60,10 +60,10 @@ export default function ModalRevokeClaim(props: Props) {
     } else if (type === txnTypes.SUPPORT) {
       return (
         <React.Fragment>
-          <p>{__('Are you sure you want to unlock these Credits?')}</p>
+          <p>{__("Are you sure you want to unlock these Credits?")}</p>
           <p>
             {__(
-              'These Credits are permanently yours and can be unlocked at any time. Unlocking them allows you to spend them, but reduces discoverability of your content in lookups and search results. It is recommended you leave Credits locked until you need or want to spend them.'
+              "These Credits are permanently yours and can be unlocked at any time. Unlocking them allows you to spend them, but reduces discoverability of your content in lookups and search results. It is recommended you leave Credits locked until you need or want to spend them."
             )}
           </p>
         </React.Fragment>
@@ -72,18 +72,18 @@ export default function ModalRevokeClaim(props: Props) {
       return (
         <React.Fragment>
           <p>
-            {__('This will permanently remove your channel. Content published under this channel will be orphaned.')}
+            {__("This will permanently remove your channel. Content published under this channel will be orphaned.")}
           </p>
-          <p>{__('Are you sure? Type %name% to confirm that you wish to remove the channel.', { name })}</p>
-{ /* @ts-expect-error - TS2741 - Property 'name' is missing in type '{ type: string; onChange: (e: any) => void; }' but required in type 'Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | "type" | "name" | "value" | "disabled" | "label" | "children" | "render" | ... 15 more ... | "onChange">'. */}
-          <FormField type={'text'} onChange={(e) => setChannelName(e.target.value)} />
+          <p>{__("Are you sure? Type %name% to confirm that you wish to remove the channel.", { name })}</p>
+          {/* @ts-expect-error - TS2741 - Property 'name' is missing in type '{ type: string; onChange: (e: any) => void; }' but required in type 'Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | "type" | "name" | "value" | "disabled" | "label" | "children" | "render" | ... 15 more ... | "onChange">'. */}
+          <FormField type={"text"} onChange={(e) => setChannelName(e.target.value)} />
         </React.Fragment>
       );
     }
 
     return (
       <React.Fragment>
-        <p>{__('Are you sure you want to remove this?')}</p>
+        <p>{__("Are you sure you want to remove this?")}</p>
         <p>
           {/* @ts-expect-error - TS2745, TS2322 (ts-migration) */}
           <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
@@ -91,7 +91,7 @@ export default function ModalRevokeClaim(props: Props) {
             your spendable balance.
           </I18nMessage>
         </p>
-        <p className="help error__text"> {__('FINAL WARNING: This action is permanent and cannot be undone.')}</p>
+        <p className="help error__text"> {__("FINAL WARNING: This action is permanent and cannot be undone.")}</p>
       </React.Fragment>
     );
   }
@@ -104,7 +104,7 @@ export default function ModalRevokeClaim(props: Props) {
   const label = getButtonLabel(type, isSupport);
 
   return (
-// @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; contentLabel: string; type: string; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
+    // @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; contentLabel: string; type: string; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
     <Modal isOpen contentLabel={label} type="card" onAborted={closeModal}>
       <Card
         title={label}
@@ -119,7 +119,7 @@ export default function ModalRevokeClaim(props: Props) {
               onClick={revokeClaim}
             />
             {/* @ts-expect-error - TS2322 (ts-migration) */}
-            <Button button="link" label={__('Cancel')} onClick={closeModal} />
+            <Button button="link" label={__("Cancel")} onClick={closeModal} />
           </div>
         }
       />

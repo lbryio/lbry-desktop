@@ -1,38 +1,38 @@
-import React from 'react';
+import React from "react";
 // @ts-expect-error - TS2792 - Cannot find module 'electron'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-import { ipcRenderer } from 'electron';
-import classnames from 'classnames';
+import { ipcRenderer } from "electron";
+import classnames from "classnames";
 
 type Props = Record<any, any>;
 
 type State = {
-  hoverUrl: string,
-  show: boolean
+  hoverUrl: string;
+  show: boolean;
 };
 
 class StatusBar extends React.PureComponent<Props, State> {
   constructor() {
-// @ts-expect-error - TS2554 - Expected 1-2 arguments, but got 0.
+    // @ts-expect-error - TS2554 - Expected 1-2 arguments, but got 0.
     super();
     this.state = {
-      hoverUrl: '',
+      hoverUrl: "",
       show: false,
     };
     (this as any).handleUrlChange = this.handleUrlChange.bind(this);
   }
 
   componentDidMount() {
-    ipcRenderer.on('update-target-url', this.handleUrlChange);
+    ipcRenderer.on("update-target-url", this.handleUrlChange);
   }
 
   componentWillUnmount() {
-    ipcRenderer.removeListener('update-target-url', this.handleUrlChange);
+    ipcRenderer.removeListener("update-target-url", this.handleUrlChange);
   }
 
   handleUrlChange(event: any, url: string) {
     // We want to retain the previous URL so that it can fade out
     // without the component collapsing.
-    if (url === '') {
+    if (url === "") {
       this.setState({ show: false });
     } else {
       this.setState({ show: true });
@@ -42,7 +42,7 @@ class StatusBar extends React.PureComponent<Props, State> {
 
   render() {
     const { hoverUrl, show } = this.state;
-    return <div className={classnames('status-bar', { visible: show })}>{decodeURI(hoverUrl)}</div>;
+    return <div className={classnames("status-bar", { visible: show })}>{decodeURI(hoverUrl)}</div>;
   }
 }
 

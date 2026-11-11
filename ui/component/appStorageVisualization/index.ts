@@ -1,14 +1,14 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import StorageViz from './view';
+import { connect } from "react-redux";
+import StorageViz from "./view";
 import {
   selectViewBlobSpace,
   selectViewHostingLimit,
   selectAutoBlobSpace,
   selectPrivateBlobSpace,
   selectAutoHostingLimit,
-} from 'redux/selectors/settings';
-import { selectDiskSpace } from 'redux/selectors/app';
+} from "redux/selectors/settings";
+import { selectDiskSpace } from "redux/selectors/app";
 
 const select = (state: unknown) => ({
   diskSpace: selectDiskSpace(state),

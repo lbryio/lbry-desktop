@@ -1,46 +1,46 @@
-import {DragDropContext, Droppable} from 'react-beautiful-dnd';
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 
-import React from 'react';
-import ClaimList from 'component/claimList';
-import Page from 'component/page';
-import * as PAGES from 'constants/pages';
-import { useHistory } from 'react-router-dom';
-import CollectionEdit from 'component/collectionEdit';
-import Card from 'component/common/card';
-import Button from 'component/button';
-import CollectionActions from 'component/collectionActions';
-import classnames from 'classnames';
-import ClaimAuthor from 'component/claimAuthor';
-import FileDescription from 'component/fileDescription';
-import * as COLLECTIONS_CONSTS from 'constants/collections';
-import Icon from 'component/common/icon';
-import * as ICONS from 'constants/icons';
-import Spinner from 'component/spinner';
-import { FormField } from 'component/common/form';
+import React from "react";
+import ClaimList from "component/claimList";
+import Page from "component/page";
+import * as PAGES from "constants/pages";
+import { useHistory } from "react-router-dom";
+import CollectionEdit from "component/collectionEdit";
+import Card from "component/common/card";
+import Button from "component/button";
+import CollectionActions from "component/collectionActions";
+import classnames from "classnames";
+import ClaimAuthor from "component/claimAuthor";
+import FileDescription from "component/fileDescription";
+import * as COLLECTIONS_CONSTS from "constants/collections";
+import Icon from "component/common/icon";
+import * as ICONS from "constants/icons";
+import Spinner from "component/spinner";
+import { FormField } from "component/common/form";
 
-export const PAGE_VIEW_QUERY = 'view';
-export const EDIT_PAGE = 'edit';
+export const PAGE_VIEW_QUERY = "view";
+export const EDIT_PAGE = "edit";
 
 type Props = {
-  collectionId: string,
-  uri: string,
-  claim: Claim,
-  title: string,
-  thumbnail: string,
-  collection: Collection,
-  collectionUrls: Array<string>,
-  collectionCount: number,
-  isResolvingCollection: boolean,
-  isMyClaim: boolean,
-  isMyCollection: boolean,
-  claimIsPending: boolean,
-  collectionHasEdits: boolean,
-  deleteCollection: (arg1: string, arg2: string) => void,
-  editCollection: (arg1: string, arg2: CollectionEditParams) => void,
-  fetchCollectionItems: (arg1: string, arg2: () => void) => void,
-  resolveUris: (arg1: string) => void,
-  user: User | null | undefined,
-  renameCollection: (arg1: string, arg2: string) => void
+  collectionId: string;
+  uri: string;
+  claim: Claim;
+  title: string;
+  thumbnail: string;
+  collection: Collection;
+  collectionUrls: Array<string>;
+  collectionCount: number;
+  isResolvingCollection: boolean;
+  isMyClaim: boolean;
+  isMyCollection: boolean;
+  claimIsPending: boolean;
+  collectionHasEdits: boolean;
+  deleteCollection: (arg1: string, arg2: string) => void;
+  editCollection: (arg1: string, arg2: CollectionEditParams) => void;
+  fetchCollectionItems: (arg1: string, arg2: () => void) => void;
+  resolveUris: (arg1: string) => void;
+  user: User | null | undefined;
+  renameCollection: (arg1: string, arg2: string) => void;
 };
 
 export default function CollectionPage(props: Props) {
@@ -76,11 +76,11 @@ export default function CollectionPage(props: Props) {
   const [newName, setNewName] = React.useState(collectionName);
 
   const { name, totalItems } = collection || {};
-// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"watchlater" | "favorites" | "favoriteChannels"'.
+  // @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"watchlater" | "favorites" | "favoriteChannels"'.
   const isBuiltin = COLLECTIONS_CONSTS.BUILTIN_LISTS.includes(collectionId);
 
   function handleOnDragEnd(result: unknown) {
-// @ts-expect-error - TS2339 - Property 'source' does not exist on type '{}'. | TS2339 - Property 'destination' does not exist on type '{}'.
+    // @ts-expect-error - TS2339 - Property 'source' does not exist on type '{}'. | TS2339 - Property 'destination' does not exist on type '{}'.
     const { source, destination } = result;
 
     if (!destination) return;
@@ -111,8 +111,8 @@ export default function CollectionPage(props: Props) {
   const pending = (
     <div className="help card__title--help">
       {/* @ts-expect-error - TS2322 (ts-migration) */}
-      <Spinner type={'small'} />
-      {__('Your publish is being confirmed and will be live soon')}
+      <Spinner type={"small"} />
+      {__("Your publish is being confirmed and will be live soon")}
     </div>
   );
 
@@ -121,7 +121,7 @@ export default function CollectionPage(props: Props) {
       // @ts-expect-error - TS2322 (ts-migration)
       button="close"
       icon={ICONS.REFRESH}
-      label={__('Clear Edits')}
+      label={__("Clear Edits")}
       onClick={() => deleteCollection(collectionId, COLLECTIONS_CONSTS.COL_KEY_EDITED)}
     />
   );
@@ -131,7 +131,7 @@ export default function CollectionPage(props: Props) {
       // @ts-expect-error - TS2322 (ts-migration)
       button="close"
       icon={ICONS.DELETE}
-      label={__('Remove all unavailable claims')}
+      label={__("Remove all unavailable claims")}
       onClick={() => {
         editCollection(collectionId, { uris: unavailableUris, remove: true });
         setUnavailable([]);
@@ -149,7 +149,7 @@ export default function CollectionPage(props: Props) {
   const subTitle = (
     <div>
       <span className="collection__subtitle">
-        {collectionCount === 1 ? __('1 item') : __('%collectionCount% items', { collectionCount })}
+        {collectionCount === 1 ? __("1 item") : __("%collectionCount% items", { collectionCount })}
       </span>
       {/* @ts-expect-error - TS2322 (ts-migration) */}
       {uri && <ClaimAuthor uri={uri} />}
@@ -162,8 +162,8 @@ export default function CollectionPage(props: Props) {
           <FormField
             autoFocus
             type="text"
-// @ts-expect-error - TS2322 - Type '{ autoFocus: true; type: string; className: string; name: string; value: string; inputButton: Element; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
-            className={'editable-text__field'}
+            // @ts-expect-error - TS2322 - Type '{ autoFocus: true; type: string; className: string; name: string; value: string; inputButton: Element; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+            className={"editable-text__field"}
             name="rename_collection"
             value={newName}
             inputButton={
@@ -171,9 +171,9 @@ export default function CollectionPage(props: Props) {
                 <Button
                   // @ts-expect-error - TS2322 (ts-migration)
                   icon={ICONS.COMPLETE}
-                  disabled={!(newName || '').trim() || collectionName === newName}
+                  disabled={!(newName || "").trim() || collectionName === newName}
                   onClick={handleRenameCollection}
-                  className={'editable-text__input-button'}
+                  className={"editable-text__input-button"}
                 />
                 <Button
                   // @ts-expect-error - TS2322 (ts-migration)
@@ -182,7 +182,7 @@ export default function CollectionPage(props: Props) {
                     setIsRenamingList(false);
                     setNewName(collectionName);
                   }}
-                  className={'editable-text__input-button'}
+                  className={"editable-text__input-button"}
                 />
               </>
             }
@@ -203,7 +203,7 @@ export default function CollectionPage(props: Props) {
               <>
                 <Button
                   // @ts-expect-error - TS2322 (ts-migration)
-                  className={'editable-text__input-button'}
+                  className={"editable-text__input-button"}
                   icon={ICONS.EDIT}
                   onClick={() => setIsRenamingList(true)}
                 />
@@ -242,7 +242,7 @@ export default function CollectionPage(props: Props) {
     return (
       // @ts-expect-error - TS2740 (ts-migration)
       <Page>
-        <h2 className="main--empty empty">{__('Loading...')}</h2>
+        <h2 className="main--empty empty">{__("Loading...")}</h2>
       </Page>
     );
   }
@@ -251,7 +251,7 @@ export default function CollectionPage(props: Props) {
     return (
       // @ts-expect-error - TS2740 (ts-migration)
       <Page>
-        <h2 className="main--empty empty">{__('Nothing here')}</h2>
+        <h2 className="main--empty empty">{__("Nothing here")}</h2>
       </Page>
     );
   }
@@ -263,8 +263,8 @@ export default function CollectionPage(props: Props) {
         noFooter
         noSideNavigation={editing}
         backout={{
-          title: __('%action% %collection%', { collection: name, action: uri ? __('Editing') : __('Publishing') }),
-          simpleTitle: uri ? __('Editing') : __('Publishing'),
+          title: __("%action% %collection%", { collection: name, action: uri ? __("Editing") : __("Publishing") }),
+          simpleTitle: uri ? __("Editing") : __("Publishing"),
         }}
       >
         {/* @ts-expect-error - TS2322, TS2741 (ts-migration) */}
@@ -284,7 +284,7 @@ export default function CollectionPage(props: Props) {
       // @ts-expect-error - TS2740 (ts-migration)
       <Page className="playlistPage-wrapper">
         {editing}
-        <div className={classnames('section card-stack')}>
+        <div className={classnames("section card-stack")}>
           {info}
 
           <DragDropContext onDragEnd={handleOnDragEnd}>

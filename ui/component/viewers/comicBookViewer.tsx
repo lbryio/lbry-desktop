@@ -1,24 +1,24 @@
-import * as React from 'react';
-import Villain from 'villain-react';
-import LoadingScreen from 'component/common/loading-screen';
+import * as React from "react";
+import Villain from "villain-react";
+import LoadingScreen from "component/common/loading-screen";
 
-import useFileStream from 'effects/use-stream-file';
+import useFileStream from "effects/use-stream-file";
 
 // Import default styles for Villain
 // @ts-expect-error - TS2882 (ts-migration)
-import 'villain-react/dist/style.css';
+import "villain-react/dist/style.css";
 
 type Props = {
   source: {
-    file: (arg1?: string | null | undefined) => any,
-    stream: string
-  },
-  theme: string
+    file: (arg1?: string | null | undefined) => any;
+    stream: string;
+  };
+  theme: string;
 };
 
-let workerUrl = 'webworkers/worker-bundle.js';
+let workerUrl = "webworkers/worker-bundle.js";
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== "production") {
   // Don't add a leading slash in production because electron treats it as an absolute path
   workerUrl = `/${workerUrl}`;
 }
@@ -31,7 +31,7 @@ const ComicBookViewer = (props: Props) => {
 
   // Villain options
   const opts = {
-    theme: theme === 'dark' ? 'Dark' : 'Light',
+    theme: theme === "dark" ? "Dark" : "Light",
     allowFullScreen: true,
     autoHideControls: false,
     allowGlobalShortcuts: true,
@@ -43,9 +43,9 @@ const ComicBookViewer = (props: Props) => {
 
   return (
     <div className="file-render__viewer  file-render__viewer--comic">
-      {loading && <LoadingScreen status={__('Loading')} isDocument />}
+      {loading && <LoadingScreen status={__("Loading")} isDocument />}
       {ready && (
-        <Villain source={finalSource.content} className={'comic-viewer'} options={opts} workerUrl={workerUrl} />
+        <Villain source={finalSource.content} className={"comic-viewer"} options={opts} workerUrl={workerUrl} />
       )}
       {error && <LoadingScreen status={errorMessage} spinner={false} />}
     </div>

@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectDownloadUrlsCount, selectIsFetchingFileList } from 'redux/selectors/file_info';
-import { selectMyPurchases, selectIsFetchingMyPurchases } from 'redux/selectors/claims';
-import { doPurchaseList } from 'redux/actions/claims';
-import LibraryPage from './view';
+import { connect } from "react-redux";
+import { selectDownloadUrlsCount, selectIsFetchingFileList } from "redux/selectors/file_info";
+import { selectMyPurchases, selectIsFetchingMyPurchases } from "redux/selectors/claims";
+import { doPurchaseList } from "redux/actions/claims";
+import LibraryPage from "./view";
 
 const select = (state: unknown) => ({
   allDownloadedUrlsCount: selectDownloadUrlsCount(state),

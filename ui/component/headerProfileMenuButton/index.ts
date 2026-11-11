@@ -1,10 +1,10 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doOpenModal } from 'redux/actions/app';
-import { selectActiveChannelClaim } from 'redux/selectors/app';
-import { selectUserEmail, selectUserVerifiedEmail } from 'redux/selectors/user';
-import * as MODALS from 'constants/modal_types';
-import HeaderProfileMenuButton from './view';
+import { connect } from "react-redux";
+import { doOpenModal } from "redux/actions/app";
+import { selectActiveChannelClaim } from "redux/selectors/app";
+import { selectUserEmail, selectUserVerifiedEmail } from "redux/selectors/user";
+import * as MODALS from "constants/modal_types";
+import HeaderProfileMenuButton from "./view";
 
 const select = (state: unknown) => ({
   activeChannelClaim: selectActiveChannelClaim(state),

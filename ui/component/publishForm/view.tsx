@@ -6,90 +6,90 @@
   File upload is carried out in the background by that function.
  */
 
-import {SITE_NAME} from 'config';
-import React, { useEffect, useState } from 'react';
-import { buildURI, isURIValid, isNameValid } from 'util/lbryURI';
-import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
-import Button from 'component/button';
-import ChannelSelect from 'component/channelSelector';
-import classnames from 'classnames';
-import TagsSelect from 'component/tagsSelect';
-import PublishDescription from 'component/publishDescription';
-import PublishPrice from 'component/publishPrice';
-import PublishFile from 'component/publishFile';
-import PublishBid from 'component/publishBid';
-import PublishAdditionalOptions from 'component/publishAdditionalOptions';
-import PublishFormErrors from 'component/publishFormErrors';
-import SelectThumbnail from 'component/selectThumbnail';
-import Card from 'component/common/card';
-import I18nMessage from 'component/i18nMessage';
-import * as PUBLISH_MODES from 'constants/publish_types';
-import { useHistory } from 'react-router';
-import Spinner from 'component/spinner';
+import { SITE_NAME } from "config";
+import React, { useEffect, useState } from "react";
+import { buildURI, isURIValid, isNameValid } from "util/lbryURI";
+import * as THUMBNAIL_STATUSES from "constants/thumbnail_upload_statuses";
+import Button from "component/button";
+import ChannelSelect from "component/channelSelector";
+import classnames from "classnames";
+import TagsSelect from "component/tagsSelect";
+import PublishDescription from "component/publishDescription";
+import PublishPrice from "component/publishPrice";
+import PublishFile from "component/publishFile";
+import PublishBid from "component/publishBid";
+import PublishAdditionalOptions from "component/publishAdditionalOptions";
+import PublishFormErrors from "component/publishFormErrors";
+import SelectThumbnail from "component/selectThumbnail";
+import Card from "component/common/card";
+import I18nMessage from "component/i18nMessage";
+import * as PUBLISH_MODES from "constants/publish_types";
+import { useHistory } from "react-router";
+import Spinner from "component/spinner";
 
-import fs from 'fs';
-import tempy from 'tempy';
+import fs from "fs";
+import tempy from "tempy";
 
 type Props = {
-  disabled: boolean,
-  tags: Array<Tag>,
-  publish: (source?: File | null | undefined, arg2?: boolean | null | undefined) => void,
-  filePath: File | null | undefined,
-  fileText: string,
-  bid: number | null | undefined,
-  bidError: string | null | undefined,
-  editingURI: string | null | undefined,
-  title: string | null | undefined,
-  thumbnail: string | null | undefined,
-  thumbnailError: boolean | null | undefined,
-  uploadThumbnailStatus: string | null | undefined,
-  thumbnailPath: string | null | undefined,
-  description: string | null | undefined,
-  language: string,
-  nsfw: boolean,
-  contentIsFree: boolean,
+  disabled: boolean;
+  tags: Array<Tag>;
+  publish: (source?: File | null | undefined, arg2?: boolean | null | undefined) => void;
+  filePath: File | null | undefined;
+  fileText: string;
+  bid: number | null | undefined;
+  bidError: string | null | undefined;
+  editingURI: string | null | undefined;
+  title: string | null | undefined;
+  thumbnail: string | null | undefined;
+  thumbnailError: boolean | null | undefined;
+  uploadThumbnailStatus: string | null | undefined;
+  thumbnailPath: string | null | undefined;
+  description: string | null | undefined;
+  language: string;
+  nsfw: boolean;
+  contentIsFree: boolean;
   fee: {
-    amount: string,
-    currency: string
-  },
-  name: string | null | undefined,
-  nameError: string | null | undefined,
-  isResolvingUri: boolean,
-  winningBidForClaimUri: number,
-  myClaimForUri: StreamClaim | null | undefined,
-  licenseType: string,
-  otherLicenseDescription: string | null | undefined,
-  licenseUrl: string | null | undefined,
-  useLBRYUploader: boolean | null | undefined,
-  publishing: boolean,
-  publishSuccess: boolean,
-  balance: number,
-  isStillEditing: boolean,
-  clearPublish: () => void,
-  resolveUri: (arg1: string) => void,
-  scrollToTop: () => void,
-  prepareEdit: (claim: any, uri: string) => void,
-  resetThumbnailStatus: () => void,
-  amountNeededForTakeover: number | null | undefined,
+    amount: string;
+    currency: string;
+  };
+  name: string | null | undefined;
+  nameError: string | null | undefined;
+  isResolvingUri: boolean;
+  winningBidForClaimUri: number;
+  myClaimForUri: StreamClaim | null | undefined;
+  licenseType: string;
+  otherLicenseDescription: string | null | undefined;
+  licenseUrl: string | null | undefined;
+  useLBRYUploader: boolean | null | undefined;
+  publishing: boolean;
+  publishSuccess: boolean;
+  balance: number;
+  isStillEditing: boolean;
+  clearPublish: () => void;
+  resolveUri: (arg1: string) => void;
+  scrollToTop: () => void;
+  prepareEdit: (claim: any, uri: string) => void;
+  resetThumbnailStatus: () => void;
+  amountNeededForTakeover: number | null | undefined;
   // Add back type
-  updatePublishForm: (arg1?: any) => void,
-  checkAvailability: (arg1: string) => void,
-  ytSignupPending: boolean,
+  updatePublishForm: (arg1?: any) => void;
+  checkAvailability: (arg1: string) => void;
+  ytSignupPending: boolean;
   modal: {
-    id: string,
-    modalProps: Record<any, any>
-  },
-  enablePublishPreview: boolean,
-  activeChannelClaim: ChannelClaim | null | undefined,
-  incognito: boolean,
-  user: User | null | undefined,
-  activeChannelStakedLevel: number,
-  isPostClaim: boolean,
-  permanentUrl: string | null | undefined,
-  remoteUrl: string | null | undefined,
-  isClaimingInitialRewards: boolean,
-  claimInitialRewards: () => void,
-  hasClaimedInitialRewards: boolean
+    id: string;
+    modalProps: Record<any, any>;
+  };
+  enablePublishPreview: boolean;
+  activeChannelClaim: ChannelClaim | null | undefined;
+  incognito: boolean;
+  user: User | null | undefined;
+  activeChannelStakedLevel: number;
+  isPostClaim: boolean;
+  permanentUrl: string | null | undefined;
+  remoteUrl: string | null | undefined;
+  isClaimingInitialRewards: boolean;
+  claimInitialRewards: () => void;
+  hasClaimedInitialRewards: boolean;
 };
 
 function PublishForm(props: Props) {
@@ -133,7 +133,7 @@ function PublishForm(props: Props) {
   const inEditMode = Boolean(editingURI);
   const { replace, location } = useHistory();
   const urlParams = new URLSearchParams(location.search);
-  const TYPE_PARAM = 'type';
+  const TYPE_PARAM = "type";
   const uploadType = urlParams.get(TYPE_PARAM);
   const _uploadType = uploadType && uploadType.toLowerCase();
   const AVAILABLE_MODES = Object.values(PUBLISH_MODES).filter((mode) => {
@@ -151,8 +151,8 @@ function PublishForm(props: Props) {
   });
 
   const MODE_TO_I18N_STR = {
-    [PUBLISH_MODES.FILE]: 'File',
-    [PUBLISH_MODES.POST]: 'Post --[noun, markdown post tab button]--',
+    [PUBLISH_MODES.FILE]: "File",
+    [PUBLISH_MODES.POST]: "Post --[noun, markdown post tab button]--",
   } as const;
 
   const [mode, setMode] = React.useState(_uploadType || PUBLISH_MODES.FILE);
@@ -160,15 +160,15 @@ function PublishForm(props: Props) {
   let customSubtitle;
   if (mode === PUBLISH_MODES.POST || isPostClaim) {
     if (isPostClaim) {
-      customSubtitle = __('Edit your post');
+      customSubtitle = __("Edit your post");
     } else {
-      customSubtitle = __('Craft an epic post clearly explaining... whatever.');
+      customSubtitle = __("Craft an epic post clearly explaining... whatever.");
     }
   } else {
     if (editingURI) {
-      customSubtitle = __('Update your content');
+      customSubtitle = __("Update your content");
     } else {
-      customSubtitle = __('Upload that unlabeled video or cassette you found behind the TV in 1991');
+      customSubtitle = __("Upload that unlabeled video or cassette you found behind the TV in 1991");
     }
   }
 
@@ -179,12 +179,12 @@ function PublishForm(props: Props) {
   const [prevName, setPrevName] = React.useState(false);
   // Used to check if the file has been modified by user
   const [fileEdited, setFileEdited] = React.useState(false);
-  const [prevFileText, setPrevFileText] = React.useState('');
+  const [prevFileText, setPrevFileText] = React.useState("");
 
   const [waitForFile, setWaitForFile] = useState(false);
   const TAGS_LIMIT = 5;
   const fileFormDisabled = mode === PUBLISH_MODES.FILE && !filePath && !remoteUrl;
-  const emptyPostError = mode === PUBLISH_MODES.POST && (!fileText || fileText.trim() === '');
+  const emptyPostError = mode === PUBLISH_MODES.POST && (!fileText || fileText.trim() === "");
   const formDisabled = (fileFormDisabled && !editingURI) || emptyPostError || publishing;
   const isInProgress = filePath || editingURI || name || title;
   const activeChannelName = activeChannelClaim && activeChannelClaim.name;
@@ -197,7 +197,7 @@ function PublishForm(props: Props) {
     (myClaimForUri && myClaimForUri.signing_channel && myClaimForUri.signing_channel.claim_id) ||
     (activeChannelClaim && activeChannelClaim.claim_id);
 
-// @ts-expect-error - TS2367 - This condition will always return 'true' since the types 'string' and 'boolean' have no overlap.
+  // @ts-expect-error - TS2367 - This condition will always return 'true' since the types 'string' and 'boolean' have no overlap.
   const nameEdited = isStillEditing && name !== prevName;
   const thumbnailUploaded = uploadThumbnailStatus === THUMBNAIL_STATUSES.COMPLETE && thumbnail;
 
@@ -218,8 +218,8 @@ function PublishForm(props: Props) {
   const formValid = isOverwritingExistingClaim
     ? false
     : editingURI && !filePath // if we're editing we don't need a file
-    ? isStillEditing && formValidLessFile && !waitingForFile
-    : formValidLessFile;
+      ? isStillEditing && formValidLessFile && !waitingForFile
+      : formValidLessFile;
 
   const [previewing, setPreviewing] = React.useState(false);
 
@@ -240,21 +240,21 @@ function PublishForm(props: Props) {
   let submitLabel;
 
   if (isClaimingInitialRewards) {
-    submitLabel = __('Claiming credits...');
+    submitLabel = __("Claiming credits...");
   } else if (publishing) {
     if (isStillEditing) {
-      submitLabel = __('Saving...');
+      submitLabel = __("Saving...");
     } else {
-      submitLabel = __('Uploading...');
+      submitLabel = __("Uploading...");
     }
   } else if (previewing) {
     // @ts-expect-error - TS2322 (ts-migration)
     submitLabel = <Spinner type="small" />;
   } else {
     if (isStillEditing) {
-      submitLabel = __('Save');
+      submitLabel = __("Save");
     } else {
-      submitLabel = __('Upload');
+      submitLabel = __("Upload");
     }
   }
 
@@ -273,11 +273,11 @@ function PublishForm(props: Props) {
 
   // Save previous name of the editing claim
   useEffect(() => {
-// @ts-expect-error - TS2367 - This condition will always return 'false' since the types 'boolean' and 'string' have no overlap. | TS2339 - Property 'trim' does not exist on type 'true'.
-    if (isStillEditing && (!prevName || !prevName.trim() === '')) {
-// @ts-expect-error - TS2367 - This condition will always return 'true' since the types 'string' and 'boolean' have no overlap.
+    // @ts-expect-error - TS2367 - This condition will always return 'false' since the types 'boolean' and 'string' have no overlap. | TS2339 - Property 'trim' does not exist on type 'true'.
+    if (isStillEditing && (!prevName || !prevName.trim() === "")) {
+      // @ts-expect-error - TS2367 - This condition will always return 'true' since the types 'string' and 'boolean' have no overlap.
       if (name !== prevName) {
-// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type 'SetStateAction<boolean>'.
+        // @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type 'SetStateAction<boolean>'.
         setPrevName(name);
       }
     }
@@ -285,7 +285,7 @@ function PublishForm(props: Props) {
 
   // Check for content changes on the text editor
   useEffect(() => {
-    if (!fileEdited && fileText !== prevFileText && fileText !== '') {
+    if (!fileEdited && fileText !== prevFileText && fileText !== "") {
       setFileEdited(true);
     } else if (fileEdited && fileText === prevFileText) {
       setFileEdited(false);
@@ -297,7 +297,7 @@ function PublishForm(props: Props) {
     // We are only going to store the full uri, but we need to resolve the uri with and without the channel name
     let uri;
     try {
-// @ts-expect-error - TS2345 - Argument of type '{ streamName: string; activeChannelName: string; }' is not assignable to parameter of type 'LbryUrlObj'.
+      // @ts-expect-error - TS2345 - Argument of type '{ streamName: string; activeChannelName: string; }' is not assignable to parameter of type 'LbryUrlObj'.
       uri = name && buildURI({ streamName: name, activeChannelName });
     } catch (e: any) {}
 
@@ -374,15 +374,15 @@ function PublishForm(props: Props) {
   // Save file changes locally ( desktop )
   function saveFileChanges() {
     let output;
-    if (!output || output === '') {
+    if (!output || output === "") {
       // Generate a temporary file:
-      output = tempy.file({ name: 'post.md' });
+      output = tempy.file({ name: "post.md" });
     }
     // Create a temporary file and save file changes
-    if (output && output !== '') {
+    if (output && output !== "") {
       // Save file changes
       return new Promise<any>((resolve, reject) => {
-// @ts-expect-error - TS2345 - Argument of type '(error: any, data: any) => void' is not assignable to parameter of type 'NoParamCallback'.
+        // @ts-expect-error - TS2345 - Argument of type '(error: any, data: any) => void' is not assignable to parameter of type 'NoParamCallback'.
         fs.writeFile(output, fileText, (error, data) => {
           // Handle error, cant save changes or create file
           error ? reject(error) : resolve(output);
@@ -436,7 +436,7 @@ function PublishForm(props: Props) {
   useEffect(() => {
     if (autoSwitchMode && editingURI && myClaimForUri) {
       // Change publish mode to "post" if editing content type is markdown
-      if (fileMimeType === 'text/markdown' && mode !== PUBLISH_MODES.POST) {
+      if (fileMimeType === "text/markdown" && mode !== PUBLISH_MODES.POST) {
         setMode(PUBLISH_MODES.POST);
         // Prevent forced mode
         setAutoSwitchMode(false);
@@ -456,7 +456,7 @@ function PublishForm(props: Props) {
   if (publishing) {
     return (
       <div className="main--empty">
-        <h1 className="section__subtitle">{__('Publishing...')}</h1>
+        <h1 className="section__subtitle">{__("Publishing...")}</h1>
         <Spinner delayed />
       </div>
     );
@@ -487,12 +487,12 @@ function PublishForm(props: Props) {
                 // @ts-expect-error - TS2322 (ts-migration)
                 icon={modeName}
                 iconSize={18}
-                label={__(MODE_TO_I18N_STR[String(modeName)] || '---')}
+                label={__(MODE_TO_I18N_STR[String(modeName)] || "---")}
                 button="alt"
                 onClick={() => {
                   setMode(modeName);
                 }}
-                className={classnames('button-toggle', { 'button-toggle--active': mode === modeName })}
+                className={classnames("button-toggle", { "button-toggle--active": mode === modeName })}
               />
             ))}
           </>
@@ -500,32 +500,32 @@ function PublishForm(props: Props) {
       />
 
       {!publishing && (
-        <div className={classnames({ 'card--disabled': formDisabled })}>
+        <div className={classnames({ "card--disabled": formDisabled })}>
           {mode !== PUBLISH_MODES.POST && <PublishDescription disabled={formDisabled} />}
-{ /* @ts-expect-error - TS2322 - Type 'Element' is not assignable to type 'string | React.ReactNode'. */}
+          {/* @ts-expect-error - TS2322 - Type 'Element' is not assignable to type 'string | React.ReactNode'. */}
           <Card actions={<SelectThumbnail />} />
-          <label>{__('Tags')}</label>
+          <label>{__("Tags")}</label>
           <TagsSelect
             suggestMature
             disableAutoFocus
             hideHeader
-            label={__('Selected Tags')}
+            label={__("Selected Tags")}
             // @ts-expect-error - TS2322 (ts-migration)
-            empty={__('No tags added')}
+            empty={__("No tags added")}
             limitSelect={TAGS_LIMIT}
             help={__(
               "Add tags that are relevant to your content so those who're looking for it can find it more easily. If your content is best suited for mature audiences, ensure it is tagged 'mature'."
             )}
-            placeholder={__('gaming, crypto')}
+            placeholder={__("gaming, crypto")}
             onSelect={(newTags) => {
               const validatedTags: unknown = [];
               newTags.forEach((newTag) => {
                 if (!tags.some((tag) => tag.name === newTag.name)) {
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+                  // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
                   validatedTags.push(newTag);
                 }
               });
-// @ts-expect-error - TS2488 - Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
+              // @ts-expect-error - TS2488 - Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
               updatePublishForm({ tags: [...tags, ...validatedTags] });
             }}
             onRemove={(clickedTag) => {
@@ -559,7 +559,7 @@ function PublishForm(props: Props) {
             }
           />
           {/* @ts-expect-error - TS2322 (ts-migration) */}
-          <Button button="link" onClick={clearPublish} label={__('New --[clears Publish Form]--')} />
+          <Button button="link" onClick={clearPublish} label={__("New --[clears Publish Form]--")} />
         </div>
         <p className="help">
           {!formDisabled && !formValid ? (
@@ -575,7 +575,7 @@ function PublishForm(props: Props) {
                     // @ts-expect-error - TS2322 (ts-migration)
                     button="link"
                     href="https://www.lbry.com/termsofservice"
-                    label={__('%site_name% Terms of Service', { site_name: SITE_NAME })}
+                    label={__("%site_name% Terms of Service", { site_name: SITE_NAME })}
                   />
                 ),
               }}

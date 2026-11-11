@@ -1,29 +1,29 @@
-import React from 'react';
-import Button from 'component/button';
-import UriIndicator from 'component/uriIndicator';
-import I18nMessage from 'component/i18nMessage';
-import { withRouter } from 'react-router';
-import debounce from 'util/debounce';
-import * as ICONS from 'constants/icons';
+import React from "react";
+import Button from "component/button";
+import UriIndicator from "component/uriIndicator";
+import I18nMessage from "component/i18nMessage";
+import { withRouter } from "react-router";
+import debounce from "util/debounce";
+import * as ICONS from "constants/icons";
 
 const DEBOUNCE_SCROLL_HANDLER_MS = 150;
-const CLASSNAME_AUTOPLAY_COUNTDOWN = 'autoplay-countdown';
+const CLASSNAME_AUTOPLAY_COUNTDOWN = "autoplay-countdown";
 
 type Props = {
   history: {
-    push: (arg1: string) => void
-  },
-  nextRecommendedClaim: StreamClaim | null | undefined,
-  nextRecommendedUri: string,
+    push: (arg1: string) => void;
+  };
+  nextRecommendedClaim: StreamClaim | null | undefined;
+  nextRecommendedUri: string;
   modal: {
-    id: string,
-    modalProps: Record<any, any>
-  },
-  skipPaid: boolean,
-  doNavigate: () => void,
-  doReplay: () => void,
-  doPrevious: () => void,
-  onCanceled: () => void
+    id: string;
+    modalProps: Record<any, any>;
+  };
+  skipPaid: boolean;
+  doNavigate: () => void;
+  doReplay: () => void;
+  doPrevious: () => void;
+  onCanceled: () => void;
 };
 
 function AutoplayCountdown(props: Props) {
@@ -56,9 +56,9 @@ function AutoplayCountdown(props: Props) {
 
   function getMsgPlayingNext() {
     if (skipPaid) {
-      return __('Playing next free content in %seconds_left% seconds...', { seconds_left: timer });
+      return __("Playing next free content in %seconds_left% seconds...", { seconds_left: timer });
     } else {
-      return __('Playing in %seconds_left% seconds...', { seconds_left: timer });
+      return __("Playing in %seconds_left% seconds...", { seconds_left: timer });
     }
   }
 
@@ -71,8 +71,8 @@ function AutoplayCountdown(props: Props) {
       setTimerPaused(shouldPauseAutoplay());
     }, DEBOUNCE_SCROLL_HANDLER_MS);
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   // Update countdown timer.
@@ -115,21 +115,21 @@ function AutoplayCountdown(props: Props) {
 
         <div className="file-viewer__overlay-title">{nextTitle}</div>
         <div className="autoplay-countdown__timer">
-          <div className={'autoplay-countdown__button autoplay-countdown__button--' + (timer % 5)}>
+          <div className={"autoplay-countdown__button autoplay-countdown__button--" + (timer % 5)}>
             {/* @ts-expect-error - TS2322 (ts-migration) */}
-            <Button onClick={doNavigate} iconSize={30} title={__('Play')} className="button--icon button--play" />
+            <Button onClick={doNavigate} iconSize={30} title={__("Play")} className="button--icon button--play" />
           </div>
           {isTimerPaused && (
             <div className="file-viewer__overlay-secondary autoplay-countdown__counter">
-              {__('Autoplay timer paused.')}{' '}
+              {__("Autoplay timer paused.")}{" "}
             </div>
           )}
           {!isTimerPaused && (
             <div className="file-viewer__overlay-secondary autoplay-countdown__counter">
-              {getMsgPlayingNext()}{' '}
+              {getMsgPlayingNext()}{" "}
               <Button
                 // @ts-expect-error - TS2322 (ts-migration)
-                label={__('Cancel')}
+                label={__("Cancel")}
                 button="link"
                 onClick={() => {
                   setTimerCanceled(true);
@@ -142,7 +142,7 @@ function AutoplayCountdown(props: Props) {
             <div>
               <Button
                 // @ts-expect-error - TS2322 (ts-migration)
-                label={__('Play Previous')}
+                label={__("Play Previous")}
                 button="link"
                 icon={ICONS.PLAY_PREVIOUS}
                 onClick={() => doPrevious()}
@@ -152,7 +152,7 @@ function AutoplayCountdown(props: Props) {
           <div>
             <Button
               // @ts-expect-error - TS2322 (ts-migration)
-              label={skipPaid ? __('Purchase?') : __('Replay?')}
+              label={skipPaid ? __("Purchase?") : __("Replay?")}
               button="link"
               iconRight={skipPaid ? ICONS.WALLET : ICONS.REPLAY}
               onClick={() => {

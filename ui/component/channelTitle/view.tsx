@@ -1,8 +1,8 @@
-import React from 'react';
+import React from "react";
 
 type Props = {
-  claim: ChannelClaim | null | undefined,
-  title: string | null | undefined
+  claim: ChannelClaim | null | undefined;
+  title: string | null | undefined;
 };
 
 function ChannelTitle(props: Props) {

@@ -1,56 +1,56 @@
-import React from 'react';
-import classnames from 'classnames';
-import { NavLink, withRouter } from 'react-router-dom';
-import FileThumbnail from 'component/fileThumbnail';
-import UriIndicator from 'component/uriIndicator';
-import TruncatedText from 'component/common/truncated-text';
-import DateTime from 'component/dateTime';
-import ChannelThumbnail from 'component/channelThumbnail';
-import FileViewCountInline from 'component/fileViewCountInline';
-import useGetThumbnail from 'effects/use-get-thumbnail';
-import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
-import { formatClaimPreviewTitle } from 'util/formatAriaLabel';
-import { parseURI } from 'util/lbryURI';
-import PreviewOverlayProperties from 'component/previewOverlayProperties';
-import FileDownloadLink from 'component/fileDownloadLink';
-import FileWatchLaterLink from 'component/fileWatchLaterLink';
-import ClaimRepostAuthor from 'component/claimRepostAuthor';
-import ClaimMenuList from 'component/claimMenuList';
-import CollectionPreviewOverlay from 'component/collectionPreviewOverlay';
+import React from "react";
+import classnames from "classnames";
+import { NavLink, withRouter } from "react-router-dom";
+import FileThumbnail from "component/fileThumbnail";
+import UriIndicator from "component/uriIndicator";
+import TruncatedText from "component/common/truncated-text";
+import DateTime from "component/dateTime";
+import ChannelThumbnail from "component/channelThumbnail";
+import FileViewCountInline from "component/fileViewCountInline";
+import useGetThumbnail from "effects/use-get-thumbnail";
+import { formatLbryUrlForWeb, generateListSearchUrlParams } from "util/url";
+import { formatClaimPreviewTitle } from "util/formatAriaLabel";
+import { parseURI } from "util/lbryURI";
+import PreviewOverlayProperties from "component/previewOverlayProperties";
+import FileDownloadLink from "component/fileDownloadLink";
+import FileWatchLaterLink from "component/fileWatchLaterLink";
+import ClaimRepostAuthor from "component/claimRepostAuthor";
+import ClaimMenuList from "component/claimMenuList";
+import CollectionPreviewOverlay from "component/collectionPreviewOverlay";
 // @ts-expect-error - TS2792 - Cannot find module 'static/img/placeholderTx.gif'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-import PlaceholderTx from 'static/img/placeholderTx.gif';
+import PlaceholderTx from "static/img/placeholderTx.gif";
 
 type Props = {
-  uri: string,
-  date?: any,
-  claim: Claim | null | undefined,
-  mediaDuration?: string,
-  resolveUri: (arg1: string) => void,
-  isResolvingUri: boolean,
+  uri: string;
+  date?: any;
+  claim: Claim | null | undefined;
+  mediaDuration?: string;
+  resolveUri: (arg1: string) => void;
+  isResolvingUri: boolean;
   history: {
-    push: (arg1: string) => void,
+    push: (arg1: string) => void;
     location: {
-      pathname: string
-    }
-  },
-  thumbnail: string,
-  title: string,
-  placeholder: boolean,
+      pathname: string;
+    };
+  };
+  thumbnail: string;
+  title: string;
+  placeholder: boolean;
   banState: {
-    blacklisted?: boolean,
-    filtered?: boolean,
-    muted?: boolean,
-    blocked?: boolean
-  },
-  getFile: (arg1: string) => void,
-  streamingUrl: string,
-  isMature: boolean,
-  showMature: boolean,
-  showHiddenByUser?: boolean,
-  properties?: (arg1: Claim) => void,
-  collectionId?: string,
-  viewCount: string,
-  swipeLayout: boolean
+    blacklisted?: boolean;
+    filtered?: boolean;
+    muted?: boolean;
+    blocked?: boolean;
+  };
+  getFile: (arg1: string) => void;
+  streamingUrl: string;
+  isMature: boolean;
+  showMature: boolean;
+  showHiddenByUser?: boolean;
+  properties?: (arg1: Claim) => void;
+  collectionId?: string;
+  viewCount: string;
+  swipeLayout: boolean;
 };
 
 // preview image cards used in related video functionality, channel overview page and homepage
@@ -78,18 +78,18 @@ function ClaimPreviewTile(props: Props) {
     swipeLayout = false,
   } = props;
   const isRepost = claim && claim.repost_channel_url;
-  const isCollection = claim && claim.value_type === 'collection';
-  const isStream = claim && claim.value_type === 'stream';
+  const isCollection = claim && claim.value_type === "collection";
+  const isStream = claim && claim.value_type === "stream";
   const isPlayable =
     claim &&
     // $FlowFixMe
     claim.value &&
     // $FlowFixMe
-// @ts-expect-error - TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
+    // @ts-expect-error - TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
     claim.value.stream_type &&
     // $FlowFixMe
-// @ts-expect-error - TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'. | TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
-    (claim.value.stream_type === 'audio' || claim.value.stream_type === 'video');
+    // @ts-expect-error - TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'. | TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
+    (claim.value.stream_type === "audio" || claim.value.stream_type === "video");
   const collectionClaimId = isCollection && claim && claim.claim_id;
   const shouldFetch = claim === undefined;
   const thumbnailUrl = useGetThumbnail(uri, claim, streamingUrl, getFile, placeholder) || thumbnail;
@@ -97,7 +97,7 @@ function ClaimPreviewTile(props: Props) {
   const repostedContentUri = claim && (claim.reposted_claim ? claim.reposted_claim.permanent_url : claim.permanent_url);
   const listId = collectionId || collectionClaimId;
   const navigateUrl =
-    formatLbryUrlForWeb(canonicalUrl || uri || '/') + (listId ? generateListSearchUrlParams(listId) : '');
+    formatLbryUrlForWeb(canonicalUrl || uri || "/") + (listId ? generateListSearchUrlParams(listId) : "");
   const navLinkProps = {
     to: navigateUrl,
     onClick: (e) => e.stopPropagation(),
@@ -115,12 +115,12 @@ function ClaimPreviewTile(props: Props) {
   }
 
   const signingChannel = claim && claim.signing_channel;
-  const isChannel = claim && claim.value_type === 'channel';
+  const isChannel = claim && claim.value_type === "channel";
   const channelUri = !isChannel ? signingChannel && signingChannel.permanent_url : claim && claim.permanent_url;
   const channelTitle = signingChannel && ((signingChannel.value && signingChannel.value.title) || signingChannel.name);
 
   // Aria-label value for claim preview
-  let ariaLabelData = isChannel ? title : formatClaimPreviewTitle(title, channelTitle, date, mediaDuration);
+  const ariaLabelData = isChannel ? title : formatClaimPreviewTitle(title, channelTitle, date, mediaDuration);
 
   function handleClick(e: unknown) {
     if (navigateUrl) {
@@ -149,13 +149,13 @@ function ClaimPreviewTile(props: Props) {
     return null;
   }
 
-  const isChannelPage = location.pathname.startsWith('/@');
+  const isChannelPage = location.pathname.startsWith("/@");
 
   const shouldShowViewCount = !(!viewCount || (claim && claim.repost_url) || !isChannelPage);
 
   if (placeholder || (!claim && isResolvingUri)) {
     return (
-      <li className={classnames('placeholder claim-preview--tile', {})}>
+      <li className={classnames("placeholder claim-preview--tile", {})}>
         <div className="media__thumb">
           <img src={PlaceholderTx} alt="Placeholder" />
         </div>
@@ -163,7 +163,7 @@ function ClaimPreviewTile(props: Props) {
           <div className="claim-tile__title" />
           <div className="claim-tile__title_b" />
           <div
-            className={classnames('claim-tile__info', {
+            className={classnames("claim-tile__info", {
               contains_view_count: shouldShowViewCount,
             })}
           >
@@ -178,14 +178,14 @@ function ClaimPreviewTile(props: Props) {
     );
   }
 
-  let liveProperty = null;
+  const liveProperty = null;
 
   return (
     <li
       onClick={handleClick}
-      className={classnames('card claim-preview--tile', {
-        'claim-preview__wrapper--channel': isChannel,
-        'swipe-list__item claim-preview--horizontal-tile': swipeLayout,
+      className={classnames("card claim-preview--tile", {
+        "claim-preview__wrapper--channel": isChannel,
+        "swipe-list__item claim-preview--horizontal-tile": swipeLayout,
       })}
     >
       <NavLink {...navLinkProps} role="none" tabIndex={-1} aria-hidden>
@@ -234,7 +234,7 @@ function ClaimPreviewTile(props: Props) {
       </div>
       <div>
         <div
-          className={classnames('claim-tile__info', {
+          className={classnames("claim-tile__info", {
             contains_view_count: shouldShowViewCount,
           })}
         >

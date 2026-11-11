@@ -1,7 +1,7 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { makeSelectClaimForUri, selectTitleForUri } from 'redux/selectors/claims';
-import ClaimPreviewTitle from './view';
+import { connect } from "react-redux";
+import { makeSelectClaimForUri, selectTitleForUri } from "redux/selectors/claims";
+import ClaimPreviewTitle from "./view";
 
 const select = (state: unknown, props: unknown) => ({
   claim: makeSelectClaimForUri(props.uri)(state),

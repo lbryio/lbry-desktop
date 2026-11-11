@@ -1,18 +1,18 @@
-import React, {useState, useEffect} from 'react';
-import FileRender from 'component/fileRender';
-import LoadingScreen from 'component/common/loading-screen';
-import { NON_STREAM_MODES } from 'constants/file_render_modes';
+import React, { useState, useEffect } from "react";
+import FileRender from "component/fileRender";
+import LoadingScreen from "component/common/loading-screen";
+import { NON_STREAM_MODES } from "constants/file_render_modes";
 
 type Props = {
-  isPlaying: boolean,
-  fileInfo: FileListItem,
-  uri: string,
-  renderMode: string,
-  streamingUrl?: string,
-  triggerAnalyticsView: (arg1: string, arg2: number) => Promise<any>,
-  claimRewards: () => void,
-  costInfo: any,
-  claimWasPurchased: boolean
+  isPlaying: boolean;
+  fileInfo: FileListItem;
+  uri: string;
+  renderMode: string;
+  streamingUrl?: string;
+  triggerAnalyticsView: (arg1: string, arg2: number) => Promise<any>;
+  claimRewards: () => void;
+  costInfo: any;
+  claimWasPurchased: boolean;
 };
 
 export default function FileRenderInline(props: Props) {
@@ -36,14 +36,14 @@ export default function FileRenderInline(props: Props) {
   let renderContent = isReadyToPlay;
 
   // Force non-streaming content to wait for download
-// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"comic" | "document" | "md" | "pdf" | "html" | "docx" | "cad" | "plain_text"'.
+  // @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"comic" | "document" | "md" | "pdf" | "html" | "docx" | "cad" | "plain_text"'.
   if (NON_STREAM_MODES.includes(renderMode)) {
     renderContent = isReadyToView;
   }
 
   useEffect(() => {
     if (isPlaying) {
-// @ts-expect-error - TS2345 - Argument of type 'number' is not assignable to parameter of type '(prevState: undefined) => undefined'.
+      // @ts-expect-error - TS2345 - Argument of type 'number' is not assignable to parameter of type '(prevState: undefined) => undefined'.
       setPlayTime(Date.now());
     }
   }, [isPlaying, setPlayTime, uri]);

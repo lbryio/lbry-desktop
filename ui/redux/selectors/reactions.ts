@@ -1,7 +1,7 @@
 //@ts-nocheck
-import * as REACTION_TYPES from 'constants/reactions';
-import { createSelector } from 'reselect';
-import { makeSelectClaimForUri } from 'redux/selectors/claims';
+import * as REACTION_TYPES from "constants/reactions";
+import { createSelector } from "reselect";
+import { makeSelectClaimForUri } from "redux/selectors/claims";
 
 const selectState = (state: unknown) => state.reactions || {};
 

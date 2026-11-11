@@ -1,24 +1,24 @@
-import React, {Fragment} from 'react';
-import MarkdownPreview from 'component/common/markdown-preview';
-import ClaimTags from 'component/claimTags';
-import CreditAmount from 'component/common/credit-amount';
-import DateTime from 'component/dateTime';
-import YoutubeBadge from 'component/youtubeBadge';
-import SUPPORTED_LANGUAGES from 'constants/supported_languages';
-import { formatNumber } from 'util/number';
+import React, { Fragment } from "react";
+import MarkdownPreview from "component/common/markdown-preview";
+import ClaimTags from "component/claimTags";
+import CreditAmount from "component/common/credit-amount";
+import DateTime from "component/dateTime";
+import YoutubeBadge from "component/youtubeBadge";
+import SUPPORTED_LANGUAGES from "constants/supported_languages";
+import { formatNumber } from "util/number";
 
 type Props = {
-  claim: ChannelClaim,
-  uri: string,
-  description: string | null | undefined,
-  email: string | null | undefined,
-  website: string | null | undefined,
-  languages: Array<string>
+  claim: ChannelClaim;
+  uri: string;
+  description: string | null | undefined;
+  email: string | null | undefined;
+  website: string | null | undefined;
+  languages: Array<string>;
 };
 
 const formatEmail = (email: string) => {
   if (email) {
-    const protocolRegex = new RegExp('^mailto:', 'i');
+    const protocolRegex = new RegExp("^mailto:", "i");
     const protocol = protocolRegex.exec(email);
     return protocol ? email : `mailto:${email}`;
   }
@@ -35,7 +35,7 @@ function ChannelAbout(props: Props) {
         <Fragment>
           {description && (
             <>
-              <label>{__('Description')}</label>
+              <label>{__("Description")}</label>
               <div className="media__info-text media__info-text--constrained">
                 <MarkdownPreview content={description} />
               </div>
@@ -43,7 +43,7 @@ function ChannelAbout(props: Props) {
           )}
           {email && (
             <Fragment>
-              <label>{__('Contact')}</label>
+              <label>{__("Contact")}</label>
               <div className="media__info-text">
                 <MarkdownPreview content={formatEmail(email)} simpleLinks />
               </div>
@@ -51,56 +51,56 @@ function ChannelAbout(props: Props) {
           )}
           {website && (
             <Fragment>
-              <label>{__('Site')}</label>
+              <label>{__("Site")}</label>
               <div className="media__info-text">
                 <MarkdownPreview content={website} simpleLinks />
               </div>
             </Fragment>
           )}
 
-          <label>{__('Tags')}</label>
+          <label>{__("Tags")}</label>
           <div className="media__info-text">
             {/* @ts-expect-error - TS2322 (ts-migration) */}
             <ClaimTags uri={uri} type="large" />
           </div>
 
-          <label>{__('Languages')}</label>
+          <label>{__("Languages")}</label>
           <div className="media__info-text">
             {/* this could use some nice 'tags' styling */}
             {languages && languages.length
               ? languages.reduce((acc, lang, i) => {
-                  return acc + `${SUPPORTED_LANGUAGES[lang]}` + ' ';
-                }, '')
+                  return acc + `${SUPPORTED_LANGUAGES[lang]}` + " ";
+                }, "")
               : null}
           </div>
 
-          <label>{__('Total Uploads')}</label>
+          <label>{__("Total Uploads")}</label>
           <div className="media__info-text">{formatNumber(claim.meta.claims_in_channel || 0, 2, true)}</div>
 
-          <label>{__('Last Updated')}</label>
+          <label>{__("Last Updated")}</label>
           <div className="media__info-text">
             {/* @ts-expect-error - TS2322 (ts-migration) */}
             <DateTime timeAgo uri={uri} />
           </div>
 
-          <label>{__('URL')}</label>
+          <label>{__("URL")}</label>
           <div className="media__info-text">
             <div className="media__info-text media__info-text--constrained">{claim.canonical_url}</div>
           </div>
 
-          <label>{__('Claim ID')}</label>
+          <label>{__("Claim ID")}</label>
           <div className="media__info-text">
             <div className="media__info-text media__info-text--constrained">{claim.claim_id}</div>
           </div>
 
-          <label>{__('Staked LBRY Credits')}</label>
+          <label>{__("Staked LBRY Credits")}</label>
           <div className="media__info-text">
             <CreditAmount
-// @ts-expect-error - TS2769 - No overload matches this call.
+              // @ts-expect-error - TS2769 - No overload matches this call.
               badge={false}
               amount={parseFloat(claim.amount) + parseFloat(claim.meta.support_amount)}
               precision={8}
-            />{' '}
+            />{" "}
           </div>
 
           <YoutubeBadge channelClaimId={claimId} />

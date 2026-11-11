@@ -1,13 +1,13 @@
-import * as ACTIONS from 'constants/action_types';
-import { RULE } from 'constants/notifications';
-import { Lbryio } from 'lbryinc';
-import { v4 as uuid } from 'uuid';
+import * as ACTIONS from "constants/action_types";
+import { RULE } from "constants/notifications";
+import { Lbryio } from "lbryinc";
+import { v4 as uuid } from "uuid";
 import {
   selectNotifications,
   selectNotificationsFiltered,
   selectNotificationCategories,
-} from 'redux/selectors/notifications';
-import { doResolveUris } from 'redux/actions/claims';
+} from "redux/selectors/notifications";
+import { doResolveUris } from "redux/actions/claims";
 
 export function doToast(params: ToastParams) {
   if (!params) {
@@ -51,15 +51,15 @@ export function doNotificationList(types?: Array<string>) {
 
     dispatch({ type: ACTIONS.NOTIFICATION_LIST_STARTED });
 
-    let params: any = { is_app_readable: true };
+    const params: any = { is_app_readable: true };
     if (types) {
-      params.type = types.join(',');
+      params.type = types.join(",");
     }
 
     try {
       if (!notificationTypes) {
         // @ts-expect-error - TS2339 (ts-migration)
-        const notificationCategories = await Lbryio.call('notification', 'categories');
+        const notificationCategories = await Lbryio.call("notification", "categories");
         if (notificationCategories) {
           dispatch({
             type: ACTIONS.NOTIFICATION_CATEGORIES_COMPLETED,
@@ -71,7 +71,7 @@ export function doNotificationList(types?: Array<string>) {
       }
 
       // @ts-expect-error - TS2339 (ts-migration)
-      return Lbryio.call('notification', 'list', params).then((response) => {
+      return Lbryio.call("notification", "list", params).then((response) => {
         const notifications = response || [];
         const channelsToResolve = notifications
           .filter((notification: WebNotification) => {
@@ -124,14 +124,14 @@ export function doReadNotifications(notificationsIds: Array<number>) {
       ids = notificationsIds;
     } else {
       // A null or invalid argument will wipe all unread notifications.
-// @ts-expect-error - TS2339 - Property 'filter' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'filter' does not exist on type 'unknown'.
       const getUnreadIds = (list: unknown) => list.filter((n) => !n.is_read).map((n) => n.id);
       ids = Array.from(new Set([...getUnreadIds(notifications), ...getUnreadIds(notificationsFiltered)]));
     }
 
     dispatch({ type: ACTIONS.NOTIFICATION_READ_STARTED });
     // @ts-expect-error - TS2339 (ts-migration)
-    return Lbryio.call('notification', 'edit', { notification_ids: ids.join(','), is_read: true })
+    return Lbryio.call("notification", "edit", { notification_ids: ids.join(","), is_read: true })
       .then(() => {
         dispatch({ type: ACTIONS.NOTIFICATION_READ_COMPLETED, data: { notificationIds: ids } });
       })
@@ -145,7 +145,7 @@ export function doSeeNotifications(notificationIds: Array<string>) {
   return (dispatch: Dispatch) => {
     dispatch({ type: ACTIONS.NOTIFICATION_SEEN_STARTED });
     // @ts-expect-error - TS2339 (ts-migration)
-    return Lbryio.call('notification', 'edit', { notification_ids: notificationIds.join(','), is_seen: true })
+    return Lbryio.call("notification", "edit", { notification_ids: notificationIds.join(","), is_seen: true })
       .then(() => {
         dispatch({
           type: ACTIONS.NOTIFICATION_SEEN_COMPLETED,
@@ -170,7 +170,7 @@ export function doSeeAllNotifications() {
       return;
     }
 
-// @ts-expect-error - TS2339 - Property 'filter' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'filter' does not exist on type 'unknown'.
     const getUnseenIds = (list: unknown) => list.filter((n) => !n.is_seen).map((n) => n.id);
     const unseenIds = Array.from(new Set([...getUnseenIds(notifications), ...getUnseenIds(notificationsFiltered)]));
 
@@ -181,12 +181,12 @@ export function doSeeAllNotifications() {
 export function doDeleteNotification(notificationId: number) {
   return (dispatch: Dispatch) => {
     // @ts-expect-error - TS2339 (ts-migration)
-    Lbryio.call('notification', 'delete', { notification_ids: notificationId })
+    Lbryio.call("notification", "delete", { notification_ids: notificationId })
       .then(() => {
         dispatch({ type: ACTIONS.NOTIFICATION_DELETE_COMPLETED, data: { notificationId } });
       })
       .catch(() => {
-        dispatch(doToast({ isError: true, message: __('Unable to delete this right now. Please try again later.') }));
+        dispatch(doToast({ isError: true, message: __("Unable to delete this right now. Please try again later.") }));
       });
   };
 }

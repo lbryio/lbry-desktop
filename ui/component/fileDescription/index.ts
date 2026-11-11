@@ -1,14 +1,14 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import {
   selectClaimForUri,
   makeSelectMetadataForUri,
   selectClaimIsMine,
   makeSelectTagsForUri,
-} from 'redux/selectors/claims';
-import { makeSelectPendingAmountByUri } from 'redux/selectors/wallet';
-import { doOpenModal } from 'redux/actions/app';
-import FileDescription from './view';
+} from "redux/selectors/claims";
+import { makeSelectPendingAmountByUri } from "redux/selectors/wallet";
+import { doOpenModal } from "redux/actions/app";
+import FileDescription from "./view";
 
 const select = (state: unknown, props: unknown) => {
   const claim = selectClaimForUri(state, props.uri);

@@ -1,14 +1,14 @@
 //@ts-nocheck
-import {DOMAIN} from 'config';
-import { connect } from 'react-redux';
-import { doSetDaemonSetting } from 'redux/actions/settings';
-import { doSignOut } from 'redux/actions/app';
-import * as DAEMON_SETTINGS from 'constants/daemon_settings';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
-import { doAuthenticate } from 'redux/actions/user';
-import { version as appVersion } from 'package.json';
+import { DOMAIN } from "config";
+import { connect } from "react-redux";
+import { doSetDaemonSetting } from "redux/actions/settings";
+import { doSignOut } from "redux/actions/app";
+import * as DAEMON_SETTINGS from "constants/daemon_settings";
+import { selectUserVerifiedEmail } from "redux/selectors/user";
+import { doAuthenticate } from "redux/actions/user";
+import { version as appVersion } from "package.json";
 
-import PrivacyAgreement from './view';
+import PrivacyAgreement from "./view";
 
 const select = (state: unknown) => ({
   authenticated: selectUserVerifiedEmail(state),

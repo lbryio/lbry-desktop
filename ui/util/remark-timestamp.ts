@@ -1,7 +1,7 @@
 //@ts-nocheck
-import visit from 'unist-util-visit';
+import visit from "unist-util-visit";
 
-const TIMESTAMP_NODE_TYPE = 'timestamp';
+const TIMESTAMP_NODE_TYPE = "timestamp";
 
 // ***************************************************************************
 // Tokenize timestamp
@@ -39,7 +39,7 @@ function findNextTimestamp(value: unknown, fromIndex: unknown, strictlyFromIndex
     }
 
     // Exclude trailing colons to allow "0:12: Start of section", for example.
-    const str = match[0].replace(/:+$/, '');
+    const str = match[0].replace(/:+$/, "");
 
     let isValidTimestamp;
     switch (str.length) {
@@ -88,7 +88,7 @@ function locateTimestamp(value: unknown, fromIndex: unknown) {
 const createTimestampNode = (text: unknown) => ({
   type: TIMESTAMP_NODE_TYPE,
   value: text,
-  children: [{ type: 'text', value: text }],
+  children: [{ type: "text", value: text }],
 });
 
 // Generate a markdown link from timestamp
@@ -122,7 +122,7 @@ export function inlineTimestamp() {
   tokenizers.timestamp = tokenizeTimestamp;
 
   // Run it just before `text`.
-  methods.splice(methods.indexOf('text'), 0, 'timestamp');
+  methods.splice(methods.indexOf("text"), 0, "timestamp");
 }
 
 // ***************************************************************************
@@ -130,19 +130,19 @@ export function inlineTimestamp() {
 // ***************************************************************************
 
 function strToSeconds(stime: unknown) {
-  const tt = stime.split(':').reverse();
+  const tt = stime.split(":").reverse();
   return (tt.length >= 3 ? +tt[2] : 0) * 60 * 60 + (tt.length >= 2 ? +tt[1] : 0) * 60 + (tt.length >= 1 ? +tt[0] : 0);
 }
 
 const transformer = (node: unknown, index: unknown, parent: unknown) => {
-  if (node.type === TIMESTAMP_NODE_TYPE && parent && parent.type === 'paragraph') {
+  if (node.type === TIMESTAMP_NODE_TYPE && parent && parent.type === "paragraph") {
     const timestampStr = node.value;
     const seconds = strToSeconds(timestampStr);
 
-    node.type = 'link';
+    node.type = "link";
     node.url = `?t=${seconds}`;
     node.title = timestampStr;
-    node.children = [{ type: 'text', value: timestampStr }];
+    node.children = [{ type: "text", value: timestampStr }];
   }
 };
 

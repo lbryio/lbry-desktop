@@ -1,5 +1,5 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import {
   selectBalance,
   selectTotalBalance,
@@ -7,11 +7,11 @@ import {
   selectSupportsBalance,
   selectTipsBalance,
   selectAbandonClaimSupportError,
-} from 'redux/selectors/wallet';
+} from "redux/selectors/wallet";
 
-import { makeSelectMetadataForUri, makeSelectClaimForUri } from 'redux/selectors/claims';
-import { doSupportAbandonForClaim } from 'redux/actions/wallet';
-import SupportsLiquidate from './view';
+import { makeSelectMetadataForUri, makeSelectClaimForUri } from "redux/selectors/claims";
+import { doSupportAbandonForClaim } from "redux/actions/wallet";
+import SupportsLiquidate from "./view";
 
 const select = (state: unknown, props: unknown) => ({
   balance: selectBalance(state),

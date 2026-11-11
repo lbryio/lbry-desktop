@@ -1,12 +1,12 @@
-import React, {useRef, useState} from 'react';
-import classnames from 'classnames';
-import Button from 'component/button';
-import { useRect } from '@reach/rect';
+import React, { useRef, useState } from "react";
+import classnames from "classnames";
+import Button from "component/button";
+import { useRect } from "@reach/rect";
 
 const COLLAPSED_HEIGHT = 120;
 
 type Props = {
-  children: React.ReactNode | Array<React.ReactNode>
+  children: React.ReactNode | Array<React.ReactNode>;
 };
 
 export default function Expandable(props: Props) {
@@ -25,8 +25,8 @@ export default function Expandable(props: Props) {
         <div ref={ref}>
           <div
             className={classnames({
-              'expandable--open': expanded,
-              'expandable--closed': !expanded,
+              "expandable--open": expanded,
+              "expandable--closed": !expanded,
             })}
           >
             {children}
@@ -35,7 +35,7 @@ export default function Expandable(props: Props) {
             // @ts-expect-error - TS2322 (ts-migration)
             button="link"
             className="expandable__button"
-            label={expanded ? __('Less') : __('More')}
+            label={expanded ? __("Less") : __("More")}
             onClick={handleClick}
           />
         </div>

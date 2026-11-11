@@ -1,89 +1,92 @@
-import * as PAGES from 'constants/pages';
-import React, { useEffect, useRef, useState, useLayoutEffect } from 'react';
-import classnames from 'classnames';
-import analytics from 'analytics';
-import Router from 'component/router/index';
-import ReactModal from 'react-modal';
-import { openContextMenu } from 'util/context-menu';
-import useKonamiListener from 'util/enhanced-layout';
-import FileRenderFloating from 'component/fileRenderFloating';
-import { withRouter } from 'react-router';
-import usePrevious from 'effects/use-previous';
-import REWARDS from 'rewards';
-import usePersistedState from 'effects/use-persisted-state';
-import LANGUAGES from 'constants/languages';
-import useZoom from 'effects/use-zoom';
-import useHistoryNav from 'effects/use-history-nav';
-import LANGUAGE_MIGRATIONS from 'constants/language-migrations';
+import * as PAGES from "constants/pages";
+import React, { useEffect, useRef, useState, useLayoutEffect } from "react";
+import classnames from "classnames";
+import analytics from "analytics";
+import Router from "component/router/index";
+import ReactModal from "react-modal";
+import { openContextMenu } from "util/context-menu";
+import useKonamiListener from "util/enhanced-layout";
+import FileRenderFloating from "component/fileRenderFloating";
+import { withRouter } from "react-router";
+import usePrevious from "effects/use-previous";
+import REWARDS from "rewards";
+import usePersistedState from "effects/use-persisted-state";
+import LANGUAGES from "constants/languages";
+import useZoom from "effects/use-zoom";
+import useHistoryNav from "effects/use-history-nav";
+import LANGUAGE_MIGRATIONS from "constants/language-migrations";
 
-import FileDrop from 'component/fileDrop';
-import ModalRouter from 'modal/modalRouter';
-import Nag from 'component/common/nag';
+import FileDrop from "component/fileDrop";
+import ModalRouter from "modal/modalRouter";
+import Nag from "component/common/nag";
 
-import SyncFatalError from 'component/syncFatalError';
-import Yrbl from 'component/yrbl';
+import SyncFatalError from "component/syncFatalError";
+import Yrbl from "component/yrbl";
 
 // ****************************************************************************
 
-export const MAIN_WRAPPER_CLASS = 'main-wrapper';
-export const IS_MAC = navigator.userAgent.indexOf('Mac OS X') !== -1;
+export const MAIN_WRAPPER_CLASS = "main-wrapper";
+export const IS_MAC = navigator.userAgent.indexOf("Mac OS X") !== -1;
 
 // button numbers pulled from https://developer.mozilla.org/en-US/docs/Web/API/MouseEvent/button
 const MOUSE_BACK_BTN = 3;
 const MOUSE_FORWARD_BTN = 4;
 
 type Props = {
-  language: string,
-  languages: Array<string>,
-  theme: string,
-  user: {
-    id: string,
-    has_verified_email: boolean,
-    is_reward_approved: boolean
-  } | null | undefined,
+  language: string;
+  languages: Array<string>;
+  theme: string;
+  user:
+    | {
+        id: string;
+        has_verified_email: boolean;
+        is_reward_approved: boolean;
+      }
+    | null
+    | undefined;
   location: {
-    pathname: string,
-    hash: string,
-    search: string
-  },
+    pathname: string;
+    hash: string;
+    search: string;
+  };
   history: {
-    goBack: () => void,
-    goForward: () => void,
-    index: number,
-    length: number,
-    push: (arg1: string) => void
-  },
-  fetchAccessToken: () => void,
-  fetchChannelListMine: () => void,
-  fetchCollectionListMine: () => void,
-  signIn: () => void,
-  requestDownloadUpgrade: () => void,
-  onSignedIn: () => void,
-  setLanguage: (arg1: string) => void,
-  isUpgradeAvailable: boolean,
-  autoUpdateDownloaded: boolean,
-  updatePreferences: () => Promise<any>,
-  getWalletSyncPref: () => Promise<any>,
-  uploadCount: number,
-  balance: number | null | undefined,
-  syncError: string | null | undefined,
-  syncEnabled: boolean,
-  rewards: Array<Reward>,
-  setReferrer: (arg1: string, arg2: boolean) => void,
-  isAuthenticated: boolean,
-  socketConnect: () => void,
-  syncLoop: (arg1?: boolean | null | undefined) => void,
-  currentModal: any,
-  syncFatalError: boolean,
-  activeChannelId: string | null | undefined,
-  myChannelClaimIds: Array<string> | null | undefined,
-  subscriptions: Array<Subscription>,
-  setActiveChannelIfNotSet: () => void,
-  setIncognito: (arg1: boolean) => void,
-  fetchModBlockedList: () => void,
-  resolveUris: (arg1: Array<string>) => void,
-  fetchModAmIList: () => void,
-  isUpdateModalDisplayed: boolean
+    goBack: () => void;
+    goForward: () => void;
+    index: number;
+    length: number;
+    push: (arg1: string) => void;
+  };
+  fetchAccessToken: () => void;
+  fetchChannelListMine: () => void;
+  fetchCollectionListMine: () => void;
+  signIn: () => void;
+  requestDownloadUpgrade: () => void;
+  onSignedIn: () => void;
+  setLanguage: (arg1: string) => void;
+  isUpgradeAvailable: boolean;
+  autoUpdateDownloaded: boolean;
+  updatePreferences: () => Promise<any>;
+  getWalletSyncPref: () => Promise<any>;
+  uploadCount: number;
+  balance: number | null | undefined;
+  syncError: string | null | undefined;
+  syncEnabled: boolean;
+  rewards: Array<Reward>;
+  setReferrer: (arg1: string, arg2: boolean) => void;
+  isAuthenticated: boolean;
+  socketConnect: () => void;
+  syncLoop: (arg1?: boolean | null | undefined) => void;
+  currentModal: any;
+  syncFatalError: boolean;
+  activeChannelId: string | null | undefined;
+  myChannelClaimIds: Array<string> | null | undefined;
+  subscriptions: Array<Subscription>;
+  setActiveChannelIfNotSet: () => void;
+  setIncognito: (arg1: boolean) => void;
+  fetchModBlockedList: () => void;
+  resolveUris: (arg1: Array<string>) => void;
+  fetchModAmIList: () => void;
+  isUpdateModalDisplayed: boolean;
 };
 
 function App(props: Props) {
@@ -135,13 +138,13 @@ function App(props: Props) {
   const [upgradeNagClosed, setUpgradeNagClosed] = useState(false);
   const [resolvedSubscriptions, setResolvedSubscriptions] = useState(false);
   const [langRenderKey, setLangRenderKey] = useState(0);
-  const [sidebarOpen] = usePersistedState('sidebar', true);
+  const [sidebarOpen] = usePersistedState("sidebar", true);
   const showUpgradeButton = (autoUpdateDownloaded || isUpgradeAvailable) && !upgradeNagClosed;
   // referral claiming
   const referredRewardAvailable = rewards && rewards.some((reward) => reward.reward_type === REWARDS.TYPE_REFEREE);
   const urlParams = new URLSearchParams(search);
-  const rawReferrerParam = urlParams.get('r');
-  const sanitizedReferrerParam = rawReferrerParam && rawReferrerParam.replace(':', '#');
+  const rawReferrerParam = urlParams.get("r");
+  const sanitizedReferrerParam = rawReferrerParam && rawReferrerParam.replace(":", "#");
   const userId = user && user.id;
   const useCustomScrollbar = !IS_MAC;
   const hasMyChannels = myChannelClaimIds && myChannelClaimIds.length > 0;
@@ -159,19 +162,19 @@ function App(props: Props) {
   useEffect(() => {
     if (!uploadCount) return;
     const handleBeforeUnload = (event: unknown) => {
-// @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
       event.preventDefault();
-// @ts-expect-error - TS2339 - Property 'returnValue' does not exist on type 'unknown'.
-      event.returnValue = __('There are pending uploads.'); // without setting this to something it doesn't work
+      // @ts-expect-error - TS2339 - Property 'returnValue' does not exist on type 'unknown'.
+      event.returnValue = __("There are pending uploads."); // without setting this to something it doesn't work
     };
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, [uploadCount]);
 
   // allows user to navigate history using the forward and backward buttons on a mouse
   useEffect(() => {
     const handleForwardAndBackButtons = (e: unknown) => {
-// @ts-expect-error - TS2339 - Property 'button' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'button' does not exist on type 'unknown'.
       switch (e.button) {
         case MOUSE_BACK_BTN:
           history.index > 0 && history.goBack();
@@ -181,26 +184,26 @@ function App(props: Props) {
           break;
       }
     };
-    window.addEventListener('mouseup', handleForwardAndBackButtons);
-    return () => window.removeEventListener('mouseup', handleForwardAndBackButtons);
+    window.addEventListener("mouseup", handleForwardAndBackButtons);
+    return () => window.removeEventListener("mouseup", handleForwardAndBackButtons);
   });
 
   // allows user to pause miniplayer using the spacebar without the page scrolling down
   useEffect(() => {
     const handleKeyPress = (e: unknown) => {
-// @ts-expect-error - TS2339 - Property 'key' does not exist on type 'unknown'. | TS2339 - Property 'target' does not exist on type 'unknown'.
-      if (e.key === ' ' && e.target === document.body) {
-// @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'key' does not exist on type 'unknown'. | TS2339 - Property 'target' does not exist on type 'unknown'.
+      if (e.key === " " && e.target === document.body) {
+        // @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
         e.preventDefault();
       }
     };
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
   }, []);
 
   // Enable ctrl +/- zooming on Desktop.
   // @if TARGET='app'
-// @ts-expect-error - TS2554 - Expected 1 arguments, but got 0.
+  // @ts-expect-error - TS2554 - Expected 1 arguments, but got 0.
   useZoom();
   // @endif
 
@@ -215,7 +218,6 @@ function App(props: Props) {
     } else if (referredRewardAvailable && sanitizedReferrerParam) {
       setReferrer(sanitizedReferrerParam, false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sanitizedReferrerParam, isRewardApproved, referredRewardAvailable]);
 
   useEffect(() => {
@@ -233,7 +235,7 @@ function App(props: Props) {
   }, [appRef, fetchAccessToken, fetchChannelListMine, fetchCollectionListMine]);
 
   useEffect(() => {
-    document.documentElement.setAttribute('theme', theme);
+    document.documentElement.setAttribute("theme", theme);
   }, [theme]);
 
   useEffect(() => {
@@ -258,7 +260,7 @@ function App(props: Props) {
   ]);
 
   useEffect(() => {
-    document.documentElement.setAttribute('lang', language);
+    document.documentElement.setAttribute("lang", language);
   }, [language]);
 
   useEffect(() => {
@@ -269,7 +271,6 @@ function App(props: Props) {
         document.documentElement.dir = LANGUAGES[language][2];
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [language, languages]);
 
   useEffect(() => {
@@ -324,7 +325,6 @@ function App(props: Props) {
     if (syncError && isAuthenticated && !pathname.includes(PAGES.AUTH_WALLET_PASSWORD) && !currentModal) {
       history.push(`/$/${PAGES.AUTH_WALLET_PASSWORD}?redirect=${pathname}`);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [syncError, pathname, isAuthenticated]);
 
   // Keep this at the end to ensure initial setup effects are run first
@@ -372,8 +372,8 @@ function App(props: Props) {
 
       {showUpgradeButton && !isUpdateModalDisplayed && (
         <Nag
-          message={__('An upgrade is available.')}
-          actionText={__('Install Now')}
+          message={__("An upgrade is available.")}
+          actionText={__("Install Now")}
           onClick={requestDownloadUpgrade}
           onClose={() => setUpgradeNagClosed(true)}
         />

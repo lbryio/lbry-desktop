@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectClaimForUri } from 'redux/selectors/claims';
-import { selectViewCountForUri } from 'lbryinc';
-import { selectLanguage } from 'redux/selectors/settings';
-import FileViewCountInline from './view';
+import { connect } from "react-redux";
+import { selectClaimForUri } from "redux/selectors/claims";
+import { selectViewCountForUri } from "lbryinc";
+import { selectLanguage } from "redux/selectors/settings";
+import FileViewCountInline from "./view";
 
 const select = (state: unknown, props: unknown) => {
   return {

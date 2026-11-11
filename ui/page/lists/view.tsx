@@ -1,8 +1,8 @@
-import * as ICONS from 'constants/icons';
-import React from 'react';
-import Page from 'component/page';
-import CollectionsListMine from 'component/collectionsListMine';
-import Icon from 'component/common/icon';
+import * as ICONS from "constants/icons";
+import React from "react";
+import Page from "component/page";
+import CollectionsListMine from "component/collectionsListMine";
+import Icon from "component/common/icon";
 
 function ListsPage() {
   return (
@@ -11,7 +11,7 @@ function ListsPage() {
       <label className="claim-list__header-label">
         <span>
           <Icon icon={ICONS.STACK} size={10} />
-          {__('Lists')}
+          {__("Lists")}
         </span>
       </label>
       <CollectionsListMine />

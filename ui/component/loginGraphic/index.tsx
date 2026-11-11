@@ -1,10 +1,10 @@
-import React from 'react';
-import { SITE_NAME, LOGIN_IMG_URL } from 'config';
-import { getThumbnailCdnUrl } from 'util/thumbnail';
+import React from "react";
+import { SITE_NAME, LOGIN_IMG_URL } from "config";
+import { getThumbnailCdnUrl } from "util/thumbnail";
 
 function LoginGraphic(props: any) {
   const [error, setError] = React.useState(false);
-  const [src, setSrc] = React.useState('---');
+  const [src, setSrc] = React.useState("---");
   const containerRef = React.useRef<any>();
   const imgUrl = LOGIN_IMG_URL;
 
@@ -12,7 +12,7 @@ function LoginGraphic(props: any) {
     if (containerRef.current && containerRef.current.parentElement && containerRef.current.parentElement.offsetWidth) {
       const newWidth = containerRef.current.parentElement.offsetWidth;
 
-      let newSrc = imgUrl && imgUrl.trim().replace(/^http:\/\//i, 'https://');
+      let newSrc = imgUrl && imgUrl.trim().replace(/^http:\/\//i, "https://");
       // @if TARGET='web'
       // Pass image urls through a compression proxy.
       newSrc = getThumbnailCdnUrl({ thumbnail: newSrc, width: newWidth, height: newWidth * 2 });
@@ -30,7 +30,7 @@ function LoginGraphic(props: any) {
 
   return (
     <div className="signup-image" ref={containerRef}>
-      <img alt={__('%SITE_NAME% login', { SITE_NAME })} src={src} onError={() => setError(true)} />
+      <img alt={__("%SITE_NAME% login", { SITE_NAME })} src={src} onError={() => setError(true)} />
     </div>
   );
 }

@@ -1,16 +1,16 @@
 //@ts-nocheck
-import {SUGGESTED_FEATURED, SUGGESTED_TOP_SUBSCRIBED} from 'constants/subscriptions';
-import { createSelector } from 'reselect';
-import { createCachedSelector } from 're-reselect';
-import { parseURI, isURIEqual } from 'util/lbryURI';
+import { SUGGESTED_FEATURED, SUGGESTED_TOP_SUBSCRIBED } from "constants/subscriptions";
+import { createSelector } from "reselect";
+import { createCachedSelector } from "re-reselect";
+import { parseURI, isURIEqual } from "util/lbryURI";
 import {
   selectAllFetchingChannelClaims,
   makeSelectChannelForClaimUri,
   makeSelectClaimForUri,
   selectClaimForUri,
-} from 'redux/selectors/claims';
-import { swapKeyAndValue } from 'util/swap-json';
-import { getChannelFromClaim, isChannelClaim } from 'util/claim';
+} from "redux/selectors/claims";
+import { swapKeyAndValue } from "util/swap-json";
+import { getChannelFromClaim, isChannelClaim } from "util/claim";
 
 // Returns the entire subscriptions state
 const selectState = (state: unknown) => state.subscriptions || {};
@@ -75,7 +75,7 @@ export const selectSuggestedChannels = createSelector(
       // Note to passer bys:
       // Maybe we should just remove the `lbry://` prefix from subscription uris
       // Most places don't store them like that
-      const subscribedUri = uri.slice('lbry://'.length);
+      const subscribedUri = uri.slice("lbry://".length);
 
       if (suggestedChannels[subscribedUri]) {
         delete suggestedChannels[subscribedUri];

@@ -1,18 +1,18 @@
 //@ts-nocheck
-import * as SETTINGS from 'constants/settings';
-import { connect } from 'react-redux';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
+import * as SETTINGS from "constants/settings";
+import { connect } from "react-redux";
+import { selectUserVerifiedEmail } from "redux/selectors/user";
 import {
   selectGetSyncErrorMessage,
   selectHasSyncedWallet,
   selectGetSyncIsPending,
   selectHashChanged,
-} from 'redux/selectors/sync';
-import { doCheckSync, doGetSync } from 'redux/actions/sync';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { doSetWalletSyncPreference } from 'redux/actions/settings';
-import SyncToggle from './view';
-import { doGetAndPopulatePreferences } from 'redux/actions/app';
+} from "redux/selectors/sync";
+import { doCheckSync, doGetSync } from "redux/actions/sync";
+import { makeSelectClientSetting } from "redux/selectors/settings";
+import { doSetWalletSyncPreference } from "redux/actions/settings";
+import SyncToggle from "./view";
+import { doGetAndPopulatePreferences } from "redux/actions/app";
 
 const select = (state: unknown) => ({
   syncEnabled: makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state),

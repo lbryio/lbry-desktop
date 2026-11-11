@@ -1,40 +1,40 @@
-import * as PAGES from 'constants/pages';
-import * as ICONS from 'constants/icons';
-import React, { useEffect, useMemo } from 'react';
-import Button from 'component/button';
-import ClaimList from 'component/claimList';
-import ClaimPreview from 'component/claimPreview';
-import Page from 'component/page';
-import Paginate from 'component/common/paginate';
-import { PAGE_PARAM, PAGE_SIZE_PARAM } from 'constants/claim';
-import Spinner from 'component/spinner';
-import Yrbl from 'component/yrbl';
-import { FormField, Form } from 'component/common/form';
-import Icon from 'component/common/icon';
-import debounce from 'util/debounce';
-import classnames from 'classnames';
+import * as PAGES from "constants/pages";
+import * as ICONS from "constants/icons";
+import React, { useEffect, useMemo } from "react";
+import Button from "component/button";
+import ClaimList from "component/claimList";
+import ClaimPreview from "component/claimPreview";
+import Page from "component/page";
+import Paginate from "component/common/paginate";
+import { PAGE_PARAM, PAGE_SIZE_PARAM } from "constants/claim";
+import Spinner from "component/spinner";
+import Yrbl from "component/yrbl";
+import { FormField, Form } from "component/common/form";
+import Icon from "component/common/icon";
+import debounce from "util/debounce";
+import classnames from "classnames";
 
-const FILTER_ALL = 'stream,repost';
-const FILTER_UPLOADS = 'stream';
-const FILTER_REPOSTS = 'repost';
-const PAGINATE_PARAM = 'page';
+const FILTER_ALL = "stream,repost";
+const FILTER_UPLOADS = "stream";
+const FILTER_REPOSTS = "repost";
+const PAGINATE_PARAM = "page";
 
 type Props = {
-  checkPendingPublishes: () => void,
-  clearPublish: () => void,
-  fetching: boolean,
+  checkPendingPublishes: () => void;
+  clearPublish: () => void;
+  fetching: boolean;
   history: {
-    replace: (arg1: string) => void,
-    push: (arg1: string) => void
-  },
-  page: number,
-  pageSize: number,
-  myClaims: any,
-  fetchAllMyClaims: () => void,
+    replace: (arg1: string) => void;
+    push: (arg1: string) => void;
+  };
+  page: number;
+  pageSize: number;
+  myClaims: any;
+  fetchAllMyClaims: () => void;
   location: {
-    search: string
-  },
-  initialSearchTerm: string
+    search: string;
+  };
+  initialSearchTerm: string;
 };
 
 function FileListPublished(props: Props) {
@@ -69,10 +69,10 @@ function FileListPublished(props: Props) {
     const filtered = myClaims.filter((claim) => {
       const value = claim.value || {};
       const src = value.source || {};
-      const title = (value.title || '').toLowerCase();
-      const description = (value.description || '').toLowerCase();
-      const tags = (value.tags || []).join('').toLowerCase();
-      const srcName = (src.name || '').toLowerCase();
+      const title = (value.title || "").toLowerCase();
+      const description = (value.description || "").toLowerCase();
+      const tags = (value.tags || []).join("").toLowerCase();
+      const srcName = (src.name || "").toLowerCase();
       const lowerCaseSearchText = searchText.toLowerCase();
       const textMatches =
         !searchText ||
@@ -93,8 +93,8 @@ function FileListPublished(props: Props) {
 
   useEffect(() => {
     const params = new URLSearchParams(search);
-    params.set('searchText', searchText);
-    history.replace('?' + params.toString());
+    params.set("searchText", searchText);
+    history.replace("?" + params.toString());
     debounceFilter();
   }, [myClaims, searchText, debounceFilter, history, search]);
 
@@ -120,8 +120,8 @@ function FileListPublished(props: Props) {
   // using a different state, ie, different filtered claims)
   useEffect(() => {
     const params = new URLSearchParams(search);
-    params.set(PAGINATE_PARAM, '1');
-    history.replace('?' + params.toString());
+    params.set(PAGINATE_PARAM, "1");
+    history.replace("?" + params.toString());
   }, [filteredClaims, history, search]);
 
   useEffect(() => {
@@ -141,30 +141,30 @@ function FileListPublished(props: Props) {
                 <span>
                   <Button
                     // @ts-expect-error - TS2322 (ts-migration)
-                    label={__('All')}
-                    aria-label={__('All uploads')}
+                    label={__("All")}
+                    aria-label={__("All uploads")}
                     onClick={() => setFilterBy(FILTER_ALL)}
                     className={classnames(`button-toggle`, {
-                      'button-toggle--active': filterBy === FILTER_ALL,
+                      "button-toggle--active": filterBy === FILTER_ALL,
                     })}
                   />
                   <Button
                     // @ts-expect-error - TS2322 (ts-migration)
-                    label={__('Uploads')}
+                    label={__("Uploads")}
                     onClick={() => setFilterBy(FILTER_UPLOADS)}
                     className={classnames(`button-toggle`, {
-                      'button-toggle--active': filterBy === FILTER_UPLOADS,
+                      "button-toggle--active": filterBy === FILTER_UPLOADS,
                     })}
                   />
                   <Button
                     // @ts-expect-error - TS2322 (ts-migration)
-                    label={__('Reposts')}
+                    label={__("Reposts")}
                     onClick={() => {
                       setFilterBy(FILTER_REPOSTS);
-                      setSearchText('');
+                      setSearchText("");
                     }}
                     className={classnames(`button-toggle`, {
-                      'button-toggle--active': filterBy === FILTER_REPOSTS,
+                      "button-toggle--active": filterBy === FILTER_REPOSTS,
                     })}
                   />
                 </span>
@@ -174,7 +174,7 @@ function FileListPublished(props: Props) {
                   <Button
                     // @ts-expect-error - TS2322 (ts-migration)
                     button="secondary"
-                    label={__('Refresh')}
+                    label={__("Refresh")}
                     icon={ICONS.REFRESH}
                     disabled={fetching}
                     onClick={fetchAllMyClaims}
@@ -183,20 +183,20 @@ function FileListPublished(props: Props) {
                     // @ts-expect-error - TS2322 (ts-migration)
                     icon={ICONS.PUBLISH}
                     button="primary"
-                    label={__('Upload')}
+                    label={__("Upload")}
                     navigate={`/$/${PAGES.UPLOAD}`}
                     onClick={() => clearPublish()}
                   />
-{ /* @ts-expect-error - TS2769 - No overload matches this call. */}
+                  {/* @ts-expect-error - TS2769 - No overload matches this call. */}
                   <Form onSubmit={() => {}} className="wunderbar--inline">
                     <Icon icon={ICONS.SEARCH} />
                     <FormField
-// @ts-expect-error - TS2322 - Type '{ className: string; value: string; onChange: (e: any) => void; type: string; placeholder: string; disabled: boolean; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+                      // @ts-expect-error - TS2322 - Type '{ className: string; value: string; onChange: (e: any) => void; type: string; placeholder: string; disabled: boolean; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                       className="wunderbar__input--inline"
                       value={searchText}
                       onChange={(e) => setSearchText(e.target.value)}
                       type="text"
-                      placeholder={__('Search Uploads')}
+                      placeholder={__("Search Uploads")}
                       disabled={filterBy === FILTER_REPOSTS}
                     />
                   </Form>
@@ -217,7 +217,7 @@ function FileListPublished(props: Props) {
           {!fetching ? (
             <section className="main--empty">
               <Yrbl
-                title={filterBy === FILTER_REPOSTS ? __('No Reposts') : __('No uploads')}
+                title={filterBy === FILTER_REPOSTS ? __("No Reposts") : __("No uploads")}
                 subtitle={
                   filterBy === FILTER_REPOSTS
                     ? __("You haven't reposted anything yet. Do it.")
@@ -230,7 +230,7 @@ function FileListPublished(props: Props) {
                         // @ts-expect-error - TS2322 (ts-migration)
                         button="primary"
                         navigate={`/$/${PAGES.UPLOAD}`}
-                        label={__('Upload Something New')}
+                        label={__("Upload Something New")}
                         onClick={() => clearPublish()}
                       />
                     </div>

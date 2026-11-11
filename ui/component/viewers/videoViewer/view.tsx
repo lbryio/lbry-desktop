@@ -1,59 +1,59 @@
-import React, {useEffect, useState, useCallback} from 'react';
-import { stopContextMenu } from 'util/context-menu';
-import type { Player } from './internal/videojs';
-import VideoJs from './internal/videojs';
-import analytics from 'analytics';
-import classnames from 'classnames';
-import { FORCE_CONTENT_TYPE_PLAYER } from 'constants/claim';
-import AutoplayCountdown from 'component/autoplayCountdown';
-import usePrevious from 'effects/use-previous';
-import LoadingScreen from 'component/common/loading-screen';
-import { addTheaterModeButton } from './internal/theater-mode';
-import { addAutoplayNextButton } from './internal/autoplay-next';
-import { addPlayNextButton } from './internal/play-next';
-import { addPlayPreviousButton } from './internal/play-previous';
-import { useHistory } from 'react-router';
-import type { HomepageCat } from 'util/buildHomepage';
-import debounce from 'util/debounce';
-import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
+import React, { useEffect, useState, useCallback } from "react";
+import { stopContextMenu } from "util/context-menu";
+import type { Player } from "./internal/videojs";
+import VideoJs from "./internal/videojs";
+import analytics from "analytics";
+import classnames from "classnames";
+import { FORCE_CONTENT_TYPE_PLAYER } from "constants/claim";
+import AutoplayCountdown from "component/autoplayCountdown";
+import usePrevious from "effects/use-previous";
+import LoadingScreen from "component/common/loading-screen";
+import { addTheaterModeButton } from "./internal/theater-mode";
+import { addAutoplayNextButton } from "./internal/autoplay-next";
+import { addPlayNextButton } from "./internal/play-next";
+import { addPlayPreviousButton } from "./internal/play-previous";
+import { useHistory } from "react-router";
+import type { HomepageCat } from "util/buildHomepage";
+import debounce from "util/debounce";
+import { formatLbryUrlForWeb, generateListSearchUrlParams } from "util/url";
 
-const PLAY_TIMEOUT_ERROR = 'play_timeout_error';
+const PLAY_TIMEOUT_ERROR = "play_timeout_error";
 const PLAY_TIMEOUT_LIMIT = 2000;
 
 type Props = {
-  position: number,
-  changeVolume: (arg1: number) => void,
-  changeMute: (arg1: boolean) => void,
-  source: string,
-  contentType: string,
-  thumbnail: string,
-  claim: StreamClaim,
-  muted: boolean,
-  videoPlaybackRate: number,
-  volume: number,
-  uri: string,
-  autoplayNext: boolean,
-  desktopPlayStartTime?: number,
-  doAnalyticsView: (arg1: string, arg2: number) => Promise<any>,
-  doAnalyticsBuffer: (arg1: string, arg2?: any) => void,
-  claimRewards: () => void,
-  savePosition: (arg1: string, arg2: number) => void,
-  clearPosition: (arg1: string) => void,
-  toggleVideoTheaterMode: () => void,
-  toggleAutoplayNext: () => void,
-  setVideoPlaybackRate: (arg1: number) => void,
-  userId: number,
+  position: number;
+  changeVolume: (arg1: number) => void;
+  changeMute: (arg1: boolean) => void;
+  source: string;
+  contentType: string;
+  thumbnail: string;
+  claim: StreamClaim;
+  muted: boolean;
+  videoPlaybackRate: number;
+  volume: number;
+  uri: string;
+  autoplayNext: boolean;
+  desktopPlayStartTime?: number;
+  doAnalyticsView: (arg1: string, arg2: number) => Promise<any>;
+  doAnalyticsBuffer: (arg1: string, arg2?: any) => void;
+  claimRewards: () => void;
+  savePosition: (arg1: string, arg2: number) => void;
+  clearPosition: (arg1: string) => void;
+  toggleVideoTheaterMode: () => void;
+  toggleAutoplayNext: () => void;
+  setVideoPlaybackRate: (arg1: number) => void;
+  userId: number;
   homepageData?: {
-    [key: string]: HomepageCat
-  },
-  shareTelemetry: boolean,
-  isFloating: boolean,
-  doPlayUri: (arg1: string, arg2: string) => void,
-  collectionId: string,
-  nextRecommendedUri: string,
-  previousListUri: string,
-  videoTheaterMode: boolean,
-  isMarkdownOrComment: boolean
+    [key: string]: HomepageCat;
+  };
+  shareTelemetry: boolean;
+  isFloating: boolean;
+  doPlayUri: (arg1: string, arg2: string) => void;
+  collectionId: string;
+  nextRecommendedUri: string;
+  previousListUri: string;
+  videoTheaterMode: boolean;
+  isMarkdownOrComment: boolean;
 };
 
 /*
@@ -96,8 +96,8 @@ function VideoViewer(props: Props) {
   } = props;
   const permanentUrl = claim && claim.permanent_url;
   const claimId = claim && claim.claim_id;
-  const isAudio = contentType.includes('audio');
-// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"video/quicktime" | "application/x-ext-mkv" | "video/x-matroska" | "video/x-ms-wmv" | "video/x-msvideo" | "video/mpeg" | "video/m4v" | "audio/ogg" | "application/x-ext-ogg" | "application/x-ext-m4a"'.
+  const isAudio = contentType.includes("audio");
+  // @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"video/quicktime" | "application/x-ext-mkv" | "video/x-matroska" | "video/x-ms-wmv" | "video/x-msvideo" | "video/mpeg" | "video/m4v" | "audio/ogg" | "application/x-ext-ogg" | "application/x-ext-m4a"'.
   const forcePlayer = FORCE_CONTENT_TYPE_PLAYER.includes(contentType);
   const { push } = useHistory();
   const [doNavigate, setDoNavigate] = useState(false);
@@ -137,8 +137,8 @@ function VideoViewer(props: Props) {
   }, [videoPlaybackRate]);
 
   function doTrackingBuffered(e: Event, data: any) {
-    fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
-      data.playerPoweredBy = response.headers.get('x-powered-by');
+    fetch(source, { method: "HEAD", cache: "no-store" }).then((response) => {
+      data.playerPoweredBy = response.headers.get("x-powered-by");
       doAnalyticsBuffer(uri, data);
     });
   }
@@ -160,8 +160,8 @@ function VideoViewer(props: Props) {
       bitrateAsBitsPerSecond = Math.round(contentInBits / durationInSeconds);
     }
 
-    fetch(source, { method: 'HEAD', cache: 'no-store' }).then((response) => {
-      let playerPoweredBy = response.headers.get('x-powered-by') || '';
+    fetch(source, { method: "HEAD", cache: "no-store" }).then((response) => {
+      const playerPoweredBy = response.headers.get("x-powered-by") || "";
       analytics.videoStartEvent(
         claimId,
         timeToStart,
@@ -209,13 +209,13 @@ function VideoViewer(props: Props) {
       }
     } else {
       if (videoNode) {
-// @ts-expect-error - TS2339 - Property 'currentTime' does not exist on type 'never'.
+        // @ts-expect-error - TS2339 - Property 'currentTime' does not exist on type 'never'.
         const currentTime = videoNode.currentTime;
 
         if (currentTime <= 5) {
           if (previousListUri && permanentUrl !== previousListUri) doPlay(previousListUri);
         } else {
-// @ts-expect-error - TS2339 - Property 'currentTime' does not exist on type 'never'.
+          // @ts-expect-error - TS2339 - Property 'currentTime' does not exist on type 'never'.
           videoNode.currentTime = 0;
         }
         setDoNavigate(false);
@@ -273,24 +273,24 @@ function VideoViewer(props: Props) {
   }
 
   function handlePosition(player: unknown) {
-// @ts-expect-error - TS2339 - Property 'currentTime' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'currentTime' does not exist on type 'unknown'.
     const currTime = player.currentTime();
     const durationInSeconds = claim.value.video && claim.value.video.duration;
     if (Number(durationInSeconds) > Number(currTime)) {
-// @ts-expect-error - TS2339 - Property 'currentTime' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'currentTime' does not exist on type 'unknown'.
       savePosition(uri, player.currentTime());
     }
   }
 
   function restorePlaybackRate(player: unknown) {
     if (!vjsCallbackDataRef.current.embedded) {
-// @ts-expect-error - TS2339 - Property 'playbackRate' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'playbackRate' does not exist on type 'unknown'.
       player.playbackRate(vjsCallbackDataRef.current.videoPlaybackRate);
     }
   }
 
   const playerReadyDependencyList = [uri];
-// @ts-expect-error - TS2345 - Argument of type 'number' is not assignable to parameter of type 'string'.
+  // @ts-expect-error - TS2345 - Argument of type 'number' is not assignable to parameter of type 'string'.
   playerReadyDependencyList.push(desktopPlayStartTime);
 
   const doPlayNext = () => {
@@ -325,7 +325,7 @@ function VideoViewer(props: Props) {
     );
 
     Promise.race([playPromise, timeoutPromise]).catch((error) => {
-      if (typeof error === 'object' && error.name && error.name === 'NotAllowedError') {
+      if (typeof error === "object" && error.name && error.name === "NotAllowedError") {
         if (player.autoplay() && !player.muted()) {
           // player.muted(true);
           // another version had player.play()
@@ -341,32 +341,32 @@ function VideoViewer(props: Props) {
     // Move the restoration to a later `loadedmetadata` phase to counter the
     // delay from the header-fetch. This is a temp change until the next
     // re-factoring.
-    player.on('loadedmetadata', () => restorePlaybackRate(player));
+    player.on("loadedmetadata", () => restorePlaybackRate(player));
 
     // used for tracking buffering for watchman
-// @ts-expect-error - TS2345 - Argument of type '(e: Event, data: any) => void' is not assignable to parameter of type '(arg1?: any) => void'.
-    player.on('tracking:buffered', doTrackingBuffered);
+    // @ts-expect-error - TS2345 - Argument of type '(e: Event, data: any) => void' is not assignable to parameter of type '(arg1?: any) => void'.
+    player.on("tracking:buffered", doTrackingBuffered);
 
     // first play tracking, used for initializing the watchman api
-// @ts-expect-error - TS2345 - Argument of type '(e: Event, data: any) => void' is not assignable to parameter of type '(arg1?: any) => void'.
-    player.on('tracking:firstplay', doTrackingFirstPlay);
-    player.on('ended', () => setEnded(true));
-    player.on('play', onPlay);
-    player.on('pause', (event) => onPause(event, player));
-    player.on('dispose', (event) => onDispose(event, player));
+    // @ts-expect-error - TS2345 - Argument of type '(e: Event, data: any) => void' is not assignable to parameter of type '(arg1?: any) => void'.
+    player.on("tracking:firstplay", doTrackingFirstPlay);
+    player.on("ended", () => setEnded(true));
+    player.on("play", onPlay);
+    player.on("pause", (event) => onPause(event, player));
+    player.on("dispose", (event) => onDispose(event, player));
 
-    player.on('error', () => {
+    player.on("error", () => {
       const error = player.error();
       if (error) {
-        analytics.sentryError('Video.js error', error);
+        analytics.sentryError("Video.js error", error);
       }
     });
-    player.on('volumechange', () => {
+    player.on("volumechange", () => {
       if (player) {
         updateVolumeState(player.volume(), player.muted());
       }
     });
-    player.on('ratechange', () => {
+    player.on("ratechange", () => {
       const HAVE_NOTHING = 0; // https://docs.videojs.com/player#readyState
       if (player && player.readyState() !== HAVE_NOTHING) {
         // The playbackRate occasionally resets to 1, typically when loading a fresh video or when 'src' changes.
@@ -384,8 +384,8 @@ function VideoViewer(props: Props) {
 
   return (
     <div
-      className={classnames('file-viewer', {
-        'file-viewer--is-playing': isPlaying,
+      className={classnames("file-viewer", {
+        "file-viewer--is-playing": isPlaying,
       })}
       onContextMenu={stopContextMenu}
     >
@@ -397,12 +397,12 @@ function VideoViewer(props: Props) {
         />
       )}
       {/* disable this loading behavior because it breaks when player.play() promise hangs */}
-      {isLoading && <LoadingScreen status={__('Loading')} />}
+      {isLoading && <LoadingScreen status={__("Loading")} />}
       <VideoJs
         source={source}
-        sourceType={forcePlayer ? 'video/mp4' : contentType}
+        sourceType={forcePlayer ? "video/mp4" : contentType}
         isAudio={isAudio}
-        poster={isAudio ? thumbnail : ''}
+        poster={isAudio ? thumbnail : ""}
         onPlayerReady={onPlayerReady}
         toggleVideoTheaterMode={toggleVideoTheaterMode}
         autoplay

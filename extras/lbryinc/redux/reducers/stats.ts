@@ -1,6 +1,6 @@
 //@ts-nocheck
-import {handleActions} from 'util/redux-utils';
-import * as ACTIONS from 'constants/action_types';
+import { handleActions } from "util/redux-utils";
+import * as ACTIONS from "constants/action_types";
 
 const defaultState = {
   fetchingViewCount: false,
@@ -13,7 +13,7 @@ const defaultState = {
 
 export const statsReducer = handleActions(
   {
-    [ACTIONS.FETCH_VIEW_COUNT_STARTED]: state => ({ ...state, fetchingViewCount: true }),
+    [ACTIONS.FETCH_VIEW_COUNT_STARTED]: (state) => ({ ...state, fetchingViewCount: true }),
     [ACTIONS.FETCH_VIEW_COUNT_FAILED]: (state, action) => ({
       ...state,
       viewCountError: action.data,
@@ -22,7 +22,7 @@ export const statsReducer = handleActions(
       const { claimIdCsv, viewCounts } = action.data;
 
       const viewCountById = Object.assign({}, state.viewCountById);
-      const claimIds = claimIdCsv.split(',');
+      const claimIds = claimIdCsv.split(",");
 
       if (claimIds.length === viewCounts.length) {
         claimIds.forEach((claimId, index) => {
@@ -36,7 +36,7 @@ export const statsReducer = handleActions(
         viewCountById,
       };
     },
-    [ACTIONS.FETCH_SUB_COUNT_STARTED]: state => ({ ...state, fetchingSubCount: true }),
+    [ACTIONS.FETCH_SUB_COUNT_STARTED]: (state) => ({ ...state, fetchingSubCount: true }),
     [ACTIONS.FETCH_SUB_COUNT_FAILED]: (state, action) => ({
       ...state,
       subCountError: action.data,

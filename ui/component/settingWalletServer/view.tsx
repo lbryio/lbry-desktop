@@ -1,35 +1,35 @@
-import React, {useState, useEffect, useRef} from 'react';
-import { FormField } from 'component/common/form';
-import Button from 'component/button';
-import * as ICONS from 'constants/icons';
-import ServerInputRow from './internal/inputRow';
-import { stringifyServerParam } from 'util/sync-settings';
+import React, { useState, useEffect, useRef } from "react";
+import { FormField } from "component/common/form";
+import Button from "component/button";
+import * as ICONS from "constants/icons";
+import ServerInputRow from "./internal/inputRow";
+import { stringifyServerParam } from "util/sync-settings";
 
 type StatusOfServer = {
-  host: string,
-  port: string,
-  availability: boolean,
-  latency: number
+  host: string;
+  port: string;
+  availability: boolean;
+  latency: number;
 };
 
 type ServerTuple = [string, string]; // ['host', 'port']
 type ServerStatus = Array<StatusOfServer>;
 type ServerConfig = Array<ServerTuple>;
 type DaemonStatus = {
-  wallet: any
+  wallet: any;
 };
 
 type Props = {
-  getDaemonStatus: () => void,
-  setCustomWalletServers: (arg1?: any) => void,
-  clearWalletServers: () => void,
-  customWalletServers: ServerConfig,
-  saveServerConfig: (arg1: Array<ServerTuple>) => void,
-  hasWalletServerPrefs: boolean,
-  daemonStatus: DaemonStatus,
-  walletReconnecting: boolean,
-  walletRollbackToDefault: boolean,
-  walletReconnectingToDefault: boolean
+  getDaemonStatus: () => void;
+  setCustomWalletServers: (arg1?: any) => void;
+  clearWalletServers: () => void;
+  customWalletServers: ServerConfig;
+  saveServerConfig: (arg1: Array<ServerTuple>) => void;
+  hasWalletServerPrefs: boolean;
+  daemonStatus: DaemonStatus;
+  walletReconnecting: boolean;
+  walletRollbackToDefault: boolean;
+  walletReconnectingToDefault: boolean;
 };
 
 function SettingWalletServer(props: Props) {
@@ -105,7 +105,7 @@ function SettingWalletServer(props: Props) {
   }
 
   function onAdd(serverTuple: ServerTuple) {
-    let newServerConfig = serverConfig.concat();
+    const newServerConfig = serverConfig.concat();
     newServerConfig.push(serverTuple);
     updateServers(newServerConfig);
   }
@@ -117,21 +117,21 @@ function SettingWalletServer(props: Props) {
   }
 
   function updateServers(newConfig: unknown) {
-// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'ServerTuple[]'.
+    // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'ServerTuple[]'.
     saveServerConfig(newConfig);
     setCustomWalletServers(stringifyServerParam(newConfig));
   }
 
   return (
     <React.Fragment>
-{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
+      {/* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
       <fieldset-section>
         <FormField
           type="radio"
           name="default_wallet_servers"
-// @ts-expect-error - TS2322 - Type '{ type: string; name: string; checked: boolean; label: string; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+          // @ts-expect-error - TS2322 - Type '{ type: string; name: string; checked: boolean; label: string; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
           checked={!usingCustomServer}
-          label={__('Use official LBRY wallet servers')}
+          label={__("Use official LBRY wallet servers")}
           onChange={(e) => {
             if (e.target.checked) {
               doClear();
@@ -141,7 +141,7 @@ function SettingWalletServer(props: Props) {
         <FormField
           type="radio"
           name="custom_wallet_servers"
-// @ts-expect-error - TS2322 - Type '{ type: string; name: string; checked: boolean; onChange: (e: any) => void; label: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+          // @ts-expect-error - TS2322 - Type '{ type: string; name: string; checked: boolean; onChange: (e: any) => void; label: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
           checked={usingCustomServer}
           onChange={(e) => {
             setUsingCustomServer(e.target.checked);
@@ -149,7 +149,7 @@ function SettingWalletServer(props: Props) {
               setCustomWalletServers(stringifyServerParam(customWalletServers));
             }
           }}
-          label={__('Use custom wallet servers')}
+          label={__("Use custom wallet servers")}
         />
 
         {showCustomServers && (
@@ -171,15 +171,15 @@ function SettingWalletServer(props: Props) {
                     </h3>
                     <span className="help">
                       {available
-                        ? __('Connected')
+                        ? __("Connected")
                         : walletReconnecting && !walletReconnectingToDefault
-                        ? __('Connecting...')
-                        : __('Not connected')}
+                          ? __("Connecting...")
+                          : __("Not connected")}
                     </span>
                     <Button
                       // @ts-expect-error - TS2322 (ts-migration)
                       button="close"
-                      title={__('Remove custom wallet server')}
+                      title={__("Remove custom wallet server")}
                       icon={ICONS.REMOVE}
                       onClick={() => onDelete(index)}
                     />
@@ -191,7 +191,7 @@ function SettingWalletServer(props: Props) {
             </div>
           </div>
         )}
-{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
+        {/* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
       </fieldset-section>
     </React.Fragment>
   );

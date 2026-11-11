@@ -1,24 +1,24 @@
 //@ts-nocheck
-import * as ACTIONS from 'constants/action_types';
-import { persistStore, persistReducer } from 'redux-persist';
-import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
-import createCompressor from 'redux-persist-transform-compress';
-import { createFilter, createBlacklistFilter } from 'redux-persist-transform-filter';
-import localForage from 'localforage';
-import { createStore, applyMiddleware, compose } from 'redux';
-import thunk from 'redux-thunk';
-import { createMemoryHistory, createBrowserHistory } from 'history';
-import { routerMiddleware } from 'connected-react-router';
-import createRootReducer from './reducers';
-import Lbry from 'lbry';
-import { buildSharedStateMiddleware } from 'redux/middleware/shared-state';
-import { doSyncLoop } from 'redux/actions/sync';
-import { getAuthToken } from 'util/saved-passwords';
-import { generateInitialUrl } from 'util/url';
-import { X_LBRY_AUTH_TOKEN } from 'constants/token';
+import * as ACTIONS from "constants/action_types";
+import { persistStore, persistReducer } from "redux-persist";
+import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
+import createCompressor from "redux-persist-transform-compress";
+import { createFilter, createBlacklistFilter } from "redux-persist-transform-filter";
+import localForage from "localforage";
+import { createStore, applyMiddleware, compose } from "redux";
+import thunk from "redux-thunk";
+import { createMemoryHistory, createBrowserHistory } from "history";
+import { routerMiddleware } from "connected-react-router";
+import createRootReducer from "./reducers";
+import Lbry from "lbry";
+import { buildSharedStateMiddleware } from "redux/middleware/shared-state";
+import { doSyncLoop } from "redux/actions/sync";
+import { getAuthToken } from "util/saved-passwords";
+import { generateInitialUrl } from "util/url";
+import { X_LBRY_AUTH_TOKEN } from "constants/token";
 
 function isFunction(object: unknown) {
-  return typeof object === 'function';
+  return typeof object === "function";
 }
 
 function isNotFunction(object: unknown) {
@@ -29,7 +29,7 @@ function createBulkThunkMiddleware() {
   return ({ dispatch, getState }) =>
     (next: unknown) =>
     (action: unknown) => {
-      if (action.type === 'BATCH_ACTIONS') {
+      if (action.type === "BATCH_ACTIONS") {
         action.actions.filter(isFunction).map((actionFn) => actionFn(dispatch, getState));
       }
       return next(action);
@@ -39,7 +39,7 @@ function createBulkThunkMiddleware() {
 function enableBatching(reducer: unknown) {
   return function batchingReducer(state: unknown, action: unknown) {
     switch (action.type) {
-      case 'BATCH_ACTIONS':
+      case "BATCH_ACTIONS":
         return action.actions.filter(isNotFunction).reduce(batchingReducer, state);
       default:
         return reducer(state, action);
@@ -47,45 +47,45 @@ function enableBatching(reducer: unknown) {
   };
 }
 
-const contentFilter = createFilter('content', ['positions', 'history']);
-const fileInfoFilter = createFilter('fileInfo', [
-  'fileListPublishedSort',
-  'fileListDownloadedSort',
-  'fileListSubscriptionSort',
+const contentFilter = createFilter("content", ["positions", "history"]);
+const fileInfoFilter = createFilter("fileInfo", [
+  "fileListPublishedSort",
+  "fileListDownloadedSort",
+  "fileListSubscriptionSort",
 ]);
-const appFilter = createFilter('app', [
-  'hasClickedComment',
-  'searchOptionsExpanded',
-  'volume',
-  'muted',
-  'allowAnalytics',
-  'welcomeVersion',
-  'interestedInYoutubeSync',
-  'splashAnimationEnabled',
-  'activeChannel',
+const appFilter = createFilter("app", [
+  "hasClickedComment",
+  "searchOptionsExpanded",
+  "volume",
+  "muted",
+  "allowAnalytics",
+  "welcomeVersion",
+  "interestedInYoutubeSync",
+  "splashAnimationEnabled",
+  "activeChannel",
 ]);
-const claimsFilter = createFilter('claims', ['pendingById']);
+const claimsFilter = createFilter("claims", ["pendingById"]);
 // We only need to persist the receiveAddress for the wallet
-const walletFilter = createFilter('wallet', ['receiveAddress']);
-const searchFilter = createFilter('search', ['options']);
-const tagsFilter = createFilter('tags', ['followedTags']);
-const subscriptionsFilter = createFilter('subscriptions', ['subscriptions']);
-const blockedFilter = createFilter('blocked', ['blockedChannels']);
-const settingsFilter = createBlacklistFilter('settings', ['loadedLanguages', 'language']);
-const collectionsFilter = createFilter('collections', ['builtin', 'saved', 'unpublished', 'edited', 'pending']);
+const walletFilter = createFilter("wallet", ["receiveAddress"]);
+const searchFilter = createFilter("search", ["options"]);
+const tagsFilter = createFilter("tags", ["followedTags"]);
+const subscriptionsFilter = createFilter("subscriptions", ["subscriptions"]);
+const blockedFilter = createFilter("blocked", ["blockedChannels"]);
+const settingsFilter = createBlacklistFilter("settings", ["loadedLanguages", "language"]);
+const collectionsFilter = createFilter("collections", ["builtin", "saved", "unpublished", "edited", "pending"]);
 const whiteListedReducers = [
-  'claims',
-  'fileInfo',
-  'publish',
-  'wallet',
-  'tags',
-  'content',
-  'app',
-  'search',
-  'blocked',
-  'settings',
-  'subscriptions',
-  'collections',
+  "claims",
+  "fileInfo",
+  "publish",
+  "wallet",
+  "tags",
+  "content",
+  "app",
+  "search",
+  "blocked",
+  "settings",
+  "subscriptions",
+  "collections",
 ];
 
 const transforms = [
@@ -105,7 +105,7 @@ const transforms = [
 ];
 
 const persistOptions = {
-  key: 'v0',
+  key: "v0",
   storage: localForage,
   stateReconciler: autoMergeLevel2,
   whitelist: whiteListedReducers,
@@ -153,26 +153,26 @@ const triggerSharedStateActions = [
  * If lbry-redux changes to another version, this code will need to be changed when upgrading
  */
 const sharedStateFilters = {
-  tags: { source: 'tags', property: 'followedTags' },
+  tags: { source: "tags", property: "followedTags" },
   subscriptions: {
-    source: 'subscriptions',
-    property: 'subscriptions',
+    source: "subscriptions",
+    property: "subscriptions",
     transform: (value) => {
       return value.map(({ uri }) => uri);
     },
   },
   following: {
-    source: 'subscriptions',
-    property: 'following',
+    source: "subscriptions",
+    property: "following",
   },
-  blocked: { source: 'blocked', property: 'blockedChannels' },
-  settings: { source: 'settings', property: 'sharedPreferences' },
-  app_welcome_version: { source: 'app', property: 'welcomeVersion' },
-  sharing_3P: { source: 'app', property: 'allowAnalytics' },
-  builtinCollections: { source: 'collections', property: 'builtin' },
-  editedCollections: { source: 'collections', property: 'edited' },
+  blocked: { source: "blocked", property: "blockedChannels" },
+  settings: { source: "settings", property: "sharedPreferences" },
+  app_welcome_version: { source: "app", property: "welcomeVersion" },
+  sharing_3P: { source: "app", property: "allowAnalytics" },
+  builtinCollections: { source: "collections", property: "builtin" },
+  editedCollections: { source: "collections", property: "edited" },
   // savedCollections: { source: 'collections', property: 'saved' },
-  unpublishedCollections: { source: 'collections', property: 'unpublished' },
+  unpublishedCollections: { source: "collections", property: "unpublished" },
 } as const;
 
 const sharedStateCb = ({ dispatch, getState }) => {

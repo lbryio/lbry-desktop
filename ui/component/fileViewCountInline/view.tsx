@@ -1,15 +1,15 @@
-import React from 'react';
+import React from "react";
 // @ts-expect-error - TS2882 (ts-migration)
-import 'scss/component/_view_count.scss';
-import { useHistory } from 'react-router';
-import { toCompactNotation } from 'util/string';
+import "scss/component/_view_count.scss";
+import { useHistory } from "react-router";
+import { toCompactNotation } from "util/string";
 
 type Props = {
-  uri: string,
+  uri: string;
   // --- select ---
-  claim: StreamClaim | null | undefined,
-  viewCount: string,
-  lang: string | null | undefined
+  claim: StreamClaim | null | undefined;
+  viewCount: string;
+  lang: string | null | undefined;
 };
 
 export default function FileViewCountInline(props: Props) {
@@ -22,7 +22,7 @@ export default function FileViewCountInline(props: Props) {
   // Limit the view-count visibility to Channel Pages for now. I believe we'll
   // eventually show it everywhere, so this band-aid would be the easiest to
   // clean up (only one place edit/remove).
-  const isChannelPage = pathname.startsWith('/@');
+  const isChannelPage = pathname.startsWith("/@");
 
   // dont show if no view count, if it's a repost or isn't a channel page
   if (!viewCount || (claim && claim.repost_url) || !isChannelPage) {
@@ -36,8 +36,8 @@ export default function FileViewCountInline(props: Props) {
 
   return (
     <span className="view_count">
-{ /* @ts-expect-error - TS2367 - This condition will always return 'true' since the types 'string' and 'number' have no overlap. */}
-      {viewCount !== 1 ? __('%view_count% views', { view_count: formattedViewCount }) : __('1 view')}
+      {/* @ts-expect-error - TS2367 - This condition will always return 'true' since the types 'string' and 'number' have no overlap. */}
+      {viewCount !== 1 ? __("%view_count% views", { view_count: formattedViewCount }) : __("1 view")}
     </span>
   );
 }

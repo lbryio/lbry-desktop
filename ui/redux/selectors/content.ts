@@ -1,4 +1,4 @@
-import {createSelector} from 'reselect';
+import { createSelector } from "reselect";
 import {
   makeSelectClaimForUri,
   selectClaimsByUri,
@@ -6,21 +6,21 @@ import {
   selectClaimIsMineForUri,
   makeSelectClaimIsNsfw,
   makeSelectContentTypeForUri,
-} from 'redux/selectors/claims';
-import { makeSelectMediaTypeForUri, makeSelectFileNameForUri } from 'redux/selectors/file_info';
-import { selectBalance } from 'redux/selectors/wallet';
-import { selectCostInfoForUri } from 'lbryinc';
-import { selectShowMatureContent } from 'redux/selectors/settings';
-import * as RENDER_MODES from 'constants/file_render_modes';
-import path from 'path';
-import { FORCE_CONTENT_TYPE_PLAYER, FORCE_CONTENT_TYPE_COMIC } from 'constants/claim';
+} from "redux/selectors/claims";
+import { makeSelectMediaTypeForUri, makeSelectFileNameForUri } from "redux/selectors/file_info";
+import { selectBalance } from "redux/selectors/wallet";
+import { selectCostInfoForUri } from "lbryinc";
+import { selectShowMatureContent } from "redux/selectors/settings";
+import * as RENDER_MODES from "constants/file_render_modes";
+import path from "path";
+import { FORCE_CONTENT_TYPE_PLAYER, FORCE_CONTENT_TYPE_COMIC } from "constants/claim";
 
 const RECENT_HISTORY_AMOUNT = 10;
 const HISTORY_ITEMS_PER_PAGE = 50;
 
 type State = {
-  claims: any,
-  content: any
+  claims: any;
+  content: any;
 };
 
 export const selectState = (state: State) => state.content || {};
@@ -39,11 +39,11 @@ export const makeSelectIsPlayerFloating = (location: UrlLocation) =>
 
     const { pathname, search } = location;
     const hasSecondarySource = Boolean(playingUri.source);
-    const isComment = playingUri.source === 'comment';
+    const isComment = playingUri.source === "comment";
     const isInlineSecondaryPlayer =
       hasSecondarySource && playingUri.uri !== primaryUri && pathname === playingUri.pathname;
 
-    if (isComment && isInlineSecondaryPlayer && search && search !== '?view=discussion') return true;
+    if (isComment && isInlineSecondaryPlayer && search && search !== "?view=discussion") return true;
 
     if (
       isInlineSecondaryPlayer ||
@@ -137,53 +137,53 @@ export const makeSelectFileRenderModeForUri = (uri: string) =>
     makeSelectMediaTypeForUri(uri),
     makeSelectFileExtensionForUri(uri),
     (contentType, mediaType, extension) => {
-      if (mediaType === 'video' || FORCE_CONTENT_TYPE_PLAYER.includes(contentType)) {
+      if (mediaType === "video" || FORCE_CONTENT_TYPE_PLAYER.includes(contentType)) {
         return RENDER_MODES.VIDEO;
       }
-      if (mediaType === 'audio') {
+      if (mediaType === "audio") {
         return RENDER_MODES.AUDIO;
       }
-      if (mediaType === 'image') {
+      if (mediaType === "image") {
         return RENDER_MODES.IMAGE;
       }
-      if (['md', 'markdown'].includes(extension) || ['text/md', 'text/markdown'].includes(contentType)) {
+      if (["md", "markdown"].includes(extension) || ["text/md", "text/markdown"].includes(contentType)) {
         return RENDER_MODES.MARKDOWN;
       }
-      if (contentType === 'application/pdf') {
+      if (contentType === "application/pdf") {
         return RENDER_MODES.PDF;
       }
-      if (['text/htm', 'text/html'].includes(contentType)) {
+      if (["text/htm", "text/html"].includes(contentType)) {
         return RENDER_MODES.HTML;
       }
-      if (['text', 'document', 'script'].includes(mediaType)) {
+      if (["text", "document", "script"].includes(mediaType)) {
         return RENDER_MODES.DOCUMENT;
       }
-      if (extension === 'docx') {
+      if (extension === "docx") {
         return RENDER_MODES.DOCX;
       }
 
       // when writing this my local copy of Lbry.getMediaType had '3D-file', but I was receiving model...'
-      if (['3D-file', 'model'].includes(mediaType)) {
+      if (["3D-file", "model"].includes(mediaType)) {
         return RENDER_MODES.CAD;
       }
       // Force content type for fallback support of older claims
-      if (mediaType === 'comic-book' || FORCE_CONTENT_TYPE_COMIC.includes(contentType)) {
+      if (mediaType === "comic-book" || FORCE_CONTENT_TYPE_COMIC.includes(contentType)) {
         return RENDER_MODES.COMIC;
       }
       if (
         [
-          'application/zip',
-          'application/x-gzip',
-          'application/x-gtar',
-          'application/x-tgz',
-          'application/vnd.rar',
-          'application/x-7z-compressed',
+          "application/zip",
+          "application/x-gzip",
+          "application/x-gtar",
+          "application/x-tgz",
+          "application/vnd.rar",
+          "application/x-7z-compressed",
         ].includes(contentType)
       ) {
         return RENDER_MODES.DOWNLOAD;
       }
 
-      if (mediaType === 'application') {
+      if (mediaType === "application") {
         return RENDER_MODES.APPLICATION;
       }
 

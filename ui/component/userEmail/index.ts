@@ -1,8 +1,8 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doUserResendVerificationEmail, doUserCheckEmailVerified, doFetchAccessToken } from 'redux/actions/user';
-import { selectEmailToVerify, selectUser, selectAccessToken } from 'redux/selectors/user';
-import UserEmailVerify from './view';
+import { connect } from "react-redux";
+import { doUserResendVerificationEmail, doUserCheckEmailVerified, doFetchAccessToken } from "redux/actions/user";
+import { selectEmailToVerify, selectUser, selectAccessToken } from "redux/selectors/user";
+import UserEmailVerify from "./view";
 
 const select = (state: unknown) => ({
   email: selectEmailToVerify(state),
@@ -11,7 +11,7 @@ const select = (state: unknown) => ({
 });
 
 const perform = (dispatch: unknown) => ({
-  resendVerificationEmail: email => dispatch(doUserResendVerificationEmail(email)),
+  resendVerificationEmail: (email) => dispatch(doUserResendVerificationEmail(email)),
   checkEmailVerified: () => dispatch(doUserCheckEmailVerified()),
   fetchAccessToken: () => dispatch(doFetchAccessToken()),
 });

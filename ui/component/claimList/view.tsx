@@ -1,60 +1,60 @@
-import {Draggable} from 'react-beautiful-dnd';
-import { MAIN_CLASS } from 'constants/classnames';
-import type { ReactNode } from 'react';
-import React, { useEffect } from 'react';
-import classnames from 'classnames';
-import ClaimPreview from 'component/claimPreview';
-import Spinner from 'component/spinner';
-import { FormField } from 'component/common/form';
-import usePersistedState from 'effects/use-persisted-state';
-import debounce from 'util/debounce';
-import ClaimPreviewTile from 'component/claimPreviewTile';
+import { Draggable } from "react-beautiful-dnd";
+import { MAIN_CLASS } from "constants/classnames";
+import type { ReactNode } from "react";
+import React, { useEffect } from "react";
+import classnames from "classnames";
+import ClaimPreview from "component/claimPreview";
+import Spinner from "component/spinner";
+import { FormField } from "component/common/form";
+import usePersistedState from "effects/use-persisted-state";
+import debounce from "util/debounce";
+import ClaimPreviewTile from "component/claimPreviewTile";
 
 const DEBOUNCE_SCROLL_HANDLER_MS = 150;
-const SORT_NEW = 'new';
-const SORT_OLD = 'old';
+const SORT_NEW = "new";
+const SORT_OLD = "old";
 
 type Props = {
-  uris: Array<string>,
-  prefixUris?: Array<string>,
-  header: React.ReactNode | boolean,
-  headerAltControls: React.ReactNode,
-  loading: boolean,
-  type: string,
-  activeUri?: string,
-  empty?: string,
-  defaultSort?: boolean,
-  onScrollBottom?: (arg1?: any) => void,
-  page?: number,
-  pageSize?: number,
+  uris: Array<string>;
+  prefixUris?: Array<string>;
+  header: React.ReactNode | boolean;
+  headerAltControls: React.ReactNode;
+  loading: boolean;
+  type: string;
+  activeUri?: string;
+  empty?: string;
+  defaultSort?: boolean;
+  onScrollBottom?: (arg1?: any) => void;
+  page?: number;
+  pageSize?: number;
   // If using the default header, this is a unique ID needed to persist the state of the filter setting
-  persistedStorageKey?: string,
-  showHiddenByUser: boolean,
-  showUnresolvedClaims?: boolean,
-  renderActions?: (arg1: Claim) => React.ReactNode | null | undefined,
-  renderProperties?: (arg1: Claim) => React.ReactNode | null | undefined,
-  includeSupportAction?: boolean,
-  injectedItem: React.ReactNode | null | undefined,
-  timedOutMessage?: React.ReactNode,
-  tileLayout?: boolean,
-  searchInLanguage: boolean,
-  hideMenu?: boolean,
+  persistedStorageKey?: string;
+  showHiddenByUser: boolean;
+  showUnresolvedClaims?: boolean;
+  renderActions?: (arg1: Claim) => React.ReactNode | null | undefined;
+  renderProperties?: (arg1: Claim) => React.ReactNode | null | undefined;
+  includeSupportAction?: boolean;
+  injectedItem: React.ReactNode | null | undefined;
+  timedOutMessage?: React.ReactNode;
+  tileLayout?: boolean;
+  searchInLanguage: boolean;
+  hideMenu?: boolean;
   claimSearchByQuery: {
-    [key: string]: Array<string>
-  },
+    [key: string]: Array<string>;
+  };
   claimsByUri: {
-    [key: string]: any
-  },
-  collectionId?: string,
-  showNoSourceClaims?: boolean,
-  onClick?: (e?: any, claim?: Claim | null | undefined, index?: number) => void,
-  maxClaimRender?: number,
-  excludeUris?: Array<string>,
-  loadedCallback?: (arg1: number) => void,
-  swipeLayout: boolean,
-  showEdit?: boolean,
-  droppableProvided?: any,
-  unavailableUris?: Array<string>
+    [key: string]: any;
+  };
+  collectionId?: string;
+  showNoSourceClaims?: boolean;
+  onClick?: (e?: any, claim?: Claim | null | undefined, index?: number) => void;
+  maxClaimRender?: number;
+  excludeUris?: Array<string>;
+  loadedCallback?: (arg1: number) => void;
+  swipeLayout: boolean;
+  showEdit?: boolean;
+  droppableProvided?: any;
+  unavailableUris?: Array<string>;
 };
 
 export default function ClaimList(props: Props) {
@@ -109,15 +109,15 @@ export default function ClaimList(props: Props) {
 
   if (maxClaimRender) tileUris = tileUris.slice(0, maxClaimRender);
 
-  let sortedUris = (urisLength > 0 && (currentSort === SORT_NEW ? tileUris : tileUris.slice().reverse())) || [];
+  const sortedUris = (urisLength > 0 && (currentSort === SORT_NEW ? tileUris : tileUris.slice().reverse())) || [];
 
   React.useEffect(() => {
-    if (typeof loadedCallback === 'function') loadedCallback(totalLength);
-  }, [totalLength]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (typeof loadedCallback === "function") loadedCallback(totalLength);
+  }, [totalLength]);
 
   const noResultMsg = searchInLanguage
-    ? __('No results. Contents may be hidden by the Language filter.')
-    : __('No results');
+    ? __("No results. Contents may be hidden by the Language filter.")
+    : __("No results");
 
   function handleSortChange() {
     setCurrentSort(currentSort === SORT_NEW ? SORT_OLD : SORT_NEW);
@@ -136,7 +136,7 @@ export default function ClaimList(props: Props) {
     // Hack to hide spee.ch thumbnail publishes
     // If it meets these requirements, it was probably uploaded here:
     // https://github.com/lbryio/lbry-redux/blob/master/src/redux/actions/publish.js#L74-L79
-    return claim.name.length === 24 && !claim.name.includes(' ') && claim.value.author === 'Spee.ch';
+    return claim.name.length === 24 && !claim.name.includes(" ") && claim.value.author === "Spee.ch";
   }, []);
 
   useEffect(() => {
@@ -155,8 +155,8 @@ export default function ClaimList(props: Props) {
     }, DEBOUNCE_SCROLL_HANDLER_MS);
 
     if (onScrollBottom) {
-      window.addEventListener('scroll', handleScroll);
-      return () => window.removeEventListener('scroll', handleScroll);
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
     }
   }, [loading, onScrollBottom, urisLength, pageSize, page]);
 
@@ -169,7 +169,7 @@ export default function ClaimList(props: Props) {
       hideMenu={hideMenu}
       includeSupportAction={includeSupportAction}
       showUnresolvedClaim={showUnresolvedClaims}
-      properties={renderProperties || (type !== 'small' ? undefined : false)}
+      properties={renderProperties || (type !== "small" ? undefined : false)}
       renderActions={renderActions}
       showUserBlocked={showHiddenByUser}
       showHiddenByUser={showHiddenByUser}
@@ -185,7 +185,7 @@ export default function ClaimList(props: Props) {
   );
 
   return tileLayout && !header ? (
-    <section className={classnames('claim-grid', { 'swipe-list': swipeLayout })}>
+    <section className={classnames("claim-grid", { "swipe-list": swipeLayout })}>
       {urisLength > 0 &&
         tileUris.map((uri) => (
           <ClaimPreviewTile
@@ -203,14 +203,14 @@ export default function ClaimList(props: Props) {
     </section>
   ) : (
     <section
-      className={classnames('claim-list', {
-        'claim-list--small': type === 'small',
+      className={classnames("claim-list", {
+        "claim-list--small": type === "small",
       })}
     >
       {header !== false && (
         <React.Fragment>
           {header && (
-            <div className={classnames('claim-list__header', { 'section__title--small': type === 'small' })}>
+            <div className={classnames("claim-list__header", { "section__title--small": type === "small" })}>
               {header}
               {/* @ts-expect-error - TS2322 (ts-migration) */}
               {loading && <Spinner type="small" />}
@@ -219,15 +219,15 @@ export default function ClaimList(props: Props) {
                   {headerAltControls}
                   {defaultSort && (
                     <FormField
-// @ts-expect-error - TS2322 - Type '{ children: Element[]; className: string; type: string; name: string; value: any; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+                      // @ts-expect-error - TS2322 - Type '{ children: Element[]; className: string; type: string; name: string; value: any; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                       className="claim-list__dropdown"
                       type="select"
                       name="file_sort"
                       value={currentSort}
                       onChange={handleSortChange}
                     >
-                      <option value={SORT_NEW}>{__('Newest First')}</option>
-                      <option value={SORT_OLD}>{__('Oldest First')}</option>
+                      <option value={SORT_NEW}>{__("Newest First")}</option>
+                      <option value={SORT_OLD}>{__("Oldest First")}</option>
                     </FormField>
                   )}
                 </div>
@@ -239,10 +239,10 @@ export default function ClaimList(props: Props) {
 
       {urisLength > 0 && (
         <ul
-          className={classnames('ul--no-style', {
-            card: !(tileLayout || swipeLayout || type === 'small'),
-            'claim-list--card-body': tileLayout,
-            'swipe-list': swipeLayout,
+          className={classnames("ul--no-style", {
+            card: !(tileLayout || swipeLayout || type === "small"),
+            "claim-list--card-body": tileLayout,
+            "swipe-list": swipeLayout,
           })}
           {...(droppableProvided && droppableProvided.droppableProps)}
           ref={droppableProvided && droppableProvided.innerRef}
@@ -258,7 +258,7 @@ export default function ClaimList(props: Props) {
                   let transform = draggableProvided.draggableProps.style.transform;
 
                   if (draggableSnapshot.isDragging && transform) {
-                    transform = transform.replace(/\(.+,/, '(0,');
+                    transform = transform.replace(/\(.+,/, "(0,");
                   }
 
                   const style = {
@@ -269,7 +269,7 @@ export default function ClaimList(props: Props) {
                   return (
                     <li ref={draggableProvided.innerRef} {...draggableProvided.draggableProps} style={style}>
                       {/* https://github.com/atlassian/react-beautiful-dnd/issues/1756 */}
-                      <div style={{ display: 'none' }} {...draggableProvided.dragHandleProps} />
+                      <div style={{ display: "none" }} {...draggableProvided.dragHandleProps} />
 
                       {getClaimPreview(uri, index, draggableProvided)}
                     </li>

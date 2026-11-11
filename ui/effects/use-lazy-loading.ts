@@ -1,5 +1,5 @@
-import type {ElementRef} from 'react';
-import React, { useEffect } from 'react';
+import type { ElementRef } from "react";
+import React, { useEffect } from "react";
 
 /**
  * Helper React hook for lazy loading images
@@ -10,9 +10,9 @@ import React, { useEffect } from 'react';
  */
 export default function useLazyLoading(
   elementRef: {
-    current: ElementRef<any> | null | undefined
+    current: ElementRef<any> | null | undefined;
   },
-  backgroundFallback: string = '',
+  backgroundFallback: string = "",
   yOffsetPx: number = 500,
   deps: Array<any> = []
 ) {
@@ -22,10 +22,10 @@ export default function useLazyLoading(
   function calcRootMargin(value: unknown) {
     const devicePixelRatio = window.devicePixelRatio || 1.0;
     if (devicePixelRatio < 1.0) {
-// @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+      // @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
       return Math.ceil(value / devicePixelRatio);
     }
-// @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    // @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     return Math.ceil(value * devicePixelRatio);
   }
 
@@ -36,12 +36,12 @@ export default function useLazyLoading(
 
     const lazyLoadingObserver = new IntersectionObserver(
       (entries: unknown, observer: unknown) => {
-// @ts-expect-error - TS2339 - Property 'forEach' does not exist on type 'unknown'.
+        // @ts-expect-error - TS2339 - Property 'forEach' does not exist on type 'unknown'.
         entries.forEach((entry) => {
           if (entry.intersectionRatio >= threshold) {
             const { target } = entry;
 
-// @ts-expect-error - TS2339 - Property 'unobserve' does not exist on type 'unknown'.
+            // @ts-expect-error - TS2339 - Property 'unobserve' does not exist on type 'unknown'.
             observer.unobserve(target);
 
             // useful for lazy loading img tags
@@ -73,7 +73,7 @@ export default function useLazyLoading(
       }
     );
 
-// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'Element'.
+    // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'Element'.
     lazyLoadingObserver.observe(elementRef.current);
   }, [backgroundFallback, elementRef, yOffsetPx]);
 

@@ -1,6 +1,6 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import SettingsCreatorPage from './view';
+import { connect } from "react-redux";
+import SettingsCreatorPage from "./view";
 import {
   doCommentBlockWords,
   doCommentUnblockWords,
@@ -9,14 +9,14 @@ import {
   doCommentModListDelegates,
   doFetchCreatorSettings,
   doUpdateCreatorSettings,
-} from 'redux/actions/comments';
-import { selectActiveChannelClaim } from 'redux/selectors/app';
+} from "redux/actions/comments";
+import { selectActiveChannelClaim } from "redux/selectors/app";
 import {
   selectSettingsByChannelId,
   selectFetchingCreatorSettings,
   selectFetchingBlockedWords,
   selectModerationDelegatesById,
-} from 'redux/selectors/comments';
+} from "redux/selectors/comments";
 
 const select = (state: unknown) => ({
   activeChannelClaim: selectActiveChannelClaim(state),

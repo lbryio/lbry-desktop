@@ -1,11 +1,11 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectBalance } from 'redux/selectors/wallet';
-import { makeSelectClaimForUri } from 'redux/selectors/claims';
-import { doOpenModal } from 'redux/actions/app';
-import WalletSend from './view';
-import { withRouter } from 'react-router';
-import { selectToast } from 'redux/selectors/notifications';
+import { connect } from "react-redux";
+import { selectBalance } from "redux/selectors/wallet";
+import { makeSelectClaimForUri } from "redux/selectors/claims";
+import { doOpenModal } from "redux/actions/app";
+import WalletSend from "./view";
+import { withRouter } from "react-router";
+import { selectToast } from "redux/selectors/notifications";
 
 const perform = (dispatch: unknown) => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),

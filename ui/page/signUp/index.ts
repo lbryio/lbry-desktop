@@ -1,4 +1,4 @@
 //@ts-nocheck
-import SignUpPage from './view';
+import SignUpPage from "./view";
 
 export default SignUpPage;

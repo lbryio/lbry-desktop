@@ -1,105 +1,105 @@
-import {ENABLE_NO_SOURCE_CLAIMS} from 'config';
-import type { ReactNode } from 'react';
-import * as CS from 'constants/claim_search';
-import React from 'react';
-import usePersistedState from 'effects/use-persisted-state';
-import { withRouter } from 'react-router';
-import { MATURE_TAGS } from 'constants/tags';
-import { createNormalizedClaimSearchKey } from 'util/claim';
-import { splitBySeparator } from 'util/lbryURI';
-import Button from 'component/button';
-import moment from 'moment';
-import ClaimList from 'component/claimList';
-import ClaimPreview from 'component/claimPreview';
-import ClaimPreviewTile from 'component/claimPreviewTile';
-import I18nMessage from 'component/i18nMessage';
-import ClaimListHeader from 'component/claimListHeader';
-import useFetchViewCount from 'effects/use-fetch-view-count';
-import { useIsLargeScreen } from 'effects/use-screensize';
+import { ENABLE_NO_SOURCE_CLAIMS } from "config";
+import type { ReactNode } from "react";
+import * as CS from "constants/claim_search";
+import React from "react";
+import usePersistedState from "effects/use-persisted-state";
+import { withRouter } from "react-router";
+import { MATURE_TAGS } from "constants/tags";
+import { createNormalizedClaimSearchKey } from "util/claim";
+import { splitBySeparator } from "util/lbryURI";
+import Button from "component/button";
+import moment from "moment";
+import ClaimList from "component/claimList";
+import ClaimPreview from "component/claimPreview";
+import ClaimPreviewTile from "component/claimPreviewTile";
+import I18nMessage from "component/i18nMessage";
+import ClaimListHeader from "component/claimListHeader";
+import useFetchViewCount from "effects/use-fetch-view-count";
+import { useIsLargeScreen } from "effects/use-screensize";
 
 type Props = {
-  uris: Array<string>,
-  prefixUris?: Array<string>,
-  name?: string,
-  type: string,
-  pageSize?: number,
-  fetchViewCount?: boolean,
-  forceShowReposts?: boolean,
-  hasNoSource?: boolean,
-  hasSource?: boolean,
-  hideAdvancedFilter?: boolean,
-  hideFilters?: boolean,
-  includeSupportAction?: boolean,
-  infiniteScroll?: boolean,
-  isChannel?: boolean,
-  personalView: boolean,
-  showHeader: boolean,
-  showHiddenByUser?: boolean,
-  showNoSourceClaims?: boolean,
-  tileLayout: boolean,
-  orderBy?: Array<string> // Trending, New, Top,
-  defaultOrderBy?: string,
-  sortBy?: Array<string> // Newest First, Oldest First,
-  freshness?: string,
-  defaultFreshness?: string,
-  tags: string // these are just going to be string. pass a CSV if you want multi,
-  defaultTags: string,
-  claimType?: string | Array<string>,
-  defaultClaimType?: Array<string>,
-  streamType?: string | Array<string>,
-  defaultStreamType?: string | Array<string>,
-  empty?: string,
-  feeAmount?: string,
-  releaseTime?: string,
-  repostedClaimId?: string,
-  scrollAnchor?: string,
-  maxPages?: number,
-  limitClaimsPerChannel?: number,
-  channelIds?: Array<string>,
-  claimIds?: Array<string>,
-  subscribedChannels: Array<Subscription>,
-  header?: React.ReactNode,
-  headerLabel?: string | React.ReactNode,
-  hiddenNsfwMessage?: React.ReactNode,
-  injectedItem: React.ReactNode | null | undefined,
-  meta?: React.ReactNode,
-  renderProperties?: (arg1: Claim) => React.ReactNode,
+  uris: Array<string>;
+  prefixUris?: Array<string>;
+  name?: string;
+  type: string;
+  pageSize?: number;
+  fetchViewCount?: boolean;
+  forceShowReposts?: boolean;
+  hasNoSource?: boolean;
+  hasSource?: boolean;
+  hideAdvancedFilter?: boolean;
+  hideFilters?: boolean;
+  includeSupportAction?: boolean;
+  infiniteScroll?: boolean;
+  isChannel?: boolean;
+  personalView: boolean;
+  showHeader: boolean;
+  showHiddenByUser?: boolean;
+  showNoSourceClaims?: boolean;
+  tileLayout: boolean;
+  orderBy?: Array<string>; // Trending, New, Top,
+  defaultOrderBy?: string;
+  sortBy?: Array<string>; // Newest First, Oldest First,
+  freshness?: string;
+  defaultFreshness?: string;
+  tags: string; // these are just going to be string. pass a CSV if you want multi,
+  defaultTags: string;
+  claimType?: string | Array<string>;
+  defaultClaimType?: Array<string>;
+  streamType?: string | Array<string>;
+  defaultStreamType?: string | Array<string>;
+  empty?: string;
+  feeAmount?: string;
+  releaseTime?: string;
+  repostedClaimId?: string;
+  scrollAnchor?: string;
+  maxPages?: number;
+  limitClaimsPerChannel?: number;
+  channelIds?: Array<string>;
+  claimIds?: Array<string>;
+  subscribedChannels: Array<Subscription>;
+  header?: React.ReactNode;
+  headerLabel?: string | React.ReactNode;
+  hiddenNsfwMessage?: React.ReactNode;
+  injectedItem: React.ReactNode | null | undefined;
+  meta?: React.ReactNode;
+  renderProperties?: (arg1: Claim) => React.ReactNode;
   history: {
-    action: string,
-    push: (arg1: string) => void,
-    replace: (arg1: string) => void
-  },
+    action: string;
+    push: (arg1: string) => void;
+    replace: (arg1: string) => void;
+  };
   location: {
-    search: string,
-    pathname: string
-  },
+    search: string;
+    pathname: string;
+  };
   // --- select ---
-  followedTags?: Array<Tag>,
+  followedTags?: Array<Tag>;
   claimSearchByQuery: {
-    [key: string]: Array<string>
-  },
+    [key: string]: Array<string>;
+  };
   claimSearchByQueryLastPageReached: {
-    [key: string]: boolean
-  },
+    [key: string]: boolean;
+  };
   claimsByUri: {
-    [key: string]: any
-  },
-  loading: boolean,
-  showNsfw: boolean,
-  hideReposts: boolean,
-  languageSetting: string,
-  mutedUris: Array<string>,
-  blockedUris: Array<string>,
-  searchInLanguage: boolean,
+    [key: string]: any;
+  };
+  loading: boolean;
+  showNsfw: boolean;
+  hideReposts: boolean;
+  languageSetting: string;
+  mutedUris: Array<string>;
+  blockedUris: Array<string>;
+  searchInLanguage: boolean;
   // --- perform ---
-  doClaimSearch: (arg1: Record<any, any>) => void,
-  doToggleTagFollowDesktop: (arg1: string) => void,
-  doFetchViewCount: (claimIdCsv: string) => void,
-  loadedCallback?: (arg1: number) => void,
-  maxClaimRender?: number,
-  useSkeletonScreen?: boolean,
-  excludeUris?: Array<string>,
-  swipeLayout: boolean
+  doClaimSearch: (arg1: Record<any, any>) => void;
+  doToggleTagFollowDesktop: (arg1: string) => void;
+  doFetchViewCount: (claimIdCsv: string) => void;
+  loadedCallback?: (arg1: number) => void;
+  maxClaimRender?: number;
+  useSkeletonScreen?: boolean;
+  excludeUris?: Array<string>;
+  swipeLayout: boolean;
 };
 
 function ClaimListDiscover(props: Props) {
@@ -169,7 +169,7 @@ function ClaimListDiscover(props: Props) {
     excludeUris = [],
     swipeLayout = false,
   } = props;
-  const didNavigateForward = history.action === 'PUSH';
+  const didNavigateForward = history.action === "PUSH";
   const { search } = location;
   const [page, setPage] = React.useState(1);
   const [forceRefresh, setForceRefresh] = React.useState<any>();
@@ -191,27 +191,27 @@ function ClaimListDiscover(props: Props) {
   const langParam = urlParams.get(CS.LANGUAGE_KEY) || null;
   const languageParams = searchInLanguage
     ? langParam === null
-      ? languageSetting.concat(languageSetting === 'en' ? ',none' : '')
-      : langParam === 'any'
-      ? null
-      : langParam.concat(langParam === 'en' ? ',none' : '')
+      ? languageSetting.concat(languageSetting === "en" ? ",none" : "")
+      : langParam === "any"
+        ? null
+        : langParam.concat(langParam === "en" ? ",none" : "")
     : langParam === null
-    ? null
-    : langParam === 'any'
-    ? null
-    : langParam.concat(langParam === 'en' ? ',none' : '');
+      ? null
+      : langParam === "any"
+        ? null
+        : langParam.concat(langParam === "en" ? ",none" : "");
 
   const contentTypeParam = urlParams.get(CS.CONTENT_KEY);
   const claimTypeParam =
-// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"stream" | "channel" | "collection" | "repost"'.
+    // @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"stream" | "channel" | "collection" | "repost"'.
     claimType || (CS.CLAIM_TYPES.includes(contentTypeParam) && contentTypeParam) || defaultClaimType || null;
   const streamTypeParam =
-// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"audio" | "video" | "image" | "document" | "model" | "binary"'.
+    // @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"audio" | "video" | "image" | "document" | "model" | "binary"'.
     streamType || (CS.FILE_TYPES.includes(contentTypeParam) && contentTypeParam) || defaultStreamType || null;
   const durationParam = urlParams.get(CS.DURATION_KEY) || null;
   const channelIdsInUrl = urlParams.get(CS.CHANNEL_IDS_KEY);
-  const channelIdsParam = channelIdsInUrl ? channelIdsInUrl.split(',') : channelIds;
-  const feeAmountParam = urlParams.get('fee_amount') || feeAmount;
+  const channelIdsParam = channelIdsInUrl ? channelIdsInUrl.split(",") : channelIds;
+  const feeAmountParam = urlParams.get("fee_amount") || feeAmount;
   const originalPageSize = pageSize || CS.PAGE_SIZE;
   const dynamicPageSize = isLargeScreen ? Math.ceil(originalPageSize * (3 / 2)) : originalPageSize;
   const historyAction = history.action;
@@ -219,7 +219,7 @@ function ClaimListDiscover(props: Props) {
   let orderParam = orderBy || urlParams.get(CS.ORDER_BY_KEY) || defaultOrderBy || orderParamEntry;
 
   if (!orderParam) {
-    if (historyAction === 'POP') {
+    if (historyAction === "POP") {
       // Reaching here means user have popped back to the page's entry point (e.g. '/$/tags' without any '?order=').
       orderParam = orderParamEntry;
     } else {
@@ -234,51 +234,50 @@ function ClaimListDiscover(props: Props) {
 
   React.useEffect(() => {
     // One-time update to stash the finalized 'orderParam' at entry.
-    if (historyAction !== 'POP') {
+    if (historyAction !== "POP") {
       setOrderParamEntry(orderParam);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [historyAction, setOrderParamEntry]);
 
-  let options: {
-    page_size: number,
-    page: number,
-    no_totals: boolean,
-    any_tags?: Array<string>,
-    any_languages?: Array<string>,
-    not_tags: Array<string>,
-    channel_ids?: Array<string>,
-    claim_ids?: Array<string>,
-    not_channel_ids?: Array<string>,
-    order_by: Array<string>,
-    release_time?: string,
-    claim_type?: string | Array<string>,
-    name?: string,
-    duration?: string | Array<string>,
-    reposted_claim_id?: string,
-    stream_types?: any,
-    fee_amount?: string,
-    has_source?: boolean,
-    has_no_source?: boolean,
-    limit_claims_per_channel?: number
+  const options: {
+    page_size: number;
+    page: number;
+    no_totals: boolean;
+    any_tags?: Array<string>;
+    any_languages?: Array<string>;
+    not_tags: Array<string>;
+    channel_ids?: Array<string>;
+    claim_ids?: Array<string>;
+    not_channel_ids?: Array<string>;
+    order_by: Array<string>;
+    release_time?: string;
+    claim_type?: string | Array<string>;
+    name?: string;
+    duration?: string | Array<string>;
+    reposted_claim_id?: string;
+    stream_types?: any;
+    fee_amount?: string;
+    has_source?: boolean;
+    has_no_source?: boolean;
+    limit_claims_per_channel?: number;
   } = {
     page_size: dynamicPageSize,
     page,
     name,
-    claim_type: claimType || ['stream', 'repost', 'channel'],
+    claim_type: claimType || ["stream", "repost", "channel"],
     // no_totals makes it so the sdk doesn't have to calculate total number pages for pagination
     // it's faster, but we will need to remove it if we start using total_pages
     no_totals: true,
     not_channel_ids: isChannel ? undefined : mutedAndBlockedChannelIds,
-// @ts-expect-error - TS2322 - Type 'readonly ["porn", "porno", "nsfw", "mature", "xxx", "sex", "creampie", "blowjob", "handjob", "vagina", "boobs", "big boobs", "big dick", "pussy", "cumshot", "anal", "hard fucking", "ass", "fuck", "hentai"] | []' is not assignable to type 'string[]'.
+    // @ts-expect-error - TS2322 - Type 'readonly ["porn", "porno", "nsfw", "mature", "xxx", "sex", "creampie", "blowjob", "handjob", "vagina", "boobs", "big boobs", "big dick", "pussy", "cumshot", "anal", "hard fucking", "ass", "fuck", "hentai"] | []' is not assignable to type 'string[]'.
     not_tags: !showNsfw ? MATURE_TAGS : [],
-// @ts-expect-error - TS2322 - Type 'string[] | readonly ["release_time"] | readonly ["effective_amount"] | readonly ["trending_score"]' is not assignable to type 'string[]'.
+    // @ts-expect-error - TS2322 - Type 'string[] | readonly ["release_time"] | readonly ["effective_amount"] | readonly ["trending_score"]' is not assignable to type 'string[]'.
     order_by: resolveOrderByOption(orderParam, sortByParam),
   };
 
   if (ENABLE_NO_SOURCE_CLAIMS && hasNoSource) {
     options.has_no_source = true;
-  } else if (hasSource || (!ENABLE_NO_SOURCE_CLAIMS && (!claimType || claimType === 'stream'))) {
+  } else if (hasSource || (!ENABLE_NO_SOURCE_CLAIMS && (!claimType || claimType === "stream"))) {
     options.has_source = true;
   }
 
@@ -299,13 +298,13 @@ function ClaimListDiscover(props: Props) {
   }
 
   if (tagsParam) {
-    if (tagsParam !== CS.TAGS_ALL && tagsParam !== '') {
+    if (tagsParam !== CS.TAGS_ALL && tagsParam !== "") {
       if (tagsParam === CS.TAGS_FOLLOWED) {
         options.any_tags = followed;
       } else if (Array.isArray(tagsParam)) {
         options.any_tags = tagsParam;
       } else {
-        options.any_tags = tagsParam.split(',');
+        options.any_tags = tagsParam.split(",");
       }
     }
   }
@@ -320,7 +319,7 @@ function ClaimListDiscover(props: Props) {
   } else if (claimType !== CS.CLAIM_CHANNEL) {
     if (orderParam === CS.ORDER_BY_TOP && freshnessParam !== CS.FRESH_ALL) {
       // @ts-expect-error - TS2769 (ts-migration)
-      options.release_time = `>${Math.floor(moment().subtract(1, freshnessParam).startOf('hour').unix())}`;
+      options.release_time = `>${Math.floor(moment().subtract(1, freshnessParam).startOf("hour").unix())}`;
     } else if (orderParam === CS.ORDER_BY_NEW || orderParam === CS.ORDER_BY_TRENDING) {
       // Warning - hack below
       // If users are following more than 10 channels or tags, limit results to stuff less than a year old
@@ -331,31 +330,31 @@ function ClaimListDiscover(props: Props) {
         (options.channel_ids && options.channel_ids.length > 20) ||
         (options.any_tags && options.any_tags.length > 20)
       ) {
-        options.release_time = `>${Math.floor(moment().subtract(3, CS.FRESH_MONTH).startOf('week').unix())}`;
+        options.release_time = `>${Math.floor(moment().subtract(3, CS.FRESH_MONTH).startOf("week").unix())}`;
       } else if (
         (options.channel_ids && options.channel_ids.length > 10) ||
         (options.any_tags && options.any_tags.length > 10)
       ) {
-        options.release_time = `>${Math.floor(moment().subtract(1, CS.FRESH_YEAR).startOf('week').unix())}`;
+        options.release_time = `>${Math.floor(moment().subtract(1, CS.FRESH_YEAR).startOf("week").unix())}`;
       } else {
         // Hack for at least the New page until https://github.com/lbryio/lbry-sdk/issues/2591 is fixed
-        options.release_time = `<${Math.floor(moment().startOf('minute').unix())}`;
+        options.release_time = `<${Math.floor(moment().startOf("minute").unix())}`;
       }
     }
   }
 
   if (durationParam) {
     if (durationParam === CS.DURATION_SHORT) {
-      options.duration = '<=240';
+      options.duration = "<=240";
     } else if (durationParam === CS.DURATION_LONG) {
-      options.duration = '>=1200';
+      options.duration = ">=1200";
     } else if (durationParam === CS.DURATION_MEDIUM) {
-      options.duration = ['<=1200', '>=240'];
+      options.duration = ["<=1200", ">=240"];
     }
   }
 
   if (streamTypeParam && streamTypeParam !== CS.CONTENT_ALL && claimType !== CS.CLAIM_CHANNEL) {
-    options.stream_types = typeof streamTypeParam === 'string' ? [streamTypeParam] : streamTypeParam;
+    options.stream_types = typeof streamTypeParam === "string" ? [streamTypeParam] : streamTypeParam;
   }
 
   if (claimTypeParam) {
@@ -370,18 +369,18 @@ function ClaimListDiscover(props: Props) {
 
   if (languageParams) {
     if (languageParams !== CS.LANGUAGES_ALL) {
-      options.any_languages = languageParams.split(',');
+      options.any_languages = languageParams.split(",");
     }
   }
 
   if (tagsParam) {
-    if (tagsParam !== CS.TAGS_ALL && tagsParam !== '') {
+    if (tagsParam !== CS.TAGS_ALL && tagsParam !== "") {
       if (tagsParam === CS.TAGS_FOLLOWED) {
         options.any_tags = followed;
       } else if (Array.isArray(tagsParam)) {
         options.any_tags = tagsParam;
       } else {
-        options.any_tags = tagsParam.split(',');
+        options.any_tags = tagsParam.split(",");
       }
     }
   }
@@ -389,15 +388,15 @@ function ClaimListDiscover(props: Props) {
   if (hideReposts && !options.reposted_claim_id && !forceShowReposts) {
     if (Array.isArray(options.claim_type)) {
       if (options.claim_type.length > 1) {
-        options.claim_type = options.claim_type.filter((claimType) => claimType !== 'repost');
+        options.claim_type = options.claim_type.filter((claimType) => claimType !== "repost");
       }
     } else {
-      options.claim_type = ['stream', 'channel'];
+      options.claim_type = ["stream", "channel"];
     }
   }
 
-// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"porn" | "porno" | "nsfw" | "mature" | "xxx" | "sex" | "creampie" | "blowjob" | "handjob" | "vagina" | "boobs" | "big boobs" | "big dick" | "pussy" | "cumshot" | "anal" | "hard fucking" | "ass" | "fuck" | "hentai"'.
-  const hasMatureTags = tagsParam && tagsParam.split(',').some((t) => MATURE_TAGS.includes(t));
+  // @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"porn" | "porno" | "nsfw" | "mature" | "xxx" | "sex" | "creampie" | "blowjob" | "handjob" | "vagina" | "boobs" | "big boobs" | "big dick" | "pussy" | "cumshot" | "anal" | "hard fucking" | "ass" | "fuck" | "hentai"'.
+  const hasMatureTags = tagsParam && tagsParam.split(",").some((t) => MATURE_TAGS.includes(t));
 
   const searchKey = createNormalizedClaimSearchKey(options);
   const claimSearchResult = claimSearchByQuery[searchKey];
@@ -446,7 +445,7 @@ function ClaimListDiscover(props: Props) {
               <Button
                 // @ts-expect-error - TS2322 (ts-migration)
                 button="link"
-                label={__('try again in a few seconds.')}
+                label={__("try again in a few seconds.")}
                 onClick={() => setForceRefresh(Date.now())}
               />
             ),
@@ -461,7 +460,7 @@ function ClaimListDiscover(props: Props) {
           // @ts-expect-error - TS2322 (ts-migration)
           tokens={{
             // @ts-expect-error - TS2322 (ts-migration)
-            contact_support: <Button button="link" label={__('contact support')} href="https://lbry.com/faq/support" />,
+            contact_support: <Button button="link" label={__("contact support")} href="https://lbry.com/faq/support" />,
           }}
         >
           If you continue to have issues, please %contact_support%.
@@ -486,15 +485,15 @@ function ClaimListDiscover(props: Props) {
 
     // Compare every field except for 'page' and 'release_time'.
     // There might be better ways to achieve this.
-// @ts-expect-error - TS2698 - Spread types may only be created from object types.
-    let tmpPrevOptions = { ...prevOptions };
+    // @ts-expect-error - TS2698 - Spread types may only be created from object types.
+    const tmpPrevOptions = { ...prevOptions };
     tmpPrevOptions.page = -1;
-    tmpPrevOptions.release_time = '';
+    tmpPrevOptions.release_time = "";
 
-// @ts-expect-error - TS2698 - Spread types may only be created from object types.
-    let tmpOptions = { ...options };
+    // @ts-expect-error - TS2698 - Spread types may only be created from object types.
+    const tmpOptions = { ...options };
     tmpOptions.page = -1;
-    tmpOptions.release_time = '';
+    tmpOptions.release_time = "";
 
     return JSON.stringify(tmpOptions) === JSON.stringify(tmpPrevOptions);
   }
@@ -503,7 +502,7 @@ function ClaimListDiscover(props: Props) {
     if (t === CS.TAGS_ALL || t === CS.TAGS_FOLLOWED) {
       return t;
     } else if (Array.isArray(t)) {
-      return t.join(',');
+      return t.join(",");
     }
   }
 
@@ -524,8 +523,8 @@ function ClaimListDiscover(props: Props) {
       orderBy === CS.ORDER_BY_TRENDING
         ? CS.ORDER_BY_TRENDING_VALUE
         : orderBy === CS.ORDER_BY_NEW
-        ? CS.ORDER_BY_NEW_VALUE
-        : CS.ORDER_BY_TOP_VALUE;
+          ? CS.ORDER_BY_NEW_VALUE
+          : CS.ORDER_BY_TOP_VALUE;
 
     if (orderBy === CS.ORDER_BY_NEW && sortBy === CS.SORT_BY.OLDEST.key) {
       return order_by.map((x) => `${CS.SORT_BY.OLDEST.opt}${x}`);

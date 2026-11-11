@@ -1,13 +1,13 @@
-import React from 'react';
-import { Modal } from 'modal/modal';
-import { DOMAIN } from 'config';
+import React from "react";
+import { Modal } from "modal/modal";
+import { DOMAIN } from "config";
 
 type Props = {
-  file: FileWithPath,
-  upload: (arg1: FileWithPath, arg2: (arg1: string) => void) => void,
-  cb: (arg1: string) => void,
-  closeModal: () => void,
-  updatePublishForm: (arg1: Record<any, any>) => void
+  file: FileWithPath;
+  upload: (arg1: FileWithPath, arg2: (arg1: string) => void) => void;
+  cb: (arg1: string) => void;
+  closeModal: () => void;
+  updatePublishForm: (arg1: Record<any, any>) => void;
 };
 
 class ModalConfirmThumbnailUpload extends React.PureComponent<Props> {
@@ -26,16 +26,16 @@ class ModalConfirmThumbnailUpload extends React.PureComponent<Props> {
 
     return (
       <Modal
-// @ts-expect-error - TS2322 - Type '{ children: Element[]; isOpen: true; title: string; contentLabel: string; type: string; confirmButtonLabel: string; onConfirmed: () => void; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
+        // @ts-expect-error - TS2322 - Type '{ children: Element[]; isOpen: true; title: string; contentLabel: string; type: string; confirmButtonLabel: string; onConfirmed: () => void; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
         isOpen
-        title={__('Upload thumbnail')}
-        contentLabel={__('Confirm Thumbnail Upload')}
+        title={__("Upload thumbnail")}
+        contentLabel={__("Confirm Thumbnail Upload")}
         type="confirm"
-        confirmButtonLabel={__('Upload')}
+        confirmButtonLabel={__("Upload")}
         onConfirmed={() => this.upload()}
         onAborted={closeModal}
       >
-        <label>{__('Are you sure you want to upload this thumbnail to %domain%', { domain: DOMAIN })}?</label>
+        <label>{__("Are you sure you want to upload this thumbnail to %domain%", { domain: DOMAIN })}?</label>
 
         <blockquote>{filePath}</blockquote>
       </Modal>

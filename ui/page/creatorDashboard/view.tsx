@@ -1,16 +1,16 @@
-import * as PAGES from 'constants/pages';
-import React from 'react';
-import Page from 'component/page';
-import Spinner from 'component/spinner';
-import Button from 'component/button';
-import CreatorAnalytics from 'component/creatorAnalytics';
-import ChannelSelector from 'component/channelSelector';
-import Yrbl from 'component/yrbl';
+import * as PAGES from "constants/pages";
+import React from "react";
+import Page from "component/page";
+import Spinner from "component/spinner";
+import Button from "component/button";
+import CreatorAnalytics from "component/creatorAnalytics";
+import ChannelSelector from "component/channelSelector";
+import Yrbl from "component/yrbl";
 
 type Props = {
-  hasChannels: boolean,
-  fetchingChannels: boolean,
-  activeChannelClaim: ChannelClaim | null | undefined
+  hasChannels: boolean;
+  fetchingChannels: boolean;
+  activeChannelClaim: ChannelClaim | null | undefined;
 };
 
 export default function CreatorDashboardPage(props: Props) {
@@ -32,7 +32,7 @@ export default function CreatorDashboardPage(props: Props) {
           actions={
             <div className="section__actions">
               {/* @ts-expect-error - TS2322 (ts-migration) */}
-              <Button button="primary" navigate={`/$/${PAGES.CHANNEL_NEW}`} label={__('Create A Channel')} />
+              <Button button="primary" navigate={`/$/${PAGES.CHANNEL_NEW}`} label={__("Create A Channel")} />
             </div>
           }
         />

@@ -1,6 +1,6 @@
 //@ts-nocheck
-import {createSelector} from 'reselect';
-import REWARDS from 'rewards';
+import { createSelector } from "reselect";
+import REWARDS from "rewards";
 
 const selectState = (state: unknown) => state.rewards || {};
 
@@ -28,14 +28,16 @@ export const selectUnclaimedRewardValue = createSelector(selectUnclaimedRewards,
 
 export const selectClaimsPendingByType = createSelector(selectState, (state) => state.claimPendingByType);
 
-const selectIsClaimRewardPending = (state: unknown, props: unknown) => selectClaimsPendingByType(state, props)[props.reward_type];
+const selectIsClaimRewardPending = (state: unknown, props: unknown) =>
+  selectClaimsPendingByType(state, props)[props.reward_type];
 
 export const makeSelectIsRewardClaimPending = () =>
   createSelector(selectIsClaimRewardPending, (isClaiming) => isClaiming);
 
 export const selectClaimErrorsByType = createSelector(selectState, (state) => state.claimErrorsByType);
 
-const selectClaimRewardError = (state: unknown, props: unknown) => selectClaimErrorsByType(state, props)[props.reward_type];
+const selectClaimRewardError = (state: unknown, props: unknown) =>
+  selectClaimErrorsByType(state, props)[props.reward_type];
 
 export const makeSelectClaimRewardError = () => createSelector(selectClaimRewardError, (errorMessage) => errorMessage);
 

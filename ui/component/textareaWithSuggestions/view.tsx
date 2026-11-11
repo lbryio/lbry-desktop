@@ -1,21 +1,21 @@
-import {EMOTES_48px as EMOTES} from 'constants/emotes';
-import { matchSorter } from 'match-sorter';
-import { SEARCH_OPTIONS } from 'constants/search';
-import * as KEYCODES from 'constants/keycodes';
-import Autocomplete from '@mui/material/Autocomplete';
-import BusyIndicator from 'component/common/busy-indicator';
-import EMOJIS from 'emoji-dictionary';
-import LbcSymbol from 'component/common/lbc-symbol';
-import Popper from '@mui/material/Popper';
-import React from 'react';
-import TextareaSuggestionsItem from 'component/textareaSuggestionsItem';
-import TextField from '@mui/material/TextField';
-import useLighthouse from 'effects/use-lighthouse';
-import useThrottle from 'effects/use-throttle';
+import { EMOTES_48px as EMOTES } from "constants/emotes";
+import { matchSorter } from "match-sorter";
+import { SEARCH_OPTIONS } from "constants/search";
+import * as KEYCODES from "constants/keycodes";
+import Autocomplete from "@mui/material/Autocomplete";
+import BusyIndicator from "component/common/busy-indicator";
+import EMOJIS from "emoji-dictionary";
+import LbcSymbol from "component/common/lbc-symbol";
+import Popper from "@mui/material/Popper";
+import React from "react";
+import TextareaSuggestionsItem from "component/textareaSuggestionsItem";
+import TextField from "@mui/material/TextField";
+import useLighthouse from "effects/use-lighthouse";
+import useThrottle from "effects/use-throttle";
 
 const SUGGESTION_REGEX = new RegExp(
   '(?<Mention>(?:^| |\n)@[^\\s=&#$@%?:;/\\"<>%{}|^~[]*(?::[\\w]+)?)|(?<Emote>(?:^| |\n):[\\w+-]*:?)',
-  'gm'
+  "gm"
 );
 
 /** Regex Explained step-by-step:
@@ -36,30 +36,30 @@ const INPUT_DEBOUNCE_MS = 1000;
 const EMOJI_MIN_CHARACTERS = 2;
 
 type Props = {
-  canonicalCommentors?: Array<string>,
-  canonicalCreatorUri?: string,
-  canonicalSearch?: Array<string>,
-  canonicalSubscriptions?: Array<string>,
-  canonicalTop?: string,
-  className?: string,
-  commentorUris?: Array<string>,
-  disabled?: boolean,
-  hasNewResolvedResults?: boolean,
-  id: string,
-  inputRef: any,
-  isLivestream?: boolean,
-  maxLength?: number,
-  placeholder?: string,
-  searchQuery?: string,
-  showMature: boolean,
-  type?: string,
-  uri?: string,
-  value: any,
-  doResolveUris: (arg1: Array<string>) => void,
-  doSetMentionSearchResults: (arg1: string, arg2: Array<string>) => void,
-  onBlur: (arg1?: any) => any,
-  onChange: (arg1?: any) => any,
-  onFocus: (arg1?: any) => any
+  canonicalCommentors?: Array<string>;
+  canonicalCreatorUri?: string;
+  canonicalSearch?: Array<string>;
+  canonicalSubscriptions?: Array<string>;
+  canonicalTop?: string;
+  className?: string;
+  commentorUris?: Array<string>;
+  disabled?: boolean;
+  hasNewResolvedResults?: boolean;
+  id: string;
+  inputRef: any;
+  isLivestream?: boolean;
+  maxLength?: number;
+  placeholder?: string;
+  searchQuery?: string;
+  showMature: boolean;
+  type?: string;
+  uri?: string;
+  value: any;
+  doResolveUris: (arg1: Array<string>) => void;
+  doSetMentionSearchResults: (arg1: string, arg2: Array<string>) => void;
+  onBlur: (arg1?: any) => any;
+  onChange: (arg1?: any) => any;
+  onFocus: (arg1?: any) => any;
 };
 
 export default function TextareaWithSuggestions(props: Props) {
@@ -92,16 +92,19 @@ export default function TextareaWithSuggestions(props: Props) {
   const inputDefaultProps = { className, placeholder, maxLength, type, disabled } as const;
 
   const [suggestionValue, setSuggestionValue] = React.useState<any>(undefined);
-  const [highlightedSuggestion, setHighlightedSuggestion] = React.useState('');
+  const [highlightedSuggestion, setHighlightedSuggestion] = React.useState("");
   const [shouldClose, setClose] = React.useState<any>();
-  const [debouncedTerm, setDebouncedTerm] = React.useState('');
+  const [debouncedTerm, setDebouncedTerm] = React.useState("");
 
   const suggestionTerm = suggestionValue && suggestionValue.term;
   const isEmote = suggestionValue && suggestionValue.isEmote;
   const isMention = suggestionValue && !suggestionValue.isEmote;
-  const invalidTerm = suggestionTerm && isMention && suggestionTerm.charAt(1) === ':';
+  const invalidTerm = suggestionTerm && isMention && suggestionTerm.charAt(1) === ":";
 
-  const additionalOptions = { isBackgroundSearch: false, [SEARCH_OPTIONS.CLAIM_TYPE]: SEARCH_OPTIONS.INCLUDE_CHANNELS } as const;
+  const additionalOptions = {
+    isBackgroundSearch: false,
+    [SEARCH_OPTIONS.CLAIM_TYPE]: SEARCH_OPTIONS.INCLUDE_CHANNELS,
+  } as const;
   const { results, loading } = useLighthouse(debouncedTerm, showMature, SEARCH_SIZE, additionalOptions, 0);
   const stringifiedResults = JSON.stringify(results);
 
@@ -110,9 +113,10 @@ export default function TextareaWithSuggestions(props: Props) {
   const showPlaceholder =
     isMention && !invalidTerm && (isTyping || loading || (results && results.length > 0 && !hasNewResolvedResults));
 
-// @ts-expect-error - TS2339 - Property 'includes' does not exist on type 'unknown'.
-  const shouldFilter = (uri: unknown, previous: unknown) => uri !== canonicalCreatorUri && (!previous || !previous.includes(uri));
-// @ts-expect-error - TS2554 - Expected 2 arguments, but got 1.
+  const shouldFilter = (uri: unknown, previous: unknown) =>
+    // @ts-expect-error - TS2339 (ts-migration)
+    uri !== canonicalCreatorUri && (!previous || !previous.includes(uri));
+  // @ts-expect-error - TS2554 - Expected 2 arguments, but got 1.
   const filteredCommentors = canonicalCommentors && canonicalCommentors.filter((uri) => shouldFilter(uri));
   const filteredSubs = canonicalSubs && canonicalSubs.filter((uri) => shouldFilter(uri, filteredCommentors));
   const filteredTop =
@@ -136,41 +140,41 @@ export default function TextareaWithSuggestions(props: Props) {
     emojiNames = hasMinEmojiLength ? EMOJIS.names.filter((name) => !emoteNames.includes(`:${name}:`)) : [];
     const emotesAndEmojis = [...emoteNames, ...emojiNames];
 
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
     allOptions.push(...emotesAndEmojis);
   } else {
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
     if (canonicalCreatorUri) allOptions.push(canonicalCreatorUri);
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
     if (filteredSubs) allOptions.push(...filteredSubs);
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
     if (filteredCommentors) allOptions.push(...filteredCommentors);
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
     if (filteredTop) allOptions.push(filteredTop);
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
     if (filteredSearch) allOptions.push(...filteredSearch);
   }
 
   const allOptionsGrouped =
-// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
     allOptions.length > 0
-// @ts-expect-error - TS2339 - Property 'map' does not exist on type 'unknown'.
-      ? allOptions.map((option) => {
+      ? // @ts-expect-error - TS2339 - Property 'map' does not exist on type 'unknown'.
+        allOptions.map((option) => {
           const groupName = isEmote
-            ? (emoteNames.includes(option) && __('Emotes')) || (emojiNames.includes(option) && __('Emojis'))
-            : (canonicalCreatorUri === option && __('Creator')) ||
-              (filteredSubs && filteredSubs.includes(option) && __('Following')) ||
-              (filteredCommentors && filteredCommentors.includes(option) && __('From Comments')) ||
-              (filteredTop && filteredTop === option && 'Top') ||
-              (filteredSearch && filteredSearch.includes(option) && __('From Search'));
+            ? (emoteNames.includes(option) && __("Emotes")) || (emojiNames.includes(option) && __("Emojis"))
+            : (canonicalCreatorUri === option && __("Creator")) ||
+              (filteredSubs && filteredSubs.includes(option) && __("Following")) ||
+              (filteredCommentors && filteredCommentors.includes(option) && __("From Comments")) ||
+              (filteredTop && filteredTop === option && "Top") ||
+              (filteredSearch && filteredSearch.includes(option) && __("From Search"));
 
           let emoteLabel;
           if (isEmote) {
-            emoteLabel = `:${option.replaceAll(':', '')}:`;
+            emoteLabel = `:${option.replaceAll(":", "")}:`;
           }
 
           return {
-            label: emoteLabel || option.replace('lbry://', '').replace('#', ':'),
+            label: emoteLabel || option.replace("lbry://", "").replace("#", ":"),
             group: groupName,
           };
         })
@@ -178,7 +182,7 @@ export default function TextareaWithSuggestions(props: Props) {
 
   const allMatches =
     useSuggestionMatch(
-      suggestionTerm || '',
+      suggestionTerm || "",
       allOptionsGrouped.map(({ label }) => label)
     ) || [];
 
@@ -203,7 +207,7 @@ export default function TextareaWithSuggestions(props: Props) {
     const groupValue = groups && Object.keys(groups).find((group) => groups[group]);
 
     const previousLastIndexes: unknown = [];
-    let isEmote = groupValue && groupValue === 'Emote';
+    let isEmote = groupValue && groupValue === "Emote";
     let currentSuggestionIndex = exec && exec.index;
     let currentLastIndex = exec && SUGGESTION_REGEX.lastIndex;
     let currentSuggestionValue =
@@ -223,10 +227,10 @@ export default function TextareaWithSuggestions(props: Props) {
         const groupValue = groups && Object.keys(groups).find((group) => groups[group]);
 
         if (tempExec) {
-          isEmote = groupValue && groupValue === 'Emote';
+          isEmote = groupValue && groupValue === "Emote";
           currentSuggestionIndex = previousLastIndex + tempExec.index;
           currentLastIndex = previousLastIndex + tempRe.lastIndex;
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+          // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
           previousLastIndexes.push(currentLastIndex);
         }
 
@@ -239,7 +243,7 @@ export default function TextareaWithSuggestions(props: Props) {
     }
 
     if (currentSuggestionValue) {
-      const token = isEmote ? ':' : '@';
+      const token = isEmote ? ":" : "@";
       const tokenIndex = currentSuggestionValue.indexOf(token);
 
       setSuggestionValue({
@@ -266,7 +270,7 @@ export default function TextareaWithSuggestions(props: Props) {
       const contentEnd =
         messageValue.length > suggestionValue.lastIndex
           ? messageValue.substring(suggestionValue.lastIndex, messageValue.length)
-          : ' ';
+          : " ";
 
       const newValue = contentBegin + replaceValue + contentEnd;
 
@@ -287,7 +291,7 @@ export default function TextareaWithSuggestions(props: Props) {
 
     if (isTyping && suggestionTerm && !invalidTerm) {
       const timer = setTimeout(() => {
-        setDebouncedTerm(!hasMinLength ? '' : suggestionTerm);
+        setDebouncedTerm(!hasMinLength ? "" : suggestionTerm);
       }, INPUT_DEBOUNCE_MS);
 
       return () => clearTimeout(timer);
@@ -309,9 +313,9 @@ export default function TextareaWithSuggestions(props: Props) {
     if (!isLivestream) return;
 
     if (suggestionTerm && inputRef) {
-      inputRef.current.setAttribute('term', suggestionTerm);
+      inputRef.current.setAttribute("term", suggestionTerm);
     } else {
-      inputRef.current.removeAttribute('term');
+      inputRef.current.removeAttribute("term");
     }
   }, [inputRef, isLivestream, suggestionTerm]);
 
@@ -329,16 +333,16 @@ export default function TextareaWithSuggestions(props: Props) {
 
       if (highlightedSuggestion && keyCode === KEYCODES.TAB) {
         e.preventDefault();
-// @ts-expect-error - TS2339 - Property 'label' does not exist on type 'string'.
+        // @ts-expect-error - TS2339 - Property 'label' does not exist on type 'string'.
         handleSelect(highlightedSuggestion.label);
       }
     }
 
-// @ts-expect-error - TS2769 - No overload matches this call.
-    window.addEventListener('keydown', handleKeyDown);
+    // @ts-expect-error - TS2769 - No overload matches this call.
+    window.addEventListener("keydown", handleKeyDown);
 
-// @ts-expect-error - TS2769 - No overload matches this call.
-    return () => window.removeEventListener('keydown', handleKeyDown);
+    // @ts-expect-error - TS2769 - No overload matches this call.
+    return () => window.removeEventListener("keydown", handleKeyDown);
   }, [handleSelect, highlightedSuggestion, suggestionTerm]);
 
   /** ------ **/
@@ -348,10 +352,10 @@ export default function TextareaWithSuggestions(props: Props) {
   const renderGroup = (groupName: string, children: any) => (
     <div key={groupName} className="textareaSuggestions__group">
       <label className="textareaSuggestions__label">
-        {groupName === 'Top' ? (
-          <LbcSymbol prefix={__('Winning Search for %matching_term%', { matching_term: searchQuery })} />
+        {groupName === "Top" ? (
+          <LbcSymbol prefix={__("Winning Search for %matching_term%", { matching_term: searchQuery })} />
         ) : suggestionTerm && suggestionTerm.length > 1 ? (
-          __('%group_name% matching %matching_term%', { group_name: groupName, matching_term: suggestionTerm })
+          __("%group_name% matching %matching_term%", { group_name: groupName, matching_term: suggestionTerm })
         ) : (
           groupName
         )}
@@ -387,23 +391,23 @@ export default function TextareaWithSuggestions(props: Props) {
       freeSolo
       fullWidth
       // @ts-expect-error - TS2339 (ts-migration)
-      getOptionLabel={(option) => option.label || ''}
+      getOptionLabel={(option) => option.label || ""}
       // @ts-expect-error - TS2339 (ts-migration)
       groupBy={(option) => option.group}
       id={id}
       inputValue={messageValue}
       loading={allMatches.length === 0 || showPlaceholder}
-      loadingText={showPlaceholder ? <BusyIndicator message={__('Searching...')} /> : __('Nothing found')}
+      loadingText={showPlaceholder ? <BusyIndicator message={__("Searching...")} /> : __("Nothing found")}
       onBlur={() => onBlur && onBlur()}
       /* Different from onInputChange, onChange is only used for the selected value,
         so here it is acting simply as a selection handler (see it as onSelect) */
       // @ts-expect-error - TS2339 (ts-migration)
       onChange={(event, value) => handleSelect(value.label)}
-      onClose={(event, reason) => reason !== 'selectOption' && setClose(true)}
+      onClose={(event, reason) => reason !== "selectOption" && setClose(true)}
       onFocus={() => onFocus && onFocus()}
       // @ts-expect-error - TS2345 (ts-migration)
       onHighlightChange={(event, option) => setHighlightedSuggestion(option)}
-      onInputChange={(event, value, reason) => reason === 'input' && handleInputChange(value)}
+      onInputChange={(event, value, reason) => reason === "input" && handleInputChange(value)}
       onOpen={() => suggestionTerm && setClose(false)}
       /* 'open' is for the popper box component, set to check for a valid term
         or else it will be displayed all the time as empty (no options) */
@@ -425,9 +429,9 @@ function useSuggestionMatch(term: string, list: Array<string>) {
   const throttledTerm = useThrottle(term);
 
   return React.useMemo(() => {
-    return !throttledTerm || throttledTerm.trim() === ''
+    return !throttledTerm || throttledTerm.trim() === ""
       ? undefined
-      // @ts-expect-error - TS2322 (ts-migration)
-      : matchSorter(list, term, { keys: [(item: unknown) => item] });
+      : // @ts-expect-error - TS2322 (ts-migration)
+        matchSorter(list, term, { keys: [(item: unknown) => item] });
   }, [list, term, throttledTerm]);
 }

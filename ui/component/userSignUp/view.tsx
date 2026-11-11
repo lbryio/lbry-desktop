@@ -1,45 +1,45 @@
-import * as PAGES from 'constants/pages';
-import * as SETTINGS from 'constants/settings';
-import React from 'react';
-import classnames from 'classnames';
-import { useHistory } from 'react-router';
-import UserEmailNew from 'component/userEmailNew';
-import UserEmailVerify from 'component/userEmailVerify';
-import UserChannelFollowIntro from 'component/userChannelFollowIntro';
-import UserTagFollowIntro from 'component/userTagFollowIntro';
-import REWARDS from 'rewards';
-import Spinner from 'component/spinner';
-import useFetched from 'effects/use-fetched';
-import usePrevious from 'effects/use-previous';
-import { SHOW_TAGS_INTRO } from 'config';
+import * as PAGES from "constants/pages";
+import * as SETTINGS from "constants/settings";
+import React from "react";
+import classnames from "classnames";
+import { useHistory } from "react-router";
+import UserEmailNew from "component/userEmailNew";
+import UserEmailVerify from "component/userEmailVerify";
+import UserChannelFollowIntro from "component/userChannelFollowIntro";
+import UserTagFollowIntro from "component/userTagFollowIntro";
+import REWARDS from "rewards";
+import Spinner from "component/spinner";
+import useFetched from "effects/use-fetched";
+import usePrevious from "effects/use-previous";
+import { SHOW_TAGS_INTRO } from "config";
 
-const REDIRECT_PARAM = 'redirect';
-const REDIRECT_IMMEDIATELY_PARAM = 'immediate';
-const STEP_PARAM = 'step';
+const REDIRECT_PARAM = "redirect";
+const REDIRECT_IMMEDIATELY_PARAM = "immediate";
+const STEP_PARAM = "step";
 
 type Props = {
-  user: User | null | undefined,
-  emailToVerify: string | null | undefined,
-  channels: Array<string> | null | undefined,
-  balance: number | null | undefined,
-  fetchingChannels: boolean,
-  claimingReward: boolean,
-  claimConfirmEmailReward: () => void,
-  claimNewUserReward: () => void,
-  fetchUser: () => void,
-  claimedRewards: Array<Reward>,
-  youtubeChannels: Array<any>,
-  syncEnabled: boolean,
-  hasSynced: boolean,
-  syncingWallet: boolean,
-  creatingChannel: boolean,
-  setClientSetting: (arg1: string, arg2: boolean, arg3?: boolean | null | undefined) => void,
-  followingAcknowledged: boolean,
-  tagsAcknowledged: boolean,
-  rewardsAcknowledged: boolean,
-  interestedInYoutubeSync: boolean,
-  doToggleInterestedInYoutubeSync: () => void,
-  prefsReady: boolean
+  user: User | null | undefined;
+  emailToVerify: string | null | undefined;
+  channels: Array<string> | null | undefined;
+  balance: number | null | undefined;
+  fetchingChannels: boolean;
+  claimingReward: boolean;
+  claimConfirmEmailReward: () => void;
+  claimNewUserReward: () => void;
+  fetchUser: () => void;
+  claimedRewards: Array<Reward>;
+  youtubeChannels: Array<any>;
+  syncEnabled: boolean;
+  hasSynced: boolean;
+  syncingWallet: boolean;
+  creatingChannel: boolean;
+  setClientSetting: (arg1: string, arg2: boolean, arg3?: boolean | null | undefined) => void;
+  followingAcknowledged: boolean;
+  tagsAcknowledged: boolean;
+  rewardsAcknowledged: boolean;
+  interestedInYoutubeSync: boolean;
+  doToggleInterestedInYoutubeSync: () => void;
+  prefsReady: boolean;
 };
 
 function UserSignUp(props: Props) {
@@ -87,8 +87,8 @@ function UserSignUp(props: Props) {
   // The possible screens for the sign in flow
   const showEmail = !hasVerifiedEmail;
   const showEmailVerification = (emailToVerify && !hasVerifiedEmail) || (!hasVerifiedEmail && passwordSet);
-  const showFollowIntro = step === 'channels' || (hasVerifiedEmail && !followingAcknowledged);
-  const showTagsIntro = SHOW_TAGS_INTRO && (step === 'tags' || (hasVerifiedEmail && !tagsAcknowledged));
+  const showFollowIntro = step === "channels" || (hasVerifiedEmail && !followingAcknowledged);
+  const showTagsIntro = SHOW_TAGS_INTRO && (step === "tags" || (hasVerifiedEmail && !tagsAcknowledged));
   const canHijackSignInFlowWithSpinner = hasVerifiedEmail && !showFollowIntro && !showTagsIntro && !rewardsAcknowledged;
   const isCurrentlyFetchingSomething = fetchingChannels || claimingReward || syncingWallet || creatingChannel;
   const isWaitingForSomethingToFinish =
@@ -98,7 +98,7 @@ function UserSignUp(props: Props) {
     canHijackSignInFlowWithSpinner && (isCurrentlyFetchingSomething || isWaitingForSomethingToFinish);
 
   function setSettingAndSync(setting: unknown, value: unknown) {
-// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
+    // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
     setClientSetting(setting, value, true);
   }
 
@@ -144,9 +144,9 @@ function UserSignUp(props: Props) {
     showFollowIntro && (
       <UserChannelFollowIntro
         onContinue={() => {
-          if (urlParams.get('reset_scroll')) {
-            urlParams.delete('reset_scroll');
-            urlParams.append('reset_scroll', '2');
+          if (urlParams.get("reset_scroll")) {
+            urlParams.delete("reset_scroll");
+            urlParams.append("reset_scroll", "2");
           }
 
           urlParams.delete(STEP_PARAM);
@@ -156,9 +156,9 @@ function UserSignUp(props: Props) {
         }}
         // @ts-expect-error - TS2322 (ts-migration)
         onBack={() => {
-          if (urlParams.get('reset_scroll')) {
-            urlParams.delete('reset_scroll');
-            urlParams.append('reset_scroll', '3');
+          if (urlParams.get("reset_scroll")) {
+            urlParams.delete("reset_scroll");
+            urlParams.append("reset_scroll", "3");
           }
 
           setSettingAndSync(SETTINGS.FOLLOWING_ACKNOWLEDGED, false);
@@ -191,7 +191,7 @@ function UserSignUp(props: Props) {
   ];
 
   function getSignInStep() {
-    for (var i = SIGN_IN_FLOW.length - 1; i > -1; i--) {
+    for (let i = SIGN_IN_FLOW.length - 1; i > -1; i--) {
       const Component = SIGN_IN_FLOW[i];
       if (Component) {
         // If we want to redirect immediately,
@@ -223,11 +223,11 @@ function UserSignUp(props: Props) {
   }, [componentToRender, claimNewUserReward]);
 
   if (!componentToRender) {
-    replace(redirect || '/');
+    replace(redirect || "/");
   }
 
   return (
-    <section className={classnames('main--contained', { 'main--hoisted': isScrollable })}>{componentToRender}</section>
+    <section className={classnames("main--contained", { "main--hoisted": isScrollable })}>{componentToRender}</section>
   );
 }
 

@@ -10,7 +10,7 @@ const parseJson = (data: unknown, filters = []) => {
     return temp;
   });
   // Beautify JSON
-  return JSON.stringify(list, null, '\t');
+  return JSON.stringify(list, null, "\t");
 };
 
 // CSV Parser
@@ -24,7 +24,7 @@ const parseCsv = (data: unknown, filters = []) => {
     Object.entries(item).forEach(([key]: [any]) => {
       if (!filters.includes(key)) list.push(key);
     });
-    return list.join(',');
+    return list.join(",");
   };
 
   // Get rows content
@@ -39,9 +39,9 @@ const parseCsv = (data: unknown, filters = []) => {
             row.push(sanitizedValue);
           }
         });
-        return row.join(',');
+        return row.join(",");
       })
-      .join('\n');
+      .join("\n");
 
   // Return CSV string
   return `${getHeaders(data[0])} \n ${getData(data)}`;

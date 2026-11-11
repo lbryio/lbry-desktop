@@ -1,6 +1,6 @@
-import React from 'react';
-import Page from 'component/page';
-import ReportContent from 'component/reportContent';
+import React from "react";
+import Page from "component/page";
+import ReportContent from "component/reportContent";
 
 export default function ReportContentPage(props: any) {
   return (
@@ -9,8 +9,8 @@ export default function ReportContentPage(props: any) {
       className="main--report-content"
       backout={{
         // @ts-expect-error - TS2561 (ts-migration)
-        backoutLabel: __('Done'),
-        title: __('Report content'),
+        backoutLabel: __("Done"),
+        title: __("Report content"),
       }}
     >
       <ReportContent />

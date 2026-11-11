@@ -1,5 +1,5 @@
 //@ts-nocheck
-import * as ACTIONS from 'constants/action_types';
+import * as ACTIONS from "constants/action_types";
 
 const reducers: Record<string, any> = {};
 
@@ -7,8 +7,8 @@ const defaultState = {
   authenticationIsPending: false,
   userIsPending: false,
   emailNewIsPending: false,
-  emailNewErrorMessage: '',
-  emailToVerify: '',
+  emailNewErrorMessage: "",
+  emailToVerify: "",
   emailAlreadyExists: false,
   emailDoesNotExist: false,
   resendingVerificationEmail: false,
@@ -18,7 +18,7 @@ const defaultState = {
   passwordSetPending: false,
   passwordSetSuccess: false,
   passwordSetError: undefined,
-  inviteNewErrorMessage: '',
+  inviteNewErrorMessage: "",
   inviteNewIsPending: false,
   inviteStatusIsPending: false,
   invitesRemaining: undefined,
@@ -28,9 +28,9 @@ const defaultState = {
   user: undefined,
   accessToken: undefined,
   youtubeChannelImportPending: false,
-  youtubeChannelImportErrorMessage: '',
+  youtubeChannelImportErrorMessage: "",
   referrerSetIsPending: false,
-  referrerSetError: '',
+  referrerSetError: "",
 } as const;
 
 reducers[ACTIONS.AUTHENTICATION_STARTED] = (state: unknown) =>
@@ -78,7 +78,7 @@ reducers[ACTIONS.USER_PHONE_NEW_STARTED] = (state: unknown, action: unknown) => 
   user.country_code = action.data.country_code;
   return Object.assign({}, state, {
     phoneNewIsPending: true,
-    phoneNewErrorMessage: '',
+    phoneNewErrorMessage: "",
     user,
   });
 };
@@ -103,12 +103,12 @@ reducers[ACTIONS.USER_PHONE_NEW_FAILURE] = (state: unknown, action: unknown) =>
 reducers[ACTIONS.USER_PHONE_VERIFY_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
     phoneVerifyIsPending: true,
-    phoneVerifyErrorMessage: '',
+    phoneVerifyErrorMessage: "",
   });
 
 reducers[ACTIONS.USER_PHONE_VERIFY_SUCCESS] = (state: unknown, action: unknown) =>
   Object.assign({}, state, {
-    phoneToVerify: '',
+    phoneToVerify: "",
     phoneVerifyIsPending: false,
     user: action.data.user,
   });
@@ -122,7 +122,7 @@ reducers[ACTIONS.USER_PHONE_VERIFY_FAILURE] = (state: unknown, action: unknown) 
 reducers[ACTIONS.USER_EMAIL_NEW_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
     emailNewIsPending: true,
-    emailNewErrorMessage: '',
+    emailNewErrorMessage: "",
     emailAlreadyExists: false,
     emailDoesNotExist: false,
   });
@@ -179,14 +179,14 @@ reducers[ACTIONS.USER_PASSWORD_SET_CLEAR] = (state: unknown) =>
 reducers[ACTIONS.USER_EMAIL_VERIFY_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
     emailVerifyIsPending: true,
-    emailVerifyErrorMessage: '',
+    emailVerifyErrorMessage: "",
   });
 
 reducers[ACTIONS.USER_EMAIL_VERIFY_SUCCESS] = (state: unknown, action: unknown) => {
   const user = Object.assign({}, state.user);
   user.primary_email = action.data.email;
   return Object.assign({}, state, {
-    emailToVerify: '',
+    emailToVerify: "",
     emailVerifyIsPending: false,
     user,
   });
@@ -206,13 +206,13 @@ reducers[ACTIONS.USER_EMAIL_VERIFY_SET] = (state: unknown, action: unknown) =>
 reducers[ACTIONS.USER_IDENTITY_VERIFY_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
     identityVerifyIsPending: true,
-    identityVerifyErrorMessage: '',
+    identityVerifyErrorMessage: "",
   });
 
 reducers[ACTIONS.USER_IDENTITY_VERIFY_SUCCESS] = (state: unknown, action: unknown) =>
   Object.assign({}, state, {
     identityVerifyIsPending: false,
-    identityVerifyErrorMessage: '',
+    identityVerifyErrorMessage: "",
     user: action.data.user,
   });
 
@@ -247,13 +247,13 @@ reducers[ACTIONS.USER_INVITE_STATUS_FETCH_SUCCESS] = (state: unknown, action: un
 reducers[ACTIONS.USER_INVITE_NEW_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
     inviteNewIsPending: true,
-    inviteNewErrorMessage: '',
+    inviteNewErrorMessage: "",
   });
 
 reducers[ACTIONS.USER_INVITE_NEW_SUCCESS] = (state: unknown) =>
   Object.assign({}, state, {
     inviteNewIsPending: false,
-    inviteNewErrorMessage: '',
+    inviteNewErrorMessage: "",
   });
 
 reducers[ACTIONS.USER_INVITE_NEW_FAILURE] = (state: unknown, action: unknown) =>
@@ -272,7 +272,7 @@ reducers[ACTIONS.USER_INVITE_STATUS_FETCH_FAILURE] = (state: unknown) =>
 reducers[ACTIONS.USER_YOUTUBE_IMPORT_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
     youtubeChannelImportPending: true,
-    youtubeChannelImportErrorMessage: '',
+    youtubeChannelImportErrorMessage: "",
   });
 
 reducers[ACTIONS.USER_YOUTUBE_IMPORT_SUCCESS] = (state: unknown, action: unknown) => {
@@ -282,7 +282,7 @@ reducers[ACTIONS.USER_YOUTUBE_IMPORT_SUCCESS] = (state: unknown, action: unknown
 
   return Object.assign({}, state, {
     youtubeChannelImportPending: false,
-    youtubeChannelImportErrorMessage: '',
+    youtubeChannelImportErrorMessage: "",
     youtubeChannelImportTotal: total,
     youtubeChannelImportComplete: complete,
   });

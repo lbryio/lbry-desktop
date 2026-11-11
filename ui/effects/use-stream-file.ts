@@ -1,6 +1,6 @@
 //@ts-nocheck
-import React from 'react';
-import useIsMounted from 'effects/use-is-mounted';
+import React from "react";
+import useIsMounted from "effects/use-is-mounted";
 
 // Returns a blob from the download path
 export default function useFileStream(fileStream: unknown) {
@@ -14,10 +14,10 @@ export default function useFileStream(fileStream: unknown) {
 
   React.useEffect(() => {
     if (fileStream && isMounted.current) {
-      let chunks: unknown = [];
+      const chunks: unknown = [];
       const stream = fileStream();
       // Handle steam chunk recived
-      stream.on('data', chunk => {
+      stream.on("data", (chunk) => {
         if (isMounted.current) {
           chunks.push(chunk);
         } else {
@@ -27,7 +27,7 @@ export default function useFileStream(fileStream: unknown) {
         }
       });
       // Handle stream ended
-      stream.on('end', () => {
+      stream.on("end", () => {
         if (isMounted.current) {
           const buffer = Buffer.concat(chunks);
           const blob = new Blob([buffer]);
@@ -35,7 +35,7 @@ export default function useFileStream(fileStream: unknown) {
         }
       });
       // Handle stream error
-      stream.on('error', () => {
+      stream.on("error", () => {
         if (isMounted.current) {
           setState({ error: true, loading: false });
         }

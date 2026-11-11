@@ -1,14 +1,14 @@
-import * as ICONS from 'constants/icons';
-import Button from 'component/button';
-import Icon from 'component/common/icon';
-import React from 'react';
+import * as ICONS from "constants/icons";
+import Button from "component/button";
+import Icon from "component/common/icon";
+import React from "react";
 
 type Props = {
-  collectionIndex?: number,
-  collectionUris: Array<Collection>,
-  dragHandleProps?: any,
-  uri: string,
-  editCollection: (arg1: CollectionEditParams) => void
+  collectionIndex?: number;
+  collectionUris: Array<Collection>;
+  dragHandleProps?: any;
+  uri: string;
+  editCollection: (arg1: CollectionEditParams) => void;
 };
 
 export default function CollectionButtons(props: Props) {
@@ -40,27 +40,27 @@ export default function CollectionButtons(props: Props) {
     >
       <div className="collection-preview__edit-group" {...dragHandleProps}>
         <div className="button-collection-manage button-collection-drag top-left bottom-left">
-{ /* @ts-expect-error - TS2769 - No overload matches this call. */}
-          <Icon icon={ICONS.DRAG} title={__('Drag')} size={20} />
+          {/* @ts-expect-error - TS2769 - No overload matches this call. */}
+          <Icon icon={ICONS.DRAG} title={__("Drag")} size={20} />
         </div>
       </div>
 
       <div className="collection-preview__edit-group">
-        {orderButton('', __('Move Top'), ICONS.UP_TOP, collectionIndex === 0, () =>
+        {orderButton("", __("Move Top"), ICONS.UP_TOP, collectionIndex === 0, () =>
           editCollection({ order: { from: collectionIndex, to: 0 } })
         )}
 
-        {orderButton('', __('Move Bottom'), ICONS.DOWN_BOTTOM, collectionIndex === lastCollectionIndex, () =>
+        {orderButton("", __("Move Bottom"), ICONS.DOWN_BOTTOM, collectionIndex === lastCollectionIndex, () =>
           editCollection({ order: { from: collectionIndex, to: lastCollectionIndex } })
         )}
       </div>
 
       <div className="collection-preview__edit-group">
-        {orderButton('', __('Move Up'), ICONS.UP, collectionIndex === 0, () =>
+        {orderButton("", __("Move Up"), ICONS.UP, collectionIndex === 0, () =>
           editCollection({ order: { from: collectionIndex, to: collectionIndex - 1 } })
         )}
 
-        {orderButton('', __('Move Down'), ICONS.DOWN, collectionIndex === lastCollectionIndex, () =>
+        {orderButton("", __("Move Down"), ICONS.DOWN, collectionIndex === lastCollectionIndex, () =>
           editCollection({ order: { from: collectionIndex, to: collectionIndex + 1 } })
         )}
       </div>
@@ -71,7 +71,7 @@ export default function CollectionButtons(props: Props) {
             // @ts-expect-error - TS2322 (ts-migration)
             className="button-collection-manage button-collection-delete top-right bottom-right"
             icon={ICONS.DELETE}
-            title={__('Remove')}
+            title={__("Remove")}
             onClick={() => setConfirmDelete(true)}
           />
         </div>
@@ -81,11 +81,11 @@ export default function CollectionButtons(props: Props) {
             // @ts-expect-error - TS2322 (ts-migration)
             className="button-collection-manage button-collection-delete-cancel top-right"
             icon={ICONS.REMOVE}
-            title={__('Cancel')}
+            title={__("Cancel")}
             onClick={() => setConfirmDelete(false)}
           />
 
-          {orderButton('button-collection-delete-confirm bottom-right', __('Remove'), ICONS.DELETE, false, () =>
+          {orderButton("button-collection-delete-confirm bottom-right", __("Remove"), ICONS.DELETE, false, () =>
             editCollection({ uris: [uri], remove: true })
           )}
         </div>

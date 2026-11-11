@@ -1,8 +1,8 @@
 //@ts-nocheck
-import * as ACTIONS from 'constants/action_types';
-import Lbry from 'lbry';
-import { Lbryio } from 'lbryinc';
-import { doToast } from 'redux/actions/notifications';
+import * as ACTIONS from "constants/action_types";
+import Lbry from "lbry";
+import { Lbryio } from "lbryinc";
+import { doToast } from "redux/actions/notifications";
 import {
   selectBalance,
   selectPendingSupportTransactions,
@@ -10,10 +10,10 @@ import {
   selectPendingOtherTransactions,
   selectPendingConsolidateTxid,
   selectPendingMassClaimTxid,
-} from 'redux/selectors/wallet';
-import { creditsToString } from 'util/format-credits';
-import { selectMyClaimsRaw, selectClaimsById } from 'redux/selectors/claims';
-import { doFetchChannelListMine, doFetchClaimListMine, doClaimSearch } from 'redux/actions/claims';
+} from "redux/selectors/wallet";
+import { creditsToString } from "util/format-credits";
+import { selectMyClaimsRaw, selectClaimsById } from "redux/selectors/claims";
+import { doFetchChannelListMine, doFetchClaimListMine, doClaimSearch } from "redux/actions/claims";
 const FIFTEEN_SECONDS = 15000;
 let walletBalancePromise = null;
 
@@ -97,7 +97,7 @@ export function doFetchTxoPage() {
         const claimsById = selectClaimsById(state);
 
         const channelIds = items.reduce<Array<any>>((acc, cur) => {
-          if (cur.type === 'support' && cur.signing_channel && !claimsById[cur.signing_channel.channel_id]) {
+          if (cur.type === "support" && cur.signing_channel && !claimsById[cur.signing_channel.channel_id]) {
             acc.push(cur.signing_channel.channel_id);
           }
           return acc;
@@ -171,15 +171,15 @@ export function doFetchUtxoCounts() {
       type: ACTIONS.FETCH_UTXO_COUNT_STARTED,
     });
 
-    let resultSets = await Promise.all([
-      Lbry.txo_list({ type: 'other', is_not_spent: true, page: 1, page_size: 1 }),
-      Lbry.txo_list({ type: 'support', is_not_spent: true, page: 1, page_size: 1 }),
+    const resultSets = await Promise.all([
+      Lbry.txo_list({ type: "other", is_not_spent: true, page: 1, page_size: 1 }),
+      Lbry.txo_list({ type: "support", is_not_spent: true, page: 1, page_size: 1 }),
     ]);
     const counts: Record<string, any> = {};
-    const paymentCount = resultSets[0]['total_items'];
-    const supportCount = resultSets[1]['total_items'];
-    counts['other'] = typeof paymentCount === 'number' ? paymentCount : 0;
-    counts['support'] = typeof supportCount === 'number' ? supportCount : 0;
+    const paymentCount = resultSets[0]["total_items"];
+    const supportCount = resultSets[1]["total_items"];
+    counts["other"] = typeof paymentCount === "number" ? paymentCount : 0;
+    counts["support"] = typeof supportCount === "number" ? supportCount : 0;
 
     dispatch({
       type: ACTIONS.FETCH_UTXO_COUNT_COMPLETED,
@@ -195,7 +195,7 @@ export function doUtxoConsolidate() {
       type: ACTIONS.DO_UTXO_CONSOLIDATE_STARTED,
     });
 
-    const results = await Lbry.txo_spend({ type: 'other' });
+    const results = await Lbry.txo_spend({ type: "other" });
     const result = results[0];
 
     dispatch({
@@ -217,7 +217,7 @@ export function doTipClaimMass() {
       type: ACTIONS.TIP_CLAIM_MASS_STARTED,
     });
 
-    const results = await Lbry.txo_spend({ type: 'support', is_not_my_input: true });
+    const results = await Lbry.txo_spend({ type: "support", is_not_my_input: true });
     const result = results[0];
 
     dispatch({
@@ -272,8 +272,8 @@ export function doSendDraftTransaction(address: unknown, amount: unknown) {
     if (balance - amount <= 0) {
       dispatch(
         doToast({
-          title: __('Insufficient credits'),
-          message: __('Insufficient credits'),
+          title: __("Insufficient credits"),
+          message: __("Insufficient credits"),
         })
       );
       return;
@@ -290,9 +290,9 @@ export function doSendDraftTransaction(address: unknown, amount: unknown) {
         });
         dispatch(
           doToast({
-            message: __('You sent %amount% LBRY Credits', { amount: amount }),
-            linkText: __('History'),
-            linkTarget: '/wallet',
+            message: __("You sent %amount% LBRY Credits", { amount: amount }),
+            linkText: __("History"),
+            linkTarget: "/wallet",
           })
         );
       } else {
@@ -302,7 +302,7 @@ export function doSendDraftTransaction(address: unknown, amount: unknown) {
         });
         dispatch(
           doToast({
-            message: __('Transaction failed'),
+            message: __("Transaction failed"),
             isError: true,
           })
         );
@@ -316,7 +316,7 @@ export function doSendDraftTransaction(address: unknown, amount: unknown) {
       });
       dispatch(
         doToast({
-          message: __('Transaction failed'),
+          message: __("Transaction failed"),
           isError: true,
         })
       );
@@ -343,7 +343,13 @@ export function doSetDraftTransactionAddress(address: unknown) {
   };
 }
 
-export function doSendTip(params: unknown, isSupport: unknown, successCallback: unknown, errorCallback: unknown, shouldNotify = true) {
+export function doSendTip(
+  params: unknown,
+  isSupport: unknown,
+  successCallback: unknown,
+  errorCallback: unknown,
+  shouldNotify = true
+) {
   return (dispatch: unknown, getState: unknown) => {
     const state = getState();
     const balance = selectBalance(state);
@@ -355,7 +361,7 @@ export function doSendTip(params: unknown, isSupport: unknown, successCallback: 
     if (balance - params.amount <= 0) {
       dispatch(
         doToast({
-          message: __('Insufficient credits'),
+          message: __("Insufficient credits"),
           isError: true,
         })
       );
@@ -367,10 +373,10 @@ export function doSendTip(params: unknown, isSupport: unknown, successCallback: 
         dispatch(
           doToast({
             message: shouldSupport
-              ? __('You deposited %amount% LBRY Credits as a support!', { amount: params.amount })
-              : __('You sent %amount% LBRY Credits as a tip, Mahalo!', { amount: params.amount }),
-            linkText: __('History'),
-            linkTarget: '/wallet',
+              ? __("You deposited %amount% LBRY Credits as a support!", { amount: params.amount })
+              : __("You sent %amount% LBRY Credits as a tip, Mahalo!", { amount: params.amount }),
+            linkText: __("History"),
+            linkTarget: "/wallet",
           })
         );
       }
@@ -503,8 +509,8 @@ export function doSupportAbandonForClaim(claimId: unknown, claimType: unknown, k
     }
 
     const params = { claim_id: claimId } as const;
-    if (preview) params['preview'] = true;
-    if (keep) params['keep'] = keep;
+    if (preview) params["preview"] = true;
+    if (keep) params["keep"] = keep;
     return Lbry.support_abandon(params)
       .then((res) => {
         if (!preview) {
@@ -547,7 +553,7 @@ export function doWalletReconnect(toDefaultServer = false) {
         });
         dispatch(
           doToast({
-            message: __('Your servers were not available. Rolling back to the default server.'),
+            message: __("Your servers were not available. Rolling back to the default server."),
             isError: true,
           })
         );
@@ -680,10 +686,10 @@ export const doCheckPendingTxs = () => (dispatch: unknown, getState: unknown) =>
           type: ACTIONS.PENDING_SUPPORTS_UPDATED,
           data: newPendingTxes,
         });
-        if (types.has('channel')) {
+        if (types.has("channel")) {
           dispatch(doFetchChannelListMine());
         }
-        if (types.has('stream')) {
+        if (types.has("stream")) {
           dispatch(doFetchClaimListMine());
         }
       }
@@ -691,14 +697,14 @@ export const doCheckPendingTxs = () => (dispatch: unknown, getState: unknown) =>
         if (noLongerPendingConsolidate.includes(pendingConsTxid)) {
           dispatch(
             doToast({
-              message: __('Your wallet is finished consolidating'),
+              message: __("Your wallet is finished consolidating"),
             })
           );
         }
         if (noLongerPendingConsolidate.includes(pendingMassCLaimTxid)) {
           dispatch(
             doToast({
-              message: __('Your tips have been collected'),
+              message: __("Your tips have been collected"),
             })
           );
         }
@@ -721,23 +727,31 @@ export const doCheckPendingTxs = () => (dispatch: unknown, getState: unknown) =>
 
 // don't need hthis
 export const doSendCashTip =
-  (tipParams: unknown, anonymous: unknown, userParams: unknown, claimId: unknown, stripeEnvironment: unknown, successCallback: unknown) => (dispatch: unknown) => {
+  (
+    tipParams: unknown,
+    anonymous: unknown,
+    userParams: unknown,
+    claimId: unknown,
+    stripeEnvironment: unknown,
+    successCallback: unknown
+  ) =>
+  (dispatch: unknown) => {
     Lbryio.call(
-      'customer',
-      'tip',
+      "customer",
+      "tip",
       {
         // round to fix issues with floating point numbers
         amount: Math.round(100 * tipParams.tipAmount), // convert from dollars to cents
         creator_channel_name: tipParams.tipChannelName, // creator_channel_name
         creator_channel_claim_id: tipParams.channelClaimId,
-        tipper_channel_name: anonymous ? '' : userParams.activeChannelName,
-        tipper_channel_claim_id: anonymous ? '' : userParams.activeChannelId,
-        currency: 'USD',
+        tipper_channel_name: anonymous ? "" : userParams.activeChannelName,
+        tipper_channel_claim_id: anonymous ? "" : userParams.activeChannelId,
+        currency: "USD",
         anonymous: anonymous,
         source_claim_id: claimId,
         environment: stripeEnvironment,
       },
-      'post'
+      "post"
     )
       .then((customerTipResponse) => {
         dispatch(
@@ -755,7 +769,7 @@ export const doSendCashTip =
         // show error message from Stripe if one exists (being passed from backend by Beamer's API currently)
         dispatch(
           doToast({
-            message: error.message || __('Sorry, there was an error in processing your payment!'),
+            message: error.message || __("Sorry, there was an error in processing your payment!"),
             isError: true,
           })
         );

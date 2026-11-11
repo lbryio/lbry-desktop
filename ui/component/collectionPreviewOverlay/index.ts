@@ -1,14 +1,14 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectIsUriResolving, selectClaimIdForUri, makeSelectClaimForClaimId } from 'redux/selectors/claims';
+import { connect } from "react-redux";
+import { selectIsUriResolving, selectClaimIdForUri, makeSelectClaimForClaimId } from "redux/selectors/claims";
 import {
   makeSelectUrlsForCollectionId,
   makeSelectNameForCollectionId,
   makeSelectPendingCollectionForId,
   makeSelectCountForCollectionId,
-} from 'redux/selectors/collections';
-import { doFetchItemsInCollection } from 'redux/actions/collections';
-import CollectionPreviewOverlay from './view';
+} from "redux/selectors/collections";
+import { doFetchItemsInCollection } from "redux/actions/collections";
+import CollectionPreviewOverlay from "./view";
 
 const select = (state: unknown, props: unknown) => {
   const collectionId = props.collectionId || (props.uri && selectClaimIdForUri(state, props.uri));

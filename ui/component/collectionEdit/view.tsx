@@ -1,61 +1,61 @@
-import {DragDropContext, Droppable} from 'react-beautiful-dnd';
-import React from 'react';
-import classnames from 'classnames';
-import Button from 'component/button';
-import TagsSearch from 'component/tagsSearch';
-import ErrorText from 'component/common/error-text';
-import ClaimAbandonButton from 'component/claimAbandonButton';
-import ChannelSelector from 'component/channelSelector';
-import ClaimList from 'component/claimList';
-import Card from 'component/common/card';
-import LbcSymbol from 'component/common/lbc-symbol';
-import SelectThumbnail from 'component/selectThumbnail';
-import { useHistory } from 'react-router-dom';
-import { isNameValid, regexInvalidURI } from 'util/lbryURI';
-import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
-import { FormField, FormFieldAreaAdvanced } from 'component/common/form';
-import { handleBidChange } from 'util/publish';
-import { FF_MAX_CHARS_IN_DESCRIPTION } from 'constants/form-field';
-import { INVALID_NAME_ERROR } from 'constants/claim';
-import SUPPORTED_LANGUAGES from 'constants/supported_languages';
-import * as PAGES from 'constants/pages';
-import analytics from 'analytics';
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import React from "react";
+import classnames from "classnames";
+import Button from "component/button";
+import TagsSearch from "component/tagsSearch";
+import ErrorText from "component/common/error-text";
+import ClaimAbandonButton from "component/claimAbandonButton";
+import ChannelSelector from "component/channelSelector";
+import ClaimList from "component/claimList";
+import Card from "component/common/card";
+import LbcSymbol from "component/common/lbc-symbol";
+import SelectThumbnail from "component/selectThumbnail";
+import { useHistory } from "react-router-dom";
+import { isNameValid, regexInvalidURI } from "util/lbryURI";
+import * as THUMBNAIL_STATUSES from "constants/thumbnail_upload_statuses";
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from "component/common/tabs";
+import { FormField, FormFieldAreaAdvanced } from "component/common/form";
+import { handleBidChange } from "util/publish";
+import { FF_MAX_CHARS_IN_DESCRIPTION } from "constants/form-field";
+import { INVALID_NAME_ERROR } from "constants/claim";
+import SUPPORTED_LANGUAGES from "constants/supported_languages";
+import * as PAGES from "constants/pages";
+import analytics from "analytics";
 
-const LANG_NONE = 'none';
+const LANG_NONE = "none";
 const MAX_TAG_SELECT = 5;
 
 type Props = {
-  uri: string,
-  claim: CollectionClaim,
-  balance: number,
-  disabled: boolean,
-  activeChannelClaim: ChannelClaim | null | undefined,
-  incognito: boolean,
+  uri: string;
+  claim: CollectionClaim;
+  balance: number;
+  disabled: boolean;
+  activeChannelClaim: ChannelClaim | null | undefined;
+  incognito: boolean;
   // params
-  title: string,
-  amount: number,
-  thumbnailUrl: string,
-  description: string,
-  tags: Array<string>,
-  locations: Array<string>,
-  languages: Array<string>,
-  collectionId: string,
-  collection: Collection,
-  collectionClaimIds: Array<string>,
-  collectionUrls: Array<string>,
-  updatingCollection: boolean,
-  updateError: string,
-  createError: string,
-  creatingCollection: boolean,
-  publishCollectionUpdate: (arg1: CollectionUpdateParams) => Promise<any>,
-  publishCollection: (arg1: CollectionPublishParams, arg2: string) => Promise<any>,
-  clearCollectionErrors: () => void,
-  onDone: (arg1: string) => void,
-  setActiveChannel: (arg1: string) => void,
-  setIncognito: (arg1: boolean) => void,
-  doCollectionEdit: (arg1: CollectionEditParams) => void,
-  resetThumbnailStatus: () => void
+  title: string;
+  amount: number;
+  thumbnailUrl: string;
+  description: string;
+  tags: Array<string>;
+  locations: Array<string>;
+  languages: Array<string>;
+  collectionId: string;
+  collection: Collection;
+  collectionClaimIds: Array<string>;
+  collectionUrls: Array<string>;
+  updatingCollection: boolean;
+  updateError: string;
+  createError: string;
+  creatingCollection: boolean;
+  publishCollectionUpdate: (arg1: CollectionUpdateParams) => Promise<any>;
+  publishCollection: (arg1: CollectionPublishParams, arg2: string) => Promise<any>;
+  clearCollectionErrors: () => void;
+  onDone: (arg1: string) => void;
+  setActiveChannel: (arg1: string) => void;
+  setIncognito: (arg1: boolean) => void;
+  doCollectionEdit: (arg1: CollectionEditParams) => void;
+  resetThumbnailStatus: () => void;
 };
 
 function CollectionForm(props: Props) {
@@ -93,7 +93,7 @@ function CollectionForm(props: Props) {
     resetThumbnailStatus,
   } = props;
   const activeChannelName = activeChannelClaim && activeChannelClaim.name;
-  let prefix = 'lbry://';
+  let prefix = "lbry://";
   if (activeChannelName && !incognito) {
     prefix += `${activeChannelName}/`;
   }
@@ -103,9 +103,9 @@ function CollectionForm(props: Props) {
   const hasClaim = !!claim;
   const [initialized, setInitialized] = React.useState(false);
   const [nameError, setNameError] = React.useState<any>(undefined);
-  const [bidError, setBidError] = React.useState('');
-  const [thumbStatus, setThumbStatus] = React.useState('');
-  const [thumbError, setThumbError] = React.useState('');
+  const [bidError, setBidError] = React.useState("");
+  const [thumbStatus, setThumbStatus] = React.useState("");
+  const [thumbError, setThumbError] = React.useState("");
   const [params, setParams]: [any, (arg1?: any) => void] = React.useState({});
   const name = params.name;
   const isNewCollection = !uri;
@@ -115,49 +115,49 @@ function CollectionForm(props: Props) {
   const secondaryLanguage = Array.isArray(languageParam) && languageParam.length >= 2 && languageParam[1];
   const hasClaims = params.claims && params.claims.length;
   const collectionClaimIdsString = JSON.stringify(collectionClaimIds);
-  const itemError = !hasClaims ? __('Cannot publish empty list') : '';
+  const itemError = !hasClaims ? __("Cannot publish empty list") : "";
   const thumbnailError =
-    (thumbError && thumbStatus !== THUMBNAIL_STATUSES.COMPLETE && __('Invalid thumbnail')) ||
-    (thumbStatus === THUMBNAIL_STATUSES.IN_PROGRESS && __('Please wait for thumbnail to finish uploading'));
+    (thumbError && thumbStatus !== THUMBNAIL_STATUSES.COMPLETE && __("Invalid thumbnail")) ||
+    (thumbStatus === THUMBNAIL_STATUSES.IN_PROGRESS && __("Please wait for thumbnail to finish uploading"));
   const submitError = nameError || bidError || itemError || updateError || createError || thumbnailError;
 
   function parseName(newName: unknown) {
-    let INVALID_URI_CHARS = new RegExp(regexInvalidURI, 'gu');
-// @ts-expect-error - TS2339 - Property 'replace' does not exist on type 'unknown'.
-    return newName.replace(INVALID_URI_CHARS, '-');
+    const INVALID_URI_CHARS = new RegExp(regexInvalidURI, "gu");
+    // @ts-expect-error - TS2339 - Property 'replace' does not exist on type 'unknown'.
+    return newName.replace(INVALID_URI_CHARS, "-");
   }
 
   function setParam(paramObj: unknown) {
-// @ts-expect-error - TS2698 - Spread types may only be created from object types.
+    // @ts-expect-error - TS2698 - Spread types may only be created from object types.
     setParams({ ...params, ...paramObj });
   }
 
   function updateParams(paramsObj: unknown) {
-// @ts-expect-error - TS2698 - Spread types may only be created from object types.
+    // @ts-expect-error - TS2698 - Spread types may only be created from object types.
     setParams({ ...params, ...paramsObj });
   }
 
   // TODO remove this or better decide whether app should delete languages[2+]
   // This was added because a previous update setting was duplicating language codes
   function dedupeLanguages(languages: unknown) {
-// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
     if (languages.length <= 1) {
       return languages;
-// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
     } else if (languages.length === 2) {
       if (languages[0] !== languages[1]) {
         return languages;
       } else {
         return [languages[0]];
       }
-// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
     } else if (languages.length > 2) {
       const newLangs: unknown = [];
-// @ts-expect-error - TS2339 - Property 'forEach' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'forEach' does not exist on type 'unknown'.
       languages.forEach((l) => {
-// @ts-expect-error - TS2339 - Property 'includes' does not exist on type 'unknown'.
+        // @ts-expect-error - TS2339 - Property 'includes' does not exist on type 'unknown'.
         if (!newLangs.includes(l)) {
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+          // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
           newLangs.push(l);
         }
       });
@@ -165,9 +165,7 @@ function CollectionForm(props: Props) {
     }
   }
 
-  function handleUpdateThumbnail(update: {
-    [key: string]: string
-  }) {
+  function handleUpdateThumbnail(update: { [key: string]: string }) {
     if (update.thumbnail_url !== undefined) {
       setParam(update);
     } else if (update.thumbnail_status) {
@@ -179,26 +177,29 @@ function CollectionForm(props: Props) {
 
   function getCollectionParams() {
     const collectionParams: {
-      thumbnail_url?: string,
-      name?: string,
-      description?: string,
-      title?: string,
-      bid: string,
-      languages?: Array<string> | null | undefined,
-      locations?: Array<string> | null | undefined,
-      tags?: Array<{
-        name: string
-      }> | null | undefined,
-      claim_id?: string,
-      channel_id?: string,
-      claims: Array<string> | null | undefined
+      thumbnail_url?: string;
+      name?: string;
+      description?: string;
+      title?: string;
+      bid: string;
+      languages?: Array<string> | null | undefined;
+      locations?: Array<string> | null | undefined;
+      tags?:
+        | Array<{
+            name: string;
+          }>
+        | null
+        | undefined;
+      claim_id?: string;
+      channel_id?: string;
+      claims: Array<string> | null | undefined;
     } = {
       thumbnail_url: thumbnailUrl,
       name: parseName(collectionName),
       description,
       title: claim ? title : collectionName,
       bid: String(amount || 0.001),
-// @ts-expect-error - TS2322 - Type 'unknown' is not assignable to type 'string[]'.
+      // @ts-expect-error - TS2322 - Type 'unknown' is not assignable to type 'string[]'.
       languages: languages ? dedupeLanguages(languages) : [],
       locations: locations || [],
       tags: tags
@@ -215,7 +216,7 @@ function CollectionForm(props: Props) {
   }
 
   function handleOnDragEnd(result: unknown) {
-// @ts-expect-error - TS2339 - Property 'source' does not exist on type '{}'. | TS2339 - Property 'destination' does not exist on type '{}'.
+    // @ts-expect-error - TS2339 - Property 'source' does not exist on type '{}'. | TS2339 - Property 'destination' does not exist on type '{}'.
     const { source, destination } = result;
 
     if (!destination) return;
@@ -242,7 +243,7 @@ function CollectionForm(props: Props) {
       if (code === LANG_NONE || code === langs[0]) {
         langs.splice(1, 1);
       } else {
-// @ts-expect-error - TS2538 - Type 'unknown' cannot be used as an index type.
+        // @ts-expect-error - TS2538 - Type 'unknown' cannot be used as an index type.
         langs[index] = code;
       }
     }
@@ -278,7 +279,7 @@ function CollectionForm(props: Props) {
   React.useEffect(() => {
     let nameError;
     if (!name && name !== undefined) {
-      nameError = __('A name is required for your url');
+      nameError = __("A name is required for your url");
     } else if (!isNameValid(name)) {
       nameError = INVALID_NAME_ERROR;
     }
@@ -330,64 +331,64 @@ function CollectionForm(props: Props) {
 
   return (
     <>
-      <div className={classnames('main--contained', { 'card--disabled': disabled })}>
+      <div className={classnames("main--contained", { "card--disabled": disabled })}>
         <Tabs>
-{ /* @ts-expect-error - TS2322 - Type '{ children: Element[]; className: string; }' is not assignable to type 'IntrinsicAttributes & TabListProps'. */}
+          {/* @ts-expect-error - TS2322 - Type '{ children: Element[]; className: string; }' is not assignable to type 'IntrinsicAttributes & TabListProps'. */}
           <TabList className="tabs__list--collection-edit-page">
-{ /* @ts-expect-error - TS2559 - Type '{ children: string; }' has no properties in common with type 'IntrinsicAttributes & TabProps'. */}
-            <Tab>{__('General')}</Tab>
-{ /* @ts-expect-error - TS2559 - Type '{ children: string; }' has no properties in common with type 'IntrinsicAttributes & TabProps'. */}
-            <Tab>{__('Items')}</Tab>
-{ /* @ts-expect-error - TS2559 - Type '{ children: string; }' has no properties in common with type 'IntrinsicAttributes & TabProps'. */}
-            <Tab>{__('Credits')}</Tab>
-{ /* @ts-expect-error - TS2559 - Type '{ children: string; }' has no properties in common with type 'IntrinsicAttributes & TabProps'. */}
-            <Tab>{__('Tags')}</Tab>
-{ /* @ts-expect-error - TS2559 - Type '{ children: string; }' has no properties in common with type 'IntrinsicAttributes & TabProps'. */}
-            <Tab>{__('Other')}</Tab>
+            {/* @ts-expect-error - TS2559 - Type '{ children: string; }' has no properties in common with type 'IntrinsicAttributes & TabProps'. */}
+            <Tab>{__("General")}</Tab>
+            {/* @ts-expect-error - TS2559 - Type '{ children: string; }' has no properties in common with type 'IntrinsicAttributes & TabProps'. */}
+            <Tab>{__("Items")}</Tab>
+            {/* @ts-expect-error - TS2559 - Type '{ children: string; }' has no properties in common with type 'IntrinsicAttributes & TabProps'. */}
+            <Tab>{__("Credits")}</Tab>
+            {/* @ts-expect-error - TS2559 - Type '{ children: string; }' has no properties in common with type 'IntrinsicAttributes & TabProps'. */}
+            <Tab>{__("Tags")}</Tab>
+            {/* @ts-expect-error - TS2559 - Type '{ children: string; }' has no properties in common with type 'IntrinsicAttributes & TabProps'. */}
+            <Tab>{__("Other")}</Tab>
           </TabList>
-{ /* @ts-expect-error - TS2559 - Type '{ children: Element[]; }' has no properties in common with type 'IntrinsicAttributes & TabPanelsProps'. */}
+          {/* @ts-expect-error - TS2559 - Type '{ children: Element[]; }' has no properties in common with type 'IntrinsicAttributes & TabPanelsProps'. */}
           <TabPanels>
             <TabPanel>
-              <div className={'card-stack'}>
+              <div className={"card-stack"}>
                 {/* @ts-expect-error - TS2322 (ts-migration) */}
                 <ChannelSelector disabled={disabled} />
                 <Card
                   body={
                     <>
-{ /* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
+                      {/* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
                       <fieldset-group class="fieldset-group--smushed fieldset-group--disabled-prefix">
-{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
+                        {/* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
                         <fieldset-section>
-                          <label htmlFor="channel_name">{__('Name')}</label>
+                          <label htmlFor="channel_name">{__("Name")}</label>
                           <div className="form-field__prefix">{prefix}</div>
-{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
+                          {/* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
                         </fieldset-section>
 
                         <FormField
                           autoFocus={isNewCollection}
                           type="text"
                           name="channel_name"
-                          placeholder={__('MyAwesomeList')}
+                          placeholder={__("MyAwesomeList")}
                           value={params.name}
                           error={nameError}
                           disabled={!isNewCollection}
-                          onChange={(e) => setParams({ ...params, name: e.target.value || '' })}
+                          onChange={(e) => setParams({ ...params, name: e.target.value || "" })}
                         />
-{ /* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
+                        {/* @ts-expect-error - TS2339 - Property 'fieldset-group' does not exist on type 'JSX.IntrinsicElements'. */}
                       </fieldset-group>
                       {!isNewCollection && (
-                        <span className="form-field__help">{__('This field cannot be changed.')}</span>
+                        <span className="form-field__help">{__("This field cannot be changed.")}</span>
                       )}
 
                       <FormField
                         type="text"
                         name="channel_title2"
-                        label={__('Title')}
-                        placeholder={__('My Awesome List')}
+                        label={__("Title")}
+                        placeholder={__("My Awesome List")}
                         value={params.title}
                         onChange={(e) => setParams({ ...params, title: e.target.value })}
                       />
-{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
+                      {/* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
                       <fieldset-section>
                         {/* @ts-expect-error - TS2740 (ts-migration) */}
                         <SelectThumbnail
@@ -397,13 +398,13 @@ function CollectionForm(props: Props) {
                           updateThumbnailParams={handleUpdateThumbnail}
                           usePublishFormMode
                         />
-{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
+                        {/* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
                       </fieldset-section>
                       <FormFieldAreaAdvanced
                         type="markdown"
                         name="content_description2"
-                        label={__('Description')}
-                        placeholder={__('Description of your content')}
+                        label={__("Description")}
+                        placeholder={__("Description of your content")}
                         value={params.description}
                         onChange={(text) => setParams({ ...params, description: text })}
                         textAreaMaxLength={FF_MAX_CHARS_IN_DESCRIPTION}
@@ -421,7 +422,7 @@ function CollectionForm(props: Props) {
                     <ClaimList
                       uris={collectionUrls}
                       collectionId={collectionId}
-                      empty={__('This list has no items.')}
+                      empty={__("This list has no items.")}
                       showEdit
                       droppableProvided={DroppableProvided}
                     />
@@ -437,17 +438,17 @@ function CollectionForm(props: Props) {
                     type="number"
                     name="content_bid2"
                     step="any"
-                    label={<LbcSymbol postfix={__('Deposit')} size={14} />}
+                    label={<LbcSymbol postfix={__("Deposit")} size={14} />}
                     value={params.bid}
                     error={bidError}
-// @ts-expect-error - TS2322 - Type 'string' is not assignable to type 'number'.
+                    // @ts-expect-error - TS2322 - Type 'string' is not assignable to type 'number'.
                     min="0.0"
                     disabled={false}
                     onChange={(event) =>
                       handleBidChange(parseFloat(event.target.value), amount, balance, setBidError, setParam)
                     }
                     placeholder={0.1}
-                    helper={__('Increasing your deposit can help your channel be discovered more easily.')}
+                    helper={__("Increasing your deposit can help your channel be discovered more easily.")}
                   />
                 }
               />
@@ -460,7 +461,7 @@ function CollectionForm(props: Props) {
                     disableAutoFocus
                     limitSelect={MAX_TAG_SELECT}
                     tagsPassedIn={params.tags || []}
-                    label={__('Selected Tags')}
+                    label={__("Selected Tags")}
                     onRemove={(clickedTag) => {
                       const newTags = params.tags.slice().filter((tag) => tag.name !== clickedTag.name);
                       setParams({ ...params, tags: newTags });
@@ -487,13 +488,13 @@ function CollectionForm(props: Props) {
                     <FormField
                       name="language_select"
                       type="select"
-                      label={__('Primary Language')}
+                      label={__("Primary Language")}
                       onChange={(event) => handleLanguageChange(0, event.target.value)}
                       value={primaryLanguage}
-                      helper={__('Your main content language')}
+                      helper={__("Your main content language")}
                     >
-                      <option key={'pri-langNone'} value={LANG_NONE}>
-                        {__('None selected')}
+                      <option key={"pri-langNone"} value={LANG_NONE}>
+                        {__("None selected")}
                       </option>
                       {Object.keys(SUPPORTED_LANGUAGES).map((language) => (
                         <option key={language} value={language}>
@@ -504,14 +505,14 @@ function CollectionForm(props: Props) {
                     <FormField
                       name="language_select2"
                       type="select"
-                      label={__('Secondary Language')}
+                      label={__("Secondary Language")}
                       onChange={(event) => handleLanguageChange(1, event.target.value)}
                       value={secondaryLanguage}
                       disabled={!languageParam[0]}
-                      helper={__('Your other content language')}
+                      helper={__("Your other content language")}
                     >
-                      <option key={'sec-langNone'} value={LANG_NONE}>
-                        {__('None selected')}
+                      <option key={"sec-langNone"} value={LANG_NONE}>
+                        {__("None selected")}
                       </option>
                       {Object.keys(SUPPORTED_LANGUAGES)
                         .filter((lang) => lang !== languageParam[0])
@@ -538,17 +539,17 @@ function CollectionForm(props: Props) {
                   disabled={
                     creatingCollection || updatingCollection || nameError || bidError || thumbnailError || !hasClaims
                   }
-                  label={creatingCollection || updatingCollection ? __('Submitting') : __('Submit')}
+                  label={creatingCollection || updatingCollection ? __("Submitting") : __("Submit")}
                   onClick={handleSubmit}
                 />
                 {/* @ts-expect-error - TS2322 (ts-migration) */}
-                <Button button="link" label={__('Cancel')} onClick={() => onDone(collectionId)} />
+                <Button button="link" label={__("Cancel")} onClick={() => onDone(collectionId)} />
               </div>
               {submitError ? (
                 <ErrorText>{submitError}</ErrorText>
               ) : (
                 <p className="help">
-                  {__('After submitting, it will take a few minutes for your changes to be live for everyone.')}
+                  {__("After submitting, it will take a few minutes for your changes to be live for everyone.")}
                 </p>
               )}
               {!isNewCollection && (

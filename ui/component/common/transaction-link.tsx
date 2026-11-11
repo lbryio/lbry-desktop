@@ -1,8 +1,8 @@
-import React from 'react';
-import Button from 'component/button';
+import React from "react";
+import Button from "component/button";
 
 type Props = {
-  id: string
+  id: string;
 };
 
 const TransactionLink = (props: Props) => {

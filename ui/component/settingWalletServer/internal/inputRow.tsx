@@ -1,23 +1,23 @@
-import React, {useState, useEffect} from 'react';
-import Button from 'component/button';
-import { Form, FormField } from 'component/common/form';
+import React, { useState, useEffect } from "react";
+import Button from "component/button";
+import { Form, FormField } from "component/common/form";
 
 type Props = {
-  update: (arg1: [string, string]) => void
+  update: (arg1: [string, string]) => void;
 };
 
 const VALID_IPADDRESS_REGEX = new RegExp(
-  '^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\.)){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$'
+  "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])(\\.)){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"
 );
 const VALID_HOSTNAME_REGEX = new RegExp(
-  '^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9])(\\.))+([A-Za-z]|[A-Za-z][A-Za-z]*[A-Za-z])$'
+  "^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9-]*[a-zA-Z0-9])(\\.))+([A-Za-z]|[A-Za-z][A-Za-z]*[A-Za-z])$"
 );
-const VALID_PORT_REGEX = new RegExp('^([0-9]){1,5}$');
+const VALID_PORT_REGEX = new RegExp("^([0-9]){1,5}$");
 
 function ServerInputRow(props: Props) {
   const { update } = props;
-  const [hostString, setHostString] = useState('');
-  const [portString, setPortString] = useState('');
+  const [hostString, setHostString] = useState("");
+  const [portString, setPortString] = useState("");
   const [validServerString, setValidServerString] = useState(false);
 
   useEffect(() => {
@@ -29,35 +29,35 @@ function ServerInputRow(props: Props) {
 
   function onSubmit() {
     update([hostString, portString]);
-    setHostString('');
-    setPortString('');
+    setHostString("");
+    setPortString("");
   }
 
   return (
     <Form onSubmit={onSubmit}>
       <div className="section__actions">
-{ /* @ts-expect-error - TS2741 - Property 'name' is missing in type '{ type: string; label: string; placeholder: string; value: string; onChange: (e: any) => void; }' but required in type 'Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | "type" | "name" | "value" | "disabled" | "label" | "children" | "render" | ... 15 more ... | "onChange">'. */}
+        {/* @ts-expect-error - TS2741 - Property 'name' is missing in type '{ type: string; label: string; placeholder: string; value: string; onChange: (e: any) => void; }' but required in type 'Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | "type" | "name" | "value" | "disabled" | "label" | "children" | "render" | ... 15 more ... | "onChange">'. */}
         <FormField
           type="text"
-          label={__('Host')}
-          placeholder={'code.freezepeach.fun'}
+          label={__("Host")}
+          placeholder={"code.freezepeach.fun"}
           value={hostString}
-          onChange={e => setHostString(e.target.value)}
+          onChange={(e) => setHostString(e.target.value)}
         />
         <span className="form-field__conjuction">:</span>
-{ /* @ts-expect-error - TS2741 - Property 'name' is missing in type '{ type: string; label: string; placeholder: string; value: string; onChange: (e: any) => void; }' but required in type 'Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | "type" | "name" | "value" | "disabled" | "label" | "children" | "render" | ... 15 more ... | "onChange">'. */}
+        {/* @ts-expect-error - TS2741 - Property 'name' is missing in type '{ type: string; label: string; placeholder: string; value: string; onChange: (e: any) => void; }' but required in type 'Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | "type" | "name" | "value" | "disabled" | "label" | "children" | "render" | ... 15 more ... | "onChange">'. */}
         <FormField
           type="number"
-          label={__('Port')}
-          placeholder={'50001'}
+          label={__("Port")}
+          placeholder={"50001"}
           value={portString}
-          onChange={e => setPortString(String(e.target.value))}
+          onChange={(e) => setPortString(String(e.target.value))}
         />
       </div>
 
       <div className="section__actions">
         {/* @ts-expect-error - TS2322 (ts-migration) */}
-        <Button type="submit" button="primary" label={__('Add')} disabled={!validServerString} />
+        <Button type="submit" button="primary" label={__("Add")} disabled={!validServerString} />
       </div>
     </Form>
   );

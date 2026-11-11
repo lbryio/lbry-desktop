@@ -1,27 +1,27 @@
-import {formatCredits, formatFullPrice} from 'util/format-credits';
-import classnames from 'classnames';
-import LbcSymbol from 'component/common/lbc-symbol';
-import React from 'react';
+import { formatCredits, formatFullPrice } from "util/format-credits";
+import classnames from "classnames";
+import LbcSymbol from "component/common/lbc-symbol";
+import React from "react";
 
 type Props = {
-  amount?: number,
-  className?: string,
+  amount?: number;
+  className?: string;
   customAmounts?: {
-    amountFiat: number,
-    amountLBC: number
-  },
-  fee?: boolean,
-  isEstimate?: boolean,
-  isFiat?: boolean,
-  noFormat?: boolean,
-  precision: number,
-  showFree: boolean,
-  showFullPrice: boolean,
-  showLBC?: boolean,
-  showPlus: boolean,
-  size?: number,
-  superChat?: boolean,
-  superChatLight?: boolean
+    amountFiat: number;
+    amountLBC: number;
+  };
+  fee?: boolean;
+  isEstimate?: boolean;
+  isFiat?: boolean;
+  noFormat?: boolean;
+  precision: number;
+  showFree: boolean;
+  showFullPrice: boolean;
+  showLBC?: boolean;
+  showPlus: boolean;
+  size?: number;
+  superChat?: boolean;
+  superChatLight?: boolean;
 };
 
 class CreditAmount extends React.PureComponent<Props> {
@@ -58,7 +58,7 @@ class CreditAmount extends React.PureComponent<Props> {
 
     function getAmountText(amount: number, isFiat?: boolean) {
       const fullPrice = formatFullPrice(amount, 2);
-// @ts-expect-error - TS2345 - Argument of type 'number' is not assignable to parameter of type 'string'.
+      // @ts-expect-error - TS2345 - Argument of type 'number' is not assignable to parameter of type 'string'.
       const isFree = parseFloat(amount) === 0;
       let formattedAmount;
 
@@ -72,7 +72,7 @@ class CreditAmount extends React.PureComponent<Props> {
       }
 
       if (showFree && isFree) {
-        return __('Free');
+        return __("Free");
       } else {
         let amountText = noFormat ? amount : formattedAmount;
 
@@ -83,11 +83,11 @@ class CreditAmount extends React.PureComponent<Props> {
         if (showLBC && !isFiat) {
           amountText = <LbcSymbol postfix={amountText} size={size} />;
         } else if (showLBC && isFiat) {
-          amountText = <p style={{ display: 'inline' }}> ${(Math.round(Number(amountText) * 100) / 100).toFixed(2)}</p>;
+          amountText = <p style={{ display: "inline" }}> ${(Math.round(Number(amountText) * 100) / 100).toFixed(2)}</p>;
         }
 
         if (fee) {
-          amountText = __('%amount% fee', { amount: amountText });
+          amountText = __("%amount% fee", { amount: amountText });
         }
 
         return amountText;
@@ -96,11 +96,11 @@ class CreditAmount extends React.PureComponent<Props> {
 
     return (
       <span
-// @ts-expect-error - TS2322 - Type 'string | number' is not assignable to type 'string'.
-        title={amount ? formatFullPrice(amount, 2) : ''}
+        // @ts-expect-error - TS2322 - Type 'string | number' is not assignable to type 'string'.
+        title={amount ? formatFullPrice(amount, 2) : ""}
         className={classnames(className, {
-          'super-chat': superChat,
-          'super-chat--light': superChatLight,
+          "super-chat": superChat,
+          "super-chat--light": superChatLight,
         })}
       >
         {customAmounts
@@ -112,7 +112,7 @@ class CreditAmount extends React.PureComponent<Props> {
           : amount && <span className="credit-amount">{getAmountText(amount, isFiat)}</span>}
 
         {isEstimate ? (
-          <span className="credit-amount__estimate" title={__('This is an estimate and does not include data fees')}>
+          <span className="credit-amount__estimate" title={__("This is an estimate and does not include data fees")}>
             *
           </span>
         ) : null}

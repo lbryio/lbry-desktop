@@ -1,59 +1,59 @@
-import {CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS} from 'config';
-import { formattedLinks, inlineLinks } from 'util/remark-lbry';
-import { formattedTimestamp, inlineTimestamp } from 'util/remark-timestamp';
-import { formattedEmote, inlineEmote } from 'util/remark-emote';
-import * as ICONS from 'constants/icons';
-import * as React from 'react';
-import Button from 'component/button';
-import classnames from 'classnames';
-import defaultSchema from 'hast-util-sanitize/lib/github.json';
-import MarkdownLink from 'component/markdownLink';
-import OptimizedImage from 'component/optimizedImage';
-import reactRenderer from 'remark-react';
-import remark from 'remark';
-import remarkAttr from 'remark-attr';
-import remarkBreaks from 'remark-breaks';
-import remarkEmoji from 'remark-emoji';
-import remarkFrontMatter from 'remark-frontmatter';
-import remarkStrip from 'strip-markdown';
-import ZoomableImage from 'component/zoomableImage';
-import { parse } from 'node-html-parser';
+import { CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS } from "config";
+import { formattedLinks, inlineLinks } from "util/remark-lbry";
+import { formattedTimestamp, inlineTimestamp } from "util/remark-timestamp";
+import { formattedEmote, inlineEmote } from "util/remark-emote";
+import * as ICONS from "constants/icons";
+import * as React from "react";
+import Button from "component/button";
+import classnames from "classnames";
+import defaultSchema from "hast-util-sanitize/lib/github.json";
+import MarkdownLink from "component/markdownLink";
+import OptimizedImage from "component/optimizedImage";
+import reactRenderer from "remark-react";
+import remark from "remark";
+import remarkAttr from "remark-attr";
+import remarkBreaks from "remark-breaks";
+import remarkEmoji from "remark-emoji";
+import remarkFrontMatter from "remark-frontmatter";
+import remarkStrip from "strip-markdown";
+import ZoomableImage from "component/zoomableImage";
+import { parse } from "node-html-parser";
 
 const RE_EMOTE = /:\+1:|:-1:|:[\w-]+:/;
 
 function isEmote(title: unknown, src: unknown) {
-// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'. | TS2339 - Property 'includes' does not exist on type 'unknown'.
-  return title && RE_EMOTE.test(title) && src.includes('static.odycdn.com/emoticons');
+  // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'. | TS2339 - Property 'includes' does not exist on type 'unknown'.
+  return title && RE_EMOTE.test(title) && src.includes("static.odycdn.com/emoticons");
 }
 
 type SimpleTextProps = {
-  children?: React.ReactNode
+  children?: React.ReactNode;
 };
 
 type SimpleLinkProps = {
-  href?: string,
-  title?: string,
-  embed?: boolean,
-  children?: React.ReactNode
+  href?: string;
+  title?: string;
+  embed?: boolean;
+  children?: React.ReactNode;
 };
 
 type ImageLinkProps = {
-  src: string,
-  title?: string,
-  alt?: string,
-  helpText?: string
+  src: string;
+  title?: string;
+  alt?: string;
+  helpText?: string;
 };
 
 type MarkdownProps = {
-  strip?: boolean,
-  content: string | null | undefined,
-  simpleLinks?: boolean,
-  noDataStore?: boolean,
-  className?: string,
-  parentCommentId?: string,
-  isMarkdownPost?: boolean,
-  disableTimestamps?: boolean,
-  stakedLevel?: number
+  strip?: boolean;
+  content: string | null | undefined;
+  simpleLinks?: boolean;
+  noDataStore?: boolean;
+  className?: string;
+  parentCommentId?: string;
+  isMarkdownPost?: boolean;
+  disableTimestamps?: boolean;
+  stakedLevel?: number;
 };
 
 // ****************************************************************************
@@ -73,17 +73,17 @@ const SimpleLink = (props: SimpleLinkProps) => {
     return children || null;
   }
 
-  if (!href.startsWith('lbry:/')) {
+  if (!href.startsWith("lbry:/")) {
     return (
-      <a href={href} title={title} target={'_blank'} rel={'noreferrer noopener'}>
+      <a href={href} title={title} target={"_blank"} rel={"noreferrer noopener"}>
         {children}
       </a>
     );
   }
 
-  const [uri, search] = href.split('?');
+  const [uri, search] = href.split("?");
   const urlParams = new URLSearchParams(search);
-  const embedParam = urlParams.get('embed');
+  const embedParam = urlParams.get("embed");
 
   if (embed || embedParam) {
     // Decode this since users might just copy it from the url bar
@@ -134,8 +134,8 @@ const SimpleImageLink = (props: ImageLinkProps) => {
 const schema = { ...defaultSchema } as const;
 
 // Extend sanitation schema to support lbry protocol
-schema.protocols.href.push('lbry');
-schema.attributes.a.push('embed');
+schema.protocols.href.push("lbry");
+schema.attributes.a.push("embed");
 
 const REPLACE_REGEX = /(<iframe\s+src=["'])(.*?(?=))(["']\s*><\/iframe>)/g;
 
@@ -167,18 +167,18 @@ export default React.memo<MarkdownProps>(function MarkdownPreview(props: Markdow
         // Let the browser try to create an iframe to see if the markup is valid
         let lbrySrc;
         try {
-          let p = parse(iframeHtml);
-          const tag = p.getElementsByTagName('iframe');
+          const p = parse(iframeHtml);
+          const tag = p.getElementsByTagName("iframe");
           const s = tag[0];
-          lbrySrc = s && s.getAttribute('src');
+          lbrySrc = s && s.getAttribute("src");
         } catch (e: any) {}
 
-        if (lbrySrc && lbrySrc.startsWith('lbry://')) {
+        if (lbrySrc && lbrySrc.startsWith("lbry://")) {
           return lbrySrc;
         }
         return iframeHtml;
       })
-    : '';
+    : "";
 
   const remarkOptions: any = {
     sanitize: schema,
@@ -216,9 +216,9 @@ export default React.memo<MarkdownProps>(function MarkdownPreview(props: Markdow
   };
 
   const remarkAttrOpts = {
-    scope: 'extended',
-    elements: ['link'],
-    extend: { link: ['embed'] },
+    scope: "extended",
+    elements: ["link"],
+    extend: { link: ["embed"] },
     defaultValue: true,
   } as const;
 
@@ -231,7 +231,7 @@ export default React.memo<MarkdownProps>(function MarkdownPreview(props: Markdow
         {
           remark()
             .use(remarkStrip)
-            .use(remarkFrontMatter, ['yaml'])
+            .use(remarkFrontMatter, ["yaml"])
             .use(reactRenderer, remarkOptions)
             .processSync(content).contents
         }
@@ -240,7 +240,7 @@ export default React.memo<MarkdownProps>(function MarkdownPreview(props: Markdow
   }
 
   return (
-    <div dir="auto" className={classnames('markdown-preview', className)}>
+    <div dir="auto" className={classnames("markdown-preview", className)}>
       {
         remark()
           .use(remarkAttr, remarkAttrOpts)
@@ -256,7 +256,7 @@ export default React.memo<MarkdownProps>(function MarkdownPreview(props: Markdow
           .use(remarkEmoji)
           // Render new lines without needing spaces.
           .use(remarkBreaks)
-          .use(remarkFrontMatter, ['yaml'])
+          .use(remarkFrontMatter, ["yaml"])
           .use(reactRenderer, remarkOptions)
           .processSync(strippedContent).contents
       }

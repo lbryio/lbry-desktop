@@ -1,38 +1,38 @@
 //@ts-nocheck
-import {hot} from 'react-hot-loader/root';
-import { connect } from 'react-redux';
-import { selectGetSyncErrorMessage, selectSyncFatalError } from 'redux/selectors/sync';
-import { doFetchAccessToken, doUserSetReferrer } from 'redux/actions/user';
-import { selectUser, selectAccessToken, selectUserVerifiedEmail } from 'redux/selectors/user';
-import { selectUnclaimedRewards } from 'redux/selectors/rewards';
-import { doFetchChannelListMine, doFetchCollectionListMine, doResolveUris } from 'redux/actions/claims';
-import { selectMyChannelUrls, selectMyChannelClaimIds } from 'redux/selectors/claims';
-import * as SETTINGS from 'constants/settings';
-import { selectSubscriptions } from 'redux/selectors/subscriptions';
+import { hot } from "react-hot-loader/root";
+import { connect } from "react-redux";
+import { selectGetSyncErrorMessage, selectSyncFatalError } from "redux/selectors/sync";
+import { doFetchAccessToken, doUserSetReferrer } from "redux/actions/user";
+import { selectUser, selectAccessToken, selectUserVerifiedEmail } from "redux/selectors/user";
+import { selectUnclaimedRewards } from "redux/selectors/rewards";
+import { doFetchChannelListMine, doFetchCollectionListMine, doResolveUris } from "redux/actions/claims";
+import { selectMyChannelUrls, selectMyChannelClaimIds } from "redux/selectors/claims";
+import * as SETTINGS from "constants/settings";
+import { selectSubscriptions } from "redux/selectors/subscriptions";
 import {
   makeSelectClientSetting,
   selectLanguage,
   selectLoadedLanguages,
   selectThemePath,
-} from 'redux/selectors/settings';
+} from "redux/selectors/settings";
 import {
   selectIsUpgradeAvailable,
   selectAutoUpdateDownloaded,
   selectModal,
   selectActiveChannelClaim,
   selectIsUpdateModalDisplayed,
-} from 'redux/selectors/app';
-import { doGetWalletSyncPreference, doSetLanguage } from 'redux/actions/settings';
-import { doSyncLoop } from 'redux/actions/sync';
+} from "redux/selectors/app";
+import { doGetWalletSyncPreference, doSetLanguage } from "redux/actions/settings";
+import { doSyncLoop } from "redux/actions/sync";
 import {
   doDownloadUpgradeRequested,
   doSignIn,
   doGetAndPopulatePreferences,
   doSetActiveChannel,
   doSetIncognito,
-} from 'redux/actions/app';
-import { doFetchModBlockedList, doFetchCommentModAmIList } from 'redux/actions/comments';
-import App from './view';
+} from "redux/actions/app";
+import { doFetchModBlockedList, doFetchCommentModAmIList } from "redux/actions/comments";
+import App from "./view";
 
 const select = (state: unknown) => ({
   user: selectUser(state),

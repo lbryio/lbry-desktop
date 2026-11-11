@@ -1,24 +1,24 @@
-import type {ReactNode} from 'react';
-import React from 'react';
-import classnames from 'classnames';
-import Button from 'component/button';
+import type { ReactNode } from "react";
+import React from "react";
+import classnames from "classnames";
+import Button from "component/button";
 
 type Props = {
-  isResolvingUri: boolean,
-  channelUri: string | null | undefined,
-  link: boolean | null | undefined,
-  claim: Claim | null | undefined,
-  hideAnonymous: boolean,
+  isResolvingUri: boolean;
+  channelUri: string | null | undefined;
+  link: boolean | null | undefined;
+  claim: Claim | null | undefined;
+  hideAnonymous: boolean;
   // Lint thinks we aren't using these, even though we are.
   // Possibly because the resolve function is an arrow function that is passed in props?
-  resolveUri: (arg1: string) => void,
-  uri: string,
+  resolveUri: (arg1: string) => void;
+  uri: string;
   // to allow for other elements to be nested within the UriIndicator
-  children: React.ReactNode | null | undefined,
-  inline: boolean,
-  external?: boolean,
-  className?: string,
-  focusable: boolean
+  children: React.ReactNode | null | undefined;
+  inline: boolean;
+  external?: boolean;
+  className?: string;
+  focusable: boolean;
 };
 
 class UriIndicator extends React.PureComponent<Props> {
@@ -52,10 +52,10 @@ class UriIndicator extends React.PureComponent<Props> {
     } = this.props;
 
     if (!claim) {
-      return <span className="empty">{isResolvingUri ? 'Validating...' : 'Unused'}</span>;
+      return <span className="empty">{isResolvingUri ? "Validating..." : "Unused"}</span>;
     }
 
-    const isChannelClaim = claim.value_type === 'channel';
+    const isChannelClaim = claim.value_type === "channel";
     const signingChannel = claim.signing_channel && claim.signing_channel.amount;
     if (!signingChannel && !isChannelClaim) {
       if (hideAnonymous) {
@@ -63,7 +63,7 @@ class UriIndicator extends React.PureComponent<Props> {
       }
 
       return (
-        <span dir="auto" className={classnames('channel-name', className, { 'channel-name--inline': inline })}>
+        <span dir="auto" className={classnames("channel-name", className, { "channel-name--inline": inline })}>
           Anonymous
         </span>
       );
@@ -76,7 +76,7 @@ class UriIndicator extends React.PureComponent<Props> {
       const channelLink = link ? channelClaim.canonical_url || channelClaim.permanent_url : false;
 
       const inner = (
-        <span dir="auto" className={classnames('channel-name', { 'channel-name--inline': inline })}>
+        <span dir="auto" className={classnames("channel-name", { "channel-name--inline": inline })}>
           {name}
         </span>
       );
@@ -92,7 +92,7 @@ class UriIndicator extends React.PureComponent<Props> {
             // @ts-expect-error - TS2322 (ts-migration)
             tabIndex={focusable ? 0 : -1}
             className={className}
-            target={external ? '_blank' : undefined}
+            target={external ? "_blank" : undefined}
             navigate={channelLink}
           >
             {children}
@@ -102,9 +102,9 @@ class UriIndicator extends React.PureComponent<Props> {
         return (
           <Button
             // @ts-expect-error - TS2322 (ts-migration)
-            className={classnames(className, 'button--uri-indicator')}
+            className={classnames(className, "button--uri-indicator")}
             navigate={channelLink}
-            target={external ? '_blank' : undefined}
+            target={external ? "_blank" : undefined}
             aria-hidden={!focusable}
             tabIndex={focusable ? 0 : -1}
           >

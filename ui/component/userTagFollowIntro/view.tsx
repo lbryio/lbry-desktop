@@ -1,14 +1,14 @@
-import React from 'react';
-import Nag from 'component/common/nag';
-import TagsSelect from 'component/tagsSelect';
-import Button from 'component/button';
-import { Form } from 'component/common/form';
-import Card from 'component/common/card';
+import React from "react";
+import Nag from "component/common/nag";
+import TagsSelect from "component/tagsSelect";
+import Button from "component/button";
+import { Form } from "component/common/form";
+import Card from "component/common/card";
 
 type Props = {
-  subscribedChannels: Array<Subscription>,
-  onContinue: () => void,
-  followedTags: Array<Tag>
+  subscribedChannels: Array<Subscription>;
+  onContinue: () => void;
+  followedTags: Array<Tag>;
 };
 
 function UserTagFollowIntro(props: Props) {
@@ -17,8 +17,8 @@ function UserTagFollowIntro(props: Props) {
 
   return (
     <Card
-      title={__('Tag selection')}
-      subtitle={__('Select some tags to help us show you interesting things.')}
+      title={__("Tag selection")}
+      subtitle={__("Select some tags to help us show you interesting things.")}
       actions={
         <React.Fragment>
           <Form onSubmit={onContinue}>
@@ -26,24 +26,24 @@ function UserTagFollowIntro(props: Props) {
               <span />
               <Button
                 // @ts-expect-error - TS2322 (ts-migration)
-                button={followedTags.length < 1 ? 'alt' : 'primary'}
+                button={followedTags.length < 1 ? "alt" : "primary"}
                 onClick={onContinue}
-                label={followedTags.length < 1 ? __('Skip') : __('Continue')}
+                label={followedTags.length < 1 ? __("Skip") : __("Continue")}
               />
             </div>
           </Form>
           <div className="section__body">
             {/* @ts-expect-error - TS2322 (ts-migration) */}
-            <TagsSelect hideHeader limitShow={300} help={false} showClose={false} title={__('Follow new tags')} />
+            <TagsSelect hideHeader limitShow={300} help={false} showClose={false} title={__("Follow new tags")} />
             {followingCount > 0 && (
               <Nag
                 type="helpful"
                 message={
                   followingCount === 1
-                    ? __('You are currently following %followingCount% tag', { followingCount })
-                    : __('You are currently following %followingCount% tags', { followingCount })
+                    ? __("You are currently following %followingCount% tag", { followingCount })
+                    : __("You are currently following %followingCount% tags", { followingCount })
                 }
-                actionText={__('Continue')}
+                actionText={__("Continue")}
                 onClick={onContinue}
               />
             )}

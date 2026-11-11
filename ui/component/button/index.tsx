@@ -1,8 +1,8 @@
 //@ts-nocheck
-import Button from './view';
-import React, { forwardRef } from 'react';
-import { connect } from 'react-redux';
-import { selectUser, selectUserVerifiedEmail } from 'redux/selectors/user';
+import Button from "./view";
+import React, { forwardRef } from "react";
+import { connect } from "react-redux";
+import { selectUser, selectUserVerifiedEmail } from "redux/selectors/user";
 
 const mapStateToProps = (state: unknown) => ({
   pathname: state.router.location.pathname,

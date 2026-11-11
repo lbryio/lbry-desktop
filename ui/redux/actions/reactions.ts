@@ -1,14 +1,14 @@
-import {Lbryio} from 'lbryinc';
-import * as ACTIONS from 'constants/action_types';
-import * as REACTION_TYPES from 'constants/reactions';
-import { makeSelectMyReactionForUri } from 'redux/selectors/reactions';
-import { selectClaimForUri } from 'redux/selectors/claims';
+import { Lbryio } from "lbryinc";
+import * as ACTIONS from "constants/action_types";
+import * as REACTION_TYPES from "constants/reactions";
+import { makeSelectMyReactionForUri } from "redux/selectors/reactions";
+import { selectClaimForUri } from "redux/selectors/claims";
 
 export const doFetchReactions = (claimId: string) => (dispatch: Dispatch) => {
   dispatch({ type: ACTIONS.REACTIONS_LIST_STARTED });
 
   // @ts-expect-error - TS2339 (ts-migration)
-  return Lbryio.call('reaction', 'list', { claim_ids: claimId }, 'post')
+  return Lbryio.call("reaction", "list", { claim_ids: claimId }, "post")
     .then((reactions: Array<number>) => {
       dispatch({ type: ACTIONS.REACTIONS_LIST_COMPLETED, data: { claimId, reactions } });
     })
@@ -26,15 +26,15 @@ export const doReactionLike = (uri: string) => (dispatch: Dispatch, getState: Ge
 
   // @ts-expect-error - TS2339 (ts-migration)
   return Lbryio.call(
-    'reaction',
-    'react',
+    "reaction",
+    "react",
     {
       claim_ids: claimId,
       type: REACTION_TYPES.LIKE,
       clear_types: REACTION_TYPES.DISLIKE,
       ...(shouldRemove ? { remove: true } : {}),
     },
-    'post'
+    "post"
   )
     .then(() => {
       dispatch({ type: ACTIONS.REACTIONS_LIKE_COMPLETED, data: { claimId, shouldRemove } });
@@ -53,15 +53,15 @@ export const doReactionDislike = (uri: string) => (dispatch: Dispatch, getState:
 
   // @ts-expect-error - TS2339 (ts-migration)
   return Lbryio.call(
-    'reaction',
-    'react',
+    "reaction",
+    "react",
     {
       claim_ids: claimId,
       type: REACTION_TYPES.DISLIKE,
       clear_types: REACTION_TYPES.LIKE,
       ...(shouldRemove ? { remove: true } : {}),
     },
-    'post'
+    "post"
   )
     .then(() => {
       dispatch({ type: ACTIONS.REACTIONS_DISLIKE_COMPLETED, data: { claimId, shouldRemove } });

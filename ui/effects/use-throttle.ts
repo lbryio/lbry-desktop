@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
 const useEffectOnce = (effect: unknown) => {
-// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'EffectCallback'.
+  // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'EffectCallback'.
   React.useEffect(effect, []);
 };
 
@@ -25,20 +25,20 @@ export default function useThrottle(value: string, ms: number = 200) {
       setState(value);
       const timeoutCallback = () => {
         if (hasNextValue.current) {
-// @ts-expect-error - TS2322 - Type 'boolean' is not assignable to type 'number'.
+          // @ts-expect-error - TS2322 - Type 'boolean' is not assignable to type 'number'.
           hasNextValue.current = false;
           setState(nextValue.current);
-// @ts-expect-error - TS2322 - Type 'Timeout' is not assignable to type 'undefined'.
+          // @ts-expect-error - TS2322 - Type 'Timeout' is not assignable to type 'undefined'.
           timeout.current = setTimeout(timeoutCallback, ms);
         } else {
           timeout.current = undefined;
         }
       };
-// @ts-expect-error - TS2322 - Type 'Timeout' is not assignable to type 'undefined'.
+      // @ts-expect-error - TS2322 - Type 'Timeout' is not assignable to type 'undefined'.
       timeout.current = setTimeout(timeoutCallback, ms);
     } else {
       nextValue.current = value;
-// @ts-expect-error - TS2322 - Type 'boolean' is not assignable to type 'number'.
+      // @ts-expect-error - TS2322 - Type 'boolean' is not assignable to type 'number'.
       hasNextValue.current = true;
     }
   }, [ms, value]);

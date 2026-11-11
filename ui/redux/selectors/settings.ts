@@ -1,11 +1,11 @@
 //@ts-nocheck
-import * as SETTINGS from 'constants/settings';
-import * as DAEMON_SETTINGS from 'constants/daemon_settings';
+import * as SETTINGS from "constants/settings";
+import * as DAEMON_SETTINGS from "constants/daemon_settings";
 
-import { createSelector } from 'reselect';
-import { ENABLE_MATURE } from 'config';
-import { getDefaultHomepageKey, getDefaultLanguage } from 'util/default-languages';
-const homepages = require('homepages');
+import { createSelector } from "reselect";
+import { ENABLE_MATURE } from "config";
+import { getDefaultHomepageKey, getDefaultLanguage } from "util/default-languages";
+const homepages = require("homepages");
 
 const selectState = (state: unknown) => state.settings || {};
 
@@ -73,8 +73,8 @@ export const selectThemePath = createSelector(
   selectAutomaticDarkModeEnabled,
   selectIsNight,
   (theme, automaticDarkModeEnabled, isNight) => {
-    const dynamicTheme = automaticDarkModeEnabled && isNight ? 'dark' : theme;
-    return dynamicTheme || 'light';
+    const dynamicTheme = automaticDarkModeEnabled && isNight ? "dark" : theme;
+    return dynamicTheme || "light";
   }
 );
 
@@ -92,7 +92,7 @@ export const selectHomepageData = createSelector(
   (homepageCode) => {
     // homepages = { 'en': homepageFile, ... }
     // mixin Homepages here
-    return homepages[homepageCode] || homepages['en'] || {};
+    return homepages[homepageCode] || homepages["en"] || {};
   }
 );
 

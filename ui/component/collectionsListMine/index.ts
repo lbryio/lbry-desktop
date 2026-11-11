@@ -1,13 +1,13 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import {
   selectBuiltinCollections,
   selectMyPublishedPlaylistCollections,
   selectMyUnpublishedCollections, // should probably distinguish types
   // selectSavedCollections,
-} from 'redux/selectors/collections';
-import { selectFetchingMyCollections } from 'redux/selectors/claims';
-import CollectionsListMine from './view';
+} from "redux/selectors/collections";
+import { selectFetchingMyCollections } from "redux/selectors/claims";
+import CollectionsListMine from "./view";
 
 const select = (state: unknown) => ({
   builtinCollections: selectBuiltinCollections(state),

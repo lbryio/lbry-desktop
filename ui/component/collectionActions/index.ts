@@ -1,11 +1,11 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { makeSelectClaimForUri, makeSelectClaimIsPending } from 'redux/selectors/claims';
-import { makeSelectCollectionIsMine, makeSelectEditedCollectionForId } from 'redux/selectors/collections';
-import { doOpenModal } from 'redux/actions/app';
-import { selectListShuffle } from 'redux/selectors/content';
-import { doToggleShuffleList, doToggleLoopList } from 'redux/actions/content';
-import CollectionActions from './view';
+import { connect } from "react-redux";
+import { makeSelectClaimForUri, makeSelectClaimIsPending } from "redux/selectors/claims";
+import { makeSelectCollectionIsMine, makeSelectEditedCollectionForId } from "redux/selectors/collections";
+import { doOpenModal } from "redux/actions/app";
+import { selectListShuffle } from "redux/selectors/content";
+import { doToggleShuffleList, doToggleLoopList } from "redux/actions/content";
+import CollectionActions from "./view";
 
 const select = (state: unknown, props: unknown) => {
   let firstItem;

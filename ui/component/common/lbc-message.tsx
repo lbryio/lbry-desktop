@@ -1,9 +1,9 @@
-import React from 'react';
-import I18nMessage from 'component/i18nMessage';
-import CreditAmount from 'component/common/credit-amount';
+import React from "react";
+import I18nMessage from "component/i18nMessage";
+import CreditAmount from "component/common/credit-amount";
 
 type Props = {
-  children: string
+  children: string;
 };
 
 export default function LbcMessage(props: Props) {
@@ -17,10 +17,10 @@ export default function LbcMessage(props: Props) {
   );
 
   return (
-// @ts-expect-error - TS2769 - No overload matches this call.
+    // @ts-expect-error - TS2769 - No overload matches this call.
     <I18nMessage tokens={{ lbc: amount ? <CreditAmount badge noFormat amount={amount} /> : undefined }}>
       {/* Catch any rogue LBC's left */}
-      {tokenizedMessage.replace(/\sLBC/g, ' Credits')}
+      {tokenizedMessage.replace(/\sLBC/g, " Credits")}
     </I18nMessage>
   );
 }

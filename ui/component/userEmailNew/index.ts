@@ -1,17 +1,17 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doClearEmailEntry, doUserSignUp } from 'redux/actions/user';
+import { connect } from "react-redux";
+import { doClearEmailEntry, doUserSignUp } from "redux/actions/user";
 import {
   selectEmailNewIsPending,
   selectEmailNewErrorMessage,
   selectEmailAlreadyExists,
   selectUser,
-} from 'redux/selectors/user';
-import * as SETTINGS from 'constants/settings';
-import * as DAEMON_SETTINGS from 'constants/daemon_settings';
-import { doSetWalletSyncPreference, doSetDaemonSetting } from 'redux/actions/settings';
-import { selectDaemonSettings, makeSelectClientSetting } from 'redux/selectors/settings';
-import UserEmailNew from './view';
+} from "redux/selectors/user";
+import * as SETTINGS from "constants/settings";
+import * as DAEMON_SETTINGS from "constants/daemon_settings";
+import { doSetWalletSyncPreference, doSetDaemonSetting } from "redux/actions/settings";
+import { selectDaemonSettings, makeSelectClientSetting } from "redux/selectors/settings";
+import UserEmailNew from "./view";
 
 const select = (state: unknown) => ({
   isPending: selectEmailNewIsPending(state),

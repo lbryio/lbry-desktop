@@ -1,13 +1,13 @@
-import React from 'react';
-import LbcSymbol from 'component/common/lbc-symbol';
-import WunderbarSuggestion from 'component/wunderbarSuggestion';
+import React from "react";
+import LbcSymbol from "component/common/lbc-symbol";
+import WunderbarSuggestion from "component/wunderbarSuggestion";
 
 type Props = {
-  winningUri: string | null | undefined,
-  doResolveUris: (arg1: Array<string>) => void,
-  uris: Array<string>,
-  resolvingUris: boolean,
-  preferEmbed: boolean
+  winningUri: string | null | undefined;
+  doResolveUris: (arg1: Array<string>) => void;
+  uris: Array<string>;
+  resolvingUris: boolean;
+  preferEmbed: boolean;
 };
 
 export default function WunderbarTopSuggestion(props: Props) {
@@ -45,7 +45,7 @@ export default function WunderbarTopSuggestion(props: Props) {
   return (
     <>
       <div className="wunderbar__label">
-        <LbcSymbol prefix={__('Most Supported')} />
+        <LbcSymbol prefix={__("Most Supported")} />
       </div>
 
       <WunderbarSuggestion uri={winningUri} />

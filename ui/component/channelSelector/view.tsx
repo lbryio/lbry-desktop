@@ -1,34 +1,34 @@
-import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
-import classnames from 'classnames';
-import React from 'react';
-import ChannelThumbnail from 'component/channelThumbnail';
-import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
-import ChannelTitle from 'component/channelTitle';
-import Icon from 'component/common/icon';
-import { useHistory } from 'react-router';
+import * as ICONS from "constants/icons";
+import * as PAGES from "constants/pages";
+import classnames from "classnames";
+import React from "react";
+import ChannelThumbnail from "component/channelThumbnail";
+import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
+import ChannelTitle from "component/channelTitle";
+import Icon from "component/common/icon";
+import { useHistory } from "react-router";
 
 type Props = {
-  selectedChannelUrl: string // currently selected channel,
-  channels: Array<ChannelClaim> | null | undefined,
-  onChannelSelect: (url: string) => void,
-  hideAnon?: boolean,
-  activeChannelClaim: ChannelClaim | null | undefined,
-  doSetActiveChannel: (arg1: string) => void,
-  incognito: boolean,
-  doSetIncognito: (arg1: boolean) => void
+  selectedChannelUrl: string; // currently selected channel,
+  channels: Array<ChannelClaim> | null | undefined;
+  onChannelSelect: (url: string) => void;
+  hideAnon?: boolean;
+  activeChannelClaim: ChannelClaim | null | undefined;
+  doSetActiveChannel: (arg1: string) => void;
+  incognito: boolean;
+  doSetIncognito: (arg1: boolean) => void;
 };
 
 type ListItemProps = {
-  uri: string,
-  isSelected?: boolean
+  uri: string;
+  isSelected?: boolean;
 };
 
 function ChannelListItem(props: ListItemProps) {
   const { uri, isSelected = false } = props;
 
   return (
-    <div className={classnames('channel__list-item', { 'channel__list-item--selected': isSelected })}>
+    <div className={classnames("channel__list-item", { "channel__list-item--selected": isSelected })}>
       {/* @ts-expect-error - TS2739 (ts-migration) */}
       <ChannelThumbnail uri={uri} hideStakedIndicator xsmall noLazyLoad />
       {/* @ts-expect-error - TS2322 (ts-migration) */}
@@ -39,14 +39,14 @@ function ChannelListItem(props: ListItemProps) {
 }
 
 type IncognitoSelectorProps = {
-  isSelected?: boolean
+  isSelected?: boolean;
 };
 
 function IncognitoSelector(props: IncognitoSelectorProps) {
   return (
-    <div className={classnames('channel__list-item', { 'channel__list-item--selected': props.isSelected })}>
+    <div className={classnames("channel__list-item", { "channel__list-item--selected": props.isSelected })}>
       <Icon sectionIcon icon={ICONS.ANONYMOUS} />
-      <h2 className="channel__list-text">{__('Anonymous')}</h2>
+      <h2 className="channel__list-text">{__("Anonymous")}</h2>
       {props.isSelected && <Icon icon={ICONS.DOWN} />}
     </div>
   );
@@ -62,7 +62,7 @@ function ChannelSelector(props: Props) {
 
   function handleChannelSelect(channelClaim: unknown) {
     doSetIncognito(false);
-// @ts-expect-error - TS2339 - Property 'claim_id' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'claim_id' does not exist on type 'unknown'.
     doSetActiveChannel(channelClaim.claim_id);
   }
 
@@ -91,7 +91,7 @@ function ChannelSelector(props: Props) {
           <MenuItem onSelect={() => push(`/$/${PAGES.CHANNEL_NEW}?redirect=${pathname}`)}>
             <div className="channel__list-item">
               <Icon sectionIcon icon={ICONS.CHANNEL} />
-              <h2 className="channel__list-text">{__('Create a new channel')}</h2>
+              <h2 className="channel__list-text">{__("Create a new channel")}</h2>
             </div>
           </MenuItem>
         </MenuList>

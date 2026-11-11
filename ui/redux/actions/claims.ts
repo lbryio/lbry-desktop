@@ -1,8 +1,8 @@
-import * as ACTIONS from 'constants/action_types';
-import * as ABANDON_STATES from 'constants/abandon_states';
-import Lbry from 'lbry';
-import { normalizeURI } from 'util/lbryURI';
-import { doToast } from 'redux/actions/notifications';
+import * as ACTIONS from "constants/action_types";
+import * as ABANDON_STATES from "constants/abandon_states";
+import Lbry from "lbry";
+import { normalizeURI } from "util/lbryURI";
+import { doToast } from "redux/actions/notifications";
 import {
   selectMyClaimsRaw,
   selectResolvingUris,
@@ -10,16 +10,16 @@ import {
   selectMyChannelClaims,
   selectPendingClaimsById,
   selectClaimIsMine,
-} from 'redux/selectors/claims';
+} from "redux/selectors/claims";
 
-import { doFetchTxoPage } from 'redux/actions/wallet';
-import { selectSupportsByOutpoint } from 'redux/selectors/wallet';
-import { creditsToString } from 'util/format-credits';
-import { batchActions } from 'util/batch-actions';
-import { createNormalizedClaimSearchKey } from 'util/claim';
-import { PAGE_SIZE } from 'constants/claim';
-import { makeSelectClaimIdsForCollectionId } from 'redux/selectors/collections';
-import { doFetchItemsInCollections } from 'redux/actions/collections';
+import { doFetchTxoPage } from "redux/actions/wallet";
+import { selectSupportsByOutpoint } from "redux/selectors/wallet";
+import { creditsToString } from "util/format-credits";
+import { batchActions } from "util/batch-actions";
+import { createNormalizedClaimSearchKey } from "util/claim";
+import { PAGE_SIZE } from "constants/claim";
+import { makeSelectClaimIdsForCollectionId } from "redux/selectors/collections";
+import { doFetchItemsInCollections } from "redux/actions/collections";
 
 let onChannelConfirmCallback;
 let checkPendingInterval;
@@ -48,8 +48,8 @@ export function doResolveUris(
     }
 
     const options: {
-      include_is_my_output?: boolean,
-      include_purchase_receipt: boolean
+      include_is_my_output?: boolean;
+      include_purchase_receipt: boolean;
     } = {
       include_purchase_receipt: true,
     };
@@ -64,11 +64,11 @@ export function doResolveUris(
 
     const resolveInfo: {
       [key: string]: {
-        stream: StreamClaim | null | undefined,
-        channel: ChannelClaim | null | undefined,
-        claimsInChannel: number | null | undefined,
-        collection: CollectionClaim | null | undefined
-      }
+        stream: StreamClaim | null | undefined;
+        channel: ChannelClaim | null | undefined;
+        claimsInChannel: number | null | undefined;
+        collection: CollectionClaim | null | undefined;
+      };
     } = {};
 
     const collectionIds: Array<string> = [];
@@ -94,16 +94,16 @@ export function doResolveUris(
                 if (uriResolveInfo.reposted_claim) {
                   const repostUrl = uriResolveInfo.reposted_claim.permanent_url;
                   if (!resolvingUris.includes(repostUrl)) {
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+                    // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
                     repostsToResolve.push(repostUrl);
                   }
                 }
               }
-              let result: Record<string, any> = {};
-              if (uriResolveInfo.value_type === 'channel') {
+              const result: Record<string, any> = {};
+              if (uriResolveInfo.value_type === "channel") {
                 result.channel = uriResolveInfo;
                 result.claimsInChannel = uriResolveInfo.meta.claims_in_channel;
-              } else if (uriResolveInfo.value_type === 'collection') {
+              } else if (uriResolveInfo.value_type === "collection") {
                 result.collection = uriResolveInfo;
                 collectionIds.push(uriResolveInfo.claim_id);
               } else {
@@ -121,11 +121,11 @@ export function doResolveUris(
       }
       processResult(result, resolveInfo, resolveReposts);
 
-// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
       if (repostsToResolve.length) {
         dispatch({
           type: ACTIONS.RESOLVE_URIS_STARTED,
-          data: { uris: repostsToResolve, debug: 'reposts' },
+          data: { uris: repostsToResolve, debug: "reposts" },
         });
         repostedResults = await Lbry.resolve({ urls: repostsToResolve, ...options });
       }
@@ -160,7 +160,7 @@ export function doFetchClaimListMine(
       type: ACTIONS.FETCH_CLAIM_LIST_MINE_STARTED,
     });
 
-    let claimTypes = ['stream', 'repost'];
+    let claimTypes = ["stream", "repost"];
     if (filterBy && filterBy.length !== 0) {
       claimTypes = claimTypes.filter((t) => filterBy.includes(t));
     }
@@ -191,7 +191,7 @@ export function doFetchAllClaimListMine() {
     Lbry.claim_list({
       page: 1,
       page_size: 99999,
-      claim_type: ['stream', 'repost'],
+      claim_type: ["stream", "repost"],
       resolve: true,
     }).then((result: StreamListResponse) => {
       dispatch({
@@ -207,9 +207,9 @@ export function doFetchAllClaimListMine() {
 export function doAbandonTxo(txo: Txo, cb: (arg1: string) => void) {
   return (dispatch: Dispatch) => {
     if (cb) cb(ABANDON_STATES.PENDING);
-    const isClaim = txo.type === 'claim';
-    const isSupport = txo.type === 'support' && txo.is_my_input === true;
-    const isTip = txo.type === 'support' && txo.is_my_input === false;
+    const isClaim = txo.type === "claim";
+    const isSupport = txo.type === "support" && txo.is_my_input === true;
+    const isTip = txo.type === "support" && txo.is_my_input === false;
 
     const data = isClaim ? { claimId: txo.claim_id } : { outpoint: `${txo.txid}:${txo.nout}` };
 
@@ -225,7 +225,7 @@ export function doAbandonTxo(txo: Txo, cb: (arg1: string) => void) {
       if (cb) cb(ABANDON_STATES.ERROR);
       dispatch(
         doToast({
-          message: isClaim ? 'Error abandoning your claim/support' : 'Error unlocking your tip',
+          message: isClaim ? "Error abandoning your claim/support" : "Error unlocking your tip",
           isError: true,
         })
       );
@@ -239,11 +239,11 @@ export function doAbandonTxo(txo: Txo, cb: (arg1: string) => void) {
 
       let abandonMessage;
       if (isClaim) {
-        abandonMessage = __('Successfully abandoned your claim.');
+        abandonMessage = __("Successfully abandoned your claim.");
       } else if (isSupport) {
-        abandonMessage = __('Successfully abandoned your support.');
+        abandonMessage = __("Successfully abandoned your support.");
       } else {
-        abandonMessage = __('Successfully unlocked your tip!');
+        abandonMessage = __("Successfully unlocked your tip!");
       }
       if (cb) cb(ABANDON_STATES.DONE);
 
@@ -255,26 +255,26 @@ export function doAbandonTxo(txo: Txo, cb: (arg1: string) => void) {
     };
 
     const abandonParams: {
-      claim_id?: string,
-      txid?: string,
-      nout?: number
+      claim_id?: string;
+      txid?: string;
+      nout?: number;
     } = {
-// @ts-expect-error - TS2322 - Type '{ blocking: boolean; }' is not assignable to type '{ claim_id?: string; txid?: string; nout?: number; }'.
+      // @ts-expect-error - TS2322 - Type '{ blocking: boolean; }' is not assignable to type '{ claim_id?: string; txid?: string; nout?: number; }'.
       blocking: true,
     };
     if (isClaim) {
-      abandonParams['claim_id'] = txo.claim_id;
+      abandonParams["claim_id"] = txo.claim_id;
     } else {
-      abandonParams['txid'] = txo.txid;
-      abandonParams['nout'] = txo.nout;
+      abandonParams["txid"] = txo.txid;
+      abandonParams["nout"] = txo.nout;
     }
 
     let method;
     if (isSupport || isTip) {
-      method = 'support_abandon';
+      method = "support_abandon";
     } else if (isClaim) {
       const { normalized_name: claimName } = txo;
-      method = claimName.startsWith('@') ? 'channel_abandon' : 'stream_abandon';
+      method = claimName.startsWith("@") ? "channel_abandon" : "stream_abandon";
     }
 
     if (!method) {
@@ -294,7 +294,7 @@ export function doAbandonClaim(claim: Claim, cb: (arg1: string) => void) {
     const state = getState();
     const myClaims: Array<Claim> = selectMyClaimsRaw(state);
     const mySupports: {
-      [key: string]: Support
+      [key: string]: Support;
     } = selectSupportsByOutpoint(state);
 
     // A user could be trying to abandon a support or one of their claims
@@ -303,7 +303,7 @@ export function doAbandonClaim(claim: Claim, cb: (arg1: string) => void) {
     const supportToAbandon = mySupports[outpoint];
 
     if (!claimToAbandon && !supportToAbandon) {
-      console.error('No associated support or claim with txid: ', txid);
+      console.error("No associated support or claim with txid: ", txid);
       return;
     }
 
@@ -323,7 +323,7 @@ export function doAbandonClaim(claim: Claim, cb: (arg1: string) => void) {
     const errorCallback = () => {
       dispatch(
         doToast({
-          message: isClaim ? 'Error abandoning your claim/support' : 'Error unlocking your tip',
+          message: isClaim ? "Error abandoning your claim/support" : "Error unlocking your tip",
           isError: true,
         })
       );
@@ -339,11 +339,11 @@ export function doAbandonClaim(claim: Claim, cb: (arg1: string) => void) {
 
       let abandonMessage;
       if (isClaim) {
-        abandonMessage = __('Successfully abandoned your claim.');
+        abandonMessage = __("Successfully abandoned your claim.");
       } else if (supportToAbandon) {
-        abandonMessage = __('Successfully abandoned your support.');
+        abandonMessage = __("Successfully abandoned your support.");
       } else {
-        abandonMessage = __('Successfully unlocked your tip!');
+        abandonMessage = __("Successfully unlocked your tip!");
       }
 
       dispatch(
@@ -362,10 +362,10 @@ export function doAbandonClaim(claim: Claim, cb: (arg1: string) => void) {
 
     let method;
     if (supportToAbandon) {
-      method = 'support_abandon';
+      method = "support_abandon";
     } else if (claimToAbandon) {
       const { name: claimName } = claimToAbandon;
-      method = claimName.startsWith('@') ? 'channel_abandon' : 'stream_abandon';
+      method = claimName.startsWith("@") ? "channel_abandon" : "stream_abandon";
     }
 
     if (!method) {
@@ -388,7 +388,7 @@ export function doFetchClaimsByChannel(uri: string, page: number = 1) {
       channel: uri,
       valid_channel_signature: true,
       page: page || 1,
-      order_by: ['release_time'],
+      order_by: ["release_time"],
       include_is_my_output: true,
       include_purchase_receipt: true,
     }).then((result: ClaimSearchResponse) => {
@@ -420,17 +420,17 @@ export function doCreateChannel(name: string, amount: number, optionalParams: an
     });
 
     const createParams: {
-      name: string,
-      bid: string,
-      blocking: true,
-      title?: string,
-      cover_url?: string,
-      thumbnail_url?: string,
-      description?: string,
-      website_url?: string,
-      email?: string,
-      tags?: Array<Tag>,
-      languages?: Array<string>
+      name: string;
+      bid: string;
+      blocking: true;
+      title?: string;
+      cover_url?: string;
+      thumbnail_url?: string;
+      description?: string;
+      website_url?: string;
+      email?: string;
+      tags?: Array<Tag>;
+      languages?: Array<string>;
     } = {
       name,
       bid: creditsToString(amount),
@@ -464,30 +464,32 @@ export function doCreateChannel(name: string, amount: number, optionalParams: an
       }
     }
 
-    return Lbry.channel_create(createParams)
-      // outputs[0] is the certificate
-      // outputs[1] is the change from the tx, not in the app currently
-      .then((result: ChannelCreateResponse) => {
-        const channelClaim = result.outputs[0];
-        dispatch({
-          type: ACTIONS.CREATE_CHANNEL_COMPLETED,
-          data: { channelClaim },
-        });
-        dispatch({
-          type: ACTIONS.UPDATE_PENDING_CLAIMS,
-          data: {
-            claims: [channelClaim],
-          },
-        });
-        dispatch(doCheckPendingClaims(onConfirm));
-        return channelClaim;
-      })
-      .catch((error) => {
-        dispatch({
-          type: ACTIONS.CREATE_CHANNEL_FAILED,
-          data: error.message,
-        });
-      });
+    return (
+      Lbry.channel_create(createParams)
+        // outputs[0] is the certificate
+        // outputs[1] is the change from the tx, not in the app currently
+        .then((result: ChannelCreateResponse) => {
+          const channelClaim = result.outputs[0];
+          dispatch({
+            type: ACTIONS.CREATE_CHANNEL_COMPLETED,
+            data: { channelClaim },
+          });
+          dispatch({
+            type: ACTIONS.UPDATE_PENDING_CLAIMS,
+            data: {
+              claims: [channelClaim],
+            },
+          });
+          dispatch(doCheckPendingClaims(onConfirm));
+          return channelClaim;
+        })
+        .catch((error) => {
+          dispatch({
+            type: ACTIONS.CREATE_CHANNEL_FAILED,
+            data: error.message,
+          });
+        })
+    );
   };
 }
 
@@ -517,13 +519,13 @@ export function doUpdateChannel(params: any, cb: any) {
     } as const;
 
     if (params.tags) {
-// @ts-expect-error - TS2540 - Cannot assign to 'tags' because it is a read-only property.
+      // @ts-expect-error - TS2540 - Cannot assign to 'tags' because it is a read-only property.
       updateParams.tags = params.tags.map((tag) => tag.name);
     }
 
     // we'll need to remove these once we add locations/channels to channel page edit/create options
     if (channelClaim && channelClaim.value && channelClaim.value.locations) {
-// @ts-expect-error - TS2540 - Cannot assign to 'locations' because it is a read-only property.
+      // @ts-expect-error - TS2540 - Cannot assign to 'locations' because it is a read-only property.
       updateParams.locations = channelClaim.value.locations;
     }
 
@@ -613,7 +615,7 @@ export function doFetchCollectionListMine(page: number = 1, pageSize: number = 9
       dispatch(
         doFetchItemsInCollections({
           collectionIds: items.map((claim) => claim.claim_id),
-// @ts-expect-error - TS2345 - Argument of type '{ collectionIds: string[]; page_size: number; }' is not assignable to parameter of type '{ collectionIds: string[]; pageSize?: number; }'.
+          // @ts-expect-error - TS2345 - Argument of type '{ collectionIds: string[]; page_size: number; }' is not assignable to parameter of type '{ collectionIds: string[]; pageSize?: number; }'.
           page_size: 5,
         })
       );
@@ -632,18 +634,18 @@ export function doFetchCollectionListMine(page: number = 1, pageSize: number = 9
 
 export function doClaimSearch(
   options: {
-    page_size?: number,
-    page: number,
-    no_totals?: boolean,
-    any_tags?: Array<string>,
-    claim_ids?: Array<string>,
-    channel_ids?: Array<string>,
-    not_channel_ids?: Array<string>,
-    not_tags?: Array<string>,
-    order_by?: Array<string>,
-    release_time?: string,
-    has_source?: boolean,
-    has_no_souce?: boolean
+    page_size?: number;
+    page: number;
+    no_totals?: boolean;
+    any_tags?: Array<string>;
+    claim_ids?: Array<string>;
+    channel_ids?: Array<string>;
+    not_channel_ids?: Array<string>;
+    not_tags?: Array<string>;
+    order_by?: Array<string>;
+    release_time?: string;
+    has_source?: boolean;
+    has_no_souce?: boolean;
   } = {
     no_totals: true,
     page_size: 10,
@@ -662,7 +664,7 @@ export function doClaimSearch(
       const urls: unknown = [];
       data.items.forEach((stream: Claim) => {
         resolveInfo[stream.canonical_url] = { stream };
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+        // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
         urls.push(stream.canonical_url);
       });
 
@@ -703,7 +705,7 @@ export function doRepost(options: StreamRepostOptions) {
       });
 
       function success(response: unknown) {
-// @ts-expect-error - TS2339 - Property 'outputs' does not exist on type 'unknown'.
+        // @ts-expect-error - TS2339 - Property 'outputs' does not exist on type 'unknown'.
         const repostClaim = response.outputs[0];
         dispatch({
           type: ACTIONS.CLAIM_REPOST_COMPLETED,
@@ -727,7 +729,7 @@ export function doRepost(options: StreamRepostOptions) {
         dispatch({
           type: ACTIONS.CLAIM_REPOST_FAILED,
           data: {
-// @ts-expect-error - TS2339 - Property 'message' does not exist on type 'unknown'.
+            // @ts-expect-error - TS2339 - Property 'message' does not exist on type 'unknown'.
             error: error.message,
           },
         });
@@ -740,31 +742,31 @@ export function doRepost(options: StreamRepostOptions) {
 
 export function doCollectionPublish(
   options: {
-    name: string,
-    bid: string,
-    blocking: true,
-    title?: string,
-    channel_id?: string,
-    thumbnail_url?: string,
-    description?: string,
-    tags?: Array<Tag>,
-    languages?: Array<string>,
-    claims: Array<string>
+    name: string;
+    bid: string;
+    blocking: true;
+    title?: string;
+    channel_id?: string;
+    thumbnail_url?: string;
+    description?: string;
+    tags?: Array<Tag>;
+    languages?: Array<string>;
+    claims: Array<string>;
   },
   localId: string
 ) {
   return (dispatch: Dispatch): Promise<any> => {
     const params: {
-      name: string,
-      bid: string,
-      channel_id?: string,
-      blocking?: true,
-      title?: string,
-      thumbnail_url?: string,
-      description?: string,
-      tags?: Array<string>,
-      languages?: Array<string>,
-      claims: Array<string>
+      name: string;
+      bid: string;
+      channel_id?: string;
+      blocking?: true;
+      title?: string;
+      thumbnail_url?: string;
+      description?: string;
+      tags?: Array<string>;
+      languages?: Array<string>;
+      claims: Array<string>;
     } = {
       name: options.name,
       bid: creditsToString(options.bid),
@@ -773,18 +775,18 @@ export function doCollectionPublish(
       description: options.description,
       tags: [],
       languages: options.languages || [],
-// @ts-expect-error - TS2322 - Type '{ name: string; bid: string; title: string; thumbnail_url: string; description: string; tags: undefined[]; languages: string[]; locations: undefined[]; blocking: true; claims: string[]; }' is not assignable to type '{ name: string; bid: string; channel_id?: string; blocking?: true; title?: string; thumbnail_url?: string; description?: string; tags?: string[]; languages?: string[]; claims: string[]; }'.
+      // @ts-expect-error - TS2322 - Type '{ name: string; bid: string; title: string; thumbnail_url: string; description: string; tags: undefined[]; languages: string[]; locations: undefined[]; blocking: true; claims: string[]; }' is not assignable to type '{ name: string; bid: string; channel_id?: string; blocking?: true; title?: string; thumbnail_url?: string; description?: string; tags?: string[]; languages?: string[]; claims: string[]; }'.
       locations: [],
       blocking: true,
       claims: options.claims,
     };
 
     if (options.tags) {
-      params['tags'] = options.tags.map((tag) => tag.name);
+      params["tags"] = options.tags.map((tag) => tag.name);
     }
 
     if (options.channel_id) {
-      params['channel_id'] = options.channel_id;
+      params["channel_id"] = options.channel_id;
     }
 
     return new Promise<any>((resolve) => {
@@ -793,7 +795,7 @@ export function doCollectionPublish(
       });
 
       function success(response: unknown) {
-// @ts-expect-error - TS2339 - Property 'outputs' does not exist on type 'unknown'.
+        // @ts-expect-error - TS2339 - Property 'outputs' does not exist on type 'unknown'.
         const collectionClaim = response.outputs[0];
         dispatch(
           batchActions(
@@ -815,7 +817,7 @@ export function doCollectionPublish(
           type: ACTIONS.COLLECTION_PENDING,
           data: { localId: localId, claimId: collectionClaim.claim_id },
         });
-// @ts-expect-error - TS2554 - Expected 1 arguments, but got 0.
+        // @ts-expect-error - TS2554 - Expected 1 arguments, but got 0.
         dispatch(doCheckPendingClaims());
         dispatch(doFetchCollectionListMine(1, 10));
         return resolve(collectionClaim);
@@ -825,7 +827,7 @@ export function doCollectionPublish(
         dispatch({
           type: ACTIONS.COLLECTION_PUBLISH_FAILED,
           data: {
-// @ts-expect-error - TS2339 - Property 'message' does not exist on type 'unknown'.
+            // @ts-expect-error - TS2339 - Property 'message' does not exist on type 'unknown'.
             error: error.message,
           },
         });
@@ -838,16 +840,16 @@ export function doCollectionPublish(
 
 export function doCollectionPublishUpdate(
   options: {
-    bid?: string,
-    blocking?: true,
-    title?: string,
-    thumbnail_url?: string,
-    description?: string,
-    claim_id: string,
-    tags?: Array<Tag>,
-    languages?: Array<string>,
-    claims?: Array<string>,
-    channel_id?: string
+    bid?: string;
+    blocking?: true;
+    title?: string;
+    thumbnail_url?: string;
+    description?: string;
+    claim_id: string;
+    tags?: Array<Tag>;
+    languages?: Array<string>;
+    claims?: Array<string>;
+    channel_id?: string;
   },
   isBackgroundUpdate?: boolean
 ) {
@@ -855,18 +857,18 @@ export function doCollectionPublishUpdate(
     // TODO: implement one click update
 
     const updateParams: {
-      bid?: string,
-      blocking?: true,
-      title?: string,
-      thumbnail_url?: string,
-      channel_id?: string,
-      description?: string,
-      claim_id: string,
-      tags?: Array<string>,
-      languages?: Array<string>,
-      claims?: Array<string>,
-      clear_claims: boolean,
-      replace?: boolean
+      bid?: string;
+      blocking?: true;
+      title?: string;
+      thumbnail_url?: string;
+      channel_id?: string;
+      description?: string;
+      claim_id: string;
+      tags?: Array<string>;
+      languages?: Array<string>;
+      claims?: Array<string>;
+      clear_claims: boolean;
+      replace?: boolean;
     } = isBackgroundUpdate
       ? {
           blocking: true,
@@ -880,7 +882,7 @@ export function doCollectionPublishUpdate(
           description: options.description,
           tags: [],
           languages: options.languages || [],
-// @ts-expect-error - TS2322 - Type '{ blocking: true; claim_id: string; clear_claims: true; } | { bid: string; title: string; thumbnail_url: string; description: string; tags: undefined[]; languages: string[]; locations: undefined[]; blocking: true; claim_id: string; clear_claims: true; replace: true; }' is not assignable to type '{ bid?: string; blocking?: true; title?: string; thumbnail_url?: string; channel_id?: string; description?: string; claim_id: string; tags?: string[]; languages?: string[]; claims?: string[]; clear_claims: boolean; replace?: boolean; }'.
+          // @ts-expect-error - TS2322 - Type '{ blocking: true; claim_id: string; clear_claims: true; } | { bid: string; title: string; thumbnail_url: string; description: string; tags: undefined[]; languages: string[]; locations: undefined[]; blocking: true; claim_id: string; clear_claims: true; replace: true; }' is not assignable to type '{ bid?: string; blocking?: true; title?: string; thumbnail_url?: string; channel_id?: string; description?: string; claim_id: string; tags?: string[]; languages?: string[]; claims?: string[]; clear_claims: boolean; replace?: boolean; }'.
           locations: [],
           blocking: true,
           claim_id: options.claim_id,
@@ -890,17 +892,17 @@ export function doCollectionPublishUpdate(
 
     if (isBackgroundUpdate && updateParams.claim_id) {
       const state = getState();
-      updateParams['claims'] = makeSelectClaimIdsForCollectionId(updateParams.claim_id)(state);
+      updateParams["claims"] = makeSelectClaimIdsForCollectionId(updateParams.claim_id)(state);
     } else if (options.claims) {
-      updateParams['claims'] = options.claims;
+      updateParams["claims"] = options.claims;
     }
 
     if (options.tags) {
-      updateParams['tags'] = options.tags.map((tag) => tag.name);
+      updateParams["tags"] = options.tags.map((tag) => tag.name);
     }
 
     if (options.channel_id) {
-      updateParams['channel_id'] = options.channel_id;
+      updateParams["channel_id"] = options.channel_id;
     }
 
     return new Promise<any>((resolve) => {
@@ -909,7 +911,7 @@ export function doCollectionPublishUpdate(
       });
 
       function success(response: unknown) {
-// @ts-expect-error - TS2339 - Property 'outputs' does not exist on type 'unknown'.
+        // @ts-expect-error - TS2339 - Property 'outputs' does not exist on type 'unknown'.
         const collectionClaim = response.outputs[0];
         dispatch({
           type: ACTIONS.COLLECTION_PUBLISH_UPDATE_COMPLETED,
@@ -927,7 +929,7 @@ export function doCollectionPublishUpdate(
             claims: [collectionClaim],
           },
         });
-// @ts-expect-error - TS2554 - Expected 1 arguments, but got 0.
+        // @ts-expect-error - TS2554 - Expected 1 arguments, but got 0.
         dispatch(doCheckPendingClaims());
         return resolve(collectionClaim);
       }
@@ -936,7 +938,7 @@ export function doCollectionPublishUpdate(
         dispatch({
           type: ACTIONS.COLLECTION_PUBLISH_UPDATE_FAILED,
           data: {
-// @ts-expect-error - TS2339 - Property 'message' does not exist on type 'unknown'.
+            // @ts-expect-error - TS2339 - Property 'message' does not exist on type 'unknown'.
             error: error.message,
           },
         });
@@ -996,7 +998,7 @@ export function doPurchaseList(page: number = 1, pageSize: number = PAGE_SIZE) {
       dispatch({
         type: ACTIONS.PURCHASE_LIST_FAILED,
         data: {
-// @ts-expect-error - TS2339 - Property 'message' does not exist on type 'unknown'.
+          // @ts-expect-error - TS2339 - Property 'message' does not exist on type 'unknown'.
           error: error.message,
         },
       });
@@ -1010,67 +1012,68 @@ export function doPurchaseList(page: number = 1, pageSize: number = PAGE_SIZE) {
   };
 }
 
-export const doCheckPendingClaims = (onChannelConfirmed: (...args: any) => any) => (dispatch: Dispatch, getState: GetState) => {
-  if (onChannelConfirmed) {
-    onChannelConfirmCallback = onChannelConfirmed;
-  }
-  clearInterval(checkPendingInterval);
-  const checkTxoList = () => {
-    const state = getState();
-    const pendingById = Object.assign({}, selectPendingClaimsById(state));
-    const pendingTxos = (Object.values(pendingById) as any).map((p) => p.txid);
-    // use collections
-    if (pendingTxos.length) {
-      Lbry.txo_list({ txid: pendingTxos })
-        .then((result) => {
-          const txos = result.items;
-          const idsToConfirm: unknown = [];
-          txos.forEach((txo) => {
-            if (txo.claim_id && txo.confirmations > 0) {
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
-              idsToConfirm.push(txo.claim_id);
-              delete pendingById[txo.claim_id];
-            }
-          });
-          return { idsToConfirm, pendingById };
-        })
-        .then((results) => {
-          const { idsToConfirm, pendingById } = results;
-// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
-          if (idsToConfirm.length) {
-            return Lbry.claim_list({ claim_id: idsToConfirm, resolve: true }).then((results) => {
-              const claims = results.items;
-              const collectionIds = claims.filter((c) => c.value_type === 'collection').map((c) => c.claim_id);
-              dispatch({
-                type: ACTIONS.UPDATE_CONFIRMED_CLAIMS,
-                data: {
-                  claims: claims,
-                  pending: pendingById,
-                },
-              });
-              if (collectionIds.length) {
-                dispatch(
-                  doFetchItemsInCollections({
-                    collectionIds,
-                  })
-                );
-              }
-              const channelClaims = claims.filter((claim) => claim.value_type === 'channel');
-              if (channelClaims.length && onChannelConfirmCallback) {
-                channelClaims.forEach((claim) => onChannelConfirmCallback(claim));
-              }
-              if (Object.keys(pendingById).length === 0) {
-                clearInterval(checkPendingInterval);
+export const doCheckPendingClaims =
+  (onChannelConfirmed: (...args: any) => any) => (dispatch: Dispatch, getState: GetState) => {
+    if (onChannelConfirmed) {
+      onChannelConfirmCallback = onChannelConfirmed;
+    }
+    clearInterval(checkPendingInterval);
+    const checkTxoList = () => {
+      const state = getState();
+      const pendingById = Object.assign({}, selectPendingClaimsById(state));
+      const pendingTxos = (Object.values(pendingById) as any).map((p) => p.txid);
+      // use collections
+      if (pendingTxos.length) {
+        Lbry.txo_list({ txid: pendingTxos })
+          .then((result) => {
+            const txos = result.items;
+            const idsToConfirm: unknown = [];
+            txos.forEach((txo) => {
+              if (txo.claim_id && txo.confirmations > 0) {
+                // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+                idsToConfirm.push(txo.claim_id);
+                delete pendingById[txo.claim_id];
               }
             });
-          }
-        });
-    } else {
-      clearInterval(checkPendingInterval);
-    }
+            return { idsToConfirm, pendingById };
+          })
+          .then((results) => {
+            const { idsToConfirm, pendingById } = results;
+            // @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
+            if (idsToConfirm.length) {
+              return Lbry.claim_list({ claim_id: idsToConfirm, resolve: true }).then((results) => {
+                const claims = results.items;
+                const collectionIds = claims.filter((c) => c.value_type === "collection").map((c) => c.claim_id);
+                dispatch({
+                  type: ACTIONS.UPDATE_CONFIRMED_CLAIMS,
+                  data: {
+                    claims: claims,
+                    pending: pendingById,
+                  },
+                });
+                if (collectionIds.length) {
+                  dispatch(
+                    doFetchItemsInCollections({
+                      collectionIds,
+                    })
+                  );
+                }
+                const channelClaims = claims.filter((claim) => claim.value_type === "channel");
+                if (channelClaims.length && onChannelConfirmCallback) {
+                  channelClaims.forEach((claim) => onChannelConfirmCallback(claim));
+                }
+                if (Object.keys(pendingById).length === 0) {
+                  clearInterval(checkPendingInterval);
+                }
+              });
+            }
+          });
+      } else {
+        clearInterval(checkPendingInterval);
+      }
+    };
+    // do something with onConfirmed (typically get blocklist for channel)
+    checkPendingInterval = setInterval(() => {
+      checkTxoList();
+    }, 30000);
   };
-  // do something with onConfirmed (typically get blocklist for channel)
-  checkPendingInterval = setInterval(() => {
-    checkTxoList();
-  }, 30000);
-};

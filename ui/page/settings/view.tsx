@@ -1,20 +1,20 @@
-import * as React from 'react';
-import Page from 'component/page';
-import SettingAccount from 'component/settingAccount';
-import SettingAppearance from 'component/settingAppearance';
-import SettingContent from 'component/settingContent';
-import SettingSystem from 'component/settingSystem';
-import SettingStorage from 'component/settingStorage';
+import * as React from "react";
+import Page from "component/page";
+import SettingAccount from "component/settingAccount";
+import SettingAppearance from "component/settingAppearance";
+import SettingContent from "component/settingContent";
+import SettingSystem from "component/settingSystem";
+import SettingStorage from "component/settingStorage";
 
 type DaemonSettings = {
-  download_dir: string,
-  share_usage_data: boolean
+  download_dir: string;
+  share_usage_data: boolean;
 };
 
 type Props = {
-  daemonSettings: DaemonSettings,
-  enterSettings: () => void,
-  exitSettings: () => void
+  daemonSettings: DaemonSettings;
+  enterSettings: () => void;
+  exitSettings: () => void;
 };
 
 class SettingsPage extends React.PureComponent<Props> {
@@ -38,15 +38,15 @@ class SettingsPage extends React.PureComponent<Props> {
         settingsPage
         noSideNavigation
         // @ts-expect-error - TS2741 (ts-migration)
-        backout={{ title: __('Settings'), backLabel: __('Back') }}
+        backout={{ title: __("Settings"), backLabel: __("Back") }}
         className="card-stack"
       >
         {noDaemonSettings ? (
           <section className="card card--section">
-            <div className="card__title card__title--deprecated">{__('Failed to load settings.')}</div>
+            <div className="card__title card__title--deprecated">{__("Failed to load settings.")}</div>
           </section>
         ) : (
-          <div className={'card-stack'}>
+          <div className={"card-stack"}>
             <SettingAppearance />
             <SettingAccount />
             <SettingContent />

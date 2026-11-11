@@ -1,11 +1,11 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectGetSyncIsPending, selectSyncApplyPasswordError } from 'redux/selectors/sync';
-import { doGetSyncDesktop } from 'redux/actions/sync';
-import { selectUserEmail } from 'redux/selectors/user';
-import { doSetClientSetting } from 'redux/actions/settings';
-import { doSignOut, doHandleSyncComplete } from 'redux/actions/app';
-import SyncPassword from './view';
+import { connect } from "react-redux";
+import { selectGetSyncIsPending, selectSyncApplyPasswordError } from "redux/selectors/sync";
+import { doGetSyncDesktop } from "redux/actions/sync";
+import { selectUserEmail } from "redux/selectors/user";
+import { doSetClientSetting } from "redux/actions/settings";
+import { doSignOut, doHandleSyncComplete } from "redux/actions/app";
+import SyncPassword from "./view";
 
 const select = (state: unknown) => ({
   getSyncIsPending: selectGetSyncIsPending(state),

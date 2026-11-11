@@ -1,6 +1,6 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doHideModal } from 'redux/actions/app';
+import { connect } from "react-redux";
+import { doHideModal } from "redux/actions/app";
 import {
   makeSelectClaimForUri,
   selectTitleForUri,
@@ -10,18 +10,18 @@ import {
   makeSelectEffectiveAmountForUri,
   selectIsUriResolving,
   selectFetchingMyChannels,
-} from 'redux/selectors/claims';
+} from "redux/selectors/claims";
 
-import { selectBalance } from 'redux/selectors/wallet';
+import { selectBalance } from "redux/selectors/wallet";
 import {
   doRepost,
   doClearRepostError,
   doCheckPublishNameAvailability,
   doCheckPendingClaims,
-} from 'redux/actions/claims';
-import { doToast } from 'redux/actions/notifications';
-import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
-import RepostCreate from './view';
+} from "redux/actions/claims";
+import { doToast } from "redux/actions/notifications";
+import { selectActiveChannelClaim, selectIncognito } from "redux/selectors/app";
+import RepostCreate from "./view";
 
 const select = (state: unknown, props: unknown) => ({
   claim: makeSelectClaimForUri(props.uri)(state),

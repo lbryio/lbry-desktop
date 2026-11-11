@@ -1,5 +1,5 @@
 //@ts-nocheck
-import {classes} from './classes';
+import { classes } from "./classes";
 
 export const container = () => `<div class="${classes.CONTAINER} ${classes.LOADING_ICON}"></div>`;
 

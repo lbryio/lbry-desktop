@@ -1,22 +1,22 @@
-import React from 'react';
-import { useHistory } from 'react-router';
-import TxoList from 'component/txoList';
-import Page from 'component/page';
-import WalletBalance from 'component/walletBalance';
-import Spinner from 'component/spinner';
-import YrblWalletEmpty from 'component/yrblWalletEmpty';
+import React from "react";
+import { useHistory } from "react-router";
+import TxoList from "component/txoList";
+import Page from "component/page";
+import WalletBalance from "component/walletBalance";
+import Spinner from "component/spinner";
+import YrblWalletEmpty from "component/yrblWalletEmpty";
 
 type Props = {
   history: {
-    action: string,
-    push: (arg1: string) => void,
-    replace: (arg1: string) => void
-  },
+    action: string;
+    push: (arg1: string) => void;
+    replace: (arg1: string) => void;
+  };
   location: {
-    search: string,
-    pathname: string
-  },
-  totalBalance: number | null | undefined
+    search: string;
+    pathname: string;
+  };
+  totalBalance: number | null | undefined;
 };
 
 const WalletPage = (props: Props) => {

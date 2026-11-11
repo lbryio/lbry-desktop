@@ -1,10 +1,10 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectGettingNewAddress, selectReceiveAddress } from 'redux/selectors/wallet';
-import { doGetNewAddress } from 'redux/actions/wallet';
-import { selectUserEmail, selectUser } from 'redux/selectors/user';
-import { doUserSetCountry } from 'redux/actions/user';
-import BuyPage from './view';
+import { connect } from "react-redux";
+import { selectGettingNewAddress, selectReceiveAddress } from "redux/selectors/wallet";
+import { doGetNewAddress } from "redux/actions/wallet";
+import { selectUserEmail, selectUser } from "redux/selectors/user";
+import { doUserSetCountry } from "redux/actions/user";
+import BuyPage from "./view";
 
 const select = (state: unknown) => ({
   receiveAddress: selectReceiveAddress(state),

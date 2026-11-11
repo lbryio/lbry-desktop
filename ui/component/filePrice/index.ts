@@ -1,8 +1,8 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectClaimForUri, makeSelectClaimWasPurchased, selectClaimIsMine } from 'redux/selectors/claims';
-import { selectCostInfoForUri, doFetchCostInfoForUri, selectFetchingCostInfoForUri } from 'lbryinc';
-import FilePrice from './view';
+import { connect } from "react-redux";
+import { selectClaimForUri, makeSelectClaimWasPurchased, selectClaimIsMine } from "redux/selectors/claims";
+import { selectCostInfoForUri, doFetchCostInfoForUri, selectFetchingCostInfoForUri } from "lbryinc";
+import FilePrice from "./view";
 
 const select = (state: unknown, props: unknown) => {
   const claim = selectClaimForUri(state, props.uri);

@@ -1,5 +1,5 @@
 //@ts-nocheck
-import moment from 'moment';
+import moment from "moment";
 
 export default function formatMediaDuration(duration = 0, config?: unknown) {
   const options = {
@@ -9,15 +9,15 @@ export default function formatMediaDuration(duration = 0, config?: unknown) {
 
   // Optimize for screen readers
   if (options.screenReader) {
-    return moment.utc(moment.duration(duration, 'seconds').asMilliseconds()).format('HH:mm:ss');
+    return moment.utc(moment.duration(duration, "seconds").asMilliseconds()).format("HH:mm:ss");
   }
 
   // Normal format
-  let date = new Date(null);
+  const date = new Date(null);
   date.setSeconds(duration);
 
   let timeString = date.toISOString().slice(11, 19);
-  if (timeString.startsWith('00:')) {
+  if (timeString.startsWith("00:")) {
     timeString = timeString.slice(3);
   }
 

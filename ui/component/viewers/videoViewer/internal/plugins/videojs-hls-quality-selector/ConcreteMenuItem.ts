@@ -1,8 +1,8 @@
 //@ts-nocheck
-import videojs from 'video.js';
+import videojs from "video.js";
 
 // Concrete classes
-const VideoJsMenuItemClass = videojs.getComponent('MenuItem');
+const VideoJsMenuItemClass = videojs.getComponent("MenuItem");
 
 /**
  * Extend vjs menu item class.

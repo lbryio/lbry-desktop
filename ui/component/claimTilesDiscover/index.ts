@@ -1,18 +1,18 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { withRouter } from 'react-router';
-import { selectClaimSearchByQuery, selectFetchingClaimSearchByQuery, selectClaimsByUri } from 'redux/selectors/claims';
-import { doClaimSearch } from 'redux/actions/claims';
-import * as SETTINGS from 'constants/settings';
-import { MATURE_TAGS } from 'constants/tags';
-import { doFetchViewCount } from 'lbryinc';
-import { doToggleTagFollowDesktop } from 'redux/actions/tags';
-import { makeSelectClientSetting, selectShowMatureContent } from 'redux/selectors/settings';
-import { selectMutedAndBlockedChannelIds } from 'redux/selectors/blocked';
-import { ENABLE_NO_SOURCE_CLAIMS } from 'config';
-import { createNormalizedClaimSearchKey } from 'util/claim';
+import { connect } from "react-redux";
+import { withRouter } from "react-router";
+import { selectClaimSearchByQuery, selectFetchingClaimSearchByQuery, selectClaimsByUri } from "redux/selectors/claims";
+import { doClaimSearch } from "redux/actions/claims";
+import * as SETTINGS from "constants/settings";
+import { MATURE_TAGS } from "constants/tags";
+import { doFetchViewCount } from "lbryinc";
+import { doToggleTagFollowDesktop } from "redux/actions/tags";
+import { makeSelectClientSetting, selectShowMatureContent } from "redux/selectors/settings";
+import { selectMutedAndBlockedChannelIds } from "redux/selectors/blocked";
+import { ENABLE_NO_SOURCE_CLAIMS } from "config";
+import { createNormalizedClaimSearchKey } from "util/claim";
 
-import ClaimListDiscover from './view';
+import ClaimListDiscover from "./view";
 
 const select = (state: unknown, props: unknown) => {
   const showNsfw = selectShowMatureContent(state);
@@ -72,7 +72,7 @@ function resolveSearchOptions(props: unknown) {
   } = props;
 
   const urlParams = new URLSearchParams(location.search);
-  const feeAmountInUrl = urlParams.get('fee_amount');
+  const feeAmountInUrl = urlParams.get("fee_amount");
   const feeAmountParam = feeAmountInUrl || feeAmount;
 
   let streamTypesParam;
@@ -82,7 +82,7 @@ function resolveSearchOptions(props: unknown) {
 
   const options = {
     page_size: pageSize,
-    claim_type: claimType || ['stream', 'repost', 'channel'],
+    claim_type: claimType || ["stream", "repost", "channel"],
     // no_totals makes it so the sdk doesn't have to calculate total number pages for pagination
     // it's faster, but we will need to remove it if we start using total_pages
     no_totals: true,
@@ -91,13 +91,13 @@ function resolveSearchOptions(props: unknown) {
     any_languages: languages,
     channel_ids: channelIds || [],
     not_channel_ids: mutedAndBlockedChannelIds,
-    order_by: orderBy || ['trending_group', 'trending_mixed'],
+    order_by: orderBy || ["trending_group", "trending_mixed"],
     stream_types: streamTypesParam,
   } as const;
 
   if (ENABLE_NO_SOURCE_CLAIMS && hasNoSource) {
     options.has_no_source = true;
-  } else if (hasSource || (!ENABLE_NO_SOURCE_CLAIMS && (!claimType || claimType === 'stream'))) {
+  } else if (hasSource || (!ENABLE_NO_SOURCE_CLAIMS && (!claimType || claimType === "stream"))) {
     options.has_source = true;
   }
 
@@ -116,9 +116,9 @@ function resolveSearchOptions(props: unknown) {
   // https://github.com/lbryio/lbry-desktop/issues/3774
   if (hideReposts) {
     if (Array.isArray(options.claim_type)) {
-      options.claim_type = options.claim_type.filter((claimType) => claimType !== 'repost');
+      options.claim_type = options.claim_type.filter((claimType) => claimType !== "repost");
     } else {
-      options.claim_type = ['stream', 'channel'];
+      options.claim_type = ["stream", "channel"];
     }
   }
 

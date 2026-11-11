@@ -1,12 +1,12 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doResolveUris } from 'redux/actions/claims';
+import { connect } from "react-redux";
+import { doResolveUris } from "redux/actions/claims";
 import {
   selectClaimForUri,
   makeSelectClaimForUri,
   selectClaimIsMine,
   selectFetchingMyChannels,
-} from 'redux/selectors/claims';
+} from "redux/selectors/claims";
 import {
   selectTopLevelCommentsForUri,
   makeSelectTopLevelTotalPagesForUri,
@@ -19,14 +19,14 @@ import {
   selectCommentIdsForUri,
   selectSettingsByChannelId,
   selectPinnedCommentsForUri,
-} from 'redux/selectors/comments';
-import { doCommentReset, doCommentList, doCommentById, doCommentReactList } from 'redux/actions/comments';
-import { selectActiveChannelClaim } from 'redux/selectors/app';
-import { getChannelIdFromClaim } from 'util/claim';
-import CommentsList from './view';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
-import * as SETTINGS from 'constants/settings';
-import { doSetClientSetting } from 'redux/actions/settings';
+} from "redux/selectors/comments";
+import { doCommentReset, doCommentList, doCommentById, doCommentReactList } from "redux/actions/comments";
+import { selectActiveChannelClaim } from "redux/selectors/app";
+import { getChannelIdFromClaim } from "util/claim";
+import CommentsList from "./view";
+import { makeSelectClientSetting } from "redux/selectors/settings";
+import * as SETTINGS from "constants/settings";
+import { doSetClientSetting } from "redux/actions/settings";
 
 const select = (state: unknown, props: unknown) => {
   const { uri } = props;

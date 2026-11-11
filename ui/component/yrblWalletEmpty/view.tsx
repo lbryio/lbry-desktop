@@ -1,25 +1,25 @@
-import type {ReactNode} from 'react';
-import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
-import React from 'react';
-import Button from 'component/button';
-import Yrbl from 'component/yrbl';
-import I18nMessage from 'component/i18nMessage';
-import LbcSymbol from 'component/common/lbc-symbol';
+import type { ReactNode } from "react";
+import * as ICONS from "constants/icons";
+import * as PAGES from "constants/pages";
+import React from "react";
+import Button from "component/button";
+import Yrbl from "component/yrbl";
+import I18nMessage from "component/i18nMessage";
+import LbcSymbol from "component/common/lbc-symbol";
 
 type Props = {
-  includeWalletLink: boolean,
-  type?: string,
-  actions?: React.ReactNode
+  includeWalletLink: boolean;
+  type?: string;
+  actions?: React.ReactNode;
 };
 export default function YrblHelp(props: Props) {
-  const { includeWalletLink = false, type = 'sad' } = props;
+  const { includeWalletLink = false, type = "sad" } = props;
 
   return (
     <div className="main--empty">
       <Yrbl
         type={type}
-        title={__('Your wallet is empty')}
+        title={__("Your wallet is empty")}
         subtitle={
           <div>
             <p>
@@ -40,13 +40,13 @@ export default function YrblHelp(props: Props) {
         actions={
           <div className="section__actions">
             {/* @ts-expect-error - TS2322 (ts-migration) */}
-            <Button button="secondary" icon={ICONS.BUY} label={'Buy Credits'} navigate={`/$/${PAGES.BUY}`} />
+            <Button button="secondary" icon={ICONS.BUY} label={"Buy Credits"} navigate={`/$/${PAGES.BUY}`} />
             {includeWalletLink && (
               <Button
                 // @ts-expect-error - TS2322 (ts-migration)
                 icon={ICONS.RECEIVE}
                 button="secondary"
-                label={__('Your Address')}
+                label={__("Your Address")}
                 navigate={`/$/${PAGES.RECEIVE}`}
               />
             )}

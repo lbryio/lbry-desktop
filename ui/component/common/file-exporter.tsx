@@ -1,23 +1,23 @@
-import * as ICONS from 'constants/icons';
+import * as ICONS from "constants/icons";
 
-import React from 'react';
-import Button from 'component/button';
-import Spinner from 'component/spinner';
+import React from "react";
+import Button from "component/button";
+import Spinner from "component/spinner";
 
 type Props = {
-  data: any,
-  label: string,
-  tooltip?: string,
-  defaultFileName?: string,
-  filters?: Array<string>,
-  onFetch?: () => void,
-  progressMsg?: string,
-  disabled?: boolean
+  data: any;
+  label: string;
+  tooltip?: string;
+  defaultFileName?: string;
+  filters?: Array<string>;
+  onFetch?: () => void;
+  progressMsg?: string;
+  disabled?: boolean;
 };
 
 class FileExporter extends React.PureComponent<Props> {
   constructor() {
-// @ts-expect-error - TS2554 - Expected 1-2 arguments, but got 0.
+    // @ts-expect-error - TS2554 - Expected 1-2 arguments, but got 0.
     super();
     (this as any).handleDownload = this.handleDownload.bind(this);
   }
@@ -25,10 +25,10 @@ class FileExporter extends React.PureComponent<Props> {
   handleDownload() {
     const { data, defaultFileName } = this.props;
 
-    const element = document.createElement('a');
-    const file = new Blob([data], { type: 'text/plain' });
+    const element = document.createElement("a");
+    const file = new Blob([data], { type: "text/plain" });
     element.href = URL.createObjectURL(file);
-    element.download = defaultFileName || 'file.txt';
+    element.download = defaultFileName || "file.txt";
     document.body.appendChild(element);
     element.click();
     document.body.removeChild(element);
@@ -57,7 +57,7 @@ class FileExporter extends React.PureComponent<Props> {
                   button="alt"
                   disabled={disabled}
                   icon={ICONS.DOWNLOAD}
-                  aria-label={__('Download fetched file')}
+                  aria-label={__("Download fetched file")}
                   onClick={this.handleDownload}
                 />
               )}
@@ -79,7 +79,7 @@ class FileExporter extends React.PureComponent<Props> {
           button="primary"
           disabled={disabled}
           icon={ICONS.DOWNLOAD}
-          label={label || __('Export')}
+          label={label || __("Export")}
           aria-label={tooltip}
           onClick={this.handleDownload}
         />

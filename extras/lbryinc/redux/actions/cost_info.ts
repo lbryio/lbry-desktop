@@ -1,9 +1,8 @@
 //@ts-nocheck
-import * as ACTIONS from 'constants/action_types';
-import { Lbryio } from 'lbryinc';
-import { selectClaimForUri } from 'redux/selectors/claims';
+import * as ACTIONS from "constants/action_types";
+import { Lbryio } from "lbryinc";
+import { selectClaimForUri } from "redux/selectors/claims";
 
-// eslint-disable-next-line import/prefer-default-export
 export function doFetchCostInfoForUri(uri: unknown) {
   return (dispatch: unknown, getState: unknown) => {
     const state = getState();
@@ -25,7 +24,7 @@ export function doFetchCostInfoForUri(uri: unknown) {
 
     if (fee === undefined) {
       resolve({ cost: 0, includesData: true });
-    } else if (fee.currency === 'LBC') {
+    } else if (fee.currency === "LBC") {
       resolve({ cost: fee.amount, includesData: true });
     } else {
       Lbryio.getExchangeRates().then(({ LBC_USD }) => {

@@ -1,20 +1,20 @@
-import * as ICONS from 'constants/icons';
-import * as MODALS from 'constants/modal_types';
-import React from 'react';
-import classnames from 'classnames';
-import { Menu, MenuButton, MenuList, MenuItem } from '@reach/menu-button';
-import Icon from 'component/common/icon';
-import * as PAGES from 'constants/pages';
-import { useHistory } from 'react-router';
-import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
+import * as ICONS from "constants/icons";
+import * as MODALS from "constants/modal_types";
+import React from "react";
+import classnames from "classnames";
+import { Menu, MenuButton, MenuList, MenuItem } from "@reach/menu-button";
+import Icon from "component/common/icon";
+import * as PAGES from "constants/pages";
+import { useHistory } from "react-router";
+import { formatLbryUrlForWeb, generateListSearchUrlParams } from "util/url";
 
 type Props = {
-  inline?: boolean,
-  doOpenModal: (arg1: string, arg2: Record<any, any>) => void,
-  collectionName?: string,
-  collectionId: string,
-  playNextUri: string,
-  doToggleShuffleList: (arg1: string) => void
+  inline?: boolean;
+  doOpenModal: (arg1: string, arg2: Record<any, any>) => void;
+  collectionName?: string;
+  collectionId: string;
+  playNextUri: string;
+  doToggleShuffleList: (arg1: string) => void;
 };
 
 function CollectionMenuList(props: Props) {
@@ -38,7 +38,7 @@ function CollectionMenuList(props: Props) {
   return (
     <Menu>
       <MenuButton
-        className={classnames('menu__button', { 'claim__menu-button': !inline, 'claim__menu-button--inline': inline })}
+        className={classnames("menu__button", { "claim__menu-button": !inline, "claim__menu-button--inline": inline })}
         onClick={(e) => {
           e.stopPropagation();
           e.preventDefault();
@@ -52,7 +52,7 @@ function CollectionMenuList(props: Props) {
             <MenuItem className="comment__menu-option" onSelect={() => push(`/$/${PAGES.LIST}/${collectionId}`)}>
               <a className="menu__link" href={`/$/${PAGES.LIST}/${collectionId}`}>
                 <Icon aria-hidden icon={ICONS.VIEW} />
-                {__('View List')}
+                {__("View List")}
               </a>
             </MenuItem>
             <MenuItem
@@ -64,7 +64,7 @@ function CollectionMenuList(props: Props) {
             >
               <div className="menu__link">
                 <Icon aria-hidden icon={ICONS.SHUFFLE} />
-                {__('Shuffle Play')}
+                {__("Shuffle Play")}
               </div>
             </MenuItem>
             <MenuItem
@@ -73,7 +73,7 @@ function CollectionMenuList(props: Props) {
             >
               <div className="menu__link">
                 <Icon aria-hidden icon={ICONS.PUBLISH} />
-                {__('Publish List')}
+                {__("Publish List")}
               </div>
             </MenuItem>
             <MenuItem
@@ -82,7 +82,7 @@ function CollectionMenuList(props: Props) {
             >
               <div className="menu__link">
                 <Icon aria-hidden icon={ICONS.DELETE} />
-                {__('Delete List')}
+                {__("Delete List")}
               </div>
             </MenuItem>
           </>

@@ -1,12 +1,12 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { makeSelectPublishFormValue } from 'redux/selectors/publish';
-import { doUpdatePublishForm } from 'redux/actions/publish';
-import PublishPage from './view';
+import { connect } from "react-redux";
+import { makeSelectPublishFormValue } from "redux/selectors/publish";
+import { doUpdatePublishForm } from "redux/actions/publish";
+import PublishPage from "./view";
 
 const select = (state: unknown) => ({
-  contentIsFree: makeSelectPublishFormValue('contentIsFree')(state),
-  fee: makeSelectPublishFormValue('fee')(state),
+  contentIsFree: makeSelectPublishFormValue("contentIsFree")(state),
+  fee: makeSelectPublishFormValue("fee")(state),
 });
 
 const perform = (dispatch: unknown) => ({

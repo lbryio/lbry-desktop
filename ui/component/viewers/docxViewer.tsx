@@ -1,15 +1,15 @@
-import React from 'react';
-import mammoth from 'mammoth';
-import LoadingScreen from 'component/common/loading-screen';
+import React from "react";
+import mammoth from "mammoth";
+import LoadingScreen from "component/common/loading-screen";
 
 type Props = {
-  source: string
+  source: string;
 };
 
 type State = {
-  error: boolean,
-  loading: boolean,
-  content: string | null | undefined
+  error: boolean;
+  loading: boolean;
+  content: string | null | undefined;
 };
 
 class DocxViewer extends React.PureComponent<Props, State> {
@@ -42,7 +42,7 @@ class DocxViewer extends React.PureComponent<Props, State> {
     mammoth
       // @ts-expect-error - TS2345 (ts-migration)
       .convertToHtml({ path: source }, options)
-      .then(result => {
+      .then((result) => {
         this.setState({ content: result.value, loading: false });
       })
       .catch(() => {
@@ -54,7 +54,7 @@ class DocxViewer extends React.PureComponent<Props, State> {
 
   render() {
     const { content, error, loading } = this.state;
-    const loadingMessage = __('Rendering document.');
+    const loadingMessage = __("Rendering document.");
     const errorMessage = __("Sorry, looks like we can't load the document.");
 
     return (

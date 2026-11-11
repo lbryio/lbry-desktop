@@ -1,25 +1,21 @@
-import {SITE_NAME} from 'config';
-import * as MODALS from 'constants/modal_types';
-import * as ICONS from 'constants/icons';
-import React from 'react';
-import Button from 'component/button';
+import { SITE_NAME } from "config";
+import * as MODALS from "constants/modal_types";
+import * as ICONS from "constants/icons";
+import React from "react";
+import Button from "component/button";
 
 type Props = {
-  uri: string,
-  claim: StreamClaim,
-  hasChannels: boolean,
-  doOpenModal: (arg1: string, arg2: Record<any, any>) => void,
-  doToast: (
-    arg1: {
-      message: string
-    },
-  ) => void
+  uri: string;
+  claim: StreamClaim;
+  hasChannels: boolean;
+  doOpenModal: (arg1: string, arg2: Record<any, any>) => void;
+  doToast: (arg1: { message: string }) => void;
 };
 
 export default function ClaimRepostButton(props: Props) {
   const { uri, claim, hasChannels, doOpenModal, doToast } = props;
-  const [contentUri, setContentUri] = React.useState('');
-  const [repostUri, setRepostUri] = React.useState('');
+  const [contentUri, setContentUri] = React.useState("");
+  const [repostUri, setRepostUri] = React.useState("");
 
   return (
     <Button
@@ -28,16 +24,16 @@ export default function ClaimRepostButton(props: Props) {
       className="button--file-action"
       icon={ICONS.REPOST}
       label={
-        claim.meta.reposted > 1 ? __(`%repost_total% Reposts`, { repost_total: claim.meta.reposted }) : __('Repost')
+        claim.meta.reposted > 1 ? __(`%repost_total% Reposts`, { repost_total: claim.meta.reposted }) : __("Repost")
       }
-      description={__('Repost')}
+      description={__("Repost")}
       onClick={() => {
         if (!hasChannels) {
           doToast({
-            message: __('A channel is required to repost on %SITE_NAME%', { SITE_NAME }),
-// @ts-expect-error - TS2345 - Argument of type '{ message: string; linkText: string; linkTarget: string; }' is not assignable to parameter of type '{ message: string; }'.
-            linkText: __('Create Channel'),
-            linkTarget: '/channel/new',
+            message: __("A channel is required to repost on %SITE_NAME%", { SITE_NAME }),
+            // @ts-expect-error - TS2345 - Argument of type '{ message: string; linkText: string; linkTarget: string; }' is not assignable to parameter of type '{ message: string; }'.
+            linkText: __("Create Channel"),
+            linkTarget: "/channel/new",
           });
         } else {
           doOpenModal(MODALS.REPOST, { uri, contentUri, setContentUri, repostUri, setRepostUri, isModal: true });

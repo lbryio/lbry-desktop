@@ -1,12 +1,12 @@
 //@ts-nocheck
-import {createSelector} from 'reselect';
-import { parseURI, buildURI } from 'util/lbryURI';
+import { createSelector } from "reselect";
+import { parseURI, buildURI } from "util/lbryURI";
 import {
   selectClaimsById,
   selectMyClaimsWithoutChannels,
   selectResolvingUris,
   selectClaimsByUri,
-} from 'redux/selectors/claims';
+} from "redux/selectors/claims";
 
 const selectState = (state: unknown) => state.publish || {};
 
@@ -42,7 +42,7 @@ export const selectPublishFormValues = createSelector(
     if (!language && isStillEditing && languageSet) {
       actualLanguage = languageSet;
     } else {
-      actualLanguage = language || languageSet || 'en';
+      actualLanguage = language || languageSet || "en";
     }
 
     return { ...formValues, language: actualLanguage };

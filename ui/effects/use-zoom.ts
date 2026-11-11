@@ -1,24 +1,24 @@
 //@ts-nocheck
-import {useEffect} from 'react';
-import { changeZoomFactor, ZOOM } from 'util/zoomWindow';
+import { useEffect } from "react";
+import { changeZoomFactor, ZOOM } from "util/zoomWindow";
 
 export default function useHover(ref: unknown) {
   useEffect(() => {
     const handleKeyPress = (e: unknown) => {
       if (e.ctrlKey && !e.shiftKey) {
         switch (e.code) {
-          case 'NumpadAdd':
-          case 'Equal':
+          case "NumpadAdd":
+          case "Equal":
             e.preventDefault();
             changeZoomFactor(ZOOM.INCREMENT);
             break;
-          case 'NumpadSubtract':
-          case 'Minus':
+          case "NumpadSubtract":
+          case "Minus":
             e.preventDefault();
             changeZoomFactor(ZOOM.DECREMENT);
             break;
-          case 'Numpad0':
-          case 'Digit0':
+          case "Numpad0":
+          case "Digit0":
             e.preventDefault();
             changeZoomFactor(ZOOM.RESET);
             break;
@@ -28,8 +28,8 @@ export default function useHover(ref: unknown) {
         }
       }
     };
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
   }, []);
 
   useEffect(() => {
@@ -42,8 +42,8 @@ export default function useHover(ref: unknown) {
         }
       }
     };
-    window.addEventListener('wheel', handleWheel);
-    return () => window.removeEventListener('wheel', handleWheel);
+    window.addEventListener("wheel", handleWheel);
+    return () => window.removeEventListener("wheel", handleWheel);
   }, []);
 
   useEffect(() => {

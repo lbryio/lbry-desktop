@@ -1,18 +1,18 @@
-import * as ICONS from 'constants/icons';
-import React from 'react';
-import Button from 'component/button';
-import Yrbl from 'component/yrbl';
-import { SITE_HELP_EMAIL } from 'config';
+import * as ICONS from "constants/icons";
+import React from "react";
+import Button from "component/button";
+import Yrbl from "component/yrbl";
+import { SITE_HELP_EMAIL } from "config";
 
 type Props = Record<any, any>;
 
 export default function SyncFatalError(props: Props) {
-  let downTime = false;
+  const downTime = false;
 
   return (
     <div className="main--empty">
       <Yrbl
-        title={downTime ? __('Under maintenance...') : __('There is a bug... somewhere')}
+        title={downTime ? __("Under maintenance...") : __("There is a bug... somewhere")}
         subtitle={
           <p>
             {downTime
@@ -28,7 +28,7 @@ export default function SyncFatalError(props: Props) {
               // @ts-expect-error - TS2322 (ts-migration)
               button="primary"
               icon={ICONS.REFRESH}
-              label={__('Refresh')}
+              label={__("Refresh")}
               onClick={() => window.location.reload()}
             />
           </div>

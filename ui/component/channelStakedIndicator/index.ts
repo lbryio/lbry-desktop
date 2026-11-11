@@ -1,11 +1,11 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import {
   makeSelectClaimForUri,
   selectTotalStakedAmountForChannelUri,
   selectStakedLevelForChannelUri,
-} from 'redux/selectors/claims';
-import ChannelStakedIndicator from './view';
+} from "redux/selectors/claims";
+import ChannelStakedIndicator from "./view";
 
 const select = (state: unknown, props: unknown) => ({
   channelClaim: makeSelectClaimForUri(props.uri)(state),

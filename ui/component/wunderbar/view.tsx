@@ -1,16 +1,16 @@
-import * as ICONS from 'constants/icons';
-import React from 'react';
-import { useIsMobile } from 'effects/use-screensize';
+import * as ICONS from "constants/icons";
+import React from "react";
+import { useIsMobile } from "effects/use-screensize";
 
-import Button from 'component/button';
-import WunderbarSuggestions from 'component/wunderbarSuggestions';
+import Button from "component/button";
+import WunderbarSuggestions from "component/wunderbarSuggestions";
 
 type Props = {
-  doOpenMobileSearch: (arg1?: any) => void,
-  channelsOnly?: boolean,
-  noTopSuggestion?: boolean,
-  noBottomLinks?: boolean,
-  customSelectAction?: (arg1: string) => void
+  doOpenMobileSearch: (arg1?: any) => void;
+  channelsOnly?: boolean;
+  noTopSuggestion?: boolean;
+  noBottomLinks?: boolean;
+  customSelectAction?: (arg1: string) => void;
 };
 
 export default function WunderBar(props: Props) {

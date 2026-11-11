@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doSetDaemonSetting, doGetDaemonStatus, doCleanBlobs } from 'redux/actions/settings';
-import { selectDaemonStatus, selectDaemonSettings, selectSettingDaemonSettings } from 'redux/selectors/settings';
-import SettingWalletServer from './view';
-import { selectDiskSpace } from 'redux/selectors/app';
+import { connect } from "react-redux";
+import { doSetDaemonSetting, doGetDaemonStatus, doCleanBlobs } from "redux/actions/settings";
+import { selectDaemonStatus, selectDaemonSettings, selectSettingDaemonSettings } from "redux/selectors/settings";
+import SettingWalletServer from "./view";
+import { selectDiskSpace } from "redux/selectors/app";
 
 const select = (state: unknown) => ({
   daemonSettings: selectDaemonSettings(state),

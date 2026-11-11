@@ -1,6 +1,6 @@
 //@ts-nocheck
-import {handleActions} from 'util/redux-utils';
-import * as ACTIONS from 'constants/action_types';
+import { handleActions } from "util/redux-utils";
+import * as ACTIONS from "constants/action_types";
 
 const defaultState = {
   fetching: {},

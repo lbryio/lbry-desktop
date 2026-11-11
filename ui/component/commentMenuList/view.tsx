@@ -1,49 +1,45 @@
-import {getChannelFromClaim} from 'util/claim';
-import { MenuList, MenuItem } from '@reach/menu-button';
-import { parseURI } from 'util/lbryURI';
-import * as ICONS from 'constants/icons';
-import * as MODALS from 'constants/modal_types';
-import ChannelThumbnail from 'component/channelThumbnail';
-import Icon from 'component/common/icon';
-import React from 'react';
+import { getChannelFromClaim } from "util/claim";
+import { MenuList, MenuItem } from "@reach/menu-button";
+import { parseURI } from "util/lbryURI";
+import * as ICONS from "constants/icons";
+import * as MODALS from "constants/modal_types";
+import ChannelThumbnail from "component/channelThumbnail";
+import Icon from "component/common/icon";
+import React from "react";
 
 type Props = {
-  uri: string | null | undefined,
-  authorUri: string // full LBRY Channel URI: lbry://@channel#123...,
-  commentId: string // sha256 digest identifying the comment,
-  isTopLevel: boolean,
-  isPinned: boolean,
-  commentIsMine: boolean // if this comment was signed by an owned channel,
-  disableEdit?: boolean,
-  disableRemove?: boolean,
-  supportAmount?: any,
+  uri: string | null | undefined;
+  authorUri: string; // full LBRY Channel URI: lbry://@channel#123...,
+  commentId: string; // sha256 digest identifying the comment,
+  isTopLevel: boolean;
+  isPinned: boolean;
+  commentIsMine: boolean; // if this comment was signed by an owned channel,
+  disableEdit?: boolean;
+  disableRemove?: boolean;
+  supportAmount?: any;
   // --- select ---
-  claim: Claim | null | undefined,
-  claimIsMine: boolean,
-  activeChannelClaim: ChannelClaim | null | undefined,
-  playingUri: PlayingUri | null | undefined,
+  claim: Claim | null | undefined;
+  claimIsMine: boolean;
+  activeChannelClaim: ChannelClaim | null | undefined;
+  playingUri: PlayingUri | null | undefined;
   moderationDelegatorsById: {
     [key: string]: {
-      global: boolean,
+      global: boolean;
       delegators: {
-        name: string,
-        claimId: string
-      }
-    }
-  },
+        name: string;
+        claimId: string;
+      };
+    };
+  };
   // --- perform ---
-  doToast: (
-    arg1: {
-      message: string
-    },
-  ) => void,
-  handleEditComment: () => void,
-  openModal: (id: string, arg2: Record<any, any>) => void,
-  clearPlayingUri: () => void,
-  muteChannel: (arg1: string) => void,
-  pinComment: (arg1: string, arg2: string, arg3: boolean) => Promise<any>,
-  commentModAddDelegate: (arg1: string, arg2: string, arg3: ChannelClaim) => void,
-  setQuickReply: (arg1?: any) => void
+  doToast: (arg1: { message: string }) => void;
+  handleEditComment: () => void;
+  openModal: (id: string, arg2: Record<any, any>) => void;
+  clearPlayingUri: () => void;
+  muteChannel: (arg1: string) => void;
+  pinComment: (arg1: string, arg2: string, arg3: boolean) => Promise<any>;
+  commentModAddDelegate: (arg1: string, arg2: string, arg3: ChannelClaim) => void;
+  setQuickReply: (arg1?: any) => void;
 };
 
 function CommentMenuList(props: Props) {
@@ -82,7 +78,7 @@ function CommentMenuList(props: Props) {
     Object.values(activeModeratorInfo.delegators).includes(contentChannelClaim.claim_id);
 
   function handleDeleteComment() {
-    if (playingUri && playingUri.source === 'comment') {
+    if (playingUri && playingUri.source === "comment") {
       clearPlayingUri();
     }
     openModal(MODALS.CONFIRM_REMOVE_COMMENT, {
@@ -109,29 +105,29 @@ function CommentMenuList(props: Props) {
     function getSubtitle() {
       if (personalPermanentBlockOnly) {
         return {
-          line1: __('Prevent this channel from interacting with you.'),
+          line1: __("Prevent this channel from interacting with you."),
           line2: null,
         };
       } else {
         if (activeChannelIsModerator && activeChannelIsAdmin) {
           return {
-            line1: __('Personal | Moderator | Admin'),
-            line2: __('Choose a permanent or temporary ban.'),
+            line1: __("Personal | Moderator | Admin"),
+            line2: __("Choose a permanent or temporary ban."),
           };
         } else if (activeChannelIsModerator && !activeChannelIsAdmin) {
           return {
-            line1: __('Personal | Moderator'),
-            line2: __('Choose a permanent or temporary ban.'),
+            line1: __("Personal | Moderator"),
+            line2: __("Choose a permanent or temporary ban."),
           };
         } else if (!activeChannelIsModerator && activeChannelIsAdmin) {
           return {
-            line1: __('Personal | Admin'),
-            line2: __('Choose a permanent or temporary ban.'),
+            line1: __("Personal | Admin"),
+            line2: __("Choose a permanent or temporary ban."),
           };
         } else {
           return {
             line1: null,
-            line2: __('Choose a permanent or temporary ban.'),
+            line2: __("Choose a permanent or temporary ban."),
           };
         }
       }
@@ -142,7 +138,7 @@ function CommentMenuList(props: Props) {
       <>
         <div className="menu__link">
           <Icon aria-hidden icon={ICONS.BLOCK} />
-          {__('Block')}
+          {__("Block")}
         </div>
         {subtitle.line1 && <span className="comment__menu-help">{subtitle.line1}</span>}
         {subtitle.line2 && (
@@ -156,16 +152,16 @@ function CommentMenuList(props: Props) {
 
   return (
     <MenuList className="menu__list">
-      {activeChannelIsCreator && <div className="comment__menu-title">{__('Creator tools')}</div>}
+      {activeChannelIsCreator && <div className="comment__menu-title">{__("Creator tools")}</div>}
 
       {activeChannelIsCreator && isTopLevel && (
         <MenuItem
           className="comment__menu-option menu__link"
-          onSelect={() => pinComment(commentId, claim ? claim.claim_id : '', isPinned)}
+          onSelect={() => pinComment(commentId, claim ? claim.claim_id : "", isPinned)}
         >
-          <span className={'button__content'}>
-            <Icon aria-hidden icon={ICONS.PIN} className={'icon'} />
-            {isPinned ? __('Unpin') : __('Pin')}
+          <span className={"button__content"}>
+            <Icon aria-hidden icon={ICONS.PIN} className={"icon"} />
+            {isPinned ? __("Unpin") : __("Pin")}
           </span>
         </MenuItem>
       )}
@@ -174,12 +170,12 @@ function CommentMenuList(props: Props) {
         <MenuItem className="comment__menu-option" onSelect={assignAsModerator}>
           <div className="menu__link">
             <Icon aria-hidden icon={ICONS.ADD} />
-            {__('Add as moderator')}
+            {__("Add as moderator")}
           </div>
           <span className="comment__menu-help">
             {activeChannelClaim
-              ? __('Assign this user to moderate %channel%.', { channel: activeChannelClaim.name })
-              : __('Assign this user to moderate your channel.')}
+              ? __("Assign this user to moderate %channel%.", { channel: activeChannelClaim.name })
+              : __("Assign this user to moderate your channel.")}
           </span>
         </MenuItem>
       )}
@@ -187,7 +183,7 @@ function CommentMenuList(props: Props) {
       {commentIsMine && activeChannelClaim && activeChannelClaim.permanent_url === authorUri && !disableEdit && (
         <MenuItem className="comment__menu-option menu__link" onSelect={handleEditComment}>
           <Icon aria-hidden icon={ICONS.EDIT} />
-          {__('Edit')}
+          {__("Edit")}
         </MenuItem>
       )}
 
@@ -198,7 +194,7 @@ function CommentMenuList(props: Props) {
           <MenuItem className="comment__menu-option" onSelect={handleDeleteComment}>
             <div className="menu__link">
               <Icon aria-hidden icon={ICONS.DELETE} />
-              {__('Remove')}
+              {__("Remove")}
             </div>
           </MenuItem>
         )}
@@ -214,10 +210,10 @@ function CommentMenuList(props: Props) {
           <MenuItem className="comment__menu-option" onSelect={() => muteChannel(authorUri)}>
             <div className="menu__link">
               <Icon aria-hidden icon={ICONS.MUTE} />
-              {__('Mute')}
+              {__("Mute")}
             </div>
             {activeChannelIsCreator && (
-              <span className="comment__menu-help">{__('Hide this channel for you only.')}</span>
+              <span className="comment__menu-help">{__("Hide this channel for you only.")}</span>
             )}
           </MenuItem>
         </>
@@ -228,7 +224,7 @@ function CommentMenuList(props: Props) {
           {/* @ts-expect-error - TS2739 (ts-migration) */}
           <ChannelThumbnail xsmall noLazyLoad uri={activeChannelClaim.permanent_url} />
           <div className="comment__menu-channel">
-            {__('Interacting as %channelName%', { channelName: activeChannelClaim.name })}
+            {__("Interacting as %channelName%", { channelName: activeChannelClaim.name })}
           </div>
         </div>
       )}

@@ -1,17 +1,17 @@
-import React from 'react';
-import { Modal } from 'modal/modal';
-import { formatFileSystemPath } from 'util/url';
+import React from "react";
+import { Modal } from "modal/modal";
+import { formatFileSystemPath } from "util/url";
 // @if TARGET='app'
 // @ts-expect-error - TS2792 - Cannot find module 'electron'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-import { shell } from 'electron';
+import { shell } from "electron";
 // @endif
 
 type Props = {
-  uri: string,
-  isTrusted: boolean,
-  path: string,
-  isMine: boolean,
-  closeModal: () => void
+  uri: string;
+  isTrusted: boolean;
+  path: string;
+  isMine: boolean;
+  closeModal: () => void;
 };
 
 function ModalOpenExternalResource(props: Props) {
@@ -46,21 +46,21 @@ function ModalOpenExternalResource(props: Props) {
 
   return (
     <Modal
-// @ts-expect-error - TS2322 - Type '{ children: Element[]; isOpen: true; title: string; contentLabel: string; type: string; confirmButtonLabel: string; onConfirmed: () => void; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
+      // @ts-expect-error - TS2322 - Type '{ children: Element[]; isOpen: true; title: string; contentLabel: string; type: string; confirmButtonLabel: string; onConfirmed: () => void; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
       isOpen
-      title={__('Warning!')}
-      contentLabel={__('Confirm External Resource')}
+      title={__("Warning!")}
+      contentLabel={__("Confirm External Resource")}
       type="confirm"
-      confirmButtonLabel={__('Continue')}
+      confirmButtonLabel={__("Continue")}
       onConfirmed={() => openResource()}
       onAborted={closeModal}
     >
       <p>
-        {(uri && __('This link leads to an external website.')) ||
-          (path && __('This file has been shared with you by other people.'))}
+        {(uri && __("This link leads to an external website.")) ||
+          (path && __("This file has been shared with you by other people."))}
       </p>
       <blockquote>{uri || path}</blockquote>
-      <p>{__('LBRY Inc is not responsible for its content, click continue to proceed at your own risk.')}</p>
+      <p>{__("LBRY Inc is not responsible for its content, click continue to proceed at your own risk.")}</p>
     </Modal>
   );
 }

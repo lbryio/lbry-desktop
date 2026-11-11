@@ -1,13 +1,13 @@
 //@ts-nocheck
-import {webFrame} from 'electron';
-import * as SETTINGS from 'constants/settings';
-const isDev = process.env.NODE_ENV !== 'production';
+import { webFrame } from "electron";
+import * as SETTINGS from "constants/settings";
+const isDev = process.env.NODE_ENV !== "production";
 
 export const ZOOM = {
-  INCREMENT: 'INCREMENT',
-  DECREMENT: 'DECREMENT',
-  RESET: 'RESET',
-  LOAD_FROM_LOCAL_STORAGE: 'LOAD_FROM_LOCAL_STORAGE',
+  INCREMENT: "INCREMENT",
+  DECREMENT: "DECREMENT",
+  RESET: "RESET",
+  LOAD_FROM_LOCAL_STORAGE: "LOAD_FROM_LOCAL_STORAGE",
 } as const;
 
 function getNextZoomFactor(curFactor: unknown, isIncreasing: unknown) {
@@ -46,7 +46,7 @@ export function changeZoomFactor(action: unknown) {
       }
       break;
     default:
-      if (isDev) throw new Error('changeZoomFactor: unexpected action');
+      if (isDev) throw new Error("changeZoomFactor: unexpected action");
       return;
   }
 

@@ -1,15 +1,15 @@
-import {SEARCH_OPTIONS} from 'constants/search';
+import { SEARCH_OPTIONS } from "constants/search";
 
 const DEFAULT_SEARCH_RESULT_FROM = 0;
 const DEFAULT_SEARCH_SIZE = 20;
 
 export function parseQueryParams(queryString: string) {
-  if (queryString === '') return {};
+  if (queryString === "") return {};
   const parts = queryString
-    .split('?')
+    .split("?")
     .pop()
-    .split('&')
-    .map((p) => p.split('='));
+    .split("&")
+    .map((p) => p.split("="));
 
   const params: Record<string, any> = {};
   parts.forEach((array) => {
@@ -21,17 +21,17 @@ export function parseQueryParams(queryString: string) {
 
 // https://stackoverflow.com/questions/5999118/how-can-i-add-or-update-a-query-string-parameter
 export function updateQueryParam(uri: string, key: string, value: string) {
-  const re = new RegExp('([?&])' + key + '=.*?(&|$)', 'i');
-  const separator = uri.includes('?') ? '&' : '?';
+  const re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+  const separator = uri.includes("?") ? "&" : "?";
   if (uri.match(re)) {
-    return uri.replace(re, '$1' + key + '=' + value + '$2');
+    return uri.replace(re, "$1" + key + "=" + value + "$2");
   } else {
-    return uri + separator + key + '=' + value;
+    return uri + separator + key + "=" + value;
   }
 }
 
 export const getSearchQueryString = (query: string, options: any = {}) => {
-// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
+  // @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
   const isSurroundedByQuotes = (str: unknown) => str[0] === '"' && str[str.length - 1] === '"';
   const encodedQuery = encodeURIComponent(query);
   const queryParams = [
@@ -40,7 +40,7 @@ export const getSearchQueryString = (query: string, options: any = {}) => {
     `from=${options.from || DEFAULT_SEARCH_RESULT_FROM}`,
   ];
   const { isBackgroundSearch } = options;
-  const includeUserOptions = typeof isBackgroundSearch === 'undefined' ? false : !isBackgroundSearch;
+  const includeUserOptions = typeof isBackgroundSearch === "undefined" ? false : !isBackgroundSearch;
 
   if (includeUserOptions) {
     const claimType = options[SEARCH_OPTIONS.CLAIM_TYPE];
@@ -54,14 +54,14 @@ export const getSearchQueryString = (query: string, options: any = {}) => {
       if (!claimType.includes(SEARCH_OPTIONS.INCLUDE_CHANNELS)) {
         queryParams.push(
           `mediaType=${[
-// @ts-expect-error - TS2339 - Property 'MEDIA_FILE' does not exist on type '{ readonly RESULT_COUNT: "size"; readonly CLAIM_TYPE: "claimType"; readonly RELATED_TO: "related_to"; readonly INCLUDE_FILES: "file"; readonly INCLUDE_CHANNELS: "channel"; readonly INCLUDE_FILES_AND_CHANNELS: "file,channel"; ... 16 more ...; readonly TIME_FILTER_THIS_YEAR: "thisyear"; }'.
+            // @ts-expect-error - TS2339 - Property 'MEDIA_FILE' does not exist on type '{ readonly RESULT_COUNT: "size"; readonly CLAIM_TYPE: "claimType"; readonly RELATED_TO: "related_to"; readonly INCLUDE_FILES: "file"; readonly INCLUDE_CHANNELS: "channel"; readonly INCLUDE_FILES_AND_CHANNELS: "file,channel"; ... 16 more ...; readonly TIME_FILTER_THIS_YEAR: "thisyear"; }'.
             SEARCH_OPTIONS.MEDIA_FILE,
             SEARCH_OPTIONS.MEDIA_AUDIO,
             SEARCH_OPTIONS.MEDIA_VIDEO,
             SEARCH_OPTIONS.MEDIA_TEXT,
             SEARCH_OPTIONS.MEDIA_IMAGE,
             SEARCH_OPTIONS.MEDIA_APPLICATION,
-          ].reduce((acc, currentOption) => (options[currentOption] ? `${acc}${currentOption},` : acc), '')}`
+          ].reduce((acc, currentOption) => (options[currentOption] ? `${acc}${currentOption},` : acc), "")}`
         );
       }
     }
@@ -93,5 +93,5 @@ export const getSearchQueryString = (query: string, options: any = {}) => {
     });
   }
 
-  return queryParams.join('&');
+  return queryParams.join("&");
 };

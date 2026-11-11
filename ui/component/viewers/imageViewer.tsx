@@ -1,10 +1,10 @@
-import React from 'react';
-import Card from 'component/common/card';
-import ErrorText from 'component/common/error-text';
-import ZoomableImage from 'component/zoomableImage';
+import React from "react";
+import Card from "component/common/card";
+import ErrorText from "component/common/error-text";
+import ZoomableImage from "component/zoomableImage";
 
 type Props = {
-  source: string
+  source: string;
 };
 
 function ImageViewer(props: Props) {
@@ -15,7 +15,7 @@ function ImageViewer(props: Props) {
     <React.Fragment>
       {loadingError && (
         <Card
-          title={__('Error displaying image')}
+          title={__("Error displaying image")}
           actions={<ErrorText>There was an error displaying the image. You may still download it.</ErrorText>}
         />
       )}

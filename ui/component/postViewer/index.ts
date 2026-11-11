@@ -1,8 +1,8 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { makeSelectClaimForUri, makeSelectClaimIsMine } from 'redux/selectors/claims';
-import PostViewer from './view';
-import { doOpenModal } from 'redux/actions/app';
+import { connect } from "react-redux";
+import { makeSelectClaimForUri, makeSelectClaimIsMine } from "redux/selectors/claims";
+import PostViewer from "./view";
+import { doOpenModal } from "redux/actions/app";
 
 const select = (state: unknown, props: unknown) => ({
   claim: makeSelectClaimForUri(props.uri)(state),

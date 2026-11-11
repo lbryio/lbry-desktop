@@ -1,19 +1,19 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import {
   selectTitleForUri,
   makeSelectClaimForUri,
   makeSelectClaimIsMine,
   selectFetchingMyChannels,
-} from 'redux/selectors/claims';
-import { doHideModal } from 'redux/actions/app';
-import { doSendTip } from 'redux/actions/wallet';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { selectActiveChannelClaim, selectIncognito } from 'redux/selectors/app';
-import { selectBalance, selectIsSendingSupport } from 'redux/selectors/wallet';
-import { withRouter } from 'react-router';
-import * as SETTINGS from 'constants/settings';
-import WalletSendTip from './view';
+} from "redux/selectors/claims";
+import { doHideModal } from "redux/actions/app";
+import { doSendTip } from "redux/actions/wallet";
+import { makeSelectClientSetting } from "redux/selectors/settings";
+import { selectActiveChannelClaim, selectIncognito } from "redux/selectors/app";
+import { selectBalance, selectIsSendingSupport } from "redux/selectors/wallet";
+import { withRouter } from "react-router";
+import * as SETTINGS from "constants/settings";
+import WalletSendTip from "./view";
 
 const select = (state: unknown, props: unknown) => ({
   activeChannelClaim: selectActiveChannelClaim(state),

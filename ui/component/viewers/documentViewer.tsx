@@ -1,23 +1,23 @@
-import React from 'react';
-import LoadingScreen from 'component/common/loading-screen';
-import MarkdownPreview from 'component/common/markdown-preview';
-import CodeViewer from 'component/viewers/codeViewer';
-import * as RENDER_MODES from 'constants/file_render_modes';
+import React from "react";
+import LoadingScreen from "component/common/loading-screen";
+import MarkdownPreview from "component/common/markdown-preview";
+import CodeViewer from "component/viewers/codeViewer";
+import * as RENDER_MODES from "constants/file_render_modes";
 
 type Props = {
-  theme: string,
-  renderMode: string,
+  theme: string;
+  renderMode: string;
   source: {
-    file: (arg1?: string | null | undefined) => any,
-    stream: string,
-    contentType: string
-  }
+    file: (arg1?: string | null | undefined) => any;
+    stream: string;
+    contentType: string;
+  };
 };
 
 type State = {
-  error: boolean,
-  loading: boolean,
-  content: string | null | undefined
+  error: boolean;
+  loading: boolean;
+  content: string | null | undefined;
 };
 
 class DocumentViewer extends React.PureComponent<Props, State> {
@@ -33,19 +33,19 @@ class DocumentViewer extends React.PureComponent<Props, State> {
   componentDidMount() {
     const { source } = this.props;
     if (source && source.file) {
-      const stream = source.file('utf8');
+      const stream = source.file("utf8");
 
-      let data = '';
+      let data = "";
 
-      stream.on('data', (chunk) => {
+      stream.on("data", (chunk) => {
         data += chunk;
       });
 
-      stream.on('end', () => {
+      stream.on("end", () => {
         this.setState({ content: data, loading: false });
       });
 
-      stream.on('error', () => {
+      stream.on("error", () => {
         this.setState({ error: true, loading: false });
       });
     }
@@ -57,7 +57,7 @@ class DocumentViewer extends React.PureComponent<Props, State> {
     const { contentType } = source;
 
     return renderMode === RENDER_MODES.MARKDOWN ? (
-// @ts-expect-error - TS2322 - Type '{ content: string; isMarkdownPost: true; promptLinks: true; }' is not assignable to type 'IntrinsicAttributes & MarkdownProps'.
+      // @ts-expect-error - TS2322 - Type '{ content: string; isMarkdownPost: true; promptLinks: true; }' is not assignable to type 'IntrinsicAttributes & MarkdownProps'.
       <MarkdownPreview content={content} isMarkdownPost promptLinks />
     ) : (
       <CodeViewer value={content} contentType={contentType} theme={theme} />

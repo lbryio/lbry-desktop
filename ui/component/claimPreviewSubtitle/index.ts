@@ -1,10 +1,10 @@
 //@ts-nocheck
-import * as PAGES from 'constants/pages';
-import { connect } from 'react-redux';
-import { makeSelectClaimForUri, makeSelectClaimIsPending } from 'redux/selectors/claims';
-import { doClearPublish, doPrepareEdit } from 'redux/actions/publish';
-import { push } from 'connected-react-router';
-import ClaimPreviewSubtitle from './view';
+import * as PAGES from "constants/pages";
+import { connect } from "react-redux";
+import { makeSelectClaimForUri, makeSelectClaimIsPending } from "redux/selectors/claims";
+import { doClearPublish, doPrepareEdit } from "redux/actions/publish";
+import { push } from "connected-react-router";
+import ClaimPreviewSubtitle from "./view";
 
 const select = (state: unknown, props: unknown) => ({
   claim: makeSelectClaimForUri(props.uri)(state),

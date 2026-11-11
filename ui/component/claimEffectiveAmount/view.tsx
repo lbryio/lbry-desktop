@@ -1,9 +1,9 @@
-import React from 'react';
-import CreditAmount from 'component/common/credit-amount';
+import React from "react";
+import CreditAmount from "component/common/credit-amount";
 
 type Props = {
-  uri: string,
-  claim: Claim | null | undefined
+  uri: string;
+  claim: Claim | null | undefined;
 };
 
 function ClaimEffectiveAmount(props: Props) {

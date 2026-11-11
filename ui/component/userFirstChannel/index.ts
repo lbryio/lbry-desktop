@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectUser, selectEmailToVerify } from 'redux/selectors/user';
-import { selectCreatingChannel, selectMyChannelClaims, selectCreateChannelError } from 'redux/selectors/claims';
-import { doCreateChannel } from 'redux/actions/claims';
-import UserFirstChannel from './view';
+import { connect } from "react-redux";
+import { selectUser, selectEmailToVerify } from "redux/selectors/user";
+import { selectCreatingChannel, selectMyChannelClaims, selectCreateChannelError } from "redux/selectors/claims";
+import { doCreateChannel } from "redux/actions/claims";
+import UserFirstChannel from "./view";
 
 const select = (state: unknown) => ({
   email: selectEmailToVerify(state),

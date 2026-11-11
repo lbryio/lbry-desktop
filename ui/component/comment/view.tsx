@@ -1,75 +1,74 @@
-import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
-import * as KEYCODES from 'constants/keycodes';
-import { COMMENT_HIGHLIGHTED } from 'constants/classnames';
-import { SORT_BY, COMMENT_PAGE_SIZE_REPLIES } from 'constants/comment';
-import { FF_MAX_CHARS_IN_COMMENT } from 'constants/form-field';
-import { SITE_NAME, ENABLE_COMMENT_REACTIONS } from 'config';
-import React, { useEffect, useState } from 'react';
-import { parseURI } from 'util/lbryURI';
-import { formatNumber } from 'util/number';
-import DateTime from 'component/dateTime';
-import Button from 'component/button';
-import Expandable from 'component/expandable';
-import MarkdownPreview from 'component/common/markdown-preview';
-import CommentBadge from 'component/common/comment-badge'; // have this?
-import ChannelThumbnail from 'component/channelThumbnail';
-import { Menu, MenuButton } from '@reach/menu-button';
-import Icon from 'component/common/icon';
-import { FormFieldAreaAdvanced, Form } from 'component/common/form';
-import classnames from 'classnames';
-import usePersistedState from 'effects/use-persisted-state';
-import CommentReactions from 'component/commentReactions';
-import CommentsReplies from 'component/commentsReplies';
-import { useHistory } from 'react-router';
-import CommentCreate from 'component/commentCreate';
-import CommentMenuList from 'component/commentMenuList';
-import UriIndicator from 'component/uriIndicator';
-import CreditAmount from 'component/common/credit-amount';
-import OptimizedImage from 'component/optimizedImage';
-import { getChannelFromClaim } from 'util/claim';
-import { parseSticker } from 'util/comments';
-import { useIsMobile } from 'effects/use-screensize';
+import * as ICONS from "constants/icons";
+import * as PAGES from "constants/pages";
+import * as KEYCODES from "constants/keycodes";
+import { COMMENT_HIGHLIGHTED } from "constants/classnames";
+import { SORT_BY, COMMENT_PAGE_SIZE_REPLIES } from "constants/comment";
+import { FF_MAX_CHARS_IN_COMMENT } from "constants/form-field";
+import { SITE_NAME, ENABLE_COMMENT_REACTIONS } from "config";
+import React, { useEffect, useState } from "react";
+import { parseURI } from "util/lbryURI";
+import { formatNumber } from "util/number";
+import DateTime from "component/dateTime";
+import Button from "component/button";
+import Expandable from "component/expandable";
+import MarkdownPreview from "component/common/markdown-preview";
+import CommentBadge from "component/common/comment-badge"; // have this?
+import ChannelThumbnail from "component/channelThumbnail";
+import { Menu, MenuButton } from "@reach/menu-button";
+import Icon from "component/common/icon";
+import { FormFieldAreaAdvanced, Form } from "component/common/form";
+import classnames from "classnames";
+import usePersistedState from "effects/use-persisted-state";
+import CommentReactions from "component/commentReactions";
+import CommentsReplies from "component/commentsReplies";
+import { useHistory } from "react-router";
+import CommentCreate from "component/commentCreate";
+import CommentMenuList from "component/commentMenuList";
+import UriIndicator from "component/uriIndicator";
+import CreditAmount from "component/common/credit-amount";
+import OptimizedImage from "component/optimizedImage";
+import { getChannelFromClaim } from "util/claim";
+import { parseSticker } from "util/comments";
+import { useIsMobile } from "effects/use-screensize";
 
 const AUTO_EXPAND_ALL_REPLIES = false;
 
 type Props = {
-  comment: LbryComment,
-  myChannelIds: Array<string> | null | undefined,
-  clearPlayingUri: () => void,
-  uri: string,
-  claim: StreamClaim,
-  channelIsBlocked: boolean // if the channel is blacklisted in the app,
-  claimIsMine: boolean // if you control the claim which this comment was posted on,
-  doCommentUpdate: (arg1: string, arg2: string) => void,
-  fetchReplies: (arg1: string, arg2: string, arg3: number, arg4: number, arg5: number) => void,
-  totalReplyPages: number,
-  commentModBlock: (arg1: string) => void,
-  linkedCommentId?: string,
+  comment: LbryComment;
+  myChannelIds: Array<string> | null | undefined;
+  clearPlayingUri: () => void;
+  uri: string;
+  claim: StreamClaim;
+  channelIsBlocked: boolean; // if the channel is blacklisted in the app,
+  claimIsMine: boolean; // if you control the claim which this comment was posted on,
+  doCommentUpdate: (arg1: string, arg2: string) => void;
+  fetchReplies: (arg1: string, arg2: string, arg3: number, arg4: number, arg5: number) => void;
+  totalReplyPages: number;
+  commentModBlock: (arg1: string) => void;
+  linkedCommentId?: string;
   linkedCommentAncestors: {
-    [key: string]: Array<string>
-  },
-  hasChannels: boolean,
-  commentingEnabled: boolean,
-  doToast: (
-    arg1: {
-      message: string
-    },
-  ) => void,
-  isTopLevel?: boolean,
-  threadDepth: number,
-  hideActions?: boolean,
-  othersReacts: {
-    like: number,
-    dislike: number
-  } | null | undefined,
-  commentIdentityChannel: any,
-  activeChannelClaim: ChannelClaim | null | undefined,
-  playingUri: PlayingUri | null | undefined,
-  stakedLevel: number,
-  supportDisabled: boolean,
-  setQuickReply: (arg1?: any) => void,
-  quickReply: any
+    [key: string]: Array<string>;
+  };
+  hasChannels: boolean;
+  commentingEnabled: boolean;
+  doToast: (arg1: { message: string }) => void;
+  isTopLevel?: boolean;
+  threadDepth: number;
+  hideActions?: boolean;
+  othersReacts:
+    | {
+        like: number;
+        dislike: number;
+      }
+    | null
+    | undefined;
+  commentIdentityChannel: any;
+  activeChannelClaim: ChannelClaim | null | undefined;
+  playingUri: PlayingUri | null | undefined;
+  stakedLevel: number;
+  supportDisabled: boolean;
+  setQuickReply: (arg1?: any) => void;
+  quickReply: any;
 };
 
 const LENGTH_TO_COLLAPSE = 300;
@@ -140,7 +139,7 @@ function CommentView(props: Props) {
   const [charCount, setCharCount] = useState(editedMessage.length);
   const [showReplies, setShowReplies] = useState(showRepliesOnMount); // on mount
   const [page, setPage] = useState(showRepliesOnMount ? 1 : 0);
-  const [advancedEditor] = usePersistedState('comment-editor-mode', false);
+  const [advancedEditor] = usePersistedState("comment-editor-mode", false);
   const [displayDeadComment, setDisplayDeadComment] = React.useState(false);
   const likesCount = (othersReacts && othersReacts.like) || 0;
   const dislikesCount = (othersReacts && othersReacts.dislike) || 0;
@@ -164,17 +163,17 @@ function CommentView(props: Props) {
 
       // a user will try and press the escape key to cancel editing their comment
       const handleEscape = (event: unknown) => {
-// @ts-expect-error - TS2339 - Property 'keyCode' does not exist on type 'unknown'.
+        // @ts-expect-error - TS2339 - Property 'keyCode' does not exist on type 'unknown'.
         if (event.keyCode === KEYCODES.ESCAPE) {
           setEditing(false);
         }
       };
 
-      window.addEventListener('keydown', handleEscape);
+      window.addEventListener("keydown", handleEscape);
 
       // removes the listener so it doesn't cause problems elsewhere in the app
       return () => {
-        window.removeEventListener('keydown', handleEscape);
+        window.removeEventListener("keydown", handleEscape);
       };
     }
   }, [author, authorUri, editedMessage, isEditing, setEditing]);
@@ -186,12 +185,12 @@ function CommentView(props: Props) {
   }, [page, uri, commentId, fetchReplies]);
 
   function handleEditMessageChanged(event: unknown) {
-// @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
     setCommentValue(advancedEditor ? event : event.target.value);
   }
 
   function handleEditComment() {
-    if (playingUri && playingUri.source === 'comment') {
+    if (playingUri && playingUri.source === "comment") {
       clearPlayingUri();
     }
     setEditing(true);
@@ -206,7 +205,7 @@ function CommentView(props: Props) {
   function handleCommentReply() {
     if (!hasChannels) {
       push(`/$/${PAGES.CHANNEL_NEW}?redirect=${pathname}`);
-      doToast({ message: __('A channel is required to comment on %SITE_NAME%', { SITE_NAME }) });
+      doToast({ message: __("A channel is required to comment on %SITE_NAME%", { SITE_NAME }) });
     } else {
       setReplying(!isReplying);
     }
@@ -214,8 +213,8 @@ function CommentView(props: Props) {
 
   function handleTimeClick() {
     const urlParams = new URLSearchParams(search);
-    urlParams.delete('lc');
-    urlParams.append('lc', commentId);
+    urlParams.delete("lc");
+    urlParams.append("lc", commentId);
     replace(`${pathname}?${urlParams.toString()}`);
   }
 
@@ -223,17 +222,17 @@ function CommentView(props: Props) {
 
   return (
     <li
-      className={classnames('comment', {
-        'comment--top-level': isTopLevel,
-        'comment--reply': !isTopLevel,
-        'comment--superchat': supportAmount > 0,
+      className={classnames("comment", {
+        "comment--top-level": isTopLevel,
+        "comment--reply": !isTopLevel,
+        "comment--superchat": supportAmount > 0,
       })}
       id={commentId}
     >
       <div
-        className={classnames('comment__content', {
+        className={classnames("comment__content", {
           [COMMENT_HIGHLIGHTED]: isLinkedComment,
-          'comment--slimed': slimedToDeath && !displayDeadComment,
+          "comment--slimed": slimedToDeath && !displayDeadComment,
         })}
       >
         <div className="comment__thumbnail-wrapper">
@@ -249,15 +248,15 @@ function CommentView(props: Props) {
         <div className="comment__body-container">
           <div className="comment__meta">
             <div className="comment__meta-information">
-              {isGlobalMod && <CommentBadge label={__('Admin')} icon={ICONS.BADGE_MOD} />}
-              {isModerator && <CommentBadge label={__('Moderator')} icon={ICONS.BADGE_MOD} />}
+              {isGlobalMod && <CommentBadge label={__("Admin")} icon={ICONS.BADGE_MOD} />}
+              {isModerator && <CommentBadge label={__("Moderator")} icon={ICONS.BADGE_MOD} />}
 
               {!author ? (
-                <span className="comment__author">{__('Anonymous')}</span>
+                <span className="comment__author">{__("Anonymous")}</span>
               ) : (
                 <UriIndicator
-                  className={classnames('comment__author', {
-                    'comment__author--creator': commentByOwnerOfContent,
+                  className={classnames("comment__author", {
+                    "comment__author--creator": commentByOwnerOfContent,
                   })}
                   link
                   // @ts-expect-error - TS2322 (ts-migration)
@@ -278,8 +277,8 @@ function CommentView(props: Props) {
                 <span className="comment__pin">
                   <Icon icon={ICONS.PIN} size={14} />
                   {channelOwnerOfContent
-                    ? __('Pinned by @%channel%', { channel: channelOwnerOfContent })
-                    : __('Pinned by creator')}
+                    ? __("Pinned by @%channel%", { channel: channelOwnerOfContent })
+                    : __("Pinned by creator")}
                 </span>
               )}
             </div>
@@ -307,9 +306,9 @@ function CommentView(props: Props) {
             {isEditing ? (
               <Form onSubmit={handleSubmit}>
                 <FormFieldAreaAdvanced
-// @ts-expect-error - TS2322 - Type '{ className: string; type: string; name: string; value: string; charCount: number; onChange: (event: unknown) => void; textAreaMaxLength: number; handleSubmit: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormFieldAreaAdvanced> & Pick<Readonly<Props> & Readonly<...>, "type" | ... 18 more ... | "quickActionHandler"> & InexactPartial<...> & InexactPartial<...>'.
+                  // @ts-expect-error - TS2322 - Type '{ className: string; type: string; name: string; value: string; charCount: number; onChange: (event: unknown) => void; textAreaMaxLength: number; handleSubmit: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormFieldAreaAdvanced> & Pick<Readonly<Props> & Readonly<...>, "type" | ... 18 more ... | "quickActionHandler"> & InexactPartial<...> & InexactPartial<...>'.
                   className="comment__edit-input"
-                  type={advancedEditor ? 'markdown' : 'textarea'}
+                  type={advancedEditor ? "markdown" : "textarea"}
                   name="editing_comment"
                   value={editedMessage}
                   charCount={charCount}
@@ -319,9 +318,9 @@ function CommentView(props: Props) {
                 />
                 <div className="section__actions section__actions--no-margin">
                   {/* @ts-expect-error - TS2322 (ts-migration) */}
-                  <Button button="primary" type="submit" label={__('Done')} disabled={message === editedMessage} />
+                  <Button button="primary" type="submit" label={__("Done")} disabled={message === editedMessage} />
                   {/* @ts-expect-error - TS2322 (ts-migration) */}
-                  <Button button="link" label={__('Cancel')} onClick={() => setEditing(false)} />
+                  <Button button="link" label={__("Cancel")} onClick={() => setEditing(false)} />
                 </div>
               </Form>
             ) : (
@@ -329,7 +328,7 @@ function CommentView(props: Props) {
                 <div className="comment__message">
                   {slimedToDeath && !displayDeadComment ? (
                     <div onClick={() => setDisplayDeadComment(true)} className="comment__dead">
-                      {__('This comment was slimed to death.')} <Icon icon={ICONS.SLIME_ACTIVE} />
+                      {__("This comment was slimed to death.")} <Icon icon={ICONS.SLIME_ACTIVE} />
                     </div>
                   ) : stickerFromMessage ? (
                     <div className="sticker__comment">
@@ -340,7 +339,7 @@ function CommentView(props: Props) {
                     <Expandable>
                       <MarkdownPreview
                         content={message}
-// @ts-expect-error - TS2322 - Type '{ content: string; promptLinks: true; parentCommentId: string; stakedLevel: number; }' is not assignable to type 'IntrinsicAttributes & MarkdownProps'.
+                        // @ts-expect-error - TS2322 - Type '{ content: string; promptLinks: true; parentCommentId: string; stakedLevel: number; }' is not assignable to type 'IntrinsicAttributes & MarkdownProps'.
                         promptLinks
                         parentCommentId={commentId}
                         stakedLevel={stakedLevel}
@@ -349,7 +348,7 @@ function CommentView(props: Props) {
                   ) : (
                     <MarkdownPreview
                       content={message}
-// @ts-expect-error - TS2322 - Type '{ content: string; promptLinks: true; parentCommentId: string; stakedLevel: number; }' is not assignable to type 'IntrinsicAttributes & MarkdownProps'.
+                      // @ts-expect-error - TS2322 - Type '{ content: string; promptLinks: true; parentCommentId: string; stakedLevel: number; }' is not assignable to type 'IntrinsicAttributes & MarkdownProps'.
                       promptLinks
                       parentCommentId={commentId}
                       stakedLevel={stakedLevel}
@@ -362,7 +361,7 @@ function CommentView(props: Props) {
                     {threadDepth !== 0 && (
                       <Button
                         // @ts-expect-error - TS2322 (ts-migration)
-                        label={commentingEnabled ? __('Reply') : __('Log in to reply')}
+                        label={commentingEnabled ? __("Reply") : __("Log in to reply")}
                         className="comment__action"
                         onClick={handleCommentReply}
                         icon={ICONS.REPLY}
@@ -380,8 +379,8 @@ function CommentView(props: Props) {
                       // @ts-expect-error - TS2322 (ts-migration)
                       label={
                         numDirectReplies < 2
-                          ? __('Show reply')
-                          : __('Show %count% replies', { count: formatNumber(numDirectReplies, 2, true) })
+                          ? __("Show reply")
+                          : __("Show %count% replies", { count: formatNumber(numDirectReplies, 2, true) })
                       }
                       button="link"
                       onClick={() => {
@@ -399,7 +398,7 @@ function CommentView(props: Props) {
                   <div className="comment__actions">
                     <Button
                       // @ts-expect-error - TS2322 (ts-migration)
-                      label={__('Hide replies')}
+                      label={__("Hide replies")}
                       button="link"
                       onClick={() => setShowReplies(false)}
                       icon={ICONS.UP}

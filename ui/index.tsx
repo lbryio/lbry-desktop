@@ -1,18 +1,18 @@
 //@ts-nocheck
-import '@babel/polyfill';
-import ErrorBoundary from 'component/errorBoundary';
-import App from 'component/app';
-import SnackBar from 'component/snackBar';
-import SplashScreen from 'component/splash';
-import * as ACTIONS from 'constants/action_types';
-import { changeZoomFactor } from 'util/zoomWindow';
-import { ipcRenderer, shell } from 'electron';
-import moment from 'moment';
-import * as MODALS from 'constants/modal_types';
-import React, { Fragment, useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import * as SETTINGS from 'constants/settings';
+import "@babel/polyfill";
+import ErrorBoundary from "component/errorBoundary";
+import App from "component/app";
+import SnackBar from "component/snackBar";
+import SplashScreen from "component/splash";
+import * as ACTIONS from "constants/action_types";
+import { changeZoomFactor } from "util/zoomWindow";
+import { ipcRenderer, shell } from "electron";
+import moment from "moment";
+import * as MODALS from "constants/modal_types";
+import React, { Fragment, useState, useEffect } from "react";
+import ReactDOM from "react-dom";
+import { Provider } from "react-redux";
+import * as SETTINGS from "constants/settings";
 import {
   doDaemonReady,
   doAutoUpdate,
@@ -25,31 +25,31 @@ import {
   doAutoUpdateDownloading,
   doAutoUpdateReset,
   doAutoUpdateFail,
-} from 'redux/actions/app';
-import { isURIValid } from 'util/lbryURI';
-import { setSearchApi, setSearchProvider } from 'redux/actions/search';
-import { doSetLanguage, doFetchLanguage, doUpdateIsNightAsync } from 'redux/actions/settings';
-import { Lbryio, doBlackListedOutpointsSubscribe, doFilteredOutpointsSubscribe } from 'lbryinc';
-import rewards from 'rewards';
-import { store, persistor, history } from 'store';
-import app from './app';
-import doLogWarningConsoleMessage from './logWarningConsoleMessage';
-import { ConnectedRouter, push } from 'connected-react-router';
-import { formatLbryUrlForWeb, formatInAppUrl } from 'util/url';
-import { PersistGate } from 'redux-persist/integration/react';
-import analytics from 'analytics';
-import { doToast } from 'redux/actions/notifications';
-import { getAuthToken, setAuthToken, doAuthTokenRefresh } from 'util/saved-passwords';
-import { makeSelectClientSetting, selectClientSetting } from 'redux/selectors/settings';
-import { DEFAULT_LANGUAGE, LBRY_API_URL } from 'config';
+} from "redux/actions/app";
+import { isURIValid } from "util/lbryURI";
+import { setSearchApi, setSearchProvider } from "redux/actions/search";
+import { doSetLanguage, doFetchLanguage, doUpdateIsNightAsync } from "redux/actions/settings";
+import { Lbryio, doBlackListedOutpointsSubscribe, doFilteredOutpointsSubscribe } from "lbryinc";
+import rewards from "rewards";
+import { store, persistor, history } from "store";
+import app from "./app";
+import doLogWarningConsoleMessage from "./logWarningConsoleMessage";
+import { ConnectedRouter, push } from "connected-react-router";
+import { formatLbryUrlForWeb, formatInAppUrl } from "util/url";
+import { PersistGate } from "redux-persist/integration/react";
+import analytics from "analytics";
+import { doToast } from "redux/actions/notifications";
+import { getAuthToken, setAuthToken, doAuthTokenRefresh } from "util/saved-passwords";
+import { makeSelectClientSetting, selectClientSetting } from "redux/selectors/settings";
+import { DEFAULT_LANGUAGE, LBRY_API_URL } from "config";
 
 // Import 3rd-party styles before ours for the current way we are code-splitting.
-import 'scss/third-party.scss';
+import "scss/third-party.scss";
 
 // Import our app styles
 // If a style is not necessary for the initial page load, it should be removed from `all.scss`
 // and loaded dynamically in the component that consumes it
-import 'scss/all.scss';
+import "scss/all.scss";
 
 const startTime = Date.now();
 analytics.startupEvent();
@@ -81,13 +81,16 @@ doAuthTokenRefresh();
 // We keep a local variable for authToken because `ipcRenderer.send` does not
 // contain a response, so there is no way to know when it's been set
 let authToken;
-Lbryio.setOverride('setAuthToken', (authToken) => {
-  setAuthToken(authToken);
-  return authToken;
+Lbryio.setOverride("setAuthToken", (newAuthToken) => {
+  setAuthToken(newAuthToken);
+  // Keep the local cache in step; the parameter previously shadowed this
+  // variable, so the cache never actually worked.
+  authToken = newAuthToken;
+  return newAuthToken;
 });
 
 Lbryio.setOverride(
-  'getAuthToken',
+  "getAuthToken",
   () =>
     new Promise<any>((resolve) => {
       const authTokenToReturn = authToken || getAuthToken();
@@ -95,17 +98,17 @@ Lbryio.setOverride(
     })
 );
 
-rewards.setCallback('claimFirstRewardSuccess', () => {
+rewards.setCallback("claimFirstRewardSuccess", () => {
   app.store.dispatch(doOpenModal(MODALS.FIRST_REWARD));
 });
 
-rewards.setCallback('claimRewardSuccess', (reward) => {
+rewards.setCallback("claimRewardSuccess", (reward) => {
   if (reward && reward.type === rewards.TYPE_REWARD_CODE) {
     app.store.dispatch(doHideModal());
   }
 });
 
-ipcRenderer.on('send-disk-space', (event, result) => {
+ipcRenderer.on("send-disk-space", (event, result) => {
   if (result.error) {
     console.log(`disk space error: ${result.error}`);
   } else {
@@ -116,17 +119,17 @@ ipcRenderer.on('send-disk-space', (event, result) => {
   }
 });
 
-ipcRenderer.on('open-uri-requested', (event, url, newSession) => {
+ipcRenderer.on("open-uri-requested", (event, url, newSession) => {
   function handleError() {
     app.store.dispatch(
       doToast({
-        message: __('Invalid LBRY URL requested'),
+        message: __("Invalid LBRY URL requested"),
       })
     );
   }
 
-  const path = url.slice('lbry://'.length);
-  if (path.startsWith('?')) {
+  const path = url.slice("lbry://".length);
+  if (path.startsWith("?")) {
     const redirectUrl = formatInAppUrl(path);
     return app.store.dispatch(push(redirectUrl));
   }
@@ -141,35 +144,35 @@ ipcRenderer.on('open-uri-requested', (event, url, newSession) => {
   handleError();
 });
 
-ipcRenderer.on('auto-update-download-progress', () => {
+ipcRenderer.on("auto-update-download-progress", () => {
   app.store.dispatch(doAutoUpdateDownloading());
 });
 
-ipcRenderer.on('auto-update-checking', () => {
+ipcRenderer.on("auto-update-checking", () => {
   app.store.dispatch(doAutoUpdateReset());
 });
 
-ipcRenderer.on('auto-update-available', (e, info) => {
+ipcRenderer.on("auto-update-available", (e, info) => {
   app.store.dispatch(doNotifyUpdateAvailable(info));
 });
 
-ipcRenderer.on('auto-update-downloaded', () => {
+ipcRenderer.on("auto-update-downloaded", () => {
   app.store.dispatch(doAutoUpdateReset());
 });
 
-ipcRenderer.on('auto-update-error', () => {
+ipcRenderer.on("auto-update-error", () => {
   app.store.dispatch(doAutoUpdateFail());
 });
 
-ipcRenderer.on('upgrade-installing-error', () => {
+ipcRenderer.on("upgrade-installing-error", () => {
   app.store.dispatch(doShowUpgradeInstallationError());
 });
 
-ipcRenderer.on('download-progress-update', (e, p) => {
+ipcRenderer.on("download-progress-update", (e, p) => {
   app.store.dispatch(doUpdateDownloadProgress(Math.round(p.percent * 100)));
 });
 
-ipcRenderer.on('download-update-complete', (e, c) => {
+ipcRenderer.on("download-update-complete", (e, c) => {
   app.store.dispatch({
     type: ACTIONS.UPGRADE_DOWNLOAD_COMPLETED,
     data: {
@@ -178,37 +181,37 @@ ipcRenderer.on('download-update-complete', (e, c) => {
   });
 });
 
-ipcRenderer.on('language-set', (event, language) => {
+ipcRenderer.on("language-set", (event, language) => {
   app.store.dispatch(doSetLanguage(language));
 });
 
-ipcRenderer.on('open-menu', (event, uri) => {
-  if (uri && uri.startsWith('/help')) {
-    app.store.dispatch(push('/$/help'));
+ipcRenderer.on("open-menu", (event, uri) => {
+  if (uri && uri.startsWith("/help")) {
+    app.store.dispatch(push("/$/help"));
   }
 });
 
-ipcRenderer.on('zoom-window', (event, action) => {
+ipcRenderer.on("zoom-window", (event, action) => {
   changeZoomFactor(action);
 });
 
-ipcRenderer.on('window-is-focused', () => {
-  if (process.platform !== 'darwin') return;
+ipcRenderer.on("window-is-focused", () => {
+  if (process.platform !== "darwin") return;
   app.store.dispatch({ type: ACTIONS.WINDOW_FOCUSED });
-  ipcRenderer.send('app:setBadge', '');
+  ipcRenderer.send("app:setBadge", "");
 });
 
-ipcRenderer.on('devtools-is-opened', () => {
+ipcRenderer.on("devtools-is-opened", () => {
   doLogWarningConsoleMessage();
 });
 
 // Force exit mode for html5 fullscreen api
 // See: https://github.com/electron/electron/issues/18188
-ipcRenderer.on('leave-full-screen', () => {
+ipcRenderer.on("leave-full-screen", () => {
   document.webkitExitFullscreen();
 });
 
-document.addEventListener('click', (event) => {
+document.addEventListener("click", (event) => {
   let { target } = event;
 
   while (target && target !== document) {
@@ -221,10 +224,10 @@ document.addEventListener('click', (event) => {
   }
 });
 
-document.addEventListener('dragover', (event) => {
+document.addEventListener("dragover", (event) => {
   event.preventDefault();
 });
-document.addEventListener('drop', (event) => {
+document.addEventListener("drop", (event) => {
   event.preventDefault();
 });
 
@@ -237,27 +240,27 @@ function AppWrapper() {
     if (persistDone) {
       const state = store.getState();
       const enabled = makeSelectClientSetting(SETTINGS.ENABLE_PRERELEASE_UPDATES)(state);
-      ipcRenderer.send('set-allow-prerelease', Boolean(enabled));
+      ipcRenderer.send("set-allow-prerelease", Boolean(enabled));
     }
   }, [persistDone]);
 
   useEffect(() => {
     // @if TARGET='app'
-    moment.locale(ipcRenderer.sendSync('app:getLocale'));
+    moment.locale(ipcRenderer.sendSync("app:getLocale"));
 
-    ipcRenderer.on('auto-update-error', (event, message) => {
-      console.error(message); // eslint-disable-line no-console
+    ipcRenderer.on("auto-update-error", (event, message) => {
+      console.error(message);
     });
 
-    if (['win32', 'darwin'].includes(process.platform) || !!process.env.APPIMAGE) {
-      ipcRenderer.on('auto-update-available', () => {
-        console.log('Update available'); // eslint-disable-line no-console
+    if (["win32", "darwin"].includes(process.platform) || !!process.env.APPIMAGE) {
+      ipcRenderer.on("auto-update-available", () => {
+        console.log("Update available");
       });
-      ipcRenderer.on('auto-update-not-available', () => {
-        console.log('Update not available'); // eslint-disable-line no-console
+      ipcRenderer.on("auto-update-not-available", () => {
+        console.log("Update not available");
       });
-      ipcRenderer.on('auto-update-downloaded', () => {
-        console.log('Update downloaded'); // eslint-disable-line no-console
+      ipcRenderer.on("auto-update-downloaded", () => {
+        console.log("Update downloaded");
         app.store.dispatch(doAutoUpdate());
       });
     }
@@ -313,4 +316,4 @@ function AppWrapper() {
   );
 }
 
-ReactDOM.render(<AppWrapper />, document.getElementById('app'));
+ReactDOM.render(<AppWrapper />, document.getElementById("app"));

@@ -1,20 +1,20 @@
-import React from 'react';
-import { useRadioState, Radio, RadioGroup } from 'reakit/Radio';
+import React from "react";
+import { useRadioState, Radio, RadioGroup } from "reakit/Radio";
 
 type Props = {
-  files: Array<File>,
-  onChange: (arg1: File | undefined) => void
+  files: Array<File>;
+  onChange: (arg1: File | undefined) => void;
 };
 
 type RadioProps = {
-  id: string,
-  label: string
+  id: string;
+  label: string;
 };
 
 // Same as FormField type="radio" but it works with reakit:
 const ForwardedRadio = React.forwardRef((props: RadioProps, ref) => (
   <span className="radio">
-{ /* @ts-expect-error - TS2322 - Type 'ForwardedRef<unknown>' is not assignable to type 'LegacyRef<HTMLInputElement>'. */}
+    {/* @ts-expect-error - TS2322 - Type 'ForwardedRef<unknown>' is not assignable to type 'LegacyRef<HTMLInputElement>'. */}
     <input {...props} type="radio" ref={ref} />
     <label htmlFor={props.id}>{props.label}</label>
   </span>
@@ -66,7 +66,7 @@ function FileList(props: Props) {
   }, [radio, onChange, getFile]);
 
   return (
-    <div className={'file-list'}>
+    <div className={"file-list"}>
       <RadioGroup {...radio} aria-label="files">
         {files.map(({ name }) => {
           return <Radio key={name} {...radio} value={name} label={name} as={ForwardedRadio} />;

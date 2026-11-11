@@ -1,6 +1,6 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import AbandonedChannelPreview from './view';
+import { connect } from "react-redux";
+import AbandonedChannelPreview from "./view";
 
 const select = (state: unknown, props: unknown) => ({});
 

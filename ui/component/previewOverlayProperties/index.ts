@@ -1,10 +1,10 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectClaimIsMine, selectClaimForUri } from 'redux/selectors/claims';
-import { makeSelectFilePartlyDownloaded } from 'redux/selectors/file_info';
-import { makeSelectEditedCollectionForId } from 'redux/selectors/collections';
-import { selectIsSubscribedForUri } from 'redux/selectors/subscriptions';
-import PreviewOverlayProperties from './view';
+import { connect } from "react-redux";
+import { selectClaimIsMine, selectClaimForUri } from "redux/selectors/claims";
+import { makeSelectFilePartlyDownloaded } from "redux/selectors/file_info";
+import { makeSelectEditedCollectionForId } from "redux/selectors/collections";
+import { selectIsSubscribedForUri } from "redux/selectors/subscriptions";
+import PreviewOverlayProperties from "./view";
 
 const select = (state: unknown, props: unknown) => {
   const claim = selectClaimForUri(state, props.uri);

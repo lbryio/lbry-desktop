@@ -1,13 +1,13 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doSetDaemonSetting } from 'redux/actions/settings';
-import { doSetWelcomeVersion } from 'redux/actions/app';
-import * as DAEMON_SETTINGS from 'constants/daemon_settings';
-import { WELCOME_VERSION } from 'config.js';
-import { selectDaemonSettings, selectDaemonStatus } from 'redux/selectors/settings';
+import { connect } from "react-redux";
+import { doSetDaemonSetting } from "redux/actions/settings";
+import { doSetWelcomeVersion } from "redux/actions/app";
+import * as DAEMON_SETTINGS from "constants/daemon_settings";
+import { WELCOME_VERSION } from "config.js";
+import { selectDaemonSettings, selectDaemonStatus } from "redux/selectors/settings";
 
-import WelcomeSplash from './view';
-import { selectDiskSpace } from 'redux/selectors/app';
+import WelcomeSplash from "./view";
+import { selectDiskSpace } from "redux/selectors/app";
 
 const select = (state: unknown) => ({
   diskSpace: selectDiskSpace(state),

@@ -1,43 +1,46 @@
-import * as React from 'react';
-import classnames from 'classnames';
-import { useIsMediumScreen } from 'effects/use-screensize';
-import Page from 'component/page';
-import * as RENDER_MODES from 'constants/file_render_modes';
-import FileTitleSection from 'component/fileTitleSection';
-import FileRenderInitiator from 'component/fileRenderInitiator';
-import FileRenderInline from 'component/fileRenderInline';
-import FileRenderDownload from 'component/fileRenderDownload';
-import RecommendedContent from 'component/recommendedContent';
-import CollectionContent from 'component/collectionContentSidebar';
-import CommentsList from 'component/commentsList';
-import Empty from 'component/common/empty';
+import * as React from "react";
+import classnames from "classnames";
+import { useIsMediumScreen } from "effects/use-screensize";
+import Page from "component/page";
+import * as RENDER_MODES from "constants/file_render_modes";
+import FileTitleSection from "component/fileTitleSection";
+import FileRenderInitiator from "component/fileRenderInitiator";
+import FileRenderInline from "component/fileRenderInline";
+import FileRenderDownload from "component/fileRenderDownload";
+import RecommendedContent from "component/recommendedContent";
+import CollectionContent from "component/collectionContentSidebar";
+import CommentsList from "component/commentsList";
+import Empty from "component/common/empty";
 
-import PostViewer from 'component/postViewer';
+import PostViewer from "component/postViewer";
 
-export const PRIMARY_PLAYER_WRAPPER_CLASS = 'file-page__video-container';
+export const PRIMARY_PLAYER_WRAPPER_CLASS = "file-page__video-container";
 
 type Props = {
-  costInfo: {
-    includesData: boolean,
-    cost: number
-  } | null | undefined,
-  fileInfo: FileListItem,
-  uri: string,
-  fetchFileInfo: (arg1: string) => void,
-  fetchCostInfo: (arg1: string) => void,
-  setViewed: (arg1: string) => void,
-  renderMode: string,
-  obscureNsfw: boolean,
-  isMature: boolean,
-  linkedCommentId?: string,
-  setPrimaryUri: (arg1?: string | null | undefined) => void,
-  collection?: Collection,
-  collectionId: string,
-  videoTheaterMode: boolean,
-  claimIsMine: boolean,
-  commentsDisabled: boolean,
-  clearPosition: (arg1: string) => void,
-  position: number
+  costInfo:
+    | {
+        includesData: boolean;
+        cost: number;
+      }
+    | null
+    | undefined;
+  fileInfo: FileListItem;
+  uri: string;
+  fetchFileInfo: (arg1: string) => void;
+  fetchCostInfo: (arg1: string) => void;
+  setViewed: (arg1: string) => void;
+  renderMode: string;
+  obscureNsfw: boolean;
+  isMature: boolean;
+  linkedCommentId?: string;
+  setPrimaryUri: (arg1?: string | null | undefined) => void;
+  collection?: Collection;
+  collectionId: string;
+  videoTheaterMode: boolean;
+  claimIsMine: boolean;
+  commentsDisabled: boolean;
+  clearPosition: (arg1: string) => void;
+  position: number;
 };
 
 function FilePage(props: Props) {
@@ -112,7 +115,7 @@ function FilePage(props: Props) {
   ]);
 
   function renderFilePageLayout() {
-// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"audio" | "video"'.
+    // @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"audio" | "video"'.
     if (RENDER_MODES.FLOATING_MODES.includes(renderMode)) {
       return (
         <React.Fragment>
@@ -124,7 +127,7 @@ function FilePage(props: Props) {
       );
     }
 
-// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"application"'.
+    // @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"application"'.
     if (RENDER_MODES.UNRENDERABLE_MODES.includes(renderMode)) {
       return (
         <React.Fragment>
@@ -139,7 +142,7 @@ function FilePage(props: Props) {
       return <PostViewer uri={uri} />;
     }
 
-// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"document" | "md" | "pdf" | "html" | "docx" | "plain_text"'.
+    // @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"document" | "md" | "pdf" | "html" | "docx" | "plain_text"'.
     if (RENDER_MODES.TEXT_MODES.includes(renderMode)) {
       return (
         <React.Fragment>
@@ -178,7 +181,7 @@ function FilePage(props: Props) {
     return (
       // @ts-expect-error - TS2740 (ts-migration)
       <Page className="file-page" filePage isMarkdown={isMarkdown}>
-        <div className={classnames('section card-stack', `file-page__${renderMode}`)}>
+        <div className={classnames("section card-stack", `file-page__${renderMode}`)}>
           {/* @ts-expect-error - TS2741 (ts-migration) */}
           <FileTitleSection uri={uri} isNsfwBlocked />
         </div>
@@ -194,15 +197,15 @@ function FilePage(props: Props) {
   return (
     // @ts-expect-error - TS2740 (ts-migration)
     <Page className="file-page" filePage isMarkdown={isMarkdown}>
-      <div className={classnames('section card-stack', `file-page__${renderMode}`)}>
+      <div className={classnames("section card-stack", `file-page__${renderMode}`)}>
         {renderFilePageLayout()}
 
         {!isMarkdown && (
           <div className="file-page__secondary-content">
             <div>
-{ /* @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"audio" | "video"'. */}
+              {/* @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"audio" | "video"'. */}
               {RENDER_MODES.FLOATING_MODES.includes(renderMode) && <FileTitleSection uri={uri} />}
-              {commentsDisabled && <Empty text={__('The creator of this content has disabled comments.')} />}
+              {commentsDisabled && <Empty text={__("The creator of this content has disabled comments.")} />}
               {!commentsDisabled && <CommentsList uri={uri} linkedCommentId={linkedCommentId} />}
             </div>
             {!collection && !isMarkdown && videoTheaterMode && !isMediumScreen && <RecommendedContent uri={uri} />}

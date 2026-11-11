@@ -1,13 +1,13 @@
-import * as ICONS from 'constants/icons';
-import React from 'react';
-import I18nMessage from 'component/i18nMessage';
-import UriIndicator from 'component/uriIndicator';
-import Icon from 'component/common/icon';
+import * as ICONS from "constants/icons";
+import React from "react";
+import I18nMessage from "component/i18nMessage";
+import UriIndicator from "component/uriIndicator";
+import Icon from "component/common/icon";
 
 type Props = {
-  uri: string,
-  claim: Claim | null | undefined,
-  short: boolean
+  uri: string;
+  claim: Claim | null | undefined;
+  short: boolean;
 };
 
 function ClaimRepostAuthor(props: Props) {
@@ -37,7 +37,7 @@ function ClaimRepostAuthor(props: Props) {
             <I18nMessage
               // @ts-expect-error - TS2322 (ts-migration)
               tokens={{
-                anonymous: <strong>{__('Anon --[used in <%anonymous% Reposted>]--')}</strong>,
+                anonymous: <strong>{__("Anon --[used in <%anonymous% Reposted>]--")}</strong>,
               }}
             >
               %anonymous%

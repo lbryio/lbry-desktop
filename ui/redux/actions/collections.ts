@@ -1,16 +1,16 @@
-import * as ACTIONS from 'constants/action_types';
-import { v4 as uuid } from 'uuid';
-import Lbry from 'lbry';
-import { doClaimSearch, doAbandonClaim } from 'redux/actions/claims';
-import { makeSelectClaimForClaimId } from 'redux/selectors/claims';
+import * as ACTIONS from "constants/action_types";
+import { v4 as uuid } from "uuid";
+import Lbry from "lbry";
+import { doClaimSearch, doAbandonClaim } from "redux/actions/claims";
+import { makeSelectClaimForClaimId } from "redux/selectors/claims";
 import {
   makeSelectCollectionForId,
   // makeSelectPublishedCollectionForId, // for "save" or "copy" action
   makeSelectPublishedCollectionForId,
   makeSelectUnpublishedCollectionForId,
   makeSelectEditedCollectionForId,
-} from 'redux/selectors/collections';
-import * as COLS from 'constants/collections';
+} from "redux/selectors/collections";
+import * as COLS from "constants/collections";
 
 const getTimestamp = () => {
   return Math.floor(Date.now() / 1000);
@@ -18,289 +18,289 @@ const getTimestamp = () => {
 
 const FETCH_BATCH_SIZE = 50;
 
-export const doLocalCollectionCreate = (
-  name: string,
-  collectionItems: Array<string>,
-  type: string,
-  sourceId: string
-) => (dispatch: Dispatch) => {
-  return dispatch({
-    type: ACTIONS.COLLECTION_NEW,
-    data: {
-      entry: {
-        id: uuid(), // start with a uuid, this becomes a claimId after publish
-        name: name,
-        updatedAt: getTimestamp(),
-        items: collectionItems || [],
-        sourceId: sourceId,
-        type: type,
-      },
-    },
-  });
-};
-
-export const doCollectionDelete = (id: string, colKey: string | null = undefined) => (
-  dispatch: Dispatch,
-  getState: GetState
-) => {
-  const state = getState();
-  const claim = makeSelectClaimForClaimId(id)(state);
-  const collectionDelete = () =>
-    dispatch({
-      type: ACTIONS.COLLECTION_DELETE,
+export const doLocalCollectionCreate =
+  (name: string, collectionItems: Array<string>, type: string, sourceId: string) => (dispatch: Dispatch) => {
+    return dispatch({
+      type: ACTIONS.COLLECTION_NEW,
       data: {
-        id: id,
-        collectionKey: colKey,
+        entry: {
+          id: uuid(), // start with a uuid, this becomes a claimId after publish
+          name: name,
+          updatedAt: getTimestamp(),
+          items: collectionItems || [],
+          sourceId: sourceId,
+          type: type,
+        },
       },
     });
-  if (claim && !colKey) {
-    // could support "abandon collection claim, but keep private collection" later
-    return dispatch(doAbandonClaim(claim, collectionDelete));
-  }
-  return collectionDelete();
-};
+  };
+
+export const doCollectionDelete =
+  (id: string, colKey: string | null = undefined) =>
+  (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const claim = makeSelectClaimForClaimId(id)(state);
+    const collectionDelete = () =>
+      dispatch({
+        type: ACTIONS.COLLECTION_DELETE,
+        data: {
+          id: id,
+          collectionKey: colKey,
+        },
+      });
+    if (claim && !colKey) {
+      // could support "abandon collection claim, but keep private collection" later
+      return dispatch(doAbandonClaim(claim, collectionDelete));
+    }
+    return collectionDelete();
+  };
 
 // Given a collection, save its collectionId to be resolved and displayed in Library
 
 // Given a collection and name, copy it to a local private collection with a name
 
-export const doFetchItemsInCollections = (
-  resolveItemsOptions: {
-    collectionIds: Array<string>,
-    pageSize?: number
-  },
-  resolveStartedCallback?: () => void
-) => async (dispatch: Dispatch, getState: GetState) => {
-  /*
+export const doFetchItemsInCollections =
+  (
+    resolveItemsOptions: {
+      collectionIds: Array<string>;
+      pageSize?: number;
+    },
+    resolveStartedCallback?: () => void
+  ) =>
+  async (dispatch: Dispatch, getState: GetState) => {
+    /*
   1) make sure all the collection claims are loaded into claims reducer, search/resolve if necessary.
   2) get the item claims for each
   3) format and make sure they're in the order as in the claim
   4) Build the collection objects and update collections reducer
   5) Update redux claims reducer
    */
-  let state = getState();
-  const { collectionIds, pageSize } = resolveItemsOptions;
+    const state = getState();
+    const { collectionIds, pageSize } = resolveItemsOptions;
 
-  dispatch({
-    type: ACTIONS.COLLECTION_ITEMS_RESOLVE_STARTED,
-    data: { ids: collectionIds },
-  });
+    dispatch({
+      type: ACTIONS.COLLECTION_ITEMS_RESOLVE_STARTED,
+      data: { ids: collectionIds },
+    });
 
-  if (resolveStartedCallback) resolveStartedCallback();
+    if (resolveStartedCallback) resolveStartedCallback();
 
-  const collectionIdsToSearch = collectionIds.filter((claimId) => !state.claims.byId[claimId]);
+    const collectionIdsToSearch = collectionIds.filter((claimId) => !state.claims.byId[claimId]);
 
-  if (collectionIdsToSearch.length) {
-    await dispatch(doClaimSearch({ claim_ids: collectionIdsToSearch, page: 1, page_size: 9999 }));
-  }
+    if (collectionIdsToSearch.length) {
+      await dispatch(doClaimSearch({ claim_ids: collectionIdsToSearch, page: 1, page_size: 9999 }));
+    }
 
-  const stateAfterClaimSearch = getState();
+    const stateAfterClaimSearch = getState();
 
-  async function fetchItemsForCollectionClaim(claim: CollectionClaim, pageSize?: number) {
-    const totalItems = claim.value.claims && claim.value.claims.length;
-    const claimId = claim.claim_id;
-    const itemOrder = claim.value.claims;
+    async function fetchItemsForCollectionClaim(claim: CollectionClaim, pageSize?: number) {
+      const totalItems = claim.value.claims && claim.value.claims.length;
+      const claimId = claim.claim_id;
+      const itemOrder = claim.value.claims;
 
-    const sortResults = (items: Array<Claim>, claimList: unknown) => {
-      const newItems: Array<Claim> = [];
-// @ts-expect-error - TS2339 - Property 'forEach' does not exist on type 'unknown'.
-      claimList.forEach((id) => {
-        const index = items.findIndex((i) => i.claim_id === id);
-        if (index >= 0) {
-          newItems.push(items[index]);
-        }
-      });
-      /*
+      const sortResults = (items: Array<Claim>, claimList: unknown) => {
+        const newItems: Array<Claim> = [];
+        // @ts-expect-error - TS2339 - Property 'forEach' does not exist on type 'unknown'.
+        claimList.forEach((id) => {
+          const index = items.findIndex((i) => i.claim_id === id);
+          if (index >= 0) {
+            newItems.push(items[index]);
+          }
+        });
+        /*
         This will return newItems[] of length less than total_items below
         if one or more of the claims has been abandoned. That's ok for now.
       */
-      return newItems;
-    };
-
-    const mergeBatches = (
-      arrayOfResults: Array<{
-        items: Array<Claim>,
-        total_items: number
-      }>,
-      claimList: Array<string>
-    ) => {
-      const mergedResults: {
-        items: Array<Claim>,
-        total_items: number
-      } = {
-        items: [],
-        total_items: 0,
+        return newItems;
       };
-      arrayOfResults.forEach((result) => {
-        mergedResults.items = mergedResults.items.concat(result.items);
-        mergedResults.total_items = result.total_items;
-      });
 
-      mergedResults.items = sortResults(mergedResults.items, claimList);
-      return mergedResults;
-    };
-
-    try {
-      const batchSize = pageSize || FETCH_BATCH_SIZE;
-      const batches: Array<Promise<any>> = [];
-
-      for (let i = 0; i < Math.ceil(totalItems / batchSize); i++) {
-        batches[i] = Lbry.claim_search({
-          claim_ids: claim.value.claims.slice(i * batchSize, (i + 1) * batchSize),
-          page: 1,
-          page_size: batchSize,
-          no_totals: true,
+      const mergeBatches = (
+        arrayOfResults: Array<{
+          items: Array<Claim>;
+          total_items: number;
+        }>,
+        claimList: Array<string>
+      ) => {
+        const mergedResults: {
+          items: Array<Claim>;
+          total_items: number;
+        } = {
+          items: [],
+          total_items: 0,
+        };
+        arrayOfResults.forEach((result) => {
+          mergedResults.items = mergedResults.items.concat(result.items);
+          mergedResults.total_items = result.total_items;
         });
-      }
-      const itemsInBatches = await Promise.all(batches);
-      const result = mergeBatches(itemsInBatches, itemOrder);
 
-      const itemsById: {
-        claimId: string,
-        items?: Array<GenericClaim> | null | undefined
-      } = { claimId: claimId };
-      if (result.items) {
-        itemsById.items = result.items;
-      } else {
-        itemsById.items = null;
-      }
-      return itemsById;
-    } catch (e: any) {
-      return {
-        claimId: claimId,
-        items: null,
+        mergedResults.items = sortResults(mergedResults.items, claimList);
+        return mergedResults;
       };
-    }
-  }
 
-  function formatForClaimActions(resultClaimsByUri: unknown) {
-    const formattedClaims: Record<string, any> = {};
-    Object.entries(resultClaimsByUri).forEach(([uri, uriResolveInfo]: [any, any]) => {
-      // Flow has terrible Object.entries support
-      // https://github.com/facebook/flow/issues/2221
-      if (uriResolveInfo) {
-        let result: Record<string, any> = {};
-        if (uriResolveInfo.value_type === 'channel') {
-          result.channel = uriResolveInfo;
-          result.claimsInChannel = uriResolveInfo.meta.claims_in_channel;
-          // ALSO SKIP COLLECTIONS
-        } else if (uriResolveInfo.value_type === 'collection') {
-          result.collection = uriResolveInfo;
-        } else {
-          result.stream = uriResolveInfo;
-          if (uriResolveInfo.signing_channel) {
-            result.channel = uriResolveInfo.signing_channel;
-            result.claimsInChannel =
-              (uriResolveInfo.signing_channel.meta && uriResolveInfo.signing_channel.meta.claims_in_channel) || 0;
-          }
+      try {
+        const batchSize = pageSize || FETCH_BATCH_SIZE;
+        const batches: Array<Promise<any>> = [];
+
+        for (let i = 0; i < Math.ceil(totalItems / batchSize); i++) {
+          batches[i] = Lbry.claim_search({
+            claim_ids: claim.value.claims.slice(i * batchSize, (i + 1) * batchSize),
+            page: 1,
+            page_size: batchSize,
+            no_totals: true,
+          });
         }
-        formattedClaims[uri] = result;
+        const itemsInBatches = await Promise.all(batches);
+        const result = mergeBatches(itemsInBatches, itemOrder);
+
+        const itemsById: {
+          claimId: string;
+          items?: Array<GenericClaim> | null | undefined;
+        } = { claimId: claimId };
+        if (result.items) {
+          itemsById.items = result.items;
+        } else {
+          itemsById.items = null;
+        }
+        return itemsById;
+      } catch (e: any) {
+        return {
+          claimId: claimId,
+          items: null,
+        };
+      }
+    }
+
+    function formatForClaimActions(resultClaimsByUri: unknown) {
+      const formattedClaims: Record<string, any> = {};
+      Object.entries(resultClaimsByUri).forEach(([uri, uriResolveInfo]: [any, any]) => {
+        // Flow has terrible Object.entries support
+        // https://github.com/facebook/flow/issues/2221
+        if (uriResolveInfo) {
+          const result: Record<string, any> = {};
+          if (uriResolveInfo.value_type === "channel") {
+            result.channel = uriResolveInfo;
+            result.claimsInChannel = uriResolveInfo.meta.claims_in_channel;
+            // ALSO SKIP COLLECTIONS
+          } else if (uriResolveInfo.value_type === "collection") {
+            result.collection = uriResolveInfo;
+          } else {
+            result.stream = uriResolveInfo;
+            if (uriResolveInfo.signing_channel) {
+              result.channel = uriResolveInfo.signing_channel;
+              result.claimsInChannel =
+                (uriResolveInfo.signing_channel.meta && uriResolveInfo.signing_channel.meta.claims_in_channel) || 0;
+            }
+          }
+          formattedClaims[uri] = result;
+        }
+      });
+      return formattedClaims;
+    }
+
+    const invalidCollectionIds: unknown = [];
+    const promisedCollectionItemFetches: unknown = [];
+    collectionIds.forEach((collectionId) => {
+      const claim = makeSelectClaimForClaimId(collectionId)(stateAfterClaimSearch);
+      if (!claim) {
+        // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+        invalidCollectionIds.push(collectionId);
+      } else {
+        // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+        promisedCollectionItemFetches.push(fetchItemsForCollectionClaim(claim, pageSize));
       }
     });
-    return formattedClaims;
-  }
 
-  const invalidCollectionIds: unknown = [];
-  const promisedCollectionItemFetches: unknown = [];
-  collectionIds.forEach((collectionId) => {
-    const claim = makeSelectClaimForClaimId(collectionId)(stateAfterClaimSearch);
-    if (!claim) {
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
-      invalidCollectionIds.push(collectionId);
-    } else {
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
-      promisedCollectionItemFetches.push(fetchItemsForCollectionClaim(claim, pageSize));
-    }
-  });
+    // @ts-expect-error - TS2322 - Type '[] | unknown[]' is not assignable to type '{ claimId: string; items: GenericClaim[]; }[]'.
+    const collectionItemsById: Array<{
+      claimId: string;
+      items: Array<GenericClaim> | null | undefined;
+      // @ts-expect-error - TS2769 - No overload matches this call.
+    }> = await Promise.all(promisedCollectionItemFetches);
 
-// @ts-expect-error - TS2322 - Type '[] | unknown[]' is not assignable to type '{ claimId: string; items: GenericClaim[]; }[]'.
-  const collectionItemsById: Array<{
-    claimId: string,
-    items: Array<GenericClaim> | null | undefined
-// @ts-expect-error - TS2769 - No overload matches this call.
-  }> = await Promise.all(promisedCollectionItemFetches);
-
-  const newCollectionObjectsById: Record<string, any> = {};
-  const resolvedItemsByUrl: Record<string, any> = {};
-  collectionItemsById.forEach((entry) => {
-    const collectionItems: Array<any> = entry.items;
-    const collectionId = entry.claimId;
-    if (collectionItems) {
-      const claim = makeSelectClaimForClaimId(collectionId)(stateAfterClaimSearch);
-
-      const editedCollection = makeSelectEditedCollectionForId(collectionId)(stateAfterClaimSearch);
-      const { name, timestamp, value } = claim || {};
-      const { title } = value;
-      const valueTypes = new Set();
-      const streamTypes = new Set();
-
-      let newItems: unknown = [];
-      let isPlaylist;
-
+    const newCollectionObjectsById: Record<string, any> = {};
+    const resolvedItemsByUrl: Record<string, any> = {};
+    collectionItemsById.forEach((entry) => {
+      const collectionItems: Array<any> = entry.items;
+      const collectionId = entry.claimId;
       if (collectionItems) {
-        collectionItems.forEach((collectionItem) => {
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
-          newItems.push(collectionItem.permanent_url);
-          valueTypes.add(collectionItem.value_type);
-          if (collectionItem.value.stream_type) {
-            streamTypes.add(collectionItem.value.stream_type);
-          }
-          resolvedItemsByUrl[collectionItem.canonical_url] = collectionItem;
-        });
-        isPlaylist =
-          valueTypes.size === 1 &&
-          valueTypes.has('stream') &&
-          ((streamTypes.size === 1 && (streamTypes.has('audio') || streamTypes.has('video'))) ||
-            (streamTypes.size === 2 && streamTypes.has('audio') && streamTypes.has('video')));
+        const claim = makeSelectClaimForClaimId(collectionId)(stateAfterClaimSearch);
+
+        const editedCollection = makeSelectEditedCollectionForId(collectionId)(stateAfterClaimSearch);
+        const { name, timestamp, value } = claim || {};
+        const { title } = value;
+        const valueTypes = new Set();
+        const streamTypes = new Set();
+
+        const newItems: unknown = [];
+        let isPlaylist;
+
+        if (collectionItems) {
+          collectionItems.forEach((collectionItem) => {
+            // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+            newItems.push(collectionItem.permanent_url);
+            valueTypes.add(collectionItem.value_type);
+            if (collectionItem.value.stream_type) {
+              streamTypes.add(collectionItem.value.stream_type);
+            }
+            resolvedItemsByUrl[collectionItem.canonical_url] = collectionItem;
+          });
+          isPlaylist =
+            valueTypes.size === 1 &&
+            valueTypes.has("stream") &&
+            ((streamTypes.size === 1 && (streamTypes.has("audio") || streamTypes.has("video"))) ||
+              (streamTypes.size === 2 && streamTypes.has("audio") && streamTypes.has("video")));
+        }
+
+        newCollectionObjectsById[collectionId] = {
+          items: newItems,
+          id: collectionId,
+          name: title || name,
+          itemCount: claim.value.claims.length,
+          type: isPlaylist ? "playlist" : "collection",
+          updatedAt: timestamp,
+        };
+
+        if (editedCollection && timestamp > editedCollection["updatedAt"]) {
+          dispatch({
+            type: ACTIONS.COLLECTION_DELETE,
+            data: {
+              id: collectionId,
+              collectionKey: "edited",
+            },
+          });
+        }
+      } else {
+        // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+        invalidCollectionIds.push(collectionId);
       }
+    });
+    const formattedClaimsByUri = formatForClaimActions(collectionItemsById);
 
-      newCollectionObjectsById[collectionId] = {
-        items: newItems,
-        id: collectionId,
-        name: title || name,
-        itemCount: claim.value.claims.length,
-        type: isPlaylist ? 'playlist' : 'collection',
-        updatedAt: timestamp,
-      };
+    dispatch({
+      type: ACTIONS.RESOLVE_URIS_COMPLETED,
+      data: { resolveInfo: formattedClaimsByUri },
+    });
 
-      if (editedCollection && timestamp > editedCollection['updatedAt']) {
-        dispatch({
-          type: ACTIONS.COLLECTION_DELETE,
-          data: {
-            id: collectionId,
-            collectionKey: 'edited',
-          },
-        });
-      }
-    } else {
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
-      invalidCollectionIds.push(collectionId);
-    }
-  });
-  const formattedClaimsByUri = formatForClaimActions(collectionItemsById);
+    dispatch({
+      type: ACTIONS.COLLECTION_ITEMS_RESOLVE_COMPLETED,
+      data: {
+        resolvedCollections: newCollectionObjectsById,
+        failedCollectionIds: invalidCollectionIds,
+      },
+    });
+  };
 
-  dispatch({
-    type: ACTIONS.RESOLVE_URIS_COMPLETED,
-    data: { resolveInfo: formattedClaimsByUri },
-  });
-
-  dispatch({
-    type: ACTIONS.COLLECTION_ITEMS_RESOLVE_COMPLETED,
-    data: {
-      resolvedCollections: newCollectionObjectsById,
-      failedCollectionIds: invalidCollectionIds,
-    },
-  });
-};
-
-export const doFetchItemsInCollection = (options: {
-  collectionId: string,
-  pageSize?: number
-}, cb?: () => void) => {
+export const doFetchItemsInCollection = (
+  options: {
+    collectionId: string;
+    pageSize?: number;
+  },
+  cb?: () => void
+) => {
   const { collectionId, pageSize } = options;
   const newOptions: {
-    collectionIds: Array<string>,
-    pageSize?: number
+    collectionIds: Array<string>;
+    pageSize?: number;
   } = {
     collectionIds: [collectionId],
   };
@@ -308,66 +308,65 @@ export const doFetchItemsInCollection = (options: {
   return doFetchItemsInCollections(newOptions, cb);
 };
 
-export const doCollectionEdit = (collectionId: string, params: CollectionEditParams) => async (
-  dispatch: Dispatch,
-  getState: GetState
-) => {
-  const state = getState();
-  const collection: Collection = makeSelectCollectionForId(collectionId)(state);
+export const doCollectionEdit =
+  (collectionId: string, params: CollectionEditParams) => async (dispatch: Dispatch, getState: GetState) => {
+    const state = getState();
+    const collection: Collection = makeSelectCollectionForId(collectionId)(state);
 
-  if (!collection) return dispatch({ type: ACTIONS.COLLECTION_ERROR, data: { message: 'collection does not exist' } });
+    if (!collection)
+      return dispatch({ type: ACTIONS.COLLECTION_ERROR, data: { message: "collection does not exist" } });
 
-  const editedCollection: Collection = makeSelectEditedCollectionForId(collectionId)(state);
-  const unpublishedCollection: Collection = makeSelectUnpublishedCollectionForId(collectionId)(state);
-  const publishedCollection: Collection = makeSelectPublishedCollectionForId(collectionId)(state); // needs to be published only
+    const editedCollection: Collection = makeSelectEditedCollectionForId(collectionId)(state);
+    const unpublishedCollection: Collection = makeSelectUnpublishedCollectionForId(collectionId)(state);
+    const publishedCollection: Collection = makeSelectPublishedCollectionForId(collectionId)(state); // needs to be published only
 
-  const { uris, order, remove, type } = params;
+    const { uris, order, remove, type } = params;
 
-  const collectionType = type || collection.type;
-  const currentUrls = collection.items ? collection.items.concat() : [];
-  let newItems = currentUrls;
+    const collectionType = type || collection.type;
+    const currentUrls = collection.items ? collection.items.concat() : [];
+    let newItems = currentUrls;
 
-  // Passed uris to add/remove:
-  if (uris) {
-    if (remove) {
-      // Filters (removes) the passed uris from the current list items
-      newItems = currentUrls.filter((url) => url && !uris.includes(url));
-    } else {
-      // Pushes (adds to the end) the passed uris to the current list items
-      uris.forEach((url) => newItems.push(url));
+    // Passed uris to add/remove:
+    if (uris) {
+      if (remove) {
+        // Filters (removes) the passed uris from the current list items
+        newItems = currentUrls.filter((url) => url && !uris.includes(url));
+      } else {
+        // Pushes (adds to the end) the passed uris to the current list items
+        uris.forEach((url) => newItems.push(url));
+      }
     }
-  }
 
-  // Passed an ordering to change: (doesn't need the uris here since
-  // the items are already on the list)
-  if (order) {
-    const [movedItem] = currentUrls.splice(order.from, 1);
-    currentUrls.splice(order.to, 0, movedItem);
-  }
+    // Passed an ordering to change: (doesn't need the uris here since
+    // the items are already on the list)
+    if (order) {
+      const [movedItem] = currentUrls.splice(order.from, 1);
+      currentUrls.splice(order.to, 0, movedItem);
+    }
 
-  // Delete 'edited' if newItems are the same as publishedItems
-  if (editedCollection && newItems && publishedCollection.items.join(',') === newItems.join(',')) {
-    dispatch({ type: ACTIONS.COLLECTION_DELETE, data: { id: collectionId, collectionKey: 'edited' } });
-  } else {
-    dispatch({
-      type: ACTIONS.COLLECTION_EDIT,
-      data: {
-        id: collectionId,
-        collectionKey:
-          ((editedCollection || publishedCollection) && 'edited') ||
-// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"watchlater" | "favorites" | "favoriteChannels"'.
-          (COLS.BUILTIN_LISTS.includes(collectionId) && 'builtin') ||
-          (unpublishedCollection && 'unpublished'),
-        collection: {
-          items: newItems,
+    // Delete 'edited' if newItems are the same as publishedItems
+    if (editedCollection && newItems && publishedCollection.items.join(",") === newItems.join(",")) {
+      dispatch({ type: ACTIONS.COLLECTION_DELETE, data: { id: collectionId, collectionKey: "edited" } });
+    } else {
+      dispatch({
+        type: ACTIONS.COLLECTION_EDIT,
+        data: {
           id: collectionId,
-          name: params.name || collection.name,
-          updatedAt: getTimestamp(),
-          type: collectionType,
+          collectionKey:
+            ((editedCollection || publishedCollection) && "edited") ||
+            // @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"watchlater" | "favorites" | "favoriteChannels"'.
+            (COLS.BUILTIN_LISTS.includes(collectionId) && "builtin") ||
+            (unpublishedCollection && "unpublished"),
+          collection: {
+            items: newItems,
+            id: collectionId,
+            name: params.name || collection.name,
+            updatedAt: getTimestamp(),
+            type: collectionType,
+          },
         },
-      },
-    });
-  }
+      });
+    }
 
-  return true;
-};
+    return true;
+  };

@@ -1,31 +1,27 @@
-import * as ICONS from 'constants/icons';
-import React, { useRef } from 'react';
-import { parseURI } from 'util/lbryURI';
-import Button from 'component/button';
-import useHover from 'effects/use-hover';
-import { useIsMobile } from 'effects/use-screensize';
-import { ENABLE_UI_NOTIFICATIONS } from 'config';
+import * as ICONS from "constants/icons";
+import React, { useRef } from "react";
+import { parseURI } from "util/lbryURI";
+import Button from "component/button";
+import useHover from "effects/use-hover";
+import { useIsMobile } from "effects/use-screensize";
+import { ENABLE_UI_NOTIFICATIONS } from "config";
 
 type SubscriptionArgs = {
-  channelName: string,
-  uri: string,
-  notificationsDisabled?: boolean
+  channelName: string;
+  uri: string;
+  notificationsDisabled?: boolean;
 };
 
 type Props = {
-  permanentUrl: string | null | undefined,
-  isSubscribed: boolean,
-  doChannelSubscribe: (arg1: SubscriptionArgs, arg2: boolean) => void,
-  doChannelUnsubscribe: (arg1: SubscriptionArgs, arg2: boolean) => void,
-  doToast: (
-    arg1: {
-      message: string
-    },
-  ) => void,
-  shrinkOnMobile: boolean,
-  notificationsDisabled: boolean,
-  user: User | null | undefined,
-  uri: string
+  permanentUrl: string | null | undefined;
+  isSubscribed: boolean;
+  doChannelSubscribe: (arg1: SubscriptionArgs, arg2: boolean) => void;
+  doChannelUnsubscribe: (arg1: SubscriptionArgs, arg2: boolean) => void;
+  doToast: (arg1: { message: string }) => void;
+  shrinkOnMobile: boolean;
+  notificationsDisabled: boolean;
+  user: User | null | undefined;
+  uri: string;
 };
 
 export default function SubscribeButton(props: Props) {
@@ -59,16 +55,16 @@ export default function SubscribeButton(props: Props) {
       }
     } catch (e: any) {}
   }
-  const claimName = channelName && '@' + channelName;
+  const claimName = channelName && "@" + channelName;
 
   const subscriptionHandler = isSubscribed ? doChannelUnsubscribe : doChannelSubscribe;
   const subscriptionLabel = isSubscribed
-    ? __('Following --[button label indicating a channel has been followed]--')
-    : __('Follow');
-  const unfollowOverride = isSubscribed && isHovering && __('Unfollow');
+    ? __("Following --[button label indicating a channel has been followed]--")
+    : __("Follow");
+  const unfollowOverride = isSubscribed && isHovering && __("Unfollow");
 
-  const label = isMobile && shrinkOnMobile ? '' : unfollowOverride || subscriptionLabel;
-  const titlePrefix = isSubscribed ? __('Unfollow this channel') : __('Follow this channel');
+  const label = isMobile && shrinkOnMobile ? "" : unfollowOverride || subscriptionLabel;
+  const titlePrefix = isSubscribed ? __("Unfollow this channel") : __("Follow this channel");
 
   if (isSubscribed && !permanentUrl && rawChannelName) {
     return (
@@ -77,9 +73,9 @@ export default function SubscribeButton(props: Props) {
           ref={buttonRef}
           // @ts-expect-error - TS2322 (ts-migration)
           iconColor="red"
-          largestLabel={isMobile && shrinkOnMobile ? '' : subscriptionLabel}
+          largestLabel={isMobile && shrinkOnMobile ? "" : subscriptionLabel}
           icon={ICONS.UNSUBSCRIBE}
-          button={'alt'}
+          button={"alt"}
           label={label}
           title={titlePrefix}
           onClick={(e) => {
@@ -87,7 +83,7 @@ export default function SubscribeButton(props: Props) {
 
             subscriptionHandler(
               {
-                channelName: '@' + rawChannelName,
+                channelName: "@" + rawChannelName,
                 uri: uri,
                 notificationsDisabled: true,
               },
@@ -105,10 +101,10 @@ export default function SubscribeButton(props: Props) {
         ref={buttonRef}
         // @ts-expect-error - TS2322 (ts-migration)
         iconColor="red"
-        className={isSubscribed ? 'button-following' : ''}
-        largestLabel={isMobile && shrinkOnMobile ? '' : subscriptionLabel}
+        className={isSubscribed ? "button-following" : ""}
+        largestLabel={isMobile && shrinkOnMobile ? "" : subscriptionLabel}
         icon={unfollowOverride ? ICONS.UNSUBSCRIBE : isSubscribed ? ICONS.SUBSCRIBED : ICONS.SUBSCRIBE}
-        button={'alt'}
+        button={"alt"}
         label={label}
         title={titlePrefix}
         onClick={(e) => {
@@ -130,8 +126,8 @@ export default function SubscribeButton(props: Props) {
             // @ts-expect-error - TS2322 (ts-migration)
             button="alt"
             icon={notificationsDisabled ? ICONS.BELL : ICONS.BELL_ON}
-            className={isSubscribed ? 'button-following' : ''}
-            aria-label={notificationsDisabled ? __('Turn on notifications') : __('Turn off notifications')}
+            className={isSubscribed ? "button-following" : ""}
+            aria-label={notificationsDisabled ? __("Turn on notifications") : __("Turn off notifications")}
             onClick={() => {
               const newNotificationsDisabled = !notificationsDisabled;
 
@@ -147,8 +143,8 @@ export default function SubscribeButton(props: Props) {
               doToast({
                 message: __(
                   newNotificationsDisabled
-                    ? 'Notifications turned off for %channel%'
-                    : 'Notifications turned on for %channel%!',
+                    ? "Notifications turned off for %channel%"
+                    : "Notifications turned on for %channel%!",
                   { channel: claimName }
                 ),
               });

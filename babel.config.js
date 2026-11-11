@@ -17,14 +17,7 @@ module.exports = api => {
       '@babel/plugin-proposal-class-properties',
       'react-hot-loader/babel',
     ],
-    // Flow and TypeScript syntax can't coexist in one parser config,
-    // so each is scoped to its own file extensions.
     overrides: [
-      {
-        test: /\.jsx?$/,
-        presets: ['@babel/flow'],
-        plugins: ['@babel/plugin-transform-flow-strip-types'],
-      },
       {
         test: /\.tsx?$/,
         presets: ['@babel/preset-typescript'],

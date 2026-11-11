@@ -1,30 +1,30 @@
-import React from 'react';
-import classnames from 'classnames';
-import usePersistedState from 'effects/use-persisted-state';
-import { FormField } from 'component/common/form';
-import Button from 'component/button';
-import PublishReleaseDate from 'component/publishReleaseDate';
-import LicenseType from './license-type';
-import Card from 'component/common/card';
-import SUPPORTED_LANGUAGES from 'constants/supported_languages';
-import { sortLanguageMap } from 'util/default-languages';
+import React from "react";
+import classnames from "classnames";
+import usePersistedState from "effects/use-persisted-state";
+import { FormField } from "component/common/form";
+import Button from "component/button";
+import PublishReleaseDate from "component/publishReleaseDate";
+import LicenseType from "./license-type";
+import Card from "component/common/card";
+import SUPPORTED_LANGUAGES from "constants/supported_languages";
+import { sortLanguageMap } from "util/default-languages";
 
 // @if TARGET='app'
 // @endif
 
 type Props = {
-  user: User | null | undefined,
-  language: string | null | undefined,
-  name: string | null | undefined,
-  licenseType: string | null | undefined,
-  otherLicenseDescription: string | null | undefined,
-  licenseUrl: string | null | undefined,
-  disabled: boolean,
-  updatePublishForm: (arg1: Record<any, any>) => void,
-  useLBRYUploader: boolean,
-  needsYTAuth: boolean,
-  fetchAccessToken: () => void,
-  accessToken: string
+  user: User | null | undefined;
+  language: string | null | undefined;
+  name: string | null | undefined;
+  licenseType: string | null | undefined;
+  otherLicenseDescription: string | null | undefined;
+  licenseUrl: string | null | undefined;
+  disabled: boolean;
+  updatePublishForm: (arg1: Record<any, any>) => void;
+  useLBRYUploader: boolean;
+  needsYTAuth: boolean;
+  fetchAccessToken: () => void;
+  accessToken: string;
 };
 
 function PublishAdditionalOptions(props: Props) {
@@ -41,7 +41,7 @@ function PublishAdditionalOptions(props: Props) {
     // accessToken,
     // fetchAccessToken,
   } = props;
-  const [hideSection, setHideSection] = usePersistedState('publish-advanced-options', true);
+  const [hideSection, setHideSection] = usePersistedState("publish-advanced-options", true);
   //   const [hasLaunchedLbryFirst, setHasLaunchedLbryFirst] = React.useState(false);
   //   const [ytError, setYtError] = React.useState(false);
   //   const isLBRYFirstUser = user && user.lbry_first_approved;
@@ -113,7 +113,7 @@ function PublishAdditionalOptions(props: Props) {
       actions={
         <React.Fragment>
           {!hideSection && (
-            <div className={classnames({ 'card--disabled': !name })}>
+            <div className={classnames({ "card--disabled": !name })}>
               {/* @if TARGET='app' */}
               {/* {showLbryFirstCheckbox && (
                 <div className="section">
@@ -153,7 +153,7 @@ function PublishAdditionalOptions(props: Props) {
                 <PublishReleaseDate />
 
                 <FormField
-                  label={__('Language')}
+                  label={__("Language")}
                   type="select"
                   name="content_language"
                   value={language}
@@ -190,7 +190,7 @@ function PublishAdditionalOptions(props: Props) {
           <div className="section__actions">
             <Button
               // @ts-expect-error - TS2322 (ts-migration)
-              label={hideSection ? __('Additional Options') : __('Hide')}
+              label={hideSection ? __("Additional Options") : __("Hide")}
               button="link"
               onClick={toggleHideSection}
             />

@@ -1,23 +1,23 @@
-import React, {useState, useEffect} from 'react';
-import MarkdownPreview from 'component/common/markdown-preview';
-import Button from 'component/button';
-import I18nMessage from 'component/i18nMessage';
+import React, { useState, useEffect } from "react";
+import MarkdownPreview from "component/common/markdown-preview";
+import Button from "component/button";
+import I18nMessage from "component/i18nMessage";
 
 type Props = {
-  releaseVersion: string,
-  hideReleaseVersion?: boolean
+  releaseVersion: string;
+  hideReleaseVersion?: boolean;
 };
 
 const LastReleaseChanges = (props: Props) => {
   const { hideReleaseVersion, releaseVersion } = props;
-  const [releaseTag, setReleaseTag] = useState('');
-  const [releaseChanges, setReleaseChanges] = useState('');
+  const [releaseTag, setReleaseTag] = useState("");
+  const [releaseChanges, setReleaseChanges] = useState("");
   const [fetchingReleaseChanges, setFetchingReleaseChanges] = useState(false);
   const [fetchReleaseFailed, setFetchReleaseFailed] = useState(false);
 
   const releaseVersionTitle = (
     <p>
-      {!hideReleaseVersion && __('A new version %release_tag% of LBRY is ready for you.', { release_tag: releaseTag })}
+      {!hideReleaseVersion && __("A new version %release_tag% of LBRY is ready for you.", { release_tag: releaseTag })}
     </p>
   );
   const seeReleaseNotes = (
@@ -28,7 +28,7 @@ const LastReleaseChanges = (props: Props) => {
         tokens={{
           release_notes: (
             // @ts-expect-error - TS2322 (ts-migration)
-            <Button button="link" label={__('release notes')} href="https://github.com/lbryio/lbry-desktop/releases" />
+            <Button button="link" label={__("release notes")} href="https://github.com/lbryio/lbry-desktop/releases" />
           ),
         }}
       >
@@ -40,8 +40,8 @@ const LastReleaseChanges = (props: Props) => {
   useEffect(() => {
     const lastReleaseUrl = `https://api.github.com/repos/lbryio/lbry-desktop/releases/tags/${releaseVersion}`;
     const options = {
-      method: 'GET',
-      headers: { Accept: 'application/vnd.github.v3+json' },
+      method: "GET",
+      headers: { Accept: "application/vnd.github.v3+json" },
     } as const;
 
     setFetchingReleaseChanges(true);
@@ -60,7 +60,7 @@ const LastReleaseChanges = (props: Props) => {
   }, [releaseVersion, setFetchingReleaseChanges, setReleaseTag, setReleaseChanges, setFetchReleaseFailed]);
 
   if (fetchingReleaseChanges) {
-    return <p>{__('Loading...')}</p>;
+    return <p>{__("Loading...")}</p>;
   }
 
   if (fetchReleaseFailed) {

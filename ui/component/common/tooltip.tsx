@@ -1,13 +1,13 @@
-import React from 'react';
-import MUITooltip from '@mui/material/Tooltip';
-import type { ReactNode } from 'react';
+import React from "react";
+import MUITooltip from "@mui/material/Tooltip";
+import type { ReactNode } from "react";
 
 type Props = {
-  arrow?: boolean,
-  children: React.ReactNode,
-  disableInteractive?: boolean,
-  enterDelay?: number,
-  title?: string | React.ReactNode
+  arrow?: boolean;
+  children: React.ReactNode;
+  disableInteractive?: boolean;
+  enterDelay?: number;
+  title?: string | React.ReactNode;
 };
 
 function Tooltip(props: Props) {

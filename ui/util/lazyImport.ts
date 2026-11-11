@@ -1,5 +1,5 @@
 //@ts-nocheck
-import React from 'react';
+import React from "react";
 
 let localStorageAvailable;
 try {
@@ -11,20 +11,20 @@ try {
 export const lazyImport = (componentImport: unknown) =>
   React.lazy(async () => {
     const pageHasAlreadyBeenForceRefreshed = localStorageAvailable
-      ? JSON.parse(window.localStorage.getItem('page-has-been-force-refreshed') || 'false')
+      ? JSON.parse(window.localStorage.getItem("page-has-been-force-refreshed") || "false")
       : false;
 
     try {
       const component = await componentImport();
       if (localStorageAvailable) {
-        window.localStorage.setItem('page-has-been-force-refreshed', 'false');
+        window.localStorage.setItem("page-has-been-force-refreshed", "false");
       }
       return component;
     } catch (error: any) {
       if (!pageHasAlreadyBeenForceRefreshed) {
         // It's highly likely that the user's session is old. Try reloading once.
         if (localStorageAvailable) {
-          window.localStorage.setItem('page-has-been-force-refreshed', 'true');
+          window.localStorage.setItem("page-has-been-force-refreshed", "true");
         }
         return window.location.reload();
       }

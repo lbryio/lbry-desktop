@@ -1,6 +1,6 @@
 //@ts-nocheck
-import {Lbryio} from 'lbryinc';
-import * as ACTIONS from 'constants/action_types';
+import { Lbryio } from "lbryinc";
+import * as ACTIONS from "constants/action_types";
 
 const CHECK_FILTERED_CONTENT_INTERVAL = 60 * 60 * 1000;
 
@@ -13,8 +13,8 @@ export function doFetchFilteredOutpoints() {
     const success = ({ outpoints }) => {
       let formattedOutpoints: unknown = [];
       if (outpoints) {
-        formattedOutpoints = outpoints.map(outpoint => {
-          const [txid, nout] = outpoint.split(':');
+        formattedOutpoints = outpoints.map((outpoint) => {
+          const [txid, nout] = outpoint.split(":");
           return { txid, nout: Number.parseInt(nout, 10) };
         });
       }
@@ -36,7 +36,7 @@ export function doFetchFilteredOutpoints() {
       });
     };
 
-    Lbryio.call('file', 'list_filtered', { auth_token: '' }).then(success, failure);
+    Lbryio.call("file", "list_filtered", { auth_token: "" }).then(success, failure);
   };
 }
 

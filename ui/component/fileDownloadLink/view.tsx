@@ -1,32 +1,35 @@
-import * as ICONS from 'constants/icons';
-import * as MODALS from 'constants/modal_types';
-import React from 'react';
-import Button from 'component/button';
+import * as ICONS from "constants/icons";
+import * as MODALS from "constants/modal_types";
+import React from "react";
+import Button from "component/button";
 
 type Props = {
-  uri: string,
-  claim: StreamClaim,
-  claimIsMine: boolean,
-  downloading: boolean,
-  loading: boolean,
-  focusable: boolean,
-  fileInfo: FileListItem | null | undefined,
+  uri: string;
+  claim: StreamClaim;
+  claimIsMine: boolean;
+  downloading: boolean;
+  loading: boolean;
+  focusable: boolean;
+  fileInfo: FileListItem | null | undefined;
   openModal: (
     id: string,
     arg2: {
-      path: string
-    },
-  ) => void,
-  pause: () => void,
-  download: (arg1: string) => void,
-  costInfo: {
-    cost: string
-  } | null | undefined,
-  buttonType: string | null | undefined,
-  showLabel: boolean | null | undefined,
-  hideOpenButton: boolean,
-  hideDownloadStatus: boolean,
-  streamingUrl: string | null | undefined
+      path: string;
+    }
+  ) => void;
+  pause: () => void;
+  download: (arg1: string) => void;
+  costInfo:
+    | {
+        cost: string;
+      }
+    | null
+    | undefined;
+  buttonType: string | null | undefined;
+  showLabel: boolean | null | undefined;
+  hideOpenButton: boolean;
+  hideDownloadStatus: boolean;
+  streamingUrl: string | null | undefined;
 };
 
 function FileDownloadLink(props: Props) {
@@ -48,7 +51,7 @@ function FileDownloadLink(props: Props) {
   } = props;
 
   function handleDownload(e: unknown) {
-// @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'preventDefault' does not exist on type 'unknown'.
     e.preventDefault();
     download(uri);
   }
@@ -65,26 +68,26 @@ function FileDownloadLink(props: Props) {
 
     if (fileInfo && fileInfo.written_bytes > 0) {
       const progress = (fileInfo.written_bytes / fileInfo.total_bytes) * 100;
-      return <span className="download-text">{__('%percent%% downloaded', { percent: progress.toFixed(0) })}</span>;
+      return <span className="download-text">{__("%percent%% downloaded", { percent: progress.toFixed(0) })}</span>;
     } else {
-      return <span className="download-text">{__('Connecting...')}</span>;
+      return <span className="download-text">{__("Connecting...")}</span>;
     }
   }
   // @endif
 
   if (fileInfo && fileInfo.download_path && fileInfo.completed) {
-    const openLabel = __('Open file');
+    const openLabel = __("Open file");
     return hideOpenButton ? null : (
       <Button
         // @ts-expect-error - TS2322 (ts-migration)
         button={buttonType}
-        className={buttonType ? undefined : 'button--file-action'}
+        className={buttonType ? undefined : "button--file-action"}
         title={openLabel}
         label={showLabel ? openLabel : null}
         icon={ICONS.EXTERNAL}
         onClick={() => {
           pause();
-// @ts-expect-error - TS2345 - Argument of type '{ path: string; isMine: boolean; }' is not assignable to parameter of type '{ path: string; }'.
+          // @ts-expect-error - TS2345 - Argument of type '{ path: string; isMine: boolean; }' is not assignable to parameter of type '{ path: string; }'.
           openModal(MODALS.CONFIRM_EXTERNAL_RESOURCE, { path: fileInfo.download_path, isMine: claimIsMine });
         }}
         aria-hidden={!focusable}
@@ -93,13 +96,13 @@ function FileDownloadLink(props: Props) {
     );
   }
 
-  const label = __('Download');
+  const label = __("Download");
 
   return (
     <Button
       // @ts-expect-error - TS2322 (ts-migration)
       button={buttonType}
-      className={buttonType ? undefined : 'button--file-action'}
+      className={buttonType ? undefined : "button--file-action"}
       title={label}
       icon={ICONS.DOWNLOAD}
       label={showLabel ? label : null}

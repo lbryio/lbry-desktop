@@ -1,17 +1,15 @@
 //@ts-nocheck
 
 // Polyfills and `lbry-redux`
-global.fetch = require('node-fetch');
+global.fetch = require("node-fetch");
 global.window = global;
-if (typeof global.fetch === 'object') {
+if (typeof global.fetch === "object") {
   global.fetch = global.fetch.default;
 }
-
 
 delete global.window;
 
 export default async function startSandbox() {
-
   // sandbox.get('/set/:outpoint', async (req, res) => {
   //   const { outpoint } = req.params;
   //

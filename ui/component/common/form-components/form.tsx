@@ -1,8 +1,8 @@
-import * as React from 'react';
+import * as React from "react";
 
 type Props = {
-  children: React.ReactNode,
-  onSubmit: (arg1?: any) => any
+  children: React.ReactNode;
+  onSubmit: (arg1?: any) => any;
 };
 
 export class Form extends React.PureComponent<Props> {
@@ -12,7 +12,7 @@ export class Form extends React.PureComponent<Props> {
       <form
         noValidate
         className="form"
-        onSubmit={event => {
+        onSubmit={(event) => {
           event.preventDefault();
           onSubmit(event);
         }}

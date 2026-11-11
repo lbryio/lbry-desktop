@@ -1,8 +1,8 @@
-import React from 'react';
-import formatMediaDuration from 'util/formatMediaDuration';
+import React from "react";
+import formatMediaDuration from "util/formatMediaDuration";
 type Props = {
-  claim: StreamClaim | null | undefined,
-  className?: string
+  claim: StreamClaim | null | undefined;
+  className?: string;
 };
 
 function VideoDuration(props: Props) {

@@ -1,8 +1,8 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectSubscriptions, selectFollowing } from 'redux/selectors/subscriptions';
-import { doImportFollowing } from 'redux/actions/subscriptions';
-import SettingFollowing from './view';
+import { connect } from "react-redux";
+import { selectSubscriptions, selectFollowing } from "redux/selectors/subscriptions";
+import { doImportFollowing } from "redux/actions/subscriptions";
+import SettingFollowing from "./view";
 
 const select = (state: unknown) => ({
   subscriptions: selectSubscriptions(state),

@@ -13,7 +13,7 @@ export default function isEqual(a: unknown, b: unknown, aStack?: unknown, bStack
   if (a !== a) return b !== b;
   // Exhaust primitive checks
   var type = typeof a;
-  if (type !== 'function' && type !== 'object' && typeof b != 'object') return false;
+  if (type !== "function" && type !== "object" && typeof b != "object") return false;
   return deepEq(a, b, aStack, bStack);
 }
 
@@ -23,31 +23,31 @@ function deepEq(a: unknown, b: unknown, aStack: unknown, bStack: unknown) {
   if (className !== toString.call(b)) return false;
   switch (className) {
     // Strings, numbers, regular expressions, dates, and booleans are compared by value.
-    case '[object RegExp]':
+    case "[object RegExp]":
     // RegExps are coerced to strings for comparison (Note: '' + /a/i === '/a/i')
-    case '[object String]':
+    case "[object String]":
       // Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is
       // equivalent to `new String("5")`.
-      return '' + a === '' + b;
-    case '[object Number]':
+      return "" + a === "" + b;
+    case "[object Number]":
       // `NaN`s are equivalent, but non-reflexive.
       // Object(NaN) is equivalent to NaN.
       if (+a !== +a) return +b !== +b;
       // An `egal` comparison is performed for other numeric values.
       return +a === 0 ? 1 / +a === 1 / b : +a === +b;
-    case '[object Date]':
-    case '[object Boolean]':
+    case "[object Date]":
+    case "[object Boolean]":
       // Coerce dates and booleans to numeric primitive values. Dates are compared by their
       // millisecond representations. Note that invalid dates with millisecond representations
       // of `NaN` are not equivalent.
       return +a === +b;
-    case '[object Symbol]':
+    case "[object Symbol]":
       return SymbolProto.valueOf.call(a) === SymbolProto.valueOf.call(b);
   }
 
-  var areArrays = className === '[object Array]';
+  var areArrays = className === "[object Array]";
   if (!areArrays) {
-    if (typeof a != 'object' || typeof b != 'object') return false;
+    if (typeof a != "object" || typeof b != "object") return false;
 
     // Objects with different constructors are not equivalent, but `Object`s or `Array`s
     // from different frames are.
@@ -56,12 +56,13 @@ function deepEq(a: unknown, b: unknown, aStack: unknown, bStack: unknown) {
     if (
       aCtor !== bCtor &&
       !(
-        typeof aCtor === 'function' &&
+        typeof aCtor === "function" &&
         aCtor instanceof aCtor &&
-        typeof bCtor === 'function' &&
+        typeof bCtor === "function" &&
         bCtor instanceof bCtor
       ) &&
-      ('constructor' in a && 'constructor' in b)
+      "constructor" in a &&
+      "constructor" in b
     ) {
       return false;
     }

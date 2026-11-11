@@ -1,13 +1,13 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { makeSelectFileInfoForUri, makeSelectStreamingUrlForUri } from 'redux/selectors/file_info';
-import { makeSelectClaimWasPurchased } from 'redux/selectors/claims';
-import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
-import { makeSelectFileRenderModeForUri, selectPrimaryUri } from 'redux/selectors/content';
-import { withRouter } from 'react-router';
-import { doAnalyticsView } from 'redux/actions/app';
-import FileRenderInline from './view';
-import { selectCostInfoForUri } from 'lbryinc';
+import { connect } from "react-redux";
+import { makeSelectFileInfoForUri, makeSelectStreamingUrlForUri } from "redux/selectors/file_info";
+import { makeSelectClaimWasPurchased } from "redux/selectors/claims";
+import { doClaimEligiblePurchaseRewards } from "redux/actions/rewards";
+import { makeSelectFileRenderModeForUri, selectPrimaryUri } from "redux/selectors/content";
+import { withRouter } from "react-router";
+import { doAnalyticsView } from "redux/actions/app";
+import FileRenderInline from "./view";
+import { selectCostInfoForUri } from "lbryinc";
 
 const select = (state: unknown, props: unknown) => ({
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),

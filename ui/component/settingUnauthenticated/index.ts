@@ -1,10 +1,10 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import * as SETTINGS from 'constants/settings';
-import { doSetClientSetting } from 'redux/actions/settings';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { connect } from "react-redux";
+import * as SETTINGS from "constants/settings";
+import { doSetClientSetting } from "redux/actions/settings";
+import { makeSelectClientSetting } from "redux/selectors/settings";
 
-import SettingUnauthenticated from './view';
+import SettingUnauthenticated from "./view";
 
 const select = (state: unknown) => ({
   searchInLanguage: makeSelectClientSetting(SETTINGS.SEARCH_IN_LANGUAGE)(state),

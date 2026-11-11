@@ -1,6 +1,6 @@
 //@ts-nocheck
-import * as ACTIONS from 'constants/action_types';
-import { Lbryio } from 'lbryinc';
+import * as ACTIONS from "constants/action_types";
+import { Lbryio } from "lbryinc";
 
 export function doGenerateAuthToken(installationId: unknown) {
   return (dispatch: unknown) => {
@@ -9,16 +9,16 @@ export function doGenerateAuthToken(installationId: unknown) {
     });
 
     Lbryio.call(
-      'user',
-      'new',
+      "user",
+      "new",
       {
-        auth_token: '',
-        language: 'en',
+        auth_token: "",
+        language: "en",
         app_id: installationId,
       },
-      'post'
+      "post"
     )
-      .then(response => {
+      .then((response) => {
         if (!response.auth_token) {
           dispatch({
             type: ACTIONS.GENERATE_AUTH_TOKEN_FAILURE,

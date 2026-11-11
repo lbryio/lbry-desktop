@@ -1,16 +1,16 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectClaimIsMine, selectClaimForUri, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
+import { connect } from "react-redux";
+import { selectClaimIsMine, selectClaimForUri, makeSelectClaimWasPurchased } from "redux/selectors/claims";
 import {
   makeSelectFileInfoForUri,
   makeSelectDownloadingForUri,
   makeSelectLoadingForUri,
   makeSelectStreamingUrlForUri,
-} from 'redux/selectors/file_info';
-import { selectCostInfoForUri } from 'lbryinc';
-import { doOpenModal, doAnalyticsView } from 'redux/actions/app';
-import { doSetPlayingUri, doPlayUri } from 'redux/actions/content';
-import FileDownloadLink from './view';
+} from "redux/selectors/file_info";
+import { selectCostInfoForUri } from "lbryinc";
+import { doOpenModal, doAnalyticsView } from "redux/actions/app";
+import { doSetPlayingUri, doPlayUri } from "redux/actions/content";
+import FileDownloadLink from "./view";
 
 const select = (state: unknown, props: unknown) => {
   const claim = selectClaimForUri(state, props.uri);

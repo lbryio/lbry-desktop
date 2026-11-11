@@ -1,5 +1,5 @@
 //@ts-nocheck
-import {createSelector} from 'reselect';
+import { createSelector } from "reselect";
 
 export const selectState = (state: unknown) => state.user || {};
 
@@ -36,7 +36,7 @@ export const selectEmailNewIsPending = createSelector(selectState, (state) => st
 
 export const selectEmailNewErrorMessage = createSelector(selectState, (state) => {
   const error = state.emailNewErrorMessage;
-  return typeof error === 'object' && error !== null ? error.message : error;
+  return typeof error === "object" && error !== null ? error.message : error;
 });
 
 export const selectPasswordExists = createSelector(selectState, (state) => state.passwordExistsForUser);
@@ -47,7 +47,7 @@ export const selectPasswordResetSuccess = createSelector(selectState, (state) =>
 
 export const selectPasswordResetError = createSelector(selectState, (state) => {
   const error = state.passwordResetError;
-  return typeof error === 'object' && error !== null ? error.message : error;
+  return typeof error === "object" && error !== null ? error.message : error;
 });
 
 export const selectPasswordSetIsPending = createSelector(selectState, (state) => state.passwordSetPending);
@@ -56,7 +56,7 @@ export const selectPasswordSetSuccess = createSelector(selectState, (state) => s
 
 export const selectPasswordSetError = createSelector(selectState, (state) => {
   const error = state.passwordSetError;
-  return typeof error === 'object' && error !== null ? error.message : error;
+  return typeof error === "object" && error !== null ? error.message : error;
 });
 
 export const selectPhoneNewErrorMessage = createSelector(selectState, (state) => state.phoneNewErrorMessage);
@@ -105,7 +105,7 @@ export const selectUserInviteNewErrorMessage = createSelector(selectState, (stat
 export const selectUserInviteReferralLink = createSelector(selectState, (state) => state.referralLink);
 
 export const selectUserInviteReferralCode = createSelector(selectState, (state) =>
-  state.referralCode ? state.referralCode[0] : ''
+  state.referralCode ? state.referralCode[0] : ""
 );
 
 export const selectYouTubeImportPending = createSelector(selectState, (state) => state.youtubeChannelImportPending);
@@ -125,4 +125,5 @@ export const selectYouTubeImportVideosComplete = createSelector(selectState, (st
   }
 });
 
-export const makeSelectUserPropForProp = (prop: unknown) => createSelector(selectUser, (user) => (user ? user[prop] : null));
+export const makeSelectUserPropForProp = (prop: unknown) =>
+  createSelector(selectUser, (user) => (user ? user[prop] : null));

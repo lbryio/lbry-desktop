@@ -1,47 +1,47 @@
-import {SEARCH_OPTIONS, SEARCH_PAGE_SIZE} from 'constants/search';
-import * as ICONS from 'constants/icons';
-import React, { useMemo } from 'react';
-import { Form, FormField } from 'component/common/form';
-import Button from 'component/button';
-import Icon from 'component/common/icon';
-import classnames from 'classnames';
+import { SEARCH_OPTIONS, SEARCH_PAGE_SIZE } from "constants/search";
+import * as ICONS from "constants/icons";
+import React, { useMemo } from "react";
+import { Form, FormField } from "component/common/form";
+import Button from "component/button";
+import Icon from "component/common/icon";
+import classnames from "classnames";
 
 const CLAIM_TYPES = {
-  [SEARCH_OPTIONS.INCLUDE_FILES]: 'Files',
-  [SEARCH_OPTIONS.INCLUDE_CHANNELS]: 'Channels',
-  [SEARCH_OPTIONS.INCLUDE_FILES_AND_CHANNELS]: 'Everything',
+  [SEARCH_OPTIONS.INCLUDE_FILES]: "Files",
+  [SEARCH_OPTIONS.INCLUDE_CHANNELS]: "Channels",
+  [SEARCH_OPTIONS.INCLUDE_FILES_AND_CHANNELS]: "Everything",
 } as const;
 
 const TYPES_ADVANCED = {
-  [SEARCH_OPTIONS.MEDIA_VIDEO]: 'Video',
-  [SEARCH_OPTIONS.MEDIA_AUDIO]: 'Audio',
-  [SEARCH_OPTIONS.MEDIA_IMAGE]: 'Image',
-  [SEARCH_OPTIONS.MEDIA_TEXT]: 'Text',
-  [SEARCH_OPTIONS.MEDIA_APPLICATION]: 'Other',
+  [SEARCH_OPTIONS.MEDIA_VIDEO]: "Video",
+  [SEARCH_OPTIONS.MEDIA_AUDIO]: "Audio",
+  [SEARCH_OPTIONS.MEDIA_IMAGE]: "Image",
+  [SEARCH_OPTIONS.MEDIA_TEXT]: "Text",
+  [SEARCH_OPTIONS.MEDIA_APPLICATION]: "Other",
 } as const;
 
 const TIME_FILTER = {
-  '': 'All',
+  "": "All",
   // [SEARCH_OPTIONS.TIME_FILTER_LAST_HOUR]: 'Last Hour', -- disable (doesn't work)
-  [SEARCH_OPTIONS.TIME_FILTER_TODAY]: 'Last 24 Hours',
-  [SEARCH_OPTIONS.TIME_FILTER_THIS_WEEK]: 'This Week',
-  [SEARCH_OPTIONS.TIME_FILTER_THIS_MONTH]: 'This Month',
-  [SEARCH_OPTIONS.TIME_FILTER_THIS_YEAR]: 'This Year',
+  [SEARCH_OPTIONS.TIME_FILTER_TODAY]: "Last 24 Hours",
+  [SEARCH_OPTIONS.TIME_FILTER_THIS_WEEK]: "This Week",
+  [SEARCH_OPTIONS.TIME_FILTER_THIS_MONTH]: "This Month",
+  [SEARCH_OPTIONS.TIME_FILTER_THIS_YEAR]: "This Year",
 } as const;
 
 const SORT_BY = {
-  '': 'Relevance',
-  [SEARCH_OPTIONS.SORT_DESCENDING]: 'Newest first',
-  [SEARCH_OPTIONS.SORT_ACCENDING]: 'Oldest first',
+  "": "Relevance",
+  [SEARCH_OPTIONS.SORT_DESCENDING]: "Newest first",
+  [SEARCH_OPTIONS.SORT_ACCENDING]: "Oldest first",
 } as const;
 
 type Props = {
-  setSearchOption: (arg1: string, arg2: boolean | string | number) => void,
-  options: Record<any, any>,
-  simple: boolean,
-  expanded: boolean,
-  toggleSearchExpanded: () => void,
-  onSearchOptionsChanged: (arg1: string) => void
+  setSearchOption: (arg1: string, arg2: boolean | string | number) => void;
+  options: Record<any, any>;
+  simple: boolean;
+  expanded: boolean;
+  toggleSearchExpanded: () => void;
+  onSearchOptionsChanged: (arg1: string) => void;
 };
 
 const SearchOptions = (props: Props) => {
@@ -51,14 +51,14 @@ const SearchOptions = (props: Props) => {
 
   const isFilteringByChannel = useMemo(() => {
     const jsonOptions = JSON.parse(stringifiedOptions);
-    const claimType = String(jsonOptions[SEARCH_OPTIONS.CLAIM_TYPE] || '');
+    const claimType = String(jsonOptions[SEARCH_OPTIONS.CLAIM_TYPE] || "");
     return claimType.includes(SEARCH_OPTIONS.INCLUDE_CHANNELS);
   }, [stringifiedOptions]);
 
   if (simple) {
-// @ts-expect-error - TS2704 - The operand of a 'delete' operator cannot be a read-only property.
+    // @ts-expect-error - TS2704 - The operand of a 'delete' operator cannot be a read-only property.
     delete TYPES_ADVANCED[SEARCH_OPTIONS.MEDIA_APPLICATION];
-// @ts-expect-error - TS2704 - The operand of a 'delete' operator cannot be a read-only property.
+    // @ts-expect-error - TS2704 - The operand of a 'delete' operator cannot be a read-only property.
     delete TYPES_ADVANCED[SEARCH_OPTIONS.MEDIA_IMAGE];
   }
 
@@ -71,10 +71,10 @@ const SearchOptions = (props: Props) => {
   }, [options, setSearchOption]);
 
   function updateSearchOptions(option: unknown, value: unknown) {
-// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
+    // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
     setSearchOption(option, value);
     if (onSearchOptionsChanged) {
-// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
+      // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
       onSearchOptionsChanged(option);
     }
   }
@@ -115,7 +115,7 @@ const SearchOptions = (props: Props) => {
                 // @ts-expect-error - TS2322 (ts-migration)
                 label={t[1]}
                 className={classnames(`button-toggle`, {
-                  'button-toggle--active': options[SEARCH_OPTIONS.CLAIM_TYPE] === option,
+                  "button-toggle--active": options[SEARCH_OPTIONS.CLAIM_TYPE] === option,
                 })}
                 onClick={() => setSearchOption(SEARCH_OPTIONS.CLAIM_TYPE, option)}
               />
@@ -125,8 +125,8 @@ const SearchOptions = (props: Props) => {
         <Button
           // @ts-expect-error - TS2322 (ts-migration)
           button="close"
-          className={classnames('close-button', {
-            'close-button--visible': options[SEARCH_OPTIONS.CLAIM_TYPE] !== SEARCH_OPTIONS.INCLUDE_FILES_AND_CHANNELS,
+          className={classnames("close-button", {
+            "close-button--visible": options[SEARCH_OPTIONS.CLAIM_TYPE] !== SEARCH_OPTIONS.INCLUDE_FILES_AND_CHANNELS,
           })}
           icon={ICONS.REMOVE}
           onClick={() => updateSearchOptions(SEARCH_OPTIONS.CLAIM_TYPE, SEARCH_OPTIONS.INCLUDE_FILES_AND_CHANNELS)}
@@ -144,7 +144,7 @@ const SearchOptions = (props: Props) => {
                 blockWrap={false}
                 disabled={options[SEARCH_OPTIONS.CLAIM_TYPE] !== SEARCH_OPTIONS.INCLUDE_FILES}
                 label={t[1]}
-// @ts-expect-error - TS2322 - Type '{ key: string; name: string; type: string; blockWrap: false; disabled: boolean; label: "Video" | "Image" | "Other" | "Audio" | "Text"; checked: any; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+                // @ts-expect-error - TS2322 - Type '{ key: string; name: string; type: string; blockWrap: false; disabled: boolean; label: "Video" | "Image" | "Other" | "Audio" | "Text"; checked: any; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 checked={!isFilteringByChannel && options[option]}
                 onChange={() => updateSearchOptions(option, !options[option])}
               />
@@ -161,10 +161,10 @@ const SearchOptions = (props: Props) => {
         <FormField
           type="checkbox"
           name="exact-match"
-// @ts-expect-error - TS2322 - Type '{ type: string; name: string; checked: any; onChange: () => void; label: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+          // @ts-expect-error - TS2322 - Type '{ type: string; name: string; checked: any; onChange: () => void; label: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
           checked={options[SEARCH_OPTIONS.EXACT]}
           onChange={() => updateSearchOptions(SEARCH_OPTIONS.EXACT, !options[SEARCH_OPTIONS.EXACT])}
-          label={__('Exact match')}
+          label={__("Exact match")}
         />
         <Icon
           className="icon--help"
@@ -193,11 +193,11 @@ const SearchOptions = (props: Props) => {
       <Button
         // @ts-expect-error - TS2322 (ts-migration)
         button="close"
-        className={classnames('close-button', {
-          'close-button--visible': options[SEARCH_OPTIONS.TIME_FILTER],
+        className={classnames("close-button", {
+          "close-button--visible": options[SEARCH_OPTIONS.TIME_FILTER],
         })}
         icon={ICONS.REMOVE}
-        onClick={() => updateSearchOptions(SEARCH_OPTIONS.TIME_FILTER, '')}
+        onClick={() => updateSearchOptions(SEARCH_OPTIONS.TIME_FILTER, "")}
       />
     </div>
   );
@@ -217,30 +217,30 @@ const SearchOptions = (props: Props) => {
   );
 
   const uploadDateLabel =
-    options[SEARCH_OPTIONS.CLAIM_TYPE] === SEARCH_OPTIONS.INCLUDE_CHANNELS ? __('Creation Date') : __('Upload Date');
+    options[SEARCH_OPTIONS.CLAIM_TYPE] === SEARCH_OPTIONS.INCLUDE_CHANNELS ? __("Creation Date") : __("Upload Date");
 
   return (
     <div>
       <Button
         // @ts-expect-error - TS2322 (ts-migration)
         button="alt"
-        label={__('Filter')}
+        label={__("Filter")}
         icon={ICONS.FILTER}
         iconRight={expanded ? ICONS.UP : ICONS.DOWN}
         onClick={toggleSearchExpanded}
       />
       <Form
-// @ts-expect-error - TS2769 - No overload matches this call.
-        className={classnames('search__options', {
-          'search__options--expanded': expanded,
+        // @ts-expect-error - TS2769 - No overload matches this call.
+        className={classnames("search__options", {
+          "search__options--expanded": expanded,
         })}
       >
         <table className="table table--condensed">
           <tbody>
-            {addRow(__('Type'), typeElem)}
+            {addRow(__("Type"), typeElem)}
             {addRow(uploadDateLabel, uploadDateElem)}
-            {addRow(__('Sort By'), sortByElem)}
-            {addRow(__('Other Options'), otherOptionsElem)}
+            {addRow(__("Sort By"), sortByElem)}
+            {addRow(__("Other Options"), otherOptionsElem)}
           </tbody>
         </table>
       </Form>

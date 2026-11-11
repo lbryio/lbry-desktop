@@ -1,11 +1,11 @@
-import type {ReactNode} from 'react';
-import * as React from 'react';
-import classnames from 'classnames';
+import type { ReactNode } from "react";
+import * as React from "react";
+import classnames from "classnames";
 
 type Props = {
-  title: string,
-  className?: string,
-  children?: React.ReactNode
+  title: string;
+  className?: string;
+  children?: React.ReactNode;
 };
 
 function FileTitle(props: Props) {

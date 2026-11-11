@@ -1,22 +1,22 @@
-import {createSelector} from 'reselect';
-import { createCachedSelector } from 're-reselect';
-import { selectMutedChannels } from 'redux/selectors/blocked';
-import { selectShowMatureContent } from 'redux/selectors/settings';
-import { selectMentionSearchResults, selectMentionQuery } from 'redux/selectors/search';
-import { selectBlacklistedOutpointMap, selectFilteredOutpointMap } from 'lbryinc';
+import { createSelector } from "reselect";
+import { createCachedSelector } from "re-reselect";
+import { selectMutedChannels } from "redux/selectors/blocked";
+import { selectShowMatureContent } from "redux/selectors/settings";
+import { selectMentionSearchResults, selectMentionQuery } from "redux/selectors/search";
+import { selectBlacklistedOutpointMap, selectFilteredOutpointMap } from "lbryinc";
 import {
   selectClaimsById,
   selectMyClaimIdsRaw,
   selectMyChannelClaimIds,
   selectClaimIdForUri,
   selectClaimIdsByUri,
-} from 'redux/selectors/claims';
-import { isClaimNsfw, getChannelFromClaim } from 'util/claim';
-import { selectSubscriptionUris } from 'redux/selectors/subscriptions';
+} from "redux/selectors/claims";
+import { isClaimNsfw, getChannelFromClaim } from "util/claim";
+import { selectSubscriptionUris } from "redux/selectors/subscriptions";
 
 type State = {
-  claims: any,
-  comments: CommentsState
+  claims: any;
+  comments: CommentsState;
 };
 
 // @ts-expect-error - TS2339 - Property 'comments' does not exist on type 'unknown'.
@@ -72,7 +72,7 @@ export const selectPinnedCommentsForUri = createCachedSelector(
 
     if (pinnedCommentIds) {
       pinnedCommentIds.forEach((commentId) => {
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+        // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
         pinnedComments.push(byId[commentId]);
       });
     }
@@ -271,11 +271,11 @@ export const selectRepliesForParentId = createCachedSelector(
 
     const comments: unknown = [];
     replyIdsForParent.forEach((cid) => {
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
       comments.push(commentsById[cid]);
     });
 
-// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'LbryComment[]'.
+    // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'LbryComment[]'.
     return filterComments(comments, undefined, filterInputs);
   }
 )((state, id: string) => String(id));
@@ -288,7 +288,7 @@ export const selectRepliesForParentId = createCachedSelector(
  * @param filterInputs Values returned by filterCommentsDepOnList.
  */
 const filterComments = (comments: Array<LbryComment>, claimId: string | null | undefined, filterInputs: any) => {
-// @ts-expect-error - TS2347 - Untyped function calls may not accept type arguments.
+  // @ts-expect-error - TS2347 - Untyped function calls may not accept type arguments.
   const filterProps = filterInputs.reduce<Record<string, any>>((acc, cur, i) => {
     acc[filterCommentsPropKeys[i]] = cur;
     return acc;
@@ -440,17 +440,17 @@ export const selectChannelMentionData = createCachedSelector(
       // @ts-expect-error - TS2339 (ts-migration)
       topLevelComments.forEach(({ channel_url: uri }) => {
         // Check: if there are duplicate commentors
-// @ts-expect-error - TS2339 - Property 'includes' does not exist on type 'unknown'.
+        // @ts-expect-error - TS2339 - Property 'includes' does not exist on type 'unknown'.
         if (!commentorUris.includes(uri)) {
           // Update: commentorUris
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+          // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
           commentorUris.push(uri);
 
           // Update: canonicalCommentors
           const claimId = claimIdsByUri[uri];
           const claim = claimsById[claimId];
           if (claim && claim.canonical_url) {
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+            // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
             canonicalCommentors.push(claim.canonical_url);
           }
         }
@@ -462,7 +462,7 @@ export const selectChannelMentionData = createCachedSelector(
       const claimId = claimIdsByUri[uri];
       const claim = claimsById[claimId];
       if (claim && claim.canonical_url) {
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+        // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
         canonicalSubscriptions.push(claim.canonical_url);
       }
     });
@@ -474,11 +474,11 @@ export const selectChannelMentionData = createCachedSelector(
         const claimId = claimIdsByUri[uri];
         const claim = claimsById[claimId];
         if (claim && claim.canonical_url) {
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+          // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
           canonicalSearch.push(claim.canonical_url);
         }
       });
-// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
       hasNewResolvedResults = canonicalSearch.length > 0;
     }
 

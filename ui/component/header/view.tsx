@@ -1,21 +1,21 @@
-import { useIsMobile } from 'effects/use-screensize';
-import { withRouter } from 'react-router';
-import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
-import Button from 'component/button';
-import classnames from 'classnames';
-import HeaderMenuButtons from 'component/headerMenuButtons';
-import HeaderProfileMenuButton from 'component/headerProfileMenuButton';
-import Logo from 'component/logo';
-import NotificationBubble from 'component/notificationBubble';
-import React from 'react';
-import SkipNavigationButton from 'component/skipNavigationButton';
-import Tooltip from 'component/common/tooltip';
-import WunderBar from 'component/wunderbar';
+import { useIsMobile } from "effects/use-screensize";
+import { withRouter } from "react-router";
+import * as ICONS from "constants/icons";
+import * as PAGES from "constants/pages";
+import Button from "component/button";
+import classnames from "classnames";
+import HeaderMenuButtons from "component/headerMenuButtons";
+import HeaderProfileMenuButton from "component/headerProfileMenuButton";
+import Logo from "component/logo";
+import NotificationBubble from "component/notificationBubble";
+import React from "react";
+import SkipNavigationButton from "component/skipNavigationButton";
+import Tooltip from "component/common/tooltip";
+import WunderBar from "component/wunderbar";
 // @ts-expect-error - TS2305 - Module '"electron"' has no exported member 'ipcRenderer'.
-import { ipcRenderer } from 'electron';
-import { IS_MAC } from 'component/app/view';
-import NavigationButton from 'component/navigationButton';
+import { ipcRenderer } from "electron";
+import { IS_MAC } from "component/app/view";
+import NavigationButton from "component/navigationButton";
 
 type Props = {
   authHeader: boolean;
@@ -89,19 +89,19 @@ const Header = (props: Props) => {
 
   // Sign out if they click the "x" when they are on the password prompt
   const authHeaderAction = syncError && { onClick: signOut };
-  const homeButtonNavigationProps = (isVerifyPage && {}) || (authHeader && authHeaderAction) || { navigate: '/' };
+  const homeButtonNavigationProps = (isVerifyPage && {}) || (authHeader && authHeaderAction) || { navigate: "/" };
   const sidebarLabel = sidebarOpen
-    ? __('Close sidebar - hide channels you are following.')
-    : __('Expand sidebar - view channels you are following.');
+    ? __("Close sidebar - hide channels you are following.")
+    : __("Expand sidebar - view channels you are following.");
 
   const onBackout = React.useCallback(
     (e: any) => {
       const { hasNavigated } = props;
       const { replace } = history;
 
-      window.removeEventListener('popstate', onBackout);
+      window.removeEventListener("popstate", onBackout);
 
-      if (e.type !== 'popstate') {
+      if (e.type !== "popstate") {
         // if not initiated by pop (back button)
         if (hasNavigated && !backNavDefault) {
           goBack();
@@ -115,8 +115,8 @@ const Header = (props: Props) => {
 
   React.useEffect(() => {
     if (canBackout) {
-      window.addEventListener('popstate', onBackout);
-      return () => window.removeEventListener('popstate', onBackout);
+      window.addEventListener("popstate", onBackout);
+      return () => window.removeEventListener("popstate", onBackout);
     }
   }, [canBackout, onBackout]);
 
@@ -125,8 +125,8 @@ const Header = (props: Props) => {
       <Tooltip
         title={
           balance > 0
-            ? __('Immediately spendable: %spendable_balance%', { spendable_balance: roundedSpendableBalance })
-            : __('Your Wallet')
+            ? __("Immediately spendable: %spendable_balance%", { spendable_balance: roundedSpendableBalance })
+            : __("Your Wallet")
         }
       >
         <div>
@@ -147,7 +147,7 @@ const Header = (props: Props) => {
               // @ts-expect-error - TS2322 (ts-migration)
               navigate={`/$/${PAGES.WALLET}`}
               className="button--file-action header__navigationItem--balance"
-              label={hideBalance || Number(roundedBalance) === 0 ? __('Your Wallet') : roundedBalance}
+              label={hideBalance || Number(roundedBalance) === 0 ? __("Your Wallet") : roundedBalance}
               icon={ICONS.LBC}
               onDoubleClick={(e) => {
                 e.stopPropagation();
@@ -163,12 +163,12 @@ const Header = (props: Props) => {
 
   return (
     <header
-      className={classnames('header', {
-        'header--minimal': authHeader,
-        'header--mac': IS_MAC,
+      className={classnames("header", {
+        "header--minimal": authHeader,
+        "header--mac": IS_MAC,
       })}
       onDoubleClick={(e) => {
-        ipcRenderer.send('window:maximize');
+        ipcRenderer.send("window:maximize");
       }}
     >
       <div className="card__actions--between header__contents">
@@ -176,7 +176,7 @@ const Header = (props: Props) => {
           <>
             <div className="header__menu--left">
               {/* @ts-expect-error - TS2322 (ts-migration) */}
-              <Button onClick={onBackout} button="link" label={backLabel || __('Cancel')} icon={ICONS.ARROW_LEFT} />
+              <Button onClick={onBackout} button="link" label={backLabel || __("Cancel")} icon={ICONS.ARROW_LEFT} />
             </div>
             {backTitle && <h1 className="header__authTitle">{(isMobile && simpleBackTitle) || backTitle}</h1>}
             {userButtons(false, isMobile)}
@@ -187,7 +187,7 @@ const Header = (props: Props) => {
               <div className="header__menu--left">
                 <SkipNavigationButton />
                 {!authHeader && (
-                  <span style={{ position: 'relative' }}>
+                  <span style={{ position: "relative" }}>
                     <Button
                       aria-label={sidebarLabel}
                       // @ts-expect-error - TS2322 (ts-migration)
@@ -202,12 +202,12 @@ const Header = (props: Props) => {
                   </span>
                 )}
                 <Button
-                  aria-label={__('Home')}
+                  aria-label={__("Home")}
                   // @ts-expect-error - TS2322 (ts-migration)
                   className="header__navigationItem--logo"
                   onClick={() => {
                     // here use state.router.location.pathname
-                    if (history.location.pathname === '/') window.location.reload();
+                    if (history.location.pathname === "/") window.location.reload();
                   }}
                   onDoubleClick={(e) => {
                     e.stopPropagation();
@@ -241,7 +241,7 @@ const Header = (props: Props) => {
                     <div className="header__menu--right">
                       <Button
                         // @ts-expect-error - TS2322 (ts-migration)
-                        title={__('Go Back')}
+                        title={__("Go Back")}
                         button="alt"
                         // className="button--header-close"
                         icon={ICONS.REMOVE}
@@ -254,7 +254,7 @@ const Header = (props: Props) => {
                           if ((isSignInPage && !emailToVerify) || isSignUpPage || isPwdResetPage) {
                             goBack();
                           } else {
-                            push('/');
+                            push("/");
                           }
                         }}
                       />

@@ -1,23 +1,23 @@
-import React from 'react';
-import debounce from 'util/debounce';
+import React from "react";
+import debounce from "util/debounce";
 
 const DEBOUNCE_SCROLL_HANDLER_MS = 50;
 
 function scaleToDevicePixelRatio(value: unknown) {
   const devicePixelRatio = window.devicePixelRatio || 1.0;
   if (devicePixelRatio < 1.0) {
-// @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    // @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     return Math.ceil(value / devicePixelRatio);
   }
-// @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+  // @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
   return Math.ceil(value * devicePixelRatio);
 }
 
 type Props = {
-  children: any,
-  skipWait?: boolean,
-  placeholder?: any,
-  yOffset?: number
+  children: any;
+  skipWait?: boolean;
+  placeholder?: any;
+  yOffset?: number;
 };
 
 export default function WaitUntilOnPage(props: Props) {
@@ -57,7 +57,7 @@ export default function WaitUntilOnPage(props: Props) {
         setShouldRender(true);
       }
     }, 500);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   // Handles "element scrolled into viewport".
   React.useEffect(() => {
@@ -68,11 +68,11 @@ export default function WaitUntilOnPage(props: Props) {
     }, DEBOUNCE_SCROLL_HANDLER_MS);
 
     if (ref && ref.current && !shouldRender) {
-      window.addEventListener('scroll', handleDisplayingRef);
-      window.addEventListener('resize', handleDisplayingRef);
+      window.addEventListener("scroll", handleDisplayingRef);
+      window.addEventListener("resize", handleDisplayingRef);
       return () => {
-        window.removeEventListener('scroll', handleDisplayingRef);
-        window.removeEventListener('resize', handleDisplayingRef);
+        window.removeEventListener("scroll", handleDisplayingRef);
+        window.removeEventListener("resize", handleDisplayingRef);
       };
     }
   }, [ref, setShouldRender, shouldRender, shouldElementRender]);

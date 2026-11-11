@@ -1,18 +1,17 @@
-
-import {ENABLE_UI_NOTIFICATIONS} from 'config';
-import { useHistory } from 'react-router';
-import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
-import Button from 'component/button';
-import Icon from 'component/common/icon';
-import NotificationBubble from 'component/notificationBubble';
-import React from 'react';
-import Tooltip from 'component/common/tooltip';
+import { ENABLE_UI_NOTIFICATIONS } from "config";
+import { useHistory } from "react-router";
+import * as ICONS from "constants/icons";
+import * as PAGES from "constants/pages";
+import Button from "component/button";
+import Icon from "component/common/icon";
+import NotificationBubble from "component/notificationBubble";
+import React from "react";
+import Tooltip from "component/common/tooltip";
 
 type Props = {
-  unseenCount: number,
-  user: User | null | undefined,
-  doSeeAllNotifications: () => void
+  unseenCount: number;
+  user: User | null | undefined;
+  doSeeAllNotifications: () => void;
 };
 
 export default function NotificationHeaderButton(props: Props) {
@@ -29,8 +28,8 @@ export default function NotificationHeaderButton(props: Props) {
   if (!notificationsEnabled) return null;
 
   return (
-    <Tooltip title={__('Notifications')}>
-{ /* @ts-expect-error - TS2322 - Type 'Element' is not assignable to type 'Node'. */}
+    <Tooltip title={__("Notifications")}>
+      {/* @ts-expect-error - TS2322 - Type 'Element' is not assignable to type 'Node'. */}
       <Button onClick={handleMenuClick} className="header__navigationItem--icon">
         <Icon size={18} icon={ICONS.NOTIFICATION} aria-hidden />
         {/* @ts-expect-error - TS2741 (ts-migration) */}

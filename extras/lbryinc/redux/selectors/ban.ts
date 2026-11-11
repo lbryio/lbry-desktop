@@ -2,13 +2,13 @@
 // here to get past importing issues with 'lbryinc', which the real fix might
 // involve moving it from 'extras' to 'ui' (big change).
 
-import {createCachedSelector} from 're-reselect';
-import { selectClaimForUri, makeSelectIsBlacklisted } from 'redux/selectors/claims';
-import { selectMutedChannels } from 'redux/selectors/blocked';
-import { selectModerationBlockList } from 'redux/selectors/comments';
-import { selectBlacklistedOutpointMap, selectFilteredOutpointMap } from 'lbryinc';
-import { getChannelFromClaim } from 'util/claim';
-import { isURIEqual } from 'util/lbryURI';
+import { createCachedSelector } from "re-reselect";
+import { selectClaimForUri, makeSelectIsBlacklisted } from "redux/selectors/claims";
+import { selectMutedChannels } from "redux/selectors/blocked";
+import { selectModerationBlockList } from "redux/selectors/comments";
+import { selectBlacklistedOutpointMap, selectFilteredOutpointMap } from "lbryinc";
+import { getChannelFromClaim } from "util/claim";
+import { isURIEqual } from "util/lbryURI";
 
 export const selectBanStateForUri = createCachedSelector(
   selectClaimForUri,
@@ -27,7 +27,7 @@ export const selectBanStateForUri = createCachedSelector(
     const channelClaim = getChannelFromClaim(claim);
 
     if (isBlacklisted) {
-      banState['blacklisted'] = true;
+      banState["blacklisted"] = true;
     }
 
     // This will be replaced once blocking is done at the wallet server level.
@@ -36,7 +36,7 @@ export const selectBanStateForUri = createCachedSelector(
         (channelClaim && blackListedOutpointMap[`${channelClaim.txid}:${channelClaim.nout}`]) ||
         blackListedOutpointMap[`${claim.txid}:${claim.nout}`]
       ) {
-        banState['blacklisted'] = true;
+        banState["blacklisted"] = true;
       }
     }
 
@@ -47,7 +47,7 @@ export const selectBanStateForUri = createCachedSelector(
         (channelClaim && filteredOutpointMap[`${channelClaim.txid}:${channelClaim.nout}`]) ||
         filteredOutpointMap[`${claim.txid}:${claim.nout}`]
       ) {
-        banState['filtered'] = true;
+        banState["filtered"] = true;
       }
     }
 
@@ -55,14 +55,14 @@ export const selectBanStateForUri = createCachedSelector(
     // block channel claims if we can't control for them in claim search
     if (mutedChannelUris.length && channelClaim) {
       if (mutedChannelUris.some((blockedUri) => isURIEqual(blockedUri, channelClaim.permanent_url))) {
-        banState['muted'] = true;
+        banState["muted"] = true;
       }
     }
 
     // Commentron blocklist
     if (personalBlocklist.length && channelClaim) {
       if (personalBlocklist.some((blockedUri) => isURIEqual(blockedUri, channelClaim.permanent_url))) {
-        banState['blocked'] = true;
+        banState["blocked"] = true;
       }
     }
 

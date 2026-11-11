@@ -1,25 +1,25 @@
 // @ts-expect-error - TS2305 - Module '"electron"' has no exported member 'ipcRenderer'.
-import { ipcRenderer } from 'electron';
-import React from 'react';
-import classnames from 'classnames';
-import * as RENDER_MODES from 'constants/file_render_modes';
-import * as KEYCODES from 'constants/keycodes';
-import VideoViewer from 'component/viewers/videoViewer';
-import { withRouter } from 'react-router-dom';
-import fs from 'fs';
-import analytics from 'analytics';
+import { ipcRenderer } from "electron";
+import React from "react";
+import classnames from "classnames";
+import * as RENDER_MODES from "constants/file_render_modes";
+import * as KEYCODES from "constants/keycodes";
+import VideoViewer from "component/viewers/videoViewer";
+import { withRouter } from "react-router-dom";
+import fs from "fs";
+import analytics from "analytics";
 
-import DocumentViewer from 'component/viewers/documentViewer';
+import DocumentViewer from "component/viewers/documentViewer";
 
 // should match
-import DocxViewer from 'component/viewers/docxViewer';
-import ComicBookViewer from 'component/viewers/comicBookViewer';
-import ThreeViewer from 'component/viewers/threeViewer';
+import DocxViewer from "component/viewers/docxViewer";
+import ComicBookViewer from "component/viewers/comicBookViewer";
+import ThreeViewer from "component/viewers/threeViewer";
 
-import AppViewer from 'component/viewers/appViewer';
-import HtmlViewer from 'component/viewers/htmlViewer';
-import ImageViewer from 'component/viewers/imageViewer';
-import PdfViewer from 'component/viewers/pdfViewer';
+import AppViewer from "component/viewers/appViewer";
+import HtmlViewer from "component/viewers/htmlViewer";
+import ImageViewer from "component/viewers/imageViewer";
+import PdfViewer from "component/viewers/pdfViewer";
 
 type Props = {
   uri: string;
@@ -47,13 +47,13 @@ class FileRender extends React.PureComponent<Props> {
   componentDidMount() {
     const { embedded } = this.props;
     // @ts-expect-error - TS2769 - No overload matches this call.
-    window.addEventListener('keydown', this.escapeListener, true);
+    window.addEventListener("keydown", this.escapeListener, true);
     analytics.playerLoadedEvent(embedded);
   }
 
   componentWillUnmount() {
     // @ts-expect-error - TS2769 - No overload matches this call.
-    window.removeEventListener('keydown', this.escapeListener, true);
+    window.removeEventListener("keydown", this.escapeListener, true);
   }
 
   escapeListener(e: React.KeyboardEvent<any>) {
@@ -67,7 +67,7 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   exitFullscreen() {
-    ipcRenderer.send('window:setFullScreen', false);
+    ipcRenderer.send("window:setFullScreen", false);
   }
 
   renderViewer() {
@@ -158,11 +158,11 @@ class FileRender extends React.PureComponent<Props> {
 
     return (
       <div
-        className={classnames('file-render', className, {
+        className={classnames("file-render", className, {
           // @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"document" | "md" | "pdf" | "html" | "docx" | "plain_text"'.
-          'file-render--document': RENDER_MODES.TEXT_MODES.includes(renderMode),
-          'file-render--embed': embedded,
-          'file-render--video': renderMode === RENDER_MODES.VIDEO || renderMode === RENDER_MODES.AUDIO,
+          "file-render--document": RENDER_MODES.TEXT_MODES.includes(renderMode),
+          "file-render--embed": embedded,
+          "file-render--video": renderMode === RENDER_MODES.VIDEO || renderMode === RENDER_MODES.AUDIO,
         })}
       >
         {this.renderViewer()}

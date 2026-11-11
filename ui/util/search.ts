@@ -1,17 +1,17 @@
-import {isNameValid, isURIValid, normalizeURI, parseURI} from 'util/lbryURI';
+import { isNameValid, isURIValid, normalizeURI, parseURI } from "util/lbryURI";
 // @ts-expect-error - TS2305 (ts-migration)
-import { URL as SITE_URL, URL_LOCAL, URL_DEV } from 'config';
-import { SEARCH_OPTIONS } from 'constants/search';
+import { URL as SITE_URL, URL_LOCAL, URL_DEV } from "config";
+import { SEARCH_OPTIONS } from "constants/search";
 
 export function createNormalizedSearchKey(query: string) {
-  const FROM = '&from=';
+  const FROM = "&from=";
 
   // Ignore the "page" (`from`) because we don't care what the last page
   // searched was, we want everything.
   let normalizedQuery = query;
   if (normalizedQuery.includes(FROM)) {
     const a = normalizedQuery.indexOf(FROM);
-    const b = normalizedQuery.indexOf('&', a + FROM.length);
+    const b = normalizedQuery.indexOf("&", a + FROM.length);
     if (b > a) {
       normalizedQuery = normalizedQuery.substring(0, a) + normalizedQuery.substring(b);
     } else {
@@ -36,12 +36,12 @@ export function getUriForSearchTerm(term: string) {
   const includesLbryTvLocal = term.includes(WEB_LOCAL_PREFIX);
   const includesLbryTvDev = term.includes(WEB_DEV_PREFIX);
   const wasCopiedFromWeb = includesLbryTvDev || includesLbryTvLocal || includesLbryTvProd || includesOdysee;
-  const isLbryUrl = term.startsWith('lbry://') && term !== 'lbry://';
-  const error = '';
+  const isLbryUrl = term.startsWith("lbry://") && term !== "lbry://";
+  const error = "";
 
   const addLbryIfNot = (term: unknown) => {
-// @ts-expect-error - TS2339 - Property 'startsWith' does not exist on type 'unknown'.
-    return term.startsWith('lbry://') ? term : `lbry://${term}`;
+    // @ts-expect-error - TS2339 - Property 'startsWith' does not exist on type 'unknown'.
+    return term.startsWith("lbry://") ? term : `lbry://${term}`;
   };
 
   if (wasCopiedFromWeb) {
@@ -50,18 +50,18 @@ export function getUriForSearchTerm(term: string) {
     if (includesLbryTvDev) prefix = WEB_DEV_PREFIX;
     if (includesOdysee) prefix = ODYSEE_PREFIX;
 
-    let query = (term && term.slice(prefix.length).replace(/:/g, '#')) || '';
+    const query = (term && term.slice(prefix.length).replace(/:/g, "#")) || "";
     try {
       const lbryUrl = `lbry://${query}`;
       parseURI(lbryUrl);
       return [lbryUrl, null];
     } catch (e: any) {
-      return [query, 'error'];
+      return [query, "error"];
     }
   }
 
   if (!isLbryUrl) {
-    if (term.startsWith('@')) {
+    if (term.startsWith("@")) {
       if (isNameValid(term.slice(1))) {
         return [term, null];
       } else {
@@ -84,7 +84,7 @@ export function getUriForSearchTerm(term: string) {
         return [term, null];
       }
     } catch (e: any) {
-      return [term, 'error'];
+      return [term, "error"];
     }
   }
 }

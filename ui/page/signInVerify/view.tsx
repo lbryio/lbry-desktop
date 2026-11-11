@@ -1,20 +1,20 @@
-import * as PAGES from 'constants/pages';
-import React, { useState } from 'react';
-import { withRouter } from 'react-router';
-import Page from 'component/page';
-import ReCAPTCHA from 'react-google-recaptcha';
-import Button from 'component/button';
-import { Lbryio } from 'lbryinc';
-import I18nMessage from 'component/i18nMessage';
-import Card from 'component/common/card';
+import * as PAGES from "constants/pages";
+import React, { useState } from "react";
+import { withRouter } from "react-router";
+import Page from "component/page";
+import ReCAPTCHA from "react-google-recaptcha";
+import Button from "component/button";
+import { Lbryio } from "lbryinc";
+import I18nMessage from "component/i18nMessage";
+import Card from "component/common/card";
 type Props = {
   history: {
-    push: (arg1: string) => void,
+    push: (arg1: string) => void;
     location: {
-      search: string
-    }
-  },
-  doToast: (arg1: Record<any, any>) => void
+      search: string;
+    };
+  };
+  doToast: (arg1: Record<any, any>) => void;
 };
 
 function SignInVerifyPage(props: Props) {
@@ -26,14 +26,14 @@ function SignInVerifyPage(props: Props) {
   const [showCaptchaMessage, setShowCaptchaMessage] = useState(false);
   const [captchaLoaded, setCaptchaLoaded] = useState(false);
   const urlParams = new URLSearchParams(location.search);
-  const authToken = urlParams.get('auth_token');
-  const userSubmittedEmail = urlParams.get('email');
-  const verificationToken = urlParams.get('verification_token');
-  const needsRecaptcha = urlParams.get('needs_recaptcha') === 'true';
+  const authToken = urlParams.get("auth_token");
+  const userSubmittedEmail = urlParams.get("email");
+  const verificationToken = urlParams.get("verification_token");
+  const needsRecaptcha = urlParams.get("needs_recaptcha") === "true";
 
   function onAuthError(message: unknown) {
     doToast({
-      message: message || __('Authentication failure.'),
+      message: message || __("Authentication failure."),
       isError: true,
     });
     push(`/$/${PAGES.AUTH}`);
@@ -41,13 +41,13 @@ function SignInVerifyPage(props: Props) {
 
   React.useEffect(() => {
     if (!authToken || !userSubmittedEmail || !verificationToken) {
-      onAuthError(__('Invalid or expired sign-in link.'));
+      onAuthError(__("Invalid or expired sign-in link."));
     }
   }, [onAuthError, authToken, userSubmittedEmail, verificationToken, doToast, push]);
 
   React.useEffect(() => {
     if (!needsRecaptcha) {
-// @ts-expect-error - TS2554 - Expected 1 arguments, but got 0.
+      // @ts-expect-error - TS2554 - Expected 1 arguments, but got 0.
       verifyUser();
     }
   }, [verifyUser, needsRecaptcha]);
@@ -78,7 +78,7 @@ function SignInVerifyPage(props: Props) {
 
   function verifyUser(captchaValue: unknown) {
     // @ts-expect-error - TS2339 (ts-migration)
-    Lbryio.call('user_email', 'confirm', {
+    Lbryio.call("user_email", "confirm", {
       auth_token: authToken,
       email: userSubmittedEmail,
       verification_token: verificationToken,
@@ -88,7 +88,7 @@ function SignInVerifyPage(props: Props) {
         setIsAuthenticationSuccess(true);
       })
       .catch(() => {
-        onAuthError(__('Invalid captcha response or other authentication error.'));
+        onAuthError(__("Invalid captcha response or other authentication error."));
       });
   }
 
@@ -97,15 +97,15 @@ function SignInVerifyPage(props: Props) {
     <Page authPage noFooter>
       <div className="main__sign-up">
         <Card
-          title={isAuthenticationSuccess ? __('Log in success!') : __('Log in')}
+          title={isAuthenticationSuccess ? __("Log in success!") : __("Log in")}
           subtitle={
             <React.Fragment>
               <p>
                 {isAuthenticationSuccess
-                  ? __('You can now close this tab.')
+                  ? __("You can now close this tab.")
                   : needsRecaptcha
-                  ? null
-                  : __('Welcome back! You are automatically being signed in.')}
+                    ? null
+                    : __("Welcome back! You are automatically being signed in.")}
               </p>
               {showCaptchaMessage && !isAuthenticationSuccess && (
                 <p>
@@ -115,7 +115,7 @@ function SignInVerifyPage(props: Props) {
                     tokens={{
                       refresh: (
                         // @ts-expect-error - TS2322 (ts-migration)
-                        <Button button="link" label={__('refreshing')} onClick={() => window.location.reload()} />
+                        <Button button="link" label={__("refreshing")} onClick={() => window.location.reload()} />
                       ),
                     }}
                   >

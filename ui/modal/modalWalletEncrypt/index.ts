@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectWalletEncryptSucceeded, selectWalletEncryptResult } from 'redux/selectors/wallet';
-import { doWalletStatus, doWalletEncrypt } from 'redux/actions/wallet';
-import { doHideModal } from 'redux/actions/app';
-import ModalWalletEncrypt from './view';
+import { connect } from "react-redux";
+import { selectWalletEncryptSucceeded, selectWalletEncryptResult } from "redux/selectors/wallet";
+import { doWalletStatus, doWalletEncrypt } from "redux/actions/wallet";
+import { doHideModal } from "redux/actions/app";
+import ModalWalletEncrypt from "./view";
 
 const select = (state: unknown) => ({
   walletEncryptSucceded: selectWalletEncryptSucceeded(state),

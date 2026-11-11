@@ -1,11 +1,11 @@
-import {MATURE_TAGS} from 'constants/tags';
-import { parseURI } from 'util/lbryURI';
+import { MATURE_TAGS } from "constants/tags";
+import { parseURI } from "util/lbryURI";
 
 const matureTagMap = MATURE_TAGS.reduce<Record<string, any>>((acc, tag) => ({ ...acc, [tag]: true }), {});
 
 export const isClaimNsfw = (claim: Claim): boolean => {
   if (!claim) {
-    throw new Error('No claim passed to isClaimNsfw()');
+    throw new Error("No claim passed to isClaimNsfw()");
   }
 
   if (!claim.value) {
@@ -23,10 +23,7 @@ export const isClaimNsfw = (claim: Claim): boolean => {
   return false;
 };
 
-export function createNormalizedClaimSearchKey(options: {
-  page: number,
-  release_time?: string
-}) {
+export function createNormalizedClaimSearchKey(options: { page: number; release_time?: string }) {
   // Ignore page because we don't care what the last page searched was, we want everything
   // Ignore release_time because that will change depending on when you call claim_search ex: release_time: ">12344567"
   const { page: optionToIgnoreForQuery, release_time: anotherToIgnore, ...rest } = options;
@@ -54,7 +51,7 @@ export function concatClaims(claimList: Array<Claim> = [], concatClaimList: Arra
 
 export function filterClaims(claims: Array<Claim>, query?: string | null): Array<Claim> {
   if (query) {
-    const queryMatchRegExp = new RegExp(query, 'i');
+    const queryMatchRegExp = new RegExp(query, "i");
     return claims.filter((claim) => {
       const { value } = claim;
 
@@ -79,7 +76,7 @@ export function isChannelClaim(claim?: Claim | null, uri?: string) {
   // 1. parseURI can't resolve a repost's channel, so a `claim` will be needed.
   // 2. parseURI is still needed to cover the case of abandoned claims.
   if (claim) {
-    return claim.value_type === 'channel';
+    return claim.value_type === "channel";
   } else if (uri) {
     try {
       return Boolean(parseURI(uri).isChannel);
@@ -93,7 +90,7 @@ export function isChannelClaim(claim?: Claim | null, uri?: string) {
 
 export function getChannelIdFromClaim(claim?: Claim | null) {
   if (claim) {
-    if (claim.value_type === 'channel') {
+    if (claim.value_type === "channel") {
       return claim.claim_id;
     } else if (claim.signing_channel) {
       return claim.signing_channel.claim_id;
@@ -104,18 +101,18 @@ export function getChannelIdFromClaim(claim?: Claim | null) {
 export function getChannelFromClaim(claim?: Claim | null) {
   return !claim
     ? null
-    : claim.value_type === 'channel'
-    ? claim
-    : claim.signing_channel && claim.is_channel_signature_valid
-    ? claim.signing_channel
-    : null;
+    : claim.value_type === "channel"
+      ? claim
+      : claim.signing_channel && claim.is_channel_signature_valid
+        ? claim.signing_channel
+        : null;
 }
 
 export function isClaimPlayable(claim?: Claim | null) {
-// @ts-expect-error - TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
+  // @ts-expect-error - TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
   if (!claim || !claim.value || !claim.value.stream_type) {
     return false;
   }
-// @ts-expect-error - TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
-  return ['audio', 'video'].includes(claim.value.stream_type);
+  // @ts-expect-error - TS2339 - Property 'stream_type' does not exist on type 'CollectionMetadata | StreamMetadata | ChannelMetadata'.
+  return ["audio", "video"].includes(claim.value.stream_type);
 }

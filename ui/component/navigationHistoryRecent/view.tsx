@@ -1,14 +1,14 @@
-import React from 'react';
-import Button from 'component/button';
-import NavigationHistoryItem from 'component/navigationHistoryItem';
+import React from "react";
+import Button from "component/button";
+import NavigationHistoryItem from "component/navigationHistoryItem";
 
 type HistoryItem = {
-  uri: string,
-  lastViewed: number
+  uri: string;
+  lastViewed: number;
 };
 
 type Props = {
-  history: Array<HistoryItem>
+  history: Array<HistoryItem>;
 };
 
 export default function NavigationHistoryRecent(props: Props) {
@@ -21,7 +21,7 @@ export default function NavigationHistoryRecent(props: Props) {
       ))}
       <div className="card__actions">
         {/* @ts-expect-error - TS2322 (ts-migration) */}
-        <Button navigate="/$/library/all" button="link" label={__('See All Visited Links')} />
+        <Button navigate="/$/library/all" button="link" label={__("See All Visited Links")} />
       </div>
     </div>
   ) : null;

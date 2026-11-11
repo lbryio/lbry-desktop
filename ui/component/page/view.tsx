@@ -1,41 +1,41 @@
-import {MAIN_CLASS} from 'constants/classnames';
-import { parseURI } from 'util/lbryURI';
-import { useHistory } from 'react-router';
-import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
-import classnames from 'classnames';
-import Header from 'component/header';
-import React from 'react';
-import Wallpaper from 'component/wallpaper';
-import SettingsSideNavigation from 'component/settingsSideNavigation';
-import SideNavigation from 'component/sideNavigation';
-import StatusBar from 'component/common/status-bar';
-import usePersistedState from 'effects/use-persisted-state';
+import { MAIN_CLASS } from "constants/classnames";
+import { parseURI } from "util/lbryURI";
+import { useHistory } from "react-router";
+import { useIsMobile, useIsMediumScreen } from "effects/use-screensize";
+import classnames from "classnames";
+import Header from "component/header";
+import React from "react";
+import Wallpaper from "component/wallpaper";
+import SettingsSideNavigation from "component/settingsSideNavigation";
+import SideNavigation from "component/sideNavigation";
+import StatusBar from "component/common/status-bar";
+import usePersistedState from "effects/use-persisted-state";
 // @ts-expect-error - TS2724 - '"react"' has no exported member named 'Element'. Did you mean 'CElement'?
-import type { Element, ReactNode } from 'react';
+import type { Element, ReactNode } from "react";
 
 type Props = {
-// @ts-expect-error - TS2300 - Duplicate identifier 'className'.
-  className: string | null | undefined,
-  autoUpdateDownloaded: boolean,
-  isUpgradeAvailable: boolean,
-  authPage: boolean,
+  // @ts-expect-error - TS2300 - Duplicate identifier 'className'.
+  className: string | null | undefined;
+  autoUpdateDownloaded: boolean;
+  isUpgradeAvailable: boolean;
+  authPage: boolean;
   backout: {
-    backLabel?: string,
-    backNavDefault?: string,
-    title: string,
-    simpleTitle: string // Just use the same value as `title` if `title` is already short (~< 10 chars), unless you have a better idea for title overlfow on mobile
-  },
-  children: React.ReactNode | Array<React.ReactNode>,
-// @ts-expect-error - TS2300 - Duplicate identifier 'className'.
-  className: string | null | undefined,
-  filePage: boolean,
-  fullWidthPage: boolean,
-  isMarkdown?: boolean,
-  noHeader: boolean,
-  noSideNavigation: boolean,
-  rightSide?: Element<any>,
-  settingsPage?: boolean,
-  videoTheaterMode: boolean
+    backLabel?: string;
+    backNavDefault?: string;
+    title: string;
+    simpleTitle: string; // Just use the same value as `title` if `title` is already short (~< 10 chars), unless you have a better idea for title overlfow on mobile
+  };
+  children: React.ReactNode | Array<React.ReactNode>;
+  // @ts-expect-error - TS2300 - Duplicate identifier 'className'.
+  className: string | null | undefined;
+  filePage: boolean;
+  fullWidthPage: boolean;
+  isMarkdown?: boolean;
+  noHeader: boolean;
+  noSideNavigation: boolean;
+  rightSide?: Element<any>;
+  settingsPage?: boolean;
+  videoTheaterMode: boolean;
 };
 
 function Page(props: Props) {
@@ -60,9 +60,9 @@ function Page(props: Props) {
 
   const isMediumScreen = useIsMediumScreen();
   const isMobile = useIsMobile();
-  const [sidebarOpen, setSidebarOpen] = usePersistedState('sidebar', false);
+  const [sidebarOpen, setSidebarOpen] = usePersistedState("sidebar", false);
 
-  const url = pathname.slice(1).replace(/:/g, '#');
+  const url = pathname.slice(1).replace(/:/g, "#");
   let isOnFilePage = false;
   try {
     const { isChannel } = parseURI(url);
@@ -76,7 +76,6 @@ function Page(props: Props) {
     if (isOnFilePage || isMediumScreen) setSidebarOpen(false);
 
     // TODO: make sure setState callback for usePersistedState uses useCallback to it doesn't cause effect to re-run
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOnFilePage, isMediumScreen]);
 
   return (
@@ -93,9 +92,9 @@ function Page(props: Props) {
         />
       )}
       <div
-        className={classnames('main-wrapper__inner', {
-          'main-wrapper__inner--filepage': isOnFilePage,
-          'main-wrapper__inner--theater-mode': isOnFilePage && videoTheaterMode && !isMediumScreen,
+        className={classnames("main-wrapper__inner", {
+          "main-wrapper__inner--filepage": isOnFilePage,
+          "main-wrapper__inner--theater-mode": isOnFilePage && videoTheaterMode && !isMediumScreen,
         })}
       >
         {!authPage &&
@@ -115,20 +114,20 @@ function Page(props: Props) {
 
         <div
           className={classnames({
-            'sidebar--pusher': fullWidthPage,
-            'sidebar--pusher--open': sidebarOpen && fullWidthPage,
-            'sidebar--pusher--filepage': !fullWidthPage,
+            "sidebar--pusher": fullWidthPage,
+            "sidebar--pusher--open": sidebarOpen && fullWidthPage,
+            "sidebar--pusher--filepage": !fullWidthPage,
           })}
         >
           <main
-            id={'main-content'}
+            id={"main-content"}
             className={classnames(MAIN_CLASS, className, {
-              'main--full-width': fullWidthPage,
-              'main--auth-page': authPage,
-              'main--file-page': filePage,
-              'main--settings-page': settingsPage,
-              'main--markdown': isMarkdown,
-              'main--theater-mode': isOnFilePage && videoTheaterMode && !isMediumScreen && !isMarkdown,
+              "main--full-width": fullWidthPage,
+              "main--auth-page": authPage,
+              "main--file-page": filePage,
+              "main--settings-page": settingsPage,
+              "main--markdown": isMarkdown,
+              "main--theater-mode": isOnFilePage && videoTheaterMode && !isMediumScreen && !isMarkdown,
             })}
           >
             {children}

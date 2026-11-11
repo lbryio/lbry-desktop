@@ -1,15 +1,15 @@
-import * as MODALS from 'constants/modal_types';
-import * as ICONS from 'constants/icons';
-import React from 'react';
-import classnames from 'classnames';
-import Button from 'component/button';
+import * as MODALS from "constants/modal_types";
+import * as ICONS from "constants/icons";
+import React from "react";
+import classnames from "classnames";
+import Button from "component/button";
 
 type Props = {
-  uri: string,
-  doOpenModal: (arg1: string, arg2: Record<any, any>) => void,
-  fileAction?: boolean,
-  disableSupport: boolean,
-  claim: GenericClaim
+  uri: string;
+  doOpenModal: (arg1: string, arg2: Record<any, any>) => void;
+  fileAction?: boolean;
+  disableSupport: boolean;
+  claim: GenericClaim;
 };
 
 export default function ClaimSupportButton(props: Props) {
@@ -23,12 +23,12 @@ export default function ClaimSupportButton(props: Props) {
   return (
     <Button
       // @ts-expect-error - TS2322 (ts-migration)
-      button={fileAction ? undefined : 'secondary'}
-      className={classnames({ 'button--file-action': fileAction })}
+      button={fileAction ? undefined : "secondary"}
+      className={classnames({ "button--file-action": fileAction })}
       icon={ICONS.LBC}
       iconSize={fileAction ? 22 : undefined}
-      label={isRepost ? __('Support Repost') : __('Support --[button to support a claim]--')}
-      title={__('Support this claim')}
+      label={isRepost ? __("Support Repost") : __("Support --[button to support a claim]--")}
+      title={__("Support this claim")}
       onClick={() => doOpenModal(MODALS.SEND_TIP, { uri, isSupport: true })}
     />
   );

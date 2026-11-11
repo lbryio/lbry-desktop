@@ -1,7 +1,7 @@
-import type {ReactNode} from 'react';
-import React from 'react';
-import ClaimPreviewTile from 'component/claimPreviewTile';
-import useFetchViewCount from 'effects/use-fetch-view-count';
+import type { ReactNode } from "react";
+import React from "react";
+import ClaimPreviewTile from "component/claimPreviewTile";
+import useFetchViewCount from "effects/use-fetch-view-count";
 
 function urisEqual(prev?: Array<string> | null, next?: Array<string> | null) {
   if (!prev || !next) {
@@ -20,42 +20,42 @@ function urisEqual(prev?: Array<string> | null, next?: Array<string> | null) {
 // ****************************************************************************
 
 type Props = {
-  prefixUris?: Array<string>,
-  pinUrls?: Array<string>,
-  uris: Array<string>,
-  showNoSourceClaims?: boolean,
-  renderProperties?: (arg1: Claim) => React.ReactNode | null | undefined,
-  fetchViewCount?: boolean,
+  prefixUris?: Array<string>;
+  pinUrls?: Array<string>;
+  uris: Array<string>;
+  showNoSourceClaims?: boolean;
+  renderProperties?: (arg1: Claim) => React.ReactNode | null | undefined;
+  fetchViewCount?: boolean;
   // claim search options are below
-  tags: Array<string>,
-  claimIds?: Array<string>,
-  channelIds?: Array<string>,
-  pageSize: number,
-  orderBy?: Array<string>,
-  releaseTime?: string,
-  languages?: Array<string>,
-  claimType?: string | Array<string>,
-  streamTypes?: Array<string>,
-  timestamp?: string,
-  feeAmount?: string,
-  limitClaimsPerChannel?: number,
-  hasSource?: boolean,
-  hasNoSource?: boolean,
+  tags: Array<string>;
+  claimIds?: Array<string>;
+  channelIds?: Array<string>;
+  pageSize: number;
+  orderBy?: Array<string>;
+  releaseTime?: string;
+  languages?: Array<string>;
+  claimType?: string | Array<string>;
+  streamTypes?: Array<string>;
+  timestamp?: string;
+  feeAmount?: string;
+  limitClaimsPerChannel?: number;
+  hasSource?: boolean;
+  hasNoSource?: boolean;
   // --- select ---
   location: {
-    search: string
-  },
-  claimSearchResults: Array<string>,
+    search: string;
+  };
+  claimSearchResults: Array<string>;
   claimsByUri: {
-    [key: string]: any
-  },
-  fetchingClaimSearch: boolean,
-  showNsfw: boolean,
-  hideReposts: boolean,
-  optionsStringified: string,
+    [key: string]: any;
+  };
+  fetchingClaimSearch: boolean;
+  showNsfw: boolean;
+  hideReposts: boolean;
+  optionsStringified: string;
   // --- perform ---
-  doClaimSearch: (arg1: Record<any, any>) => void,
-  doFetchViewCount: (claimIdCsv: string) => void
+  doClaimSearch: (arg1: Record<any, any>) => void;
+  doFetchViewCount: (claimIdCsv: string) => void;
 };
 
 function ClaimTilesDiscover(props: Props) {
@@ -89,13 +89,13 @@ function ClaimTilesDiscover(props: Props) {
   if (uris.length > 0 && uris.length < pageSize && shouldPerformSearch) {
     // prefixUri and pinUrls might already be present while waiting for the
     // remaining claim_search results. Fill the space to prevent layout shifts.
-    uris.push(...Array(pageSize - uris.length).fill(''));
+    uris.push(...Array(pageSize - uris.length).fill(""));
   }
 
   useFetchViewCount(fetchViewCount, uris, claimsByUri, doFetchViewCount);
 
   const finalUris = isUnfetchedClaimSearch && prevUris.current ? prevUris.current : uris;
-// @ts-expect-error - TS2322 - Type 'string[]' is not assignable to type 'undefined'.
+  // @ts-expect-error - TS2322 - Type 'string[]' is not assignable to type 'undefined'.
   prevUris.current = finalUris;
   // Run `doClaimSearch`
   React.useEffect(() => {
@@ -139,7 +139,7 @@ export default React.memo<Props>(ClaimTilesDiscover, areEqual);
 
 function trace(key: unknown, value: unknown) {
   // @if process.env.DEBUG_TILE_RENDER
-  console.log(`[claimTilesDiscover] ${key}: ${value}`); // eslint-disable-line no-console
+  console.log(`[claimTilesDiscover] ${key}: ${value}`);
   // @endif
 }
 
@@ -150,12 +150,12 @@ function areEqual(prev: Props, next: Props) {
   if (prev.claimType !== next.claimType) {
     // Array<string>: confirm the contents are actually different.
     if (prev.claimType && next.claimType && JSON.stringify(prev.claimType) !== JSON.stringify(next.claimType)) {
-      trace('claimType', next.claimType);
+      trace("claimType", next.claimType);
       return false;
     }
   }
 
-  const ARRAY_KEYS = ['prefixUris', 'channelIds'];
+  const ARRAY_KEYS = ["prefixUris", "channelIds"];
   for (let i = 0; i < ARRAY_KEYS.length; ++i) {
     const key = ARRAY_KEYS[i];
     if (!urisEqual(prev[key], next[key])) {
@@ -169,12 +169,12 @@ function areEqual(prev: Props, next: Props) {
   // to update this function. Better to render more than miss an important one.
   const KEYS_TO_IGNORE = [
     ...ARRAY_KEYS,
-    'claimType', // Handled above.
-    'claimsByUri', // Used for view-count. Just ignore it for now.
-    'location',
-    'history',
-    'match',
-    'doClaimSearch',
+    "claimType", // Handled above.
+    "claimsByUri", // Used for view-count. Just ignore it for now.
+    "location",
+    "history",
+    "match",
+    "doClaimSearch",
   ];
 
   const propKeys = Object.keys(next);

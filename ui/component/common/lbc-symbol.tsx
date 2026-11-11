@@ -1,15 +1,15 @@
-import type {ReactNode} from 'react';
-import * as ICONS from 'constants/icons';
-import React from 'react';
-import classnames from 'classnames';
-import Icon from 'component/common/icon';
+import type { ReactNode } from "react";
+import * as ICONS from "constants/icons";
+import React from "react";
+import classnames from "classnames";
+import Icon from "component/common/icon";
 
 type Props = {
-  withText?: boolean,
-  isTitle?: boolean,
-  size?: number,
-  prefix?: string | number | React.ReactNode,
-  postfix?: string | number | React.ReactNode
+  withText?: boolean;
+  isTitle?: boolean;
+  size?: number;
+  prefix?: string | number | React.ReactNode;
+  postfix?: string | number | React.ReactNode;
 };
 
 const LbcSymbol = (props: Props) => {
@@ -20,10 +20,10 @@ const LbcSymbol = (props: Props) => {
       <Icon
         icon={ICONS.LBC}
         size={isTitle ? 22 : size}
-        className={classnames('icon__lbc', {
-          'icon__lbc--before-text': prefix,
-          'icon__lbc--after-text': postfix,
-          'icon__lbc--title': isTitle,
+        className={classnames("icon__lbc", {
+          "icon__lbc--before-text": prefix,
+          "icon__lbc--after-text": postfix,
+          "icon__lbc--title": isTitle,
         })}
       />
       {postfix}

@@ -1,8 +1,8 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doSetLanguage } from 'redux/actions/settings';
-import { selectLanguage } from 'redux/selectors/settings';
-import SettingLanguage from './view';
+import { connect } from "react-redux";
+import { doSetLanguage } from "redux/actions/settings";
+import { selectLanguage } from "redux/selectors/settings";
+import SettingLanguage from "./view";
 
 const select = (state: unknown) => ({
   language: selectLanguage(state),

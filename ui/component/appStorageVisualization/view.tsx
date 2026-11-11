@@ -1,29 +1,29 @@
-import * as React from 'react';
-import I18nMessage from 'component/i18nMessage';
+import * as React from "react";
+import I18nMessage from "component/i18nMessage";
 // @ts-expect-error - TS2792 - Cannot find module 'electron'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-import { ipcRenderer } from 'electron';
+import { ipcRenderer } from "electron";
 
 type Props = {
   // --- select ---
-  diskSpace: DiskSpace // KB,
-  viewHostingLimit: number // MB,
-  autoHostingLimit: number,
-  viewBlobSpace: number,
-  autoBlobSpace: number,
-  privateBlobSpace: number
+  diskSpace: DiskSpace; // KB,
+  viewHostingLimit: number; // MB,
+  autoHostingLimit: number;
+  viewBlobSpace: number;
+  autoBlobSpace: number;
+  privateBlobSpace: number;
 };
 
 function StorageViz(props: Props) {
   const { diskSpace, viewHostingLimit, autoHostingLimit, viewBlobSpace, autoBlobSpace, privateBlobSpace } = props;
   React.useEffect(() => {
-    ipcRenderer.send('get-disk-space');
+    ipcRenderer.send("get-disk-space");
   }, []);
 
   if (!diskSpace || !diskSpace.total) {
     return (
-      <div className={'storage__wrapper'}>
-        <div className={'storage__bar'}>
-          <div className="help">{__('Cannot get disk space information.')}</div>
+      <div className={"storage__wrapper"}>
+        <div className={"storage__bar"}>
+          <div className="help">{__("Cannot get disk space information.")}</div>
         </div>
       </div>
     );
@@ -40,7 +40,7 @@ function StorageViz(props: Props) {
       ? freeMB - (autoHostingLimit - autoBlobSpace) + viewBlobSpace
       : viewHostingLimit + viewBlobSpace;
 
-// @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+  // @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
   const getPercent = (val: unknown, lim = totalMB) => (val / lim) * 100;
   const getGB = (val: unknown) => (Number(val) / 1024).toFixed(2);
 
@@ -52,36 +52,36 @@ function StorageViz(props: Props) {
   const autoUsedPercentOfLimit = getPercent(autoBlobSpace, autoHostingLimit);
 
   return (
-    <div className={'storage__wrapper'}>
-      <div className={'storage__bar'}>
-        <div className={'storage__other'} style={{ width: `${otherPercent}%` }} />
-        <div className={'storage__private'} style={{ width: `${privatePercent}%` }} />
-        <div className={'storage__auto'} style={{ width: `${autoLimitPercent}%` }}>
-          <div className={'storage__auto--used'} style={{ width: `${autoUsedPercentOfLimit}%` }} />
-          <div className={'storage__auto--free'} />
+    <div className={"storage__wrapper"}>
+      <div className={"storage__bar"}>
+        <div className={"storage__other"} style={{ width: `${otherPercent}%` }} />
+        <div className={"storage__private"} style={{ width: `${privatePercent}%` }} />
+        <div className={"storage__auto"} style={{ width: `${autoLimitPercent}%` }}>
+          <div className={"storage__auto--used"} style={{ width: `${autoUsedPercentOfLimit}%` }} />
+          <div className={"storage__auto--free"} />
         </div>
-        <div className={'storage__viewed'} style={{ width: `${viewLimitPercent}%` }}>
-          <div className={'storage__viewed--used'} style={{ width: `${viewUsedPercentOfLimit}%` }} />
-          <div className={'storage__viewed--free'} />
+        <div className={"storage__viewed"} style={{ width: `${viewLimitPercent}%` }}>
+          <div className={"storage__viewed--used"} style={{ width: `${viewUsedPercentOfLimit}%` }} />
+          <div className={"storage__viewed--free"} />
         </div>
         {/* @ts-expect-error - TS2353 (ts-migration) */}
-        {viewHostingLimit !== 0 && <div style={{ 'background-color': 'unset' }} />}
+        {viewHostingLimit !== 0 && <div style={{ "background-color": "unset" }} />}
       </div>
-      <div className={'storage__legend-wrapper'}>
-        <div className={'storage__legend-item'}>
-          <div className={'storage__legend-item-swatch storage__legend-item-swatch--private'} />
-          <div className={'storage__legend-item-label'}>
-            <label>{__('Publishes --[legend, storage category]--')}</label>
-            <div className={'help'}>{`${getGB(privateBlobSpace)} GB`}</div>
+      <div className={"storage__legend-wrapper"}>
+        <div className={"storage__legend-item"}>
+          <div className={"storage__legend-item-swatch storage__legend-item-swatch--private"} />
+          <div className={"storage__legend-item-label"}>
+            <label>{__("Publishes --[legend, storage category]--")}</label>
+            <div className={"help"}>{`${getGB(privateBlobSpace)} GB`}</div>
           </div>
         </div>
-        <div className={'storage__legend-item'}>
-          <div className={'storage__legend-item-swatch storage__legend-item-swatch--auto'} />
-          <div className={'storage__legend-item-label'}>
-            <label>{__('Auto Hosting --[legend, storage category]--')}</label>
-            <div className={'help'}>
+        <div className={"storage__legend-item"}>
+          <div className={"storage__legend-item-swatch storage__legend-item-swatch--auto"} />
+          <div className={"storage__legend-item-label"}>
+            <label>{__("Auto Hosting --[legend, storage category]--")}</label>
+            <div className={"help"}>
               {autoHostingLimit === 0 ? (
-                __('Disabled')
+                __("Disabled")
               ) : (
                 // @ts-expect-error - TS2745 (ts-migration)
                 <I18nMessage
@@ -97,13 +97,13 @@ function StorageViz(props: Props) {
             </div>
           </div>
         </div>
-        <div className={'storage__legend-item'}>
-          <div className={'storage__legend-item-swatch storage__legend-item-swatch--viewed'} />
-          <div className={'storage__legend-item-label'}>
-            <label>{__('View Hosting --[legend, storage category]--')}</label>
-            <div className={'help'}>
+        <div className={"storage__legend-item"}>
+          <div className={"storage__legend-item-swatch storage__legend-item-swatch--viewed"} />
+          <div className={"storage__legend-item-label"}>
+            <label>{__("View Hosting --[legend, storage category]--")}</label>
+            <div className={"help"}>
               {viewHostingLimit === 1 ? (
-                __('Disabled')
+                __("Disabled")
               ) : (
                 // @ts-expect-error - TS2745 (ts-migration)
                 <I18nMessage
@@ -120,11 +120,11 @@ function StorageViz(props: Props) {
           </div>
         </div>
         {viewHostingLimit !== 0 && (
-          <div className={'storage__legend-item'}>
-            <div className={'storage__legend-item-swatch storage__legend-item-swatch--free'} />
-            <div className={'storage__legend-item-label'}>
-              <label>{__('Free --[legend, unused disk space]--')}</label>
-              <div className={'help'}>{`${getGB(unallocFree)} GB`}</div>
+          <div className={"storage__legend-item"}>
+            <div className={"storage__legend-item-swatch storage__legend-item-swatch--free"} />
+            <div className={"storage__legend-item-label"}>
+              <label>{__("Free --[legend, unused disk space]--")}</label>
+              <div className={"help"}>{`${getGB(unallocFree)} GB`}</div>
             </div>
           </div>
         )}

@@ -1,36 +1,36 @@
-import React from 'react';
-import Button from 'component/button';
-import { getSavedPassword } from 'util/saved-passwords';
-import Card from 'component/common/card';
-import { withRouter } from 'react-router';
-import Spinner from 'component/spinner';
-import Lbry from 'lbry';
-import ErrorText from 'component/common/error-text';
-import I18nMessage from 'component/i18nMessage';
+import React from "react";
+import Button from "component/button";
+import { getSavedPassword } from "util/saved-passwords";
+import Card from "component/common/card";
+import { withRouter } from "react-router";
+import Spinner from "component/spinner";
+import Lbry from "lbry";
+import ErrorText from "component/common/error-text";
+import I18nMessage from "component/i18nMessage";
 
 type Props = {
-  setSyncEnabled: (arg1: boolean) => void,
-  syncEnabled: boolean,
-  getSyncError: string | null | undefined,
-  getSyncPending: boolean,
-  getSync: (pw: string, cb: () => void) => void,
-  checkSync: () => void,
-  closeModal: () => void,
-  updatePreferences: () => void,
-  mode: string
+  setSyncEnabled: (arg1: boolean) => void;
+  syncEnabled: boolean;
+  getSyncError: string | null | undefined;
+  getSyncPending: boolean;
+  getSync: (pw: string, cb: () => void) => void;
+  checkSync: () => void;
+  closeModal: () => void;
+  updatePreferences: () => void;
+  mode: string;
 };
 
-const ENABLE_MODE = 'enable';
+const ENABLE_MODE = "enable";
 
 // steps
-const FETCH_FOR_ENABLE = 'fetch-for-enable';
-const FETCH_FOR_DISABLE = 'fetch-for-disable';
-const CONFIRM = 'confirm';
-const INITIAL = 'initial';
-const ERROR = 'error';
+const FETCH_FOR_ENABLE = "fetch-for-enable";
+const FETCH_FOR_DISABLE = "fetch-for-disable";
+const CONFIRM = "confirm";
+const INITIAL = "initial";
+const ERROR = "error";
 
-const SHARED_KEY = 'shared';
-const LOCAL_KEY = 'local';
+const SHARED_KEY = "shared";
+const LOCAL_KEY = "local";
 
 function SyncEnableFlow(props: Props) {
   const { setSyncEnabled, getSyncError, getSyncPending, getSync, checkSync, mode, closeModal, updatePreferences } =
@@ -39,7 +39,7 @@ function SyncEnableFlow(props: Props) {
   const [step, setStep] = React.useState(INITIAL);
   const [prefDict, setPrefDict]: [any, (arg1?: any) => void] = React.useState<any>();
   const [error, setError] = React.useState<any>();
-  const [password, setPassword] = React.useState('');
+  const [password, setPassword] = React.useState("");
 
   const handleSyncToggle = async () => {
     const shared = prefDict.shared;
@@ -65,18 +65,18 @@ function SyncEnableFlow(props: Props) {
   };
 
   const makeMergedPrefs = (alt: unknown, base: unknown) => {
-    let finalPrefs = base;
-// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
-    let baseData = base.value;
-// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
-    let altData = alt.value;
+    const finalPrefs = base;
+    // @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
+    const baseData = base.value;
+    // @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
+    const altData = alt.value;
     if (!altData) {
       return base;
     }
 
-    let mergedBlockListSet = new Set(baseData.blocked || []);
-    let mergedSubscriptionsSet = new Set(baseData.subscriptions || []);
-    let mergedTagsSet = new Set(baseData.tags || []);
+    const mergedBlockListSet = new Set(baseData.blocked || []);
+    const mergedSubscriptionsSet = new Set(baseData.subscriptions || []);
+    const mergedTagsSet = new Set(baseData.tags || []);
 
     const altBlocklist = altData.blocked || [];
     const altSubscriptions = altData.subscriptions || [];
@@ -95,7 +95,7 @@ function SyncEnableFlow(props: Props) {
     baseData.blocked = Array.from(mergedBlockListSet);
     baseData.subscriptions = Array.from(mergedSubscriptionsSet);
     baseData.tags = Array.from(mergedTagsSet);
-// @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'value' does not exist on type 'unknown'.
     finalPrefs.value = baseData;
     return finalPrefs;
   };
@@ -116,7 +116,7 @@ function SyncEnableFlow(props: Props) {
 
   React.useEffect(() => {
     if (step === FETCH_FOR_ENABLE) {
-// @ts-expect-error - TS2345 - Argument of type '(e: any, hasChanged: any) => void' is not assignable to parameter of type '() => void'.
+      // @ts-expect-error - TS2345 - Argument of type '(e: any, hasChanged: any) => void' is not assignable to parameter of type '() => void'.
       getSync(password, (e, hasChanged) => {
         if (e) {
           setStep(ERROR);
@@ -153,7 +153,7 @@ function SyncEnableFlow(props: Props) {
 
   return (
     <Card
-      title={mode === ENABLE_MODE ? 'Enable Sync' : 'Disable Sync'}
+      title={mode === ENABLE_MODE ? "Enable Sync" : "Disable Sync"}
       subtitle={
         <div>
           {(error || getSyncError) && (
@@ -166,7 +166,7 @@ function SyncEnableFlow(props: Props) {
                     // @ts-expect-error - TS2322 (ts-migration)
                     button="link"
                     href="https://lbry.com/faq/accounts-and-sync#limitations"
-                    label={__('Click here')}
+                    label={__("Click here")}
                   />
                 ),
               }}
@@ -198,7 +198,7 @@ function SyncEnableFlow(props: Props) {
           )}
           {(error || getSyncError) && (
             <>
-              <ErrorText>{error || (getSyncError && String(getSyncError)) || __('Unknown error')}</ErrorText>
+              <ErrorText>{error || (getSyncError && String(getSyncError)) || __("Unknown error")}</ErrorText>
             </>
           )}
         </div>
@@ -206,37 +206,37 @@ function SyncEnableFlow(props: Props) {
       actions={
         <>
           {step === CONFIRM && (
-            <div className={'card__actions'}>
+            <div className={"card__actions"}>
               <Button
                 // @ts-expect-error - TS2322 (ts-migration)
                 button="primary"
-                name={'syncbutton'}
-                label={mode === ENABLE_MODE ? __('Enable Sync') : __('Disable Sync')}
+                name={"syncbutton"}
+                label={mode === ENABLE_MODE ? __("Enable Sync") : __("Disable Sync")}
                 onClick={() => handleSyncToggle()}
               />
               {/* @ts-expect-error - TS2322 (ts-migration) */}
-              <Button button="link" name={'cancel'} label={__('Cancel')} onClick={() => closeModal()} />
+              <Button button="link" name={"cancel"} label={__("Cancel")} onClick={() => closeModal()} />
             </div>
           )}
           {(step === FETCH_FOR_ENABLE || step === FETCH_FOR_DISABLE) && (
-            <div className={'card__actions'}>
+            <div className={"card__actions"}>
               <Button
                 // @ts-expect-error - TS2322 (ts-migration)
                 button="primary"
-                name={'syncbutton'}
-                label={mode === ENABLE_MODE ? __('Enable Sync') : __('Disable Sync')}
+                name={"syncbutton"}
+                label={mode === ENABLE_MODE ? __("Enable Sync") : __("Disable Sync")}
                 onClick={() => handleSyncToggle()}
                 disabled
               />
               {/* @ts-expect-error - TS2322 (ts-migration) */}
-              <Button button="link" name={'cancel'} label={__('Cancel')} onClick={() => closeModal()} />
+              <Button button="link" name={"cancel"} label={__("Cancel")} onClick={() => closeModal()} />
             </div>
           )}
           {(error || getSyncError) && (
-            <div className={'card__actions'}>
+            <div className={"card__actions"}>
               {/* @ts-expect-error - TS2322 (ts-migration) */}
-              <Button button="primary" name={'cancel'} label={__('Close')} onClick={() => closeModal()} />
-              <ErrorText>{error || (getSyncError && String(getSyncError)) || __('Unknown error')}</ErrorText>
+              <Button button="primary" name={"cancel"} label={__("Close")} onClick={() => closeModal()} />
+              <ErrorText>{error || (getSyncError && String(getSyncError)) || __("Unknown error")}</ErrorText>
             </div>
           )}
         </>

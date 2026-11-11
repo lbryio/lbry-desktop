@@ -1,21 +1,21 @@
-import React from 'react';
-import Page from 'component/page';
-import { useHistory } from 'react-router';
-import RepostCreate from 'component/repostCreate';
-import YrblWalletEmpty from 'component/yrblWalletEmpty';
-import useThrottle from 'effects/use-throttle';
-import classnames from 'classnames';
+import React from "react";
+import Page from "component/page";
+import { useHistory } from "react-router";
+import RepostCreate from "component/repostCreate";
+import YrblWalletEmpty from "component/yrblWalletEmpty";
+import useThrottle from "effects/use-throttle";
+import classnames from "classnames";
 
 type Props = {
-  balance: number,
-  resolveUri: (arg1: string) => void
+  balance: number;
+  resolveUri: (arg1: string) => void;
 };
 function RepostPage(props: Props) {
   const { balance, resolveUri } = props;
 
-  const REPOST_FROM = 'from';
-  const REPOST_TO = 'to';
-  const REDIRECT = 'redirect';
+  const REPOST_FROM = "from";
+  const REPOST_TO = "to";
+  const REDIRECT = "redirect";
   const {
     location: { search },
   } = useHistory();
@@ -24,8 +24,8 @@ function RepostPage(props: Props) {
   const repostFrom = urlParams.get(REPOST_FROM);
   const redirectUri = urlParams.get(REDIRECT);
   const repostTo = urlParams.get(REPOST_TO);
-  const [contentUri, setContentUri] = React.useState('');
-  const [repostUri, setRepostUri] = React.useState('');
+  const [contentUri, setContentUri] = React.useState("");
+  const [repostUri, setRepostUri] = React.useState("");
   const throttledContentValue = useThrottle(contentUri, 500);
   const throttledRepostValue = useThrottle(repostUri, 500);
 
@@ -54,13 +54,13 @@ function RepostPage(props: Props) {
       noSideNavigation
       // @ts-expect-error - TS2741 (ts-migration)
       backout={{
-        title: __('Repost'),
-        backLabel: __('Back'),
+        title: __("Repost"),
+        backLabel: __("Back"),
       }}
     >
       {/* @ts-expect-error - TS2322, TS2741 (ts-migration) */}
       {balance === 0 && <YrblWalletEmpty />}
-      <div className={classnames({ 'card--disabled': balance === 0 })}>
+      <div className={classnames({ "card--disabled": balance === 0 })}>
         {/* @ts-expect-error - TS2741 (ts-migration) */}
         <RepostCreate
           uri={decodedFrom}

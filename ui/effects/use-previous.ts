@@ -1,5 +1,5 @@
 //@ts-nocheck
-import {useEffect, useRef} from 'react';
+import { useEffect, useRef } from "react";
 
 export default function usePrevious(value: unknown) {
   const ref = useRef();

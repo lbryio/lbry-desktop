@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doOpenModal } from 'redux/actions/app';
-import CollectionAddButton from './view';
-import { makeSelectClaimForUri } from 'redux/selectors/claims';
-import { makeSelectClaimUrlInCollection } from 'redux/selectors/collections';
+import { connect } from "react-redux";
+import { doOpenModal } from "redux/actions/app";
+import CollectionAddButton from "./view";
+import { makeSelectClaimForUri } from "redux/selectors/claims";
+import { makeSelectClaimUrlInCollection } from "redux/selectors/collections";
 
 const select = (state: unknown, props: unknown) => {
   const claim = makeSelectClaimForUri(props.uri)(state);

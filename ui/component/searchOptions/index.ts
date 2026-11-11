@@ -1,10 +1,10 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doUpdateSearchOptions } from 'redux/actions/search';
-import { selectSearchOptions } from 'redux/selectors/search';
-import { doToggleSearchExpanded } from 'redux/actions/app';
-import { selectSearchOptionsExpanded } from 'redux/selectors/app';
-import SearchOptions from './view';
+import { connect } from "react-redux";
+import { doUpdateSearchOptions } from "redux/actions/search";
+import { selectSearchOptions } from "redux/selectors/search";
+import { doToggleSearchExpanded } from "redux/actions/app";
+import { selectSearchOptionsExpanded } from "redux/selectors/app";
+import SearchOptions from "./view";
 
 const select = (state: unknown) => ({
   options: selectSearchOptions(state),

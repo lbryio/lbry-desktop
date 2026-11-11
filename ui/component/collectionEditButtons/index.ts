@@ -1,8 +1,8 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doCollectionEdit } from 'redux/actions/collections';
-import { makeSelectIndexForUrlInCollection, makeSelectUrlsForCollectionId } from 'redux/selectors/collections';
-import CollectionButtons from './view';
+import { connect } from "react-redux";
+import { doCollectionEdit } from "redux/actions/collections";
+import { makeSelectIndexForUrlInCollection, makeSelectUrlsForCollectionId } from "redux/selectors/collections";
+import CollectionButtons from "./view";
 
 const select = (state: unknown, props: unknown) => {
   const { uri, collectionId } = props;

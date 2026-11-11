@@ -1,37 +1,37 @@
-import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
-import React from 'react';
-import * as SETTINGS from 'constants/settings';
-import { Lbryio } from 'lbryinc';
-import { SETTINGS_GRP } from 'constants/settings';
-import Button from 'component/button';
-import Card from 'component/common/card';
-import { FormField, FormFieldPrice } from 'component/common/form';
-import MaxPurchasePrice from 'component/maxPurchasePrice';
-import SettingsRow from 'component/settingsRow';
-import SettingFollowing from 'component/settingFollowing';
+import * as ICONS from "constants/icons";
+import * as PAGES from "constants/pages";
+import React from "react";
+import * as SETTINGS from "constants/settings";
+import { Lbryio } from "lbryinc";
+import { SETTINGS_GRP } from "constants/settings";
+import Button from "component/button";
+import Card from "component/common/card";
+import { FormField, FormFieldPrice } from "component/common/form";
+import MaxPurchasePrice from "component/maxPurchasePrice";
+import SettingsRow from "component/settingsRow";
+import SettingFollowing from "component/settingFollowing";
 
 type Price = {
-  currency: string,
-  amount: number
+  currency: string;
+  amount: number;
 };
 
 type Props = {
   // --- select ---
-  isAuthenticated: boolean,
-  floatingPlayer: boolean,
-  autoplayMedia: boolean,
-  autoplayNext: boolean,
-  hideReposts: boolean | null | undefined,
-  showNsfw: boolean,
-  persistWatchTime: boolean,
-  myChannelUrls: Array<string> | null | undefined,
-  instantPurchaseEnabled: boolean,
-  instantPurchaseMax: Price,
-  enablePublishPreview: boolean,
+  isAuthenticated: boolean;
+  floatingPlayer: boolean;
+  autoplayMedia: boolean;
+  autoplayNext: boolean;
+  hideReposts: boolean | null | undefined;
+  showNsfw: boolean;
+  persistWatchTime: boolean;
+  myChannelUrls: Array<string> | null | undefined;
+  instantPurchaseEnabled: boolean;
+  instantPurchaseMax: Price;
+  enablePublishPreview: boolean;
   // --- perform ---
-  setClientSetting: (arg1: string, arg2: boolean | string | number) => void,
-  clearPlayingUri: () => void
+  setClientSetting: (arg1: string, arg2: boolean | string | number) => void;
+  clearPlayingUri: () => void;
   // clearContentCache: () => void,
 };
 
@@ -57,14 +57,14 @@ export default function SettingContent(props: Props) {
   return (
     <>
       <div className="card__title-section">
-        <h2 className="card__title">{__('Content settings')}</h2>
+        <h2 className="card__title">{__("Content settings")}</h2>
       </div>
       <Card
         id={SETTINGS_GRP.CONTENT}
         isBodyList
         body={
           <>
-            <SettingsRow title={__('Floating video player')} subtitle={__(HELP.FLOATING_PLAYER)}>
+            <SettingsRow title={__("Floating video player")} subtitle={__(HELP.FLOATING_PLAYER)}>
               <FormField
                 type="checkbox"
                 name="floating_player"
@@ -72,53 +72,53 @@ export default function SettingContent(props: Props) {
                   setClientSetting(SETTINGS.FLOATING_PLAYER, !floatingPlayer);
                   clearPlayingUri();
                 }}
-// @ts-expect-error - TS2322 - Type '{ type: string; name: string; onChange: () => void; checked: boolean; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+                // @ts-expect-error - TS2322 - Type '{ type: string; name: string; onChange: () => void; checked: boolean; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 checked={floatingPlayer}
               />
             </SettingsRow>
 
-            <SettingsRow title={__('Autoplay media files')} subtitle={__(HELP.AUTOPLAY_MEDIA)}>
+            <SettingsRow title={__("Autoplay media files")} subtitle={__(HELP.AUTOPLAY_MEDIA)}>
               <FormField
                 type="checkbox"
                 name="autoplay media"
                 onChange={() => setClientSetting(SETTINGS.AUTOPLAY_MEDIA, !autoplayMedia)}
-// @ts-expect-error - TS2322 - Type '{ type: string; name: string; onChange: () => void; checked: boolean; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+                // @ts-expect-error - TS2322 - Type '{ type: string; name: string; onChange: () => void; checked: boolean; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 checked={autoplayMedia}
               />
             </SettingsRow>
 
-            <SettingsRow title={__('Autoplay next recommended content')} subtitle={__(HELP.AUTOPLAY_NEXT)}>
+            <SettingsRow title={__("Autoplay next recommended content")} subtitle={__(HELP.AUTOPLAY_NEXT)}>
               <FormField
                 type="checkbox"
                 name="autoplay next"
                 onChange={() => setClientSetting(SETTINGS.AUTOPLAY_NEXT, !autoplayNext)}
-// @ts-expect-error - TS2322 - Type '{ type: string; name: string; onChange: () => void; checked: boolean; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+                // @ts-expect-error - TS2322 - Type '{ type: string; name: string; onChange: () => void; checked: boolean; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 checked={autoplayNext}
               />
             </SettingsRow>
-            <SettingsRow title={__('Hide reposts')} subtitle={__(HELP.HIDE_REPOSTS)}>
+            <SettingsRow title={__("Hide reposts")} subtitle={__(HELP.HIDE_REPOSTS)}>
               <FormField
                 type="checkbox"
                 name="hide_reposts"
                 onChange={(e) => {
                   if (isAuthenticated) {
-                    let param = e.target.checked ? { add: 'noreposts' } : { remove: 'noreposts' };
+                    const param = e.target.checked ? { add: "noreposts" } : { remove: "noreposts" };
                     // @ts-expect-error - TS2339 (ts-migration)
-                    Lbryio.call('user_tag', 'edit', param);
+                    Lbryio.call("user_tag", "edit", param);
                   }
                   setClientSetting(SETTINGS.HIDE_REPOSTS, !hideReposts);
                 }}
-// @ts-expect-error - TS2322 - Type '{ type: string; name: string; onChange: (e: any) => void; checked: boolean; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+                // @ts-expect-error - TS2322 - Type '{ type: string; name: string; onChange: (e: any) => void; checked: boolean; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 checked={hideReposts}
               />
             </SettingsRow>
-            <SettingsRow title={__('Show Video View Progress')} subtitle={__(HELP.PERSIST_WATCH_TIME)}>
+            <SettingsRow title={__("Show Video View Progress")} subtitle={__(HELP.PERSIST_WATCH_TIME)}>
               {/* <div className="settings__persistWatchTimeCheckbox"> */}
               <FormField
                 type="checkbox"
                 name="persist_watch_time"
                 onChange={() => setClientSetting(SETTINGS.PERSIST_WATCH_TIME, !persistWatchTime)}
-// @ts-expect-error - TS2322 - Type '{ type: string; name: string; onChange: () => void; checked: boolean; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+                // @ts-expect-error - TS2322 - Type '{ type: string; name: string; onChange: () => void; checked: boolean; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 checked={persistWatchTime}
               />
               {/* </div>
@@ -139,87 +139,87 @@ export default function SettingContent(props: Props) {
                />
               </div> */}
             </SettingsRow>
-            <SettingsRow title={__('Show mature content')} subtitle={__(HELP.SHOW_MATURE)}>
+            <SettingsRow title={__("Show mature content")} subtitle={__(HELP.SHOW_MATURE)}>
               <FormField
                 type="checkbox"
                 name="show_nsfw"
-// @ts-expect-error - TS2322 - Type '{ type: string; name: string; checked: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+                // @ts-expect-error - TS2322 - Type '{ type: string; name: string; checked: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 checked={showNsfw}
                 onChange={() => setClientSetting(SETTINGS.SHOW_MATURE, !showNsfw)}
               />
             </SettingsRow>
-            <SettingsRow title={__('Notifications')}>
+            <SettingsRow title={__("Notifications")}>
               <Button
                 // @ts-expect-error - TS2322 (ts-migration)
                 button="inverse"
-                label={__('Manage')}
+                label={__("Manage")}
                 icon={ICONS.ARROW_RIGHT}
                 navigate={`/$/${PAGES.SETTINGS_NOTIFICATIONS}`}
               />
             </SettingsRow>
 
-            <SettingsRow title={__('Blocked and muted channels')}>
+            <SettingsRow title={__("Blocked and muted channels")}>
               <Button
                 // @ts-expect-error - TS2322 (ts-migration)
                 button="inverse"
-                label={__('Manage')}
+                label={__("Manage")}
                 icon={ICONS.ARROW_RIGHT}
                 navigate={`/$/${PAGES.SETTINGS_BLOCKED_MUTED}`}
               />
             </SettingsRow>
 
-            <SettingsRow title={__('Followed channels')} subtitle={__(HELP.FOLLOWING_FILE)} multirow>
+            <SettingsRow title={__("Followed channels")} subtitle={__(HELP.FOLLOWING_FILE)} multirow>
               <SettingFollowing />
             </SettingsRow>
 
             {myChannelUrls && myChannelUrls.length > 0 && (
-              <SettingsRow title={__('Creator settings')}>
+              <SettingsRow title={__("Creator settings")}>
                 <Button
                   // @ts-expect-error - TS2322 (ts-migration)
                   button="inverse"
-                  label={__('Manage')}
+                  label={__("Manage")}
                   icon={ICONS.ARROW_RIGHT}
                   navigate={`/$/${PAGES.SETTINGS_CREATOR}`}
                 />
               </SettingsRow>
             )}
-            <SettingsRow title={__('Publish confirmation')} subtitle={__(HELP.PUBLISH_PREVIEW)}>
+            <SettingsRow title={__("Publish confirmation")} subtitle={__(HELP.PUBLISH_PREVIEW)}>
               <FormField
                 type="checkbox"
                 name="publish_confirmation"
-                label={__('')}
-// @ts-expect-error - TS2322 - Type '{ type: string; name: string; label: string; checked: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+                label={__("")}
+                // @ts-expect-error - TS2322 - Type '{ type: string; name: string; label: string; checked: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 checked={enablePublishPreview}
                 onChange={() => setClientSetting(SETTINGS.ENABLE_PUBLISH_PREVIEW, !enablePublishPreview)}
               />
             </SettingsRow>
-            <SettingsRow title={__('Max purchase price')} subtitle={__(HELP.MAX_PURCHASE_PRICE)} multirow>
+            <SettingsRow title={__("Max purchase price")} subtitle={__(HELP.MAX_PURCHASE_PRICE)} multirow>
               <MaxPurchasePrice />
             </SettingsRow>
-            <SettingsRow title={__('Purchase and tip confirmations')} multirow>
+            <SettingsRow title={__("Purchase and tip confirmations")} multirow>
               <FormField
                 type="radio"
                 name="confirm_all_purchases"
-// @ts-expect-error - TS2322 - Type '{ type: string; name: string; checked: boolean; label: string; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+                // @ts-expect-error - TS2322 - Type '{ type: string; name: string; checked: boolean; label: string; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 checked={!instantPurchaseEnabled}
-                label={__('Always confirm before purchasing content or tipping')}
+                label={__("Always confirm before purchasing content or tipping")}
                 onChange={() => setClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED, false)}
               />
               <FormField
                 type="radio"
                 name="instant_purchases"
-// @ts-expect-error - TS2322 - Type '{ type: string; name: string; checked: boolean; label: string; helper: string; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+                // @ts-expect-error - TS2322 - Type '{ type: string; name: string; checked: boolean; label: string; helper: string; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 checked={instantPurchaseEnabled}
-                label={__('Only confirm purchases or tips over a certain amount')}
+                label={__("Only confirm purchases or tips over a certain amount")}
                 helper={__(HELP.ONLY_CONFIRM_OVER_AMOUNT)}
                 onChange={() => setClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED, true)}
               />
               {instantPurchaseEnabled && (
-// @ts-expect-error - TS2739 - Type '{ name: string; min: number; onChange: (newValue: FormPrice) => void; price: Price; }' is missing the following properties from type 'Readonly<Props>': placeholder, disabled, step
+                // @ts-expect-error - TS2739 - Type '{ name: string; min: number; onChange: (newValue: FormPrice) => void; price: Price; }' is missing the following properties from type 'Readonly<Props>': placeholder, disabled, step
                 <FormFieldPrice
                   name="confirmation_price"
                   min={0.1}
-// @ts-expect-error - TS2345 - Argument of type 'FormPrice' is not assignable to parameter of type 'string | number | boolean'.
+                  // @ts-expect-error - TS2345 - Argument of type 'FormPrice' is not assignable to parameter of type 'string | number | boolean'.
                   onChange={(newValue) => setClientSetting(SETTINGS.INSTANT_PURCHASE_MAX, newValue)}
                   price={instantPurchaseMax}
                 />

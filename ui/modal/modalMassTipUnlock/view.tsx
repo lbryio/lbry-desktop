@@ -1,20 +1,20 @@
-import * as ICONS from 'constants/icons';
-import React from 'react';
-import { Modal } from 'modal/modal';
-import I18nMessage from 'component/i18nMessage';
-import Button from 'component/button';
-import LbcSymbol from 'component/common/lbc-symbol';
-import Card from 'component/common/card';
-import { WALLET_CONSOLIDATE_UTXOS } from 'component/walletBalance/view';
+import * as ICONS from "constants/icons";
+import React from "react";
+import { Modal } from "modal/modal";
+import I18nMessage from "component/i18nMessage";
+import Button from "component/button";
+import LbcSymbol from "component/common/lbc-symbol";
+import Card from "component/common/card";
+import { WALLET_CONSOLIDATE_UTXOS } from "component/walletBalance/view";
 
 type Props = {
-  doHideModal: () => void,
-  tipsBalance: number,
-  doTipClaimMass: () => void,
-  massClaimingTips: boolean,
+  doHideModal: () => void;
+  tipsBalance: number;
+  doTipClaimMass: () => void;
+  massClaimingTips: boolean;
   utxoCounts: {
-    [key: string]: number
-  }
+    [key: string]: number;
+  };
 };
 
 export default function ModalSupportsLiquidate(props: Props) {
@@ -28,11 +28,11 @@ export default function ModalSupportsLiquidate(props: Props) {
   }, [tipsBalance, doHideModal]);
 
   return (
-// @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; contentLabel: string; type: string; confirmButtonLabel: string; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
-    <Modal isOpen contentLabel={__('Unlock all tips')} type="card" confirmButtonLabel="done" onAborted={doHideModal}>
+    // @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; contentLabel: string; type: string; confirmButtonLabel: string; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
+    <Modal isOpen contentLabel={__("Unlock all tips")} type="card" confirmButtonLabel="done" onAborted={doHideModal}>
       <Card
         icon={ICONS.UNLOCK}
-        title={__('Unlock all tips')}
+        title={__("Unlock all tips")}
         subtitle={
           <>
             <p>
@@ -52,7 +52,7 @@ export default function ModalSupportsLiquidate(props: Props) {
                 // @ts-expect-error - TS2322 (ts-migration)
                 tokens={{
                   // @ts-expect-error - TS2322 (ts-migration)
-                  learn_more: <Button button="link" label={__('Learn More')} href="https://lbry.com/faq/tipping" />,
+                  learn_more: <Button button="link" label={__("Learn More")} href="https://lbry.com/faq/tipping" />,
                 }}
               >
                 It's usually only worth unlocking what you intend to use immediately. %learn_more%
@@ -68,11 +68,11 @@ export default function ModalSupportsLiquidate(props: Props) {
                 button="primary"
                 onClick={() => doTipClaimMass()}
                 disabled={massClaimingTips}
-                label={massClaimingTips ? __('Working...') : __('Unlock All')}
+                label={massClaimingTips ? __("Working...") : __("Unlock All")}
               />
             </div>
             {supportCount > WALLET_CONSOLIDATE_UTXOS && (
-              <span className="help">{__('You have a lot of tips. This could take some time.')}</span>
+              <span className="help">{__("You have a lot of tips. This could take some time.")}</span>
             )}
           </>
         }

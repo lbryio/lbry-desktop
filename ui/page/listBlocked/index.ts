@@ -1,7 +1,7 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doFetchModBlockedList, doFetchCommentModAmIList } from 'redux/actions/comments';
-import { selectMutedChannels } from 'redux/selectors/blocked';
+import { connect } from "react-redux";
+import { doFetchModBlockedList, doFetchCommentModAmIList } from "redux/actions/comments";
+import { selectMutedChannels } from "redux/selectors/blocked";
 import {
   selectModerationBlockList,
   selectAdminBlockList,
@@ -12,9 +12,9 @@ import {
   selectAdminTimeoutMap,
   selectModeratorTimeoutMap,
   selectPersonalTimeoutMap,
-} from 'redux/selectors/comments';
-import { selectMyChannelClaimIds } from 'redux/selectors/claims';
-import ListBlocked from './view';
+} from "redux/selectors/comments";
+import { selectMyChannelClaimIds } from "redux/selectors/claims";
+import ListBlocked from "./view";
 
 const select = (state: unknown) => ({
   mutedUris: selectMutedChannels(state),

@@ -1,5 +1,5 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import {
   selectEmailNewErrorMessage,
   selectEmailToVerify,
@@ -7,10 +7,10 @@ import {
   selectEmailAlreadyExists,
   selectUser,
   selectEmailNewIsPending,
-} from 'redux/selectors/user';
-import { doUserCheckIfEmailExists, doClearEmailEntry } from 'redux/actions/user';
-import { doSetWalletSyncPreference } from 'redux/actions/settings';
-import UserEmailReturning from './view';
+} from "redux/selectors/user";
+import { doUserCheckIfEmailExists, doClearEmailEntry } from "redux/actions/user";
+import { doSetWalletSyncPreference } from "redux/actions/settings";
+import UserEmailReturning from "./view";
 
 const select = (state: unknown) => ({
   errorMessage: selectEmailNewErrorMessage(state),

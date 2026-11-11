@@ -1,12 +1,10 @@
-import {createSelector} from 'reselect';
-import { splitBySeparator } from 'util/lbryURI';
+import { createSelector } from "reselect";
+import { splitBySeparator } from "util/lbryURI";
 
-const selectState = (state: {
-  blocked: BlocklistState
-}) => state.blocked || {};
+const selectState = (state: { blocked: BlocklistState }) => state.blocked || {};
 
 export const selectMutedChannels = createSelector(selectState, (state: BlocklistState) => {
-  return state.blockedChannels.filter((e) => typeof e === 'string');
+  return state.blockedChannels.filter((e) => typeof e === "string");
 });
 
 export const makeSelectChannelIsMuted = (uri: string) =>

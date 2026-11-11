@@ -1,108 +1,109 @@
-import * as MODALS from 'constants/modal_types';
-import * as ACTIONS from 'constants/action_types';
-import * as PAGES from 'constants/pages';
-import { batchActions } from 'util/batch-actions';
-import { doCheckPendingClaims } from 'redux/actions/claims';
-import { selectMyClaims, selectMyChannelClaims, selectReflectingById } from 'redux/selectors/claims';
-import { selectPublishFormValues, selectMyClaimForUri } from 'redux/selectors/publish';
-import { doError } from 'redux/actions/notifications';
-import { push } from 'connected-react-router';
-import analytics from 'analytics';
-import { doOpenModal } from 'redux/actions/app';
-import { CC_LICENSES, COPYRIGHT, OTHER, NONE, PUBLIC_DOMAIN } from 'constants/licenses';
-import { uploadImage } from 'util/upload-image';
-import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
-import { creditsToString } from 'util/format-credits';
-import Lbry from 'lbry';
-import { isClaimNsfw } from 'util/claim';
+import * as MODALS from "constants/modal_types";
+import * as ACTIONS from "constants/action_types";
+import * as PAGES from "constants/pages";
+import { batchActions } from "util/batch-actions";
+import { doCheckPendingClaims } from "redux/actions/claims";
+import { selectMyClaims, selectMyChannelClaims, selectReflectingById } from "redux/selectors/claims";
+import { selectPublishFormValues, selectMyClaimForUri } from "redux/selectors/publish";
+import { doError } from "redux/actions/notifications";
+import { push } from "connected-react-router";
+import analytics from "analytics";
+import { doOpenModal } from "redux/actions/app";
+import { CC_LICENSES, COPYRIGHT, OTHER, NONE, PUBLIC_DOMAIN } from "constants/licenses";
+import { uploadImage } from "util/upload-image";
+import * as THUMBNAIL_STATUSES from "constants/thumbnail_upload_statuses";
+import { creditsToString } from "util/format-credits";
+import Lbry from "lbry";
+import { isClaimNsfw } from "util/claim";
 
-export const NO_FILE = '---';
-export const doPublishDesktop = (filePath?: File | null, preview?: boolean) => (dispatch: Dispatch, getState: () => Record<any, any>) => {
-  const publishPreview = (previewResponse: unknown) => {
-    dispatch(
-      doOpenModal(MODALS.PUBLISH_PREVIEW, {
-        previewResponse,
-      })
-    );
+export const NO_FILE = "---";
+export const doPublishDesktop =
+  (filePath?: File | null, preview?: boolean) => (dispatch: Dispatch, getState: () => Record<any, any>) => {
+    const publishPreview = (previewResponse: unknown) => {
+      dispatch(
+        doOpenModal(MODALS.PUBLISH_PREVIEW, {
+          previewResponse,
+        })
+      );
+    };
+
+    const publishSuccess = (successResponse: unknown, lbryFirstError: unknown) => {
+      const state = getState();
+      // @ts-expect-error - TS2741 (ts-migration)
+      const myClaims = selectMyClaims(state);
+      // @ts-expect-error - TS2339 - Property 'outputs' does not exist on type 'unknown'.
+      const pendingClaim = successResponse.outputs[0];
+      analytics.apiLogPublish(pendingClaim);
+      const { permanent_url: url } = pendingClaim;
+      const actions: unknown = [];
+
+      // @if TARGET='app'
+      // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+      actions.push(push(`/$/${PAGES.UPLOADS}`));
+      // @endif
+
+      // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+      actions.push({
+        type: ACTIONS.PUBLISH_SUCCESS,
+      });
+
+      // We have to fake a temp claim until the new pending one is returned by claim_list_mine
+      // We can't rely on claim_list_mine because there might be some delay before the new claims are returned
+      // Doing this allows us to show the pending claim immediately, it will get overwritten by the real one
+      // @ts-expect-error - TS2339 - Property 'claim_id' does not exist on type 'unknown'.
+      const isMatch = (claim: unknown) => claim.claim_id === pendingClaim.claim_id;
+      const isEdit = myClaims.some(isMatch);
+
+      // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+      actions.push({
+        type: ACTIONS.UPDATE_PENDING_CLAIMS,
+        data: {
+          claims: [pendingClaim],
+        },
+      });
+      // @if TARGET='app'
+      // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+      actions.push({
+        type: ACTIONS.ADD_FILES_REFLECTING,
+        data: pendingClaim,
+      });
+      // @endif
+
+      // @ts-expect-error - TS2488 - Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
+      dispatch(batchActions(...actions));
+      dispatch(
+        doOpenModal(MODALS.PUBLISH, {
+          uri: url,
+          isEdit,
+          filePath,
+          lbryFirstError,
+        })
+      );
+      // @ts-expect-error - TS2554 - Expected 1 arguments, but got 0.
+      dispatch(doCheckPendingClaims());
+      dispatch(doCheckReflectingFiles());
+    };
+
+    const publishFail = (error: unknown) => {
+      const actions: unknown = [];
+      // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+      actions.push({
+        type: ACTIONS.PUBLISH_FAIL,
+      });
+      // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'. | TS2339 - Property 'message' does not exist on type 'unknown'.
+      actions.push(doError(error.message));
+      // @ts-expect-error - TS2488 - Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
+      dispatch(batchActions(...actions));
+    };
+
+    if (preview) {
+      dispatch(doPublish(publishSuccess, publishFail, publishPreview));
+      return;
+    }
+
+    // @ts-expect-error - TS2554 - Expected 3 arguments, but got 2.
+    dispatch(doPublish(publishSuccess, publishFail));
   };
-
-  const publishSuccess = (successResponse: unknown, lbryFirstError: unknown) => {
-    const state = getState();
-    // @ts-expect-error - TS2741 (ts-migration)
-    const myClaims = selectMyClaims(state);
-// @ts-expect-error - TS2339 - Property 'outputs' does not exist on type 'unknown'.
-    const pendingClaim = successResponse.outputs[0];
-    analytics.apiLogPublish(pendingClaim);
-    const { permanent_url: url } = pendingClaim;
-    const actions: unknown = [];
-
-    // @if TARGET='app'
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
-    actions.push(push(`/$/${PAGES.UPLOADS}`));
-    // @endif
-
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
-    actions.push({
-      type: ACTIONS.PUBLISH_SUCCESS,
-    });
-
-    // We have to fake a temp claim until the new pending one is returned by claim_list_mine
-    // We can't rely on claim_list_mine because there might be some delay before the new claims are returned
-    // Doing this allows us to show the pending claim immediately, it will get overwritten by the real one
-// @ts-expect-error - TS2339 - Property 'claim_id' does not exist on type 'unknown'.
-    const isMatch = (claim: unknown) => claim.claim_id === pendingClaim.claim_id;
-    const isEdit = myClaims.some(isMatch);
-
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
-    actions.push({
-      type: ACTIONS.UPDATE_PENDING_CLAIMS,
-      data: {
-        claims: [pendingClaim],
-      },
-    });
-    // @if TARGET='app'
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
-    actions.push({
-      type: ACTIONS.ADD_FILES_REFLECTING,
-      data: pendingClaim,
-    });
-    // @endif
-
-// @ts-expect-error - TS2488 - Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
-    dispatch(batchActions(...actions));
-    dispatch(
-      doOpenModal(MODALS.PUBLISH, {
-        uri: url,
-        isEdit,
-        filePath,
-        lbryFirstError,
-      })
-    );
-// @ts-expect-error - TS2554 - Expected 1 arguments, but got 0.
-    dispatch(doCheckPendingClaims());
-    dispatch(doCheckReflectingFiles());
-  };
-
-  const publishFail = (error: unknown) => {
-    const actions: unknown = [];
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
-    actions.push({
-      type: ACTIONS.PUBLISH_FAIL,
-    });
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'. | TS2339 - Property 'message' does not exist on type 'unknown'.
-    actions.push(doError(error.message));
-// @ts-expect-error - TS2488 - Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
-    dispatch(batchActions(...actions));
-  };
-
-  if (preview) {
-    dispatch(doPublish(publishSuccess, publishFail, publishPreview));
-    return;
-  }
-
-// @ts-expect-error - TS2554 - Expected 3 arguments, but got 2.
-  dispatch(doPublish(publishSuccess, publishFail));
-};
 
 // The upload service has no status endpoint (spee.ch had one), so assume it's up: a failed upload
 // says so, and the "Enter a thumbnail URL" option is always there.
@@ -110,10 +111,10 @@ export const doResetThumbnailStatus = () => (dispatch: Dispatch) =>
   dispatch({
     type: ACTIONS.UPDATE_PUBLISH_FORM,
     data: {
-      thumbnailPath: '',
+      thumbnailPath: "",
       thumbnailError: undefined,
       uploadThumbnailStatus: THUMBNAIL_STATUSES.READY,
-      thumbnail: '',
+      thumbnail: "",
     },
   });
 
@@ -131,17 +132,17 @@ export const doUpdatePublishForm = (publishFormValue: UpdatePublishFormData) => 
 export const doUploadThumbnail =
   (filePath?: string, thumbnailBlob?: File, fsAdapter?: any, fs?: any, path?: any, cb?: (arg1: string) => void) =>
   (dispatch: Dispatch) => {
-    const downMessage = __('Thumbnail upload service may be down, try again later.');
+    const downMessage = __("Thumbnail upload service may be down, try again later.");
     let thumbnail, fileExt, fileName, fileType;
 
-    const uploadError = (error = '') => {
+    const uploadError = (error = "") => {
       dispatch(
         batchActions(
           {
             type: ACTIONS.UPDATE_PUBLISH_FORM,
             data: {
               uploadThumbnailStatus: THUMBNAIL_STATUSES.READY,
-              thumbnail: '',
+              thumbnail: "",
               nsfw: false,
             },
           },
@@ -175,11 +176,11 @@ export const doUploadThumbnail =
           let message = err.message;
 
           // This sucks but ¯\_(ツ)_/¯
-          if (message === 'Failed to fetch') {
+          if (message === "Failed to fetch") {
             message = downMessage;
           }
           const userInput = [fileName, fileExt, fileType];
-          uploadError(`${message}\nUser input:  ${userInput.join(', ')}`);
+          uploadError(`${message}\nUser input:  ${userInput.join(", ")}`);
         });
 
     dispatch({
@@ -189,11 +190,11 @@ export const doUploadThumbnail =
 
     if (fsAdapter && fsAdapter.readFile && filePath) {
       const localPath = filePath;
-      fsAdapter.readFile(localPath, 'base64').then((base64Image) => {
-        fileExt = 'png';
-        fileName = 'thumbnail.png';
-        fileType = 'image/png';
-        return doUpload({ uri: 'file://' + localPath, type: fileType, name: fileName });
+      fsAdapter.readFile(localPath, "base64").then((base64Image) => {
+        fileExt = "png";
+        fileName = "thumbnail.png";
+        fileType = "image/png";
+        return doUpload({ uri: "file://" + localPath, type: fileType, name: fileName });
       });
     } else {
       if (filePath && fs && path) {
@@ -202,7 +203,7 @@ export const doUploadThumbnail =
         fileName = path.basename(filePath);
         fileType = `image/${fileExt.slice(1)}`;
       } else if (thumbnailBlob) {
-        fileExt = `.${thumbnailBlob.type && thumbnailBlob.type.split('/')[1]}`;
+        fileExt = `.${thumbnailBlob.type && thumbnailBlob.type.split("/")[1]}`;
         fileName = thumbnailBlob.name;
         fileType = thumbnailBlob.type;
       } else {
@@ -219,38 +220,38 @@ export const doPrepareEdit =
     const { name, amount, value = {} } = claim;
     const channelName = (claim && claim.signing_channel && claim.signing_channel.name) || null;
     const {
-// @ts-expect-error - TS2339 - Property 'author' does not exist on type '{}'.
+      // @ts-expect-error - TS2339 - Property 'author' does not exist on type '{}'.
       author,
-// @ts-expect-error - TS2339 - Property 'description' does not exist on type '{}'.
+      // @ts-expect-error - TS2339 - Property 'description' does not exist on type '{}'.
       description,
       // use same values as default state
       // fee will be undefined for free content
-// @ts-expect-error - TS2339 - Property 'fee' does not exist on type '{}'.
+      // @ts-expect-error - TS2339 - Property 'fee' does not exist on type '{}'.
       fee = {
-        amount: '0',
-        currency: 'LBC',
+        amount: "0",
+        currency: "LBC",
       },
-// @ts-expect-error - TS2339 - Property 'languages' does not exist on type '{}'.
+      // @ts-expect-error - TS2339 - Property 'languages' does not exist on type '{}'.
       languages,
-// @ts-expect-error - TS2339 - Property 'release_time' does not exist on type '{}'.
+      // @ts-expect-error - TS2339 - Property 'release_time' does not exist on type '{}'.
       release_time,
-// @ts-expect-error - TS2339 - Property 'license' does not exist on type '{}'.
+      // @ts-expect-error - TS2339 - Property 'license' does not exist on type '{}'.
       license,
-// @ts-expect-error - TS2339 - Property 'license_url' does not exist on type '{}'.
+      // @ts-expect-error - TS2339 - Property 'license_url' does not exist on type '{}'.
       license_url: licenseUrl,
-// @ts-expect-error - TS2339 - Property 'thumbnail' does not exist on type '{}'.
+      // @ts-expect-error - TS2339 - Property 'thumbnail' does not exist on type '{}'.
       thumbnail,
-// @ts-expect-error - TS2339 - Property 'title' does not exist on type '{}'.
+      // @ts-expect-error - TS2339 - Property 'title' does not exist on type '{}'.
       title,
-// @ts-expect-error - TS2339 - Property 'tags' does not exist on type '{}'.
+      // @ts-expect-error - TS2339 - Property 'tags' does not exist on type '{}'.
       tags,
     } = value;
 
     const publishData: UpdatePublishFormData = {
       name,
       bid: Number(amount),
-      contentIsFree: fee.amount === '0',
-// @ts-expect-error - TS2322 - Type '{ name: string; bid: number; contentIsFree: boolean; author: any; description: any; fee: any; languages: any; releaseTime: any; releaseTimeEdited: undefined; thumbnail: any; title: any; uri: string; uploadThumbnailStatus: string; licenseUrl: any; nsfw: boolean; tags: any; }' is not assignable to type 'UpdatePublishFormData'.
+      contentIsFree: fee.amount === "0",
+      // @ts-expect-error - TS2322 - Type '{ name: string; bid: number; contentIsFree: boolean; author: any; description: any; fee: any; languages: any; releaseTime: any; releaseTimeEdited: undefined; thumbnail: any; title: any; uri: string; uploadThumbnailStatus: string; licenseUrl: any; nsfw: boolean; tags: any; }' is not assignable to type 'UpdatePublishFormData'.
       author,
       description,
       fee,
@@ -282,14 +283,15 @@ export const doPrepareEdit =
       publishData.licenseType = license;
     }
     if (channelName) {
-      publishData['channel'] = channelName;
+      publishData["channel"] = channelName;
     }
 
     dispatch({ type: ACTIONS.DO_PREPARE_EDIT, data: publishData });
   };
 
 export const doPublish =
-  (success: (...args: any) => any, fail: (...args: any) => any, preview: (...args: any) => any) => (dispatch: Dispatch, getState: () => Record<any, any>) => {
+  (success: (...args: any) => any, fail: (...args: any) => any, preview: (...args: any) => any) =>
+  (dispatch: Dispatch, getState: () => Record<any, any>) => {
     if (!preview) {
       dispatch({ type: ACTIONS.PUBLISH_START });
     }
@@ -339,30 +341,30 @@ export const doPublish =
 
     // get the claim id from the channel name, we will use that instead
     const namedChannelClaim = myChannels ? myChannels.find((myChannel) => myChannel.name === channel) : null;
-    const channelId = namedChannelClaim ? namedChannelClaim.claim_id : '';
+    const channelId = namedChannelClaim ? namedChannelClaim.claim_id : "";
 
     const publishPayload: {
-      name: string | null | undefined,
-      bid: string,
-      description?: string,
-      channel_id?: string,
-      file_path?: string,
-      license_url?: string,
-      license?: string,
-      thumbnail_url?: string,
-      release_time?: number,
-      fee_currency?: string,
-      fee_amount?: string,
-      languages?: Array<string>,
-      tags: Array<string>,
-      locations?: Array<any>,
-      blocking: boolean,
-      optimize_file?: boolean,
-      preview?: boolean,
-      remote_url?: string
+      name: string | null | undefined;
+      bid: string;
+      description?: string;
+      channel_id?: string;
+      file_path?: string;
+      license_url?: string;
+      license?: string;
+      thumbnail_url?: string;
+      release_time?: number;
+      fee_currency?: string;
+      fee_amount?: string;
+      languages?: Array<string>;
+      tags: Array<string>;
+      locations?: Array<any>;
+      blocking: boolean;
+      optimize_file?: boolean;
+      preview?: boolean;
+      remote_url?: string;
     } = {
       name,
-// @ts-expect-error - TS2322 - Type '{ name: any; title: any; description: any; locations: undefined[]; bid: string; languages: any[]; tags: any; thumbnail_url: any; blocking: true; preview: false; }' is not assignable to type '{ name: string; bid: string; description?: string; channel_id?: string; file_path?: string; license_url?: string; license?: string; thumbnail_url?: string; release_time?: number; fee_currency?: string; ... 7 more ...; remote_url?: string; }'.
+      // @ts-expect-error - TS2322 - Type '{ name: any; title: any; description: any; locations: undefined[]; bid: string; languages: any[]; tags: any; thumbnail_url: any; blocking: true; preview: false; }' is not assignable to type '{ name: string; bid: string; description?: string; channel_id?: string; file_path?: string; license_url?: string; license?: string; thumbnail_url?: string; release_time?: number; fee_currency?: string; ... 7 more ...; remote_url?: string; }'.
       title,
       description,
       locations: [],
@@ -389,7 +391,7 @@ export const doPublish =
     }
 
     if (useLBRYUploader) {
-      publishPayload.tags.push('lbry-first');
+      publishPayload.tags.push("lbry-first");
     }
 
     // Set release time to curret date. On edits, keep original release/transaction time as release_time
@@ -454,17 +456,17 @@ export const doCheckReflectingFiles = () => (dispatch: Dispatch, getState: GetSt
     // TODO: just use file_list({claim_id: Array<claimId>})
     if (Object.keys(reflectingById).length) {
       ids.forEach((claimId) => {
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+        // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
         promises.push(Lbry.file_list({ claim_id: claimId }));
       });
 
-// @ts-expect-error - TS2769 - No overload matches this call.
+      // @ts-expect-error - TS2769 - No overload matches this call.
       Promise.all(promises)
         .then((results) => {
           results.forEach((res) => {
-// @ts-expect-error - TS2339 - Property 'items' does not exist on type 'unknown'.
+            // @ts-expect-error - TS2339 - Property 'items' does not exist on type 'unknown'.
             if (res.items[0]) {
-// @ts-expect-error - TS2339 - Property 'items' does not exist on type 'unknown'.
+              // @ts-expect-error - TS2339 - Property 'items' does not exist on type 'unknown'.
               const fileListItem = res.items[0];
               const fileClaimId = fileListItem.claim_id;
               const {

@@ -1,26 +1,26 @@
-import * as ACTIONS from 'constants/action_types';
-import * as SETTINGS from 'constants/settings';
-import * as SHARED_PREFERENCES from 'constants/shared_preferences';
-import { Lbryio } from 'lbryinc';
-import Lbry from 'lbry';
-import { doWalletEncrypt, doWalletDecrypt } from 'redux/actions/wallet';
+import * as ACTIONS from "constants/action_types";
+import * as SETTINGS from "constants/settings";
+import * as SHARED_PREFERENCES from "constants/shared_preferences";
+import { Lbryio } from "lbryinc";
+import Lbry from "lbry";
+import { doWalletEncrypt, doWalletDecrypt } from "redux/actions/wallet";
 import {
   selectSyncHash,
   selectGetSyncIsPending,
   selectSetSyncIsPending,
   selectSyncIsLocked,
-} from 'redux/selectors/sync';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { getSavedPassword } from 'util/saved-passwords';
-import { doAnalyticsTagSync, doHandleSyncComplete } from 'redux/actions/app';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
-import Comments from 'comments';
-import { getSubsetFromKeysArray } from 'util/sync-settings';
+} from "redux/selectors/sync";
+import { makeSelectClientSetting } from "redux/selectors/settings";
+import { getSavedPassword } from "util/saved-passwords";
+import { doAnalyticsTagSync, doHandleSyncComplete } from "redux/actions/app";
+import { selectUserVerifiedEmail } from "redux/selectors/user";
+import Comments from "comments";
+import { getSubsetFromKeysArray } from "util/sync-settings";
 
 let syncTimer = null;
 const SYNC_INTERVAL = 1000 * 60 * 5; // 5 minutes
-const NO_WALLET_ERROR = 'no wallet found for this user';
-const BAD_PASSWORD_ERROR_NAME = 'InvalidPasswordError';
+const NO_WALLET_ERROR = "no wallet found for this user";
+const BAD_PASSWORD_ERROR_NAME = "InvalidPasswordError";
 const { CLIENT_SYNC_KEYS } = SHARED_PREFERENCES;
 export function doSetDefaultAccount(success: () => void, failure: (arg1: string) => void) {
   return (dispatch: Dispatch) => {
@@ -60,7 +60,7 @@ export function doSetDefaultAccount(success: () => void, failure: (arg1: string)
             });
         } else if (failure) {
           // no default account to set
-          failure('Could not set a default account'); // fail
+          failure("Could not set a default account"); // fail
         }
       })
       .catch((err) => {
@@ -78,10 +78,10 @@ export function doSetSync(oldHash: string, newHash: string, data: any) {
     });
 
     // @ts-expect-error - TS2339 (ts-migration)
-    return Lbryio.call('sync', 'set', { old_hash: oldHash, new_hash: newHash, data }, 'post')
+    return Lbryio.call("sync", "set", { old_hash: oldHash, new_hash: newHash, data }, "post")
       .then((response) => {
         if (!response.hash) {
-          throw Error('No hash returned for sync/set.');
+          throw Error("No hash returned for sync/set.");
         }
 
         return dispatch({
@@ -107,7 +107,7 @@ export const doGetSyncDesktop =
     const syncLocked = selectSyncIsLocked(state);
 
     return getSavedPassword().then((savedPassword) => {
-      const passwordArgument = password || password === '' ? password : savedPassword === null ? '' : savedPassword;
+      const passwordArgument = password || password === "" ? password : savedPassword === null ? "" : savedPassword;
 
       if (syncEnabled && !getSyncPending && !setSyncPending && !syncLocked) {
         return dispatch(doGetSync(passwordArgument, cb));
@@ -148,15 +148,15 @@ export function doSyncUnsubscribe() {
 }
 
 export function doGetSync(passedPassword?: string, callback?: (arg1?: any, arg2?: boolean | null | undefined) => void) {
-  const password = passedPassword === null || passedPassword === undefined ? '' : passedPassword;
+  const password = passedPassword === null || passedPassword === undefined ? "" : passedPassword;
 
   function handleCallback(error: unknown, hasNewData: unknown) {
     if (callback) {
-      if (typeof callback !== 'function') {
+      if (typeof callback !== "function") {
         throw new Error('Second argument passed to "doGetSync" must be a function');
       }
 
-// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'boolean'.
+      // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'boolean'.
       callback(error, hasNewData);
     }
   }
@@ -187,7 +187,7 @@ export function doGetSync(passedPassword?: string, callback?: (arg1?: any, arg2?
         throw new Error();
       })
       // @ts-expect-error - TS2339 (ts-migration)
-      .then((hash?: string) => Lbryio.call('sync', 'get', { hash }, 'post'))
+      .then((hash?: string) => Lbryio.call("sync", "get", { hash }, "post"))
       .then((response: any) => {
         const syncHash = response.hash;
         data.syncHash = syncHash;
@@ -227,10 +227,10 @@ export function doGetSync(passedPassword?: string, callback?: (arg1?: any, arg2?
             dispatch({ type: ACTIONS.SYNC_APPLY_BAD_PASSWORD });
           }
 
-// @ts-expect-error - TS2554 - Expected 2 arguments, but got 1.
+          // @ts-expect-error - TS2554 - Expected 2 arguments, but got 1.
           handleCallback(syncAttemptError);
         } else if (data.hasSyncedWallet) {
-          const error = (syncAttemptError && syncAttemptError.message) || 'Error getting synced wallet';
+          const error = (syncAttemptError && syncAttemptError.message) || "Error getting synced wallet";
           dispatch({
             type: ACTIONS.GET_SYNC_FAILED,
             data: {
@@ -242,7 +242,7 @@ export function doGetSync(passedPassword?: string, callback?: (arg1?: any, arg2?
             dispatch({ type: ACTIONS.SYNC_APPLY_BAD_PASSWORD });
           }
 
-// @ts-expect-error - TS2554 - Expected 2 arguments, but got 1.
+          // @ts-expect-error - TS2554 - Expected 2 arguments, but got 1.
           handleCallback(error);
         } else {
           const noWalletError = syncAttemptError && syncAttemptError.message === NO_WALLET_ERROR;
@@ -263,12 +263,12 @@ export function doGetSync(passedPassword?: string, callback?: (arg1?: any, arg2?
           if (noWalletError) {
             Lbry.sync_apply({ password })
               .then(({ hash: walletHash, data: syncApplyData }) => {
-                dispatch(doSetSync('', walletHash, syncApplyData));
-// @ts-expect-error - TS2554 - Expected 2 arguments, but got 0.
+                dispatch(doSetSync("", walletHash, syncApplyData));
+                // @ts-expect-error - TS2554 - Expected 2 arguments, but got 0.
                 handleCallback();
               })
               .catch((syncApplyError) => {
-// @ts-expect-error - TS2554 - Expected 2 arguments, but got 1.
+                // @ts-expect-error - TS2554 - Expected 2 arguments, but got 1.
                 handleCallback(syncApplyError);
               });
           }
@@ -298,7 +298,7 @@ export function doSyncApply(syncHash: string, syncData: any, password: string) {
         dispatch({
           type: ACTIONS.SYNC_APPLY_FAILED,
           data: {
-            error: 'Invalid password specified. Please enter the password for your previously synchronised wallet.',
+            error: "Invalid password specified. Please enter the password for your previously synchronised wallet.",
           },
         });
       });
@@ -313,7 +313,7 @@ export function doCheckSync() {
 
     Lbry.sync_hash().then((hash) => {
       // @ts-expect-error - TS2339 (ts-migration)
-      Lbryio.call('sync', 'get', { hash }, 'post')
+      Lbryio.call("sync", "get", { hash }, "post")
         .then((response) => {
           const data = {
             hasSyncedWallet: true,
@@ -335,38 +335,41 @@ export function doCheckSync() {
 }
 
 export function doResetSync() {
-  return (dispatch: Dispatch): Promise<any> => new Promise<any>((resolve) => {
-    dispatch({ type: ACTIONS.SYNC_RESET });
-// @ts-expect-error - TS2794 - Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
-    resolve();
-  });
+  return (dispatch: Dispatch): Promise<any> =>
+    new Promise<any>((resolve) => {
+      dispatch({ type: ACTIONS.SYNC_RESET });
+      // @ts-expect-error - TS2794 - Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
+      resolve();
+    });
 }
 
 export function doSyncEncryptAndDecrypt(oldPassword: string, newPassword: string, encrypt: boolean) {
   return (dispatch: Dispatch) => {
     const data: Record<string, any> = {};
-    return Lbry.sync_hash()
-      // @ts-expect-error - TS2339 (ts-migration)
-      .then((hash) => Lbryio.call('sync', 'get', { hash }, 'post'))
-      .then((syncGetResponse) => {
-        data.oldHash = syncGetResponse.hash;
+    return (
+      Lbry.sync_hash()
+        // @ts-expect-error - TS2339 (ts-migration)
+        .then((hash) => Lbryio.call("sync", "get", { hash }, "post"))
+        .then((syncGetResponse) => {
+          data.oldHash = syncGetResponse.hash;
 
-        return Lbry.sync_apply({ password: oldPassword, data: syncGetResponse.data });
-      })
-      .then(() => {
-        if (encrypt) {
-          dispatch(doWalletEncrypt(newPassword));
-        } else {
-          dispatch(doWalletDecrypt());
-        }
-      })
-      .then(() => Lbry.sync_apply({ password: newPassword }))
-      .then((syncApplyResponse) => {
-        if (syncApplyResponse.hash !== data.oldHash) {
-          return dispatch(doSetSync(data.oldHash, syncApplyResponse.hash, syncApplyResponse.data));
-        }
-      })
-      .catch(console.error); // eslint-disable-line
+          return Lbry.sync_apply({ password: oldPassword, data: syncGetResponse.data });
+        })
+        .then(() => {
+          if (encrypt) {
+            dispatch(doWalletEncrypt(newPassword));
+          } else {
+            dispatch(doWalletDecrypt());
+          }
+        })
+        .then(() => Lbry.sync_apply({ password: newPassword }))
+        .then((syncApplyResponse) => {
+          if (syncApplyResponse.hash !== data.oldHash) {
+            return dispatch(doSetSync(data.oldHash, syncApplyResponse.hash, syncApplyResponse.data));
+          }
+        })
+        .catch(console.error)
+    );
   };
 }
 
@@ -385,27 +388,27 @@ export function doSetPrefsReady() {
 }
 
 type SharedData = {
-  version: '0.1',
+  version: "0.1";
   value: {
-    subscriptions?: Array<string>,
+    subscriptions?: Array<string>;
     following?: Array<{
-      uri: string,
-      notificationsDisabled: boolean
-    }>,
-    tags?: Array<string>,
-    blocked?: Array<string>,
-    settings?: any,
-    app_welcome_version?: number,
-    sharing_3P?: boolean,
-    unpublishedCollections: CollectionGroup,
-    editedCollections: CollectionGroup,
-    builtinCollections: CollectionGroup,
-    savedCollections: Array<string>
-  }
+      uri: string;
+      notificationsDisabled: boolean;
+    }>;
+    tags?: Array<string>;
+    blocked?: Array<string>;
+    settings?: any;
+    app_welcome_version?: number;
+    sharing_3P?: boolean;
+    unpublishedCollections: CollectionGroup;
+    editedCollections: CollectionGroup;
+    builtinCollections: CollectionGroup;
+    savedCollections: Array<string>;
+  };
 };
 
 function extractUserState(rawObj: SharedData) {
-  if (rawObj && rawObj.version === '0.1' && rawObj.value) {
+  if (rawObj && rawObj.version === "0.1" && rawObj.value) {
     const {
       subscriptions,
       following,
@@ -488,7 +491,13 @@ export function doPopulateSharedUserState(sharedSettings: any) {
   };
 }
 
-export function doPreferenceSet(key: string, value: any, version: string, success: (...args: any) => any, fail: (...args: any) => any) {
+export function doPreferenceSet(
+  key: string,
+  value: any,
+  version: string,
+  success: (...args: any) => any,
+  fail: (...args: any) => any
+) {
   return (dispatch: Dispatch) => {
     const preference = {
       type: typeof value,

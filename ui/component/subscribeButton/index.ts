@@ -1,15 +1,15 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doChannelSubscribe, doChannelUnsubscribe } from 'redux/actions/subscriptions';
+import { connect } from "react-redux";
+import { doChannelSubscribe, doChannelUnsubscribe } from "redux/actions/subscriptions";
 import {
   selectIsSubscribedForUri,
   selectFirstRunCompleted,
   makeSelectNotificationsDisabled,
-} from 'redux/selectors/subscriptions';
-import { makeSelectPermanentUrlForUri } from 'redux/selectors/claims';
-import { selectUser } from 'redux/selectors/user';
-import { doToast } from 'redux/actions/notifications';
-import SubscribeButton from './view';
+} from "redux/selectors/subscriptions";
+import { makeSelectPermanentUrlForUri } from "redux/selectors/claims";
+import { selectUser } from "redux/selectors/user";
+import { doToast } from "redux/actions/notifications";
+import SubscribeButton from "./view";
 
 const select = (state: unknown, props: unknown) => ({
   isSubscribed: selectIsSubscribedForUri(state, props.uri),

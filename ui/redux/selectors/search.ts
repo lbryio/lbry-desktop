@@ -1,6 +1,6 @@
-import {getSearchQueryString} from 'util/query-params';
-import { selectShowMatureContent } from 'redux/selectors/settings';
-import { SEARCH_OPTIONS } from 'constants/search';
+import { getSearchQueryString } from "util/query-params";
+import { selectShowMatureContent } from "redux/selectors/settings";
+import { SEARCH_OPTIONS } from "constants/search";
 import {
   selectClaimsByUri,
   makeSelectClaimForUri,
@@ -8,19 +8,19 @@ import {
   selectClaimIsNsfwForUri,
   makeSelectPendingClaimForUri,
   selectIsUriResolving,
-} from 'redux/selectors/claims';
-import { parseURI } from 'util/lbryURI';
-import { isClaimNsfw } from 'util/claim';
-import { createSelector } from 'reselect';
-import { createCachedSelector } from 're-reselect';
-import { createNormalizedSearchKey, getRecommendationSearchOptions } from 'util/search';
-import { selectMutedChannels } from 'redux/selectors/blocked';
-import { selectHistory } from 'redux/selectors/content';
-import { selectAllCostInfoByUri } from 'lbryinc';
+} from "redux/selectors/claims";
+import { parseURI } from "util/lbryURI";
+import { isClaimNsfw } from "util/claim";
+import { createSelector } from "reselect";
+import { createCachedSelector } from "re-reselect";
+import { createNormalizedSearchKey, getRecommendationSearchOptions } from "util/search";
+import { selectMutedChannels } from "redux/selectors/blocked";
+import { selectHistory } from "redux/selectors/content";
+import { selectAllCostInfoByUri } from "lbryinc";
 
 type State = {
-  claims: any,
-  search: SearchState
+  claims: any;
+  search: SearchState;
 };
 
 export const selectState = (state: State): SearchState => state.search;
@@ -30,31 +30,32 @@ export const selectSearchValue: (state: State) => string = (state) => selectStat
 export const selectSearchOptions: (state: State) => SearchOptions = (state) => selectState(state).options;
 export const selectIsSearching: (state: State) => boolean = (state) => selectState(state).searching;
 export const selectSearchResultByQuery: (state: State) => {
-  [key: string]: Array<string>
-} = (state) =>
-  selectState(state).resultsByQuery;
+  [key: string]: Array<string>;
+} = (state) => selectState(state).resultsByQuery;
 // @ts-expect-error - TS2344 - Type 'boolean' does not satisfy the constraint 'string | number | symbol'.
 export const selectHasReachedMaxResultsLength: (state: State) => Partial<Record<boolean, Array<boolean>>> = (state) =>
   selectState(state).hasReachedMaxResultsLength;
 export const selectMentionSearchResults: (state: State) => Array<string> = (state) => selectState(state).results;
 export const selectMentionQuery: (state: State) => string = (state) => selectState(state).mentionQuery;
 
-export const makeSelectSearchUrisForQuery = (query: string): (state: State) => Array<string> => createSelector(selectSearchResultByQuery, (byQuery) => {
-  if (!query) return;
-  // replace statement below is kind of ugly, and repeated in doSearch action
-  query = query.replace(/^lbry:\/\//i, '').replace(/\//, ' ');
-  const normalizedQuery = createNormalizedSearchKey(query);
-  return byQuery[normalizedQuery] && byQuery[normalizedQuery]['uris'];
-});
-
-export const makeSelectHasReachedMaxResultsLength = (query: string): (state: State) => boolean => createSelector(selectHasReachedMaxResultsLength, (hasReachedMaxResultsLength) => {
-  if (query) {
-    query = query.replace(/^lbry:\/\//i, '').replace(/\//, ' ');
+export const makeSelectSearchUrisForQuery = (query: string): ((state: State) => Array<string>) =>
+  createSelector(selectSearchResultByQuery, (byQuery) => {
+    if (!query) return;
+    // replace statement below is kind of ugly, and repeated in doSearch action
+    query = query.replace(/^lbry:\/\//i, "").replace(/\//, " ");
     const normalizedQuery = createNormalizedSearchKey(query);
-    return hasReachedMaxResultsLength[normalizedQuery];
-  }
-  return hasReachedMaxResultsLength[query];
-});
+    return byQuery[normalizedQuery] && byQuery[normalizedQuery]["uris"];
+  });
+
+export const makeSelectHasReachedMaxResultsLength = (query: string): ((state: State) => boolean) =>
+  createSelector(selectHasReachedMaxResultsLength, (hasReachedMaxResultsLength) => {
+    if (query) {
+      query = query.replace(/^lbry:\/\//i, "").replace(/\//, " ");
+      const normalizedQuery = createNormalizedSearchKey(query);
+      return hasReachedMaxResultsLength[normalizedQuery];
+    }
+    return hasReachedMaxResultsLength[query];
+  });
 
 export const selectRecommendedContentForUri = createCachedSelector(
   (state, uri) => uri,
@@ -79,23 +80,23 @@ export const selectRecommendedContentForUri = createCachedSelector(
     if (!title) return;
 
     const options: {
-      size: number,
-      nsfw?: boolean,
-      isBackgroundSearch?: boolean
+      size: number;
+      nsfw?: boolean;
+      isBackgroundSearch?: boolean;
     } = { size: 20, nsfw: matureEnabled, isBackgroundSearch: true };
 
     if (matureEnabled || (!matureEnabled && !isMature)) {
       options[SEARCH_OPTIONS.RELATED_TO] = claim.claim_id;
     }
 
-    const searchQuery = getSearchQueryString(title.replace(/\//, ' '), options);
+    const searchQuery = getSearchQueryString(title.replace(/\//, " "), options);
     const normalizedSearchQuery = createNormalizedSearchKey(searchQuery);
 
-    let searchResult = searchUrisByQuery[normalizedSearchQuery];
+    const searchResult = searchUrisByQuery[normalizedSearchQuery];
 
     if (searchResult) {
       // Filter from recommended: The same claim and blocked channels
-      recommendedContent = searchResult['uris'].filter((searchUri) => {
+      recommendedContent = searchResult["uris"].filter((searchUri) => {
         const searchClaim = claimsByUri[searchUri];
 
         if (!searchClaim) return;
@@ -117,8 +118,8 @@ export const selectRecommendedContentForUri = createCachedSelector(
       const nextUriToPlay = recommendedContent.filter((nextRecommendedUri) => {
         const costInfo = costInfoByUri[nextRecommendedUri] && costInfoByUri[nextRecommendedUri].cost;
         const recommendedClaim = claimsByUri[nextRecommendedUri];
-        const isVideo = recommendedClaim && recommendedClaim.value && recommendedClaim.value.stream_type === 'video';
-        const isAudio = recommendedClaim && recommendedClaim.value && recommendedClaim.value.stream_type === 'audio';
+        const isVideo = recommendedClaim && recommendedClaim.value && recommendedClaim.value.stream_type === "video";
+        const isAudio = recommendedClaim && recommendedClaim.value && recommendedClaim.value.stream_type === "audio";
 
         let historyMatch = false;
         try {
@@ -160,7 +161,7 @@ export const makeSelectRecommendedRecsysIdForClaimId = (claimId: string) =>
         }
 
         const options = getRecommendationSearchOptions(matureEnabled, isMature, claimId);
-        const searchQuery = getSearchQueryString(title.replace(/\//, ' '), options);
+        const searchQuery = getSearchQueryString(title.replace(/\//, " "), options);
         const normalizedSearchQuery = createNormalizedSearchKey(searchQuery);
 
         const searchResult = searchUrisByQuery[normalizedSearchQuery];
@@ -177,7 +178,7 @@ export const makeSelectRecommendedRecsysIdForClaimId = (claimId: string) =>
 export const makeSelectWinningUriForQuery = (query: string) => {
   const uriFromQuery = `lbry://${query}`;
 
-  let channelUriFromQuery = '';
+  let channelUriFromQuery = "";
   try {
     const { isChannel } = parseURI(uriFromQuery);
     if (!isChannel) {
@@ -193,7 +194,7 @@ export const makeSelectWinningUriForQuery = (query: string) => {
     (matureEnabled, pendingClaim, claim1, claim2) => {
       const claim1Mature = claim1 && isClaimNsfw(claim1);
       const claim2Mature = claim2 && isClaimNsfw(claim2);
-      let pendingAmount = pendingClaim && pendingClaim.amount;
+      const pendingAmount = pendingClaim && pendingClaim.amount;
 
       if (!claim1 && !claim2) {
         return undefined;
@@ -203,8 +204,8 @@ export const makeSelectWinningUriForQuery = (query: string) => {
         return matureEnabled
           ? claim1.repost_url || claim1.canonical_url
           : claim1Mature
-          ? undefined
-          : claim1.repost_url || claim1.canonical_url;
+            ? undefined
+            : claim1.repost_url || claim1.canonical_url;
       }
 
       const effectiveAmount1 = claim1 && (claim1.repost_bid_amount || claim1.meta.effective_amount);
@@ -234,7 +235,7 @@ export const makeSelectWinningUriForQuery = (query: string) => {
   );
 };
 
-export const selectIsResolvingWinningUri = (state: State, query: string = '') => {
+export const selectIsResolvingWinningUri = (state: State, query: string = "") => {
   const uriFromQuery = `lbry://${query}`;
   let channelUriFromQuery;
   try {

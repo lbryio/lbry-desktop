@@ -1,13 +1,13 @@
-import React, {Fragment, useState, useRef, useContext, useLayoutEffect, createContext} from 'react';
+import React, { Fragment, useState, useRef, useContext, useLayoutEffect, createContext } from "react";
 import {
   Tabs as ReachTabs,
   Tab as ReachTab,
   TabList as ReachTabList,
   TabPanels as ReachTabPanels,
   TabPanel as ReachTabPanel,
-} from '@reach/tabs';
-import classnames from 'classnames';
-import { useRect } from '@reach/rect';
+} from "@reach/tabs";
+import classnames from "classnames";
+import { useRect } from "@reach/rect";
 
 // Tabs are a compound component
 // The components are used individually, but they will still interact and share state
@@ -31,9 +31,9 @@ import { useRect } from '@reach/rect';
 // We're just adding some styling
 
 type TabsProps = {
-  index?: number,
-  onChange?: (arg1: number) => void,
-  children: Array<React.ReactNode>
+  index?: number;
+  onChange?: (arg1: number) => void;
+  children: Array<React.ReactNode>;
 };
 
 // Use context so child TabPanels can set the active tab, which is kept in Tabs' state
@@ -73,11 +73,11 @@ function Tabs(props: TabsProps) {
 //
 // The wrapper for the list of tab labels that users can click
 type TabListProps = {
-  className?: string
+  className?: string;
 };
 function TabList(props: TabListProps) {
   const { className, ...rest } = props;
-  return <ReachTabList className={classnames('tabs__list', className)} {...rest} />;
+  return <ReachTabList className={classnames("tabs__list", className)} {...rest} />;
 }
 
 //
@@ -85,7 +85,7 @@ function TabList(props: TabListProps) {
 // Accesses `setSelectedRect` from context to set itself as active if needed
 // Flow doesn't understand we don't have to pass it in ourselves
 type TabProps = {
-  isSelected?: boolean
+  isSelected?: boolean;
 };
 function Tab(props: TabProps) {
   // @reach/tabs provides an `isSelected` prop
@@ -109,7 +109,7 @@ function Tab(props: TabProps) {
 //
 // The wrapper for TabPanel
 type TabPanelsProps = {
-  header?: React.ReactNode
+  header?: React.ReactNode;
 };
 function TabPanels(props: TabPanelsProps) {
   const { header, ...rest } = props;

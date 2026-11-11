@@ -1,21 +1,21 @@
-import React, {useState} from 'react';
-import Button from 'component/button';
-import I18nMessage from 'component/i18nMessage';
-import { FormField } from 'component/common/form-components/form-field';
-import { Form } from 'component/common/form-components/form';
-import { withRouter } from 'react-router-dom';
+import React, { useState } from "react";
+import Button from "component/button";
+import I18nMessage from "component/i18nMessage";
+import { FormField } from "component/common/form-components/form-field";
+import { Form } from "component/common/form-components/form";
+import { withRouter } from "react-router-dom";
 // @ts-expect-error - TS2792 - Cannot find module 'static/img/yrblsec.svg'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-import image from 'static/img/yrblsec.svg';
+import image from "static/img/yrblsec.svg";
 
-const LIMITED = 'limited';
-const NONE = 'none';
+const LIMITED = "limited";
+const NONE = "none";
 
 type Props = {
-  signOut: () => void,
-  setShareDataInternal: (arg1: boolean) => void,
-  authenticated: boolean,
-  authenticateIfSharingData: () => void,
-  handleNextPage: () => void
+  signOut: () => void;
+  setShareDataInternal: (arg1: boolean) => void;
+  authenticated: boolean;
+  authenticateIfSharingData: () => void;
+  handleNextPage: () => void;
 };
 
 function PrivacyAgreement(props: Props) {
@@ -38,40 +38,40 @@ function PrivacyAgreement(props: Props) {
 
   return (
     <section className="main--contained">
-      <div className={'columns first-run__wrapper'}>
-        <div className={'first-run__left'}>
+      <div className={"columns first-run__wrapper"}>
+        <div className={"first-run__left"}>
           <div>
-            <h1 className="section__title--large">{__('Privacy')}</h1>
+            <h1 className="section__title--large">{__("Privacy")}</h1>
             <h3 className="section__subtitle">
               {__(
                 `LBRY takes privacy and choice seriously. Is it ok if we monitor performance and help creators track their views?`
               )}
             </h3>
           </div>
-{ /* @ts-expect-error - TS2769 - No overload matches this call. */}
+          {/* @ts-expect-error - TS2769 - No overload matches this call. */}
           <Form onSubmit={handleSubmit} className="section__body">
             <fieldset>
               <FormField
-                name={'shareWithLBRY'}
+                name={"shareWithLBRY"}
                 type="radio"
                 // @ts-expect-error - TS2322 (ts-migration)
                 checked={share === LIMITED}
                 label={
                   <>
-                    {__('Yes, share with LBRY')} <span>🙂</span>
+                    {__("Yes, share with LBRY")} <span>🙂</span>
                   </>
                 }
                 onChange={(e) => setShare(LIMITED)}
               />
               <FormField
                 disabled={authenticated}
-                name={'shareNot'}
+                name={"shareNot"}
                 type="radio"
                 // @ts-expect-error - TS2322 (ts-migration)
                 checked={share === NONE}
                 label={
                   <>
-                    {__('No')} <span>😢</span>
+                    {__("No")} <span>😢</span>
                   </>
                 }
                 helper={__(
@@ -87,7 +87,7 @@ function PrivacyAgreement(props: Props) {
                       // @ts-expect-error - TS2322 (ts-migration)
                       tokens={{
                         // @ts-expect-error - TS2322 (ts-migration)
-                        signout_button: <Button button="link" label={__('Sign Out')} onClick={signOut} />,
+                        signout_button: <Button button="link" label={__("Sign Out")} onClick={signOut} />,
                       }}
                     >
                       You are signed in and sharing data with your cloud service provider. %signout_button%.
@@ -96,20 +96,20 @@ function PrivacyAgreement(props: Props) {
                 </div>
               )}
             </fieldset>
-            <div className={'card__actions'}>
+            <div className={"card__actions"}>
               {/* @ts-expect-error - TS2322 (ts-migration) */}
               <Button button="primary" label={__(`Next`)} disabled={!share} type="submit" />
             </div>
             {share === NONE && (
               <p className="help">
                 {__(
-                  'While we respect the desire for maximally private usage, please note that choosing this option hurts the ability for creators to understand how their content is performing.'
+                  "While we respect the desire for maximally private usage, please note that choosing this option hurts the ability for creators to understand how their content is performing."
                 )}
               </p>
             )}
           </Form>
         </div>
-        <div className={'first-run__image-wrapper'}>
+        <div className={"first-run__image-wrapper"}>
           <img src={image} className="privacy-img" />
         </div>
       </div>

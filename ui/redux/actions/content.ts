@@ -1,29 +1,29 @@
-import * as ACTIONS from 'constants/action_types';
-import * as MODALS from 'constants/modal_types';
+import * as ACTIONS from "constants/action_types";
+import * as MODALS from "constants/modal_types";
 // @if TARGET='app'
 // @ts-expect-error - TS2792 - Cannot find module 'electron'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-import { ipcRenderer } from 'electron';
+import { ipcRenderer } from "electron";
 // @endif
-import { doOpenModal } from 'redux/actions/app';
+import { doOpenModal } from "redux/actions/app";
 import {
   makeSelectClaimForUri,
   selectClaimForUri,
   makeSelectClaimIsMine,
   makeSelectClaimWasPurchased,
-} from 'redux/selectors/claims';
+} from "redux/selectors/claims";
 import {
   makeSelectFileInfoForUri,
   selectFileInfosByOutpoint,
   makeSelectUriIsStreamable,
   selectDownloadingByOutpoint,
-} from 'redux/selectors/file_info';
-import { makeSelectUrlsForCollectionId } from 'redux/selectors/collections';
-import { doToast } from 'redux/actions/notifications';
-import { doPurchaseUri } from 'redux/actions/file';
-import Lbry from 'lbry';
-import * as SETTINGS from 'constants/settings';
-import { selectCostInfoForUri, Lbryio } from 'lbryinc';
-import { makeSelectClientSetting, selectosNotificationsEnabled, selectDaemonSettings } from 'redux/selectors/settings';
+} from "redux/selectors/file_info";
+import { makeSelectUrlsForCollectionId } from "redux/selectors/collections";
+import { doToast } from "redux/actions/notifications";
+import { doPurchaseUri } from "redux/actions/file";
+import Lbry from "lbry";
+import * as SETTINGS from "constants/settings";
+import { selectCostInfoForUri, Lbryio } from "lbryinc";
+import { makeSelectClientSetting, selectosNotificationsEnabled, selectDaemonSettings } from "redux/selectors/settings";
 
 const DOWNLOAD_POLL_INTERVAL = 1000;
 
@@ -69,14 +69,14 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
         // If notifications are disabled(false) just return
         if (!selectosNotificationsEnabled(getState()) || !fileInfo.written_bytes) return;
 
-        const notif = new window.Notification(__('LBRY Download Complete'), {
+        const notif = new window.Notification(__("LBRY Download Complete"), {
           body: fileInfo.metadata.title,
           silent: false,
         });
 
         // @if TARGET='app'
         notif.onclick = () => {
-          ipcRenderer.send('focusWindow', 'main');
+          ipcRenderer.send("focusWindow", "main");
         };
         // @ENDIF
       } else {
@@ -119,11 +119,11 @@ export function doSetPlayingUri({
   commentId,
   collectionId,
 }: {
-  uri: string | null | undefined,
-  source?: string,
-  commentId?: string,
-  pathname?: string,
-  collectionId?: string
+  uri: string | null | undefined;
+  source?: string;
+  commentId?: string;
+  pathname?: string;
+  collectionId?: string;
 }) {
   return (dispatch: Dispatch) => {
     dispatch({
@@ -133,16 +133,21 @@ export function doSetPlayingUri({
   };
 }
 
-export function doPurchaseUriWrapper(uri: string, cost: number, saveFile: boolean, cb?: ((arg1: GetResponse) => void) | null) {
+export function doPurchaseUriWrapper(
+  uri: string,
+  cost: number,
+  saveFile: boolean,
+  cb?: ((arg1: GetResponse) => void) | null
+) {
   return (dispatch: Dispatch, getState: () => any) => {
     function onSuccess(fileInfo: unknown) {
       if (saveFile) {
-// @ts-expect-error - TS2339 - Property 'outpoint' does not exist on type 'unknown'.
+        // @ts-expect-error - TS2339 - Property 'outpoint' does not exist on type 'unknown'.
         dispatch(doUpdateLoadStatus(uri, fileInfo.outpoint));
       }
 
       if (cb) {
-// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'GetResponse'.
+        // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'GetResponse'.
         cb(fileInfo);
       }
     }
@@ -209,7 +214,7 @@ export function doPlayUri(
     }
 
     if (instantPurchaseEnabled) {
-      if (instantPurchaseMax.currency === 'LBC') {
+      if (instantPurchaseMax.currency === "LBC") {
         attemptPlay(instantPurchaseMax.amount);
       } else {
         // Need to convert currency of instant purchase maximum before trying to play
@@ -291,14 +296,13 @@ export function doClearContentHistoryAll() {
   };
 }
 
-export const doRecommendationUpdate = (claimId: string, urls: Array<string>, id: string, parentId: string) => (
-  dispatch: Dispatch
-) => {
-  dispatch({
-    type: ACTIONS.RECOMMENDATION_UPDATED,
-    data: { claimId, urls, id, parentId },
-  });
-};
+export const doRecommendationUpdate =
+  (claimId: string, urls: Array<string>, id: string, parentId: string) => (dispatch: Dispatch) => {
+    dispatch({
+      type: ACTIONS.RECOMMENDATION_UPDATED,
+      data: { claimId, urls, id, parentId },
+    });
+  };
 
 export const doRecommendationClicked = (claimId: string, index: number) => (dispatch: Dispatch) => {
   if (index !== undefined && index !== null) {
@@ -318,7 +322,7 @@ export function doToggleLoopList(collectionId: string, loop: boolean, hideToast:
     if (!hideToast) {
       dispatch(
         doToast({
-          message: loop ? __('Loop is on.') : __('Loop is off.'),
+          message: loop ? __("Loop is on.") : __("Loop is off."),
         })
       );
     }
@@ -331,7 +335,7 @@ export function doToggleShuffleList(currentUri: string, collectionId: string, sh
       const state = getState();
       const urls = makeSelectUrlsForCollectionId(collectionId)(state);
 
-      let newUrls = urls
+      const newUrls = urls
         .map((item) => ({ item, sort: Math.random() }))
         .sort((a, b) => a.sort - b.sort)
         .map(({ item }) => item);
@@ -339,7 +343,7 @@ export function doToggleShuffleList(currentUri: string, collectionId: string, sh
       // the currently playing URI should be first in list or else
       // can get in strange position where it might be in the middle or last
       // and the shuffled list ends before scrolling through all entries
-      if (currentUri && currentUri !== '') {
+      if (currentUri && currentUri !== "") {
         newUrls.splice(newUrls.indexOf(currentUri), 1);
         newUrls.splice(0, 0, currentUri);
       }
@@ -357,7 +361,7 @@ export function doToggleShuffleList(currentUri: string, collectionId: string, sh
     if (!hideToast) {
       dispatch(
         doToast({
-          message: shuffle ? __('Shuffle is on.') : __('Shuffle is off.'),
+          message: shuffle ? __("Shuffle is on.") : __("Shuffle is off."),
         })
       );
     }

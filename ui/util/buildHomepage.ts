@@ -1,41 +1,41 @@
-import * as PAGES from 'constants/pages';
-import * as ICONS from 'constants/icons';
-import * as CS from 'constants/claim_search';
-import SUPPORTED_LANGUAGES from 'constants/supported_languages';
-import { parseURI } from 'util/lbryURI';
-import moment from 'moment';
-import { toCapitalCase } from 'util/string';
-import { CUSTOM_HOMEPAGE } from 'config';
+import * as PAGES from "constants/pages";
+import * as ICONS from "constants/icons";
+import * as CS from "constants/claim_search";
+import SUPPORTED_LANGUAGES from "constants/supported_languages";
+import { parseURI } from "util/lbryURI";
+import moment from "moment";
+import { toCapitalCase } from "util/string";
+import { CUSTOM_HOMEPAGE } from "config";
 
 export type RowDataItem = {
-  title: any,
-  link?: string,
-  help?: any,
-  icon?: string,
-  extra?: any,
+  title: any;
+  link?: string;
+  help?: any;
+  icon?: string;
+  extra?: any;
   options?: {
-    channelIds?: Array<string>,
-    pageSize?: number,
-    limitClaimsPerChannel?: number,
-    languages?: Array<string>
-  },
-  route?: string,
-  hideForUnauth?: boolean
+    channelIds?: Array<string>;
+    pageSize?: number;
+    limitClaimsPerChannel?: number;
+    languages?: Array<string>;
+  };
+  route?: string;
+  hideForUnauth?: boolean;
 };
 
 export type HomepageCat = {
-  name: string,
-  icon: string,
-  label: string,
-  channelIds?: Array<string>,
-  daysOfContent?: number,
-  channelLimit?: string,
-  pageSize?: number,
-  claimType?: string,
-  order?: string,
-  tags?: Array<string>,
-  pinnedUrls?: Array<string>,
-  mixIn?: Array<string>
+  name: string;
+  icon: string;
+  label: string;
+  channelIds?: Array<string>;
+  daysOfContent?: number;
+  channelLimit?: string;
+  pageSize?: number;
+  claimType?: string;
+  order?: string;
+  tags?: Array<string>;
+  pinnedUrls?: Array<string>;
+  mixIn?: Array<string>;
 };
 
 // type HomepageData = {
@@ -66,34 +66,34 @@ export function getAllIds(all: any) {
 export const getHomepageRowForCat = (cat: HomepageCat) => {
   let orderValue;
   switch (cat.order) {
-    case 'trending':
+    case "trending":
       orderValue = CS.ORDER_BY_TRENDING_VALUE;
       break;
-    case 'top':
+    case "top":
       orderValue = CS.ORDER_BY_TOP_VALUE;
       break;
     default:
       orderValue = CS.ORDER_BY_NEW_VALUE;
   }
 
-  let urlParams = new URLSearchParams();
+  const urlParams = new URLSearchParams();
   if (cat.claimType) {
     urlParams.set(CS.CLAIM_TYPE, cat.claimType);
   }
   if (cat.channelIds) {
-    urlParams.set(CS.CHANNEL_IDS_KEY, cat.channelIds.join(','));
+    urlParams.set(CS.CHANNEL_IDS_KEY, cat.channelIds.join(","));
   }
 
-  const isChannelType = cat.claimType && cat.claimType === 'channel';
+  const isChannelType = cat.claimType && cat.claimType === "channel";
 
   // can intend no limit, numerica auto limit, specific limit.
   let limitClaims;
-  if (typeof cat.channelLimit === 'string' && cat.channelIds && cat.channelIds.length) {
-    if (cat.channelLimit === 'auto') {
+  if (typeof cat.channelLimit === "string" && cat.channelIds && cat.channelIds.length) {
+    if (cat.channelLimit === "auto") {
       limitClaims = getLimitPerChannel(cat.channelIds.length, isChannelType);
     } else if (cat.channelLimit) {
       const limitNumber = Number(cat.channelLimit);
-      // eslint-disable-next-line
+
       if (limitNumber === limitNumber && limitNumber !== 0) {
         // because javascript and NaN !== NaN
         limitClaims = Math.floor(limitNumber);
@@ -104,19 +104,19 @@ export const getHomepageRowForCat = (cat: HomepageCat) => {
   return {
     link: `/$/${PAGES.DISCOVER}?${urlParams.toString()}`,
     route: cat.name ? `/$/${cat.name}` : undefined,
-    icon: cat.icon || '', // some default
+    icon: cat.icon || "", // some default
     title: cat.label,
     pinnedUrls: cat.pinnedUrls,
     options: {
-      claimType: cat.claimType || 'stream',
+      claimType: cat.claimType || "stream",
       channelIds: cat.channelIds,
       orderBy: orderValue,
       pageSize: cat.pageSize || undefined,
       limitClaimsPerChannel: limitClaims,
       releaseTime: `>${Math.floor(
         moment()
-          .subtract(cat.daysOfContent || 30, 'days')
-          .startOf('week')
+          .subtract(cat.daysOfContent || 30, "days")
+          .startOf("week")
           .unix()
       )}`,
     },
@@ -135,24 +135,24 @@ export function GetLinksData(
   showNsfw?: boolean
 ) {
   function getPageSize(originalSize: unknown) {
-// @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    // @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     return isLargeScreen ? originalSize * (3 / 2) : originalSize;
   }
 
-  let rowData: Array<RowDataItem> = [];
+  const rowData: Array<RowDataItem> = [];
   const individualTagDataItems: Array<RowDataItem> = [];
 
   if (isHomepage && showPersonalizedChannels && subscribedChannels) {
     const RECENT_FROM_FOLLOWING = {
-      title: __('Recent From Following'),
+      title: __("Recent From Following"),
       link: `/$/${PAGES.CHANNELS_FOLLOWING}`,
       icon: ICONS.SUBSCRIBE,
       options: {
         orderBy: CS.ORDER_BY_NEW_VALUE,
         releaseTime:
           subscribedChannels.length > 20
-            ? `>${Math.floor(moment().subtract(9, 'months').startOf('week').unix())}`
-            : `>${Math.floor(moment().subtract(1, 'year').startOf('week').unix())}`,
+            ? `>${Math.floor(moment().subtract(9, "months").startOf("week").unix())}`
+            : `>${Math.floor(moment().subtract(1, "year").startOf("week").unix())}`,
         pageSize: getPageSize(subscribedChannels.length > 3 ? (subscribedChannels.length > 6 ? 16 : 8) : 4),
         streamTypes: null,
         channelIds: subscribedChannels.map((subscription: Subscription) => {
@@ -161,7 +161,7 @@ export function GetLinksData(
         }),
       },
     } as const;
-// @ts-expect-error - TS2345 - Argument of type '{ readonly title: string; readonly link: "/$/following"; readonly icon: "Heart"; readonly options: { readonly orderBy: readonly ["release_time"]; readonly releaseTime: string; readonly pageSize: unknown; readonly streamTypes: any; readonly channelIds: string[]; }; }' is not assignable to parameter of type 'RowDataItem'.
+    // @ts-expect-error - TS2345 - Argument of type '{ readonly title: string; readonly link: "/$/following"; readonly icon: "Heart"; readonly options: { readonly orderBy: readonly ["release_time"]; readonly releaseTime: string; readonly pageSize: unknown; readonly streamTypes: any; readonly channelIds: string[]; }; }' is not assignable to parameter of type 'RowDataItem'.
     rowData.push(RECENT_FROM_FOLLOWING);
   }
 
@@ -256,79 +256,79 @@ export function GetLinksData(
   */
 
   const TOP_CONTENT_TODAY = {
-    title: __('Top Content from Today'),
+    title: __("Top Content from Today"),
     link: `/$/${PAGES.DISCOVER}?${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_DAY}`,
     options: {
       pageSize: getPageSize(showPersonalizedChannels || showPersonalizedTags ? 4 : 8),
       orderBy: CS.ORDER_BY_TOP_VALUE,
-      claimType: ['stream'],
+      claimType: ["stream"],
       limitClaimsPerChannel: 2,
-      releaseTime: `>${Math.floor(moment().subtract(1, 'day').startOf('day').unix())}`,
+      releaseTime: `>${Math.floor(moment().subtract(1, "day").startOf("day").unix())}`,
     },
   } as const;
 
-  const language = localStorage.getItem('language') || 'en';
+  const language = localStorage.getItem("language") || "en";
   const languageName = SUPPORTED_LANGUAGES[language];
   const LANGUAGE_CATEGORY = {
-    title: __('Top content in %language%', { language: languageName }),
+    title: __("Top content in %language%", { language: languageName }),
     link: `/$/${PAGES.DISCOVER}?${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_DAY}&${CS.LANGUAGE_KEY}=${language}`,
     options: {
       languages: [language],
       pageSize: getPageSize(showPersonalizedChannels || showPersonalizedTags ? 4 : 8),
       orderBy: CS.ORDER_BY_TOP_VALUE,
-      claimType: ['stream'],
+      claimType: ["stream"],
       limitClaimsPerChannel: 2,
-      releaseTime: `>${Math.floor(moment().subtract(1, 'day').startOf('day').unix())}`,
+      releaseTime: `>${Math.floor(moment().subtract(1, "day").startOf("day").unix())}`,
     },
   } as const;
 
   const TOP_CHANNELS = {
-    title: __('Top Channels On LBRY'),
+    title: __("Top Channels On LBRY"),
     link: `/$/${PAGES.DISCOVER}?claim_type=channel&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_ALL}`,
     options: {
       orderBy: CS.ORDER_BY_TOP_VALUE,
-      claimType: ['channel'],
+      claimType: ["channel"],
     },
   } as const;
 
   const LATEST_FROM_LBRY = {
-    title: __('Latest From @lbry'),
+    title: __("Latest From @lbry"),
     link: `/@lbry:3f`,
     options: {
       orderBy: CS.ORDER_BY_NEW_VALUE,
       pageSize: getPageSize(4),
-      channelIds: ['3fda836a92faaceedfe398225fb9b2ee2ed1f01a'],
+      channelIds: ["3fda836a92faaceedfe398225fb9b2ee2ed1f01a"],
     },
   } as const;
 
   if (isHomepage && !CUSTOM_HOMEPAGE) {
     if (followedTags) {
       const TRENDING_FOR_TAGS = {
-        title: __('Trending For Your Tags'),
+        title: __("Trending For Your Tags"),
         link: `/$/${PAGES.TAGS_FOLLOWING}`,
         icon: ICONS.TAG,
 
         options: {
           pageSize: getPageSize(4),
           tags: followedTags.map((tag) => tag.name),
-          claimType: ['stream'],
+          claimType: ["stream"],
           limitClaimsPerChannel: 2,
         },
       } as const;
       followedTags.forEach((tag: Tag) => {
         const tagName = `#${toCapitalCase(tag.name)}`;
         individualTagDataItems.push({
-          title: __('Trending for %tagName%', { tagName: tagName }),
+          title: __("Trending for %tagName%", { tagName: tagName }),
           link: `/$/${PAGES.DISCOVER}?t=${tag.name}`,
           options: {
             pageSize: 4,
-// @ts-expect-error - TS2322 - Type '{ pageSize: number; tags: string[]; claimType: string[]; }' is not assignable to type '{ channelIds?: string[]; pageSize?: number; limitClaimsPerChannel?: number; languages?: string[]; }'.
+            // @ts-expect-error - TS2322 - Type '{ pageSize: number; tags: string[]; claimType: string[]; }' is not assignable to type '{ channelIds?: string[]; pageSize?: number; limitClaimsPerChannel?: number; languages?: string[]; }'.
             tags: [tag.name],
-            claimType: ['stream'],
+            claimType: ["stream"],
           },
         });
       });
-// @ts-expect-error - TS2345 - Argument of type '{ readonly title: string; readonly link: "/$/tags"; readonly icon: "Tag"; readonly options: { readonly pageSize: unknown; readonly tags: string[]; readonly claimType: readonly ["stream"]; readonly limitClaimsPerChannel: 2; }; }' is not assignable to parameter of type 'RowDataItem'.
+      // @ts-expect-error - TS2345 - Argument of type '{ readonly title: string; readonly link: "/$/tags"; readonly icon: "Tag"; readonly options: { readonly pageSize: unknown; readonly tags: string[]; readonly claimType: readonly ["stream"]; readonly limitClaimsPerChannel: 2; }; }' is not assignable to parameter of type 'RowDataItem'.
       if (showPersonalizedTags && !showIndividualTags) rowData.push(TRENDING_FOR_TAGS);
       if (showPersonalizedTags && showIndividualTags) {
         individualTagDataItems.forEach((item: RowDataItem) => {
@@ -339,15 +339,15 @@ export function GetLinksData(
   }
 
   if (!CUSTOM_HOMEPAGE) {
-// @ts-expect-error - TS2345 - Argument of type '{ readonly title: string; readonly link: "/$/discover?order=top&fresh=day"; readonly options: { readonly pageSize: unknown; readonly orderBy: readonly ["effective_amount"]; readonly claimType: readonly ["stream"]; readonly limitClaimsPerChannel: 2; readonly releaseTime: `>${number}`; }; }' is not assignable to parameter of type 'RowDataItem'.
+    // @ts-expect-error - TS2345 - Argument of type '{ readonly title: string; readonly link: "/$/discover?order=top&fresh=day"; readonly options: { readonly pageSize: unknown; readonly orderBy: readonly ["effective_amount"]; readonly claimType: readonly ["stream"]; readonly limitClaimsPerChannel: 2; readonly releaseTime: `>${number}`; }; }' is not assignable to parameter of type 'RowDataItem'.
     rowData.push(TOP_CONTENT_TODAY);
-    if (language !== 'en') {
-// @ts-expect-error - TS2345 - Argument of type '{ readonly title: string; readonly link: `/$/discover?order=top&fresh=day&language=${string}`; readonly options: { readonly languages: readonly [string]; readonly pageSize: unknown; readonly orderBy: readonly ["effective_amount"]; readonly claimType: readonly ["stream"]; readonly limitClaimsPerChannel: 2; readonly r...' is not assignable to parameter of type 'RowDataItem'.
+    if (language !== "en") {
+      // @ts-expect-error - TS2345 - Argument of type '{ readonly title: string; readonly link: `/$/discover?order=top&fresh=day&language=${string}`; readonly options: { readonly languages: readonly [string]; readonly pageSize: unknown; readonly orderBy: readonly ["effective_amount"]; readonly claimType: readonly ["stream"]; readonly limitClaimsPerChannel: 2; readonly r...' is not assignable to parameter of type 'RowDataItem'.
       rowData.push(LANGUAGE_CATEGORY);
     }
-// @ts-expect-error - TS2345 - Argument of type '{ readonly title: string; readonly link: "/@lbry:3f"; readonly options: { readonly orderBy: readonly ["release_time"]; readonly pageSize: unknown; readonly channelIds: readonly ["3fda836a92faaceedfe398225fb9b2ee2ed1f01a"]; }; }' is not assignable to parameter of type 'RowDataItem'.
+    // @ts-expect-error - TS2345 - Argument of type '{ readonly title: string; readonly link: "/@lbry:3f"; readonly options: { readonly orderBy: readonly ["release_time"]; readonly pageSize: unknown; readonly channelIds: readonly ["3fda836a92faaceedfe398225fb9b2ee2ed1f01a"]; }; }' is not assignable to parameter of type 'RowDataItem'.
     rowData.push(LATEST_FROM_LBRY);
-// @ts-expect-error - TS2345 - Argument of type '{ readonly title: string; readonly link: "/$/discover?claim_type=channel&order=top&fresh=all"; readonly options: { readonly orderBy: readonly ["effective_amount"]; readonly claimType: readonly ["channel"]; }; }' is not assignable to parameter of type 'RowDataItem'.
+    // @ts-expect-error - TS2345 - Argument of type '{ readonly title: string; readonly link: "/$/discover?claim_type=channel&order=top&fresh=all"; readonly options: { readonly orderBy: readonly ["effective_amount"]; readonly claimType: readonly ["channel"]; }; }' is not assignable to parameter of type 'RowDataItem'.
     if (!showPersonalizedChannels) rowData.push(TOP_CHANNELS);
   }
 
@@ -356,7 +356,7 @@ export function GetLinksData(
 
   // TODO: provide better method for exempting from homepage
   (Object.values(all) as any)
-    .filter((row) => !(isHomepage && row.name === 'news'))
+    .filter((row) => !(isHomepage && row.name === "news"))
     .map((row) => rowData.push(getHomepageRowForCat(row)));
   return rowData;
 }

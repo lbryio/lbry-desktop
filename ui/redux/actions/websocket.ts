@@ -1,14 +1,14 @@
 //@ts-nocheck
-import * as ACTIONS from 'constants/action_types';
-import { getAuthToken } from 'util/saved-passwords';
-import { doNotificationList } from 'redux/actions/notifications';
-import { SOCKETY_SERVER_API } from 'config';
+import * as ACTIONS from "constants/action_types";
+import { getAuthToken } from "util/saved-passwords";
+import { doNotificationList } from "redux/actions/notifications";
+import { SOCKETY_SERVER_API } from "config";
 
 const NOTIFICATION_WS_URL = `${SOCKETY_SERVER_API}/internal?id=`;
 const COMMENT_WS_URL = `${SOCKETY_SERVER_API}/commentron?id=`;
 
-let sockets: Record<string, any> = {};
-let closingSockets: Record<string, any> = {};
+const sockets: Record<string, any> = {};
+const closingSockets: Record<string, any> = {};
 let retryCount = 0;
 
 const getCommentSocketUrl = (claimId: unknown) => {
@@ -27,7 +27,7 @@ export const doSocketConnect = (url: unknown, cb: unknown) => {
       sockets[url] = new WebSocket(url);
       sockets[url].onopen = (e: unknown) => {
         retryCount = 0;
-        console.log('\nConnected to WS \n\n'); // eslint-disable-line
+        console.log("\nConnected to WS \n\n");
       };
 
       sockets[url].onmessage = (e: unknown) => {
@@ -36,12 +36,12 @@ export const doSocketConnect = (url: unknown, cb: unknown) => {
       };
 
       sockets[url].onerror = (e: unknown) => {
-        console.error('websocket onerror', e); // eslint-disable-line
+        console.error("websocket onerror", e);
         // onerror and onclose will both fire, so nothing is needed here
       };
 
       sockets[url].onclose = () => {
-        console.log('\n Disconnected from WS\n\n'); // eslint-disable-line
+        console.log("\n Disconnected from WS\n\n");
         if (!closingSockets[url]) {
           retryCount += 1;
           connectToSocket();
@@ -70,7 +70,7 @@ export const doSocketDisconnect = (url: unknown) => (dispatch: unknown) => {
 export const doNotificationSocketConnect = (enableNotifications: unknown) => (dispatch: unknown) => {
   const authToken = getAuthToken();
   if (!authToken) {
-    console.error('Unable to connect to web socket because auth token is missing'); // eslint-disable-line
+    console.error("Unable to connect to web socket because auth token is missing");
     return;
   }
 
@@ -78,7 +78,7 @@ export const doNotificationSocketConnect = (enableNotifications: unknown) => (di
 
   doSocketConnect(url, (data) => {
     switch (data.type) {
-      case 'pending_notification':
+      case "pending_notification":
         if (enableNotifications) {
           dispatch(doNotificationList());
         }
@@ -91,14 +91,14 @@ export const doCommentSocketConnect = (uri: unknown, claimId: unknown) => (dispa
   const url = getCommentSocketUrl(claimId);
 
   doSocketConnect(url, (response) => {
-    if (response.type === 'delta') {
+    if (response.type === "delta") {
       const newComment = response.data.comment;
       dispatch({
         type: ACTIONS.COMMENT_RECEIVED,
         data: { comment: newComment, claimId, uri },
       });
     }
-    if (response.type === 'pinned') {
+    if (response.type === "pinned") {
       const pinnedComment = response.data.comment;
       dispatch({
         type: ACTIONS.COMMENT_PIN_COMPLETED,

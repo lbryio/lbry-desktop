@@ -1,18 +1,18 @@
-import React from 'react';
-import Button from 'component/button';
-import CopyableText from 'component/copyableText';
-import QRCode from 'component/common/qr-code';
-import Card from 'component/common/card';
+import React from "react";
+import Button from "component/button";
+import CopyableText from "component/copyableText";
+import QRCode from "component/common/qr-code";
+import Card from "component/common/card";
 
 type Props = {
-  checkAddressIsMine: (arg1: string) => void,
-  receiveAddress: string,
-  getNewAddress: () => void,
-  gettingNewAddress: boolean
+  checkAddressIsMine: (arg1: string) => void;
+  receiveAddress: string;
+  getNewAddress: () => void;
+  gettingNewAddress: boolean;
 };
 
 type State = {
-  showQR: boolean
+  showQR: boolean;
 };
 
 class WalletAddress extends React.PureComponent<Props, State> {
@@ -47,30 +47,30 @@ class WalletAddress extends React.PureComponent<Props, State> {
 
     return (
       <Card
-        title={__('Receive Credits')}
-        subtitle={__('Use this address to receive LBRY Credits.')}
+        title={__("Receive Credits")}
+        subtitle={__("Use this address to receive LBRY Credits.")}
         actions={
           <React.Fragment>
             <CopyableText
               primaryButton
-              label={__('Your Address')}
+              label={__("Your Address")}
               copyable={receiveAddress}
-              snackMessage={__('Address copied.')}
+              snackMessage={__("Address copied.")}
             />
 
             <div className="card__actions">
               <Button
                 // @ts-expect-error - TS2322 (ts-migration)
                 button="secondary"
-                label={__('Get New Address')}
+                label={__("Get New Address")}
                 onClick={getNewAddress}
                 disabled={gettingNewAddress}
               />
               {/* @ts-expect-error - TS2322 (ts-migration) */}
-              <Button button="link" label={showQR ? __('Hide QR code') : __('Show QR code')} onClick={this.toggleQR} />
+              <Button button="link" label={showQR ? __("Hide QR code") : __("Show QR code")} onClick={this.toggleQR} />
             </div>
             <p className="help">
-              {__('You can generate a new address at any time, and any previous addresses will continue to work.')}
+              {__("You can generate a new address at any time, and any previous addresses will continue to work.")}
             </p>
 
             {showQR && <QRCode value={receiveAddress} paddingTop />}

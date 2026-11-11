@@ -1,15 +1,15 @@
-import {useEffect} from 'react';
+import { useEffect } from "react";
 
-const isDev = process.env.NODE_ENV !== 'production';
+const isDev = process.env.NODE_ENV !== "production";
 
 const TAP = {
-  NONE: 'NONE',
-  UNMUTE: 'UNMUTE',
-  RETRY: 'RETRY',
+  NONE: "NONE",
+  UNMUTE: "UNMUTE",
+  RETRY: "RETRY",
 } as const;
 
 const setLabel = (controlBar: unknown, childName: unknown, label: unknown) => {
-// @ts-expect-error - TS2339 - Property 'getChild' does not exist on type 'unknown'.
+  // @ts-expect-error - TS2339 - Property 'getChild' does not exist on type 'unknown'.
   const c = controlBar.getChild(childName);
   if (c) {
     c.controlText(label);
@@ -33,22 +33,22 @@ const VideoJsEvents = ({
   claimRewards,
   playerServerRef,
 }: {
-  tapToUnmuteRef: any // DOM element,
-  tapToRetryRef: any // DOM element,
-  setReload: any // react hook,
-  videoTheaterMode: any // dispatch function,
-  playerRef: any // DOM element,
-  autoplaySetting: boolean,
-  replay: boolean,
-  claimId?: string | null | undefined,
-  userId?: number | null | undefined,
-  claimValues?: any,
-  embedded?: boolean,
-  clearPosition?: (arg1: string) => void,
-  uri?: string,
-  doAnalyticsView?: (arg1: string, arg2: number) => any,
-  claimRewards?: () => void,
-  playerServerRef?: any
+  tapToUnmuteRef: any; // DOM element,
+  tapToRetryRef: any; // DOM element,
+  setReload: any; // react hook,
+  videoTheaterMode: any; // dispatch function,
+  playerRef: any; // DOM element,
+  autoplaySetting: boolean;
+  replay: boolean;
+  claimId?: string | null | undefined;
+  userId?: number | null | undefined;
+  claimValues?: any;
+  embedded?: boolean;
+  clearPosition?: (arg1: string) => void;
+  uri?: string;
+  doAnalyticsView?: (arg1: string, arg2: number) => any;
+  claimRewards?: () => void;
+  playerServerRef?: any;
 }) => {
   // Override the player's control text. We override to:
   // 1. Add keyboard shortcut to the tool-tip.
@@ -65,45 +65,45 @@ const VideoJsEvents = ({
   function resolveCtrlText(e: unknown) {
     const player = playerRef.current;
     if (player) {
-      const ctrlBar = player.getChild('controlBar');
-// @ts-expect-error - TS2339 - Property 'type' does not exist on type 'unknown'.
+      const ctrlBar = player.getChild("controlBar");
+      // @ts-expect-error - TS2339 - Property 'type' does not exist on type 'unknown'.
       switch (e.type) {
-        case 'play':
-          setLabel(ctrlBar, 'PlayToggle', __('Pause (space)'));
+        case "play":
+          setLabel(ctrlBar, "PlayToggle", __("Pause (space)"));
           break;
-        case 'pause':
-          setLabel(ctrlBar, 'PlayToggle', __('Play (space)'));
+        case "pause":
+          setLabel(ctrlBar, "PlayToggle", __("Play (space)"));
           break;
-        case 'volumechange':
+        case "volumechange":
           ctrlBar
-            .getChild('VolumePanel')
-            .getChild('MuteToggle')
-            .controlText(player.muted() || player.volume() === 0 ? __('Unmute (m)') : __('Mute (m)'));
+            .getChild("VolumePanel")
+            .getChild("MuteToggle")
+            .controlText(player.muted() || player.volume() === 0 ? __("Unmute (m)") : __("Mute (m)"));
           break;
-        case 'fullscreenchange':
+        case "fullscreenchange":
           setLabel(
             ctrlBar,
-            'FullscreenToggle',
-            player.isFullscreen() ? __('Exit Fullscreen (f)') : __('Fullscreen (f)')
+            "FullscreenToggle",
+            player.isFullscreen() ? __("Exit Fullscreen (f)") : __("Fullscreen (f)")
           );
           break;
-        case 'loadstart':
+        case "loadstart":
           // --- Do everything ---
-          setLabel(ctrlBar, 'PlaybackRateMenuButton', __('Playback Rate (<, >)'));
-          setLabel(ctrlBar, 'QualityButton', __('Quality'));
-          setLabel(ctrlBar, 'PlayNextButton', __('Play Next (SHIFT+N)'));
-          setLabel(ctrlBar, 'PlayPreviousButton', __('Play Previous (SHIFT+P)'));
-          setLabel(ctrlBar, 'TheaterModeButton', videoTheaterMode ? __('Default Mode (t)') : __('Theater Mode (t)'));
-          setLabel(ctrlBar, 'AutoplayNextButton', autoplaySetting ? __('Autoplay Next On') : __('Autoplay Next Off'));
+          setLabel(ctrlBar, "PlaybackRateMenuButton", __("Playback Rate (<, >)"));
+          setLabel(ctrlBar, "QualityButton", __("Quality"));
+          setLabel(ctrlBar, "PlayNextButton", __("Play Next (SHIFT+N)"));
+          setLabel(ctrlBar, "PlayPreviousButton", __("Play Previous (SHIFT+P)"));
+          setLabel(ctrlBar, "TheaterModeButton", videoTheaterMode ? __("Default Mode (t)") : __("Theater Mode (t)"));
+          setLabel(ctrlBar, "AutoplayNextButton", autoplaySetting ? __("Autoplay Next On") : __("Autoplay Next Off"));
 
-          resolveCtrlText({ type: 'play' });
-          resolveCtrlText({ type: 'pause' });
-          resolveCtrlText({ type: 'volumechange' });
-          resolveCtrlText({ type: 'fullscreenchange' });
+          resolveCtrlText({ type: "play" });
+          resolveCtrlText({ type: "pause" });
+          resolveCtrlText({ type: "volumechange" });
+          resolveCtrlText({ type: "fullscreenchange" });
           break;
         default:
-// @ts-expect-error - TS2339 - Property 'type' does not exist on type 'unknown'.
-          if (isDev) throw Error('Unexpected: ' + e.type);
+          // @ts-expect-error - TS2339 - Property 'type' does not exist on type 'unknown'.
+          if (isDev) throw Error("Unexpected: " + e.type);
           break;
       }
     }
@@ -112,9 +112,9 @@ const VideoJsEvents = ({
   function onInitialPlay() {
     const player = playerRef.current;
 
-    const bigPlayButton = document.querySelector('.vjs-big-play-button');
-// @ts-expect-error - TS2339 - Property 'style' does not exist on type 'Element'.
-    if (bigPlayButton) bigPlayButton.style.setProperty('display', 'none');
+    const bigPlayButton = document.querySelector(".vjs-big-play-button");
+    // @ts-expect-error - TS2339 - Property 'style' does not exist on type 'Element'.
+    if (bigPlayButton) bigPlayButton.style.setProperty("display", "none");
 
     if (player && (player.muted() || player.volume() === 0)) {
       // The css starts as "hidden". We make it visible here without
@@ -137,21 +137,20 @@ const VideoJsEvents = ({
     showTapButton(TAP.RETRY);
 
     // reattach initial play listener in case we recover from error successfully
-    player.one('play', onInitialPlay);
+    player.one("play", onInitialPlay);
 
     if (player && player.loadingSpinner) {
       player.loadingSpinner.hide();
     }
   }
 
-
   useEffect(() => {
     const player = playerRef.current;
     if (player) {
-      const controlBar = player.getChild('controlBar');
+      const controlBar = player.getChild("controlBar");
       controlBar
-        .getChild('TheaterModeButton')
-        .controlText(videoTheaterMode ? __('Default Mode (t)') : __('Theater Mode (t)'));
+        .getChild("TheaterModeButton")
+        .controlText(videoTheaterMode ? __("Default Mode (t)") : __("Theater Mode (t)"));
     }
   }, [videoTheaterMode, playerRef]);
 
@@ -178,13 +177,13 @@ const VideoJsEvents = ({
   function showTapButton(tapButton: unknown) {
     const setButtonVisibility = (theRef: unknown, newState: unknown) => {
       // Use the DOM to control the state of the button to prevent re-renders.
-// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
       if (theRef.current) {
-// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
-        const curState = theRef.current.style.visibility === 'visible';
+        // @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
+        const curState = theRef.current.style.visibility === "visible";
         if (newState !== curState) {
-// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
-          theRef.current.style.visibility = newState ? 'visible' : 'hidden';
+          // @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
+          theRef.current.style.visibility = newState ? "visible" : "hidden";
         }
       }
     };
@@ -203,7 +202,7 @@ const VideoJsEvents = ({
         setButtonVisibility(tapToRetryRef, true);
         break;
       default:
-        if (isDev) throw new Error('showTapButton: unexpected ref');
+        if (isDev) throw new Error("showTapButton: unexpected ref");
         break;
     }
   }
@@ -211,16 +210,16 @@ const VideoJsEvents = ({
   useEffect(() => {
     const player = playerRef.current;
     if (player) {
-      const touchOverlay = player.getChild('TouchOverlay');
-      const controlBar = player.getChild('controlBar') || touchOverlay.getChild('controlBar');
-      const autoplayButton = controlBar.getChild('AutoplayNextButton');
+      const touchOverlay = player.getChild("TouchOverlay");
+      const controlBar = player.getChild("controlBar") || touchOverlay.getChild("controlBar");
+      const autoplayButton = controlBar.getChild("AutoplayNextButton");
 
       if (autoplayButton) {
-        const title = autoplaySetting ? __('Autoplay Next On') : __('Autoplay Next Off');
+        const title = autoplaySetting ? __("Autoplay Next On") : __("Autoplay Next Off");
 
         autoplayButton.controlText(title);
-        autoplayButton.setAttribute('aria-label', title);
-        autoplayButton.setAttribute('aria-checked', autoplaySetting);
+        autoplayButton.setAttribute("aria-label", title);
+        autoplayButton.setAttribute("aria-checked", autoplaySetting);
       }
     }
   }, [autoplaySetting, playerRef]);
@@ -235,26 +234,26 @@ const VideoJsEvents = ({
   function initializeEvents() {
     const player = playerRef.current;
     // Add various event listeners to player
-    player.one('play', onInitialPlay);
-    player.on('play', resolveCtrlText);
-    player.on('pause', resolveCtrlText);
-    player.on('loadstart', resolveCtrlText);
-    player.on('fullscreenchange', resolveCtrlText);
-    player.on('volumechange', resolveCtrlText);
-    player.on('volumechange', onVolumeChange);
-    player.on('error', onError);
+    player.one("play", onInitialPlay);
+    player.on("play", resolveCtrlText);
+    player.on("pause", resolveCtrlText);
+    player.on("loadstart", resolveCtrlText);
+    player.on("fullscreenchange", resolveCtrlText);
+    player.on("volumechange", resolveCtrlText);
+    player.on("volumechange", onVolumeChange);
+    player.on("error", onError);
     // custom tracking plugin, event used for watchman data, and marking view/getting rewards
     // hide forcing control bar show
-    player.on('canplaythrough', function () {
+    player.on("canplaythrough", function () {
       setTimeout(function () {
-        const vjsControlBar = document.querySelector('.vjs-control-bar');
-// @ts-expect-error - TS2339 - Property 'style' does not exist on type 'Element'.
-        if (vjsControlBar) vjsControlBar.style.removeProperty('opacity');
+        const vjsControlBar = document.querySelector(".vjs-control-bar");
+        // @ts-expect-error - TS2339 - Property 'style' does not exist on type 'Element'.
+        if (vjsControlBar) vjsControlBar.style.removeProperty("opacity");
       }, 1000 * 3); // wait 3 seconds to hit control bar
     });
-    player.on('playing', function () {
-// @ts-expect-error - TS2339 - Property 'style' does not exist on type 'Element'.
-      document.querySelector('.vjs-big-play-button').style.setProperty('display', 'none', 'important');
+    player.on("playing", function () {
+      // @ts-expect-error - TS2339 - Property 'style' does not exist on type 'Element'.
+      document.querySelector(".vjs-big-play-button").style.setProperty("display", "none", "important");
     });
     // player.on('ended', onEnded);
   }

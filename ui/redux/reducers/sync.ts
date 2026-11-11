@@ -1,5 +1,5 @@
 //@ts-nocheck
-import * as ACTIONS from 'constants/action_types';
+import * as ACTIONS from "constants/action_types";
 
 const reducers: Record<string, any> = {};
 const defaultState = {
@@ -8,7 +8,7 @@ const defaultState = {
   syncData: null,
   setSyncErrorMessage: null,
   getSyncErrorMessage: null,
-  syncApplyErrorMessage: '',
+  syncApplyErrorMessage: "",
   syncApplyIsPending: false,
   syncApplyPasswordError: false,
   getSyncIsPending: false,
@@ -30,7 +30,8 @@ reducers[ACTIONS.SYNC_STATE_POPULATE] = (state: unknown) => {
   }
 };
 
-reducers[ACTIONS.SET_PREFS_READY] = (state: unknown, action: unknown) => Object.assign({}, state, { prefsReady: action.data });
+reducers[ACTIONS.SET_PREFS_READY] = (state: unknown, action: unknown) =>
+  Object.assign({}, state, { prefsReady: action.data });
 
 reducers[ACTIONS.GET_SYNC_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
@@ -83,13 +84,13 @@ reducers[ACTIONS.SYNC_APPLY_STARTED] = (state: unknown) =>
   Object.assign({}, state, {
     syncApplyPasswordError: false,
     syncApplyIsPending: true,
-    syncApplyErrorMessage: '',
+    syncApplyErrorMessage: "",
   });
 
 reducers[ACTIONS.SYNC_APPLY_COMPLETED] = (state: unknown) =>
   Object.assign({}, state, {
     syncApplyIsPending: false,
-    syncApplyErrorMessage: '',
+    syncApplyErrorMessage: "",
   });
 
 reducers[ACTIONS.SYNC_APPLY_FAILED] = (state: unknown, action: unknown) =>

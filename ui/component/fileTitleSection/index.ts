@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doFetchSubCount, selectSubCountForUri } from 'lbryinc';
-import { selectTitleForUri, selectClaimForUri } from 'redux/selectors/claims';
-import { selectInsufficientCreditsForUri } from 'redux/selectors/content';
-import FileTitleSection from './view';
+import { connect } from "react-redux";
+import { doFetchSubCount, selectSubCountForUri } from "lbryinc";
+import { selectTitleForUri, selectClaimForUri } from "redux/selectors/claims";
+import { selectInsufficientCreditsForUri } from "redux/selectors/content";
+import FileTitleSection from "./view";
 
 const select = (state: unknown, props: unknown) => {
   const claim = selectClaimForUri(state, props.uri);

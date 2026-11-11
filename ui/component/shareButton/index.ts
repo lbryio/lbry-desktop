@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doChannelSubscribe, doChannelUnsubscribe } from 'redux/actions/subscriptions';
-import { doOpenModal } from 'redux/actions/app';
-import { doToast } from 'redux/actions/notifications';
-import ShareButton from './view';
+import { connect } from "react-redux";
+import { doChannelSubscribe, doChannelUnsubscribe } from "redux/actions/subscriptions";
+import { doOpenModal } from "redux/actions/app";
+import { doToast } from "redux/actions/notifications";
+import ShareButton from "./view";
 
 const select = (state: unknown, props: unknown) => ({});
 

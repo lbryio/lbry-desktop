@@ -1,12 +1,12 @@
 //@ts-nocheck
-import { clipboard, ipcRenderer, shell } from 'electron';
-import { convertToShareLink } from 'util/lbryURI';
-const isDev = process.env.NODE_ENV !== 'production';
+import { clipboard, ipcRenderer, shell } from "electron";
+import { convertToShareLink } from "util/lbryURI";
+const isDev = process.env.NODE_ENV !== "production";
 
 let contextMenuId = 0;
 const contextMenuCallbacks = {};
 
-ipcRenderer.on('context-menu-clicked', (event, id) => {
+ipcRenderer.on("context-menu-clicked", (event, id) => {
   const callback = contextMenuCallbacks[id];
   if (callback) {
     delete contextMenuCallbacks[id];
@@ -22,7 +22,7 @@ function serializeTemplate(templates) {
       item.submenu = serializeTemplate(item.submenu);
     }
 
-    if (typeof item.click === 'function') {
+    if (typeof item.click === "function") {
       const id = `context-menu-${contextMenuId++}`;
       contextMenuCallbacks[id] = item.click;
       item.id = id;
@@ -37,19 +37,19 @@ function serializeTemplate(templates) {
 
 function popupContextMenu(templates) {
   Object.keys(contextMenuCallbacks).forEach((id) => delete contextMenuCallbacks[id]);
-  ipcRenderer.send('show-context-menu', serializeTemplate(templates));
+  ipcRenderer.send("show-context-menu", serializeTemplate(templates));
 }
 
 function injectDevelopmentTemplate(event: unknown, templates: unknown) {
   if (!isDev) return templates;
   const { screenX, screenY } = event;
-  const separator = { type: 'separator' } as const;
+  const separator = { type: "separator" } as const;
   const developmentTemplateAddition = [
     {
-      label: 'Inspect element',
-      accelerator: 'CmdOrCtrl+Shift+I',
+      label: "Inspect element",
+      accelerator: "CmdOrCtrl+Shift+I",
       click: () => {
-        ipcRenderer.send('inspect-element', screenX, screenY);
+        ipcRenderer.send("inspect-element", screenX, screenY);
       },
     },
   ];
@@ -60,40 +60,40 @@ function injectDevelopmentTemplate(event: unknown, templates: unknown) {
   return templates;
 }
 
-export function openContextMenu(event: unknown, templates = [], canEdit = false, selection = '') {
+export function openContextMenu(event: unknown, templates = [], canEdit = false, selection = "") {
   const { type, value } = event.target;
-  const isInput = event.target.matches('input') && (type === 'text' || type === 'number');
-  const isTextField = canEdit || isInput || event.target.matches('textarea');
+  const isInput = event.target.matches("input") && (type === "text" || type === "number");
+  const isTextField = canEdit || isInput || event.target.matches("textarea");
   const isSomethingSelected = selection.length > 0 || window.getSelection().toString().length > 0;
 
   templates.push({
-    label: 'Copy',
-    accelerator: 'CmdOrCtrl+C',
-    role: 'copy',
+    label: "Copy",
+    accelerator: "CmdOrCtrl+C",
+    role: "copy",
     enabled: isSomethingSelected,
   });
 
   // If context menu is opened on Input and there is text on the input and something is selected.
   const { selectionStart, selectionEnd } = event.target;
   if (!!value && isTextField && selectionStart !== selectionEnd) {
-    templates.push({ label: 'Cut', accelerator: 'CmdOrCtrl+X', role: 'cut' });
+    templates.push({ label: "Cut", accelerator: "CmdOrCtrl+X", role: "cut" });
   }
 
   // If context menu is opened on Input and text is present on clipboard
   if (clipboard.readText().length > 0 && isTextField) {
     templates.push({
-      label: 'Paste',
-      accelerator: 'CmdOrCtrl+V',
-      role: 'paste',
+      label: "Paste",
+      accelerator: "CmdOrCtrl+V",
+      role: "paste",
     });
   }
 
   // If context menu is opened on Input
   if (isTextField && value) {
     templates.push({
-      label: 'Select All',
-      accelerator: 'CmdOrCtrl+A',
-      role: 'selectall',
+      label: "Select All",
+      accelerator: "CmdOrCtrl+A",
+      role: "selectall",
     });
   }
 
@@ -107,18 +107,18 @@ export function openEditorMenu(codeMirror: unknown, event: unknown) {
   const selection = codeMirror.doc.getSelection();
   const templates = [
     {
-      label: 'Select All',
-      accelerator: 'CmdOrCtrl+A',
-      role: 'selectall',
+      label: "Select All",
+      accelerator: "CmdOrCtrl+A",
+      role: "selectall",
       click: () => {
-        codeMirror.execCommand('selectAll');
+        codeMirror.execCommand("selectAll");
       },
       enabled: value.length > 0,
     },
     {
-      label: 'Cut',
-      accelerator: 'CmdOrCtrl+X',
-      role: 'cut',
+      label: "Cut",
+      accelerator: "CmdOrCtrl+X",
+      role: "cut",
       enabled: selection.length > 0,
     },
   ];
@@ -131,11 +131,11 @@ export function openSnippetMenu(codeMirror: unknown, event: unknown) {
   const selection = codeMirror.doc.getSelection();
   const templates = [
     {
-      label: 'Select All',
-      accelerator: 'CmdOrCtrl+A',
-      role: 'selectall',
+      label: "Select All",
+      accelerator: "CmdOrCtrl+A",
+      role: "selectall",
       click: () => {
-        codeMirror.execCommand('selectAll');
+        codeMirror.execCommand("selectAll");
       },
       // Enabled if there is text to select
       enabled: value.length > 0,
@@ -146,23 +146,23 @@ export function openSnippetMenu(codeMirror: unknown, event: unknown) {
 
 export function openClaimPreviewMenu(claim: unknown, event: unknown) {
   // @if TARGET='app'
-  let templates: unknown = [];
+  const templates: unknown = [];
 
   if (claim) {
     const shareLink = convertToShareLink(claim.canonical_url || claim.permanent_url);
     const claimId = claim.claim_id;
 
     templates.push({
-      label: 'Copy link',
+      label: "Copy link",
       click: () => {
         clipboard.writeText(shareLink);
       },
     });
 
-    templates.push({ type: 'separator' });
+    templates.push({ type: "separator" });
 
     templates.push({
-      label: 'Report content',
+      label: "Report content",
       click: () => {
         shell.openExternal(`https://lbry.com/dmca/${claimId}`);
       },
@@ -179,7 +179,7 @@ export function openClaimPreviewMenu(claim: unknown, event: unknown) {
 
 // Block context menu
 export function stopContextMenu(event: unknown) {
-  if (navigator.userAgent.toLowerCase().indexOf(' electron/') > -1) {
+  if (navigator.userAgent.toLowerCase().indexOf(" electron/") > -1) {
     event.preventDefault();
     event.stopPropagation();
   }

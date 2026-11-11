@@ -1,19 +1,19 @@
-import * as PAGES from 'constants/pages';
-import React from 'react';
-import { Modal } from 'modal/modal';
-import ClaimPreview from 'component/claimPreview';
-import Button from 'component/button';
-import Card from 'component/common/card';
-import Nag from 'component/common/nag';
+import * as PAGES from "constants/pages";
+import React from "react";
+import { Modal } from "modal/modal";
+import ClaimPreview from "component/claimPreview";
+import Button from "component/button";
+import Card from "component/common/card";
+import Nag from "component/common/nag";
 
 type Props = {
-  closeModal: () => void,
-  clearPublish: () => void,
-  navigate: (arg1: string) => void,
-  uri: string,
-  isEdit: boolean,
-  filePath: string | null | undefined,
-  lbryFirstError: string | null | undefined
+  closeModal: () => void;
+  clearPublish: () => void;
+  navigate: (arg1: string) => void;
+  uri: string;
+  isEdit: boolean;
+  filePath: string | null | undefined;
+  lbryFirstError: string | null | undefined;
 };
 
 class ModalPublishSuccess extends React.PureComponent<Props> {
@@ -25,16 +25,16 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
     const { closeModal, clearPublish, navigate, uri, isEdit, filePath, lbryFirstError } = this.props;
     let contentLabel;
     if (isEdit) {
-      contentLabel = __('Update published');
+      contentLabel = __("Update published");
     } else {
-      contentLabel = __('File published');
+      contentLabel = __("File published");
     }
 
     let publishMessage;
     if (isEdit) {
-      publishMessage = __('Your update is now pending. It will take a few minutes to appear for other users.');
+      publishMessage = __("Your update is now pending. It will take a few minutes to appear for other users.");
     } else {
-      publishMessage = __('Your content will be live shortly.');
+      publishMessage = __("Your content will be live shortly.");
     }
 
     function handleClose() {
@@ -42,10 +42,10 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
     }
 
     return (
-// @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; type: string; contentLabel: string; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
+      // @ts-expect-error - TS2322 - Type '{ children: Element; isOpen: true; type: string; contentLabel: string; onAborted: () => void; }' is not assignable to type 'IntrinsicAttributes & ModalProps'.
       <Modal isOpen type="card" contentLabel={__(contentLabel)} onAborted={handleClose}>
         <Card
-          title={__('Success')}
+          title={__("Success")}
           subtitle={publishMessage}
           body={
             <React.Fragment>
@@ -57,9 +57,9 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
                   <React.Fragment>
                     {__(
                       `Upload will continue in the background, please do not shut down immediately. Leaving the app running helps the network, thank you!`
-                    )}{' '}
+                    )}{" "}
                     {/* @ts-expect-error - TS2322 (ts-migration) */}
-                    <Button button="link" href="https://lbry.com/faq/host-content" label={__('Learn More')} />
+                    <Button button="link" href="https://lbry.com/faq/host-content" label={__("Learn More")} />
                   </React.Fragment>
                 </p>
               )}
@@ -70,7 +70,7 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
               <Button
                 // @ts-expect-error - TS2322 (ts-migration)
                 button="primary"
-                label={__('View My Uploads')}
+                label={__("View My Uploads")}
                 onClick={() => {
                   clearPublish();
                   navigate(`/$/${PAGES.UPLOADS}`);
@@ -78,7 +78,7 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
                 }}
               />
               {/* @ts-expect-error - TS2322 (ts-migration) */}
-              <Button button="link" label={__('Close')} onClick={handleClose} />
+              <Button button="link" label={__("Close")} onClick={handleClose} />
             </div>
           }
           nag={
@@ -88,7 +88,7 @@ class ModalPublishSuccess extends React.PureComponent<Props> {
                 type="error"
                 message={
                   <span>
-                    {__('Your file was published to LBRY, but the YouTube upload failed.')}
+                    {__("Your file was published to LBRY, but the YouTube upload failed.")}
                     <br />
                     {lbryFirstError}
                   </span>

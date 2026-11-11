@@ -1,14 +1,14 @@
-import * as PAGES from 'constants/pages';
-import * as ICONS from 'constants/icons';
-import React from 'react';
-import ClaimListDiscover from 'component/claimListDiscover';
-import Page from 'component/page';
-import Button from 'component/button';
-import Icon from 'component/common/icon';
-import * as CS from 'constants/claim_search';
+import * as PAGES from "constants/pages";
+import * as ICONS from "constants/icons";
+import React from "react";
+import ClaimListDiscover from "component/claimListDiscover";
+import Page from "component/page";
+import Button from "component/button";
+import Icon from "component/common/icon";
+import * as CS from "constants/claim_search";
 
 type Props = {
-  tileLayout: boolean
+  tileLayout: boolean;
 };
 
 function TagsFollowingPage(props: Props) {
@@ -21,7 +21,7 @@ function TagsFollowingPage(props: Props) {
         headerLabel={
           <span>
             <Icon icon={ICONS.TAG} size={10} />
-            {__('Your Tags')}
+            {__("Your Tags")}
           </span>
         }
         personalView
@@ -32,7 +32,7 @@ function TagsFollowingPage(props: Props) {
             // @ts-expect-error - TS2322 (ts-migration)
             button="secondary"
             icon={ICONS.EDIT}
-            label={__('Manage')}
+            label={__("Manage")}
             navigate={`/$/${PAGES.TAGS_FOLLOWING_MANAGE}`}
           />
         }

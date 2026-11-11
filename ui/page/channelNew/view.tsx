@@ -1,21 +1,21 @@
-import * as PAGES from 'constants/pages';
-import React from 'react';
-import ChannelForm from 'component/channelForm';
-import Page from 'component/page';
-import { useHistory } from 'react-router';
-import YrblWalletEmpty from 'component/yrblWalletEmpty';
+import * as PAGES from "constants/pages";
+import React from "react";
+import ChannelForm from "component/channelForm";
+import Page from "component/page";
+import { useHistory } from "react-router";
+import YrblWalletEmpty from "component/yrblWalletEmpty";
 
 type Props = {
-  balance: number,
-  claimConfirmEmailReward: () => void,
-  isAuthenticated: boolean
+  balance: number;
+  claimConfirmEmailReward: () => void;
+  isAuthenticated: boolean;
 };
 
 function ChannelNew(props: Props) {
   const { balance, claimConfirmEmailReward, isAuthenticated } = props;
   const { push, location } = useHistory();
   const urlSearchParams = new URLSearchParams(location.search);
-  const redirectUrl = urlSearchParams.get('redirect');
+  const redirectUrl = urlSearchParams.get("redirect");
   const emptyBalance = balance === 0;
 
   React.useEffect(() => {
@@ -26,7 +26,7 @@ function ChannelNew(props: Props) {
 
   return (
     // @ts-expect-error - TS2741 (ts-migration)
-    <Page noSideNavigation noFooter backout={{ title: __('Create a channel'), backLabel: __('Cancel') }}>
+    <Page noSideNavigation noFooter backout={{ title: __("Create a channel"), backLabel: __("Cancel") }}>
       {/* @ts-expect-error - TS2322, TS2741 (ts-migration) */}
       {emptyBalance && <YrblWalletEmpty />}
 

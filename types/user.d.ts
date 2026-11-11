@@ -1,4 +1,4 @@
-type DeviceType = 'mobile' | 'web' | 'desktop';
+type DeviceType = "mobile" | "web" | "desktop";
 
 type User = {
   country: string | null | undefined;

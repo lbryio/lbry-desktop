@@ -1,47 +1,47 @@
-import * as PAGES from 'constants/pages';
-import * as ICONS from 'constants/icons';
-import { SETTINGS_GRP } from 'constants/settings';
-import type { ReactNode } from 'react';
-import React from 'react';
-import { useHistory } from 'react-router-dom';
-import classnames from 'classnames';
-import Button from 'component/button';
-import { IS_MAC } from 'component/app/view';
-import { useIsMediumScreen } from 'effects/use-screensize';
+import * as PAGES from "constants/pages";
+import * as ICONS from "constants/icons";
+import { SETTINGS_GRP } from "constants/settings";
+import type { ReactNode } from "react";
+import React from "react";
+import { useHistory } from "react-router-dom";
+import classnames from "classnames";
+import Button from "component/button";
+import { IS_MAC } from "component/app/view";
+import { useIsMediumScreen } from "effects/use-screensize";
 
 type SideNavLink = {
-  title: string,
-  link?: string,
-  route?: string,
-  section?: string,
-  onClick?: () => any,
-  icon: string,
-  extra?: React.ReactNode
+  title: string;
+  link?: string;
+  route?: string;
+  section?: string;
+  onClick?: () => any;
+  icon: string;
+  extra?: React.ReactNode;
 };
 
 const SIDE_LINKS: Array<SideNavLink> = [
   {
-    title: 'Appearance',
+    title: "Appearance",
     section: SETTINGS_GRP.APPEARANCE,
     icon: ICONS.APPEARANCE,
   },
   {
-    title: 'Account',
+    title: "Account",
     section: SETTINGS_GRP.ACCOUNT,
     icon: ICONS.ACCOUNT,
   },
   {
-    title: 'Content settings',
+    title: "Content settings",
     section: SETTINGS_GRP.CONTENT,
     icon: ICONS.CONTENT,
   },
   {
-    title: 'System',
+    title: "System",
     section: SETTINGS_GRP.SYSTEM,
     icon: ICONS.SETTINGS,
   },
   {
-    title: 'Content Hosting',
+    title: "Content Hosting",
     section: SETTINGS_GRP.STORAGE,
     icon: ICONS.PUBLISH,
   },
@@ -61,7 +61,7 @@ export default function SettingsSideNavigation() {
       window.scrollTo({
         top: element.offsetTop - TOP_MARGIN_PX,
         left: 0,
-        behavior: 'smooth',
+        behavior: "smooth",
       });
     }
   }
@@ -69,12 +69,12 @@ export default function SettingsSideNavigation() {
   function getOnClickHandler(section: unknown) {
     if (section) {
       if (location.pathname === `/$/${PAGES.SETTINGS}`) {
-// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
+        // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
         return () => scrollToSection(section);
       } else if (location.pathname.startsWith(`/$/${PAGES.SETTINGS}/`)) {
         return () => {
           goBack();
-// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
+          // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
           setTimeout(() => scrollToSection(section), 5);
         };
       }
@@ -93,22 +93,22 @@ export default function SettingsSideNavigation() {
 
   return (
     <div
-      className={classnames('navigation__wrapper', {
-        'navigation__wrapper--micro': microNavigation,
-        'navigation__wrapper--absolute': isAbsolute,
+      className={classnames("navigation__wrapper", {
+        "navigation__wrapper--micro": microNavigation,
+        "navigation__wrapper--absolute": isAbsolute,
       })}
     >
       <nav
-        aria-label={'Sidebar'}
-        className={classnames('navigation', {
-          'navigation--micro': microNavigation,
+        aria-label={"Sidebar"}
+        className={classnames("navigation", {
+          "navigation--micro": microNavigation,
           // @if TARGET='app'
-          'navigation--mac': IS_MAC,
+          "navigation--mac": IS_MAC,
           // @endif
         })}
       >
         <div>
-          <ul className={classnames('navigation-links', { 'navigation-links--micro': !sidebarOpen })}>
+          <ul className={classnames("navigation-links", { "navigation-links--micro": !sidebarOpen })}>
             {SIDE_LINKS.map((linkProps) => {
               return (
                 <li key={linkProps.title}>
@@ -118,7 +118,7 @@ export default function SettingsSideNavigation() {
                     label={__(linkProps.title)}
                     title={__(linkProps.title)}
                     icon={linkProps.icon}
-                    className={classnames('navigation-link', {})}
+                    className={classnames("navigation-link", {})}
                     // $FlowFixMe
                     onClick={getOnClickHandler(linkProps.section)}
                   />
@@ -133,9 +133,9 @@ export default function SettingsSideNavigation() {
       {isMediumScreen && sidebarOpen && (
         <>
           <nav
-            className={classnames('navigation--absolute', {
+            className={classnames("navigation--absolute", {
               // @if TARGET='app'
-              'navigation--mac': IS_MAC,
+              "navigation--mac": IS_MAC,
               // @endif
             })}
           >
@@ -151,7 +151,7 @@ export default function SettingsSideNavigation() {
                         label={__(linkProps.title)}
                         title={__(linkProps.title)}
                         icon={linkProps.icon}
-                        className={classnames('navigation-link', {})}
+                        className={classnames("navigation-link", {})}
                         onClick={getOnClickHandler(linkProps.section)}
                       />
                       {linkProps.extra && linkProps.extra}

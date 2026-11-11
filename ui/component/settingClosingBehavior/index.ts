@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import * as SETTINGS from 'constants/settings';
-import { doSetAppToTrayWhenClosed } from 'redux/actions/settings';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
-import SettingClosingBehavior from './view';
+import { connect } from "react-redux";
+import * as SETTINGS from "constants/settings";
+import { doSetAppToTrayWhenClosed } from "redux/actions/settings";
+import { makeSelectClientSetting } from "redux/selectors/settings";
+import SettingClosingBehavior from "./view";
 
 const select = (state: unknown) => ({
   toTrayWhenClosed: makeSelectClientSetting(SETTINGS.TO_TRAY_WHEN_CLOSED)(state),

@@ -1,8 +1,8 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doSetDaemonSetting } from 'redux/actions/settings';
-import { selectDaemonSettings } from 'redux/selectors/settings';
-import MaxPurchasePrice from './view';
+import { connect } from "react-redux";
+import { doSetDaemonSetting } from "redux/actions/settings";
+import { selectDaemonSettings } from "redux/selectors/settings";
+import MaxPurchasePrice from "./view";
 
 const select = (state: unknown) => ({
   daemonSettings: selectDaemonSettings(state),

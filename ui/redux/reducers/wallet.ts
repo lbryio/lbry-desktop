@@ -1,5 +1,5 @@
-import * as ACTIONS from 'constants/action_types';
-import { handleActions } from 'util/redux-utils';
+import * as ACTIONS from "constants/action_types";
+import { handleActions } from "util/redux-utils";
 
 const buildDraftTransaction = () => ({
   amount: undefined,
@@ -9,59 +9,59 @@ const buildDraftTransaction = () => ({
 // TODO: Split into common success and failure types
 // See details in https://github.com/lbryio/lbry/issues/1307
 type ActionResult = {
-  type: any,
-  result: any
+  type: any;
+  result: any;
 };
 
 type WalletState = {
-  balance: any,
-  totalBalance: any,
-  reservedBalance: any,
-  claimsBalance: any,
-  supportsBalance: any,
-  tipsBalance: any,
-  latestBlock: number | null | undefined,
+  balance: any;
+  totalBalance: any;
+  reservedBalance: any;
+  claimsBalance: any;
+  supportsBalance: any;
+  tipsBalance: any;
+  latestBlock: number | null | undefined;
   transactions: {
-    [key: string]: Transaction
-  },
+    [key: string]: Transaction;
+  };
   supports: {
-    [key: string]: Support
-  },
+    [key: string]: Support;
+  };
   abandoningSupportsByOutpoint: {
-    [key: string]: boolean
-  },
-  fetchingTransactions: boolean,
-  fetchingTransactionsError: string,
-  gettingNewAddress: boolean,
-  draftTransaction: any,
-  sendingSupport: boolean,
-  walletIsEncrypted: boolean,
-  walletEncryptPending: boolean,
-  walletEncryptSucceded: boolean | null | undefined,
-  walletEncryptResult: boolean | null | undefined,
-  walletDecryptPending: boolean,
-  walletDecryptSucceded: boolean | null | undefined,
-  walletDecryptResult: boolean | null | undefined,
-  walletUnlockPending: boolean,
-  walletUnlockSucceded: boolean | null | undefined,
-  walletUnlockResult: boolean | null | undefined,
-  walletLockPending: boolean,
-  walletLockSucceded: boolean | null | undefined,
-  walletLockResult: boolean | null | undefined,
-  walletReconnecting: boolean,
-  txoFetchParams: Record<any, any>,
-  utxoCounts: Record<any, any>,
-  txoPage: any,
-  fetchId: string,
-  fetchingTxos: boolean,
-  fetchingTxosError?: string,
-  consolidatingUtxos: boolean,
-  pendingConsolidateTxid?: string,
-  massClaimingTips: boolean,
-  pendingMassClaimTxid?: string,
-  pendingSupportTransactions: Record<any, any> // { claimId: {txid: 123, amount 12.3}, },
-  pendingTxos: Array<string>,
-  abandonClaimSupportError?: string
+    [key: string]: boolean;
+  };
+  fetchingTransactions: boolean;
+  fetchingTransactionsError: string;
+  gettingNewAddress: boolean;
+  draftTransaction: any;
+  sendingSupport: boolean;
+  walletIsEncrypted: boolean;
+  walletEncryptPending: boolean;
+  walletEncryptSucceded: boolean | null | undefined;
+  walletEncryptResult: boolean | null | undefined;
+  walletDecryptPending: boolean;
+  walletDecryptSucceded: boolean | null | undefined;
+  walletDecryptResult: boolean | null | undefined;
+  walletUnlockPending: boolean;
+  walletUnlockSucceded: boolean | null | undefined;
+  walletUnlockResult: boolean | null | undefined;
+  walletLockPending: boolean;
+  walletLockSucceded: boolean | null | undefined;
+  walletLockResult: boolean | null | undefined;
+  walletReconnecting: boolean;
+  txoFetchParams: Record<any, any>;
+  utxoCounts: Record<any, any>;
+  txoPage: any;
+  fetchId: string;
+  fetchingTxos: boolean;
+  fetchingTxosError?: string;
+  consolidatingUtxos: boolean;
+  pendingConsolidateTxid?: string;
+  massClaimingTips: boolean;
+  pendingMassClaimTxid?: string;
+  pendingSupportTransactions: Record<any, any>; // { claimId: {txid: 123, amount 12.3}, },
+  pendingTxos: Array<string>;
+  abandonClaimSupportError?: string;
 };
 
 const defaultState = {
@@ -94,7 +94,7 @@ const defaultState = {
   walletLockPending: false,
   walletLockSucceded: null,
   walletLockResult: null,
-  transactionListFilter: 'all',
+  transactionListFilter: "all",
   walletReconnecting: false,
   txoFetchParams: {},
   utxoCounts: {},
@@ -105,7 +105,7 @@ const defaultState = {
   massClaimingTips: false,
   pendingMassClaimTxid: null,
   txoPage: {},
-  fetchId: '',
+  fetchId: "",
   fetchingTxos: false,
   fetchingTxosError: undefined,
   pendingSupportTransactions: {},
@@ -127,7 +127,7 @@ export const walletReducer = handleActions(
 
       const { transactions } = action.data;
       transactions.forEach((transaction) => {
-// @ts-expect-error - TS2542 - Index signature in type '{ readonly [x: string]: Transaction; }' only permits reading.
+        // @ts-expect-error - TS2542 - Index signature in type '{ readonly [x: string]: Transaction; }' only permits reading.
         byId[transaction.txid] = transaction;
       });
 
@@ -157,7 +157,7 @@ export const walletReducer = handleActions(
       return {
         ...state,
         txoPage: action.data.result,
-        fetchId: '',
+        fetchId: "",
         fetchingTxos: false,
       };
     },
@@ -166,7 +166,7 @@ export const walletReducer = handleActions(
       return {
         ...state,
         txoPage: {},
-        fetchId: '',
+        fetchId: "",
         fetchingTxos: false,
         fetchingTxosError: action.data,
       };
@@ -289,7 +289,7 @@ export const walletReducer = handleActions(
       const {
         outpoint,
       }: {
-        outpoint: string
+        outpoint: string;
       } = action.data;
       const currentlyAbandoning = state.abandoningSupportsByOutpoint;
 
@@ -305,7 +305,7 @@ export const walletReducer = handleActions(
       const {
         outpoint,
       }: {
-        outpoint: string
+        outpoint: string;
       } = action.data;
       const byOutpoint = state.supports;
       const currentlyAbandoning = state.abandoningSupportsByOutpoint;
@@ -341,12 +341,11 @@ export const walletReducer = handleActions(
         txid,
         effective,
       }: {
-        claimId: string,
-        type: string,
-        txid: string,
-        effective: string
-      } =
-        action.data;
+        claimId: string;
+        type: string;
+        txid: string;
+        effective: string;
+      } = action.data;
       const pendingtxs = Object.assign({}, state.pendingSupportTransactions);
 
       pendingtxs[claimId] = { txid, type, effective };
@@ -547,22 +546,31 @@ export const walletReducer = handleActions(
       walletLockResult: action.result,
     }),
 
-    [ACTIONS.SET_TRANSACTION_LIST_FILTER]: (state: WalletState, action: {
-      data: string
-    }) => ({
+    [ACTIONS.SET_TRANSACTION_LIST_FILTER]: (
+      state: WalletState,
+      action: {
+        data: string;
+      }
+    ) => ({
       ...state,
       transactionListFilter: action.data,
     }),
 
-    [ACTIONS.UPDATE_CURRENT_HEIGHT]: (state: WalletState, action: {
-      data: number
-    }) => ({
+    [ACTIONS.UPDATE_CURRENT_HEIGHT]: (
+      state: WalletState,
+      action: {
+        data: number;
+      }
+    ) => ({
       ...state,
       latestBlock: action.data,
     }),
-    [ACTIONS.WALLET_RESTART]: (state: WalletState, action: {
-      data: boolean
-    }) => ({
+    [ACTIONS.WALLET_RESTART]: (
+      state: WalletState,
+      action: {
+        data: boolean;
+      }
+    ) => ({
       ...state,
       walletReconnecting: true,
       walletReconnectingToDefault: action.data,

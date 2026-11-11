@@ -1,28 +1,28 @@
-import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
-import React from 'react';
-import Page from 'component/page';
-import Button from 'component/button';
-import ClaimTilesDiscover from 'component/claimTilesDiscover';
-import ClaimListDiscover from 'component/claimListDiscover';
-import * as CS from 'constants/claim_search';
-import { toCapitalCase } from 'util/string';
-import { CUSTOM_HOMEPAGE } from 'config';
+import * as ICONS from "constants/icons";
+import * as PAGES from "constants/pages";
+import React from "react";
+import Page from "component/page";
+import Button from "component/button";
+import ClaimTilesDiscover from "component/claimTilesDiscover";
+import ClaimListDiscover from "component/claimListDiscover";
+import * as CS from "constants/claim_search";
+import { toCapitalCase } from "util/string";
+import { CUSTOM_HOMEPAGE } from "config";
 
-const MORE_CHANNELS_ANCHOR = 'MoreChannels';
+const MORE_CHANNELS_ANCHOR = "MoreChannels";
 
 type Props = {
-  followedTags: Array<Tag>,
-  subscribedChannels: Array<Subscription>,
-  blockedChannels: Array<string>,
-  homepageData: any
+  followedTags: Array<Tag>;
+  subscribedChannels: Array<Subscription>;
+  blockedChannels: Array<string>;
+  homepageData: any;
 };
 
 type ChannelsFollowingItem = {
-  title: string,
-  link?: string,
-  help?: any,
-  options?: Record<any, any>
+  title: string;
+  link?: string;
+  help?: any;
+  options?: Record<any, any>;
 };
 
 function ChannelsFollowingDiscover(props: Props) {
@@ -36,28 +36,28 @@ function ChannelsFollowingDiscover(props: Props) {
       channelIds = PRIMARY_CONTENT.channelIds;
     }
   }
-  let rowData: Array<ChannelsFollowingItem> = [];
+  const rowData: Array<ChannelsFollowingItem> = [];
   const notChannels = subscribedChannels
     .map(({ uri }) => uri)
     .concat(blockedChannels)
-    .map((uri) => uri.split('#')[1]);
+    .map((uri) => uri.split("#")[1]);
 
   rowData.push({
-    title: 'Top Channels Of All Time',
+    title: "Top Channels Of All Time",
     link: `/$/${PAGES.DISCOVER}?claim_type=channel&${CS.ORDER_BY_KEY}=${CS.ORDER_BY_TOP}&${CS.FRESH_KEY}=${CS.FRESH_ALL}`,
     options: {
       pageSize: 12,
-      claimType: 'channel',
+      claimType: "channel",
       orderBy: CS.ORDER_BY_TOP_VALUE,
     },
   });
 
   rowData.push({
-    title: 'Trending Channels',
+    title: "Trending Channels",
     link: `/$/${PAGES.DISCOVER}?claim_type=channel`,
     options: {
       pageSize: 8,
-      claimType: 'channel',
+      claimType: "channel",
       orderBy: CS.ORDER_BY_TRENDING_VALUE,
     },
   });
@@ -67,7 +67,7 @@ function ChannelsFollowingDiscover(props: Props) {
       title: `Trending Channels for #${toCapitalCase(tag.name)}`,
       link: `/$/${PAGES.DISCOVER}?t=${tag.name}&claim_type=channel`,
       options: {
-        claimType: 'channel',
+        claimType: "channel",
         pageSize: 4,
         tags: [tag.name],
       },
@@ -77,10 +77,10 @@ function ChannelsFollowingDiscover(props: Props) {
 
   if (followedTags.length > 4) {
     rowData.push({
-      title: 'Trending For Your Tags',
+      title: "Trending For Your Tags",
       link: `/$/${PAGES.TAGS_FOLLOWING}?claim_type=channel`,
       options: {
-        claimType: 'channel',
+        claimType: "channel",
         tags: followedTags.map((tag) => tag.name),
       },
     });
@@ -122,7 +122,7 @@ function ChannelsFollowingDiscover(props: Props) {
       ))}
       {
         <h1 id={MORE_CHANNELS_ANCHOR} className="claim-grid__title">
-          {__('More Channels')}
+          {__("More Channels")}
         </h1>
       }
       <ClaimListDiscover

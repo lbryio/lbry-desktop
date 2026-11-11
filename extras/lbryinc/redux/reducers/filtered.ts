@@ -1,6 +1,6 @@
 //@ts-nocheck
-import * as ACTIONS from 'constants/action_types';
-import { handleActions } from 'util/redux-utils';
+import * as ACTIONS from "constants/action_types";
+import { handleActions } from "util/redux-utils";
 
 const defaultState = {
   loading: false,
@@ -9,7 +9,7 @@ const defaultState = {
 
 export const filteredReducer = handleActions(
   {
-    [ACTIONS.FETCH_FILTERED_CONTENT_STARTED]: state => ({
+    [ACTIONS.FETCH_FILTERED_CONTENT_STARTED]: (state) => ({
       ...state,
       loading: true,
     }),

@@ -1,7 +1,7 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectClaimForUri, selectIsUriResolving } from 'redux/selectors/claims';
-import WunderbarSuggestion from './view';
+import { connect } from "react-redux";
+import { selectClaimForUri, selectIsUriResolving } from "redux/selectors/claims";
+import WunderbarSuggestion from "./view";
 
 const select = (state: unknown, props: unknown) => ({
   claim: selectClaimForUri(state, props.uri),

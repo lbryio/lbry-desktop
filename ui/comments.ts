@@ -1,5 +1,5 @@
 // @ts-ignore: config module might not have type declarations
-import { COMMENT_SERVER_API } from 'config';
+import { COMMENT_SERVER_API } from "config";
 
 // Type definitions for comment-related API parameters and responses
 export interface Comment {
@@ -199,88 +199,70 @@ const Comments = {
     Comments.isCustomServer = Comments.url !== COMMENT_SERVER_API;
   },
 
-  moderation_block: (params: ModerationBlockParams): Promise<any> => 
-    fetchCommentsApi('moderation.Block', params),
-  
-  moderation_unblock: (params: ModerationBlockParams): Promise<any> => 
-    fetchCommentsApi('moderation.UnBlock', params),
-  
-  moderation_block_list: (params: BlockedListArgs): Promise<any> => 
-    fetchCommentsApi('moderation.BlockedList', params),
-  
-  moderation_add_delegate: (params: ModerationAddDelegateParams): Promise<any> => 
-    fetchCommentsApi('moderation.AddDelegate', params),
-  
+  moderation_block: (params: ModerationBlockParams): Promise<any> => fetchCommentsApi("moderation.Block", params),
+
+  moderation_unblock: (params: ModerationBlockParams): Promise<any> => fetchCommentsApi("moderation.UnBlock", params),
+
+  moderation_block_list: (params: BlockedListArgs): Promise<any> => fetchCommentsApi("moderation.BlockedList", params),
+
+  moderation_add_delegate: (params: ModerationAddDelegateParams): Promise<any> =>
+    fetchCommentsApi("moderation.AddDelegate", params),
+
   moderation_remove_delegate: (params: ModerationRemoveDelegateParams): Promise<any> =>
-    fetchCommentsApi('moderation.RemoveDelegate', params),
-  
+    fetchCommentsApi("moderation.RemoveDelegate", params),
+
   moderation_list_delegates: (params: ModerationListDelegatesParams): Promise<any> =>
-    fetchCommentsApi('moderation.ListDelegates', params),
-  
-  moderation_am_i: (params: ModerationAmIParams): Promise<any> => 
-    fetchCommentsApi('moderation.AmI', params),
-  
-  comment_list: (params: CommentListParams): Promise<any> => 
-    fetchCommentsApi('comment.List', params),
-  
-  comment_abandon: (params: CommentAbandonParams): Promise<any> => 
-    fetchCommentsApi('comment.Abandon', params),
-  
-  comment_create: (params: CommentCreateParams): Promise<any> => 
-    fetchCommentsApi('comment.Create', params),
-  
-  comment_by_id: (params: CommentByIdParams): Promise<any> => 
-    fetchCommentsApi('comment.ByID', params),
-  
-  comment_pin: (params: CommentPinParams): Promise<any> => 
-    fetchCommentsApi('comment.Pin', params),
-  
-  comment_edit: (params: CommentEditParams): Promise<any> => 
-    fetchCommentsApi('comment.Edit', params),
-  
-  reaction_list: (params: ReactionListParams): Promise<any> => 
-    fetchCommentsApi('reaction.List', params),
-  
-  reaction_react: (params: ReactionReactParams): Promise<any> => 
-    fetchCommentsApi('reaction.React', params),
-  
-  setting_list: (params: SettingsParams): Promise<any> => 
-    fetchCommentsApi('setting.List', params),
-  
-  setting_block_word: (params: BlockWordParams): Promise<any> => 
-    fetchCommentsApi('setting.BlockWord', params),
-  
-  setting_unblock_word: (params: BlockWordParams): Promise<any> => 
-    fetchCommentsApi('setting.UnBlockWord', params),
-  
-  setting_list_blocked_words: (params: SettingsParams): Promise<any> => 
-    fetchCommentsApi('setting.ListBlockedWords', params),
-  
-  setting_update: (params: UpdateSettingsParams): Promise<any> => 
-    fetchCommentsApi('setting.Update', params),
-  
-  setting_get: (params: SettingsParams): Promise<any> => 
-    fetchCommentsApi('setting.Get', params),
-  
-  super_list: (params: SuperListParams): Promise<any> => 
-    fetchCommentsApi('comment.SuperChatList', params),
+    fetchCommentsApi("moderation.ListDelegates", params),
+
+  moderation_am_i: (params: ModerationAmIParams): Promise<any> => fetchCommentsApi("moderation.AmI", params),
+
+  comment_list: (params: CommentListParams): Promise<any> => fetchCommentsApi("comment.List", params),
+
+  comment_abandon: (params: CommentAbandonParams): Promise<any> => fetchCommentsApi("comment.Abandon", params),
+
+  comment_create: (params: CommentCreateParams): Promise<any> => fetchCommentsApi("comment.Create", params),
+
+  comment_by_id: (params: CommentByIdParams): Promise<any> => fetchCommentsApi("comment.ByID", params),
+
+  comment_pin: (params: CommentPinParams): Promise<any> => fetchCommentsApi("comment.Pin", params),
+
+  comment_edit: (params: CommentEditParams): Promise<any> => fetchCommentsApi("comment.Edit", params),
+
+  reaction_list: (params: ReactionListParams): Promise<any> => fetchCommentsApi("reaction.List", params),
+
+  reaction_react: (params: ReactionReactParams): Promise<any> => fetchCommentsApi("reaction.React", params),
+
+  setting_list: (params: SettingsParams): Promise<any> => fetchCommentsApi("setting.List", params),
+
+  setting_block_word: (params: BlockWordParams): Promise<any> => fetchCommentsApi("setting.BlockWord", params),
+
+  setting_unblock_word: (params: BlockWordParams): Promise<any> => fetchCommentsApi("setting.UnBlockWord", params),
+
+  setting_list_blocked_words: (params: SettingsParams): Promise<any> =>
+    fetchCommentsApi("setting.ListBlockedWords", params),
+
+  setting_update: (params: UpdateSettingsParams): Promise<any> => fetchCommentsApi("setting.Update", params),
+
+  setting_get: (params: SettingsParams): Promise<any> => fetchCommentsApi("setting.Get", params),
+
+  super_list: (params: SuperListParams): Promise<any> => fetchCommentsApi("comment.SuperChatList", params),
 };
 
 function fetchCommentsApi(method: string, params: Record<string, any>): Promise<any> {
   if (!Comments.url) {
-    return Promise.reject(new Error('Commenting server is not set.'));
+    return Promise.reject(new Error("Commenting server is not set."));
   } else if (!Comments.enabled) {
-    return Promise.reject(new Error('Comments are not currently enabled.'));
+    return Promise.reject(new Error("Comments are not currently enabled."));
   }
 
   const url = `${Comments.url}?m=${method}`;
   const options: RequestInit = {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      jsonrpc: '2.0',
+      jsonrpc: "2.0",
       id: 1,
       method,
       params,

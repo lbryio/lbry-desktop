@@ -1,10 +1,10 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { makeSelectClaimForUri, makeSelectContentTypeForUri, makeSelectMetadataForUri } from 'redux/selectors/claims';
-import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
-import { selectUser } from 'redux/selectors/user';
-import { doOpenFileInFolder } from 'redux/actions/file';
-import FileDetails from './view';
+import { connect } from "react-redux";
+import { makeSelectClaimForUri, makeSelectContentTypeForUri, makeSelectMetadataForUri } from "redux/selectors/claims";
+import { makeSelectFileInfoForUri } from "redux/selectors/file_info";
+import { selectUser } from "redux/selectors/user";
+import { doOpenFileInFolder } from "redux/actions/file";
+import FileDetails from "./view";
 
 const select = (state: unknown, props: unknown) => ({
   claim: makeSelectClaimForUri(props.uri)(state),

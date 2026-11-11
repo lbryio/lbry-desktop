@@ -1,10 +1,10 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doCollectionEdit } from 'redux/actions/collections';
-import { makeSelectCollectionForIdHasClaimUrl } from 'redux/selectors/collections';
-import * as COLLECTIONS_CONSTS from 'constants/collections';
-import FileWatchLaterLink from './view';
-import { doToast } from 'redux/actions/notifications';
+import { connect } from "react-redux";
+import { doCollectionEdit } from "redux/actions/collections";
+import { makeSelectCollectionForIdHasClaimUrl } from "redux/selectors/collections";
+import * as COLLECTIONS_CONSTS from "constants/collections";
+import FileWatchLaterLink from "./view";
+import { doToast } from "redux/actions/notifications";
 
 const select = (state: unknown, props: unknown) => {
   const { uri } = props;

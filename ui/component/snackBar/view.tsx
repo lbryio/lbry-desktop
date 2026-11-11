@@ -1,18 +1,21 @@
-import * as ICONS from 'constants/icons';
-import React from 'react';
-import Button from 'component/button';
-import classnames from 'classnames';
-import Icon from 'component/common/icon';
-import LbcMessage from 'component/common/lbc-message';
+import * as ICONS from "constants/icons";
+import React from "react";
+import Button from "component/button";
+import classnames from "classnames";
+import Icon from "component/common/icon";
+import LbcMessage from "component/common/lbc-message";
 
 type Props = {
-  removeSnack: (arg1?: any) => void,
-  snack: {
-    linkTarget: string | null | undefined,
-    linkText: string | null | undefined,
-    message: string,
-    isError: boolean
-  } | null | undefined
+  removeSnack: (arg1?: any) => void;
+  snack:
+    | {
+        linkTarget: string | null | undefined;
+        linkText: string | null | undefined;
+        message: string;
+        isError: boolean;
+      }
+    | null
+    | undefined;
 };
 
 class SnackBar extends React.PureComponent<Props> {
@@ -37,7 +40,7 @@ class SnackBar extends React.PureComponent<Props> {
     const { message, linkText, linkTarget, isError } = snack;
 
     if (this.hideTimeout === null) {
-// @ts-expect-error - TS2322 - Type 'Timeout' is not assignable to type 'number'.
+      // @ts-expect-error - TS2322 - Type 'Timeout' is not assignable to type 'number'.
       this.hideTimeout = setTimeout(() => {
         this.hideTimeout = null;
         removeSnack();
@@ -46,8 +49,8 @@ class SnackBar extends React.PureComponent<Props> {
 
     return (
       <div
-        className={classnames('snack-bar', {
-          'snack-bar--error': isError,
+        className={classnames("snack-bar", {
+          "snack-bar--error": isError,
         })}
       >
         <div className="snack-bar__message">

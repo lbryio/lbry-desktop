@@ -1,6 +1,6 @@
 //@ts-nocheck
 // @if TARGET='app'
-import {ipcRenderer} from 'electron';
+import { ipcRenderer } from "electron";
 // @endif
 
 const Native: Record<string, any> = {};
@@ -9,10 +9,10 @@ const Native: Record<string, any> = {};
 Native.getAppVersionInfo = () =>
   new Promise<any>((resolve) => {
     // @if TARGET='app'
-    ipcRenderer.once('version-info-received', (event, versionInfo) => {
+    ipcRenderer.once("version-info-received", (event, versionInfo) => {
       resolve(versionInfo);
     });
-    ipcRenderer.send('version-info-requested');
+    ipcRenderer.send("version-info-requested");
     // @endif
   });
 // @endif

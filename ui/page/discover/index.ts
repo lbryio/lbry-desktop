@@ -1,13 +1,13 @@
 //@ts-nocheck
-import * as CS from 'constants/claim_search';
-import { connect } from 'react-redux';
-import { doResolveUri } from 'redux/actions/claims';
-import { selectClaimForUri } from 'redux/selectors/claims';
-import * as SETTINGS from 'constants/settings';
-import { selectFollowedTags } from 'redux/selectors/tags';
-import { doToggleTagFollowDesktop } from 'redux/actions/tags';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
-import Tags from './view';
+import * as CS from "constants/claim_search";
+import { connect } from "react-redux";
+import { doResolveUri } from "redux/actions/claims";
+import { selectClaimForUri } from "redux/selectors/claims";
+import * as SETTINGS from "constants/settings";
+import { selectFollowedTags } from "redux/selectors/tags";
+import { doToggleTagFollowDesktop } from "redux/actions/tags";
+import { makeSelectClientSetting } from "redux/selectors/settings";
+import Tags from "./view";
 
 const select = (state: unknown, props: unknown) => {
   const urlParams = new URLSearchParams(props.location.search);

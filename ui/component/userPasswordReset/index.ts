@@ -1,14 +1,14 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import {
   selectPasswordResetSuccess,
   selectPasswordResetIsPending,
   selectPasswordResetError,
   selectEmailToVerify,
-} from 'redux/selectors/user';
-import { doUserPasswordReset, doClearPasswordEntry, doClearEmailEntry } from 'redux/actions/user';
-import { doToast } from 'redux/actions/notifications';
-import UserSignIn from './view';
+} from "redux/selectors/user";
+import { doUserPasswordReset, doClearPasswordEntry, doClearEmailEntry } from "redux/actions/user";
+import { doToast } from "redux/actions/notifications";
+import UserSignIn from "./view";
 
 const select = (state: unknown) => ({
   passwordResetSuccess: selectPasswordResetSuccess(state),

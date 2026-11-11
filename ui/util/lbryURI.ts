@@ -1,20 +1,21 @@
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = process.env.NODE_ENV === "production";
 const channelNameMinLength = 1;
 const claimIdMaxLength = 40;
 
 // see https://spec.lbry.com/#urls
-export const regexInvalidURI = /[ =&#:$@%?;/\\"<>%{}|^~[\]`\u{0000}-\u{0008}\u{000b}-\u{000c}\u{000e}-\u{001F}\u{D800}-\u{DFFF}\u{FFFE}-\u{FFFF}]/u;
+export const regexInvalidURI =
+  /[ =&#:$@%?;/\\"<>%{}|^~[\]`\u{0000}-\u{0008}\u{000b}-\u{000c}\u{000e}-\u{001F}\u{D800}-\u{DFFF}\u{FFFE}-\u{FFFF}]/u;
 export const regexAddress = /^(b|r)(?=[^0OIl]{32,33})[0-9A-Za-z]{32,33}$/;
-const regexPartProtocol = '^((?:lbry://)?)';
-const regexPartStreamOrChannelName = '([^:$#/]*)';
-const regexPartModifierSeparator = '([:$#]?)([^/]*)';
-const queryStringBreaker = '^([\\S]+)([?][\\S]*)';
+const regexPartProtocol = "^((?:lbry://)?)";
+const regexPartStreamOrChannelName = "([^:$#/]*)";
+const regexPartModifierSeparator = "([:$#]?)([^/]*)";
+const queryStringBreaker = "^([\\S]+)([?][\\S]*)";
 const separateQuerystring = new RegExp(queryStringBreaker);
 
-const MOD_SEQUENCE_SEPARATOR = '*';
-const MOD_CLAIM_ID_SEPARATOR_OLD = '#';
-const MOD_CLAIM_ID_SEPARATOR = ':';
-const MOD_BID_POSITION_SEPARATOR = '$';
+const MOD_SEQUENCE_SEPARATOR = "*";
+const MOD_CLAIM_ID_SEPARATOR_OLD = "#";
+const MOD_CLAIM_ID_SEPARATOR = ":";
+const MOD_BID_POSITION_SEPARATOR = "$";
 
 /**
  * Parses a LBRY name into its component parts. Throws errors with user-friendly
@@ -40,7 +41,7 @@ export function parseURI(url: string, requireProto: boolean = false): LbryUrlObj
     regexPartProtocol + // protocol
       regexPartStreamOrChannelName + // stream or channel name (stops at the first separator or end)
       regexPartModifierSeparator + // modifier separator, modifier (stops at the first path separator or end)
-      '(/?)' + // path separator, there should only be one (optional) slash to separate the stream and channel parts
+      "(/?)" + // path separator, there should only be one (optional) slash to separate the stream and channel parts
       regexPartStreamOrChannelName +
       regexPartModifierSeparator
   );
@@ -54,42 +55,42 @@ export function parseURI(url: string, requireProto: boolean = false): LbryUrlObj
   const cleanURL = QSStrippedURL || url;
   const regexMatch = componentsRegex.exec(cleanURL) || [];
   const [proto, ...rest] = regexMatch.slice(1).map((match) => match || null);
-  const path = rest.join('');
+  const path = rest.join("");
   const [
     streamNameOrChannelName,
     primaryModSeparator,
     primaryModValue,
-    pathSep, // eslint-disable-line no-unused-vars
+    pathSep,
     possibleStreamName,
     secondaryModSeparator,
     secondaryModValue,
   ] = rest;
-  const searchParams = new URLSearchParams(qs || '');
-  const startTime = searchParams.get('t');
+  const searchParams = new URLSearchParams(qs || "");
+  const startTime = searchParams.get("t");
 
   // Validate protocol
   if (requireProto && !proto) {
-    throw new Error(__('LBRY URLs must include a protocol prefix (lbry://).'));
+    throw new Error(__("LBRY URLs must include a protocol prefix (lbry://)."));
   }
 
   // Validate and process name
   if (!streamNameOrChannelName) {
-    throw new Error(__('URL does not include name.'));
+    throw new Error(__("URL does not include name."));
   }
 
   rest.forEach((urlPiece) => {
-    if (urlPiece && urlPiece.includes(' ')) {
-      throw new Error(__('URL can not include a space'));
+    if (urlPiece && urlPiece.includes(" ")) {
+      throw new Error(__("URL can not include a space"));
     }
   });
 
-  const includesChannel = streamNameOrChannelName.startsWith('@');
-  const isChannel = streamNameOrChannelName.startsWith('@') && !possibleStreamName;
+  const includesChannel = streamNameOrChannelName.startsWith("@");
+  const isChannel = streamNameOrChannelName.startsWith("@") && !possibleStreamName;
   const channelName = includesChannel && streamNameOrChannelName.slice(1);
 
   if (includesChannel) {
     if (!channelName) {
-      throw new Error(__('No channel name after @.'));
+      throw new Error(__("No channel name after @."));
     }
 
     if (channelName.length < channelNameMinLength) {
@@ -160,11 +161,11 @@ function parseURIModifier(modSeperator?: string | null, modValue?: string | null
   }
 
   if (claimSequence && !claimSequence.match(/^-?[1-9][0-9]*$/)) {
-    throw new Error(__('Claim sequence must be a number.'));
+    throw new Error(__("Claim sequence must be a number."));
   }
 
   if (bidPosition && !bidPosition.match(/^-?[1-9][0-9]*$/)) {
-    throw new Error(__('Bid position must be a number.'));
+    throw new Error(__("Bid position must be a number."));
   }
 
   return [claimId, claimSequence, bidPosition];
@@ -175,11 +176,7 @@ function parseURIModifier(modSeperator?: string | null, modValue?: string | null
  *
  * The channelName key will accept names with or without the @ prefix.
  */
-export function buildURI(
-  UrlObj: LbryUrlObj,
-  includeProto: boolean = true,
-  protoDefault: string = 'lbry://',
-): string {
+export function buildURI(UrlObj: LbryUrlObj, includeProto: boolean = true, protoDefault: string = "lbry://"): string {
   const {
     streamName,
     streamClaimId,
@@ -212,25 +209,25 @@ export function buildURI(
     );
   }
 
-  const formattedChannelName = channelName && (channelName.startsWith('@') ? channelName : `@${channelName}`);
+  const formattedChannelName = channelName && (channelName.startsWith("@") ? channelName : `@${channelName}`);
   const primaryClaimName = claimName || contentName || formattedChannelName || streamName;
   const primaryClaimId = claimId || (formattedChannelName ? channelClaimId : streamClaimId);
   const secondaryClaimName = (!claimName && contentName) || (formattedChannelName ? streamName : null);
   const secondaryClaimId = secondaryClaimName && streamClaimId;
 
   return (
-    (includeProto ? protoDefault : '') +
+    (includeProto ? protoDefault : "") +
     // primaryClaimName will always exist here because we throw above if there is no "name" value passed in
     // $FlowFixMe
     primaryClaimName +
-    (primaryClaimId ? `#${primaryClaimId}` : '') +
-    (primaryClaimSequence ? `:${primaryClaimSequence}` : '') +
-    (primaryBidPosition ? `${primaryBidPosition}` : '') +
-    (secondaryClaimName ? `/${secondaryClaimName}` : '') +
-    (secondaryClaimId ? `#${secondaryClaimId}` : '') +
-    (secondaryClaimSequence ? `:${secondaryClaimSequence}` : '') +
-    (secondaryBidPosition ? `${secondaryBidPosition}` : '') +
-    (startTime ? `?t=${startTime}` : '')
+    (primaryClaimId ? `#${primaryClaimId}` : "") +
+    (primaryClaimSequence ? `:${primaryClaimSequence}` : "") +
+    (primaryBidPosition ? `${primaryBidPosition}` : "") +
+    (secondaryClaimName ? `/${secondaryClaimName}` : "") +
+    (secondaryClaimId ? `#${secondaryClaimId}` : "") +
+    (secondaryClaimSequence ? `:${secondaryClaimSequence}` : "") +
+    (secondaryBidPosition ? `${secondaryBidPosition}` : "") +
+    (startTime ? `?t=${startTime}` : "")
   );
 }
 
@@ -309,13 +306,13 @@ export function convertToShareLink(URL: string) {
       secondaryClaimSequence,
     },
     true,
-    'https://open.lbry.com/'
+    "https://open.lbry.com/"
   );
 }
 
 export function splitBySeparator(uri: string) {
   const protocolLength = 7;
-  return uri.startsWith('lbry://') ? uri.slice(protocolLength).split(/[#:*]/) : uri.split(/#:\*\$/);
+  return uri.startsWith("lbry://") ? uri.slice(protocolLength).split(/[#:*]/) : uri.split(/#:\*\$/);
 }
 
 export function isURIEqual(uriA: string, uriB: string) {

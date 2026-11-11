@@ -1,9 +1,9 @@
-import * as ACTIONS from 'constants/action_types';
-import { DEFAULT_KNOWN_TAGS, DEFAULT_FOLLOWED_TAGS } from 'constants/tags';
-import { handleActions } from 'util/redux-utils';
+import * as ACTIONS from "constants/action_types";
+import { DEFAULT_KNOWN_TAGS, DEFAULT_FOLLOWED_TAGS } from "constants/tags";
+import { handleActions } from "util/redux-utils";
 
 function getDefaultKnownTags() {
-// @ts-expect-error - TS2769 - No overload matches this call.
+  // @ts-expect-error - TS2769 - No overload matches this call.
   return DEFAULT_FOLLOWED_TAGS.concat(DEFAULT_KNOWN_TAGS).reduce<Record<string, any>>((tagsMap, tag) => {
     tagsMap[tag] = { name: tag };
     return tagsMap;
@@ -39,7 +39,7 @@ export default handleActions(
       const { knownTags } = state;
       const { name } = action.data;
 
-      let newKnownTags = { ...knownTags };
+      const newKnownTags = { ...knownTags };
       newKnownTags[name] = { name };
 
       return {
@@ -52,7 +52,7 @@ export default handleActions(
       const { knownTags, followedTags } = state;
       const { name } = action.data;
 
-      let newKnownTags = { ...knownTags };
+      const newKnownTags = { ...knownTags };
       delete newKnownTags[name];
       const newFollowedTags = followedTags.filter((tag) => tag !== name);
 
@@ -62,14 +62,17 @@ export default handleActions(
         followedTags: newFollowedTags,
       };
     },
-    [ACTIONS.SYNC_STATE_POPULATE]: (state: TagState, action: {
-      data: {
-        tags: Array<string> | null | undefined
+    [ACTIONS.SYNC_STATE_POPULATE]: (
+      state: TagState,
+      action: {
+        data: {
+          tags: Array<string> | null | undefined;
+        };
       }
-    }) => {
+    ) => {
       const { tags } = action.data;
       if (Array.isArray(tags)) {
-        const next = tags && tags.filter((tag) => typeof tag === 'string');
+        const next = tags && tags.filter((tag) => typeof tag === "string");
         const prev = state.followedTags;
 
         if (next && prev && prev.length === next.length && prev.every((value, index) => value === next[index])) {

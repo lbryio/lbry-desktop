@@ -1,10 +1,10 @@
-import CreditAmount from 'component/common/credit-amount';
-import I18nMessage from 'component/i18nMessage';
-import React from 'react';
+import CreditAmount from "component/common/credit-amount";
+import I18nMessage from "component/i18nMessage";
+import React from "react";
 
 type Props = {
-  balance: number,
-  inline?: boolean
+  balance: number;
+  inline?: boolean;
 };
 
 function WalletSpendableBalanceHelp(props: Props) {
@@ -16,9 +16,9 @@ function WalletSpendableBalanceHelp(props: Props) {
   );
 
   return !balance ? null : inline ? (
-    <span className="help--spendable">{getMessage(__('%balance% available.'))}</span>
+    <span className="help--spendable">{getMessage(__("%balance% available."))}</span>
   ) : (
-    <div className="help">{getMessage(__('Your immediately spendable balance is %balance%.'))}</div>
+    <div className="help">{getMessage(__("Your immediately spendable balance is %balance%."))}</div>
   );
 }
 

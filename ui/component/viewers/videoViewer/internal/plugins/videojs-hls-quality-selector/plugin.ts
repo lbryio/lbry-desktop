@@ -1,9 +1,9 @@
 //@ts-nocheck
-/* eslint-disable */
-import videojs from 'video.js';
-import { version as VERSION } from './package.json';
-import ConcreteButton from './ConcreteButton';
-import ConcreteMenuItem from './ConcreteMenuItem';
+
+import videojs from "video.js";
+import { version as VERSION } from "./package.json";
+import ConcreteButton from "./ConcreteButton";
+import ConcreteMenuItem from "./ConcreteMenuItem";
 
 // Default options for the plugin.
 const defaults: Record<string, any> = {};
@@ -45,7 +45,7 @@ class HlsQualitySelectorPlugin {
     this.bindPlayerEvents();
 
     // Listen for source changes
-    this.player.on('loadedmetadata', (e) => {
+    this.player.on("loadedmetadata", (e) => {
       this.updatePlugin();
     });
   }
@@ -67,7 +67,7 @@ class HlsQualitySelectorPlugin {
    * @return {*} - videojs-http-streaming plugin.
    */
   getHls() {
-    console.warn('hls-quality-selector: WARN: Using getHls options is deprecated. Use getVhs instead.')
+    console.warn("hls-quality-selector: WARN: Using getHls options is deprecated. Use getVhs instead.");
     return this.getVhs();
   }
 
@@ -84,7 +84,7 @@ class HlsQualitySelectorPlugin {
    * Binds listener for quality level changes.
    */
   bindPlayerEvents() {
-    this.player.qualityLevels().on('addqualitylevel', this.onAddQualityLevel.bind(this));
+    this.player.qualityLevels().on("addqualitylevel", this.onAddQualityLevel.bind(this));
   }
 
   /**
@@ -98,19 +98,19 @@ class HlsQualitySelectorPlugin {
     const placementIndex = player.controlBar.children().length - 2;
     const concreteButtonInstance = player.controlBar.addChild(
       this._qualityButton,
-      { componentClass: 'qualitySelector' },
+      { componentClass: "qualitySelector" },
       this.config.placementIndex || placementIndex
     );
 
-    concreteButtonInstance.addClass('vjs-quality-selector');
+    concreteButtonInstance.addClass("vjs-quality-selector");
     if (!this.config.displayCurrentQuality) {
-      const icon = ` ${this.config.vjsIconClass || 'vjs-icon-hd'}`;
+      const icon = ` ${this.config.vjsIconClass || "vjs-icon-hd"}`;
 
-      concreteButtonInstance.menuButton_.$('.vjs-icon-placeholder').className += icon;
+      concreteButtonInstance.menuButton_.$(".vjs-icon-placeholder").className += icon;
     } else {
-      this.setButtonInnerText('auto');
+      this.setButtonInnerText("auto");
     }
-    concreteButtonInstance.removeClass('vjs-hidden');
+    concreteButtonInstance.removeClass("vjs-hidden");
   }
 
   /**
@@ -119,7 +119,7 @@ class HlsQualitySelectorPlugin {
    * @param {string} text - the text to display in the button.
    */
   setButtonInnerText(text: unknown) {
-    this._qualityButton.menuButton_.$('.vjs-icon-placeholder').innerHTML = text;
+    this._qualityButton.menuButton_.$(".vjs-icon-placeholder").innerHTML = text;
   }
 
   /**
@@ -150,7 +150,7 @@ class HlsQualitySelectorPlugin {
         }).length
       ) {
         const levelItem = this.getQualityMenuItem.call(this, {
-          label: levels[i].height + 'p',
+          label: levels[i].height + "p",
           value: levels[i].height,
         });
 
@@ -159,7 +159,7 @@ class HlsQualitySelectorPlugin {
     }
 
     levelItems.sort((current, next) => {
-      if (typeof current !== 'object' || typeof next !== 'object') {
+      if (typeof current !== "object" || typeof next !== "object") {
         return -1;
       }
       if (current.item.value < next.item.value) {
@@ -173,8 +173,8 @@ class HlsQualitySelectorPlugin {
 
     levelItems.push(
       this.getQualityMenuItem.call(this, {
-        label: player.localize('Auto'),
-        value: 'auto',
+        label: player.localize("Auto"),
+        value: "auto",
         selected: true,
       })
     );
@@ -199,13 +199,13 @@ class HlsQualitySelectorPlugin {
     this._currentQuality = height;
 
     if (this.config.displayCurrentQuality) {
-      this.setButtonInnerText(height === 'auto' ? height : `${height}p`);
+      this.setButtonInnerText(height === "auto" ? height : `${height}p`);
     }
 
     for (let i = 0; i < qualityList.length; ++i) {
       const quality = qualityList[i];
 
-      quality.enabled = quality.height === height || height === 'auto';
+      quality.enabled = quality.height === height || height === "auto";
     }
     this._qualityButton.unpressButton();
   }
@@ -216,7 +216,7 @@ class HlsQualitySelectorPlugin {
    * @return {string} the currently set quality
    */
   getCurrentQuality() {
-    return this._currentQuality || 'auto';
+    return this._currentQuality || "auto";
   }
 }
 
@@ -235,7 +235,7 @@ class HlsQualitySelectorPlugin {
  *           A plain object containing options for the plugin.
  */
 const onPlayerReady = (player: unknown, options: unknown) => {
-  player.addClass('vjs-hls-quality-selector');
+  player.addClass("vjs-hls-quality-selector");
   player.hlsQualitySelector = new HlsQualitySelectorPlugin(player, options);
 };
 
@@ -258,10 +258,9 @@ const hlsQualitySelector = function (options: unknown) {
 };
 
 // Register the plugin with video.js.
-registerPlugin('hlsQualitySelector', hlsQualitySelector);
+registerPlugin("hlsQualitySelector", hlsQualitySelector);
 
 // Include the version number.
 hlsQualitySelector.VERSION = VERSION;
 
 export default hlsQualitySelector;
-/* eslint-enable */

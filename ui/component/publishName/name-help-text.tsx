@@ -1,13 +1,13 @@
-import * as React from 'react';
-import Button from 'component/button';
-import { buildURI } from 'util/lbryURI';
-import I18nMessage from 'component/i18nMessage';
+import * as React from "react";
+import Button from "component/button";
+import { buildURI } from "util/lbryURI";
+import I18nMessage from "component/i18nMessage";
 
 type Props = {
-  uri: string | null | undefined,
-  myClaimForUri: StreamClaim | null | undefined,
-  isStillEditing: boolean,
-  onEditMyClaim: (arg1: any, arg2: string) => void
+  uri: string | null | undefined;
+  myClaimForUri: StreamClaim | null | undefined;
+  isStillEditing: boolean;
+  onEditMyClaim: (arg1: any, arg2: string) => void;
 };
 
 function NameHelpText(props: Props) {
@@ -15,7 +15,7 @@ function NameHelpText(props: Props) {
   let nameHelpText;
 
   if (isStillEditing) {
-    nameHelpText = __('You are currently editing this claim.');
+    nameHelpText = __("You are currently editing this claim.");
   } else if (uri && myClaimForUri) {
     const editUri = buildURI({
       streamName: myClaimForUri.name,
@@ -42,7 +42,7 @@ function NameHelpText(props: Props) {
         <Button
           // @ts-expect-error - TS2322 (ts-migration)
           button="link"
-          label={__('Edit existing claim instead')}
+          label={__("Edit existing claim instead")}
           onClick={() => onEditMyClaim(myClaimForUri, editUri)}
         />
       </React.Fragment>
@@ -52,7 +52,7 @@ function NameHelpText(props: Props) {
   return (
     <React.Fragment>
       {nameHelpText || (
-        <span>{__('Create a URL for this content. Simpler names are easier to find and remember.')}</span>
+        <span>{__("Create a URL for this content. Simpler names are easier to find and remember.")}</span>
       )}
     </React.Fragment>
   );

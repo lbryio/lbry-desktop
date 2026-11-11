@@ -1,7 +1,7 @@
 //@ts-nocheck
-import React from 'react';
-import https from 'https';
-import useIsMounted from 'effects/use-is-mounted';
+import React from "react";
+import https from "https";
+import useIsMounted from "effects/use-is-mounted";
 
 // Returns web blob from the streaming url
 export default function useStream(url: unknown) {
@@ -15,11 +15,11 @@ export default function useStream(url: unknown) {
 
   React.useEffect(() => {
     if (url && isMounted.current) {
-      https.get(url, response => {
+      https.get(url, (response) => {
         if (isMounted && response.statusCode >= 200 && response.statusCode < 300) {
-          let chunks: unknown = [];
+          const chunks: unknown = [];
           // Handle stream chunk recived
-          response.on('data', function(chunk) {
+          response.on("data", function (chunk) {
             if (isMounted.current) {
               chunks.push(chunk);
             } else {
@@ -29,7 +29,7 @@ export default function useStream(url: unknown) {
             }
           });
           // Handle stream ended
-          response.on('end', () => {
+          response.on("end", () => {
             if (isMounted.current) {
               const buffer = Buffer.concat(chunks);
               const blob = new Blob([buffer]);
@@ -37,7 +37,7 @@ export default function useStream(url: unknown) {
             }
           });
           // Handle stream error
-          response.on('error', () => {
+          response.on("error", () => {
             if (isMounted.current) {
               setState({ error: true, loading: false });
             }

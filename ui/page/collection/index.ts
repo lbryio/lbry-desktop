@@ -1,8 +1,8 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 
-import { withRouter } from 'react-router-dom';
-import CollectionPage from './view';
+import { withRouter } from "react-router-dom";
+import CollectionPage from "./view";
 import {
   selectTitleForUri,
   getThumbnailFromClaim,
@@ -10,7 +10,7 @@ import {
   makeSelectClaimIsPending,
   makeSelectClaimForClaimId,
   makeSelectChannelForClaimUri,
-} from 'redux/selectors/claims';
+} from "redux/selectors/claims";
 
 import {
   makeSelectCollectionForId,
@@ -19,10 +19,10 @@ import {
   makeSelectCollectionIsMine,
   makeSelectCountForCollectionId,
   makeSelectEditedCollectionForId,
-} from 'redux/selectors/collections';
+} from "redux/selectors/collections";
 
-import { doFetchItemsInCollection, doCollectionDelete, doCollectionEdit } from 'redux/actions/collections';
-import { selectUser } from 'redux/selectors/user';
+import { doFetchItemsInCollection, doCollectionDelete, doCollectionEdit } from "redux/actions/collections";
+import { selectUser } from "redux/selectors/user";
 
 const select = (state: unknown, props: unknown) => {
   const { match } = props;

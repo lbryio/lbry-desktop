@@ -1,7 +1,7 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectTitleForUri } from 'redux/selectors/claims';
-import FileTitleSection from './view';
+import { connect } from "react-redux";
+import { selectTitleForUri } from "redux/selectors/claims";
+import FileTitleSection from "./view";
 
 const select = (state: unknown, props: unknown) => ({
   title: selectTitleForUri(state, props.uri),

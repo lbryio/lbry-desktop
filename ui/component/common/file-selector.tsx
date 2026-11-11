@@ -1,29 +1,29 @@
-import * as React from 'react';
+import * as React from "react";
 // @ts-expect-error - TS2792 - Cannot find module 'electron'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-import { ipcRenderer } from 'electron';
-import path from 'path';
-import Button from 'component/button';
-import { FormField } from 'component/common/form';
+import { ipcRenderer } from "electron";
+import path from "path";
+import Button from "component/button";
+import { FormField } from "component/common/form";
 
 type Props = {
-  type: string,
-  currentPath?: string | null | undefined,
-  onFileChosen: (arg1: FileWithPath) => void,
-  label?: string,
-  placeholder?: string,
-  accept?: string,
-  error?: string,
-  disabled?: boolean,
-  autoFocus?: boolean,
+  type: string;
+  currentPath?: string | null | undefined;
+  onFileChosen: (arg1: FileWithPath) => void;
+  label?: string;
+  placeholder?: string;
+  accept?: string;
+  error?: string;
+  disabled?: boolean;
+  autoFocus?: boolean;
   filters?: Array<{
-    name: string,
-    extension: string[]
-  }>,
-  readFile?: boolean
+    name: string;
+    extension: string[];
+  }>;
+  readFile?: boolean;
 };
 
 // The folder of the last file picked with an "openFile" selector, so the next dialog starts there.
-const LAST_FILE_FOLDER_KEY = 'file-selector:last-file-folder';
+const LAST_FILE_FOLDER_KEY = "file-selector:last-file-folder";
 
 function getLastFileFolder(): string | null | undefined {
   try {
@@ -41,28 +41,28 @@ function setLastFileFolder(filePath: string) {
 
 // Where the open dialog starts. With no default, Windows opens the folder the app is installed in.
 function getDefaultPath(type: string, currentPath?: string | null): string {
-  if (type === 'openDirectory') {
-    return currentPath || ipcRenderer.sendSync('app:getPath', 'home');
+  if (type === "openDirectory") {
+    return currentPath || ipcRenderer.sendSync("app:getPath", "home");
   }
   try {
-    return getLastFileFolder() || ipcRenderer.sendSync('app:getPath', 'documents');
+    return getLastFileFolder() || ipcRenderer.sendSync("app:getPath", "documents");
   } catch (e: any) {
     // Electron throws if the system has no Documents folder (possible on Linux).
-    return ipcRenderer.sendSync('app:getPath', 'home');
+    return ipcRenderer.sendSync("app:getPath", "home");
   }
 }
 
 class FileSelector extends React.PureComponent<Props> {
   static defaultProps = {
     autoFocus: false,
-    type: 'file',
+    type: "file",
     readFile: true,
   };
 
   fileInput: React.ElementRef<any>;
 
   constructor() {
-// @ts-expect-error - TS2554 - Expected 1-2 arguments, but got 0.
+    // @ts-expect-error - TS2554 - Expected 1-2 arguments, but got 0.
     super();
     this.fileInput = React.createRef();
     this.handleFileInputSelection = this.handleFileInputSelection.bind(this);
@@ -71,7 +71,7 @@ class FileSelector extends React.PureComponent<Props> {
   }
 
   handleFileInputSelection = () => {
-// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
     const { files } = this.fileInput.current;
     if (!files) {
       return;
@@ -82,16 +82,16 @@ class FileSelector extends React.PureComponent<Props> {
     if (this.props.onFileChosen) {
       this.props.onFileChosen({ file, path: file.path || file.name });
     }
-// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
     this.fileInput.current.value = null; // clear the file input
   };
 
   handleDirectoryInputSelection = () => {
     const { type, currentPath, filters, readFile } = this.props;
-    const properties = type === 'openDirectory' ? ['openDirectory'] : ['openFile'];
+    const properties = type === "openDirectory" ? ["openDirectory"] : ["openFile"];
 
     ipcRenderer
-      .invoke('dialog:showOpenDialog', {
+      .invoke("dialog:showOpenDialog", {
         properties,
         defaultPath: getDefaultPath(type, currentPath),
         filters,
@@ -99,10 +99,10 @@ class FileSelector extends React.PureComponent<Props> {
       .then((result) => {
         const chosenPath = result && result.filePaths[0];
         if (chosenPath) {
-          if (type === 'openFile') {
+          if (type === "openFile") {
             setLastFileFolder(chosenPath);
           }
-          return ipcRenderer.invoke('get-file-from-path', chosenPath, readFile);
+          return ipcRenderer.invoke("get-file-from-path", chosenPath, readFile);
         }
       })
       .then((result) => {
@@ -117,7 +117,7 @@ class FileSelector extends React.PureComponent<Props> {
   };
 
   fileInputButton = () => {
-// @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'current' does not exist on type 'unknown'.
     this.fileInput.current.click();
   };
 
@@ -136,9 +136,9 @@ class FileSelector extends React.PureComponent<Props> {
           error={error}
           disabled={disabled}
           type="text"
-// @ts-expect-error - TS2322 - Type 'string' is not assignable to type 'boolean'.
+          // @ts-expect-error - TS2322 - Type 'string' is not assignable to type 'boolean'.
           readOnly="readonly"
-          value={placeHolder || __('Choose a file')}
+          value={placeHolder || __("Choose a file")}
           inputButton={
             <Button
               // @ts-expect-error - TS2322 (ts-migration)
@@ -146,22 +146,22 @@ class FileSelector extends React.PureComponent<Props> {
               button="primary"
               disabled={disabled}
               onClick={
-                type === 'openDirectory' || type === 'openFile'
+                type === "openDirectory" || type === "openFile"
                   ? this.handleDirectoryInputSelection
                   : this.fileInputButton
               }
-              label={__('Browse')}
+              label={__("Browse")}
             />
           }
         />
         <input
-          type={'file'}
-          style={{ display: 'none' }}
+          type={"file"}
+          style={{ display: "none" }}
           accept={accept}
-// @ts-expect-error - TS2322 - Type 'unknown' is not assignable to type 'LegacyRef<HTMLInputElement>'.
+          // @ts-expect-error - TS2322 - Type 'unknown' is not assignable to type 'LegacyRef<HTMLInputElement>'.
           ref={this.fileInput}
-          onChange={() => (type === 'openDirectory' ? () => {} : this.handleFileInputSelection())}
-          webkitdirectory={type === 'openDirectory' ? 'True' : null}
+          onChange={() => (type === "openDirectory" ? () => {} : this.handleFileInputSelection())}
+          webkitdirectory={type === "openDirectory" ? "True" : null}
         />
       </React.Fragment>
     );

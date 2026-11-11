@@ -1,8 +1,8 @@
-import * as ICONS from 'constants/icons';
-import React from 'react';
-import Page from 'component/page';
-import PlaylistsMine from 'component/playlistsMine';
-import Icon from 'component/common/icon';
+import * as ICONS from "constants/icons";
+import React from "react";
+import Page from "component/page";
+import PlaylistsMine from "component/playlistsMine";
+import Icon from "component/common/icon";
 
 function PlaylistsPage() {
   return (
@@ -11,7 +11,7 @@ function PlaylistsPage() {
       <label className="claim-list__header-label">
         <span>
           <Icon icon={ICONS.STACK} size={10} />
-          {__('Playlists')}
+          {__("Playlists")}
         </span>
       </label>
       <PlaylistsMine />

@@ -1,11 +1,11 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { makeSelectClaimForUri, selectIsUriResolving } from 'redux/selectors/claims';
-import { doResolveUri } from 'redux/actions/claims';
-import { doSetPlayingUri } from 'redux/actions/content';
-import { punctuationMarks } from 'util/remark-lbry';
-import { selectPlayingUri } from 'redux/selectors/content';
-import ClaimLink from './view';
+import { connect } from "react-redux";
+import { makeSelectClaimForUri, selectIsUriResolving } from "redux/selectors/claims";
+import { doResolveUri } from "redux/actions/claims";
+import { doSetPlayingUri } from "redux/actions/content";
+import { punctuationMarks } from "util/remark-lbry";
+import { selectPlayingUri } from "redux/selectors/content";
+import ClaimLink from "./view";
 
 const select = (state: unknown, props: unknown) => {
   let uri = props.uri;

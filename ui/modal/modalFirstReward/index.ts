@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {makeSelectRewardByType} from 'redux/selectors/rewards';
-import rewards from 'rewards';
-import { connect } from 'react-redux';
-import { doHideModal } from 'redux/actions/app';
-import ModalFirstReward from './view';
+import { makeSelectRewardByType } from "redux/selectors/rewards";
+import rewards from "rewards";
+import { connect } from "react-redux";
+import { doHideModal } from "redux/actions/app";
+import ModalFirstReward from "./view";
 
 const select = (state: unknown) => {
   const selectReward = makeSelectRewardByType();

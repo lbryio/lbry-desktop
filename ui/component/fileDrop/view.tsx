@@ -1,39 +1,39 @@
-import React from 'react';
-import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
-import * as MODALS from 'constants/modal_types';
-import classnames from 'classnames';
-import useDragDrop from 'effects/use-drag-drop';
-import { getTree } from 'util/web-file-system';
-import { withRouter } from 'react-router';
-import Icon from 'component/common/icon';
+import React from "react";
+import * as ICONS from "constants/icons";
+import * as PAGES from "constants/pages";
+import * as MODALS from "constants/modal_types";
+import classnames from "classnames";
+import useDragDrop from "effects/use-drag-drop";
+import { getTree } from "util/web-file-system";
+import { withRouter } from "react-router";
+import Icon from "component/common/icon";
 
 type Props = {
   modal: {
-    id: string,
-    modalProps: Record<any, any>
-  },
-  filePath: string | null | undefined,
-  clearPublish: () => void,
-  updatePublishForm: (arg1: Record<any, any>) => void,
+    id: string;
+    modalProps: Record<any, any>;
+  };
+  filePath: string | null | undefined;
+  clearPublish: () => void;
+  updatePublishForm: (arg1: Record<any, any>) => void;
   openModal: (
     id: string,
     arg2: {
-      files: Array<File>
-    },
-  ) => void,
+      files: Array<File>;
+    }
+  ) => void;
   // React router
   history: {
-    entities: Record<any, any>[],
-    goBack: () => void,
-    goForward: () => void,
-    index: number,
-    length: number,
+    entities: Record<any, any>[];
+    goBack: () => void;
+    goForward: () => void;
+    index: number;
+    length: number;
     location: {
-      pathname: string
-    },
-    push: (arg1: string) => void
-  }
+      pathname: string;
+    };
+    push: (arg1: string) => void;
+  };
 };
 
 const HIDE_TIME_OUT = 600;
@@ -56,12 +56,12 @@ function FileDrop(props: Props) {
     // Not all files have a type
     if (!type) return ICONS.FILE;
     // Detect common types
-// @ts-expect-error - TS2339 - Property 'split' does not exist on type 'unknown'.
-    const contentType = type.split('/')[0];
-    if (contentType === 'text') return ICONS.TEXT;
-    if (contentType === 'image') return ICONS.IMAGE;
-    if (contentType === 'video') return ICONS.VIDEO;
-    if (contentType === 'audio') return ICONS.AUDIO;
+    // @ts-expect-error - TS2339 - Property 'split' does not exist on type 'unknown'.
+    const contentType = type.split("/")[0];
+    if (contentType === "text") return ICONS.TEXT;
+    if (contentType === "image") return ICONS.IMAGE;
+    if (contentType === "video") return ICONS.VIDEO;
+    if (contentType === "audio") return ICONS.AUDIO;
     // Binary file
     return ICONS.FILE;
   };
@@ -161,9 +161,9 @@ function FileDrop(props: Props) {
   const show = files.length === 1 || (!target && drag && (!modal || modal.id !== MODALS.FILE_SELECTION));
 
   return (
-    <div aria-hidden={!show} className={classnames('file-drop', show && 'file-drop--show')}>
-      <div className={classnames('card', 'file-drop__area')}>
-        <Icon size={64} icon={icon} className={'main-icon'} />
+    <div aria-hidden={!show} className={classnames("file-drop", show && "file-drop--show")}>
+      <div className={classnames("card", "file-drop__area")}>
+        <Icon size={64} icon={icon} className={"main-icon"} />
         <p>{target ? target.name : __(`Drop here to publish!`)} </p>
       </div>
     </div>

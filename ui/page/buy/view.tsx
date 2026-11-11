@@ -1,23 +1,23 @@
-import React from 'react';
-import Page from 'component/page';
-import Card from 'component/common/card';
-import Spinner from 'component/spinner';
-import hmacSHA256 from 'crypto-js/hmac-sha256';
-import Base64 from 'crypto-js/enc-base64';
-import { countries as countryData } from 'country-data';
-import { FormField } from 'component/common/form';
-import { SUPPORTED_MOONPAY_COUNTRIES } from 'constants/moonpay';
-import { useHistory } from 'react-router';
-import Button from 'component/button';
-import Nag from 'component/common/nag';
-import I18nMessage from 'component/i18nMessage';
-import LbcSymbol from 'component/common/lbc-symbol';
+import React from "react";
+import Page from "component/page";
+import Card from "component/common/card";
+import Spinner from "component/spinner";
+import hmacSHA256 from "crypto-js/hmac-sha256";
+import Base64 from "crypto-js/enc-base64";
+import { countries as countryData } from "country-data";
+import { FormField } from "component/common/form";
+import { SUPPORTED_MOONPAY_COUNTRIES } from "constants/moonpay";
+import { useHistory } from "react-router";
+import Button from "component/button";
+import Nag from "component/common/nag";
+import I18nMessage from "component/i18nMessage";
+import LbcSymbol from "component/common/lbc-symbol";
 
 const MOONPAY_KEY = process.env.MOONPAY_SECRET_KEY;
 const COUNTRIES = Array.from(
   new Set(
     countryData.all
-      .filter((country) => country.status !== 'deleted')
+      .filter((country) => country.status !== "deleted")
       .map((country) => country.name)
       .sort((a, b) => {
         if (a > b) {
@@ -34,21 +34,21 @@ const COUNTRIES = Array.from(
 );
 
 type Props = {
-  receiveAddress: string | null | undefined,
-  gettingNewAddress: boolean,
-  email: string,
-  user: User | null | undefined,
-  doGetNewAddress: () => void,
-  doUserSetCountry: (arg1: string) => void
+  receiveAddress: string | null | undefined;
+  gettingNewAddress: boolean;
+  email: string;
+  user: User | null | undefined;
+  doGetNewAddress: () => void;
+  doUserSetCountry: (arg1: string) => void;
 };
 
 export default function BuyPage(props: Props) {
   const { receiveAddress, gettingNewAddress, doGetNewAddress, email, user, doUserSetCountry } = props;
-  const initialCountry = (user && user.country) || '';
+  const initialCountry = (user && user.country) || "";
   const [url, setUrl] = React.useState<any>();
   const [country, setCountry] = React.useState(initialCountry);
   const [showPurchaseScreen, setShowPurchaseScreen] = React.useState(false);
-// @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"Argentina" | "Australia" | "Austria" | "Belgium" | "Brazil" | "Bulgaria" | "Canada" | "Chile" | "Colombia" | "Croatia" | "Cyprus" | "Czech Republic" | "Denmark" | "Estonia" | ... 45 more ... | "Viet Nam"'.
+  // @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"Argentina" | "Australia" | "Austria" | "Belgium" | "Brazil" | "Bulgaria" | "Canada" | "Chile" | "Colombia" | "Croatia" | "Cyprus" | "Czech Republic" | "Denmark" | "Estonia" | ... 45 more ... | "Viet Nam"'.
   const isValid = SUPPORTED_MOONPAY_COUNTRIES.includes(country);
   const { goBack } = useHistory();
 
@@ -72,7 +72,7 @@ export default function BuyPage(props: Props) {
         url += `&email=${encodeURIComponent(email)}`;
       }
 
-      url += `&enabledPaymentMethods=${encodeURIComponent('credit_debit_card,sepa_bank_transfer,gbp_bank_transfer')}`;
+      url += `&enabledPaymentMethods=${encodeURIComponent("credit_debit_card,sepa_bank_transfer,gbp_bank_transfer")}`;
 
       const query = new URL(url).search;
       const signature = Base64.stringify(hmacSHA256(query, MOONPAY_KEY));
@@ -81,14 +81,14 @@ export default function BuyPage(props: Props) {
     }
   }, [url, setUrl, receiveAddress, email]);
 
-  const title = __('Buy Credits');
+  const title = __("Buy Credits");
   const subtitle = (
     // @ts-expect-error - TS2745 (ts-migration)
     <I18nMessage
       // @ts-expect-error - TS2322 (ts-migration)
       tokens={{
         // @ts-expect-error - TS2322 (ts-migration)
-        learn_more: <Button button="link" label={__('Learn more')} href="https://lbry.com/faq/buy-lbc" />,
+        learn_more: <Button button="link" label={__("Learn more")} href="https://lbry.com/faq/buy-lbc" />,
       }}
     >
       LBRY, Inc. partners with Moonpay to provide the option to purchase LBRY Credits. %learn_more%.
@@ -100,9 +100,9 @@ export default function BuyPage(props: Props) {
       noSideNavigation
       className="main--swap"
       backout={{
-        backoutLabel: __('Done'),
+        backoutLabel: __("Done"),
         // @ts-expect-error - TS2322 (ts-migration)
-        title: <LbcSymbol prefix={__('Buy LBC')} size={28} />,
+        title: <LbcSymbol prefix={__("Buy LBC")} size={28} />,
       }}
     >
       <div className="section">
@@ -127,7 +127,7 @@ export default function BuyPage(props: Props) {
                         src={url}
                         width="100%"
                       >
-                        <p>{__('Your browser does not support iframes.')}</p>
+                        <p>{__("Your browser does not support iframes.")}</p>
                       </iframe>
                     ) : (
                       <div className="main--empty">
@@ -147,21 +147,21 @@ export default function BuyPage(props: Props) {
                     <div>
                       <div className="section">
                         <FormField
-                          label={__('Country')}
+                          label={__("Country")}
                           type="select"
                           name="country-codes"
                           helper={__(
-                            'Only some countries are eligible at this time. We are working to make this available to everyone.'
+                            "Only some countries are eligible at this time. We are working to make this available to everyone."
                           )}
                           value={country}
                           onChange={(e) => setCountry(e.target.value)}
                         >
-{ /* @ts-expect-error - TS2322 - Type 'boolean' is not assignable to type 'string | number | readonly string[]'. */}
+                          {/* @ts-expect-error - TS2322 - Type 'boolean' is not assignable to type 'string | number | readonly string[]'. */}
                           <option value="" disabled defaultValue>
-                            {__('Select your country')}
+                            {__("Select your country")}
                           </option>
                           {COUNTRIES.map((country, index) => (
-// @ts-expect-error - TS2322 - Type 'unknown' is not assignable to type 'Key'. | TS2322 - Type 'unknown' is not assignable to type 'string | number | readonly string[]'.
+                            // @ts-expect-error - TS2322 - Type 'unknown' is not assignable to type 'Key'. | TS2322 - Type 'unknown' is not assignable to type 'string | number | readonly string[]'.
                             <option key={country} value={country}>
                               {country}
                             </option>
@@ -175,18 +175,18 @@ export default function BuyPage(props: Props) {
                               <Button
                                 // @ts-expect-error - TS2322 (ts-migration)
                                 button="primary"
-                                label={__('Continue')}
+                                label={__("Continue")}
                                 onClick={() => setShowPurchaseScreen(true)}
                               />
                             </div>
                           ) : (
                             <div className="section__actions">
                               {/* @ts-expect-error - TS2322 (ts-migration) */}
-                              <Button button="alt" label={__('Go Back')} onClick={() => goBack()} />
+                              <Button button="alt" label={__("Go Back")} onClick={() => goBack()} />
                               <Button
                                 // @ts-expect-error - TS2322 (ts-migration)
                                 button="link"
-                                label={__('Try Anyway')}
+                                label={__("Try Anyway")}
                                 onClick={() => setShowPurchaseScreen(true)}
                               />
                             </div>

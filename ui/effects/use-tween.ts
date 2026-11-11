@@ -1,5 +1,5 @@
 //@ts-nocheck
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from "react";
 
 const getProgress = (elapsed: unknown, duration: unknown) => Math.min(elapsed / duration, 1);
 const easeOut = (progress: unknown) => Math.pow(progress - 1, 5) + 1;
@@ -8,7 +8,7 @@ export default function useTween(duration: unknown, onRest: unknown) {
   const [value, setValue] = useState(0);
 
   useEffect(() => {
-    let start = performance.now();
+    const start = performance.now();
     let elapsed = 0;
     let frame;
 

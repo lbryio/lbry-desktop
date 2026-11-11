@@ -1,16 +1,16 @@
 //@ts-nocheck
-import {selectUser} from 'redux/selectors/user';
-import { makeSelectRecommendedRecsysIdForClaimId } from 'redux/selectors/search';
-import { v4 as Uuidv4 } from 'uuid';
-import { parseURI } from 'util/lbryURI';
-import * as SETTINGS from 'constants/settings';
-import { makeSelectClaimForUri } from 'redux/selectors/claims';
-import { selectPlayingUri, selectPrimaryUri } from 'redux/selectors/content';
-import { makeSelectClientSetting, selectDaemonSettings } from 'redux/selectors/settings';
-import { history } from 'ui/store';
+import { selectUser } from "redux/selectors/user";
+import { makeSelectRecommendedRecsysIdForClaimId } from "redux/selectors/search";
+import { v4 as Uuidv4 } from "uuid";
+import { parseURI } from "util/lbryURI";
+import * as SETTINGS from "constants/settings";
+import { makeSelectClaimForUri } from "redux/selectors/claims";
+import { selectPlayingUri, selectPrimaryUri } from "redux/selectors/content";
+import { makeSelectClientSetting, selectDaemonSettings } from "redux/selectors/settings";
+import { history } from "ui/store";
 
-const recsysEndpoint = 'https://clickstream.odysee.com/log/video/view';
-const recsysId = 'lighthouse-v0';
+const recsysEndpoint = "https://clickstream.odysee.com/log/video/view";
+const recsysId = "lighthouse-v0";
 
 const getClaimIdsFromUris = (uris: unknown) => {
   return uris
@@ -55,36 +55,36 @@ const recsys = {
    * @param parentClaimId: string,
    * @param newClaimId: string,
    */
-  onClickedRecommended: function(parentClaimId, newClaimId) {
+  onClickedRecommended: function (parentClaimId, newClaimId) {
     const parentEntry = recsys.entries[parentClaimId] ? recsys.entries[parentClaimId] : null;
-    const parentUuid = parentEntry['uuid'];
-    const parentRecommendedClaims = parentEntry['recClaimIds'] || [];
-    const parentClickedIndexes = parentEntry['recClickedVideoIdx'] || [];
+    const parentUuid = parentEntry["uuid"];
+    const parentRecommendedClaims = parentEntry["recClaimIds"] || [];
+    const parentClickedIndexes = parentEntry["recClickedVideoIdx"] || [];
     const indexClicked = parentRecommendedClaims.indexOf(newClaimId);
 
     if (parentUuid) {
       recsys.createRecsysEntry(newClaimId, parentUuid);
     }
     parentClickedIndexes.push(indexClicked);
-    recsys.log('onClickedRecommended', { parentClaimId, newClaimId });
+    recsys.log("onClickedRecommended", { parentClaimId, newClaimId });
   },
 
   /**
    * Page was loaded. Get or Create entry and populate it with default data, plus recommended content, recsysId, etc.
    * Called from recommendedContent component
    */
-  onRecsLoaded: function(claimId, uris) {
+  onRecsLoaded: function (claimId, uris) {
     if (window.store) {
       const state = window.store.getState();
       if (!recsys.entries[claimId]) {
         recsys.createRecsysEntry(claimId);
       }
       const claimIds = getClaimIdsFromUris(uris);
-      recsys.entries[claimId]['recsysId'] = makeSelectRecommendedRecsysIdForClaimId(claimId)(state) || recsysId;
-      recsys.entries[claimId]['pageLoadedAt'] = Date.now();
-      recsys.entries[claimId]['recClaimIds'] = claimIds;
+      recsys.entries[claimId]["recsysId"] = makeSelectRecommendedRecsysIdForClaimId(claimId)(state) || recsysId;
+      recsys.entries[claimId]["pageLoadedAt"] = Date.now();
+      recsys.entries[claimId]["recClaimIds"] = claimIds;
     }
-    recsys.log('onRecsLoaded', claimId);
+    recsys.log("onRecsLoaded", claimId);
   },
 
   /**
@@ -92,7 +92,7 @@ const recsys = {
    * @param: claimId: string
    * @param: parentUuid: string (optional)
    */
-  createRecsysEntry: function(claimId, parentUuid) {
+  createRecsysEntry: function (claimId, parentUuid) {
     if (window.store && claimId) {
       const state = window.store.getState();
       const user = selectUser(state);
@@ -121,7 +121,7 @@ const recsys = {
         };
       }
     }
-    recsys.log('createRecsysEntry', claimId);
+    recsys.log("createRecsysEntry", claimId);
   },
 
   /**
@@ -129,7 +129,7 @@ const recsys = {
    * @param claimId
    * @param isTentative
    */
-  sendRecsysEntry: function(claimId, isTentative) {
+  sendRecsysEntry: function (claimId, isTentative) {
     const shareTelemetry =
       IS_WEB || (window && window.store && selectDaemonSettings(window.store.getState()).share_usage_data);
 
@@ -141,10 +141,10 @@ const recsys = {
           delete recsys.entries[claimId];
         }
       } catch (error: any) {
-        console.log('no beacon for you', error);
+        console.log("no beacon for you", error);
       }
     }
-    recsys.log('sendRecsysEntry', claimId);
+    recsys.log("sendRecsysEntry", claimId);
   },
 
   /**
@@ -152,18 +152,18 @@ const recsys = {
    * @param claimId
    * @param event
    */
-  onRecsysPlayerEvent: function(claimId, event, isEmbedded) {
+  onRecsysPlayerEvent: function (claimId, event, isEmbedded) {
     if (!recsys.entries[claimId]) {
       recsys.createRecsysEntry(claimId);
       // do something to show it's floating or autoplay
     }
     if (isEmbedded) {
-      recsys.entries[claimId]['isEmbed'] = true;
+      recsys.entries[claimId]["isEmbed"] = true;
     }
     recsys.entries[claimId].events.push(event);
-    recsys.log('onRecsysPlayerEvent', claimId);
+    recsys.log("onRecsysPlayerEvent", claimId);
   },
-  log: function(callName, claimId) {
+  log: function (callName, claimId) {
     if (recsys.debug) {
       console.log(`Call: ***${callName}***, ClaimId: ${claimId}, Recsys Entries`, Object.assign({}, recsys.entries));
     }
@@ -173,7 +173,7 @@ const recsys = {
    * Player closed. Check to see if primaryUri = playingUri
    * if so, send the Entry.
    */
-  onPlayerDispose: function(claimId, isEmbedded) {
+  onPlayerDispose: function (claimId, isEmbedded) {
     if (window.store) {
       const state = window.store.getState();
       const playingUri = selectPlayingUri(state);
@@ -181,12 +181,12 @@ const recsys = {
       const onFilePage = playingUri === primaryUri;
       if (!onFilePage || isEmbedded) {
         if (isEmbedded) {
-          recsys.entries[claimId]['isEmbed'] = true;
+          recsys.entries[claimId]["isEmbed"] = true;
         }
         recsys.sendRecsysEntry(claimId);
       }
     }
-    recsys.log('PlayerDispose', claimId);
+    recsys.log("PlayerDispose", claimId);
   },
 
   // /**
@@ -222,7 +222,7 @@ const recsys = {
    * Navigate event
    * Send all claimIds that aren't currently playing.
    */
-  onNavigate: function() {
+  onNavigate: function () {
     if (window.store) {
       const state = window.store.getState();
       const playingUri = selectPlayingUri(state);
@@ -234,17 +234,17 @@ const recsys = {
       Object.keys(recsys.entries).forEach((claimId) => {
         const shouldSkip = recsys.entries[claimId].parentUuid && !recsys.entries[claimId].recClaimIds;
         if (!shouldSkip && ((claimId !== playingClaimId && floatingPlayer) || !floatingPlayer)) {
-          recsys.entries[claimId]['pageExitedAt'] = Date.now();
+          recsys.entries[claimId]["pageExitedAt"] = Date.now();
           recsys.sendRecsysEntry(claimId);
         }
-        recsys.log('OnNavigate', claimId);
+        recsys.log("OnNavigate", claimId);
       });
     }
   },
 } as const;
 // @if TARGET='web'
-document.addEventListener('visibilitychange', function logData() {
-  if (document.visibilityState === 'hidden') {
+document.addEventListener("visibilitychange", function logData() {
+  if (document.visibilityState === "hidden") {
     Object.keys(recsys.entries).map((claimId) => recsys.sendRecsysEntry(claimId, true));
   }
 });

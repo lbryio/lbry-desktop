@@ -1,8 +1,7 @@
 //@ts-nocheck
-/* eslint-disable no-undef */
-/* eslint-disable react/prop-types */
-import React from 'react';
-import Button from 'component/button';
+
+import React from "react";
+import Button from "component/button";
 
 let scriptLoading = false;
 let scriptLoaded = false;
@@ -53,8 +52,8 @@ class CardVerify extends React.Component {
 
     scriptLoading = true;
 
-    const script = document.createElement('script');
-    script.src = 'https://checkout.stripe.com/checkout.js';
+    const script = document.createElement("script");
+    script.src = "https://checkout.stripe.com/checkout.js";
     script.async = true;
 
     this.loadPromise = (() => {
@@ -75,7 +74,7 @@ class CardVerify extends React.Component {
       });
       const wrappedPromise = new Promise<any>((resolve, reject) => {
         promise.then(() => (canceled ? reject({ isCanceled: true }) : resolve()));
-        promise.catch(error => (canceled ? reject({ isCanceled: true }) : reject(error)));
+        promise.catch((error) => (canceled ? reject({ isCanceled: true }) : reject(error)));
       });
 
       return {
@@ -139,10 +138,10 @@ class CardVerify extends React.Component {
     CardVerify.stripeHandler.open({
       allowRememberMe: false,
       closed: this.onClosed,
-      description: __('Confirm Identity'),
+      description: __("Confirm Identity"),
       email: this.props.email,
-      locale: 'auto',
-      panelLabel: 'Verify',
+      locale: "auto",
+      panelLabel: "Verify",
       token: this.props.token,
       zipCode: true,
     });
@@ -151,7 +150,7 @@ class CardVerify extends React.Component {
   onClick = () => {
     if (scriptDidError) {
       try {
-        throw new Error('Tried to call onClick, but StripeCheckout failed to load');
+        throw new Error("Tried to call onClick, but StripeCheckout failed to load");
       } catch (x: any) {}
     } else if (CardVerify.stripeHandler) {
       this.showStripeDialog();
@@ -181,5 +180,3 @@ class CardVerify extends React.Component {
 }
 
 export default CardVerify;
-/* eslint-enable no-undef */
-/* eslint-enable react/prop-types */

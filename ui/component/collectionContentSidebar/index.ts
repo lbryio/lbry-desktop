@@ -1,16 +1,16 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import CollectionContent from './view';
-import { selectClaimForUri } from 'redux/selectors/claims';
+import { connect } from "react-redux";
+import CollectionContent from "./view";
+import { selectClaimForUri } from "redux/selectors/claims";
 import {
   makeSelectUrlsForCollectionId,
   makeSelectNameForCollectionId,
   makeSelectCollectionForId,
   makeSelectCollectionIsMine,
-} from 'redux/selectors/collections';
-import { selectPlayingUri, selectListLoop, selectListShuffle } from 'redux/selectors/content';
-import { doToggleLoopList, doToggleShuffleList } from 'redux/actions/content';
-import { doCollectionEdit } from 'redux/actions/collections';
+} from "redux/selectors/collections";
+import { selectPlayingUri, selectListLoop, selectListShuffle } from "redux/selectors/content";
+import { doToggleLoopList, doToggleShuffleList } from "redux/actions/content";
+import { doCollectionEdit } from "redux/actions/collections";
 
 const select = (state: unknown, props: unknown) => {
   const playingUri = selectPlayingUri(state);

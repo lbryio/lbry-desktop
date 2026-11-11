@@ -1,6 +1,6 @@
-import {handleActions} from 'util/redux-utils';
-import * as ACTIONS from 'constants/action_types';
-import * as REACTION_TYPES from 'constants/reactions';
+import { handleActions } from "util/redux-utils";
+import * as ACTIONS from "constants/action_types";
+import * as REACTION_TYPES from "constants/reactions";
 
 const defaultState = {
   fetchingReactions: false,
@@ -10,7 +10,7 @@ const defaultState = {
 
 export default handleActions(
   {
-    [ACTIONS.REACTIONS_LIST_STARTED]: state => ({ ...state, fetchingReactions: true }),
+    [ACTIONS.REACTIONS_LIST_STARTED]: (state) => ({ ...state, fetchingReactions: true }),
     [ACTIONS.REACTIONS_LIST_FAILED]: (state, action) => ({
       ...state,
       reactionsError: action.data,

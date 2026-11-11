@@ -1,7 +1,7 @@
 //@ts-nocheck
-import * as ACTIONS from 'constants/action_types';
-import * as SORT_OPTIONS from 'constants/sort_options';
-import * as PAGES from 'constants/pages';
+import * as ACTIONS from "constants/action_types";
+import * as SORT_OPTIONS from "constants/sort_options";
+import * as PAGES from "constants/pages";
 
 const reducers: Record<string, any> = {};
 const defaultState = {
@@ -141,8 +141,8 @@ reducers[ACTIONS.FILE_DELETE] = (state: unknown, action: unknown) => {
 
 reducers[ACTIONS.SET_FILE_LIST_SORT] = (state: unknown, action: unknown) => {
   const pageSortStates = {
-    [PAGES.PUBLISHED]: 'fileListPublishedSort',
-    [PAGES.DOWNLOADED]: 'fileListDownloadedSort',
+    [PAGES.PUBLISHED]: "fileListPublishedSort",
+    [PAGES.DOWNLOADED]: "fileListDownloadedSort",
   } as const;
   const pageSortState = pageSortStates[action.data.page];
   const { value } = action.data;

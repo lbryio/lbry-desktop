@@ -1,14 +1,14 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import {
   selectUser,
   selectUserIsPending,
   selectEmailToVerify,
   selectEmailNewErrorMessage,
   selectEmailNewIsPending,
-} from 'redux/selectors/user';
-import { doUserSignIn, doClearEmailEntry } from 'redux/actions/user';
-import UserSignIn from './view';
+} from "redux/selectors/user";
+import { doUserSignIn, doClearEmailEntry } from "redux/actions/user";
+import UserSignIn from "./view";
 
 const select = (state: unknown) => ({
   user: selectUser(state),

@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { makeSelectClaimForUri } from 'redux/selectors/claims';
-import { doFetchRecommendedContent } from 'redux/actions/search';
-import { selectRecommendedContentForUri, selectIsSearching } from 'redux/selectors/search';
-import RecommendedContent from './view';
+import { connect } from "react-redux";
+import { makeSelectClaimForUri } from "redux/selectors/claims";
+import { doFetchRecommendedContent } from "redux/actions/search";
+import { selectRecommendedContentForUri, selectIsSearching } from "redux/selectors/search";
+import RecommendedContent from "./view";
 
 const select = (state: unknown, props: unknown) => {
   const claim = makeSelectClaimForUri(props.uri)(state);

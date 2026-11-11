@@ -1,8 +1,8 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doDismissToast } from 'redux/actions/notifications';
-import { selectToast } from 'redux/selectors/notifications';
-import SnackBar from './view';
+import { connect } from "react-redux";
+import { doDismissToast } from "redux/actions/notifications";
+import { selectToast } from "redux/selectors/notifications";
+import SnackBar from "./view";
 
 const perform = (dispatch: unknown) => ({
   removeSnack: () => dispatch(doDismissToast()),

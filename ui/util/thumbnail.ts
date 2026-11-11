@@ -1,14 +1,14 @@
-import {THUMBNAIL_CDN_URL} from 'config';
+import { THUMBNAIL_CDN_URL } from "config";
 
 const THUMBNAIL_HEIGHT = 220;
 const THUMBNAIL_WIDTH = 390;
 const THUMBNAIL_QUALITY = 85;
 
 type Props = {
-  thumbnail: string | null | undefined,
-  height?: number,
-  width?: number,
-  quality?: number
+  thumbnail: string | null | undefined;
+  height?: number;
+  width?: number;
+  quality?: number;
 };
 
 export function getThumbnailCdnUrl(props: Props) {
@@ -18,11 +18,11 @@ export function getThumbnailCdnUrl(props: Props) {
     return thumbnail;
   }
 
-  if (thumbnail && !thumbnail.includes('https://spee.ch')) {
+  if (thumbnail && !thumbnail.includes("https://spee.ch")) {
     return `${THUMBNAIL_CDN_URL}s:${width}:${height}/quality:${quality}/plain/${thumbnail}`;
   }
 
-  if (thumbnail && thumbnail.includes('https://spee.ch')) {
+  if (thumbnail && thumbnail.includes("https://spee.ch")) {
     return `${thumbnail}?quality=${quality}&height=${height}&width=${width}`;
   }
 }

@@ -3,4 +3,4 @@
 
 export const SUB_LANG_CODE_LEN = 5;
 
-export const SUPPORTED_SUB_LANGUAGE_CODES = ['zh-CN', 'zh-TW', 'pt-BR'] as const;
+export const SUPPORTED_SUB_LANGUAGE_CODES = ["zh-CN", "zh-TW", "pt-BR"] as const;

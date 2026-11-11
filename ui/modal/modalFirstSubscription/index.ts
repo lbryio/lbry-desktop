@@ -1,10 +1,10 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doHideModal } from 'redux/actions/app';
-import { selectAccessToken, selectUser } from 'redux/selectors/user';
-import { withRouter } from 'react-router';
+import { connect } from "react-redux";
+import { doHideModal } from "redux/actions/app";
+import { selectAccessToken, selectUser } from "redux/selectors/user";
+import { withRouter } from "react-router";
 
-import ModalFirstSubscription from './view';
+import ModalFirstSubscription from "./view";
 
 const select = (state: unknown) => ({
   accessToken: selectAccessToken(state),

@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { normalizeURI } from 'util/lbryURI';
-import { doResolveUri } from 'redux/actions/claims';
-import { selectIsUriResolving, makeSelectClaimForUri } from 'redux/selectors/claims';
-import UriIndicator from './view';
+import { connect } from "react-redux";
+import { normalizeURI } from "util/lbryURI";
+import { doResolveUri } from "redux/actions/claims";
+import { selectIsUriResolving, makeSelectClaimForUri } from "redux/selectors/claims";
+import UriIndicator from "./view";
 
 const select = (state: unknown, props: unknown) => ({
   claim: makeSelectClaimForUri(props.uri)(state),

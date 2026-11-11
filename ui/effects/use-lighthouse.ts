@@ -1,8 +1,8 @@
-import React from 'react';
-import { lighthouse } from 'redux/actions/search';
-import { getSearchQueryString } from 'util/query-params';
-import { isURIValid } from 'util/lbryURI';
-import useThrottle from './use-throttle';
+import React from "react";
+import { lighthouse } from "redux/actions/search";
+import { getSearchQueryString } from "util/query-params";
+import { isURIValid } from "util/lbryURI";
+import useThrottle from "./use-throttle";
 
 export default function useLighthouse(
   query: string,
@@ -13,7 +13,7 @@ export default function useLighthouse(
 ) {
   const [results, setResults] = React.useState<any>();
   const [loading, setLoading] = React.useState<any>();
-  const queryString = query ? getSearchQueryString(query, { nsfw: showMature, size, ...additionalOptions }) : '';
+  const queryString = query ? getSearchQueryString(query, { nsfw: showMature, size, ...additionalOptions }) : "";
   const throttledQuery = useThrottle(queryString, throttleMs);
 
   React.useEffect(() => {

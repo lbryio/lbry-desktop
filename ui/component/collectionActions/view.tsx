@@ -1,33 +1,33 @@
-import * as PAGES from 'constants/pages';
-import * as MODALS from 'constants/modal_types';
-import * as ICONS from 'constants/icons';
-import React from 'react';
-import Button from 'component/button';
-import { useIsMobile } from 'effects/use-screensize';
-import ClaimSupportButton from 'component/claimSupportButton';
-import FileReactions from 'component/fileReactions';
-import { useHistory } from 'react-router';
-import { EDIT_PAGE, PAGE_VIEW_QUERY } from 'page/collection/view';
-import classnames from 'classnames';
-import { ENABLE_FILE_REACTIONS } from 'config';
-import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
+import * as PAGES from "constants/pages";
+import * as MODALS from "constants/modal_types";
+import * as ICONS from "constants/icons";
+import React from "react";
+import Button from "component/button";
+import { useIsMobile } from "effects/use-screensize";
+import ClaimSupportButton from "component/claimSupportButton";
+import FileReactions from "component/fileReactions";
+import { useHistory } from "react-router";
+import { EDIT_PAGE, PAGE_VIEW_QUERY } from "page/collection/view";
+import classnames from "classnames";
+import { ENABLE_FILE_REACTIONS } from "config";
+import { formatLbryUrlForWeb, generateListSearchUrlParams } from "util/url";
 
 type Props = {
-  uri: string,
-  claim: StreamClaim,
-  openModal: (id: string, arg2: Record<any, any>) => void,
-  claimIsPending: boolean,
-  isMyCollection: boolean,
-  collectionId: string,
-  showInfo: boolean,
-  setShowInfo: (arg1: boolean) => void,
-  showEdit: boolean,
-  setShowEdit: (arg1: boolean) => void,
-  collectionHasEdits: boolean,
-  isBuiltin: boolean,
-  doToggleShuffleList: (arg1: string, arg2: boolean) => void,
-  playNextUri: string,
-  firstItem: string
+  uri: string;
+  claim: StreamClaim;
+  openModal: (id: string, arg2: Record<any, any>) => void;
+  claimIsPending: boolean;
+  isMyCollection: boolean;
+  collectionId: string;
+  showInfo: boolean;
+  setShowInfo: (arg1: boolean) => void;
+  showEdit: boolean;
+  setShowEdit: (arg1: boolean) => void;
+  collectionHasEdits: boolean;
+  isBuiltin: boolean;
+  doToggleShuffleList: (arg1: string, arg2: boolean) => void;
+  playNextUri: string;
+  firstItem: string;
 };
 
 function CollectionActions(props: Props) {
@@ -83,8 +83,8 @@ function CollectionActions(props: Props) {
         // @ts-expect-error - TS2322 (ts-migration)
         className="button--file-action"
         icon={ICONS.PLAY}
-        label={__('Play')}
-        title={__('Play')}
+        label={__("Play")}
+        title={__("Play")}
         disabled={isEmptyCollection}
         onClick={() => {
           doToggleShuffleList(collectionId, false);
@@ -95,8 +95,8 @@ function CollectionActions(props: Props) {
         // @ts-expect-error - TS2322 (ts-migration)
         className="button--file-action"
         icon={ICONS.SHUFFLE}
-        label={__('Shuffle Play')}
-        title={__('Shuffle Play')}
+        label={__("Shuffle Play")}
+        title={__("Shuffle Play")}
         disabled={isEmptyCollection}
         onClick={() => {
           doToggleShuffleList(collectionId, true);
@@ -113,8 +113,8 @@ function CollectionActions(props: Props) {
               // @ts-expect-error - TS2322 (ts-migration)
               className="button--file-action"
               icon={ICONS.SHARE}
-              label={__('Share')}
-              title={__('Share')}
+              label={__("Share")}
+              title={__("Share")}
               onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, webShareable })}
             />
           )}
@@ -130,30 +130,30 @@ function CollectionActions(props: Props) {
           <>
             <Button
               // @ts-expect-error - TS2322 (ts-migration)
-              title={uri ? __('Update') : __('Publish')}
-              label={uri ? __('Update') : __('Publish')}
-              className={classnames('button--file-action')}
+              title={uri ? __("Update") : __("Publish")}
+              label={uri ? __("Update") : __("Publish")}
+              className={classnames("button--file-action")}
               onClick={() => push(`?${PAGE_VIEW_QUERY}=${EDIT_PAGE}`)}
               icon={ICONS.PUBLISH}
-              iconColor={collectionHasEdits && 'red'}
+              iconColor={collectionHasEdits && "red"}
               iconSize={18}
               disabled={claimIsPending}
             />
             <Button
               // @ts-expect-error - TS2322 (ts-migration)
-              className={classnames('button--file-action')}
-              title={__('Delete List')}
+              className={classnames("button--file-action")}
+              title={__("Delete List")}
               onClick={() => openModal(MODALS.COLLECTION_DELETE, { uri, collectionId, redirect: `/$/${PAGES.LISTS}` })}
               icon={ICONS.DELETE}
               iconSize={18}
-              description={__('Delete List')}
+              description={__("Delete List")}
               disabled={claimIsPending}
             />
           </>
         ) : (
           <Button
             // @ts-expect-error - TS2322 (ts-migration)
-            title={__('Report content')}
+            title={__("Report content")}
             className="button--file-action"
             icon={ICONS.REPORT}
             navigate={`/$/${PAGES.REPORT_CONTENT}?claimId=${claimId}`}
@@ -167,9 +167,9 @@ function CollectionActions(props: Props) {
       {uri && (
         <Button
           // @ts-expect-error - TS2322 (ts-migration)
-          title={__('Info')}
-          className={classnames('button-toggle', {
-            'button-toggle--active': showInfo,
+          title={__("Info")}
+          className={classnames("button-toggle", {
+            "button-toggle--active": showInfo,
           })}
           icon={ICONS.MORE}
           onClick={() => setShowInfo(!showInfo)}
@@ -179,8 +179,8 @@ function CollectionActions(props: Props) {
       {isMyCollection && (
         <Button
           // @ts-expect-error - TS2322 (ts-migration)
-          title={__('Edit')}
-          className={classnames('button-toggle', { 'button-toggle--active': showEdit })}
+          title={__("Edit")}
+          className={classnames("button-toggle", { "button-toggle--active": showEdit })}
           icon={ICONS.EDIT}
           onClick={() => setShowEdit(!showEdit)}
         />

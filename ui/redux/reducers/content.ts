@@ -1,5 +1,5 @@
 //@ts-nocheck
-import * as ACTIONS from 'constants/action_types';
+import * as ACTIONS from "constants/action_types";
 
 const reducers: Record<string, any> = {};
 const defaultState = {
@@ -67,7 +67,7 @@ reducers[ACTIONS.CLEAR_CONTENT_POSITION] = (state: unknown, action: unknown) => 
   if (state.positions[claimId]) {
     const numOutpoints = Object.keys(state.positions[claimId]).length;
     if (numOutpoints <= 1) {
-      let positions = { ...state.positions };
+      const positions = { ...state.positions };
       delete positions[claimId];
 
       return {
@@ -75,7 +75,7 @@ reducers[ACTIONS.CLEAR_CONTENT_POSITION] = (state: unknown, action: unknown) => 
         positions: positions,
       };
     } else {
-      let outpoints = { ...state.positions[claimId] };
+      const outpoints = { ...state.positions[claimId] };
       delete outpoints[outpoint];
 
       return {

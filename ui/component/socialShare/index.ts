@@ -1,10 +1,10 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { makeSelectClaimForUri, selectTitleForUri } from 'redux/selectors/claims';
-import SocialShare from './view';
-import { makeSelectContentPositionForUri } from 'redux/selectors/content';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
-import * as SETTINGS from 'constants/settings';
+import { connect } from "react-redux";
+import { makeSelectClaimForUri, selectTitleForUri } from "redux/selectors/claims";
+import SocialShare from "./view";
+import { makeSelectContentPositionForUri } from "redux/selectors/content";
+import { makeSelectClientSetting } from "redux/selectors/settings";
+import * as SETTINGS from "constants/settings";
 
 const select = (state: unknown, props: unknown) => ({
   claim: makeSelectClaimForUri(props.uri)(state),

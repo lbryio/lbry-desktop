@@ -1,9 +1,9 @@
-import {selectFollowedTagsList} from 'redux/selectors/tags';
-import { selectPrefsReady } from 'redux/selectors/sync';
-import * as ACTIONS from 'constants/action_types';
+import { selectFollowedTagsList } from "redux/selectors/tags";
+import { selectPrefsReady } from "redux/selectors/sync";
+import * as ACTIONS from "constants/action_types";
 
-import analytics from 'analytics';
-import { doAlertWaitingForSync } from 'redux/actions/app';
+import analytics from "analytics";
+import { doAlertWaitingForSync } from "redux/actions/app";
 
 export const doToggleTagFollowDesktop = (name: string) => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
@@ -20,7 +20,7 @@ export const doToggleTagFollowDesktop = (name: string) => (dispatch: Dispatch, g
     },
   });
 
-  const stringOfTags = tags.join(',');
+  const stringOfTags = tags.join(",");
   if (stringOfTags) {
     analytics.apiSyncTags({ content_tags: stringOfTags });
   }

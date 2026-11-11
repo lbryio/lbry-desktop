@@ -1,13 +1,10 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectRecentHistory } from 'redux/selectors/content';
-import RecentUserHistory from './view';
+import { connect } from "react-redux";
+import { selectRecentHistory } from "redux/selectors/content";
+import RecentUserHistory from "./view";
 
 const select = (state: unknown, props: unknown) => ({
   history: selectRecentHistory(state),
 });
 
-export default connect(
-  select,
-  null
-)(RecentUserHistory);
+export default connect(select, null)(RecentUserHistory);

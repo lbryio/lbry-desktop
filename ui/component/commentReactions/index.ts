@@ -1,12 +1,12 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import Comment from './view';
-import { selectClaimIsMine, selectClaimForUri } from 'redux/selectors/claims';
-import { doResolveUri } from 'redux/actions/claims';
-import { doToast } from 'redux/actions/notifications';
-import { selectMyReactsForComment, selectOthersReactsForComment } from 'redux/selectors/comments';
-import { doCommentReact } from 'redux/actions/comments';
-import { selectActiveChannelClaim } from 'redux/selectors/app';
+import { connect } from "react-redux";
+import Comment from "./view";
+import { selectClaimIsMine, selectClaimForUri } from "redux/selectors/claims";
+import { doResolveUri } from "redux/actions/claims";
+import { doToast } from "redux/actions/notifications";
+import { selectMyReactsForComment, selectOthersReactsForComment } from "redux/selectors/comments";
+import { doCommentReact } from "redux/actions/comments";
+import { selectActiveChannelClaim } from "redux/selectors/app";
 
 const select = (state: unknown, props: unknown) => {
   const activeChannelClaim = selectActiveChannelClaim(state);

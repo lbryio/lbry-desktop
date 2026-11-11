@@ -1,4 +1,4 @@
 //@ts-nocheck
-import ListsPage from './view';
+import ListsPage from "./view";
 
 export default ListsPage;

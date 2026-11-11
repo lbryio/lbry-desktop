@@ -1,49 +1,49 @@
-import {Form} from 'component/common/form';
-import { Lbryio } from 'lbryinc';
-import { parseURI } from 'util/lbryURI';
-import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
-import Button from 'component/button';
-import Card from 'component/common/card';
-import ChannelSelector from 'component/channelSelector';
-import classnames from 'classnames';
-import I18nMessage from 'component/i18nMessage';
-import LbcSymbol from 'component/common/lbc-symbol';
-import React from 'react';
-import usePersistedState from 'effects/use-persisted-state';
-import WalletTipAmountSelector from 'component/walletTipAmountSelector';
+import { Form } from "component/common/form";
+import { Lbryio } from "lbryinc";
+import { parseURI } from "util/lbryURI";
+import * as ICONS from "constants/icons";
+import * as PAGES from "constants/pages";
+import Button from "component/button";
+import Card from "component/common/card";
+import ChannelSelector from "component/channelSelector";
+import classnames from "classnames";
+import I18nMessage from "component/i18nMessage";
+import LbcSymbol from "component/common/lbc-symbol";
+import React from "react";
+import usePersistedState from "effects/use-persisted-state";
+import WalletTipAmountSelector from "component/walletTipAmountSelector";
 
-const TAB_BOOST = 'TabBoost';
-const TAB_LBC = 'TabLBC';
-const TAB_FIAT = 'TabFiat';
+const TAB_BOOST = "TabBoost";
+const TAB_LBC = "TabLBC";
+const TAB_FIAT = "TabFiat";
 
 type SupportParams = {
-  amount: number,
-  claim_id: string,
-  channel_id?: string
+  amount: number;
+  claim_id: string;
+  channel_id?: string;
 };
 // REMOVE (fiat only)
 // type TipParams = { tipAmount: number, tipChannelName: string, channelClaimId: string };
 // type UserParams = { activeChannelName: ?string, activeChannelId: ?string };
 
 type Props = {
-  activeChannelClaim: ChannelClaim | null | undefined,
-  balance: number,
-  claim: StreamClaim,
-  claimIsMine: boolean,
-  fetchingChannels: boolean,
-  incognito: boolean,
-  instantTipEnabled: boolean,
+  activeChannelClaim: ChannelClaim | null | undefined;
+  balance: number;
+  claim: StreamClaim;
+  claimIsMine: boolean;
+  fetchingChannels: boolean;
+  incognito: boolean;
+  instantTipEnabled: boolean;
   instantTipMax: {
-    amount: number,
-    currency: string
-  },
-  isPending: boolean,
-  isSupport: boolean,
-  title: string,
-  uri: string,
-  doHideModal: () => void,
-  doSendTip: (arg1: SupportParams, arg2: boolean) => void
+    amount: number;
+    currency: string;
+  };
+  isPending: boolean;
+  isSupport: boolean;
+  title: string;
+  uri: string;
+  doHideModal: () => void;
+  doSendTip: (arg1: SupportParams, arg2: boolean) => void;
 };
 
 function WalletSendTip(props: Props) {
@@ -65,10 +65,10 @@ function WalletSendTip(props: Props) {
 
   /** STATE **/
 
-  const [tipAmount, setTipAmount] = usePersistedState('comment-support:customTip', 1.0);
+  const [tipAmount, setTipAmount] = usePersistedState("comment-support:customTip", 1.0);
   const [isOnConfirmationPage, setConfirmationPage] = React.useState(false);
   const [tipError, setTipError] = React.useState<any>();
-  const [activeTab, setActiveTab] = usePersistedState('comment-tip:tab', TAB_BOOST);
+  const [activeTab, setActiveTab] = usePersistedState("comment-tip:tab", TAB_BOOST);
   const [disableSubmitButton, setDisableSubmitButton] = React.useState<any>();
 
   /** CONSTS **/
@@ -76,9 +76,9 @@ function WalletSendTip(props: Props) {
   const claimTypeText = getClaimTypeText();
   const isSupport = claimIsMine || activeTab === TAB_BOOST;
   const titleText = claimIsMine
-    ? __('Boost Your %claimTypeText%', { claimTypeText })
-    : __('Boost This %claimTypeText%', { claimTypeText });
-// @ts-expect-error - TS2339 - Property 'claim_id' does not exist on type '{}'.
+    ? __("Boost Your %claimTypeText%", { claimTypeText })
+    : __("Boost This %claimTypeText%", { claimTypeText });
+  // @ts-expect-error - TS2339 - Property 'claim_id' does not exist on type '{}'.
   const { claim_id: claimId } = claim;
   let channelName;
   try {
@@ -88,41 +88,41 @@ function WalletSendTip(props: Props) {
   // // setup variables for backend tip API
 
   // icon to use or explainer text to show per tab
-  let explainerText = '',
-    confirmLabel = '';
+  let explainerText = "",
+    confirmLabel = "";
   switch (activeTab) {
     case TAB_BOOST:
       explainerText = __(
-        'This refundable boost will improve the discoverability of this %claimTypeText% while active. ',
+        "This refundable boost will improve the discoverability of this %claimTypeText% while active. ",
         { claimTypeText }
       );
-      confirmLabel = __('Boosting');
+      confirmLabel = __("Boosting");
       break;
     case TAB_FIAT:
-      explainerText = __('Show this channel your appreciation by sending a donation in USD. ');
-      confirmLabel = __('Tipping Fiat (USD)');
+      explainerText = __("Show this channel your appreciation by sending a donation in USD. ");
+      confirmLabel = __("Tipping Fiat (USD)");
       break;
     case TAB_LBC:
-      explainerText = __('Show this channel your appreciation by sending a donation of Credits. ');
-      confirmLabel = __('Tipping Credit');
+      explainerText = __("Show this channel your appreciation by sending a donation of Credits. ");
+      confirmLabel = __("Tipping Credit");
       break;
   }
 
   /** FUNCTIONS **/
 
   function getClaimTypeText() {
-// @ts-expect-error - TS2339 - Property 'value_type' does not exist on type '{}'.
+    // @ts-expect-error - TS2339 - Property 'value_type' does not exist on type '{}'.
     switch (claim.value_type) {
-      case 'stream':
-        return __('Content');
-      case 'channel':
-        return __('Channel');
-      case 'repost':
-        return __('Repost');
-      case 'collection':
-        return __('List');
+      case "stream":
+        return __("Content");
+      case "channel":
+        return __("Channel");
+      case "repost":
+        return __("Repost");
+      case "collection":
+        return __("List");
       default:
-        return __('Claim');
+        return __("Claim");
     }
   }
 
@@ -149,7 +149,7 @@ function WalletSendTip(props: Props) {
 
     // send an instant tip (no need to go to an exchange first)
     if (instantTipEnabled && activeTab !== TAB_FIAT) {
-      if (instantTipMax.currency === 'LBC') {
+      if (instantTipMax.currency === "LBC") {
         sendSupportOrConfirm(instantTipMax.amount);
       } else {
         // Need to convert currency of instant purchase maximum before trying to send support
@@ -166,19 +166,19 @@ function WalletSendTip(props: Props) {
     function isNan(tipAmount: unknown) {
       // testing for NaN ES5 style https://stackoverflow.com/a/35912757/3973137
       // also sometimes it's returned as a string
-      // eslint-disable-next-line
-      return tipAmount !== tipAmount || tipAmount === 'NaN';
+
+      return tipAmount !== tipAmount || tipAmount === "NaN";
     }
 
     function convertToTwoDecimals(number: unknown) {
-// @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+      // @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
       return (Math.round(number * 100) / 100).toFixed(2);
     }
 
     const amountToShow = activeTab === TAB_FIAT ? convertToTwoDecimals(tipAmount) : tipAmount;
 
     // if it's a valid number display it, otherwise do an empty string
-    const displayAmount = !isNan(tipAmount) ? amountToShow : '';
+    const displayAmount = !isNan(tipAmount) ? amountToShow : "";
 
     // build button text based on tab
     switch (activeTab) {
@@ -187,7 +187,7 @@ function WalletSendTip(props: Props) {
       // case TAB_FIAT:
       //   return __('Send a $%displayAmount% Tip', { displayAmount });
       case TAB_LBC:
-        return __('Send a %displayAmount% Credit Tip', { displayAmount });
+        return __("Send a %displayAmount% Credit Tip", { displayAmount });
     }
   }
 
@@ -201,11 +201,11 @@ function WalletSendTip(props: Props) {
       label={tabLabel}
       button="alt"
       onClick={() => {
-        const tipInputElement = document.getElementById('tip-input');
+        const tipInputElement = document.getElementById("tip-input");
         if (tipInputElement) tipInputElement.focus();
         if (!isOnConfirmationPage) setActiveTab(tabName);
       }}
-      className={classnames('button-toggle', { 'button-toggle--active': activeTab === tabName })}
+      className={classnames("button-toggle", { "button-toggle--active": activeTab === tabName })}
     />
   );
 
@@ -220,10 +220,10 @@ function WalletSendTip(props: Props) {
             {!claimIsMine && (
               <div className="section">
                 {/* tip LBC tab button */}
-                {getTabButton(ICONS.LBC, __('Tip'), TAB_LBC)}
+                {getTabButton(ICONS.LBC, __("Tip"), TAB_LBC)}
 
                 {/* support LBC tab button */}
-                {getTabButton(ICONS.TRENDING, __('Boost'), TAB_BOOST)}
+                {getTabButton(ICONS.TRENDING, __("Boost"), TAB_BOOST)}
               </div>
             )}
 
@@ -232,7 +232,7 @@ function WalletSendTip(props: Props) {
               {explainerText}
               {/* {activeTab === TAB_FIAT && !hasCardSaved && <Button navigate={`/$/${PAGES.SETTINGS_STRIPE_CARD}`} label={__('Add A Card')} button="link" />} */}
               {/* @ts-expect-error - TS2322 (ts-migration) */}
-              {<Button label={__('Learn more')} button="link" href="https://lbry.com/faq/tipping" />}
+              {<Button label={__("Learn more")} button="link" href="https://lbry.com/faq/tipping" />}
             </div>
           </>
         }
@@ -242,11 +242,11 @@ function WalletSendTip(props: Props) {
             <>
               <div className="section section--padded card--inline confirm__wrapper">
                 <div className="section">
-                  <div className="confirm__label">{__('To --[the tip recipient]--')}</div>
+                  <div className="confirm__label">{__("To --[the tip recipient]--")}</div>
                   <div className="confirm__value">{channelName || title}</div>
-                  <div className="confirm__label">{__('From --[the tip sender]--')}</div>
+                  <div className="confirm__label">{__("From --[the tip sender]--")}</div>
                   <div className="confirm__value">
-                    {activeChannelClaim && !incognito ? activeChannelClaim.name : __('Anonymous')}
+                    {activeChannelClaim && !incognito ? activeChannelClaim.name : __("Anonymous")}
                   </div>
                   <div className="confirm__label">{confirmLabel}</div>
                   <div className="confirm__value">
@@ -256,9 +256,9 @@ function WalletSendTip(props: Props) {
               </div>
               <div className="section__actions">
                 {/* @ts-expect-error - TS2322 (ts-migration) */}
-                <Button autoFocus onClick={handleSubmit} button="primary" disabled={isPending} label={__('Confirm')} />
+                <Button autoFocus onClick={handleSubmit} button="primary" disabled={isPending} label={__("Confirm")} />
                 {/* @ts-expect-error - TS2322 (ts-migration) */}
-                <Button button="link" label={__('Cancel')} onClick={() => setConfirmationPage(false)} />
+                <Button button="link" label={__("Cancel")} onClick={() => setConfirmationPage(false)} />
               </div>
             </>
           ) : !((activeTab === TAB_LBC || activeTab === TAB_BOOST) && balance === 0) ? (
@@ -289,7 +289,7 @@ function WalletSendTip(props: Props) {
                   disabled={fetchingChannels || isPending || tipError || !tipAmount || disableSubmitButton}
                   label={buildButtonText()}
                 />
-                {fetchingChannels && <span className="help">{__('Loading your channels...')}</span>}
+                {fetchingChannels && <span className="help">{__("Loading your channels...")}</span>}
               </div>
             </>
           ) : (
@@ -298,14 +298,14 @@ function WalletSendTip(props: Props) {
               title={
                 // @ts-expect-error - TS2745, TS2322 (ts-migration)
                 <I18nMessage tokens={{ lbc: <LbcSymbol size={22} /> }}>
-                  {__('Supporting content requires %lbc%')}
+                  {__("Supporting content requires %lbc%")}
                 </I18nMessage>
               }
               subtitle={
                 // @ts-expect-error - TS2745, TS2322 (ts-migration)
                 <I18nMessage tokens={{ lbc: <LbcSymbol /> }}>
                   {__(
-                    'With %lbc%, you can send tips to your favorite creators, or help boost their content for more people to see.'
+                    "With %lbc%, you can send tips to your favorite creators, or help boost their content for more people to see."
                   )}
                 </I18nMessage>
               }
@@ -315,18 +315,18 @@ function WalletSendTip(props: Props) {
                     // @ts-expect-error - TS2322 (ts-migration)
                     icon={ICONS.REWARDS}
                     button="primary"
-                    label={__('Earn Rewards')}
+                    label={__("Earn Rewards")}
                     navigate={`/$/${PAGES.REWARDS}`}
                   />
                   <Button
                     // @ts-expect-error - TS2322 (ts-migration)
                     icon={ICONS.BUY}
                     button="secondary"
-                    label={__('Buy/Swap Credits')}
+                    label={__("Buy/Swap Credits")}
                     navigate={`/$/${PAGES.BUY}`}
                   />
                   {/* @ts-expect-error - TS2322 (ts-migration) */}
-                  <Button button="link" label={__('Nevermind')} onClick={doHideModal} />
+                  <Button button="link" label={__("Nevermind")} onClick={doHideModal} />
                 </div>
               }
             />

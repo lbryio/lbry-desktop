@@ -1,33 +1,33 @@
-import * as ICONS from 'constants/icons';
-import * as MODALS from 'constants/modal_types';
-import * as PAGES from 'constants/pages';
-import React from 'react';
-import CreditAmount from 'component/common/credit-amount';
-import Button from 'component/button';
-import HelpLink from 'component/common/help-link';
-import Card from 'component/common/card';
-import LbcSymbol from 'component/common/lbc-symbol';
-import I18nMessage from 'component/i18nMessage';
-import { formatCredits } from 'util/format-credits';
+import * as ICONS from "constants/icons";
+import * as MODALS from "constants/modal_types";
+import * as PAGES from "constants/pages";
+import React from "react";
+import CreditAmount from "component/common/credit-amount";
+import Button from "component/button";
+import HelpLink from "component/common/help-link";
+import Card from "component/common/card";
+import LbcSymbol from "component/common/lbc-symbol";
+import I18nMessage from "component/i18nMessage";
+import { formatCredits } from "util/format-credits";
 
 type Props = {
-  balance: number,
-  totalBalance: number,
-  claimsBalance: number,
-  supportsBalance: number,
-  tipsBalance: number,
-  doOpenModal: (arg1: string) => void,
-  hasSynced: boolean,
-  doFetchUtxoCounts: () => void,
-  doUtxoConsolidate: () => void,
-  fetchingUtxoCounts: boolean,
-  consolidatingUtxos: boolean,
-  consolidateIsPending: boolean,
-  massClaimingTips: boolean,
-  massClaimIsPending: boolean,
+  balance: number;
+  totalBalance: number;
+  claimsBalance: number;
+  supportsBalance: number;
+  tipsBalance: number;
+  doOpenModal: (arg1: string) => void;
+  hasSynced: boolean;
+  doFetchUtxoCounts: () => void;
+  doUtxoConsolidate: () => void;
+  fetchingUtxoCounts: boolean;
+  consolidatingUtxos: boolean;
+  consolidateIsPending: boolean;
+  massClaimingTips: boolean;
+  massClaimIsPending: boolean;
   utxoCounts: {
-    [key: string]: number
-  }
+    [key: string]: number;
+  };
 };
 
 export const WALLET_CONSOLIDATE_UTXOS = 400;
@@ -73,7 +73,7 @@ const WalletBalance = (props: Props) => {
             Your total balance. All of this is yours, but some %lbc% is in use on channels and content right now.
           </I18nMessage>
         ) : (
-          <span>{__('Your total balance.')}</span>
+          <span>{__("Your total balance.")}</span>
         )
       }
       actions={
@@ -98,7 +98,7 @@ const WalletBalance = (props: Props) => {
             <Button
               // @ts-expect-error - TS2322 (ts-migration)
               button="link"
-              label={detailsExpanded ? __('View less') : __('View more')}
+              label={detailsExpanded ? __("View less") : __("View more")}
               iconRight={detailsExpanded ? ICONS.UP : ICONS.DOWN}
               onClick={() => setDetailsExpanded(!detailsExpanded)}
             />
@@ -107,8 +107,8 @@ const WalletBalance = (props: Props) => {
             <div className="section__subtitle">
               <dl>
                 <dt>
-                  <span className="dt__text">{__('...earned from others')}</span>
-                  <span className="help--dt">({__('Unlock to spend')})</span>
+                  <span className="dt__text">{__("...earned from others")}</span>
+                  <span className="help--dt">({__("Unlock to spend")})</span>
                 </dt>
                 <dd>
                   <span className="dd__text">
@@ -127,16 +127,16 @@ const WalletBalance = (props: Props) => {
                 </dd>
 
                 <dt>
-                  <span className="dt__text">{__('...on initial publishes')}</span>
-                  <span className="help--dt">({__('Delete or edit past content to spend')})</span>
+                  <span className="dt__text">{__("...on initial publishes")}</span>
+                  <span className="help--dt">({__("Delete or edit past content to spend")})</span>
                 </dt>
                 <dd>
                   <CreditAmount amount={claimsBalance} precision={4} />
                 </dd>
 
                 <dt>
-                  <span className="dt__text">{__('...supporting content')}</span>
-                  <span className="help--dt">({__('Delete supports to spend')})</span>
+                  <span className="dt__text">{__("...supporting content")}</span>
+                  <span className="help--dt">({__("Delete supports to spend")})</span>
                 </dt>
                 <dd>
                   <CreditAmount amount={supportsBalance} precision={4} />
@@ -147,24 +147,24 @@ const WalletBalance = (props: Props) => {
 
           {hasSynced ? (
             <p className="section help">
-              {__('A backup of your wallet is synced with a cloud service.')}
+              {__("A backup of your wallet is synced with a cloud service.")}
               <HelpLink href="https://lbry.com/faq/account-sync" />
             </p>
           ) : (
             <p className="help">
               {__(
-                'Your wallet is not currently using a cloud sync service. You are in control of backing up your wallet.'
+                "Your wallet is not currently using a cloud sync service. You are in control of backing up your wallet."
               )}
               <HelpLink navigate={`/$/${PAGES.BACKUP}`} />
             </p>
           )}
           <div className="section__actions">
             {/* @ts-expect-error - TS2322 (ts-migration) */}
-            <Button button="primary" label={__('Buy')} icon={ICONS.BUY} navigate={`/$/${PAGES.BUY}`} />
+            <Button button="primary" label={__("Buy")} icon={ICONS.BUY} navigate={`/$/${PAGES.BUY}`} />
             {/* @ts-expect-error - TS2322 (ts-migration) */}
-            <Button button="secondary" label={__('Receive')} icon={ICONS.RECEIVE} navigate={`/$/${PAGES.RECEIVE}`} />
+            <Button button="secondary" label={__("Receive")} icon={ICONS.RECEIVE} navigate={`/$/${PAGES.RECEIVE}`} />
             {/* @ts-expect-error - TS2322 (ts-migration) */}
-            <Button button="secondary" label={__('Send')} icon={ICONS.SEND} navigate={`/$/${PAGES.SEND}`} />
+            <Button button="secondary" label={__("Send")} icon={ICONS.SEND} navigate={`/$/${PAGES.SEND}`} />
           </div>
           {(otherCount > WALLET_CONSOLIDATE_UTXOS || consolidateIsPending || consolidatingUtxos) && (
             <p className="help">
@@ -179,7 +179,7 @@ const WalletBalance = (props: Props) => {
                       onClick={() => doUtxoConsolidate()}
                       disabled={operationPending}
                       label={
-                        consolidateIsPending || consolidatingUtxos ? __('Consolidating...') : __('Consolidate Now')
+                        consolidateIsPending || consolidatingUtxos ? __("Consolidating...") : __("Consolidate Now")
                       }
                     />
                   ),

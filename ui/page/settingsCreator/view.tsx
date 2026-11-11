@@ -1,16 +1,16 @@
-import * as React from 'react';
-import Card from 'component/common/card';
-import TagsSearch from 'component/tagsSearch';
-import Page from 'component/page';
-import ChannelSelector from 'component/channelSelector';
-import SearchChannelField from 'component/searchChannelField';
-import SettingsRow from 'component/settingsRow';
-import Spinner from 'component/spinner';
-import { FormField } from 'component/common/form-components/form-field';
-import LbcSymbol from 'component/common/lbc-symbol';
-import I18nMessage from 'component/i18nMessage';
-import { parseURI } from 'util/lbryURI';
-import debounce from 'util/debounce';
+import * as React from "react";
+import Card from "component/common/card";
+import TagsSearch from "component/tagsSearch";
+import Page from "component/page";
+import ChannelSelector from "component/channelSelector";
+import SearchChannelField from "component/searchChannelField";
+import SettingsRow from "component/settingsRow";
+import Spinner from "component/spinner";
+import { FormField } from "component/common/form-components/form-field";
+import LbcSymbol from "component/common/lbc-symbol";
+import I18nMessage from "component/i18nMessage";
+import { parseURI } from "util/lbryURI";
+import debounce from "util/debounce";
 
 const DEBOUNCE_REFRESH_MS = 1000;
 
@@ -22,30 +22,26 @@ const LBC_STEP = 1.0;
 // ****************************************************************************
 
 type Props = {
-  activeChannelClaim: ChannelClaim,
+  activeChannelClaim: ChannelClaim;
   settingsByChannelId: {
-    [key: string]: PerChannelSettings
-  },
-  fetchingCreatorSettings: boolean,
-  fetchingBlockedWords: boolean,
+    [key: string]: PerChannelSettings;
+  };
+  fetchingCreatorSettings: boolean;
+  fetchingBlockedWords: boolean;
   moderationDelegatesById: {
     [key: string]: Array<{
-      channelId: string,
-      channelName: string
-    }>
-  },
-  commentBlockWords: (arg1: ChannelClaim, arg2: Array<string>) => void,
-  commentUnblockWords: (arg1: ChannelClaim, arg2: Array<string>) => void,
-  commentModAddDelegate: (arg1: string, arg2: string, arg3: ChannelClaim) => void,
-  commentModRemoveDelegate: (arg1: string, arg2: string, arg3: ChannelClaim) => void,
-  commentModListDelegates: (arg1: ChannelClaim) => void,
-  fetchCreatorSettings: (channelId: string) => void,
-  updateCreatorSettings: (arg1: ChannelClaim, arg2: PerChannelSettings) => void,
-  doToast: (
-    arg1: {
-      message: string
-    },
-  ) => void
+      channelId: string;
+      channelName: string;
+    }>;
+  };
+  commentBlockWords: (arg1: ChannelClaim, arg2: Array<string>) => void;
+  commentUnblockWords: (arg1: ChannelClaim, arg2: Array<string>) => void;
+  commentModAddDelegate: (arg1: string, arg2: string, arg3: ChannelClaim) => void;
+  commentModRemoveDelegate: (arg1: string, arg2: string, arg3: ChannelClaim) => void;
+  commentModListDelegates: (arg1: ChannelClaim) => void;
+  fetchCreatorSettings: (channelId: string) => void;
+  updateCreatorSettings: (arg1: ChannelClaim, arg2: PerChannelSettings) => void;
+  doToast: (arg1: { message: string }) => void;
 };
 
 export default function SettingsCreatorPage(props: Props) {
@@ -70,9 +66,9 @@ export default function SettingsCreatorPage(props: Props) {
   const [slowModeMin, setSlowModeMin] = React.useState(0);
   const [lastUpdated, setLastUpdated] = React.useState(1);
 
-  const pushSlowModeMinDebounced = React.useMemo(() => debounce(pushSlowModeMin, 1000), []); // eslint-disable-line react-hooks/exhaustive-deps
-  const pushMinTipDebounced = React.useMemo(() => debounce(pushMinTip, 1000), []); // eslint-disable-line react-hooks/exhaustive-deps
-  const pushMinSuperDebounced = React.useMemo(() => debounce(pushMinSuper, 1000), []); // eslint-disable-line react-hooks/exhaustive-deps
+  const pushSlowModeMinDebounced = React.useMemo(() => debounce(pushSlowModeMin, 1000), []);
+  const pushMinTipDebounced = React.useMemo(() => debounce(pushMinTip, 1000), []);
+  const pushMinSuperDebounced = React.useMemo(() => debounce(pushMinSuper, 1000), []);
 
   // **************************************************************************
   // **************************************************************************
@@ -89,7 +85,7 @@ export default function SettingsCreatorPage(props: Props) {
       const tagArray = Array.from(new Set(words));
       setMutedWordTags(
         tagArray
-          .filter((t) => t !== '')
+          .filter((t) => t !== "")
           .map((x) => {
             return { name: x };
           })
@@ -141,7 +137,7 @@ export default function SettingsCreatorPage(props: Props) {
 
   function parseModUri(uri: unknown) {
     try {
-// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
+      // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
       return parseURI(uri);
     } catch (e: any) {}
     return undefined;
@@ -169,18 +165,18 @@ export default function SettingsCreatorPage(props: Props) {
     const validatedNewTags: unknown = [];
     newTags.forEach((newTag) => {
       if (!mutedWordTags.some((tag) => tag.name === newTag.name)) {
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+        // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
         validatedNewTags.push(newTag);
       }
     });
 
-// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'.
     if (validatedNewTags.length !== 0) {
-// @ts-expect-error - TS2488 - Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
+      // @ts-expect-error - TS2488 - Type 'unknown' must have a '[Symbol.iterator]()' method that returns an iterator.
       setMutedWordTags([...mutedWordTags, ...validatedNewTags]);
       commentBlockWords(
         activeChannelClaim,
-// @ts-expect-error - TS2339 - Property 'map' does not exist on type 'unknown'.
+        // @ts-expect-error - TS2339 - Property 'map' does not exist on type 'unknown'.
         validatedNewTags.map((x) => x.name)
       );
       setLastUpdated(Date.now());
@@ -190,7 +186,7 @@ export default function SettingsCreatorPage(props: Props) {
   function removeMutedWord(tagToRemove: Tag) {
     const newMutedWordTags = mutedWordTags.slice().filter((t) => t.name !== tagToRemove.name);
     setMutedWordTags(newMutedWordTags);
-    commentUnblockWords(activeChannelClaim, ['', tagToRemove.name]);
+    commentUnblockWords(activeChannelClaim, ["", tagToRemove.name]);
     setLastUpdated(Date.now());
   }
 
@@ -250,7 +246,7 @@ export default function SettingsCreatorPage(props: Props) {
       noSideNavigation
       settingsPage
       // @ts-expect-error - TS2741 (ts-migration)
-      backout={{ title: __('Creator settings'), backLabel: __('Back') }}
+      backout={{ title: __("Creator settings"), backLabel: __("Back") }}
       className="card-stack"
     >
       <div className="card-stack">
@@ -265,7 +261,7 @@ export default function SettingsCreatorPage(props: Props) {
 
         {isDisabled && (
           <Card
-            title={__('Settings unavailable for this channel')}
+            title={__("Settings unavailable for this channel")}
             subtitle={__("This channel isn't staking enough LBRY Credits to enable Creator Settings.")}
           />
         )}
@@ -276,21 +272,21 @@ export default function SettingsCreatorPage(props: Props) {
               isBodyList
               body={
                 <>
-                  <SettingsRow title={__('Enable comments for channel.')}>
+                  <SettingsRow title={__("Enable comments for channel.")}>
                     <FormField
                       type="checkbox"
                       name="comments_enabled"
-// @ts-expect-error - TS2322 - Type '{ type: string; name: string; checked: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+                      // @ts-expect-error - TS2322 - Type '{ type: string; name: string; checked: boolean; onChange: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                       checked={commentsEnabled}
                       onChange={() => setSettings({ comments_enabled: !commentsEnabled })}
                     />
                   </SettingsRow>
 
-                  <SettingsRow title={__('Slow mode')} subtitle={__(HELP.SLOW_MODE)}>
+                  <SettingsRow title={__("Slow mode")} subtitle={__(HELP.SLOW_MODE)}>
                     <FormField
                       name="slow_mode_min_gap"
                       min={0}
-// @ts-expect-error - TS2322 - Type '{ name: string; min: number; step: number; type: string; placeholder: string; value: number; onChange: (e: any) => void; onBlur: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+                      // @ts-expect-error - TS2322 - Type '{ name: string; min: number; step: number; type: string; placeholder: string; value: number; onChange: (e: any) => void; onBlur: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                       step={1}
                       type="number"
                       placeholder="1"
@@ -314,7 +310,7 @@ export default function SettingsCreatorPage(props: Props) {
                   >
                     <FormField
                       name="min_tip_amount_comment"
-// @ts-expect-error - TS2322 - Type '{ name: string; className: string; max: number; min: number; step: number; type: string; placeholder: string; value: number; onChange: (e: any) => void; onBlur: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+                      // @ts-expect-error - TS2322 - Type '{ name: string; className: string; max: number; min: number; step: number; type: string; placeholder: string; value: number; onChange: (e: any) => void; onBlur: () => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                       className="form-field--price-amount"
                       max={LBC_MAX}
                       min={LBC_MIN}
@@ -335,29 +331,29 @@ export default function SettingsCreatorPage(props: Props) {
                     />
                   </SettingsRow>
 
-                  <SettingsRow title={__('Moderators')} subtitle={__(HELP.MODERATORS)} multirow>
+                  <SettingsRow title={__("Moderators")} subtitle={__(HELP.MODERATORS)} multirow>
                     <SearchChannelField
-                      label={__('Moderators')}
-                      labelAddNew={__('Add moderator')}
-                      labelFoundAction={__('Add')}
+                      label={__("Moderators")}
+                      labelAddNew={__("Add moderator")}
+                      labelFoundAction={__("Add")}
                       values={moderatorUris}
                       onAdd={handleModeratorAdded}
                       onRemove={handleModeratorRemoved}
                     />
                   </SettingsRow>
 
-                  <SettingsRow title={__('Filter')} subtitle={__(HELP.BLOCKED_WORDS)} multirow>
+                  <SettingsRow title={__("Filter")} subtitle={__(HELP.BLOCKED_WORDS)} multirow>
                     <div className="tag--blocked-words">
                       <TagsSearch
-                        label={__('Muted words')}
-                        labelAddNew={__('Add words')}
-                        labelSuggestions={__('Suggestions')}
+                        label={__("Muted words")}
+                        labelAddNew={__("Add words")}
+                        labelSuggestions={__("Suggestions")}
                         onRemove={removeMutedWord}
                         // @ts-expect-error - TS2322 (ts-migration)
                         onSelect={addMutedWords}
                         disableAutoFocus
                         tagsPassedIn={mutedWordTags}
-                        placeholder={__('Add words to block')}
+                        placeholder={__("Add words to block")}
                         hideSuggestions
                         disableControlTags
                       />

@@ -7,7 +7,7 @@ export default function isUserTyping() {
 
   if (activeElement) {
     const elementType = activeElement.tagName.toLowerCase();
-    return elementType === 'input' || elementType === 'textarea';
+    return elementType === "input" || elementType === "textarea";
   }
 
   return false;

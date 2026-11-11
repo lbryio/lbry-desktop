@@ -1,13 +1,13 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectMyChannelUrls } from 'redux/selectors/claims';
-import * as SETTINGS from 'constants/settings';
-import { doSetPlayingUri, clearContentCache } from 'redux/actions/content';
-import { doSetClientSetting } from 'redux/actions/settings';
-import { selectShowMatureContent, makeSelectClientSetting } from 'redux/selectors/settings';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
+import { connect } from "react-redux";
+import { selectMyChannelUrls } from "redux/selectors/claims";
+import * as SETTINGS from "constants/settings";
+import { doSetPlayingUri, clearContentCache } from "redux/actions/content";
+import { doSetClientSetting } from "redux/actions/settings";
+import { selectShowMatureContent, makeSelectClientSetting } from "redux/selectors/settings";
+import { selectUserVerifiedEmail } from "redux/selectors/user";
 
-import SettingContent from './view';
+import SettingContent from "./view";
 
 const select = (state: unknown) => ({
   isAuthenticated: selectUserVerifiedEmail(state),

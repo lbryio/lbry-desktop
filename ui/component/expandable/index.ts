@@ -1,8 +1,5 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import Expandable from './view';
+import { connect } from "react-redux";
+import Expandable from "./view";
 
-export default connect(
-  null,
-  null
-)(Expandable);
+export default connect(null, null)(Expandable);

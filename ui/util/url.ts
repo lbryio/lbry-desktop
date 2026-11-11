@@ -1,21 +1,21 @@
 //@ts-nocheck
 // Can't use aliases here because we're doing exports/require
 
-const PAGES = require('../constants/pages');
-const { parseURI, buildURI } = require('../util/lbryURI');
-const COLLECTIONS_CONSTS = require('../constants/collections');
+const PAGES = require("../constants/pages");
+const { parseURI, buildURI } = require("../util/lbryURI");
+const COLLECTIONS_CONSTS = require("../constants/collections");
 
 function encodeWithSpecialCharEncode(string: unknown) {
   // encodeURIComponent doesn't encode `'` and others
   // which other services may not like
-  return encodeURIComponent(string).replace(/'/g, '%27').replace(/\(/g, '%28').replace(/\)/g, '%29');
+  return encodeURIComponent(string).replace(/'/g, "%27").replace(/\(/g, "%28").replace(/\)/g, "%29");
 }
 
 export const formatLbryUrlForWeb = (uri: unknown) => {
-  let newUrl = uri.replace('lbry://', '/').replace(/#/g, ':');
-  if (newUrl.startsWith('/?')) {
+  let newUrl = uri.replace("lbry://", "/").replace(/#/g, ":");
+  if (newUrl.startsWith("/?")) {
     // This is a lbry link to an internal page ex: lbry://?rewards
-    newUrl = newUrl.replace('/?', '/$/');
+    newUrl = newUrl.replace("/?", "/$/");
   }
 
   return newUrl;
@@ -26,9 +26,9 @@ export const formatFileSystemPath = (path: unknown) => {
     return;
   }
 
-  let webUrl = path.replace(/\\/g, '/');
+  let webUrl = path.replace(/\\/g, "/");
 
-  if (webUrl[0] !== '/') {
+  if (webUrl[0] !== "/") {
     webUrl = `/${webUrl}`;
   }
 
@@ -50,7 +50,7 @@ export const formatInAppUrl = (path: unknown) => {
     const [, , page, queryString] = appPageMatches;
 
     if (Object.values(PAGES).includes(page)) {
-      let actualUrl = '/$/' + page;
+      let actualUrl = "/$/" + page;
 
       if (queryString) {
         actualUrl += `?${queryString.slice(1)}`;
@@ -67,39 +67,45 @@ export const formatInAppUrl = (path: unknown) => {
 export const formatWebUrlIntoLbryUrl = (pathname: unknown, search: unknown) => {
   // If there is no uri, the user is on an internal page
   // pathname will either be "/" or "/$/{page}"
-  const path = pathname.startsWith('/$/') ? pathname.slice(3) : pathname.slice(1);
+  const path = pathname.startsWith("/$/") ? pathname.slice(3) : pathname.slice(1);
   let appLink = `lbry://?${path || PAGES.DISCOVER}`;
 
   if (search) {
     // We already have a leading "?" for the query param on internal pages
-    appLink += search.replace('?', '&');
+    appLink += search.replace("?", "&");
   }
 
   return appLink;
 };
 
 export const generateInitialUrl = (hash: unknown) => {
-  let url = '/';
+  let url = "/";
   if (hash) {
-    hash = hash.replace('#', '');
-    url = hash.startsWith('/') ? hash : '/' + hash;
+    hash = hash.replace("#", "");
+    url = hash.startsWith("/") ? hash : "/" + hash;
   }
   return url;
 };
 
 export const generateLbryContentUrl = (canonicalUrl: unknown, permanentUrl: unknown) => {
-  return canonicalUrl ? canonicalUrl.split('lbry://')[1] : permanentUrl.split('lbry://')[1];
+  return canonicalUrl ? canonicalUrl.split("lbry://")[1] : permanentUrl.split("lbry://")[1];
 };
 
 export const generateLbryWebUrl = (lbryUrl: unknown) => {
-  return lbryUrl.replace(/#/g, ':');
+  return lbryUrl.replace(/#/g, ":");
 };
 
-export const generateEncodedLbryURL = (domain: unknown, lbryWebUrl: unknown, includeStartTime: unknown, startTime: unknown, listId: unknown) => {
-  let urlParams = new URLSearchParams();
+export const generateEncodedLbryURL = (
+  domain: unknown,
+  lbryWebUrl: unknown,
+  includeStartTime: unknown,
+  startTime: unknown,
+  listId: unknown
+) => {
+  const urlParams = new URLSearchParams();
 
   if (includeStartTime) {
-    urlParams.append('t', startTime.toString());
+    urlParams.append("t", startTime.toString());
   }
 
   if (listId) {
@@ -119,9 +125,9 @@ export const generateShareUrl = (
   startTime: unknown,
   listId: unknown
 ) => {
-  let urlParams = new URLSearchParams();
+  const urlParams = new URLSearchParams();
   if (referralCode && rewardsApproved) {
-    urlParams.append('r', referralCode);
+    urlParams.append("r", referralCode);
   }
 
   if (listId) {
@@ -129,14 +135,14 @@ export const generateShareUrl = (
   }
 
   if (includeStartTime) {
-    urlParams.append('t', startTime.toString());
+    urlParams.append("t", startTime.toString());
   }
 
   const urlParamsString = urlParams.toString();
 
   const { streamName, streamClaimId, channelName, channelClaimId } = parseURI(lbryUrl);
 
-  let uriParts = {
+  const uriParts = {
     ...(streamName ? { streamName: encodeWithSpecialCharEncode(streamName) } : {}),
     ...(streamClaimId ? { streamClaimId } : {}),
     ...(channelName ? { channelName: encodeWithSpecialCharEncode(channelName) } : {}),
@@ -144,18 +150,18 @@ export const generateShareUrl = (
   };
 
   const encodedUrl = buildURI(uriParts, false);
-  const lbryWebUrl = encodedUrl.replace(/#/g, ':');
+  const lbryWebUrl = encodedUrl.replace(/#/g, ":");
 
-  const url = `${domain}/${lbryWebUrl}` + (urlParamsString === '' ? '' : `?${urlParamsString}`);
+  const url = `${domain}/${lbryWebUrl}` + (urlParamsString === "" ? "" : `?${urlParamsString}`);
   return url;
 };
 
 export const generateRssUrl = (domain: unknown, channelClaim: unknown) => {
-  if (!channelClaim || channelClaim.value_type !== 'channel' || !channelClaim.canonical_url) {
-    return '';
+  if (!channelClaim || channelClaim.value_type !== "channel" || !channelClaim.canonical_url) {
+    return "";
   }
 
-  const url = `${domain}/$/rss/${channelClaim.canonical_url.replace('lbry://', '').replace('#', ':')}`;
+  const url = `${domain}/$/rss/${channelClaim.canonical_url.replace("lbry://", "").replace("#", ":")}`;
   return url;
 };
 

@@ -1,26 +1,26 @@
-import * as ICONS from 'constants/icons';
-import Button from 'component/button';
-import Comment from 'component/comment';
-import React from 'react';
-import Spinner from 'component/spinner';
+import * as ICONS from "constants/icons";
+import Button from "component/button";
+import Comment from "component/comment";
+import React from "react";
+import Spinner from "component/spinner";
 
 type Props = {
-  fetchedReplies: Array<LbryComment>,
-  resolvedReplies: Array<LbryComment>,
-  uri: string,
-  parentId: string,
-  claimIsMine: boolean,
-  linkedCommentId?: string,
-  userCanComment: boolean,
-  threadDepth: number,
-  numDirectReplies: number // Total replies for parentId as reported by 'comment[replies]'. Includes blocked items.,
+  fetchedReplies: Array<LbryComment>;
+  resolvedReplies: Array<LbryComment>;
+  uri: string;
+  parentId: string;
+  claimIsMine: boolean;
+  linkedCommentId?: string;
+  userCanComment: boolean;
+  threadDepth: number;
+  numDirectReplies: number; // Total replies for parentId as reported by 'comment[replies]'. Includes blocked items.,
   isFetchingByParentId: {
-    [key: string]: boolean
-  },
-  hasMore: boolean,
-  supportDisabled: boolean,
-  doResolveUris: (arg1: Array<string>) => void,
-  onShowMore?: () => void
+    [key: string]: boolean;
+  };
+  hasMore: boolean;
+  supportDisabled: boolean;
+  doResolveUris: (arg1: Array<string>) => void;
+  onShowMore?: () => void;
 };
 
 function CommentsReplies(props: Props) {
@@ -52,10 +52,10 @@ function CommentsReplies(props: Props) {
     if (!fetchedReplies || alreadyResolved) return;
 
     const urisToResolve: unknown = [];
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
     fetchedReplies.map(({ channel_url }) => channel_url !== undefined && urisToResolve.push(channel_url));
 
-// @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'. | TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string[]'.
+    // @ts-expect-error - TS2339 - Property 'length' does not exist on type 'unknown'. | TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string[]'.
     if (urisToResolve.length > 0) doResolveUris(urisToResolve);
   }, [alreadyResolved, doResolveUris, fetchedReplies]);
 
@@ -72,7 +72,7 @@ function CommentsReplies(props: Props) {
           <Button
             // @ts-expect-error - TS2322 (ts-migration)
             className="comment__action"
-            label={__('Show Replies')}
+            label={__("Show Replies")}
             onClick={() => setExpanded(!isExpanded)}
             icon={isExpanded ? ICONS.UP : ICONS.DOWN}
           />
@@ -107,7 +107,7 @@ function CommentsReplies(props: Props) {
           <Button
             // @ts-expect-error - TS2322 (ts-migration)
             button="link"
-            label={__('Show more')}
+            label={__("Show more")}
             onClick={() => onShowMore && onShowMore()}
             className="button--uri-indicator"
           />

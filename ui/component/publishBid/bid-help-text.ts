@@ -1,9 +1,9 @@
-import {formatCredits} from 'util/format-credits';
+import { formatCredits } from "util/format-credits";
 
 type Props = {
-  uri: string | null | undefined,
-  isResolvingUri: boolean,
-  amountNeededForTakeover: number
+  uri: string | null | undefined;
+  isResolvingUri: boolean;
+  amountNeededForTakeover: number;
 };
 
 function BidHelpText(props: Props) {
@@ -13,16 +13,16 @@ function BidHelpText(props: Props) {
 
   if (uri) {
     if (isResolvingUri) {
-      bidHelpText = __('Checking the winning claim amount...');
+      bidHelpText = __("Checking the winning claim amount...");
     } else if (amountNeededForTakeover === 0) {
-      bidHelpText = __('You currently have the highest bid for this name.');
+      bidHelpText = __("You currently have the highest bid for this name.");
     } else if (!amountNeededForTakeover) {
       bidHelpText = __(
-        'Any amount will give you the highest bid, but larger amounts help your content be trusted and discovered.'
+        "Any amount will give you the highest bid, but larger amounts help your content be trusted and discovered."
       );
     } else {
       bidHelpText = __(
-        'If you bid more than %amount% LBRY Credits, when someone navigates to %uri%, it will load your published content. However, you can get a longer version of this URL for any bid.',
+        "If you bid more than %amount% LBRY Credits, when someone navigates to %uri%, it will load your published content. However, you can get a longer version of this URL for any bid.",
         {
           amount: formatCredits(amountNeededForTakeover, 2, true),
           uri: uri,
@@ -30,7 +30,7 @@ function BidHelpText(props: Props) {
       );
     }
   } else {
-    bidHelpText = __('These LBRY Credits remain yours and the deposit can be undone at any time.');
+    bidHelpText = __("These LBRY Credits remain yours and the deposit can be undone at any time.");
   }
 
   return bidHelpText;

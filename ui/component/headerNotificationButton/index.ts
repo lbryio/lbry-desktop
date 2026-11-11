@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectUnseenNotificationCount } from 'redux/selectors/notifications';
-import { doSeeAllNotifications } from 'redux/actions/notifications';
-import { selectUser } from 'redux/selectors/user';
-import NotificationHeaderButton from './view';
+import { connect } from "react-redux";
+import { selectUnseenNotificationCount } from "redux/selectors/notifications";
+import { doSeeAllNotifications } from "redux/actions/notifications";
+import { selectUser } from "redux/selectors/user";
+import NotificationHeaderButton from "./view";
 
 const select = (state: unknown) => ({
   unseenCount: selectUnseenNotificationCount(state),

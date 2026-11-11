@@ -1,7 +1,7 @@
 //@ts-nocheck
-import {createSelector} from 'reselect';
-import { selectClaimsById, selectMyChannelClaims, selectTotalStakedAmountForChannelUri } from 'redux/selectors/claims';
-import * as MODALS from 'constants/modal_types';
+import { createSelector } from "reselect";
+import { selectClaimsById, selectMyChannelClaims, selectTotalStakedAmountForChannelUri } from "redux/selectors/claims";
+import * as MODALS from "constants/modal_types";
 
 export const selectState = (state: unknown) => state.app || {};
 
@@ -11,20 +11,20 @@ export const selectRemoteVersion = createSelector(selectState, (state) => state.
 
 export const selectUpdateUrl = createSelector(selectPlatform, selectRemoteVersion, (platform, releaseVersion) => {
   switch (platform) {
-    case 'darwin':
-      return 'https://lbry.com/get/lbry.dmg';
-    case 'linux':
+    case "darwin":
+      return "https://lbry.com/get/lbry.dmg";
+    case "linux":
       // releaseVersion can be used as the tag name
       // Example: v0.53.5-alpha.test7495b
       // When downloading, we need to remove the initial
       // v, ending up with a file name like
       // LBRY_0.53.5-alpha.test7495b.deb
-      const fileName = 'LBRY_' + (releaseVersion || '').replace('v', '') + '.deb';
+      const fileName = "LBRY_" + (releaseVersion || "").replace("v", "") + ".deb";
       return `https://github.com/lbryio/lbry-desktop/releases/download/${releaseVersion}/${fileName}`;
-    case 'win32':
-      return 'https://lbry.com/get/lbry.exe';
+    case "win32":
+      return "https://lbry.com/get/lbry.exe";
     default:
-      throw Error('Unknown platform');
+      throw Error("Unknown platform");
   }
 });
 
@@ -38,14 +38,14 @@ export const selectUpgradeFailedInstallation = createSelector(selectState, (stat
 
 export const selectUpgradeFilename = createSelector(selectPlatform, selectRemoteVersion, (platform, version) => {
   switch (platform) {
-    case 'darwin':
+    case "darwin":
       return `LBRY_${version}.dmg`;
-    case 'linux':
+    case "linux":
       return `LBRY_${version}.deb`;
-    case 'win32':
+    case "win32":
       return `LBRY_${version}.exe`;
     default:
-      throw Error('Unknown platform');
+      throw Error("Unknown platform");
   }
 });
 

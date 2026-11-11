@@ -1,16 +1,16 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doResolveUris } from 'redux/actions/claims';
-import { doSetMentionSearchResults } from 'redux/actions/search';
-import { makeSelectWinningUriForQuery } from 'redux/selectors/search';
-import { selectChannelMentionData } from 'redux/selectors/comments';
-import { selectShowMatureContent } from 'redux/selectors/settings';
-import { withRouter } from 'react-router';
-import TextareaWithSuggestions from './view';
+import { connect } from "react-redux";
+import { doResolveUris } from "redux/actions/claims";
+import { doSetMentionSearchResults } from "redux/actions/search";
+import { makeSelectWinningUriForQuery } from "redux/selectors/search";
+import { selectChannelMentionData } from "redux/selectors/comments";
+import { selectShowMatureContent } from "redux/selectors/settings";
+import { withRouter } from "react-router";
+import TextareaWithSuggestions from "./view";
 
 const select = (state: unknown, props: unknown) => {
   const { pathname } = props.location;
-  const uri = `lbry:/${pathname.replaceAll(':', '#')}`;
+  const uri = `lbry:/${pathname.replaceAll(":", "#")}`;
 
   const maxComments = -1;
   const data = selectChannelMentionData(state, uri, maxComments);

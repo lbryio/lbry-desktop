@@ -1,19 +1,19 @@
-import React from 'react';
-import moment from 'moment';
+import React from "react";
+import moment from "moment";
 
 const DEFAULT_MIN_UPDATE_DELTA_MS = 60 * 1000;
 
 type Props = {
-  date?: any,
-  timeAgo?: boolean,
-  formatOptions?: Record<any, any>,
-  show?: string,
-  clock24h?: boolean,
-  minUpdateDeltaMs?: number
+  date?: any;
+  timeAgo?: boolean;
+  formatOptions?: Record<any, any>;
+  show?: string;
+  clock24h?: boolean;
+  minUpdateDeltaMs?: number;
 };
 
 type State = {
-  lastRenderTime: Date
+  lastRenderTime: Date;
 };
 
 class DateTime extends React.Component<Props, State> {
@@ -24,12 +24,12 @@ class DateTime extends React.Component<Props, State> {
     };
   }
 
-  static SHOW_DATE = 'date';
-  static SHOW_TIME = 'time';
+  static SHOW_DATE = "date";
+  static SHOW_TIME = "time";
 
   static getTimeAgoStr(date: any) {
-    const suffixList = ['years', 'months', 'days', 'hours', 'minutes', 'seconds', ''];
-    var duration = 0;
+    const suffixList = ["years", "months", "days", "hours", "minutes", "seconds", ""];
+    let duration = 0;
 
     for (var i = 0; i < suffixList.length; ++i) {
       // moment() is very liberal with it's rounding.
@@ -50,10 +50,10 @@ class DateTime extends React.Component<Props, State> {
     // Strip off the 's' for the singular suffix, construct the string ID,
     // then load the localized version.
     const suffix = duration === 1 ? suffixList[i].slice(0, -1) : suffixList[i];
-    let strId = '%duration% ' + suffix + ' ago';
+    let strId = "%duration% " + suffix + " ago";
 
     if (!suffix) {
-      strId = 'Just now';
+      strId = "Just now";
     }
 
     return __(strId, { duration });
@@ -94,9 +94,9 @@ class DateTime extends React.Component<Props, State> {
   render() {
     const { date, timeAgo, show, clock24h } = this.props;
 
-    let clockFormat = 'hh:mm A';
+    let clockFormat = "hh:mm A";
     if (clock24h) {
-      clockFormat = 'HH:mm';
+      clockFormat = "HH:mm";
     }
 
     if (timeAgo) {
@@ -104,14 +104,18 @@ class DateTime extends React.Component<Props, State> {
         return null;
       }
 
-      return <span className="date_time" title={moment(date).format(`MMMM Do, YYYY ${clockFormat}`)}>{DateTime.getTimeAgoStr(date)}</span>;
+      return (
+        <span className="date_time" title={moment(date).format(`MMMM Do, YYYY ${clockFormat}`)}>
+          {DateTime.getTimeAgoStr(date)}
+        </span>
+      );
     }
 
     return (
       <span className="date_time">
-        {date && show === DateTime.SHOW_DATE && moment(date).format('MMMM Do, YYYY')}
+        {date && show === DateTime.SHOW_DATE && moment(date).format("MMMM Do, YYYY")}
         {date && show === DateTime.SHOW_TIME && moment(date).format(clockFormat)}
-        {!date && '...'}
+        {!date && "..."}
       </span>
     );
   }

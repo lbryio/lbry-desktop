@@ -1,35 +1,28 @@
-import React from 'react';
-import ClaimList from 'component/claimList';
-import ClaimListDiscover from 'component/claimListDiscover';
-import Card from 'component/common/card';
-import { useIsMobile, useIsMediumScreen } from 'effects/use-screensize';
-import Button from 'component/button';
-import classnames from 'classnames';
-import RecSys from 'recsys';
+import React from "react";
+import ClaimList from "component/claimList";
+import ClaimListDiscover from "component/claimListDiscover";
+import Card from "component/common/card";
+import { useIsMobile, useIsMediumScreen } from "effects/use-screensize";
+import Button from "component/button";
+import classnames from "classnames";
+import RecSys from "recsys";
 
-const VIEW_ALL_RELATED = 'view_all_related';
-const VIEW_MORE_FROM = 'view_more_from';
+const VIEW_ALL_RELATED = "view_all_related";
+const VIEW_MORE_FROM = "view_more_from";
 
 type Props = {
-  uri: string,
-  recommendedContentUris: Array<string>,
-  nextRecommendedUri: string,
-  isSearching: boolean,
-  doFetchRecommendedContent: (arg1: string) => void,
-  claim: StreamClaim | null | undefined,
-  claimId: string
+  uri: string;
+  recommendedContentUris: Array<string>;
+  nextRecommendedUri: string;
+  isSearching: boolean;
+  doFetchRecommendedContent: (arg1: string) => void;
+  claim: StreamClaim | null | undefined;
+  claimId: string;
 };
 
 export default React.memo<Props>(function RecommendedContent(props: Props) {
-  const {
-    uri,
-    doFetchRecommendedContent,
-    recommendedContentUris,
-    nextRecommendedUri,
-    isSearching,
-    claim,
-    claimId,
-  } = props;
+  const { uri, doFetchRecommendedContent, recommendedContentUris, nextRecommendedUri, isSearching, claim, claimId } =
+    props;
   const [viewMode, setViewMode] = React.useState(VIEW_ALL_RELATED);
   const signingChannel = claim && claim.signing_channel;
   const channelName = signingChannel ? signingChannel.name : null;
@@ -55,7 +48,7 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
 
   function handleRecommendationClicked(e: unknown, clickedClaim: unknown) {
     if (claim) {
-// @ts-expect-error - TS2339 - Property 'claim_id' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'claim_id' does not exist on type 'unknown'.
       onRecommendationClicked(claim.claim_id, clickedClaim.claim_id);
     }
   }
@@ -65,25 +58,25 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
       isBodyList
       smallTitle={!isMobile && !isMedium}
       className="file-page__recommended"
-      title={__('Related')}
+      title={__("Related")}
       titleActions={
         signingChannel && (
           <div className="recommended-content__bubble">
             <Button
               // @ts-expect-error - TS2322 (ts-migration)
-              className={classnames('button-bubble', {
-                'button-bubble--active': viewMode === VIEW_ALL_RELATED,
+              className={classnames("button-bubble", {
+                "button-bubble--active": viewMode === VIEW_ALL_RELATED,
               })}
-              label={__('Related')}
+              label={__("Related")}
               onClick={() => setViewMode(VIEW_ALL_RELATED)}
             />
 
             <Button
               // @ts-expect-error - TS2322 (ts-migration)
-              className={classnames('button-bubble', {
-                'button-bubble--active': viewMode === VIEW_MORE_FROM,
+              className={classnames("button-bubble", {
+                "button-bubble--active": viewMode === VIEW_MORE_FROM,
               })}
-              label={__('More from %claim_name%', { claim_name: channelName })}
+              label={__("More from %claim_name%", { claim_name: channelName })}
               onClick={() => setViewMode(VIEW_MORE_FROM)}
             />
           </div>
@@ -98,7 +91,7 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
               loading={isSearching}
               uris={recommendedContentUris}
               hideMenu={isMobile}
-              empty={__('No related content found')}
+              empty={__("No related content found")}
               onClick={handleRecommendationClicked}
             />
           )}
@@ -108,7 +101,7 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
               tileLayout={false}
               showHeader={false}
               type="small"
-              claimType={['stream']}
+              claimType={["stream"]}
               orderBy="new"
               pageSize={20}
               infiniteScroll={false}
@@ -116,7 +109,7 @@ export default React.memo<Props>(function RecommendedContent(props: Props) {
               channelIds={[signingChannel.claim_id]}
               loading={isSearching}
               hideMenu={isMobile}
-              empty={__('No related content found')}
+              empty={__("No related content found")}
             />
           )}
         </div>

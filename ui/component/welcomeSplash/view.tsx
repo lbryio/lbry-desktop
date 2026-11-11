@@ -1,15 +1,15 @@
-import React from 'react';
-import Button from 'component/button';
-import { withRouter } from 'react-router-dom';
-import I18nMessage from 'component/i18nMessage';
+import React from "react";
+import Button from "component/button";
+import { withRouter } from "react-router-dom";
+import I18nMessage from "component/i18nMessage";
 // @ts-expect-error - TS2792 - Cannot find module 'static/img/yrblhappy.svg'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-import YrblHappy from 'static/img/yrblhappy.svg';
+import YrblHappy from "static/img/yrblhappy.svg";
 
 type Props = {
-  setWelcomeVersion: (arg1: number) => void,
-  setShareDataInternal: (arg1: boolean) => void,
-  handleNextPage: () => void,
-  diskSpace?: DiskSpace
+  setWelcomeVersion: (arg1: number) => void;
+  setShareDataInternal: (arg1: boolean) => void;
+  handleNextPage: () => void;
+  diskSpace?: DiskSpace;
 };
 
 function WelcomePage(props: Props) {
@@ -17,18 +17,18 @@ function WelcomePage(props: Props) {
 
   return (
     <section className="main--contained">
-      <div className={'columns first-run__wrapper'}>
-        <div className={'first-run__left'}>
-          <h1 className="section__title--large">{__('Welcome')}</h1>
+      <div className={"columns first-run__wrapper"}>
+        <div className={"first-run__left"}>
+          <h1 className="section__title--large">{__("Welcome")}</h1>
           <h3 className="section__subtitle first-run__copy">
             {__(`You've entered the land of content freedom! Let's make sure everything is ship shape.`)}
           </h3>
         </div>
-        <div className={'first-run__image-wrapper'}>
+        <div className={"first-run__image-wrapper"}>
           <img src={YrblHappy} className="privacy-img" />
         </div>
       </div>
-      <div className={'first-run__actions'}>
+      <div className={"first-run__actions"}>
         {/* @ts-expect-error - TS2322 (ts-migration) */}
         <Button button="primary" label={__(`Next`)} onClick={handleNextPage} />
       </div>
@@ -38,7 +38,7 @@ function WelcomePage(props: Props) {
           // @ts-expect-error - TS2322 (ts-migration)
           tokens={{
             // @ts-expect-error - TS2322 (ts-migration)
-            terms: <Button button="link" href="https://www.lbry.com/termsofservice" label={__('Terms of Service')} />,
+            terms: <Button button="link" href="https://www.lbry.com/termsofservice" label={__("Terms of Service")} />,
           }}
         >
           By continuing, you agree to the %terms%

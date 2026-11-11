@@ -1,24 +1,24 @@
 // @ts-expect-error - TS2882 (ts-migration)
-import 'scss/component/_emote-selector.scss';
-import { EMOTES_48px as EMOTES } from 'constants/emotes';
-import * as ICONS from 'constants/icons';
-import Button from 'component/button';
-import EMOJIS from 'emoji-dictionary';
-import OptimizedImage from 'component/optimizedImage';
-import React from 'react';
+import "scss/component/_emote-selector.scss";
+import { EMOTES_48px as EMOTES } from "constants/emotes";
+import * as ICONS from "constants/icons";
+import Button from "component/button";
+import EMOJIS from "emoji-dictionary";
+import OptimizedImage from "component/optimizedImage";
+import React from "react";
 
 const OLD_QUICK_EMOJIS = [
-  EMOJIS.getUnicode('rocket'),
-  EMOJIS.getUnicode('jeans'),
-  EMOJIS.getUnicode('fire'),
-  EMOJIS.getUnicode('heart'),
-  EMOJIS.getUnicode('open_mouth'),
+  EMOJIS.getUnicode("rocket"),
+  EMOJIS.getUnicode("jeans"),
+  EMOJIS.getUnicode("fire"),
+  EMOJIS.getUnicode("heart"),
+  EMOJIS.getUnicode("open_mouth"),
 ];
 
 type Props = {
-  commentValue: string,
-  setCommentValue: (arg1: string) => void,
-  closeSelector: () => void
+  commentValue: string;
+  setCommentValue: (arg1: string) => void;
+  closeSelector: () => void;
 };
 
 export default function EmoteSelector(props: Props) {
@@ -26,7 +26,7 @@ export default function EmoteSelector(props: Props) {
 
   function addEmoteToComment(emote: string) {
     setCommentValue(
-      commentValue + (commentValue && commentValue.charAt(commentValue.length - 1) !== ' ' ? ` ${emote} ` : `${emote} `)
+      commentValue + (commentValue && commentValue.charAt(commentValue.length - 1) !== " " ? ` ${emote} ` : `${emote} `)
     );
   }
 

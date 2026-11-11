@@ -1,15 +1,15 @@
 //@ts-nocheck
-import {createSelector} from 'reselect';
+import { createSelector } from "reselect";
 import {
   selectClaimsByUri,
   selectIsFetchingClaimListMine,
   selectMyClaims,
   makeSelectContentTypeForUri,
   makeSelectClaimForUri,
-} from 'redux/selectors/claims';
-import { buildURI } from 'util/lbryURI';
-import Lbry from 'lbry';
-import { PAGE_SIZE } from 'constants/claim';
+} from "redux/selectors/claims";
+import { buildURI } from "util/lbryURI";
+import Lbry from "lbry";
+import { PAGE_SIZE } from "constants/claim";
 
 export const selectState = (state: unknown) => state.fileInfo || {};
 
@@ -117,7 +117,7 @@ export const makeSelectMediaTypeForUri = (uri: unknown) =>
 
 export const makeSelectUriIsStreamable = (uri: unknown) =>
   createSelector(makeSelectMediaTypeForUri(uri), (mediaType) => {
-    const isStreamable = ['audio', 'video', 'image'].indexOf(mediaType) !== -1;
+    const isStreamable = ["audio", "video", "image"].indexOf(mediaType) !== -1;
     return isStreamable;
   });
 
@@ -144,7 +144,7 @@ export const selectDownloadUrlsCount = createSelector(selectDownloadedUris, (uri
 
 function filterFileInfos(fileInfos: unknown, query: unknown) {
   if (query) {
-    const queryMatchRegExp = new RegExp(query, 'i');
+    const queryMatchRegExp = new RegExp(query, "i");
     return fileInfos.filter((fileInfo) => {
       const { metadata } = fileInfo;
 

@@ -1,13 +1,13 @@
-import * as PAGES from 'constants/pages';
-import React from 'react';
-import Nag from 'component/common/nag';
-import { useHistory } from 'react-router';
+import * as PAGES from "constants/pages";
+import React from "react";
+import Nag from "component/common/nag";
+import { useHistory } from "react-router";
 
 type Props = {
-  followingAcknowledged: boolean,
-  firstRunStarted: boolean,
-  setClientSetting: (arg1: string, arg2: boolean) => void,
-  syncSetttings: () => void
+  followingAcknowledged: boolean;
+  firstRunStarted: boolean;
+  setClientSetting: (arg1: string, arg2: boolean) => void;
+  syncSetttings: () => void;
 };
 
 export default function NagContinueFirstRun(props: Props) {
@@ -29,8 +29,8 @@ export default function NagContinueFirstRun(props: Props) {
   return (
     <Nag
       type="helpful"
-      message={__('Continue setting up your account.')}
-      actionText={__('Finish Up')}
+      message={__("Continue setting up your account.")}
+      actionText={__("Finish Up")}
       onClick={handleContinue}
     />
   );

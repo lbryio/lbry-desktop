@@ -1,9 +1,9 @@
 //@ts-nocheck
-import SettingDisableAutoUpdates from './view';
-import * as SETTINGS from 'constants/settings';
-import { connect } from 'react-redux';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { doSetClientSetting } from 'redux/actions/settings';
+import SettingDisableAutoUpdates from "./view";
+import * as SETTINGS from "constants/settings";
+import { connect } from "react-redux";
+import { makeSelectClientSetting } from "redux/selectors/settings";
+import { doSetClientSetting } from "redux/actions/settings";
 
 const select = (state: unknown) => {
   return {

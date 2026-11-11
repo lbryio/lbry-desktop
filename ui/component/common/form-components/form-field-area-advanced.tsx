@@ -1,46 +1,46 @@
 // @ts-expect-error - TS2882 (ts-migration)
-import 'easymde/dist/easymde.min.css';
-import { FF_MAX_CHARS_DEFAULT } from 'constants/form-field';
-import { openEditorMenu, stopContextMenu } from 'util/context-menu';
-import * as ICONS from 'constants/icons';
-import Button from 'component/button';
-import MarkdownPreview from 'component/common/markdown-preview';
-import React from 'react';
-import ReactDOMServer from 'react-dom/server';
-import SimpleMDE from 'react-simplemde-editor';
-import TextareaWithSuggestions from 'component/textareaWithSuggestions';
-import type { ElementRef, ReactNode } from 'react';
+import "easymde/dist/easymde.min.css";
+import { FF_MAX_CHARS_DEFAULT } from "constants/form-field";
+import { openEditorMenu, stopContextMenu } from "util/context-menu";
+import * as ICONS from "constants/icons";
+import Button from "component/button";
+import MarkdownPreview from "component/common/markdown-preview";
+import React from "react";
+import ReactDOMServer from "react-dom/server";
+import SimpleMDE from "react-simplemde-editor";
+import TextareaWithSuggestions from "component/textareaWithSuggestions";
+import type { ElementRef, ReactNode } from "react";
 
 type Props = {
-  autoFocus?: boolean,
-  blockWrap: boolean,
-  charCount?: number,
-  children?: React.ReactNode,
-  disabled?: boolean,
-  helper?: string | React.ReactNode,
-  hideSuggestions?: boolean,
-  isLivestream?: boolean,
-  label?: string | React.ReactNode,
-  labelOnLeft: boolean,
-  name: string,
-  noEmojis?: boolean,
-  placeholder?: string | number,
-  quickActionLabel?: string,
-  textAreaMaxLength?: number,
-  type?: string,
-  value?: string | number,
-  onChange?: (arg1?: any) => any,
-  openEmoteMenu?: () => void,
-  quickActionHandler?: (arg1?: any) => any,
-  render?: () => React.ReactElement,
-  header?: React.ReactNode
+  autoFocus?: boolean;
+  blockWrap: boolean;
+  charCount?: number;
+  children?: React.ReactNode;
+  disabled?: boolean;
+  helper?: string | React.ReactNode;
+  hideSuggestions?: boolean;
+  isLivestream?: boolean;
+  label?: string | React.ReactNode;
+  labelOnLeft: boolean;
+  name: string;
+  noEmojis?: boolean;
+  placeholder?: string | number;
+  quickActionLabel?: string;
+  textAreaMaxLength?: number;
+  type?: string;
+  value?: string | number;
+  onChange?: (arg1?: any) => any;
+  openEmoteMenu?: () => void;
+  quickActionHandler?: (arg1?: any) => any;
+  render?: () => React.ReactElement;
+  header?: React.ReactNode;
 };
 
 export class FormFieldAreaAdvanced extends React.PureComponent<Props> {
   static defaultProps = { labelOnLeft: false, blockWrap: true };
 
   input: {
-    current: ElementRef<any>
+    current: ElementRef<any>;
   };
 
   constructor(props: Props) {
@@ -52,7 +52,7 @@ export class FormFieldAreaAdvanced extends React.PureComponent<Props> {
     const { autoFocus } = this.props;
     const input = this.input.current;
 
-// @ts-expect-error - TS2339 - Property 'focus' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'focus' does not exist on type 'unknown'.
     if (input && autoFocus) input.focus();
   }
 
@@ -85,7 +85,7 @@ export class FormFieldAreaAdvanced extends React.PureComponent<Props> {
     // text length from the callback. So, we'll use our own widget.
     const hasCharCount = charCount !== undefined && charCount >= 0;
     const countInfo = hasCharCount && textAreaMaxLength !== undefined && (
-      <span className="comment__char-count-mde">{`${charCount || '0'}/${textAreaMaxLength}`}</span>
+      <span className="comment__char-count-mde">{`${charCount || "0"}/${textAreaMaxLength}`}</span>
     );
 
     const quickAction =
@@ -98,44 +98,44 @@ export class FormFieldAreaAdvanced extends React.PureComponent<Props> {
 
     const input = () => {
       switch (type) {
-        case 'markdown':
+        case "markdown":
           const handleEvents = { contextmenu: openEditorMenu } as const;
 
           const getInstance = (editor: unknown) => {
             // SimpleMDE max char check
-// @ts-expect-error - TS2339 - Property 'codemirror' does not exist on type 'unknown'.
-            editor.codemirror.on('beforeChange', (instance, changes) => {
+            // @ts-expect-error - TS2339 - Property 'codemirror' does not exist on type 'unknown'.
+            editor.codemirror.on("beforeChange", (instance, changes) => {
               if (textAreaMaxLength && changes.update) {
-                var str = changes.text.join('\n');
-                var delta = str.length - (instance.indexFromPos(changes.to) - instance.indexFromPos(changes.from));
+                let str = changes.text.join("\n");
+                let delta = str.length - (instance.indexFromPos(changes.to) - instance.indexFromPos(changes.from));
 
                 if (delta <= 0) return;
 
                 delta = instance.getValue().length + delta - textAreaMaxLength;
                 if (delta > 0) {
                   str = str.substring(0, str.length - delta);
-                  changes.update(changes.from, changes.to, str.split('\n'));
+                  changes.update(changes.from, changes.to, str.split("\n"));
                 }
               }
             });
 
             // "Create Link (Ctrl-K)": highlight URL instead of label:
-// @ts-expect-error - TS2339 - Property 'codemirror' does not exist on type 'unknown'.
-            editor.codemirror.on('changes', (instance, changes) => {
+            // @ts-expect-error - TS2339 - Property 'codemirror' does not exist on type 'unknown'.
+            editor.codemirror.on("changes", (instance, changes) => {
               try {
                 // Grab the last change from the buffered list. I assume the
                 // buffered one ('changes', instead of 'change') is more efficient,
                 // and that "Create Link" will always end up last in the list.
                 const lastChange = changes[changes.length - 1];
-                if (lastChange.origin === '+input') {
+                if (lastChange.origin === "+input") {
                   // https://github.com/Ionaru/easy-markdown-editor/blob/8fa54c496f98621d5f45f57577ce630bee8c41ee/src/js/easymde.js#L765
-                  const EASYMDE_URL_PLACEHOLDER = '(https://)';
+                  const EASYMDE_URL_PLACEHOLDER = "(https://)";
 
                   // The URL placeholder is always placed last, so just look at the
                   // last text in the array to also cover the multi-line case:
                   const urlLineText = lastChange.text[lastChange.text.length - 1];
 
-                  if (urlLineText.endsWith(EASYMDE_URL_PLACEHOLDER) && urlLineText !== '[]' + EASYMDE_URL_PLACEHOLDER) {
+                  if (urlLineText.endsWith(EASYMDE_URL_PLACEHOLDER) && urlLineText !== "[]" + EASYMDE_URL_PLACEHOLDER) {
                     const from = lastChange.from;
                     const to = lastChange.to;
                     const isSelectionMultiline = lastChange.text.length > 1;
@@ -147,8 +147,8 @@ export class FormFieldAreaAdvanced extends React.PureComponent<Props> {
                     // Add a small delay to handle that case.
                     setTimeout(() => {
                       instance.setSelection(
-                        { line: to.line, ch: baseIndex + urlLineText.lastIndexOf('(') + 1 },
-                        { line: to.line, ch: baseIndex + urlLineText.lastIndexOf(')') }
+                        { line: to.line, ch: baseIndex + urlLineText.lastIndexOf("(") + 1 },
+                        { line: to.line, ch: baseIndex + urlLineText.lastIndexOf(")") }
                       );
                     }, 25);
                   }
@@ -159,7 +159,7 @@ export class FormFieldAreaAdvanced extends React.PureComponent<Props> {
 
           return (
             <div className="form-field--SimpleMDE" onContextMenu={stopContextMenu}>
-{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
+              {/* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
               <fieldset-section>
                 {!header && (
                   <div className="form-field__two-column">
@@ -179,22 +179,22 @@ export class FormFieldAreaAdvanced extends React.PureComponent<Props> {
                   getMdeInstance={getInstance}
                   options={{
                     spellChecker: true,
-                    hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'],
+                    hideIcons: ["heading", "image", "fullscreen", "side-by-side"],
                     previewRender(plainText: unknown) {
-// @ts-expect-error - TS2322 - Type 'unknown' is not assignable to type 'string'.
+                      // @ts-expect-error - TS2322 - Type 'unknown' is not assignable to type 'string'.
                       const preview = <MarkdownPreview content={plainText} noDataStore />;
                       return ReactDOMServer.renderToString(preview);
                     },
                   }}
                 />
                 {countInfo}
-{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
+                {/* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
               </fieldset-section>
             </div>
           );
-        case 'textarea':
+        case "textarea":
           return (
-// @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'.
+            // @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'.
             <fieldset-section>
               {!header && (label || quickAction) && (
                 <div className="form-field__two-column">
@@ -208,7 +208,7 @@ export class FormFieldAreaAdvanced extends React.PureComponent<Props> {
                   type={type}
                   id={name}
                   maxLength={textAreaMaxLength || FF_MAX_CHARS_DEFAULT}
-// @ts-expect-error - TS2322 - Type '{ current: unknown; }' is not assignable to type 'LegacyRef<HTMLTextAreaElement>'.
+                  // @ts-expect-error - TS2322 - Type '{ current: unknown; }' is not assignable to type 'LegacyRef<HTMLTextAreaElement>'.
                   ref={this.input}
                   {...inputProps}
                 />
@@ -236,7 +236,7 @@ export class FormFieldAreaAdvanced extends React.PureComponent<Props> {
                 )}
                 {countInfo}
               </div>
-{ /* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
+              {/* @ts-expect-error - TS2339 - Property 'fieldset-section' does not exist on type 'JSX.IntrinsicElements'. */}
             </fieldset-section>
           );
       }

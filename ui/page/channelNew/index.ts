@@ -1,10 +1,10 @@
 //@ts-nocheck
-import REWARD_TYPES from 'rewards';
-import { connect } from 'react-redux';
-import { selectBalance } from 'redux/selectors/wallet';
-import { selectUserVerifiedEmail } from 'redux/selectors/user';
-import { doClaimRewardType } from 'redux/actions/rewards';
-import ChannelNew from './view';
+import REWARD_TYPES from "rewards";
+import { connect } from "react-redux";
+import { selectBalance } from "redux/selectors/wallet";
+import { selectUserVerifiedEmail } from "redux/selectors/user";
+import { doClaimRewardType } from "redux/actions/rewards";
+import ChannelNew from "./view";
 
 const select = (state: unknown) => ({
   balance: selectBalance(state),

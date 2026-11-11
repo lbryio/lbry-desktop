@@ -1,7 +1,7 @@
 /*
   LBRY FIRST does not work due to api changes
  */
-import 'proxy-polyfill';
+import "proxy-polyfill";
 
 const CHECK_LBRYFIRST_STARTED_TRY_NUMBER = 200;
 //
@@ -12,11 +12,11 @@ const CHECK_LBRYFIRST_STARTED_TRY_NUMBER = 200;
 const LbryFirst: LbryFirstTypes = {
   isConnected: false,
   connectPromise: null,
-  lbryFirstConnectionString: 'http://localhost:1337/rpc',
-  apiRequestHeaders: { 'Content-Type': 'application/json' },
+  lbryFirstConnectionString: "http://localhost:1337/rpc",
+  apiRequestHeaders: { "Content-Type": "application/json" },
 
   // Allow overriding lbryFirst connection string (e.g. to `/api/proxy` for lbryweb)
-// @ts-expect-error - TS2322 - Type '{ isConnected: false; connectPromise: null; lbryFirstConnectionString: string; apiRequestHeaders: { 'Content-Type': string; }; setLbryFirstConnectionString: (value: string) => void; setApiHeader: (key: string, value: string) => void; ... 11 more ...; connect: () => Promise<...>; }' is not assignable to type 'LbryFirstTypes'.
+  // @ts-expect-error - TS2322 - Type '{ isConnected: false; connectPromise: null; lbryFirstConnectionString: string; apiRequestHeaders: { 'Content-Type': string; }; setLbryFirstConnectionString: (value: string) => void; setApiHeader: (key: string, value: string) => void; ... 11 more ...; connect: () => Promise<...>; }' is not assignable to type 'LbryFirstTypes'.
   setLbryFirstConnectionString: (value: string) => {
     LbryFirst.lbryFirstConnectionString = value;
   },
@@ -25,9 +25,8 @@ const LbryFirst: LbryFirstTypes = {
     LbryFirst.apiRequestHeaders = Object.assign(LbryFirst.apiRequestHeaders, { [key]: value });
   },
 
-  unsetApiHeader: key => {
-    Object.keys(LbryFirst.apiRequestHeaders).includes(key) &&
-      delete LbryFirst.apiRequestHeaders['key'];
+  unsetApiHeader: (key) => {
+    Object.keys(LbryFirst.apiRequestHeaders).includes(key) && delete LbryFirst.apiRequestHeaders["key"];
   },
   // Allow overriding Lbry methods
   overrides: {},
@@ -37,53 +36,55 @@ const LbryFirst: LbryFirstTypes = {
   getApiRequestHeaders: () => LbryFirst.apiRequestHeaders,
 
   // LbryFirst Methods
-  status: (params = {}) => lbryFirstCallWithResult('status', params),
-  stop: () => lbryFirstCallWithResult('stop', {}),
-  version: () => lbryFirstCallWithResult('version', {}),
+  status: (params = {}) => lbryFirstCallWithResult("status", params),
+  stop: () => lbryFirstCallWithResult("stop", {}),
+  version: () => lbryFirstCallWithResult("version", {}),
 
   // Upload to youtube
-// @ts-expect-error - TS2739 - Type '{}' is missing the following properties from type '{ title: string; description: string; file_path: string; }': title, description, file_path
-  upload: (params: {
-    title: string,
-    description: string,
-    file_path: string | null | undefined
-  } = {}) => {
+  upload: (
+    // @ts-expect-error - TS2739 (ts-migration)
+    params: {
+      title: string;
+      description: string;
+      file_path: string | null | undefined;
+    } = {}
+  ) => {
     // Only upload when originally publishing for now
     if (!params.file_path) {
       return Promise.resolve();
     }
 
     const uploadParams: {
-      Title: string,
-      Description: string,
-      FilePath: string,
-      Category: string,
-      Keywords: string
+      Title: string;
+      Description: string;
+      FilePath: string;
+      Category: string;
+      Keywords: string;
     } = {
       Title: params.title,
       Description: params.description,
       FilePath: params.file_path,
-      Category: '',
-      Keywords: '',
+      Category: "",
+      Keywords: "",
     };
 
-    return lbryFirstCallWithResult('youtube.Upload', uploadParams);
+    return lbryFirstCallWithResult("youtube.Upload", uploadParams);
   },
 
   hasYTAuth: (token: string) => {
     const hasYTAuthParams: Record<string, any> = {};
     hasYTAuthParams.AuthToken = token;
-    return lbryFirstCallWithResult('youtube.HasAuth', hasYTAuthParams);
+    return lbryFirstCallWithResult("youtube.HasAuth", hasYTAuthParams);
   },
 
   ytSignup: () => {
     const emptyParams: Record<string, any> = {};
-    return lbryFirstCallWithResult('youtube.Signup', emptyParams);
+    return lbryFirstCallWithResult("youtube.Signup", emptyParams);
   },
 
   remove: () => {
     const emptyParams: Record<string, any> = {};
-    return lbryFirstCallWithResult('youtube.Remove', emptyParams);
+    return lbryFirstCallWithResult("youtube.Remove", emptyParams);
   },
 
   // Connect to lbry-first
@@ -100,7 +101,7 @@ const LbryFirst: LbryFirstTypes = {
               if (tryNum <= CHECK_LBRYFIRST_STARTED_TRY_NUMBER) {
                 setTimeout(checkLbryFirstStarted, tryNum < 50 ? 400 : 1000);
               } else {
-                reject(new Error('Unable to connect to LBRY'));
+                reject(new Error("Unable to connect to LBRY"));
               }
             });
         }
@@ -115,32 +116,37 @@ const LbryFirst: LbryFirstTypes = {
 };
 
 function checkAndParse(response: unknown) {
-// @ts-expect-error - TS2339 - Property 'status' does not exist on type 'unknown'. | TS2339 - Property 'status' does not exist on type 'unknown'.
+  // @ts-expect-error - TS2339 - Property 'status' does not exist on type 'unknown'. | TS2339 - Property 'status' does not exist on type 'unknown'.
   if (response.status >= 200 && response.status < 300) {
-// @ts-expect-error - TS2339 - Property 'json' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'json' does not exist on type 'unknown'.
     return response.json();
   }
-// @ts-expect-error - TS2339 - Property 'json' does not exist on type 'unknown'.
-  return response.json().then(json => {
+  // @ts-expect-error - TS2339 - Property 'json' does not exist on type 'unknown'.
+  return response.json().then((json) => {
     let error;
     if (json.error) {
-      const errorMessage = typeof json.error === 'object' ? json.error.message : json.error;
+      const errorMessage = typeof json.error === "object" ? json.error.message : json.error;
       error = new Error(errorMessage);
     } else {
-      error = new Error('Protocol error with unknown response signature');
+      error = new Error("Protocol error with unknown response signature");
     }
     return Promise.reject(error);
   });
 }
 
-export function apiCall(method: string, params: Record<any, any> | null | undefined, resolve: (...args: any) => any, reject: (...args: any) => any) {
+export function apiCall(
+  method: string,
+  params: Record<any, any> | null | undefined,
+  resolve: (...args: any) => any,
+  reject: (...args: any) => any
+) {
   const counter = new Date().getTime();
   const paramsArray = [params];
   const options = {
-    method: 'POST',
+    method: "POST",
     headers: LbryFirst.apiRequestHeaders,
     body: JSON.stringify({
-      jsonrpc: '2.0',
+      jsonrpc: "2.0",
       method,
       params: paramsArray,
       id: counter,
@@ -149,7 +155,7 @@ export function apiCall(method: string, params: Record<any, any> | null | undefi
 
   return fetch(LbryFirst.lbryFirstConnectionString, options)
     .then(checkAndParse)
-    .then(response => {
+    .then((response) => {
       const error = response.error || (response.result && response.result.error);
 
       if (error) {
@@ -165,7 +171,7 @@ function lbryFirstCallWithResult(name: string, params: Record<any, any> | null =
     apiCall(
       name,
       params,
-      result => {
+      (result) => {
         resolve(result);
       },
       reject

@@ -1,13 +1,13 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import {
   doResetThumbnailStatus,
   doClearPublish,
   doUpdatePublishForm,
   doPrepareEdit,
   doPublishDesktop,
-} from 'redux/actions/publish';
-import { doResolveUri, doCheckPublishNameAvailability } from 'redux/actions/claims';
+} from "redux/actions/publish";
+import { doResolveUri, doCheckPublishNameAvailability } from "redux/actions/claims";
 import {
   selectTakeOverAmount,
   selectPublishFormValues,
@@ -15,29 +15,29 @@ import {
   makeSelectPublishFormValue,
   selectIsResolvingPublishUris,
   selectMyClaimForUri,
-} from 'redux/selectors/publish';
-import * as RENDER_MODES from 'constants/file_render_modes';
-import * as SETTINGS from 'constants/settings';
-import { doClaimInitialRewards } from 'redux/actions/rewards';
+} from "redux/selectors/publish";
+import * as RENDER_MODES from "constants/file_render_modes";
+import * as SETTINGS from "constants/settings";
+import { doClaimInitialRewards } from "redux/actions/rewards";
 import {
   selectUnclaimedRewardValue,
   selectIsClaimingInitialRewards,
   selectHasClaimedInitialRewards,
-} from 'redux/selectors/rewards';
+} from "redux/selectors/rewards";
 import {
   selectModal,
   selectActiveChannelClaim,
   selectIncognito,
   selectActiveChannelStakedLevel,
-} from 'redux/selectors/app';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { makeSelectFileRenderModeForUri } from 'redux/selectors/content';
-import { selectUser } from 'redux/selectors/user';
-import PublishForm from './view';
+} from "redux/selectors/app";
+import { makeSelectClientSetting } from "redux/selectors/settings";
+import { makeSelectFileRenderModeForUri } from "redux/selectors/content";
+import { selectUser } from "redux/selectors/user";
+import PublishForm from "./view";
 
 const select = (state: unknown) => {
   const myClaimForUri = selectMyClaimForUri(state);
-  const permanentUrl = (myClaimForUri && myClaimForUri.permanent_url) || '';
+  const permanentUrl = (myClaimForUri && myClaimForUri.permanent_url) || "";
   const isPostClaim = makeSelectFileRenderModeForUri(permanentUrl)(state) === RENDER_MODES.MARKDOWN;
 
   return {
@@ -52,9 +52,9 @@ const select = (state: unknown) => {
     // If I clicked the "edit" button, have I changed the uri?
     // Need this to make it easier to find the source on previously published content
     isStillEditing: selectIsStillEditing(state),
-    filePath: makeSelectPublishFormValue('filePath')(state),
-    remoteUrl: makeSelectPublishFormValue('remoteFileUrl')(state),
-    publishSuccess: makeSelectPublishFormValue('publishSuccess')(state),
+    filePath: makeSelectPublishFormValue("filePath")(state),
+    remoteUrl: makeSelectPublishFormValue("remoteFileUrl")(state),
+    publishSuccess: makeSelectPublishFormValue("publishSuccess")(state),
     isResolvingUri: selectIsResolvingPublishUris(state),
     totalRewardValue: selectUnclaimedRewardValue(state),
     modal: selectModal(state),

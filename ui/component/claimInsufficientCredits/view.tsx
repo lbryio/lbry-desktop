@@ -1,13 +1,13 @@
-import * as React from 'react';
-import Button from 'component/button';
-import I18nMessage from 'component/i18nMessage';
-import LbcSymbol from 'component/common/lbc-symbol';
+import * as React from "react";
+import Button from "component/button";
+import I18nMessage from "component/i18nMessage";
+import LbcSymbol from "component/common/lbc-symbol";
 
 type Props = {
-  uri: string,
-  fileInfo: FileListItem,
-  isInsufficientCredits: boolean,
-  claimWasPurchased: boolean
+  uri: string;
+  fileInfo: FileListItem;
+  isInsufficientCredits: boolean;
+  claimWasPurchased: boolean;
 };
 
 function ClaimInsufficientCredits(props: Props) {
@@ -24,9 +24,9 @@ function ClaimInsufficientCredits(props: Props) {
         // @ts-expect-error - TS2322 (ts-migration)
         tokens={{
           // @ts-expect-error - TS2322 (ts-migration)
-          reward_link: <Button button="link" navigate="/$/rewards" label={__('Rewards')} />,
+          reward_link: <Button button="link" navigate="/$/rewards" label={__("Rewards")} />,
           // @ts-expect-error - TS2322 (ts-migration)
-          buy_link: <Button button="link" navigate="/$/buy" label={__('buy')} />,
+          buy_link: <Button button="link" navigate="/$/buy" label={__("buy")} />,
           lbc: <LbcSymbol />,
         }}
       >

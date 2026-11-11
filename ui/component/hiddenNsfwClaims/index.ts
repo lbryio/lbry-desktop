@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { makeSelectNsfwCountFromUris, makeSelectOmittedCountForChannel } from 'redux/selectors/claims';
-import { parseURI } from 'util/lbryURI';
-import { selectShowMatureContent } from 'redux/selectors/settings';
-import HiddenNsfwClaims from './view';
+import { connect } from "react-redux";
+import { makeSelectNsfwCountFromUris, makeSelectOmittedCountForChannel } from "redux/selectors/claims";
+import { parseURI } from "util/lbryURI";
+import { selectShowMatureContent } from "redux/selectors/settings";
+import HiddenNsfwClaims from "./view";
 
 const select = (state: unknown, props: unknown) => {
   const { uri, uris } = props;

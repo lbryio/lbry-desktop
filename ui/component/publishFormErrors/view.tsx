@@ -1,20 +1,20 @@
-import React from 'react';
-import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
-import { isNameValid } from 'util/lbryURI';
-import { INVALID_NAME_ERROR } from 'constants/claim';
+import React from "react";
+import * as THUMBNAIL_STATUSES from "constants/thumbnail_upload_statuses";
+import { isNameValid } from "util/lbryURI";
+import { INVALID_NAME_ERROR } from "constants/claim";
 
 type Props = {
-  title: string | null | undefined,
-  name: string | null | undefined,
-  bid: string | null | undefined,
-  bidError: string | null | undefined,
-  editingURI: string | null | undefined,
-  filePath: string | null | undefined,
-  isStillEditing: boolean,
-  uploadThumbnailStatus: string,
-  thumbnail: string,
-  thumbnailError: boolean,
-  waitForFile: boolean
+  title: string | null | undefined;
+  name: string | null | undefined;
+  bid: string | null | undefined;
+  bidError: string | null | undefined;
+  editingURI: string | null | undefined;
+  filePath: string | null | undefined;
+  isStillEditing: boolean;
+  uploadThumbnailStatus: string;
+  thumbnail: string;
+  thumbnailError: boolean;
+  waitForFile: boolean;
 };
 
 function PublishFormErrors(props: Props) {
@@ -39,16 +39,16 @@ function PublishFormErrors(props: Props) {
 
   return (
     <div className="error__text">
-      {waitForFile && <div>{__('Choose a replay file, or select None')}</div>}
-      {!title && <div>{__('A title is required')}</div>}
-      {!name && <div>{__('A URL is required')}</div>}
+      {waitForFile && <div>{__("Choose a replay file, or select None")}</div>}
+      {!title && <div>{__("A title is required")}</div>}
+      {!name && <div>{__("A URL is required")}</div>}
       {name && !isNameValid(name) && INVALID_NAME_ERROR}
-      {!bid && <div>{__('A deposit amount is required')}</div>}
-      {bidError && <div>{__('Please check your deposit amount.')}</div>}
-      {isUploadingThumbnail && <div>{__('Please wait for thumbnail to finish uploading')}</div>}
-      {thumbnailError && !thumbnailUploaded && <div>{__('Thumbnail is invalid.')}</div>}
+      {!bid && <div>{__("A deposit amount is required")}</div>}
+      {bidError && <div>{__("Please check your deposit amount.")}</div>}
+      {isUploadingThumbnail && <div>{__("Please wait for thumbnail to finish uploading")}</div>}
+      {thumbnailError && !thumbnailUploaded && <div>{__("Thumbnail is invalid.")}</div>}
       {editingURI && !isStillEditing && !filePath && (
-        <div>{__('Please reselect a file after changing the LBRY URL')}</div>
+        <div>{__("Please reselect a file after changing the LBRY URL")}</div>
       )}
     </div>
   );

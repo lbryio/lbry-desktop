@@ -4,10 +4,10 @@
  * Touch UI component
  */
 
-import videojs from 'video.js';
-import window from 'global/window';
+import videojs from "video.js";
+import window from "global/window";
 
-const Component = videojs.getComponent('Component');
+const Component = videojs.getComponent("Component");
 const dom = videojs.dom || videojs;
 
 /**
@@ -32,12 +32,12 @@ class TouchOverlay extends Component {
     this.tapTimeout = options.tapTimeout;
 
     // Add play toggle overlay
-    this.addChild('playToggle', {});
+    this.addChild("playToggle", {});
 
     // Clear overlay when playback starts or with control fade
-    player.on(['playing', 'userinactive'], (e) => {
+    player.on(["playing", "userinactive"], (e) => {
       if (!this.player_.paused()) {
-        this.removeClass('show-play-toggle');
+        this.removeClass("show-play-toggle");
       }
     });
 
@@ -56,8 +56,8 @@ class TouchOverlay extends Component {
    *         The DOM element.
    */
   createEl() {
-    const el = dom.createEl('div', {
-      className: 'vjs-touch-overlay',
+    const el = dom.createEl("div", {
+      className: "vjs-touch-overlay",
       // Touch overlay is not tabbable.
       tabIndex: -1,
     });
@@ -103,8 +103,8 @@ class TouchOverlay extends Component {
    *
    */
   handleSingleTap(event: unknown) {
-    this.removeClass('skip');
-    this.toggleClass('show-play-toggle');
+    this.removeClass("skip");
+    this.toggleClass("show-play-toggle");
   }
 
   /**
@@ -121,21 +121,21 @@ class TouchOverlay extends Component {
     // Check if double tap is in left or right area
     if (x < rect.width * 0.4) {
       this.player_.currentTime(Math.max(0, this.player_.currentTime() - this.seekSeconds));
-      this.addClass('reverse');
+      this.addClass("reverse");
     } else if (x > rect.width - rect.width * 0.4) {
       this.player_.currentTime(Math.min(this.player_.duration(), this.player_.currentTime() + this.seekSeconds));
-      this.removeClass('reverse');
+      this.removeClass("reverse");
     } else {
       return;
     }
 
     // Remove play toggle if showing
-    this.removeClass('show-play-toggle');
+    this.removeClass("show-play-toggle");
 
     // Remove and readd class to trigger animation
-    this.removeClass('skip');
+    this.removeClass("skip");
     window.requestAnimationFrame(() => {
-      this.addClass('skip');
+      this.addClass("skip");
     });
   }
 
@@ -144,16 +144,16 @@ class TouchOverlay extends Component {
    */
   enable() {
     this.firstTapCaptured = false;
-    this.on('touchend', this.handleTap);
+    this.on("touchend", this.handleTap);
   }
 
   /**
    * Disables touch handler
    */
   disable() {
-    this.off('touchend', this.handleTap);
+    this.off("touchend", this.handleTap);
   }
 }
 
-Component.registerComponent('TouchOverlay', TouchOverlay);
+Component.registerComponent("TouchOverlay", TouchOverlay);
 export default TouchOverlay;

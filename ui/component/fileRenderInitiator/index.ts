@@ -1,21 +1,21 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doPlayUri, doSetPlayingUri, doSetPrimaryUri } from 'redux/actions/content';
-import { selectThumbnailForUri, makeSelectClaimForUri, makeSelectClaimWasPurchased } from 'redux/selectors/claims';
-import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
-import * as SETTINGS from 'constants/settings';
-import * as COLLECTIONS_CONSTS from 'constants/collections';
-import { selectCostInfoForUri } from 'lbryinc';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { withRouter } from 'react-router';
+import { connect } from "react-redux";
+import { doPlayUri, doSetPlayingUri, doSetPrimaryUri } from "redux/actions/content";
+import { selectThumbnailForUri, makeSelectClaimForUri, makeSelectClaimWasPurchased } from "redux/selectors/claims";
+import { makeSelectFileInfoForUri } from "redux/selectors/file_info";
+import * as SETTINGS from "constants/settings";
+import * as COLLECTIONS_CONSTS from "constants/collections";
+import { selectCostInfoForUri } from "lbryinc";
+import { makeSelectClientSetting } from "redux/selectors/settings";
+import { withRouter } from "react-router";
 import {
   makeSelectIsPlaying,
   selectShouldObscurePreviewForUri,
   selectInsufficientCreditsForUri,
   makeSelectFileRenderModeForUri,
-} from 'redux/selectors/content';
-import FileRenderInitiator from './view';
-import { doAnaltyicsPurchaseEvent } from 'redux/actions/app';
+} from "redux/selectors/content";
+import FileRenderInitiator from "./view";
+import { doAnaltyicsPurchaseEvent } from "redux/actions/app";
 
 const select = (state: unknown, props: unknown) => {
   const { search } = props.location;

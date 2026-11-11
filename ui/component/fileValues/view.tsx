@@ -1,34 +1,34 @@
-import * as ICONS from 'constants/icons';
-import * as MODALS from 'constants/modal_types';
-import * as PAGES from 'constants/pages';
-import React, { PureComponent } from 'react';
-import Button from 'component/button';
-import Spinner from 'component/spinner';
-import HelpLink from 'component/common/help-link';
-import CreditAmount from 'component/common/credit-amount';
+import * as ICONS from "constants/icons";
+import * as MODALS from "constants/modal_types";
+import * as PAGES from "constants/pages";
+import React, { PureComponent } from "react";
+import Button from "component/button";
+import Spinner from "component/spinner";
+import HelpLink from "component/common/help-link";
+import CreditAmount from "component/common/credit-amount";
 
 type Props = {
-  uri: string,
-  claim: StreamClaim,
-  fileInfo: FileListItem,
-  metadata: StreamMetadata,
-  openFolder: (arg1: string) => void,
-  contentType: string,
-  pendingAmount: string,
+  uri: string;
+  claim: StreamClaim;
+  fileInfo: FileListItem;
+  metadata: StreamMetadata;
+  openFolder: (arg1: string) => void;
+  contentType: string;
+  pendingAmount: string;
   openModal: (
     id: string,
     arg2: {
-      uri: string
-    },
-  ) => void,
-  claimIsMine: boolean
+      uri: string;
+    }
+  ) => void;
+  claimIsMine: boolean;
 };
 
 class FileValues extends PureComponent<Props> {
   render() {
     const { uri, claim, metadata, openModal, pendingAmount, claimIsMine } = this.props;
     if (!claim || !metadata) {
-      return <span className="empty">{__('Empty claim or metadata info.')}</span>;
+      return <span className="empty">{__("Empty claim or metadata info.")}</span>;
     }
     const supportsAmount = claim && claim.meta && claim.meta.support_amount && Number(claim.meta.support_amount);
     const purchaseReceipt = claim && claim.purchase_receipt;
@@ -38,7 +38,7 @@ class FileValues extends PureComponent<Props> {
         <tbody>
           {purchaseReceipt && (
             <tr>
-              <td> {__('Purchase Amount')}</td>
+              <td> {__("Purchase Amount")}</td>
               <td>
                 <Button
                   // @ts-expect-error - TS2322 (ts-migration)
@@ -50,12 +50,12 @@ class FileValues extends PureComponent<Props> {
             </tr>
           )}
           <tr>
-            <td> {__('Original Publish Amount')}</td>
+            <td> {__("Original Publish Amount")}</td>
             <td>{claim && claim.amount ? <CreditAmount amount={Number(claim.amount)} precision={2} /> : <p>...</p>}</td>
           </tr>
           <tr>
             <td>
-              {__('Supports and Tips')}
+              {__("Supports and Tips")}
               <HelpLink href="https://lbry.com/faq/tipping" />
             </td>
             <td>
@@ -67,11 +67,11 @@ class FileValues extends PureComponent<Props> {
                     className="expandable__button"
                     icon={ICONS.UNLOCK}
                     label={<CreditAmount amount={Number(supportsAmount)} precision={2} />}
-                    aria-label={__('Unlock tips')}
+                    aria-label={__("Unlock tips")}
                     onClick={() => {
                       openModal(MODALS.LIQUIDATE_SUPPORTS, { uri });
                     }}
-                  />{' '}
+                  />{" "}
                 </>
               )}
               {(!claimIsMine || (claimIsMine && !pendingAmount && supportsAmount === 0)) && (
@@ -79,13 +79,13 @@ class FileValues extends PureComponent<Props> {
               )}
 
               {/* @ts-expect-error - TS2322 (ts-migration) */}
-              {claimIsMine && pendingAmount && <Spinner type={'small'} />}
+              {claimIsMine && pendingAmount && <Spinner type={"small"} />}
             </td>
           </tr>
           <tr>
             <td>
               <div>
-                {__('Total Staked Amount')}
+                {__("Total Staked Amount")}
                 <HelpLink href="https://lbry.com/faq/tipping" />
               </div>
             </td>
@@ -95,14 +95,14 @@ class FileValues extends PureComponent<Props> {
           </tr>
           <tr>
             <td>
-              {__('Community Choice?')}
+              {__("Community Choice?")}
               <HelpLink href="https://lbry.com/faq/naming" />
             </td>
             <td>
               <Button
                 // @ts-expect-error - TS2322 (ts-migration)
                 button="link"
-                label={claim.meta.is_controlling ? __('Yes') : __('No')}
+                label={claim.meta.is_controlling ? __("Yes") : __("No")}
                 navigate={`/$/${PAGES.TOP}?name=${claim.name}`}
               />
             </td>

@@ -1,27 +1,27 @@
 // A housing for all of our icons. Mostly taken from https://github.com/feathericons/react-feather
-import * as ICONS from 'constants/icons';
-import React, { forwardRef } from 'react';
-import { v4 as uuid } from 'uuid';
+import * as ICONS from "constants/icons";
+import React, { forwardRef } from "react";
+import { v4 as uuid } from "uuid";
 
 type IconProps = {
-  size: number,
-  color: string,
-  title?: string
+  size: number;
+  color: string;
+  title?: string;
 };
 
 type CustomProps = {
-  size?: number,
-  className?: string
+  size?: number;
+  className?: string;
 };
 
 // Returns a react component
 // Icons with tooltips need to use this function so the ref can be properly forwarded
 const buildIcon = (iconStrokes: React.ReactNode, customSvgValues = {}) =>
   forwardRef((props: IconProps, ref) => {
-    const { size = 24, color = 'currentColor', title, ...otherProps } = props;
+    const { size = 24, color = "currentColor", title, ...otherProps } = props;
     return (
       <svg
-// @ts-expect-error - TS2322 - Type 'ForwardedRef<unknown>' is not assignable to type 'LegacyRef<SVGSVGElement>'.
+        // @ts-expect-error - TS2322 - Type 'ForwardedRef<unknown>' is not assignable to type 'LegacyRef<SVGSVGElement>'.
         ref={ref}
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
@@ -58,7 +58,7 @@ export const icons = {
     </svg>
   ),
   [ICONS.LBC]: (props: IconProps) => {
-    const { size = 24, color = 'currentColor', ...rest } = props;
+    const { size = 24, color = "currentColor", ...rest } = props;
     const randomId = uuid();
 
     return (
@@ -196,7 +196,7 @@ export const icons = {
     </g>
   ),
   [ICONS.SUBSCRIBE]: (props: IconProps) => {
-    const { size = 24, color = 'currentColor', ...otherProps } = props;
+    const { size = 24, color = "currentColor", ...otherProps } = props;
     return (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -204,7 +204,7 @@ export const icons = {
         width={size}
         height={size}
         fill={color}
-        stroke={'#FFFFFF'}
+        stroke={"#FFFFFF"}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -215,7 +215,7 @@ export const icons = {
     );
   },
   [ICONS.SUBSCRIBED]: (props: IconProps) => {
-    const { size = 24, color = 'currentColor', ...otherProps } = props;
+    const { size = 24, color = "currentColor", ...otherProps } = props;
     return (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -223,7 +223,7 @@ export const icons = {
         width={size}
         height={size}
         fill={color}
-        stroke={'#FFFFFF'}
+        stroke={"#FFFFFF"}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -235,7 +235,7 @@ export const icons = {
   },
 
   [ICONS.UNSUBSCRIBE]: (props: IconProps) => {
-    const { size = 24, color = 'currentColor', ...otherProps } = props;
+    const { size = 24, color = "currentColor", ...otherProps } = props;
     return (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -243,7 +243,7 @@ export const icons = {
         width={size}
         height={size}
         fill={color}
-        stroke={'#FFFFFF'}
+        stroke={"#FFFFFF"}
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -687,7 +687,7 @@ export const icons = {
       />
     </g>,
     {
-      viewBox: '0 0 60 60',
+      viewBox: "0 0 60 60",
     }
   ),
   [ICONS.FACEBOOK]: buildIcon(
@@ -706,7 +706,7 @@ export const icons = {
       />
     </g>,
     {
-      viewBox: '0 0 60 60',
+      viewBox: "0 0 60 60",
     }
   ),
   [ICONS.REDDIT]: buildIcon(
@@ -743,7 +743,7 @@ export const icons = {
       />
     </g>,
     {
-      viewBox: '0 0 60 60',
+      viewBox: "0 0 60 60",
     }
   ),
   [ICONS.TELEGRAM]: buildIcon(
@@ -791,7 +791,7 @@ export const icons = {
       </defs>
     </g>,
     {
-      viewBox: '0 0 60 60',
+      viewBox: "0 0 60 60",
     }
   ),
   [ICONS.LINKEDIN]: buildIcon(
@@ -810,7 +810,7 @@ export const icons = {
       />
     </g>,
     {
-      viewBox: '0 0 60 60',
+      viewBox: "0 0 60 60",
     }
   ),
   [ICONS.EMBED]: buildIcon(
@@ -827,7 +827,7 @@ export const icons = {
       </g>
     </g>,
     {
-      viewBox: '0 0 60 60',
+      viewBox: "0 0 60 60",
     }
   ),
   [ICONS.SHARE_LINK]: buildIcon(
@@ -842,7 +842,7 @@ export const icons = {
       <path d="M32 27a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" stroke="black" />
     </g>,
     {
-      viewBox: '0 0 60 60',
+      viewBox: "0 0 60 60",
     }
   ),
   [ICONS.COPY_LINK]: buildIcon(
@@ -955,8 +955,8 @@ export const icons = {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="-3 0 24 24"
-      width={props.size || '16'}
-      height={props.size || '18'}
+      width={props.size || "16"}
+      height={props.size || "18"}
       fill="none"
       strokeWidth="1.5"
       strokeLinecap="round"
@@ -990,8 +990,8 @@ export const icons = {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="-5 0 24 24"
-      width={props.size || '16'}
-      height={props.size || '18'}
+      width={props.size || "16"}
+      height={props.size || "18"}
       fill="none"
       strokeWidth="1.5"
       strokeLinecap="round"
@@ -1016,8 +1016,8 @@ export const icons = {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
-      width={props.size || '16'}
-      height={props.size || '18'}
+      width={props.size || "16"}
+      height={props.size || "18"}
       fill="none"
       strokeLinecap="round"
       strokeLinejoin="round"
@@ -1051,8 +1051,8 @@ export const icons = {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
-      width={props.size || '16'}
-      height={props.size || '18'}
+      width={props.size || "16"}
+      height={props.size || "18"}
       fill="none"
       strokeWidth="1.5"
       strokeLinecap="round"
@@ -1074,8 +1074,8 @@ export const icons = {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="-1 0 24 24"
-      width={props.size || '16'}
-      height={props.size || '18'}
+      width={props.size || "16"}
+      height={props.size || "18"}
       fill="none"
       strokeWidth="1.5"
       strokeLinecap="round"
@@ -1100,8 +1100,8 @@ export const icons = {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="-2 -1 24 26"
-      width={props.size || '18'}
-      height={props.size || '16'}
+      width={props.size || "18"}
+      height={props.size || "16"}
       fill="none"
       strokeWidth="1.5"
       strokeLinecap="round"
@@ -1136,8 +1136,8 @@ export const icons = {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="-2 -1 24 26"
-      width={props.size || '18'}
-      height={props.size || '18'}
+      width={props.size || "18"}
+      height={props.size || "18"}
       fill="none"
       strokeWidth="1.5"
       strokeLinecap="round"
@@ -1210,8 +1210,8 @@ export const icons = {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="-6 0 26 24"
-      width={props.size || '18'}
-      height={props.size || '18'}
+      width={props.size || "18"}
+      height={props.size || "18"}
       fill="none"
       stroke="currentColor"
       strokeWidth="1.5"
@@ -1228,8 +1228,8 @@ export const icons = {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="-6 0 26 24"
-      width={props.size || '18'}
-      height={props.size || '18'}
+      width={props.size || "18"}
+      height={props.size || "18"}
       fill="none"
       stroke="currentColor"
       strokeWidth="1.5"
@@ -1250,8 +1250,8 @@ export const icons = {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="-6 0 24 24"
-      width={props.size || '18'}
-      height={props.size || '18'}
+      width={props.size || "18"}
+      height={props.size || "18"}
       fill="none"
       stroke="currentColor"
       strokeWidth="1"
@@ -1275,8 +1275,8 @@ export const icons = {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="-6 0 24 24"
-      width={props.size || '18'}
-      height={props.size || '18'}
+      width={props.size || "18"}
+      height={props.size || "18"}
       fill="none"
       stroke="currentColor"
       strokeWidth="1"
@@ -1294,8 +1294,8 @@ export const icons = {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
-      width={props.size || '18'}
-      height={props.size || '18'}
+      width={props.size || "18"}
+      height={props.size || "18"}
       fill="none"
       stroke="currentColor"
       strokeWidth="0"
@@ -1331,8 +1331,8 @@ export const icons = {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 26 24"
-      width={props.size || '18'}
-      height={props.size || '18'}
+      width={props.size || "18"}
+      height={props.size || "18"}
       fill="none"
       stroke="currentColor"
       strokeWidth="1.5"
@@ -1353,8 +1353,8 @@ export const icons = {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 26 24"
-      width={props.size || '18'}
-      height={props.size || '18'}
+      width={props.size || "18"}
+      height={props.size || "18"}
       fill="currentColor"
       stroke="currentColor"
       strokeWidth="0"
@@ -1369,8 +1369,8 @@ export const icons = {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 26 24"
-      width={props.size || '18'}
-      height={props.size || '18'}
+      width={props.size || "18"}
+      height={props.size || "18"}
       fill="currentColor"
       stroke="currentColor"
       strokeWidth="0"
@@ -1385,8 +1385,8 @@ export const icons = {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
-      width={props.size || '18'}
-      height={props.size || '18'}
+      width={props.size || "18"}
+      height={props.size || "18"}
       fill="currentColor"
       stroke="currentColor"
       strokeWidth="0"
@@ -1401,8 +1401,8 @@ export const icons = {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
-      width={props.size || '18'}
-      height={props.size || '18'}
+      width={props.size || "18"}
+      height={props.size || "18"}
       fill="currentColor"
       stroke="currentColor"
       strokeWidth="0"
@@ -1417,8 +1417,8 @@ export const icons = {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
-      width={props.size || '18'}
-      height={props.size || '18'}
+      width={props.size || "18"}
+      height={props.size || "18"}
       fill="currentColor"
       stroke="currentColor"
       strokeWidth="0"
@@ -1586,8 +1586,8 @@ export const icons = {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
-      width={props.size || '18'}
-      height={props.size || '16'}
+      width={props.size || "18"}
+      height={props.size || "16"}
       fill="none"
       strokeWidth="1.5"
       strokeLinecap="round"
@@ -1632,8 +1632,8 @@ export const icons = {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 25 24"
-      width={props.size || '18'}
-      height={props.size || '16'}
+      width={props.size || "18"}
+      height={props.size || "16"}
       fill="none"
       strokeWidth="1.5"
       strokeLinecap="round"
@@ -1678,8 +1678,8 @@ export const icons = {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 25 24"
-      width={props.size || '18'}
-      height={props.size || '16'}
+      width={props.size || "18"}
+      height={props.size || "16"}
       fill="none"
       strokeWidth="1.5"
       strokeLinecap="round"
@@ -1731,8 +1731,8 @@ export const icons = {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 25 24"
-      width={props.size || '18'}
-      height={props.size || '16'}
+      width={props.size || "18"}
+      height={props.size || "16"}
       fill="none"
       strokeWidth="1.5"
       strokeLinecap="round"
@@ -1758,8 +1758,8 @@ export const icons = {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 25 24"
-      width={props.size || '18'}
-      height={props.size || '16'}
+      width={props.size || "18"}
+      height={props.size || "16"}
       fill="none"
       strokeWidth="1.5"
       strokeLinecap="round"
@@ -1788,8 +1788,8 @@ export const icons = {
       {...props}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
-      width={props.size || '18'}
-      height={props.size || '18'}
+      width={props.size || "18"}
+      height={props.size || "18"}
       fill="none"
       stroke="currentColor"
       strokeWidth="2"
@@ -1812,8 +1812,8 @@ export const icons = {
     <svg
       {...props}
       viewBox="0 0 24 24"
-      width={props.size || '18'}
-      height={props.size || '18'}
+      width={props.size || "18"}
+      height={props.size || "18"}
       xmlns="http://www.w3.org/2000/svg"
       strokeWidth="2"
       strokeLinecap="round"
@@ -1832,8 +1832,8 @@ export const icons = {
     <svg
       {...props}
       viewBox="0 0 24 24"
-      width={props.size || '18'}
-      height={props.size || '18'}
+      width={props.size || "18"}
+      height={props.size || "18"}
       xmlns="http://www.w3.org/2000/svg"
       strokeWidth="2"
       strokeLinecap="round"
@@ -1897,7 +1897,7 @@ export const icons = {
       viewBox="0 0 24 24"
       xmlSpace="preserve"
     >
-      <style type="text/css">{'.st0{fill:FF3850}.st1{fill:#181021}.st2{fill:#FFFFFF}'}</style>
+      <style type="text/css">{".st0{fill:FF3850}.st1{fill:#181021}.st2{fill:#FFFFFF}"}</style>
       <g>
         <g>
           <path
@@ -1930,7 +1930,7 @@ export const icons = {
       viewBox="-1182 401 24 24"
       xmlSpace="preserve"
     >
-      <style type="text/css">{'.st0{fill:#FF5490}.st1{fill:#81BBB9}.st2{fill:#2E2A2F}.st3{fill:#FFFFFF}'}</style>
+      <style type="text/css">{".st0{fill:#FF5490}.st1{fill:#81BBB9}.st2{fill:#2E2A2F}.st3{fill:#FFFFFF}"}</style>
       <path
         className="st0"
         d="M-1169.8,406.4c-4.3,0-7.8,3.5-7.8,7.8c0,0.4,0,0.8,0.1,1.1h1c-0.1-0.4-0.1-0.7-0.1-1.1c0-3.7,3-6.8,6.8-6.8 s6.8,3,6.8,6.8c0,0.4,0,0.8-0.1,1.1h1c0.1-0.4,0.1-0.7,0.1-1.1C-1162.1,409.9-1165.5,406.4-1169.8,406.4z"

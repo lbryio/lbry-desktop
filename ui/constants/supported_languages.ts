@@ -1,12 +1,12 @@
 //@ts-nocheck
-import LANGUAGES from './languages';
+import LANGUAGES from "./languages";
 // supported_browser_languages
 const SUPPORTED_LANGUAGES = {
   af: LANGUAGES.af[1],
   en: LANGUAGES.en[1],
   da: LANGUAGES.da[1],
-  'zh-Hans': LANGUAGES['zh-Hans'][1],
-  'zh-Hant': LANGUAGES['zh-Hant'][1],
+  "zh-Hans": LANGUAGES["zh-Hans"][1],
+  "zh-Hant": LANGUAGES["zh-Hant"][1],
   hr: LANGUAGES.hr[1],
   nl: LANGUAGES.nl[1],
   no: LANGUAGES.no[1],
@@ -25,7 +25,7 @@ const SUPPORTED_LANGUAGES = {
   pa: LANGUAGES.pa[1],
   pl: LANGUAGES.pl[1],
   pt: LANGUAGES.pt[1],
-  'pt-BR': LANGUAGES['pt-BR'][1],
+  "pt-BR": LANGUAGES["pt-BR"][1],
   ro: LANGUAGES.ro[1],
   ru: LANGUAGES.ru[1],
   sr: LANGUAGES.sr[1],

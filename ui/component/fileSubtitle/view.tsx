@@ -1,10 +1,10 @@
-import React from 'react';
-import DateTime from 'component/dateTime';
-import FileViewCount from 'component/fileViewCount';
-import FileActions from 'component/fileActions';
+import React from "react";
+import DateTime from "component/dateTime";
+import FileViewCount from "component/fileViewCount";
+import FileActions from "component/fileActions";
 
 type Props = {
-  uri: string
+  uri: string;
 };
 
 function FileSubtitle(props: Props) {

@@ -1,16 +1,16 @@
-import React from 'react';
-import Button from 'component/button';
-import FilePrice from 'component/filePrice';
-import { formatLbryUrlForWeb } from 'util/url';
-import { withRouter } from 'react-router';
-import { URL } from 'config';
-import Logo from 'component/logo';
+import React from "react";
+import Button from "component/button";
+import FilePrice from "component/filePrice";
+import { formatLbryUrlForWeb } from "util/url";
+import { withRouter } from "react-router";
+import { URL } from "config";
+import Logo from "component/logo";
 
 type Props = {
-  uri: string,
-  title: string | null | undefined,
-  isInApp: boolean,
-  preferEmbed: boolean
+  uri: string;
+  title: string | null | undefined;
+  isInApp: boolean;
+  preferEmbed: boolean;
 };
 
 function FileViewerEmbeddedTitle(props: Props) {
@@ -23,7 +23,7 @@ function FileViewerEmbeddedTitle(props: Props) {
   }
 
   const contentLinkProps = isInApp ? { navigate: contentLink } : { href: contentLink };
-  const lbryLinkProps = isInApp ? { navigate: '/' } : { href: URL };
+  const lbryLinkProps = isInApp ? { navigate: "/" } : { href: URL };
 
   return (
     <div className="file-viewer__embedded-header">
@@ -45,8 +45,8 @@ function FileViewerEmbeddedTitle(props: Props) {
 
       <div className="file-viewer__embedded-info">
         {/* @ts-expect-error - TS2322 (ts-migration) */}
-        <Button className="file-viewer__overlay-logo" disabled={preferEmbed} aria-label={__('Home')} {...lbryLinkProps}>
-          <Logo type={'embed'} />
+        <Button className="file-viewer__overlay-logo" disabled={preferEmbed} aria-label={__("Home")} {...lbryLinkProps}>
+          <Logo type={"embed"} />
         </Button>
         {isInApp && <FilePrice uri={uri} />}
       </div>

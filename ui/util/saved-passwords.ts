@@ -1,23 +1,23 @@
 //@ts-nocheck
-import { DOMAIN } from 'config';
-const AUTH_TOKEN = 'auth_token';
-const SAVED_PASSWORD = 'saved_password';
+import { DOMAIN } from "config";
+const AUTH_TOKEN = "auth_token";
+const SAVED_PASSWORD = "saved_password";
 const domain =
-  typeof window === 'object' && window.location.hostname.includes('localhost') ? window.location.hostname : DOMAIN;
-const isProduction = process.env.NODE_ENV === 'production';
+  typeof window === "object" && window.location.hostname.includes("localhost") ? window.location.hostname : DOMAIN;
+const isProduction = process.env.NODE_ENV === "production";
 const maxExpiration = 2147483647;
 let sessionPassword;
 
 function setCookie(name: unknown, value: unknown, expirationDaysOnWeb: unknown) {
-  let expires = '';
+  let expires = "";
   if (expirationDaysOnWeb) {
-    let date = new Date();
+    const date = new Date();
     date.setTime(date.getTime() + expirationDaysOnWeb * 24 * 60 * 60 * 1000);
     // If on PC, set to not expire (max)
     expires = `expires=${maxExpiration};`;
   }
 
-  let cookie = `${name}=${value || ''}; ${expires} path=/;`;
+  let cookie = `${name}=${value || ""}; ${expires} path=/;`;
   if (isProduction) {
     cookie += ` SameSite=None;`;
   }
@@ -32,12 +32,12 @@ function setCookie(name: unknown, value: unknown, expirationDaysOnWeb: unknown) 
 }
 
 function getCookie(name: unknown) {
-  const nameEQ = name + '=';
-  const cookies = document.cookie.split(';');
+  const nameEQ = name + "=";
+  const cookies = document.cookie.split(";");
 
-  for (var i = 0; i < cookies.length; i++) {
+  for (let i = 0; i < cookies.length; i++) {
     let cookie = cookies[i];
-    while (cookie.charAt(0) === ' ') {
+    while (cookie.charAt(0) === " ") {
       cookie = cookie.substring(1, cookie.length);
     }
 
@@ -60,7 +60,7 @@ function deleteCookie(name: unknown) {
 
 function setSavedPassword(value: unknown, saveToDisk: unknown) {
   return new Promise<any>((resolve) => {
-    const password = value === undefined || value === null ? '' : value;
+    const password = value === undefined || value === null ? "" : value;
     sessionPassword = password;
 
     if (saveToDisk) {

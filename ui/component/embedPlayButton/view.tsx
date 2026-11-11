@@ -1,39 +1,42 @@
-import * as RENDER_MODES from 'constants/file_render_modes';
-import React, { useEffect } from 'react';
-import classnames from 'classnames';
-import Button from 'component/button';
-import FileViewerEmbeddedTitle from 'component/fileViewerEmbeddedTitle';
-import { useHistory } from 'react-router-dom';
-import { useIsMobile } from 'effects/use-screensize';
-import { formatLbryUrlForWeb } from 'util/url';
+import * as RENDER_MODES from "constants/file_render_modes";
+import React, { useEffect } from "react";
+import classnames from "classnames";
+import Button from "component/button";
+import FileViewerEmbeddedTitle from "component/fileViewerEmbeddedTitle";
+import { useHistory } from "react-router-dom";
+import { useIsMobile } from "effects/use-screensize";
+import { formatLbryUrlForWeb } from "util/url";
 
 type Props = {
-  uri: string,
-  thumbnail: string,
-  claim: Claim | null | undefined,
-  doResolveUri: (arg1: string) => void,
-  doFetchCostInfoForUri: (arg1: string) => void,
-  costInfo: {
-    cost: number
-  } | null | undefined,
-  floatingPlayerEnabled: boolean,
+  uri: string;
+  thumbnail: string;
+  claim: Claim | null | undefined;
+  doResolveUri: (arg1: string) => void;
+  doFetchCostInfoForUri: (arg1: string) => void;
+  costInfo:
+    | {
+        cost: number;
+      }
+    | null
+    | undefined;
+  floatingPlayerEnabled: boolean;
   doPlayUri: (
     arg1: string,
     arg2: boolean | null | undefined,
     arg3: boolean | null | undefined,
-    arg4: (arg1: GetResponse) => void,
-  ) => void,
-  doAnaltyicsPurchaseEvent: (arg1: GetResponse) => void,
-  parentCommentId?: string,
-  isMarkdownPost: boolean,
-  doSetPlayingUri: (arg1: Record<any, any>) => void,
-  renderMode: string
+    arg4: (arg1: GetResponse) => void
+  ) => void;
+  doAnaltyicsPurchaseEvent: (arg1: GetResponse) => void;
+  parentCommentId?: string;
+  isMarkdownPost: boolean;
+  doSetPlayingUri: (arg1: Record<any, any>) => void;
+  renderMode: string;
 };
 
 export default function EmbedPlayButton(props: Props) {
   const {
     uri,
-    thumbnail = '',
+    thumbnail = "",
     claim,
     doResolveUri,
     doFetchCostInfoForUri,
@@ -76,12 +79,12 @@ export default function EmbedPlayButton(props: Props) {
       push(formattedUrl);
     } else {
       doPlayUri(uri, undefined, undefined, (fileInfo) => {
-        let playingOptions = { uri, pathname, source: undefined, commentId: undefined };
+        const playingOptions = { uri, pathname, source: undefined, commentId: undefined };
         if (parentCommentId) {
-          playingOptions.source = 'comment';
+          playingOptions.source = "comment";
           playingOptions.commentId = parentCommentId;
         } else if (isMarkdownPost) {
-          playingOptions.source = 'markdown';
+          playingOptions.source = "markdown";
         }
 
         doSetPlayingUri(playingOptions);
@@ -92,7 +95,7 @@ export default function EmbedPlayButton(props: Props) {
 
   return (
     <div
-// @ts-expect-error - TS2322 - Type '{ children: Element[]; disabled: boolean; role: "button"; className: string; onClick: () => void; style: { backgroundImage: string; }; }' is not assignable to type 'DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>'.
+      // @ts-expect-error - TS2322 - Type '{ children: Element[]; disabled: boolean; role: "button"; className: string; onClick: () => void; style: { backgroundImage: string; }; }' is not assignable to type 'DetailedHTMLProps<HTMLAttributes<HTMLDivElement>, HTMLDivElement>'.
       disabled={disabled}
       role="button"
       className="embed__inline-button"
@@ -104,10 +107,10 @@ export default function EmbedPlayButton(props: Props) {
         // @ts-expect-error - TS2322 (ts-migration)
         onClick={handleClick}
         iconSize={30}
-        title={__('Play')}
-        className={classnames('button--icon', {
-          'button--play': canPlayInline,
-          'button--view': !canPlayInline,
+        title={__("Play")}
+        className={classnames("button--icon", {
+          "button--play": canPlayInline,
+          "button--view": !canPlayInline,
         })}
         disabled={disabled}
       />

@@ -1,15 +1,15 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import TopPage from './view';
-import { doClearPublish, doPrepareEdit } from 'redux/actions/publish';
-import { doResolveUris } from 'redux/actions/claims';
-import { push } from 'connected-react-router';
-import * as PAGES from 'constants/pages';
+import { connect } from "react-redux";
+import TopPage from "./view";
+import { doClearPublish, doPrepareEdit } from "redux/actions/publish";
+import { doResolveUris } from "redux/actions/claims";
+import { push } from "connected-react-router";
+import * as PAGES from "constants/pages";
 
 const select = (state: unknown, props: unknown) => {
   const { search } = props.location;
   const urlParams = new URLSearchParams(search);
-  const name = urlParams.get('name');
+  const name = urlParams.get("name");
 
   return {
     name,

@@ -1,11 +1,11 @@
 //@ts-nocheck
-import REWARDS from 'rewards';
-import { connect } from 'react-redux';
-import { doHideModal } from 'redux/actions/app';
-import { doClaimRewardType } from 'redux/actions/rewards';
-import { makeSelectClaimRewardError, makeSelectIsRewardClaimPending } from 'redux/selectors/rewards';
+import REWARDS from "rewards";
+import { connect } from "react-redux";
+import { doHideModal } from "redux/actions/app";
+import { doClaimRewardType } from "redux/actions/rewards";
+import { makeSelectClaimRewardError, makeSelectIsRewardClaimPending } from "redux/selectors/rewards";
 
-import ModalRewardCode from './view';
+import ModalRewardCode from "./view";
 
 const select = (state: unknown) => ({
   rewardIsPending: makeSelectIsRewardClaimPending()(state, {
@@ -16,7 +16,7 @@ const select = (state: unknown) => ({
 
 const perform = (dispatch: unknown) => ({
   closeModal: () => dispatch(doHideModal()),
-  submitRewardCode: code => dispatch(doClaimRewardType(REWARDS.TYPE_REWARD_CODE, { params: { code } })),
+  submitRewardCode: (code) => dispatch(doClaimRewardType(REWARDS.TYPE_REWARD_CODE, { params: { code } })),
 });
 
 export default connect(select, perform)(ModalRewardCode);

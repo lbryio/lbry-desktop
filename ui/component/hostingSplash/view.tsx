@@ -1,27 +1,27 @@
-import React from 'react';
-import Button from 'component/button';
-import { FormField } from 'component/common/form-components/form-field';
-import { Form } from 'component/common/form-components/form';
-import { withRouter } from 'react-router-dom';
+import React from "react";
+import Button from "component/button";
+import { FormField } from "component/common/form-components/form-field";
+import { Form } from "component/common/form-components/form";
+import { withRouter } from "react-router-dom";
 
 // @ts-expect-error - TS2792 - Cannot find module 'static/img/yrblhappy.svg'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-import image from 'static/img/yrblhappy.svg';
-import * as DAEMON_SETTINGS from 'constants/daemon_settings';
+import image from "static/img/yrblhappy.svg";
+import * as DAEMON_SETTINGS from "constants/daemon_settings";
 
 type SetDaemonSettingArg = boolean | string | number;
 
 type Props = {
-  handleNextPage: () => void,
-  handleDone: () => void,
-  setDaemonSetting: (arg1: string, arg2?: SetDaemonSettingArg | null | undefined) => void,
+  handleNextPage: () => void;
+  handleDone: () => void;
+  setDaemonSetting: (arg1: string, arg2?: SetDaemonSettingArg | null | undefined) => void;
   // --- select ---
-  diskSpace: DiskSpace // KB,
-  viewHostingLimit: number // MB,
-  autoHostingLimit: number,
-  viewBlobSpace: number,
-  autoBlobSpace: number,
-  privateBlobSpace: number,
-  saveBlobs: boolean
+  diskSpace: DiskSpace; // KB,
+  viewHostingLimit: number; // MB,
+  autoHostingLimit: number;
+  viewBlobSpace: number;
+  autoBlobSpace: number;
+  privateBlobSpace: number;
+  saveBlobs: boolean;
 };
 
 const TWENTY_PERCENT = 0.2;
@@ -44,9 +44,9 @@ function HostingSplash(props: Props) {
   const freeMB = diskSpace && Math.floor(diskSpace.free / 1024);
   const blobSpaceUsed = viewBlobSpace + autoBlobSpace;
 
-  const [hostingChoice, setHostingChoice] = React.useState('MANAGED');
+  const [hostingChoice, setHostingChoice] = React.useState("MANAGED");
   function handleSubmit() {
-    if (hostingChoice === 'CUSTOM') {
+    if (hostingChoice === "CUSTOM") {
       handleNextPage();
     } else {
       handleAuto();
@@ -111,43 +111,43 @@ function HostingSplash(props: Props) {
 
   return (
     <section className="main--contained">
-      <div className={'columns first-run__wrapper'}>
-        <div className={'first-run__left'}>
+      <div className={"columns first-run__wrapper"}>
+        <div className={"first-run__left"}>
           <div>
-            <h1 className="section__title--large">{__('Hosting')}</h1>
+            <h1 className="section__title--large">{__("Hosting")}</h1>
             <h3 className="section__subtitle">
-              {__('Help creators and improve the P2P data network by hosting content.')}
+              {__("Help creators and improve the P2P data network by hosting content.")}
             </h3>
             <fieldset>
               <FormField
-                name={'managedhosting'}
+                name={"managedhosting"}
                 type="radio"
-// @ts-expect-error - TS2322 - Type '{ name: string; type: string; checked: boolean; label: string; helper: string; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
-                checked={hostingChoice === 'MANAGED'}
+                // @ts-expect-error - TS2322 - Type '{ name: string; type: string; checked: boolean; label: string; helper: string; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+                checked={hostingChoice === "MANAGED"}
                 label={getManagedCopy()}
                 helper={getManagedHelper()}
-                onChange={(e) => setHostingChoice('MANAGED')}
+                onChange={(e) => setHostingChoice("MANAGED")}
               />
               <FormField
-                name={'customhosting'}
+                name={"customhosting"}
                 type="radio"
                 // @ts-expect-error - TS2322 (ts-migration)
-                checked={hostingChoice === 'CUSTOM'}
-                label={<>{__('Custom')}</>}
+                checked={hostingChoice === "CUSTOM"}
+                label={<>{__("Custom")}</>}
                 helper={__(`You choose how much data to host.`)}
-                onChange={(e) => setHostingChoice('CUSTOM')}
+                onChange={(e) => setHostingChoice("CUSTOM")}
               />
             </fieldset>
           </div>
-{ /* @ts-expect-error - TS2769 - No overload matches this call. */}
+          {/* @ts-expect-error - TS2769 - No overload matches this call. */}
           <Form onSubmit={handleSubmit} className="section__body">
-            <div className={'card__actions'}>
+            <div className={"card__actions"}>
               {/* @ts-expect-error - TS2322 (ts-migration) */}
-              <Button button="primary" label={hostingChoice === 'CUSTOM' ? __('Next') : __(`Let's go`)} type="submit" />
+              <Button button="primary" label={hostingChoice === "CUSTOM" ? __("Next") : __(`Let's go`)} type="submit" />
             </div>
           </Form>
         </div>
-        <div className={'first-run__image-wrapper'}>
+        <div className={"first-run__image-wrapper"}>
           <img src={image} className="privacy-img" />
         </div>
       </div>

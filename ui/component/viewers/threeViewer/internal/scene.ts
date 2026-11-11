@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {Color} from 'three-full/sources/math/Color';
-import { HemisphereLight } from 'three-full/sources/lights/HemisphereLight';
-import { DirectionalLight } from 'three-full/sources/lights/DirectionalLight';
-import { Scene } from 'three-full/sources/scenes/Scene';
-import { Fog } from 'three-full/sources/scenes/Fog';
+import { Color } from "three-full/sources/math/Color";
+import { HemisphereLight } from "three-full/sources/lights/HemisphereLight";
+import { DirectionalLight } from "three-full/sources/lights/DirectionalLight";
+import { Scene } from "three-full/sources/scenes/Scene";
+import { Fog } from "three-full/sources/scenes/Fog";
 
 const addLights = (scene: unknown, color: unknown, groundColor: unknown) => {
   // Light color

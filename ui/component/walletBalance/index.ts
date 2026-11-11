@@ -1,5 +1,5 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import {
   selectBalance,
   selectClaimsBalance,
@@ -11,12 +11,12 @@ import {
   selectIsMassClaimingTips,
   selectPendingConsolidateTxid,
   selectPendingMassClaimTxid,
-} from 'redux/selectors/wallet';
-import { doFetchUtxoCounts, doUtxoConsolidate } from 'redux/actions/wallet';
-import { doOpenModal } from 'redux/actions/app';
-import { selectSyncHash } from 'redux/selectors/sync';
-import { selectClaimedRewards } from 'redux/selectors/rewards';
-import WalletBalance from './view';
+} from "redux/selectors/wallet";
+import { doFetchUtxoCounts, doUtxoConsolidate } from "redux/actions/wallet";
+import { doOpenModal } from "redux/actions/app";
+import { selectSyncHash } from "redux/selectors/sync";
+import { selectClaimedRewards } from "redux/selectors/rewards";
+import WalletBalance from "./view";
 
 const select = (state: unknown) => ({
   balance: selectBalance(state),

@@ -1,18 +1,18 @@
-import React, {PureComponent} from 'react';
-import classnames from 'classnames';
-import { DARK_THEME, LIGHT_THEME } from 'constants/themes';
+import React, { PureComponent } from "react";
+import classnames from "classnames";
+import { DARK_THEME, LIGHT_THEME } from "constants/themes";
 
 type Props = {
-  dark?: boolean // always a dark spinner,
-  light?: boolean // always a light spinner,
-  theme: string,
-  type: string | null | undefined,
-  delayed: boolean,
-  text?: any
+  dark?: boolean; // always a dark spinner,
+  light?: boolean; // always a light spinner,
+  theme: string;
+  type: string | null | undefined;
+  delayed: boolean;
+  text?: any;
 };
 
 type State = {
-  show: boolean
+  show: boolean;
 };
 
 class Spinner extends PureComponent<Props, State> {
@@ -24,7 +24,7 @@ class Spinner extends PureComponent<Props, State> {
   };
 
   constructor() {
-// @ts-expect-error - TS2554 - Expected 1-2 arguments, but got 0.
+    // @ts-expect-error - TS2554 - Expected 1-2 arguments, but got 0.
     super();
 
     this.state = { show: false };
@@ -39,7 +39,7 @@ class Spinner extends PureComponent<Props, State> {
     } else {
       // If the delayed prop is passed in, wait some time before showing the loading indicator
       // We don't want the spinner to just flash for a fraction of a second
-// @ts-expect-error - TS2322 - Type 'Timeout' is not assignable to type 'number'.
+      // @ts-expect-error - TS2322 - Type 'Timeout' is not assignable to type 'number'.
       this.delayedTimeout = setTimeout(() => {
         this.setState({ show: true });
       }, 750);
@@ -67,10 +67,10 @@ class Spinner extends PureComponent<Props, State> {
       <>
         {text}
         <div
-          className={classnames('spinner', {
-            'spinner--dark': !light && (dark || theme === LIGHT_THEME),
-            'spinner--light': !dark && (light || theme === DARK_THEME),
-            'spinner--small': type === 'small',
+          className={classnames("spinner", {
+            "spinner--dark": !light && (dark || theme === LIGHT_THEME),
+            "spinner--light": !dark && (light || theme === DARK_THEME),
+            "spinner--small": type === "small",
           })}
         >
           <div className="rect rect1" />

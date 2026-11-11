@@ -1,18 +1,18 @@
 //@ts-nocheck
-import React from 'react';
-import Icon from 'component/common/icon';
-import * as ICONS from 'constants/icons';
-import ReactDOMServer from 'react-dom/server';
+import React from "react";
+import Icon from "component/common/icon";
+import * as ICONS from "constants/icons";
+import ReactDOMServer from "react-dom/server";
 
-import './plugins/videojs-overlay/plugin';
-import './plugins/videojs-overlay/plugin.scss';
+import "./plugins/videojs-overlay/plugin";
+import "./plugins/videojs-overlay/plugin.scss";
 
 // ****************************************************************************
 // ****************************************************************************
 
-const OVERLAY_NAME_ONE_OFF = 'one-off';
-const OVERLAY_CLASS_PLAYBACK_RATE = 'vjs-overlay-playrate';
-const OVERLAY_CLASS_SEEKED = 'vjs-overlay-seeked';
+const OVERLAY_NAME_ONE_OFF = "one-off";
+const OVERLAY_CLASS_PLAYBACK_RATE = "vjs-overlay-playrate";
+const OVERLAY_CLASS_SEEKED = "vjs-overlay-seeked";
 
 // ****************************************************************************
 // ****************************************************************************
@@ -52,7 +52,7 @@ function showOneOffOverlay(player: unknown, className: unknown, overlayJsx: unkn
     name: OVERLAY_NAME_ONE_OFF,
     class: className,
     content: ReactDOMServer.renderToStaticMarkup(overlayJsx),
-    start: 'immediate',
+    start: "immediate",
     align: align,
   });
   // Display it:
@@ -76,7 +76,7 @@ export function showPlaybackRateOverlay(player: unknown, newRate: unknown, isSpe
     </div>
   );
 
-  showOneOffOverlay(player, OVERLAY_CLASS_PLAYBACK_RATE, overlayJsx, 'center');
+  showOneOffOverlay(player, OVERLAY_CLASS_PLAYBACK_RATE, overlayJsx, "center");
 }
 
 /**
@@ -90,13 +90,13 @@ export function showSeekedOverlay(player: unknown, duration: unknown, isForward:
   const overlayJsx = (
     <div>
       <p>
-        {isForward ? '+' : '-'}
+        {isForward ? "+" : "-"}
         {duration}
       </p>
     </div>
   );
 
-  showOneOffOverlay(player, OVERLAY_CLASS_SEEKED, overlayJsx, 'center');
+  showOneOffOverlay(player, OVERLAY_CLASS_SEEKED, overlayJsx, "center");
 }
 
 /**
@@ -110,10 +110,10 @@ export function showVolumeverlay(player: unknown, percentage: unknown) {
     <div>
       <p>
         {percentage}
-        {'%'}
+        {"%"}
       </p>
     </div>
   );
 
-  showOneOffOverlay(player, OVERLAY_CLASS_SEEKED, overlayJsx, 'center');
+  showOneOffOverlay(player, OVERLAY_CLASS_SEEKED, overlayJsx, "center");
 }

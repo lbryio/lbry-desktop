@@ -11,57 +11,57 @@
 //     &timestamp=12:03
 //     &additional_details=Hello%20Rick!
 
-export const CATEGORIES = 'categories';
-export const INFRINGES_MY_RIGHTS = 'Infringes my rights';
-export const COPYRIGHT_ISSUES = 'Copyright issue';
-export const OTHER_LEGAL_ISSUES = 'Other legal issue';
-export const BEHALF_SELF = 'self';
-export const BEHALF_CLIENT = 'client';
-export const PARTY_SELF = 'Myself';
-export const PARTY_GROUP = 'My company, organization, or client';
+export const CATEGORIES = "categories";
+export const INFRINGES_MY_RIGHTS = "Infringes my rights";
+export const COPYRIGHT_ISSUES = "Copyright issue";
+export const OTHER_LEGAL_ISSUES = "Other legal issue";
+export const BEHALF_SELF = "self";
+export const BEHALF_CLIENT = "client";
+export const PARTY_SELF = "Myself";
+export const PARTY_GROUP = "My company, organization, or client";
 
 export const RELATIONSHIP_FIELD_MIN_WIDTH = 10;
 export const COPYRIGHT_OWNER_MAX_LENGTH = 50;
 
 export const PARAMETERS = {
   type: {
-    'Sexual content': {
+    "Sexual content": {
       [CATEGORIES]: [
-        'Graphic sexual activity',
-        'Nudity',
-        'Suggestive, but without nudity',
-        'Content involving minors',
-        'Sexual Abusive title or description',
-        'Other sexual content',
+        "Graphic sexual activity",
+        "Nudity",
+        "Suggestive, but without nudity",
+        "Content involving minors",
+        "Sexual Abusive title or description",
+        "Other sexual content",
       ],
     },
-    'Violent or repulsive content': {
-      [CATEGORIES]: ['Adults fighting', 'Physical attack', 'Youth violence', 'Animal abuse'],
+    "Violent or repulsive content": {
+      [CATEGORIES]: ["Adults fighting", "Physical attack", "Youth violence", "Animal abuse"],
     },
-    'Hateful or abusive content': {
-      [CATEGORIES]: ['Promotes hatred or violence', 'Bullying', 'Hateful Abusive title or description'],
+    "Hateful or abusive content": {
+      [CATEGORIES]: ["Promotes hatred or violence", "Bullying", "Hateful Abusive title or description"],
     },
-    'Harmful or dangerous acts': {
+    "Harmful or dangerous acts": {
       [CATEGORIES]: [
-        'Pharmaceutical or drug abuse',
-        'Abuse of fire or explosives',
-        'Suicide or self injury',
-        'Other dangerous acts',
+        "Pharmaceutical or drug abuse",
+        "Abuse of fire or explosives",
+        "Suicide or self injury",
+        "Other dangerous acts",
       ],
     },
-    'Child abuse': {
-      [CATEGORIES]: ['Child abuse'],
+    "Child abuse": {
+      [CATEGORIES]: ["Child abuse"],
     },
-    'Promotes terrorism': {
-      [CATEGORIES]: ['Promotes terrorism'],
+    "Promotes terrorism": {
+      [CATEGORIES]: ["Promotes terrorism"],
     },
-    'Spam or misleading': {
+    "Spam or misleading": {
       [CATEGORIES]: [
-        'Mass advertising',
-        'Pharmaceutical drugs for sale',
-        'Misleading text',
-        'Misleading thumbnail',
-        'Scams or fraud',
+        "Mass advertising",
+        "Pharmaceutical drugs for sale",
+        "Misleading text",
+        "Misleading thumbnail",
+        "Scams or fraud",
       ],
     },
     [INFRINGES_MY_RIGHTS]: {

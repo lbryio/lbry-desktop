@@ -1,6 +1,6 @@
-import {handleActions} from 'util/redux-utils';
-import * as ACTIONS from 'constants/action_types';
-import * as COLS from 'constants/collections';
+import { handleActions } from "util/redux-utils";
+import * as ACTIONS from "constants/action_types";
+import * as COLS from "constants/collections";
 
 const getTimestamp = () => {
   return Math.floor(Date.now() / 1000);
@@ -11,21 +11,21 @@ const defaultState: CollectionState = {
     watchlater: {
       items: [],
       id: COLS.WATCH_LATER_ID,
-      name: 'Watch Later',
+      name: "Watch Later",
       updatedAt: getTimestamp(),
       type: COLS.COL_TYPE_PLAYLIST,
     },
     favorites: {
       items: [],
       id: COLS.FAVORITES_ID,
-      name: 'Favorites',
+      name: "Favorites",
       type: COLS.COL_TYPE_PLAYLIST,
       updatedAt: getTimestamp(),
     },
   },
   resolved: {},
   unpublished: {}, // sync
-// @ts-expect-error - TS2322 - Type '{ builtin: { watchlater: { items: undefined[]; id: string; name: string; updatedAt: number; type: string; }; favorites: { items: undefined[]; id: string; name: string; type: string; updatedAt: number; }; }; resolved: {}; ... 6 more ...; error: null; }' is not assignable to type 'CollectionState'.
+  // @ts-expect-error - TS2322 - Type '{ builtin: { watchlater: { items: undefined[]; id: string; name: string; updatedAt: number; type: string; }; favorites: { items: undefined[]; id: string; name: string; type: string; updatedAt: number; }; }; resolved: {}; ... 6 more ...; error: null; }' is not assignable to type 'CollectionState'.
   lastUsedCollection: undefined,
   edited: {},
   pending: {},
@@ -134,7 +134,7 @@ const collectionsReducer = handleActions(
         };
       }
 
-      if (collectionKey === 'edited') {
+      if (collectionKey === "edited") {
         const { edited: lists } = state;
         return {
           ...state,
@@ -165,7 +165,7 @@ const collectionsReducer = handleActions(
       });
       return Object.assign({}, state, {
         ...state,
-        error: '',
+        error: "",
         isResolvingCollectionById: newResolving,
       });
     },
@@ -191,7 +191,7 @@ const collectionsReducer = handleActions(
       if (resolvedCollections && Object.keys(resolvedCollections).length) {
         resolvedIds.forEach((resolvedId) => {
           if (newEdited[resolvedId]) {
-            if (newEdited[resolvedId]['updatedAt'] < resolvedCollections[resolvedId]['updatedAt']) {
+            if (newEdited[resolvedId]["updatedAt"] < resolvedCollections[resolvedId]["updatedAt"]) {
               delete newEdited[resolvedId];
             }
           }

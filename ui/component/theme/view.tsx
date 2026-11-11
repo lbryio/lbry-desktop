@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
 type Props = {
-  themePath: string | null | undefined
+  themePath: string | null | undefined;
 };
 
 const Theme = (props: Props) => {

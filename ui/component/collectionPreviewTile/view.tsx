@@ -1,46 +1,46 @@
-import React from 'react';
-import classnames from 'classnames';
-import { NavLink, useHistory } from 'react-router-dom';
-import ClaimPreviewTile from 'component/claimPreviewTile';
-import TruncatedText from 'component/common/truncated-text';
-import CollectionCount from './collectionCount';
-import CollectionPrivate from './collectionPrivate';
-import CollectionMenuList from 'component/collectionMenuList';
-import { formatLbryUrlForWeb, generateListSearchUrlParams } from 'util/url';
-import FileThumbnail from 'component/fileThumbnail';
+import React from "react";
+import classnames from "classnames";
+import { NavLink, useHistory } from "react-router-dom";
+import ClaimPreviewTile from "component/claimPreviewTile";
+import TruncatedText from "component/common/truncated-text";
+import CollectionCount from "./collectionCount";
+import CollectionPrivate from "./collectionPrivate";
+import CollectionMenuList from "component/collectionMenuList";
+import { formatLbryUrlForWeb, generateListSearchUrlParams } from "util/url";
+import FileThumbnail from "component/fileThumbnail";
 
 type Props = {
-  uri: string,
-// @ts-expect-error - TS2300 - Duplicate identifier 'collectionId'.
-  collectionId: string,
-  collectionName: string,
-  collectionCount: number,
-  editedCollection?: Collection,
-  pendingCollection?: Collection,
-  claim: Claim | null | undefined,
-  channelClaim: ChannelClaim | null | undefined,
-  collectionItemUrls: Array<string>,
-  resolveUri: (arg1: string) => void,
-  isResolvingUri: boolean,
-  thumbnail?: string,
-  title?: string,
-  placeholder: boolean,
+  uri: string;
+  // @ts-expect-error - TS2300 - Duplicate identifier 'collectionId'.
+  collectionId: string;
+  collectionName: string;
+  collectionCount: number;
+  editedCollection?: Collection;
+  pendingCollection?: Collection;
+  claim: Claim | null | undefined;
+  channelClaim: ChannelClaim | null | undefined;
+  collectionItemUrls: Array<string>;
+  resolveUri: (arg1: string) => void;
+  isResolvingUri: boolean;
+  thumbnail?: string;
+  title?: string;
+  placeholder: boolean;
   blackListedOutpoints: Array<{
-    txid: string,
-    nout: number
-  }>,
+    txid: string;
+    nout: number;
+  }>;
   filteredOutpoints: Array<{
-    txid: string,
-    nout: number
-  }>,
-  blockedChannelUris: Array<string>,
-  isMature?: boolean,
-  showMature: boolean,
-// @ts-expect-error - TS2300 - Duplicate identifier 'collectionId'.
-  collectionId: string,
-  deleteCollection: (arg1: string) => void,
-  resolveCollectionItems: (arg1?: any) => void,
-  isResolvingCollectionClaims: boolean
+    txid: string;
+    nout: number;
+  }>;
+  blockedChannelUris: Array<string>;
+  isMature?: boolean;
+  showMature: boolean;
+  // @ts-expect-error - TS2300 - Duplicate identifier 'collectionId'.
+  collectionId: string;
+  deleteCollection: (arg1: string) => void;
+  resolveCollectionItems: (arg1?: any) => void;
+  isResolvingCollectionClaims: boolean;
 };
 
 function CollectionPreviewTile(props: Props) {
@@ -64,9 +64,8 @@ function CollectionPreviewTile(props: Props) {
     }
   }, [collectionId, hasClaim, resolveCollectionItems]);
 
-
   const navigateUrl =
-    formatLbryUrlForWeb(collectionItemUrls[0] || '/') + (collectionId ? generateListSearchUrlParams(collectionId) : '');
+    formatLbryUrlForWeb(collectionItemUrls[0] || "/") + (collectionId ? generateListSearchUrlParams(collectionId) : "");
 
   function handleClick(e: unknown) {
     if (navigateUrl) {
@@ -79,10 +78,9 @@ function CollectionPreviewTile(props: Props) {
     onClick: (e) => e.stopPropagation(),
   } as const;
 
-
   if (isResolvingUri || isResolvingCollectionClaims) {
     return (
-      <li className={classnames('claim-preview--tile', {})}>
+      <li className={classnames("claim-preview--tile", {})}>
         <div className="placeholder media__thumb" />
         <div className="placeholder__wrapper">
           <div className="placeholder claim-tile__title" />
@@ -96,7 +94,7 @@ function CollectionPreviewTile(props: Props) {
   }
 
   return (
-    <li role="link" onClick={handleClick} className={'card claim-preview--tile'}>
+    <li role="link" onClick={handleClick} className={"card claim-preview--tile"}>
       <NavLink {...navLinkProps}>
         {/* @ts-expect-error - TS2739 (ts-migration) */}
         <FileThumbnail uri={collectionItemUrls && collectionItemUrls.length && collectionItemUrls[0]}>

@@ -4,7 +4,7 @@
 // Wrapper for webkitGetAsEntry
 // Note: webkitGetAsEntry might be renamed to GetAsEntry
 const getAsEntry = (item: unknown) => {
-  if (item.kind === 'file' && item.webkitGetAsEntry) {
+  if (item.kind === "file" && item.webkitGetAsEntry) {
     return item.webkitGetAsEntry();
   }
 };
@@ -16,7 +16,7 @@ const getFile = (fileEntry: unknown) => new Promise<any>((resolve, reject) => fi
 const readDirectory = (directory: unknown) => {
   // Some browsers don't support this
   if (directory.createReader !== undefined) {
-    let dirReader = directory.createReader();
+    const dirReader = directory.createReader();
     return new Promise<any>((resolve, reject) => dirReader.readEntries(resolve, reject));
   }
 };
@@ -24,9 +24,9 @@ const readDirectory = (directory: unknown) => {
 // Get file system entries from the dataTransfer items list:
 
 const getFiles = (items: unknown, directoryEntries = false) => {
-  let entries: unknown = [];
+  const entries: unknown = [];
 
-  for (let item of items) {
+  for (const item of items) {
     const entry = directoryEntries ? item : getAsEntry(item);
     if (entry && entry.isFile) {
       const file = getFile(entry);

@@ -1,8 +1,8 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doHideModal } from 'redux/actions/app';
-import ModalRemoveComment from './view';
-import { doCommentAbandon } from 'redux/actions/comments';
+import { connect } from "react-redux";
+import { doHideModal } from "redux/actions/app";
+import ModalRemoveComment from "./view";
+import { doCommentAbandon } from "redux/actions/comments";
 
 const perform = (dispatch: unknown) => ({
   closeModal: () => dispatch(doHideModal()),

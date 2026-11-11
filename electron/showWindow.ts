@@ -8,8 +8,8 @@ const maximized = new WeakMap();
 // Call before anything can maximize the window (e.g. electron-window-state's manage()).
 export function trackMaximized(window: unknown) {
   maximized.set(window, window.isMaximized());
-  window.on('maximize', () => maximized.set(window, true));
-  window.on('unmaximize', () => maximized.set(window, false));
+  window.on("maximize", () => maximized.set(window, true));
+  window.on("unmaximize", () => maximized.set(window, false));
 }
 
 export default function showWindow(window: unknown) {

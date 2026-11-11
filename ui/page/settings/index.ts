@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doEnterSettingsPage, doExitSettingsPage } from 'redux/actions/settings';
-import { selectDaemonSettings } from 'redux/selectors/settings';
+import { connect } from "react-redux";
+import { doEnterSettingsPage, doExitSettingsPage } from "redux/actions/settings";
+import { selectDaemonSettings } from "redux/selectors/settings";
 
-import SettingsPage from './view';
+import SettingsPage from "./view";
 
 const select = (state: unknown) => ({
   daemonSettings: selectDaemonSettings(state),

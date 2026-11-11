@@ -1,9 +1,9 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import * as SETTINGS from 'constants/settings';
-import { doSetClientSetting } from 'redux/actions/settings';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
-import SettingShareUrl from './view';
+import { connect } from "react-redux";
+import * as SETTINGS from "constants/settings";
+import { doSetClientSetting } from "redux/actions/settings";
+import { makeSelectClientSetting } from "redux/selectors/settings";
+import SettingShareUrl from "./view";
 
 const select = (state: unknown) => ({
   customShareUrlEnabled: makeSelectClientSetting(SETTINGS.CUSTOM_SHARE_URL_ENABLED)(state),

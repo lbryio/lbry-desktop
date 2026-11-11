@@ -1,39 +1,39 @@
-import * as CS from 'constants/claim_search';
-import * as ICONS from 'constants/icons';
-import React, { Fragment } from 'react';
-import HiddenNsfwClaims from 'component/hiddenNsfwClaims';
-import { useHistory } from 'react-router-dom';
-import Button from 'component/button';
-import ClaimListDiscover from 'component/claimListDiscover';
-import Icon from 'component/common/icon';
-import { Form, FormField } from 'component/common/form';
-import { DEBOUNCE_WAIT_DURATION_MS } from 'constants/search';
-import { lighthouse } from 'redux/actions/search';
+import * as CS from "constants/claim_search";
+import * as ICONS from "constants/icons";
+import React, { Fragment } from "react";
+import HiddenNsfwClaims from "component/hiddenNsfwClaims";
+import { useHistory } from "react-router-dom";
+import Button from "component/button";
+import ClaimListDiscover from "component/claimListDiscover";
+import Icon from "component/common/icon";
+import { Form, FormField } from "component/common/form";
+import { DEBOUNCE_WAIT_DURATION_MS } from "constants/search";
+import { lighthouse } from "redux/actions/search";
 
-const TYPES_TO_ALLOW_FILTER = ['stream', 'repost'];
+const TYPES_TO_ALLOW_FILTER = ["stream", "repost"];
 
 type Props = {
-  uri: string,
-  totalPages: number,
-  fetching: boolean,
+  uri: string;
+  totalPages: number;
+  fetching: boolean;
   params: {
-    page: number
-  },
-  pageOfClaimsInChannel: Array<StreamClaim>,
-  channelIsBlocked: boolean,
-  channelIsMine: boolean,
-  fetchClaims: (arg1: string, arg2: number) => void,
-  channelIsBlackListed: boolean,
-  defaultPageSize?: number,
-  defaultInfiniteScroll?: boolean,
-  claim: Claim,
-  isAuthenticated: boolean,
-  showMature: boolean,
-  tileLayout: boolean,
-  viewHiddenChannels: boolean,
-  doResolveUris: (arg1: Array<string>, arg2: boolean) => void,
-  claimType: string,
-  empty?: string
+    page: number;
+  };
+  pageOfClaimsInChannel: Array<StreamClaim>;
+  channelIsBlocked: boolean;
+  channelIsMine: boolean;
+  fetchClaims: (arg1: string, arg2: number) => void;
+  channelIsBlackListed: boolean;
+  defaultPageSize?: number;
+  defaultInfiniteScroll?: boolean;
+  claim: Claim;
+  isAuthenticated: boolean;
+  showMature: boolean;
+  tileLayout: boolean;
+  viewHiddenChannels: boolean;
+  doResolveUris: (arg1: Array<string>, arg2: boolean) => void;
+  claimType: string;
+  empty?: string;
 };
 
 function ChannelContent(props: Props) {
@@ -54,7 +54,7 @@ function ChannelContent(props: Props) {
     empty,
   } = props;
   const claimsInChannel = 9999;
-  const [searchQuery, setSearchQuery] = React.useState('');
+  const [searchQuery, setSearchQuery] = React.useState("");
   const [searchResults, setSearchResults] = React.useState<any>(undefined);
   const {
     location: { pathname, search },
@@ -68,21 +68,21 @@ function ChannelContent(props: Props) {
       : TYPES_TO_ALLOW_FILTER.includes(claimType));
 
   function handleInputChange(e: unknown) {
-// @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'target' does not exist on type 'unknown'.
     const { value } = e.target;
     setSearchQuery(value);
   }
 
   React.useEffect(() => {
     const timer = setTimeout(() => {
-      if (searchQuery === '' || !claimId) {
+      if (searchQuery === "" || !claimId) {
         // In order to display original search results, search results must be set to null. A query of '' should display original results.
         return setSearchResults(null);
       } else {
         lighthouse
           .search(
             `s=${encodeURIComponent(searchQuery)}&channel_id=${encodeURIComponent(claimId)}${
-              !showMature ? '&nsfw=false&size=50&from=0' : ''
+              !showMature ? "&nsfw=false&size=50&from=0" : ""
             }`
           )
           .then(({ body: results }) => {
@@ -106,7 +106,7 @@ function ChannelContent(props: Props) {
   }, [claimId, doResolveUris, searchQuery, showMature]);
 
   React.useEffect(() => {
-    setSearchQuery('');
+    setSearchQuery("");
     setSearchResults(null);
   }, [url]);
 
@@ -120,19 +120,19 @@ function ChannelContent(props: Props) {
         <section className="card card--section">
           <p>
             {__(
-              'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this channel from our applications.'
+              "In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this channel from our applications."
             )}
           </p>
           <div className="section__actions">
             {/* @ts-expect-error - TS2322 (ts-migration) */}
-            <Button button="link" href="https://lbry.com/faq/dmca" label={__('Read More')} />
+            <Button button="link" href="https://lbry.com/faq/dmca" label={__("Read More")} />
           </div>
         </section>
       )}
 
       {!fetching && channelIsBlocked && (
         <div className="card--section">
-          <h2 className="help">{__('You have blocked this channel content.')}</h2>
+          <h2 className="help">{__("You have blocked this channel content.")}</h2>
         </div>
       )}
 
@@ -157,16 +157,16 @@ function ChannelContent(props: Props) {
         infiniteScroll={defaultInfiniteScroll}
         meta={
           showFilters && (
-// @ts-expect-error - TS2769 - No overload matches this call.
+            // @ts-expect-error - TS2769 - No overload matches this call.
             <Form onSubmit={() => {}} className="wunderbar--inline">
               <Icon icon={ICONS.SEARCH} />
               <FormField
-// @ts-expect-error - TS2322 - Type '{ className: string; value: string; onChange: (e: unknown) => void; type: string; placeholder: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+                // @ts-expect-error - TS2322 - Type '{ className: string; value: string; onChange: (e: unknown) => void; type: string; placeholder: string; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
                 className="wunderbar__input--inline"
                 value={searchQuery}
                 onChange={handleInputChange}
                 type="text"
-                placeholder={__('Search')}
+                placeholder={__("Search")}
               />
             </Form>
           )

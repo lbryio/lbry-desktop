@@ -1,5 +1,5 @@
 //@ts-nocheck
-import {createSelector} from 'reselect';
+import { createSelector } from "reselect";
 
 export const selectState = (state: unknown) => state.notifications || {};
 

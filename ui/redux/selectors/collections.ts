@@ -1,12 +1,10 @@
-import fromEntries from '@ungap/from-entries';
-import { createSelector } from 'reselect';
-import { selectMyCollectionIds, makeSelectClaimForUri } from 'redux/selectors/claims';
-import { parseURI } from 'util/lbryURI';
-import { isClaimPlayable } from 'util/claim';
+import fromEntries from "@ungap/from-entries";
+import { createSelector } from "reselect";
+import { selectMyCollectionIds, makeSelectClaimForUri } from "redux/selectors/claims";
+import { parseURI } from "util/lbryURI";
+import { isClaimPlayable } from "util/claim";
 
-const selectState = (state: {
-  collections: CollectionState
-}) => state.collections;
+const selectState = (state: { collections: CollectionState }) => state.collections;
 
 export const selectSavedCollectionIds = createSelector(selectState, (collectionState) => collectionState.saved);
 
@@ -73,7 +71,7 @@ export const selectMyPublishedMixedCollections = createSelector(selectMyPublishe
   const myCollections = fromEntries(
     // $FlowFixMe
     Object.entries(published).filter(([key, collection]: [any, any]) => {
-      return collection.type === 'collection';
+      return collection.type === "collection";
     })
   );
   return myCollections;
@@ -83,7 +81,7 @@ export const selectMyPublishedPlaylistCollections = createSelector(selectMyPubli
   const myCollections = fromEntries(
     // $FlowFixMe
     Object.entries(published).filter(([key, collection]: [any, any]) => {
-      return collection.type === 'playlist';
+      return collection.type === "playlist";
     })
   );
   return myCollections;
@@ -91,7 +89,6 @@ export const selectMyPublishedPlaylistCollections = createSelector(selectMyPubli
 
 export const makeSelectMyPublishedCollectionForId = (id: string) =>
   createSelector(selectMyPublishedCollections, (myPublishedCollections) => myPublishedCollections[id]);
-
 
 export const makeSelectIsResolvingCollectionForId = (id: string) =>
   createSelector(selectState, (state) => {
@@ -124,12 +121,12 @@ export const makeSelectClaimUrlInCollection = (url: string) =>
       collections.map((list) => {
         Object.entries(list).forEach(([key, value]: [any, any]) => {
           value.items.map((item) => {
-// @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
+            // @ts-expect-error - TS2339 - Property 'push' does not exist on type 'unknown'.
             itemsInCollections.push(item);
           });
         });
       });
-// @ts-expect-error - TS2339 - Property 'includes' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'includes' does not exist on type 'unknown'.
       return itemsInCollections.includes(url);
     }
   );
@@ -263,7 +260,7 @@ export const makeSelectNextPlayableUrlFromCollectionAndUrl = (collectionId: stri
 
 export const makeSelectNameForCollectionId = (id: string) =>
   createSelector(makeSelectCollectionForId(id), (collection) => {
-    return (collection && collection.name) || '';
+    return (collection && collection.name) || "";
   });
 
 export const makeSelectCountForCollectionId = (id: string) =>

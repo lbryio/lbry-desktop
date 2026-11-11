@@ -1,73 +1,76 @@
-import * as ICONS from 'constants/icons';
-import * as PAGES from 'constants/pages';
-import React from 'react';
-import { parseURI } from 'util/lbryURI';
-import { formatNumber } from 'util/number';
-import { YOUTUBE_STATUSES } from 'lbryinc';
-import Page from 'component/page';
-import SubscribeButton from 'component/subscribeButton';
-import ShareButton from 'component/shareButton';
-import { Tabs, TabList, Tab, TabPanels, TabPanel } from 'component/common/tabs';
-import { useHistory } from 'react-router';
-import Button from 'component/button';
-import { formatLbryUrlForWeb } from 'util/url';
-import ChannelContent from 'component/channelContent';
-import ChannelAbout from 'component/channelAbout';
-import ChannelDiscussion from 'component/channelDiscussion';
-import ChannelThumbnail from 'component/channelThumbnail';
-import ChannelForm from 'component/channelForm';
-import classnames from 'classnames';
-import HelpLink from 'component/common/help-link';
-import ClaimSupportButton from 'component/claimSupportButton';
-import ClaimMenuList from 'component/claimMenuList';
-import OptimizedImage from 'component/optimizedImage';
-import Yrbl from 'component/yrbl';
-import I18nMessage from 'component/i18nMessage';
-import TruncatedText from 'component/common/truncated-text';
+import * as ICONS from "constants/icons";
+import * as PAGES from "constants/pages";
+import React from "react";
+import { parseURI } from "util/lbryURI";
+import { formatNumber } from "util/number";
+import { YOUTUBE_STATUSES } from "lbryinc";
+import Page from "component/page";
+import SubscribeButton from "component/subscribeButton";
+import ShareButton from "component/shareButton";
+import { Tabs, TabList, Tab, TabPanels, TabPanel } from "component/common/tabs";
+import { useHistory } from "react-router";
+import Button from "component/button";
+import { formatLbryUrlForWeb } from "util/url";
+import ChannelContent from "component/channelContent";
+import ChannelAbout from "component/channelAbout";
+import ChannelDiscussion from "component/channelDiscussion";
+import ChannelThumbnail from "component/channelThumbnail";
+import ChannelForm from "component/channelForm";
+import classnames from "classnames";
+import HelpLink from "component/common/help-link";
+import ClaimSupportButton from "component/claimSupportButton";
+import ClaimMenuList from "component/claimMenuList";
+import OptimizedImage from "component/optimizedImage";
+import Yrbl from "component/yrbl";
+import I18nMessage from "component/i18nMessage";
+import TruncatedText from "component/common/truncated-text";
 // @ts-expect-error - TS2792 - Cannot find module 'static/img/placeholderTx.gif'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-import PlaceholderTx from 'static/img/placeholderTx.gif';
+import PlaceholderTx from "static/img/placeholderTx.gif";
 
 export const PAGE_VIEW_QUERY = `view`;
 export const DISCUSSION_PAGE = `discussion`;
 
 const PAGE = {
-  CONTENT: 'content',
-  LISTS: 'lists',
-  ABOUT: 'about',
+  CONTENT: "content",
+  LISTS: "lists",
+  ABOUT: "about",
   DISCUSSION: DISCUSSION_PAGE,
-  EDIT: 'edit',
+  EDIT: "edit",
 } as const;
 
 type Props = {
-  uri: string,
-  claim: ChannelClaim,
-  title: string | null | undefined,
-  cover: string | null | undefined,
-  thumbnail: string | null | undefined,
-  page: number,
+  uri: string;
+  claim: ChannelClaim;
+  title: string | null | undefined;
+  cover: string | null | undefined;
+  thumbnail: string | null | undefined;
+  page: number;
   match: {
     params: {
-      attribute: string | null | undefined
-    }
-  },
-  channelIsMine: boolean,
-  isSubscribed: boolean,
-  channelIsBlocked: boolean,
+      attribute: string | null | undefined;
+    };
+  };
+  channelIsMine: boolean;
+  isSubscribed: boolean;
+  channelIsBlocked: boolean;
   blackListedOutpoints: Array<{
-    txid: string,
-    nout: number
-  }>,
-  fetchSubCount: (arg1: string) => void,
-  subCount: number,
-  pending: boolean,
-  youtubeChannels: Array<{
-    channel_claim_id: string,
-    sync_status: string,
-    transfer_state: string
-  }> | null | undefined,
-  blockedChannels: Array<string>,
-  mutedChannels: Array<string>,
-  unpublishedCollections: CollectionGroup
+    txid: string;
+    nout: number;
+  }>;
+  fetchSubCount: (arg1: string) => void;
+  subCount: number;
+  pending: boolean;
+  youtubeChannels:
+    | Array<{
+        channel_claim_id: string;
+        sync_status: string;
+        transfer_state: string;
+      }>
+    | null
+    | undefined;
+  blockedChannels: Array<string>;
+  mutedChannels: Array<string>;
+  unpublishedCollections: CollectionGroup;
 };
 
 function ChannelPage(props: Props) {
@@ -130,7 +133,7 @@ function ChannelPage(props: Props) {
               // @ts-expect-error - TS2322 (ts-migration)
               tokens={{
                 // @ts-expect-error - TS2322 (ts-migration)
-                pick: <Button button="link" navigate={`/$/${PAGES.LISTS}`} label={__('Pick')} />,
+                pick: <Button button="link" navigate={`/$/${PAGES.LISTS}`} label={__("Pick")} />,
               }}
             >
               You have unpublished lists! %pick% one and publish it!
@@ -139,10 +142,10 @@ function ChannelPage(props: Props) {
         }
       </section>
     ) : (
-      <section className="main--empty">{__('You have no lists! Create one from any playable content.')}</section>
+      <section className="main--empty">{__("You have no lists! Create one from any playable content.")}</section>
     );
   } else {
-    collectionEmpty = <section className="main--empty">{__('No Lists Found')}</section>;
+    collectionEmpty = <section className="main--empty">{__("No Lists Found")}</section>;
   }
 
   let channelIsBlackListed = false;
@@ -176,8 +179,8 @@ function ChannelPage(props: Props) {
   }
 
   function onTabChange(newTabIndex: unknown) {
-    let url = formatLbryUrlForWeb(uri);
-    let search = '?';
+    const url = formatLbryUrlForWeb(uri);
+    let search = "?";
 
     if (newTabIndex === 0) {
       search += `${PAGE_VIEW_QUERY}=${PAGE.CONTENT}`;
@@ -209,8 +212,8 @@ function ChannelPage(props: Props) {
         noFooter
         noSideNavigation={editing}
         backout={{
-          title: __('Editing @%channel%', { channel: channelName }),
-          simpleTitle: __('Editing'),
+          title: __("Editing @%channel%", { channel: channelName }),
+          simpleTitle: __("Editing"),
         }}
       >
         {/* @ts-expect-error - TS2322, TS2739 (ts-migration) */}
@@ -228,7 +231,7 @@ function ChannelPage(props: Props) {
             <Button
               // @ts-expect-error - TS2322 (ts-migration)
               button="alt"
-              label={__('Claim Your Channel')}
+              label={__("Claim Your Channel")}
               icon={ICONS.YOUTUBE}
               navigate={`/$/${PAGES.CHANNELS}`}
             />
@@ -241,31 +244,31 @@ function ChannelPage(props: Props) {
           {/* @ts-expect-error - TS2322 (ts-migration) */}
           <ClaimMenuList uri={claim.permanent_url} inline isChannelPage />
         </div>
-        {cover && <img className={classnames('channel-cover__custom')} src={PlaceholderTx} />}
+        {cover && <img className={classnames("channel-cover__custom")} src={PlaceholderTx} />}
         {/* @ts-expect-error - TS2322 (ts-migration) */}
-        {cover && <OptimizedImage className={classnames('channel-cover__custom')} src={cover} objectFit="cover" />}
+        {cover && <OptimizedImage className={classnames("channel-cover__custom")} src={cover} objectFit="cover" />}
         <div className="channel__primary-info">
           {/* @ts-expect-error - TS2739 (ts-migration) */}
           <ChannelThumbnail className="channel__thumbnail--channel-page" uri={uri} allowGifs />
           <h1 className="channel__title">
             <TruncatedText lines={2} showTooltip>
-              {title || (channelName && '@' + channelName)}
+              {title || (channelName && "@" + channelName)}
             </TruncatedText>
           </h1>
           <div className="channel__meta">
             <span>
-              {formattedSubCount} {subCount !== 1 ? __('Followers') : __('Follower')}
+              {formattedSubCount} {subCount !== 1 ? __("Followers") : __("Follower")}
               <HelpLink href="https://lbry.com/faq/views" />
             </span>
             {channelIsMine && (
               <>
                 {pending ? (
-                  <span>{__('Your changes will be live in a few minutes')}</span>
+                  <span>{__("Your changes will be live in a few minutes")}</span>
                 ) : (
                   <Button
                     // @ts-expect-error - TS2322 (ts-migration)
                     button="alt"
-                    title={__('Edit')}
+                    title={__("Edit")}
                     onClick={() => push(`?${PAGE_VIEW_QUERY}=${PAGE.EDIT}`)}
                     icon={ICONS.EDIT}
                     iconSize={18}
@@ -282,38 +285,38 @@ function ChannelPage(props: Props) {
       {(isBlocked || isMuted) && !viewBlockedChannel ? (
         <div className="main--empty">
           <Yrbl
-            title={isBlocked ? __('This channel is blocked') : __('This channel is muted')}
+            title={isBlocked ? __("This channel is blocked") : __("This channel is muted")}
             subtitle={
               isBlocked
-                ? __('Are you sure you want to view this content? Viewing will not unblock @%channel%', {
+                ? __("Are you sure you want to view this content? Viewing will not unblock @%channel%", {
                     channel: channelName,
                   })
-                : __('Are you sure you want to view this content? Viewing will not unmute @%channel%', {
+                : __("Are you sure you want to view this content? Viewing will not unmute @%channel%", {
                     channel: channelName,
                   })
             }
             actions={
               <div className="section__actions">
                 {/* @ts-expect-error - TS2322 (ts-migration) */}
-                <Button button="primary" label={__('View Content')} onClick={() => setViewBlockedChannel(true)} />
+                <Button button="primary" label={__("View Content")} onClick={() => setViewBlockedChannel(true)} />
               </div>
             }
           />
         </div>
       ) : (
         <Tabs onChange={onTabChange} index={tabIndex}>
-{ /* @ts-expect-error - TS2322 - Type '{ children: Element[]; className: string; }' is not assignable to type 'IntrinsicAttributes & TabListProps'. */}
+          {/* @ts-expect-error - TS2322 - Type '{ children: Element[]; className: string; }' is not assignable to type 'IntrinsicAttributes & TabListProps'. */}
           <TabList className="tabs__list--channel-page">
-{ /* @ts-expect-error - TS2322 - Type '{ children: string; disabled: boolean; }' is not assignable to type 'IntrinsicAttributes & TabProps'. */}
-            <Tab disabled={editing}>{__('Content')}</Tab>
-{ /* @ts-expect-error - TS2322 - Type '{ children: string; disabled: boolean; }' is not assignable to type 'IntrinsicAttributes & TabProps'. */}
-            <Tab disabled={editing}>{__('Playlists')}</Tab>
-{ /* @ts-expect-error - TS2559 - Type '{ children: string; }' has no properties in common with type 'IntrinsicAttributes & TabProps'. */}
-            <Tab>{editing ? __('Editing Your Channel') : __('About --[tab title in Channel Page]--')}</Tab>
-{ /* @ts-expect-error - TS2322 - Type '{ children: string; disabled: boolean; }' is not assignable to type 'IntrinsicAttributes & TabProps'. */}
-            <Tab disabled={editing}>{__('Community')}</Tab>
+            {/* @ts-expect-error - TS2322 - Type '{ children: string; disabled: boolean; }' is not assignable to type 'IntrinsicAttributes & TabProps'. */}
+            <Tab disabled={editing}>{__("Content")}</Tab>
+            {/* @ts-expect-error - TS2322 - Type '{ children: string; disabled: boolean; }' is not assignable to type 'IntrinsicAttributes & TabProps'. */}
+            <Tab disabled={editing}>{__("Playlists")}</Tab>
+            {/* @ts-expect-error - TS2559 - Type '{ children: string; }' has no properties in common with type 'IntrinsicAttributes & TabProps'. */}
+            <Tab>{editing ? __("Editing Your Channel") : __("About --[tab title in Channel Page]--")}</Tab>
+            {/* @ts-expect-error - TS2322 - Type '{ children: string; disabled: boolean; }' is not assignable to type 'IntrinsicAttributes & TabProps'. */}
+            <Tab disabled={editing}>{__("Community")}</Tab>
           </TabList>
-{ /* @ts-expect-error - TS2559 - Type '{ children: Element[]; }' has no properties in common with type 'IntrinsicAttributes & TabPanelsProps'. */}
+          {/* @ts-expect-error - TS2559 - Type '{ children: Element[]; }' has no properties in common with type 'IntrinsicAttributes & TabPanelsProps'. */}
           <TabPanels>
             <TabPanel>
               {currentView === PAGE.CONTENT && (
@@ -321,15 +324,15 @@ function ChannelPage(props: Props) {
                   uri={uri}
                   channelIsBlackListed={channelIsBlackListed}
                   viewHiddenChannels
-                  claimType={['stream', 'repost']}
-                  empty={<section className="main--empty">{__('No Content Found')}</section>}
+                  claimType={["stream", "repost"]}
+                  empty={<section className="main--empty">{__("No Content Found")}</section>}
                 />
               )}
             </TabPanel>
             <TabPanel>
               {currentView === PAGE.LISTS && (
                 <ChannelContent
-                  claimType={'collection'}
+                  claimType={"collection"}
                   uri={uri}
                   channelIsBlackListed={channelIsBlackListed}
                   viewHiddenChannels

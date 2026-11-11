@@ -1,14 +1,14 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doUserResendVerificationEmail, doUserCheckEmailVerified } from 'redux/actions/user';
+import { connect } from "react-redux";
+import { doUserResendVerificationEmail, doUserCheckEmailVerified } from "redux/actions/user";
 import {
   selectEmailToVerify,
   selectEmailAlreadyExists,
   selectUser,
   selectResendingVerificationEmail,
-} from 'redux/selectors/user';
-import { doToast } from 'redux/actions/notifications';
-import UserEmailVerify from './view';
+} from "redux/selectors/user";
+import { doToast } from "redux/actions/notifications";
+import UserEmailVerify from "./view";
 
 const select = (state: unknown) => ({
   email: selectEmailToVerify(state),
@@ -18,9 +18,9 @@ const select = (state: unknown) => ({
 });
 
 const perform = (dispatch: unknown) => ({
-  resendVerificationEmail: email => dispatch(doUserResendVerificationEmail(email)),
+  resendVerificationEmail: (email) => dispatch(doUserResendVerificationEmail(email)),
   checkEmailVerified: () => dispatch(doUserCheckEmailVerified()),
-  toast: message => dispatch(doToast({ message })),
+  toast: (message) => dispatch(doToast({ message })),
 });
 
 export default connect(select, perform)(UserEmailVerify);

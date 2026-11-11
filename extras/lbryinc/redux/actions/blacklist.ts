@@ -1,6 +1,6 @@
 //@ts-nocheck
-import {Lbryio} from 'lbryinc';
-import * as ACTIONS from 'constants/action_types';
+import { Lbryio } from "lbryinc";
+import * as ACTIONS from "constants/action_types";
 
 const CHECK_BLACK_LISTED_CONTENT_INTERVAL = 60 * 60 * 1000;
 
@@ -14,7 +14,7 @@ export function doFetchBlackListedOutpoints() {
       const splitOutpoints: unknown = [];
       if (outpoints) {
         outpoints.forEach((outpoint, index) => {
-          const [txid, nout] = outpoint.split(':');
+          const [txid, nout] = outpoint.split(":");
 
           splitOutpoints[index] = { txid, nout: Number.parseInt(nout, 10) };
         });
@@ -39,8 +39,8 @@ export function doFetchBlackListedOutpoints() {
       });
     };
 
-    Lbryio.call('file', 'list_blocked', {
-      auth_token: '',
+    Lbryio.call("file", "list_blocked", {
+      auth_token: "",
     }).then(success, failure);
   };
 }

@@ -1,13 +1,13 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doHideModal } from 'redux/actions/app';
-import { doUploadThumbnail } from 'redux/actions/publish';
-import { doToast } from 'redux/actions/notifications';
-import ModalAutoGenerateThumbnail from './view';
+import { connect } from "react-redux";
+import { doHideModal } from "redux/actions/app";
+import { doUploadThumbnail } from "redux/actions/publish";
+import { doToast } from "redux/actions/notifications";
+import ModalAutoGenerateThumbnail from "./view";
 
 const perform = (dispatch: unknown) => ({
   closeModal: () => dispatch(doHideModal()),
-  upload: (file) => dispatch(doUploadThumbnail(null, file, null, null, 'Generated')),
+  upload: (file) => dispatch(doUploadThumbnail(null, file, null, null, "Generated")),
   showToast: (options) => dispatch(doToast(options)),
 });
 

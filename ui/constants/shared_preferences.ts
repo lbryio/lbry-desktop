@@ -8,8 +8,8 @@
  * See redux/settings/actions in the app for where this is used.
  */
 
-import * as DAEMON_SETTINGS from './daemon_settings';
-import * as SETTINGS from './settings';
+import * as DAEMON_SETTINGS from "./daemon_settings";
+import * as SETTINGS from "./settings";
 
 // DAEMON
 export const SDK_SYNC_KEYS = [DAEMON_SETTINGS.LBRYUM_SERVERS, DAEMON_SETTINGS.SHARE_USAGE_DATA] as const;

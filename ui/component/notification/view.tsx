@@ -1,32 +1,32 @@
-import {formatLbryUrlForWeb} from 'util/url';
-import { Menu, MenuList, MenuButton, MenuItem } from '@reach/menu-button';
-import { NavLink } from 'react-router-dom';
-import { PAGE_VIEW_QUERY, DISCUSSION_PAGE } from 'page/channel/view';
-import { parseSticker } from 'util/comments';
-import { parseURI } from 'util/lbryURI';
-import { RULE } from 'constants/notifications';
-import { useHistory } from 'react-router';
-import * as ICONS from 'constants/icons';
-import Button from 'component/button';
-import ChannelThumbnail from 'component/channelThumbnail';
-import classnames from 'classnames';
-import CommentCreate from 'component/commentCreate';
-import CommentReactions from 'component/commentReactions';
-import CommentsReplies from 'component/commentsReplies';
-import DateTime from 'component/dateTime';
-import FileThumbnail from 'component/fileThumbnail';
-import Icon from 'component/common/icon';
-import LbcMessage from 'component/common/lbc-message';
-import NotificationContentChannelMenu from 'component/notificationContentChannelMenu';
-import OptimizedImage from 'component/optimizedImage';
-import React from 'react';
-import UriIndicator from 'component/uriIndicator';
+import { formatLbryUrlForWeb } from "util/url";
+import { Menu, MenuList, MenuButton, MenuItem } from "@reach/menu-button";
+import { NavLink } from "react-router-dom";
+import { PAGE_VIEW_QUERY, DISCUSSION_PAGE } from "page/channel/view";
+import { parseSticker } from "util/comments";
+import { parseURI } from "util/lbryURI";
+import { RULE } from "constants/notifications";
+import { useHistory } from "react-router";
+import * as ICONS from "constants/icons";
+import Button from "component/button";
+import ChannelThumbnail from "component/channelThumbnail";
+import classnames from "classnames";
+import CommentCreate from "component/commentCreate";
+import CommentReactions from "component/commentReactions";
+import CommentsReplies from "component/commentsReplies";
+import DateTime from "component/dateTime";
+import FileThumbnail from "component/fileThumbnail";
+import Icon from "component/common/icon";
+import LbcMessage from "component/common/lbc-message";
+import NotificationContentChannelMenu from "component/notificationContentChannelMenu";
+import OptimizedImage from "component/optimizedImage";
+import React from "react";
+import UriIndicator from "component/uriIndicator";
 
 type Props = {
-  menuButton: boolean,
-  notification: WebNotification,
-  deleteNotification: () => void,
-  readNotification: () => void
+  menuButton: boolean;
+  notification: WebNotification;
+  deleteNotification: () => void;
+  readNotification: () => void;
 };
 
 export default function Notification(props: Props) {
@@ -86,9 +86,9 @@ export default function Notification(props: Props) {
   }
 
   let notificationLink = formatLbryUrlForWeb(notificationTarget);
-  let urlParams = new URLSearchParams();
+  const urlParams = new URLSearchParams();
   if (isCommentNotification && notification_parameters.dynamic.hash) {
-    urlParams.append('lc', notification_parameters.dynamic.hash);
+    urlParams.append("lc", notification_parameters.dynamic.hash);
   }
 
   let channelName;
@@ -99,23 +99,23 @@ export default function Notification(props: Props) {
   }
 
   const notificationTitle = notification_parameters.device.title;
-  const titleSplit = notificationTitle.split(' ');
-  let fullTitle = [' '];
+  const titleSplit = notificationTitle.split(" ");
+  let fullTitle = [" "];
   let uriIndicator;
   const title = titleSplit.map((message, index) => {
     if (channelName === message) {
       // @ts-expect-error - TS2322 (ts-migration)
       uriIndicator = <UriIndicator uri={channelUrl} link />;
-      fullTitle.push(' ');
+      fullTitle.push(" ");
       const resultTitle = fullTitle;
-      fullTitle = [' '];
+      fullTitle = [" "];
 
-      return [resultTitle.join(' '), uriIndicator];
+      return [resultTitle.join(" "), uriIndicator];
     } else {
       fullTitle.push(message);
 
       if (index === titleSplit.length - 1) {
-        const result = fullTitle.join(' ');
+        const result = fullTitle.join(" ");
         return <LbcMessage key={result}>{result}</LbcMessage>;
       }
     }
@@ -148,34 +148,28 @@ export default function Notification(props: Props) {
   }
 
   const Wrapper = menuButton
-    ? (props: {
-    children: any
-  }) => (
+    ? (props: { children: any }) => (
         <MenuItem className="menu__link--notification" onSelect={handleNotificationClick}>
           {props.children}
         </MenuItem>
       )
     : notificationLink
-    ? (props: {
-    children: any
-  }) => (
-        <NavLink {...navLinkProps} className="menu__link--notification" onClick={handleNotificationClick}>
-          {props.children}
-        </NavLink>
-      )
-    : (props: {
-    children: any
-  }) => (
-        <span
-          className={is_read ? 'menu__link--notification-nolink' : 'menu__link--notification'}
-          onClick={handleNotificationClick}
-        >
-          {props.children}
-        </span>
-      );
+      ? (props: { children: any }) => (
+          <NavLink {...navLinkProps} className="menu__link--notification" onClick={handleNotificationClick}>
+            {props.children}
+          </NavLink>
+        )
+      : (props: { children: any }) => (
+          <span
+            className={is_read ? "menu__link--notification-nolink" : "menu__link--notification"}
+            onClick={handleNotificationClick}
+          >
+            {props.children}
+          </span>
+        );
 
   return (
-    <div className={classnames('notification__wrapper', { 'notification__wrapper--unread': !is_read })}>
+    <div className={classnames("notification__wrapper", { "notification__wrapper--unread": !is_read })}>
       <Wrapper>
         <div className="notification__icon">{icon}</div>
 
@@ -186,7 +180,7 @@ export default function Notification(props: Props) {
 
               {!commentText ? (
                 <div
-                  title={notification_parameters.device.text.replace(/\sLBC/g, ' Credits')}
+                  title={notification_parameters.device.text.replace(/\sLBC/g, " Credits")}
                   className="notification__text"
                 >
                   <LbcMessage>{notification_parameters.device.text}</LbcMessage>
@@ -248,7 +242,7 @@ export default function Notification(props: Props) {
             <MenuList className="menu__list">
               <MenuItem className="menu__link" onSelect={() => deleteNotification()}>
                 <Icon aria-hidden icon={ICONS.DELETE} />
-                {__('Delete')}
+                {__("Delete")}
               </MenuItem>
               {notification_rule === RULE.NEW_CONTENT && channelUrl ? (
                 <NotificationContentChannelMenu uri={channelUrl} />
@@ -263,7 +257,7 @@ export default function Notification(props: Props) {
           <div className="notification__reactions">
             <Button
               // @ts-expect-error - TS2322 (ts-migration)
-              label={__('Reply')}
+              label={__("Reply")}
               className="comment__action"
               onClick={() => setReplying(!isReplying)}
               icon={ICONS.REPLY}

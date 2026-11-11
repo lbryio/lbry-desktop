@@ -1,19 +1,19 @@
-import {KNOWN_APP_DOMAINS} from 'config';
-import * as ICONS from 'constants/icons';
-import * as React from 'react';
-import { isURIValid } from 'util/lbryURI';
-import Button from 'component/button';
-import ClaimLink from 'component/claimLink';
+import { KNOWN_APP_DOMAINS } from "config";
+import * as ICONS from "constants/icons";
+import * as React from "react";
+import { isURIValid } from "util/lbryURI";
+import Button from "component/button";
+import ClaimLink from "component/claimLink";
 
 type Props = {
-  href: string,
-  title?: string,
-  embed?: boolean,
-  allowPreview?: boolean,
-  children: React.ReactNode,
-  parentCommentId?: string,
-  isMarkdownPost?: boolean,
-  simpleLinks?: boolean
+  href: string;
+  title?: string;
+  embed?: boolean;
+  allowPreview?: boolean;
+  children: React.ReactNode;
+  parentCommentId?: string;
+  isMarkdownPost?: boolean;
+  simpleLinks?: boolean;
 };
 
 function MarkdownLink(props: Props) {
@@ -40,7 +40,7 @@ function MarkdownLink(props: Props) {
   let element = <span>{children}</span>;
 
   // Regex for url protocol
-  const protocolRegex = new RegExp('^(https?|lbry|mailto)+:', 'i');
+  const protocolRegex = new RegExp("^(https?|lbry|mailto)+:", "i");
   const protocol = href ? protocolRegex.exec(href) : null;
 
   let linkUrlObject;
@@ -49,7 +49,7 @@ function MarkdownLink(props: Props) {
   } catch (e: any) {}
 
   let lbryUrlFromLink;
-  if (linkUrlObject && !href.startsWith('mailto:')) {
+  if (linkUrlObject && !href.startsWith("mailto:")) {
     const linkDomain = linkUrlObject.host;
     const isKnownAppDomainLink = KNOWN_APP_DOMAINS.includes(linkDomain);
     if (isKnownAppDomainLink) {
@@ -57,12 +57,12 @@ function MarkdownLink(props: Props) {
       try {
         // This could be anything
         linkPathname = decodeURIComponent(
-          linkUrlObject.pathname.startsWith('//') ? linkUrlObject.pathname.slice(2) : linkUrlObject.pathname.slice(1)
+          linkUrlObject.pathname.startsWith("//") ? linkUrlObject.pathname.slice(2) : linkUrlObject.pathname.slice(1)
         );
       } catch (e: any) {}
 
       const linkPathPlusHash = linkPathname ? `${linkPathname}${linkUrlObject.hash}` : undefined;
-      const possibleLbryUrl = linkPathPlusHash ? `lbry://${linkPathPlusHash.replace(/:/g, '#')}` : undefined;
+      const possibleLbryUrl = linkPathPlusHash ? `lbry://${linkPathPlusHash.replace(/:/g, "#")}` : undefined;
 
       const lbryLinkIsValid = possibleLbryUrl && isURIValid(possibleLbryUrl);
       const isMarkdownLinkWithLabel =
@@ -78,7 +78,7 @@ function MarkdownLink(props: Props) {
   // Return plain text if no valid url.
   // Return external link if protocol is http or https.
   // Return local link if protocol is lbry uri.
-  if (href.startsWith('?t=')) {
+  if (href.startsWith("?t=")) {
     // Video timestamp markers
     element = (
       <Button
@@ -89,16 +89,16 @@ function MarkdownLink(props: Props) {
         label={children}
         className="button--external-link"
         onClick={() => {
-// @ts-expect-error - TS2339 - Property 'player' does not exist on type 'Window & typeof globalThis'.
+          // @ts-expect-error - TS2339 - Property 'player' does not exist on type 'Window & typeof globalThis'.
           if (window.player) {
-// @ts-expect-error - TS2339 - Property 'player' does not exist on type 'Window & typeof globalThis'.
+            // @ts-expect-error - TS2339 - Property 'player' does not exist on type 'Window & typeof globalThis'.
             window.player.currentTime(parseInt(href.slice(3)));
             window.scrollTo(0, 0);
           }
         }}
       />
     );
-  } else if (!simpleLinks && ((protocol && protocol[0] === 'lbry:' && isURIValid(decodedUri)) || lbryUrlFromLink)) {
+  } else if (!simpleLinks && ((protocol && protocol[0] === "lbry:" && isURIValid(decodedUri)) || lbryUrlFromLink)) {
     element = (
       <ClaimLink
         // @ts-expect-error - TS2322 (ts-migration)
@@ -113,9 +113,9 @@ function MarkdownLink(props: Props) {
     );
   } else if (
     simpleLinks ||
-    (protocol && (protocol[0] === 'http:' || protocol[0] === 'https:' || protocol[0] === 'mailto:'))
+    (protocol && (protocol[0] === "http:" || protocol[0] === "https:" || protocol[0] === "mailto:"))
   ) {
-    const isLbryLink = href.startsWith('lbry://');
+    const isLbryLink = href.startsWith("lbry://");
 
     element = (
       <Button

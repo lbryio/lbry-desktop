@@ -1,10 +1,10 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectFollowedTags } from 'redux/selectors/tags';
-import { selectSubscriptions } from 'redux/selectors/subscriptions';
-import { selectShowMatureContent, selectHomepageData } from 'redux/selectors/settings';
+import { connect } from "react-redux";
+import { selectFollowedTags } from "redux/selectors/tags";
+import { selectSubscriptions } from "redux/selectors/subscriptions";
+import { selectShowMatureContent, selectHomepageData } from "redux/selectors/settings";
 
-import DiscoverPage from './view';
+import DiscoverPage from "./view";
 
 const select = (state: unknown) => ({
   followedTags: selectFollowedTags(state),

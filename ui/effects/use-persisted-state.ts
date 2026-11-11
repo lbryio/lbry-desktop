@@ -1,5 +1,5 @@
 //@ts-nocheck
-import {useState, useEffect} from 'react';
+import { useState, useEffect } from "react";
 
 const listeners: Record<string, any> = {};
 
@@ -22,7 +22,7 @@ export default function usePersistedState(key: unknown, firstTimeDefault: unknow
     localStorageAvailable = false;
   }
   if (key && localStorageAvailable) {
-    let item = localStorage.getItem(key);
+    const item = localStorage.getItem(key);
 
     if (item) {
       let parsedItem;
@@ -50,7 +50,7 @@ export default function usePersistedState(key: unknown, firstTimeDefault: unknow
 
   useEffect(() => {
     if (key && localStorageAvailable) {
-      localStorage.setItem(key, typeof value === 'object' ? JSON.stringify(value) : value);
+      localStorage.setItem(key, typeof value === "object" ? JSON.stringify(value) : value);
     }
     if (key) {
       // add hook on mount

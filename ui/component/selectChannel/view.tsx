@@ -1,14 +1,14 @@
-import React from 'react';
-import { FormField } from 'component/common/form';
+import React from "react";
+import { FormField } from "component/common/form";
 
 type Props = {
-  tiny?: boolean,
-  label: string,
-  myChannelClaims: Array<ChannelClaim> | null | undefined,
-  injected: Array<string> | null | undefined,
-  activeChannelClaim: ChannelClaim | null | undefined,
-  setActiveChannel: (arg1: string) => void,
-  fetchingChannels: boolean
+  tiny?: boolean;
+  label: string;
+  myChannelClaims: Array<ChannelClaim> | null | undefined;
+  injected: Array<string> | null | undefined;
+  activeChannelClaim: ChannelClaim | null | undefined;
+  setActiveChannel: (arg1: string) => void;
+  fetchingChannels: boolean;
 };
 
 function SelectChannel(props: Props) {
@@ -31,15 +31,15 @@ function SelectChannel(props: Props) {
     <>
       <FormField
         name="channel"
-        label={!tiny && (label || __('Channel'))}
+        label={!tiny && (label || __("Channel"))}
         labelOnLeft={tiny}
-        type={tiny ? 'select-tiny' : 'select'}
+        type={tiny ? "select-tiny" : "select"}
         onChange={handleChannelChange}
         value={activeChannelClaim && activeChannelClaim.claim_id}
         disabled={fetchingChannels}
       >
         {fetchingChannels ? (
-          <option>{__('Loading your channels...')}</option>
+          <option>{__("Loading your channels...")}</option>
         ) : (
           <>
             {myChannelClaims &&
@@ -49,7 +49,7 @@ function SelectChannel(props: Props) {
                 </option>
               ))}
             {injected &&
-              injected.map(item => (
+              injected.map((item) => (
                 <option key={item} value={item}>
                   {item}
                 </option>

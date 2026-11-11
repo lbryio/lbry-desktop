@@ -1,16 +1,16 @@
-import type {ReactNode} from 'react';
-import * as MODALS from 'constants/modal_types';
-import * as ICONS from 'constants/icons';
-import React from 'react';
-import Lbry from 'lbry';
-import Button from 'component/button';
-import ModalWalletUnlock from 'modal/modalWalletUnlock';
-import ModalIncompatibleDaemon from 'modal/modalIncompatibleDaemon';
-import ModalUpgrade from 'modal/modalUpgrade';
-import ModalDownloading from 'modal/modalDownloading';
-import Card from 'component/common/card';
-import I18nMessage from 'component/i18nMessage';
-import 'css-doodle';
+import type { ReactNode } from "react";
+import * as MODALS from "constants/modal_types";
+import * as ICONS from "constants/icons";
+import React from "react";
+import Lbry from "lbry";
+import Button from "component/button";
+import ModalWalletUnlock from "modal/modalWalletUnlock";
+import ModalIncompatibleDaemon from "modal/modalIncompatibleDaemon";
+import ModalUpgrade from "modal/modalUpgrade";
+import ModalDownloading from "modal/modalDownloading";
+import Card from "component/common/card";
+import I18nMessage from "component/i18nMessage";
+import "css-doodle";
 
 const FORTY_FIVE_SECONDS = 45 * 1000;
 const UPDATE_INTERVAL = 1000; // 1 second
@@ -18,30 +18,33 @@ const MAX_WALLET_WAIT = 20; // 20 seconds for wallet to be started, but servers 
 const MAX_SYNC_WAIT = 45; // 45 seconds to sync wallet, show message if taking long
 
 type Props = {
-  checkDaemonVersion: () => Promise<any>,
-  notifyUnlockWallet: (arg1?: boolean | null | undefined) => Promise<any>,
-  daemonVersionMatched: boolean,
-  onReadyToLaunch: () => void,
-  hideModal: () => void,
-  modal: {
-    id: string
-  } | null | undefined,
-  animationHidden: boolean,
-  toggleSplashAnimation: () => void,
-  clearWalletServers: () => void,
-  doShowSnackBar: (arg1: string) => void
+  checkDaemonVersion: () => Promise<any>;
+  notifyUnlockWallet: (arg1?: boolean | null | undefined) => Promise<any>;
+  daemonVersionMatched: boolean;
+  onReadyToLaunch: () => void;
+  hideModal: () => void;
+  modal:
+    | {
+        id: string;
+      }
+    | null
+    | undefined;
+  animationHidden: boolean;
+  toggleSplashAnimation: () => void;
+  clearWalletServers: () => void;
+  doShowSnackBar: (arg1: string) => void;
 };
 
 type State = {
-  details: string | React.ReactNode,
-  message: string,
-  launchedModal: boolean,
-  error: boolean,
-  errorDetail: string | null,
-  isRunning: boolean,
-  launchWithIncompatibleDaemon: boolean,
-  waitingForWallet: number,
-  waitingForSync: number
+  details: string | React.ReactNode;
+  message: string;
+  launchedModal: boolean;
+  error: boolean;
+  errorDetail: string | null;
+  isRunning: boolean;
+  launchWithIncompatibleDaemon: boolean;
+  waitingForWallet: number;
+  waitingForSync: number;
 };
 
 export default class SplashScreen extends React.PureComponent<Props, State> {
@@ -49,13 +52,13 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     super(props);
 
     this.state = {
-      details: __('Starting...'),
-      message: __('Connecting'),
+      details: __("Starting..."),
+      message: __("Connecting"),
       launchedModal: false,
       error: false,
       errorDetail: null,
-// @ts-expect-error - TS2367 - This condition will always return 'false' since the types 'boolean' and 'string' have no overlap.
-      launchWithIncompatibleDaemon: !process.env.NODE_ENV === 'production',
+      // @ts-expect-error - TS2367 - This condition will always return 'false' since the types 'boolean' and 'string' have no overlap.
+      launchWithIncompatibleDaemon: !process.env.NODE_ENV === "production",
       isRunning: false,
       waitingForWallet: 0,
       waitingForSync: 0,
@@ -77,10 +80,10 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
       })
       .catch((err) => {
         this.setState({
-          message: __('Connection Failure'),
+          message: __("Connection Failure"),
           errorDetail: String((err && err.message) || err),
           details: __(
-            'Try closing all LBRY processes and starting again. If this still happens, your anti-virus software or firewall may be preventing LBRY from connecting. Contact hello@lbry.com if you think this is a software bug.'
+            "Try closing all LBRY processes and starting again. If this still happens, your anti-virus software or firewall may be preventing LBRY from connecting. Contact hello@lbry.com if you think this is a software bug."
           ),
         });
       });
@@ -103,7 +106,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
 
     // Every time we make it to a new step in the daemon startup process, reset the timer
     // If nothing changes after 1 minute, show the error message.
-// @ts-expect-error - TS2322 - Type 'Timeout' is not assignable to type 'number'.
+    // @ts-expect-error - TS2322 - Type 'Timeout' is not assignable to type 'number'.
     this.timeout = setTimeout(() => {
       this.setState({ error: true });
     }, FORTY_FIVE_SECONDS);
@@ -113,47 +116,49 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     const { modal, notifyUnlockWallet, clearWalletServers, doShowSnackBar } = this.props;
     const { launchedModal } = this.state;
 
-    Lbry.status().then((status) => {
-      const sdkStatus = status;
-      const { wallet } = status;
-      Lbry.wallet_status().then((walletStatus) => {
-        if (sdkStatus.is_running && wallet && wallet.available_servers) {
-          if (walletStatus.is_locked) {
-            // Clear the error timeout, it might sit on this step for a while until someone enters their password
+    Lbry.status()
+      .then((status) => {
+        const sdkStatus = status;
+        const { wallet } = status;
+        Lbry.wallet_status().then((walletStatus) => {
+          if (sdkStatus.is_running && wallet && wallet.available_servers) {
+            if (walletStatus.is_locked) {
+              // Clear the error timeout, it might sit on this step for a while until someone enters their password
+              if (this.timeout) {
+                clearTimeout(this.timeout);
+              }
+              // Make sure there isn't another active modal (like INCOMPATIBLE_DAEMON)
+              this.updateStatusCallback(sdkStatus, walletStatus, true);
+              if (launchedModal === false && !modal) {
+                this.setState({ launchedModal: true }, () => notifyUnlockWallet());
+              }
+            } else {
+              this.updateStatusCallback(sdkStatus, walletStatus);
+            }
+          } else if (!sdkStatus.is_running && walletStatus.is_syncing) {
+            // Clear the timeout if wallet is still syncing
             if (this.timeout) {
               clearTimeout(this.timeout);
             }
-            // Make sure there isn't another active modal (like INCOMPATIBLE_DAEMON)
-            this.updateStatusCallback(sdkStatus, walletStatus, true);
-            if (launchedModal === false && !modal) {
-              this.setState({ launchedModal: true }, () => notifyUnlockWallet());
-            }
+            this.updateStatusCallback(sdkStatus, walletStatus);
+          } else if (this.state.waitingForWallet > MAX_WALLET_WAIT && launchedModal === false && !modal) {
+            clearWalletServers();
+            doShowSnackBar(
+              __(
+                "The wallet server took a bit too long. Resetting defaults just in case. Shutdown (Cmd/Ctrl+Q) LBRY and restart if this continues."
+              )
+            );
+            this.setState({ waitingForWallet: 0 });
+            this.updateStatusCallback(sdkStatus, walletStatus);
           } else {
             this.updateStatusCallback(sdkStatus, walletStatus);
           }
-        } else if (!sdkStatus.is_running && walletStatus.is_syncing) {
-          // Clear the timeout if wallet is still syncing
-          if (this.timeout) {
-            clearTimeout(this.timeout);
-          }
-          this.updateStatusCallback(sdkStatus, walletStatus);
-        } else if (this.state.waitingForWallet > MAX_WALLET_WAIT && launchedModal === false && !modal) {
-          clearWalletServers();
-          doShowSnackBar(
-            __(
-              'The wallet server took a bit too long. Resetting defaults just in case. Shutdown (Cmd/Ctrl+Q) LBRY and restart if this continues.'
-            )
-          );
-          this.setState({ waitingForWallet: 0 });
-          this.updateStatusCallback(sdkStatus, walletStatus);
-        } else {
-          this.updateStatusCallback(sdkStatus, walletStatus);
-        }
+        });
+      })
+      .catch((err) => {
+        // Record the real failure so the timeout error screen can show it.
+        this.setState({ errorDetail: String((err && err.message) || err) });
       });
-    }).catch((err) => {
-      // Record the real failure so the timeout error screen can show it.
-      this.setState({ errorDetail: String((err && err.message) || err) });
-    });
   }
 
   updateStatusCallback(status: StatusResponse, walletStatus: WalletStatusResponse, waitingForUnlock: boolean = false) {
@@ -163,7 +168,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
     if (startupStatus && wallet && wallet.available_servers < 1) {
       this.setState({ waitingForWallet: this.state.waitingForWallet + UPDATE_INTERVAL / 1000 });
     } else if (status.is_running && !waitingForUnlock) {
-      Lbry.resolve({ urls: 'lbry://one' }).then(() => {
+      Lbry.resolve({ urls: "lbry://one" }).then(() => {
         this.setState({ isRunning: true }, () => this.continueAppLaunch());
       });
 
@@ -172,24 +177,24 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
       this.setState({ waitingForSync: this.state.waitingForSync + UPDATE_INTERVAL / 1000 });
       if (this.state.waitingForSync < MAX_SYNC_WAIT) {
         this.setState({
-          message: __('Loading Wallet'),
-          details: __('Updating wallet data...'),
+          message: __("Loading Wallet"),
+          details: __("Updating wallet data..."),
         });
       } else {
         this.setState({
-          message: __('Loading Wallet'),
+          message: __("Loading Wallet"),
           details: (
             <React.Fragment>
-              <div>{__('Large account history')}</div>
-              <div>{__('Please wait...')}</div>
+              <div>{__("Large account history")}</div>
+              <div>{__("Please wait...")}</div>
             </React.Fragment>
           ),
         });
       }
     } else if (wallet && !status.is_running && startupStatus.database) {
       this.setState({
-        message: __('Finalizing'),
-        details: __('Almost ready...'),
+        message: __("Finalizing"),
+        details: __("Almost ready..."),
       });
     }
 
@@ -257,7 +262,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
         )}
 
         {!animationHidden && !error && (
-// @ts-expect-error - TS2339 - Property 'css-doodle' does not exist on type 'JSX.IntrinsicElements'.
+          // @ts-expect-error - TS2339 - Property 'css-doodle' does not exist on type 'JSX.IntrinsicElements'.
           <css-doodle class="doodle">
             {`
             --color: @p(var(--color-primary), var(--color-secondary), var(--color-focus), var(--color-nothing));
@@ -292,20 +297,20 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
             }
           )
           `}
-{ /* @ts-expect-error - TS2339 - Property 'css-doodle' does not exist on type 'JSX.IntrinsicElements'. */}
+            {/* @ts-expect-error - TS2339 - Property 'css-doodle' does not exist on type 'JSX.IntrinsicElements'. */}
           </css-doodle>
         )}
         {!error && (
           <Button
             // @ts-expect-error - TS2322 (ts-migration)
             className="splash__animation-toggle"
-            label={!animationHidden ? __('I feel woosy! Stop spinning!') : __('Spin Spin Sugar')}
+            label={!animationHidden ? __("I feel woosy! Stop spinning!") : __("Spin Spin Sugar")}
             onClick={() => toggleSplashAnimation()}
           />
         )}
         {error && (
           <Card
-            title={<h1 className="splash__error-title">{__('Error starting up')}</h1>}
+            title={<h1 className="splash__error-title">{__("Error starting up")}</h1>}
             subtitle={
               <React.Fragment>
                 {errorDetail && (
@@ -313,14 +318,14 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
                     <code>{errorDetail}</code>
                   </p>
                 )}
-                {!errorDetail && typeof details === 'string' && (
+                {!errorDetail && typeof details === "string" && (
                   <p className="splash__error-detail">
-                    {__('Last status: %message% — %details%', { message: message, details: details })}
+                    {__("Last status: %message% — %details%", { message: message, details: details })}
                   </p>
                 )}
                 <p>
                   {__(
-                    'You can try refreshing to fix it. If you still have issues, your anti-virus software or firewall may be preventing startup.'
+                    "You can try refreshing to fix it. If you still have issues, your anti-virus software or firewall may be preventing startup."
                   )}
                 </p>
                 <p>
@@ -333,7 +338,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
                           // @ts-expect-error - TS2322 (ts-migration)
                           button="link"
                           href="https://lbry.com/faq/startup-troubleshooting"
-                          label={__('this link')}
+                          label={__("this link")}
                         />
                       ),
                     }}
@@ -348,7 +353,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
                 // @ts-expect-error - TS2322 (ts-migration)
                 button="primary"
                 icon={ICONS.REFRESH}
-                label={__('Refresh')}
+                label={__("Refresh")}
                 onClick={() => window.location.reload()}
               />
             }

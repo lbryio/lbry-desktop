@@ -1,5 +1,5 @@
-import * as ACTIONS from 'constants/action_types';
-import { COPYRIGHT_ISSUES, OTHER_LEGAL_ISSUES } from 'constants/report_content';
+import * as ACTIONS from "constants/action_types";
+import { COPYRIGHT_ISSUES, OTHER_LEGAL_ISSUES } from "constants/report_content";
 
 type Dispatch = (action?: any) => any;
 
@@ -11,17 +11,17 @@ export const doReportContent = (category: string, params: string) => (dispatch: 
   let REPORT_URL;
   switch (category) {
     case COPYRIGHT_ISSUES:
-      REPORT_URL = 'https://reports.lbry.com/copyright_issue/new';
+      REPORT_URL = "https://reports.lbry.com/copyright_issue/new";
       break;
     case OTHER_LEGAL_ISSUES:
-      REPORT_URL = 'https://reports.lbry.com/other_legal_issue/new';
+      REPORT_URL = "https://reports.lbry.com/other_legal_issue/new";
       break;
     default:
-      REPORT_URL = 'https://reports.lbry.com/common/new';
+      REPORT_URL = "https://reports.lbry.com/common/new";
       break;
   }
 
-  fetch(`${REPORT_URL}?${params}`, { method: 'POST' })
+  fetch(`${REPORT_URL}?${params}`, { method: "POST" })
     .then((response) => {
       if (response) {
         response
@@ -41,13 +41,13 @@ export const doReportContent = (category: string, params: string) => (dispatch: 
           .catch((err) => {
             dispatch({
               type: ACTIONS.REPORT_CONTENT_FAILED,
-              data: 'Server error: Invalid response',
+              data: "Server error: Invalid response",
             });
           });
       } else {
         dispatch({
           type: ACTIONS.REPORT_CONTENT_FAILED,
-          data: 'Server error: No response',
+          data: "Server error: No response",
         });
       }
     })

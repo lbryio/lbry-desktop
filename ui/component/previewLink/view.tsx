@@ -1,20 +1,20 @@
-import * as React from 'react';
-import UriIndicator from 'component/uriIndicator';
-import TruncatedText from 'component/common/truncated-text';
-import MarkdownPreview from 'component/common/markdown-preview';
-import { withRouter } from 'react-router-dom';
-import { formatLbryUrlForWeb } from 'util/url';
-import { parseURI } from 'util/lbryURI';
-import classnames from 'classnames';
+import * as React from "react";
+import UriIndicator from "component/uriIndicator";
+import TruncatedText from "component/common/truncated-text";
+import MarkdownPreview from "component/common/markdown-preview";
+import { withRouter } from "react-router-dom";
+import { formatLbryUrlForWeb } from "util/url";
+import { parseURI } from "util/lbryURI";
+import classnames from "classnames";
 
 type Props = {
-  uri: string,
-  title: string | null | undefined,
-  thumbnail: string | null | undefined,
-  description: string | null | undefined,
+  uri: string;
+  title: string | null | undefined;
+  thumbnail: string | null | undefined;
+  description: string | null | undefined;
   history: {
-    push: (arg1: string) => void
-  }
+    push: (arg1: string) => void;
+  };
 };
 
 class PreviewLink extends React.PureComponent<Props> {
@@ -26,7 +26,7 @@ class PreviewLink extends React.PureComponent<Props> {
   render() {
     const { uri, title, description, thumbnail } = this.props;
     const { isChannel } = parseURI(uri);
-    const placeholder = 'static/img/placeholder.png';
+    const placeholder = "static/img/placeholder.png";
 
     const thumbnailStyle = {
       backgroundImage: `url(${thumbnail || placeholder})`,
@@ -37,8 +37,8 @@ class PreviewLink extends React.PureComponent<Props> {
         <span className="claim-preview">
           <span
             style={thumbnailStyle}
-            className={classnames('preview-link__thumbnail media__thumb', {
-              'preview-link__thumbnail--channel': isChannel,
+            className={classnames("preview-link__thumbnail media__thumb", {
+              "preview-link__thumbnail--channel": isChannel,
             })}
           />
           <span className="claim-preview-metadata">

@@ -1,25 +1,25 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { selectBalance } from 'redux/selectors/wallet';
-import { selectIsStillEditing, makeSelectPublishFormValue } from 'redux/selectors/publish';
-import { doUpdatePublishForm, doClearPublish } from 'redux/actions/publish';
-import { doToast } from 'redux/actions/notifications';
-import { selectFfmpegStatus } from 'redux/selectors/settings';
-import PublishPage from './view';
+import { connect } from "react-redux";
+import { selectBalance } from "redux/selectors/wallet";
+import { selectIsStillEditing, makeSelectPublishFormValue } from "redux/selectors/publish";
+import { doUpdatePublishForm, doClearPublish } from "redux/actions/publish";
+import { doToast } from "redux/actions/notifications";
+import { selectFfmpegStatus } from "redux/selectors/settings";
+import PublishPage from "./view";
 
 const select = (state: unknown) => ({
-  name: makeSelectPublishFormValue('name')(state),
-  title: makeSelectPublishFormValue('title')(state),
-  filePath: makeSelectPublishFormValue('filePath')(state),
-  remoteUrl: makeSelectPublishFormValue('remoteFileUrl')(state),
-  optimize: makeSelectPublishFormValue('optimize')(state),
+  name: makeSelectPublishFormValue("name")(state),
+  title: makeSelectPublishFormValue("title")(state),
+  filePath: makeSelectPublishFormValue("filePath")(state),
+  remoteUrl: makeSelectPublishFormValue("remoteFileUrl")(state),
+  optimize: makeSelectPublishFormValue("optimize")(state),
   isStillEditing: selectIsStillEditing(state),
   balance: selectBalance(state),
-  publishing: makeSelectPublishFormValue('publishing')(state),
+  publishing: makeSelectPublishFormValue("publishing")(state),
   ffmpegStatus: selectFfmpegStatus(state),
-  size: makeSelectPublishFormValue('fileSize')(state),
-  duration: makeSelectPublishFormValue('fileDur')(state),
-  isVid: makeSelectPublishFormValue('fileVid')(state),
+  size: makeSelectPublishFormValue("fileSize")(state),
+  duration: makeSelectPublishFormValue("fileDur")(state),
+  isVid: makeSelectPublishFormValue("fileVid")(state),
 });
 
 const perform = (dispatch: unknown) => ({

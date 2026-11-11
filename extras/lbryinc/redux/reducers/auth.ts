@@ -1,5 +1,5 @@
 //@ts-nocheck
-import * as ACTIONS from 'constants/action_types';
+import * as ACTIONS from "constants/action_types";
 
 const reducers: Record<string, any> = {};
 const defaultState = {

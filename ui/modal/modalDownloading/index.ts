@@ -1,14 +1,14 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doStartUpgrade, doCancelUpgrade, doHideModal } from 'redux/actions/app';
+import { connect } from "react-redux";
+import { doStartUpgrade, doCancelUpgrade, doHideModal } from "redux/actions/app";
 import {
   selectDownloadProgress,
   selectDownloadComplete,
   selectUpgradeDownloadPath,
   selectUpgradeInitialized,
   selectUpgradeFailedInstallation,
-} from 'redux/selectors/app';
-import ModalDownloading from './view';
+} from "redux/selectors/app";
+import ModalDownloading from "./view";
 
 const select = (state: unknown) => ({
   downloadProgress: selectDownloadProgress(state),

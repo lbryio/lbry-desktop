@@ -1,23 +1,23 @@
-import * as React from 'react';
-import * as dat from 'dat.gui';
-import LoadingScreen from 'component/common/loading-screen';
+import * as React from "react";
+import * as dat from "dat.gui";
+import LoadingScreen from "component/common/loading-screen";
 
 // ThreeJS
-import { LoadingManager } from 'three-full/sources/loaders/LoadingManager';
-import { STLLoader } from 'three-full/sources/loaders/STLLoader';
-import { OBJLoader2 } from 'three-full/sources/loaders/OBJLoader2';
-import { OrbitControls } from 'three-full/sources/controls/OrbitControls';
-import { Geometry } from 'three-full/sources/core/Geometry';
-import { Box3 } from 'three-full/sources/math/Box3';
-import { Vector3 } from 'three-full/sources/math/Vector3';
-import { Mesh } from 'three-full/sources/objects/Mesh';
-import { Group } from 'three-full/sources/objects/Group';
-import { PerspectiveCamera } from 'three-full/sources/cameras/PerspectiveCamera';
-import { MeshPhongMaterial } from 'three-full/sources/materials/MeshPhongMaterial';
-import detectWebGL from './internal/detector';
-import ThreeGrid from './internal/grid';
-import ThreeScene from './internal/scene';
-import ThreeRenderer from './internal/renderer';
+import { LoadingManager } from "three-full/sources/loaders/LoadingManager";
+import { STLLoader } from "three-full/sources/loaders/STLLoader";
+import { OBJLoader2 } from "three-full/sources/loaders/OBJLoader2";
+import { OrbitControls } from "three-full/sources/controls/OrbitControls";
+import { Geometry } from "three-full/sources/core/Geometry";
+import { Box3 } from "three-full/sources/math/Box3";
+import { Vector3 } from "three-full/sources/math/Vector3";
+import { Mesh } from "three-full/sources/objects/Mesh";
+import { Group } from "three-full/sources/objects/Group";
+import { PerspectiveCamera } from "three-full/sources/cameras/PerspectiveCamera";
+import { MeshPhongMaterial } from "three-full/sources/materials/MeshPhongMaterial";
+import detectWebGL from "./internal/detector";
+import ThreeGrid from "./internal/grid";
+import ThreeScene from "./internal/scene";
+import ThreeRenderer from "./internal/renderer";
 
 const Manager = ({ onLoad, onStart, onError }) => {
   const manager = new LoadingManager();
@@ -33,19 +33,19 @@ const Loader = (fileType: unknown, manager: unknown) => {
     stl: () => new STLLoader(manager),
     obj: () => new OBJLoader2(manager),
   } as const;
-// @ts-expect-error - TS2538 - Type 'unknown' cannot be used as an index type. | TS2538 - Type 'unknown' cannot be used as an index type.
+  // @ts-expect-error - TS2538 - Type 'unknown' cannot be used as an index type. | TS2538 - Type 'unknown' cannot be used as an index type.
   return fileTypes[fileType] ? fileTypes[fileType]() : null;
 };
 
 const ThreeLoader = ({ fileType = null, downloadPath = null }, renderModel: unknown, managerEvents: unknown) => {
   if (fileType && downloadPath) {
-// @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type '{ onLoad: any; onStart: any; onError: any; }'.
+    // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type '{ onLoad: any; onStart: any; onError: any; }'.
     const manager = Manager(managerEvents);
     const loader = Loader(fileType, manager);
 
     if (loader) {
-      loader.load(`file://${downloadPath}`, data => {
-// @ts-expect-error - TS2349 - This expression is not callable.
+      loader.load(`file://${downloadPath}`, (data) => {
+        // @ts-expect-error - TS2349 - This expression is not callable.
         renderModel(fileType, data);
       });
     }
@@ -53,31 +53,32 @@ const ThreeLoader = ({ fileType = null, downloadPath = null }, renderModel: unkn
 };
 
 type viewerTheme = {
-  showFog: boolean,
-  gridColor: number,
-  backgroundColor: number,
-  centerLineColor: number
+  showFog: boolean;
+  gridColor: number;
+  backgroundColor: number;
+  centerLineColor: number;
 };
 
 type Props = {
   source: {
-    fileType: string,
-    downloadPath: string
-  }
+    fileType: string;
+    downloadPath: string;
+  };
 };
 
 type State = {
-  error: string | null | undefined,
-  isReady: boolean,
-  isLoading: boolean
+  error: string | null | undefined;
+  isReady: boolean;
+  isLoading: boolean;
 };
 
 class ThreeViewer extends React.PureComponent<Props, State> {
-  static testWebgl = (): Promise<void> => new Promise<any>((resolve, reject) => {
-// @ts-expect-error - TS2794 - Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
-    if (detectWebGL()) resolve();
-    else reject();
-  });
+  static testWebgl = (): Promise<void> =>
+    new Promise<any>((resolve, reject) => {
+      // @ts-expect-error - TS2794 - Expected 1 arguments, but got 0. Did you forget to include 'void' in your type argument to 'Promise'?
+      if (detectWebGL()) resolve();
+      else reject();
+    });
 
   static createOrbitControls(camera: any, canvas: any) {
     const controls = new OrbitControls(camera, canvas);
@@ -97,22 +98,22 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     const max = { x: 0, y: 0, z: 0 } as const;
     const min = { x: 0, y: 0, z: 0 } as const;
 
-    group.traverse(child => {
+    group.traverse((child) => {
       if (child instanceof Mesh) {
         const box = new Box3().setFromObject(child);
         // Max
-// @ts-expect-error - TS2540 - Cannot assign to 'x' because it is a read-only property.
+        // @ts-expect-error - TS2540 - Cannot assign to 'x' because it is a read-only property.
         max.x = box.max.x > max.x ? box.max.x : max.x;
-// @ts-expect-error - TS2540 - Cannot assign to 'y' because it is a read-only property.
+        // @ts-expect-error - TS2540 - Cannot assign to 'y' because it is a read-only property.
         max.y = box.max.y > max.y ? box.max.y : max.y;
-// @ts-expect-error - TS2540 - Cannot assign to 'z' because it is a read-only property.
+        // @ts-expect-error - TS2540 - Cannot assign to 'z' because it is a read-only property.
         max.z = box.max.z > max.z ? box.max.z : max.z;
         // Min
-// @ts-expect-error - TS2540 - Cannot assign to 'x' because it is a read-only property.
+        // @ts-expect-error - TS2540 - Cannot assign to 'x' because it is a read-only property.
         min.x = box.min.x < min.x ? box.min.x : min.x;
-// @ts-expect-error - TS2540 - Cannot assign to 'y' because it is a read-only property.
+        // @ts-expect-error - TS2540 - Cannot assign to 'y' because it is a read-only property.
         min.y = box.min.y < min.y ? box.min.y : min.y;
-// @ts-expect-error - TS2540 - Cannot assign to 'z' because it is a read-only property.
+        // @ts-expect-error - TS2540 - Cannot assign to 'z' because it is a read-only property.
         min.z = box.min.z < min.z ? box.min.z : min.z;
       }
     });
@@ -170,7 +171,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
       .then(() => {
         this.renderScene();
         // Update render on resize window
-        window.addEventListener('resize', this.handleResize, false);
+        window.addEventListener("resize", this.handleResize, false);
       })
       .catch(() => {
         // No webgl support, handle Error...
@@ -181,7 +182,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
 
   componentWillUnmount() {
     // Remove event listeners
-    window.removeEventListener('resize', this.handleResize, false);
+    window.removeEventListener("resize", this.handleResize, false);
     // Free memory
     if (this.renderer && this.mesh) {
       // Clean up group
@@ -199,7 +200,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
         this.grid.geometry.dispose();
       }
       // Clean up group items
-      this.mesh.traverse(child => {
+      this.mesh.traverse((child) => {
         if (child instanceof Mesh) {
           if (child.geometry) child.geometry.dispose();
           // @ts-expect-error - TS2339 (ts-migration)
@@ -269,13 +270,13 @@ class ThreeViewer extends React.PureComponent<Props, State> {
 
   createInterfaceControls() {
     if (this.guiContainer && this.mesh) {
-      this.gui = new dat.GUI({ autoPlace: false, name: 'controls' });
+      this.gui = new dat.GUI({ autoPlace: false, name: "controls" });
 
       const config = {
         color: this.materialColor,
         reset: () => {
           // Reset material color
-// @ts-expect-error - TS2540 - Cannot assign to 'color' because it is a read-only property.
+          // @ts-expect-error - TS2540 - Cannot assign to 'color' because it is a read-only property.
           config.color = this.materialColor;
           // Reset material
           this.material.color.set(config.color);
@@ -289,45 +290,33 @@ class ThreeViewer extends React.PureComponent<Props, State> {
         },
       } as const;
 
-      const materialFolder = this.gui.addFolder('Material');
+      const materialFolder = this.gui.addFolder("Material");
 
       // Color picker
-      const colorPicker = materialFolder
-        .addColor(config, 'color')
-        .name('Color')
-        .listen();
+      const colorPicker = materialFolder.addColor(config, "color").name("Color").listen();
 
-      colorPicker.onChange(color => {
+      colorPicker.onChange((color) => {
         this.material.color.set(color);
       });
 
-      materialFolder
-        .add(this.material, 'shininess', 0, 100)
-        .name('Shininess')
-        .listen();
+      materialFolder.add(this.material, "shininess", 0, 100).name("Shininess").listen();
 
       materialFolder
-        .add(this.material, 'flatShading')
-        .name('FlatShading')
+        .add(this.material, "flatShading")
+        .name("FlatShading")
         .onChange(() => {
-// @ts-expect-error - TS2554 - Expected 2 arguments, but got 1.
+          // @ts-expect-error - TS2554 - Expected 2 arguments, but got 1.
           this.updateMaterial(this.material);
         })
         .listen();
 
-      materialFolder
-        .add(this.material, 'wireframe')
-        .name('Wireframe')
-        .listen();
+      materialFolder.add(this.material, "wireframe").name("Wireframe").listen();
 
-      const sceneFolder = this.gui.addFolder('Scene');
+      const sceneFolder = this.gui.addFolder("Scene");
 
-      sceneFolder
-        .add(this.controls, 'autoRotate')
-        .name('Auto-Rotate')
-        .listen();
+      sceneFolder.add(this.controls, "autoRotate").name("Auto-Rotate").listen();
 
-      sceneFolder.add(config, 'reset').name('Reset');
+      sceneFolder.add(config, "reset").name("Reset");
 
       if (this.guiContainer) {
         this.guiContainer.appendChild(this.gui.domElement);
@@ -381,11 +370,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     this.renderer.setSize(width, height);
   };
 
-  updateControlsTarget(point: {
-    x: number,
-    y: number,
-    z: number
-  }) {
+  updateControlsTarget(point: { x: number; y: number; z: number }) {
     this.controls.target.fromArray([point.x, point.y, point.z]);
     this.controls.update();
   }
@@ -402,7 +387,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
   renderStl(data: any) {
     this.createGeometry(data);
     this.mesh = new Mesh(this.geometry, this.material);
-    this.mesh.name = 'model';
+    this.mesh.name = "model";
     this.scene.add(this.mesh);
     this.transformGroup(this.mesh);
   }
@@ -410,10 +395,10 @@ class ThreeViewer extends React.PureComponent<Props, State> {
   renderObj(event: any) {
     const mesh = event.detail.loaderRootNode;
     this.mesh = new Group();
-    this.mesh.name = 'model';
+    this.mesh.name = "model";
 
     // Assign new material
-    mesh.traverse(child => {
+    mesh.traverse((child) => {
       if (child instanceof Mesh) {
         // Get geometry from child
         const geometry = new Geometry();
@@ -435,8 +420,8 @@ class ThreeViewer extends React.PureComponent<Props, State> {
 
   renderModel(fileType: string, parsedData: any) {
     const renderTypes = {
-      stl: data => this.renderStl(data),
-      obj: data => this.renderObj(data),
+      stl: (data) => this.renderStl(data),
+      obj: (data) => this.renderObj(data),
     } as const;
 
     if (renderTypes[fileType]) {
@@ -500,15 +485,15 @@ class ThreeViewer extends React.PureComponent<Props, State> {
 
   render() {
     const { error, isReady, isLoading } = this.state;
-    const loadingMessage = __('Loading 3D model.');
+    const loadingMessage = __("Loading 3D model.");
     const showLoading = isLoading && !error && !isReady;
-    const containerClass = 'gui-container';
+    const containerClass = "gui-container";
 
     return (
       <>
         <div className="file-render__viewer file-render__viewer--three">
-          <div ref={element => (this.guiContainer = element)} className={containerClass} />
-          <div className="three-viewer" ref={viewer => (this.viewer = viewer)}>
+          <div ref={(element) => (this.guiContainer = element)} className={containerClass} />
+          <div className="three-viewer" ref={(viewer) => (this.viewer = viewer)}>
             {error && <LoadingScreen status={error} spinner={false} />}
             {showLoading && <LoadingScreen status={loadingMessage} spinner />}
           </div>

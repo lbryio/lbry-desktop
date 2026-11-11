@@ -1,24 +1,24 @@
 //@ts-nocheck
-import videojs from 'video.js';
-import window from 'global/window';
-const VERSION = '2.1.4';
+import videojs from "video.js";
+import window from "global/window";
+const VERSION = "2.1.4";
 
 const defaults = {
-  align: 'top-left',
-  class: '',
-  content: 'This overlay will show up while the video is playing',
+  align: "top-left",
+  class: "",
+  content: "This overlay will show up while the video is playing",
   debug: false,
   showBackground: true,
   attachToControlBar: false,
   overlays: [
     {
-      start: 'playing',
-      end: 'paused',
+      start: "playing",
+      end: "paused",
     },
   ],
 } as const;
 
-const Component = videojs.getComponent('Component');
+const Component = videojs.getComponent("Component");
 
 const dom = videojs.dom || videojs;
 const registerPlugin = videojs.registerPlugin || videojs.plugin;
@@ -32,9 +32,7 @@ const registerPlugin = videojs.registerPlugin || videojs.plugin;
  * @return {Boolean}
  */
 
-/* eslint-disable no-self-compare */
-const isNumber = (n: unknown) => typeof n === 'number' && n === n;
-/* eslint-enable no-self-compare */
+const isNumber = (n: unknown) => typeof n === "number" && n === n;
 
 /**
  * Whether a value is a string with no whitespace.
@@ -42,7 +40,7 @@ const isNumber = (n: unknown) => typeof n === 'number' && n === n;
  * @param  {String} s
  * @return {Boolean}
  */
-const hasNoWhitespace = (s: unknown) => typeof s === 'string' && /^\S+$/.test(s);
+const hasNoWhitespace = (s: unknown) => typeof s === "string" && /^\S+$/.test(s);
 
 /**
  * Overlay component.
@@ -54,16 +52,16 @@ class Overlay extends Component {
   constructor(player: unknown, options: unknown) {
     super(player, options);
 
-    ['start', 'end'].forEach(key => {
+    ["start", "end"].forEach((key) => {
       const value = this.options_[key];
 
       if (isNumber(value)) {
-        this[key + 'Event_'] = 'timeupdate';
+        this[key + "Event_"] = "timeupdate";
       } else if (hasNoWhitespace(value)) {
-        this[key + 'Event_'] = value;
+        this[key + "Event_"] = value;
 
         // An overlay MUST have a start option. Otherwise, it's pointless.
-      } else if (key === 'start') {
+      } else if (key === "start") {
         throw new Error('invalid "start" option; expected number or string');
       }
     });
@@ -75,21 +73,21 @@ class Overlay extends Component {
     // its GUID magic), but the anonymous function approach avoids any issues
     // caused by crappy libraries clobbering Function.prototype.bind.
     // - https://github.com/videojs/video.js/issues/3097
-    ['endListener_', 'rewindListener_', 'startListener_'].forEach(name => {
+    ["endListener_", "rewindListener_", "startListener_"].forEach((name) => {
       this[name] = (e: unknown) => Overlay.prototype[name].call(this, e);
     });
 
     // If the start event is a timeupdate, we need to watch for rewinds (i.e.,
     // when the user seeks backward).
-    if (this.startEvent_ === 'timeupdate') {
-      this.on(player, 'timeupdate', this.rewindListener_);
+    if (this.startEvent_ === "timeupdate") {
+      this.on(player, "timeupdate", this.rewindListener_);
     }
 
     this.debug(
-      `created, listening to "${this.startEvent_}" for "start" and "${this.endEvent_ || 'nothing'}" for "end"`
+      `created, listening to "${this.startEvent_}" for "start" and "${this.endEvent_ || "nothing"}" for "end"`
     );
 
-    if (this.startEvent_ === 'immediate') {
+    if (this.startEvent_ === "immediate") {
       this.show();
     } else {
       this.hide();
@@ -100,8 +98,8 @@ class Overlay extends Component {
     const options = this.options_;
     const content = options.content;
 
-    const background = options.showBackground ? 'vjs-overlay-background' : 'vjs-overlay-no-background';
-    const el = dom.createEl('div', {
+    const background = options.showBackground ? "vjs-overlay-background" : "vjs-overlay-no-background";
+    const el = dom.createEl("div", {
       className: `
         vjs-overlay
         vjs-overlay-${options.align}
@@ -111,7 +109,7 @@ class Overlay extends Component {
       `,
     });
 
-    if (typeof content === 'string') {
+    if (typeof content === "string") {
       el.innerHTML = content;
     } else if (content instanceof window.DocumentFragment) {
       el.appendChild(content);
@@ -136,7 +134,7 @@ class Overlay extends Component {
     let fn = log;
 
     // Support `videojs.log.foo` calls.
-    if (log.hasOwnProperty(args[0]) && typeof log[args[0]] === 'function') {
+    if (log.hasOwnProperty(args[0]) && typeof log[args[0]] === "function") {
       fn = log[args.shift()];
     }
 
@@ -151,7 +149,7 @@ class Overlay extends Component {
   hide() {
     super.hide();
 
-    this.debug('hidden');
+    this.debug("hidden");
     this.debug(`bound \`startListener_\` to "${this.startEvent_}"`);
 
     // Overlays without an "end" are valid.
@@ -188,7 +186,7 @@ class Overlay extends Component {
   show() {
     super.show();
     this.off(this.player(), this.startEvent_, this.startListener_);
-    this.debug('shown');
+    this.debug("shown");
     this.debug(`unbound \`startListener_\` from "${this.startEvent_}"`);
 
     // Overlays without an "end" are valid.
@@ -274,7 +272,7 @@ class Overlay extends Component {
 
     // Did we seek backward?
     if (time < previous) {
-      this.debug('rewind detected');
+      this.debug("rewind detected");
 
       // The overlay remains visible if two conditions are met: the end value
       // MUST be an integer and the the current time indicates that the
@@ -299,7 +297,7 @@ class Overlay extends Component {
   }
 }
 
-videojs.registerComponent('Overlay', Overlay);
+videojs.registerComponent("Overlay", Overlay);
 
 /**
  * Initialize the plugin.
@@ -307,12 +305,12 @@ videojs.registerComponent('Overlay', Overlay);
  * @function plugin
  * @param    {Object} [options={}]
  */
-const plugin = function(options: unknown) {
+const plugin = function (options: unknown) {
   const settings = videojs.mergeOptions(defaults, options);
 
   // De-initialize the plugin if it already has an array of overlays.
   if (Array.isArray(this.overlays_)) {
-    this.overlays_.forEach(overlay => {
+    this.overlays_.forEach((overlay) => {
       this.removeChild(overlay);
       if (this.controlBar) {
         this.controlBar.removeChild(overlay);
@@ -327,16 +325,16 @@ const plugin = function(options: unknown) {
   // because it doesn't make sense to pass it to each Overlay component.
   delete settings.overlays;
 
-  this.overlays_ = overlays.map(o => {
+  this.overlays_ = overlays.map((o) => {
     const mergeOptions = videojs.mergeOptions(settings, o);
     const attachToControlBar =
-      typeof mergeOptions.attachToControlBar === 'string' || mergeOptions.attachToControlBar === true;
+      typeof mergeOptions.attachToControlBar === "string" || mergeOptions.attachToControlBar === true;
 
     if (!this.controls() || !this.controlBar) {
-      return this.addChild('overlay', mergeOptions);
+      return this.addChild("overlay", mergeOptions);
     }
 
-    if (attachToControlBar && mergeOptions.align.indexOf('bottom') !== -1) {
+    if (attachToControlBar && mergeOptions.align.indexOf("bottom") !== -1) {
       let referenceChild = this.controlBar.children()[0];
 
       if (this.controlBar.getChild(mergeOptions.attachToControlBar) !== undefined) {
@@ -344,14 +342,14 @@ const plugin = function(options: unknown) {
       }
 
       if (referenceChild) {
-        const controlBarChild = this.controlBar.addChild('overlay', mergeOptions);
+        const controlBarChild = this.controlBar.addChild("overlay", mergeOptions);
 
         this.controlBar.el().insertBefore(controlBarChild.el(), referenceChild.el());
         return controlBarChild;
       }
     }
 
-    const playerChild = this.addChild('overlay', mergeOptions);
+    const playerChild = this.addChild("overlay", mergeOptions);
 
     this.el().insertBefore(playerChild.el(), this.controlBar.el());
     return playerChild;
@@ -360,6 +358,6 @@ const plugin = function(options: unknown) {
 
 plugin.VERSION = VERSION;
 
-registerPlugin('overlay', plugin);
+registerPlugin("overlay", plugin);
 
 export default plugin;

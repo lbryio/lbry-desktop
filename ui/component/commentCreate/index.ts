@@ -1,19 +1,19 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import {
   selectClaimForUri,
   selectClaimIsMine,
   selectHasChannels,
   selectFetchingMyChannels,
   makeSelectTagInClaimOrChannelForUri,
-} from 'redux/selectors/claims';
-import { CommentCreate } from './view';
-import { DISABLE_SUPPORT_TAG } from 'constants/tags';
-import { doCommentCreate, doFetchCreatorSettings, doCommentById } from 'redux/actions/comments';
-import { doSendTip } from 'redux/actions/wallet';
-import { doToast } from 'redux/actions/notifications';
-import { selectActiveChannelClaim } from 'redux/selectors/app';
-import { selectSettingsByChannelId } from 'redux/selectors/comments';
+} from "redux/selectors/claims";
+import { CommentCreate } from "./view";
+import { DISABLE_SUPPORT_TAG } from "constants/tags";
+import { doCommentCreate, doFetchCreatorSettings, doCommentById } from "redux/actions/comments";
+import { doSendTip } from "redux/actions/wallet";
+import { doToast } from "redux/actions/notifications";
+import { selectActiveChannelClaim } from "redux/selectors/app";
+import { selectSettingsByChannelId } from "redux/selectors/comments";
 
 const select = (state: unknown, props: unknown) => {
   const claim = selectClaimForUri(state, props.uri);

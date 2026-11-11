@@ -1,40 +1,40 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { makeSelectClaimForUri, selectThumbnailForUri } from 'redux/selectors/claims';
+import { connect } from "react-redux";
+import { makeSelectClaimForUri, selectThumbnailForUri } from "redux/selectors/claims";
 import {
   makeSelectPrevPlayableUrlFromCollectionAndUrl,
   makeSelectNextPlayableUrlFromCollectionAndUrl,
-} from 'redux/selectors/collections';
-import * as SETTINGS from 'constants/settings';
-import * as COLLECTIONS_CONSTS from 'constants/collections';
+} from "redux/selectors/collections";
+import * as SETTINGS from "constants/settings";
+import * as COLLECTIONS_CONSTS from "constants/collections";
 import {
   doChangeVolume,
   doChangeMute,
   doAnalyticsView,
   doAnalyticsBuffer,
   doAnaltyicsPurchaseEvent,
-} from 'redux/actions/app';
-import { selectVolume, selectMute } from 'redux/selectors/app';
-import { savePosition, clearPosition, doPlayUri, doSetPlayingUri } from 'redux/actions/content';
-import { makeSelectContentPositionForUri, makeSelectIsPlayerFloating, selectPlayingUri } from 'redux/selectors/content';
-import { selectRecommendedContentForUri } from 'redux/selectors/search';
-import VideoViewer from './view';
-import { withRouter } from 'react-router';
-import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
-import { selectDaemonSettings, makeSelectClientSetting, selectHomepageData } from 'redux/selectors/settings';
-import { toggleVideoTheaterMode, toggleAutoplayNext, doSetClientSetting } from 'redux/actions/settings';
-import { selectUser } from 'redux/selectors/user';
+} from "redux/actions/app";
+import { selectVolume, selectMute } from "redux/selectors/app";
+import { savePosition, clearPosition, doPlayUri, doSetPlayingUri } from "redux/actions/content";
+import { makeSelectContentPositionForUri, makeSelectIsPlayerFloating, selectPlayingUri } from "redux/selectors/content";
+import { selectRecommendedContentForUri } from "redux/selectors/search";
+import VideoViewer from "./view";
+import { withRouter } from "react-router";
+import { doClaimEligiblePurchaseRewards } from "redux/actions/rewards";
+import { selectDaemonSettings, makeSelectClientSetting, selectHomepageData } from "redux/selectors/settings";
+import { toggleVideoTheaterMode, toggleAutoplayNext, doSetClientSetting } from "redux/actions/settings";
+import { selectUser } from "redux/selectors/user";
 
 const select = (state: unknown, props: unknown) => {
   const { search } = props.location;
   const urlParams = new URLSearchParams(search);
   const uri = props.uri;
   // TODO: eventually this should be received from DB and not local state (https://github.com/lbryio/lbry-desktop/issues/6796)
-  const position = urlParams.get('t') !== null ? urlParams.get('t') : makeSelectContentPositionForUri(uri)(state);
+  const position = urlParams.get("t") !== null ? urlParams.get("t") : makeSelectContentPositionForUri(uri)(state);
   const userId = selectUser(state) && selectUser(state).id;
   const playingUri = selectPlayingUri(state);
   const collectionId = urlParams.get(COLLECTIONS_CONSTS.COLLECTION_ID) || (playingUri && playingUri.collectionId);
-  const isMarkdownOrComment = playingUri && (playingUri.source === 'markdown' || playingUri.source === 'comment');
+  const isMarkdownOrComment = playingUri && (playingUri.source === "markdown" || playingUri.source === "comment");
 
   let nextRecommendedUri;
   let previousListUri;

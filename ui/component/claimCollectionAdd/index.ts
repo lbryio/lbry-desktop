@@ -1,14 +1,14 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import ClaimCollectionAdd from './view';
-import { withRouter } from 'react-router';
+import { connect } from "react-redux";
+import ClaimCollectionAdd from "./view";
+import { withRouter } from "react-router";
 import {
   selectBuiltinCollections,
   selectMyPublishedCollections,
   selectMyUnpublishedCollections,
-} from 'redux/selectors/collections';
-import { makeSelectClaimForUri } from 'redux/selectors/claims';
-import { doLocalCollectionCreate } from 'redux/actions/collections';
+} from "redux/selectors/collections";
+import { makeSelectClaimForUri } from "redux/selectors/claims";
+import { doLocalCollectionCreate } from "redux/actions/collections";
 
 const select = (state: unknown, props: unknown) => ({
   claim: makeSelectClaimForUri(props.uri)(state),

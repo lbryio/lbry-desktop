@@ -1,19 +1,19 @@
-import * as REACTION_TYPES from 'constants/reactions';
-import * as ICONS from 'constants/icons';
-import React from 'react';
-import classnames from 'classnames';
-import Button from 'component/button';
-import { formatNumber } from 'util/number';
-import NudgeFloating from 'component/nudgeFloating';
+import * as REACTION_TYPES from "constants/reactions";
+import * as ICONS from "constants/icons";
+import React from "react";
+import classnames from "classnames";
+import Button from "component/button";
+import { formatNumber } from "util/number";
+import NudgeFloating from "component/nudgeFloating";
 type Props = {
-  claim: StreamClaim,
-  doFetchReactions: (arg1: string) => void,
-  doReactionLike: (arg1: string) => void,
-  doReactionDislike: (arg1: string) => void,
-  uri: string,
-  likeCount: number,
-  dislikeCount: number,
-  myReaction: string | null | undefined
+  claim: StreamClaim;
+  doFetchReactions: (arg1: string) => void;
+  doReactionLike: (arg1: string) => void;
+  doReactionDislike: (arg1: string) => void;
+  uri: string;
+  likeCount: number;
+  dislikeCount: number;
+  myReaction: string | null | undefined;
 };
 
 function FileReactions(props: Props) {
@@ -22,7 +22,7 @@ function FileReactions(props: Props) {
 
   const claimId = claim && claim.claim_id;
   const channel = claim && claim.signing_channel && claim.signing_channel.name;
-  const isCollection = claim && claim.value_type === 'collection'; // hack because nudge gets cut off by card on cols.
+  const isCollection = claim && claim.value_type === "collection"; // hack because nudge gets cut off by card on cols.
   const likeIcon = ICONS.UPVOTE;
   const dislikeIcon = ICONS.DOWNVOTE;
   React.useEffect(() => {
@@ -40,16 +40,16 @@ function FileReactions(props: Props) {
       {channel && !isCollection && (
         <NudgeFloating
           name="nudge:support-acknowledge"
-          text={__('Let %channel% know you enjoyed this!', { channel })}
+          text={__("Let %channel% know you enjoyed this!", { channel })}
         />
       )}
 
       <Button
         // @ts-expect-error - TS2322 (ts-migration)
-        title={__('I like this')}
+        title={__("I like this")}
         authSrc="filereaction_like"
-        className={classnames('button--file-action button-like', {
-          'button--file-action-active': myReaction === REACTION_TYPES.LIKE,
+        className={classnames("button--file-action button-like", {
+          "button--file-action-active": myReaction === REACTION_TYPES.LIKE,
         })}
         label={<>{formatNumber(likeCount, 2, true)}</>}
         iconSize={18}
@@ -58,10 +58,10 @@ function FileReactions(props: Props) {
       />
       <Button
         // @ts-expect-error - TS2322 (ts-migration)
-        authSrc={'filereaction_dislike'}
-        title={__('I dislike this')}
-        className={classnames('button--file-action button-dislike', {
-          'button--file-action-active': myReaction === REACTION_TYPES.DISLIKE,
+        authSrc={"filereaction_dislike"}
+        title={__("I dislike this")}
+        className={classnames("button--file-action button-dislike", {
+          "button--file-action-active": myReaction === REACTION_TYPES.DISLIKE,
         })}
         label={<>{formatNumber(dislikeCount, 2, true)}</>}
         iconSize={18}

@@ -1,10 +1,10 @@
-import * as React from 'react';
-import ClaimPreview from 'component/claimPreview';
+import * as React from "react";
+import ClaimPreview from "component/claimPreview";
 
 type Props = {
-  channelUri: string,
-  hideActions?: boolean,
-  channelSubCount?: number
+  channelUri: string;
+  hideActions?: boolean;
+  channelSubCount?: number;
 };
 
 function ClaimAuthor(props: Props) {
@@ -20,7 +20,7 @@ function ClaimAuthor(props: Props) {
       channelSubCount={channelSubCount}
     />
   ) : (
-    <div className="claim-preview--inline claim-preview__title">{__('Anonymous')}</div>
+    <div className="claim-preview--inline claim-preview__title">{__("Anonymous")}</div>
   );
 }
 

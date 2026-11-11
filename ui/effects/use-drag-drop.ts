@@ -1,16 +1,16 @@
 //@ts-nocheck
-import React from 'react';
+import React from "react";
 
 const LISTENER = {
-  ADD: 'add',
-  REMOVE: 'remove',
+  ADD: "add",
+  REMOVE: "remove",
 } as const;
 
 const DRAG_TYPES = {
-  END: 'dragend',
-  START: 'dragstart',
-  ENTER: 'dragenter',
-  LEAVE: 'dragleave',
+  END: "dragend",
+  START: "dragstart",
+  ENTER: "dragenter",
+  LEAVE: "dragleave",
 } as const;
 
 const DRAG_SCORE = {
@@ -75,7 +75,7 @@ export default function useFetched() {
     const handleEventListeners = (event: unknown) => {
       const action = `${event}EventListener`;
       // Handle drop event
-      document[action]('drop', handleDropEvent);
+      document[action]("drop", handleDropEvent);
       // Handle drag events
       document[action](DRAG_TYPES.ENTER, handleDragEvent);
       document[action](DRAG_TYPES.LEAVE, handleDragEvent);

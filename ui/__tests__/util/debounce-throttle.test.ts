@@ -1,5 +1,5 @@
-import debounce from '../../util/debounce';
-import throttle from '../../util/throttle';
+import debounce from "../../util/debounce";
+import throttle from "../../util/throttle";
 
 beforeEach(() => {
   jest.useFakeTimers();
@@ -9,22 +9,22 @@ afterEach(() => {
   jest.useRealTimers();
 });
 
-describe('debounce', () => {
-  it('fires once on the trailing edge after the wait', () => {
+describe("debounce", () => {
+  it("fires once on the trailing edge after the wait", () => {
     const fn = jest.fn();
     const debounced = debounce(fn, 100);
 
-    debounced('a');
-    debounced('b');
-    debounced('c');
+    debounced("a");
+    debounced("b");
+    debounced("c");
     expect(fn).not.toHaveBeenCalled();
 
     jest.advanceTimersByTime(100);
     expect(fn).toHaveBeenCalledTimes(1);
-    expect(fn).toHaveBeenLastCalledWith('c');
+    expect(fn).toHaveBeenLastCalledWith("c");
   });
 
-  it('resets the wait on each call', () => {
+  it("resets the wait on each call", () => {
     const fn = jest.fn();
     const debounced = debounce(fn, 100);
 
@@ -37,7 +37,7 @@ describe('debounce', () => {
     expect(fn).toHaveBeenCalledTimes(1);
   });
 
-  it('fires on the leading edge with immediate=true', () => {
+  it("fires on the leading edge with immediate=true", () => {
     const fn = jest.fn();
     const debounced = debounce(fn, 100, true);
 
@@ -48,8 +48,8 @@ describe('debounce', () => {
   });
 });
 
-describe('throttle', () => {
-  it('fires immediately, then at most once per window', () => {
+describe("throttle", () => {
+  it("fires immediately, then at most once per window", () => {
     const fn = jest.fn();
     const throttled = throttle(fn, 100);
 
@@ -65,7 +65,7 @@ describe('throttle', () => {
     expect(fn).toHaveBeenCalledTimes(2);
   });
 
-  it('cancel() suppresses the pending trailing call', () => {
+  it("cancel() suppresses the pending trailing call", () => {
     const fn = jest.fn();
     const throttled = throttle(fn, 100);
 

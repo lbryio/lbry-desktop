@@ -1,4 +1,4 @@
 //@ts-nocheck
-import PlaylistsPage from './view';
+import PlaylistsPage from "./view";
 
 export default PlaylistsPage;

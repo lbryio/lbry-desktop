@@ -1,16 +1,16 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import { doCommentListOwn, doCommentReset } from 'redux/actions/comments';
-import { selectActiveChannelClaim } from 'redux/selectors/app';
+import { connect } from "react-redux";
+import { doCommentListOwn, doCommentReset } from "redux/actions/comments";
+import { selectActiveChannelClaim } from "redux/selectors/app";
 import {
   selectIsFetchingComments,
   selectCommentsForUri,
   makeSelectTotalCommentsCountForUri,
   makeSelectTopLevelTotalPagesForUri,
-} from 'redux/selectors/comments';
-import { selectClaimsById } from 'redux/selectors/claims';
+} from "redux/selectors/comments";
+import { selectClaimsById } from "redux/selectors/claims";
 
-import OwnComments from './view';
+import OwnComments from "./view";
 
 const select = (state: unknown) => {
   const activeChannelClaim = selectActiveChannelClaim(state);

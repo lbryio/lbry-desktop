@@ -1,5 +1,5 @@
 //@ts-nocheck
-import ErrorBoundary from './view';
+import ErrorBoundary from "./view";
 
 // TODO: bring in device/user(?) info in the future
 export default ErrorBoundary;

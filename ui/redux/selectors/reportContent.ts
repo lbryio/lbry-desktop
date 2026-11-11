@@ -1,7 +1,7 @@
-import {createSelector} from 'reselect';
+import { createSelector } from "reselect";
 
 type State = {
-  reportContent: ReportContentState
+  reportContent: ReportContentState;
 };
 
 export const selectState = (state: State): ReportContentState => state.reportContent;

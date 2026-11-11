@@ -1,7 +1,7 @@
-import * as React from 'react';
-import Page from 'component/page';
-import WalletBackup from 'component/walletBackup';
-import WalletSeed from 'component/walletSeed';
+import * as React from "react";
+import Page from "component/page";
+import WalletBackup from "component/walletBackup";
+import WalletSeed from "component/walletSeed";
 
 function BackupPage() {
   return (

@@ -1,10 +1,10 @@
 //@ts-nocheck
-import {connect} from 'react-redux';
-import * as SETTINGS from 'constants/settings';
-import { selectSubscriptions } from 'redux/selectors/subscriptions';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { connect } from "react-redux";
+import * as SETTINGS from "constants/settings";
+import { selectSubscriptions } from "redux/selectors/subscriptions";
+import { makeSelectClientSetting } from "redux/selectors/settings";
 
-import ChannelsFollowingPage from './view';
+import ChannelsFollowingPage from "./view";
 
 const select = (state: unknown) => ({
   subscribedChannels: selectSubscriptions(state),

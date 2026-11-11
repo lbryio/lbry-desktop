@@ -1,18 +1,24 @@
 //@ts-nocheck
-const apiBaseUrl = 'https://www.transifex.com/api/2/project';
-const resource = 'app-strings';
+const apiBaseUrl = "https://www.transifex.com/api/2/project";
+const resource = "app-strings";
 
-export function doTransifexUpload(contents: unknown, project: unknown, token: unknown, success: unknown, fail: unknown) {
+export function doTransifexUpload(
+  contents: unknown,
+  project: unknown,
+  token: unknown,
+  success: unknown,
+  fail: unknown
+) {
   const url = `${apiBaseUrl}/${project}/resources/`;
   const updateUrl = `${apiBaseUrl}/${project}/resource/${resource}/content/`;
   const headers = {
-    Authorization: `Basic ${Buffer.from(`api:${token}`).toString('base64')}`,
-    'Content-Type': 'application/json',
+    Authorization: `Basic ${Buffer.from(`api:${token}`).toString("base64")}`,
+    "Content-Type": "application/json",
   } as const;
 
   const req = {
     accept_translations: true,
-    i18n_type: 'KEYVALUEJSON',
+    i18n_type: "KEYVALUEJSON",
     name: resource,
     slug: resource,
     content: contents,
@@ -35,7 +41,7 @@ export function doTransifexUpload(contents: unknown, project: unknown, token: un
 
   function handleError(err: unknown) {
     if (fail) {
-      fail(err.message ? err.message : 'Could not upload strings resource to Transifex');
+      fail(err.message ? err.message : "Could not upload strings resource to Transifex");
     }
   }
 
@@ -45,13 +51,13 @@ export function doTransifexUpload(contents: unknown, project: unknown, token: un
     .then(() => {
       // perform an update
       fetch(updateUrl, {
-        method: 'PUT',
+        method: "PUT",
         headers,
         body: JSON.stringify({ content: contents }),
       })
         .then((response) => {
           if (response.status !== 200 && response.status !== 201) {
-            throw new Error('failed to update transifex');
+            throw new Error("failed to update transifex");
           }
 
           return response.text();
@@ -62,13 +68,13 @@ export function doTransifexUpload(contents: unknown, project: unknown, token: un
     .catch(() => {
       // resource doesn't exist, create a fresh resource
       fetch(url, {
-        method: 'POST',
+        method: "POST",
         headers,
         body: JSON.stringify(req),
       })
         .then((response) => {
           if (response.status !== 200 && response.status !== 201) {
-            throw new Error('failed to upload to transifex');
+            throw new Error("failed to upload to transifex");
           }
 
           return response.text();

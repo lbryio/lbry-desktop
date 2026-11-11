@@ -1,22 +1,22 @@
 //@ts-nocheck
-import {execSync} from 'child_process';
-import isDev from 'electron-is-dev';
-import { ipcRenderer } from 'electron';
-import * as ACTIONS from 'constants/action_types';
-import * as MODALS from 'constants/modal_types';
-import * as SETTINGS from 'constants/settings';
-import * as DAEMON_SETTINGS from 'constants/daemon_settings';
-import * as SHARED_PREFERENCES from 'constants/shared_preferences';
-import { DOMAIN } from 'config';
-import Lbry from 'lbry';
-import { doFetchChannelListMine, doFetchCollectionListMine, doCheckPendingClaims } from 'redux/actions/claims';
-import { selectClaimForUri, selectClaimIsMineForUri, selectMyChannelClaims } from 'redux/selectors/claims';
-import { doFetchFileInfos } from 'redux/actions/file_info';
-import { doClearSupport, doBalanceSubscribe } from 'redux/actions/wallet';
-import { doClearPublish } from 'redux/actions/publish';
-import { Lbryio } from 'lbryinc';
-import { selectFollowedTagsList } from 'redux/selectors/tags';
-import { doToast, doError, doNotificationList } from 'redux/actions/notifications';
+import { execSync } from "child_process";
+import isDev from "electron-is-dev";
+import { ipcRenderer } from "electron";
+import * as ACTIONS from "constants/action_types";
+import * as MODALS from "constants/modal_types";
+import * as SETTINGS from "constants/settings";
+import * as DAEMON_SETTINGS from "constants/daemon_settings";
+import * as SHARED_PREFERENCES from "constants/shared_preferences";
+import { DOMAIN } from "config";
+import Lbry from "lbry";
+import { doFetchChannelListMine, doFetchCollectionListMine, doCheckPendingClaims } from "redux/actions/claims";
+import { selectClaimForUri, selectClaimIsMineForUri, selectMyChannelClaims } from "redux/selectors/claims";
+import { doFetchFileInfos } from "redux/actions/file_info";
+import { doClearSupport, doBalanceSubscribe } from "redux/actions/wallet";
+import { doClearPublish } from "redux/actions/publish";
+import { Lbryio } from "lbryinc";
+import { selectFollowedTagsList } from "redux/selectors/tags";
+import { doToast, doError, doNotificationList } from "redux/actions/notifications";
 
 import {
   doFetchDaemonSettings,
@@ -24,7 +24,7 @@ import {
   doSetDaemonSetting,
   doFindFFmpeg,
   doGetDaemonStatus,
-} from 'redux/actions/settings';
+} from "redux/actions/settings";
 import {
   selectIsUpgradeSkipped,
   selectUpdateUrl,
@@ -34,16 +34,16 @@ import {
   selectUpgradeTimer,
   selectModal,
   selectAllowAnalytics,
-} from 'redux/selectors/app';
-import { selectDaemonSettings, makeSelectClientSetting, selectDisableAutoUpdates } from 'redux/selectors/settings';
-import { selectUser } from 'redux/selectors/user';
-import { doSyncLoop, doSetPrefsReady, doPreferenceGet, doPopulateSharedUserState } from 'redux/actions/sync';
-import { doAuthenticate } from 'redux/actions/user';
-import { lbrySettings as config, version as appVersion } from 'package.json';
-import analytics, { SHARE_INTERNAL } from 'analytics';
-import { doSignOutCleanup } from 'util/saved-passwords';
-import { doNotificationSocketConnect } from 'redux/actions/websocket';
-import { stringifyServerParam, shouldSetSetting } from 'util/sync-settings';
+} from "redux/selectors/app";
+import { selectDaemonSettings, makeSelectClientSetting, selectDisableAutoUpdates } from "redux/selectors/settings";
+import { selectUser } from "redux/selectors/user";
+import { doSyncLoop, doSetPrefsReady, doPreferenceGet, doPopulateSharedUserState } from "redux/actions/sync";
+import { doAuthenticate } from "redux/actions/user";
+import { lbrySettings as config, version as appVersion } from "package.json";
+import analytics, { SHARE_INTERNAL } from "analytics";
+import { doSignOutCleanup } from "util/saved-passwords";
+import { doNotificationSocketConnect } from "redux/actions/websocket";
+import { stringifyServerParam, shouldSetSetting } from "util/sync-settings";
 
 const CHECK_UPGRADE_INTERVAL = 10 * 60 * 1000;
 
@@ -83,7 +83,7 @@ export function doStartUpgrade() {
     const state = getState();
     const upgradeDownloadPath = selectUpgradeDownloadPath(state);
 
-    ipcRenderer.send('upgrade', upgradeDownloadPath);
+    ipcRenderer.send("upgrade", upgradeDownloadPath);
     dispatch({
       type: ACTIONS.UPGRADE_INIT_INSTALL,
     });
@@ -100,7 +100,7 @@ export function doDownloadUpgrade() {
   return (dispatch: unknown, getState: unknown) => {
     const state = getState();
     const url = selectUpdateUrl(state);
-    ipcRenderer.send('download-upgrade', { url, options: {} });
+    ipcRenderer.send("download-upgrade", { url, options: {} });
     dispatch({
       type: ACTIONS.UPGRADE_DOWNLOAD_STARTED,
     });
@@ -116,7 +116,7 @@ export function doDownloadUpgradeRequested() {
   // the old logic.
 
   return (dispatch: unknown) => {
-    if (['win32', 'darwin'].includes(process.platform) || !!process.env.APPIMAGE) {
+    if (["win32", "darwin"].includes(process.platform) || !!process.env.APPIMAGE) {
       // electron-updater behavior
       dispatch(doOpenModal(MODALS.AUTO_UPDATE_DOWNLOADED));
     } else {
@@ -162,7 +162,7 @@ export function doAutoUpdateDeclined() {
 }
 
 export function doCancelUpgrade() {
-  ipcRenderer.send('cancel-download-upgrade');
+  ipcRenderer.send("cancel-download-upgrade");
   return { type: ACTIONS.UPGRADE_CANCELLED };
 }
 
@@ -173,7 +173,7 @@ export function doCheckUpgradeAvailable() {
       type: ACTIONS.CHECK_UPGRADE_START,
     });
 
-    const autoUpdateSupported = ['win32', 'darwin'].includes(process.platform) || !!process.env.APPIMAGE;
+    const autoUpdateSupported = ["win32", "darwin"].includes(process.platform) || !!process.env.APPIMAGE;
 
     const autoUpdateDeclined = selectAutoUpdateDeclined(state);
 
@@ -186,7 +186,7 @@ export function doCheckUpgradeAvailable() {
       return;
     }
 
-    ipcRenderer.send('check-for-updates', !disableAutoUpdate);
+    ipcRenderer.send("check-for-updates", !disableAutoUpdate);
   };
 }
 
@@ -208,7 +208,7 @@ export function doNotifyUpdateAvailable(e: unknown) {
       },
     });
 
-    const autoUpdateSupported = ['win32', 'darwin'].includes(process.platform) || !!process.env.APPIMAGE;
+    const autoUpdateSupported = ["win32", "darwin"].includes(process.platform) || !!process.env.APPIMAGE;
 
     if (autoUpdateSupported) {
       return;
@@ -257,7 +257,7 @@ export function doCheckDaemonVersion() {
     Lbry.version().then(({ lbrynet_version: lbrynetVersion }) => {
       // Avoid the incompatible daemon modal if running in dev mode
       // Lets you  run a different daemon than the one specified in package.json
-      if (config.lbrynetDaemonVersion === lbrynetVersion || process.env.NODE_ENV !== 'production') {
+      if (config.lbrynetDaemonVersion === lbrynetVersion || process.env.NODE_ENV !== "production") {
         return dispatch({
           type: ACTIONS.DAEMON_VERSION_MATCH,
         });
@@ -266,7 +266,7 @@ export function doCheckDaemonVersion() {
       dispatch({
         type: ACTIONS.DAEMON_VERSION_MISMATCH,
       });
-      if (process.env.NODE_ENV === 'production') {
+      if (process.env.NODE_ENV === "production") {
         return dispatch(doOpenModal(MODALS.INCOMPATIBLE_DAEMON));
       }
     });
@@ -313,7 +313,7 @@ export function doAlertWaitingForSync() {
   return (dispatch: unknown) => {
     dispatch(
       doToast({
-        message: __('Please wait a bit, we are still getting your account ready.'),
+        message: __("Please wait a bit, we are still getting your account ready."),
         isError: false,
       })
     );
@@ -325,7 +325,7 @@ export function doDaemonReady() {
     const state = getState();
 
     // TODO: call doFetchDaemonSettings, then get usage data, and call doAuthenticate once they are loaded into the store
-    const shareUsageData = window.localStorage.getItem(SHARE_INTERNAL) === 'true';
+    const shareUsageData = window.localStorage.getItem(SHARE_INTERNAL) === "true";
 
     dispatch(
       doAuthenticate(
@@ -360,7 +360,7 @@ export function doDaemonReady() {
       dispatch(doCheckUpgradeAvailable());
     }
     dispatch(doCheckUpgradeSubscribe());
-    ipcRenderer.send('get-disk-space');
+    ipcRenderer.send("get-disk-space");
   };
 }
 
@@ -379,7 +379,7 @@ export function doClearCache() {
 export function doQuit() {
   return () => {
     // @if TARGET='app'
-    ipcRenderer.send('app:quit');
+    ipcRenderer.send("app:quit");
     // @endif
   };
 }
@@ -390,10 +390,10 @@ export function doQuitAnyDaemon() {
     Lbry.stop()
       .catch(() => {
         try {
-          if (process.platform === 'win32') {
-            execSync('taskkill /im lbrynet.exe /t /f');
+          if (process.platform === "win32") {
+            execSync("taskkill /im lbrynet.exe /t /f");
           } else {
-            execSync('pkill lbrynet');
+            execSync("pkill lbrynet");
           }
         } catch (error: any) {
           dispatch(doAlertError(`Quitting daemon failed due to: ${error.message}`));
@@ -477,7 +477,7 @@ export function doAnalyticsTagSync() {
   return (dispatch: unknown, getState: unknown) => {
     const state = getState();
     const tags = selectFollowedTagsList(state);
-    const stringOfTags = tags.join(',');
+    const stringOfTags = tags.join(",");
     if (stringOfTags) {
       analytics.apiSyncTags({ content_tags: stringOfTags });
     }
@@ -486,7 +486,7 @@ export function doAnalyticsTagSync() {
 
 export function doAnaltyicsPurchaseEvent(fileInfo: unknown) {
   return () => {
-    let purchasePrice = fileInfo.purchase_receipt && fileInfo.purchase_receipt.amount;
+    const purchasePrice = fileInfo.purchase_receipt && fileInfo.purchase_receipt.amount;
     if (purchasePrice) {
       const purchaseInt = Number(Number(purchasePrice).toFixed(0));
       analytics.purchaseEvent(purchaseInt);
@@ -517,7 +517,7 @@ export function doSignIn() {
 
 export function doSignOut() {
   return () => {
-    Lbryio.call('user', 'signout')
+    Lbryio.call("user", "signout")
       .then(doSignOutCleanup)
       .then(() => {
         // @if TARGET='web'
@@ -570,7 +570,7 @@ export function doGetAndPopulatePreferences() {
     const syncEnabled = makeSelectClientSetting(SETTINGS.ENABLE_SYNC)(state);
     const hasVerifiedEmail = state.user && state.user.user && state.user.user.has_verified_email;
     let preferenceKey;
-    preferenceKey = syncEnabled && hasVerifiedEmail ? 'shared' : 'local';
+    preferenceKey = syncEnabled && hasVerifiedEmail ? "shared" : "local";
 
     function successCb(savedPreferences: unknown) {
       const successState = getState();
@@ -604,7 +604,7 @@ export function doGetAndPopulatePreferences() {
       dispatch(
         doToast({
           isError: true,
-          message: __('Unable to load your saved preferences.'),
+          message: __("Unable to load your saved preferences."),
         })
       );
 
@@ -629,7 +629,7 @@ export function doHandleSyncComplete(error: unknown, hasNewData: unknown) {
         dispatch(doFetchChannelListMine());
       }
     } else {
-      console.error('Error in doHandleSyncComplete', error);
+      console.error("Error in doHandleSyncComplete", error);
     }
   };
 }

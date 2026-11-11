@@ -1,36 +1,36 @@
-import React from 'react';
-import Button from 'component/button';
-import ChannelSelector from 'component/channelSelector';
-import ClaimPreview from 'component/claimPreview';
-import Comment from 'component/comment';
-import Card from 'component/common/card';
-import Empty from 'component/common/empty';
-import Page from 'component/page';
-import Spinner from 'component/spinner';
-import { COMMENT_PAGE_SIZE_TOP_LEVEL } from 'constants/comment';
-import * as ICONS from 'constants/icons';
-import useFetched from 'effects/use-fetched';
-import debounce from 'util/debounce';
+import React from "react";
+import Button from "component/button";
+import ChannelSelector from "component/channelSelector";
+import ClaimPreview from "component/claimPreview";
+import Comment from "component/comment";
+import Card from "component/common/card";
+import Empty from "component/common/empty";
+import Page from "component/page";
+import Spinner from "component/spinner";
+import { COMMENT_PAGE_SIZE_TOP_LEVEL } from "constants/comment";
+import * as ICONS from "constants/icons";
+import useFetched from "effects/use-fetched";
+import debounce from "util/debounce";
 
 function scaleToDevicePixelRatio(value: unknown) {
   const devicePixelRatio = window.devicePixelRatio || 1.0;
   if (devicePixelRatio < 1.0) {
-// @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+    // @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     return Math.ceil(value / devicePixelRatio);
   }
-// @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+  // @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
   return Math.ceil(value * devicePixelRatio);
 }
 
 type Props = {
-  activeChannelClaim: ChannelClaim | null | undefined,
-  allComments: Array<LbryComment>,
-  totalComments: number,
-  topLevelTotalPages: number,
-  isFetchingComments: boolean,
-  claimsById: any,
-  doCommentReset: (claimId: string) => void,
-  doCommentListOwn: (channelId: string, page: number, pageSize: number) => void
+  activeChannelClaim: ChannelClaim | null | undefined;
+  allComments: Array<LbryComment>;
+  totalComments: number;
+  topLevelTotalPages: number;
+  isFetchingComments: boolean;
+  claimsById: any;
+  doCommentReset: (claimId: string) => void;
+  doCommentListOwn: (channelId: string, page: number, pageSize: number) => void;
 };
 
 export default function OwnComments(props: Props) {
@@ -45,7 +45,7 @@ export default function OwnComments(props: Props) {
   } = props;
   const spinnerRef = React.useRef();
   const [page, setPage] = React.useState(0);
-  const [activeChannelId, setActiveChannelId] = React.useState('');
+  const [activeChannelId, setActiveChannelId] = React.useState("");
 
   // Since we are sharing the key for Discussion and MyComments, don't show
   // the list until we've gone through the initial reset.
@@ -55,10 +55,10 @@ export default function OwnComments(props: Props) {
   const moreBelow = page < totalPages;
 
   function getCommentsElem(comments: unknown) {
-// @ts-expect-error - TS2339 - Property 'map' does not exist on type 'unknown'.
+    // @ts-expect-error - TS2339 - Property 'map' does not exist on type 'unknown'.
     return comments.map((comment) => {
       const contentClaim = claimsById[comment.claim_id];
-      const isChannel = contentClaim && contentClaim.value_type === 'channel';
+      const isChannel = contentClaim && contentClaim.value_type === "channel";
 
       return (
         <div key={comment.comment_id} className="comments-own card__main-actions">
@@ -68,14 +68,14 @@ export default function OwnComments(props: Props) {
                 <ClaimPreview
                   uri={contentClaim.canonical_url}
                   searchParams={{
-                    ...(isChannel ? { view: 'discussion' } : {}),
+                    ...(isChannel ? { view: "discussion" } : {}),
                   }}
                   hideActions
                   hideMenu
                   properties={() => null}
                 />
               )}
-              {!contentClaim && <Empty text={__('Content or channel was deleted.')} />}
+              {!contentClaim && <Empty text={__("Content or channel was deleted.")} />}
             </div>
             <React.Suspense fallback={null}>
               <Comment
@@ -107,27 +107,33 @@ export default function OwnComments(props: Props) {
       doCommentReset(activeChannelId);
       setPage(1);
     }
-  }, [page, activeChannelId]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [page, activeChannelId]);
 
   // Fetch own comments
   React.useEffect(() => {
     if (page !== 0 && activeChannelId) {
       doCommentListOwn(activeChannelId, page, COMMENT_PAGE_SIZE_TOP_LEVEL);
     }
-  }, [page]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [page]);
 
   // Infinite scroll
   React.useEffect(() => {
-    function shouldFetchNextPage(page: unknown, topLevelTotalPages: unknown, window: unknown, document: unknown, yPrefetchPx = 1000) {
+    function shouldFetchNextPage(
+      page: unknown,
+      topLevelTotalPages: unknown,
+      window: unknown,
+      document: unknown,
+      yPrefetchPx = 1000
+    ) {
       if (!spinnerRef || !spinnerRef.current) {
         return false;
       }
 
-// @ts-expect-error - TS2339 - Property 'getBoundingClientRect' does not exist on type 'never'.
+      // @ts-expect-error - TS2339 - Property 'getBoundingClientRect' does not exist on type 'never'.
       const rect = spinnerRef.current.getBoundingClientRect();
-// @ts-expect-error - TS2339 - Property 'innerHeight' does not exist on type 'unknown'. | TS2339 - Property 'documentElement' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'innerHeight' does not exist on type 'unknown'. | TS2339 - Property 'documentElement' does not exist on type 'unknown'.
       const windowH = window.innerHeight || document.documentElement.clientHeight;
-// @ts-expect-error - TS2339 - Property 'innerWidth' does not exist on type 'unknown'. | TS2339 - Property 'documentElement' does not exist on type 'unknown'.
+      // @ts-expect-error - TS2339 - Property 'innerWidth' does not exist on type 'unknown'. | TS2339 - Property 'documentElement' does not exist on type 'unknown'.
       const windowW = window.innerWidth || document.documentElement.clientWidth;
 
       const isApproachingViewport = yPrefetchPx !== 0 && rect.top < windowH + scaleToDevicePixelRatio(yPrefetchPx);
@@ -155,8 +161,8 @@ export default function OwnComments(props: Props) {
       if (shouldFetchNextPage(page, totalPages, window, document, 0)) {
         setPage(page + 1);
       } else {
-        window.addEventListener('scroll', handleCommentScroll);
-        return () => window.removeEventListener('scroll', handleCommentScroll);
+        window.addEventListener("scroll", handleCommentScroll);
+        return () => window.removeEventListener("scroll", handleCommentScroll);
       }
     }
   }, [page, spinnerRef, isFetchingComments, moreBelow, totalPages]);
@@ -170,7 +176,7 @@ export default function OwnComments(props: Props) {
 
   return (
     // @ts-expect-error - TS2741 (ts-migration)
-    <Page noFooter noSideNavigation settingsPage backout={{ title: __('Your comments'), backLabel: __('Back') }}>
+    <Page noFooter noSideNavigation settingsPage backout={{ title: __("Your comments"), backLabel: __("Back") }}>
       {/* @ts-expect-error - TS2322, TS2739 (ts-migration) */}
       <ChannelSelector hideAnon />
       <Card
@@ -178,18 +184,18 @@ export default function OwnComments(props: Props) {
         title={
           totalComments > 0
             ? totalComments === 1
-              ? __('1 comment')
-              : __('%total_comments% comments', { total_comments: totalComments })
+              ? __("1 comment")
+              : __("%total_comments% comments", { total_comments: totalComments })
             : isFetchingComments
-            ? ''
-            : __('No comments')
+              ? ""
+              : __("No comments")
         }
         titleActions={
           <Button
             // @ts-expect-error - TS2322 (ts-migration)
             button="alt"
             icon={ICONS.REFRESH}
-            title={__('Refresh')}
+            title={__("Refresh")}
             onClick={() => {
               setPage(0);
             }}

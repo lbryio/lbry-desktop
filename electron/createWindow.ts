@@ -1,17 +1,17 @@
 //@ts-nocheck
-import {WEBPACK_ELECTRON_PORT} from 'config';
-import { app, BrowserWindow, dialog, screen, nativeImage } from 'electron';
-import isDev from 'electron-is-dev';
-import windowStateKeeper from 'electron-window-state';
-import SUPPORTED_LANGUAGES from 'constants/supported_languages';
-import { SUPPORTED_SUB_LANGUAGE_CODES, SUB_LANG_CODE_LEN } from 'constants/supported_sub_languages';
-import SUPPORTED_BROWSER_LANGUAGES from 'constants/supported_browser_languages';
-import { TO_TRAY_WHEN_CLOSED } from 'constants/settings';
+import { WEBPACK_ELECTRON_PORT } from "config";
+import { app, BrowserWindow, dialog, screen, nativeImage } from "electron";
+import isDev from "electron-is-dev";
+import windowStateKeeper from "electron-window-state";
+import SUPPORTED_LANGUAGES from "constants/supported_languages";
+import { SUPPORTED_SUB_LANGUAGE_CODES, SUB_LANG_CODE_LEN } from "constants/supported_sub_languages";
+import SUPPORTED_BROWSER_LANGUAGES from "constants/supported_browser_languages";
+import { TO_TRAY_WHEN_CLOSED } from "constants/settings";
 
-import setupBarMenu from './menu/setupBarMenu';
-import { trackMaximized } from './showWindow';
-import * as PAGES from 'constants/pages';
-const shell = require('electron').shell;
+import setupBarMenu from "./menu/setupBarMenu";
+import { trackMaximized } from "./showWindow";
+import * as PAGES from "constants/pages";
+const shell = require("electron").shell;
 function GetAppLangCode() {
   // https://www.electronjs.org/docs/api/locales
   // 1. Gets the user locale.
@@ -35,14 +35,14 @@ export default (appState: unknown) => {
     defaultHeight: height,
   });
 
-  const startMinimized = (process.argv || []).includes('--hidden');
+  const startMinimized = (process.argv || []).includes("--hidden");
 
   const windowConfiguration = {
-    backgroundColor: '#270f34', // Located in src/scss/init/_vars.scss `--color-background--splash`
+    backgroundColor: "#270f34", // Located in src/scss/init/_vars.scss `--color-background--splash`
     minWidth: 950,
     minHeight: 600,
     autoHideMenuBar: true,
-    titleBarStyle: 'hiddenInset',
+    titleBarStyle: "hiddenInset",
     show: false,
     // Create the window using the state information.
     x: windowState.x,
@@ -50,7 +50,7 @@ export default (appState: unknown) => {
     // If state is undefined, create window as maximized.
     width: windowState.width === undefined ? width : windowState.width,
     height: windowState.height === undefined ? height : windowState.height,
-    icon: nativeImage.createFromPath('static/img/tray/default/tray.png'),
+    icon: nativeImage.createFromPath("static/img/tray/default/tray.png"),
     webPreferences: {
       // Disable renderer process's webSecurity on development to enable CORS.
       webSecurity: !isDev,
@@ -59,8 +59,8 @@ export default (appState: unknown) => {
       contextIsolation: false,
     },
   } as const;
-  const lbryProto = 'lbry://';
-  const lbryProtoQ = 'lbry://?';
+  const lbryProto = "lbry://";
+  const lbryProtoQ = "lbry://?";
   const rendererURL = isDev ? `http://localhost:${WEBPACK_ELECTRON_PORT}` : `file://${__dirname}/index.html`;
 
   let window = new BrowserWindow(windowConfiguration);
@@ -75,8 +75,8 @@ export default (appState: unknown) => {
 
   let deepLinkingURI;
 
-  if ((process.platform === 'win32' || process.platform === 'linux') && String(process.argv[1]).startsWith('lbry')) {
-    [, deepLinkingURI] = process.argv || '';
+  if ((process.platform === "win32" || process.platform === "linux") && String(process.argv[1]).startsWith("lbry")) {
+    [, deepLinkingURI] = process.argv || "";
     // Keep only command line / deep linked arguments
     // Windows normalizes URIs when they're passed in from other apps. On Windows, this tries to
     // restore the original URI that was typed.
@@ -85,37 +85,34 @@ export default (appState: unknown) => {
     //   - In a URI with a claim ID, like lbry://channel#claimid, Windows interprets the hash mark as
     //     an anchor and converts it to lbry://channel/#claimid. We remove the slash here as well.
     //   - ? also interpreted as an anchor, remove slash also.
-    if (process.platform === 'win32') {
-      deepLinkingURI = deepLinkingURI
-        .replace(/\/$/, '')
-        .replace('/#', '#')
-        .replace('/?', '?');
+    if (process.platform === "win32") {
+      deepLinkingURI = deepLinkingURI.replace(/\/$/, "").replace("/#", "#").replace("/?", "?");
     }
   } else {
-    deepLinkingURI = appState.macDeepLinkingURI || '';
+    deepLinkingURI = appState.macDeepLinkingURI || "";
   }
 
   // is it a lbry://? pointing to an app page
   if (deepLinkingURI.includes(lbryProtoQ)) {
-    let path = deepLinkingURI.slice(lbryProtoQ.length);
-    let page = path.indexOf('?') >= 0 ? path.substring(0, path.indexOf('?')) : path;
+    const path = deepLinkingURI.slice(lbryProtoQ.length);
+    const page = path.indexOf("?") >= 0 ? path.substring(0, path.indexOf("?")) : path;
     if (Object.values(PAGES).includes(page)) {
-      deepLinkingURI = deepLinkingURI.replace(lbryProtoQ, '#/$/');
+      deepLinkingURI = deepLinkingURI.replace(lbryProtoQ, "#/$/");
     } else {
-      deepLinkingURI = '';
+      deepLinkingURI = "";
     }
     // else is it a claim
   } else if (deepLinkingURI.includes(lbryProto)) {
-    deepLinkingURI = deepLinkingURI.replace(lbryProto, '#');
+    deepLinkingURI = deepLinkingURI.replace(lbryProto, "#");
   } else {
-    deepLinkingURI = '';
+    deepLinkingURI = "";
   }
 
   setupBarMenu();
 
   window.loadURL(rendererURL + deepLinkingURI);
 
-  window.on('close', event => {
+  window.on("close", (event) => {
     // 'window' is nulled when the renderer crashes; a late 'close' event
     // (e.g. during the uncaughtException quit path) must not dereference it.
     if (!window || window.isDestroyed() || appState.isQuitting) {
@@ -125,7 +122,7 @@ export default (appState: unknown) => {
     if (!appState.autoUpdateAccepted) {
       event.preventDefault();
       if (window.isFullScreen()) {
-        window.once('leave-full-screen', () => {
+        window.once("leave-full-screen", () => {
           window.hide();
         });
         window.setFullScreen(false);
@@ -134,10 +131,12 @@ export default (appState: unknown) => {
       }
     }
 
-    const getToTrayWhenClosedSetting = window.webContents.executeJavaScript(`localStorage.getItem('${TO_TRAY_WHEN_CLOSED}')`);
+    const getToTrayWhenClosedSetting = window.webContents.executeJavaScript(
+      `localStorage.getItem('${TO_TRAY_WHEN_CLOSED}')`
+    );
 
-    getToTrayWhenClosedSetting.then(toTrayWhenClosedSetting => {
-      const closeApp = toTrayWhenClosedSetting === 'false';
+    getToTrayWhenClosedSetting.then((toTrayWhenClosedSetting) => {
+      const closeApp = toTrayWhenClosedSetting === "false";
 
       if (closeApp) {
         app.quit();
@@ -145,76 +144,76 @@ export default (appState: unknown) => {
     });
   });
 
-  window.on('focus', () => {
-    if (window && !window.isDestroyed()) window.webContents.send('window-is-focused', null);
+  window.on("focus", () => {
+    if (window && !window.isDestroyed()) window.webContents.send("window-is-focused", null);
   });
 
   // Keep Settings > Appearance > Full screen in step, however full screen was changed (F11, the View menu, or the setting).
   const sendFullScreen = (fullScreen: unknown) => {
-    if (window && !window.isDestroyed()) window.webContents.send('full-screen-changed', fullScreen);
+    if (window && !window.isDestroyed()) window.webContents.send("full-screen-changed", fullScreen);
   };
-  window.on('enter-full-screen', () => sendFullScreen(true));
-  window.on('leave-full-screen', () => {
+  window.on("enter-full-screen", () => sendFullScreen(true));
+  window.on("leave-full-screen", () => {
     sendFullScreen(false);
     // Force exit mode for html5 fullscreen api (see ui/index).
-    if (window && !window.isDestroyed()) window.webContents.send('leave-full-screen');
+    if (window && !window.isDestroyed()) window.webContents.send("leave-full-screen");
   });
 
-  window.on('unresponsive', () => {
+  window.on("unresponsive", () => {
     dialog.showMessageBox(
       window,
       {
-        type: 'warning',
-        buttons: ['Wait', 'Quit'],
-        title: 'LBRY Unresponsive',
+        type: "warning",
+        buttons: ["Wait", "Quit"],
+        title: "LBRY Unresponsive",
         defaultId: 1,
-        message: 'LBRY is not responding. Would you like to quit?',
+        message: "LBRY is not responding. Would you like to quit?",
         cancelId: 0,
       },
-      buttonIndex => {
+      (buttonIndex) => {
         if (buttonIndex === 1) app.quit();
       }
     );
   });
 
-  window.once('ready-to-show', () => {
+  window.once("ready-to-show", () => {
     startMinimized ? window.hide() : window.show();
   });
 
   // A backup incase https://github.com/electron/electron/issues/7779 happens
-  window.webContents.once('dom-ready', () => {
+  window.webContents.once("dom-ready", () => {
     startMinimized && window.hide();
   });
 
-  window.webContents.on('did-finish-load', () => {
+  window.webContents.on("did-finish-load", () => {
     window.webContents.session.setUserAgent(`LBRY/${app.getVersion()}`);
 
     // restore the user's previous language - we have to do this from here because only electron process can access app.getLocale()
-    window.webContents.executeJavaScript("localStorage.getItem('language')").then(storedLanguage => {
+    window.webContents.executeJavaScript("localStorage.getItem('language')").then((storedLanguage) => {
       const language =
-        storedLanguage && storedLanguage !== 'undefined' && storedLanguage !== 'null'
+        storedLanguage && storedLanguage !== "undefined" && storedLanguage !== "null"
           ? storedLanguage
           : GetAppLangCode();
-      if (language !== 'en' && SUPPORTED_LANGUAGES[language]) {
-        window.webContents.send('language-set', language);
+      if (language !== "en" && SUPPORTED_LANGUAGES[language]) {
+        window.webContents.send("language-set", language);
       }
     });
   });
 
-  window.webContents.on('crashed', () => {
+  window.webContents.on("crashed", () => {
     window = null;
   });
 
   window.webContents.setWindowOpenHandler((details) => {
     // Only open http and https links to prevent
     // security issues.
-    if (['https:', 'http:'].includes(new URL(details.url).protocol)) {
+    if (["https:", "http:"].includes(new URL(details.url).protocol)) {
       shell.openExternal(details.url);
     }
-    return { action: 'deny' };
+    return { action: "deny" };
   });
 
-  window.webContents.on('update-target-url', (event, url) => {
+  window.webContents.on("update-target-url", (event, url) => {
     // Change internal links to the lbry protocol. External (https) links should remain unchanged.
     let hoverUrlBase = `http://localhost:${WEBPACK_ELECTRON_PORT}/`;
     if (!isDev) {
@@ -222,12 +221,12 @@ export default (appState: unknown) => {
       //   Linux:   file:///@claim
       //   Windows: file:///C:/@claim
       // Use '__dirname' in case installation is not in C:
-      const path = require('path');
+      const path = require("path");
       const exeRoot = path.parse(__dirname).root;
 
-      if (process.platform === 'win32') {
+      if (process.platform === "win32") {
         // Add extra "/" prefix. Convert "C:\" to "C:/"
-        hoverUrlBase = `file:///` + exeRoot.replace(/\\/g, '/');
+        hoverUrlBase = `file:///` + exeRoot.replace(/\\/g, "/");
       } else {
         hoverUrlBase = `file://` + exeRoot;
       }
@@ -236,11 +235,11 @@ export default (appState: unknown) => {
     let dispUrl = url.replace(hoverUrlBase, lbryProto);
     // Non-claims don't need the lbry protocol:
     if (dispUrl === lbryProto) {
-      dispUrl = 'Home';
-    } else if (dispUrl.startsWith(lbryProto + '$/')) {
-      dispUrl = dispUrl.replace(lbryProto, '/');
+      dispUrl = "Home";
+    } else if (dispUrl.startsWith(lbryProto + "$/")) {
+      dispUrl = dispUrl.replace(lbryProto, "/");
     }
-    window.webContents.send('update-target-url', dispUrl);
+    window.webContents.send("update-target-url", dispUrl);
   });
 
   return window;
