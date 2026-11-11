@@ -2,6 +2,32 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.0.2] - [2026-11-12]
+
+### Added
+ - Wallet: reveal/export your seed phrase and import a wallet from a seed, with a guided backup page ([#641](https://github.com/bitcoinbrisbane/lbry-desktop/pull/641))
+ - "Open in Folder" in the claim menu for downloaded files ([#651](https://github.com/bitcoinbrisbane/lbry-desktop/pull/651))
+ - Linux: the .deb installs an AppArmor profile so the Chromium sandbox works on Ubuntu 23.10+ ([#661](https://github.com/bitcoinbrisbane/lbry-desktop/pull/661), fixes [#660](https://github.com/bitcoinbrisbane/lbry-desktop/issues/660))
+
+### Fixed
+ - Publish form no longer overwrites your claim name when selecting a file; text posts stop being renamed to "post" ([#631](https://github.com/bitcoinbrisbane/lbry-desktop/pull/631))
+ - Crash on shutdown: TypeError reading isFullScreen of null ([#630](https://github.com/bitcoinbrisbane/lbry-desktop/pull/630))
+ - Share dialog includes the start time on the internal LBRY URL ([#632](https://github.com/bitcoinbrisbane/lbry-desktop/pull/632))
+ - The splash screen shows the actual startup error instead of a generic message ([#633](https://github.com/bitcoinbrisbane/lbry-desktop/pull/633))
+ - The comment box stays compact until used, so comments are reachable without scrolling ([#635](https://github.com/bitcoinbrisbane/lbry-desktop/pull/635))
+ - Image uploads reject non-image files and reset cleanly after failures ([#653](https://github.com/bitcoinbrisbane/lbry-desktop/pull/653))
+ - The "Add Email" button in Settings works ([#654](https://github.com/bitcoinbrisbane/lbry-desktop/pull/654))
+ - Channel thumbnails with broken URLs no longer flicker ([#652](https://github.com/bitcoinbrisbane/lbry-desktop/pull/652))
+ - Analytics are fully disabled when no Matomo endpoint is configured ([#650](https://github.com/bitcoinbrisbane/lbry-desktop/pull/650))
+
+### Changed
+ - **Electron 17 → 45.2.1** with the deprecated remote module removed, and electron-builder 26 — thanks to community PRs by [@elderengineer](https://github.com/elderengineer) ([#647](https://github.com/bitcoinbrisbane/lbry-desktop/pull/647), [#648](https://github.com/bitcoinbrisbane/lbry-desktop/pull/648))
+ - TypeScript migration Phase 3: Flow fully removed, ESLint 10 with typescript-eslint, prettier 3 with double quotes; tsc runs on the TypeScript 7 native compiler ([#657](https://github.com/bitcoinbrisbane/lbry-desktop/pull/657))
+ - Growing test suite (85 tests) and the first typed-event/redux cleanups ([#638](https://github.com/bitcoinbrisbane/lbry-desktop/pull/638), [#659](https://github.com/bitcoinbrisbane/lbry-desktop/pull/659), [#662](https://github.com/bitcoinbrisbane/lbry-desktop/pull/662))
+
+### Known issues
+ - macOS builds remain unsigned (right-click → Open); AppImage on Ubuntu 23.10+ needs the .deb or a sysctl toggle (see README)
+
 ## [1.0.0] - [2026-11-10]
 
 The first release from this fork, and the first TypeScript-based build.
