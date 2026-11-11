@@ -49,6 +49,11 @@ This fork doesn't publish builds yet. The last official release, v0.53.9 (Februa
 _If the deb fails to install from the Ubuntu Software Center, install it with `sudo dpkg -i <path to deb>`,
 then run `sudo apt-get install -f` to install its dependencies._
 
+_**AppImage on Ubuntu 23.10 or newer:** AppArmor restricts the sandbox Electron needs, so the AppImage
+aborts with a "SUID sandbox helper" error ([#660](https://github.com/bitcoinbrisbane/lbry-desktop/issues/660)).
+Use the .deb instead (it installs an AppArmor profile), or run
+`sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0` before launching the AppImage._
+
 Community builds. The app's own updater only updates the deb, so update these yourself:
 
 | Flatpak                                              | Arch                                                              | Nixpkgs                                                                            | ARM/ARM64                                    |

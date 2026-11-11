@@ -1,0 +1,13 @@
+# AppArmor profile for LBRY Desktop (Ubuntu 23.10+ / 24.04).
+# Grants the Electron binary the unprivileged user namespaces it needs for
+# the Chromium sandbox, which AppArmor restricts by default since 23.10.
+# Installed by the .deb to /etc/apparmor.d/lbry.
+abi <abi/4.0>,
+include <tunables/global>
+
+profile lbry /opt/LBRY/lbry flags=(unconfined) {
+  userns,
+
+  # Site-specific additions and overrides. See local/README for details.
+  include if exists <local/lbry>
+}
