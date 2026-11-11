@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as remote from '@electron/remote';
 // @ts-expect-error - TS2792 - Cannot find module 'electron'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import { ipcRenderer } from 'electron';
 import path from 'path';
@@ -43,13 +42,13 @@ function setLastFileFolder(filePath: string) {
 // Where the open dialog starts. With no default, Windows opens the folder the app is installed in.
 function getDefaultPath(type: string, currentPath?: string | null): string {
   if (type === 'openDirectory') {
-    return currentPath || remote.app.getPath('home');
+    return currentPath || ipcRenderer.sendSync('app:getPath', 'home');
   }
   try {
-    return getLastFileFolder() || remote.app.getPath('documents');
+    return getLastFileFolder() || ipcRenderer.sendSync('app:getPath', 'documents');
   } catch (e: any) {
     // Electron throws if the system has no Documents folder (possible on Linux).
-    return remote.app.getPath('home');
+    return ipcRenderer.sendSync('app:getPath', 'home');
   }
 }
 
@@ -91,8 +90,8 @@ class FileSelector extends React.PureComponent<Props> {
     const { type, currentPath, filters, readFile } = this.props;
     const properties = type === 'openDirectory' ? ['openDirectory'] : ['openFile'];
 
-    remote.dialog
-      .showOpenDialog({
+    ipcRenderer
+      .invoke('dialog:showOpenDialog', {
         properties,
         defaultPath: getDefaultPath(type, currentPath),
         filters,

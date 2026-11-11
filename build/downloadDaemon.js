@@ -2,7 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const packageJSON = require('../package.json');
 const fetch = require('node-fetch');
-const decompress = require('decompress');
+const AdmZip = require('adm-zip');
 const os = require('os');
 const del = require('del');
 
@@ -65,11 +65,16 @@ const downloadDaemon = targetPlatform =>
         )
         .then(() => del(`${daemonFilePath}*`))
         .then()
-        .then(() =>
-          decompress(tmpZipPath, daemonDir, {
-            filter: file => path.basename(file.path) === daemonFileName,
-          })
-        )
+        .then(() => {
+          const zip = new AdmZip(tmpZipPath);
+          const entry = zip.getEntries().find(file => path.basename(file.entryName) === daemonFileName);
+
+          if (!entry) {
+            throw new Error(`Could not find ${daemonFileName} in archive`);
+          }
+
+          zip.extractEntryTo(entry, daemonDir, false, true);
+        })
         .then(() => {
           console.log(`\x1b[32msuccess\x1b[0m Daemon downloaded! - v${daemonVersion}`);
           if (hasDaemonVersion) {

@@ -1,7 +1,6 @@
 import * as React from 'react';
 // @ts-expect-error - TS2792 - Cannot find module 'electron'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
-import { shell } from 'electron';
-import * as remote from '@electron/remote';
+import { ipcRenderer, shell } from 'electron';
 import Button from 'component/button';
 import CopyableText from 'component/copyableText';
 import AdmZip from 'adm-zip';
@@ -58,9 +57,9 @@ class WalletBackup extends React.PureComponent<Props, State> {
     // Prefer placing backup in user's Downloads folder, then their home folder, and finally
     // right next to the lbryum folder itself.
     let outputDir = path.dirname(lbryumWalletDir);
-    if (remote && remote.app) {
-      outputDir = remote.app.getPath('downloads') || remote.app.getPath('home') || outputDir;
-    }
+    const downloadsDir = ipcRenderer.sendSync('app:getPath', 'downloads');
+    const homeDir = ipcRenderer.sendSync('app:getPath', 'home');
+    outputDir = downloadsDir || homeDir || outputDir;
 
     const outputPath = path.join(outputDir, outputFilename);
 
