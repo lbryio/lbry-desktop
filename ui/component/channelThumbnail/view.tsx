@@ -126,6 +126,12 @@ function ChannelThumbnail(props: Props) {
             }
           }}
           onLoad={() => {
+            // Only a successful load of the real thumbnail clears the error.
+            // The fallback avatar loading fine must not re-arm a broken URL,
+            // or the image alternates between the two forever (#535).
+            if (avatarSrc !== channelThumbnail) {
+              return;
+            }
             if (setThumbUploadError) {
               setThumbUploadError(false);
             } else {
