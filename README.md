@@ -18,6 +18,7 @@ and send our changes there as well.
 ## Contents
 
 1. [What's different in this fork](#whats-different-in-this-fork)
+2. [Roadmap](ROADMAP.md)
 2. [Install](#install)
 3. [Running from source](#running-from-source)
 4. [Contributing](#contributing)
