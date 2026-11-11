@@ -58,6 +58,7 @@ type Props = {
   ) => void,
   claimIsMine: boolean,
   fileInfo: FileListItem,
+  openFolder: (path: string) => void,
   prepareEdit: (arg1: Record<any, any>, arg2: string, arg3: Record<any, any>) => void,
   isSubscribed: boolean,
   doChannelSubscribe: (arg1: SubscriptionArgs) => void,
@@ -101,6 +102,7 @@ function ClaimMenuList(props: Props) {
     doToast,
     claimIsMine,
     fileInfo,
+    openFolder,
     prepareEdit,
     isSubscribed,
     doChannelSubscribe,
@@ -478,6 +480,14 @@ function ClaimMenuList(props: Props) {
               </>
             )}
 
+            {fileInfo && fileInfo.download_path && (
+              <MenuItem className="comment__menu-option" onSelect={() => openFolder(fileInfo.download_path)}>
+                <div className="menu__link">
+                  <Icon aria-hidden icon={ICONS.OPEN_LOG_FOLDER} />
+                  {__('Open in Folder')}
+                </div>
+              </MenuItem>
+            )}
             {showDelete && (
               <MenuItem className="comment__menu-option" onSelect={handleDelete}>
                 <div className="menu__link">

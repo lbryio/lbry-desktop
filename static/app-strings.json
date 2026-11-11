@@ -2370,5 +2370,6 @@
   "Imported account": "Imported account",
   "Account %account_id% imported. Balances and claims will appear once the wallet finishes syncing.": "Account %account_id% imported. Balances and claims will appear once the wallet finishes syncing.",
   "The daemon did not confirm the import.": "The daemon did not confirm the import.",
+  "Open in Folder": "Open in Folder",
   "--end--": "--end--"
 }

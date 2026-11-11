@@ -12,6 +12,7 @@ import {
   selectLastUsedCollection,
 } from 'redux/selectors/collections';
 import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
+import { doOpenFileInFolder } from 'redux/actions/file';
 import * as COLLECTIONS_CONSTS from 'constants/collections';
 import { makeSelectChannelIsMuted } from 'redux/selectors/blocked';
 import { doChannelMute, doChannelUnmute } from 'redux/actions/blocked';
@@ -87,6 +88,7 @@ const select = (state: unknown, props: unknown) => {
 };
 
 const perform = (dispatch: unknown) => ({
+  openFolder: (path) => dispatch(doOpenFileInFolder(path)),
   prepareEdit: (publishData, uri, fileInfo) => {
     if (publishData.signing_channel) {
       dispatch(doSetIncognito(false));
