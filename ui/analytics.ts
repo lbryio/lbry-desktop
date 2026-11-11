@@ -82,8 +82,10 @@ type LogPublishParams = {
   channel_claim_id?: string
 };
 
-let internalAnalyticsEnabled: boolean = false;
-if (window.localStorage.getItem(SHARE_INTERNAL) === 'true') internalAnalyticsEnabled = true;
+// Tracking is impossible without a configured Matomo endpoint — treat an
+// unset MATOMO_URL as analytics disabled, regardless of the user setting.
+let internalAnalyticsEnabled: boolean = Boolean(MATOMO_URL);
+if (window.localStorage.getItem(SHARE_INTERNAL) !== 'true') internalAnalyticsEnabled = false;
 
 const analytics: Analytics = {
   // receive buffer events from tracking plugin and save buffer amounts and times for backend call
@@ -148,7 +150,7 @@ const analytics: Analytics = {
 // @ts-expect-error - TS2740 - Type '{}' is missing the following properties from type '{ id: number; value: string; }[]': length, pop, push, concat, and 28 more.
         params['customDimensions'] = dimensions;
       }
-      MatomoInstance.trackPageView(params);
+      if (MatomoInstance) MatomoInstance.trackPageView(params);
     }
   },
   setUser: (userId) => {
@@ -161,7 +163,7 @@ const analytics: Analytics = {
     }
   },
   toggleInternal: (enabled: boolean): void => {
-    internalAnalyticsEnabled = enabled;
+    internalAnalyticsEnabled = Boolean(MATOMO_URL) && enabled;
 // @ts-expect-error - TS2345 - Argument of type 'boolean' is not assignable to parameter of type 'string'.
     window.localStorage.setItem(SHARE_INTERNAL, enabled);
   },
@@ -293,15 +295,18 @@ function sendMatomoEvent(category: unknown, action: unknown, name: unknown, valu
   if (internalAnalyticsEnabled) {
     const event = { category, action, name, value } as const;
     // @ts-expect-error - TS2345 (ts-migration)
-    MatomoInstance.trackEvent(event);
+    if (MatomoInstance) MatomoInstance.trackEvent(event);
   }
 }
 
-const MatomoInstance = new MatomoTracker({
-  urlBase: MATOMO_URL,
-  // @ts-expect-error - TS2322 (ts-migration)
-  siteId: MATOMO_ID, // optional, default value: `1`
-});
+// Constructing the tracker without a URL would throw at import time.
+const MatomoInstance = MATOMO_URL
+  ? new MatomoTracker({
+      urlBase: MATOMO_URL,
+      // @ts-expect-error - TS2322 (ts-migration)
+      siteId: MATOMO_ID, // optional, default value: `1`
+    })
+  : null;
 
 analytics.pageView(generateInitialUrl(window.location.hash));
 
