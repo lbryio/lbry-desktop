@@ -90,6 +90,10 @@ function SelectAsset(props: Props) {
       .catch((err) => {
         uploadError(err.message);
         setUploadStatus(SPEECH_READY);
+        // Reset the selection so the form isn't stuck with a file that
+        // cannot upload (#551).
+        setFileSelected(null);
+        setPathSelected('');
       });
   }
 
@@ -135,6 +139,18 @@ function SelectAsset(props: Props) {
             currentPath={pathSelected}
             onFileChosen={(fileWithPath) => {
               if (fileWithPath.file.name) {
+                // Guard against non-image files (drag & drop and the
+                // "All Files" dialog option bypass the extension filter).
+                const isImage = fileWithPath.file.type
+                  ? fileWithPath.file.type.startsWith('image/')
+                  : /\.(png|jpe?g|gif)$/i.test(fileWithPath.file.name);
+                if (!isImage) {
+                  setError(__('Only image files (png, jpg, gif) are supported.'));
+                  setFileSelected(null);
+                  setPathSelected('');
+                  return;
+                }
+                setError(undefined);
                 setFileSelected(fileWithPath.file);
                 setPathSelected(fileWithPath.path);
               }
