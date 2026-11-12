@@ -55,23 +55,23 @@ function SettingWalletServer(props: Props) {
   const serverConfig: ServerConfig = customWalletServers;
   const STATUS_INTERVAL = 5000;
 
-  // onUnmount, if there are no available servers, doClear()
-  // in order to replicate componentWillUnmount, the effect needs to get the value from a ref
-  const hasAvailableRef = useRef();
-  useEffect(
-    () => () => {
-      hasAvailableRef.current = availableServers;
-    },
-    [availableServers]
-  );
+  // Latest values for the unmount cleanup below, which must not re-run on re-renders.
+  const unmountStateRef = useRef({ availableServers, hasWalletServerPrefs, clearWalletServers });
+  unmountStateRef.current = { availableServers, hasWalletServerPrefs, clearWalletServers };
 
+  // On leaving the page, fall back to the official servers if custom ones are
+  // configured and the daemon reports none of them reachable. Only on unmount:
+  // this used to depend on `doClear` (a new function every render), so it fired
+  // on every re-render and the 5s status poll below made it call
+  // wallet_reconnect every ~5s, even on the official servers (#672).
   useEffect(
     () => () => {
-      if (!hasAvailableRef.current) {
-        doClear();
+      const { availableServers, hasWalletServerPrefs, clearWalletServers } = unmountStateRef.current;
+      if (hasWalletServerPrefs && availableServers === 0) {
+        clearWalletServers();
       }
     },
-    [doClear]
+    []
   );
 
   useEffect(() => {
@@ -87,11 +87,13 @@ function SettingWalletServer(props: Props) {
     return () => clearInterval(interval);
   }, [getDaemonStatus]);
 
+  // Once per rollback, not on every render while the flag is set (`doClear` is
+  // a new function each render, so it can't be a dependency).
   useEffect(() => {
     if (walletRollbackToDefault) {
       doClear();
     }
-  }, [doClear, walletRollbackToDefault]);
+  }, [walletRollbackToDefault]);
 
   useEffect(() => {
     if (usingCustomServer) {
