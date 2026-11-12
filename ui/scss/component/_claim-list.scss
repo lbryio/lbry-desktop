@@ -19,7 +19,7 @@
   }
 }
 
-[aria-expanded='true'].claim__menu-button {
+[aria-expanded="true"].claim__menu-button {
   opacity: 1;
   background-color: var(--color-header-background);
   border-radius: var(--border-radius);
@@ -1185,6 +1185,11 @@
 
 // div that displays watch later button
 .claim-preview__hover-actions {
+  position: relative;
+  float: right;
+  top: var(--spacing-xxs);
+  margin-right: var(--spacing-xxs);
+
   // if the user is using a mouse
   @media (pointer: fine) {
     display: none;
@@ -1194,11 +1199,6 @@
   @media (pointer: none), (pointer: coarse) {
     display: none !important;
   }
-
-  position: relative;
-  float: right;
-  top: var(--spacing-xxs);
-  margin-right: var(--spacing-xxs);
 
   & > * {
     color: var(--color-text);
@@ -1246,11 +1246,13 @@
     position: absolute;
     top: -8px;
     left: 62px;
-    content: '►';
+    content: "►";
     z-index: 1;
     font-size: 5rem;
     color: #fff;
-    text-shadow: 0 0 3px var(--color-primary), 0 0 5px var(--color-primary);
+    text-shadow:
+      0 0 3px var(--color-primary),
+      0 0 5px var(--color-primary);
   }
 }
 
@@ -1326,7 +1328,7 @@
 @media (min-width: $breakpoint-small) {
   .claim-preview--tile:not(:hover),
   .claim-preview__wrapper:not(:hover) {
-    .claim__menu-button:not(:focus):not([aria-expanded='true']) {
+    .claim__menu-button:not(:focus):not([aria-expanded="true"]) {
       opacity: 0;
     }
   }

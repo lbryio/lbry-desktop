@@ -29,10 +29,10 @@
   position: relative;
 
   .tag {
+    font-size: var(--font-xsmall);
     @media (max-width: $breakpoint-xsmall) {
       display: none;
     }
-    font-size: var(--font-xsmall);
   }
 
   & > *:not(:last-child) {

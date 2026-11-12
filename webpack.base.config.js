@@ -66,7 +66,19 @@ let baseConfig = {
               },
             },
           },
-          { loader: 'sass-loader' },
+          {
+            loader: 'sass-loader',
+            options: {
+              // Sass's legacy render() API is deprecated (#693).
+              api: 'modern',
+              sassOptions: {
+                // ui/scss still uses @import. Moving to @use changes how @extend
+                // reaches across files, so it needs its own careful migration;
+                // until then, hide only this one deprecation.
+                silenceDeprecations: ['import'],
+              },
+            },
+          },
         ],
       },
       {
