@@ -45,3 +45,6 @@ package-lock.json
 
 # Jest coverage output
 /coverage
+
+# Claude Code worktrees
+/.claude/worktrees/
