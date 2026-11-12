@@ -13,6 +13,7 @@ module.exports = {
   // Mirror the webpack aliases the source imports rely on.
   moduleNameMapper: {
     '^config$': '<rootDir>/ui/__tests__/__mocks__/config.js',
+    '^lbryinc$': '<rootDir>/extras/lbryinc',
     // Electron APIs aren't available under Jest.
     '^electron$': '<rootDir>/ui/__tests__/__mocks__/electron.js',
     // jsdom's browser condition resolves uuid to its ESM build, which Jest can't parse.

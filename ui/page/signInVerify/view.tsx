@@ -23,15 +23,22 @@ function SignInVerifyPage(props: Props) {
     doToast,
   } = props;
   const [isAuthenticationSuccess, setIsAuthenticationSuccess] = useState(false);
+  // Google's reCAPTCHA is only loaded after the user agrees to it (#607).
+  const [captchaAccepted, setCaptchaAccepted] = useState(false);
   const [showCaptchaMessage, setShowCaptchaMessage] = useState(false);
   const [captchaLoaded, setCaptchaLoaded] = useState(false);
+  // The sign-in link is single use, so confirm it at most once. A second
+  // confirm fails and would report an error after a successful sign-in.
+  const confirmStarted = React.useRef(false);
   const urlParams = new URLSearchParams(location.search);
   const authToken = urlParams.get("auth_token");
   const userSubmittedEmail = urlParams.get("email");
   const verificationToken = urlParams.get("verification_token");
   const needsRecaptcha = urlParams.get("needs_recaptcha") === "true";
+  const isLinkValid = Boolean(authToken && userSubmittedEmail && verificationToken);
+  const showCaptchaConsent = needsRecaptcha && !captchaAccepted && !isAuthenticationSuccess;
 
-  function onAuthError(message: unknown) {
+  function onAuthError(message?: unknown) {
     doToast({
       message: message || __("Authentication failure."),
       isError: true,
@@ -39,44 +46,10 @@ function SignInVerifyPage(props: Props) {
     push(`/$/${PAGES.AUTH}`);
   }
 
-  React.useEffect(() => {
-    if (!authToken || !userSubmittedEmail || !verificationToken) {
-      onAuthError(__("Invalid or expired sign-in link."));
-    }
-  }, [onAuthError, authToken, userSubmittedEmail, verificationToken, doToast, push]);
+  function verifyUser(captchaValue?: unknown) {
+    if (confirmStarted.current) return;
+    confirmStarted.current = true;
 
-  React.useEffect(() => {
-    if (!needsRecaptcha) {
-      // @ts-expect-error - TS2554 - Expected 1 arguments, but got 0.
-      verifyUser();
-    }
-  }, [verifyUser, needsRecaptcha]);
-
-  React.useEffect(() => {
-    let captchaTimeout;
-
-    if (needsRecaptcha && !captchaLoaded) {
-      captchaTimeout = setTimeout(() => {
-        setShowCaptchaMessage(true);
-      }, 2000);
-    }
-
-    return () => {
-      if (captchaTimeout) {
-        clearTimeout(captchaTimeout);
-      }
-    };
-  }, [needsRecaptcha, captchaLoaded]);
-
-  function onCaptchaChange(value: unknown) {
-    verifyUser(value);
-  }
-
-  function onCaptchaReady() {
-    setCaptchaLoaded(true);
-  }
-
-  function verifyUser(captchaValue: unknown) {
     // @ts-expect-error - TS2339 (ts-migration)
     Lbryio.call("user_email", "confirm", {
       auth_token: authToken,
@@ -92,6 +65,81 @@ function SignInVerifyPage(props: Props) {
       });
   }
 
+  // The link comes from the URL the page opened with, so check it once.
+  React.useEffect(() => {
+    if (!isLinkValid) {
+      onAuthError(__("Invalid or expired sign-in link."));
+    } else if (!needsRecaptcha) {
+      verifyUser();
+    }
+  }, []);
+
+  React.useEffect(() => {
+    let captchaTimeout;
+
+    if (captchaAccepted && !captchaLoaded) {
+      captchaTimeout = setTimeout(() => {
+        setShowCaptchaMessage(true);
+      }, 2000);
+    }
+
+    return () => {
+      if (captchaTimeout) {
+        clearTimeout(captchaTimeout);
+      }
+    };
+  }, [captchaAccepted, captchaLoaded]);
+
+  function onCaptchaChange(value: unknown) {
+    verifyUser(value);
+  }
+
+  function onCaptchaReady() {
+    setCaptchaLoaded(true);
+  }
+
+  function getSubtitle() {
+    if (isAuthenticationSuccess) return __("You can now close this tab.");
+    if (showCaptchaConsent) {
+      return __(
+        "To finish signing in, the sign-in server asks for a Google reCAPTCHA check. Loading it sends your IP address and browser details to Google."
+      );
+    }
+    if (needsRecaptcha) return null;
+    return __("Welcome back! You are automatically being signed in.");
+  }
+
+  function getActions() {
+    if (isAuthenticationSuccess || !needsRecaptcha || !isLinkValid) return null;
+
+    if (showCaptchaConsent) {
+      return (
+        <div className="section__actions">
+          <Button
+            // @ts-expect-error - TS2322 (ts-migration)
+            button="primary"
+            label={__("Continue with Google reCAPTCHA")}
+            onClick={() => setCaptchaAccepted(true)}
+          />
+          {/* @ts-expect-error - TS2322 (ts-migration) */}
+          <Button button="link" label={__("Cancel")} onClick={() => push(`/$/${PAGES.AUTH}`)} />
+        </div>
+      );
+    }
+
+    return (
+      <div className="section__actions">
+        <ReCAPTCHA
+          sitekey="6LePsJgUAAAAAFTuWOKRLnyoNKhm0HA4C3elrFMG"
+          onChange={onCaptchaChange}
+          asyncScriptOnLoad={onCaptchaReady}
+          onExpired={onAuthError}
+          onErrored={onAuthError}
+        />
+      </div>
+    );
+  }
+
   return (
     // @ts-expect-error - TS2322 (ts-migration)
     <Page authPage noFooter>
@@ -100,13 +148,7 @@ function SignInVerifyPage(props: Props) {
           title={isAuthenticationSuccess ? __("Log in success!") : __("Log in")}
           subtitle={
             <React.Fragment>
-              <p>
-                {isAuthenticationSuccess
-                  ? __("You can now close this tab.")
-                  : needsRecaptcha
-                    ? null
-                    : __("Welcome back! You are automatically being signed in.")}
-              </p>
+              <p>{getSubtitle()}</p>
               {showCaptchaMessage && !isAuthenticationSuccess && (
                 <p>
                   {/* @ts-expect-error - TS2745 (ts-migration) */}
@@ -125,20 +167,7 @@ function SignInVerifyPage(props: Props) {
               )}
             </React.Fragment>
           }
-          actions={
-            !isAuthenticationSuccess &&
-            needsRecaptcha && (
-              <div className="section__actions">
-                <ReCAPTCHA
-                  sitekey="6LePsJgUAAAAAFTuWOKRLnyoNKhm0HA4C3elrFMG"
-                  onChange={onCaptchaChange}
-                  asyncScriptOnLoad={onCaptchaReady}
-                  onExpired={onAuthError}
-                  onErrored={onAuthError}
-                />
-              </div>
-            )
-          }
+          actions={getActions()}
         />
       </div>
     </Page>

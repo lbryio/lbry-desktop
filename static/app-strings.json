@@ -2378,5 +2378,7 @@
   "Keep the uploader's file name, or name files after their title. Files with the same name get a number added. Changing these settings will not affect previously downloaded content.": "Keep the uploader's file name, or name files after their title. Files with the same name get a number added. Changing these settings will not affect previously downloaded content.",
   "Original file name": "Original file name",
   "Date - Title": "Date - Title",
+  "To finish signing in, the sign-in server asks for a Google reCAPTCHA check. Loading it sends your IP address and browser details to Google.": "To finish signing in, the sign-in server asks for a Google reCAPTCHA check. Loading it sends your IP address and browser details to Google.",
+  "Continue with Google reCAPTCHA": "Continue with Google reCAPTCHA",
   "--end--": "--end--"
 }
