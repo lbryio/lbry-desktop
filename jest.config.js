@@ -8,6 +8,9 @@ module.exports = {
   roots: ['<rootDir>/ui'],
   // Mirror webpack's resolve.modules so bare imports like 'util/lbryURI' work.
   modulePaths: ['<rootDir>/ui'],
+  // Count every source file, not just the ones a test happens to import, so the
+  // coverage number isn't inflated.
+  collectCoverageFrom: ['ui/**/*.{ts,tsx}', '!ui/__tests__/**', '!**/*.d.ts'],
   testMatch: ['**/__tests__/**/*.test.[jt]s?(x)'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   // Mirror the webpack aliases the source imports rely on.

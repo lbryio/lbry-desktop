@@ -42,3 +42,6 @@ package-lock.json
 !.yarn/sdks
 !.yarn/versions
 !.yarn/releases
+
+# Jest coverage output
+/coverage

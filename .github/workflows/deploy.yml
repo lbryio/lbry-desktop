@@ -23,7 +23,14 @@ jobs:
       - run: corepack enable
       - run: yarn
       - run: yarn lint
-      - run: yarn test
+      - run: yarn test --coverage --coverageReporters=lcov --coverageReporters=text-summary
+      # Needs the CODECOV_TOKEN repo secret. Forks and Dependabot PRs don't get it,
+      # so a failed upload must not fail the build.
+      - uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage/lcov.info
+          fail_ci_if_error: false
 
   typecheck:
     name: typecheck

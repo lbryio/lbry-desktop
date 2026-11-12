@@ -11,6 +11,8 @@ This is [Bitcoin Brisbane](https://github.com/bitcoinbrisbane)'s fork of
 April 2023. We follow the [LBRY Foundation's fork](https://github.com/LBRYFoundation/lbry-desktop)
 and send our changes there as well.
 
+<a href="https://github.com/bitcoinbrisbane/lbry-desktop/actions/workflows/deploy.yml?query=branch%3Amaster" title="Build status on master"><img alt="Build status" src="https://github.com/bitcoinbrisbane/lbry-desktop/actions/workflows/deploy.yml/badge.svg?branch=master"></a>
+<a href="https://codecov.io/gh/bitcoinbrisbane/lbry-desktop" title="Test coverage on master"><img alt="Coverage" src="https://codecov.io/gh/bitcoinbrisbane/lbry-desktop/branch/master/graph/badge.svg"></a>
 <a href="LICENSE" title="MIT licensed"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
 
 ![App GIF](https://spee.ch/ba/lbry-joule.gif)
