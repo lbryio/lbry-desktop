@@ -42,8 +42,8 @@ function deepEq(a: any, b: any, aStack: any[], bStack: any[]): boolean {
       // of `NaN` are not equivalent.
       return +a === +b;
     case "[object Symbol]":
-      // @ts-expect-error - TS2304 - SymbolProto is never defined in this port of underscore (throws if reached)
-      return SymbolProto.valueOf.call(a) === SymbolProto.valueOf.call(b);
+      // Boxed symbols, Object(Symbol()). Plain symbols never get this far.
+      return Symbol.prototype.valueOf.call(a) === Symbol.prototype.valueOf.call(b);
   }
 
   var areArrays = className === "[object Array]";
@@ -115,7 +115,6 @@ function deepEq(a: any, b: any, aStack: any[], bStack: any[]): boolean {
 }
 
 function has(obj: unknown, path: PropertyKey): boolean {
-  // @ts-expect-error - TS2304 - bare hasOwnProperty is only defined where window is the global object
-  return obj != null && hasOwnProperty.call(obj, path);
+  return obj != null && Object.prototype.hasOwnProperty.call(obj, path);
 }
 /* eslint-enable */

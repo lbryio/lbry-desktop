@@ -32,4 +32,36 @@ describe("isEqual", () => {
     expect(isEqual(/abc/i, /abc/i)).toBe(true);
     expect(isEqual(/abc/i, /abc/g)).toBe(false);
   });
+
+  // #712: boxed symbols reached `SymbolProto`, which was never defined, and threw a ReferenceError.
+  describe("symbols", () => {
+    it("compares plain symbols by identity", () => {
+      const a = Symbol("a");
+      expect(isEqual(a, a)).toBe(true);
+      expect(isEqual(Symbol("a"), Symbol("a"))).toBe(false);
+    });
+
+    it("compares boxed symbols by the symbol they wrap", () => {
+      const a = Symbol("a");
+      expect(isEqual(Object(a), Object(a))).toBe(true);
+      expect(isEqual(Object(a), Object(Symbol("a")))).toBe(false);
+    });
+
+    it("finds symbols nested in objects", () => {
+      const a = Symbol("a");
+      expect(isEqual({ k: Object(a) }, { k: Object(a) })).toBe(true);
+      expect(isEqual({ k: Object(a) }, { k: Object(Symbol("a")) })).toBe(false);
+    });
+  });
+
+  describe("keys", () => {
+    it("requires the same own keys, not just the same number of them", () => {
+      expect(isEqual({ a: 1 }, { b: 1 })).toBe(false);
+    });
+
+    it("compares objects that have their own hasOwnProperty key", () => {
+      expect(isEqual({ hasOwnProperty: 1 }, { hasOwnProperty: 1 })).toBe(true);
+      expect(isEqual({ hasOwnProperty: 1 }, { hasOwnProperty: 2 })).toBe(false);
+    });
+  });
 });

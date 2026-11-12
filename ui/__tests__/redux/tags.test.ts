@@ -51,11 +51,10 @@ describe("tags reducer", () => {
   describe("SYNC_STATE_POPULATE", () => {
     const populate = (state: any, tags: any) => reducer(state, { type: ACTIONS.SYNC_STATE_POPULATE, data: { tags } });
 
-    // Not toBe(): handleActions (util/redux-utils) wraps every handled action in Object.assign({}, ...),
-    // so even this "no changes" branch yields a new top-level object.
-    it("leaves the followed tags alone when the synced tags match", () => {
+    // handleActions keeps the same object when a handler returns its state unchanged (#707).
+    it("returns the same state when the synced tags match", () => {
       const state = withTags(["a", "b"]);
-      expect(populate(state, ["a", "b"])).toEqual(state);
+      expect(populate(state, ["a", "b"])).toBe(state);
     });
 
     it("replaces followed tags and drops non-strings", () => {

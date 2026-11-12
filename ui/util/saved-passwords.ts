@@ -69,6 +69,9 @@ function setSavedPassword(value: string | null | undefined, saveToDisk: boolean)
         deleteSavedPassword();
       }
     }
+
+    // Nothing here is asynchronous, but callers get a Promise, so settle it (#713).
+    resolve();
   });
 }
 
