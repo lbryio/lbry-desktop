@@ -109,8 +109,10 @@ const startDaemon = async () => {
   if (!isDaemonRunning) {
     daemon = new Daemon();
     daemon.on("exit", () => {
+      // Always clear the handle: will-quit waits while `daemon` is set, so leaving it
+      // set (as dev used to) makes every later quit wait forever (#692).
+      daemon = null;
       if (!isDev) {
-        daemon = null;
         if (!appState.isQuitting) {
           dialog.showErrorBox(
             "Daemon has Exited",
@@ -119,6 +121,10 @@ const startDaemon = async () => {
               "https://lbry.com/faq/startup-troubleshooting"
           );
         }
+      }
+      // In dev an unexpected daemon exit shouldn't close the app (you may be restarting the
+      // daemon by hand), but a quit that was waiting on it must be allowed to finish.
+      if (!isDev || appState.isQuitting) {
         app.quit();
       }
     });
@@ -139,9 +145,9 @@ const startLbryFirst = async () => {
   try {
     lbryFirst = new LbryFirstInstance();
     lbryFirst.on("exit", (e) => {
+      lbryFirst = null;
+      isLbryFirstRunning = false;
       if (!isDev) {
-        lbryFirst = null;
-        isLbryFirstRunning = false;
         if (!appState.isQuitting) {
           dialog.showErrorBox(
             "LbryFirst has Exited",
@@ -149,6 +155,8 @@ const startLbryFirst = async () => {
             e
           );
         }
+      }
+      if (!isDev || appState.isQuitting) {
         app.quit();
       }
     });
