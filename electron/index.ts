@@ -20,6 +20,10 @@ import installDevtools from "./installDevtools";
 import fs from "fs";
 import path from "path";
 import { diskSpaceLinux, diskSpaceWindows, diskSpaceMac } from "../ui/util/diskspace";
+import ignoreBrokenPipe from "./ignoreBrokenPipe";
+
+// Before anything logs: a closed stdout/stderr must not crash the app (#601).
+ignoreBrokenPipe(process.stdout, process.stderr);
 
 const { download } = require("electron-dl");
 const mime = require("mime");
