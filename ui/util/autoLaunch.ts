@@ -1,4 +1,3 @@
-//@ts-nocheck
 // @if TARGET='app'
 const AutoLaunch = require("auto-launch");
 

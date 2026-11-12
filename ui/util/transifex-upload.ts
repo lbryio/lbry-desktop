@@ -1,14 +1,13 @@
-//@ts-nocheck
 const apiBaseUrl = "https://www.transifex.com/api/2/project";
 const resource = "app-strings";
 
 export function doTransifexUpload(
   contents: unknown,
-  project: unknown,
-  token: unknown,
-  success: unknown,
-  fail: unknown
-) {
+  project: string,
+  token: string,
+  success: ((result: unknown) => void) | null | undefined,
+  fail: ((message: string) => void) | null | undefined
+): void {
   const url = `${apiBaseUrl}/${project}/resources/`;
   const updateUrl = `${apiBaseUrl}/${project}/resource/${resource}/content/`;
   const headers = {
@@ -24,8 +23,8 @@ export function doTransifexUpload(
     content: contents,
   } as const;
 
-  function handleResponse(text: unknown) {
-    let json;
+  function handleResponse(text: string) {
+    let json: unknown;
     try {
       // transifex api returns Python dicts for some reason.
       // Any way to get the api to return valid JSON?
@@ -39,7 +38,7 @@ export function doTransifexUpload(
     }
   }
 
-  function handleError(err: unknown) {
+  function handleError(err: { message?: string }) {
     if (fail) {
       fail(err.message ? err.message : "Could not upload strings resource to Transifex");
     }

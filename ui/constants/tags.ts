@@ -1,4 +1,3 @@
-//@ts-nocheck
 export const DEFAULT_FOLLOWED_TAGS = [
   "art",
   "automotive",

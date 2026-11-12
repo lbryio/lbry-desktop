@@ -1,4 +1,3 @@
-//@ts-nocheck
 /* Many SETTINGS are stored in the localStorage by their name -
     be careful about changing the value of a SETTINGS constant, as doing so can invalidate existing SETTINGS */
 export const CREDIT_REQUIRED_ACKNOWLEDGED = "credit_required_acknowledged";

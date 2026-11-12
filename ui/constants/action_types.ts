@@ -1,4 +1,3 @@
-//@ts-nocheck
 /*
   Constants for redux actions
   All names should be in present tense

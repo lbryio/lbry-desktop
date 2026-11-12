@@ -1,4 +1,3 @@
-//@ts-nocheck
 export const RULE = {
   COMMENT: "comment",
   COMMENT_REPLY: "comment-reply",

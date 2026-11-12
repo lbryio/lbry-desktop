@@ -1,4 +1,3 @@
-//@ts-nocheck
 const LANGUAGES = {
   aa: ["Afar", "Afar"],
   ab: ["Abkhazian", "Аҧсуа"],

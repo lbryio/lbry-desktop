@@ -1,4 +1,3 @@
-//@ts-nocheck
 import React from "react";
 
 let localStorageAvailable;
@@ -8,7 +7,7 @@ try {
   localStorageAvailable = false;
 }
 
-export const lazyImport = (componentImport: unknown) =>
+export const lazyImport = (componentImport: () => Promise<any>): React.LazyExoticComponent<React.ComponentType<any>> =>
   React.lazy(async () => {
     const pageHasAlreadyBeenForceRefreshed = localStorageAvailable
       ? JSON.parse(window.localStorage.getItem("page-has-been-force-refreshed") || "false")

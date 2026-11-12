@@ -1,35 +1,35 @@
-//@ts-nocheck
 // Some functions to work with the new html5 file system API:
 
 // Wrapper for webkitGetAsEntry
 // Note: webkitGetAsEntry might be renamed to GetAsEntry
-const getAsEntry = (item: unknown) => {
+const getAsEntry = (item: DataTransferItem): FileSystemEntry | undefined => {
   if (item.kind === "file" && item.webkitGetAsEntry) {
     return item.webkitGetAsEntry();
   }
 };
 
 // Get file object from fileEntry
-const getFile = (fileEntry: unknown) => new Promise<any>((resolve, reject) => fileEntry.file(resolve, reject));
+const getFile = (fileEntry: FileSystemFileEntry): Promise<File> =>
+  new Promise<File>((resolve, reject) => fileEntry.file(resolve, reject));
 
 // Read entries from directory
-const readDirectory = (directory: unknown) => {
+const readDirectory = (directory: FileSystemDirectoryEntry): Promise<FileSystemEntry[]> | undefined => {
   // Some browsers don't support this
   if (directory.createReader !== undefined) {
     const dirReader = directory.createReader();
-    return new Promise<any>((resolve, reject) => dirReader.readEntries(resolve, reject));
+    return new Promise<FileSystemEntry[]>((resolve, reject) => dirReader.readEntries(resolve, reject));
   }
 };
 
 // Get file system entries from the dataTransfer items list:
 
-const getFiles = (items: unknown, directoryEntries = false) => {
-  const entries: unknown = [];
+const getFiles = (items: Iterable<DataTransferItem | FileSystemEntry>, directoryEntries = false): Promise<File[]> => {
+  const entries: Promise<File>[] = [];
 
   for (const item of items) {
-    const entry = directoryEntries ? item : getAsEntry(item);
+    const entry = (directoryEntries ? item : getAsEntry(item as DataTransferItem)) as FileSystemEntry | undefined;
     if (entry && entry.isFile) {
-      const file = getFile(entry);
+      const file = getFile(entry as FileSystemFileEntry);
       entries.push(file);
     }
   }
@@ -40,7 +40,7 @@ const getFiles = (items: unknown, directoryEntries = false) => {
 // Generate a valid file tree from dataTransfer:
 // - Ignores directory entries
 // - Ignores recursive search
-export const getTree = async (dataTransfer: unknown) => {
+export const getTree = async (dataTransfer: DataTransfer): Promise<File[] | FileList | undefined> => {
   if (dataTransfer) {
     const { items, files } = dataTransfer;
     // Handle single item drop
@@ -50,13 +50,13 @@ export const getTree = async (dataTransfer: unknown) => {
       if (root) {
         // Handle directory
         if (root.isDirectory) {
-          const directoryEntries = await readDirectory(root);
+          const directoryEntries = await readDirectory(root as FileSystemDirectoryEntry);
           // Get each file from the list
           return getFiles(directoryEntries, true);
         }
         // Hanlde file
         if (root.isFile) {
-          const file = await getFile(root);
+          const file = await getFile(root as FileSystemFileEntry);
           return [file];
         }
       } else {

@@ -1,11 +1,11 @@
-//@ts-nocheck
 import { useEffect, useState } from "react";
 
-export default function useKonamiListener() {
+export default function useKonamiListener(): boolean {
   const [isActive, setIsActive] = useState(false);
   useEffect(() => {
     let listener;
     if (!listener) {
+      // @ts-expect-error - TS2350 - vendored konami-js: Konami is a plain function used as a constructor
       listener = new Konami(() => setIsActive(!isActive));
     }
     return () => {
@@ -27,7 +27,7 @@ export default function useKonamiListener() {
  * Licensed under the MIT License (http://opensource.org/licenses/MIT)
  * Tested in: Safari 4+, Google Chrome 4+, Firefox 3+, IE7+, Mobile Safari 2.2.1+ and Android
  */
-var Konami = function (callback: unknown) {
+var Konami = function (callback: () => void) {
   var konami = {
     addEvent: function (obj, type, fn, ref_obj) {
       if (obj.addEventListener) obj.addEventListener(type, fn, false);
@@ -53,12 +53,14 @@ var Konami = function (callback: unknown) {
       if (ref_obj) {
         konami = ref_obj;
       } // IE
+      // @ts-expect-error - TS2339 - vendored konami-js: reads the legacy global event
       konami.input += e ? e.keyCode : event.keyCode;
 
       if (konami.input.length > konami.pattern.length) {
         konami.input = konami.input.slice(konami.input.length - konami.pattern.length);
       }
       if (konami.input === konami.pattern) {
+        // @ts-expect-error - TS2339 - vendored konami-js: _currentLink is added at run time
         konami.code(konami._currentLink);
         konami.input = "";
         e.preventDefault();
@@ -113,6 +115,7 @@ var Konami = function (callback: unknown) {
             }
           }
           if (match) {
+            // @ts-expect-error - TS2339 - vendored konami-js: _currentLink is added at run time
             konami.iphone.code(konami._currentLink);
           }
         }
@@ -125,8 +128,10 @@ var Konami = function (callback: unknown) {
       },
       load: function (link) {
         this.orig_keys = this.keys;
+        // @ts-expect-error - TS2554 - vendored konami-js: ref_obj is optional
         konami.addEvent(document, "touchmove", this.touchmoveHandler);
         konami.addEvent(document, "touchend", this.touchendHandler, false);
+        // @ts-expect-error - TS2554 - vendored konami-js: ref_obj is optional
         konami.addEvent(document, "touchstart", this.touchstartHandler);
       },
       unload: function () {
@@ -149,6 +154,7 @@ var Konami = function (callback: unknown) {
   typeof callback === "string" && konami.load(callback);
   if (typeof callback === "function") {
     konami.code = callback;
+    // @ts-expect-error - TS2554 - vendored konami-js: load() takes an optional link
     konami.load();
   }
 

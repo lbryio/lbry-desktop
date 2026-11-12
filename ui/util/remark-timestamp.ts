@@ -1,5 +1,5 @@
-//@ts-nocheck
 import visit from "unist-util-visit";
+import type { MdNode, Eat } from "util/remark-types";
 
 const TIMESTAMP_NODE_TYPE = "timestamp";
 
@@ -7,7 +7,11 @@ const TIMESTAMP_NODE_TYPE = "timestamp";
 // Tokenize timestamp
 // ***************************************************************************
 
-function findNextTimestamp(value: unknown, fromIndex: unknown, strictlyFromIndex: unknown) {
+function findNextTimestamp(
+  value: string,
+  fromIndex: number,
+  strictlyFromIndex: boolean
+): { text: string; index: number } | null {
   let begin = 0;
   while (begin < value.length) {
     // Start with a rough match
@@ -41,7 +45,7 @@ function findNextTimestamp(value: unknown, fromIndex: unknown, strictlyFromIndex
     // Exclude trailing colons to allow "0:12: Start of section", for example.
     const str = match[0].replace(/:+$/, "");
 
-    let isValidTimestamp;
+    let isValidTimestamp: boolean;
     switch (str.length) {
       case 4: // "9:59"
         isValidTimestamp = /^[0-9]:[0-5][0-9]$/.test(str);
@@ -79,20 +83,20 @@ function findNextTimestamp(value: unknown, fromIndex: unknown, strictlyFromIndex
   return null;
 }
 
-function locateTimestamp(value: unknown, fromIndex: unknown) {
+function locateTimestamp(value: string, fromIndex: number): number {
   const ts = findNextTimestamp(value, fromIndex, false);
   return ts ? ts.index : -1;
 }
 
 // Generate 'timestamp' markdown node
-const createTimestampNode = (text: unknown) => ({
+const createTimestampNode = (text: string): MdNode => ({
   type: TIMESTAMP_NODE_TYPE,
   value: text,
   children: [{ type: "text", value: text }],
 });
 
 // Generate a markdown link from timestamp
-function tokenizeTimestamp(eat: unknown, value: unknown, silent: unknown) {
+function tokenizeTimestamp(eat: Eat, value: string, silent: boolean): unknown {
   if (silent) {
     return true;
   }
@@ -113,7 +117,7 @@ tokenizeTimestamp.notInList = true; // Flag doesn't work? It'll always tokenizes
 tokenizeTimestamp.notInLink = true;
 tokenizeTimestamp.notInBlock = true;
 
-export function inlineTimestamp() {
+export function inlineTimestamp(): void {
   const Parser = this.Parser;
   const tokenizers = Parser.prototype.inlineTokenizers;
   const methods = Parser.prototype.inlineMethods;
@@ -129,12 +133,12 @@ export function inlineTimestamp() {
 // Format timestamp
 // ***************************************************************************
 
-function strToSeconds(stime: unknown) {
+function strToSeconds(stime: string): number {
   const tt = stime.split(":").reverse();
   return (tt.length >= 3 ? +tt[2] : 0) * 60 * 60 + (tt.length >= 2 ? +tt[1] : 0) * 60 + (tt.length >= 1 ? +tt[0] : 0);
 }
 
-const transformer = (node: unknown, index: unknown, parent: unknown) => {
+const transformer = (node: MdNode, index: number, parent: MdNode | undefined): void => {
   if (node.type === TIMESTAMP_NODE_TYPE && parent && parent.type === "paragraph") {
     const timestampStr = node.value;
     const seconds = strToSeconds(timestampStr);
@@ -146,8 +150,8 @@ const transformer = (node: unknown, index: unknown, parent: unknown) => {
   }
 };
 
-const transform = (tree: unknown) => {
+const transform = (tree: MdNode): void => {
   visit(tree, [TIMESTAMP_NODE_TYPE], transformer);
 };
 
-export const formattedTimestamp = () => transform;
+export const formattedTimestamp = (): ((tree: MdNode) => void) => transform;

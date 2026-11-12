@@ -1,4 +1,3 @@
-//@ts-nocheck
 const SUPPORTED_BROWSER_LANGUAGES = {
   af: "af",
   en: "en",

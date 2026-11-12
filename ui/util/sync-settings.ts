@@ -1,23 +1,25 @@
-//@ts-nocheck
 import * as DAEMON_SETTINGS from "constants/daemon_settings";
 import isEqual from "util/deep-equal";
 
-export function stringifyServerParam(configList: unknown) {
-  return configList.reduce<Array<any>>((acc, cur) => {
+export function stringifyServerParam(configList: Array<[unknown, unknown]>): string[] {
+  return configList.reduce<string[]>((acc, cur) => {
     acc.push(`${cur[0]}:${cur[1]}`);
     return acc;
   }, []);
 }
 
-export const getSubsetFromKeysArray = (obj: unknown, keys: unknown) =>
+export const getSubsetFromKeysArray = (
+  obj: Record<string, unknown>,
+  keys: readonly string[]
+): Record<string, unknown> =>
   Object.keys(obj)
     .filter((i) => keys.includes(i))
-    .reduce<Record<string, any>>((acc, key) => {
+    .reduce<Record<string, unknown>>((acc, key) => {
       acc[key] = obj[key];
       return acc;
     }, {});
 
-export const shouldSetSetting = (key: unknown, val: unknown, current: unknown) => {
+export const shouldSetSetting = (key: string, val: unknown, current: unknown): boolean | number => {
   switch (key) {
     case DAEMON_SETTINGS.LBRYUM_SERVERS:
       return val !== null && Array.isArray(val) && val.length && !isEqual(val, current);

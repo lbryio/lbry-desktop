@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { DOMAIN } from "config";
 const AUTH_TOKEN = "auth_token";
 const SAVED_PASSWORD = "saved_password";
@@ -6,9 +5,9 @@ const domain =
   typeof window === "object" && window.location.hostname.includes("localhost") ? window.location.hostname : DOMAIN;
 const isProduction = process.env.NODE_ENV === "production";
 const maxExpiration = 2147483647;
-let sessionPassword;
+let sessionPassword: string;
 
-function setCookie(name: unknown, value: unknown, expirationDaysOnWeb: unknown) {
+function setCookie(name: string, value: string, expirationDaysOnWeb?: number): void {
   let expires = "";
   if (expirationDaysOnWeb) {
     const date = new Date();
@@ -31,7 +30,7 @@ function setCookie(name: unknown, value: unknown, expirationDaysOnWeb: unknown) 
   document.cookie = cookie;
 }
 
-function getCookie(name: unknown) {
+function getCookie(name: string): string | null {
   const nameEQ = name + "=";
   const cookies = document.cookie.split(";");
 
@@ -48,7 +47,7 @@ function getCookie(name: unknown) {
   return null;
 }
 
-function deleteCookie(name: unknown) {
+function deleteCookie(name: string): void {
   document.cookie = name + `=; Max-Age=-99999999; domain=${domain}; path=/;`;
 
   // Legacy
@@ -58,8 +57,8 @@ function deleteCookie(name: unknown) {
   document.cookie = name + `=; Max-Age=-99999999; domain=.${domain}; path=/;`;
 }
 
-function setSavedPassword(value: unknown, saveToDisk: unknown) {
-  return new Promise<any>((resolve) => {
+function setSavedPassword(value: string | null | undefined, saveToDisk: boolean): Promise<void> {
+  return new Promise<void>((resolve) => {
     const password = value === undefined || value === null ? "" : value;
     sessionPassword = password;
 
@@ -73,8 +72,8 @@ function setSavedPassword(value: unknown, saveToDisk: unknown) {
   });
 }
 
-function getSavedPassword() {
-  return new Promise<any>((resolve) => {
+function getSavedPassword(): Promise<string> {
+  return new Promise<string>((resolve) => {
     if (sessionPassword) {
       resolve(sessionPassword);
     }
@@ -83,45 +82,45 @@ function getSavedPassword() {
   });
 }
 
-function getPasswordFromCookie() {
-  return new Promise<any>((resolve) => {
-    let password;
+function getPasswordFromCookie(): Promise<string> {
+  return new Promise<string>((resolve) => {
+    let password: string;
     password = getCookie(SAVED_PASSWORD);
     resolve(password);
   });
 }
 
-function deleteSavedPassword() {
-  return new Promise<any>((resolve) => {
+function deleteSavedPassword(): Promise<void> {
+  return new Promise<void>((resolve) => {
     deleteCookie(SAVED_PASSWORD);
     resolve();
   });
 }
 
-function getAuthToken() {
+function getAuthToken(): string | null {
   return getCookie(AUTH_TOKEN);
 }
 
-function setAuthToken(value: unknown) {
+function setAuthToken(value: string): void {
   return setCookie(AUTH_TOKEN, value, 365);
 }
 
-function deleteAuthToken() {
-  return new Promise<any>((resolve) => {
+function deleteAuthToken(): Promise<void> {
+  return new Promise<void>((resolve) => {
     deleteCookie(AUTH_TOKEN);
     resolve();
   });
 }
 
-function doSignOutCleanup() {
-  return new Promise<any>((resolve) => {
+function doSignOutCleanup(): Promise<void> {
+  return new Promise<void>((resolve) => {
     deleteAuthToken();
     deleteSavedPassword();
     resolve();
   });
 }
 
-function doAuthTokenRefresh() {
+function doAuthTokenRefresh(): void {
   const authToken = getAuthToken();
   if (authToken) {
     deleteAuthToken();

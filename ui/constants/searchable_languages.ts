@@ -1,4 +1,3 @@
-//@ts-nocheck
 import LANGUAGES from "./languages";
 
 const SEARCHABLE_LANGUAGES = {

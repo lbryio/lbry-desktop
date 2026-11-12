@@ -118,8 +118,7 @@ function SettingWalletServer(props: Props) {
     updateServers(newServerConfig);
   }
 
-  function updateServers(newConfig: unknown) {
-    // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'ServerTuple[]'.
+  function updateServers(newConfig: ServerConfig) {
     saveServerConfig(newConfig);
     setCustomWalletServers(stringifyServerParam(newConfig));
   }

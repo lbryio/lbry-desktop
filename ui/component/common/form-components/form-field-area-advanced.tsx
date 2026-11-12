@@ -173,8 +173,8 @@ export class FormFieldAreaAdvanced extends React.PureComponent<Props> {
                 <SimpleMDE
                   {...inputProps}
                   id={name}
-                  // @ts-expect-error - TS2322 (ts-migration)
                   type="textarea"
+                  // @ts-expect-error - TS2322 - SimpleMDE types each event as CodeMirror's on() overloads, not as a handler
                   events={handleEvents}
                   getMdeInstance={getInstance}
                   options={{

@@ -44,11 +44,10 @@ export type HomepageCat = {
 //   },
 // };
 
-function getLimitPerChannel(size: unknown, isChannel: unknown) {
+function getLimitPerChannel(size: number, isChannel: boolean): number {
   if (isChannel) {
     return 1;
   } else {
-    // @ts-expect-error - TS2365 (ts-migration)
     return size < 250 ? (size < 150 ? 3 : 2) : 1;
   }
 }
@@ -134,8 +133,7 @@ export function GetLinksData(
   showIndividualTags?: boolean,
   showNsfw?: boolean
 ) {
-  function getPageSize(originalSize: unknown) {
-    // @ts-expect-error - TS2362 - The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+  function getPageSize(originalSize: number): number {
     return isLargeScreen ? originalSize * (3 / 2) : originalSize;
   }
 
@@ -161,7 +159,6 @@ export function GetLinksData(
         }),
       },
     } as const;
-    // @ts-expect-error - TS2345 - Argument of type '{ readonly title: string; readonly link: "/$/following"; readonly icon: "Heart"; readonly options: { readonly orderBy: readonly ["release_time"]; readonly releaseTime: string; readonly pageSize: unknown; readonly streamTypes: any; readonly channelIds: string[]; }; }' is not assignable to parameter of type 'RowDataItem'.
     rowData.push(RECENT_FROM_FOLLOWING);
   }
 
@@ -328,7 +325,6 @@ export function GetLinksData(
           },
         });
       });
-      // @ts-expect-error - TS2345 - Argument of type '{ readonly title: string; readonly link: "/$/tags"; readonly icon: "Tag"; readonly options: { readonly pageSize: unknown; readonly tags: string[]; readonly claimType: readonly ["stream"]; readonly limitClaimsPerChannel: 2; }; }' is not assignable to parameter of type 'RowDataItem'.
       if (showPersonalizedTags && !showIndividualTags) rowData.push(TRENDING_FOR_TAGS);
       if (showPersonalizedTags && showIndividualTags) {
         individualTagDataItems.forEach((item: RowDataItem) => {
@@ -339,7 +335,6 @@ export function GetLinksData(
   }
 
   if (!CUSTOM_HOMEPAGE) {
-    // @ts-expect-error - TS2345 - Argument of type '{ readonly title: string; readonly link: "/$/discover?order=top&fresh=day"; readonly options: { readonly pageSize: unknown; readonly orderBy: readonly ["effective_amount"]; readonly claimType: readonly ["stream"]; readonly limitClaimsPerChannel: 2; readonly releaseTime: `>${number}`; }; }' is not assignable to parameter of type 'RowDataItem'.
     rowData.push(TOP_CONTENT_TODAY);
     if (language !== "en") {
       // @ts-expect-error - TS2345 - Argument of type '{ readonly title: string; readonly link: `/$/discover?order=top&fresh=day&language=${string}`; readonly options: { readonly languages: readonly [string]; readonly pageSize: unknown; readonly orderBy: readonly ["effective_amount"]; readonly claimType: readonly ["stream"]; readonly limitClaimsPerChannel: 2; readonly r...' is not assignable to parameter of type 'RowDataItem'.

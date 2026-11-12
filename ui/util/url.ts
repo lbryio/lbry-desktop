@@ -1,17 +1,16 @@
-//@ts-nocheck
 // Can't use aliases here because we're doing exports/require
 
 const PAGES = require("../constants/pages");
 const { parseURI, buildURI } = require("../util/lbryURI");
 const COLLECTIONS_CONSTS = require("../constants/collections");
 
-function encodeWithSpecialCharEncode(string: unknown) {
+function encodeWithSpecialCharEncode(string: string): string {
   // encodeURIComponent doesn't encode `'` and others
   // which other services may not like
   return encodeURIComponent(string).replace(/'/g, "%27").replace(/\(/g, "%28").replace(/\)/g, "%29");
 }
 
-export const formatLbryUrlForWeb = (uri: unknown) => {
+export const formatLbryUrlForWeb = (uri: string): string => {
   let newUrl = uri.replace("lbry://", "/").replace(/#/g, ":");
   if (newUrl.startsWith("/?")) {
     // This is a lbry link to an internal page ex: lbry://?rewards
@@ -21,7 +20,7 @@ export const formatLbryUrlForWeb = (uri: unknown) => {
   return newUrl;
 };
 
-export const formatFileSystemPath = (path: unknown) => {
+export const formatFileSystemPath = (path: string | null | undefined): string | undefined => {
   if (!path) {
     return;
   }
@@ -40,7 +39,7 @@ export const formatFileSystemPath = (path: unknown) => {
   ex: lbry://?rewards
   ex: open.lbry.com/?rewards
 */
-export const formatInAppUrl = (path: unknown) => {
+export const formatInAppUrl = (path: string): string => {
   // Determine if we need to add a leading "/$/" for app pages
   const APP_PAGE_REGEX = /(\?)([a-z]*)(.*)/;
   const appPageMatches = APP_PAGE_REGEX.exec(path);
@@ -64,7 +63,7 @@ export const formatInAppUrl = (path: unknown) => {
   return path;
 };
 
-export const formatWebUrlIntoLbryUrl = (pathname: unknown, search: unknown) => {
+export const formatWebUrlIntoLbryUrl = (pathname: string, search: string): string => {
   // If there is no uri, the user is on an internal page
   // pathname will either be "/" or "/$/{page}"
   const path = pathname.startsWith("/$/") ? pathname.slice(3) : pathname.slice(1);
@@ -78,7 +77,7 @@ export const formatWebUrlIntoLbryUrl = (pathname: unknown, search: unknown) => {
   return appLink;
 };
 
-export const generateInitialUrl = (hash: unknown) => {
+export const generateInitialUrl = (hash: string): string => {
   let url = "/";
   if (hash) {
     hash = hash.replace("#", "");
@@ -87,21 +86,21 @@ export const generateInitialUrl = (hash: unknown) => {
   return url;
 };
 
-export const generateLbryContentUrl = (canonicalUrl: unknown, permanentUrl: unknown) => {
+export const generateLbryContentUrl = (canonicalUrl: string | null | undefined, permanentUrl: string): string => {
   return canonicalUrl ? canonicalUrl.split("lbry://")[1] : permanentUrl.split("lbry://")[1];
 };
 
-export const generateLbryWebUrl = (lbryUrl: unknown) => {
+export const generateLbryWebUrl = (lbryUrl: string): string => {
   return lbryUrl.replace(/#/g, ":");
 };
 
 export const generateEncodedLbryURL = (
-  domain: unknown,
-  lbryWebUrl: unknown,
-  includeStartTime: unknown,
-  startTime: unknown,
-  listId: unknown
-) => {
+  domain: string,
+  lbryWebUrl: string,
+  includeStartTime: boolean,
+  startTime: number,
+  listId: string | number | null | undefined
+): string => {
   const urlParams = new URLSearchParams();
 
   if (includeStartTime) {
@@ -109,7 +108,7 @@ export const generateEncodedLbryURL = (
   }
 
   if (listId) {
-    urlParams.append(COLLECTIONS_CONSTS.COLLECTION_ID, listId);
+    urlParams.append(COLLECTIONS_CONSTS.COLLECTION_ID, String(listId));
   }
   const urlParamsString = urlParams.toString();
   const encodedPart = encodeWithSpecialCharEncode(`${lbryWebUrl}?${urlParamsString}`);
@@ -117,21 +116,21 @@ export const generateEncodedLbryURL = (
 };
 
 export const generateShareUrl = (
-  domain: unknown,
-  lbryUrl: unknown,
-  referralCode: unknown,
-  rewardsApproved: unknown,
-  includeStartTime: unknown,
-  startTime: unknown,
-  listId: unknown
-) => {
+  domain: string,
+  lbryUrl: string,
+  referralCode: string | null | undefined,
+  rewardsApproved: boolean,
+  includeStartTime: boolean,
+  startTime: number,
+  listId: string | number | null | undefined
+): string => {
   const urlParams = new URLSearchParams();
   if (referralCode && rewardsApproved) {
     urlParams.append("r", referralCode);
   }
 
   if (listId) {
-    urlParams.append(COLLECTIONS_CONSTS.COLLECTION_ID, listId);
+    urlParams.append(COLLECTIONS_CONSTS.COLLECTION_ID, String(listId));
   }
 
   if (includeStartTime) {
@@ -156,7 +155,10 @@ export const generateShareUrl = (
   return url;
 };
 
-export const generateRssUrl = (domain: unknown, channelClaim: unknown) => {
+export const generateRssUrl = (
+  domain: string,
+  channelClaim: { value_type?: string; canonical_url?: string } | null | undefined
+): string => {
   if (!channelClaim || channelClaim.value_type !== "channel" || !channelClaim.canonical_url) {
     return "";
   }
@@ -165,7 +167,7 @@ export const generateRssUrl = (domain: unknown, channelClaim: unknown) => {
   return url;
 };
 
-export const generateListSearchUrlParams = (collectionId: unknown) => {
+export const generateListSearchUrlParams = (collectionId: string): string => {
   const urlParams = new URLSearchParams();
   urlParams.set(COLLECTIONS_CONSTS.COLLECTION_ID, collectionId);
   return `?` + urlParams.toString();

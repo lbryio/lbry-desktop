@@ -1,4 +1,3 @@
-//@ts-nocheck
 export const VIDEO = "video";
 export const AUDIO = "audio";
 
@@ -29,6 +28,6 @@ export const UNSUPPORTED = "unsupported";
 
 export const UNSUPPORTED_IN_THIS_APP = [APPLICATION] as const;
 
-export const UNRENDERABLE_MODES = Array.from(
-  new Set(UNSUPPORTED_IN_THIS_APP.concat([DOWNLOAD, APPLICATION, UNSUPPORTED]))
+export const UNRENDERABLE_MODES: string[] = Array.from(
+  new Set<string>([...UNSUPPORTED_IN_THIS_APP, DOWNLOAD, APPLICATION, UNSUPPORTED])
 );

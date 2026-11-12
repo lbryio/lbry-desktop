@@ -1,4 +1,3 @@
-//@ts-nocheck
 export const VIEW_ALL = "view_all";
 export const VIEW_LATEST_FIRST = "view_latest_first";
 

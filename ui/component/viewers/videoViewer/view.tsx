@@ -114,7 +114,7 @@ function VideoViewer(props: Props) {
   const [videoNode, setVideoNode] = useState();
 
   const updateVolumeState = React.useCallback(
-    debounce((volume, muted) => {
+    debounce((volume: number, muted: boolean) => {
       changeVolume(volume);
       changeMute(muted);
     }, 500),

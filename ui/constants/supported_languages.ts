@@ -1,4 +1,3 @@
-//@ts-nocheck
 import LANGUAGES from "./languages";
 // supported_browser_languages
 const SUPPORTED_LANGUAGES = {

@@ -1,7 +1,6 @@
-//@ts-nocheck
 import moment from "moment";
 
-export default function formatMediaDuration(duration = 0, config?: unknown) {
+export default function formatMediaDuration(duration = 0, config?: { screenReader?: boolean }): string {
   const options = {
     screenReader: false,
     ...config,

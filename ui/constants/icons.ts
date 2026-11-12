@@ -1,4 +1,3 @@
-//@ts-nocheck
 // React Feather icons
 // https://github.com/carmelopullara/react-feather
 // Note: Icons should be named for their purpose, rather than the actual icon.

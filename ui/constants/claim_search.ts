@@ -1,4 +1,3 @@
-//@ts-nocheck
 export const PAGE_SIZE = 20;
 
 export const FRESH_KEY = "fresh";

@@ -1,12 +1,32 @@
-//@ts-nocheck
+// @ts-expect-error - TS2305 - electron's typings only expose these renderer modules there, not from the package root
 import { clipboard, ipcRenderer, shell } from "electron";
 import { convertToShareLink } from "util/lbryURI";
 const isDev = process.env.NODE_ENV !== "production";
 
-let contextMenuId = 0;
-const contextMenuCallbacks = {};
+type MenuTemplate = {
+  label?: string;
+  accelerator?: string;
+  role?: string;
+  enabled?: boolean;
+  type?: string;
+  id?: string;
+  click?: () => void;
+  submenu?: MenuTemplate[];
+};
 
-ipcRenderer.on("context-menu-clicked", (event, id) => {
+// The part of a mouse event these menus read.
+type ContextMenuEvent = { target: EventTarget; screenX?: number; screenY?: number };
+
+// The part of a CodeMirror instance the editor menus use.
+type CodeMirrorLike = {
+  doc: { getValue: () => string; getSelection: () => string };
+  execCommand: (command: string) => void;
+};
+
+let contextMenuId = 0;
+const contextMenuCallbacks: Record<string, () => void> = {};
+
+ipcRenderer.on("context-menu-clicked", (event, id: string) => {
   const callback = contextMenuCallbacks[id];
   if (callback) {
     delete contextMenuCallbacks[id];
@@ -14,7 +34,7 @@ ipcRenderer.on("context-menu-clicked", (event, id) => {
   }
 });
 
-function serializeTemplate(templates) {
+function serializeTemplate(templates: MenuTemplate[]): MenuTemplate[] {
   return templates.map((template) => {
     const item = Object.assign({}, template);
 
@@ -35,12 +55,12 @@ function serializeTemplate(templates) {
   });
 }
 
-function popupContextMenu(templates) {
+function popupContextMenu(templates: MenuTemplate[]): void {
   Object.keys(contextMenuCallbacks).forEach((id) => delete contextMenuCallbacks[id]);
   ipcRenderer.send("show-context-menu", serializeTemplate(templates));
 }
 
-function injectDevelopmentTemplate(event: unknown, templates: unknown) {
+function injectDevelopmentTemplate(event: ContextMenuEvent, templates: MenuTemplate[]): MenuTemplate[] {
   if (!isDev) return templates;
   const { screenX, screenY } = event;
   const separator = { type: "separator" } as const;
@@ -60,10 +80,16 @@ function injectDevelopmentTemplate(event: unknown, templates: unknown) {
   return templates;
 }
 
-export function openContextMenu(event: unknown, templates = [], canEdit = false, selection = "") {
-  const { type, value } = event.target;
-  const isInput = event.target.matches("input") && (type === "text" || type === "number");
-  const isTextField = canEdit || isInput || event.target.matches("textarea");
+export function openContextMenu(
+  event: ContextMenuEvent,
+  templates: MenuTemplate[] = [],
+  canEdit = false,
+  selection = ""
+): void {
+  const target = event.target as HTMLInputElement & HTMLTextAreaElement;
+  const { type, value } = target;
+  const isInput = target.matches("input") && (type === "text" || type === "number");
+  const isTextField = canEdit || isInput || target.matches("textarea");
   const isSomethingSelected = selection.length > 0 || window.getSelection().toString().length > 0;
 
   templates.push({
@@ -74,7 +100,7 @@ export function openContextMenu(event: unknown, templates = [], canEdit = false,
   });
 
   // If context menu is opened on Input and there is text on the input and something is selected.
-  const { selectionStart, selectionEnd } = event.target;
+  const { selectionStart, selectionEnd } = target;
   if (!!value && isTextField && selectionStart !== selectionEnd) {
     templates.push({ label: "Cut", accelerator: "CmdOrCtrl+X", role: "cut" });
   }
@@ -102,7 +128,7 @@ export function openContextMenu(event: unknown, templates = [], canEdit = false,
 }
 
 // This function is used for the markdown description on the publish page
-export function openEditorMenu(codeMirror: unknown, event: unknown) {
+export function openEditorMenu(codeMirror: CodeMirrorLike, event: ContextMenuEvent): void {
   const value = codeMirror.doc.getValue();
   const selection = codeMirror.doc.getSelection();
   const templates = [
@@ -126,7 +152,7 @@ export function openEditorMenu(codeMirror: unknown, event: unknown) {
 }
 
 // This function is used for the CodeViewer component
-export function openSnippetMenu(codeMirror: unknown, event: unknown) {
+export function openSnippetMenu(codeMirror: CodeMirrorLike, event: ContextMenuEvent): void {
   const value = codeMirror.doc.getValue();
   const selection = codeMirror.doc.getSelection();
   const templates = [
@@ -144,9 +170,12 @@ export function openSnippetMenu(codeMirror: unknown, event: unknown) {
   openContextMenu(event, templates, false, selection);
 }
 
-export function openClaimPreviewMenu(claim: unknown, event: unknown) {
+export function openClaimPreviewMenu(
+  claim: { canonical_url?: string; permanent_url?: string; claim_id?: string } | null | undefined,
+  event: ContextMenuEvent
+): void {
   // @if TARGET='app'
-  const templates: unknown = [];
+  const templates: MenuTemplate[] = [];
 
   if (claim) {
     const shareLink = convertToShareLink(claim.canonical_url || claim.permanent_url);
@@ -178,7 +207,7 @@ export function openClaimPreviewMenu(claim: unknown, event: unknown) {
 }
 
 // Block context menu
-export function stopContextMenu(event: MouseClickEvent) {
+export function stopContextMenu(event: MouseClickEvent): void {
   if (navigator.userAgent.toLowerCase().indexOf(" electron/") > -1) {
     event.preventDefault();
     event.stopPropagation();

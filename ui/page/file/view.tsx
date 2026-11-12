@@ -127,7 +127,6 @@ function FilePage(props: Props) {
       );
     }
 
-    // @ts-expect-error - TS2345 - Argument of type 'string' is not assignable to parameter of type '"application"'.
     if (RENDER_MODES.UNRENDERABLE_MODES.includes(renderMode)) {
       return (
         <React.Fragment>

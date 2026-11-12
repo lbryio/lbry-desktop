@@ -1,4 +1,3 @@
-//@ts-nocheck
 // Sample query:
 //   https://reports.lbry.com/common/new?primary_email=e4drcf@gmail.com
 //     &channel_name=e4drcf

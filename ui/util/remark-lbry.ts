@@ -1,6 +1,6 @@
-//@ts-nocheck
 import { parseURI } from "util/lbryURI";
 import visit from "unist-util-visit";
+import type { MdNode, Eat } from "util/remark-types";
 
 const protocol = "lbry://";
 const uriRegex = /(lbry:\/\/)[^\s"]*[^)]/g;
@@ -11,7 +11,7 @@ const mentionToken = "@";
 const invalidRegex = /[-_.+=?!@#$%^&*:;,{}<>\w/\\]/;
 const mentionRegex = /@[^\s()"-_.+=?!@$%^&*;,{}<>/\\]*/gm;
 
-function handlePunctuation(value: unknown) {
+function handlePunctuation(value: string): string {
   const protocolIndex = value.indexOf("lbry://") === 0 ? protocol.length - 1 : 0;
   const channelModifierIndex =
     (value.indexOf(":", protocolIndex) >= 0 && value.indexOf(":", protocolIndex)) ||
@@ -21,7 +21,7 @@ function handlePunctuation(value: unknown) {
     (value.indexOf("#", channelModifierIndex + 1) >= 0 && value.indexOf("#", channelModifierIndex + 1)) ||
     channelModifierIndex;
 
-  let punctuationIndex;
+  let punctuationIndex: number | false;
   punctuationMarks.some((p) => {
     if (claimModifierIndex) {
       punctuationIndex = value.indexOf(p, claimModifierIndex + 1) >= 0 && value.indexOf(p, claimModifierIndex + 1);
@@ -33,7 +33,7 @@ function handlePunctuation(value: unknown) {
 }
 
 // Find channel mention
-function locateMention(value: unknown, fromIndex: unknown) {
+function locateMention(value: string, fromIndex: number): number {
   const index = value.indexOf(mentionToken, fromIndex);
 
   // Skip invalid mention
@@ -45,7 +45,7 @@ function locateMention(value: unknown, fromIndex: unknown) {
 }
 
 // Find claim url
-function locateURI(value: unknown, fromIndex: unknown) {
+function locateURI(value: string, fromIndex: number): number {
   const index = value.indexOf(protocol, fromIndex);
 
   // Skip invalid uri
@@ -57,7 +57,7 @@ function locateURI(value: unknown, fromIndex: unknown) {
 }
 
 // Generate a valid markdown link
-const createURI = (text: unknown, uri: unknown, embed = false) => ({
+const createURI = (text: string, uri: string, embed = false): MdNode => ({
   type: "link",
   url: (uri.startsWith(protocol) ? "" : protocol) + uri,
   data: {
@@ -67,7 +67,7 @@ const createURI = (text: unknown, uri: unknown, embed = false) => ({
   children: [{ type: "text", value: text }],
 });
 
-const validateURI = (match: unknown, eat: unknown) => {
+const validateURI = (match: string[] | null, eat: Eat): unknown => {
   if (match) {
     try {
       const text = match[0];
@@ -91,18 +91,19 @@ const validateURI = (match: unknown, eat: unknown) => {
 };
 
 // Generate a markdown link from channel name
-function tokenizeMention(eat: unknown, value: unknown, silent: unknown) {
+function tokenizeMention(eat: Eat, value: string, silent: boolean): unknown {
   if (silent) {
     return true;
   }
 
   const match = value.match(mentionRegex);
 
+  // @ts-expect-error - TS2554 - validateURI takes two arguments; the extra `self` is ignored
   return validateURI(match, eat, self);
 }
 
 // Generate a markdown link from lbry url
-function tokenizeURI(eat: unknown, value: unknown, silent: unknown) {
+function tokenizeURI(eat: Eat, value: string, silent: boolean): unknown {
   if (silent) {
     return true;
   }
@@ -124,7 +125,7 @@ tokenizeMention.notInList = false;
 tokenizeMention.notInLink = true;
 tokenizeMention.notInBlock = false;
 
-const visitor = (node: unknown, index: unknown, parent: unknown) => {
+const visitor = (node: MdNode, index: number, parent: MdNode | undefined): void => {
   if (node.type === "link" && parent && parent.type === "paragraph") {
     try {
       const uri = parseURI(node.url);
@@ -151,14 +152,14 @@ const visitor = (node: unknown, index: unknown, parent: unknown) => {
 };
 
 // transform
-const transform = (tree: unknown) => {
+const transform = (tree: MdNode): void => {
   visit(tree, ["link"], visitor);
 };
 
-export const formattedLinks = () => transform;
+export const formattedLinks = (): ((tree: MdNode) => void) => transform;
 
 // Main module
-export function inlineLinks() {
+export function inlineLinks(): void {
   const Parser = this.Parser;
   const tokenizers = Parser.prototype.inlineTokenizers;
   const methods = Parser.prototype.inlineMethods;

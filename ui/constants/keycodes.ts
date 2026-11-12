@@ -1,4 +1,3 @@
-//@ts-nocheck
 export const BACKSPACE = 8;
 export const TAB = 9;
 export const ENTER = 13;

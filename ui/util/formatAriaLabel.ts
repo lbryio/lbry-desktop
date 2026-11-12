@@ -1,7 +1,11 @@
-//@ts-nocheck
 import DateTime from "component/dateTime";
 
-export function formatClaimPreviewTitle(title: unknown, channelTitle: unknown, date: unknown, mediaDuration: unknown) {
+export function formatClaimPreviewTitle(
+  title: string,
+  channelTitle: string,
+  date: number | string | Date | null | undefined,
+  mediaDuration: string | null | undefined
+): string {
   // Aria-label value for claim preview
   const ariaDate = date ? DateTime.getTimeAgoStr(date) : null;
   let ariaLabelData = title;

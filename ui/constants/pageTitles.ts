@@ -1,4 +1,3 @@
-//@ts-nocheck
 // Customer-facing title for a page.
 //
 // Primarily used for the browser tab and history title.

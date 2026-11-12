@@ -1,6 +1,5 @@
-//@ts-nocheck
-export default function fetchWithTimeout(ms: unknown, promise: unknown) {
-  return new Promise<any>((resolve, reject) => {
+export default function fetchWithTimeout<T>(ms: number, promise: Promise<T>): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
     const timeoutId = setTimeout(() => {
       reject(new Error("promise timeout"));
     }, ms);

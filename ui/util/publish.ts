@@ -1,14 +1,13 @@
-//@ts-nocheck
 import { ESTIMATED_FEE, MINIMUM_PUBLISH_BID } from "constants/claim";
 
 export function handleBidChange(
-  bid: unknown,
-  amount: unknown,
-  balance: unknown,
-  setBidError: unknown,
-  setParam: unknown
-) {
-  const totalAvailableBidAmount = (parseFloat(amount) || 0.0) + (parseFloat(balance) || 0.0);
+  bid: number,
+  amount: number | string,
+  balance: number | string,
+  setBidError: (error: string) => void,
+  setParam: (params: { bid: number }) => void
+): void {
+  const totalAvailableBidAmount = (parseFloat(String(amount)) || 0.0) + (parseFloat(String(balance)) || 0.0);
 
   setParam({ bid: bid });
 

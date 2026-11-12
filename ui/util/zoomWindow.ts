@@ -1,4 +1,4 @@
-//@ts-nocheck
+// @ts-expect-error - TS2305 - electron's typings only expose webFrame to the renderer
 import { webFrame } from "electron";
 import * as SETTINGS from "constants/settings";
 const isDev = process.env.NODE_ENV !== "production";
@@ -10,12 +10,13 @@ export const ZOOM = {
   LOAD_FROM_LOCAL_STORAGE: "LOAD_FROM_LOCAL_STORAGE",
 } as const;
 
-function getNextZoomFactor(curFactor: unknown, isIncreasing: unknown) {
+function getNextZoomFactor(curFactor: number, isIncreasing: boolean): number {
   const zoomTable = [0.25, 0.33, 0.5, 0.67, 0.75, 0.8, 0.9, 1.0, 1.1, 1.25, 1.5, 1.75, 2.0, 2.5, 3.0];
 
-  curFactor = curFactor.toPrecision(3);
+  // toPrecision gives a string; it was compared with numbers, which coerces it back.
+  const roundedFactor = Number(curFactor.toPrecision(3));
   let i = zoomTable.length;
-  while (curFactor < zoomTable[--i]) {}
+  while (roundedFactor < zoomTable[--i]) {}
 
   if (isIncreasing) {
     return zoomTable[Math.min(zoomTable.length - 1, i + 1)];
@@ -24,10 +25,10 @@ function getNextZoomFactor(curFactor: unknown, isIncreasing: unknown) {
   }
 }
 
-export function changeZoomFactor(action: unknown) {
+export function changeZoomFactor(action: string): void {
   const ZOOM_DFLT_FACTOR = 1.0;
   const curFactor = webFrame.getZoomFactor();
-  let newFactor = null;
+  let newFactor: number | null = null;
 
   switch (action) {
     case ZOOM.INCREMENT:
@@ -51,5 +52,5 @@ export function changeZoomFactor(action: unknown) {
   }
 
   webFrame.setZoomFactor(newFactor);
-  window.localStorage.setItem(SETTINGS.DESKTOP_WINDOW_ZOOM, newFactor);
+  window.localStorage.setItem(SETTINGS.DESKTOP_WINDOW_ZOOM, String(newFactor));
 }

@@ -1,5 +1,4 @@
-//@ts-nocheck
-export function webDownloadClaim(streamingUrl: unknown, fileName: unknown) {
+export function webDownloadClaim(streamingUrl: string, fileName: string): void {
   // @if TARGET='web'
   const element = document.createElement("a");
   element.setAttribute("href", `${streamingUrl}?download=true`);

@@ -1,7 +1,6 @@
-//@ts-nocheck
 import { getFormatter } from "./intlNumberFormat";
 
-export function formatCredits(amount: unknown, precision: unknown, shortFormat = false) {
+export function formatCredits(amount: number | string, precision: number, shortFormat = false): string {
   const language = localStorage.getItem("language") || undefined;
   const actualAmount = Number(amount);
   const safePrecision = Math.min(20, Math.max(1, precision || 0));
@@ -28,7 +27,7 @@ export function formatCredits(amount: unknown, precision: unknown, shortFormat =
   return formatter.format(actualAmount);
 }
 
-export function formatFullPrice(amount: unknown, precision = 1) {
+export function formatFullPrice(amount: number | string, precision = 1): number {
   let formated = "";
 
   const quantity = amount.toString().split(".");
@@ -46,7 +45,7 @@ export function formatFullPrice(amount: unknown, precision = 1) {
   return parseFloat(quantity[0] + formated);
 }
 
-export function creditsToString(amount: unknown) {
-  const creditString = parseFloat(amount).toFixed(8);
+export function creditsToString(amount: number | string): string {
+  const creditString = parseFloat(String(amount)).toFixed(8);
   return creditString;
 }

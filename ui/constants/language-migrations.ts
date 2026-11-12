@@ -1,4 +1,3 @@
-//@ts-nocheck
 const LANGUAGE_MIGRATIONS = {
   "zh-CN": "zh-Hans",
   "zh-TW": "zh-Hant",

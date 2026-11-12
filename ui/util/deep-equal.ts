@@ -1,9 +1,9 @@
-//@ts-nocheck
 /* eslint-disable */
 // underscore's deep equal function
 // https://github.com/jashkenas/underscore/blob/master/underscore.js#L1189
 
-export default function isEqual(a: unknown, b: unknown, aStack?: unknown, bStack?: unknown) {
+// underscore's algorithm is written for arbitrary values, so a and b stay `any`.
+export default function isEqual(a: any, b: any, aStack?: any[], bStack?: any[]): boolean {
   // Identical objects are equal. `0 === -0`, but they aren't identical.
   // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
   if (a === b) return a !== 0 || 1 / a === 1 / b;
@@ -17,7 +17,7 @@ export default function isEqual(a: unknown, b: unknown, aStack?: unknown, bStack
   return deepEq(a, b, aStack, bStack);
 }
 
-function deepEq(a: unknown, b: unknown, aStack: unknown, bStack: unknown) {
+function deepEq(a: any, b: any, aStack: any[], bStack: any[]): boolean {
   // Compare `[[Class]]` names.
   var className = toString.call(a);
   if (className !== toString.call(b)) return false;
@@ -42,6 +42,7 @@ function deepEq(a: unknown, b: unknown, aStack: unknown, bStack: unknown) {
       // of `NaN` are not equivalent.
       return +a === +b;
     case "[object Symbol]":
+      // @ts-expect-error - TS2304 - SymbolProto is never defined in this port of underscore (throws if reached)
       return SymbolProto.valueOf.call(a) === SymbolProto.valueOf.call(b);
   }
 
@@ -113,7 +114,8 @@ function deepEq(a: unknown, b: unknown, aStack: unknown, bStack: unknown) {
   return true;
 }
 
-function has(obj: unknown, path: unknown) {
+function has(obj: unknown, path: PropertyKey): boolean {
+  // @ts-expect-error - TS2304 - bare hasOwnProperty is only defined where window is the global object
   return obj != null && hasOwnProperty.call(obj, path);
 }
 /* eslint-enable */

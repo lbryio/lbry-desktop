@@ -1,4 +1,3 @@
-//@ts-nocheck
 export const AUTH = "signup";
 export const AUTH_SIGNIN = "signin";
 export const AUTH_VERIFY = "verify";

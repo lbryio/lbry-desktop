@@ -1,4 +1,3 @@
-//@ts-nocheck
 /*
   Polyfill functions for the HTML5 fullscreen api:
   https://developer.mozilla.org/en-US/docs/Web/API/Fullscreen_API
@@ -25,25 +24,25 @@ const getPrefix = () => {
   return prefixIndex;
 };
 
-export const fullscreenElement = () => {
+export const fullscreenElement = (): Element | null => {
   const index = getPrefix();
   const prefix = prefixes.fullscreenElement[index];
   return document[prefix];
 };
 
-export const requestFullscreen = (elem: unknown) => {
+export const requestFullscreen = (elem: Element): void => {
   const index = getPrefix();
   const prefix = prefixes.requestFullscreen[index];
   elem[prefix] && elem[prefix]();
 };
 
-export const exitFullscreen = () => {
+export const exitFullscreen = (): void => {
   const index = getPrefix();
   const prefix = prefixes.exitFullscreen[index];
   document[prefix] && document[prefix]();
 };
 
-export const onFullscreenChange = (target: unknown, action: unknown, callback: unknown) => {
+export const onFullscreenChange = (target: EventTarget, action: "add" | "remove", callback: EventListener): void => {
   const index = getPrefix();
   const prefix = prefixes.fullscreenChange[index];
   target[`${action}EventListener`](prefix, callback, false);

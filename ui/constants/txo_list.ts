@@ -1,4 +1,3 @@
-//@ts-nocheck
 export const ACTIVE = "active"; // spent, active, all
 export const TYPE = "type"; // all, payment, support, channel, stream, repost
 export const SUB_TYPE = "subtype"; // other, purchase, tip

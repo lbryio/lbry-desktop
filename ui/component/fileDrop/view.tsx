@@ -131,6 +131,7 @@ function FileDrop(props: Props) {
       getTree(dropData)
         .then((entries) => {
           if (entries && entries.length) {
+            // @ts-expect-error - TS2345 - getTree can return a FileList (when a drop has hidden items), which this state types as an array
             setFiles(entries);
           }
         })

@@ -1,4 +1,3 @@
-//@ts-nocheck
 /*
  * How to use this file:
  * Settings exported from here will trigger the setting to be

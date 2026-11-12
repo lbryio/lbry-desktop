@@ -1,4 +1,3 @@
-//@ts-nocheck
 export const YOUTUBE_SYNC_NOT_TRANSFERRED = "not_transferred";
 export const YOUTUBE_SYNC_PENDING = "pending";
 export const YOUTUBE_SYNC_PENDING_EMAIL = "pendingemail";

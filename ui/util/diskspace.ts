@@ -1,8 +1,9 @@
-//@ts-nocheck
 const { exec } = require("child_process");
 
-export const diskSpaceLinux = (path: unknown) => {
-  return new Promise<any>((resolve, reject) => {
+export type DiskSpace = { total: number; free: number };
+
+export const diskSpaceLinux = (path: string): Promise<DiskSpace> => {
+  return new Promise<DiskSpace>((resolve, reject) => {
     exec(`df ${path}`, (error, stdout, stderr) => {
       if (error) {
         return reject(error);
@@ -22,7 +23,7 @@ export const diskSpaceLinux = (path: unknown) => {
   });
 };
 
-export const diskSpaceMac = (path: unknown) => {
+export const diskSpaceMac = (path: string): Promise<DiskSpace> => {
   // Escape spaces in path to prevent errors.
   // Example:
   // "/Users/username/Library/Application Support/LBRY" gets updated to
@@ -31,8 +32,8 @@ export const diskSpaceMac = (path: unknown) => {
   return diskSpaceLinux(escapedPath);
 };
 
-export const diskSpaceWindows = (path: unknown) => {
-  return new Promise<any>((resolve, reject) => {
+export const diskSpaceWindows = (path: string): Promise<DiskSpace> => {
+  return new Promise<DiskSpace>((resolve, reject) => {
     exec(`wmic logicaldisk get size,freespace,caption`, (error, stdout, stderr) => {
       if (error) {
         return reject(error);

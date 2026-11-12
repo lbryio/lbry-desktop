@@ -1,4 +1,3 @@
-//@ts-nocheck
 export const ID = "id";
 export const LANGUAGE = "language";
 export const GIVEN_NAME = "given_name";

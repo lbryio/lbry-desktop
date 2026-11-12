@@ -1,6 +1,6 @@
-//@ts-nocheck
 import { EMOTES_48px as EMOTES } from "constants/emotes";
 import visit from "unist-util-visit";
+import type { MdNode, Eat } from "util/remark-types";
 
 const EMOTE_NODE_TYPE = "emote";
 const RE_EMOTE = /:\+1:|:-1:|:[\w-]+:/;
@@ -9,7 +9,11 @@ const RE_EMOTE = /:\+1:|:-1:|:[\w-]+:/;
 // Tokenize emote
 // ***************************************************************************
 
-function findNextEmote(value: unknown, fromIndex: unknown, strictlyFromIndex: unknown) {
+function findNextEmote(
+  value: string,
+  fromIndex: number,
+  strictlyFromIndex: boolean
+): { text: string; index: number } | null {
   let begin = 0;
 
   while (begin < value.length) {
@@ -54,20 +58,20 @@ function findNextEmote(value: unknown, fromIndex: unknown, strictlyFromIndex: un
   return null;
 }
 
-function locateEmote(value: unknown, fromIndex: unknown) {
+function locateEmote(value: string, fromIndex: number): number {
   const emote = findNextEmote(value, fromIndex, false);
   return emote ? emote.index : -1;
 }
 
 // Generate 'emote' markdown node
-const createEmoteNode = (text: unknown) => ({
+const createEmoteNode = (text: string): MdNode => ({
   type: EMOTE_NODE_TYPE,
   value: text,
   children: [{ type: "text", value: text }],
 });
 
 // Generate a markdown image from emote
-function tokenizeEmote(eat: unknown, value: unknown, silent: unknown) {
+function tokenizeEmote(eat: Eat, value: string, silent: boolean): unknown {
   if (silent) return true;
 
   const emote = findNextEmote(value, 0, true);
@@ -81,7 +85,7 @@ function tokenizeEmote(eat: unknown, value: unknown, silent: unknown) {
 
 tokenizeEmote.locator = locateEmote;
 
-export function inlineEmote() {
+export function inlineEmote(): void {
   const Parser = this.Parser;
   const tokenizers = Parser.prototype.inlineTokenizers;
   const methods = Parser.prototype.inlineMethods;
@@ -97,7 +101,7 @@ export function inlineEmote() {
 // Format emote
 // ***************************************************************************
 
-const transformer = (node: unknown, index: unknown, parent: unknown) => {
+const transformer = (node: MdNode, index: number, parent: MdNode | undefined): void => {
   if (node.type === EMOTE_NODE_TYPE && parent && parent.type === "paragraph") {
     const emoteStr = node.value;
     const emote = EMOTES.find(({ name }) => emoteStr.toUpperCase() === name);
@@ -121,6 +125,6 @@ const transformer = (node: unknown, index: unknown, parent: unknown) => {
   }
 };
 
-const transform = (tree: unknown) => visit(tree, [EMOTE_NODE_TYPE], transformer);
+const transform = (tree: MdNode): void => visit(tree, [EMOTE_NODE_TYPE], transformer);
 
-export const formattedEmote = () => transform;
+export const formattedEmote = (): ((tree: MdNode) => void) => transform;

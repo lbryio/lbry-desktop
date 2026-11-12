@@ -1,4 +1,3 @@
-//@ts-nocheck
 // Odysee's image upload service, used for thumbnails and other images when publishing.
 // The app used spee.ch before, but spee.ch now redirects every request to Odysee's image CDN.
 export const IMG_CDN_PUBLISH_URL = "https://thumbs.odycdn.com/upload";

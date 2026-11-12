@@ -1,4 +1,3 @@
-//@ts-nocheck
 import { countries as countryData } from "country-data";
 
 export const COUNTRIES = Array.from(

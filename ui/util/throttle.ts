@@ -1,4 +1,3 @@
-//@ts-nocheck
 // Taken from underscore.js (slightly modified to add the getNow function and use const/let over var)
 // https://github.com/jashkenas/underscore/blob/master/underscore.js#L830-L874
 
@@ -7,11 +6,15 @@
 // as much as it can, without ever going more than once per `wait` duration;
 // but if you'd like to disable the execution on the leading edge, pass
 // `{leading: false}`. To disable execution on the trailing edge, ditto.
-export default function throttle(func: unknown, wait: unknown, options = {}) {
-  let timeout;
-  let context;
-  let args;
-  let result;
+export default function throttle<A extends unknown[]>(
+  func: (...args: A) => unknown,
+  wait: number,
+  options: { leading?: boolean; trailing?: boolean } = {}
+): ((...funcArgs: A) => unknown) & { cancel: () => void } {
+  let timeout: ReturnType<typeof setTimeout> | null;
+  let context: unknown;
+  let args: A | null;
+  let result: unknown;
   let previous = 0;
   const getNow = () => new Date().getTime();
 
@@ -25,7 +28,7 @@ export default function throttle(func: unknown, wait: unknown, options = {}) {
     }
   };
 
-  const throttled = function throttled(...funcArgs) {
+  const throttled = function throttled(this: unknown, ...funcArgs: A) {
     const now = getNow();
 
     if (!previous && options.leading === false) previous = now;

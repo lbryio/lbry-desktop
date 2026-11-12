@@ -1,4 +1,3 @@
-//@ts-nocheck
 export const ANNOUNCE_HEAD_AND_SD_ONLY = "announce_head_and_sd_only";
 export const API = "api";
 export const BLOB_DOWNLOAD_TIMEOUT = "blob_download_timeout";

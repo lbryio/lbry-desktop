@@ -231,10 +231,8 @@ export default function TagsSearch(props: Props) {
                   <Tag
                     disabled={tag !== "mature" && maxed}
                     key={`suggested${tag}`}
-                    // @ts-expect-error - TS2322 (ts-migration)
                     name={tag}
                     type="add"
-                    // @ts-expect-error - TS2345 - Argument of type 'unknown' is not assignable to parameter of type 'string'.
                     onClick={() => handleTagClick(tag)}
                   />
                 ))}

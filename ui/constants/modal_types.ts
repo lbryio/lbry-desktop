@@ -1,4 +1,3 @@
-//@ts-nocheck
 export const CONFIRM_FILE_REMOVE = "confirm_file_remove";
 export const CONFIRM_EXTERNAL_RESOURCE = "confirm_external_resource";
 export const COMMENT_ACKNOWEDGEMENT = "comment_acknowlegement";

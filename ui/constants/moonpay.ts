@@ -1,4 +1,3 @@
-//@ts-nocheck
 export const SUPPORTED_MOONPAY_COUNTRIES = [
   "Argentina",
   "Australia",

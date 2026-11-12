@@ -1,4 +1,3 @@
-//@ts-nocheck
 export const API_DOWN = "apiDown";
 export const READY = "ready";
 export const IN_PROGRESS = "inProgress";

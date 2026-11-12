@@ -1,4 +1,3 @@
-//@ts-nocheck
 export const CC_LICENSES = [
   {
     value: "Creative Commons Attribution 4.0 International",
