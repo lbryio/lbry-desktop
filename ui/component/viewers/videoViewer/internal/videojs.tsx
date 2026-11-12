@@ -225,76 +225,105 @@ export default React.memo<Props>(function VideoJs(props: Props) {
   }
 
   /** instantiate videoJS and dispose of it when done with code **/
-  // This lifecycle hook is only called once (on mount), or when `isAudio` or `source` changes.
+  // Only on mount, or when `isAudio` or `source` changes. Don't add the helper
+  // functions to the deps: they're recreated on every render, which would tear
+  // down and rebuild the player on every re-render (the video jumps, then
+  // half-built players crash on dispose; #671).
   useEffect(() => {
+    let cancelled = false;
+    let keydownHandler: ((event: KeyboardEvent) => void) | null = null;
     const vjsElement = createVideoPlayerDOM(containerRef.current);
 
-    // Detect source file type via pre-fetch (async)
-    detectFileType().then(() => {
-      // Initialize Video.js
-      const vjsPlayer = initializeVideoPlayer(vjsElement);
+    // Detect source file type via pre-fetch (async). If that request fails,
+    // still start the player with the original source rather than leave it blank.
+    detectFileType()
+      .catch((error: unknown) => console.warn("videojs: couldn't detect the source type", error))
+      .then(() => {
+        // Unmounted (or the source changed) while we were waiting.
+        if (cancelled) return;
 
-      // Add reference to player to global scope
-      // @ts-expect-error - TS2339 - Property 'player' does not exist on type 'Window & typeof globalThis'.
-      window.player = vjsPlayer;
+        // Initialize Video.js
+        const vjsPlayer = initializeVideoPlayer(vjsElement);
 
-      // Set reference in component state
-      playerRef.current = vjsPlayer;
+        // Add reference to player to global scope
+        // @ts-expect-error - TS2339 - Property 'player' does not exist on type 'Window & typeof globalThis'.
+        window.player = vjsPlayer;
 
-      window.addEventListener("keydown", curried_function(playerRef, containerRef));
-    });
+        // Set reference in component state
+        playerRef.current = vjsPlayer;
+
+        keydownHandler = curried_function(playerRef, containerRef);
+        window.addEventListener("keydown", keydownHandler);
+      });
 
     // Cleanup
     return () => {
-      // @ts-expect-error - TS2769 - No overload matches this call.
-      window.removeEventListener("keydown", curried_function);
+      cancelled = true;
 
-      const player = playerRef.current;
+      if (keydownHandler) {
+        window.removeEventListener("keydown", keydownHandler);
+      }
+
+      const player: any = playerRef.current;
+      playerRef.current = undefined;
+
       if (player) {
-        // @ts-expect-error - TS2339 - Property 'dispose' does not exist on type 'never'.
-        player.dispose();
         // @ts-expect-error - TS2339 - Property 'player' does not exist on type 'Window & typeof globalThis'.
-        window.player = undefined;
+        if (window.player === player) window.player = undefined;
+
+        // A throw here would escape React's cleanup and take down the whole app.
+        try {
+          if (!player.isDisposed()) player.dispose();
+        } catch (error) {
+          console.warn("videojs: dispose failed", error);
+        }
+      } else if (vjsElement && vjsElement.parentElement) {
+        // The player never initialized; remove the wrapper we created for it.
+        vjsElement.parentElement.remove();
       }
     };
-  }, [isAudio, source, curried_function, createVideoPlayerDOM, detectFileType, initializeVideoPlayer]);
+  }, [isAudio, source]);
 
-  // Update video player and reload when source URL changes
+  // Update video player and reload when source URL changes.
+  // Deps are only `source` and `reload`: `videoJsOptions.sources` is a new array
+  // every render, which would re-run this HEAD request on every re-render (#671).
   useEffect(() => {
     // For some reason the video player is responsible for detecting content type this way
-    fetch(source, { method: "HEAD", cache: "no-store" }).then((response) => {
-      let finalType = sourceType;
-      let finalSource = source;
+    fetch(source, { method: "HEAD", cache: "no-store" })
+      .then((response) => {
+        let finalType = sourceType;
+        let finalSource = source;
 
-      // override type if we receive an .m3u8 (transcoded mp4)
-      // do we need to check if explicitly redirected
-      // or is checking extension only a safer method
-      if (response && response.redirected && response.url && response.url.endsWith("m3u8")) {
-        finalType = "application/x-mpegURL";
-        finalSource = response.url;
-      }
+        // override type if we receive an .m3u8 (transcoded mp4)
+        // do we need to check if explicitly redirected
+        // or is checking extension only a safer method
+        if (response && response.redirected && response.url && response.url.endsWith("m3u8")) {
+          finalType = "application/x-mpegURL";
+          finalSource = response.url;
+        }
 
-      // Modify video source in options
-      // @ts-expect-error - TS2540 - Cannot assign to 'sources' because it is a read-only property.
-      videoJsOptions.sources = [
-        {
-          src: finalSource,
-          type: finalType,
-        },
-      ];
+        // Modify video source in options
+        // @ts-expect-error - TS2540 - Cannot assign to 'sources' because it is a read-only property.
+        videoJsOptions.sources = [
+          {
+            src: finalSource,
+            type: finalType,
+          },
+        ];
 
-      // Update player source
-      const player = playerRef.current;
-      if (!player) return;
+        // Update player source
+        const player = playerRef.current;
+        if (!player) return;
 
-      // PR #5570: Temp workaround to avoid double Play button until the next re-architecture.
-      // @ts-expect-error - TS2339 - Property 'paused' does not exist on type 'never'.
-      if (!player.paused()) {
-        // @ts-expect-error - TS2339 - Property 'bigPlayButton' does not exist on type 'never'.
-        player.bigPlayButton.hide();
-      }
-    });
-  }, [source, reload, sourceType, videoJsOptions.sources]);
+        // PR #5570: Temp workaround to avoid double Play button until the next re-architecture.
+        // @ts-expect-error - TS2339 - Property 'paused' does not exist on type 'never'.
+        if (!player.paused()) {
+          // @ts-expect-error - TS2339 - Property 'bigPlayButton' does not exist on type 'never'.
+          player.bigPlayButton.hide();
+        }
+      })
+      .catch(() => {}); // nothing to update if the stream isn't reachable yet
+  }, [source, reload]);
 
   return (
     // $FlowFixMe
