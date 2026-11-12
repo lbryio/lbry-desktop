@@ -114,24 +114,25 @@ export default function FileRenderInitiator(props: Props) {
     [play, uri, isPlayable, collectionId]
   );
 
+  const hasFileInfo = Boolean(fileInfo);
   useEffect(() => {
-    // This is just for beginning to download a file
-    // Play/Pause/Fullscreen will be handled by the respective viewers because not every file type should behave the same
+    // Space starts a file that hasn't started yet. After that it isn't ours:
+    // the player's shortcuts handle it for media, and text posts, images etc.
+    // keep it for scrolling (#483).
     function handleKeyDown(e: KeyboardEvent) {
-      if (!isUserTyping() && e.keyCode === KEYCODES.SPACEBAR) {
-        e.preventDefault();
+      if (isUserTyping() || e.keyCode !== KEYCODES.SPACEBAR) return;
+      const hasStarted = isPlayable ? isPlaying && fileStatus !== "stopped" : hasFileInfo;
+      if (hasStarted) return;
 
-        if (!isPlaying || fileStatus === "stopped") {
-          viewFile(e);
-        }
-      }
+      e.preventDefault();
+      viewFile(e);
     }
 
     window.addEventListener("keydown", handleKeyDown);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [isPlaying, fileStatus, viewFile]);
+  }, [isPlayable, isPlaying, fileStatus, hasFileInfo, viewFile]);
 
   useEffect(() => {
     const videoOnPage = document.querySelector("video");

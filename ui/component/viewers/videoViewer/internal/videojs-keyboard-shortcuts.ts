@@ -14,6 +14,22 @@ function activeElementIsPartOfVideoElement() {
   return videoElementParent.contains(activeElement);
 }
 
+// Keys that buttons, links and form controls use themselves: Space presses a
+// button, arrows move a select or radio group. When one of those has focus
+// outside the player, the key is theirs, not a player shortcut (#483).
+const CONTROL_KEYS = [KEYCODES.SPACEBAR, KEYCODES.LEFT, KEYCODES.RIGHT, KEYCODES.UP, KEYCODES.DOWN];
+const CONTROL_SELECTOR =
+  "button, a[href], select, summary, [role='button'], [role='link'], [role='checkbox'], [role='radio']," +
+  " [role='menuitem'], [role='option'], [role='tab'], [role='slider'], [role='switch']";
+
+function focusIsOnControlOutsidePlayer() {
+  const activeElement = document.activeElement;
+  if (!activeElement || activeElement === document.body) return false;
+  const videoElementParent = document.getElementsByClassName("video-js-parent")[0];
+  if (videoElementParent && videoElementParent.contains(activeElement)) return false;
+  return Boolean(activeElement.closest(CONTROL_SELECTOR));
+}
+
 function volumeUp(event: unknown, playerRef: unknown) {
   // dont run if video element is not active element (otherwise runs when scrolling using keypad)
   const videoElementIsActive = activeElementIsPartOfVideoElement();
@@ -142,6 +158,12 @@ const VideoJsKeyboardShorcuts = ({
 
   function handleSingleKeyActions(e: KeyboardEvent, playerRef: unknown, containerRef: unknown) {
     if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    if (CONTROL_KEYS.includes(e.keyCode) && focusIsOnControlOutsidePlayer()) return;
+    // Space and Left/Right also scroll the page; when the player uses them, it
+    // owns them. (Up/Down only act inside the player; see volumeUp/volumeDown.)
+    if (e.keyCode === KEYCODES.SPACEBAR || e.keyCode === KEYCODES.LEFT || e.keyCode === KEYCODES.RIGHT) {
+      e.preventDefault();
+    }
     if (e.keyCode === KEYCODES.SPACEBAR || e.keyCode === KEYCODES.K) togglePlay(containerRef);
     if (e.keyCode === KEYCODES.F) toggleFullscreen(playerRef);
     if (e.keyCode === KEYCODES.M) toggleMute(containerRef);

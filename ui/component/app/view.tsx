@@ -185,17 +185,6 @@ function App(props: Props) {
     return () => window.removeEventListener("mouseup", handleForwardAndBackButtons);
   });
 
-  // allows user to pause miniplayer using the spacebar without the page scrolling down
-  useEffect(() => {
-    const handleKeyPress = (e: KeyboardEvent) => {
-      if (e.key === " " && e.target === document.body) {
-        e.preventDefault();
-      }
-    };
-    window.addEventListener("keydown", handleKeyPress);
-    return () => window.removeEventListener("keydown", handleKeyPress);
-  }, []);
-
   // Enable ctrl +/- zooming on Desktop.
   // @if TARGET='app'
   // @ts-expect-error - TS2554 - Expected 1 arguments, but got 0.
