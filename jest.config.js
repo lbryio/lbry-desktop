@@ -11,7 +11,6 @@ module.exports = {
     '^config$': '<rootDir>/ui/__tests__/__mocks__/config.js',
     // Electron APIs aren't available under Jest.
     '^electron$': '<rootDir>/ui/__tests__/__mocks__/electron.js',
-    '^@electron/remote$': '<rootDir>/ui/__tests__/__mocks__/electron.js',
     // jsdom's browser condition resolves uuid to its ESM build, which Jest can't parse.
     '^uuid$': '<rootDir>/node_modules/uuid/dist/cjs/index.js',
     '\\.(scss|css)$': '<rootDir>/ui/__tests__/__mocks__/style.js',

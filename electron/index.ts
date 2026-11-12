@@ -337,6 +337,10 @@ ipcMain.on("app:getPath", (event, name) => {
   }
 });
 
+ipcMain.on("app:getAppPath", (event) => {
+  event.returnValue = app.getAppPath();
+});
+
 ipcMain.on("app:getLocale", (event) => {
   event.returnValue = app.getLocale();
 });

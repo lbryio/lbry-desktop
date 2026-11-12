@@ -1964,15 +1964,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@electron/remote@npm:^2.0.1":
-  version: 2.1.3
-  resolution: "@electron/remote@npm:2.1.3"
-  peerDependencies:
-    electron: ">= 13.0.0"
-  checksum: 8ed8e27c212405391f0e6379777f86ee51fa88c0881f947eb46800bc23927d67699983a7bbbd8203017e99119d2777b6fbaf4db8acd83ec81d7f462a208cc478
-  languageName: node
-  linkType: hard
-
 "@electron/universal@npm:2.0.3":
   version: 2.0.3
   resolution: "@electron/universal@npm:2.0.3"
@@ -2655,17 +2646,6 @@ __metadata:
   dependencies:
     unist-util-visit: ^1.3.0
   checksum: 4e563a274ae54bfb15f7d12fb711bbfc9579ff2704149cc8dddbc36b3d007a1cdefa993462c767b6b3da5d392b848680e9cc466b282ed9df8f16b23df685062c
-  languageName: node
-  linkType: hard
-
-"@meetfranz/electron-cookies@npm:^3.0.2":
-  version: 3.0.2
-  resolution: "@meetfranz/electron-cookies@npm:3.0.2"
-  dependencies:
-    "@electron/remote": ^2.0.1
-    tough-cookie: ^2.3.1
-    tough-cookie-web-storage-store: ^1.0.0
-  checksum: e80c162e5a3048d126e1b8ba880bd0cdfbb6930bc904c61310b44aec6fb637b0b3c02318900cbeea944556a1d901edccd914f84d9c70495688c0d3c0c7fcb3bd
   languageName: node
   linkType: hard
 
@@ -13757,7 +13737,6 @@ __metadata:
     "@emotion/styled": ^11.10.4
     "@eslint/js": ^10.0.1
     "@hot-loader/react-dom": ^16.13
-    "@meetfranz/electron-cookies": ^3.0.2
     "@mui/material": ^5.2.1
     "@noble/hashes": ^1.4.0
     "@reach/combobox": ^0.12.1
@@ -13890,6 +13869,8 @@ __metadata:
     tempy: ^0.6.0
     terser-webpack-plugin: ^5.3.9
     three-full: ^28.0.2
+    tough-cookie: ^2.5.0
+    tough-cookie-web-storage-store: ^1.0.0
     typescript: "npm:@typescript/typescript6@^6.0.2"
     typescript-eslint: ^8.72.2
     unist-util-visit: ^2.0.3
@@ -20659,7 +20640,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tough-cookie@npm:^2.3.1":
+"tough-cookie@npm:^2.5.0":
   version: 2.5.0
   resolution: "tough-cookie@npm:2.5.0"
   dependencies:

@@ -10,7 +10,7 @@ import * as Sentry from "@sentry/browser";
 import MatomoTracker from "@datapunt/matomo-tracker-js";
 import { history } from "./store";
 import Native from "native";
-import ElectronCookies from "@meetfranz/electron-cookies";
+import ElectronCookies from "util/electron-cookies";
 import { generateInitialUrl } from "util/url";
 import { MATOMO_ID, MATOMO_URL } from "config";
 
