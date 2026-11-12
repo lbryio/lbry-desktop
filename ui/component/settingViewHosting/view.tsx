@@ -135,11 +135,6 @@ function SettingViewHosting(props: Props) {
                   (!unlimited &&
                     (String(viewHostingLimit) === convertGbToMbStr(contentBlobSpaceLimitGB) ||
                       !isValidHostingAmount(String(contentBlobSpaceLimitGB)))) ||
-                  (!unlimited &&
-                    String(viewHostingLimit) ===
-                      convertGbToMbStr(
-                        contentBlobSpaceLimitGB || !isValidHostingAmount(String(contentBlobSpaceLimitGB))
-                      )) ||
                   isSetting ||
                   disabled
                 }
@@ -155,11 +150,8 @@ function SettingViewHosting(props: Props) {
                   // disabled if settings are equal or not valid amounts
                   (viewHostingLimit === 1 && contentBlobSpaceLimitGB <= MINIMUM_VIEW_SETTING) ||
                   (unlimited && viewHostingLimit === 0) ||
-                  (!unlimited &&
-                    String(viewHostingLimit) ===
-                      convertGbToMbStr(
-                        contentBlobSpaceLimitGB || !isValidHostingAmount(String(contentBlobSpaceLimitGB))
-                      )) ||
+                  // Reset puts the saved value back, so it must stay usable while the input is empty or invalid.
+                  (!unlimited && String(viewHostingLimit) === convertGbToMbStr(contentBlobSpaceLimitGB)) ||
                   isSetting ||
                   disabled
                 }
