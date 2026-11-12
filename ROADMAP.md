@@ -58,6 +58,18 @@ coordinate with the [LBRY Foundation's fork](https://github.com/LBRYFoundation/l
 
 ## How releases happen
 
-CI builds installers for every master push; releases are tagged from master with notes in
-[CHANGELOG.md](CHANGELOG.md). macOS builds are currently unsigned (right-click → Open) until
+CI builds installers for every master push and pull request (download them from the
+workflow run's artifacts). Releases are cut from version tags
+([#664](https://github.com/bitcoinbrisbane/lbry-desktop/issues/664)):
+
+1. Merge a release-prep PR that bumps `version` in `package.json` and adds the release's
+   section to [CHANGELOG.md](CHANGELOG.md).
+2. Tag that commit on master and push the tag: `git tag vX.Y.Z && git push origin vX.Y.Z`.
+   The tag must match the `package.json` version.
+3. The tag's CI build uploads the Linux, macOS and Windows installers to a **draft** GitHub
+   release for that version. Only tag builds publish, so later master pushes can't overwrite it.
+4. Paste the CHANGELOG section into the draft's notes and publish it
+   (or `gh release edit vX.Y.Z --draft=false`).
+
+macOS builds are currently unsigned (right-click → Open) until
 [#576](https://github.com/bitcoinbrisbane/lbry-desktop/issues/576) lands.

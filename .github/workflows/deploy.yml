@@ -3,11 +3,14 @@ name: Node.js CI
 on:
   push:
     branches: [master]
+    # Pushing a version tag (e.g. v1.0.3) builds the release: electron-builder
+    # uploads the installers to a draft GitHub release for that version (#664).
+    tags: ['v*']
   pull_request:
     branches: [master]
 
-# electron-builder publishes installers to a draft GitHub release on master
-# pushes; the default token needs write access to releases for that.
+# Tag builds publish installers to a draft GitHub release; the default token
+# needs write access to releases for that.
 permissions:
   contents: write
 
@@ -63,11 +66,18 @@ jobs:
           curl -o ./static/daemon/headers https://headers.lbry.io/blockchain_headers_latest
           ls ./static/daemon
 
+      # Same as `yarn build`, but publishing only from tag builds. With no --publish,
+      # electron-builder falls back to onTagOrDraft on CI, which also uploads from
+      # master pushes while a draft release exists, overwriting the release's
+      # installers (and implicit publishing is going away in electron-builder 27).
+      # PR builds never publish. The release is named "v" + package.json version,
+      # so tag the commit to match (v1.0.3 <-> "version": "1.0.3").
       - name: Build
         run: |
           yarn dlx cross-env
           yarn --network-timeout 600000
-          yarn build
+          yarn compile
+          yarn electron-builder build --publish onTag
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NOTARIZATION_USERNAME: ${{ secrets.NOTARIZATION_USERNAME }}
