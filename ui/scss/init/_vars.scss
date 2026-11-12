@@ -1,4 +1,5 @@
-@import 'breakpoints';
+@forward "breakpoints";
+@use "breakpoints" as *;
 $spacing-vertical: 2rem;
 $spacing-width: 36px;
 :root {
@@ -31,7 +32,7 @@ $spacing-width: 36px;
   --aspect-ratio-standard: 56.25%; // 16:9
 
   // Type
-  --font-mono: 'Fira Code';
+  --font-mono: "Fira Code";
   --font-sans: Inter;
   --font-serif: Georgia;
   --font-weight-base: 400;

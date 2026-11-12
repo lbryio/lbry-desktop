@@ -1,4 +1,4 @@
-@import '../init/vars.scss';
+@use "../init/vars" as *;
 
 .filePrice {
   position: relative;
@@ -16,7 +16,7 @@
 
   &::before {
     position: absolute;
-    content: '';
+    content: "";
     left: 0;
     width: 250%;
     height: 160%;
@@ -137,7 +137,7 @@
   }
 
   &::before {
-    content: '';
+    content: "";
     transform: skew(15deg);
     animation: expand 2.5s 1 ease-out;
   }

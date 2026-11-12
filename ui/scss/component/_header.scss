@@ -1,5 +1,5 @@
-@import '../init/breakpoints';
-@import '../init/mixins';
+@use "../init/breakpoints" as *;
+@use "../init/mixins" as *;
 
 .header {
   z-index: 3; // Main content uses z-index: 1, other content uses z-index: 2, this ensures it always scrolls under the header
@@ -70,7 +70,9 @@
     }
   }
 
-  *:focus-visible:not(.wunderbar__input):not(.menu__list):not(.menu__list--header):not(.button--secondary):not(.button-like):not(.button-dislike):not(select):not(input):not(textarea):not(video) {
+  *:focus-visible:not(.wunderbar__input):not(.menu__list):not(.menu__list--header):not(.button--secondary):not(
+      .button-like
+    ):not(.button-dislike):not(select):not(input):not(textarea):not(video) {
     background-color: rgba(var(--color-primary-static), 0.2) !important;
     color: var(--color-text) !important;
     box-shadow: 0px 0px 0px 2px var(--color-brand) inset;
@@ -281,7 +283,7 @@
   position: relative;
   font-weight: var(--font-weight-bold);
 
-  &[aria-expanded='true']:not(.header__navigationItem--profilePic) {
+  &[aria-expanded="true"]:not(.header__navigationItem--profilePic) {
     transform: rotate(0deg);
     &:not(.button-rotate) {
       background-color: var(--color-header-button-hover);

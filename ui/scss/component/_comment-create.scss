@@ -1,4 +1,4 @@
-@import '../init/breakpoints';
+@use "../init/breakpoints" as *;
 
 $thumbnailWidth: 1.5rem;
 $thumbnailWidthSmall: 1rem;
@@ -265,7 +265,7 @@ $thumbnailWidthSmall: 1rem;
     .credit-amount:not(:last-child) {
       &::after {
         margin-left: var(--spacing-xxs);
-        content: '/';
+        content: "/";
       }
     }
 
