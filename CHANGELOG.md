@@ -2,7 +2,31 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
-## [1.0.2] - [2026-11-12]
+## [1.0.3] - [2026-11-12]
+
+Supersedes 1.0.2, which was tagged but never published: its build opened to a blank purple window ([#665](https://github.com/bitcoinbrisbane/lbry-desktop/issues/665)). Everything listed under 1.0.2 below ships in 1.0.3.
+
+### Added
+ - Optional download organization in Settings → System: save downloads into a folder per channel, and name files after their title or "date - title" instead of the uploader's file name ([#670](https://github.com/bitcoinbrisbane/lbry-desktop/pull/670), fixes [#602](https://github.com/bitcoinbrisbane/lbry-desktop/issues/602))
+
+### Fixed
+ - The app opened to a blank purple window after the Electron 45 upgrade ([#666](https://github.com/bitcoinbrisbane/lbry-desktop/pull/666), fixes [#665](https://github.com/bitcoinbrisbane/lbry-desktop/issues/665))
+ - Videos jumped around and then crashed to the "Aw shucks" error screen ([#673](https://github.com/bitcoinbrisbane/lbry-desktop/pull/673), fixes [#671](https://github.com/bitcoinbrisbane/lbry-desktop/issues/671))
+ - With Settings → System open, the app reset the wallet connection every few seconds, which could leave the wallet stuck ("The wallet server took a bit too long") ([#674](https://github.com/bitcoinbrisbane/lbry-desktop/pull/674), fixes [#672](https://github.com/bitcoinbrisbane/lbry-desktop/issues/672), see [#603](https://github.com/bitcoinbrisbane/lbry-desktop/issues/603))
+
+### Security
+ - tough-cookie 2.5.0 → 4.1.4 (CVE-2023-26136), with a new cookie store that keeps existing logins ([#675](https://github.com/bitcoinbrisbane/lbry-desktop/pull/675), fixes [#667](https://github.com/bitcoinbrisbane/lbry-desktop/issues/667))
+
+### Changed
+ - Releases are built and published from version tags ([#676](https://github.com/bitcoinbrisbane/lbry-desktop/pull/676), fixes [#664](https://github.com/bitcoinbrisbane/lbry-desktop/issues/664))
+ - Test suite: 85 → 136 tests, including the first player, settings and cookie-store component tests
+
+### Known issues
+ - macOS builds remain unsigned (right-click → Open); AppImage on Ubuntu 23.10+ needs the .deb or a sysctl toggle (see README)
+
+## [1.0.2] - [2026-11-12] [YANKED]
+
+Tagged but never published: the build opened to a blank purple window ([#665](https://github.com/bitcoinbrisbane/lbry-desktop/issues/665)). Use 1.0.3, which includes all of these changes.
 
 ### Added
  - Wallet: reveal/export your seed phrase and import a wallet from a seed, with a guided backup page ([#641](https://github.com/bitcoinbrisbane/lbry-desktop/pull/641))
