@@ -3,7 +3,7 @@ import { selectSupportsByOutpoint } from "redux/selectors/wallet";
 import { createSelector } from "reselect";
 import { createCachedSelector } from "re-reselect";
 import { isClaimNsfw, filterClaims } from "util/claim";
-import { selectBlackListedOutpoints } from "lbryinc";
+import { selectBlacklistedOutpointMap } from "lbryinc";
 import * as CLAIM from "constants/claim";
 
 type State = {
@@ -99,9 +99,9 @@ export const makeSelectClaimErrorCensor = (claimUri: string) =>
 export const makeSelectIsBlacklisted = (claimUri: string) =>
   createSelector(
     makeSelectClaimErrorCensor(claimUri),
-    selectBlackListedOutpoints,
+    selectBlacklistedOutpointMap,
     makeSelectClaimForUri(claimUri),
-    (errorCensor, legacyBlacklistedList, claim) => {
+    (errorCensor, blacklistedOutpointMap, claim) => {
       if (errorCensor) {
         return true;
       }
@@ -109,19 +109,17 @@ export const makeSelectIsBlacklisted = (claimUri: string) =>
       if (!claim) {
         return false;
       }
-      if (!legacyBlacklistedList) {
-        return false;
-      }
       const signingChannel = claim.signing_channel;
       if (!signingChannel) {
         return false;
       }
-      const isInLegacyBlacklist = legacyBlacklistedList.some(
-        (outpoint) =>
-          (signingChannel && outpoint.txid === signingChannel.txid && outpoint.nout === signingChannel.nout) ||
-          (outpoint.txid === claim.txid && outpoint.nout === claim.nout)
+      // The legacy list has ~24k outpoints and this runs for every claim tile on
+      // every store update, so look them up in the memoized map rather than
+      // scanning the list (#486).
+      return Boolean(
+        blacklistedOutpointMap[`${signingChannel.txid}:${signingChannel.nout}`] ||
+        blacklistedOutpointMap[`${claim.txid}:${claim.nout}`]
       );
-      return isInLegacyBlacklist;
     }
   );
 
