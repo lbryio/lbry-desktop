@@ -4190,7 +4190,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/tough-cookie@npm:*":
+"@types/tough-cookie@npm:*, @types/tough-cookie@npm:^4.0.5":
   version: 4.0.5
   resolution: "@types/tough-cookie@npm:4.0.5"
   checksum: f19409d0190b179331586365912920d192733112a195e870c7f18d20ac8adb7ad0b0ff69dad430dba8bc2be09593453a719cfea92dc3bda19748fd158fe1498d
@@ -13753,6 +13753,7 @@ __metadata:
     "@types/react": ^16
     "@types/react-dom": ^16
     "@types/three": ^0.103.2
+    "@types/tough-cookie": ^4.0.5
     "@typescript/native": "npm:typescript@^7.0.2"
     "@ungap/from-entries": ^0.2.1
     adm-zip: ^0.6.1
@@ -13869,8 +13870,7 @@ __metadata:
     tempy: ^0.6.0
     terser-webpack-plugin: ^5.3.9
     three-full: ^28.0.2
-    tough-cookie: ^2.5.0
-    tough-cookie-web-storage-store: ^1.0.0
+    tough-cookie: ^4.1.4
     typescript: "npm:@typescript/typescript6@^6.0.2"
     typescript-eslint: ^8.72.2
     unist-util-visit: ^2.0.3
@@ -14235,7 +14235,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:^4.17.11, lodash@npm:^4.17.15, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.4, lodash@npm:^4.17.5, lodash@npm:^4.2.0, lodash@npm:^4.2.1, lodash@npm:^4.6.1":
+"lodash@npm:^4.17.11, lodash@npm:^4.17.15, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.4, lodash@npm:^4.17.5, lodash@npm:^4.2.0, lodash@npm:^4.2.1":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: eb835a2e51d381e561e508ce932ea50a8e5a68f4ebdd771ea240d3048244a8d13658acbd502cd4829768c56f2e16bdd4340b9ea141297d472517b83868e677f7
@@ -17148,7 +17148,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"psl@npm:^1.1.28, psl@npm:^1.1.33":
+"psl@npm:^1.1.33":
   version: 1.15.0
   resolution: "psl@npm:1.15.0"
   dependencies:
@@ -20629,28 +20629,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tough-cookie-web-storage-store@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "tough-cookie-web-storage-store@npm:1.0.0"
-  dependencies:
-    lodash: ^4.6.1
-  peerDependencies:
-    tough-cookie: "*"
-  checksum: c2f0baf1a133395dfeeb626299089d9f9702446a4da356caad121b05041c7fcf06576f0f85003a62805493b718c0931cae04b83308c40472ca3f292664673aa8
-  languageName: node
-  linkType: hard
-
-"tough-cookie@npm:^2.5.0":
-  version: 2.5.0
-  resolution: "tough-cookie@npm:2.5.0"
-  dependencies:
-    psl: ^1.1.28
-    punycode: ^2.1.1
-  checksum: 16a8cd090224dd176eee23837cbe7573ca0fa297d7e468ab5e1c02d49a4e9a97bb05fef11320605eac516f91d54c57838a25864e8680e27b069a5231d8264977
-  languageName: node
-  linkType: hard
-
-"tough-cookie@npm:^4.1.2":
+"tough-cookie@npm:^4.1.2, tough-cookie@npm:^4.1.4":
   version: 4.1.4
   resolution: "tough-cookie@npm:4.1.4"
   dependencies:

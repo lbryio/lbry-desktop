@@ -16,7 +16,7 @@ import path from "path";
 // @ts-expect-error - TS2305 - Module '"electron"' has no exported member 'ipcRenderer'.
 import { ipcRenderer } from "electron";
 import { CookieJar } from "tough-cookie";
-import WebStorageCookieStore from "tough-cookie-web-storage-store";
+import LocalStorageCookieStore from "util/local-storage-cookie-store";
 
 let appPath: string | null = null;
 
@@ -41,7 +41,7 @@ function getLocationString(origin: string | null | undefined): string {
 
 function enable(options?: { origin?: string }) {
   const origin = options ? options.origin : null;
-  const cookieJar = new CookieJar(new WebStorageCookieStore(window.localStorage));
+  const cookieJar = new CookieJar(new LocalStorageCookieStore(window.localStorage));
 
   Object.defineProperty(document, "cookie", {
     enumerable: true,
