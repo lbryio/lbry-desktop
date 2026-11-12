@@ -11877,15 +11877,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"invariant@npm:^2.2.4":
-  version: 2.2.4
-  resolution: "invariant@npm:2.2.4"
-  dependencies:
-    loose-envify: ^1.0.0
-  checksum: cc3182d793aad82a8d1f0af697b462939cb46066ec48bbf1707c150ad5fad6406137e91a262022c269702e01621f35ef60269f6c0d7fd178487959809acdfb14
-  languageName: node
-  linkType: hard
-
 "ip-address@npm:^10.0.1":
   version: 10.0.1
   resolution: "ip-address@npm:10.0.1"
@@ -13833,7 +13824,7 @@ __metadata:
     raw-loader: ^2.0.0
     rc-progress: ^2.0.6
     re-reselect: ^4.0.0
-    react: ^16.8.2
+    react: ^16.8.3
     react-awesome-lightbox: ^1.7.3
     react-beautiful-dnd: ^13.1.1
     react-datetime-picker: ^7.0.1
@@ -13843,7 +13834,7 @@ __metadata:
     react-hot-loader: ^4.11.1
     react-modal: ^3.1.7
     react-paginate: ^5.2.1
-    react-redux: ^6.0.1
+    react-redux: ^7.2.9
     react-router: ^5.1.0
     react-router-dom: ^5.1.0
     react-simplemde-editor: ^4.1.3
@@ -17615,7 +17606,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^16.13.1, react-is@npm:^16.6.0, react-is@npm:^16.7.0, react-is@npm:^16.8.2":
+"react-is@npm:^16.13.1, react-is@npm:^16.6.0, react-is@npm:^16.7.0":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: f7a19ac3496de32ca9ae12aa030f00f14a3d45374f1ceca0af707c831b2a6098ef0d6bdae51bd437b0a306d7f01d4677fcc8de7c0d331eb47ad0f46130e53c5f
@@ -17687,24 +17678,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-redux@npm:^6.0.1":
-  version: 6.0.1
-  resolution: "react-redux@npm:6.0.1"
-  dependencies:
-    "@babel/runtime": ^7.3.1
-    hoist-non-react-statics: ^3.3.0
-    invariant: ^2.2.4
-    loose-envify: ^1.4.0
-    prop-types: ^15.7.2
-    react-is: ^16.8.2
-  peerDependencies:
-    react: ^16.4.0-0
-    redux: ^2.0.0 || ^3.0.0 || ^4.0.0-0
-  checksum: d9b8648f57e854e0ef7797582b9d7948b557f83974359613572bab684df4bff7423babe4841ae198e670eebf8584e8858729b0f00c7caa92a4704076f3ef5537
-  languageName: node
-  linkType: hard
-
-"react-redux@npm:^7.2.0":
+"react-redux@npm:^7.2.0, react-redux@npm:^7.2.9":
   version: 7.2.9
   resolution: "react-redux@npm:7.2.9"
   dependencies:
@@ -17825,7 +17799,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^16.8.2":
+"react@npm:^16.8.3":
   version: 16.14.0
   resolution: "react@npm:16.14.0"
   dependencies:
