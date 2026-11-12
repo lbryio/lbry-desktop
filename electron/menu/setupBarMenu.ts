@@ -91,7 +91,7 @@ export default () => {
         {
           label: "Report Issue",
           click: () => {
-            shell.openExternal("https://github.com/lbryio/lbry-desktop/issues/new");
+            shell.openExternal("https://github.com/bitcoinbrisbane/lbry-desktop/issues/new");
           },
         },
         { type: "separator" },

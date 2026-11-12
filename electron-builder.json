@@ -17,7 +17,9 @@
   ],
   "publish": [
     {
-      "provider": "github"
+      "provider": "github",
+      "owner": "bitcoinbrisbane",
+      "repo": "lbry-desktop"
     }
   ],
   "mac": {
