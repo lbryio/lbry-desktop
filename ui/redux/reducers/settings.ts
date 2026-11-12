@@ -144,6 +144,10 @@ reducers[ACTIONS.UPDATE_IS_NIGHT] = (state: unknown) => {
   const endNightMoment = moment(to.formattedTime, "HH:mm");
   const isNight = !(momentNow.isAfter(endNightMoment) && momentNow.isBefore(startNightMoment));
 
+  // This runs every 5 minutes. A new settings object makes every connected
+  // component recompute, so keep the old one when nothing changed (#486).
+  if (state.isNight === isNight) return state;
+
   return Object.assign({}, state, {
     isNight,
   });
