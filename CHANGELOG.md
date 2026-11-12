@@ -13,6 +13,8 @@ Supersedes 1.0.2, which was tagged but never published: its build opened to a bl
  - The app opened to a blank purple window after the Electron 45 upgrade ([#666](https://github.com/bitcoinbrisbane/lbry-desktop/pull/666), fixes [#665](https://github.com/bitcoinbrisbane/lbry-desktop/issues/665))
  - Videos jumped around and then crashed to the "Aw shucks" error screen ([#673](https://github.com/bitcoinbrisbane/lbry-desktop/pull/673), fixes [#671](https://github.com/bitcoinbrisbane/lbry-desktop/issues/671))
  - With Settings → System open, the app reset the wallet connection every few seconds, which could leave the wallet stuck ("The wallet server took a bit too long") ([#674](https://github.com/bitcoinbrisbane/lbry-desktop/pull/674), fixes [#672](https://github.com/bitcoinbrisbane/lbry-desktop/issues/672), see [#603](https://github.com/bitcoinbrisbane/lbry-desktop/issues/603))
+ - The app no longer crashes with "Error: write EPIPE" a few minutes after launch when the launcher or terminal that started it has gone away ([#678](https://github.com/bitcoinbrisbane/lbry-desktop/pull/678), fixes [#601](https://github.com/bitcoinbrisbane/lbry-desktop/issues/601))
+ - Release publishing, auto-update and the Linux upgrade check pointed at the old lbryio/lbry-desktop repository, so installed builds were never offered this fork's updates ([#679](https://github.com/bitcoinbrisbane/lbry-desktop/pull/679))
 
 ### Security
  - tough-cookie 2.5.0 → 4.1.4 (CVE-2023-26136), with a new cookie store that keeps existing logins ([#675](https://github.com/bitcoinbrisbane/lbry-desktop/pull/675), fixes [#667](https://github.com/bitcoinbrisbane/lbry-desktop/issues/667))
@@ -22,6 +24,7 @@ Supersedes 1.0.2, which was tagged but never published: its build opened to a bl
  - Test suite: 85 → 136 tests, including the first player, settings and cookie-store component tests
 
 ### Known issues
+ - Coming from 1.0.0: install 1.0.3 manually, because 1.0.0 checks the old repository for updates. From 1.0.3 on, updates are offered automatically.
  - macOS builds remain unsigned (right-click → Open); AppImage on Ubuntu 23.10+ needs the .deb or a sysctl toggle (see README)
 
 ## [1.0.2] - [2026-11-12] [YANKED]
