@@ -3,9 +3,15 @@ import * as ABANDON_STATES from "constants/abandon_states";
 // @if TARGET='app'
 // @ts-expect-error - TS2792 - Cannot find module 'electron'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
 import { shell } from "electron";
+import fs from "fs";
 // @endif
 import Lbry from "lbry";
+import type { GetParams } from "lbry";
+import * as SETTINGS from "constants/settings";
 import { selectClaimForUri } from "redux/selectors/claims";
+import { selectClientSetting, selectDaemonSettings } from "redux/selectors/settings";
+import { getDownloadTarget } from "util/download-target";
+import type { DownloadTarget } from "util/download-target";
 import { doAbandonClaim } from "redux/actions/claims";
 import { batchActions } from "util/batch-actions";
 
@@ -122,10 +128,35 @@ export function doDeleteFileAndMaybeGoBack(
   };
 }
 
+// Folder and file name for a saved download, from the "organize downloads"
+// settings (#602). Empty when they're off, so the daemon's defaults apply.
+function getSaveTarget(state: any, claim: StreamClaim): DownloadTarget {
+  const daemonSettings = selectDaemonSettings(state) || {};
+  const target = getDownloadTarget(claim, {
+    baseDir: daemonSettings.download_dir,
+    byChannel: Boolean(selectClientSetting(state, SETTINGS.DOWNLOAD_BY_CHANNEL)),
+    naming: selectClientSetting(state, SETTINGS.DOWNLOAD_FILE_NAMING),
+  });
+
+  // The daemon won't create a missing download_directory. If we can't either,
+  // fall back to the plain download directory rather than failing the download.
+  if (target.download_directory) {
+    try {
+      fs.mkdirSync(target.download_directory, { recursive: true });
+    } catch (error) {
+      console.error(`Couldn't create download folder ${target.download_directory}:`, error);
+      delete target.download_directory;
+    }
+  }
+
+  return target;
+}
+
 export function doFileGet(uri: string, saveFile: boolean = true, onSuccess?: (arg1: GetResponse) => any) {
   return (dispatch: Dispatch, getState: () => any) => {
     const state = getState();
-    const { nout, txid } = selectClaimForUri(state, uri);
+    const claim = selectClaimForUri(state, uri);
+    const { nout, txid } = claim;
     const outpoint = `${txid}:${nout}`;
 
     dispatch({
@@ -136,7 +167,10 @@ export function doFileGet(uri: string, saveFile: boolean = true, onSuccess?: (ar
     });
 
     // set save_file argument to True to save the file (old behaviour)
-    Lbry.get({ uri, save_file: saveFile })
+    const params: GetParams = { uri, save_file: saveFile };
+    if (saveFile) Object.assign(params, getSaveTarget(state, claim));
+
+    Lbry.get(params)
       .then((streamInfo: GetResponse) => {
         const timeout = streamInfo === null || typeof streamInfo !== "object" || streamInfo.error === "Timeout";
         if (timeout) {

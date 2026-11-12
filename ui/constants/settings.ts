@@ -51,6 +51,8 @@ export const SEARCH_PROVIDER = "search_provider";
 export const LBRY_SEARCH_URL = "lbry_search_url";
 export const ENABLE_PRERELEASE_UPDATES = "enable_prerelease_updates";
 export const DISABLE_AUTO_UPDATES = "disable_auto_updates";
+export const DOWNLOAD_BY_CHANNEL = "download_by_channel";
+export const DOWNLOAD_FILE_NAMING = "download_file_naming";
 
 export const SETTINGS_GRP = {
   APPEARANCE: "appearance",

@@ -2372,5 +2372,11 @@
   "The daemon did not confirm the import.": "The daemon did not confirm the import.",
   "Only image files (png, jpg, gif) are supported.": "Only image files (png, jpg, gif) are supported.",
   "Open in Folder": "Open in Folder",
+  "Organize downloads by channel": "Organize downloads by channel",
+  "Save each download into a folder named after its channel, inside your download directory. Content without a channel goes into an \"Anonymous\" folder.": "Save each download into a folder named after its channel, inside your download directory. Content without a channel goes into an \"Anonymous\" folder.",
+  "Name downloaded files": "Name downloaded files",
+  "Keep the uploader's file name, or name files after their title. Files with the same name get a number added. Changing these settings will not affect previously downloaded content.": "Keep the uploader's file name, or name files after their title. Files with the same name get a number added. Changing these settings will not affect previously downloaded content.",
+  "Original file name": "Original file name",
+  "Date - Title": "Date - Title",
   "--end--": "--end--"
 }

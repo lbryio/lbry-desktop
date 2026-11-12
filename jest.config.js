@@ -1,3 +1,7 @@
+// Run every test in UTC so date formatting doesn't depend on the machine's zone.
+// Set here, before workers start, because Node caches the zone on first use.
+process.env.TZ = 'UTC';
+
 module.exports = {
   testEnvironment: 'node',
   setupFiles: ['<rootDir>/jest.setup.js'],

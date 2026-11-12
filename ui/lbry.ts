@@ -81,6 +81,15 @@ export interface WalletBalanceParams extends BaseParams {
   confirmations?: number;
 }
 
+export interface GetParams extends BaseParams {
+  uri: string;
+  file_name?: string; // overrides the stream's file name
+  download_directory?: string; // full path; must already exist
+  timeout?: number;
+  save_file?: boolean;
+  wallet_id?: string;
+}
+
 export interface FileListParams extends BaseParams {
   sd_hash?: string;
   file_name?: string;
@@ -118,7 +127,7 @@ export interface ILbry extends LbryConfig {
 
   // Claim methods
   resolve: (params: BaseParams) => Promise<any>;
-  get: (params: BaseParams) => Promise<any>;
+  get: (params: GetParams) => Promise<any>;
   claim_search: (params?: ClaimSearchParams) => Promise<any>;
   claim_list: (params?: BaseParams) => Promise<any>;
   channel_create: (params: BaseParams) => Promise<any>;
@@ -261,7 +270,7 @@ const Lbry: ILbry = {
 
   // Claim fetching and manipulation
   resolve: (params: BaseParams): Promise<any> => daemonCallWithResult("resolve", params),
-  get: (params: BaseParams): Promise<any> => daemonCallWithResult("get", params),
+  get: (params: GetParams): Promise<any> => daemonCallWithResult("get", params),
   claim_search: (params: ClaimSearchParams = {}): Promise<any> => daemonCallWithResult("claim_search", params),
   claim_list: (params: BaseParams = {}): Promise<any> => daemonCallWithResult("claim_list", params),
   channel_create: (params: BaseParams): Promise<any> => daemonCallWithResult("channel_create", params),

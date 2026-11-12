@@ -5,6 +5,7 @@ import { SEARCH_PROVIDERS } from "constants/search";
 import { SEARCH_PROVIDER, LBRY_SEARCH_API } from "config";
 import moment from "moment";
 import { getDefaultLanguage } from "util/default-languages";
+import { DOWNLOAD_NAMING } from "util/download-target";
 
 const reducers: Record<string, any> = {};
 const settingLanguage: unknown = [];
@@ -76,6 +77,10 @@ const defaultState = {
     [SETTINGS.AUTO_DOWNLOAD]: true,
     [SETTINGS.HIDE_REPOSTS]: false,
     [SETTINGS.PERSIST_WATCH_TIME]: true,
+
+    // Downloads
+    [SETTINGS.DOWNLOAD_BY_CHANNEL]: false,
+    [SETTINGS.DOWNLOAD_FILE_NAMING]: DOWNLOAD_NAMING.ORIGINAL,
 
     // OS
     [SETTINGS.AUTO_LAUNCH]: true,
