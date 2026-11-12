@@ -32,6 +32,21 @@ jobs:
           files: coverage/lcov.info
           fail_ci_if_error: false
 
+  go-core:
+    name: go-core
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version-file: core/go.mod
+      - name: vet and test
+        working-directory: core
+        run: |
+          test -z "$(gofmt -l .)"
+          go vet ./...
+          go test -race ./...
+
   typecheck:
     name: typecheck
     runs-on: ubuntu-latest
