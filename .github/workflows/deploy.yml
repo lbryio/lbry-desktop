@@ -59,6 +59,55 @@ jobs:
       - run: yarn
       - run: yarn typecheck
 
+  # Launch the packaged app and check the renderer comes up (#668). #665 shipped a blank window that
+  # passed lint, typecheck, tests and the build matrix, because nothing ran the result. This uses a stub
+  # daemon (LBRY_DAEMON), so it needs neither lbrynet nor the network.
+  smoke:
+    needs: ['lint']
+    name: smoke (launch app)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22.x
+      - run: corepack enable
+      - run: yarn --network-timeout 600000
+      - name: Build the unpacked app
+        run: |
+          yarn compile
+          yarn electron-builder build --linux dir -c.compression=store --publish never
+        env:
+          WELCOME_VERSION: 1.0
+          DOMAIN: lbry.tv
+          URL: https://lbry.tv
+          SHARE_DOMAIN_URL: https://open.lbry.com
+          SITE_TITLE: lbry.tv
+          SITE_NAME: lbry.tv
+          SHOW_ADS: false
+          ENABLE_COMMENT_REACTIONS: true
+          ENABLE_NO_SOURCE_CLAIMS: false
+          DEFAULT_LANGUAGE: en
+          KNOWN_APP_DOMAINS: lbry.tv,lbry.lat,odysee.com
+          CHANNEL_STAKED_LEVEL_VIDEO_COMMENTS: 0
+      # ubuntu-latest restricts unprivileged user namespaces, so the Chromium sandbox needs the
+      # setuid helper. Doing this (instead of --no-sandbox) keeps the run like production.
+      - name: Set up the Chromium sandbox
+        run: |
+          sudo chown root:root dist/electron/linux-unpacked/chrome-sandbox
+          sudo chmod 4755 dist/electron/linux-unpacked/chrome-sandbox
+      - name: Launch and check the renderer
+        run: xvfb-run -a node scripts/smoke-test.js dist/electron/linux-unpacked/lbry
+        env:
+          LBRY_DAEMON: ${{ github.workspace }}/scripts/smoke-daemon-stub.sh
+          SMOKE_TARGET_TIMEOUT_MS: 120000
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: smoke-artifacts
+          path: smoke-artifacts/
+          if-no-files-found: ignore
+
   build:
     needs: ['lint']
     name: 'build'
