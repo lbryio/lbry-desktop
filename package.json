@@ -149,7 +149,7 @@
     "localforage": "^1.7.1",
     "lodash-es": "^4.17.21",
     "mammoth": "^1.4.16",
-    "moment": "^2.29.2",
+    "moment": "^2.31.0",
     "node-fetch": "^2.6.7",
     "node-loader": "^0.6.0",
     "node-wget": "^0.4.3",
