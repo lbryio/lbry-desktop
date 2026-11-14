@@ -4,15 +4,23 @@ import { accountKeyFromExtended } from "../../extras/lbc/keys/hd";
 import { addressFromPublicKey } from "../../extras/lbc/address";
 import { getNetwork } from "../../extras/lbc/networks";
 import type { WalletAddress, WalletStore } from "./store";
+import { balanceOf, unspentOutputs, type Balance } from "./balance";
 
 /** The part of the hub backend this needs; HubBackend satisfies it, and tests supply a fake. */
 export interface AddressStatusSource {
   subscribeAddresses(addresses: string[]): Promise<(string | null)[]>;
 }
 
+/** What the balance needs on top of that: the history of an address and the transactions in it. */
+export interface TransactionSource {
+  getHistory(address: string): Promise<{ txid: string; height: number }[]>;
+  getTransactions(txids: string[]): Promise<Map<string, { hex: string; height: number }>>;
+}
+
 // lbry-sdk's default address generator: lbry/wallet/account.py
 export const RECEIVING_GAP = 20;
 export const CHANGE_GAP = 6;
+const BALANCE_CACHE_MS = 10_000;
 // Bounds one scan, so a hub that reports every address as used cannot make a request run forever.
 const MAX_ADDRESSES_PER_CHAIN = 1000;
 
@@ -24,14 +32,14 @@ export interface UsedAddress extends WalletAddress {
 const isUsed = (status: string | null | undefined) => status !== null && status !== undefined && status !== "";
 
 export class WalletService {
-  private backend: Promise<AddressStatusSource> | null = null;
+  private backend: Promise<AddressStatusSource & Partial<TransactionSource>> | null = null;
 
   constructor(
     private readonly store: WalletStore,
-    private readonly connect: () => Promise<AddressStatusSource>
+    private readonly connect: () => Promise<AddressStatusSource & Partial<TransactionSource>>
   ) {}
 
-  private hub(): Promise<AddressStatusSource> {
+  private hub(): Promise<AddressStatusSource & Partial<TransactionSource>> {
     if (!this.backend) {
       this.backend = this.connect().catch((e) => {
         this.backend = null; // try again next time instead of caching the failure
@@ -85,6 +93,46 @@ export class WalletService {
     }));
     if (params.address) items = items.filter((i) => i.address === params.address);
     return paginate(items, params.page, params.page_size);
+  }
+
+  private balanceCache: { at: number; result: Promise<Balance> } | null = null;
+
+  /**
+   * lbry-sdk's wallet_balance. The app asks often, and each answer takes a scan of the addresses and their
+   * transactions, so one answer is shared for a few seconds (and by calls that arrive while it is being worked out).
+   */
+  balance(): Promise<Balance> {
+    const cached = this.balanceCache;
+    if (cached && Date.now() - cached.at < BALANCE_CACHE_MS) return cached.result;
+    const result = this.computeBalance();
+    this.balanceCache = { at: Date.now(), result };
+    // A failure is not worth keeping: the next call tries again.
+    result.catch(() => {
+      if (this.balanceCache && this.balanceCache.result === result) this.balanceCache = null;
+    });
+    return result;
+  }
+
+  private async computeBalance(): Promise<Balance> {
+    const status = this.store.status();
+    if (!status.exists || !status.network) throw new Error("There is no wallet yet.");
+    const hub = await this.hub();
+    if (!hub.getHistory || !hub.getTransactions) throw new Error("This wallet server cannot list transactions.");
+
+    const used = (await this.scanChain(0, RECEIVING_GAP))
+      .concat(await this.scanChain(1, CHANGE_GAP))
+      .filter((a) => a.used);
+    const txids = new Set<string>();
+    for (const a of used) (await hub.getHistory(a.address)).forEach((h) => txids.add(h.txid));
+    // Array.from, not spread: the app's Babel setup is loose, and spreading a Set gives [set].
+    const ids = Array.from(txids);
+    const fetched = await hub.getTransactions(ids);
+    const missing = ids.filter((id) => !fetched.has(id));
+    // A balance computed from some of the transactions would be wrong, so say so instead.
+    if (missing.length) throw new Error(`The wallet server did not return ${missing.length} of the transactions.`);
+
+    const outputs = unspentOutputs(Array.from(fetched.values()), new Set(used.map((a) => a.address)), getNetwork(status.network));
+    return balanceOf(outputs);
   }
 
   /** The wallet's account as lbry-sdk's account_list reports it (no seed: that needs the password). */

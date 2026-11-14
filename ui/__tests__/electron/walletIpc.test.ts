@@ -27,6 +27,7 @@ describe("wallet IPC", () => {
       "wallet:addressList",
       "wallet:addressUnused",
       "wallet:addresses",
+      "wallet:balance",
       "wallet:changePassword",
       "wallet:create",
       "wallet:findLbrynet",
