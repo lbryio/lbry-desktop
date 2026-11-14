@@ -1,0 +1,60 @@
+import fs from "fs";
+import os from "os";
+import path from "path";
+import { registerWalletIpc } from "../../../electron/wallet/ipc";
+import { WalletStore } from "../../../electron/wallet/store";
+
+const SEED = "carbon smart garage balance margin twelve chest sword toast envelope bottom stomach absent";
+
+function setup() {
+  const handlers: Record<string, (event: unknown, ...args: any[]) => Promise<any>> = {};
+  const ipcMain: any = { handle: (channel: string, fn: any) => (handlers[channel] = fn) };
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "lbry-wallet-ipc-"));
+  registerWalletIpc(ipcMain, new WalletStore(dir, { kdfCost: { N: 1 << 10, r: 8, p: 1 } }));
+  const call = (channel: string, ...args: any[]) => handlers[channel]({}, ...args);
+  return { call, handlers, dir };
+}
+
+describe("wallet IPC", () => {
+  it("registers every channel", () => {
+    expect(Object.keys(setup().handlers).sort()).toEqual([
+      "wallet:addresses",
+      "wallet:changePassword",
+      "wallet:create",
+      "wallet:import",
+      "wallet:lock",
+      "wallet:reveal",
+      "wallet:status",
+      "wallet:unlock",
+    ]);
+  });
+
+  it("answers { ok, result } and { ok: false, error } so error names survive the trip", async () => {
+    const { call, dir } = setup();
+    try {
+      expect(await call("wallet:status")).toEqual({ ok: true, result: { exists: false, locked: true } });
+
+      const imported = await call("wallet:import", { password: "correct horse", mnemonic: SEED });
+      expect(imported.ok).toBe(true);
+      expect(imported.result.exists).toBe(true);
+      expect(imported.result).not.toHaveProperty("mnemonic");
+
+      const wrong = await call("wallet:unlock", "wrong password");
+      expect(wrong).toEqual({ ok: false, error: { name: "WrongPasswordError", message: "Incorrect password" } });
+      expect((await call("wallet:unlock", "correct horse")).result.locked).toBe(false);
+      expect((await call("wallet:lock")).result.locked).toBe(true);
+
+      const addresses = await call("wallet:addresses", 0, 0, 1);
+      expect(addresses.result).toEqual([{ address: "bCqJrLHdoiRqEZ1whFZ3WHNb33bP34SuGx", chain: 0, index: 0 }]);
+
+      const again = await call("wallet:create", { password: "correct horse" });
+      expect(again.ok).toBe(false);
+      expect(again.error.name).toBe("WalletError");
+
+      const noArguments = await call("wallet:import");
+      expect(noArguments.ok).toBe(false);
+    } finally {
+      fs.rmSync(dir, { recursive: true, force: true });
+    }
+  });
+});

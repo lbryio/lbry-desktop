@@ -2788,6 +2788,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@noble/ciphers@npm:2.4.0":
+  version: 2.4.0
+  resolution: "@noble/ciphers@npm:2.4.0"
+  checksum: 240d5e3eb57a356ae980560148f49a7af96de5c257a098543b849522f9762ab9cb46af6fefd60cdc19b9c4d8414cd346174ace85128f386b08d7c79536bc5590
+  languageName: node
+  linkType: hard
+
 "@noble/curves@npm:2.4.0":
   version: 2.4.0
   resolution: "@noble/curves@npm:2.4.0"
@@ -13755,6 +13762,7 @@ __metadata:
     "@eslint/js": ^10.0.1
     "@hot-loader/react-dom": ^16.13
     "@mui/material": ^5.2.1
+    "@noble/ciphers": 2.4.0
     "@noble/curves": 2.4.0
     "@noble/hashes": 2.4.0
     "@reach/combobox": ^0.12.1

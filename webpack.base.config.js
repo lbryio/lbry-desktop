@@ -103,6 +103,8 @@ let baseConfig = {
   resolve: {
     modules: [UI_ROOT, 'node_modules', __dirname],
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.json', '.scss'],
+    // The vendored wallet code (extras/lbc) imports its own TypeScript files as './x.js', so try the .ts first.
+    extensionAlias: { '.js': ['.ts', '.tsx', '.js'] },
     alias: {
       config: path.resolve(__dirname, 'config.js'),
       homepage: 'util/homepage',

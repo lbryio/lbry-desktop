@@ -21,6 +21,8 @@ import fs from "fs";
 import path from "path";
 import { diskSpaceLinux, diskSpaceWindows, diskSpaceMac } from "../ui/util/diskspace";
 import ignoreBrokenPipe from "./ignoreBrokenPipe";
+import { WalletStore } from "./wallet/store";
+import { registerWalletIpc } from "./wallet/ipc";
 
 // Before anything logs: a closed stdout/stderr must not crash the app (#601).
 ignoreBrokenPipe(process.stdout, process.stderr);
@@ -336,6 +338,9 @@ ipcMain.on("window:setFullScreen", (event, isFullScreen) => {
 ipcMain.on("app:quit", () => {
   app.quit();
 });
+
+// The wallet lives in this process; the renderer only sees what the wallet:* channels return.
+registerWalletIpc(ipcMain, new WalletStore(path.join(app.getPath("userData"), "wallet")));
 
 ipcMain.on("app:setBadge", (event, text) => {
   if (app.dock) app.dock.setBadge(text || "");
