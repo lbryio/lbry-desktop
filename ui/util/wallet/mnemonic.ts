@@ -3,9 +3,9 @@
 // Keep near-verbatim so it can be refreshed from upstream; only the utf8Encode import is inlined.
 
 import { generateMnemonic as bip39Generate, validateMnemonic as bip39Validate, mnemonicToSeedSync } from "@scure/bip39";
-import { wordlist as english } from "@scure/bip39/wordlists/english";
-import { pbkdf2 } from "@noble/hashes/pbkdf2";
-import { sha512 } from "@noble/hashes/sha2";
+import { wordlist as english } from "@scure/bip39/wordlists/english.js";
+import { pbkdf2 } from "@noble/hashes/pbkdf2.js";
+import { sha512 } from "@noble/hashes/sha2.js";
 
 const utf8Encode = (s: string): Uint8Array => new TextEncoder().encode(s);
 /** English BIP39 wordlist (also used by the LBRY SDK for its own seeds). */

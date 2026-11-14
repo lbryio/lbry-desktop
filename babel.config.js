@@ -22,7 +22,15 @@ module.exports = api => {
         test: /\.tsx?$/,
         presets: ['@babel/preset-typescript'],
       },
+      {
+        // The vendored wallet code (and its tests) rely on real ES2015+ semantics (spreading a Uint8Array or a Set).
+        // The default loose ES5 output turns `[...x]` into `[].concat(x)`, which is wrong for those, so
+        // build it for the runtimes we ship on (Electron's Node and Chromium) without loose mode.
+        test: /[\\/](extras|__tests__)[\\/]lbc[\\/]/,
+        presets: [['@babel/env', { loose: false, modules: isTest ? 'commonjs' : false, targets: isTest ? { node: 'current' } : { electron: '30' } }]],
+      },
     ],
-    ignore: [/node_modules/],
+    // @noble and @scure 2.x are ES modules only, so Jest needs Babel to transform them.
+    ignore: [/node_modules\/(?!(@noble|@scure)\/)/],
   };
 };

@@ -14,7 +14,11 @@ module.exports = {
   testMatch: ['**/__tests__/**/*.test.[jt]s?(x)'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
   // Mirror the webpack aliases the source imports rely on.
+  // @noble and @scure 2.x ship ES modules only, so Jest has to transform them.
+  transformIgnorePatterns: ['/node_modules/(?!(@noble|@scure)/)'],
   moduleNameMapper: {
+    // The vendored wallet code (extras/lbc) imports its own files as './x.js'; resolve them to the .ts.
+    '^(\\.{1,2}/.*)\\.js$': '$1',
     '^config$': '<rootDir>/ui/__tests__/__mocks__/config.js',
     '^lbryinc$': '<rootDir>/extras/lbryinc',
     // Electron APIs aren't available under Jest.

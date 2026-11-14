@@ -2,7 +2,8 @@
   "compilerOptions": {
     // Babel does the transpilation; tsc is check-only (same role Flow had).
     "noEmit": true,
-    "target": "ES2019",
+    // ES2020 for BigInt literals, which the vendored wallet (extras/lbc) uses. Check-only, so this does not change output.
+    "target": "ES2020",
     "module": "esnext",
     "moduleResolution": "bundler",
     "jsx": "react",
