@@ -62,6 +62,8 @@ export interface WalletStatus {
   xpub?: string;
   /** Set when wallet.json exists but cannot be read; the file is left alone. */
   error?: string;
+  /** When unlocked: the time (ms since the epoch) the wallet locks itself unless it is used first. */
+  autoLockAt?: number;
 }
 
 export interface WalletAddress {
@@ -77,7 +79,11 @@ export interface StoreOptions {
   now?: () => number;
   /** Where to look for an existing lbrynet wallet; tests point it at temporary files. */
   lbrynetFiles?: string[];
+  /** How long an unlocked wallet may sit unused before it locks itself. 0 turns this off. */
+  autoLockMs?: number;
 }
+
+export const DEFAULT_AUTO_LOCK_MS = 15 * 60 * 1000;
 
 export class WalletStore {
   private readonly file: string;
@@ -85,7 +91,11 @@ export class WalletStore {
   private readonly kdfCost: typeof DEFAULT_KDF;
   private readonly now: () => number;
   private readonly lbrynetFiles: string[] | undefined;
+  private readonly autoLockMs: number;
   private account: HDKey | null = null;
+  private lockTimer: ReturnType<typeof setTimeout> | null = null;
+  private lockAt: number | null = null;
+  private listeners = new Set<(status: WalletStatus) => void>();
   private queue: Promise<unknown> = Promise.resolve();
 
   constructor(
@@ -97,6 +107,36 @@ export class WalletStore {
     this.kdfCost = options.kdfCost || DEFAULT_KDF;
     this.now = options.now || Date.now;
     this.lbrynetFiles = options.lbrynetFiles;
+    this.autoLockMs = options.autoLockMs === undefined ? DEFAULT_AUTO_LOCK_MS : options.autoLockMs;
+  }
+
+  /** Called whenever the wallet locks or unlocks, including when it locks itself. Returns a way to stop. */
+  onLockChange(listener: (status: WalletStatus) => void): () => void {
+    this.listeners.add(listener);
+    return () => this.listeners.delete(listener);
+  }
+
+  private notify() {
+    const status = this.status();
+    this.listeners.forEach((listener) => {
+      try {
+        listener(status);
+      } catch {
+        // A listener that throws must not stop the others or leave the wallet unlocked.
+      }
+    });
+  }
+
+  /** Restarts the idle countdown. Anything that uses the unlocked key should call this. */
+  touch() {
+    if (this.lockTimer) clearTimeout(this.lockTimer);
+    this.lockTimer = null;
+    this.lockAt = null;
+    if (!this.account || this.autoLockMs <= 0) return;
+    this.lockAt = this.now() + this.autoLockMs;
+    this.lockTimer = setTimeout(() => this.lock(), this.autoLockMs);
+    // Never keep the app alive just for this.
+    (this.lockTimer as { unref?: () => void }).unref?.();
   }
 
   /** Runs one operation at a time, so two creates or a create and an unlock cannot interleave. */
@@ -156,6 +196,7 @@ export class WalletStore {
         network: wallet.network,
         scheme: wallet.scheme,
         xpub: wallet.xpub,
+        ...(this.account && this.lockAt ? { autoLockAt: this.lockAt } : {}),
       };
     } catch (e) {
       return { exists: true, locked: true, error: (e as Error).message };
@@ -262,13 +303,18 @@ export class WalletStore {
       const { account } = await this.open(wallet, password);
       this.account?.wipePrivateData();
       this.account = account;
+      this.touch();
+      this.notify();
       return this.status();
     });
   }
 
   lock(): WalletStatus {
+    const wasUnlocked = this.account !== null;
     this.account?.wipePrivateData();
     this.account = null;
+    this.touch();
+    if (wasUnlocked) this.notify();
     return this.status();
   }
 

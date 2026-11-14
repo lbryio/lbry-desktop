@@ -139,6 +139,84 @@ describe("WalletStore", () => {
     expect(makeStore().status().locked).toBe(true);
   });
 
+  describe("auto-lock", () => {
+    afterEach(() => jest.useRealTimers());
+
+    it("locks itself after the idle time and says so", async () => {
+      const store = new WalletStore(dir, { kdfCost: FAST, autoLockMs: 60_000 });
+      await store.import({ password: PASSWORD, mnemonic: LBRY_SEED });
+      const seen: boolean[] = [];
+      store.onLockChange((status) => seen.push(status.locked));
+
+      jest.useFakeTimers();
+      await store.unlock(PASSWORD);
+      expect(store.status().locked).toBe(false);
+      expect(store.status().autoLockAt).toBeGreaterThan(Date.now());
+
+      jest.advanceTimersByTime(59_000);
+      expect(store.status().locked).toBe(false);
+      jest.advanceTimersByTime(2_000);
+      expect(store.status().locked).toBe(true);
+      expect(store.status().autoLockAt).toBeUndefined();
+      expect(seen).toEqual([false, true]);
+    });
+
+    it("touch() restarts the countdown", async () => {
+      const store = new WalletStore(dir, { kdfCost: FAST, autoLockMs: 60_000 });
+      await store.import({ password: PASSWORD, mnemonic: LBRY_SEED });
+      jest.useFakeTimers();
+      await store.unlock(PASSWORD);
+
+      jest.advanceTimersByTime(50_000);
+      store.touch();
+      jest.advanceTimersByTime(50_000);
+      expect(store.status().locked).toBe(false);
+      jest.advanceTimersByTime(11_000);
+      expect(store.status().locked).toBe(true);
+    });
+
+    it("tells listeners once for a manual lock, and not at all if already locked", async () => {
+      const store = makeStore();
+      await store.import({ password: PASSWORD, mnemonic: LBRY_SEED });
+      const seen: boolean[] = [];
+      const stop = store.onLockChange((status) => seen.push(status.locked));
+
+      store.lock();
+      expect(seen).toEqual([]);
+      await store.unlock(PASSWORD);
+      store.lock();
+      store.lock();
+      expect(seen).toEqual([false, true]);
+
+      stop();
+      await store.unlock(PASSWORD);
+      expect(seen).toEqual([false, true]);
+    });
+
+    it("can be turned off", async () => {
+      const store = new WalletStore(dir, { kdfCost: FAST, autoLockMs: 0 });
+      await store.import({ password: PASSWORD, mnemonic: LBRY_SEED });
+      jest.useFakeTimers();
+      await store.unlock(PASSWORD);
+      jest.advanceTimersByTime(24 * 60 * 60 * 1000);
+      expect(store.status().locked).toBe(false);
+      expect(store.status().autoLockAt).toBeUndefined();
+    });
+
+    it("a listener that throws does not stop the lock or the others", async () => {
+      const store = makeStore();
+      await store.import({ password: PASSWORD, mnemonic: LBRY_SEED });
+      const seen: boolean[] = [];
+      store.onLockChange(() => {
+        throw new Error("boom");
+      });
+      store.onLockChange((status) => seen.push(status.locked));
+      await store.unlock(PASSWORD);
+      expect(store.lock().locked).toBe(true);
+      expect(seen).toEqual([false, true]);
+    });
+  });
+
   it("reveals the phrase only for the right password", async () => {
     const store = makeStore();
     await store.import({ password: PASSWORD, mnemonic: LBRY_SEED });

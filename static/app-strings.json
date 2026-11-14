@@ -2412,5 +2412,11 @@
   "Import my existing LBRY wallet": "Import my existing LBRY wallet",
   "This copies the recovery phrase of your LBRY wallet into a new wallet in this app, protected by a password you choose now. Your existing wallet file is not changed or deleted. It still holds your recovery phrase unprotected on disk.": "This copies the recovery phrase of your LBRY wallet into a new wallet in this app, protected by a password you choose now. Your existing wallet file is not changed or deleted. It still holds your recovery phrase unprotected on disk.",
   "Import this wallet": "Import this wallet",
+  "Wallet unlocked": "Wallet unlocked",
+  "Your wallet locks itself after a while without use. Lock it now if you are stepping away.": "Your wallet locks itself after a while without use. Lock it now if you are stepping away.",
+  "Lock wallet": "Lock wallet",
+  "Wallet locked": "Wallet locked",
+  "Receiving works while the wallet is locked. Enter your password to spend or sign.": "Receiving works while the wallet is locked. Enter your password to spend or sign.",
+  "Unlocking...": "Unlocking...",
   "--end--": "--end--"
 }

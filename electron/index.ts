@@ -343,6 +343,8 @@ ipcMain.on("app:quit", () => {
 
 // The wallet lives in this process; the renderer only sees what the wallet:* channels return.
 const walletStore = new WalletStore(path.join(app.getPath("userData"), "wallet"));
+// Tells the window when the wallet locks or unlocks, including when it locks itself after sitting idle.
+walletStore.onLockChange((status) => sendToRenderer("wallet:lockChanged", status));
 registerWalletIpc(ipcMain, walletStore, new WalletService(walletStore, () => connectHub("mainnet", `lbry-desktop/${app.getVersion()}`)));
 
 ipcMain.on("app:setBadge", (event, text) => {

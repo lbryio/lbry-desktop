@@ -3,6 +3,7 @@ import Page from "component/page";
 import LbcSymbol from "component/common/lbc-symbol";
 import WalletAddress from "component/walletAddress";
 import WalletSetup from "component/walletSetup";
+import WalletLock from "component/walletLock";
 
 type Props = Record<any, any>;
 
@@ -23,6 +24,7 @@ export default function ReceivePage(props: Props) {
     >
       <div className="card-stack">
         <WalletSetup />
+        <WalletLock />
         <WalletAddress />
       </div>
     </Page>
