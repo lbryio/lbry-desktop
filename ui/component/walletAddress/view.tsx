@@ -73,7 +73,7 @@ class WalletAddress extends React.PureComponent<Props, State> {
               {__("You can generate a new address at any time, and any previous addresses will continue to work.")}
             </p>
 
-            {showQR && <QRCode value={receiveAddress} paddingTop />}
+            {showQR && <QRCode value={receiveAddress} size={256} paddingTop />}
           </React.Fragment>
         }
       />

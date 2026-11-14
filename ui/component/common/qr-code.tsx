@@ -6,6 +6,8 @@ type Props = {
   value: string;
   paddingRight?: boolean;
   paddingTop?: boolean;
+  // Width and height in pixels.
+  size?: number;
 };
 
 class QRCode extends React.Component<Props> {
@@ -15,7 +17,7 @@ class QRCode extends React.Component<Props> {
   };
 
   render() {
-    const { value, paddingRight, paddingTop } = this.props;
+    const { value, paddingRight, paddingTop, size } = this.props;
     return (
       <div
         className={classnames("qr-code", {
@@ -23,7 +25,7 @@ class QRCode extends React.Component<Props> {
           "qr-code--top-padding": paddingTop,
         })}
       >
-        <ReactQrCode value={value} />
+        <ReactQrCode value={value} size={size} />
       </div>
     );
   }

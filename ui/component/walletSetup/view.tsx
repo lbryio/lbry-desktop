@@ -196,7 +196,7 @@ export default function WalletSetup(props: Props) {
           <React.Fragment>
             {usable && (
               <p className="help">
-                {__("We found a LBRY wallet on this computer (%name%). You can keep using it.", {
+                {__("We found a LBRY wallet on this computer (%name%). You can import it.", {
                   name: (existing && existing.name) || "",
                 })}
               </p>
@@ -208,12 +208,12 @@ export default function WalletSetup(props: Props) {
                 )}
               </p>
             )}
-            <div className="section__actions">
+            <div className="card__actions card__actions--wrap">
               {usable && (
                 <Button
                   // @ts-expect-error - TS2322 (ts-migration)
                   button="primary"
-                  label={__("Use my existing LBRY wallet")}
+                  label={__("Import my existing LBRY wallet")}
                   onClick={() => setStep("existing")}
                 />
               )}
@@ -235,7 +235,7 @@ export default function WalletSetup(props: Props) {
   if (step === "existing") {
     return (
       <Card
-        title={__("Use my existing LBRY wallet")}
+        title={__("Import my existing LBRY wallet")}
         subtitle={__(
           "This copies the recovery phrase of your LBRY wallet into a new wallet in this app, protected by a password you choose now. Your existing wallet file is not changed or deleted. It still holds your recovery phrase unprotected on disk."
         )}
@@ -263,7 +263,7 @@ export default function WalletSetup(props: Props) {
                 // @ts-expect-error - TS2322 (ts-migration)
                 button="primary"
                 type="submit"
-                label={busy ? __("Importing...") : __("Use this wallet")}
+                label={busy ? __("Importing...") : __("Import this wallet")}
                 disabled={!password || !confirm || busy}
               />
               {/* @ts-expect-error - TS2322 (ts-migration) */}

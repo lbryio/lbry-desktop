@@ -148,6 +148,16 @@
   }
 }
 
+// Several buttons that may not fit on one line.
+.card__actions--wrap {
+  flex-wrap: wrap;
+  gap: var(--spacing-s);
+
+  > *:not(:last-child) {
+    margin-right: 0;
+  }
+}
+
 .card__title-section {
   @extend .section__flex;
 
@@ -502,7 +512,7 @@
       }
 
       span + .media__subtitle--centered::before {
-        content: '•';
+        content: "•";
         margin: 0 5px;
       }
     }

@@ -21,8 +21,10 @@ export default function ReceivePage(props: Props) {
         ),
       }}
     >
-      <WalletSetup />
-      <WalletAddress />
+      <div className="card-stack">
+        <WalletSetup />
+        <WalletAddress />
+      </div>
     </Page>
   );
 }
