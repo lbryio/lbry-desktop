@@ -388,6 +388,13 @@ export function apiCall(
   resolve: (result: any) => void,
   reject: (error: any) => void
 ): Promise<void> {
+  // A method that something else answers (e.g. the local wallet in the Electron main process) never
+  // reaches the daemon. setOverride registers it.
+  const override = Lbry.overrides[method];
+  if (override) {
+    return override(params || {}).then(resolve, reject);
+  }
+
   const counter = new Date().getTime();
   const options: RequestInit = {
     method: "POST",

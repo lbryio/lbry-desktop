@@ -23,6 +23,8 @@ import { diskSpaceLinux, diskSpaceWindows, diskSpaceMac } from "../ui/util/disks
 import ignoreBrokenPipe from "./ignoreBrokenPipe";
 import { WalletStore } from "./wallet/store";
 import { registerWalletIpc } from "./wallet/ipc";
+import { WalletService } from "./wallet/service";
+import { connectHub } from "./wallet/chain";
 
 // Before anything logs: a closed stdout/stderr must not crash the app (#601).
 ignoreBrokenPipe(process.stdout, process.stderr);
@@ -340,7 +342,8 @@ ipcMain.on("app:quit", () => {
 });
 
 // The wallet lives in this process; the renderer only sees what the wallet:* channels return.
-registerWalletIpc(ipcMain, new WalletStore(path.join(app.getPath("userData"), "wallet")));
+const walletStore = new WalletStore(path.join(app.getPath("userData"), "wallet"));
+registerWalletIpc(ipcMain, walletStore, new WalletService(walletStore, () => connectHub("mainnet", `lbry-desktop/${app.getVersion()}`)));
 
 ipcMain.on("app:setBadge", (event, text) => {
   if (app.dock) app.dock.setBadge(text || "");

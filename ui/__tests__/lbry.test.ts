@@ -145,3 +145,36 @@ describe("the Lbry proxy", () => {
     expect(fetchMock.mock.calls[0][0]).toBe(`${DEFAULT_CONNECTION}?m=version`);
   });
 });
+
+describe("method overrides", () => {
+  afterEach(() => {
+    delete Lbry.overrides.address_unused;
+    delete Lbry.overrides.fake_failure;
+  });
+
+  it("answers a method from its override without calling the daemon", async () => {
+    const fetchMock = mockFetchResult({ result: "from the daemon" });
+    (global as any).fetch = fetchMock;
+    Lbry.setOverride("address_unused", async () => "from the wallet");
+
+    await expect(Lbry.address_unused()).resolves.toBe("from the wallet");
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("passes the params to the override and rejects with its error", async () => {
+    const override = jest.fn().mockRejectedValue(new Error("There is no wallet yet."));
+    Lbry.setOverride("fake_failure", override);
+
+    await expect(new Promise((resolve, reject) => apiCall("fake_failure", { a: 1 }, resolve, reject))).rejects.toThrow(
+      "There is no wallet yet."
+    );
+    expect(override).toHaveBeenCalledWith({ a: 1 });
+  });
+
+  it("still sends methods without an override to the daemon", async () => {
+    const fetchMock = mockFetchResult({ result: "from the daemon" });
+    (global as any).fetch = fetchMock;
+    await expect(Lbry.address_unused()).resolves.toBe("from the daemon");
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+});

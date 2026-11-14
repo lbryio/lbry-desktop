@@ -26,6 +26,8 @@ import {
   doAutoUpdateReset,
   doAutoUpdateFail,
 } from "redux/actions/app";
+import Lbry from "lbry";
+import { installLocalWalletMethods } from "util/wallet/localWallet";
 import { isURIValid } from "util/lbryURI";
 import { setSearchApi, setSearchProvider } from "redux/actions/search";
 import { doSetLanguage, doFetchLanguage, doUpdateIsNightAsync } from "redux/actions/settings";
@@ -75,6 +77,12 @@ applySearchSetting();
 store.subscribe(applySearchSetting);
 
 doAuthTokenRefresh();
+
+// The wallet lives in the Electron main process, so these wallet methods are answered there and never go to the
+// daemon (see electron/wallet and ui/util/wallet/localWallet).
+// @if TARGET='app'
+installLocalWalletMethods(Lbry, ipcRenderer);
+// @endif
 
 // We need to override Lbryio for getting/setting the authToken
 // We interact with ipcRenderer to get the auth key from a users keyring

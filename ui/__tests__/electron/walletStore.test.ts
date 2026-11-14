@@ -16,6 +16,16 @@ let dir: string;
 const makeStore = (d = dir) => new WalletStore(d, { kdfCost: FAST });
 const walletFile = () => path.join(dir, "wallet.json");
 
+function expectNoPlainTextPhrase(onDisk: string, phrase: string) {
+  const words = phrase.split(" ");
+  expect(onDisk).not.toContain(phrase);
+  for (let i = 0; i + 1 < words.length; i++) expect(onDisk).not.toContain(`${words[i]} ${words[i + 1]}`);
+  // And no string value in the parsed file contains it either.
+  const values: string[] = [];
+  JSON.stringify(JSON.parse(onDisk), (key, value) => (typeof value === "string" && values.push(value), value));
+  values.forEach((value) => expect(value).not.toContain(words[0] + " " + words[1]));
+}
+
 beforeEach(() => {
   dir = fs.mkdtempSync(path.join(os.tmpdir(), "lbry-wallet-test-"));
 });
@@ -33,11 +43,20 @@ describe("WalletStore", () => {
     expect(created).toMatchObject({ exists: true, locked: true, name: "Main", scheme: "lbry", network: "mainnet" });
     expect(created.xpub).toMatch(/^xpub/);
 
+    expectNoPlainTextPhrase(fs.readFileSync(walletFile(), "utf8"), created.mnemonic);
+    expect(JSON.parse(fs.readFileSync(walletFile(), "utf8")).xpub).toBe(created.xpub);
+    expect(fs.readFileSync(walletFile(), "utf8")).not.toContain(PASSWORD);
+  });
+
+  // Several BIP39 words are also keys in wallet.json ("version", "secret", "name", "salt", ...), so a single
+  // word showing up proves nothing. Two consecutive words, or the whole phrase, would.
+  it("is not fooled by a phrase made of the file's own key names", async () => {
+    const store = makeStore();
+    const phrase = "version secret name salt scheme network format version secret name salt scheme";
+    await store.import({ password: PASSWORD, mnemonic: phrase });
     const onDisk = fs.readFileSync(walletFile(), "utf8");
-    for (const word of created.mnemonic.split(" ")) expect(onDisk).not.toContain(`"${word}"`);
-    expect(onDisk).not.toContain(created.mnemonic);
-    expect(onDisk).not.toContain(PASSWORD);
-    expect(JSON.parse(onDisk).xpub).toBe(created.xpub);
+    expect(onDisk).toContain('"version"'); // the words really are in the file, as keys
+    expectNoPlainTextPhrase(onDisk, phrase);
   });
 
   it("can make a 24 word phrase", async () => {
