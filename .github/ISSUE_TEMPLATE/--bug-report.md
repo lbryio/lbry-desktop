@@ -13,10 +13,8 @@ Thanks for reporting an issue to LBRY and helping us improve!
 To make it possible for us to help you, please fill out below information carefully.
 
 Before reporting any issues, please make sure that you're using the latest version.
-- App releases: https://github.com/lbryio/lbry-desktop/releases
+- App releases: https://github.com/bitcoinbrisbane/lbry-desktop/releases
 - Standalone daemon: https://github.com/lbryio/lbry/releases
-
-We are also available on live chat at https://chat.lbry.com
 -->
 
 **Bug**

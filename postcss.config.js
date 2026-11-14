@@ -1,16 +1,18 @@
-module.exports = ({ file, options, env }) => {
-  env = env || {};
-  file = file || {};
-  options = options || {};
-  options.cssnext = options.cssnext || null;
-  options.autoprefixer = options.autoprefixer || null;
-  options.cssnano = options.cssnano || null;
-
-  return {
-    parser: file.extname === '.sss' ? 'sugarss' : false,
-    plugins: {
-      'postcss-import': { root: file.dirname },
-      cssnano: env === 'production' ? options.cssnano : false,
+module.exports = {
+  plugins: {
+    'postcss-import': {
+      resolve: function(id) {
+        // Handle ~ imports for node_modules
+        if (id.startsWith('~')) {
+          try {
+            return require.resolve(id.substring(1));
+          } catch (e) {
+            return id;
+          }
+        }
+        return id;
+      },
     },
-  };
+    cssnano: process.env.NODE_ENV === 'production' ? {} : false,
+  },
 };

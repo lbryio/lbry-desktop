@@ -1,4 +1,4 @@
-@import './breakpoints';
+@use "./breakpoints" as *;
 
 html {
   box-sizing: border-box;
@@ -29,20 +29,20 @@ html {
 }
 
 [for],
-[role='button'],
-[type='button'],
-[type='checkbox'],
-[type='file'],
-[type='radio'],
-[type='select'],
-[type='submit'] {
+[role="button"],
+[type="button"],
+[type="checkbox"],
+[type="file"],
+[type="radio"],
+[type="select"],
+[type="submit"] {
   cursor: pointer;
 }
 
 a,
 area,
 button,
-[role='button'],
+[role="button"],
 input,
 label,
 select,
@@ -225,20 +225,20 @@ textarea {
     a {
       &[href]::after {
         // Show hypertext data for links and abbreviations
-        content: ' (' attr(href) ')' !important;
+        content: " (" attr(href) ")" !important;
       }
 
-      &[href^='javascript:'],
-      &[href^='#'] {
+      &[href^="javascript:"],
+      &[href^="#"] {
         &::after {
-          content: '' !important;
+          content: "" !important;
         }
       }
     }
 
     abbr {
       &[title]::after {
-        content: ' (' attr(title) ')' !important;
+        content: " (" attr(title) ")" !important;
       }
     }
 

@@ -1,4 +1,4 @@
-@import '../init/breakpoints';
+@use "../init/breakpoints" as *;
 
 $emote-item-size--small: 2.5rem;
 $emote-item-size--big: 3rem;

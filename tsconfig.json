@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    // Babel does the transpilation; tsc is check-only (same role Flow had).
+    "noEmit": true,
+    // ES2020 for BigInt literals, which the vendored wallet (extras/lbc) uses. Check-only, so this does not change output.
+    "target": "ES2020",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "jsx": "react",
+    "allowJs": true,
+    "checkJs": false,
+    "strict": false,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    // Global type packages to load (TS 7 does not auto-include @types/*).
+    "types": ["jest"],
+    // Mirrors resolve.modules [ui/, node_modules, root] and resolve.alias
+    // in webpack.base.config.js — keep the three in sync.
+    // (paths resolve relative to this file; baseUrl was removed in TS 7.)
+    "paths": {
+      "config": ["./config.js"],
+      "homepage": ["./ui/util/homepage.js"],
+      "homepages/*": ["./homepages/*"],
+      "memes": ["./homepages/meme/index.js"],
+      "lbryinc": ["./extras/lbryinc"],
+      "recsys": ["./extras/recsys"],
+      "*": ["./ui/*", "./*"]
+    }
+  },
+  // allowJs stays on so the remaining plain-JS modules (config.js,
+  // homepages/, electron/devServer.js) resolve; checkJs stays off so they
+  // aren't checked.
+  "include": ["types", "ui", "electron", "extras"],
+  "exclude": ["node_modules", "dist"]
+}

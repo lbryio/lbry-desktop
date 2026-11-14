@@ -1,0 +1,3 @@
+# One-shot mechanical reformats; blame tools using --ignore-revs-file skip these.
+# prettier 3 double-quote reformat (#626)
+e9d5dde8b06776fe1fda516fb3ce8817efc6fa0c

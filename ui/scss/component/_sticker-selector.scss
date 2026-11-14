@@ -1,4 +1,4 @@
-@import '../init/breakpoints';
+@use "../init/breakpoints" as *;
 
 .stickerSelector {
   animation: menu-animate-in var(--animation-duration) var(--animation-style);

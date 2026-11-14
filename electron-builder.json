@@ -12,39 +12,21 @@
     {
       "from": "dist/electron/static",
       "to": "./"
-    }
-  ],
-  "extraResources": [
-    {
-      "from": "./static/daemon/",
-      "to": "static/daemon/",
-      "filter": ["**/*"]
     },
-    {
-      "from": "./static/img",
-      "to": "static/img",
-      "filter": ["**/*"]
-    },
-    {
-      "from": "./static/font",
-      "to": "static/font",
-      "filter": ["**/*"]
-    },
-    {
-      "from": "./static/app-update.yml",
-      "to": "app-update.yml"
-    }
+    "!**/node_modules/electron/**"
   ],
   "publish": [
     {
-      "provider": "github"
+      "provider": "github",
+      "owner": "bitcoinbrisbane",
+      "repo": "lbry-desktop"
     }
   ],
   "mac": {
     "category": "public.app-category.entertainment",
     "entitlements": "build/entitlements.mac.plist",
     "entitlementsInherit": "build/entitlements.mac.plist",
-    "hardenedRuntime" : true,
+    "hardenedRuntime": true,
     "gatekeeperAssess": false
   },
   "dmg": {
@@ -72,20 +54,40 @@
   "protocols": [
     {
       "name": "LBRY URI",
-      "schemes": ["lbry"],
+      "schemes": [
+        "lbry"
+      ],
       "role": "Viewer"
     }
   ],
   "linux": {
-    "target": ["AppImage", "deb"],
+    "target": [
+      "AppImage",
+      "deb"
+    ],
     "executableName": "lbry",
     "category": "AudioVideo;Video",
     "desktop": {
-      "MimeType": "x-scheme-handler/lbry"
-    }
+      "entry": {
+        "MimeType": "x-scheme-handler/lbry"
+      }
+    },
+    "extraResources": [
+      {
+        "from": "build/linux/apparmor-lbry",
+        "to": "apparmor-lbry"
+      }
+    ]
   },
   "deb": {
-    "depends": ["gconf2", "gconf-service", "libnotify4", "libxtst6", "libnss3"]
+    "depends": [
+      "gconf2",
+      "gconf-service",
+      "libnotify4",
+      "libxtst6",
+      "libnss3"
+    ],
+    "afterInstall": "build/linux/deb-after-install.sh"
   },
   "nsis": {
     "perMachine": true,
@@ -96,7 +98,9 @@
     "target": [
       {
         "target": "nsis",
-        "arch": ["x64"]
+        "arch": [
+          "x64"
+        ]
       }
     ]
   },

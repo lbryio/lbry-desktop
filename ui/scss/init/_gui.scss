@@ -25,8 +25,18 @@ body {
   cursor: default;
   line-height: 1.5;
   font-weight: 400;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
-    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol';
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif,
+    "Apple Color Emoji",
+    "Segoe UI Emoji",
+    "Segoe UI Symbol";
 
   // The W3C future standard; currently supported by Firefox only.
   // It'll hopefully auto fallback to this when 'webkit-scrollbar' below is deprecated in the future.
@@ -275,7 +285,7 @@ img {
   margin: -1rem 0;
   padding: 0 30px;
 
-  background: url('../../static/img/busy.gif') no-repeat center center;
+  background: url("../../static/img/busy.gif") no-repeat center center;
   display: inline-block;
   vertical-align: middle;
 
@@ -371,9 +381,17 @@ img {
 }
 
 .qr-code {
-  width: 134px;
-  height: 134px;
+  // Grows with the code it holds (the size prop of the QRCode component), instead of a fixed box that crops it.
+  width: fit-content;
+  height: fit-content;
   border: 3px solid white;
+  background-color: white;
+  line-height: 0;
+
+  canvas,
+  svg {
+    display: block;
+  }
 
   &.qr-code--right-padding {
     margin-right: calc(var(--spacing-vertical) * 2 / 3);
@@ -928,7 +946,13 @@ a {
 }
 
 // Temporary fix for focus-visible
-*:focus-visible:not(.modal):not(.card):not(.wunderbar__input):not(.menu__list):not(.menu__list--header):not(.button--secondary):not(.button-like):not(.button-dislike):not(select):not(input):not(textarea):not(video):not([data-reach-tab-panels]):not([data-reach-tabs]):not([data-reach-tab-panel]):not(.CodeMirror-code):not(.MuiModal-root):not(.MuiPaper-root):not(.card) {
+*:focus-visible:not(.modal):not(.card):not(.wunderbar__input):not(.menu__list):not(.menu__list--header):not(
+    .button--secondary
+  ):not(.button-like):not(.button-dislike):not(select):not(input):not(textarea):not(video):not(
+    [data-reach-tab-panels]
+  ):not([data-reach-tabs]):not([data-reach-tab-panel]):not(.CodeMirror-code):not(.MuiModal-root):not(
+    .MuiPaper-root
+  ):not(.card) {
   background-color: rgba(var(--color-primary-dynamic), 0.2) !important;
   color: var(--color-text) !important;
   // outline: 2px solid var(--color-primary);

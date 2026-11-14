@@ -1,4 +1,4 @@
-@import './header';
+@import "./header";
 
 .wunderbar__wrapper {
   flex: 1;
@@ -109,11 +109,11 @@
 
 .wunderbar__input--inline {
   @extend .wunderbar__input;
+  border-radius: var(--border-radius);
   @media (max-width: $breakpoint-small) {
     position: absolute;
     top: 0;
   }
-  border-radius: var(--border-radius);
 }
 
 .wunderbar__suggestions {
@@ -382,7 +382,7 @@
   background-color: var(--color-brand);
 }
 
-[data-reach-combobox-option][aria-selected='true'] {
+[data-reach-combobox-option][aria-selected="true"] {
   &:hover {
     background-color: var(--color-brand);
   }

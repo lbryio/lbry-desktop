@@ -1,0 +1,17 @@
+//@ts-nocheck
+import { connect } from "react-redux";
+import * as SETTINGS from "constants/settings";
+import { doSetClientSetting } from "redux/actions/settings";
+import { makeSelectClientSetting } from "redux/selectors/settings";
+
+import SettingUnauthenticated from "./view";
+
+const select = (state: unknown) => ({
+  searchInLanguage: makeSelectClientSetting(SETTINGS.SEARCH_IN_LANGUAGE)(state),
+});
+
+const perform = (dispatch: Dispatch) => ({
+  setSearchInLanguage: (value) => dispatch(doSetClientSetting(SETTINGS.SEARCH_IN_LANGUAGE, value)),
+});
+
+export default connect(select, perform)(SettingUnauthenticated);

@@ -1,0 +1,152 @@
+import { CLOUD_CONNECT_SITE_NAME } from "config";
+import * as PAGES from "constants/pages";
+import React, { useState } from "react";
+import { FormField, Form } from "component/common/form";
+import Button from "component/button";
+import { EMAIL_REGEX } from "constants/email";
+import { useHistory } from "react-router-dom";
+import UserEmailVerify from "component/userEmailVerify";
+import Card from "component/common/card";
+import Nag from "component/common/nag";
+import classnames from "classnames";
+
+type Props = {
+  user: User | null | undefined;
+  errorMessage: string | null | undefined;
+  emailToVerify: string | null | undefined;
+  emailDoesNotExist: boolean;
+  doClearEmailEntry: () => void;
+  doUserSignIn: (arg1: string, arg2?: string | null | undefined) => void;
+  doUserCheckIfEmailExists: (arg1: string) => void;
+  doSetWalletSyncPreference: (arg1: boolean) => void;
+  doSetClientSetting: (arg1: string, arg2: boolean, arg3?: boolean | null | undefined) => void;
+  isPending: boolean;
+};
+
+function UserEmailReturning(props: Props) {
+  const {
+    user,
+    errorMessage,
+    doUserCheckIfEmailExists,
+    emailToVerify,
+    doClearEmailEntry,
+    emailDoesNotExist,
+    doSetWalletSyncPreference,
+    isPending,
+  } = props;
+  const { push, location } = useHistory();
+  const urlParams = new URLSearchParams(location.search);
+  const emailFromUrl = urlParams.get("email");
+  const emailExistsFromUrl = urlParams.get("email_exists");
+  const defaultEmail = emailFromUrl ? decodeURIComponent(emailFromUrl) : "";
+  const hasPasswordSet = user && user.password_set;
+
+  const [email, setEmail] = useState(defaultEmail);
+  const [syncEnabled, setSyncEnabled] = useState(true);
+
+  const valid = email.match(EMAIL_REGEX);
+  const showEmailVerification = emailToVerify || hasPasswordSet;
+
+  function handleSubmit() {
+    // @if TARGET='app'
+    doSetWalletSyncPreference(syncEnabled);
+    // @endif
+    doUserCheckIfEmailExists(email);
+  }
+
+  function handleChangeToSignIn() {
+    doClearEmailEntry();
+    const url = `/$/${PAGES.AUTH}`;
+    const urlParams = new URLSearchParams(location.search);
+
+    urlParams.delete("email_exists");
+    urlParams.delete("email");
+    if (email) {
+      urlParams.set("email", encodeURIComponent(email));
+    }
+
+    push(`${url}?${urlParams.toString()}`);
+  }
+
+  return (
+    <div className={classnames("main__sign-in")}>
+      {showEmailVerification ? (
+        // @ts-expect-error - TS2739 (ts-migration)
+        <UserEmailVerify />
+      ) : (
+        <Card
+          title={__("Cloud Connect")}
+          subtitle={__("Log in to %CLOUD_CONNECT_SITE_NAME%", { CLOUD_CONNECT_SITE_NAME })}
+          actions={
+            <div>
+              {/* @ts-expect-error - TS2769 - No overload matches this call. */}
+              <Form onSubmit={handleSubmit} className="section">
+                <FormField
+                  autoFocus={!emailExistsFromUrl}
+                  placeholder={__("yourstruly@example.com")}
+                  type="email"
+                  // @ts-expect-error - TS2322 - Type '{ autoFocus: boolean; placeholder: string; type: string; id: string; autoComplete: string; name: string; label: string; value: string; onChange: (e: any) => void; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<FormField> & Pick<Readonly<Props> & Readonly<{ children?: ReactNode; }>, "error" | ... 22 more ... | "onChange"> & InexactPartial<...> & InexactPartial<...>'.
+                  id="username"
+                  autoComplete="on"
+                  name="sign_in_email"
+                  label={__("Email")}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+
+                {/* @if TARGET='app' */}
+                <FormField
+                  type="checkbox"
+                  name="sync_checkbox"
+                  label={
+                    <React.Fragment>
+                      {__("Backup your account and wallet data.")} {/* @ts-expect-error - TS2322 (ts-migration) */}
+                      <Button button="link" href="https://lbry.com/faq/account-sync" label={__("Learn More")} />
+                    </React.Fragment>
+                  }
+                  // @ts-expect-error - TS2322 (ts-migration)
+                  checked={syncEnabled}
+                  onChange={() => setSyncEnabled(!syncEnabled)}
+                />
+                {/* @endif */}
+
+                <div className="section__actions">
+                  <Button
+                    // @ts-expect-error - TS2322 (ts-migration)
+                    autoFocus={emailExistsFromUrl}
+                    button="primary"
+                    type="submit"
+                    label={__("Log In")}
+                    disabled={!email || !valid || isPending}
+                  />
+                  {/* @ts-expect-error - TS2322 (ts-migration) */}
+                  <Button button="link" onClick={handleChangeToSignIn} label={__("Sign Up")} />
+                </div>
+              </Form>
+            </div>
+          }
+          nag={
+            <>
+              {!emailDoesNotExist && emailExistsFromUrl && (
+                <Nag type="helpful" relative message={__("That email is already in use. Did you mean to log in?")} />
+              )}
+              {emailDoesNotExist && (
+                <Nag
+                  type="helpful"
+                  relative
+                  message={__("We can't find that email. Did you mean to sign up?")}
+                  actionText={__("Sign Up")}
+                />
+              )}
+              {!emailExistsFromUrl && !emailDoesNotExist && errorMessage && (
+                <Nag type="error" relative message={errorMessage} />
+              )}
+            </>
+          }
+        />
+      )}
+    </div>
+  );
+}
+
+export default UserEmailReturning;

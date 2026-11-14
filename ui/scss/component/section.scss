@@ -186,7 +186,7 @@
     }
   }
 
-  [aria-expanded='true'].button--file-action:last-of-type {
+  [aria-expanded="true"].button--file-action:last-of-type {
     background-color: var(--color-header-background);
   }
 
@@ -299,23 +299,23 @@
 }
 
 .card__main-actions.settings__row {
+  padding-bottom: var(--spacing-m);
   @media (max-width: $breakpoint-small) {
     padding: 0;
     margin-top: 0;
     margin-bottom: 0;
   }
-  padding-bottom: var(--spacing-m);
 }
 
 .settings__row--title {
   min-width: 100%;
   align-self: flex-start;
+  margin-bottom: var(--spacing-m);
 
   @media (min-width: $breakpoint-small) {
     min-width: 60%;
     max-width: 60%;
   }
-  margin-bottom: var(--spacing-m);
 }
 
 .settings__row-section-title {

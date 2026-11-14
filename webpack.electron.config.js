@@ -1,32 +1,24 @@
-const config = require('./config');
 const path = require('path');
-const webpack = require('webpack');
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const baseConfig = require('./webpack.base.config.js');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { DefinePlugin, ProvidePlugin } = require('webpack');
-const { getIfUtils, removeEmpty } = require('webpack-config-utils');
-const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
-
 const STATIC_ROOT = path.resolve(__dirname, 'static/');
 const DIST_ROOT = path.resolve(__dirname, 'dist/');
-const NODE_ENV = process.env.NODE_ENV || 'development';
-
-const { ifProduction } = getIfUtils(NODE_ENV);
 
 let mainConfig = {
   target: 'electron-main',
   entry: {
-    main: './electron/index.js',
+    main: './electron/index.ts',
   },
   output: {
     filename: '[name].js',
-    path: __dirname + '/dist/electron/webpack',
+    path: path.resolve(__dirname,'dist/electron/webpack'),
   },
   module: {
     rules: [
       {
-        test: /\.(jsx?$|s?css$)/,
+        test: /\.([jt]sx?$|s?css$)/,
         use: [
           {
             loader: 'preprocess-loader',
@@ -74,7 +66,6 @@ if (process.env.NODE_ENV === 'production') {
     },
   });
 } else {
-  const nodeExternals = require('webpack-node-externals');
   // Apply dev overrides
   mainConfig = merge(mainConfig, {
     externals: {
@@ -90,34 +81,23 @@ let plugins = [
     IS_WEB: JSON.stringify(false),
   }),
   new ProvidePlugin({
-    __: ['i18n.js', '__'],
+    __: ['i18n', '__'],
   }),
 ];
-
-// if (hasSentryToken) {
-//   plugins.push(
-//     new SentryWebpackPlugin({
-//       include: './dist',
-//       ignoreFile: '.sentrycliignore',
-//       ignore: ['node_modules', 'webpack.config.js', 'webworkers'],
-//       configFile: 'sentry.properties',
-//     })
-//   );
-// }
 
 const renderConfig = {
   target: 'electron-renderer',
   entry: {
-    ui: ['./ui/index.jsx'],
+    ui: ['./ui/index.tsx'],
   },
   output: {
     filename: '[name].js',
-    path: __dirname + '/dist/electron/webpack',
+    path: path.resolve(__dirname,'dist/electron/webpack'),
   },
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.[jt]sx?$/,
         use: [
           {
             loader: 'preprocess-loader',

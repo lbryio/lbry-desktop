@@ -1,118 +1,125 @@
 <img width="40%" src="https://miro.medium.com/max/5198/1*bTVuL2THG_0mpwmE-n7Ezg.png" />
 
-# LBRY App
+# LBRY Desktop
 
-This repo contains the UI code that powers the official LBRY desktop app. The LBRY app is a graphical browser for the decentralized content marketplace provided by the
-[LBRY](https://lbry.com) protocol. It is essentially the
-[lbry daemon](https://github.com/lbryio/lbry) bundled with a UI using
-[Electron](https://electron.atom.io/).
+A desktop app for browsing and publishing on the [LBRY](https://lbry.org) network. It's the
+[LBRY daemon](https://github.com/lbryio/lbry-sdk) with a user interface, built with
+[Electron](https://www.electronjs.org/).
 
- <a href="https://github.com/lbryio/lbry-desktop/blob/master/LICENSE" title="MIT licensed">
-   <img alt="npm" src="https://img.shields.io/dub/l/vibe-d.svg?style=flat">
- </a>
- <a href="https://GitHub.com/lbryio/lbry-desktop/releases/" title="GitHub release">
-   <img src="https://img.shields.io/github/release/lbryio/lbry-desktop.svg"/>
- </a>
- <a href="https://travis-ci.org/lbryio/lbry-desktop">
-   <img src="https://travis-ci.org/lbryio/lbry-desktop.svg?branch=master" alt="Build Status"  />
- </a>
- <a href="https://chat.lbry.com">
-   <img alt="GitHub contributors" src="https://img.shields.io/discord/362322208485277697.svg?logo=discord" alt="chat on Discord">
- </a>
+This is [Bitcoin Brisbane](https://github.com/bitcoinbrisbane)'s fork of
+[lbryio/lbry-desktop](https://github.com/lbryio/lbry-desktop), which has had no changes merged since
+April 2023. We follow the [LBRY Foundation's fork](https://github.com/LBRYFoundation/lbry-desktop)
+and send our changes there as well.
 
-<h2>
-  <a href="https://forthebadge.com" title="forthebadge">
-    <img alt="forthebadge" src="https://forthebadge.com/images/badges/60-percent-of-the-time-works-every-time.svg">
-  </a>
-  <a href="https://forthebadge.com" title="forthebadge">
-    <img alt="forthebadge" src="https://forthebadge.com/images/badges/approved-by-veridian-dynamics.svg">
-  </a>
-</h2>
+<a href="https://github.com/bitcoinbrisbane/lbry-desktop/actions/workflows/deploy.yml?query=branch%3Amaster" title="Build status on master"><img alt="Build status" src="https://github.com/bitcoinbrisbane/lbry-desktop/actions/workflows/deploy.yml/badge.svg?branch=master"></a>
+<a href="https://codecov.io/gh/bitcoinbrisbane/lbry-desktop" title="Test coverage on master"><img alt="Coverage" src="https://codecov.io/gh/bitcoinbrisbane/lbry-desktop/branch/master/graph/badge.svg"></a>
+<a href="LICENSE" title="MIT licensed"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-blue.svg"></a>
 
 ![App GIF](https://spee.ch/ba/lbry-joule.gif)
 
-## Table of Contents
+## Contents
 
-1. [Install](#install)
-2. [Usage](#usage)
-3. [Running from Source](#running-from-source)
+1. [What's different in this fork](#whats-different-in-this-fork)
+2. [Roadmap](ROADMAP.md)
+2. [Install](#install)
+3. [Running from source](#running-from-source)
 4. [Contributing](#contributing)
-5. [License](#license)
-6. [Security](#security)
+5. [Security](#security)
+6. [License](#license)
 7. [Contact](#contact)
+
+## What's different in this fork
+
+- The LBRY Foundation's 2025 build and CI fixes are merged in.
+- The codebase is being migrated from [Flow](https://flow.org/) to
+  [TypeScript](https://www.typescriptlang.org/) ([#618](https://github.com/bitcoinbrisbane/lbry-desktop/issues/618)).
+  The build compiles TypeScript today; new code should be written in TypeScript, and the
+  remaining Flow-annotated files are being converted incrementally.
+- Open issues from the original tracker are copied here with the
+  [`from-lbryio`](https://github.com/bitcoinbrisbane/lbry-desktop/issues?q=label%3Afrom-lbryio) label,
+  so they can be worked on.
+- A setting to search with [lbry-search](https://github.com/bitcoinbrisbane/lbry-search),
+  a self-hosted search index that follows an LBRY full node, instead of Lighthouse
+  ([#1](https://github.com/bitcoinbrisbane/lbry-desktop/pull/1)).
 
 ## Install
 
-[![Windows](https://img.shields.io/badge/Windows-Install-blue)](https://lbry.com/get/lbry.exe)
-[![Linux](https://img.shields.io/badge/Linux-Install-blue)](https://lbry.com/get/lbry.deb)
-[![MacOS](https://img.shields.io/badge/MacOS-Install-blue)](https://lbry.com/get/lbry.dmg)
+This fork doesn't publish builds yet. The last official release, v0.53.9 (February 2023), is on the
+[lbryio releases page](https://github.com/lbryio/lbry-desktop/releases) and at
+[lbry.com/get](https://lbry.com/get), for Windows, macOS and Debian-based Linux.
 
-We provide installers for Windows, macOS (v10.12.4, Sierra, or greater), and Debian-based Linux. See community maintained builds section for alternative Linux installations.
+_If the deb fails to install from the Ubuntu Software Center, install it with `sudo dpkg -i <path to deb>`,
+then run `sudo apt-get install -f` to install its dependencies._
 
-|                       | Windows                                       | macOS                                         | Linux                                         |
-| --------------------- | --------------------------------------------- | --------------------------------------------- | --------------------------------------------- |
-| Latest Stable Release | [Download](https://lbry.com/get/lbry.exe)     | [Download](https://lbry.com/get/lbry.dmg)     | [Download](https://lbry.com/get/lbry.deb)     |
-| Latest Pre-release    | [Download](https://lbry.com/get/lbry.pre.exe) | [Download](https://lbry.com/get/lbry.pre.dmg) | [Download](https://lbry.com/get/lbry.pre.deb) |
+_**AppImage on Ubuntu 23.10 or newer:** AppArmor restricts the sandbox Electron needs, so the AppImage
+aborts with a "SUID sandbox helper" error ([#660](https://github.com/bitcoinbrisbane/lbry-desktop/issues/660)).
+Use the .deb instead (it installs an AppArmor profile), or run
+`sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0` before launching the AppImage._
 
-Our [releases page](https://github.com/lbryio/lbry-desktop/releases) also contains the latest
-release, pre-releases, and past builds.
-_Note: If the deb fails to install using the Ubuntu Software Center, install manually via `sudo dpkg -i <path to deb>`. You'll need to run `sudo apt-get install -f` if this is the first time installing it to install dependencies_
+Community builds. The app's own updater only updates the deb, so update these yourself:
 
-To install from source or make changes to the application, continue to the next section below.
+| Flatpak                                              | Arch                                                              | Nixpkgs                                                                            | ARM/ARM64                                    |
+| ---------------------------------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------- | -------------------------------------------- |
+| [Flathub](https://flathub.org/apps/io.lbry.lbry-app) | [AUR package](https://aur.archlinux.org/packages/lbry-desktop-bin) | [Nixpkgs](https://search.nixos.org/packages?channel=unstable&show=lbry&query=lbry) | [Build guide](https://odysee.com/@LBRYarm:5) |
 
-**Community maintained** builds for Arch Linux and Flatpak are available, see below. These installs will need to be updated manually as the in-app update process only supports Debian installs at this time.
-_Note: If coming from a deb install, the directory structure is different and you'll need to [migrate data](https://lbry.com/faq/backup-data)._
+_Coming from a deb install? These keep their data somewhere else, so you'll need to
+[move your data](https://lbry.com/faq/backup-data)._
 
-|                | Flatpak                                                           | Arch                                                                                      | Nixpkgs                                                                            | ARM/ARM64                                   |
-| -------------- | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------- |
-| Latest Release | [FlatHub Page](https://flathub.org/apps/details/io.lbry.lbry-app) | [AUR Package](https://aur.archlinux.org/packages/lbry-desktop-bin/)                           | [Nixpkgs](https://search.nixos.org/packages?channel=unstable&show=lbry&query=lbry) | [Build Guide](https://lbry.tv/@LBRYarm:5)   |
-| Maintainers    |             N/A                   | [@RubenKelevra](https://github.com/RubenKelevra)                                                        | [@Enderger](https://github.com/enderger)                                           | [@Madiator2011](https://github.com/kodxana) |
+## Running from source
 
-## Usage
+You need [Git](https://git-scm.com/downloads), [Node.js](https://nodejs.org/en/download/) 20 or newer,
+and Yarn through [Corepack](https://nodejs.org/api/corepack.html) (`corepack enable`), which uses the
+Yarn version this repo pins.
 
-Start the installed application to interact with the LBRY network.
+1. Clone this repository: `git clone https://github.com/bitcoinbrisbane/lbry-desktop`
+2. `cd lbry-desktop`
+3. Install the dependencies: `yarn`. This also downloads the LBRY daemon into `static/daemon`.
+4. Run the app: `yarn dev`
 
-## Running from Source
+`yarn build` builds the production app into `dist/` with [electron-builder](https://www.electron.build/).
 
-#### Prerequisites
+**Linux:** on recent Ubuntu, Electron stops at startup with "The SUID sandbox helper binary was found,
+but is not configured correctly". Give its sandbox helper the permissions it asks for, and again after
+each `yarn` install:
 
-- [Git](https://git-scm.com/downloads)
-- [Node.js](https://nodejs.org/en/download/) (v16 required)
-- [Corepack](https://nodejs.org/dist/latest-v17.x/docs/api/corepack.html) `npm i -g corepack` (Included in nodejs 14 LTS, 16 LTS and 17)
-- [Yarn](https://yarnpkg.com/en/docs/install)
+```sh
+sudo chown root:root node_modules/electron/dist/chrome-sandbox
+sudo chmod 4755 node_modules/electron/dist/chrome-sandbox
+```
 
-1. Clone (or [fork](https://help.github.com/articles/fork-a-repo/)) this repository: `git clone https://github.com/lbryio/lbry-desktop`
-2. Change directory into the cloned repository: `cd lbry-desktop`
-3. If corepack is not enabled, run `sudo corepack enable` (the sudo is necessary for system-wide installation, if you use container, nvm etc... you might not be forced to use it)
-4. Install the dependencies: `yarn`
+#### Resetting your packages
 
-#### Run the electron app
+If the app isn't building, or `yarn` commands aren't working, reset your `node_modules`:
+`rm -r node_modules && yarn`, or `del /s /q node_modules && yarn` on Windows.
 
-`yarn dev`
-
-- If you want to build and launch the production app you can run `yarn build`. This will give you an executable inside the `/dist` folder. We use [electron-builder](https://github.com/electron-userland/electron-builder) to create distributable packages.
-
-#### Resetting your Packages
-
-If the app isn't building, or `yarn xxx` commands aren't working you may need to just reset your `node_modules`. To do so you can run: `rm -r node_modules && yarn` or `del /s /q node_modules && yarn` on Windows.
-
-If you _really_ think something might have gone wrong, you can force your repo to clear everything that doesn't match the repo with `git reset --hard HEAD && git clean -fxd && git pull -r`
+If you _really_ think something has gone wrong, you can clear everything that doesn't match the repo
+with `git reset --hard HEAD && git clean -fxd && git pull -r`.
 
 ## Contributing
 
-We :heart: contributions from everyone and contributions to this project are encouraged, and compensated. We welcome [bug reports](https://github.com/lbryio/lbry-desktop/issues/), [bug fixes](https://github.com/lbryio/lbry-desktop/pulls) and feedback is always appreciated. For more details, see [CONTRIBUTING.md](CONTRIBUTING.md).
-
-## [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/lbryio/lbry-desktop/issues) [![GitHub contributors](https://img.shields.io/github/contributors/lbryio/lbry-desktop.svg)](https://GitHub.com/lbryio/lbry-desktop/graphs/contributors/)
-
-## License
-
-This project is MIT licensed. For the full license, see [LICENSE](LICENSE).
+Bug reports, fixes and feedback are welcome: open an
+[issue](https://github.com/bitcoinbrisbane/lbry-desktop/issues) or a
+[pull request](https://github.com/bitcoinbrisbane/lbry-desktop/pulls). See
+[CONTRIBUTING.md](CONTRIBUTING.md) for how.
 
 ## Security
 
-We take security seriously. Please contact security@lbry.com regarding any security issues. Our PGP key is [here](https://lbry.com/faq/pgp-key) if you need it. Previous versions up to v0.50.2 were signed by [Sean Yesmunt](https://keybase.io/seanyesmunt/key.asc).
-New Releases are signed by [Jessop Breth](https://keybase.io/jessopb/key.asc).
+Please don't report security problems in public issues. Report them privately through this
+repository's [Security tab](https://github.com/bitcoinbrisbane/lbry-desktop/security/advisories/new).
+See [SECURITY.md](SECURITY.md) for what to include and what's in scope.
+
+## Acknowledgements
+
+- The seed phrase utilities in `ui/util/wallet/mnemonic.ts` are vendored from
+  [lBC-wallet-with-mining-ability](https://github.com/mnaghshvarian/lBC-wallet-with-mining-ability)
+  by [@mnaghshvarian](https://github.com/mnaghshvarian) (MIT), via our
+  [fork](https://github.com/bitcoinbrisbane/lBC-wallet-with-mining-ability). Thank you!
+
+## License
+
+MIT. See [LICENSE](LICENSE).
 
 ## Contact
 
-The primary contact for this project is [@jessopb](https://github.com/jessopb).
+This fork is maintained by [Bitcoin Brisbane](https://github.com/bitcoinbrisbane). For anything else,
+open an [issue](https://github.com/bitcoinbrisbane/lbry-desktop/issues).

@@ -1,0 +1,170 @@
+import React from "react";
+import Button from "component/button";
+import UriIndicator from "component/uriIndicator";
+import I18nMessage from "component/i18nMessage";
+import { withRouter } from "react-router";
+import debounce from "util/debounce";
+import * as ICONS from "constants/icons";
+
+const DEBOUNCE_SCROLL_HANDLER_MS = 150;
+const CLASSNAME_AUTOPLAY_COUNTDOWN = "autoplay-countdown";
+
+type Props = {
+  history: {
+    push: (arg1: string) => void;
+  };
+  nextRecommendedClaim: StreamClaim | null | undefined;
+  nextRecommendedUri: string;
+  modal: {
+    id: string;
+    modalProps: Record<any, any>;
+  };
+  skipPaid: boolean;
+  doNavigate: () => void;
+  doReplay: () => void;
+  doPrevious: () => void;
+  onCanceled: () => void;
+};
+
+function AutoplayCountdown(props: Props) {
+  const {
+    nextRecommendedUri,
+    nextRecommendedClaim,
+    history: { push },
+    modal,
+    skipPaid,
+    doNavigate,
+    doReplay,
+    doPrevious,
+    onCanceled,
+  } = props;
+  const nextTitle = nextRecommendedClaim && nextRecommendedClaim.value && nextRecommendedClaim.value.title;
+
+  /* this value is coupled with CSS timing variables on .autoplay-countdown__timer */
+  const countdownTime = 5;
+
+  const [timer, setTimer] = React.useState(countdownTime);
+  const [timerCanceled, setTimerCanceled] = React.useState(false);
+  const [timerPaused, setTimerPaused] = React.useState(false);
+  const anyModalPresent = modal !== undefined && modal !== null;
+  const isTimerPaused = timerPaused || anyModalPresent;
+
+  function shouldPauseAutoplay() {
+    const elm = document.querySelector(`.${CLASSNAME_AUTOPLAY_COUNTDOWN}`);
+    return elm && elm.getBoundingClientRect().top < 0;
+  }
+
+  function getMsgPlayingNext() {
+    if (skipPaid) {
+      return __("Playing next free content in %seconds_left% seconds...", { seconds_left: timer });
+    } else {
+      return __("Playing in %seconds_left% seconds...", { seconds_left: timer });
+    }
+  }
+
+  // Update 'setTimerPaused'.
+  React.useEffect(() => {
+    // Ensure correct 'setTimerPaused' on initial render.
+    setTimerPaused(shouldPauseAutoplay());
+
+    const handleScroll = debounce((e) => {
+      setTimerPaused(shouldPauseAutoplay());
+    }, DEBOUNCE_SCROLL_HANDLER_MS);
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Update countdown timer.
+  React.useEffect(() => {
+    let interval;
+    if (!timerCanceled && nextRecommendedUri) {
+      if (isTimerPaused) {
+        clearInterval(interval);
+        setTimer(countdownTime);
+      } else {
+        interval = setInterval(() => {
+          const newTime = timer - 1;
+          if (newTime === 0) {
+            if (skipPaid) setTimer(countdownTime);
+            doNavigate();
+          } else {
+            setTimer(timer - 1);
+          }
+        }, 1000);
+      }
+    }
+    return () => {
+      clearInterval(interval);
+    };
+  }, [timer, doNavigate, push, timerCanceled, isTimerPaused, nextRecommendedUri, skipPaid]);
+
+  if (timerCanceled || !nextRecommendedUri) {
+    return null;
+  }
+
+  return (
+    <div className="file-viewer__overlay">
+      <div className={CLASSNAME_AUTOPLAY_COUNTDOWN}>
+        <div className="file-viewer__overlay-secondary">
+          {/* @ts-expect-error - TS2745, TS2322 (ts-migration) */}
+          <I18nMessage tokens={{ channel: <UriIndicator link uri={nextRecommendedUri} /> }}>
+            Up Next by %channel%
+          </I18nMessage>
+        </div>
+
+        <div className="file-viewer__overlay-title">{nextTitle}</div>
+        <div className="autoplay-countdown__timer">
+          <div className={"autoplay-countdown__button autoplay-countdown__button--" + (timer % 5)}>
+            {/* @ts-expect-error - TS2322 (ts-migration) */}
+            <Button onClick={doNavigate} iconSize={30} title={__("Play")} className="button--icon button--play" />
+          </div>
+          {isTimerPaused && (
+            <div className="file-viewer__overlay-secondary autoplay-countdown__counter">
+              {__("Autoplay timer paused.")}{" "}
+            </div>
+          )}
+          {!isTimerPaused && (
+            <div className="file-viewer__overlay-secondary autoplay-countdown__counter">
+              {getMsgPlayingNext()}{" "}
+              <Button
+                // @ts-expect-error - TS2322 (ts-migration)
+                label={__("Cancel")}
+                button="link"
+                onClick={() => {
+                  setTimerCanceled(true);
+                  if (onCanceled) onCanceled();
+                }}
+              />
+            </div>
+          )}
+          {skipPaid && doPrevious && (
+            <div>
+              <Button
+                // @ts-expect-error - TS2322 (ts-migration)
+                label={__("Play Previous")}
+                button="link"
+                icon={ICONS.PLAY_PREVIOUS}
+                onClick={() => doPrevious()}
+              />
+            </div>
+          )}
+          <div>
+            <Button
+              // @ts-expect-error - TS2322 (ts-migration)
+              label={skipPaid ? __("Purchase?") : __("Replay?")}
+              button="link"
+              iconRight={skipPaid ? ICONS.WALLET : ICONS.REPLAY}
+              onClick={() => {
+                setTimerCanceled(true);
+                doReplay();
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default withRouter(AutoplayCountdown);

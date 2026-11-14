@@ -8,7 +8,6 @@ const TerserPlugin = require('terser-webpack-plugin');
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const { ifProduction } = getIfUtils(NODE_ENV);
 const UI_ROOT = path.resolve(__dirname, 'ui/');
-const STATIC_ROOT = path.resolve(__dirname, 'static/');
 
 let baseConfig = {
   mode: ifProduction('production', 'development'),
@@ -17,7 +16,9 @@ let baseConfig = {
     minimizer: [
       new TerserPlugin({
         parallel: true,
-        sourceMap: true,
+        terserOptions: {
+          sourceMap: true,
+        },
       }),
     ],
   },
@@ -30,9 +31,23 @@ let baseConfig = {
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.[jt]sx?$/,
+        exclude: /node_modules/,
         loader: 'babel-loader',
         options: {
+          plugins: ['@babel/plugin-syntax-dynamic-import'],
+        },
+      },
+      {
+        // Some dependencies ship modern syntax; transpile just those packages
+        // instead of all of node_modules.
+        test: /\.jsx?$/,
+        include: [/node_modules[\\/](parse-duration|adm-zip|mammoth|electron-updater|uuid|@sentry)[\\/]/],
+        loader: 'babel-loader',
+        options: {
+          configFile: false,
+          babelrc: false,
+          presets: [['@babel/env', { loose: true, modules: false }]],
           plugins: ['@babel/plugin-syntax-dynamic-import'],
         },
       },
@@ -41,14 +56,29 @@ let baseConfig = {
         use: [
           { loader: 'style-loader' },
           { loader: 'css-loader' },
-          { loader: 'postcss-loader',
+          {
+            loader: 'postcss-loader',
             options: {
-              plugins: function () {
-                return [ require('postcss-rtl')() ];
+              postcssOptions: {
+                plugins: function() {
+                  return [require('postcss-rtl')()];
+                },
               },
             },
           },
-          { loader: 'sass-loader'},
+          {
+            loader: 'sass-loader',
+            options: {
+              // Sass's legacy render() API is deprecated (#693).
+              api: 'modern',
+              sassOptions: {
+                // ui/scss still uses @import. Moving to @use changes how @extend
+                // reaches across files, so it needs its own careful migration;
+                // until then, hide only this one deprecation.
+                silenceDeprecations: ['import'],
+              },
+            },
+          },
         ],
       },
       {
@@ -72,10 +102,12 @@ let baseConfig = {
   // Allows imports for all directories inside '/ui' :)
   resolve: {
     modules: [UI_ROOT, 'node_modules', __dirname],
-    extensions: ['.js', '.jsx', '.json', '.scss'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json', '.scss'],
+    // The vendored wallet code (extras/lbc) imports its own TypeScript files as './x.js', so try the .ts first.
+    extensionAlias: { '.js': ['.ts', '.tsx', '.js'] },
     alias: {
       config: path.resolve(__dirname, 'config.js'),
-      homepage: 'util/homepage.js',
+      homepage: 'util/homepage',
       homepages: process.env.CUSTOM_HOMEPAGE === 'true' ? path.resolve(__dirname, 'custom/homepages/v2/index.js') : ('homepages/index.js'),
       memes: process.env.CUSTOM_HOMEPAGE === 'true' ? path.resolve(__dirname, 'custom/homepages/meme/index.js') : path.resolve(__dirname, 'homepages/meme/index.js'),
       lbryinc: 'extras/lbryinc',
@@ -89,14 +121,17 @@ let baseConfig = {
       'lodash.isempty': 'lodash-es/isEmpty',
       'lodash.forin': 'lodash-es/forIn',
       'lodash.clonedeep': 'lodash-es/cloneDeep',
+      'react/jsx-runtime': 'react/jsx-runtime.js',
       ...ifProduction({}, { 'react-dom': '@hot-loader/react-dom' }),
     },
     symlinks: false,
   },
 
   plugins: [
-    new webpack.IgnorePlugin({resourceRegExp: /^\.\/locale$/, contextRegExp: /moment$/}),
-    new webpack.EnvironmentPlugin(['NODE_ENV']),
+    new webpack.IgnorePlugin({ resourceRegExp: /^\.\/locale$/, contextRegExp: /moment$/ }),
+    new webpack.EnvironmentPlugin({
+      NODE_ENV: 'development', // default value if NODE_ENV is not defined
+    }),
     new DefinePlugin({
       __static: `"${path.join(__dirname, 'static').replace(/\\/g, '\\\\')}"`,
       'process.env.NODE_ENV': JSON.stringify(NODE_ENV),
