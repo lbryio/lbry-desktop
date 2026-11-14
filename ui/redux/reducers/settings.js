@@ -2,6 +2,7 @@ import * as ACTIONS from 'constants/action_types';
 import * as SETTINGS from 'constants/settings';
 import moment from 'moment';
 import { getDefaultLanguage } from 'util/default-languages';
+import { DOWNLOAD_NAMING } from 'util/download-target';
 
 const reducers = {};
 let settingLanguage = [];
@@ -70,6 +71,10 @@ const defaultState = {
     [SETTINGS.AUTO_DOWNLOAD]: true,
     [SETTINGS.HIDE_REPOSTS]: false,
     [SETTINGS.PERSIST_WATCH_TIME]: true,
+
+    // Downloads
+    [SETTINGS.DOWNLOAD_BY_CHANNEL]: false,
+    [SETTINGS.DOWNLOAD_FILE_NAMING]: DOWNLOAD_NAMING.ORIGINAL,
 
     // OS
     [SETTINGS.AUTO_LAUNCH]: true,

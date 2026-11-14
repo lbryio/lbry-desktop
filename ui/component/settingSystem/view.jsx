@@ -8,6 +8,7 @@ import { FormField } from 'component/common/form';
 import FileSelector from 'component/common/file-selector';
 import I18nMessage from 'component/i18nMessage';
 import SettingAutoLaunch from 'component/settingAutoLaunch';
+import SettingDownloadOrganization from 'component/settingDownloadOrganization';
 import SettingClosingBehavior from 'component/settingClosingBehavior';
 import SettingCommentsServer from 'component/settingCommentsServer';
 import SettingShareUrl from 'component/settingShareUrl';
@@ -135,6 +136,7 @@ export default function SettingSystem(props: Props) {
                 }}
               />
             </SettingsRow>
+            <SettingDownloadOrganization />
             {/* @endif */}
 
             <SettingsRow
