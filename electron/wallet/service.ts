@@ -76,13 +76,18 @@ export class WalletService {
     return all;
   }
 
-  /** The first receiving address with no history (lbry-sdk's address_unused). */
-  async addressUnused(): Promise<string> {
-    for (let start = 0; start < MAX_ADDRESSES_PER_CHAIN; start += RECEIVING_GAP) {
-      const unused = (await this.mark(this.store.addresses(0, start, RECEIVING_GAP))).find((a) => !a.used);
-      if (unused) return unused.address;
-    }
-    throw new Error("Every address in the first 1000 has been used.");
+  /**
+   * The first receiving address with no history (lbry-sdk's address_unused). With `exclude`, the first one that is
+   * not that address, so "Get New Address" gives a different one while the shown address is still unused. It stays
+   * inside the gap after the last used address (the SDK's rule), so a restore from the phrase still finds every
+   * address that has been handed out; past that, it keeps returning the last one inside it.
+   */
+  async addressUnused(params: { exclude?: string } = {}): Promise<string> {
+    const exclude = typeof params.exclude === "string" ? params.exclude : "";
+    const window = await this.scanChain(0, RECEIVING_GAP);
+    const unused = window.filter((a) => !a.used);
+    if (!unused.length) throw new Error("Every address in the first 1000 has been used.");
+    return (unused.find((a) => a.address !== exclude) || unused[unused.length - 1]).address;
   }
 
   /** lbry-sdk's address_list: Paginated[Address], receiving addresses first. */

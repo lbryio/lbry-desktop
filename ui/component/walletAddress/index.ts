@@ -12,7 +12,7 @@ const select = (state: unknown) => ({
 
 const perform = (dispatch: Dispatch) => ({
   checkAddressIsMine: (address) => dispatch(doCheckAddressIsMine(address)),
-  getNewAddress: () => dispatch(doGetNewAddress()),
+  getNewAddress: () => dispatch(doGetNewAddress(true)),
 });
 
 export default withRouter(connect(select, perform)(WalletAddress));

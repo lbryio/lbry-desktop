@@ -68,6 +68,23 @@ describe("WalletService.addressUnused", () => {
     expect(await service.addressUnused()).toBe(store.addresses(0, 25, 1)[0].address);
   });
 
+  it("gives a different address than the excluded one, so Get New Address does something", async () => {
+    const { service, store } = await setup();
+    expect(await service.addressUnused({ exclude: FIRST })).toBe(store.addresses(0, 1, 1)[0].address);
+    expect(await service.addressUnused({ exclude: "something else" })).toBe(FIRST);
+  });
+
+  it("never goes past the gap after the last used address", async () => {
+    const { service, store } = await setup([[0, 0]]);
+    // Used: 0. The window is 1..20; excluding the last of it must not run on to 21.
+    const last = store.addresses(0, 20, 1)[0].address;
+    expect(await service.addressUnused({ exclude: last })).toBe(store.addresses(0, 1, 1)[0].address);
+    const results = new Set<string>();
+    for (let i = 1; i <= 25; i++)
+      results.add(await service.addressUnused({ exclude: store.addresses(0, i, 1)[0].address }));
+    results.forEach((address) => expect(store.addresses(0, 21, 5).map((a) => a.address)).not.toContain(address));
+  });
+
   it("treats an empty-string status (herald.go) like null", async () => {
     const { service } = await setup([], "");
     expect(await service.addressUnused()).toBe(FIRST);

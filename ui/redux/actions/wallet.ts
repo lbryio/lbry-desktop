@@ -10,6 +10,7 @@ import {
   selectPendingOtherTransactions,
   selectPendingConsolidateTxid,
   selectPendingMassClaimTxid,
+  selectReceiveAddress,
 } from "redux/selectors/wallet";
 import { creditsToString } from "util/format-credits";
 import { selectMyClaimsRaw, selectClaimsById } from "redux/selectors/claims";
@@ -233,18 +234,35 @@ export function doTipClaimMass() {
   };
 }
 
-export function doGetNewAddress() {
-  return (dispatch: Dispatch) => {
+// `forceNew`: for the "Get New Address" button, give a different address than the one shown, even if it is
+// still unused. Without it, an unused address is returned as it is.
+export function doGetNewAddress(forceNew: boolean = false) {
+  return (dispatch: Dispatch, getState: () => any) => {
+    const shown = selectReceiveAddress(getState());
     dispatch({
       type: ACTIONS.GET_NEW_ADDRESS_STARTED,
     });
 
-    Lbry.address_unused().then((address) => {
-      dispatch({
-        type: ACTIONS.GET_NEW_ADDRESS_COMPLETED,
-        data: { address },
+    Lbry.address_unused(forceNew && shown ? { exclude: shown } : {})
+      .then((address) => {
+        dispatch({
+          type: ACTIONS.GET_NEW_ADDRESS_COMPLETED,
+          data: { address },
+        });
+      })
+      .catch((error) => {
+        // Keep the address that is shown, and let the button be used again.
+        dispatch({
+          type: ACTIONS.GET_NEW_ADDRESS_COMPLETED,
+          data: { address: shown },
+        });
+        dispatch(
+          doToast({
+            message: __("Could not get a new address: %error%", { error: (error && error.message) || String(error) }),
+            isError: true,
+          })
+        );
       });
-    });
   };
 }
 

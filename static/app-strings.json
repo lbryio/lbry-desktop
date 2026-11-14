@@ -2418,5 +2418,6 @@
   "Wallet locked": "Wallet locked",
   "Receiving works while the wallet is locked. Enter your password to spend or sign.": "Receiving works while the wallet is locked. Enter your password to spend or sign.",
   "Unlocking...": "Unlocking...",
+  "Could not get a new address: %error%": "Could not get a new address: %error%",
   "--end--": "--end--"
 }
