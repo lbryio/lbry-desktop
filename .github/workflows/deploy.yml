@@ -8,6 +8,8 @@ on:
     tags: ['v*']
   pull_request:
     branches: [master]
+  # Run the installer builds by hand to check a branch (Actions > Node.js CI > Run workflow).
+  workflow_dispatch:
 
 # Tag builds publish installers to a draft GitHub release; the default token
 # needs write access to releases for that.
@@ -108,7 +110,10 @@ jobs:
           path: smoke-artifacts/
           if-no-files-found: ignore
 
+  # The Windows, macOS and Linux installer builds are slow, so they run for release tags and by hand,
+  # not on every PR or push to master (#776). The smoke job above still launches the built app.
   build:
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
     needs: ['lint']
     name: 'build'
     strategy:
