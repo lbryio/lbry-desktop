@@ -2,6 +2,32 @@
 All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [1.0.4] - [2026-11-14]
+
+### Added
+ - Client-side wallet: the app now creates or restores its own wallet, encrypted with a password you choose, and can bring in an existing LBRY wallet found on this computer. A recovery phrase is shown once at setup ([#755](https://github.com/bitcoinbrisbane/lbry-desktop/pull/755), [#763](https://github.com/bitcoinbrisbane/lbry-desktop/pull/763), [#764](https://github.com/bitcoinbrisbane/lbry-desktop/pull/764), [#769](https://github.com/bitcoinbrisbane/lbry-desktop/pull/769))
+ - Unlock and auto-lock the wallet from the app (it locks itself after 15 minutes idle) ([#778](https://github.com/bitcoinbrisbane/lbry-desktop/pull/778))
+ - Balance and sending Credits from the local wallet: the app builds, signs and broadcasts the transaction itself ([#781](https://github.com/bitcoinbrisbane/lbry-desktop/pull/781), [#782](https://github.com/bitcoinbrisbane/lbry-desktop/pull/782))
+ - Show your recovery phrase again from the wallet, with the wallet password ([#785](https://github.com/bitcoinbrisbane/lbry-desktop/pull/785))
+ - The app version is shown in the window title and on the splash screen ([#761](https://github.com/bitcoinbrisbane/lbry-desktop/pull/761))
+
+### Fixed
+ - Receive: QR code is no longer cropped ([#780](https://github.com/bitcoinbrisbane/lbry-desktop/pull/780))
+ - Receive: Get New Address gives a different address, and a failed lookup no longer leaves the button disabled ([#784](https://github.com/bitcoinbrisbane/lbry-desktop/pull/784))
+ - Wallet setup card layout and wording ([#772](https://github.com/bitcoinbrisbane/lbry-desktop/pull/772))
+ - Splash screen shows a failing wallet status instead of hanging ([#748](https://github.com/bitcoinbrisbane/lbry-desktop/pull/748))
+ - Player keys: Space and arrows act once, and Space scrolls pages again ([#696](https://github.com/bitcoinbrisbane/lbry-desktop/pull/696))
+ - Fewer needless state rebuilds and a faster blacklist lookup ([#694](https://github.com/bitcoinbrisbane/lbry-desktop/pull/694), [#698](https://github.com/bitcoinbrisbane/lbry-desktop/pull/698))
+
+### Changed
+ - Removed the hello@lbry.com contact address from the app ([#759](https://github.com/bitcoinbrisbane/lbry-desktop/pull/759))
+ - Windows, macOS and Linux installers are built only for release tags or by hand; pull requests no longer wait on them ([#777](https://github.com/bitcoinbrisbane/lbry-desktop/pull/777))
+ - Build, test and typing work: Sass `@use`, react-redux 7, more reducer and type checks, a packaged-app launch check in CI ([#697](https://github.com/bitcoinbrisbane/lbry-desktop/pull/697), [#701](https://github.com/bitcoinbrisbane/lbry-desktop/pull/701), [#709](https://github.com/bitcoinbrisbane/lbry-desktop/pull/709), [#711](https://github.com/bitcoinbrisbane/lbry-desktop/pull/711), [#743](https://github.com/bitcoinbrisbane/lbry-desktop/pull/743))
+
+### Known issues
+ - Sending has been tried on one real wallet only; start with a small amount
+ - macOS builds remain unsigned (right-click → Open); AppImage on Ubuntu 23.10+ needs the .deb or a sysctl toggle (see README)
+
 ## [1.0.3] - [2026-11-12]
 
 Supersedes 1.0.2, which was tagged but never published: its build opened to a blank purple window ([#665](https://github.com/bitcoinbrisbane/lbry-desktop/issues/665)). Everything listed under 1.0.2 below ships in 1.0.3.
