@@ -72,16 +72,21 @@ import WalletSeed from "../../component/walletSeed/view";
 
 const SEED = "carbon smart garage balance margin twelve chest sword toast envelope bottom stomach absent";
 
+const mockLocalStatus = jest.fn();
+const mockReveal = jest.fn();
+const localApi = { status: (...a: any[]) => mockLocalStatus(...a), reveal: (...a: any[]) => mockReveal(...a) };
+
 function renderSeed() {
   return render(
     <MemoryRouter>
-      <WalletSeed />
+      <WalletSeed wallet={localApi} />
     </MemoryRouter>
   );
 }
 
 beforeEach(() => {
   jest.clearAllMocks();
+  mockLocalStatus.mockResolvedValue({ exists: false });
   mockWalletStatus.mockResolvedValue({ is_locked: false });
   mockAccountList.mockResolvedValue({
     items: [
@@ -149,6 +154,52 @@ describe("reveal seed flow", () => {
     fireEvent.click(screen.getByText("Show it"));
 
     await waitFor(() => screen.getByText("connection refused"));
+  });
+});
+
+describe("reveal from the local wallet", () => {
+  const passwordField = () => document.querySelector('[name="wallet_reveal_password"]') as Element;
+
+  // The password field only shows once the wallet status says there is a local wallet.
+  async function openPrompt() {
+    renderSeed();
+    fireEvent.click(screen.getByText("Reveal seed phrase"));
+    await waitFor(() => expect(passwordField()).not.toBeNull());
+  }
+
+  beforeEach(() => {
+    mockLocalStatus.mockResolvedValue({ exists: true });
+    mockReveal.mockResolvedValue({ mnemonic: SEED });
+  });
+
+  it("needs the password, and never asks the daemon", async () => {
+    await openPrompt();
+    expect((screen.getByText("Show it").closest("button") as HTMLButtonElement).disabled).toBe(true);
+    expect(mockReveal).not.toHaveBeenCalled();
+    expect(mockAccountList).not.toHaveBeenCalled();
+  });
+
+  it("shows the phrase for the right password and clears it on Hide", async () => {
+    await openPrompt();
+    fireEvent.change(passwordField(), { target: { value: "correct horse" } });
+    fireEvent.click(screen.getByText("Show it"));
+
+    await waitFor(() => expect(screen.getByTestId("copyable").textContent).toBe(SEED));
+    expect(mockReveal).toHaveBeenCalledWith("correct horse");
+    expect(mockAccountList).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByText("Hide"));
+    expect(screen.queryByTestId("copyable")).toBeNull();
+  });
+
+  it("shows an error and reveals nothing for a wrong password", async () => {
+    mockReveal.mockRejectedValue(new Error("Wrong password."));
+    await openPrompt();
+    fireEvent.change(passwordField(), { target: { value: "nope nope" } });
+    fireEvent.click(screen.getByText("Show it"));
+
+    await waitFor(() => screen.getByText("Wrong password."));
+    expect(screen.queryByTestId("copyable")).toBeNull();
   });
 });
 

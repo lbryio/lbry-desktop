@@ -1,14 +1,47 @@
 import * as React from "react";
+// @ts-expect-error - TS2792 - Cannot find module 'electron'. Did you mean to set the 'moduleResolution' option to 'node', or to add aliases to the 'paths' option?
+import { ipcRenderer } from "electron";
 import Lbry from "lbry";
 import Button from "component/button";
 import Card from "component/common/card";
 import CopyableText from "component/copyableText";
 import { FormField, Form } from "component/common/form";
 import { checkPhrase, cleanPhrase } from "util/wallet/mnemonic";
+import { localWallet } from "util/wallet/localWallet";
 
 type RevealState = "hidden" | "confirming" | "revealed";
 
-export default function WalletSeed() {
+// The operations this needs from the wallet in the main process (see ui/util/wallet/localWallet).
+export type RevealApi = {
+  status: () => Promise<{ exists: boolean }>;
+  reveal: (password: string) => Promise<{ mnemonic: string }>;
+};
+
+type Props = {
+  // Only tests pass this.
+  wallet?: RevealApi;
+};
+
+export default function WalletSeed(props: Props) {
+  const wallet = React.useMemo<RevealApi>(
+    () => props.wallet || (localWallet(ipcRenderer) as RevealApi),
+    [props.wallet]
+  );
+  // True when this app has its own wallet. Then the phrase comes from it, behind its password, not from the daemon.
+  const [hasLocal, setHasLocal] = React.useState(false);
+  const [password, setPassword] = React.useState("");
+
+  React.useEffect(() => {
+    let active = true;
+    wallet
+      .status()
+      .then((s) => active && setHasLocal(Boolean(s && s.exists)))
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, [wallet]);
+
   // --- Reveal / export ---------------------------------------------------
   const [revealState, setRevealState] = React.useState<RevealState>("hidden");
   const [seed, setSeed] = React.useState<string | null>(null);
@@ -16,6 +49,18 @@ export default function WalletSeed() {
 
   async function revealSeed() {
     setRevealError(null);
+    if (hasLocal) {
+      try {
+        const revealed = await wallet.reveal(password);
+        setSeed(revealed.mnemonic);
+        setRevealState("revealed");
+      } catch (err: any) {
+        setRevealError(String((err && err.message) || err));
+      } finally {
+        setPassword("");
+      }
+      return;
+    }
     try {
       const walletStatus = await Lbry.wallet_status();
       if (walletStatus && walletStatus.is_locked) {
@@ -38,6 +83,8 @@ export default function WalletSeed() {
 
   function hideSeed() {
     setSeed(null);
+    setPassword("");
+    setRevealError(null);
     setRevealState("hidden");
   }
 
@@ -97,9 +144,24 @@ export default function WalletSeed() {
                 <p className="help--warning">
                   {__("Make sure nobody can see your screen. Your seed phrase will be displayed in plain text.")}
                 </p>
+                {hasLocal && (
+                  <FormField
+                    autoFocus
+                    type="password"
+                    name="wallet_reveal_password"
+                    label={__("Wallet password")}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                )}
                 <div className="section__actions">
-                  {/* @ts-expect-error - TS2322 (ts-migration) */}
-                  <Button button="primary" label={__("Show it")} onClick={revealSeed} />
+                  <Button
+                    // @ts-expect-error - TS2322 (ts-migration)
+                    button="primary"
+                    label={__("Show it")}
+                    onClick={revealSeed}
+                    disabled={hasLocal && !password}
+                  />
                   {/* @ts-expect-error - TS2322 (ts-migration) */}
                   <Button button="link" label={__("Cancel")} onClick={hideSeed} />
                 </div>
