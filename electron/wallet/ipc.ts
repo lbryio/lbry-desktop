@@ -35,5 +35,6 @@ export function registerWalletIpc(ipcMain: IpcHandleRegistry, store: WalletStore
     handle("wallet:addressList", (params) => service.addressList(params || {}));
     handle("wallet:accountList", () => service.accountList());
     handle("wallet:balance", () => service.balance());
+    handle("wallet:send", (params) => service.send(params || {}));
   }
 }

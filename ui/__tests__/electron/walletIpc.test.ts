@@ -35,6 +35,7 @@ describe("wallet IPC", () => {
       "wallet:importLbrynet",
       "wallet:lock",
       "wallet:reveal",
+      "wallet:send",
       "wallet:status",
       "wallet:unlock",
     ]);

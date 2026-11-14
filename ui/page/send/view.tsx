@@ -2,6 +2,7 @@ import React from "react";
 import Page from "component/page";
 import LbcSymbol from "component/common/lbc-symbol";
 import WalletSend from "component/walletSend";
+import WalletLock from "component/walletLock";
 // @ts-expect-error - TS2305 (ts-migration)
 import { URL as SITE_URL, URL_LOCAL, URL_DEV } from "config";
 import { parseURI, isNameValid, isURIValid, normalizeURI } from "util/lbryURI";
@@ -133,19 +134,23 @@ export default function SendPage(props: Props) {
         ),
       }}
     >
-      <WalletSend
-        isAddress={isAddress}
-        setIsAddress={setIsAddress}
-        contentUri={contentUri}
-        contentError={contentError}
-        setEnteredContentUri={setEnteredContentUri}
-        confirmed={confirmed}
-        setConfirmed={setConfirmed}
-        draftTransaction={draftTransaction}
-        setDraftTransaction={setDraftTransaction}
-        sendLabel={sendLabel}
-        setSendLabel={setSendLabel}
-      />
+      {/* Sending needs the wallet unlocked; it shows nothing when there is no local wallet. */}
+      <div className="card-stack">
+        <WalletLock />
+        <WalletSend
+          isAddress={isAddress}
+          setIsAddress={setIsAddress}
+          contentUri={contentUri}
+          contentError={contentError}
+          setEnteredContentUri={setEnteredContentUri}
+          confirmed={confirmed}
+          setConfirmed={setConfirmed}
+          draftTransaction={draftTransaction}
+          setDraftTransaction={setDraftTransaction}
+          sendLabel={sendLabel}
+          setSendLabel={setSendLabel}
+        />
+      </div>
     </Page>
   );
 }

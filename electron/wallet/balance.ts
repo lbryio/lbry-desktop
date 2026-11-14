@@ -13,6 +13,8 @@ export interface OwnedOutput {
   /** Dewies (1 LBC = 100,000,000). */
   value: bigint;
   address: string;
+  /** The whole output script, claim prefix included. */
+  script: Uint8Array;
   kind: "plain" | "claim" | "update" | "support";
   /** For claims, updates and supports: the claim this output is, or supports. */
   claimId?: string;
@@ -46,6 +48,7 @@ export function unspentOutputs(
         vout,
         value: output.value,
         address,
+        script: output.script,
         kind: !claim ? "plain" : claim.kind,
         claimId: !claim ? undefined : claim.kind === "claim" ? newClaimId(txid, vout) : claim.claimId,
         height,
@@ -82,7 +85,7 @@ export function balanceOf(outputs: OwnedOutput[]): Balance {
   for (const o of outputs) {
     total += o.value;
     if (o.kind === "claim" || o.kind === "update") claims += o.value;
-    else if (o.kind === "support") (ownClaims.has(o.claimId) ? (supports += o.value) : (tips += o.value));
+    else if (o.kind === "support") ownClaims.has(o.claimId) ? (supports += o.value) : (tips += o.value);
   }
   const reserved = claims + supports + tips;
   return {

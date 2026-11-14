@@ -2,7 +2,7 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 import { balanceOf, dewiesToString, newClaimId, unspentOutputs } from "../../../electron/wallet/balance";
-import { WalletService } from "../../../electron/wallet/service";
+import { parseDewies, WalletService } from "../../../electron/wallet/service";
 import { WalletStore } from "../../../electron/wallet/store";
 import { Transaction } from "../../../extras/lbc/tx/transaction";
 import { MAINNET } from "../../../extras/lbc/networks";
@@ -132,17 +132,23 @@ describe("WalletService.balance", () => {
   // The hub's answers are filled in by each test, after it knows the wallet's first address.
   let history: Record<string, string[]> = {};
   let txs: Record<string, string> = {};
+  let broadcasts: string[] = [];
   const historyFor = (address: string) => history[address] || [];
 
   async function setup() {
     history = {};
     txs = {};
+    broadcasts = [];
     const store = new WalletStore(dir, { kdfCost: FAST });
     await store.import({ password: "correct horse", mnemonic: SEED });
     const first = store.addresses(0, 0, 1)[0].address;
     const hub = {
       subscribeAddresses: async (addresses: string[]) => addresses.map((a) => (historyFor(a).length ? "ab" : null)),
       getHistory: async (a: string) => historyFor(a).map((txid) => ({ txid, height: 1 })),
+      broadcast: async (hex: string) => {
+        broadcasts.push(hex);
+        return Transaction.fromHex(hex).txid;
+      },
       getTransactions: async (ids: string[]) => {
         const out = new Map<string, { hex: string; height: number }>();
         ids.forEach((id) => txs[id] && out.set(id, { hex: txs[id], height: 1 }));
@@ -197,5 +203,133 @@ describe("WalletService.balance", () => {
     await store.import({ password: "correct horse", mnemonic: SEED });
     const service = new WalletService(store, async () => ({ subscribeAddresses: async (a) => a.map(() => null) }));
     await expect(service.balance()).rejects.toThrow(/cannot list transactions/);
+  });
+});
+
+describe("parseDewies", () => {
+  it("reads decimal strings exactly", () => {
+    expect(parseDewies("1")).toBe(LBC);
+    expect(parseDewies("1.5")).toBe(150_000_000n);
+    expect(parseDewies("0.00000001")).toBe(1n);
+    expect(parseDewies("12.34567890")).toBe(1_234_567_890n);
+  });
+
+  it("refuses anything else", () => {
+    for (const bad of ["", "-1", "1e3", "1.123456789", ".5", "1.", "abc", "1,5", " 1", NaN, 1.5, null, undefined]) {
+      expect(() => parseDewies(bad)).toThrow(/valid amount/);
+    }
+  });
+});
+
+describe("WalletService.send", () => {
+  const PASSWORD = "correct horse";
+  const DEST = "bCqJrLHdoiRqEZ1whFZ3WHNb33bP34SuGx";
+
+  let store: WalletStore;
+  let service: WalletService;
+  let broadcasts: string[] = [];
+  let history: Record<string, string[]> = {};
+  let txs: Record<string, string> = {};
+  let first = "";
+  let funding: Transaction;
+
+  beforeEach(async () => {
+    history = {};
+    txs = {};
+    broadcasts = [];
+    store = new WalletStore(dir, { kdfCost: FAST });
+    await store.import({ password: PASSWORD, mnemonic: SEED });
+    first = store.addresses(0, 0, 1)[0].address;
+    const hub = {
+      subscribeAddresses: async (addresses: string[]) =>
+        addresses.map((a) => ((history[a] || []).length ? "ab" : null)),
+      getHistory: async (a: string) => (history[a] || []).map((txid) => ({ txid, height: 1 })),
+      getTransactions: async (ids: string[]) => {
+        const out = new Map<string, { hex: string; height: number }>();
+        ids.forEach((id) => txs[id] && out.set(id, { hex: txs[id], height: 1 }));
+        return out;
+      },
+      broadcast: async (hex: string) => {
+        broadcasts.push(hex);
+        return Transaction.fromHex(hex).txid;
+      },
+    };
+    service = new WalletService(store, async () => hub);
+    // 10 LBC to spend, and 50 LBC sitting in a claim that must not be touched.
+    funding = makeTx(fundingInput, [
+      [10n * LBC, pay(first)],
+      [50n * LBC, claimScript("held", pay(first))],
+    ]);
+    history[first] = [funding.txid];
+    txs[funding.txid] = funding.toHex();
+  });
+
+  it("will not send while the wallet is locked, and broadcasts nothing", async () => {
+    await expect(service.send({ addresses: [DEST], amount: "1.0" })).rejects.toMatchObject({
+      name: "WalletLockedError",
+    });
+    expect(broadcasts).toEqual([]);
+  });
+
+  it("pays the amount, spends only plain coins, and sends the change to a new change address", async () => {
+    await store.unlock(PASSWORD);
+    const result = await service.send({ addresses: [DEST], amount: "3.0" });
+    expect(broadcasts).toHaveLength(1);
+
+    const tx = Transaction.fromHex(broadcasts[0]);
+    expect(result.txid).toBe(tx.txid);
+    expect(tx.inputs.map((i) => `${i.txid}:${i.vout}`)).toEqual([`${funding.txid}:0`]);
+    expect(tx.outputs[0].value).toBe(3n * LBC);
+    expect(Buffer.from(tx.outputs[0].script).toString("hex")).toBe(Buffer.from(pay(DEST)).toString("hex"));
+
+    const change = tx.outputs[1];
+    const changeAddress = store.addresses(1, 0, 1)[0].address;
+    expect(Buffer.from(change.script).toString("hex")).toBe(Buffer.from(pay(changeAddress)).toString("hex"));
+    const fee = 10n * LBC - tx.totalOutput();
+    expect(fee).toBeGreaterThan(0n);
+    expect(fee).toBeLessThan(100_000n);
+    expect(result.fee).toBe(dewiesToString(fee));
+    expect(tx.inputs[0].scriptSig.length).toBeGreaterThan(60);
+  });
+
+  it("does not offer the same coins twice", async () => {
+    await store.unlock(PASSWORD);
+    await service.send({ addresses: [DEST], amount: "3.0" });
+    await expect(service.send({ addresses: [DEST], amount: "3.0" })).rejects.toThrow(/Not enough available Credits/);
+    expect(broadcasts).toHaveLength(1);
+  });
+
+  it("will not spend what is reserved in claims", async () => {
+    await store.unlock(PASSWORD);
+    await expect(service.send({ addresses: [DEST], amount: "20.0" })).rejects.toThrow(/Not enough available Credits/);
+    expect(broadcasts).toEqual([]);
+  });
+
+  it("refuses bad addresses and amounts before doing anything", async () => {
+    await store.unlock(PASSWORD);
+    await expect(service.send({ addresses: ["nonsense"], amount: "1.0" })).rejects.toThrow(/valid address/);
+    await expect(service.send({ addresses: [DEST, DEST], amount: "1.0" })).rejects.toThrow(/exactly one/);
+    await expect(service.send({ addresses: [DEST], amount: "-1" })).rejects.toThrow(/valid amount/);
+    await expect(service.send({ addresses: [DEST], amount: "0.00000001" })).rejects.toThrow(/too small/);
+    expect(broadcasts).toEqual([]);
+  });
+
+  it("does not remember coins as spent when the broadcast fails", async () => {
+    await store.unlock(PASSWORD);
+    const hub = (await (service as any).hub()) as any;
+    const real = hub.broadcast;
+    hub.broadcast = async () => {
+      throw new Error("hub down");
+    };
+    await expect(service.send({ addresses: [DEST], amount: "3.0" })).rejects.toThrow("hub down");
+    hub.broadcast = real;
+    await expect(service.send({ addresses: [DEST], amount: "3.0" })).resolves.toMatchObject({ amount: "3.0" });
+  });
+
+  it("restarts the idle countdown when it signs", async () => {
+    await store.unlock(PASSWORD);
+    const touch = jest.spyOn(store, "touch");
+    await service.send({ addresses: [DEST], amount: "1.0" });
+    expect(touch).toHaveBeenCalled();
   });
 });

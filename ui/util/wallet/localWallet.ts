@@ -17,6 +17,7 @@ export const LOCAL_WALLET_METHODS: Record<string, string> = {
   address_list: "wallet:addressList",
   account_list: "wallet:accountList",
   wallet_balance: "wallet:balance",
+  wallet_send: "wallet:send",
 };
 
 type Registry = { setOverride(name: string, method: (params: any) => Promise<any>): void };

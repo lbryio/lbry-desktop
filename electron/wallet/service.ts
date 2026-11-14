@@ -4,7 +4,11 @@ import { accountKeyFromExtended } from "../../extras/lbc/keys/hd";
 import { addressFromPublicKey } from "../../extras/lbc/address";
 import { getNetwork } from "../../extras/lbc/networks";
 import type { WalletAddress, WalletStore } from "./store";
-import { balanceOf, unspentOutputs, type Balance } from "./balance";
+import { balanceOf, dewiesToString, unspentOutputs, type Balance, type OwnedOutput } from "./balance";
+import { WalletLockedError } from "./store";
+import { addressToScript, isValidAddress } from "../../extras/lbc/address";
+import { DEFAULT_FEE_PER_BYTE } from "../../extras/lbc/networks";
+import { assembleTransaction, selectCoins, signTransaction, type Utxo } from "../../extras/lbc/tx/builder";
 
 /** The part of the hub backend this needs; HubBackend satisfies it, and tests supply a fake. */
 export interface AddressStatusSource {
@@ -15,12 +19,17 @@ export interface AddressStatusSource {
 export interface TransactionSource {
   getHistory(address: string): Promise<{ txid: string; height: number }[]>;
   getTransactions(txids: string[]): Promise<Map<string, { hex: string; height: number }>>;
+  broadcast(rawHex: string): Promise<string>;
 }
 
 // lbry-sdk's default address generator: lbry/wallet/account.py
 export const RECEIVING_GAP = 20;
 export const CHANGE_GAP = 6;
 const BALANCE_CACHE_MS = 10_000;
+// Outputs a sent transaction spent are not offered again for this long, until the hub shows the spend.
+const PENDING_SPEND_MS = 10 * 60 * 1000;
+// Refuse a payment whose fee is more than this, whatever the rate: a bug or a hostile hub must not drain a wallet.
+const MAX_FEE_DEWIES = 100_000_000n;
 // Bounds one scan, so a hub that reports every address as used cannot make a request run forever.
 const MAX_ADDRESSES_PER_CHAIN = 1000;
 
@@ -114,6 +123,11 @@ export class WalletService {
   }
 
   private async computeBalance(): Promise<Balance> {
+    return balanceOf((await this.ownedOutputs()).outputs);
+  }
+
+  /** The wallet's unspent outputs, with where each address sits in the key tree. Works while locked. */
+  private async ownedOutputs(): Promise<{ outputs: OwnedOutput[]; used: UsedAddress[] }> {
     const status = this.store.status();
     if (!status.exists || !status.network) throw new Error("There is no wallet yet.");
     const hub = await this.hub();
@@ -131,8 +145,103 @@ export class WalletService {
     // A balance computed from some of the transactions would be wrong, so say so instead.
     if (missing.length) throw new Error(`The wallet server did not return ${missing.length} of the transactions.`);
 
-    const outputs = unspentOutputs(Array.from(fetched.values()), new Set(used.map((a) => a.address)), getNetwork(status.network));
-    return balanceOf(outputs);
+    const outputs = unspentOutputs(
+      Array.from(fetched.values()),
+      new Set(used.map((a) => a.address)),
+      getNetwork(status.network)
+    );
+    return { outputs, used };
+  }
+
+  private sending: Promise<unknown> = Promise.resolve();
+  private pendingSpends = new Map<string, number>();
+
+  /**
+   * lbry-sdk's wallet_send for one address: pays `amount` (a decimal string of LBC), takes the fee from the
+   * wallet's own coins and sends the change to a fresh change address. The wallet must be unlocked. Only plain
+   * coins are spent, never ones holding a claim or a support. One payment is worked out at a time, so two cannot
+   * pick the same coins.
+   */
+  send(params: { addresses?: string[]; amount?: string }): Promise<{ txid: string; fee: string; amount: string }> {
+    const run = () => this.build(params);
+    const result = this.sending.then(run, run);
+    this.sending = result.catch(() => undefined);
+    return result;
+  }
+
+  private async build(params: { addresses?: string[]; amount?: string }) {
+    const status = this.store.status();
+    if (!status.exists || !status.network) throw new Error("There is no wallet yet.");
+    const network = getNetwork(status.network);
+
+    if (!Array.isArray(params.addresses) || params.addresses.length !== 1) {
+      throw new Error("Send to exactly one address.");
+    }
+    const address = params.addresses[0];
+    if (typeof address !== "string" || !isValidAddress(address, network))
+      throw new Error("That is not a valid address.");
+    const amount = parseDewies(params.amount);
+    if (amount < DUST_DEWIES) throw new Error("That amount is too small to send.");
+    // Checked before any network work, so a locked wallet fails fast and nothing is built.
+    if (this.store.status().locked) throw new WalletLockedError();
+
+    const hub = await this.hub();
+    if (!hub.broadcast) throw new Error("This wallet server cannot send transactions.");
+    const { outputs, used } = await this.ownedOutputs();
+    const now = Date.now();
+    this.pendingSpends.forEach((at, key) => now - at > PENDING_SPEND_MS && this.pendingSpends.delete(key));
+
+    const spendable: Utxo[] = outputs
+      .filter((o) => o.kind === "plain" && !this.pendingSpends.has(`${o.txid}:${o.vout}`))
+      .map((o) => ({
+        txid: o.txid,
+        vout: o.vout,
+        value: o.value,
+        script: o.script,
+        address: o.address,
+        height: o.height,
+      }));
+    const where = new Map(used.map((a) => [a.address, a]));
+
+    // A change address that has never been used.
+    const changeAddress = (await this.scanChain(1, CHANGE_GAP)).find((a) => !a.used);
+    if (!changeAddress) throw new Error("No unused change address was found.");
+
+    let selection;
+    try {
+      selection = selectCoins(
+        spendable,
+        [{ script: addressToScript(address, network), value: amount }],
+        addressToScript(changeAddress.address, network),
+        DEFAULT_FEE_PER_BYTE
+      );
+    } catch (e) {
+      if ((e as Error).name === "InsufficientFundsError") throw new Error("Not enough available Credits.");
+      throw e;
+    }
+    if (selection.fee > MAX_FEE_DEWIES)
+      throw new Error("The fee for this payment is unreasonably high, so it was not sent.");
+
+    const payment = assembleTransaction(
+      selection.inputs,
+      [{ script: addressToScript(address, network), value: amount }],
+      selection.change > 0n
+        ? { script: addressToScript(changeAddress.address, network), value: selection.change }
+        : undefined
+    );
+    const signed = this.store.withKeys((keyFor) =>
+      signTransaction(payment, (utxo) => {
+        const owner = where.get(utxo.address);
+        if (!owner) throw new Error("A coin to spend does not belong to this wallet.");
+        return keyFor(owner.chain, owner.index);
+      })
+    );
+
+    const sentId = await hub.broadcast(signed.toHex());
+    if (sentId && sentId !== signed.txid) throw new Error("The wallet server reported a different transaction.");
+    selection.inputs.forEach((u) => this.pendingSpends.set(`${u.txid}:${u.vout}`, Date.now()));
+    this.balanceCache = null;
+    return { txid: signed.txid, fee: dewiesToString(selection.fee), amount: dewiesToString(amount) };
   }
 
   /** The wallet's account as lbry-sdk's account_list reports it (no seed: that needs the password). */
@@ -163,6 +272,15 @@ export class WalletService {
     // The paginated shape (walletSeed) and the per-ledger shape (sync.ts) the UI reads.
     return { ...paginate([account], 1, 20), lbc_mainnet: [account], lbc_testnet: [] as unknown[] };
   }
+}
+
+const DUST_DEWIES = 1000n;
+
+/** "1.5" to dewies, exactly: no floats, at most 8 decimals, nothing but digits. */
+export function parseDewies(value: unknown): bigint {
+  if (typeof value !== "string" || !/^\d+(\.\d{1,8})?$/.test(value)) throw new Error("That is not a valid amount.");
+  const [whole, fraction = ""] = value.split(".");
+  return BigInt(whole) * 100_000_000n + BigInt(fraction.padEnd(8, "0"));
 }
 
 function hdPublicKey(xpub: string, network: ReturnType<typeof getNetwork>): Uint8Array {

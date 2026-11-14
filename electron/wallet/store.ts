@@ -14,7 +14,13 @@ import path from "path";
 import type { HDKey } from "@scure/bip32";
 import { toHex } from "../../extras/lbc/encoding/bytes";
 import { randomBytes } from "../../extras/lbc/crypto/hash";
-import { AddressDeriver, deriveAccountKey, publicOnly, type DerivationScheme } from "../../extras/lbc/keys/hd";
+import {
+  AddressDeriver,
+  deriveAccountKey,
+  derivePrivateKey,
+  publicOnly,
+  type DerivationScheme,
+} from "../../extras/lbc/keys/hd";
 import { checkPhrase, cleanPhrase, generateMnemonic } from "../../extras/lbc/keys/mnemonic";
 import { getNetwork, type NetworkName } from "../../extras/lbc/networks";
 import { DEFAULT_KDF, openJson, sealJson, WrongPasswordError, type SealedBox } from "../../extras/lbc/vault";
@@ -30,6 +36,13 @@ export class WalletError extends Error {
   constructor(message: string) {
     super(message);
     this.name = "WalletError";
+  }
+}
+
+export class WalletLockedError extends WalletError {
+  constructor() {
+    super("Your wallet is locked. Unlock it with your password first.");
+    this.name = "WalletLockedError";
   }
 }
 
@@ -338,6 +351,23 @@ export class WalletStore {
       account.wipePrivateData();
       this.write({ ...wallet, secret: await sealJson(secret, newPassword, SECRET_PURPOSE, this.kdfCost) });
       return this.status();
+    });
+  }
+
+  /**
+   * Runs `use` with a way to get the private key of one address, and nothing else: the keys never leave this
+   * process and `use` cannot keep them (each is the caller's to wipe). Throws WalletLockedError when locked, and
+   * counts as use, so the idle countdown restarts.
+   */
+  withKeys<T>(use: (keyFor: (chain: number, index: number) => Uint8Array) => T): T {
+    const account = this.account;
+    if (!account) throw new WalletLockedError();
+    this.touch();
+    return use((chain, index) => {
+      if ((chain !== 0 && chain !== 1) || !Number.isInteger(index) || index < 0) {
+        throw new WalletError("That is not an address of this wallet.");
+      }
+      return derivePrivateKey(account, chain, index);
     });
   }
 

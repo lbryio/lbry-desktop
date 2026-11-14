@@ -28,7 +28,13 @@ describe("installLocalWalletMethods", () => {
     const ipc = ipcReturning({ ok: true, result: "bAddress" });
     installLocalWalletMethods({ setOverride: (name, method) => (overrides[name] = method) }, ipc);
 
-    expect(Object.keys(overrides).sort()).toEqual(["account_list", "address_list", "address_unused", "wallet_balance"]);
+    expect(Object.keys(overrides).sort()).toEqual([
+      "account_list",
+      "address_list",
+      "address_unused",
+      "wallet_balance",
+      "wallet_send",
+    ]);
     await expect(overrides.address_unused({})).resolves.toBe("bAddress");
     expect(ipc.invoke).toHaveBeenCalledWith(LOCAL_WALLET_METHODS.address_unused, {});
     await overrides.address_list({ page: 2 });
