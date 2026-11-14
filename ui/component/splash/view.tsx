@@ -83,7 +83,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
           message: __("Connection Failure"),
           errorDetail: String((err && err.message) || err),
           details: __(
-            "Try closing all LBRY processes and starting again. If this still happens, your anti-virus software or firewall may be preventing LBRY from connecting. Contact hello@lbry.com if you think this is a software bug."
+            "Try closing all LBRY processes and starting again. If this still happens, your anti-virus software or firewall may be preventing LBRY from connecting. Report it at https://github.com/bitcoinbrisbane/lbry-desktop/issues if you think this is a software bug."
           ),
         });
       });
@@ -335,6 +335,14 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
                   <I18nMessage
                     // @ts-expect-error - TS2322 (ts-migration)
                     tokens={{
+                      issues_link: (
+                        <Button
+                          // @ts-expect-error - TS2322 (ts-migration)
+                          button="link"
+                          href="https://github.com/bitcoinbrisbane/lbry-desktop/issues"
+                          label={__("the issue tracker")}
+                        />
+                      ),
                       help_link: (
                         <Button
                           // @ts-expect-error - TS2322 (ts-migration)
@@ -345,7 +353,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
                       ),
                     }}
                   >
-                    Reach out to hello@lbry.com for help, or check out %help_link%.
+                    Report it on %issues_link%, or check out %help_link%.
                   </I18nMessage>
                 </p>
               </React.Fragment>
