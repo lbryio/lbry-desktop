@@ -2,6 +2,7 @@ import React from "react";
 import Page from "component/page";
 import LbcSymbol from "component/common/lbc-symbol";
 import WalletAddress from "component/walletAddress";
+import WalletSetup from "component/walletSetup";
 
 type Props = Record<any, any>;
 
@@ -20,6 +21,7 @@ export default function ReceivePage(props: Props) {
         ),
       }}
     >
+      <WalletSetup />
       <WalletAddress />
     </Page>
   );

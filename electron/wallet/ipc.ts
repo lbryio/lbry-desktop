@@ -22,6 +22,8 @@ export function registerWalletIpc(ipcMain: IpcHandleRegistry, store: WalletStore
   handle("wallet:status", () => store.status());
   handle("wallet:create", (options) => store.create(options || {}));
   handle("wallet:import", (options) => store.import(options || {}));
+  handle("wallet:findLbrynet", () => store.findLbrynet());
+  handle("wallet:importLbrynet", (password) => store.importLbrynet(password));
   handle("wallet:unlock", (password) => store.unlock(password));
   handle("wallet:lock", () => store.lock());
   handle("wallet:reveal", (password) => store.reveal(password));

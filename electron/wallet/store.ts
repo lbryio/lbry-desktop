@@ -18,6 +18,7 @@ import { AddressDeriver, deriveAccountKey, publicOnly, type DerivationScheme } f
 import { checkPhrase, cleanPhrase, generateMnemonic } from "../../extras/lbc/keys/mnemonic";
 import { getNetwork, type NetworkName } from "../../extras/lbc/networks";
 import { DEFAULT_KDF, openJson, sealJson, WrongPasswordError, type SealedBox } from "../../extras/lbc/vault";
+import { findLbrynetWallet, lbrynetWalletFiles } from "./lbrynet";
 
 export { WrongPasswordError };
 
@@ -74,6 +75,8 @@ export interface StoreOptions {
   /** scrypt cost; only tests lower it. */
   kdfCost?: typeof DEFAULT_KDF;
   now?: () => number;
+  /** Where to look for an existing lbrynet wallet; tests point it at temporary files. */
+  lbrynetFiles?: string[];
 }
 
 export class WalletStore {
@@ -81,6 +84,7 @@ export class WalletStore {
   private readonly network: NetworkName;
   private readonly kdfCost: typeof DEFAULT_KDF;
   private readonly now: () => number;
+  private readonly lbrynetFiles: string[] | undefined;
   private account: HDKey | null = null;
   private queue: Promise<unknown> = Promise.resolve();
 
@@ -92,6 +96,7 @@ export class WalletStore {
     this.network = options.network || "mainnet";
     this.kdfCost = options.kdfCost || DEFAULT_KDF;
     this.now = options.now || Date.now;
+    this.lbrynetFiles = options.lbrynetFiles;
   }
 
   /** Runs one operation at a time, so two creates or a create and an unlock cannot interleave. */
@@ -303,5 +308,58 @@ export class WalletStore {
       list.push({ address: deriver.derive(chain, start + i).address, chain, index: start + i });
     }
     return list;
+  }
+
+  /**
+   * Looks for an existing lbrynet wallet. Reports only whether there is one, where, and whether it can be
+   * brought in; the recovery phrase never leaves this process.
+   */
+  findLbrynet(): { found: boolean; path?: string; name?: string; encrypted?: boolean; error?: string } {
+    try {
+      const found = findLbrynetWallet(this.lbrynetFiles || lbrynetWalletFiles());
+      if (!found) return { found: false };
+      const account = found.accounts[0];
+      return {
+        found: true,
+        path: found.path,
+        name: found.name,
+        encrypted: !account || account.encrypted || !account.seed,
+      };
+    } catch (e) {
+      return { found: false, error: (e as Error).message };
+    }
+  }
+
+  /**
+   * Creates this wallet from the existing lbrynet wallet's recovery phrase. It checks that the phrase really
+   * gives the file's public key first, and only reads the lbrynet file.
+   */
+  importLbrynet(password: string): Promise<WalletStatus> {
+    return this.run(async () => {
+      let found;
+      try {
+        found = findLbrynetWallet(this.lbrynetFiles || lbrynetWalletFiles());
+      } catch (e) {
+        throw new WalletError((e as Error).message);
+      }
+      if (!found) throw new WalletError("No LBRY wallet was found on this computer.");
+      const account = found.accounts[0];
+      if (!account) throw new WalletError("The LBRY wallet has no account.");
+      if (account.encrypted || !account.seed) {
+        throw new WalletError(
+          "The LBRY wallet is protected with a password, so its recovery phrase cannot be read. Restore it with the recovery phrase instead."
+        );
+      }
+      const network = getNetwork(this.network);
+      const derived = deriveAccountKey(cleanPhrase(account.seed), "lbry", network);
+      const matches = publicOnly(derived, network).publicExtendedKey === account.publicKey;
+      derived.wipePrivateData();
+      if (!matches) {
+        throw new WalletError(
+          "The recovery phrase in the LBRY wallet does not match its public key, so nothing was imported."
+        );
+      }
+      return this.store({ password, name: found.name, mnemonic: account.seed, scheme: "lbry" });
+    });
   }
 }

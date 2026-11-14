@@ -212,3 +212,95 @@ describe("WalletStore", () => {
     await expect(makeStore().unlock(PASSWORD)).rejects.toThrow(/do not match/);
   });
 });
+
+// An existing lbrynet wallet is only ever read. These are temporary files shaped like the SDK's, never the real one.
+describe("WalletStore: bringing in an existing lbrynet wallet", () => {
+  let sdkDir: string;
+  let sdkFile: string;
+
+  const writeSdkWallet = (accounts: Array<Record<string, unknown>>, name = "My Wallet") =>
+    fs.writeFileSync(sdkFile, JSON.stringify({ version: 1, name, accounts, preferences: {} }));
+  const storeWithSdk = (files = [sdkFile]) => new WalletStore(dir, { kdfCost: FAST, lbrynetFiles: files });
+  const account = (extra: Record<string, unknown> = {}) => ({
+    name: "acct",
+    encrypted: false,
+    seed: LBRY_SEED,
+    private_key: "xprv-not-checked",
+    public_key: LBRY_XPUB,
+    ...extra,
+  });
+
+  beforeEach(() => {
+    sdkDir = fs.mkdtempSync(path.join(os.tmpdir(), "lbry-sdk-wallet-"));
+    sdkFile = path.join(sdkDir, "default_wallet");
+  });
+  afterEach(() => fs.rmSync(sdkDir, { recursive: true, force: true }));
+
+  it("reports no wallet, and never the phrase", () => {
+    expect(storeWithSdk().findLbrynet()).toEqual({ found: false });
+    writeSdkWallet([account()], "Old wallet");
+    const found = storeWithSdk().findLbrynet();
+    expect(found).toEqual({ found: true, path: sdkFile, name: "Old wallet", encrypted: false });
+    expect(JSON.stringify(found)).not.toContain("carbon");
+  });
+
+  it("flags a password-protected wallet", () => {
+    writeSdkWallet([account({ encrypted: true })]);
+    expect(storeWithSdk().findLbrynet()).toMatchObject({ found: true, encrypted: true });
+  });
+
+  it("reports a damaged file without throwing", () => {
+    fs.writeFileSync(sdkFile, "{ not json");
+    expect(storeWithSdk().findLbrynet()).toMatchObject({
+      found: false,
+      error: expect.stringMatching(/Could not read/),
+    });
+  });
+
+  it("creates the app wallet from it with the SDK's keys, and leaves the original untouched", async () => {
+    writeSdkWallet([account()], "Old wallet");
+    const before = fs.readFileSync(sdkFile, "utf8");
+    const store = storeWithSdk();
+
+    const status = await store.importLbrynet(PASSWORD);
+    expect(status).toMatchObject({ exists: true, name: "Old wallet", scheme: "lbry", xpub: LBRY_XPUB });
+    expect(store.addresses(0, 0, 1)[0].address).toBe(LBRY_FIRST_ADDRESS);
+    expect((await store.reveal(PASSWORD)).mnemonic).toBe(LBRY_SEED);
+    expect(fs.readFileSync(sdkFile, "utf8")).toBe(before);
+    expect(fs.readFileSync(walletFile(), "utf8")).not.toContain(LBRY_SEED);
+  });
+
+  it("refuses when the phrase does not give the file's public key, and writes nothing", async () => {
+    writeSdkWallet([account({ public_key: "xpub-of-some-other-wallet" })]);
+    await expect(storeWithSdk().importLbrynet(PASSWORD)).rejects.toThrow(/does not match its public key/);
+    expect(fs.existsSync(walletFile())).toBe(false);
+  });
+
+  it("refuses an encrypted wallet and says what to do", async () => {
+    writeSdkWallet([account({ encrypted: true })]);
+    await expect(storeWithSdk().importLbrynet(PASSWORD)).rejects.toThrow(/recovery phrase instead/);
+    expect(fs.existsSync(walletFile())).toBe(false);
+  });
+
+  it("refuses when there is no wallet, no account or no seed", async () => {
+    await expect(storeWithSdk().importLbrynet(PASSWORD)).rejects.toThrow(/No LBRY wallet was found/);
+    writeSdkWallet([]);
+    await expect(storeWithSdk().importLbrynet(PASSWORD)).rejects.toThrow(/no account/);
+    writeSdkWallet([account({ seed: undefined })]);
+    await expect(storeWithSdk().importLbrynet(PASSWORD)).rejects.toThrow(/protected with a password/);
+  });
+
+  it("still enforces the password rules and never replaces an existing wallet", async () => {
+    writeSdkWallet([account()]);
+    const store = storeWithSdk();
+    await expect(store.importLbrynet("short")).rejects.toThrow(/at least 8/);
+    await store.importLbrynet(PASSWORD);
+    await expect(store.importLbrynet(PASSWORD)).rejects.toThrow(/already exists/);
+  });
+
+  it("uses the first candidate file that exists", () => {
+    writeSdkWallet([account()], "Second place");
+    const missing = path.join(sdkDir, "nowhere", "default_wallet");
+    expect(storeWithSdk([missing, sdkFile]).findLbrynet()).toMatchObject({ found: true, name: "Second place" });
+  });
+});

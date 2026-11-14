@@ -33,6 +33,8 @@ export const localWallet = (ipc: IpcInvoker) => ({
   create: (options: { password: string; name?: string; words?: 12 | 24 }) => walletCall(ipc, "wallet:create", options),
   import: (options: { password: string; mnemonic: string; name?: string; scheme?: "lbry" | "bip44" }) =>
     walletCall(ipc, "wallet:import", options),
+  findLbrynet: () => walletCall(ipc, "wallet:findLbrynet"),
+  importLbrynet: (password: string) => walletCall(ipc, "wallet:importLbrynet", password),
   unlock: (password: string) => walletCall(ipc, "wallet:unlock", password),
   lock: () => walletCall(ipc, "wallet:lock"),
   reveal: (password: string) => walletCall(ipc, "wallet:reveal", password),
