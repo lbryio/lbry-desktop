@@ -10,6 +10,7 @@ import ModalUpgrade from "modal/modalUpgrade";
 import ModalDownloading from "modal/modalDownloading";
 import Card from "component/common/card";
 import I18nMessage from "component/i18nMessage";
+import { version as appVersion } from "package.json";
 import "css-doodle";
 
 const FORTY_FIVE_SECONDS = 45 * 1000;
@@ -259,6 +260,7 @@ export default class SplashScreen extends React.PureComponent<Props, State> {
         {!error && (
           <>
             <h1 className="splash__title">LBRY</h1>
+            <div className="splash__version">{__("Version %version%", { version: appVersion })}</div>
             <div className="splash__details">{details}</div>
           </>
         )}

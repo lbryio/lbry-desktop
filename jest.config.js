@@ -20,6 +20,8 @@ module.exports = {
     // The vendored wallet code (extras/lbc) imports its own files as './x.js'; resolve them to the .ts.
     '^(\\.{1,2}/.*)\\.js$': '$1',
     '^config$': '<rootDir>/ui/__tests__/__mocks__/config.js',
+    // webpack resolves a bare 'package.json' through resolve.modules [..., __dirname].
+    '^package\\.json$': '<rootDir>/package.json',
     '^lbryinc$': '<rootDir>/extras/lbryinc',
     // Electron APIs aren't available under Jest.
     '^electron$': '<rootDir>/ui/__tests__/__mocks__/electron.js',

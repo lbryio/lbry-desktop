@@ -3,6 +3,8 @@ import { Route, Redirect, Switch, withRouter } from "react-router-dom";
 
 import * as PAGES from "constants/pages";
 import { PAGE_TITLE } from "constants/pageTitles";
+import { version as appVersion } from "package.json";
+import { titleWithVersion } from "util/appTitle";
 import { LINKED_COMMENT_QUERY_PARAM } from "constants/comment";
 import { parseURI, isURIValid } from "util/lbryURI";
 import { WELCOME_VERSION } from "config";
@@ -166,21 +168,23 @@ function AppRouter(props: Props) {
       return __(title) || "LBRY";
     };
 
+    let pageTitle: string;
     if (uri) {
       const { channelName, streamName } = parseURI(uri);
 
       if (title) {
-        document.title = title;
+        pageTitle = title;
       } else if (streamName) {
-        document.title = streamName;
+        pageTitle = streamName;
       } else if (channelName) {
-        document.title = channelName;
+        pageTitle = channelName;
       } else {
-        document.title = getDefaultTitle(pathname);
+        pageTitle = getDefaultTitle(pathname);
       }
     } else {
-      document.title = getDefaultTitle(pathname);
+      pageTitle = getDefaultTitle(pathname);
     }
+    document.title = titleWithVersion(pageTitle, appVersion);
 
     // @if TARGET='app'
     entries[entryIndex].title = document.title;

@@ -2379,5 +2379,6 @@
   "To finish signing in, the sign-in server asks for a Google reCAPTCHA check. Loading it sends your IP address and browser details to Google.": "To finish signing in, the sign-in server asks for a Google reCAPTCHA check. Loading it sends your IP address and browser details to Google.",
   "Continue with Google reCAPTCHA": "Continue with Google reCAPTCHA",
   "the issue tracker": "the issue tracker",
+  "Version %version%": "Version %version%",
   "--end--": "--end--"
 }

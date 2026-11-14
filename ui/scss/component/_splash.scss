@@ -28,6 +28,18 @@
   margin-top: -1rem;
 }
 
+// Along the bottom edge, so it cannot collide with the title and the status text, which are centred.
+.splash__version {
+  position: fixed;
+  bottom: var(--spacing-m);
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: var(--font-small);
+  color: #fff;
+  opacity: 0.6;
+}
+
 .splash__error-title {
   font-size: 22px;
   line-height: 1;
